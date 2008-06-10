@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<TablePane styles="{padding:8, spacing:4}">
+    <rows>
+        <Row height="-1"/>
+        <Row height="1*"/>
+        <Row height="-1"/>
+        <Row height="-1"/>
+    </rows>
+    <columns>
+        <Column width="1*"/>
+    </columns>
+
+    <cells>
+        <Label row="0" column="0" text="Stock Tracker" styles="{font:'Verdana bold 14'}"/>
+
+        <Border row="1" column="0" styles="{padding:0, borderColor:'#cccac2'}">
+	        <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
+	           verticalScrollBarPolicy="fillToCapacity">
+	            <view>
+	                <TableView id="stocksTableView" selectMode="multi"
+	                    styles="{showHorizontalGridLines:false}">
+	                    <columns>
+	                        <Column name="symbol" headerData="'Symbol'" width="80"/>
+	                        <Column name="value" headerData="'Value'" width="80"/>
+	                        <Column name="change" headerData="'Change'" width="1*"
+	                           cellRendererStyles="{horizontalAlignment:'right'}"/>
+	                    </columns>
+	                </TableView>
+	            </view>
+
+	            <columnHeader>
+	                <TableViewHeader tableViewID="stocksTableView"/>
+	            </columnHeader>
+	        </ScrollPane>
+        </Border>
+
+        <FlowPane row="2" column="0" styles="{horizontalAlignment:'justify', padding: {top:2, bottom:6}}">
+            <FlowPane styles="{horizontalAlignment:'left'}">
+                <Label text="Symbol:" styles="{font:'Verdana bold 11'}"/>
+                <TextInput id="tickerSymbolTextInput" textSize="10" maximumLength="5"/>
+                <LinkButton buttonData="{iconURL:'@add.png'}" enabled="false"/>
+                <LinkButton buttonData="{iconURL:'@delete.png'}" enabled="false"/>
+            </FlowPane>
+            <FlowPane styles="{horizontalAlignment:'right'}">
+                <LinkButton buttonData="{iconURL:'@go-up.png'}" enabled="false"/>
+                <LinkButton buttonData="{iconURL:'@go-down.png'}" enabled="false"/>
+            </FlowPane>
+        </FlowPane>
+
+        <Label row="3" column="0" text="Last update: November 7, 2007 4:42:13pm"
+            styles="{font:'Verdana italic 10'}"/>
+    </cells>
+</TablePane>

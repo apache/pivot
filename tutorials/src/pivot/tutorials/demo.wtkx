@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Border styles="{borderColor:'#999999', backgroundColor:'#cccac2', padding:8}">
+    <Border styles="{borderColor:'#999999', backgroundColor:'#f7f5eb', padding:0}">
+        <ScrollPane>
+            <view>
+                <FlowPane orientation="vertical" styles="{padding:6}">
+                    <Rollup expanded="true">
+                        <Label text="Buttons" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                        <Component namespace="buttons" src="buttons.wtkx"/>
+                    </Rollup>
+                    <Rollup>
+                        <Label text="Lists" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                        <Component namespace="lists" src="lists.wtkx"/>
+                    </Rollup>
+                    <Rollup>
+                        <Label text="Text" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                        <Component namespace="text" src="text.wtkx"/>
+                    </Rollup>
+                    <Rollup>
+                        <Label text="Navigation" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                        <Component namespace="navigation" src="navigation.wtkx"/>
+                    </Rollup>
+                    <Rollup>
+                        <Label text="Splitters" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                        <Component namespace="splitters" src="splitters.wtkx"/>
+                    </Rollup>
+                    <Rollup>
+                        <Label text="Meters" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                        <Component namespace="meters" src="meters.wtkx"/>
+                    </Rollup>
+                    <Rollup>
+                        <Label text="Tables" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                        <Component namespace="tables" src="tables.wtkx"/>
+                    </Rollup>
+                    <Rollup>
+                        <Label text="Trees" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                        <Component namespace="trees" src="trees.wtkx"/>
+                    </Rollup>
+                    <Rollup>
+                        <Label text="Drag &amp; Drop" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                        <Component namespace="dragdrop" src="dragdrop.wtkx"/>
+                    </Rollup>
+                    <Rollup>
+                        <Label text="Alerts" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                        <Component namespace="alerts" src="alerts.wtkx"/>
+                    </Rollup>
+                </FlowPane>
+            </view>
+        </ScrollPane>
+    </Border>
+</Border>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FlowPane styles="{padding:4, horizontalAlignment:'center', verticalAlignment:'center'}">
+    <PushButton id="pushButton" buttonData="'Click Me!'"/>
+</FlowPane>

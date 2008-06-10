@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FlowPane orientation="vertical">
+    <RadioButton buttonData="{iconURL:'@bell.png', label:'Bell'}" group="icons"/>
+    <RadioButton buttonData="{iconURL:'@clock.png', label:'Clock'}" group="icons"/>
+    <RadioButton buttonData="{iconURL:'@house.png', label:'House'}" group="icons"/>
+</FlowPane>
+

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FlowPane orientation="vertical" styles="{padding:4}">
+    <RadioButton id="oneButton" buttonData="'One'" group="numbers" selected="true"/>
+    <RadioButton id="twoButton" buttonData="'Two'" group="numbers"/>
+    <RadioButton id="threeButton" buttonData="'Three'" group="numbers"/>
+    <PushButton id="selectButton" buttonData="'Select'"/>
+</FlowPane>

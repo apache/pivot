@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FlowPane styles="{padding:4, horizontalAlignment:'center', verticalAlignment:'center'}">
+    <PushButton buttonData="{iconURL:'@/pivot/tutorials/anchor.png', label:'Anchor'}" toggleButton="true"/>
+    <PushButton buttonData="{iconURL:'@/pivot/tutorials/cup.png', label:'Cup'}" toggleButton="true"/>
+    <PushButton buttonData="{iconURL:'@/pivot/tutorials/star.png', label:'Star'}" toggleButton="true"/>
+</FlowPane>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FlowPane>
+    <Border styles="{padding:0, borderColor:'#999999'}">
+        <ImageView id="imageView1" src="go-home.png" preferredWidth="48" preferredHeight="48"/>
+    </Border>
+    <Border styles="{padding:0, borderColor:'#999999'}">
+        <ImageView id="imageView2" src="weather-few-clouds.png" preferredWidth="48" preferredHeight="48"/>
+    </Border>
+    <Border styles="{padding:0, borderColor:'#999999'}">
+        <ImageView id="imageView3" preferredWidth="48" preferredHeight="48"/>
+    </Border>
+</FlowPane>
+

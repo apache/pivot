@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Border styles="{borderColor:'#999999'}">
+    <FlowPane styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
+        <FlowPane orientation="vertical" styles="{spacing:6}">
+            <Label text="Basic" styles="{font:'Verdana bold 11'}"/>
+            <Border styles="{padding:0, borderColor:'#cccac2'}">
+                <ScrollPane preferredHeight="80">
+                    <view>
+                        <ListView selectMode="single" selectedIndex="0">
+                            <listData>
+                                <item label="Red"/>
+                                <item label="Orange"/>
+                                <item label="Yellow"/>
+                                <item label="Green"/>
+                                <item label="Blue"/>
+                                <item label="Purple"/>
+                            </listData>
+                        </ListView>
+                    </view>
+                </ScrollPane>
+            </Border>
+        </FlowPane>
+
+        <FlowPane orientation="vertical" styles="{spacing:6}">
+            <Label text="Multi-Select" styles="{font:'Verdana bold 11'}"/>
+            <Border styles="{padding:0, borderColor:'#cccac2'}">
+                <ScrollPane preferredHeight="80">
+                    <view>
+                        <ListView selectMode="multi" selectedIndexes="[0, 3, 4]">
+                            <listData>
+                                <item label="Circle"/>
+                                <item label="Ellipse"/>
+                                <item label="Square"/>
+                                <item label="Rectangle"/>
+                                <item label="Hexagon"/>
+                                <item label="Octagon"/>
+                            </listData>
+                        </ListView>
+                    </view>
+                </ScrollPane>
+            </Border>
+        </FlowPane>
+
+        <FlowPane orientation="vertical" styles="{spacing:6}">
+            <Label text="Image" styles="{font:'Verdana bold 11'}"/>
+            <Border styles="{padding:0, borderColor:'#cccac2'}">
+                <ScrollPane preferredHeight="80">
+                    <view>
+                        <ListView selectMode="multi"
+                            selectedIndex="2"
+                            disabledItems="[1, 5]"
+                            itemRendererProperties="{iconSize:{width:16, height:16}, showIcon:true}">
+                            <listData>
+                                <item iconURL="@anchor.png" label="Anchor"/>
+                                <item iconURL="@bell.png" label="Bell"/>
+                                <item iconURL="@clock.png" label="Clock"/>
+                                <item iconURL="@cup.png" label="Cup"/>
+                                <item iconURL="@house.png" label="House"/>
+                                <item iconURL="@star.png" label="Star"/>
+                            </listData>
+                        </ListView>
+                    </view>
+                </ScrollPane>
+            </Border>
+        </FlowPane>
+
+        <FlowPane orientation="vertical" styles="{spacing:6}">
+            <Label text="List Buttons" styles="{font:'Verdana bold 11'}"/>
+            <Form>
+                <ListButton label="Basic" selectedIndex="0">
+                    <listData>
+                        <item label="Red"/>
+                        <item label="Orange"/>
+                        <item label="Yellow"/>
+                        <item label="Green"/>
+                        <item label="Blue"/>
+                        <item label="Purple"/>
+                    </listData>
+                </ListButton>
+
+                <ListButton label="Image" selectedIndex="2"
+                    itemRendererProperties="{iconSize:{width:16, height:16}, showIcon:true}">
+                    <listData>
+                        <item iconURL="@anchor.png" label="Anchor"/>
+                        <item iconURL="@bell.png" label="Bell"/>
+                        <item iconURL="@clock.png" label="Clock"/>
+                        <item iconURL="@cup.png" label="Cup"/>
+                        <item iconURL="@house.png" label="House"/>
+                        <item iconURL="@star.png" label="Star"/>
+                    </listData>
+                </ListButton>
+            </Form>
+        </FlowPane>
+    </FlowPane>
+</Border>

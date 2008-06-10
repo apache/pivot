@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true, padding:4, spacing: 1, gridColor:'#cccac2'}">
+    <rows>
+        <Row height="24"/>
+        <Row height="24"/>
+        <Row height="24"/>
+    </rows>
+    <columns>
+        <Column width="-1"/>
+        <Column width="24"/>
+    </columns>
+
+    <cells>
+        <FlowPane row="0" column="0" styles="{verticalAlignment:'center'}">
+            <Checkbox id="bellCheckbox" buttonData="'Bell'"/>
+        </FlowPane>
+        <FlowPane row="1" column="0" styles="{verticalAlignment:'center'}">
+            <Checkbox id="clockCheckbox" buttonData="'Clock'"/>
+        </FlowPane>
+        <FlowPane row="2" column="0" styles="{verticalAlignment:'center'}">
+            <Checkbox id="houseCheckbox" buttonData="'House'"/>
+        </FlowPane>
+
+        <ImageView row="0" column="1" id="bellImageView" src="/pivot/tutorials/bell.png" displayable="false"/>
+        <ImageView row="1" column="1" id="clockImageView" src="/pivot/tutorials/clock.png" displayable="false"/>
+        <ImageView row="2" column="1" id="houseImageView" src="/pivot/tutorials/house.png" displayable="false"/>
+    </cells>
+</TablePane>

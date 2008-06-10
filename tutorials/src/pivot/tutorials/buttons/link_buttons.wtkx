@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<CardPane id="cardPane" selectedIndex="0">
+    <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+        <ImageView src="/pivot/tutorials/IMG_0735_2.jpg"/>
+        <LinkButton id="nextButton" buttonData="{iconURL:'@resultset_next.png', label:'Next'}"/>
+    </FlowPane>
+
+    <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+        <ImageView src="/pivot/tutorials/IMG_0767_2.jpg"/>
+        <LinkButton id="previousButton" buttonData="{iconURL:'@resultset_previous.png', label:'Previous'}"/>
+    </FlowPane>
+</CardPane>

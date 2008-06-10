@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Border styles="{borderColor:'#999999'}">
+    <FlowPane styles="{padding:4, spacing:10}">
+        <FlowPane orientation="vertical">
+            <Label text="Simple" styles="{font:'Verdana bold 11'}"/>
+            <Border styles="{borderColor:'#999999', padding:0}">
+                <ScrollPane preferredWidth="160" preferredHeight="240"
+                    horizontalScrollBarPolicy="fillToCapacity">
+                    <view>
+                        <TreeView selectedPath="[0]" nodeRendererProperties="{showIcon:false}">
+                            <treeData>
+                                <node label="Numbers">
+                                    <node label="0"/>
+                                    <node label="1"/>
+                                    <node label="2"/>
+                                    <node label="3"/>
+                                    <node label="4"/>
+                                    <node label="5"/>
+                                    <node label="6"/>
+                                    <node label="7"/>
+                                    <node label="8"/>
+                                    <node label="9"/>
+                                </node>
+                                <node label="Letters">
+                                    <node label="A"/>
+                                    <node label="B"/>
+                                    <node label="C"/>
+                                    <node label="D"/>
+                                    <node label="E"/>
+                                    <node label="F"/>
+                                    <node label="G"/>
+                                    <node label="H"/>
+                                    <node label="I"/>
+                                    <node label="J"/>
+                                    <node label="K"/>
+                                    <node label="L"/>
+                                    <node label="M"/>
+                                    <node label="N"/>
+                                    <node label="O"/>
+                                    <node label="P"/>
+                                    <node label="Q"/>
+                                    <node label="R"/>
+                                    <node label="S"/>
+                                    <node label="T"/>
+                                    <node label="U"/>
+                                    <node label="V"/>
+                                    <node label="W"/>
+                                    <node label="X"/>
+                                    <node label="Y"/>
+                                    <node label="Z"/>
+                                </node>
+                            </treeData>
+                        </TreeView>
+                    </view>
+                </ScrollPane>
+            </Border>
+        </FlowPane>
+
+        <FlowPane orientation="vertical">
+            <Label text="Editable" styles="{font:'Verdana bold 11'}"/>
+            <Border styles="{borderColor:'#999999', padding:0}">
+                <ScrollPane id="editableTreeViewScrollPane" preferredWidth="160" preferredHeight="240"
+                    horizontalScrollBarPolicy="fillToCapacity">
+                    <view>
+                        <TreeView id="editableTreeView" selectedPath="[0]"
+                            nodeRendererProperties="{showIcon:true}">
+                            <treeData>
+                                <node label="Activity" iconURL="@folder.png">
+                                    <node label="Games" iconURL="@folder.png">
+                                        <node label="A very long game name that just serves to show how a wide tree node behaves" iconURL="@page_white.png"/>
+                                        <node label="Air Hockey" iconURL="@page_white.png"/>
+                                        <node label="Foosball" iconURL="@page_white.png"/>
+                                        <node label="Ping Pong" iconURL="@page_white.png"/>
+                                    </node>
+                                    <node label="Sports" iconURL="@folder.png">
+                                        <node label="Baseball" iconURL="@page_white.png"/>
+                                        <node label="Basketball" iconURL="@page_white.png"/>
+                                        <node label="Football" iconURL="@page_white.png"/>
+                                        <node label="Ice Hockey" iconURL="@page_white.png"/>
+                                        <node label="Soccer" iconURL="@page_white.png"/>
+                                        <node label="Softball" iconURL="@page_white.png"/>
+                                    </node>
+                                    <node label="Camping" iconURL="@page_white.png"/>
+                                    <node label="Skiing" iconURL="@page_white.png"/>
+                                </node>
+                                <node label="Occasion" iconURL="@folder.png">
+                                    <node label="Holidays" iconURL="@folder.png">
+                                        <node label="Christmas" iconURL="@page_white.png"/>
+                                        <node label="Independence Day" iconURL="@page_white.png"/>
+                                        <node label="Labor Day" iconURL="@page_white.png"/>
+                                        <node label="New Year's Day" iconURL="@page_white.png"/>
+                                        <node label="President's Day" iconURL="@page_white.png"/>
+                                        <node label="Thanksgiving" iconURL="@page_white.png"/>
+                                        <node label="Valentine's Day" iconURL="@page_white.png"/>
+                                        <node label="Veteran's Day" iconURL="@page_white.png"/>
+                                    </node>
+                                    <node label="Anniversary" iconURL="@page_white.png"/>
+                                    <node label="Birthday" iconURL="@page_white.png"/>
+                                    <node label="Wedding" iconURL="@page_white.png"/>
+                                </node>
+                                <node label="Location" iconURL="@folder.png">
+                                    <node label="Africa" iconURL="@folder.png"/>
+                                    <node label="Antarctica" iconURL="@folder.png"/>
+                                    <node label="Asia" iconURL="@folder.png"/>
+                                    <node label="Australia" iconURL="@folder.png"/>
+                                    <node label="Europe" iconURL="@folder.png"/>
+                                    <node label="North America" iconURL="@folder.png"/>
+                                    <node label="South America" iconURL="@folder.png">
+                                        <node label="Peru" iconURL="@folder.png"/>
+                                    </node>
+                                </node>
+                            </treeData>
+                        </TreeView>
+                    </view>
+                </ScrollPane>
+            </Border>
+        </FlowPane>
+
+        <FlowPane orientation="vertical">
+            <Label text="Multi-Select" styles="{font:'Verdana bold 11'}"/>
+            <Border styles="{borderColor:'#999999', padding:0}">
+                <ScrollPane preferredWidth="160" preferredHeight="240"
+                    horizontalScrollBarPolicy="fillToCapacity">
+                    <view>
+                        <TreeView selectedPath="[0]" selectMode="multi"
+                            nodeRendererProperties="{showIcon:true}">
+                            <treeData>
+                                <node label="Africa" iconURL="@folder.png"/>
+                                <node label="Antarctica" iconURL="@folder.png"/>
+                                <node label="Asia" iconURL="@folder.png"/>
+                                <node label="Australia" iconURL="@folder.png"/>
+                                <node label="Europe" iconURL="@folder.png">
+                                    <node label="Albania" iconURL="@page_white.png"/>
+                                    <node label="Andorra" iconURL="@page_white.png"/>
+                                    <node label="Armenia" iconURL="@page_white.png"/>
+                                    <node label="Austria" iconURL="@page_white.png"/>
+                                    <node label="Azerbaijan" iconURL="@page_white.png"/>
+                                    <node label="Belarus" iconURL="@page_white.png"/>
+                                    <node label="Belgium" iconURL="@page_white.png"/>
+                                    <node label="Bosnia and Herzegovina" iconURL="@page_white.png"/>
+                                    <node label="Bulgaria" iconURL="@page_white.png"/>
+                                    <node label="Croatia" iconURL="@page_white.png"/>
+                                    <node label="Cyprus" iconURL="@page_white.png"/>
+                                    <node label="Czech Republic" iconURL="@page_white.png"/>
+                                    <node label="Denmark" iconURL="@page_white.png"/>
+                                    <node label="Estonia" iconURL="@page_white.png"/>
+                                    <node label="Finland" iconURL="@page_white.png"/>
+                                    <node label="Former Yugoslav Republic of Macedonia" iconURL="@page_white.png"/>
+                                    <node label="France" iconURL="@page_white.png"/>
+                                    <node label="Georgia" iconURL="@page_white.png"/>
+                                    <node label="Germany" iconURL="@page_white.png"/>
+                                    <node label="Greece" iconURL="@page_white.png"/>
+                                    <node label="Hungary" iconURL="@page_white.png"/>
+                                    <node label="Iceland" iconURL="@page_white.png"/>
+                                    <node label="Ireland" iconURL="@page_white.png"/>
+                                    <node label="Italy" iconURL="@page_white.png"/>
+                                    <node label="Latvia" iconURL="@page_white.png"/>
+                                    <node label="Liechtenstein" iconURL="@page_white.png"/>
+                                    <node label="Lithuania" iconURL="@page_white.png"/>
+                                    <node label="Luxembourg" iconURL="@page_white.png"/>
+                                    <node label="Malta" iconURL="@page_white.png"/>
+                                    <node label="Moldova" iconURL="@page_white.png"/>
+                                    <node label="Monaco" iconURL="@page_white.png"/>
+                                    <node label="Montenegro" iconURL="@page_white.png"/>
+                                    <node label="Netherlands" iconURL="@page_white.png"/>
+                                    <node label="Norway" iconURL="@page_white.png"/>
+                                    <node label="Poland" iconURL="@page_white.png"/>
+                                    <node label="Portugal" iconURL="@page_white.png"/>
+                                    <node label="Romania" iconURL="@page_white.png"/>
+                                    <node label="Russia" iconURL="@page_white.png"/>
+                                    <node label="San Marino" iconURL="@page_white.png"/>
+                                    <node label="Serbia" iconURL="@page_white.png"/>
+                                    <node label="Slovakia" iconURL="@page_white.png"/>
+                                    <node label="Slovenia" iconURL="@page_white.png"/>
+                                    <node label="Spain" iconURL="@page_white.png"/>
+                                    <node label="Sweden" iconURL="@page_white.png"/>
+                                    <node label="Switzerland" iconURL="@page_white.png"/>
+                                    <node label="Turkey" iconURL="@page_white.png"/>
+                                    <node label="Ukraine" iconURL="@page_white.png"/>
+                                    <node label="United Kingdom" iconURL="@page_white.png"/>
+                                    <node label="Vatican City State" iconURL="@page_white.png"/>
+                                </node>
+                                <node label="North America" iconURL="@folder.png">
+                                    <node label="Alabama" iconURL="@page_white.png"/>
+                                    <node label="Alaska" iconURL="@page_white.png"/>
+                                    <node label="Arizona" iconURL="@page_white.png"/>
+                                    <node label="Arkansas" iconURL="@page_white.png"/>
+                                    <node label="California" iconURL="@page_white.png"/>
+                                    <node label="Colorado" iconURL="@page_white.png"/>
+                                    <node label="Connecticut" iconURL="@page_white.png"/>
+                                    <node label="Delaware" iconURL="@page_white.png"/>
+                                    <node label="District of Columbia" iconURL="@page_white.png"/>
+                                    <node label="Florida" iconURL="@page_white.png"/>
+                                    <node label="Georgia" iconURL="@page_white.png"/>
+                                    <node label="Hawaii" iconURL="@page_white.png"/>
+                                    <node label="Idaho" iconURL="@page_white.png"/>
+                                    <node label="Illinois" iconURL="@page_white.png"/>
+                                    <node label="Indiana" iconURL="@page_white.png"/>
+                                    <node label="Iowa" iconURL="@page_white.png"/>
+                                    <node label="Kansas" iconURL="@page_white.png"/>
+                                    <node label="Kentucky" iconURL="@page_white.png"/>
+                                    <node label="Louisiana" iconURL="@page_white.png"/>
+                                    <node label="Maine" iconURL="@page_white.png"/>
+                                    <node label="Maryland" iconURL="@page_white.png"/>
+                                    <node label="Massachusetts" iconURL="@page_white.png"/>
+                                    <node label="Michigan" iconURL="@page_white.png"/>
+                                    <node label="Minnesota" iconURL="@page_white.png"/>
+                                    <node label="Mississippi" iconURL="@page_white.png"/>
+                                    <node label="Missouri" iconURL="@page_white.png"/>
+                                    <node label="Montana" iconURL="@page_white.png"/>
+                                    <node label="Nebraska" iconURL="@page_white.png"/>
+                                    <node label="Nevada" iconURL="@page_white.png"/>
+                                    <node label="New Hampshire" iconURL="@page_white.png"/>
+                                    <node label="New Jersey" iconURL="@page_white.png"/>
+                                    <node label="New Mexico" iconURL="@page_white.png"/>
+                                    <node label="New York" iconURL="@page_white.png"/>
+                                    <node label="North Carolina" iconURL="@page_white.png"/>
+                                    <node label="North Dakota" iconURL="@page_white.png"/>
+                                    <node label="Ohio" iconURL="@page_white.png"/>
+                                    <node label="Oklahoma" iconURL="@page_white.png"/>
+                                    <node label="Oregon" iconURL="@page_white.png"/>
+                                    <node label="Pennsylvania" iconURL="@page_white.png"/>
+                                    <node label="Rhode Island" iconURL="@page_white.png"/>
+                                    <node label="South Carolina" iconURL="@page_white.png"/>
+                                    <node label="South Dakota" iconURL="@page_white.png"/>
+                                    <node label="Tennessee" iconURL="@page_white.png"/>
+                                    <node label="Texas" iconURL="@page_white.png"/>
+                                    <node label="Utah" iconURL="@page_white.png"/>
+                                    <node label="Vermont" iconURL="@page_white.png"/>
+                                    <node label="Virginia" iconURL="@page_white.png"/>
+                                    <node label="Washington" iconURL="@page_white.png"/>
+                                    <node label="West Virginia" iconURL="@page_white.png"/>
+                                    <node label="Wisconsin" iconURL="@page_white.png"/>
+                                    <node label="Wyoming" iconURL="@page_white.png"/>
+                                </node>
+                                <node label="South America" iconURL="@folder.png"/>
+                            </treeData>
+                        </TreeView>
+                    </view>
+                </ScrollPane>
+            </Border>
+        </FlowPane>
+    </FlowPane>
+</Border>

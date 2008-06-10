@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FlowPane styles="{padding:4, verticalAlignment:'center'}">
+    <ImageView src="/pivot/tutorials/clock.png" cursor="crosshair"/>
+    <Label text="What time is it?"/>
+</FlowPane>

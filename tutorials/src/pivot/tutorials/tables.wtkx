@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Border styles="{borderColor:'#999999'}">
+    <FlowPane styles="{padding:4, spacing:8}">
+        <FlowPane orientation="vertical">
+            <Label text="Sortable" styles="{font:'Verdana bold 11'}"/>
+            <Border styles="{padding:0, borderColor:'#cccac2'}">
+                <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="276" preferredHeight="160">
+                    <view>
+                        <TableView id="sortableTableView" selectMode="single">
+                            <columns>
+                                <Column name="i" width="48"/>
+                                <Column name="a" width="48"/>
+                                <Column name="b" width="48"/>
+                                <Column name="c" width="48"/>
+                                <Column name="d" width="48"/>
+                                <Column name="e" width="1*"/>
+                            </columns>
+                        </TableView>
+                    </view>
+                    <columnHeader>
+                        <TableViewHeader id="sortableTableViewHeader" tableViewID="sortableTableView"/>
+                    </columnHeader>
+                </ScrollPane>
+            </Border>
+
+        </FlowPane>
+
+        <FlowPane orientation="vertical">
+            <Label text="Custom Content" styles="{font:'Verdana bold 11'}"/>
+            <Border styles="{padding:0, borderColor:'#cccac2'}">
+                <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="160">
+                    <view>
+                        <TableView id="customTableView" selectMode="multi"
+                            selectedIndexes="[0, 2]" disabledRows="[1, 5]"
+                            styles="{showHorizontalGridLines:false}">
+                            <columns>
+                                <Column name="a" width="20"
+                                    headerData="{iconURL:'@flag_red.png'}"
+                                    cellRenderer="pivot.wtk.content.TableViewBooleanCellRenderer"/>
+                                <Column name="b" width="32"
+                                    headerData="'Icon'"
+                                    cellRenderer="pivot.wtk.content.TableViewImageCellRenderer"/>
+                                <Column name="c" width="1*"
+                                    headerData="'Name'"/>
+                            </columns>
+                            <tableData>
+                                <row a="true" b="@anchor.png" c="Anchor"/>
+                                <row a="false" b="@bell.png" c="Bell"/>
+                                <row a="false" b="@clock.png" c="Clock"/>
+                                <row a="true" b="@cup.png" c="Cup"/>
+                                <row a="false" b="@house.png" c="House"/>
+                                <row a="true" b="@star.png" c="Star"/>
+                            </tableData>
+                        </TableView>
+                    </view>
+                    <columnHeader>
+                        <TableViewHeader tableViewID="customTableView"/>
+                    </columnHeader>
+                </ScrollPane>
+            </Border>
+        </FlowPane>
+    </FlowPane>
+</Border>

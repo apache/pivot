@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FlowPane>
+    <Border styles="{borderColor:'#999999'}">
+        <FlowPane styles="{padding:8}">
+            <FlowPane styles="{padding:{right:8}}">
+                <PushButton id="errorAlertButton" buttonData="'Error'"/>
+                <PushButton id="warningAlertButton" buttonData="'Warning'"/>
+                <PushButton id="questionAlertButton" buttonData="'Question'"/>
+                <PushButton id="infoAlertButton" buttonData="'Info'"/>
+            </FlowPane>
+
+            <PushButton id="customAlertButton" buttonData="'Custom'"/>
+        </FlowPane>
+    </Border>
+</FlowPane>
+
