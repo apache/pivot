@@ -37,9 +37,14 @@ limitations under the License.
 	                    styles="{showHorizontalGridLines:false}">
 	                    <columns>
 	                        <Column name="symbol" headerData="'Symbol'" width="80"/>
-	                        <Column name="value" headerData="'Value'" width="80"/>
+	                        <Column name="value" headerData="'Value'" width="80"
+	                           cellRenderer="pivot.wtk.content.TableViewNumberCellRenderer"
+	                           cellRendererStyles="{horizontalAlignment:'right'}"
+	                           cellRendererProperties="{numberFormat:'$0.00'}"/>
 	                        <Column name="change" headerData="'Change'" width="1*"
-	                           cellRendererStyles="{horizontalAlignment:'right'}"/>
+	                           cellRenderer="pivot.tutorials.stocktracker.ChangeCellRenderer"
+	                           cellRendererStyles="{horizontalAlignment:'right'}"
+	                           cellRendererProperties="{numberFormat:'+0.00;-0.00'}"/>
 	                    </columns>
 	                </TableView>
 	            </view>
@@ -63,7 +68,7 @@ limitations under the License.
             </FlowPane>
         </FlowPane>
 
-        <Label row="3" column="0" text="Last update: November 7, 2007 4:42:13pm"
+        <Label row="3" column="0" text="Last update: June 12, 2008 4:30pm"
             styles="{font:'Verdana italic 10'}"/>
     </cells>
 </TablePane>
