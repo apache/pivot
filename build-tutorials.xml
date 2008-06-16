@@ -46,5 +46,6 @@
    <!-- Clean the tutorial classes -->
    <target name="clean">
       <delete dir="${tutorials}/${bin}"/>
+      <delete file="${tutorials}/${ant.project.name}-tutorials.jar"/>
    </target>
 </project>
