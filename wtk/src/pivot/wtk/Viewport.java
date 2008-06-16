@@ -1,0 +1,163 @@
+/*
+ * Copyright (c) 2008 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package pivot.wtk;
+
+import pivot.collections.Sequence;
+import pivot.util.ListenerList;
+
+/**
+ * TODO Document
+ *
+ * @author tvolkert
+ */
+public abstract class Viewport extends Container {
+    public interface Skin extends pivot.wtk.Skin {
+        public Rectangle getViewportBounds();
+    }
+
+    private class ViewportListenerList extends ListenerList<ViewportListener>
+        implements ViewportListener {
+
+        public void scrollTopChanged(Viewport viewport, int previousScrollTop) {
+            for (ViewportListener listener : this) {
+                listener.scrollTopChanged(viewport, previousScrollTop);
+            }
+        }
+
+        public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
+            for (ViewportListener listener : this) {
+                listener.scrollLeftChanged(viewport, previousScrollLeft);
+            }
+        }
+
+        public void viewChanged(Viewport viewport, Component previousView) {
+            for (ViewportListener listener : this) {
+                listener.viewChanged(viewport, previousView);
+            }
+        }
+    }
+
+    private int scrollTop = 0;
+    private int scrollLeft = 0;
+    private Component view;
+    private ViewportListenerList viewportListeners = new ViewportListenerList();
+
+    @Override
+    public void setSkinClass(Class<? extends pivot.wtk.Skin> skinClass) {
+        if (!Viewport.Skin.class.isAssignableFrom(skinClass)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + Viewport.Skin.class.getName());
+        }
+
+        super.setSkinClass(skinClass);
+    }
+
+    public int getScrollTop() {
+        return scrollTop;
+    }
+
+    public void setScrollTop(int scrollTop) {
+        if (scrollTop < 0) {
+            throw new IllegalArgumentException("Scroll top must be positive");
+        }
+
+        int previousScrollTop = this.scrollTop;
+
+        if (scrollTop != previousScrollTop) {
+            this.scrollTop = scrollTop;
+            viewportListeners.scrollTopChanged(this, previousScrollTop);
+        }
+    }
+
+    public int getScrollLeft() {
+        return scrollLeft;
+    }
+
+    public void setScrollLeft(int scrollLeft) {
+        if (scrollLeft < 0) {
+            throw new IllegalArgumentException("Scroll left must be positive");
+        }
+
+        int previousScrollLeft = this.scrollLeft;
+
+        if (scrollLeft != previousScrollLeft) {
+            this.scrollLeft = scrollLeft;
+            viewportListeners.scrollLeftChanged(this, previousScrollLeft);
+        }
+    }
+
+    public Component getView() {
+        return view;
+    }
+
+    public void setView(Component view) {
+       Component previousView = this.view;
+
+        if (view != previousView) {
+            Container.ComponentSequence components = getComponents();
+
+            if (view != null) {
+                if (view.getParent() != null) {
+                    throw new IllegalArgumentException("Component already has a parent.");
+                }
+
+                // Add the component
+                components.insert(view, 0);
+            }
+
+            // Set the component as the new view component (note that we
+            // set the new component before removing the old one so two
+            // view change events don't get fired)
+            this.view = view;
+
+            // Remove any previous view component
+            if (previousView != null) {
+                components.remove(previousView);
+            }
+
+            viewportListeners.viewChanged(this, previousView);
+        }
+    }
+
+    public Rectangle getViewportBounds() {
+        Viewport.Skin viewportSkin = (Viewport.Skin)getSkin();
+        return viewportSkin.getViewportBounds();
+    }
+
+    @Override
+    protected Sequence<Component> removeComponents(int index, int count) {
+        // Call the base method to remove the components
+        Sequence<Component> removed = super.removeComponents(index, count);
+
+        // Ensure that the appropriate instance variable is cleared if the
+        // component being removed maps to the view
+        for (int i = 0, n = removed.getLength(); i < n; i++) {
+            Component component = removed.get(i);
+
+            if (component == view) {
+                view = null;
+                viewportListeners.viewChanged(this, component);
+                break;
+            }
+        }
+
+        return removed;
+    }
+
+    public ListenerList<ViewportListener> getViewportListeners() {
+        return viewportListeners;
+    }
+}

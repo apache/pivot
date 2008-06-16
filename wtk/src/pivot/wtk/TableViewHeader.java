@@ -1,0 +1,148 @@
+/*
+ * Copyright (c) 2008 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package pivot.wtk;
+
+import pivot.util.ListenerList;
+import pivot.wtk.content.TableViewHeaderDataRenderer;
+import pivot.wtk.skin.terra.TableViewHeaderSkin;
+
+public class TableViewHeader extends Component {
+    public interface DataRenderer extends Renderer {
+        public void render(Object data, TableViewHeader tableViewHeader, boolean highlighted);
+    }
+
+    /**
+     * Table view skin interface. Table view skins may optionally implement
+     * this interface to facilitate additional communication between the
+     * component and the skin.
+     *
+     * @author gbrown
+     */
+    public interface Skin extends pivot.wtk.Skin {
+        public int getHeaderAt(int x);
+        public Rectangle getHeaderBounds(int index);
+    }
+
+    private class TableViewHeaderListenerList extends ListenerList<TableViewHeaderListener>
+        implements TableViewHeaderListener {
+        public void dataRendererChanged(TableViewHeader tableViewHeader,
+            TableViewHeader.DataRenderer previousDataRenderer) {
+            for (TableViewHeaderListener listener : this) {
+                listener.dataRendererChanged(tableViewHeader, previousDataRenderer);
+            }
+        }
+    }
+
+    private class TableViewHeaderPressListenerList extends ListenerList<TableViewHeaderPressListener>
+        implements TableViewHeaderPressListener {
+        public void headerPressed(TableViewHeader tableViewHeader, int index) {
+            for (TableViewHeaderPressListener listener : this) {
+                listener.headerPressed(tableViewHeader, index);
+            }
+        }
+    }
+
+    private TableView tableView = null;
+    private DataRenderer dataRenderer = null;
+
+    private TableViewHeaderListenerList tableViewHeaderListeners = new TableViewHeaderListenerList();
+    private TableViewHeaderPressListenerList tableViewHeaderPressListeners = new TableViewHeaderPressListenerList();
+
+    public TableViewHeader(TableView tableView) {
+        if (tableView == null) {
+            throw new IllegalArgumentException("tableView is null.");
+        }
+
+        this.tableView = tableView;
+
+        if (getClass() == TableViewHeader.class) {
+            setSkinClass(TableViewHeaderSkin.class);
+        }
+
+        setDataRenderer(new TableViewHeaderDataRenderer());
+    }
+
+    @Override
+    public void setSkinClass(Class<? extends pivot.wtk.Skin> skinClass) {
+        if (!TableViewHeader.Skin.class.isAssignableFrom(skinClass)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + TableViewHeader.Skin.class.getName());
+        }
+
+        super.setSkinClass(skinClass);
+    }
+
+    public TableView getTableView() {
+        return tableView;
+    }
+
+    public DataRenderer getDataRenderer() {
+        return dataRenderer;
+    }
+
+    public void setDataRenderer(DataRenderer dataRenderer) {
+        if (dataRenderer == null) {
+            throw new IllegalArgumentException("dataRenderer is null.");
+        }
+
+        DataRenderer previousDataRenderer = this.dataRenderer;
+        if (previousDataRenderer != dataRenderer) {
+            this.dataRenderer = dataRenderer;
+            tableViewHeaderListeners.dataRendererChanged(this, previousDataRenderer);
+        }
+    }
+
+    public void pressHeader(int index) {
+        tableViewHeaderPressListeners.headerPressed(this, index);
+    }
+
+    /**
+     * Returns the index of the header at a given location.
+     *
+     * @param x
+     * The x-coordinate of the header to identify.
+     *
+     * @return
+     * The column index, or <tt>-1</tt> if there is no column at the given
+     * x-coordinate.
+     */
+    public int getHeaderAt(int x) {
+        TableViewHeader.Skin tableViewHeaderSkin = (TableViewHeader.Skin)getSkin();
+        return tableViewHeaderSkin.getHeaderAt(x);
+    }
+
+    /**
+     * Returns the bounding area of a given header.
+     *
+     * @param index
+     * The index of the header.
+     *
+     * @return
+     * The bounding area of the header.
+     */
+    public Rectangle getHeaderBounds(int index) {
+        TableViewHeader.Skin tableViewHeaderSkin = (TableViewHeader.Skin)getSkin();
+        return tableViewHeaderSkin.getHeaderBounds(index);
+    }
+
+    public ListenerList<TableViewHeaderListener> getTableViewHeaderListeners() {
+        return tableViewHeaderListeners;
+    }
+
+    public ListenerList<TableViewHeaderPressListener> getTableViewHeaderPressListeners() {
+        return tableViewHeaderPressListeners;
+    }
+}
