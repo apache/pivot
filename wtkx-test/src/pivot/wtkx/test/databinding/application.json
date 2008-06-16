@@ -1,0 +1,10 @@
+{ id: 1000,
+  name: {
+    last: "Brown",
+    first: "Greg",
+  },
+  active: "selected",
+  male: true,
+  favoriteColors: ["red", "green", "blue"],
+  favoriteShape: "hexagon"
+}
