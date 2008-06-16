@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="pivot" default="build">
+   <property name="src" value="src"/>
+   <property name="bin" value="ant-bin"/>
+
+   <property name="tutorials" value="tutorials"/>
+
+   <!-- Compiler properties -->
+   <property name="compiler.optimize" value="true" />
+   <property name="compiler.deprecation" value="true" />
+   <property name="compiler.debug" value="true" />
+
+   <!-- Build tutorial library -->
+   <target name="build">
+      <mkdir dir="${tutorials}/${bin}"/>
+
+      <!-- Compile source files -->
+      <javac srcdir="${tutorials}/${src}"
+         destDir="${tutorials}/${bin}"
+         optimize="${compiler.optimize}"
+         deprecation="${compiler.deprecation}"
+         debug="${compiler.debug}"
+         failonerror="true">
+         <compilerarg value="-Xlint"/>
+         <classpath>
+           <pathelement location="core/pivot-core.jar"/>
+           <pathelement location="web/pivot-web.jar"/>
+           <pathelement location="wtk/pivot-wtk.jar"/>
+           <pathelement location="wtkx/pivot-wtkx.jar"/>
+         </classpath>
+      </javac>
+
+      <!-- Rebuild the JAR file -->
+      <delete file="${tutorials}/${ant.project.name}-tutorials.jar"/>
+      <jar jarfile="${tutorials}/${ant.project.name}-tutorials.jar">
+         <fileset dir="${tutorials}/${bin}"/>
+         <fileset dir="${tutorials}/${src}">
+           <include name="**/*.png"/>
+           <include name="**/*.jpg"/>
+           <include name="**/*.wtkx"/>
+         </fileset>
+      </jar>
+   </target>
+
+   <!-- Clean the tutorial classes -->
+   <target name="clean">
+      <delete dir="${tutorials}/${bin}"/>
+   </target>
+</project>
