@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2008 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package pivot.core.test;
+
+import java.io.StringReader;
+import java.io.StringWriter;
+import pivot.collections.List;
+import pivot.collections.Map;
+import pivot.serialization.JSONSerializer;
+
+public class JSONSerializerTest {
+    public static String[] testStrings = {
+        "  null",
+        "\"Hello\\\" World\"",
+        "'Hello\\\' \"World'",
+        "\"ABCD",
+        " 10",
+        "+10",
+        " -10",
+        "10.1",
+        "+10.1",
+        "-1s0.1",
+        "true",
+        "false",
+        " [  0, 1, 2, [3, 4]",
+        " [ \"A\", \"B\", \t\"C\", [\t0, 1, 2, 'abc', true]]",
+        "['A', 'B', 'C']",
+        "{   }",
+        "{a:1, b:2",
+        "{'1a' : 0, bc : 'hello', n:-100.56, c:true, d:{e:10, f:20}, g:{aa:10, bb:20, cc:30}, m:[1,2, 4]}",
+        "{\"a#b\" : '#ff'}"
+    };
+
+    public static void main(String[] args) {
+        JSONSerializer jsonSerializer = new JSONSerializer();
+
+        for (int i = 0, n = testStrings.length; i < n; i++) {
+            try {
+                System.out.println("Input: " + testStrings[i]);
+                Object object = jsonSerializer.readObject(new StringReader(testStrings[i]));
+
+                StringWriter writer = new StringWriter();
+                jsonSerializer.writeObject(object, writer);
+
+                System.out.println("Output: " + writer);
+            } catch(Exception exception) {
+                System.out.println(exception);
+            }
+        }
+
+        int i = Integer.MAX_VALUE;
+        long l1 = (long)i + 1;
+        long l2 = Long.MAX_VALUE;
+        float f = Float.MAX_VALUE;
+        double d1 = (double)f + 1;
+        double d2 = Double.MAX_VALUE;
+        String listString = "[" + i + ", " + l1 + ", " + l2 + ", "
+            + f + ", " + d1 + ", " + d2 + "]";
+        List<Object> list = JSONSerializer.parseList(listString);
+        for (Object item : list) {
+            System.out.println(item);
+        }
+
+        Map<String, Object> map = JSONSerializer.parseMap("{a:100, b:200, c:300}");
+        for (String key : map) {
+            System.out.println(key + ":" + map.get(key));
+        }
+
+
+    }
+}
