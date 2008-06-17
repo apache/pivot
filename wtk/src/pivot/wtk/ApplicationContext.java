@@ -507,19 +507,6 @@ public abstract class ApplicationContext {
     public ApplicationContext() {
         assert (ApplicationContext.instance == null) : "An application context already exists.";
 
-        // NOTE These flags are defined in
-        // src/windows/native/sun/windows/awt_Component.cpp and may not work
-        // on other platforms; also, they are considered "secure" properties
-        // and require appropriate runtime permissions to be set (i.e. they
-        // will only work in a trusted JVM such as a desktop application or
-        // a signed applet).
-        try {
-            System.setProperty("sun.awt.noerasebackground", "true");
-            System.setProperty("sun.awt.erasebackgroundonresize", "true");
-        } catch (RuntimeException exception) {
-            System.out.println(exception);
-        }
-
         ApplicationContext.instance = this;
     }
 
@@ -570,8 +557,6 @@ public abstract class ApplicationContext {
      */
     public void setBusy(boolean busy) {
         if (this.busy != busy) {
-            DisplayHost displayHost = getDisplayHost();
-
             if (displayHost == null) {
                 throw new IllegalStateException("Display host not initialized.");
             }
@@ -598,8 +583,6 @@ public abstract class ApplicationContext {
         if (!busy
             && cursor != this.cursor) {
             this.cursor = cursor;
-
-            DisplayHost displayHost = getDisplayHost();
 
             if (displayHost == null) {
                 throw new IllegalStateException("Display host not initialized.");
@@ -685,8 +668,6 @@ public abstract class ApplicationContext {
     }
 
     public void repaint(int x, int y, int width, int height) {
-        DisplayHost displayHost = getDisplayHost();
-
         if (displayHost != null) {
             displayHost.repaint(x, y, width, height);
         }
@@ -694,7 +675,6 @@ public abstract class ApplicationContext {
 
     public Graphics2D getGraphics() {
         Graphics2D graphics = null;
-        DisplayHost displayHost = getDisplayHost();
 
         if (displayHost != null) {
             graphics = (Graphics2D) displayHost.getGraphics();
@@ -705,11 +685,18 @@ public abstract class ApplicationContext {
 
     /**
      * Returns the display host component.
-     *
-     * @return
      */
     public DisplayHost getDisplayHost() {
         return displayHost;
+    }
+
+    /**
+     * Recreates the display host. This is required to work around an apparent
+     * bug in the Java plugin. See source code comments in
+     * BrowserApplicationContext.java for more information.
+     */
+    protected void recreateDisplayHost() {
+        displayHost = new DisplayHost();
     }
 
     /**

@@ -58,7 +58,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private java.awt.Frame hostFrame = new java.awt.Frame();
 
     private DesktopApplicationContext() {
-        super();
+        // NOTE These properties are supported on Windows only
+        System.setProperty("sun.awt.noerasebackground", "true");
+        System.setProperty("sun.awt.erasebackgroundonresize", "true");
 
         // Add the display host to the frame
         hostFrame.add(displayHost);

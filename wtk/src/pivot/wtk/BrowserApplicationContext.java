@@ -17,22 +17,8 @@ package pivot.wtk;
 
 public final class BrowserApplicationContext extends ApplicationContext {
     public static final class HostApplet extends java.applet.Applet {
-        public HostApplet() {
-            // Create the application context; if the applet has been
-            // previously loaded, the JVM may still be running, and the
-            // instance may already exist
-            ApplicationContext applicationContext = ApplicationContext.getInstance();
-
-            if (applicationContext == null) {
-                applicationContext = new BrowserApplicationContext();
-            }
-
-            // NOTE We must create a new instance of DisplayHost every time
-            // the applet is reloaded. There appears to be a bug in the Java
-            // plugin that precludes re-using a single instance of DisplayHost
-            // across page refreshes, even when the DisplayHost is added to
-            // the applet in init() and removed in destroy().
-            applicationContext.displayHost = new DisplayHost();
+        static {
+            new BrowserApplicationContext();
         }
 
         private class InitCallback implements Runnable {
@@ -40,6 +26,12 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 // Add the display host to the applet
                 ApplicationContext applicationContext = ApplicationContext.getInstance();
 
+                // NOTE We must create a new instance of DisplayHost every time
+                // the applet is reloaded. There appears to be a bug in the Java
+                // plugin that precludes re-using a single instance of DisplayHost
+                // across page refreshes, even when the DisplayHost is added to
+                // the applet in init() and removed in destroy().
+                applicationContext.recreateDisplayHost();
                 DisplayHost displayHost = applicationContext.getDisplayHost();
                 setLayout(new java.awt.BorderLayout());
                 add(displayHost);
