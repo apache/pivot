@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class SXONSerializer implements Serializer {
+    public static final String MIME_TYPE = "text/xml"; // TODO
 
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
@@ -33,4 +34,7 @@ public class SXONSerializer implements Serializer {
 
     }
 
+    public String getMIMEType() {
+        return MIME_TYPE;
+    }
 }

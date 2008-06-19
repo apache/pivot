@@ -88,12 +88,11 @@ public class WebQueryTestServlet extends HttpServlet {
 
         try {
             Object value = jsonSerializer.readObject(inputStream);
-            System.out.println(value);
+            jsonSerializer.writeObject(value, System.out);
             response.setStatus(201);
             response.setHeader("Location", request.getPathInfo() +"#101");
         } catch(SerializationException exception) {
-            System.out.println(exception);
-            response.setStatus(400);
+            throw new ServletException(exception);
         }
 
         response.setContentLength(0);
@@ -108,11 +107,10 @@ public class WebQueryTestServlet extends HttpServlet {
 
         try {
             Object value = jsonSerializer.readObject(inputStream);
-            System.out.println(value);
+            jsonSerializer.writeObject(value, System.out);
             response.setStatus(200);
         } catch(SerializationException exception) {
-            System.out.println(exception);
-            response.setStatus(400);
+            throw new ServletException(exception);
         }
 
         response.setContentLength(0);

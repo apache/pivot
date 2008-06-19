@@ -29,6 +29,14 @@ import pivot.serialization.JSONSerializer;
  * TODO Copy data to system clipboard when allowed (and the data format is
  * supported).
  *
+ * TODO Use a list of Class:Serializer mapping, so we can prioritize? Using
+ * this approach, we could walk the list and use the first matching serializer
+ * (e.g. to use BinarySerializer for classes that implement Serializable).
+ * Alternatively, this would let us serialize to all matching types (though
+ * this could be a peformance issue).
+ *
+ * Another alternative is to require the caller to specify the serializer(s)
+ * at put() time.
  */
 public class Clipboard {
     public static final class SerializerDictionary

@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class BinarySerializer implements Serializer {
+    public static final String MIME_TYPE = "application/x-java-serialized-object";
 
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
@@ -31,5 +32,9 @@ public class BinarySerializer implements Serializer {
         throws IOException, SerializationException {
         // TODO Auto-generated method stub
 
+    }
+
+    public String getMIMEType() {
+        return MIME_TYPE;
     }
 }

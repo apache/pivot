@@ -39,6 +39,8 @@ public class JSONSerializer implements Serializer {
     private int c = -1;
     private boolean alwaysDelimitMapKeys = false;
 
+    public static final String MIME_TYPE = "application/json";
+
     /**
      * Deserializes data from a JSON stream. See {@link #readObject(Reader)}.
      */
@@ -442,6 +444,10 @@ public class JSONSerializer implements Serializer {
             throw new IllegalArgumentException(object.getClass()
                 + " is not a supported type.");
         }
+    }
+
+    public String getMIMEType() {
+        return MIME_TYPE;
     }
 
     /**

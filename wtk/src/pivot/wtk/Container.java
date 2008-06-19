@@ -404,11 +404,13 @@ public abstract class Container extends Component {
 
     @Override
     public void setEnabled(boolean enabled) {
-        // If this container is being disabled and contains the focused
-        // component, clear the focus
-        if (!enabled
-            && isAncestor(getFocusedComponent())) {
-            setFocusedComponent(null);
+        if (isEnabled() != enabled) {
+            if (!enabled) {
+                // If this container contains the focused component, clear the focus
+                if (isAncestor(getFocusedComponent())) {
+                    setFocusedComponent(null);
+                }
+            }
         }
 
         super.setEnabled(enabled);

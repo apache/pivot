@@ -40,6 +40,8 @@ import pivot.collections.Sequence;
  * TODO Add support for variable delimiters.
  */
 public class CSVSerializer implements Serializer {
+    public static final String MIME_TYPE = "text/csv";
+
     public class KeySequence implements Sequence<String> {
         public int add(String item) {
             return keys.add(item);
@@ -265,5 +267,9 @@ public class CSVSerializer implements Serializer {
                 printWriter.close();
             }
         }
+    }
+
+    public String getMIMEType() {
+        return MIME_TYPE;
     }
 }

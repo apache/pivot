@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <FlowPane orientation="horizontal" styles="{backgroundColor:'#ff0000', padding:8, spacing:8}">
-    <FlowPane orientation="vertical" cursor="hand" styles="{backgroundColor:'#00ff00', padding:8, spacing:8}">
+    <FlowPane orientation="vertical" cursor="crosshair" styles="{backgroundColor:'#00ff00', padding:8, spacing:8}">
         <Label text="Hello" cursor="text"/>
         <Label text="World" cursor="text"/>
+        <LinkButton id="button" buttonData="'Click Me'"/>
     </FlowPane>
 </FlowPane>

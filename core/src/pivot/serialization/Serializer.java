@@ -47,4 +47,6 @@ public interface Serializer {
      * The data stream to which the object will be written.
      */
     public void writeObject(Object object, OutputStream outputStream) throws IOException, SerializationException;
+
+    public String getMIMEType();
 }

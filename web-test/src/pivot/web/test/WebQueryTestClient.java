@@ -28,7 +28,7 @@ import pivot.web.PutQuery;
 public class WebQueryTestClient {
     public static void main(String[] args) {
         final String HOSTNAME = "localhost";
-        final String PATH = "/pivot-web/webquery/bar";
+        final String PATH = "/pivot/webquery/bar";
         final int PORT = 8080;
         final boolean SECURE = false;
 

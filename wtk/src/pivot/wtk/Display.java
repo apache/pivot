@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import java.awt.Graphics2D;
-
 import pivot.wtk.skin.DisplaySkin;
 
 public final class Display extends Container {
@@ -49,23 +47,6 @@ public final class Display extends Container {
             super.invalidate();
             ApplicationContext.queueCallback(new ValidateCallback());
         }
-    }
-
-    @Override
-    public void paint(Graphics2D graphics) {
-        java.awt.Rectangle clipBounds = graphics.getClipBounds();
-        StringBuilder buf = new StringBuilder();
-        if (clipBounds != null) {
-            buf.append((int)clipBounds.getX());
-            buf.append(",");
-            buf.append((int)clipBounds.getY());
-            buf.append("+");
-            buf.append((int)clipBounds.getWidth());
-            buf.append("x");
-            buf.append((int)clipBounds.getHeight());
-        }
-
-        super.paint(graphics);
     }
 
     @Override

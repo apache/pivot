@@ -15,8 +15,12 @@
  */
 package pivot.wtkx.test;
 
+import pivot.wtk.Alert;
 import pivot.wtk.Application;
+import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
+import pivot.wtk.Button;
+import pivot.wtk.Display;
 import pivot.wtk.Window;
 import pivot.wtkx.ComponentLoader;
 
@@ -29,11 +33,19 @@ public class CursorTest implements Application {
 
         Component content = componentLoader.load("pivot/wtkx/test/cursor.wtkx");
 
+        Button button = (Button)componentLoader.getComponent("button");
+        button.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                Alert.alert(Alert.Type.INFO, "This is a modal alert dialog.", window);
+            }
+        });
+
         window = new Window();
         window.setTitle("Cursor Test");
         window.setContent(content);
+        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE,
+            Boolean.TRUE);
 
-        window.setPreferredSize(320, 240);
         window.open();
     }
 

@@ -426,6 +426,11 @@ public abstract class Component implements Visual {
     private boolean enabled = true;
 
     /**
+     * The component's mouse-over flag.
+     */
+    private boolean mouseOver = false;
+
+    /**
      * The cursor that is displayed over the component.
      */
     private Cursor cursor = Cursor.DEFAULT;
@@ -1460,11 +1465,16 @@ public abstract class Component implements Visual {
      */
     public void setEnabled(boolean enabled) {
         if (this.enabled != enabled) {
-            // If this component is being disabled and has the focus, clear
-            // the focus
-            if (!enabled
-                && isFocused()) {
-                setFocusedComponent(null);
+            if (!enabled) {
+                // If this component has the focus, clear it
+                if (isFocused()) {
+                    setFocusedComponent(null);
+                }
+
+                // Ensure that the mouse out event is processed
+                if (mouseOver) {
+                    mouseOut();
+                }
             }
 
             this.enabled = enabled;
@@ -1494,6 +1504,16 @@ public abstract class Component implements Visual {
         return blocked;
     }
 
+    /**
+     * Determines if the mouse is positioned over this component.
+     *
+     * @return
+     * <tt>true</tt> if the mouse is currently located over this component;
+     * <tt>false</tt>, otherwise.
+     */
+    public boolean isMouseOver() {
+        return mouseOver;
+    }
 
     /**
      * Returns the cursor that is displayed when the mouse pointer is over
@@ -1831,6 +1851,8 @@ public abstract class Component implements Visual {
                 skin.mouseOver();
             }
 
+            mouseOver = true;
+
             componentMouseListeners.mouseOver(this);
         }
     }
@@ -1846,6 +1868,8 @@ public abstract class Component implements Visual {
             if (skin != null) {
                 skin.mouseOut();
             }
+
+            mouseOver = false;
 
             componentMouseListeners.mouseOut(this);
         }
