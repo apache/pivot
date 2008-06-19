@@ -33,8 +33,6 @@ import pivot.collections.Sequence;
 /**
  * Reads data from and writes data to a comma-separated value (CSV) file.
  *
- * TODO Add support for quoted values.
- *
  * TODO Add "firstLineContainsKeys" flag.
  *
  * TODO Add support for variable delimiters.
@@ -199,11 +197,29 @@ public class CSVSerializer implements Serializer {
             // Read the value
             StringBuilder valueBuilder = new StringBuilder();
 
-            while (c != -1
-                && c != ','
-                && (c != '\r' && c != '\n')) {
-                valueBuilder.append((char)c);
+            // Values may be bounded in quotes; the double-quote character is
+            // escaped by two successive occurrences
+            boolean quoted = (c == '"');
+            if (quoted) {
                 c = reader.read();
+            }
+
+            while (c != -1
+                && (quoted || c != ',')
+                && (c != '\r' && c != '\n')) {
+                if (c == '"') {
+                    c = reader.read();
+                    quoted = (c == '"');
+                }
+
+                if (quoted || c != ',') {
+                    valueBuilder.append((char)c);
+                    c = reader.read();
+                }
+            }
+
+            if (quoted) {
+                throw new SerializationException("Unterminated string.");
             }
 
             value = valueBuilder.toString();

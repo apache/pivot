@@ -855,7 +855,7 @@ public abstract class ApplicationContext {
      *
      * @return An integer ID that can be used to cancel execution of the task.
      */
-    public static int setInterval(Runnable runnable, int period) {
+    public static int setInterval(Runnable runnable, long period) {
         int intervalID = nextTimerTaskID++;
 
         IntervalTask intervalTask = new IntervalTask(runnable);
@@ -886,7 +886,7 @@ public abstract class ApplicationContext {
      *
      * @return
      */
-    public static int setTimeout(Runnable runnable, int timeout) {
+    public static int setTimeout(Runnable runnable, long timeout) {
         int timeoutID = nextTimerTaskID++;
 
         TimeoutTask timeoutTask = new TimeoutTask(runnable, timeoutID);

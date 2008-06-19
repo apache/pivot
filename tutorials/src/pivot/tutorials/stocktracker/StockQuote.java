@@ -17,7 +17,11 @@ public class StockQuote implements Dictionary<String, Object> {
     public Object put(String key, Object value) {
         if (key.equals(VALUE_KEY)
             || key.equals(CHANGE_KEY)) {
-            value = Float.parseFloat((String)value);
+            try {
+                value = Float.parseFloat((String)value);
+            } catch(NumberFormatException exception) {
+                value = null;
+            }
         }
 
         return values.put(key, value);

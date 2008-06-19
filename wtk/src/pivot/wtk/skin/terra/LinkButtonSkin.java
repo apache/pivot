@@ -205,6 +205,14 @@ public class LinkButtonSkin extends ButtonSkin {
     }
 
     @Override
+    public void enabledChanged(Component component) {
+        super.enabledChanged(component);
+
+        highlighted = false;
+        repaintComponent();
+    }
+
+    @Override
     public void mouseOver() {
         super.mouseOver();
 

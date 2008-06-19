@@ -21,7 +21,7 @@ import pivot.serialization.CSVSerializer;
 
 public class CSVSerializerTest {
     public static String[] testStrings = {
-        "\"YHOO\",26.11,-0.33,X",
+        "\"Y\"\"HO,O\",26.11,-0.33,X",
         "0,1,2,3\nQ,5,6,7\n8,9,10,11",
         "a,b,c,d",
         "hello,world",
