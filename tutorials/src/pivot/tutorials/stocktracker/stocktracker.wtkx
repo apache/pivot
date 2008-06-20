@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Copyright (c) 2008 VMware, Inc.
-
+	
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
-
+	
 	http://www.apache.org/licenses/LICENSE-2.0
-
+	
 	Unless required by applicable law or agreed to in writing, software
 	distributed under the License is distributed on an "AS IS" BASIS,
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,7 @@
 	limitations under the License.
 -->
 
-<TablePane styles="{padding:8, spacing:4}">
+<TablePane styles="{padding:8, spacing:6}">
 	<rows>
 		<Row height="-1" />
 		<Row height="1*" />
@@ -23,11 +23,12 @@
 		<Row height="-1" />
 	</rows>
 	<columns>
+		<Column width="244" />
 		<Column width="1*" />
 	</columns>
 
 	<cells>
-		<Label row="0" column="0" text="Stock Tracker"
+		<Label row="0" column="0" text="%stockTracker"
 			styles="{font:'Verdana bold 14'}" />
 
 		<Border row="1" column="0"
@@ -38,15 +39,15 @@
 					<TableView id="stocksTableView" selectMode="multi"
 						styles="{showHorizontalGridLines:false}">
 						<columns>
-							<Column name="symbol" headerData="'Symbol'"
+							<Column name="symbol" headerData="'%symbol'"
 								width="80" />
-							<Column name="value" headerData="'Value'"
+							<Column name="value" headerData="'%value'"
 								width="80"
 								cellRenderer="pivot.wtk.content.TableViewNumberCellRenderer"
 								cellRendererStyles="{horizontalAlignment:'right'}"
 								cellRendererProperties="{numberFormat:'$0.00'}" />
-							<Column name="change" headerData="'Change'"
-								width="1*"
+							<Column name="change" headerData="'%change'"
+								width="80"
 								cellRenderer="pivot.tutorials.stocktracker.ChangeCellRenderer"
 								cellRendererStyles="{horizontalAlignment:'right'}"
 								cellRendererProperties="{numberFormat:'+0.00;-0.00'}" />
@@ -60,17 +61,26 @@
 			</ScrollPane>
 		</Border>
 
-		<FlowPane row="2" column="0" styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
+		<FlowPane row="2" column="0"
+			styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
 			<Label text="Symbol:" styles="{font:'Verdana bold 11'}" />
 			<TextInput id="symbolTextInput" textSize="10"
 				maximumLength="5" />
 			<LinkButton id="addSymbolButton"
-				buttonData="{iconURL:'@add.png'}" enabled="false" />
+				buttonData="{iconURL:'@add.png'}" enabled="false"
+				tooltipText="%addSymbol" />
 			<LinkButton id="removeSymbolsButton"
-				buttonData="{iconURL:'@delete.png'}" enabled="false" />
+				buttonData="{iconURL:'@delete.png'}" enabled="false"
+				tooltipText="%removeSymbol" />
 		</FlowPane>
 
 		<Label row="3" column="0" id="lastUpdateLabel"
 			styles="{font:'Verdana italic 10'}" />
+
+		<Border row="1" column="1"
+			styles="{padding:0, borderColor:'#cccac2'}">
+			<Component namespace="detail"
+				src="stocktracker.detail.wtkx" />
+		</Border>
 	</cells>
 </TablePane>

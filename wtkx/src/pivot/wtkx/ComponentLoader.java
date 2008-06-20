@@ -18,6 +18,7 @@ package pivot.wtkx;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import javax.xml.parsers.DocumentBuilder;
@@ -47,6 +48,7 @@ import pivot.wtk.Skin;
  */
 public class ComponentLoader extends Loader {
     private ComponentLoader parent = null;
+    private Locale locale = null;
 
     private URL baseURL = null;
     private ResourceBundle resourceBundle = null;
@@ -77,13 +79,26 @@ public class ComponentLoader extends Loader {
     public static final String STYLES_ATTRIBUTE = "styles";
 
     public ComponentLoader() {
-        this(null);
+        this(null, Locale.getDefault());
     }
 
-    private ComponentLoader(ComponentLoader parent) {
+    public ComponentLoader(Locale locale) {
+        this(null, locale);
+    }
+
+    private ComponentLoader(ComponentLoader parent, Locale locale) {
         this.parent = parent;
+        this.locale = locale;
     }
-
+    
+    public ComponentLoader getParent() {
+        return parent;
+    }
+    
+    public Locale getLocale() {
+        return locale;
+    }
+    
     public URL getResource(String name) {
         URL location = null;
 
@@ -135,14 +150,9 @@ public class ComponentLoader extends Loader {
         }
 
         if (string == null) {
-            if (parent == null) {
-                // TODO it's possible that a resource bundle WAS specified,
-                // but it didn't contain the specified resource, in which case
-                // this exception is confusing
-                throw new IllegalStateException("No resource bundle specified.");
+            if (parent != null) {
+                string = parent.getResourceString(key);
             }
-
-            string = parent.getResourceString(key);
         }
 
         return string;
@@ -215,7 +225,7 @@ public class ComponentLoader extends Loader {
     public Component load(String resourceName, String resourceBundleBaseName)
         throws LoadException {
         ResourceBundle resourceBundle = (resourceBundleBaseName == null) ?
-            null : ResourceBundle.getBundle(resourceBundleBaseName);
+            null : ResourceBundle.getBundle(resourceBundleBaseName, locale);
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL resourceURL = classLoader.getResource(resourceName);
@@ -317,10 +327,10 @@ public class ComponentLoader extends Loader {
 
             if (element.hasAttribute(COMPONENT_RESOURCE_BUNDLE_ATTRIBUTE)) {
                 String resourceBundleAttribute = element.getAttribute(COMPONENT_RESOURCE_BUNDLE_ATTRIBUTE);
-                componentResourceBundle = ResourceBundle.getBundle(resourceBundleAttribute);
+                componentResourceBundle = ResourceBundle.getBundle(resourceBundleAttribute, locale);
             }
 
-            ComponentLoader componentLoader = new ComponentLoader(rootLoader);
+            ComponentLoader componentLoader = new ComponentLoader(rootLoader, locale);
             rootLoader.namespaces.put(namespaceKey, componentLoader);
 
             component = componentLoader.load(componentURL, componentResourceBundle);

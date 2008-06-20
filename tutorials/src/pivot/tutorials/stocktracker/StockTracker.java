@@ -18,6 +18,8 @@ package pivot.tutorials.stocktracker;
 import java.text.DateFormat;
 import java.util.Comparator;
 import java.util.Date;
+// import java.util.Locale;
+import java.util.ResourceBundle;
 
 import pivot.collections.ArrayList;
 import pivot.collections.List;
@@ -31,7 +33,9 @@ import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
+import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.Display;
+import pivot.wtk.Keyboard;
 import pivot.wtk.Label;
 import pivot.wtk.Span;
 import pivot.wtk.TableView;
@@ -57,7 +61,7 @@ public class StockTracker implements Application {
     public static final String SERVICE_HOSTNAME = "download.finance.yahoo.com";
     public static final String SERVICE_PATH = "/d/quotes.csv";
     public static final long REFRESH_INTERVAL = 15000;
-
+    
     public StockTracker() {
         symbols.setComparator(new Comparator<String>() {
             public int compare(String s1, String s2) {
@@ -73,20 +77,34 @@ public class StockTracker implements Application {
         symbols.add("VMW");
     }
 
-    @SuppressWarnings("unchecked")
     public void startup() throws Exception {
         ApplicationContext.getInstance().setTitle("Stock Tracker Demo");
 
         ComponentLoader.initialize();
         ComponentLoader componentLoader = new ComponentLoader();
 
-        Component content = componentLoader.load("pivot/tutorials/stocktracker/stocktracker.wtkx");
+        Component content = componentLoader.load("pivot/tutorials/stocktracker/stocktracker.wtkx",
+            getClass().getName());
 
         stocksTableView = (TableView)componentLoader.getComponent("stocksTableView");
         stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
             public void selectionChanged(TableView tableView) {
                 int firstSelectedIndex = tableView.getFirstSelectedIndex();
                 removeSymbolsButton.setEnabled(firstSelectedIndex != -1);
+            }
+        });
+        
+        stocksTableView.getComponentKeyListeners().add(new ComponentKeyListener() {
+            public void keyTyped(Component component, char character) {
+            }
+
+            public void keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+                if (keyCode == Keyboard.KeyCode.DELETE) {
+                    removeSelectedSymbols();
+                }
+            }
+            
+            public void keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             }
         });
 
@@ -97,34 +115,31 @@ public class StockTracker implements Application {
             }
         });
 
+        symbolTextInput.getComponentKeyListeners().add(new ComponentKeyListener() {
+            public void keyTyped(Component component, char character) {
+            }
+
+            public void keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+                if (keyCode == Keyboard.KeyCode.ENTER) {
+                    addSymbol();
+                }
+            }
+            
+            public void keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            }
+        });
+        
         addSymbolButton = (Button)componentLoader.getComponent("addSymbolButton");
         addSymbolButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                String symbol = symbolTextInput.getText().toUpperCase();
-                if (symbols.indexOf(symbol) == -1) {
-                    int index = symbols.add(symbol);
-
-                    List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
-                    StockQuote stockQuote = new StockQuote();
-                    stockQuote.put(StockQuote.SYMBOL_KEY, symbol);
-                    tableData.insert(stockQuote, index);
-
-                    stocksTableView.setSelectedIndex(index);
-                }
-
-                symbolTextInput.setText("");
-                Component.setFocusedComponent(stocksTableView);
-                refresh();
+                addSymbol();
             }
         });
 
         removeSymbolsButton = (Button)componentLoader.getComponent("removeSymbolsButton");
         removeSymbolsButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                int selectedIndex = stocksTableView.getFirstSelectedIndex();
-                int selectionLength = stocksTableView.getLastSelectedIndex() - selectedIndex + 1;
-                stocksTableView.getTableData().remove(selectedIndex, selectionLength);
-                symbols.remove(selectedIndex, selectionLength);
+                removeSelectedSymbols();
             }
         });
 
@@ -142,6 +157,8 @@ public class StockTracker implements Application {
                 refresh();
             }
         }, REFRESH_INTERVAL);
+        
+        Component.setFocusedComponent(symbolTextInput);
     }
 
     public void shutdown() throws Exception {
@@ -190,10 +207,18 @@ public class StockTracker implements Application {
 
                     List<StockQuote> quotes = (List<StockQuote>)task.getResult();
                     stocksTableView.setTableData(quotes);
-                    stocksTableView.setSelectedRanges(selectedRanges);
-
-                    String lastUpdateText = "Last update: "
-                        + DateFormat.getDateTimeInstance().format(new Date());
+                    
+                    if (selectedRanges.getLength() > 0) {
+                        stocksTableView.setSelectedRanges(selectedRanges);
+                    } else {
+                        if (quotes.getLength() > 0) {
+                            stocksTableView.setSelectedIndex(0);
+                        }
+                    }
+                    
+                    ResourceBundle resourceBundle = ResourceBundle.getBundle(StockTracker.class.getName());
+                    String lastUpdateText = resourceBundle.getString("lastUpdate")
+                        + ": " + DateFormat.getDateTimeInstance().format(new Date());
                     lastUpdateLabel.setText(lastUpdateText);
 
                     getQuery = null;
@@ -207,5 +232,36 @@ public class StockTracker implements Application {
                 }
             }
         }));
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void addSymbol() {
+        String symbol = symbolTextInput.getText().toUpperCase();
+        if (symbols.indexOf(symbol) == -1) {
+            int index = symbols.add(symbol);
+
+            List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
+            StockQuote stockQuote = new StockQuote();
+            stockQuote.put(StockQuote.SYMBOL_KEY, symbol);
+            tableData.insert(stockQuote, index);
+
+            stocksTableView.setSelectedIndex(index);
+        }
+
+        symbolTextInput.setText("");
+        refresh();
+    }
+    
+    private void removeSelectedSymbols() {
+        int selectedIndex = stocksTableView.getFirstSelectedIndex();
+        int selectionLength = stocksTableView.getLastSelectedIndex() - selectedIndex + 1;
+        stocksTableView.getTableData().remove(selectedIndex, selectionLength);
+        symbols.remove(selectedIndex, selectionLength);
+        
+        if (selectedIndex >= symbols.getLength()) {
+            selectedIndex = symbols.getLength() - 1;
+        }
+        
+        stocksTableView.setSelectedIndex(selectedIndex);
     }
 }
