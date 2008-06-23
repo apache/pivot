@@ -29,7 +29,7 @@
 
 	<cells>
 		<Label row="0" column="0" text="%stockTracker"
-			styles="{font:'Verdana bold 14'}" />
+			styles="{font:'Verdana bold 14', verticalAlignment:'center'}" />
 
 		<Border row="1" column="0"
 			styles="{padding:0, borderColor:'#cccac2'}">
@@ -63,7 +63,7 @@
 
 		<FlowPane row="2" column="0"
 			styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
-			<Label text="Symbol:" styles="{font:'Verdana bold 11'}" />
+			<Label text="%symbol" styles="{font:'Verdana bold 11'}" />
 			<TextInput id="symbolTextInput" textSize="10"
 				maximumLength="5" />
 			<LinkButton id="addSymbolButton"
@@ -74,16 +74,16 @@
 				tooltipText="%removeSymbol" />
 		</FlowPane>
 
-        <Label row="3" column="0" id="lastUpdateLabel"
-            styles="{font:'Verdana italic 10'}" />
+		<Label row="3" column="0" id="lastUpdateLabel"
+			styles="{font:'Verdana italic 10'}" />
 
 		<Border row="1" column="1"
 			styles="{padding:6, borderColor:'#cccac2'}">
-			<Component namespace="detail"
-				src="stocktracker.detail.wtkx" />
+			<Component namespace="detail" src="stocktracker.detail.wtkx" />
 		</Border>
 
-		<FlowPane row="3" column="1" styles="{horizontalAlignment:'right'}">
+		<FlowPane row="3" column="1"
+			styles="{horizontalAlignment:'right'}">
 			<Label text="%dataProvidedBy" />
 			<LinkButton id="yahooFinanceButton" buttonData="'%yahooFinance'" />
 		</FlowPane>

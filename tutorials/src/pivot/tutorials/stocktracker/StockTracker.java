@@ -52,6 +52,8 @@ import pivot.wtk.Window;
 import pivot.wtkx.ComponentLoader;
 
 public class StockTracker implements Application {
+    private Locale locale = null;
+
     private ArrayList<String> symbols = new ArrayList<String>();
 
     private Window window = null;
@@ -87,10 +89,15 @@ public class StockTracker implements Application {
     }
 
     public void startup() throws Exception {
-        ApplicationContext.getInstance().setTitle("Stock Tracker Demo");
+        locale = new Locale("fr");
+
+        ResourceBundle resourceBundle =
+            ResourceBundle.getBundle(StockTracker.class.getName(), locale);
+
+        ApplicationContext.getInstance().setTitle(resourceBundle.getString("stockTracker"));
 
         ComponentLoader.initialize();
-        ComponentLoader componentLoader = new ComponentLoader(Locale.getDefault());
+        ComponentLoader componentLoader = new ComponentLoader(locale);
 
         Component content = componentLoader.load("pivot/tutorials/stocktracker/stocktracker.wtkx",
             getClass().getName());
@@ -195,11 +202,6 @@ public class StockTracker implements Application {
 
     @SuppressWarnings("unchecked")
     private void refreshTable() {
-        if (getQuery != null) {
-            // TODO
-            // getQuery.abort();
-        }
-
         getQuery = new GetQuery(SERVICE_HOSTNAME, SERVICE_PATH);
 
         StringBuilder symbolsArgumentBuilder = new StringBuilder();
@@ -253,7 +255,8 @@ public class StockTracker implements Application {
                         }
                     }
 
-                    ResourceBundle resourceBundle = ResourceBundle.getBundle(StockTracker.class.getName());
+                    ResourceBundle resourceBundle =
+                        ResourceBundle.getBundle(StockTracker.class.getName(), locale);
                     String lastUpdateText = resourceBundle.getString("lastUpdate")
                         + ": " + DateFormat.getDateTimeInstance().format(new Date());
                     lastUpdateLabel.setText(lastUpdateText);

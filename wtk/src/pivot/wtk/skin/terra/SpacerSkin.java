@@ -14,21 +14,21 @@ public class SpacerSkin extends ComponentSkin {
     protected Color color = DEFAULT_COLOR;
     protected int thickness = DEFAULT_THICKNESS;
     protected int padding = DEFAULT_PADDING;
-    
-    private static final Color DEFAULT_COLOR = Color.BLACK; 
+
+    private static final Color DEFAULT_COLOR = Color.BLACK;
     private static final int DEFAULT_THICKNESS = 1;
     private static final int DEFAULT_PADDING = 4;
-    
+
     protected static final String COLOR_KEY = "color";
     protected static final String THICKNESS_KEY = "thickness";
     protected static final String PADDING_KEY = "padding";
-    
+
     public void install(Component component) {
         validateComponentType(component, Spacer.class);
-        
+
         super.install(component);
     }
-    
+
     public int getPreferredWidth(int height) {
         return 0;
     }
@@ -48,7 +48,7 @@ public class SpacerSkin extends ComponentSkin {
     public void paint(Graphics2D graphics) {
         int width = getWidth();
         int height = getHeight();
-        
+
         Line2D line = new Line2D.Double(0, height / 2, width, height / 2);
         graphics.setStroke(new BasicStroke(thickness));
         graphics.setColor(color);
@@ -63,7 +63,7 @@ public class SpacerSkin extends ComponentSkin {
     public boolean isFocusable() {
         return false;
     }
-    
+
     @Override
     public Object get(String key) {
         if (key == null) {

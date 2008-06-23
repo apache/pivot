@@ -7,7 +7,7 @@ import pivot.wtk.Spacer;
 
 class SpacerLoader extends Loader {
     public static final String SPACER_TAG = "Spacer";
-    
+
     @Override
     protected Component load(Element element, ComponentLoader rootLoader)
         throws LoadException {
