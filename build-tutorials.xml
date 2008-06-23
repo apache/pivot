@@ -31,21 +31,46 @@
          </classpath>
       </javac>
 
-      <!-- Rebuild the JAR file -->
+      <!-- Rebuild the JAR files -->
       <delete file="${tutorials}/${ant.project.name}-tutorials.jar"/>
       <jar jarfile="${tutorials}/${ant.project.name}-tutorials.jar">
-         <fileset dir="${tutorials}/${bin}"/>
+         <fileset dir="${tutorials}/${bin}">
+           <exclude name="pivot/tutorials/stocktracker/**"/>
+         </fileset>
          <fileset dir="${tutorials}/${src}">
            <include name="**/*.png"/>
            <include name="**/*.jpg"/>
            <include name="**/*.wtkx"/>
+           <exclude name="pivot/tutorials/stocktracker/**"/>
          </fileset>
       </jar>
+
+      <signjar jar="${tutorials}/${ant.project.name}-tutorials.jar"
+         signedjar="${tutorials}/${ant.project.name}-tutorials.signed.jar"
+         alias="myself" storepass="keystore"/>
+
+      <delete file="${tutorials}/${ant.project.name}-stocktracker.jar"/>
+      <jar jarfile="${tutorials}/${ant.project.name}-stocktracker.jar">
+         <fileset dir="${tutorials}/${bin}">
+           <include name="pivot/tutorials/stocktracker/*"/>
+         </fileset>
+         <fileset dir="${tutorials}/${src}">
+           <include name="pivot/tutorials/stocktracker/**/*.png"/>
+           <include name="pivot/tutorials/stocktracker/**/*.jpg"/>
+           <include name="pivot/tutorials/stocktracker/**/*.properties"/>
+           <include name="pivot/tutorials/stocktracker/**/*.wtkx"/>
+         </fileset>
+      </jar>
+
+      <signjar jar="${tutorials}/${ant.project.name}-stocktracker.jar"
+         alias="myself" storepass="keystore"/>
    </target>
 
    <!-- Clean the tutorial classes -->
    <target name="clean">
       <delete dir="${tutorials}/${bin}"/>
       <delete file="${tutorials}/${ant.project.name}-tutorials.jar"/>
+      <delete file="${tutorials}/${ant.project.name}-tutorials.signed.jar"/>
+      <delete file="${tutorials}/${ant.project.name}-stocktracker.jar"/>
    </target>
 </project>
