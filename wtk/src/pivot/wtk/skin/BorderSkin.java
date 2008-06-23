@@ -36,10 +36,10 @@ import pivot.wtk.Insets;
  * @author gbrown
  */
 public class BorderSkin extends TitlePaneSkin {
-    private Color borderColor = DEFAULT_BORDER_COLOR;
-    private int borderThickness = DEFAULT_BORDER_THICKNESS;
-    private Insets padding = DEFAULT_PADDING;
-    private CornerRadii cornerRadii = DEFAULT_CORNER_RADII;
+    protected Color borderColor = DEFAULT_BORDER_COLOR;
+    protected int borderThickness = DEFAULT_BORDER_THICKNESS;
+    protected Insets padding = DEFAULT_PADDING;
+    protected CornerRadii cornerRadii = DEFAULT_CORNER_RADII;
 
     private static final Color DEFAULT_BACKGROUND_COLOR = new Color(0xff, 0xff, 0xff);
 

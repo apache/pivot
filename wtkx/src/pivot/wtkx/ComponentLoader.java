@@ -512,6 +512,7 @@ public class ComponentLoader extends Loader {
         loaders.put(RadioButtonLoader.RADIO_BUTTON_TAG, RadioButtonLoader.class);
         loaders.put(RollupLoader.ROLLUP_TAG, RollupLoader.class);
         loaders.put(ScrollPaneLoader.SCROLL_PANE_TAG, ScrollPaneLoader.class);
+        loaders.put(SpacerLoader.SPACER_TAG, SpacerLoader.class);
         loaders.put(SplitPaneLoader.SPLIT_PANE_TAG, SplitPaneLoader.class);
         loaders.put(StackPaneLoader.STACK_PANE_TAG, StackPaneLoader.class);
         loaders.put(TabPaneLoader.TAB_PANE_TAG, TabPaneLoader.class);
