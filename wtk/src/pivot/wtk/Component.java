@@ -1781,7 +1781,7 @@ public abstract class Component implements Visual {
      *
      * @param context
      */
-    public void load(Map<String, Object> context) {
+    public void load(Dictionary<String, Object> context) {
     }
 
     /**
@@ -1791,7 +1791,7 @@ public abstract class Component implements Visual {
      *
      * @param context
      */
-    public void store(Map<String, Object> context) {
+    public void store(Dictionary<String, Object> context) {
     }
 
     public Object getUserData() {

@@ -85,7 +85,7 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
             }
 
             return (key.equals(NUMBER_FORMAT_KEY)
-                    || super.containsKey(key));
+                || super.containsKey(key));
         }
 
         @Override

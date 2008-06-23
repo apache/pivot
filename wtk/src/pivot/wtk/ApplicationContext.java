@@ -721,17 +721,33 @@ public abstract class ApplicationContext {
     public abstract void exit();
 
     /**
+     * Opens the given resource.
+     *
+     * @param location
+     */
+    public abstract void open(URL location);
+
+    /**
      * Initializes the application context. Loads the application class and
      * startup properties and starts the system timer.
      */
+    @SuppressWarnings("unchecked")
     protected void initialize(String applicationClassName, String propertiesResourceName) {
         assert (applicationClassName != null) : "applicationClassName is null.";
 
         try {
-            loadApplication(applicationClassName);
+            // Load the application's class
+            Class<?> applicationClass = Class.forName(applicationClassName);
 
+            // Instantiate the application
+            application = (Application)applicationClass.newInstance();
+
+            // Load the properties
             if (propertiesResourceName != null) {
-                loadProperties(propertiesResourceName);
+                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                InputStream propertiesStream = classLoader.getResourceAsStream(propertiesResourceName);
+                JSONSerializer jsonSerializer = new JSONSerializer();
+                properties = (Map<String, Object>)jsonSerializer.readObject(propertiesStream);
             }
 
             // Start the timer
@@ -752,24 +768,6 @@ public abstract class ApplicationContext {
         }
 
         timer = null;
-    }
-
-    private void loadApplication(String applicationClassName)
-        throws Exception {
-        // Load the application's class
-        Class<?> applicationClass = Class.forName(applicationClassName);
-
-        // Instantiate the application
-        application = (Application)applicationClass.newInstance();
-    }
-
-    @SuppressWarnings("unchecked")
-    private void loadProperties(String propertiesResourceName)
-        throws Exception {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream propertiesStream = classLoader.getResourceAsStream(propertiesResourceName);
-        JSONSerializer jsonSerializer = new JSONSerializer();
-        properties = (Map<String, Object>)jsonSerializer.readObject(propertiesStream);
     }
 
     protected void startupApplication() {

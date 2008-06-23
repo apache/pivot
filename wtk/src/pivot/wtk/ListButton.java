@@ -17,7 +17,7 @@ package pivot.wtk;
 
 import pivot.collections.ArrayList;
 import pivot.collections.List;
-import pivot.collections.Map;
+import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
 import pivot.wtk.ListView.ValueMapping;
 import pivot.wtk.content.ListButtonDataRenderer;
@@ -305,7 +305,8 @@ public class ListButton extends Button {
         listButtonListeners.valueMappingChanged(this, previousValueMapping);
     }
 
-    public void load(Map<String, Object> context) {
+    @Override
+    public void load(Dictionary<String, Object> context) {
         String selectedValueKey = getSelectedValueKey();
         if (selectedValueKey != null
             && context.containsKey(selectedValueKey)) {
@@ -314,7 +315,8 @@ public class ListButton extends Button {
         }
     }
 
-    public void store(Map<String, Object> context) {
+    @Override
+    public void store(Dictionary<String, Object> context) {
         String selectedValueKey = getSelectedValueKey();
         if (selectedValueKey != null) {
             Object value = getSelectedValue();

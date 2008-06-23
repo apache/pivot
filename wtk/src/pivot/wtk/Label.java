@@ -15,7 +15,7 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Map;
+import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
 import pivot.wtk.skin.LabelSkin;
 
@@ -96,7 +96,8 @@ public class Label extends Component {
         }
     }
 
-    public void load(Map<String, Object> context) {
+    @Override
+    public void load(Dictionary<String, Object> context) {
         if (textKey != null
             && context.containsKey(textKey)) {
             Object value = context.get(textKey);
@@ -106,7 +107,8 @@ public class Label extends Component {
         }
     }
 
-    public void store(Map<String, Object> context) {
+    @Override
+    public void store(Dictionary<String, Object> context) {
         if (textKey != null) {
             context.put(textKey, getText());
         }

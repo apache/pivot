@@ -27,7 +27,6 @@ import pivot.wtk.FormListener;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
 import pivot.wtk.Label;
-import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
 
@@ -45,23 +44,25 @@ public class FormSkin extends ContainerSkin implements FormListener {
     private static Image errorImage = Image.load(FormSkin.class.getResource("FormSkin-Error-16x16.png"));
     private static Image questionImage = Image.load(FormSkin.class.getResource("FormSkin-Question-16x16.png"));
 
+    private static final int FLAG_IMAGE_SIZE = 16;
+
     // Style properties
-    protected HorizontalAlignment labelHorizontalAlignment = DEFAULT_LABEL_HORIZONTAL_ALIGNMENT;
-    protected VerticalAlignment labelVerticalAlignment = DEFAULT_LABEL_VERTICAL_ALIGNMENT;
+    protected boolean rightAlignLabels = DEFAULT_RIGHT_ALIGN_LABELS;
+    protected HorizontalAlignment fieldAlignment = DEFAULT_FIELD_ALIGNMENT;
     protected int horizontalSpacing = DEFAULT_HORIZONTAL_SPACING;
     protected int verticalSpacing = DEFAULT_VERTICAL_SPACING;
     protected int flagImageOffset = DEFAULT_FLAG_IMAGE_OFFSET;
 
     // Default style values
-    private static final HorizontalAlignment DEFAULT_LABEL_HORIZONTAL_ALIGNMENT = HorizontalAlignment.RIGHT;
-    private static final VerticalAlignment DEFAULT_LABEL_VERTICAL_ALIGNMENT = VerticalAlignment.TOP;
+    private static final boolean DEFAULT_RIGHT_ALIGN_LABELS = false;
+    private static final HorizontalAlignment DEFAULT_FIELD_ALIGNMENT = HorizontalAlignment.LEFT;
     private static final int DEFAULT_HORIZONTAL_SPACING = 12;
     private static final int DEFAULT_VERTICAL_SPACING = 6;
     private static final int DEFAULT_FLAG_IMAGE_OFFSET = 4;
 
     // Style keys
-    protected static final String LABEL_HORIZONTAL_ALIGNMENT_KEY = "labelHorizontalAlignment";
-    protected static final String LABEL_VERTICAL_ALIGNMENT_KEY = "labelVerticalAlignment";
+    protected static final String RIGHT_ALIGN_LABELS_KEY = "rightAlignLabels";
+    protected static final String FIELD_ALIGNMENT_KEY = "fieldAlignment";
     protected static final String HORIZONTAL_SPACING_KEY = "horizontalSpacing";
     protected static final String VERTICAL_SPACING_KEY = "verticalSpacing";
     protected static final String FLAG_IMAGE_OFFSET_KEY = "flagImageOffset";
@@ -79,7 +80,11 @@ public class FormSkin extends ContainerSkin implements FormListener {
         Form form = (Form)component;
         form.getFormListeners().add(this);
 
-        // TODO Initialize for existing fields
+        // Initialize for existing fields
+        for (int i = 0, n = form.getComponents().getLength(); i < n; i++) {
+            updateLabel(i);
+            updateFlag(i);
+        }
     }
 
     @Override
@@ -87,7 +92,11 @@ public class FormSkin extends ContainerSkin implements FormListener {
         Form form = (Form)getComponent();
         form.getFormListeners().remove(this);
 
-        // TODO Remove all added labels and flag image views
+        // Remove all added labels and flag image views
+        for (int i = 0, n = form.getComponents().getLength(); i < n; i++) {
+            form.getComponents().remove(labels.get(i));
+            form.getComponents().remove(flagImageViews.get(i));
+        }
 
         super.uninstall();
     }
@@ -95,26 +104,29 @@ public class FormSkin extends ContainerSkin implements FormListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        // Preferred width is the maximum label width, plus the maximum field
-        // width, plus horizontal spacing and flag image size
+        // Preferred width is the sum of the maximum label width, maximum field
+        // width, horizontal spacing, flag image offset, and flag image size
+        // values
         Form form = (Form)getComponent();
         Form.FieldSequence fields = form.getFields();
 
-        int maxLabelWidth = 0;
-        int maxFlaggedFieldWidth = 0;
+        int maximumLabelWidth = 0;
+        int maximumFieldWidth = 0;
 
         for (int i = 0, n = fields.getLength(); i < n; i++) {
-            Label label = labels.get(i);
-            maxLabelWidth = Math.max(maxLabelWidth, label.getPreferredWidth(-1));
-
             Component field = fields.get(i);
-            ImageView flagImageView = flagImageViews.get(i);
-            maxFlaggedFieldWidth = Math.max(maxFlaggedFieldWidth,
-                field.getPreferredWidth(-1) + flagImageOffset
-                + flagImageView.getPreferredWidth(-1));
+
+            if (field.isDisplayable()) {
+                Label label = labels.get(i);
+                maximumLabelWidth = Math.max(maximumLabelWidth,
+                    label.getPreferredWidth(-1));
+                maximumFieldWidth = Math.max(maximumFieldWidth,
+                    field.getPreferredWidth(-1));
+            }
         }
 
-        preferredWidth = maxLabelWidth + horizontalSpacing + maxFlaggedFieldWidth;
+        preferredWidth = maximumLabelWidth + horizontalSpacing + maximumFieldWidth
+            + flagImageOffset + FLAG_IMAGE_SIZE;
 
         return preferredWidth;
     }
@@ -122,31 +134,46 @@ public class FormSkin extends ContainerSkin implements FormListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        // Preferred height is the sum of the maximum value of the label,
-        // field, and flag image for each row, plus vertical spacing.
         Form form = (Form)getComponent();
         Form.FieldSequence fields = form.getFields();
 
-        int displayableComponentCount = 0;
+        int fieldWidth = -1;
 
+        // If justified and constrained, determine field width constraint
+        if (fieldAlignment == HorizontalAlignment.JUSTIFY
+            && width != -1) {
+            int maximumLabelWidth = 0;
+
+            for (int i = 0, n = fields.getLength(); i < n; i++) {
+                Component field = fields.get(i);
+
+                if (field.isDisplayable()) {
+                    Label label = labels.get(i);
+                    maximumLabelWidth = Math.max(maximumLabelWidth,
+                        label.getPreferredWidth(-1));
+                }
+            }
+
+            fieldWidth = Math.max(0, width - (maximumLabelWidth
+                + horizontalSpacing + flagImageOffset + FLAG_IMAGE_SIZE));
+        }
+
+        // Preferred height is the sum of the maximum value of the label,
+        // field, and flag image for each row, plus vertical spacing
         for (int i = 0, n = fields.getLength(); i < n; i++) {
             Component field = fields.get(i);
 
             if (field.isDisplayable()) {
                 Label label = labels.get(i);
-                ImageView flagImageView = flagImageViews.get(i);
 
                 int preferredRowHeight = Math.max(label.getPreferredHeight(-1),
-                    Math.max(field.getPreferredHeight(-1),
-                    flagImageView.getPreferredHeight(-1)));
+                    Math.max(field.getPreferredHeight(fieldWidth), FLAG_IMAGE_SIZE));
                 preferredHeight += preferredRowHeight;
 
-                displayableComponentCount++;
+                if (i > 0) {
+                    preferredHeight += verticalSpacing;
+                }
             }
-        }
-
-        if (displayableComponentCount > 1) {
-            preferredHeight += verticalSpacing * (displayableComponentCount - 1);
         }
 
         return preferredHeight;
@@ -163,42 +190,94 @@ public class FormSkin extends ContainerSkin implements FormListener {
 
         int n = fields.getLength();
 
-        // Determine the maximum label width
+        // Determine the maximum label and field widths
         int maximumLabelWidth = 0;
-
-        for (int i = 0; i < n; i++) {
-            Label label = labels.get(i);
-            maximumLabelWidth = Math.max(maximumLabelWidth, label.getPreferredWidth(-1));
-        }
-
-        // Lay out the components
-        int rowY = 0;
-        int fieldX = maximumLabelWidth + horizontalSpacing;
+        int maximumFieldWidth = 0;
 
         for (int i = 0; i < n; i++) {
             Component field = fields.get(i);
+
+            if (field.isDisplayable()) {
+                Label label = labels.get(i);
+                maximumLabelWidth = Math.max(maximumLabelWidth,
+                    label.getPreferredWidth(-1));
+                maximumFieldWidth = Math.max(maximumFieldWidth,
+                    field.getPreferredWidth(-1));
+            }
+        }
+
+        // Determine the maximum field width
+        int width = getWidth();
+        int availableFieldWidth = Math.max(0, width - (maximumLabelWidth
+            + horizontalSpacing + flagImageOffset + FLAG_IMAGE_SIZE));
+
+        // Lay out the components
+        int rowY = 0;
+
+        for (int i = 0; i < n; i++) {
             Label label = labels.get(i);
+            Component field = fields.get(i);
             ImageView flagImageView = flagImageViews.get(i);
 
             if (field.isDisplayable()) {
+                // Show the row components
                 label.setVisible(true);
                 field.setVisible(true);
                 flagImageView.setVisible(true);
 
+                // Set the row component sizes
                 label.setSize(label.getPreferredSize());
-                field.setSize(field.getPreferredSize());
+
+                Dimensions fieldSize = null;
+                if (fieldAlignment == HorizontalAlignment.JUSTIFY) {
+                    fieldSize = new Dimensions(availableFieldWidth,
+                        field.getPreferredHeight(availableFieldWidth));
+                } else {
+                    fieldSize = field.getPreferredSize();
+                }
+
+                field.setSize(fieldSize);
                 flagImageView.setSize(flagImageView.getPreferredSize());
 
                 int rowHeight = Math.max(label.getHeight(),
                     Math.max(field.getHeight(), flagImageView.getHeight()));
 
-                label.setLocation(0, rowY);
+                // Set the row component locations
+                int labelX = rightAlignLabels ? maximumLabelWidth - label.getWidth() : 0;
+                label.setLocation(labelX, rowY);
+
+                int fieldX = 0;
+                switch(fieldAlignment) {
+                    case LEFT:
+                    case JUSTIFY: {
+                        fieldX = maximumLabelWidth + horizontalSpacing;
+                        break;
+                    }
+
+                    case RIGHT: {
+                        fieldX = maximumLabelWidth + horizontalSpacing
+                            + Math.max(0, Math.max(availableFieldWidth, maximumFieldWidth)
+                                - field.getWidth());
+                        break;
+                    }
+
+                    case CENTER: {
+                        fieldX = maximumLabelWidth + horizontalSpacing
+                            + Math.max(0, (Math.max(availableFieldWidth, maximumFieldWidth)
+                                - field.getWidth()) / 2);
+                        break;
+                    }
+                }
+
                 field.setLocation(fieldX, rowY);
+
                 flagImageView.setLocation(fieldX + field.getWidth() + flagImageOffset,
                     rowY + (rowHeight - flagImageView.getHeight()) / 2);
 
+                // Update the row y-coordinate
                 rowY += rowHeight + verticalSpacing;
             } else {
+                // Hide the row components
                 label.setVisible(false);
                 field.setVisible(false);
                 flagImageView.setVisible(false);
@@ -213,10 +292,10 @@ public class FormSkin extends ContainerSkin implements FormListener {
 
         Object value = null;
 
-        if (key.equals(LABEL_HORIZONTAL_ALIGNMENT_KEY)) {
-            value = labelHorizontalAlignment;
-        } else if (key.equals(LABEL_VERTICAL_ALIGNMENT_KEY)) {
-            value = labelVerticalAlignment;
+        if (key.equals(RIGHT_ALIGN_LABELS_KEY)) {
+            value = rightAlignLabels;
+        } else if (key.equals(FIELD_ALIGNMENT_KEY)) {
+            value = fieldAlignment;
         } else if (key.equals(HORIZONTAL_SPACING_KEY)) {
             value = horizontalSpacing;
         } else if (key.equals(VERTICAL_SPACING_KEY)) {
@@ -237,28 +316,28 @@ public class FormSkin extends ContainerSkin implements FormListener {
 
         Object previousValue = null;
 
-        if (key.equals(LABEL_HORIZONTAL_ALIGNMENT_KEY)) {
+        if (key.equals(RIGHT_ALIGN_LABELS_KEY)) {
+            if (value instanceof String) {
+                value = Boolean.parseBoolean((String)value);
+            }
+
+            validatePropertyType(key, value, Boolean.class, true);
+
+            previousValue = rightAlignLabels;
+            rightAlignLabels = (Boolean)value;
+
+            repaintComponent();
+        } else if (key.equals(FIELD_ALIGNMENT_KEY)) {
             if (value instanceof String) {
                 value = HorizontalAlignment.decode((String)value);
             }
 
-            validatePropertyType(key, value, HorizontalAlignment.class, true);
+            validatePropertyType(key, value, HorizontalAlignment.class, false);
 
-            previousValue = labelHorizontalAlignment;
-            labelHorizontalAlignment = (HorizontalAlignment)value;
+            previousValue = fieldAlignment;
+            fieldAlignment = (HorizontalAlignment)value;
 
-            repaintComponent();
-        } else if (key.equals(LABEL_VERTICAL_ALIGNMENT_KEY)) {
-            if (value instanceof String) {
-                value = VerticalAlignment.decode((String)value);
-            }
-
-            validatePropertyType(key, value, VerticalAlignment.class, true);
-
-            previousValue = labelVerticalAlignment;
-            labelVerticalAlignment = (VerticalAlignment)value;
-
-            repaintComponent();
+            invalidateComponent();
         } else if (key.equals(HORIZONTAL_SPACING_KEY)) {
             if (value instanceof String) {
                 value = Integer.parseInt((String)value);
@@ -312,10 +391,10 @@ public class FormSkin extends ContainerSkin implements FormListener {
 
         Object previousValue = null;
 
-        if (key.equals(LABEL_HORIZONTAL_ALIGNMENT_KEY)) {
-            previousValue = put(key, LABEL_HORIZONTAL_ALIGNMENT_KEY);
-        } else if (key.equals(LABEL_VERTICAL_ALIGNMENT_KEY)) {
-            previousValue = put(key, LABEL_VERTICAL_ALIGNMENT_KEY);
+        if (key.equals(RIGHT_ALIGN_LABELS_KEY)) {
+            previousValue = put(key, DEFAULT_RIGHT_ALIGN_LABELS);
+        } else if (key.equals(FIELD_ALIGNMENT_KEY)) {
+            previousValue  = put(key, DEFAULT_FIELD_ALIGNMENT);
         } else if (key.equals(HORIZONTAL_SPACING_KEY)) {
             previousValue = put(key, HORIZONTAL_SPACING_KEY);
         } else if (key.equals(VERTICAL_SPACING_KEY)) {
@@ -334,8 +413,8 @@ public class FormSkin extends ContainerSkin implements FormListener {
             throw new IllegalArgumentException("key is null.");
         }
 
-        return (key.equals(LABEL_HORIZONTAL_ALIGNMENT_KEY)
-            || key.equals(LABEL_VERTICAL_ALIGNMENT_KEY)
+        return (key.equals(RIGHT_ALIGN_LABELS_KEY)
+            || key.equals(FIELD_ALIGNMENT_KEY)
             || key.equals(HORIZONTAL_SPACING_KEY)
             || key.equals(VERTICAL_SPACING_KEY)
             || key.equals(FLAG_IMAGE_OFFSET_KEY)
@@ -382,46 +461,34 @@ public class FormSkin extends ContainerSkin implements FormListener {
     // Component attribute events
     public void attributeAdded(Component component, Container.Attribute attribute) {
         super.attributeAdded(component, attribute);
-
-        Form form = (Form)getComponent();
-        int index = form.getFields().indexOf(component);
-
-        if (index != -1) {
-            updateLabel(index);
-            updateFlag(index);
-        }
-
-        invalidateComponent();
+        updateField(component, attribute);
     }
 
     public void attributeUpdated(Component component, Container.Attribute attribute,
         Object previousValue) {
         super.attributeUpdated(component, attribute, previousValue);
-
-        Form form = (Form)getComponent();
-        int index = form.getFields().indexOf(component);
-
-        if (index != -1) {
-            updateLabel(index);
-            updateFlag(index);
-        }
-
-        invalidateComponent();
+        updateField(component, attribute);
     }
 
     public void attributeRemoved(Component component, Container.Attribute attribute,
         Object value) {
         super.attributeRemoved(component, attribute, value);
+        updateField(component, attribute);
+    }
 
+    private void updateField(Component component, Container.Attribute attribute) {
         Form form = (Form)getComponent();
         int index = form.getFields().indexOf(component);
 
         if (index != -1) {
-            updateLabel(index);
-            updateFlag(index);
+            if (attribute == Form.LABEL_ATTRIBUTE) {
+                updateLabel(index);
+            } else if (attribute == Form.FLAG_ATTRIBUTE) {
+                updateFlag(index);
+            } else {
+                // No-op
+            }
         }
-
-        invalidateComponent();
     }
 
     private void updateLabel(int index) {

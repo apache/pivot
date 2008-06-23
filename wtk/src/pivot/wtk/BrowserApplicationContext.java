@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import java.net.URL;
+
 public final class BrowserApplicationContext extends ApplicationContext {
     public static final class HostApplet extends java.applet.Applet {
         static {
@@ -23,6 +25,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         private class InitCallback implements Runnable {
             public void run() {
+                currentHostApplet = HostApplet.this;
+
                 // Add the display host to the applet
                 ApplicationContext applicationContext = ApplicationContext.getInstance();
 
@@ -76,6 +80,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
                 DisplayHost displayHost = applicationContext.getDisplayHost();
                 remove(displayHost);
+
+                currentHostApplet = null;
             }
         }
 
@@ -128,6 +134,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
         }
     }
 
+    private static HostApplet currentHostApplet = null;
+
     public String getTitle() {
         return null;
     }
@@ -138,5 +146,11 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
     public void exit() {
         // No-op for applets
+    }
+
+    public void open(URL location) {
+        // TODO Use java.awt.Desktop class when Java 6 is available on OSX
+
+        currentHostApplet.getAppletContext().showDocument(location, "_blank");
     }
 }

@@ -17,9 +17,9 @@ package pivot.wtk;
 
 import java.util.Comparator;
 import pivot.collections.ArrayList;
+import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.ListListener;
-import pivot.collections.Map;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.content.ListViewItemRenderer;
@@ -902,8 +902,9 @@ public class ListView extends Component {
         listViewListeners.valueMappingChanged(this, previousValueMapping);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    public void load(Map<String, Object> context) {
+    public void load(Dictionary<String, Object> context) {
         if (selectedValueKey != null
             && context.containsKey(selectedValueKey)) {
             Object value = context.get(selectedValueKey);
@@ -919,7 +920,8 @@ public class ListView extends Component {
         // TODO Add support for checked values
     }
 
-    public void store(Map<String, Object> context) {
+    @Override
+    public void store(Dictionary<String, Object> context) {
         if (selectedValueKey != null) {
             Object value = getSelectedValue();
             context.put(selectedValueKey, value);

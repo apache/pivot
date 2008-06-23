@@ -15,7 +15,7 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Map;
+import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
 
 /**
@@ -486,7 +486,8 @@ public abstract class Button extends Component {
         buttonListeners.stateKeyChanged(this, previousStateKey);
     }
 
-    public void load(Map<String, Object> context) {
+    @Override
+    public void load(Dictionary<String, Object> context) {
         if (selectedKey != null
             && context.containsKey(selectedKey)) {
             Object value = context.get(selectedKey);
@@ -515,7 +516,8 @@ public abstract class Button extends Component {
         }
     }
 
-    public void store(Map<String, Object> context) {
+    @Override
+    public void store(Dictionary<String, Object> context) {
         if (selectedKey != null) {
             context.put(selectedKey, isSelected());
         }

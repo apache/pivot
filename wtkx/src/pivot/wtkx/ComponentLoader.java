@@ -90,15 +90,15 @@ public class ComponentLoader extends Loader {
         this.parent = parent;
         this.locale = locale;
     }
-    
+
     public ComponentLoader getParent() {
         return parent;
     }
-    
+
     public Locale getLocale() {
         return locale;
     }
-    
+
     public URL getResource(String name) {
         URL location = null;
 

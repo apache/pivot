@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Copyright (c) 2008 VMware, Inc.
-	
+
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
-	
+
 	http://www.apache.org/licenses/LICENSE-2.0
-	
+
 	Unless required by applicable law or agreed to in writing, software
 	distributed under the License is distributed on an "AS IS" BASIS,
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -74,13 +74,18 @@
 				tooltipText="%removeSymbol" />
 		</FlowPane>
 
-		<Label row="3" column="0" id="lastUpdateLabel"
-			styles="{font:'Verdana italic 10'}" />
+        <Label row="3" column="0" id="lastUpdateLabel"
+            styles="{font:'Verdana italic 10'}" />
 
 		<Border row="1" column="1"
-			styles="{padding:0, borderColor:'#cccac2'}">
+			styles="{padding:6, borderColor:'#cccac2'}">
 			<Component namespace="detail"
 				src="stocktracker.detail.wtkx" />
 		</Border>
+
+		<FlowPane row="3" column="1" styles="{horizontalAlignment:'right'}">
+			<Label text="%dataProvidedBy" />
+			<LinkButton id="yahooFinanceButton" buttonData="'%yahooFinance'" />
+		</FlowPane>
 	</cells>
 </TablePane>

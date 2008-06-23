@@ -21,6 +21,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 import pivot.collections.ArrayList;
+import pivot.collections.Dictionary;
 import pivot.collections.Map;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
@@ -515,7 +516,7 @@ public abstract class Container extends Component {
      * @param context
      */
     @SuppressWarnings("unchecked")
-    public void load(Map<String, Object> context) {
+    public void load(Dictionary<String, Object> context) {
         if (contextKey != null
             && context.containsKey(contextKey)) {
             context = (Map<String, Object>)context.get(contextKey);
@@ -533,7 +534,7 @@ public abstract class Container extends Component {
      * @param context
      */
     @SuppressWarnings("unchecked")
-    public void store(Map<String, Object> context) {
+    public void store(Dictionary<String, Object> context) {
         if (contextKey != null) {
             // Bound value is expected to be a sub-context
             context = (Map<String, Object>)context.get(contextKey);

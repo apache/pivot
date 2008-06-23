@@ -17,6 +17,7 @@ package pivot.wtk;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
@@ -99,6 +100,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     public void exit() {
         System.exit(0);
+    }
+
+    public void open(URL location) {
+        // TODO Use java.awt.Desktop class when Java 6 is available on OSX
     }
 
     public static void main(String[] args) {
