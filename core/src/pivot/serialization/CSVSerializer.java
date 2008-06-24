@@ -209,7 +209,7 @@ public class CSVSerializer implements Serializer {
                 && (c != '\r' && c != '\n')) {
                 if (c == '"') {
                     c = reader.read();
-                    quoted = (c == '"');
+                    quoted &= (c == '"');
                 }
 
                 if (quoted || c != ',') {

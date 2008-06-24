@@ -46,18 +46,8 @@ public class JSONSerializer implements Serializer {
      */
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
-        Object o = null;
-        Reader reader = null;
-
-        try {
-            reader = new InputStreamReader(inputStream);
-            o = readObject(reader);
-        }
-        finally {
-            if (reader != null) {
-                reader.close();
-            }
-        }
+        Reader reader = new InputStreamReader(inputStream);
+        Object o = readObject(reader);
 
         return o;
     }
@@ -349,7 +339,7 @@ public class JSONSerializer implements Serializer {
             writeObject(object, writer);
         } finally {
             if (writer != null) {
-                writer.close();
+                writer.flush();
             }
         }
     }
@@ -472,10 +462,11 @@ public class JSONSerializer implements Serializer {
     }
 
     /**
-     * TODO This method will return the value at the given path.
+     * Returns the value at the given path.
      *
-     * @param map
-     * The root object.
+     * @param root
+     * The root object; must be an instance of {@link pivot.collections.Map}
+     * or {@link pivot.collections.List}.
      *
      * @param path
      * The path to the value, in JavaScript path notation.
@@ -483,51 +474,174 @@ public class JSONSerializer implements Serializer {
      * @return
      * The value at the given path.
      */
-    public static Object getObject(Map<String, Object> map, String path) {
-        // TODO Parse the JavaScript path and return the value at that path
-        throw new UnsupportedOperationException("Not implemented.");
+    @SuppressWarnings("unchecked")
+    public static Object getValue(Object root, String path) {
+        Object value = root;
+
+        int i = 0;
+        int n = path.length();
+
+        while (i < n) {
+            char c = path.charAt(i++);
+
+            boolean keyed = true;
+            StringBuilder identifierBuilder = new StringBuilder();
+
+            boolean bracketed = (c == '[');
+            if (bracketed
+                && i < n) {
+                c = path.charAt(i++);
+
+                char quote = Character.UNASSIGNED;
+
+                boolean quoted = (c == '"'
+                    || c == '\'');
+                if (quoted
+                    && i < n) {
+                    quote = c;
+                    c = path.charAt(i++);
+                }
+
+                keyed = quoted;
+
+                while (i <= n
+                    && bracketed) {
+                    bracketed = quoted || (c != ']');
+
+                    if (bracketed) {
+                        if (c == quote) {
+                            if (i < n) {
+                                c = path.charAt(i++);
+                                quoted = (c == quote);
+                            }
+                        }
+
+                        if (quoted || c != ']') {
+                            if (Character.isISOControl(c)) {
+                                throw new IllegalArgumentException("Illegal identifier character.");
+                            }
+
+                            identifierBuilder.append(c);
+
+                            if (i < n) {
+                                c = path.charAt(i++);
+                            }
+                        }
+                    }
+                }
+
+                if (quoted) {
+                    throw new IllegalArgumentException("Unterminated quoted identifier.");
+                }
+
+                if (bracketed) {
+                    throw new IllegalArgumentException("Unterminated bracketed identifier.");
+                }
+
+                if (i < n) {
+                    c = path.charAt(i);
+
+                    if (c == '.') {
+                        i++;
+                    }
+                }
+            } else {
+                keyed = true;
+
+                do {
+                    if (c != '.') {
+                        if (!Character.isJavaIdentifierPart(c)) {
+                            throw new IllegalArgumentException("Illegal identifier character.");
+                        }
+
+                        identifierBuilder.append(c);
+
+                        if (i < n) {
+                            c = path.charAt(i++);
+                        }
+                    }
+                } while(i < n
+                    && c != '.'
+                    && c != '[');
+
+                if (c == '[') {
+                    i--;
+                }
+            }
+
+            if (c == '.'
+                && i == n) {
+                throw new IllegalArgumentException("Path cannot end with a '.' character.");
+            }
+
+            if (identifierBuilder.length() == 0) {
+                throw new IllegalArgumentException("Missing identifier.");
+            }
+
+            String identifier = identifierBuilder.toString();
+
+            if (keyed) {
+                if (!(value instanceof Map<?, ?>)){
+                    throw new IllegalArgumentException("Invalid path.");
+                }
+
+                String key = identifier;
+                Map<String, Object> map = (Map<String, Object>)value;
+                value = map.get(key);
+            } else {
+                if (!(value instanceof List<?>)){
+                    throw new IllegalArgumentException("Invalid path.");
+                }
+
+                int index = Integer.parseInt(identifier);
+                List<Object> list = (List<Object>)value;
+                value = list.get(index);
+            }
+        }
+
+        return value;
     }
 
-    public static String getString(Map<String, Object> map, String path) {
-        return (String)getObject(map, path);
+    public static String getString(Object root, String path) {
+        return (String)getValue(root, path);
     }
 
-    public static Number getNumber(Map<String, Object> map, String path) {
-        return (Number)getObject(map, path);
+    public static Number getNumber(Object root, String path) {
+        return (Number)getValue(root, path);
     }
 
-    public static Short getShort(Map<String, Object> map, String path) {
-        return (Short)getObject(map, path);
+    public static Short getShort(Object root, String path) {
+        return (Short)getValue(root, path);
     }
 
-    public static Integer getInteger(Map<String, Object> map, String path) {
-        return (Integer)getObject(map, path);
+    public static Integer getInteger(Object root, String path) {
+        return (Integer)getValue(root, path);
     }
 
-    public static Long getLong(Map<String, Object> map, String path) {
-        return (Long)getObject(map, path);
+    public static Long getLong(Object root, String path) {
+        return (Long)getValue(root, path);
     }
 
-    public static Float getFloat(Map<String, Object> map, String path) {
-        return (Float)getObject(map, path);
+    public static Float getFloat(Object root, String path) {
+        return (Float)getValue(root, path);
     }
 
-    public static Double getDouble(Map<String, Object> map, String path) {
-        return (Double)getObject(map, path);
+    public static Double getDouble(Object root, String path) {
+        return (Double)getValue(root, path);
     }
 
-    public static Boolean getBoolean(Map<String, Object> map, String path) {
-        return (Boolean)getObject(map, path);
+    public static Boolean getBoolean(Object root, String path) {
+        return (Boolean)getValue(root, path);
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Object> getList(Map<String, Object> map, String path) {
-        return (List<Object>)getObject(map, path);
+    public static List<Object> getList(Object root, String path) {
+        return (List<Object>)getValue(root, path);
     }
 
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> getMap(Map<String, Object> map, String path) {
-        return (Map<String, Object>)getObject(map, path);
+    public static Map<String, Object> getMap(Object root, String path) {
+        return (Map<String, Object>)getValue(root, path);
     }
 
     @SuppressWarnings("unchecked")

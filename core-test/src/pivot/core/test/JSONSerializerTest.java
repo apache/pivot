@@ -45,6 +45,11 @@ public class JSONSerializerTest {
     };
 
     public static void main(String[] args) {
+        // test1();
+        test2();
+    }
+
+    public static void test1() {
         JSONSerializer jsonSerializer = new JSONSerializer();
 
         for (int i = 0, n = testStrings.length; i < n; i++) {
@@ -78,7 +83,43 @@ public class JSONSerializerTest {
         for (String key : map) {
             System.out.println(key + ":" + map.get(key));
         }
+    }
 
+    public static void test2() {
+        testMap("{a: {b: [{c:'hello'}, {c:'world'}]}}", "a.b[0].c");
+        testMap("{a: {b: [{c:'hello'}, {c:'world'}]}}", "['a'].b[0].c");
+        testMap("{a: {b: [{c:'hello'}, {c:'world'}]}}", "a[\"b\"][0]['c']");
+        testMap("{a: {b: [{c:'hello'}, {c:'world'}]}}", "a.");
+        testMap("{a: {b: [{c:'hello', d:[0, 1, 2, 3, 4]}, {c:'world'}]}}", "a.b[0].d[2]");
+        testMap("{a: {b: [{c:'hello', d:[0, 1, 2, 3, 4]}, {c:'world'}]}}", "a.....");
 
+        testList("[[0, 1, 2], [3, 4, 5]]", "[1][0]");
+        testList("[[0, 1, 2], [3, 4, 5]]", "[1][0].c");
+        testList("[[0, 1, 2], [3, 4, 5]]", "[1][]");
+        testList("[[0, 1, 2], [3, 4, 5]]", "[1][0][0]");
+    }
+
+    private static void testList(String list, String path) {
+        JSONSerializer jsonSerializer = new JSONSerializer();
+
+        try {
+            jsonSerializer.writeObject(JSONSerializer.getValue(JSONSerializer.parseList(list), path),
+                System.out);
+            System.out.println();
+        } catch(Exception exception) {
+            System.out.println(exception);
+        }
+    }
+
+    private static void testMap(String map, String path) {
+        JSONSerializer jsonSerializer = new JSONSerializer();
+
+        try {
+            jsonSerializer.writeObject(JSONSerializer.getValue(JSONSerializer.parseMap(map), path),
+                System.out);
+            System.out.println();
+        } catch(Exception exception) {
+            System.out.println(exception);
+        }
     }
 }
