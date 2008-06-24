@@ -265,8 +265,11 @@ public class StockTracker implements Application {
 
                     ResourceBundle resourceBundle =
                         ResourceBundle.getBundle(StockTracker.class.getName(), locale);
+
+                    DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
+                        DateFormat.MEDIUM, locale);
                     String lastUpdateText = resourceBundle.getString("lastUpdate")
-                        + ": " + DateFormat.getDateTimeInstance().format(new Date());
+                        + ": " + dateFormat.format(new Date());
                     lastUpdateLabel.setText(lastUpdateText);
 
                     getQuery = null;
