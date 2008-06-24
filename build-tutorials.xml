@@ -45,10 +45,6 @@
          </fileset>
       </jar>
 
-      <signjar jar="${tutorials}/${ant.project.name}-tutorials.jar"
-         signedjar="${tutorials}/${ant.project.name}-tutorials.signed.jar"
-         alias="myself" storepass="keystore"/>
-
       <delete file="${tutorials}/${ant.project.name}-stocktracker.jar"/>
       <jar jarfile="${tutorials}/${ant.project.name}-stocktracker.jar">
          <fileset dir="${tutorials}/${bin}">
@@ -61,16 +57,12 @@
            <include name="pivot/tutorials/stocktracker/**/*.wtkx"/>
          </fileset>
       </jar>
-
-      <signjar jar="${tutorials}/${ant.project.name}-stocktracker.jar"
-         alias="myself" storepass="keystore"/>
    </target>
 
    <!-- Clean the tutorial classes -->
    <target name="clean">
       <delete dir="${tutorials}/${bin}"/>
       <delete file="${tutorials}/${ant.project.name}-tutorials.jar"/>
-      <delete file="${tutorials}/${ant.project.name}-tutorials.signed.jar"/>
       <delete file="${tutorials}/${ant.project.name}-stocktracker.jar"/>
    </target>
 </project>
