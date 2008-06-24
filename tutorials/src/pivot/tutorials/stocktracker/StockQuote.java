@@ -16,7 +16,7 @@ public class StockQuote implements Dictionary<String, Object> {
     public static final String VOLUME_KEY = "volume";
 
     public float getChange() {
-        return (values.containsKey(CHANGE_KEY) ? (Float)values.get(CHANGE_KEY): 0);
+        return (values.containsKey(CHANGE_KEY) ? (Float)values.get(CHANGE_KEY) : 0);
     }
 
     public Object get(String key) {
@@ -33,7 +33,7 @@ public class StockQuote implements Dictionary<String, Object> {
             try {
                 value = Float.parseFloat((String)value);
             } catch(NumberFormatException exception) {
-                value = null;
+                value = 0f;
             }
         }
 
