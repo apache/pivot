@@ -15,7 +15,11 @@
  */
 package pivot.wtk;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
+
+import pivot.collections.HashMap;
 
 public final class BrowserApplicationContext extends ApplicationContext {
     public static final class HostApplet extends java.applet.Applet {
@@ -57,10 +61,12 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 ApplicationContext applicationContext = ApplicationContext.getInstance();
 
                 String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
-                String propertiesResourceName = getParameter(PROPERTIES_RESOURCE_NAME_PARAMETER);
-
-                applicationContext.initialize(applicationClassName, propertiesResourceName);
-                applicationContext.startupApplication();
+                if (applicationClassName == null) {
+                    Alert.alert(Alert.Type.ERROR, "Application class name is required.");
+                } else {
+                    applicationContext.initialize(applicationClassName);
+                    applicationContext.startupApplication();
+                }
             }
         }
 
@@ -85,12 +91,40 @@ public final class BrowserApplicationContext extends ApplicationContext {
             }
         }
 
+        private HashMap<String, String> properties = null;
+
         public static final long serialVersionUID = 0;
         public static final String APPLICATION_CLASS_NAME_PARAMETER = "applicationClassName";
-        public static final String PROPERTIES_RESOURCE_NAME_PARAMETER = "propertiesResourceName";
 
         @Override
         public void init() {
+            // Load any properties specified on the query string
+            properties = new HashMap<String, String>();
+
+            URL documentBase = getDocumentBase();
+            String queryString = documentBase.getQuery();
+            if (queryString != null) {
+                String[] arguments = queryString.split("&");
+
+                for (int i = 0, n = arguments.length; i < n; i++) {
+                    String argument = arguments[i];
+                    String[] property = argument.split("=");
+
+                    if (property.length == 2) {
+                        String key, value;
+                        try {
+                            final String encoding = "UTF-8";
+                            key = URLDecoder.decode(property[0], encoding);
+                            value = URLDecoder.decode(property[1], encoding);
+                            properties.put(key, value);
+                        } catch(UnsupportedEncodingException exception) {
+                        }
+                    } else {
+                        System.out.println(argument + " is not a valid startup property.");
+                    }
+                }
+            }
+
             InitCallback initCallback = new InitCallback();
 
             if (java.awt.EventQueue.isDispatchThread()) {
@@ -144,13 +178,18 @@ public final class BrowserApplicationContext extends ApplicationContext {
         // No-op for applets; title is set in the host page
     }
 
-    public void exit() {
-        // No-op for applets
+    public String getProperty(String name) {
+        return (currentHostApplet.properties.containsKey(name) ?
+            currentHostApplet.properties.get(name) : currentHostApplet.getParameter(name));
     }
 
     public void open(URL location) {
         // TODO Use java.awt.Desktop class when Java 6 is available on OSX
 
         currentHostApplet.getAppletContext().showDocument(location, "_blank");
+    }
+
+    public void exit() {
+        // No-op for applets
     }
 }

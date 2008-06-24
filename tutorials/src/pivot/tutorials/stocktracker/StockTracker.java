@@ -68,6 +68,7 @@ public class StockTracker implements Application {
 
     private GetQuery getQuery = null;
 
+    public static final String LANGUAGE_PROPERTY_NAME = "language";
     public static final String SERVICE_HOSTNAME = "download.finance.yahoo.com";
     public static final String SERVICE_PATH = "/d/quotes.csv";
     public static final long REFRESH_INTERVAL = 15000;
@@ -89,19 +90,26 @@ public class StockTracker implements Application {
     }
 
     public void startup() throws Exception {
-        locale = new Locale("fr");
+        ApplicationContext applicationContext = ApplicationContext.getInstance();
 
+        // Set the locale
+        String language = applicationContext.getProperty(LANGUAGE_PROPERTY_NAME);
+        locale = (language == null) ? Locale.getDefault() : new Locale(language);
+
+        // Set the application context title
         ResourceBundle resourceBundle =
             ResourceBundle.getBundle(StockTracker.class.getName(), locale);
 
-        ApplicationContext.getInstance().setTitle(resourceBundle.getString("stockTracker"));
+        applicationContext.setTitle(resourceBundle.getString("stockTracker"));
 
+        // Load the application's UI
         ComponentLoader.initialize();
         ComponentLoader componentLoader = new ComponentLoader(locale);
 
         Component content = componentLoader.load("pivot/tutorials/stocktracker/stocktracker.wtkx",
             getClass().getName());
 
+        // Wire up event handlers
         stocksTableView = (TableView)componentLoader.getComponent("stocksTableView");
         stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
             public void selectionChanged(TableView tableView) {

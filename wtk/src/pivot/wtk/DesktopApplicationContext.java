@@ -18,13 +18,13 @@ package pivot.wtk;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.URL;
-
 import javax.imageio.ImageIO;
+import pivot.collections.HashMap;
 
 public final class DesktopApplicationContext extends ApplicationContext {
     private class WindowHandler implements WindowListener {
         public void windowOpened(WindowEvent event) {
-            initialize(applicationClassName, propertiesResourceName);
+            initialize(applicationClassName);
             startupApplication();
         }
 
@@ -56,9 +56,15 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     }
 
+    private String applicationClassName = null;
+    private HashMap<String, String> properties = null;
     private java.awt.Frame hostFrame = new java.awt.Frame();
 
-    private DesktopApplicationContext() {
+    private DesktopApplicationContext(String applicationClassName,
+        HashMap<String, String> properties) {
+        this.applicationClassName = applicationClassName;
+        this.properties = properties;
+
         // NOTE These properties are supported on Windows only
         System.setProperty("sun.awt.noerasebackground", "true");
         System.setProperty("sun.awt.erasebackgroundonresize", "true");
@@ -98,26 +104,44 @@ public final class DesktopApplicationContext extends ApplicationContext {
         hostFrame.setTitle(title);
     }
 
-    public void exit() {
-        System.exit(0);
+    public String getProperty(String name) {
+        return properties.get(name);
     }
 
     public void open(URL location) {
         // TODO Use java.awt.Desktop class when Java 6 is available on OSX
     }
 
-    public static void main(String[] args) {
-        if (args.length > 0) {
-            applicationClassName = args[0];
+    public void exit() {
+        System.exit(0);
+    }
 
-            if (args.length > 1) {
-                propertiesResourceName = args[1];
+    public static void main(String[] args) {
+        String applicationClassName = null;
+        HashMap<String, String> properties = new HashMap<String, String>();
+
+        for (int i = 0, n = args.length; i < n; i++) {
+            String arg = args[i];
+
+            if (i == 0) {
+                applicationClassName = arg;
+            } else {
+                String[] property = arg.split(":");
+
+                if (property.length == 2) {
+                    String key = property[0];
+                    String value = property[1];
+                    properties.put(key, value);
+                } else {
+                    System.out.println(arg + " is not a valid startup property.");
+                }
             }
         }
 
-        new DesktopApplicationContext();
+        if (applicationClassName == null) {
+            System.out.println("Application class name is required.");
+        } else {
+            new DesktopApplicationContext(applicationClassName, properties);
+        }
     }
-
-    private static String applicationClassName = null;
-    private static String propertiesResourceName = null;
 }

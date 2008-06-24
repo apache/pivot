@@ -25,15 +25,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
-import pivot.collections.Map;
-import pivot.serialization.JSONSerializer;
 
 public abstract class ApplicationContext {
     public static class DisplayHost extends java.awt.Panel {
@@ -426,28 +423,6 @@ public abstract class ApplicationContext {
         }
     }
 
-    public final class PropertyDictionary implements Dictionary<String, Object> {
-        public Object get(String key) {
-            return properties.get(key);
-        }
-
-        public Object put(String key, Object value) {
-            throw new UnsupportedOperationException();
-        }
-
-        public Object remove(String key) {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean containsKey(String key) {
-            return properties.containsKey(key);
-        }
-
-        public boolean isEmpty() {
-            return properties.isEmpty();
-        }
-    }
-
     private static class IntervalTask extends TimerTask {
         private Runnable runnable = null;
 
@@ -481,9 +456,6 @@ public abstract class ApplicationContext {
     protected DisplayHost displayHost = new DisplayHost();
 
     private Application application = null;
-    private Map<String, Object> properties = new HashMap<String, Object>();
-    private PropertyDictionary propertyDictionary = new PropertyDictionary();
-
     private HashMap<URL, Object> resources = new HashMap<URL, Object>();
 
     private boolean applicationStarted = false;
@@ -523,20 +495,6 @@ public abstract class ApplicationContext {
 
     public boolean isApplicationSuspended() {
         return applicationSuspended;
-    }
-
-    /**
-     * Startup properties accessor.
-     */
-    public PropertyDictionary getProperties() {
-        return propertyDictionary;
-    }
-
-    /**
-     * Resource properties accessor.
-     */
-    public Dictionary<URL, Object> getResources() {
-        return resources;
     }
 
     /**
@@ -716,9 +674,16 @@ public abstract class ApplicationContext {
     public abstract void setTitle(String title);
 
     /**
-     * Terminates the application context.
+     * Retrieves the value of a startup property.
+     *
+     * @param name
+     * The property name.
+     *
+     * @return
+     * The property value, or <tt>null</tt> if the property was not specified
+     * at startup.
      */
-    public abstract void exit();
+    public abstract String getProperty(String name);
 
     /**
      * Opens the given resource.
@@ -728,27 +693,29 @@ public abstract class ApplicationContext {
     public abstract void open(URL location);
 
     /**
+     * Terminates the application context.
+     */
+    public abstract void exit();
+
+    /**
+     * Resource properties accessor.
+     */
+    public Dictionary<URL, Object> getResources() {
+        return resources;
+    }
+
+    /**
      * Initializes the application context. Loads the application class and
      * startup properties and starts the system timer.
      */
     @SuppressWarnings("unchecked")
-    protected void initialize(String applicationClassName, String propertiesResourceName) {
+    protected void initialize(String applicationClassName) {
         assert (applicationClassName != null) : "applicationClassName is null.";
 
         try {
-            // Load the application's class
+            // Load and instantiate the application class
             Class<?> applicationClass = Class.forName(applicationClassName);
-
-            // Instantiate the application
             application = (Application)applicationClass.newInstance();
-
-            // Load the properties
-            if (propertiesResourceName != null) {
-                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                InputStream propertiesStream = classLoader.getResourceAsStream(propertiesResourceName);
-                JSONSerializer jsonSerializer = new JSONSerializer();
-                properties = (Map<String, Object>)jsonSerializer.readObject(propertiesStream);
-            }
 
             // Start the timer
             timer = new Timer();
