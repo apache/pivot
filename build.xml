@@ -119,6 +119,9 @@
       <delete file="${web}/${ant.project.name}-web.jar"/>
       <jar jarfile="${web}/${ant.project.name}-web.jar">
          <fileset dir="${web}/${bin}"/>
+         <manifest>
+            <attribute name="Sealed" value="true"/>
+         </manifest>
       </jar>
    </target>
 
