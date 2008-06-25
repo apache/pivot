@@ -47,9 +47,9 @@ public class JSONSerializer implements Serializer {
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
         Reader reader = new InputStreamReader(inputStream);
-        Object o = readObject(reader);
+        Object object = readObject(reader);
 
-        return o;
+        return object;
     }
 
     /**

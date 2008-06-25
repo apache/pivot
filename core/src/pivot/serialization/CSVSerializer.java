@@ -113,18 +113,8 @@ public class CSVSerializer implements Serializer {
     @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
-        Object object = null;
-        Reader reader = null;
-
-        try {
-            reader = new InputStreamReader(inputStream);
-            object = readObject(reader);
-        }
-        finally {
-            if (reader != null) {
-                reader.close();
-            }
-        }
+        Reader reader = new InputStreamReader(inputStream);
+        Object object = readObject(reader);
 
         return object;
     }
@@ -249,7 +239,7 @@ public class CSVSerializer implements Serializer {
             writeObject(object, writer);
         } finally {
             if (writer != null) {
-                writer.close();
+                writer.flush();
             }
         }
     }
