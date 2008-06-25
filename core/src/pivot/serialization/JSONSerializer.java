@@ -548,21 +548,21 @@ public class JSONSerializer implements Serializer {
             } else {
                 keyed = true;
 
-                do {
-                    if (c != '.') {
-                        if (!Character.isJavaIdentifierPart(c)) {
-                            throw new IllegalArgumentException("Illegal identifier character.");
-                        }
-
-                        identifierBuilder.append(c);
-
-                        if (i < n) {
-                            c = path.charAt(i++);
-                        }
-                    }
-                } while(i < n
+                while(i <= n
                     && c != '.'
-                    && c != '[');
+                    && c != '[') {
+                    if (!Character.isJavaIdentifierPart(c)) {
+                        throw new IllegalArgumentException("Illegal identifier character.");
+                    }
+
+                    identifierBuilder.append(c);
+
+                    if (i < n) {
+                        c = path.charAt(i);
+                    }
+
+                    i++;
+                }
 
                 if (c == '[') {
                     i--;

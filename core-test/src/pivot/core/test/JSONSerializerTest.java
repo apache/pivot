@@ -86,13 +86,15 @@ public class JSONSerializerTest {
     }
 
     public static void test2() {
-        testMap("{a: {b: [{c:'hello'}, {c:'world'}]}}", "a.b[0].c");
+        testMap("{a: {b: [{cd:'hello'}, {c:'world'}]}}", "a.b[0].cd");
         testMap("{a: {b: [{c:'hello'}, {c:'world'}]}}", "['a'].b[0].c");
         testMap("{a: {b: [{c:'hello'}, {c:'world'}]}}", "a[\"b\"][0]['c']");
         testMap("{a: {b: [{c:'hello'}, {c:'world'}]}}", "a.");
         testMap("{a: {b: [{c:'hello', d:[0, 1, 2, 3, 4]}, {c:'world'}]}}", "a.b[0].d[2]");
         testMap("{a: {b: [{c:'hello', d:[0, 1, 2, 3, 4]}, {c:'world'}]}}", "a.....");
+        testMap("{abc: {def: [{ghi:'hello', d:[0, 1, 2, 3, 4]}, {c:'world'}]}}", "abc.def[0].ghi");
 
+        testList("[[0, 1, 2], [3, 4, 5]]", "[1]");
         testList("[[0, 1, 2], [3, 4, 5]]", "[1][0]");
         testList("[[0, 1, 2], [3, 4, 5]]", "[1][0].c");
         testList("[[0, 1, 2], [3, 4, 5]]", "[1][]");
