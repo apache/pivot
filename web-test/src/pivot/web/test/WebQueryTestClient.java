@@ -27,8 +27,10 @@ import pivot.web.PutQuery;
 
 public class WebQueryTestClient {
     public static void main(String[] args) {
+        final boolean useProxy = true;
+
         final String HOSTNAME = "localhost";
-        final String PATH = "/pivot/webquery/bar";
+        final String PATH = useProxy ? "/pivot_web_test/proxy" : "/pivot_web_test/webquery/bar";
         final int PORT = 8080;
         final boolean SECURE = false;
 

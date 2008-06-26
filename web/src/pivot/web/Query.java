@@ -130,7 +130,7 @@ public abstract class Query<V> extends Task<V> {
             locationContext = new URL(secure ? HTTPS_PROTOCOL : HTTP_PROTOCOL,
                 hostname, port, path);
         } catch(MalformedURLException exception) {
-            throw new IllegalArgumentException("Unable to construct path URL.",
+            throw new IllegalArgumentException("Unable to construct context URL.",
                 exception);
         }
     }
@@ -164,7 +164,7 @@ public abstract class Query<V> extends Task<V> {
                 queryStringBuilder.append(URLEncoder.encode(key, URL_ENCODING)
                     + "=" + URLEncoder.encode(arguments.get(key), URL_ENCODING));
             } catch(UnsupportedEncodingException exception) {
-                throw new IllegalStateException("Unable to construct query URL.", exception);
+                throw new IllegalStateException("Unable to construct query string.", exception);
             }
         }
 
@@ -178,9 +178,8 @@ public abstract class Query<V> extends Task<V> {
                 locationContext.getPort(),
                 locationContext.getPath() + queryString);
         } catch(MalformedURLException exception) {
+            throw new IllegalStateException("Unable to construct query URL.", exception);
         }
-
-        assert (location != null) : "Error constructing location.";
 
         return location;
     }
@@ -281,7 +280,8 @@ public abstract class Query<V> extends Task<V> {
         }
 
         // If the response was anything other than 2xx, throw an exception
-        if (status / 100 != 2) {
+        int statusPrefix = status / 100;
+        if (statusPrefix != 2) {
             throw new QueryException(status, message);
         }
 
