@@ -240,7 +240,7 @@ public class FormSkin extends ContainerSkin implements FormListener {
                 flagImageView.setSize(flagImageView.getPreferredSize());
 
                 int rowHeight = Math.max(label.getHeight(),
-                    Math.max(field.getHeight(), flagImageView.getHeight()));
+                    Math.max(field.getHeight(), FLAG_IMAGE_SIZE));
 
                 // Set the row component locations
                 int labelX = rightAlignLabels ? maximumLabelWidth - label.getWidth() : 0;
