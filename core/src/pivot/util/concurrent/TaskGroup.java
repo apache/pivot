@@ -16,44 +16,105 @@
 package pivot.util.concurrent;
 
 import pivot.collections.Group;
+import pivot.collections.HashMap;
 
 /**
- * TODO Class that runs a group of tasks in parallel and notifies listeners
- * when all tasks are complete.
+ * Class that runs a group of tasks in parallel and notifies listeners
+ * when all tasks are complete. Callers can retrieve task results or faults by
+ * calling {@link Task#getResult()} and {@link Task#getFault()}, respectively.
  *
- * NOTE Callers can retrieve task results or faults by calling
- * {@link Task#getResult()} and {@link Task#getFault()}, respectively.
- *
+ * @author tvolkert
  * @author gbrown
  */
 public class TaskGroup<V> extends Task<Void> implements Group<Task<? extends V>> {
+    private class TaskHandler implements TaskListener<Object> {
+        public void taskExecuted(Task<Object> task) {
+            synchronized (TaskGroup.this) {
+                tasks.put(task, Boolean.TRUE);
+                TaskGroup.this.notify();
+            }
+        }
+
+        public void executeFailed(Task<Object> task) {
+            synchronized (TaskGroup.this) {
+                exception = task.getFault();
+                TaskGroup.this.notify();
+            }
+        }
+    }
+
+    private HashMap<Task<Object>, Boolean> tasks = new HashMap<Task<Object>, Boolean>();
+    private boolean executing = false;
+    private Exception exception;
+
     public TaskGroup(Dispatcher dispatcher) {
         super(dispatcher);
     }
 
     @Override
-    public Void execute() {
-        // TODO Execute all tasks using this task's dispatcher
+    public synchronized Void execute() throws TaskExecutionException {
+        executing = true;
+
+        try {
+            TaskHandler taskHandler = new TaskHandler();
+
+            for (Task<Object> task : tasks) {
+                tasks.put(task, Boolean.FALSE);
+                task.execute(taskHandler);
+            }
+
+            boolean complete = false;
+
+            while (!complete) {
+                try {
+                    wait();
+                } catch (InterruptedException ex) {
+                    throw new TaskExecutionException(ex);
+                }
+
+                if (exception != null) {
+                    throw new TaskExecutionException(exception);
+                }
+
+                complete = true;
+                for (Task<Object> task : tasks) {
+                    if (!tasks.get(task)) {
+                        complete = false;
+                        break;
+                    }
+                }
+            }
+        } finally {
+            executing = false;
+        }
+
         return null;
     }
 
-    public void add(Task<? extends V> element) {
-        // TODO Auto-generated method stub
+    @SuppressWarnings("unchecked")
+    public synchronized void add(Task<? extends V> element) {
+        if (executing) {
+            throw new IllegalStateException("Task group is executing.");
+        }
 
+        tasks.put((Task<Object>)element, Boolean.FALSE);
     }
 
-    public void remove(Task<? extends V> element) {
-        // TODO Auto-generated method stub
+    @SuppressWarnings("unchecked")
+    public synchronized void remove(Task<? extends V> element) {
+        if (executing) {
+            throw new IllegalStateException("Task group is executing.");
+        }
 
+        tasks.remove((Task<Object>)element);
     }
 
+    @SuppressWarnings("unchecked")
     public boolean contains(Task<? extends V> element) {
-        // TODO Auto-generated method stub
-        return false;
+        return tasks.containsKey((Task<Object>)element);
     }
 
     public boolean isEmpty() {
-        // TODO Auto-generated method stub
-        return false;
+        return tasks.isEmpty();
     }
 }
