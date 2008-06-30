@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{borderColor:'#999999', backgroundColor:'#cccac2', padding:8}">
+<Border styles="{borderColor:'#cccac2', backgroundColor:'#cccac2', padding:8}">
     <Border styles="{borderColor:'#999999', backgroundColor:'#f7f5eb', padding:0}">
         <ScrollPane>
             <view>

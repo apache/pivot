@@ -24,6 +24,7 @@ import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ComponentKeyListener;
@@ -331,6 +332,8 @@ public class Demo implements Application {
         infoAlertButton = (PushButton)componentLoader.getComponent("alerts.infoAlertButton");
         customAlertButton = (PushButton)componentLoader.getComponent("alerts.customAlertButton");
         initializeAlertButtons();
+
+        ApplicationContext.getInstance().setTitle("Pivot Demo");
 
         window = new Window();
         window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE, Boolean.TRUE);

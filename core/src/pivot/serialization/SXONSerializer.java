@@ -19,6 +19,43 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * TODO Need a MIME type
+ *
+ * <!-- Simple XML Object Notation (SXON) -->
+ *
+ * <!-- "Hello World" -->
+ * <string>Hello World</string>
+ *
+ * <!-- 100, 100.0; infer type from presence of decimal point -->
+ * <number>100</number>
+ *
+ * <!-- true -->
+ * <boolean>true</boolean>
+ *
+ * <!-- ["Hello World", 100, true] -->
+ * <list>
+ *     <string>Hello World</string>
+ *     <number>100</number>
+ *     <boolean>true</boolean>
+ * </list>
+ *
+ * <!-- {foo:"Hello World", bar:100, baz:true} -->
+ * <map>
+ *     <string key="foo">Hello World</string>
+ *     <number key="bar">100</number>
+ *     <boolean key="baz">true</boolean>
+ *     <map key="inner"/>
+ *     <list key="list"/>
+ *     <null key="null"/>
+ * </map>
+ *
+ * <!-- null -->
+ * <null/>
+ *
+ * <!-- XML -->
+ * <xml>...</xml>
+ */
 public class SXONSerializer implements Serializer {
     public static final String MIME_TYPE = "text/xml"; // TODO
 
