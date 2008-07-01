@@ -18,7 +18,7 @@
 <FlowPane id="rootPane" orientation="vertical"
 	styles="{horizontalAlignment:'justify'}">
 	<Label textKey="companyName" styles="{font:'Verdana bold 12'}" />
-	<Spacer />
+    <Spacer />
 	<Form styles="{rightAlignLabels:true, fieldAlignment:'right'}">
 		<Label label="%value" textKey="value" />
 		<Label id="changeLabel" label="%change" textKey="change" />

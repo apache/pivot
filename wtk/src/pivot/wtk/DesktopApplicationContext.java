@@ -17,8 +17,12 @@ package pivot.wtk;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URL;
+
 import javax.imageio.ImageIO;
+
 import pivot.collections.HashMap;
 
 public final class DesktopApplicationContext extends ApplicationContext {
@@ -109,7 +113,17 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     public void open(URL location) {
-        // TODO Use java.awt.Desktop class when Java 6 is available on OSX
+    	try {
+    	    Class<?> desktopClass = Class.forName("java.awt.Desktop");
+    	    Method getDesktopMethod = desktopClass.getMethod("getDesktop",
+    		    new Class<?>[] {});
+    	    Method browseMethod = desktopClass.getMethod("browse",
+    		    new Class[] { URI.class });
+    	    Object desktop = getDesktopMethod.invoke(null, (Object[]) null);
+    	    browseMethod.invoke(desktop, location.toURI());
+    	} catch (Exception exception) {
+    	    System.out.println("Unable to open URL in default browser.");
+    	}
     }
 
     public void exit() {
