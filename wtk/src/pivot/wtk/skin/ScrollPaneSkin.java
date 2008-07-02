@@ -24,6 +24,7 @@ import pivot.wtk.Rectangle;
 import pivot.wtk.ScrollBar;
 import pivot.wtk.ScrollBarValueListener;
 import pivot.wtk.ScrollPane;
+import pivot.wtk.ScrollPane.Corner;
 import pivot.wtk.ScrollPane.ScrollBarPolicy;
 import pivot.wtk.ScrollPaneListener;
 import pivot.wtk.Viewport;
@@ -34,12 +35,6 @@ import pivot.wtk.ViewportListener;
  * pivot.wtk.skin.terra. This is because the fundamental behavior of the skin
  * should not change across themes, though the appearance of a scroll bar may.
  *
- * TODO add support for corner component
- *
- * TODO add components in the other three corners to prevent the view from
- * showing through in the corners. Do the same for the top left corner if the
- * scroll pane doesn't have a "corner component".
- *
  * @author tvolkert
  */
 public class ScrollPaneSkin extends ContainerSkin
@@ -48,6 +43,11 @@ public class ScrollPaneSkin extends ContainerSkin
 
     private ScrollBar horizontalScrollBar = new ScrollBar(Orientation.HORIZONTAL);
     private ScrollBar verticalScrollBar = new ScrollBar(Orientation.VERTICAL);
+
+    private Corner topLeftCorner = new Corner(Corner.Placement.TOP_LEFT);
+    private Corner bottomLeftCorner = new Corner(Corner.Placement.BOTTOM_LEFT);
+    private Corner bottomRightCorner = new Corner(Corner.Placement.BOTTOM_RIGHT);
+    private Corner topRightCorner = new Corner(Corner.Placement.TOP_RIGHT);
 
     // Style properties
     protected int horizontalReveal = DEFAULT_HORIZONTAL_REVEAL;
@@ -92,6 +92,11 @@ public class ScrollPaneSkin extends ContainerSkin
         scrollPane.getComponents().add(horizontalScrollBar);
         scrollPane.getComponents().add(verticalScrollBar);
 
+        scrollPane.getComponents().add(topLeftCorner);
+        scrollPane.getComponents().add(bottomLeftCorner);
+        scrollPane.getComponents().add(bottomRightCorner);
+        scrollPane.getComponents().add(topRightCorner);
+
         horizontalScrollBar.getScrollBarValueListeners().add(this);
         verticalScrollBar.getScrollBarValueListeners().add(this);
     }
@@ -104,6 +109,11 @@ public class ScrollPaneSkin extends ContainerSkin
 
         scrollPane.getComponents().remove(horizontalScrollBar);
         scrollPane.getComponents().remove(verticalScrollBar);
+
+        scrollPane.getComponents().remove(topLeftCorner);
+        scrollPane.getComponents().remove(bottomLeftCorner);
+        scrollPane.getComponents().remove(bottomRightCorner);
+        scrollPane.getComponents().remove(topRightCorner);
 
         horizontalScrollBar.getScrollBarValueListeners().remove(this);
         verticalScrollBar.getScrollBarValueListeners().remove(this);
@@ -610,6 +620,7 @@ public class ScrollPaneSkin extends ContainerSkin
         Component view = scrollPane.getView();
         Component columnHeader = scrollPane.getColumnHeader();
         Component rowHeader = scrollPane.getRowHeader();
+        Component corner = scrollPane.getCorner();
 
         int rowHeaderWidth = 0;
         if (rowHeader != null) {
@@ -722,6 +733,57 @@ public class ScrollPaneSkin extends ContainerSkin
                 columnHeaderHeight);
         } else {
             verticalScrollBar.setVisible(false);
+        }
+
+        // Handle corner components
+
+        if (columnHeaderHeight > 0
+            && rowHeaderWidth > 0) {
+            if (corner != null) {
+                corner.setVisible(true);
+                corner.setSize(rowHeaderWidth, columnHeaderHeight);
+                corner.setLocation(0, 0);
+
+                topLeftCorner.setVisible(false);
+            } else {
+                topLeftCorner.setVisible(true);
+                topLeftCorner.setSize(rowHeaderWidth, columnHeaderHeight);
+                topLeftCorner.setLocation(0, 0);
+            }
+        } else {
+            if (corner != null) {
+                corner.setVisible(false);
+            }
+
+            topLeftCorner.setVisible(false);
+        }
+
+        if (rowHeaderWidth > 0
+            && horizontalScrollBarHeight > 0) {
+            bottomLeftCorner.setVisible(true);
+            bottomLeftCorner.setSize(rowHeaderWidth, horizontalScrollBarHeight);
+            bottomLeftCorner.setLocation(0, height - horizontalScrollBarHeight);
+        } else {
+            bottomLeftCorner.setVisible(false);
+        }
+
+        if (verticalScrollBarWidth > 0
+            && horizontalScrollBarHeight > 0) {
+            bottomRightCorner.setVisible(true);
+            bottomRightCorner.setSize(verticalScrollBarWidth, horizontalScrollBarHeight);
+            bottomRightCorner.setLocation(width - verticalScrollBarWidth,
+                height - horizontalScrollBarHeight);
+        } else {
+            bottomRightCorner.setVisible(false);
+        }
+
+        if (columnHeaderHeight > 0
+            && verticalScrollBarWidth > 0) {
+            topRightCorner.setVisible(true);
+            topRightCorner.setSize(verticalScrollBarWidth, columnHeaderHeight);
+            topRightCorner.setLocation(width - verticalScrollBarWidth, 0);
+        } else {
+            topRightCorner.setVisible(false);
         }
 
         // Perform bounds checking on the scrollTop and scrollLeft values,

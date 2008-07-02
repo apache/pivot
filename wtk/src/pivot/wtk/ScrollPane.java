@@ -18,6 +18,7 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.skin.ScrollPaneSkin;
+import pivot.wtk.skin.terra.ScrollPaneCornerSkin;
 
 /**
  *
@@ -94,6 +95,41 @@ public class ScrollPane extends Viewport {
             for (ScrollPaneListener listener : this) {
                 listener.cornerChanged(scrollPane, previousCorner);
             }
+        }
+    }
+
+    /**
+     * Component class representing the components that will get placed in the
+     * corners of a <tt>ScrollPane</tt>. Skins will instantiate these
+     * components as needed when unfilled corners are introduced by a row
+     * header or column header.
+     *
+     * @author tvolkert
+     */
+    public static class Corner extends Component {
+        public static enum Placement {
+            TOP_LEFT,
+            BOTTOM_LEFT,
+            BOTTOM_RIGHT,
+            TOP_RIGHT;
+        }
+
+        private Placement placement;
+
+        public Corner(Placement placement) {
+            if (placement == null) {
+                throw new IllegalArgumentException("Placement is null.");
+            }
+
+            this.placement = placement;
+
+            if (getClass() == Corner.class) {
+                setSkinClass(ScrollPaneCornerSkin.class);
+            }
+        }
+
+        public Placement getPlacement() {
+            return placement;
         }
     }
 
@@ -179,8 +215,14 @@ public class ScrollPane extends Viewport {
                     throw new IllegalArgumentException("Component already has a parent.");
                 }
 
+                int insertionIndex = 0;
+
+                if (getView() != null) {
+                    insertionIndex++;
+                }
+
                 // Add the component
-                components.add(rowHeader);
+                components.insert(rowHeader, insertionIndex);
             }
 
             // Set the component as the new row header component (note that we
@@ -212,8 +254,14 @@ public class ScrollPane extends Viewport {
                     throw new IllegalArgumentException("Component already has a parent.");
                 }
 
+                int insertionIndex = 0;
+
+                if (getView() != null) {
+                    insertionIndex++;
+                }
+
                 // Add the component
-                components.add(columnHeader);
+                components.insert(columnHeader, insertionIndex);
             }
 
             // Set the component as the new column header component (note that
@@ -245,8 +293,22 @@ public class ScrollPane extends Viewport {
                     throw new IllegalArgumentException("Component already has a parent.");
                 }
 
+                int insertionIndex = 0;
+
+                if (getView() != null) {
+                    insertionIndex++;
+                }
+
+                if (rowHeader != null) {
+                    insertionIndex++;
+                }
+
+                if (columnHeader != null) {
+                    insertionIndex++;
+                }
+
                 // Add the component
-                components.add(corner);
+                components.insert(corner, insertionIndex);
             }
 
             // Set the component as the new corner component (note that we
