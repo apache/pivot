@@ -30,11 +30,6 @@ import pivot.wtk.Label;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
 
-/**
- * TODO Use a white flag for INFO (currently it is green).
- *
- * @author gbrown
- */
 public class FormSkin extends ContainerSkin implements FormListener {
     private ArrayList<Label> labels = new ArrayList<Label>();
     private ArrayList<ImageView> flagImageViews = new ArrayList<ImageView>();
