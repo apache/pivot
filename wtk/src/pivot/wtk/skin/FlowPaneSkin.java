@@ -377,7 +377,7 @@ public class FlowPaneSkin extends ContainerSkin
             // Determine the fixed height (used in scaling components
             // when justified vertically)
             int fixedHeight = 0;
-            if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
+            if (verticalAlignment == VerticalAlignment.JUSTIFY) {
                 fixedHeight = padding.top + padding.bottom;
 
                 int displayableComponentCount = 0;

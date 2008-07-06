@@ -25,6 +25,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import pivot.collections.ArrayList;
 import pivot.collections.HashMap;
 import pivot.collections.List;
 import pivot.collections.Map;
@@ -48,15 +49,18 @@ import pivot.wtk.Skin;
  */
 public class ComponentLoader extends Loader {
     private ComponentLoader parent = null;
+    private String namespace = null;
     private Locale locale = null;
 
     private URL baseURL = null;
     private ResourceBundle resourceBundle = null;
 
-    private HashMap<String, Component> components = new HashMap<String, Component>();
-    private HashMap<String, ComponentLoader> namespaces = new HashMap<String, ComponentLoader>();
+    private ArrayList<Loader> loaders = new ArrayList<Loader>();
 
-    protected static final HashMap<String, Class<? extends Loader>> loaders =
+    private HashMap<String, Component> components = new HashMap<String, Component>();
+    private HashMap<String, ComponentLoader> componentLoaders = new HashMap<String, ComponentLoader>();
+
+    protected static final HashMap<String, Class<? extends Loader>> loaderClasses =
         new HashMap<String, Class<? extends Loader>>();
 
     public static final String URL_PREFIX = "@";
@@ -79,20 +83,43 @@ public class ComponentLoader extends Loader {
     public static final String STYLES_ATTRIBUTE = "styles";
 
     public ComponentLoader() {
-        this(null, Locale.getDefault());
+        this(null, null, Locale.getDefault());
     }
 
     public ComponentLoader(Locale locale) {
-        this(null, locale);
+        this(null, null, locale);
     }
 
-    private ComponentLoader(ComponentLoader parent, Locale locale) {
+    private ComponentLoader(ComponentLoader parent, String namespace, Locale locale) {
         this.parent = parent;
+        this.namespace = namespace;
         this.locale = locale;
     }
 
     public ComponentLoader getParent() {
         return parent;
+    }
+
+    public String getNamepsace() {
+        return namespace;
+    }
+
+    public String getQualifiedNamepsace() {
+        String qualifiedNamespace = this.namespace;
+
+        if (qualifiedNamespace != null) {
+            ComponentLoader ancestor = parent;
+
+            while (ancestor != null) {
+                if (ancestor.namespace != null) {
+                    qualifiedNamespace = ancestor.namespace + "." + qualifiedNamespace;
+                }
+
+                ancestor = ancestor.parent;
+            }
+        }
+
+        return qualifiedNamespace;
     }
 
     public Locale getLocale() {
@@ -266,8 +293,9 @@ public class ComponentLoader extends Loader {
         baseURL = null;
         this.resourceBundle = null;
 
+        loaders.clear();
         components.clear();
-        namespaces.clear();
+        componentLoaders.clear();
 
         try {
             builder = factory.newDocumentBuilder();
@@ -308,18 +336,18 @@ public class ComponentLoader extends Loader {
             // Construct the URL for the component's source document
             URL componentURL = rootLoader.getResource(src);
 
-            String namespaceKey = element.getAttribute(COMPONENT_NAMESPACE_ATTRIBUTE);
-            if (namespaceKey.length() == 0) {
+            String namespace = element.getAttribute(COMPONENT_NAMESPACE_ATTRIBUTE);
+            if (namespace.length() == 0) {
                 throw new LoadException("A namespace attribute is required for subcomponents.");
             }
 
-            if (namespaceKey.contains(".")) {
+            if (namespace.contains(".")) {
                 throw new LoadException("Namespace names may not contain \".\" characters.");
             }
 
             // Create a new namespace
-            if (namespaces.containsKey(namespaceKey)) {
-                throw new LoadException("Namespace " + namespaceKey + " is already in use.");
+            if (componentLoaders.containsKey(namespace)) {
+                throw new LoadException("Namespace " + namespace + " is already in use.");
             }
 
             // Load the resource bundle for the component
@@ -330,21 +358,26 @@ public class ComponentLoader extends Loader {
                 componentResourceBundle = ResourceBundle.getBundle(resourceBundleAttribute, locale);
             }
 
-            ComponentLoader componentLoader = new ComponentLoader(rootLoader, locale);
-            rootLoader.namespaces.put(namespaceKey, componentLoader);
+            ComponentLoader componentLoader = new ComponentLoader(rootLoader, namespace, locale);
+            rootLoader.componentLoaders.put(namespace, componentLoader);
 
             component = componentLoader.load(componentURL, componentResourceBundle);
         } else {
             // Retrieve the loader class for this tag
-            Class<? extends Loader> loaderClass = loaders.get(tagName);
+            Class<? extends Loader> loaderClass = loaderClasses.get(tagName);
 
             if (loaderClass == null) {
                 throw new LoadException("No loader mapping found for " + tagName + ".");
             }
 
             try {
-                // Load the component
+                // Create the loader and add it to the loaders list; this will
+                // ensure that it is not garbage collected until all components
+                // in this branch have been loaded
                 Loader loader = loaderClass.newInstance();
+                loaders.add(loader);
+
+                // Load the component
                 component = loader.load(element, rootLoader);
 
                 if (element.hasAttribute(ID_ATTRIBUTE)) {
@@ -442,15 +475,15 @@ public class ComponentLoader extends Loader {
             throw new IllegalArgumentException("name is null.");
         }
 
-        ComponentLoader namespace = this;
+        ComponentLoader componentLoader = this;
         String[] namespacePath = name.split("\\.");
 
         for (int i = 0; i < namespacePath.length && namespace != null; i++) {
-            String namespaceKey = namespacePath[i];
-            namespace = namespace.namespaces.get(namespaceKey);
+            String namespace = namespacePath[i];
+            componentLoader = componentLoader.componentLoaders.get(namespace);
         }
 
-        return namespace;
+        return componentLoader;
     }
 
     /**
@@ -471,21 +504,21 @@ public class ComponentLoader extends Loader {
         }
 
         Component component = null;
-        ComponentLoader namespace = ComponentLoader.this;
+        ComponentLoader componentLoader = ComponentLoader.this;
 
         String[] namespacePath = name.split("\\.");
         int i = 0;
         int n = namespacePath.length - 1;
 
         while (i < n
-            && namespace != null) {
-            String namespaceKey = namespacePath[i];
-            namespace = namespace.namespaces.get(namespaceKey);
+            && componentLoader != null) {
+            String namespace = namespacePath[i];
+            componentLoader = componentLoader.componentLoaders.get(namespace);
             i++;
         }
 
-        if (namespace != null) {
-            component = namespace.components.get(namespacePath[i]);
+        if (componentLoader != null) {
+            component = componentLoader.components.get(namespacePath[i]);
         }
 
         return component;
@@ -496,30 +529,30 @@ public class ComponentLoader extends Loader {
      * operation.
      */
     public static void initialize() {
-        loaders.put(BorderLoader.BORDER_TAG, BorderLoader.class);
-        loaders.put(CardPaneLoader.CARD_PANE_TAG, CardPaneLoader.class);
-        loaders.put(CheckboxLoader.CHECKBOX_TAG, CheckboxLoader.class);
-        loaders.put(ExpanderLoader.EXPANDER_TAG, ExpanderLoader.class);
-        loaders.put(FlowPaneLoader.FLOW_PANE_TAG, FlowPaneLoader.class);
-        loaders.put(FormLoader.FORM_TAG, FormLoader.class);
-        loaders.put(ImageViewLoader.IMAGE_VIEW_TAG, ImageViewLoader.class);
-        loaders.put(LabelLoader.LABEL_TAG, LabelLoader.class);
-        loaders.put(LinkButtonLoader.LINK_BUTTON_TAG, LinkButtonLoader.class);
-        loaders.put(ListButtonLoader.LIST_BUTTON_TAG, ListButtonLoader.class);
-        loaders.put(ListViewLoader.LIST_VIEW_TAG, ListViewLoader.class);
-        loaders.put(MeterLoader.METER_TAG, MeterLoader.class);
-        loaders.put(PushButtonLoader.PUSH_BUTTON_TAG, PushButtonLoader.class);
-        loaders.put(RadioButtonLoader.RADIO_BUTTON_TAG, RadioButtonLoader.class);
-        loaders.put(RollupLoader.ROLLUP_TAG, RollupLoader.class);
-        loaders.put(ScrollPaneLoader.SCROLL_PANE_TAG, ScrollPaneLoader.class);
-        loaders.put(SpacerLoader.SPACER_TAG, SpacerLoader.class);
-        loaders.put(SplitPaneLoader.SPLIT_PANE_TAG, SplitPaneLoader.class);
-        loaders.put(StackPaneLoader.STACK_PANE_TAG, StackPaneLoader.class);
-        loaders.put(TabPaneLoader.TAB_PANE_TAG, TabPaneLoader.class);
-        loaders.put(TablePaneLoader.TABLE_PANE_TAG, TablePaneLoader.class);
-        loaders.put(TableViewLoader.TABLE_VIEW_TAG, TableViewLoader.class);
-        loaders.put(TableViewHeaderLoader.TABLE_VIEW_HEADER_TAG, TableViewHeaderLoader.class);
-        loaders.put(TextInputLoader.TEXT_INPUT_TAG, TextInputLoader.class);
-        loaders.put(TreeViewLoader.TREE_VIEW_TAG, TreeViewLoader.class);
+        loaderClasses.put(BorderLoader.BORDER_TAG, BorderLoader.class);
+        loaderClasses.put(CardPaneLoader.CARD_PANE_TAG, CardPaneLoader.class);
+        loaderClasses.put(CheckboxLoader.CHECKBOX_TAG, CheckboxLoader.class);
+        loaderClasses.put(ExpanderLoader.EXPANDER_TAG, ExpanderLoader.class);
+        loaderClasses.put(FlowPaneLoader.FLOW_PANE_TAG, FlowPaneLoader.class);
+        loaderClasses.put(FormLoader.FORM_TAG, FormLoader.class);
+        loaderClasses.put(ImageViewLoader.IMAGE_VIEW_TAG, ImageViewLoader.class);
+        loaderClasses.put(LabelLoader.LABEL_TAG, LabelLoader.class);
+        loaderClasses.put(LinkButtonLoader.LINK_BUTTON_TAG, LinkButtonLoader.class);
+        loaderClasses.put(ListButtonLoader.LIST_BUTTON_TAG, ListButtonLoader.class);
+        loaderClasses.put(ListViewLoader.LIST_VIEW_TAG, ListViewLoader.class);
+        loaderClasses.put(MeterLoader.METER_TAG, MeterLoader.class);
+        loaderClasses.put(PushButtonLoader.PUSH_BUTTON_TAG, PushButtonLoader.class);
+        loaderClasses.put(RadioButtonLoader.RADIO_BUTTON_TAG, RadioButtonLoader.class);
+        loaderClasses.put(RollupLoader.ROLLUP_TAG, RollupLoader.class);
+        loaderClasses.put(ScrollPaneLoader.SCROLL_PANE_TAG, ScrollPaneLoader.class);
+        loaderClasses.put(SpacerLoader.SPACER_TAG, SpacerLoader.class);
+        loaderClasses.put(SplitPaneLoader.SPLIT_PANE_TAG, SplitPaneLoader.class);
+        loaderClasses.put(StackPaneLoader.STACK_PANE_TAG, StackPaneLoader.class);
+        loaderClasses.put(TabPaneLoader.TAB_PANE_TAG, TabPaneLoader.class);
+        loaderClasses.put(TablePaneLoader.TABLE_PANE_TAG, TablePaneLoader.class);
+        loaderClasses.put(TableViewLoader.TABLE_VIEW_TAG, TableViewLoader.class);
+        loaderClasses.put(TableViewHeaderLoader.TABLE_VIEW_HEADER_TAG, TableViewHeaderLoader.class);
+        loaderClasses.put(TextInputLoader.TEXT_INPUT_TAG, TextInputLoader.class);
+        loaderClasses.put(TreeViewLoader.TREE_VIEW_TAG, TreeViewLoader.class);
     }
 }

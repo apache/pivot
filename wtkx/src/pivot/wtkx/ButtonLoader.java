@@ -21,8 +21,6 @@ import org.w3c.dom.Element;
 import pivot.collections.HashMap;
 import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
-import pivot.wtk.Application;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
 
@@ -38,8 +36,6 @@ abstract class ButtonLoader extends Loader {
     public static final String DATA_RENDERER_PROPERTIES_ATTRIBUTE = "dataRendererProperties";
     public static final String SELECTED_KEY_ATTRIBUTE = "selectedKey";
     public static final String STATE_KEY_ATTRIBUTE = "stateKey";
-
-    private static final String GROUP_NAME_DELIMITER = "$";
 
     private String groupName = null;
     private static HashMap<String, Button.Group> groups = new HashMap<String, Button.Group>();
@@ -80,11 +76,12 @@ abstract class ButtonLoader extends Loader {
         }
 
         if (element.hasAttribute(GROUP_ATTRIBUTE)) {
-            Application application = ApplicationContext.getInstance().getApplication();
-            Class<? extends Application> applicationClass = application.getClass();
+            groupName = element.getAttribute(GROUP_ATTRIBUTE);
 
-            groupName = applicationClass.getName() + GROUP_NAME_DELIMITER
-                + element.getAttribute(GROUP_ATTRIBUTE);
+            String absoluteNamespace = rootLoader.getQualifiedNamepsace();
+            if (absoluteNamespace != null) {
+                groupName = absoluteNamespace + "$" + groupName;
+            }
 
             Button.Group group = groups.get(groupName);
             if (group == null) {
@@ -181,7 +178,10 @@ abstract class ButtonLoader extends Loader {
         throws Throwable {
         try {
             if (groupName != null) {
-                groups.remove(groupName);
+                if (groups.containsKey(groupName)) {
+                    System.out.println("Removing " + groupName);
+                    groups.remove(groupName);
+                }
             }
         } finally {
             super.finalize();
