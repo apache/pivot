@@ -179,7 +179,6 @@ abstract class ButtonLoader extends Loader {
         try {
             if (groupName != null) {
                 if (groups.containsKey(groupName)) {
-                    System.out.println("Removing " + groupName);
                     groups.remove(groupName);
                 }
             }

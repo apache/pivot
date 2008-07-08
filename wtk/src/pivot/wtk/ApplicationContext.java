@@ -33,7 +33,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
 public abstract class ApplicationContext {
-    public static class DisplayHost extends java.awt.Panel {
+    public static class DisplayHost extends java.awt.Component {
         public static final long serialVersionUID = 0;
         private Component focusedComponent = null;
 
@@ -45,7 +45,12 @@ public abstract class ApplicationContext {
                 | AWTEvent.MOUSE_WHEEL_EVENT_MASK
                 | AWTEvent.KEY_EVENT_MASK);
 
-            setLayout(null);
+            try {
+                System.setProperty("sun.awt.noerasebackground", "true");
+                System.setProperty("sun.awt.erasebackgroundonresize", "true");
+            } catch(SecurityException exception) {
+            }
+
             setFocusTraversalKeysEnabled(false);
         }
 
@@ -159,14 +164,6 @@ public abstract class ApplicationContext {
             }
 
             return painted;
-        }
-
-        @Override
-        public void update(Graphics graphics) {
-            // NOTE We override this method to call paint() directly, since,
-            // in Windows and Linux, the base method appears to clear the
-            // background before calling paint().
-            paint(graphics);
         }
 
         @Override

@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import java.awt.Graphics;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -165,6 +166,10 @@ public final class BrowserApplicationContext extends ApplicationContext {
             } else {
                 queueCallback(destroyCallback, true);
             }
+        }
+
+        public void update(Graphics graphics) {
+            paint(graphics);
         }
     }
 

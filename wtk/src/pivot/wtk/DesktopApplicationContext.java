@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import java.awt.Graphics;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.lang.reflect.Method;
@@ -26,6 +27,14 @@ import javax.imageio.ImageIO;
 import pivot.collections.HashMap;
 
 public final class DesktopApplicationContext extends ApplicationContext {
+    private static class HostFrame extends java.awt.Frame {
+        public static final long serialVersionUID = 0;
+
+        public void update(Graphics graphics) {
+            paint(graphics);
+        }
+    }
+
     private class WindowHandler implements WindowListener {
         public void windowOpened(WindowEvent event) {
             initialize(applicationClassName);
@@ -62,16 +71,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     private String applicationClassName = null;
     private HashMap<String, String> properties = null;
-    private java.awt.Frame hostFrame = new java.awt.Frame();
+    private HostFrame hostFrame = new HostFrame();
 
     private DesktopApplicationContext(String applicationClassName,
         HashMap<String, String> properties) {
         this.applicationClassName = applicationClassName;
         this.properties = properties;
-
-        // NOTE These properties are supported on Windows only
-        System.setProperty("sun.awt.noerasebackground", "true");
-        System.setProperty("sun.awt.erasebackgroundonresize", "true");
 
         // Add the display host to the frame
         hostFrame.add(displayHost);
