@@ -478,7 +478,7 @@ public class ComponentLoader extends Loader {
         ComponentLoader componentLoader = this;
         String[] namespacePath = name.split("\\.");
 
-        for (int i = 0; i < namespacePath.length && namespace != null; i++) {
+        for (int i = 0; i < namespacePath.length && componentLoader != null; i++) {
             String namespace = namespacePath[i];
             componentLoader = componentLoader.componentLoaders.get(namespace);
         }
