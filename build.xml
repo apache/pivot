@@ -266,6 +266,8 @@
    <target name="wtk-clean">
       <delete dir="${wtk}/${bin}"/>
       <delete file="${wtk}/${ant.project.name}-wtk.jar"/>
+      <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
+      <delete file="${wtk}/${ant.project.name}-wtk.obsidian.jar"/>
    </target>
 
    <!-- WTK Test -->
