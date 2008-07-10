@@ -27,7 +27,7 @@ import pivot.wtk.Mouse;
 import pivot.wtk.skin.ButtonSkin;
 
 public class LinkButtonSkin extends ButtonSkin {
-    boolean highlighted = false;
+    private boolean highlighted = false;
 
     // Style properties
     protected Font font = DEFAULT_FONT;

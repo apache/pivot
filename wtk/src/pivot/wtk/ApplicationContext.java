@@ -469,6 +469,7 @@ public abstract class ApplicationContext {
 
     private static int DEFAULT_MULTI_CLICK_INTERVAL = 400;
     private static int DEFAULT_CURSOR_BLINK_RATE = 600;
+    private static final String DEFAULT_THEME_CLASS_NAME = "pivot.wtk.skin.terra.TerraTheme";
 
     /**
      * Creates the application context.
@@ -710,6 +711,16 @@ public abstract class ApplicationContext {
         assert (applicationClassName != null) : "applicationClassName is null.";
 
         try {
+            try {
+                // Load and instantiate the default theme, if possible
+                Class<?> themeClass = Class.forName(DEFAULT_THEME_CLASS_NAME);
+                Theme.setTheme((Theme)themeClass.newInstance());
+            } catch(ClassNotFoundException exception) {
+                // No-op; assume that a custom theme will be installed later
+                // by the caller
+                System.out.println("Warning: Unable to load default theme.");
+            }
+
             // Load and instantiate the application class
             Class<?> applicationClass = Class.forName(applicationClassName);
             application = (Application)applicationClass.newInstance();

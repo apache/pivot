@@ -24,15 +24,11 @@ import java.awt.geom.Line2D;
 
 import pivot.collections.Map;
 import pivot.wtk.Button;
-import pivot.wtk.ButtonStateListener;
-import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
-import pivot.wtk.Keyboard;
-import pivot.wtk.Mouse;
 import pivot.wtk.PushButton;
 import pivot.wtk.Rectangle;
-import pivot.wtk.skin.ButtonSkin;
+import pivot.wtk.skin.AbstractPushButtonSkin;
 
 /**
  * TODO Add a "flat" or "toolbar" boolean style that, when set, only paints
@@ -41,10 +37,7 @@ import pivot.wtk.skin.ButtonSkin;
  *
  * @author gbrown
  */
-public class PushButtonSkin extends ButtonSkin
-    implements ButtonStateListener {
-    private boolean pressed = false;
-
+public class PushButtonSkin extends AbstractPushButtonSkin {
     // Style properties
     protected Font font = DEFAULT_FONT;
     protected Color color = DEFAULT_COLOR;
@@ -83,25 +76,6 @@ public class PushButtonSkin extends ButtonSkin
     protected static final String PRESSED_BEVEL_COLOR_KEY = "pressedBevelColor";
     protected static final String DISABLED_BEVEL_COLOR_KEY = "disabledBevelColor";
     protected static final String PADDING_KEY = "padding";
-
-    public PushButtonSkin() {
-    }
-
-    public void install(Component component) {
-        validateComponentType(component, PushButton.class);
-
-        super.install(component);
-
-        PushButton pushButton = (PushButton)component;
-        pushButton.getButtonStateListeners().add(this);
-    }
-
-    public void uninstall() {
-        PushButton pushButton = (PushButton)getComponent();
-        pushButton.getButtonStateListeners().remove(this);
-
-        super.uninstall();
-    }
 
     public int getPreferredWidth(int height) {
         PushButton pushButton = (PushButton)getComponent();
@@ -458,98 +432,5 @@ public class PushButtonSkin extends ButtonSkin
     @Override
     public boolean isEmpty() {
         return false;
-    }
-
-    @Override
-    public void enabledChanged(Component component) {
-        super.enabledChanged(component);
-
-        pressed = false;
-        repaintComponent();
-    }
-
-    @Override
-    public void focusedChanged(Component component, boolean temporary) {
-        super.focusedChanged(component, temporary);
-
-        pressed = false;
-        repaintComponent();
-    }
-
-    @Override
-    public void mouseOut() {
-        super.mouseOut();
-
-        if (pressed) {
-            pressed = false;
-            repaintComponent();
-        }
-    }
-
-    @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
-
-        pressed = true;
-        repaintComponent();
-
-        return consumed;
-    }
-
-    @Override
-    public boolean mouseUp(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseUp(button, x, y);
-
-        pressed = false;
-        repaintComponent();
-
-        return consumed;
-    }
-
-    @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
-        PushButton pushButton = (PushButton)getComponent();
-
-        if (pushButton.isFocusable()) {
-            Component.setFocusedComponent(pushButton);
-        }
-
-        pushButton.press();
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
-
-        if (keyCode == Keyboard.KeyCode.SPACE) {
-            pressed = true;
-            repaintComponent();
-        } else {
-            consumed = super.keyPressed(keyCode, keyLocation);
-        }
-
-        return consumed;
-    }
-
-    @Override
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
-
-        PushButton pushButton = (PushButton)getComponent();
-
-        if (keyCode == Keyboard.KeyCode.SPACE) {
-            pressed = false;
-            repaintComponent();
-
-            pushButton.press();
-        } else {
-            consumed = super.keyReleased(keyCode, keyLocation);
-        }
-
-        return consumed;
-    }
-
-    public void stateChanged(Button toggleButton, Button.State previousState) {
-        repaintComponent();
     }
 }

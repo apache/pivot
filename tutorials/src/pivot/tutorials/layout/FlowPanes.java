@@ -16,6 +16,7 @@
 package pivot.tutorials.layout;
 
 import pivot.wtk.Application;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
@@ -24,6 +25,7 @@ import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Orientation;
 import pivot.wtk.RadioButton;
+import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
 import pivot.wtkx.ComponentLoader;
@@ -44,6 +46,14 @@ public class FlowPanes implements Application, ButtonStateListener {
     private Window window = null;
 
     public void startup() throws Exception {
+        ApplicationContext applicationContext = ApplicationContext.getInstance();
+        String themeClassName = applicationContext.getProperty("themeClassName");
+
+        if (themeClassName != null) {
+            Class<?> themeClass = Class.forName(themeClassName);
+            Theme.setTheme((Theme)themeClass.newInstance());
+        }
+
         ComponentLoader.initialize();
         ComponentLoader componentLoader = new ComponentLoader();
 

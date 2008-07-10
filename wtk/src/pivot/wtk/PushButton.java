@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.wtk.content.ButtonDataRenderer;
-import pivot.wtk.skin.terra.PushButtonSkin;
 
 public class PushButton extends Button {
     public PushButton() {
@@ -37,7 +36,7 @@ public class PushButton extends Button {
         setToggleButton(toggleButton);
 
         if (getClass() == PushButton.class) {
-            setSkinClass(PushButtonSkin.class);
+            setSkinClass(Theme.getTheme().getSkinClass(PushButton.class));
         }
 
         setDataRenderer(new ButtonDataRenderer());
