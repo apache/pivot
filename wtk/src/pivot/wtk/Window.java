@@ -23,7 +23,6 @@ import pivot.collections.HashMap;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
-import pivot.wtk.skin.WindowSkin;
 
 public class Window extends TitlePane {
     /**
@@ -212,12 +211,10 @@ public class Window extends TitlePane {
     }
 
     public Window(String title, Component content) {
-        if (getClass() == Window.class) {
-            setSkinClass(WindowSkin.class);
-        }
-
         setTitle(title);
         setContent(content);
+
+        installSkin(Window.class);
     }
 
     @Override

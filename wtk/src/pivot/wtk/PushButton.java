@@ -34,12 +34,9 @@ public class PushButton extends Button {
         super(buttonData);
 
         setToggleButton(toggleButton);
-
-        if (getClass() == PushButton.class) {
-            setSkinClass(Theme.getTheme().getSkinClass(PushButton.class));
-        }
-
         setDataRenderer(new ButtonDataRenderer());
+
+        installSkin(PushButton.class);
     }
 
     public void press() {

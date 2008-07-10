@@ -540,11 +540,22 @@ public abstract class Component implements Visual {
         return skin;
     }
 
+    protected void installSkin(Class<? extends Component> componentClass) {
+        if (getClass() == componentClass) {
+            setSkinClass(Theme.getTheme().getSkinClass(componentClass));
+        }
+    }
+
     public Container getParent() {
         return parent;
     }
 
     protected void setParent(Container parent) {
+        if (parent != null
+            && skin == null) {
+            throw new IllegalStateException(this + " has no skin.");
+        }
+
         // If this component is being removed from the component hierarchy
         // and is currently focused, clear the focus
         if (parent == null
