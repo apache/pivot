@@ -21,7 +21,6 @@ import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
-import pivot.wtk.skin.terra.TabPaneSkin;
 
 /**
  * TODO Add a corner component.
@@ -154,7 +153,7 @@ public class TabPane extends Container {
 
         this.collapsible = collapsible;
 
-        setSkinClass(TabPaneSkin.class);
+        installSkin(TabPane.class);
     }
 
     public Orientation getTabOrientation() {

@@ -56,7 +56,7 @@ public class ExpanderSkin extends TitlePaneSkin
 
             this.expander = expander;
 
-            setSkinClass(ShadeButtonSkin.class);
+            installSkin(ShadeButton.class);
         }
 
         public Expander getExpander() {

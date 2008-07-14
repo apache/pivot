@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.wtk.content.ButtonDataRenderer;
-import pivot.wtk.skin.terra.RadioButtonSkin;
 
 public class RadioButton extends Button {
     public RadioButton() {
@@ -35,16 +34,13 @@ public class RadioButton extends Button {
         super(buttonData);
 
         super.setToggleButton(true);
-
-        if (getClass() == RadioButton.class) {
-            setSkinClass(RadioButtonSkin.class);
-        }
+        setGroup(group);
 
         Button.DataRenderer dataRenderer = new ButtonDataRenderer();
         dataRenderer.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         setDataRenderer(dataRenderer);
 
-        this.setGroup(group);
+        installSkin(RadioButton.class);
     }
 
     public void press() {

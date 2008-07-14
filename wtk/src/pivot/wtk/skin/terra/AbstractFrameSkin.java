@@ -68,7 +68,7 @@ public abstract class AbstractFrameSkin extends WindowSkin
 
             this.window = window;
 
-            setSkinClass(FrameButtonSkin.class);
+            installSkin(FrameButton.class);
         }
 
         public Window getWindow() {

@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.util.ListenerList;
-import pivot.wtk.skin.terra.ScrollBarSkin;
 
 /**
  * TODO Documentation
@@ -83,9 +82,7 @@ public class ScrollBar extends Container {
 
         this.orientation = orientation;
 
-        if (getClass() == ScrollBar.class) {
-            setSkinClass(ScrollBarSkin.class);
-        }
+        installSkin(ScrollBar.class);
     }
 
     public Orientation getOrientation() {

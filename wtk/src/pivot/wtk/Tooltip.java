@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.util.ListenerList;
-import pivot.wtk.skin.terra.TooltipSkin;
 
 public class Tooltip extends Window {
     private class TooltipListenerList extends ListenerList<TooltipListener>
@@ -33,11 +32,8 @@ public class Tooltip extends Window {
     private TooltipListenerList tooltipListeners = new TooltipListenerList();
 
     public Tooltip(String tooltipText) {
-        if (getClass() == Tooltip.class) {
-            setSkinClass(TooltipSkin.class);
-        }
-
         setTooltipText(tooltipText);
+        installSkin(Tooltip.class);
     }
 
     public String getTooltipText() {

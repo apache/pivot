@@ -17,7 +17,6 @@ package pivot.wtk;
 
 import pivot.util.ListenerList;
 import pivot.wtk.content.TableViewHeaderDataRenderer;
-import pivot.wtk.skin.terra.TableViewHeaderSkin;
 
 public class TableViewHeader extends Component {
     public interface DataRenderer extends Renderer {
@@ -68,11 +67,8 @@ public class TableViewHeader extends Component {
 
         this.tableView = tableView;
 
-        if (getClass() == TableViewHeader.class) {
-            setSkinClass(TableViewHeaderSkin.class);
-        }
-
         setDataRenderer(new TableViewHeaderDataRenderer());
+        installSkin(TableViewHeader.class);
     }
 
     @Override

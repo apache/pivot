@@ -18,7 +18,6 @@ package pivot.wtk;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
-import pivot.wtk.skin.TablePaneSkin;
 
 /**
  *
@@ -150,29 +149,19 @@ public class TablePane extends Container {
 
         private int width = 0;
         private boolean relative = false;
-        private Object headerData = null;
         private boolean selected = false;
 
         public Column(int width) {
-            this(width, false, null, false);
-        }
-
-        public Column(int width, Object headerData) {
-            this(width, false, headerData, false);
+            this(width, false, false);
         }
 
         public Column(int width, boolean relative) {
-            this(width, relative, null, false);
+            this(width, relative, false);
         }
 
-        public Column(int width, boolean relative, Object headerData) {
-            this(width, relative, headerData, false);
-        }
-
-        public Column(int width, boolean relative, Object headerData, boolean selected) {
+        public Column(int width, boolean relative, boolean selected) {
             this.width = width;
             this.relative = relative;
-            this.headerData = headerData;
             this.selected = selected;
         }
 
@@ -242,36 +231,6 @@ public class TablePane extends Container {
                     tablePane.tablePaneListeners.columnWidthChanged(tablePane,
                         tablePane.columns.indexOf(this), previousWidth,
                         previousRelative);
-                }
-            }
-        }
-
-        /**
-         * Returns the column header data.
-         *
-         * @return
-         * The column header data, or <tt>null</tt> if the column has no
-         * header data.
-         */
-        public Object getHeaderData() {
-            return headerData;
-        }
-
-        /**
-         * Sets the column header data.
-         *
-         * @param headerData
-         * The column header data, or <tt>null</tt> for no header data.
-         */
-        public void setHeaderData(Object headerData) {
-            Object previousHeaderData = this.headerData;
-
-            if (previousHeaderData != headerData) {
-                this.headerData = headerData;
-
-                if (tablePane != null) {
-                    tablePane.tablePaneListeners.columnHeaderDataChanged(tablePane,
-                        tablePane.columns.indexOf(this), previousHeaderData);
                 }
             }
         }
@@ -644,9 +603,7 @@ public class TablePane extends Container {
             }
         }
 
-        if (getClass() == TablePane.class) {
-            setSkinClass(TablePaneSkin.class);
-        }
+        installSkin(TablePane.class);
     }
 
     /**

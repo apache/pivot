@@ -17,7 +17,6 @@ package pivot.wtk;
 
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
-import pivot.wtk.skin.ImageViewSkin;
 
 public class ImageView extends Component {
     private class ImageViewListenerList extends ListenerList<ImageViewListener>
@@ -40,7 +39,7 @@ public class ImageView extends Component {
     public ImageView(Image image) {
         setImage(image);
 
-        setSkinClass(ImageViewSkin.class);
+        installSkin(ImageView.class);
     }
 
     public Image getImage() {

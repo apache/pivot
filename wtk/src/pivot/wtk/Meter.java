@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.util.ListenerList;
-import pivot.wtk.skin.terra.MeterSkin;
 
 public class Meter extends Component {
     private class MeterListenerList extends ListenerList<MeterListener>
@@ -39,9 +38,7 @@ public class Meter extends Component {
     private MeterListenerList meterListeners = new MeterListenerList();
 
     public Meter() {
-        if (getClass() == Meter.class) {
-            setSkinClass(MeterSkin.class);
-        }
+        installSkin(Meter.class);
     }
 
     public double getPercentage() {

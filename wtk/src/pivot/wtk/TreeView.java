@@ -23,7 +23,6 @@ import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.content.TreeViewNodeRenderer;
-import pivot.wtk.skin.terra.TreeViewSkin;
 
 /**
  * Class that displays a hierarchical data structure, allowing a user to select
@@ -446,11 +445,8 @@ public class TreeView extends Component {
      * @see #setTreeData(List)
      */
     public TreeView(List<?> treeData) {
-        if (getClass() == TreeView.class) {
-            setSkinClass(TreeViewSkin.class);
-        }
-
         setTreeData(treeData);
+        installSkin(TreeView.class);
     }
 
     @Override

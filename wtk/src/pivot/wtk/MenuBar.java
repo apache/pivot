@@ -18,7 +18,6 @@ package pivot.wtk;
 import java.util.Iterator;
 import pivot.collections.Sequence;
 import pivot.wtk.Menu.ItemGroup;
-import pivot.wtk.skin.terra.MenuBarSkin;
 
 /**
  * TODO Make Menu constructor protected?
@@ -82,9 +81,7 @@ public class MenuBar extends Component {
     public MenuBar() {
         // TODO
 
-        if (getClass() == MenuBar.class) {
-            setSkinClass(MenuBarSkin.class);
-        }
+        installSkin(MenuBar.class);
     }
 
     public ItemGroupSequence getMenuItemGroups() {

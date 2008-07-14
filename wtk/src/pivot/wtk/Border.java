@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.wtk.skin.BorderSkin;
-
 /**
  * TODO Create subclasses that install inset and outset skins, which will
  * probably have different style properties than BorderSkin.
@@ -29,8 +27,7 @@ public class Border extends TitlePane {
     }
 
     public Border(Component content) {
-        setSkinClass(BorderSkin.class);
-
         this.setContent(content);
+        installSkin(Border.class);
     }
 }

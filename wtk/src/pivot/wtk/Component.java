@@ -540,9 +540,42 @@ public abstract class Component implements Visual {
         return skin;
     }
 
+    /**
+     * Installs the skin for the given component class, unless a subclass has
+     * defined a more specific skin. Any component that defines a custom skin
+     * class must call this method.
+     *
+     * @param componentClass
+     */
+    @SuppressWarnings("unchecked")
     protected void installSkin(Class<? extends Component> componentClass) {
-        if (getClass() == componentClass) {
-            setSkinClass(Theme.getTheme().getSkinClass(componentClass));
+        assert (skin == null) : "Skin is already installed.";
+
+        // Walk the class hierarchy of this component's type to find a match
+        Theme theme = Theme.getTheme();
+
+        Class<?> superClass = getClass();
+        Class<? extends Skin> skinClass = null;
+
+        while (superClass != componentClass
+            && superClass != Component.class
+            && skinClass == null) {
+            skinClass = theme.getSkinClass((Class<? extends Component>)superClass);
+
+            if (skinClass == null) {
+                superClass = superClass.getSuperclass();
+            }
+        }
+
+        assert (superClass != Component.class) : componentClass.getName()
+            + " is not an ancestor of " + getClass().getName();
+
+        if (superClass == componentClass) {
+            skinClass = theme.getSkinClass(componentClass);
+            assert (skinClass != null) :
+                "No skin mapping specified for " + componentClass.getName();
+
+            setSkinClass(skinClass);
         }
     }
 

@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.wtk.skin.terra.FrameSkin;
-
 public class Frame extends Window {
     public Frame() {
         this(null, null);
@@ -33,8 +31,6 @@ public class Frame extends Window {
     public Frame(String title, Component content) {
         super(title, content);
 
-        if (getClass() == Frame.class) {
-            setSkinClass(FrameSkin.class);
-        }
+        installSkin(Frame.class);
     }
 }

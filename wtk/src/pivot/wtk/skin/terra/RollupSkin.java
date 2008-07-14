@@ -58,7 +58,7 @@ public class RollupSkin extends ContainerSkin
 
             this.rollup = rollup;
 
-            setSkinClass(RollupButtonSkin.class);
+            installSkin(RollupButton.class);
         }
 
         public Rollup getRollup() {

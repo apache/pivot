@@ -15,10 +15,8 @@
  */
 package pivot.wtk;
 
-import pivot.wtk.skin.StackPaneSkin;
-
 public class StackPane extends Container {
     public StackPane() {
-        setSkinClass(StackPaneSkin.class);
+        installSkin(StackPane.class);
     }
 }

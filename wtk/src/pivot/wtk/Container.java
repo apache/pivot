@@ -25,7 +25,6 @@ import pivot.collections.Dictionary;
 import pivot.collections.Map;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
-import pivot.wtk.skin.ContainerSkin;
 
 /**
  * Base class for containers.
@@ -213,12 +212,6 @@ public abstract class Container extends Component {
 
     private ContainerListenerList containerListeners = new ContainerListenerList();
     private ContainerMouseListenerList containerMouseListeners = new ContainerMouseListenerList();
-
-    public Container() {
-        if (getClass() == Container.class) {
-            setSkinClass(ContainerSkin.class);
-        }
-    }
 
     public ComponentSequence getComponents() {
         return componentSequence;

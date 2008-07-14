@@ -210,7 +210,7 @@ public class ScrollBarSkin extends ContainerSkin
             this.direction = direction;
             this.buttonImage = buttonImage;
 
-            setSkinClass(ScrollButtonSkin.class);
+            installSkin(ScrollButton.class);
         }
 
         public ScrollBar getScrollBar() {
@@ -463,7 +463,7 @@ public class ScrollBarSkin extends ContainerSkin
         public ScrollHandle(ScrollBar scrollBar) {
             this.scrollBar = scrollBar;
 
-            setSkinClass(ScrollHandleSkin.class);
+            installSkin(ScrollHandle.class);
         }
 
         public ScrollBar getScrollBar() {

@@ -21,7 +21,6 @@ import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
 import pivot.wtk.ListView.ValueMapping;
 import pivot.wtk.content.ListButtonDataRenderer;
-import pivot.wtk.skin.terra.ListButtonSkin;
 
 /**
  * A component that allows a user to select one of several options. The options
@@ -123,10 +122,7 @@ public class ListButton extends Button {
         super(buttonData);
 
         setDataRenderer(new ListButtonDataRenderer());
-
-        if (getClass() == ListButton.class) {
-            setSkinClass(ListButtonSkin.class);
-        }
+        installSkin(ListButton.class);
 
         setListData(listData);
     }

@@ -17,7 +17,6 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
-import pivot.wtk.skin.CardPaneSkin;
 
 public class CardPane extends Container {
     private class CardPaneListenerList extends ListenerList<CardPaneListener>
@@ -33,7 +32,7 @@ public class CardPane extends Container {
     private CardPaneListenerList cardPaneListeners = new CardPaneListenerList();
 
     public CardPane() {
-        setSkinClass(CardPaneSkin.class);
+        installSkin(CardPane.class);
     }
 
     /**

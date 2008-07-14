@@ -60,15 +60,6 @@ import pivot.collections.Dictionary;
  * a specific skin, and a WTK application would fail to run if that skin class
  * was not present.</li>
  * </ul>
- * <p>
- * TODO Since, in general, skins can only be installed on a particular component
- * type, it is not possible to reuse an arbitrary skin within another skin to
- * assist in layout. However, could skins embed other skin implementations that
- * are applicable to their components ancestor classes? For example,
- * TablePaneSkin could embed CardPaneSkin since TablePane extends CardPane?
- *
- * @see Component#setSkinClass(Class)
- * @see Renderer
  *
  * @version 1.0 (4/17/2007)
  */

@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.util.ListenerList;
-import pivot.wtk.skin.terra.ExpanderSkin;
 
 public class Expander extends TitlePane {
     private class ExpanderListenerList extends ListenerList<ExpanderListener>
@@ -32,9 +31,7 @@ public class Expander extends TitlePane {
     private ExpanderListenerList expanderListeners = new ExpanderListenerList();
 
     public Expander() {
-        if (getClass() == Expander.class) {
-            setSkinClass(ExpanderSkin.class);
-        }
+        installSkin(Expander.class);
     }
 
     public boolean isExpanded() {

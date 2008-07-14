@@ -22,7 +22,6 @@ import pivot.collections.List;
 import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
-import pivot.wtk.skin.terra.AlertSkin;
 
 public class Alert extends Dialog {
     public enum Type {
@@ -167,9 +166,7 @@ public class Alert extends Dialog {
         setSubject(subject);
         setOptionData(optionData);
 
-        if (getClass() == Alert.class) {
-           setSkinClass(AlertSkin.class);
-        }
+        installSkin(Alert.class);
     }
 
     public Type getType() {

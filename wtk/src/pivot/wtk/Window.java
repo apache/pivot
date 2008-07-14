@@ -128,7 +128,6 @@ public class Window extends TitlePane {
     private static class WindowClassListenerList
         extends ListenerList<WindowClassListener>
         implements WindowClassListener {
-
         public void activeWindowChanged(Window previousActiveWindow) {
             for (WindowClassListener listener : this) {
                 listener.activeWindowChanged(previousActiveWindow);
@@ -213,7 +212,6 @@ public class Window extends TitlePane {
     public Window(String title, Component content) {
         setTitle(title);
         setContent(content);
-
         installSkin(Window.class);
     }
 

@@ -17,8 +17,6 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
-import pivot.wtk.skin.ScrollPaneSkin;
-import pivot.wtk.skin.terra.ScrollPaneCornerSkin;
 
 /**
  *
@@ -123,9 +121,7 @@ public class ScrollPane extends Viewport {
 
             this.placement = placement;
 
-            if (getClass() == Corner.class) {
-                setSkinClass(ScrollPaneCornerSkin.class);
-            }
+            installSkin(Corner.class);
         }
 
         public Placement getPlacement() {
@@ -159,9 +155,7 @@ public class ScrollPane extends Viewport {
         this.horizontalScrollBarPolicy = horizontalScrollBarPolicy;
         this.verticalScrollBarPolicy = verticalScrollBarPolicy;
 
-        if (getClass() == ScrollPane.class) {
-            setSkinClass(ScrollPaneSkin.class);
-        }
+        installSkin(ScrollPane.class);
     }
 
     public ScrollBarPolicy getHorizontalPolicy() {

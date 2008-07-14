@@ -23,7 +23,6 @@ import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.content.TableViewCellRenderer;
-import pivot.wtk.skin.terra.TableViewSkin;
 
 /**
  * Displays a sequence of items partitioned into columns, optionally allowing a
@@ -713,7 +712,6 @@ public class TableView extends Component {
     private TableViewSelectionDetailListenerList tableViewSelectionDetailListeners
         = new TableViewSelectionDetailListenerList();
 
-
     /**
      * Creates a new table view populated with an empty array list.
      */
@@ -727,11 +725,8 @@ public class TableView extends Component {
      * @param tableData
      */
     public TableView(List<?> tableData) {
-        if (getClass() == TableView.class) {
-            setSkinClass(TableViewSkin.class);
-        }
-
         setTableData(tableData);
+        installSkin(TableView.class);
     }
 
     @Override

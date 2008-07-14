@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.util.ListenerList;
-import pivot.wtk.skin.FlowPaneSkin;
 
 /**
  *
@@ -42,7 +41,7 @@ public class FlowPane extends Container {
     public FlowPane(Orientation orientation) {
         this.orientation = orientation;
 
-        setSkinClass(FlowPaneSkin.class);
+        installSkin(FlowPane.class);
     }
 
     public Orientation getOrientation() {

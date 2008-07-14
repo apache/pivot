@@ -17,7 +17,6 @@ package pivot.wtk;
 
 import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
-import pivot.wtk.skin.LabelSkin;
 
 /**
  * Component representing a displayable string of text.
@@ -52,7 +51,7 @@ public class Label extends Component {
     public Label(String text) {
         this.text = text;
 
-       setSkinClass(LabelSkin.class);
+        installSkin(Label.class);
     }
 
     public String getText() {

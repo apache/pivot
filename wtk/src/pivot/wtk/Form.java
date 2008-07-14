@@ -21,7 +21,6 @@ import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.Alert;
-import pivot.wtk.skin.terra.FormSkin;
 
 /**
  * A container that arranges field components in a form layout. Each field has
@@ -224,9 +223,7 @@ public class Form extends Container {
     public Form() {
         super();
 
-        if (getClass() == Form.class) {
-            setSkinClass(FormSkin.class);
-        }
+        installSkin(Form.class);
     }
 
     /**

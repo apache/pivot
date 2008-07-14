@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.wtk.content.ButtonDataRenderer;
-import pivot.wtk.skin.terra.CheckboxSkin;
 
 public class Checkbox extends Button {
     public Checkbox() {
@@ -28,13 +27,11 @@ public class Checkbox extends Button {
 
         super.setToggleButton(true);
 
-        if (getClass() == Checkbox.class) {
-            setSkinClass(CheckboxSkin.class);
-        }
-
         Button.DataRenderer dataRenderer = new ButtonDataRenderer();
         dataRenderer.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         setDataRenderer(dataRenderer);
+
+        installSkin(Checkbox.class);
     }
 
     public void press() {

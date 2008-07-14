@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.wtk.skin.terra.DialogSkin;
-
 public class Dialog extends Window {
     private class RepositionCallback implements Runnable {
         private static final float GOLDEN_SECTION = 0.382f;
@@ -58,10 +56,7 @@ public class Dialog extends Window {
 
     public Dialog(String title, Component content) {
         super(title, content);
-
-        if (getClass() == Dialog.class) {
-            setSkinClass(DialogSkin.class);
-        }
+        installSkin(Dialog.class);
     }
 
     /**

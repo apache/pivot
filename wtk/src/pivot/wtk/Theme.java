@@ -1,8 +1,23 @@
 package pivot.wtk;
 
 import pivot.collections.HashMap;
+import pivot.wtk.skin.BorderSkin;
+import pivot.wtk.skin.CardPaneSkin;
+import pivot.wtk.skin.FlowPaneSkin;
+import pivot.wtk.skin.ImageViewSkin;
+import pivot.wtk.skin.LabelSkin;
+import pivot.wtk.skin.PopupSkin;
+import pivot.wtk.skin.ScrollPaneSkin;
+import pivot.wtk.skin.StackPaneSkin;
+import pivot.wtk.skin.TablePaneSkin;
 import pivot.wtk.skin.WindowSkin;
 
+/**
+ * Base class for Pivot themes. Note that concrete Theme implementations should
+ * be declared as final. If multiple third-party libraries attempted to extend
+ * a theme, it would cause a conflict, as only one could be used in any given
+ * application.
+ */
 public abstract class Theme {
     protected HashMap<Class<? extends Component>, Class<? extends Skin>> componentSkinMap =
         new HashMap<Class<? extends Component>, Class<? extends Skin>>();
@@ -10,33 +25,20 @@ public abstract class Theme {
     private static Theme theme = null;
 
     public Theme() {
-        // TODO Add additional mappings
-
+        componentSkinMap.put(Border.class, BorderSkin.class);
+        componentSkinMap.put(CardPane.class, CardPaneSkin.class);
+        componentSkinMap.put(FlowPane.class, FlowPaneSkin.class);
+        componentSkinMap.put(ImageView.class, ImageViewSkin.class);
+        componentSkinMap.put(Label.class, LabelSkin.class);
+        componentSkinMap.put(Popup.class, PopupSkin.class);
+        componentSkinMap.put(ScrollPane.class, ScrollPaneSkin.class);
+        componentSkinMap.put(StackPane.class, StackPaneSkin.class);
+        componentSkinMap.put(TablePane.class, TablePaneSkin.class);
         componentSkinMap.put(Window.class, WindowSkin.class);
     }
 
-    @SuppressWarnings("unchecked")
     public final Class<? extends Skin> getSkinClass(Class<? extends Component> componentClass) {
-        Class<? extends Skin> skinClass = null;
-
-        // Walk the class hierarchy of this component type to find a match
-        while (componentClass != null
-            && skinClass == null) {
-            skinClass = componentSkinMap.get(componentClass);
-
-            if (skinClass == null) {
-                Class<?> superClass = componentClass.getSuperclass();
-                componentClass = (superClass == Object.class) ?
-                    null : (Class<? extends Component>)superClass;
-            }
-        }
-
-        if (skinClass == null) {
-            throw new IllegalArgumentException("Could not find skin for "
-                + componentClass.getName());
-        }
-
-        return skinClass;
+        return componentSkinMap.get(componentClass);
     }
 
     public static Theme getTheme() {
@@ -49,7 +51,8 @@ public abstract class Theme {
 
     public static void setTheme(Theme theme) {
         // TODO Walk existing component tree from display down and install new
-        // skins
+        // skins; re-install skin by walking up class hierarchy until a skin
+        // match is found (do this here in this method)
 
         Theme.theme = theme;
     }

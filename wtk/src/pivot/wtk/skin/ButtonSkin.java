@@ -42,7 +42,7 @@ public abstract class ButtonSkin extends ComponentSkin implements ButtonListener
         Button button = (Button)getComponent();
         button.getButtonListeners().remove(this);
 
-        button.setCursor(null);
+        button.setCursor(Cursor.DEFAULT);
 
         super.uninstall();
     }

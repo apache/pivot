@@ -23,7 +23,6 @@ import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.content.ListViewItemRenderer;
-import pivot.wtk.skin.terra.ListViewSkin;
 
 /**
  * Displays a sequence of items, optionally allowing a user to select or check
@@ -356,12 +355,10 @@ public class ListView extends Component {
      * @param listData
      */
     public ListView(List<?> listData) {
-        if (getClass() == ListView.class) {
-            setSkinClass(ListViewSkin.class);
-        }
-
         setItemRenderer(new ListViewItemRenderer());
         setListData(listData);
+
+        installSkin(ListView.class);
     }
 
     /**

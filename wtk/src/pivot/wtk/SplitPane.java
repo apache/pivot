@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.util.ListenerList;
-import pivot.wtk.skin.terra.SplitPaneSkin;
 
 /**
  * A <tt>SplitPane</tt> is a container component that splits its size up into
@@ -104,9 +103,7 @@ public class SplitPane extends Container {
     public SplitPane(Orientation orientation) {
         this.orientation = orientation;
 
-        if (getClass() == SplitPane.class) {
-            setSkinClass(SplitPaneSkin.class);
-        }
+        installSkin(SplitPane.class);
     }
 
     public Component getTopLeftComponent() {

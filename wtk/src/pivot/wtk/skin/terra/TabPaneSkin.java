@@ -66,12 +66,12 @@ public class TabPaneSkin extends ContainerSkin
         public TabButton(TabPane tabPane, Object buttonData) {
             super(buttonData);
 
-            setToggleButton(true);
-
             this.tabPane = tabPane;
 
-            setSkinClass(TabButtonSkin.class);
+            setToggleButton(true);
             setDataRenderer(new ButtonDataRenderer());
+
+            installSkin(TabButton.class);
         }
 
         public TabPane getTabPane() {

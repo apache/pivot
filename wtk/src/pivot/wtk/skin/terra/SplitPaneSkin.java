@@ -48,7 +48,7 @@ public class SplitPaneSkin extends ContainerSkin
 
             this.splitPane = splitPane;
 
-            setSkinClass(SplitterSkin.class);
+            installSkin(Splitter.class);
         }
 
         public SplitPane getSplitPane() {
@@ -305,7 +305,7 @@ public class SplitPaneSkin extends ContainerSkin
         public SplitterShadow() {
             super();
 
-            setSkinClass(SplitterShadowSkin.class);
+            installSkin(SplitterShadow.class);
         }
     }
 

@@ -142,11 +142,8 @@ public class TextInput extends Component {
      * The initial text content of the text input.
      */
     public TextInput(String text) {
-        if (getClass() == TextInput.class) {
-            setSkinClass(TextInputSkin.class);
-        }
-
         setText(text);
+        installSkin(TextInput.class);
     }
 
     /**

@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.wtk.content.LinkButtonDataRenderer;
-import pivot.wtk.skin.terra.LinkButtonSkin;
 
 public class LinkButton extends Button {
     public LinkButton() {
@@ -27,10 +26,7 @@ public class LinkButton extends Button {
         super(buttonData);
 
         setDataRenderer(new LinkButtonDataRenderer());
-
-        if (getClass() == LinkButton.class) {
-            setSkinClass(LinkButtonSkin.class);
-        }
+        installSkin(LinkButton.class);
     }
 
     @Override

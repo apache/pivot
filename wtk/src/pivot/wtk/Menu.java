@@ -19,7 +19,6 @@ import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.util.ListenerList;
 import pivot.wtk.content.MenuItemDataRenderer;
-import pivot.wtk.skin.terra.MenuSkin;
 
 /**
  * Class representing a menu.
@@ -301,10 +300,7 @@ public class Menu extends Component {
 
     public Menu(ItemGroup menuData) {
         setMenuData(menuData);
-
-        if (getClass() == Menu.class) {
-            setSkinClass(MenuSkin.class);
-        }
+        installSkin(Menu.class);
     }
 
     /**

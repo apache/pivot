@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.wtk.skin.PopupSkin;
-
 /**
  * Represents a "popup" window. A popup is a non-activatable window that is
  * optionally associated with an "affiliate" component. A popup closes
@@ -51,9 +49,7 @@ public class Popup extends Window {
     public Popup(Component content) {
         super(content);
 
-        if (getClass() == Popup.class) {
-            setSkinClass(PopupSkin.class);
-        }
+        installSkin(Popup.class);
     }
 
     /**

@@ -40,7 +40,6 @@ class TablePaneLoader extends ContainerLoader {
 
     public static final String COLUMN_TAG = "Column";
     public static final String COLUMN_WIDTH_ATTRIBUTE = "width";
-    public static final String COLUMN_HEADER_DATA_ATTRIBUTE = "headerData";
     public static final String COLUMN_SELECTED_ATTRIBUTE = "selected";
 
     public static final String RELATIVE_SIZE_INDICATOR = "*";
@@ -186,7 +185,6 @@ class TablePaneLoader extends ContainerLoader {
                 if (childElement.getTagName().equals(COLUMN_TAG)) {
                     int width = -1;
                     boolean relative = false;
-                    Object headerData = null;
                     boolean selected = false;
 
                     if (childElement.hasAttribute(COLUMN_WIDTH_ATTRIBUTE)) {
@@ -202,16 +200,6 @@ class TablePaneLoader extends ContainerLoader {
                         width = Integer.parseInt(widthAttribute);
                     }
 
-                    if (childElement.hasAttribute(COLUMN_HEADER_DATA_ATTRIBUTE)) {
-                        String headerDataAttribute = childElement.getAttribute
-                            (COLUMN_HEADER_DATA_ATTRIBUTE);
-
-                        // TODO If the attribute text begins with "{", treat it as a
-                        // JSON object
-
-                        headerData = headerDataAttribute;
-                    }
-
                     if (childElement.hasAttribute(COLUMN_SELECTED_ATTRIBUTE)) {
                         String selectedAttribute = childElement.getAttribute
                             (COLUMN_SELECTED_ATTRIBUTE);
@@ -219,8 +207,7 @@ class TablePaneLoader extends ContainerLoader {
                         selected = Boolean.parseBoolean(selectedAttribute);
                     }
 
-                    columns.add(new TablePane.Column(width, relative, headerData,
-                        selected));
+                    columns.add(new TablePane.Column(width, relative, selected));
                 }
             }
         }
