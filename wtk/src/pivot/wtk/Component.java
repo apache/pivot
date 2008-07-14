@@ -204,6 +204,12 @@ public abstract class Component implements Visual {
             }
         }
 
+        public void decoratorChanged(Component component, Decorator previousDecorator) {
+            for (ComponentListener listener : this) {
+                listener.decoratorChanged(component, previousDecorator);
+            }
+        }
+
         public void cursorChanged(Component component, Cursor previousCursor) {
             for (ComponentListener listener : this) {
                 listener.cursorChanged(component, previousCursor);
@@ -419,6 +425,11 @@ public abstract class Component implements Visual {
      * The component's displayable flag.
      */
     private boolean displayable = true;
+
+    /**
+     * The component's decorator.
+     */
+    private Decorator decorator = null;
 
     /**
      * The component's enabled flag.
@@ -1141,6 +1152,34 @@ public abstract class Component implements Visual {
             invalidate();
 
             componentLayoutListeners.displayableChanged(this);
+        }
+    }
+
+    /**
+     * Returns the component's decorator.
+     *
+     * @return
+     * The component's decorator, or <tt>null</tt> if no decorator is
+     * installed.
+     */
+    public Decorator getDecorator() {
+        return decorator;
+    }
+
+    /**
+     * Sets the component's decorator and repaints the component.
+     *
+     * @param decorator
+     * The component's decorator, or <tt>null</tt> for no decorator.
+     */
+    public void setDecorator(Decorator decorator) {
+        Decorator previousDecorator = this.decorator;
+
+        if (previousDecorator != decorator) {
+            this.decorator = decorator;
+            repaint();
+
+            componentListeners.decoratorChanged(this, previousDecorator);
         }
     }
 

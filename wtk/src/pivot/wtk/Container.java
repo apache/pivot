@@ -383,6 +383,12 @@ public abstract class Container extends Component {
                 // Create a copy of the current graphics context
                 Graphics2D componentGraphics = (Graphics2D)graphics.create();
 
+                // Get the decorator and prepare the component's graphics
+                Decorator decorator = component.getDecorator();
+                if (decorator != null) {
+                    componentGraphics = decorator.prepare(component, componentGraphics);
+                }
+
                 // Set a clip rectangle so the component can't paint outside
                 // of its boundaries
                 componentGraphics.clip(componentBounds);
@@ -392,6 +398,11 @@ public abstract class Container extends Component {
 
                 // Paint the component
                 component.paint(componentGraphics);
+
+                // Update the component
+                if (decorator != null) {
+                    decorator.update();
+                }
             }
         }
     }

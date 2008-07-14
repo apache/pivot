@@ -21,6 +21,7 @@ import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Cursor;
+import pivot.wtk.Decorator;
 import pivot.wtk.Display;
 import pivot.wtk.DragHandler;
 import pivot.wtk.DropHandler;
@@ -121,6 +122,10 @@ public class PopupSkin extends WindowSkin
         // Close the popup
         Popup popup = (Popup)getComponent();
         popup.close();
+    }
+
+    public void decoratorChanged(Component component, Decorator previousDecorator) {
+        // No-op
     }
 
     public void cursorChanged(Component component, Cursor previousCursor) {
