@@ -54,9 +54,7 @@ public class FlowPanes implements Application, ButtonStateListener {
             Theme.setTheme((Theme)themeClass.newInstance());
         }
 
-        ComponentLoader.initialize();
         ComponentLoader componentLoader = new ComponentLoader();
-
         Component content =
             componentLoader.load("pivot/tutorials/layout/flowpanes.wtkx");
 

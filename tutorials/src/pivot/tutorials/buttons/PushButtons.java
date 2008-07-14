@@ -29,9 +29,7 @@ public class PushButtons implements Application {
     private Window window = null;
 
     public void startup() throws Exception {
-        ComponentLoader.initialize();
         ComponentLoader componentLoader = new ComponentLoader();
-
         Component content =
             componentLoader.load("pivot/tutorials/buttons/push_buttons.wtkx");
 

@@ -103,9 +103,7 @@ public class StockTracker implements Application {
         applicationContext.setTitle(resourceBundle.getString("stockTracker"));
 
         // Load the application's UI
-        ComponentLoader.initialize();
         ComponentLoader componentLoader = new ComponentLoader(locale);
-
         Component content = componentLoader.load("pivot/tutorials/stocktracker/stocktracker.wtkx",
             getClass().getName());
 

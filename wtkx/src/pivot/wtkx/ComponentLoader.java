@@ -39,12 +39,6 @@ import pivot.wtk.Skin;
  *
  * TODO Add support for namedStyles attribute.
  *
- * NOTE Implementers of components that don't live in pivot.wtk should
- * create a subclass of this class that also defines a static initialize()
- * method and adds the custom loaders to the loader map. Callers that want to
- * use the custom component library must call initialize() for all
- * ComponentLoaders before calling load() on any component loader.
- *
  * @author gbrown
  */
 public class ComponentLoader extends Loader {
@@ -60,7 +54,7 @@ public class ComponentLoader extends Loader {
     private HashMap<String, Component> components = new HashMap<String, Component>();
     private HashMap<String, ComponentLoader> componentLoaders = new HashMap<String, ComponentLoader>();
 
-    protected static final HashMap<String, Class<? extends Loader>> loaderClasses =
+    private static final HashMap<String, Class<? extends Loader>> loaderClasses =
         new HashMap<String, Class<? extends Loader>>();
 
     public static final String URL_PREFIX = "@";
@@ -524,11 +518,7 @@ public class ComponentLoader extends Loader {
         return component;
     }
 
-    /**
-     * Initializes the loader. This method must be called prior to any load
-     * operation.
-     */
-    public static void initialize() {
+    static {
         loaderClasses.put(BorderLoader.BORDER_TAG, BorderLoader.class);
         loaderClasses.put(CardPaneLoader.CARD_PANE_TAG, CardPaneLoader.class);
         loaderClasses.put(CheckboxLoader.CHECKBOX_TAG, CheckboxLoader.class);

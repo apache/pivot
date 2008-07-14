@@ -30,9 +30,7 @@ public class RadioButtons implements Application {
     private Window window = null;
 
     public void startup() throws Exception {
-        ComponentLoader.initialize();
         ComponentLoader componentLoader = new ComponentLoader();
-
         Component content =
             componentLoader.load("pivot/tutorials/buttons/radio_buttons.wtkx");
 

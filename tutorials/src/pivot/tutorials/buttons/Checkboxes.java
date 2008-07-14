@@ -37,9 +37,7 @@ public class Checkboxes implements Application {
     private ButtonPressHandler buttonPressHandler = new ButtonPressHandler();
 
     public void startup() throws Exception {
-        ComponentLoader.initialize();
         ComponentLoader componentLoader = new ComponentLoader();
-
         Component content =
             componentLoader.load("pivot/tutorials/buttons/checkboxes.wtkx");
 

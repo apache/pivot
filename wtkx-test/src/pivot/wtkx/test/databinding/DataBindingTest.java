@@ -64,7 +64,6 @@ public class DataBindingTest implements Application {
     @SuppressWarnings("unchecked")
     public void startup() throws Exception {
         // Load the components from the XML file
-        ComponentLoader.initialize();
         ComponentLoader componentLoader = new ComponentLoader();
         Component component = componentLoader.load("pivot/wtkx/test/databinding/application.wtkx");
 
