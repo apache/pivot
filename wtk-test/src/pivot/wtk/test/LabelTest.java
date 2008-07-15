@@ -18,6 +18,8 @@ package pivot.wtk.test;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
+
+import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Decorator;
@@ -51,24 +53,6 @@ public class LabelTest implements Application {
             + "one and one is all: to be a rock and not to roll.";
 
         FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
-        flowPane.setDecorator(new Decorator() {
-            Graphics2D graphics = null;
-
-            public Graphics2D prepare(Component component, Graphics2D graphics) {
-                this.graphics = graphics;
-
-                graphics = (Graphics2D)graphics.create();
-                graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-                graphics.scale(0.5f, 0.5f);
-
-                return graphics;
-            }
-
-            public void update() {
-                graphics.setColor(Color.RED);
-                graphics.fillRect(0, 0, 10, 10);
-            }
-        });
 
         Label label1 = new Label(line1);
         label1.getStyles().put("wrapText", true);
@@ -85,9 +69,31 @@ public class LabelTest implements Application {
         flowPane.getStyles().put("padding", new Insets(10));
 
         window.setContent(flowPane);
-
         window.setPreferredWidth(200);
+
+        Decorator shadowDecorator = new Decorator() {
+            public Graphics2D prepare(Component component, Graphics2D graphics) {
+                Graphics2D shadowGraphics = (Graphics2D)graphics.create();
+                shadowGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+                shadowGraphics.setColor(Color.BLACK);
+
+                shadowGraphics.setClip(null);
+                shadowGraphics.fillRect(10, 10, component.getWidth(), component.getHeight());
+
+                return graphics;
+            }
+
+            public void update() {
+            }
+        };
+
+        window.setDecorator(shadowDecorator);
         window.open();
+
+        Alert alert = new Alert(Alert.Type.INFO, "Foo");
+        alert.setDecorator(shadowDecorator);
+
+        alert.open(window);
     }
 
     public void shutdown() throws Exception {
