@@ -25,18 +25,25 @@
 
    <target name="doc">
       <delete dir="${doc}"/>
+      <delete file="${doc}.zip"/>
+
       <javadoc packagenames="vmware.*"
          destdir="${doc}"
          author="true"
          version="true"
          use="true">
          <packageset dir="${core}/${src}" includes="**/*"/>
-         <packageset dir="${web}/${src}" includes="**/*"/>
+         <packageset dir="${web}/${src}" includes="**/*">
+           <exclude name="**/db/**"/>
+           <exclude name="**/proxy/**"/>
+         </packageset>
          <packageset dir="${wtk}/${src}" includes="**/*">
            <exclude name="**/skin/**"/>
          </packageset>
          <packageset dir="${wtkx}/${src}" includes="**/*"/>
       </javadoc>
+      
+      <zip destfile="${doc}.zip" basedir="doc"/>
    </target>
 
    <!-- Core -->
