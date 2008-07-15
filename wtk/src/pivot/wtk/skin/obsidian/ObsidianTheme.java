@@ -9,4 +9,12 @@ public final class ObsidianTheme extends Theme {
         componentSkinMap.put(PushButton.class, PushButtonSkin.class);
         componentSkinMap.put(RadioButton.class, pivot.wtk.skin.terra.RadioButtonSkin.class);
     }
+
+    public void install() {
+        // TODO
+    }
+
+    public void uninstall() {
+        // TODO
+    }
 }

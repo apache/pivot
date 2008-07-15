@@ -41,6 +41,9 @@ public abstract class Theme {
         return componentSkinMap.get(componentClass);
     }
 
+    public abstract void install();
+    public abstract void uninstall();
+
     public static Theme getTheme() {
         if (theme == null) {
             throw new IllegalStateException("No installed theme.");
@@ -50,10 +53,19 @@ public abstract class Theme {
     }
 
     public static void setTheme(Theme theme) {
+        if (theme == null) {
+            throw new IllegalArgumentException("theme is null.");
+        }
+
+        if (Theme.theme != null) {
+            theme.uninstall();
+        }
+
         // TODO Walk existing component tree from display down and install new
         // skins; re-install skin by walking up class hierarchy until a skin
         // match is found (do this here in this method)
 
         Theme.theme = theme;
+        theme.install();
     }
 }
