@@ -34,7 +34,6 @@
          use="true">
          <packageset dir="${core}/${src}" includes="**/*"/>
          <packageset dir="${web}/${src}" includes="**/*">
-           <exclude name="**/db/**"/>
            <exclude name="**/proxy/**"/>
          </packageset>
          <packageset dir="${wtk}/${src}" includes="**/*">
@@ -42,7 +41,7 @@
          </packageset>
          <packageset dir="${wtkx}/${src}" includes="**/*"/>
       </javadoc>
-      
+
       <zip destfile="${doc}.zip" basedir="doc"/>
    </target>
 
@@ -126,7 +125,6 @@
       <jar jarfile="${web}/${ant.project.name}-web.jar">
          <fileset dir="${web}/${bin}">
             <exclude name="pivot/web/proxy/**"/>
-            <exclude name="pivot/web/db/**"/>
          </fileset>
          <manifest>
             <attribute name="Sealed" value="true"/>
@@ -142,23 +140,12 @@
             <attribute name="Sealed" value="true"/>
          </manifest>
       </jar>
-
-      <delete file="${web}/${ant.project.name}-web.db.jar"/>
-      <jar jarfile="${web}/${ant.project.name}-web.db.jar">
-         <fileset dir="${web}/${bin}">
-           <include name="pivot/web/db/*"/>
-         </fileset>
-         <manifest>
-            <attribute name="Sealed" value="true"/>
-         </manifest>
-      </jar>
    </target>
 
    <target name="web-clean">
       <delete dir="${web}/${bin}"/>
       <delete file="${web}/${ant.project.name}-web.jar"/>
       <delete file="${web}/${ant.project.name}-web.proxy.jar"/>
-      <delete file="${web}/${ant.project.name}-web.db.jar"/>
    </target>
 
    <!-- Web Test -->
@@ -192,7 +179,6 @@
       <mkdir dir="${webtest}/${lib}"/>
       <copy file="${core}/${ant.project.name}-core.jar" todir="${webtest}/${lib}"/>
       <copy file="${web}/${ant.project.name}-web.proxy.jar" todir="${webtest}/${lib}"/>
-      <copy file="${web}/${ant.project.name}-web.db.jar" todir="${webtest}/${lib}"/>
 
       <delete file="${webtest}/${ant.project.name}_web_test.war"/>
       <war destfile="${webtest}/${ant.project.name}_web_test.war"

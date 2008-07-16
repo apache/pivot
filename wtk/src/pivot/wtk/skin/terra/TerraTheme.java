@@ -9,6 +9,7 @@ import pivot.wtk.Alert;
 import pivot.wtk.Checkbox;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentListener;
+import pivot.wtk.ComponentStateListener;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerListener;
 import pivot.wtk.Cursor;
@@ -48,6 +49,8 @@ import pivot.wtk.Window;
 public final class TerraTheme extends Theme {
     private class DropShadowDecorator implements Decorator {
         Decorator decorator = null;
+        Component component = null;
+        Graphics2D graphics = null;
 
         public DropShadowDecorator(Decorator decorator) {
             this.decorator = decorator;
@@ -58,6 +61,13 @@ public final class TerraTheme extends Theme {
         }
 
         public Graphics2D prepare(Component component, Graphics2D graphics) {
+            this.component = component;
+            this.graphics = graphics;
+
+            if (decorator != null) {
+                graphics = decorator.prepare(component, graphics);
+            }
+
             // Paint the drop shadow
             Graphics2D shadowGraphics = (Graphics2D)graphics.create();
             shadowGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
@@ -68,11 +78,26 @@ public final class TerraTheme extends Theme {
             shadowGraphics.fillRect(DROP_SHADOW_OFFSET, DROP_SHADOW_OFFSET,
                 component.getWidth(), component.getHeight());
 
+            if (!component.isEnabled()) {
+                // TODO Paint a blurred state
+            }
+
             return graphics;
         }
 
         public void update() {
-            // No-op
+            if (decorator != null) {
+                decorator.update();
+            }
+
+            if (!component.isEnabled()) {
+                // TODO Paint a blurred state
+
+                graphics.setColor(Color.BLACK);
+                graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                    DROP_SHADOW_OPACITY));
+                graphics.fill(component.getBounds());
+            }
         }
     }
 
@@ -98,7 +123,7 @@ public final class TerraTheme extends Theme {
         }
     }
 
-    private class WindowMonitor implements ComponentListener {
+    private class WindowMonitor implements ComponentListener, ComponentStateListener {
         public void parentChanged(Component component, Container previousParent) {
             // No-op
         }
@@ -148,6 +173,14 @@ public final class TerraTheme extends Theme {
         }
 
         public void dropHandlerChanged(Component component, DropHandler previousDropHandler) {
+            // No-op
+        }
+
+        public void enabledChanged(Component component) {
+            component.repaint();
+        }
+
+        public void focusedChanged(Component component, boolean temporary) {
             // No-op
         }
     }
@@ -227,13 +260,15 @@ public final class TerraTheme extends Theme {
         window.setDecorator(new DropShadowDecorator(window.getDecorator()));
         repaintShadowRegion(window);
 
-        // Add component listener
+        // Add component listeners
         window.getComponentListeners().add(windowMonitor);
+        window.getComponentStateListeners().add(windowMonitor);
     }
 
     private void unmonitorWindow(Window window) {
         // Remove component listener
         window.getComponentListeners().remove(windowMonitor);
+        window.getComponentStateListeners().remove(windowMonitor);
 
         // Remove shadow decorator and repaint
         window.setDecorator(((DropShadowDecorator)window.getDecorator()).getDecorator());
