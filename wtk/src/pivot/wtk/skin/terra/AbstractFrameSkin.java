@@ -381,7 +381,7 @@ public abstract class AbstractFrameSkin extends WindowSkin
     protected static final String RESIZABLE_KEY = "resizable";
 
     public AbstractFrameSkin() {
-        backgroundColor = DEFAULT_BACKGROUND_COLOR;
+        setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
 
         // The title bar flow pane contains two nested flow panes: one for
         // the title contents and the other for the buttons

@@ -15,7 +15,7 @@
  */
 package pivot.wtk.skin;
 
-import pivot.collections.Map;
+import pivot.collections.Dictionary;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
@@ -34,24 +34,10 @@ import pivot.wtk.VerticalAlignment;
  */
 public class FlowPaneSkin extends ContainerSkin
     implements FlowPaneListener {
-    protected HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT;
-    protected VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT;
-    protected Insets padding = DEFAULT_PADDING;
-    protected int spacing = DEFAULT_SPACING;
-
-    protected static final String HORIZONTAL_ALIGNMENT_KEY = "horizontalAlignment";
-    protected static final String VERTICAL_ALIGNMENT_KEY = "verticalAlignment";
-    protected static final String PADDING_KEY = "padding";
-    protected static final String SPACING_KEY = "spacing";
-
-    private static final HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.LEFT;
-    private static final VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.TOP;
-    private static final Insets DEFAULT_PADDING = new Insets(0);
-    private static final int DEFAULT_SPACING = 4;
-
-    public FlowPaneSkin() {
-        super();
-    }
+    private HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
+    private VerticalAlignment verticalAlignment = VerticalAlignment.TOP;
+    private Insets padding = new Insets(0);
+    private int spacing = 4;
 
     @Override
     public void install(Component component) {
@@ -489,127 +475,96 @@ public class FlowPaneSkin extends ContainerSkin
         }
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(HORIZONTAL_ALIGNMENT_KEY)) {
-            value = horizontalAlignment;
-        } else if (key.equals(VERTICAL_ALIGNMENT_KEY)) {
-            value = verticalAlignment;
-        } else if (key.equals(PADDING_KEY)) {
-            value = padding;
-        } else if (key.equals(SPACING_KEY)) {
-            value = spacing;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public HorizontalAlignment getHorizontalAlignment() {
+        return horizontalAlignment;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
+        if (horizontalAlignment == null) {
+            throw new IllegalArgumentException("horizontalAlignment is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(HORIZONTAL_ALIGNMENT_KEY)) {
-            if (value instanceof String) {
-                value = HorizontalAlignment.decode((String)value);
-            }
-
-            validatePropertyType(key, value, HorizontalAlignment.class, false);
-
-            previousValue = horizontalAlignment;
-            horizontalAlignment = (HorizontalAlignment)value;
-
-            invalidateComponent();
-        } else if (key.equals(VERTICAL_ALIGNMENT_KEY)) {
-            if (value instanceof String) {
-                value = VerticalAlignment.decode((String)value);
-            }
-
-            validatePropertyType(key, value, VerticalAlignment.class, false);
-
-            previousValue = verticalAlignment;
-            verticalAlignment = (VerticalAlignment)value;
-
-            invalidateComponent();
-        } else if (key.equals(PADDING_KEY)) {
-            if (value instanceof Number) {
-                value = new Insets(((Number)value).intValue());
-            } else {
-                if (value instanceof Map<?, ?>) {
-                    value = new Insets((Map<String, Object>)value);
-                }
-            }
-
-            validatePropertyType(key, value, Insets.class, false);
-
-            previousValue = padding;
-            padding = (Insets)value;
-
-            invalidateComponent();
-        } else if (key.equals(SPACING_KEY)) {
-            if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = spacing;
-            spacing = (Integer)value;
-
-            invalidateComponent();
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
+        this.horizontalAlignment = horizontalAlignment;
+        invalidateComponent();
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setHorizontalAlignment(String horizontalAlignment) {
+        if (horizontalAlignment == null) {
+            throw new IllegalArgumentException("horizontalAlignment is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(HORIZONTAL_ALIGNMENT_KEY)) {
-            previousValue = put(key, DEFAULT_HORIZONTAL_ALIGNMENT);
-        } else if (key.equals(VERTICAL_ALIGNMENT_KEY)) {
-            previousValue = put(key, DEFAULT_VERTICAL_ALIGNMENT);
-        } else if (key.equals(PADDING_KEY)) {
-            previousValue = put(key, DEFAULT_PADDING);
-        } else if (key.equals(SPACING_KEY)) {
-            previousValue = put(key, DEFAULT_SPACING);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setHorizontalAlignment(HorizontalAlignment.decode(horizontalAlignment));
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public VerticalAlignment getVerticalAlignment() {
+        return verticalAlignment;
+    }
+
+    public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
+        if (verticalAlignment == null) {
+            throw new IllegalArgumentException("verticalAlignment is null.");
         }
 
-        return (key.equals(HORIZONTAL_ALIGNMENT_KEY)
-            || key.equals(VERTICAL_ALIGNMENT_KEY)
-            || key.equals(PADDING_KEY)
-            || key.equals(SPACING_KEY)
-            || super.containsKey(key));
+        this.verticalAlignment = verticalAlignment;
+        invalidateComponent();
+    }
+
+    public final void setVerticalAlignment(String verticalAlignment) {
+        if (verticalAlignment == null) {
+            throw new IllegalArgumentException("verticalAlignment is null.");
+        }
+
+        setVerticalAlignment(VerticalAlignment.decode(verticalAlignment));
+    }
+
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public int getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(int spacing) {
+        this.spacing = spacing;
+        invalidateComponent();
+    }
+
+    public final void setSpacing(String spacing) {
+        if (spacing == null) {
+            throw new IllegalArgumentException("spacing is null.");
+        }
+
+        setSpacing(Integer.parseInt(spacing));
     }
 
     // Flow pane events

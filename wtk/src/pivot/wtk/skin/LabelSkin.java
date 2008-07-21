@@ -29,7 +29,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import pivot.collections.Map;
+
+import pivot.collections.Dictionary;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.HorizontalAlignment;
@@ -51,31 +52,13 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     protected FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
 
     // Style properties
-    protected Color color = DEFAULT_COLOR;
-    protected Font font = DEFAULT_FONT;
-    protected TextDecoration textDecoration = DEFAULT_TEXT_DECORATION;
-    protected HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT;
-    protected VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT;
-    protected Insets padding = DEFAULT_PADDING;
-    protected boolean wrapText = DEFAULT_WRAP_TEXT;
-
-    // Default style values
-    private static final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 11);
-    private static final Color DEFAULT_COLOR = Color.BLACK;
-    private static final TextDecoration DEFAULT_TEXT_DECORATION = null;
-    private static final HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.LEFT;
-    private static final VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.TOP;
-    private static final Insets DEFAULT_PADDING = new Insets(0);
-    private static final boolean DEFAULT_WRAP_TEXT = false;
-
-    // Style keys
-    protected static final String COLOR_KEY = "color";
-    protected static final String FONT_KEY = "font";
-    protected static final String TEXT_DECORATION_KEY = "textDecoration";
-    protected static final String HORIZONTAL_ALIGNMENT_KEY = "horizontalAlignment";
-    protected static final String VERTICAL_ALIGNMENT_KEY = "verticalAlignment";
-    protected static final String PADDING_KEY = "padding";
-    protected static final String WRAP_TEXT_KEY = "wrapText";
+    protected Color color = Color.BLACK;
+    protected Font font = new Font("Verdana", Font.PLAIN, 11);
+    protected TextDecoration textDecoration = null;
+    protected HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
+    protected VerticalAlignment verticalAlignment = VerticalAlignment.TOP;
+    protected Insets padding = new Insets(0);
+    protected boolean wrapText = false;
 
     @Override
     public void install(Component component) {
@@ -305,184 +288,158 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         return false;
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(COLOR_KEY)) {
-            value = color;
-        } else if (key.equals(FONT_KEY)) {
-            value = font;
-        } else if (key.equals(TEXT_DECORATION_KEY)) {
-            value = textDecoration;
-        } else if (key.equals(HORIZONTAL_ALIGNMENT_KEY)) {
-            value = horizontalAlignment;
-        } else if (key.equals(VERTICAL_ALIGNMENT_KEY)) {
-            value = verticalAlignment;
-        } else if (key.equals(PADDING_KEY)) {
-            value = padding;
-        } else if (key.equals(WRAP_TEXT_KEY)) {
-            value = wrapText;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public Color getColor() {
+        return color;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = color;
-            color = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(FONT_KEY)) {
-            if (value instanceof String) {
-                value = Font.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Font.class, false);
-
-            previousValue = font;
-            font = (Font)value;
-
-            invalidateComponent();
-        } else if (key.equals(TEXT_DECORATION_KEY)) {
-            if (value instanceof String) {
-                value = TextDecoration.decode((String)value);
-            }
-
-            validatePropertyType(key, value, TextDecoration.class, true);
-
-            previousValue = textDecoration;
-            textDecoration = (TextDecoration)value;
-
-            invalidateComponent();
-        } else if (key.equals(HORIZONTAL_ALIGNMENT_KEY)) {
-            if (value instanceof String) {
-                value = HorizontalAlignment.decode((String)value);
-            }
-
-            validatePropertyType(key, value, HorizontalAlignment.class, false);
-
-            previousValue = horizontalAlignment;
-            horizontalAlignment = (HorizontalAlignment)value;
-
-            repaintComponent();
-        } else if (key.equals(VERTICAL_ALIGNMENT_KEY)) {
-            if (value instanceof String) {
-                value = VerticalAlignment.decode((String)value);
-            }
-
-            validatePropertyType(key, value, VerticalAlignment.class, false);
-
-            previousValue = verticalAlignment;
-            verticalAlignment = (VerticalAlignment)value;
-
-            repaintComponent();
-        } else if (key.equals(PADDING_KEY)) {
-            if (value instanceof Number) {
-                value = new Insets(((Number)value).intValue());
-            } else {
-                if (value instanceof Map<?, ?>) {
-                    value = new Insets((Map<String, Object>)value);
-                }
-            }
-
-            validatePropertyType(key, value, Insets.class, false);
-
-            previousValue = padding;
-            padding = (Insets)value;
-
-            invalidateComponent();
-        } else if (key.equals(WRAP_TEXT_KEY)) {
-            if (value instanceof String) {
-                value = Boolean.parseBoolean((String)value);
-            }
-
-            validatePropertyType(key, value, Boolean.class, false);
-
-            previousValue = wrapText;
-            wrapText = (Boolean)value;
-
-            invalidateComponent();
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
+        this.color = color;
+        repaintComponent();
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
         }
 
-        Object previousValue = null;
+        setColor(Color.decode(color));
+    }
 
-        if (key.equals(COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_COLOR);
-        } else if (key.equals(FONT_KEY)) {
-            previousValue = put(key, DEFAULT_FONT);
-        } else if (key.equals(TEXT_DECORATION_KEY)) {
-            previousValue = put(key, DEFAULT_TEXT_DECORATION);
-        } else if (key.equals(HORIZONTAL_ALIGNMENT_KEY)) {
-            previousValue = put(key, DEFAULT_HORIZONTAL_ALIGNMENT);
-        } else if (key.equals(VERTICAL_ALIGNMENT_KEY)) {
-            previousValue = put(key, DEFAULT_VERTICAL_ALIGNMENT);
-        } else if (key.equals(PADDING_KEY)) {
-            previousValue = put(key, DEFAULT_PADDING);
-        } else if (key.equals(WRAP_TEXT_KEY)) {
-            previousValue = put(key, DEFAULT_WRAP_TEXT);
-        } else {
-            previousValue = super.remove(key);
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        return previousValue;
+        this.font = font;
+        invalidateComponent();
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        return (key.equals(COLOR_KEY)
-            || key.equals(FONT_KEY)
-            || key.equals(TEXT_DECORATION_KEY)
-            || key.equals(HORIZONTAL_ALIGNMENT_KEY)
-            || key.equals(VERTICAL_ALIGNMENT_KEY)
-            || key.equals(PADDING_KEY)
-            || key.equals(WRAP_TEXT_KEY)
-            || super.containsKey(key));
+        setFont(Font.decode(font));
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
+    public TextDecoration getTextDecoration() {
+        return textDecoration;
     }
 
-    // LabelListener methods
+    public void setTextDecoration(TextDecoration textDecoration) {
+        this.textDecoration = textDecoration;
+        invalidateComponent();
+    }
 
+    public final void setTextDecoration(String textDecoration) {
+        if (textDecoration == null) {
+            throw new IllegalArgumentException("textDecoration is null.");
+        }
+
+        setTextDecoration(TextDecoration.decode(textDecoration));
+    }
+
+    public HorizontalAlignment getHorizontalAlignment() {
+        return horizontalAlignment;
+    }
+
+    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
+        if (horizontalAlignment == null) {
+            throw new IllegalArgumentException("horizontalAlignment is null.");
+        }
+
+        this.horizontalAlignment = horizontalAlignment;
+        repaintComponent();
+    }
+
+    public final void setHorizontalAlignment(String horizontalAlignment) {
+        if (horizontalAlignment == null) {
+            throw new IllegalArgumentException("horizontalAlignment is null.");
+        }
+
+        setHorizontalAlignment(HorizontalAlignment.decode(horizontalAlignment));
+    }
+
+    public VerticalAlignment getVerticalAlignment() {
+        return verticalAlignment;
+    }
+
+    public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
+        if (verticalAlignment == null) {
+            throw new IllegalArgumentException("verticalAlignment is null.");
+        }
+
+        this.verticalAlignment = verticalAlignment;
+        repaintComponent();
+    }
+
+    public final void setVerticalAlignment(String verticalAlignment) {
+        if (verticalAlignment == null) {
+            throw new IllegalArgumentException("verticalAlignment is null.");
+        }
+
+        setVerticalAlignment(VerticalAlignment.decode(verticalAlignment));
+    }
+
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public boolean getWrapText() {
+        return wrapText;
+    }
+
+    public void setWrapText(boolean wrapText) {
+        this.wrapText = wrapText;
+        invalidateComponent();
+    }
+
+    public final void setWrapText(String wrapText) {
+        if (wrapText == null) {
+            throw new IllegalArgumentException("wrapText is null.");
+        }
+
+        setWrapText(Boolean.parseBoolean(wrapText));
+    }
+
+    // Label events
     public void textChanged(Label label, String previousText) {
         invalidateComponent();
     }

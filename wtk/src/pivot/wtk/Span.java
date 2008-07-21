@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import pivot.collections.Dictionary;
+import pivot.serialization.JSONSerializer;
 
 /**
  * Class representing a range of integer values. The range includes all values
@@ -35,6 +36,10 @@ public class Span {
      * Creates a span with start and end values of 0.
      */
     public Span() {
+    }
+
+    public Span(String span) {
+        this(JSONSerializer.parseMap(span));
     }
 
     public Span(Dictionary<String, ?> span) {

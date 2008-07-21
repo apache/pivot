@@ -17,6 +17,7 @@ package pivot.wtk;
 
 import java.awt.Graphics2D;
 
+import pivot.beans.Bean;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.collections.Map;
@@ -46,7 +47,7 @@ import pivot.wtk.Mouse.ScrollType;
  *
  * @version 1.0 (3/13/2007)
  */
-public abstract class Component implements Visual {
+public abstract class Component extends Bean implements Visual {
     /**
      * Attribute dictionary implementation.
      *
@@ -637,7 +638,7 @@ public abstract class Component implements Visual {
 
     public final void setSize(Dimensions size) {
         if (size == null) {
-            throw new IllegalArgumentException("size cannot be null.");
+            throw new IllegalArgumentException("size is null.");
         }
 
         setSize(size.width, size.height);
@@ -741,6 +742,14 @@ public abstract class Component implements Visual {
         }
     }
 
+    public final void setPreferredWidth(String preferredWidth) {
+        if (preferredWidth == null) {
+            throw new IllegalArgumentException("preferredWidth is null.");
+        }
+
+        setPreferredWidth(Integer.parseInt(preferredWidth));
+    }
+
     /**
      * Returns a flag indicating whether the preferred width was explicitly
      * set by the caller or is the default value determined by the skin.
@@ -807,6 +816,14 @@ public abstract class Component implements Visual {
             componentLayoutListeners.preferredSizeChanged(this,
                 preferredWidth, previousPreferredHeight);
         }
+    }
+
+    public final void setPreferredHeight(String preferredHeight) {
+        if (preferredHeight == null) {
+            throw new IllegalArgumentException("preferredHeight is null.");
+        }
+
+        setPreferredHeight(Integer.parseInt(preferredHeight));
     }
 
     /**
@@ -912,6 +929,22 @@ public abstract class Component implements Visual {
         }
 
         return preferredSize;
+    }
+
+    public final void setPreferredSize(Dimensions preferredSize) {
+        if (preferredSize == null) {
+            throw new IllegalArgumentException("preferredSize is null.");
+        }
+
+        setPreferredSize(preferredSize.width, preferredSize.height);
+    }
+
+    public final void setPreferredSize(String preferredSize) {
+        if (preferredSize == null) {
+            throw new IllegalArgumentException("preferredSize is null.");
+        }
+
+        setPreferredSize(new Dimensions(preferredSize));
     }
 
     /**
@@ -1153,6 +1186,14 @@ public abstract class Component implements Visual {
 
             componentLayoutListeners.displayableChanged(this);
         }
+    }
+
+    public final void setDisplayable(String displayable) {
+        if (displayable == null) {
+            throw new IllegalArgumentException("displayable is null.");
+        }
+
+        setDisplayable(Boolean.parseBoolean(displayable));
     }
 
     /**
@@ -1566,6 +1607,14 @@ public abstract class Component implements Visual {
         }
     }
 
+    public final void setEnabled(String enabled) {
+        if (enabled == null) {
+            throw new IllegalArgumentException("enabled is null.");
+        }
+
+        setEnabled(Boolean.parseBoolean(enabled));
+    }
+
     /**
      * Determines if this component is blocked. A component is blocked if the
      * component or any of its ancestors is disabled.
@@ -1627,6 +1676,14 @@ public abstract class Component implements Visual {
             this.cursor = cursor;
             componentListeners.cursorChanged(this, previousCursor);
         }
+    }
+
+    public final void setCursor(String cursor) {
+        if (cursor == null) {
+            throw new IllegalArgumentException("cursor is null.");
+        }
+
+        setCursor(Cursor.decode(cursor));
     }
 
     /**

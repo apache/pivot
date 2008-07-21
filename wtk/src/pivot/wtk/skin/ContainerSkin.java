@@ -95,23 +95,11 @@ public abstract class ContainerSkin extends ComponentSkin
         }
     }
 
-    private static final FocusTraversalPolicy DEFAULT_FOCUS_TRAVERSAL_POLICY = new IndexFocusTraversalPolicy();
-
     // Style properties
-    protected Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
-    protected float backgroundOpacity = DEFAULT_BACKGROUND_OPACITY;
+    private Color backgroundColor = null;
+    private float backgroundOpacity = 1.0f;
 
-    // Default style values
-    private static final Color DEFAULT_BACKGROUND_COLOR = null;
-    private static final float DEFAULT_BACKGROUND_OPACITY = 1.0f;
-
-    // Style keys
-    protected static final String BACKGROUND_COLOR_KEY = "backgroundColor";
-    protected static final String BACKGROUND_OPACITY_KEY = "backgroundOpacity";
-
-    public ContainerSkin() {
-        super();
-    }
+    private static final FocusTraversalPolicy DEFAULT_FOCUS_TRAVERSAL_POLICY = new IndexFocusTraversalPolicy();
 
     @Override
     public void install(Component component) {
@@ -181,90 +169,38 @@ public abstract class ContainerSkin extends ComponentSkin
         return false;
     }
 
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(BACKGROUND_COLOR_KEY)) {
-            value = backgroundColor;
-        } else if (key.equals(BACKGROUND_OPACITY_KEY)) {
-            value = backgroundOpacity;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public Color getBackgroundColor() {
+        return backgroundColor;
     }
 
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, true);
-
-            previousValue = backgroundColor;
-            backgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(BACKGROUND_OPACITY_KEY)) {
-            if (value instanceof String) {
-                value = Float.parseFloat((String)value);
-            }
-
-            validatePropertyType(key, value, Float.class, false);
-
-            previousValue = backgroundOpacity;
-            backgroundOpacity = (Float)value;
-
-            repaintComponent();
-        } else {
-            super.put(key, value);
-        }
-
-        return previousValue;
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        repaintComponent();
     }
 
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setBackgroundColor(String backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BACKGROUND_COLOR);
-        } else if (key.equals(BACKGROUND_OPACITY_KEY)) {
-            previousValue = put(key, DEFAULT_BACKGROUND_OPACITY);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setBackgroundColor(Color.decode(backgroundColor));
     }
 
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(BACKGROUND_COLOR_KEY)
-            || key.equals(BACKGROUND_OPACITY_KEY)
-            || super.containsKey(key));
+    public float getBackgroundOpacity() {
+        return backgroundOpacity;
     }
 
-    public boolean isEmpty() {
-        return false;
+    public void setBackgroundOpacity(float backgroundOpacity) {
+        this.backgroundOpacity = backgroundOpacity;
+        repaintComponent();
+    }
+
+    public final void setBackgroundOpacity(String backgroundOpacity) {
+        if (backgroundOpacity == null) {
+            throw new IllegalArgumentException("backgroundOpacity is null");
+        }
+
+        setBackgroundOpacity(Float.parseFloat(backgroundOpacity));
     }
 
     // Container events

@@ -139,7 +139,7 @@ abstract class ButtonLoader extends Loader {
                     (Map<String, Object>)jsonSerializer.readObject(itemRendererPropertiesReader);
 
                 for (String key : properties) {
-                    dataRenderer.getProperties().put(key, properties.get(key));
+                    dataRenderer.put(key, properties.get(key));
                 }
             } catch(Exception exception) {
                 throw new LoadException("Unable to apply item renderer properties.", exception);

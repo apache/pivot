@@ -32,9 +32,4 @@ public class MenuItemDataRenderer extends TablePane implements Menu.ItemDataRend
         boolean disabled, boolean highlighted) {
         // TODO
     }
-
-    public PropertyDictionary getProperties() {
-        // TODO
-        return null;
-    }
 }

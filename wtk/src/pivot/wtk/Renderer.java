@@ -17,55 +17,6 @@ package pivot.wtk;
 
 import pivot.collections.Dictionary;
 
-public interface Renderer extends Visual {
-    public static class PropertyDictionary
-        implements Dictionary<String, Object> {
-        public Object get(String key) {
-            return null;
-        }
-
-        public Object put(String key, Object value) {
-            return null;
-        }
-
-        public Object remove(String key) {
-            return null;
-        }
-
-        public boolean containsKey(String key) {
-            return false;
-        }
-
-        public boolean isEmpty() {
-            return true;
-        }
-
-        /**
-         * Verifies that a property value is of the correct type.
-         *
-         * @param key
-         * @param value
-         * @param type
-         * @param nullable
-         *
-         * @throws IllegalArgumentException
-         * If the type of <tt>value</tt> does not match the given type.
-         */
-        protected static final void validatePropertyType(String key, Object value,
-            Class<?> type, boolean nullable) {
-            if (value == null) {
-                if (!nullable) {
-                    throw new IllegalArgumentException(key + " must not be null.");
-                }
-            }
-            else {
-                if (!type.isInstance(value)) {
-                    throw new IllegalArgumentException(key + " must be an instance of " + type);
-                }
-            }
-        }
-    }
-
-    public Component.StyleDictionary getStyles();
-    public PropertyDictionary getProperties();
+public interface Renderer extends Visual, Dictionary<String, Object> {
+    public Dictionary<String, Object> getStyles();
 }

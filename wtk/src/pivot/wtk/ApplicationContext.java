@@ -799,14 +799,14 @@ public abstract class ApplicationContext {
             message = exception.toString();
         }
 
+        exception.printStackTrace();
+
         Alert alert = new Alert(Alert.Type.ERROR, message);
         alert.setTitle(exception.getClass().getName());
 
         // TODO i18n
         alert.getOptionData().add("OK");
         alert.open();
-
-        exception.printStackTrace();
     }
 
     /**

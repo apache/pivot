@@ -24,8 +24,6 @@ import pivot.wtk.TableView.CellRenderer;
 import pivot.wtk.media.Image;
 
 public class TableViewImageCellRenderer extends ImageView implements CellRenderer {
-    private PropertyDictionary properties = new PropertyDictionary();
-
     public static int DEFAULT_HEIGHT = 16;
 
     public TableViewImageCellRenderer() {
@@ -78,9 +76,5 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
         }
 
         setImage(image);
-    }
-
-    public PropertyDictionary getProperties() {
-        return properties;
     }
 }

@@ -17,6 +17,7 @@ package pivot.wtk;
 
 import java.awt.geom.Rectangle2D;
 import pivot.collections.Dictionary;
+import pivot.serialization.JSONSerializer;
 
 public class Rectangle extends Rectangle2D {
     public int x = 0;
@@ -30,6 +31,10 @@ public class Rectangle extends Rectangle2D {
     public static final String HEIGHT_KEY = "height";
 
     public Rectangle() {
+    }
+
+    public Rectangle(String rectangle) {
+        this(JSONSerializer.parseMap(rectangle));
     }
 
     public Rectangle(Dictionary<String, ?> rectangle) {

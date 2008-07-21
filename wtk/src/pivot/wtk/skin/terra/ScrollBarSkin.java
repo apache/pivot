@@ -727,7 +727,7 @@ public class ScrollBarSkin extends ContainerSkin
     public ScrollBarSkin() {
         super();
 
-        backgroundColor = DEFAULT_BACKGROUND_COLOR;
+        setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
     }
 
     @Override

@@ -20,7 +20,6 @@ import java.awt.Font;
 import java.net.URL;
 
 import pivot.collections.Dictionary;
-import pivot.collections.Map;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
@@ -30,98 +29,14 @@ import pivot.wtk.ImageView;
 import pivot.wtk.Insets;
 import pivot.wtk.Label;
 import pivot.wtk.ListView;
-import pivot.wtk.Renderer;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
 public class ListViewItemRenderer extends FlowPane implements ListView.ItemRenderer {
-    private class PropertyDictionary extends Renderer.PropertyDictionary {
-        public Object get(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            Object value = null;
-
-            if (key.equals(ICON_WIDTH_KEY)) {
-                value = getIconWidth();
-            } else if (key.equals(ICON_HEIGHT_KEY)) {
-                value = getIconHeight();
-            } else if (key.equals(ICON_SIZE_KEY)) {
-                value = getIconSize();
-            } else if (key.equals(SHOW_ICON_KEY)) {
-                value = getShowIcon();
-            } else {
-                // No-op
-            }
-
-            return value;
-        }
-
-        @SuppressWarnings("unchecked")
-        public Object put(String key, Object value) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            Object previousValue = null;
-
-            if (key.equals(ICON_SIZE_KEY)) {
-                if (value instanceof Map<?, ?>) {
-                    value = new Dimensions((Map<String, Object>)value);
-                }
-
-                Dimensions dimensions = (Dimensions)value;
-                setIconSize(dimensions.width, dimensions.height);
-            } else if (key.equals(SHOW_ICON_KEY)) {
-                setShowIcon((Boolean)value);
-            } else {
-                System.out.println("\"" + key + "\" is not a valid property for "
-                    + getClass().getName() + ".");
-            }
-
-            return previousValue;
-        }
-
-        public Object remove(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            Object previousValue = null;
-
-            if (key.equals(ICON_SIZE_KEY)) {
-                previousValue = put(key, new Dimensions(DEFAULT_ICON_WIDTH, DEFAULT_ICON_HEIGHT));
-            } else if (key.equals(SHOW_ICON_KEY)) {
-                previousValue = put(key, DEFAULT_SHOW_ICON);
-            } else {
-                // No-op
-            }
-
-            return previousValue;
-        }
-
-        public boolean containsKey(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            return (key.equals(ICON_WIDTH_KEY)
-                || key.equals(ICON_HEIGHT_KEY)
-                || key.equals(ICON_SIZE_KEY)
-                || key.equals(SHOW_ICON_KEY));
-        }
-
-        public boolean isEmpty() {
-            return false;
-        }
-    }
-
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();
 
-    private PropertyDictionary properties = new PropertyDictionary();
-
+    public static final String ICON_KEY = "icon";
     public static final String ICON_URL_KEY = "iconURL";
     public static final String LABEL_KEY = "label";
 
@@ -163,21 +78,21 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
         Image icon = null;
         String text = null;
 
-        if (item instanceof ListItem) {
-            ListItem listItem = (ListItem)item;
-            icon = listItem.getIcon();
-            text = listItem.getLabel();
-        } else if (item instanceof Dictionary<?, ?>) {
+        if (item instanceof Dictionary<?, ?>) {
             Dictionary<String, Object> dictionary = (Dictionary<String, Object>)item;
 
-            URL iconURL = (URL)dictionary.get(ICON_URL_KEY);
-            if (iconURL != null) {
-                ApplicationContext applicationContext = ApplicationContext.getInstance();
-                icon = (Image)applicationContext.getResources().get(iconURL);
+            icon = (Image)dictionary.get(ICON_KEY);
+            if (icon == null) {
+                URL iconURL = (URL)dictionary.get(ICON_URL_KEY);
 
-                if (icon == null) {
-                    icon = Image.load(iconURL);
-                    applicationContext.getResources().put(iconURL, icon);
+                if (iconURL != null) {
+                    ApplicationContext applicationContext = ApplicationContext.getInstance();
+                    icon = (Image)applicationContext.getResources().get(iconURL);
+
+                    if (icon == null) {
+                        icon = Image.load(iconURL);
+                        applicationContext.getResources().put(iconURL, icon);
+                    }
                 }
             }
 
@@ -241,6 +156,14 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
         return new Dimensions(getIconWidth(), getIconHeight());
     }
 
+    public void setIconSize(Dimensions iconSize) {
+        setIconSize(iconSize.width, iconSize.height);
+    }
+
+    public void setIconSize(Dictionary<String, Object> iconSize) {
+        setIconSize(new Dimensions(iconSize));
+    }
+
     public void setIconSize(int width, int height) {
         imageView.setPreferredSize(width, height);
     }
@@ -253,7 +176,7 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
         imageView.setDisplayable(showIcon);
     }
 
-    public PropertyDictionary getProperties() {
-        return properties;
+    public void setShowIcon(String showIcon) {
+        setShowIcon(Boolean.parseBoolean(showIcon));
     }
 }

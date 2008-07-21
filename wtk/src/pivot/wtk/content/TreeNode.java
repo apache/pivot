@@ -15,7 +15,15 @@
  */
 package pivot.wtk.content;
 
+import java.util.Comparator;
+import java.util.Iterator;
+
+import pivot.beans.Bean;
 import pivot.collections.ArrayList;
+import pivot.collections.List;
+import pivot.collections.ListListener;
+import pivot.collections.Sequence;
+import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
 /**
@@ -23,10 +31,13 @@ import pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-public class TreeNode extends ArrayList<TreeNode> {
+public class TreeNode extends Bean implements List<TreeNode> {
     private Image icon = null;
     private Image expandedIcon = null;
     private String label = null;
+
+    private ArrayList<TreeNode> nodes = new ArrayList<TreeNode>();
+    private ListListenerList<TreeNode> listListeners = new ListListenerList<TreeNode>();
 
     public TreeNode() {
         this(null, null, null);
@@ -72,5 +83,71 @@ public class TreeNode extends ArrayList<TreeNode> {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public int add(TreeNode treeNode) {
+        int index = nodes.getLength();
+        insert(treeNode, index);
+
+        return index;
+    }
+
+    public void insert(TreeNode treeNode, int index) {
+        nodes.insert(treeNode, index);
+        listListeners.itemInserted(this, index);
+    }
+
+    public TreeNode update(int index, TreeNode treeNode) {
+        TreeNode previousTreeNode = nodes.update(index, treeNode);
+        listListeners.itemUpdated(this, index, previousTreeNode);
+
+        return previousTreeNode;
+    }
+
+    public int remove(TreeNode treeNode) {
+        return remove(treeNode);
+    }
+
+    public Sequence<TreeNode> remove(int index, int count) {
+        Sequence<TreeNode> removed = nodes.remove(index, count);
+        listListeners.itemsRemoved(this, index, removed);
+
+        return removed;
+    }
+
+    public void clear() {
+        nodes.clear();
+        listListeners.itemsRemoved(this, 0, null);
+    }
+
+    public TreeNode get(int index) {
+        return nodes.get(index);
+    }
+
+    public int indexOf(TreeNode treeNode) {
+        return nodes.indexOf(treeNode);
+    }
+
+    public int getLength() {
+        return nodes.getLength();
+    }
+
+    public Comparator<TreeNode> getComparator() {
+        return nodes.getComparator();
+    }
+
+    public void setComparator(Comparator<TreeNode> comparator) {
+        Comparator<TreeNode> previousComparator = nodes.getComparator();
+        nodes.setComparator(comparator);
+        listListeners.comparatorChanged(this, previousComparator);
+    }
+
+    public Iterator<TreeNode> iterator() {
+        // TODO Wrap in a custom iterator to capture or prevent removals
+        return nodes.iterator();
+    }
+
+    public ListenerList<ListListener<TreeNode>> getListListeners() {
+        return listListeners;
     }
 }

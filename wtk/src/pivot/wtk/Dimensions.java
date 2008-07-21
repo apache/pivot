@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import pivot.collections.Dictionary;
+import pivot.serialization.JSONSerializer;
 
 public class Dimensions {
     public int width = 0;
@@ -26,6 +27,10 @@ public class Dimensions {
 
     public Dimensions() {
         this(0, 0);
+    }
+
+    public Dimensions(String dimensions) {
+        this(JSONSerializer.parseMap(dimensions));
     }
 
     public Dimensions(Dictionary<String, ?> dimensions) {

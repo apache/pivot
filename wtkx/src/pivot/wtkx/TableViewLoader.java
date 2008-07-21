@@ -236,7 +236,7 @@ class TableViewLoader extends Loader {
                                 (Map<String, Object>)jsonSerializer.readObject(cellRendererPropertiesReader);
 
                             for (String key : properties) {
-                                cellRenderer.getProperties().put(key, properties.get(key));
+                                cellRenderer.put(key, properties.get(key));
                             }
                         } catch(Exception exception) {
                             throw new LoadException("Unable to apply cell renderer properties.", exception);

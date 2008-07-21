@@ -33,33 +33,28 @@ import pivot.wtk.skin.AbstractPushButtonSkin;
 public class PushButtonSkin extends AbstractPushButtonSkin
     implements ButtonStateListener {
     // Style properties
-    protected static final Font FONT = new Font("Verdana", Font.PLAIN, 11);
-    protected static final Color COLOR = Color.WHITE;
-    protected static final Color DISABLED_COLOR = new Color(0x66, 0x66, 0x66);
-    protected static final Insets PADDING = new Insets(4, 8, 4, 8);
+    private Font font = new Font("Verdana", Font.PLAIN, 11);
+    private Color color = Color.WHITE;
+    private Color disabledColor = new Color(0x66, 0x66, 0x66);
+    private Insets padding = new Insets(4, 8, 4, 8);
 
-    protected static final Color BORDER_COLOR = new Color(0x4c, 0x4c, 0x4c);
-    protected static final Color GRADIENT_START_COLOR = new Color(0x66, 0x66, 0x66);
-    protected static final Color GRADIENT_END_COLOR = new Color(0x00, 0x00, 0x00);
+    private Color borderColor = new Color(0x4c, 0x4c, 0x4c);
+    private Color gradientStartColor = new Color(0x66, 0x66, 0x66);
+    private Color gradientEndColor = new Color(0x00, 0x00, 0x00);
 
-    protected static final Color HIGHLIGHTED_BORDER_COLOR = new Color(0x4c, 0x4c, 0x4c);
-    protected static final Color HIGHLIGHTED_GRADIENT_START_COLOR = new Color(0x99, 0x99, 0x99);
-    protected static final Color HIGHLIGHTED_GRADIENT_END_COLOR = new Color(0x00, 0x00, 0x00);
+    private Color highlightedBorderColor = new Color(0x4c, 0x4c, 0x4c);
+    private Color highlightedGradientStartColor = new Color(0x99, 0x99, 0x99);
+    private Color highlightedGradientEndColor = new Color(0x00, 0x00, 0x00);
 
-    protected static final Color PRESSED_BORDER_COLOR = new Color(0x80, 0x80, 0x80);
-    protected static final Color PRESSED_GRADIENT_START_COLOR = new Color(0x00, 0x00, 0x00);
-    protected static final Color PRESSED_GRADIENT_END_COLOR = new Color(0x66, 0x66, 0x66);
+    private Color pressedBorderColor = new Color(0x80, 0x80, 0x80);
+    private Color pressedGradientStartColor = new Color(0x00, 0x00, 0x00);
+    private Color pressedGradientEndColor = new Color(0x66, 0x66, 0x66);
 
-    protected static final Color DISABLED_BORDER_COLOR = new Color(0x80, 0x80, 0x80);
-    protected static final Color DISABLED_GRADIENT_START_COLOR = new Color(0x4c, 0x4c, 0x4c);
-    protected static final Color DISABLED_GRADIENT_END_COLOR = new Color(0x4c, 0x4c, 0x4c);
+    private Color disabledBorderColor = new Color(0x80, 0x80, 0x80);
+    private Color disabledGradientStartColor = new Color(0x4c, 0x4c, 0x4c);
+    private Color disabledGradientEndColor = new Color(0x4c, 0x4c, 0x4c);
 
-    protected static final int CORNER_RADIUS = 6;
-
-    // Style keys
-    protected static final String FONT_KEY = "font";
-    protected static final String COLOR_KEY = "color";
-    protected static final String DISABLED_COLOR_KEY = "disabledColor";
+    private int cornerRadius = 6;
 
     public int getPreferredWidth(int height) {
         PushButton pushButton = (PushButton)getComponent();
@@ -69,11 +64,11 @@ public class PushButtonSkin extends AbstractPushButtonSkin
 
         // Include padding in constraint
         if (height != -1) {
-            height = Math.max(height - (PADDING.top + PADDING.bottom + 2), 0);
+            height = Math.max(height - (padding.top + padding.bottom + 2), 0);
         }
 
         int preferredWidth = dataRenderer.getPreferredWidth(height)
-            + PADDING.left + PADDING.right + 2;
+            + padding.left + padding.right + 2;
 
         return preferredWidth;
     }
@@ -86,11 +81,11 @@ public class PushButtonSkin extends AbstractPushButtonSkin
 
         // Include padding in constraint
         if (width != -1) {
-            width = Math.max(width - (PADDING.left + PADDING.right + 2), 0);
+            width = Math.max(width - (padding.left + padding.right + 2), 0);
         }
 
         int preferredHeight = dataRenderer.getPreferredHeight(width)
-            + PADDING.top + PADDING.bottom + 2;
+            + padding.top + padding.bottom + 2;
 
         return preferredHeight;
     }
@@ -104,10 +99,10 @@ public class PushButtonSkin extends AbstractPushButtonSkin
         Dimensions preferredContentSize = dataRenderer.getPreferredSize();
 
         int preferredWidth = preferredContentSize.width
-            + PADDING.left + PADDING.right + 2;
+            + padding.left + padding.right + 2;
 
         int preferredHeight = preferredContentSize.height
-            + PADDING.top + PADDING.bottom + 2;
+            + padding.top + padding.bottom + 2;
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -122,25 +117,25 @@ public class PushButtonSkin extends AbstractPushButtonSkin
         if (pushButton.isEnabled()) {
             if (pressed
                 || pushButton.isSelected()) {
-                borderColor = PRESSED_BORDER_COLOR;
-                gradientStartColor = PRESSED_GRADIENT_START_COLOR;
-                gradientEndColor = PRESSED_GRADIENT_END_COLOR;
+                borderColor = pressedBorderColor;
+                gradientStartColor = pressedGradientStartColor;
+                gradientEndColor = pressedGradientEndColor;
             } else {
                 if (highlighted) {
-                    borderColor = HIGHLIGHTED_BORDER_COLOR;
-                    gradientStartColor = HIGHLIGHTED_GRADIENT_START_COLOR;
-                    gradientEndColor = HIGHLIGHTED_GRADIENT_END_COLOR;
+                    borderColor = highlightedBorderColor;
+                    gradientStartColor = highlightedGradientStartColor;
+                    gradientEndColor = highlightedGradientEndColor;
                 } else {
-                    borderColor = BORDER_COLOR;
-                    gradientStartColor = GRADIENT_START_COLOR;
-                    gradientEndColor = GRADIENT_END_COLOR;
+                    borderColor = this.borderColor;
+                    gradientStartColor = this.gradientStartColor;
+                    gradientEndColor = this.gradientEndColor;
                 }
             }
         }
         else {
-            borderColor = DISABLED_BORDER_COLOR;
-            gradientStartColor = DISABLED_GRADIENT_START_COLOR;
-            gradientEndColor = DISABLED_GRADIENT_END_COLOR;
+            borderColor = disabledBorderColor;
+            gradientStartColor = disabledGradientStartColor;
+            gradientEndColor = disabledGradientEndColor;
         }
 
         int width = getWidth();
@@ -150,7 +145,7 @@ public class PushButtonSkin extends AbstractPushButtonSkin
 
         // Paint the background
         RoundRectangle2D buttonRectangle = new RoundRectangle2D.Double(0, 0,
-            width - 1, height - 1, CORNER_RADIUS, CORNER_RADIUS);
+            width - 1, height - 1, cornerRadius, cornerRadius);
 
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
@@ -167,10 +162,10 @@ public class PushButtonSkin extends AbstractPushButtonSkin
         // Paint the content
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
         dataRenderer.render(pushButton.getButtonData(), pushButton, false);
-        dataRenderer.setSize(Math.max(width - (PADDING.left + PADDING.right + 2), 0),
-            Math.max(getHeight() - (PADDING.top + PADDING.bottom + 2), 0));
+        dataRenderer.setSize(Math.max(width - (padding.left + padding.right + 2), 0),
+            Math.max(getHeight() - (padding.top + padding.bottom + 2), 0));
 
-        contentGraphics.translate(PADDING.left + 1, PADDING.top + 1);
+        contentGraphics.translate(padding.left + 1, padding.top + 1);
         contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
         dataRenderer.paint(contentGraphics);
 
@@ -179,50 +174,23 @@ public class PushButtonSkin extends AbstractPushButtonSkin
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
-            graphics.setColor(HIGHLIGHTED_GRADIENT_START_COLOR);
+            graphics.setColor(highlightedGradientStartColor);
             graphics.setStroke(dashStroke);
 
             graphics.draw(new RoundRectangle2D.Double(2, 2, Math.max(width - 5, 0),
-                Math.max(height - 5, 0), CORNER_RADIUS - 2, CORNER_RADIUS - 2));
+                Math.max(height - 5, 0), cornerRadius - 2, cornerRadius - 2));
         }
     }
 
-
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(FONT_KEY)) {
-            value = FONT;
-        } else if (key.equals(COLOR_KEY)) {
-            value = COLOR;
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            value = DISABLED_COLOR;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public Font getFont() {
+        return font;
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(FONT_KEY)
-            || key.equals(COLOR_KEY)
-            || key.equals(DISABLED_COLOR_KEY)
-            || super.containsKey(key));
+    public Color getColor() {
+        return color;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
+    public Color getDisabledColor() {
+        return disabledColor;
     }
 }

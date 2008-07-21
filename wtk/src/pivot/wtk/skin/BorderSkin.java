@@ -21,7 +21,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 
-import pivot.collections.Map;
+import pivot.collections.Dictionary;
 import pivot.wtk.Border;
 import pivot.wtk.Component;
 import pivot.wtk.CornerRadii;
@@ -36,25 +36,13 @@ import pivot.wtk.Insets;
  * @author gbrown
  */
 public class BorderSkin extends TitlePaneSkin {
-    protected Color borderColor = DEFAULT_BORDER_COLOR;
-    protected int borderThickness = DEFAULT_BORDER_THICKNESS;
-    protected Insets padding = DEFAULT_PADDING;
-    protected CornerRadii cornerRadii = DEFAULT_CORNER_RADII;
-
-    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(0xff, 0xff, 0xff);
-
-    private static final Color DEFAULT_BORDER_COLOR = new Color(0x00, 0x00, 0x00);
-    private static final int DEFAULT_BORDER_THICKNESS = 1;
-    private static final Insets DEFAULT_PADDING = new Insets(2);
-    private static final CornerRadii DEFAULT_CORNER_RADII = new CornerRadii(0);
-
-    protected static final String BORDER_COLOR_KEY = "borderColor";
-    protected static final String BORDER_THICKNESS_KEY = "borderThickness";
-    protected static final String PADDING_KEY = "padding";
-    protected static final String CORNER_RADII_KEY = "cornerRadii";
+    private Color borderColor = Color.BLACK;
+    private int borderThickness = 1;
+    private Insets padding = new Insets(2);
+    private CornerRadii cornerRadii = new CornerRadii(0);
 
     public BorderSkin() {
-        backgroundColor = DEFAULT_BACKGROUND_COLOR;
+        setBackgroundColor(Color.WHITE);
     }
 
     @Override
@@ -200,147 +188,107 @@ public class BorderSkin extends TitlePaneSkin {
         graphics.fill(borderArea);
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(BORDER_COLOR_KEY)) {
-            value = borderColor;
-        }
-        else if (key.equals(BORDER_THICKNESS_KEY)) {
-            value = borderThickness;
-        }
-        else if (key.equals(PADDING_KEY)) {
-            value = padding;
-        }
-        else if (key.equals(CORNER_RADII_KEY)) {
-            value = cornerRadii;
-        }
-        else {
-            value = super.get(key);
-        }
-
-        return value;
+    public Color getBorderColor() {
+        return borderColor;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public void setBorderColor(Color borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(BORDER_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = borderColor;
-            borderColor = (Color)value;
-
-            repaintComponent();
-        }
-        else if (key.equals(BORDER_THICKNESS_KEY)) {
-            if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = borderThickness;
-            borderThickness = (Integer)value;
-
-            invalidateComponent();
-        }
-        else if (key.equals(PADDING_KEY)) {
-            if (value instanceof Number) {
-                value = new Insets(((Number)value).intValue());
-            } else {
-                if (value instanceof Map<?, ?>) {
-                    value = new Insets((Map<String, Object>)value);
-                }
-            }
-
-            validatePropertyType(key, value, Insets.class, false);
-
-            previousValue = padding;
-            padding = (Insets)value;
-
-            invalidateComponent();
-        }
-        else if (key.equals(CORNER_RADII_KEY)) {
-            if (value instanceof Number) {
-                value = new CornerRadii(((Number)value).intValue());
-            } else {
-                if (value instanceof Map<?, ?>) {
-                    value = new CornerRadii((Map<String, Object>)value);
-                }
-            }
-
-            validatePropertyType(key, value, CornerRadii.class, false);
-
-            previousValue = cornerRadii;
-            cornerRadii = (CornerRadii)value;
-
-            repaintComponent();
-        }
-        else {
-            super.put(key, value);
-        }
-
-        return previousValue;
+        this.borderColor = borderColor;
+        repaintComponent();
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setBorderColor(String borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(BORDER_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BORDER_COLOR);
-        }
-        else if (key.equals(BORDER_THICKNESS_KEY)) {
-            previousValue = put(key, DEFAULT_BORDER_THICKNESS);
-        }
-        else if (key.equals(PADDING_KEY)) {
-            previousValue = put(key, DEFAULT_PADDING);
-        }
-        else if (key.equals(CORNER_RADII_KEY)) {
-            previousValue = put(key, DEFAULT_CORNER_RADII);
-        }
-        else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setBorderColor(Color.decode(borderColor));
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(BORDER_COLOR_KEY)
-            || key.equals(BORDER_THICKNESS_KEY)
-            || key.equals(PADDING_KEY)
-            || key.equals(CORNER_RADII_KEY)
-            || super.containsKey(key));
+    public int getBorderThickness() {
+        return borderThickness;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
+    public void setBorderThickness(int borderThickness) {
+        this.borderThickness = borderThickness;
+        repaintComponent();
+    }
+
+    public final void setBorderThickness(String borderThickness) {
+        if (borderThickness == null) {
+            throw new IllegalArgumentException("borderThickness is null.");
+        }
+
+        setBorderThickness(Integer.parseInt(borderThickness));
+    }
+
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public CornerRadii getCornerRadii() {
+        return cornerRadii;
+    }
+
+    public void setCornerRadii(CornerRadii cornerRadii) {
+        if (cornerRadii == null) {
+            throw new IllegalArgumentException("cornerRadii is null.");
+        }
+
+        this.cornerRadii = cornerRadii;
+        repaintComponent();
+    }
+
+    public final void setCornerRadii(int cornerRadii) {
+        setCornerRadii(new CornerRadii(cornerRadii));
+    }
+
+    public final void setCornerRadii(Dictionary<String, ?> cornerRadii) {
+        if (cornerRadii == null) {
+            throw new IllegalArgumentException("cornerRadii is null.");
+        }
+
+        setCornerRadii(new CornerRadii(cornerRadii));
+    }
+
+    public final void setCornerRadii(String cornerRadii) {
+        if (cornerRadii == null) {
+            throw new IllegalArgumentException("cornerRadii is null.");
+        }
+
+        setCornerRadii(new CornerRadii(cornerRadii));
     }
 }

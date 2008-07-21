@@ -36,29 +36,12 @@ import pivot.wtk.media.Image;
  * @author gbrown
  */
 public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
-    protected Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
-    protected float opacity = DEFAULT_OPACITY;
-    protected float scaleX = DEFAULT_SCALE_X;
-    protected float scaleY = DEFAULT_SCALE_Y;
-    protected HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT;
-    protected VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT;
-
-    private static final Color DEFAULT_BACKGROUND_COLOR = null;
-    private static final float DEFAULT_OPACITY = 1.0f;
-    private static final float DEFAULT_SCALE_X = 1.0f;
-    private static final float DEFAULT_SCALE_Y = 1.0f;
-    private static final HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.CENTER;
-    private static final VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.CENTER;
-
-    protected static final String BACKGROUND_COLOR_KEY = "backgroundColor";
-    protected static final String OPACITY_KEY = "opacity";
-    protected static final String SCALE_X_KEY = "scaleX";
-    protected static final String SCALE_Y_KEY = "scaleY";
-    protected static final String HORIZONTAL_ALIGNMENT_KEY = "horizontalAlignment";
-    protected static final String VERTICAL_ALIGNMENT_KEY = "verticalAlignment";
-
-    public ImageViewSkin() {
-    }
+    private Color backgroundColor = null;
+    private float opacity = 1.0f;
+    private float scaleX = 1.0f;
+    private float scaleY = 1.0f;
+    private HorizontalAlignment horizontalAlignment = HorizontalAlignment.CENTER;
+    private VerticalAlignment verticalAlignment = VerticalAlignment.CENTER;
 
     public void install(Component component) {
         validateComponentType(component, ImageView.class);
@@ -208,149 +191,118 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         return false;
     }
 
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(BACKGROUND_COLOR_KEY)) {
-            value = backgroundColor;
-        } else if (key.equals(OPACITY_KEY)) {
-            value = opacity;
-        } else if (key.equals(SCALE_X_KEY)) {
-            value = scaleX;
-        } else if (key.equals(SCALE_Y_KEY)) {
-            value = scaleY;
-        } else if (key.equals(HORIZONTAL_ALIGNMENT_KEY)) {
-            value = horizontalAlignment;
-        } else if (key.equals(VERTICAL_ALIGNMENT_KEY)) {
-            value = verticalAlignment;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public Color getBackgroundColor() {
+        return backgroundColor;
     }
 
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, true);
-
-            previousValue = backgroundColor;
-            backgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(OPACITY_KEY)) {
-            validatePropertyType(key, value, Number.class, false);
-
-            previousValue = opacity;
-            opacity = ((Number)value).floatValue();
-
-            repaintComponent();
-        } else if (key.equals(SCALE_X_KEY)) {
-            validatePropertyType(key, value, Number.class, false);
-
-            previousValue = scaleX;
-            scaleX = ((Number)value).floatValue();
-
-            invalidateComponent();
-        } else if (key.equals(SCALE_Y_KEY)) {
-            validatePropertyType(key, value, Number.class, false);
-
-            previousValue = scaleY;
-            scaleY = ((Number)value).floatValue();
-
-            invalidateComponent();
-        } else if (key.equals(HORIZONTAL_ALIGNMENT_KEY)) {
-            if (value instanceof String) {
-                value = HorizontalAlignment.decode((String)value);
-            }
-
-            validatePropertyType(key, value, HorizontalAlignment.class, false);
-
-            previousValue = horizontalAlignment;
-            horizontalAlignment = (HorizontalAlignment)value;
-
-            repaintComponent();
-        } else if (key.equals(VERTICAL_ALIGNMENT_KEY)) {
-            if (value instanceof String) {
-                value = VerticalAlignment.decode((String)value);
-            }
-
-            validatePropertyType(key, value, VerticalAlignment.class, false);
-
-            previousValue = verticalAlignment;
-            verticalAlignment = (VerticalAlignment)value;
-
-            repaintComponent();
-        } else {
-            super.put(key, value);
-        }
-
-        return previousValue;
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        repaintComponent();
     }
 
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setBackgroundColor(String backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        Object previousValue = null;
+        setBackgroundColor(Color.decode(backgroundColor));
+    }
 
-        if (key.equals(BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BACKGROUND_COLOR);
-        } else if (key.equals(OPACITY_KEY)) {
-            previousValue = put(key, DEFAULT_OPACITY);
-        } else if (key.equals(SCALE_X_KEY)) {
-            previousValue = put(key, DEFAULT_SCALE_X);
-        } else if (key.equals(SCALE_Y_KEY)) {
-            previousValue = put(key, DEFAULT_SCALE_Y);
-        } else if (key.equals(HORIZONTAL_ALIGNMENT_KEY)) {
-            previousValue = put(key, DEFAULT_HORIZONTAL_ALIGNMENT);
-        } else if (key.equals(VERTICAL_ALIGNMENT_KEY)) {
-            previousValue = put(key, DEFAULT_VERTICAL_ALIGNMENT);
-        } else {
-            previousValue = super.remove(key);
+    public float getOpacity() {
+        return opacity;
+    }
+
+    public void setOpacity(float opacity) {
+        this.opacity = opacity;
+        repaintComponent();
+    }
+
+    public final void setOpacity(String opacity) {
+        if (opacity == null) {
+            throw new IllegalArgumentException("opacity is null.");
         }
 
-        return previousValue;
+        setOpacity(Float.parseFloat(opacity));
     }
 
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(BACKGROUND_COLOR_KEY)
-            || key.equals(OPACITY_KEY)
-            || key.equals(SCALE_X_KEY)
-            || key.equals(SCALE_Y_KEY)
-            || key.equals(HORIZONTAL_ALIGNMENT_KEY)
-            || key.equals(VERTICAL_ALIGNMENT_KEY)
-            || super.containsKey(key));
+    public float getScaleX() {
+        return scaleX;
     }
 
-    public boolean isEmpty() {
-        return false;
-    }
-
-    public void imageChanged(ImageView imageView, Image previousImage) {
+    public void setScaleX(float scaleX) {
+        this.scaleX = scaleX;
         invalidateComponent();
     }
 
-    public void scaleChanged(ImageView imageView, double previousScaleX, double previousScaleY) {
+    public final void setScaleX(String scaleX) {
+        if (scaleX == null) {
+            throw new IllegalArgumentException("scaleX is null.");
+        }
+
+        setOpacity(Float.parseFloat(scaleX));
+    }
+
+    public float getScaleY() {
+        return scaleY;
+    }
+
+    public void setScaleY(float scaleY) {
+        this.scaleY = scaleY;
+        invalidateComponent();
+    }
+
+    public final void setScaleY(String scaleY) {
+        if (scaleY == null) {
+            throw new IllegalArgumentException("scaleY is null.");
+        }
+
+        setOpacity(Float.parseFloat(scaleY));
+    }
+
+    public HorizontalAlignment getHorizontalAlignment() {
+        return horizontalAlignment;
+    }
+
+    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
+        if (horizontalAlignment == null) {
+            throw new IllegalArgumentException("horizontalAlignment is null.");
+        }
+
+        this.horizontalAlignment = horizontalAlignment;
+        repaintComponent();
+    }
+
+    public final void setHorizontalAlignment(String horizontalAlignment) {
+        if (horizontalAlignment == null) {
+            throw new IllegalArgumentException("horizontalAlignment is null.");
+        }
+
+        setHorizontalAlignment(HorizontalAlignment.decode(horizontalAlignment));
+    }
+
+    public VerticalAlignment getVerticalAlignment() {
+        return verticalAlignment;
+    }
+
+    public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
+        if (verticalAlignment == null) {
+            throw new IllegalArgumentException("verticalAlignment is null.");
+        }
+
+        this.verticalAlignment = verticalAlignment;
+        repaintComponent();
+    }
+
+    public final void setVerticalAlignment(String verticalAlignment) {
+        if (verticalAlignment == null) {
+            throw new IllegalArgumentException("verticalAlignment is null.");
+        }
+
+        setVerticalAlignment(VerticalAlignment.decode(verticalAlignment));
+    }
+
+    // Image view events
+    public void imageChanged(ImageView imageView, Image previousImage) {
         invalidateComponent();
     }
 }

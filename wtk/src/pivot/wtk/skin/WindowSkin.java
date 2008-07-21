@@ -49,13 +49,9 @@ public class WindowSkin extends TitlePaneSkin
 
     private static final FocusTraversalPolicy DEFAULT_FOCUS_TRAVERSAL_POLICY = new WindowFocusTraversalPolicy();
 
-    // Default style values
-    private static final Color DEFAULT_BACKGROUND_COLOR = Color.WHITE;
-
     public WindowSkin() {
         super();
-
-        backgroundColor = DEFAULT_BACKGROUND_COLOR;
+        setBackgroundColor(Color.WHITE);
     }
 
     @Override
@@ -119,23 +115,6 @@ public class WindowSkin extends TitlePaneSkin
                 content.setVisible(false);
             }
         }
-    }
-
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BACKGROUND_COLOR);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
     }
 
     public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {

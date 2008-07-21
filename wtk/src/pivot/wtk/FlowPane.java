@@ -54,4 +54,8 @@ public class FlowPane extends Container {
             flowPaneListeners.orientationChanged(this);
         }
     }
+
+    public void setOrientation(String orientation) {
+        setOrientation(Orientation.decode(orientation));
+    }
 }

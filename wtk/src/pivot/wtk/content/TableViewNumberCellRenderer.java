@@ -21,90 +21,9 @@ import pivot.collections.Dictionary;
 import pivot.wtk.TableView;
 
 public class TableViewNumberCellRenderer extends TableViewCellRenderer {
-    protected class PropertyDictionary extends TableViewCellRenderer.PropertyDictionary {
-        @Override
-        public Object get(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            Object value = null;
-
-            if (key.equals(NUMBER_FORMAT_KEY)) {
-                value = getNumberFormat();
-            } else {
-                value = super.get(key);
-            }
-
-            return value;
-        }
-
-        @Override
-        public Object put(String key, Object value) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            Object previousValue = null;
-
-            if (key.equals(NUMBER_FORMAT_KEY)) {
-                if (value instanceof String) {
-                    value = new DecimalFormat((String)value);
-                }
-
-                previousValue = numberFormat;
-                setNumberFormat((NumberFormat)value);
-            } else {
-                previousValue = super.put(key, value);
-            }
-
-            return previousValue;
-        }
-
-        @Override
-        public Object remove(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            Object previousValue = null;
-
-            if (key.equals(NUMBER_FORMAT_KEY)) {
-                previousValue = put(key, NUMBER_FORMAT_KEY);
-            } else {
-                previousValue = super.remove(key);
-            }
-
-            return previousValue;
-        }
-
-        @Override
-        public boolean containsKey(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            return (key.equals(NUMBER_FORMAT_KEY)
-                || super.containsKey(key));
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return false;
-        }
-    }
-
     private NumberFormat numberFormat = DEFAULT_NUMBER_FORMAT;
 
-    public static final String NUMBER_FORMAT_KEY = "numberFormat";
-
     public static final NumberFormat DEFAULT_NUMBER_FORMAT = NumberFormat.getNumberInstance();
-
-    public TableViewNumberCellRenderer() {
-        super();
-
-        properties = new PropertyDictionary();
-    }
 
     public NumberFormat getNumberFormat() {
         return numberFormat;
@@ -116,6 +35,10 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
         }
 
         this.numberFormat = numberFormat;
+    }
+
+    public void setNumberFormat(String numberFormat) {
+        setNumberFormat(new DecimalFormat((String)numberFormat));
     }
 
     @Override

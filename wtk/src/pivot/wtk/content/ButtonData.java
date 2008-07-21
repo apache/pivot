@@ -15,6 +15,7 @@
  */
 package pivot.wtk.content;
 
+import pivot.beans.Bean;
 import pivot.wtk.media.Image;
 
 /**
@@ -23,7 +24,7 @@ import pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-public class ButtonData {
+public class ButtonData extends Bean {
     private Image icon = null;
     private String label = null;
 

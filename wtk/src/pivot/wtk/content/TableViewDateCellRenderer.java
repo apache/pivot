@@ -22,90 +22,9 @@ import pivot.collections.Dictionary;
 import pivot.wtk.TableView;
 
 public class TableViewDateCellRenderer extends TableViewCellRenderer {
-    protected class PropertyDictionary extends TableViewCellRenderer.PropertyDictionary {
-        @Override
-        public Object get(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            Object value = null;
-
-            if (key.equals(DATE_FORMAT_KEY)) {
-                value = getDateFormat();
-            } else {
-                value = super.get(key);
-            }
-
-            return value;
-        }
-
-        @Override
-        public Object put(String key, Object value) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            Object previousValue = null;
-
-            if (key.equals(DATE_FORMAT_KEY)) {
-                if (value instanceof String) {
-                    value = new SimpleDateFormat((String)value);
-                }
-
-                previousValue = dateFormat;
-                setDateFormat((DateFormat)value);
-            } else {
-                previousValue = super.put(key, value);
-            }
-
-            return previousValue;
-        }
-
-        @Override
-        public Object remove(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            Object previousValue = null;
-
-            if (key.equals(DATE_FORMAT_KEY)) {
-                previousValue = put(key, DEFAULT_DATE_FORMAT);
-            } else {
-                previousValue = super.remove(key);
-            }
-
-            return previousValue;
-        }
-
-        @Override
-        public boolean containsKey(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            return (key.equals(DATE_FORMAT_KEY)
-                    || super.containsKey(key));
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return false;
-        }
-    }
-
     private DateFormat dateFormat = DEFAULT_DATE_FORMAT;
 
-    public static final String DATE_FORMAT_KEY = "dateFormat";
-
     public static final DateFormat DEFAULT_DATE_FORMAT = DateFormat.getDateInstance();
-
-    public TableViewDateCellRenderer() {
-        super();
-
-        properties = new PropertyDictionary();
-    }
 
     public DateFormat getDateFormat() {
         return dateFormat;
@@ -117,6 +36,10 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
         }
 
         this.dateFormat = dateFormat;
+    }
+
+    public void setDateFormat(String dateFormat) {
+        setDateFormat(new SimpleDateFormat((String)dateFormat));
     }
 
     @Override

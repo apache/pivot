@@ -131,7 +131,7 @@ class TreeViewLoader extends Loader {
                     (Map<String, Object>)jsonSerializer.readObject(nodeRendererPropertiesReader);
 
                 for (String key : properties) {
-                    nodeRenderer.getProperties().put(key, properties.get(key));
+                    nodeRenderer.put(key, properties.get(key));
                 }
             } catch(Exception exception) {
                 throw new LoadException("Unable to apply node renderer properties.", exception);

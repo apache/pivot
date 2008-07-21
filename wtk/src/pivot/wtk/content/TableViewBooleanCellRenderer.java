@@ -25,7 +25,6 @@ import pivot.wtk.VerticalAlignment;
 public class TableViewBooleanCellRenderer extends FlowPane
     implements TableView.CellRenderer {
     private Checkbox checkbox = new Checkbox();
-    private PropertyDictionary properties = new PropertyDictionary();
 
     public TableViewBooleanCellRenderer() {
         super();
@@ -65,9 +64,5 @@ public class TableViewBooleanCellRenderer extends FlowPane
 
         checkbox.setSelected(checkboxSelected);
         checkbox.setEnabled(tableView.isEnabled() && !rowDisabled);
-    }
-
-    public PropertyDictionary getProperties() {
-        return properties;
     }
 }

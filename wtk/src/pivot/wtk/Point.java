@@ -18,6 +18,7 @@ package pivot.wtk;
 import java.awt.geom.Point2D;
 
 import pivot.collections.Dictionary;
+import pivot.serialization.JSONSerializer;
 
 public class Point extends Point2D {
     public int x = 0;
@@ -27,6 +28,10 @@ public class Point extends Point2D {
     public static final String Y_KEY = "y";
 
     public Point() {
+    }
+
+    public Point(String point) {
+        this(JSONSerializer.parseMap(point));
     }
 
     public Point(Dictionary<String, ?> point) {

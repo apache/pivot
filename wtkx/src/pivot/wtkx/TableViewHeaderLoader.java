@@ -92,7 +92,7 @@ class TableViewHeaderLoader extends Loader {
                     (Map<String, Object>)jsonSerializer.readObject(dataRendererPropertiesReader);
 
                 for (String key : properties) {
-                    dataRenderer.getProperties().put(key, properties.get(key));
+                    dataRenderer.put(key, properties.get(key));
                 }
             } catch(Exception exception) {
                 throw new LoadException("Unable to apply data renderer properties.", exception);

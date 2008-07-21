@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import pivot.collections.Dictionary;
+import pivot.serialization.JSONSerializer;
 
 public class CornerRadii {
     public int topLeft = 0;
@@ -30,6 +31,10 @@ public class CornerRadii {
 
     public CornerRadii(int radius) {
         this(radius, radius, radius, radius);
+    }
+
+    public CornerRadii(String cornerRadii) {
+        this(JSONSerializer.parseMap(cornerRadii));
     }
 
     public CornerRadii(Dictionary<String, ?> cornerRadii) {

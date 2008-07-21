@@ -24,19 +24,11 @@ import pivot.wtk.Window;
 
 public class DisplaySkin extends ContainerSkin {
     // Style properties
-    private boolean activeWindowFollowsMouse = DEFAULT_ACTIVE_WINDOW_FOLLOWS_MOUSE;
-
-    // Default style values
-    private static final Color DEFAULT_BACKGROUND_COLOR = Color.LIGHT_GRAY;
-    private static final boolean DEFAULT_ACTIVE_WINDOW_FOLLOWS_MOUSE = false;
-
-    // Style keys
-    private static final String ACTIVE_WINDOW_FOLLOWS_MOUSE_KEY = "activeWindowFollowsMouse";
+    private boolean activeWindowFollowsMouse = false;
 
     public DisplaySkin() {
         super();
-
-        backgroundColor = DEFAULT_BACKGROUND_COLOR;
+        setBackgroundColor(Color.LIGHT_GRAY);
     }
 
     @Override
@@ -77,70 +69,20 @@ public class DisplaySkin extends ContainerSkin {
         }
     }
 
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(ACTIVE_WINDOW_FOLLOWS_MOUSE_KEY)) {
-            value = activeWindowFollowsMouse;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public boolean getActiveWindowFollowsMouse() {
+        return activeWindowFollowsMouse;
     }
 
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(ACTIVE_WINDOW_FOLLOWS_MOUSE_KEY)) {
-            validatePropertyType(key, value, Boolean.class, false);
-
-            previousValue = activeWindowFollowsMouse;
-            activeWindowFollowsMouse = (Boolean)value;
-
-            repaintComponent();
-        } else {
-            super.put(key, value);
-        }
-
-        return previousValue;
+    public void setActiveWindowFollowsMouse(boolean activeWindowFollowsMouse) {
+        this.activeWindowFollowsMouse = activeWindowFollowsMouse;
     }
 
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setActiveWindowFollowsMouse(String activeWindowFollowsMouse) {
+        if (activeWindowFollowsMouse == null) {
+            throw new IllegalArgumentException("activeWindowFollowsMouse is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(ACTIVE_WINDOW_FOLLOWS_MOUSE_KEY)) {
-            previousValue = put(key, DEFAULT_ACTIVE_WINDOW_FOLLOWS_MOUSE);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
-    }
-
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(ACTIVE_WINDOW_FOLLOWS_MOUSE_KEY)
-            || super.containsKey(key));
-    }
-
-    public boolean isEmpty() {
-        return false;
+        setActiveWindowFollowsMouse(Boolean.parseBoolean(activeWindowFollowsMouse));
     }
 
     @Override

@@ -30,6 +30,7 @@ import pivot.wtk.MenuButton;
 import pivot.wtk.MenuPopup;
 import pivot.wtk.Menu;
 import pivot.wtk.Meter;
+import pivot.wtk.Popup;
 import pivot.wtk.PushButton;
 import pivot.wtk.RadioButton;
 import pivot.wtk.Rollup;
@@ -95,7 +96,7 @@ public final class TerraTheme extends Theme {
 
                 graphics.setColor(Color.BLACK);
                 graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                    DROP_SHADOW_OPACITY));
+                    DROP_SHADOW_OPACITY / 2));
                 graphics.fill(component.getBounds());
             }
         }
@@ -103,13 +104,15 @@ public final class TerraTheme extends Theme {
 
     private class DisplayMonitor implements ContainerListener {
         public void componentInserted(Container container, int index) {
-            monitorWindow((Window)container.getComponents().get(index));
+            Window window = (Window)container.getComponents().get(index);
+            monitorWindow(window);
         }
 
         public void componentsRemoved(Container container, int index,
-            Sequence<Component> components) {
-            for (int i = 0, n = components.getLength(); i < n; i++) {
-                unmonitorWindow((Window)components.get(i));
+            Sequence<Component> removed) {
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                Window window = (Window)removed.get(i);
+                unmonitorWindow(window);
             }
         }
 
@@ -256,23 +259,30 @@ public final class TerraTheme extends Theme {
     }
 
     private void monitorWindow(Window window) {
-        // Attach shadow decorator and repaint
-        window.setDecorator(new DropShadowDecorator(window.getDecorator()));
-        repaintShadowRegion(window);
+        if (!(window instanceof Popup)) {
+            // Attach shadow decorator and repaint
+            Decorator decorator = window.getDecorator();
+            window.setDecorator(new DropShadowDecorator(decorator));
+            repaintShadowRegion(window);
 
-        // Add component listeners
-        window.getComponentListeners().add(windowMonitor);
-        window.getComponentStateListeners().add(windowMonitor);
+            // Add component listeners
+            window.getComponentListeners().add(windowMonitor);
+            window.getComponentStateListeners().add(windowMonitor);
+        }
     }
 
     private void unmonitorWindow(Window window) {
-        // Remove component listener
-        window.getComponentListeners().remove(windowMonitor);
-        window.getComponentStateListeners().remove(windowMonitor);
+        if (!(window instanceof Popup)) {
+            // Remove component listener
+            window.getComponentListeners().remove(windowMonitor);
+            window.getComponentStateListeners().remove(windowMonitor);
 
-        // Remove shadow decorator and repaint
-        window.setDecorator(((DropShadowDecorator)window.getDecorator()).getDecorator());
-        repaintShadowRegion(window);
+            // Remove shadow decorator and repaint
+            DropShadowDecorator dropShadowDecorator = (DropShadowDecorator)window.getDecorator();
+            Decorator decorator = dropShadowDecorator.getDecorator();
+            window.setDecorator(decorator);
+            repaintShadowRegion(window);
+        }
     }
 
     private void repaintShadowRegion(Window window) {

@@ -118,7 +118,7 @@ class ListButtonLoader extends ButtonLoader {
                     (Map<String, Object>)jsonSerializer.readObject(itemRendererPropertiesReader);
 
                 for (String key : properties) {
-                    itemRenderer.getProperties().put(key, properties.get(key));
+                    itemRenderer.put(key, properties.get(key));
                 }
             } catch(Exception exception) {
                 throw new LoadException("Unable to apply item renderer properties.", exception);

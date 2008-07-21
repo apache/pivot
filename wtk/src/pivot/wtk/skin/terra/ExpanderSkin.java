@@ -167,8 +167,6 @@ public class ExpanderSkin extends TitlePaneSkin
     protected Insets padding = DEFAULT_PADDING;
 
     // Default style values
-    private static final Color DEFAULT_BACKGROUND_COLOR = Color.WHITE;
-
     private static final Font DEFAULT_TITLE_BAR_FONT = new Font("Verdana", Font.BOLD, 11);
     private static final Color DEFAULT_TITLE_BAR_COLOR = Color.BLACK;
     private static final Color DEFAULT_TITLE_BAR_BACKGROUND_COLOR = new Color(0xE6, 0xE3, 0xDA);
@@ -189,7 +187,7 @@ public class ExpanderSkin extends TitlePaneSkin
     protected static final String PADDING_KEY = "padding";
 
     public ExpanderSkin() {
-        backgroundColor = DEFAULT_BACKGROUND_COLOR;
+        setBackgroundColor(Color.WHITE);
 
         titleBarFlowPane = new FlowPane(Orientation.HORIZONTAL);
         titleBarFlowPane.getComponentMouseButtonListeners().add(titleBarMouseHandler);

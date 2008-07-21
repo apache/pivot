@@ -58,14 +58,14 @@ public abstract class Theme {
         }
 
         if (Theme.theme != null) {
-            theme.uninstall();
+            Theme.theme.uninstall();
         }
+
+        theme.install();
+        Theme.theme = theme;
 
         // TODO Walk existing component tree from display down and install new
         // skins; re-install skin by walking up class hierarchy until a skin
         // match is found (do this here in this method)
-
-        Theme.theme = theme;
-        theme.install();
     }
 }

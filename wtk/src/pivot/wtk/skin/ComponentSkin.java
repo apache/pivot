@@ -16,6 +16,8 @@
 package pivot.wtk.skin;
 
 import java.awt.Graphics2D;
+
+import pivot.beans.Bean;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentStateListener;
@@ -32,7 +34,8 @@ import pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-public abstract class ComponentSkin implements Skin, ComponentStateListener {
+public abstract class ComponentSkin extends Bean
+    implements Skin, ComponentStateListener {
     /**
      * Base class for "image assets", images generated and used internally by
      * a skin. Image assets cannot be loaded, stored, or drawn to.
@@ -212,30 +215,6 @@ public abstract class ComponentSkin implements Skin, ComponentStateListener {
         if (component != null) {
             component.repaint(x, y, width, height);
         }
-    }
-
-    public Object get(String key) {
-        return null;
-    }
-
-    public Object put(String key, Object value) {
-        Component component = getComponent();
-        System.out.println(key + " is not a valid style for "
-            + component.getClass().getName());
-
-        return null;
-    }
-
-    public Object remove(String key) {
-        return null;
-    }
-
-    public boolean containsKey(String key) {
-        return false;
-    }
-
-    public boolean isEmpty() {
-        return true;
     }
 
     /**

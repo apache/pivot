@@ -22,55 +22,11 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Component;
 import pivot.wtk.Insets;
 import pivot.wtk.Label;
-import pivot.wtk.Renderer;
 import pivot.wtk.TableView;
 import pivot.wtk.VerticalAlignment;
 
 public class TableViewCellRenderer extends Label
     implements TableView.CellRenderer {
-    protected class PropertyDictionary extends Renderer.PropertyDictionary {
-        public Object get(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            return null;
-        }
-
-        public Object put(String key, Object value) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            System.out.println("\"" + key + "\" is not a valid property for "
-                + getClass().getName() + ".");
-
-            return null;
-        }
-
-        public Object remove(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            return null;
-        }
-
-        public boolean containsKey(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            return false;
-        }
-
-        public boolean isEmpty() {
-            return true;
-        }
-    }
-
-    protected PropertyDictionary properties = new PropertyDictionary();
-
     public TableViewCellRenderer() {
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         getStyles().put("padding", new Insets(2));
@@ -122,9 +78,5 @@ public class TableViewCellRenderer extends Label
         } else {
             styles.remove("color");
         }
-    }
-
-    public PropertyDictionary getProperties() {
-        return properties;
     }
 }

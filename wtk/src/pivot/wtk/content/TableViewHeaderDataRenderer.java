@@ -35,8 +35,8 @@ public class TableViewHeaderDataRenderer extends FlowPane
     implements TableViewHeader.DataRenderer {
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();
-    private PropertyDictionary properties = new PropertyDictionary();
 
+    public static final String ICON_KEY = "icon";
     public static final String ICON_URL_KEY = "iconURL";
     public static final String LABEL_KEY = "label";
 
@@ -63,21 +63,22 @@ public class TableViewHeaderDataRenderer extends FlowPane
         Image icon = null;
         String text = null;
 
-        if (data instanceof TableViewHeaderData) {
-            TableViewHeaderData headerData = (TableViewHeaderData)data;
-            icon = headerData.getIcon();
-            text = headerData.getLabel();
-        } else if (data instanceof Dictionary<?, ?>) {
+        if (data instanceof Dictionary<?, ?>) {
             Dictionary<String, Object> dictionary = (Dictionary<String, Object>)data;
 
-            URL iconURL = (URL)dictionary.get(ICON_URL_KEY);
-            if (iconURL != null) {
-                ApplicationContext applicationContext = ApplicationContext.getInstance();
-                icon = (Image)applicationContext.getResources().get(iconURL);
+            icon = (Image)dictionary.get(ICON_KEY);
 
-                if (icon == null) {
-                    icon = Image.load(iconURL);
-                    applicationContext.getResources().put(iconURL, icon);
+            if (icon == null) {
+                URL iconURL = (URL)dictionary.get(ICON_URL_KEY);
+
+                if (iconURL != null) {
+                    ApplicationContext applicationContext = ApplicationContext.getInstance();
+                    icon = (Image)applicationContext.getResources().get(iconURL);
+
+                    if (icon == null) {
+                        icon = Image.load(iconURL);
+                        applicationContext.getResources().put(iconURL, icon);
+                    }
                 }
             }
 
@@ -135,9 +136,5 @@ public class TableViewHeaderDataRenderer extends FlowPane
                 labelStyles.remove("color");
             }
         }
-    }
-
-    public PropertyDictionary getProperties() {
-        return properties;
     }
 }

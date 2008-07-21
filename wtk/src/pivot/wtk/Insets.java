@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import pivot.collections.Dictionary;
+import pivot.serialization.JSONSerializer;
 
 public class Insets {
     public int top = 0;
@@ -30,6 +31,10 @@ public class Insets {
 
     public Insets(int inset) {
         this(inset, inset, inset, inset);
+    }
+
+    public Insets(String insets) {
+        this(JSONSerializer.parseMap(insets));
     }
 
     public Insets(Dictionary<String, ?> insets) {
