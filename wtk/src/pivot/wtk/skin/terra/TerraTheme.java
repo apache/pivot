@@ -3,6 +3,11 @@ package pivot.wtk.skin.terra;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 
 import pivot.collections.Sequence;
 import pivot.wtk.Alert;
@@ -48,10 +53,26 @@ import pivot.wtk.TreeView;
 import pivot.wtk.Window;
 
 public final class TerraTheme extends Theme {
-    private class DropShadowDecorator implements Decorator {
-        Decorator decorator = null;
-        Component component = null;
-        Graphics2D graphics = null;
+    private static class DropShadowDecorator implements Decorator {
+        private boolean decorate = true;
+
+        private Decorator decorator = null;
+        private Component component = null;
+        private Graphics2D graphics = null;
+        private BufferedImage bufferedImage = null;
+
+        private static final float[] BLUR_KERNEL = {
+            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f
+        };
+
+        private static final ConvolveOp BLUR = new ConvolveOp(new Kernel(7, 7,
+            BLUR_KERNEL), ConvolveOp.EDGE_NO_OP, null);
 
         public DropShadowDecorator(Decorator decorator) {
             this.decorator = decorator;
@@ -62,25 +83,51 @@ public final class TerraTheme extends Theme {
         }
 
         public Graphics2D prepare(Component component, Graphics2D graphics) {
-            this.component = component;
-            this.graphics = graphics;
-
             if (decorator != null) {
                 graphics = decorator.prepare(component, graphics);
             }
 
-            // Paint the drop shadow
-            Graphics2D shadowGraphics = (Graphics2D)graphics.create();
-            shadowGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                DROP_SHADOW_OPACITY));
-            shadowGraphics.setColor(DROP_SHADOW_COLOR);
+            this.component = component;
+            this.graphics = graphics;
 
-            shadowGraphics.setClip(null);
-            shadowGraphics.fillRect(DROP_SHADOW_OFFSET, DROP_SHADOW_OFFSET,
-                component.getWidth(), component.getHeight());
+            if (decorate) {
+                // Paint the drop shadow
+                Graphics2D shadowGraphics = (Graphics2D)graphics.create();
+                shadowGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                    DROP_SHADOW_OPACITY));
+                shadowGraphics.setColor(DROP_SHADOW_COLOR);
 
-            if (!component.isEnabled()) {
-                // TODO Paint a blurred state
+                shadowGraphics.setClip(null);
+                shadowGraphics.fillRect(DROP_SHADOW_OFFSET, DROP_SHADOW_OFFSET,
+                    component.getWidth(), component.getHeight());
+
+                if (!component.isEnabled()) {
+                    // Redirect the graphics to a buffered image
+                    int width = component.getWidth();
+                    int height = component.getHeight();
+
+                    if (bufferedImage == null
+                        || bufferedImage.getWidth() != width
+                        || bufferedImage.getHeight() != height) {
+                        bufferedImage = new BufferedImage(width, height,
+                            BufferedImage.TYPE_INT_RGB);
+                        Graphics2D tmpGraphics = bufferedImage.createGraphics();
+
+                        decorate = false;
+                        try {
+                            component.paint(tmpGraphics);
+                        } finally {
+                            decorate = true;
+                        }
+                    }
+
+                    Graphics2D tmpGraphics = bufferedImage.createGraphics();
+                    tmpGraphics.setClip(graphics.getClip());
+                    graphics = tmpGraphics;
+                } else {
+                    // Free the buffered image
+                    bufferedImage = null;
+                }
             }
 
             return graphics;
@@ -92,12 +139,11 @@ public final class TerraTheme extends Theme {
             }
 
             if (!component.isEnabled()) {
-                // TODO Paint a blurred state
+                // Blur the buffer image
+                Image blurredImage = BLUR.filter(bufferedImage, null);
 
-                graphics.setColor(Color.BLACK);
-                graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                    DROP_SHADOW_OPACITY / 2));
-                graphics.fill(component.getBounds());
+                // Draw the blurred image to the real graphics
+                this.graphics.drawImage(blurredImage, 0, 0, null);
             }
         }
     }
