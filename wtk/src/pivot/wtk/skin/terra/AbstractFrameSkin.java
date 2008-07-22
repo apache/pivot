@@ -27,7 +27,6 @@ import java.awt.geom.Rectangle2D;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentAttributeListener;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Container;
@@ -55,7 +54,7 @@ import pivot.wtk.skin.WindowSkin;
  * @author gbrown
  */
 public abstract class AbstractFrameSkin extends WindowSkin
-    implements ButtonPressListener, ComponentAttributeListener {
+    implements ButtonPressListener {
     public static class FrameButton extends PushButton {
         private Window window = null;
 
@@ -390,6 +389,7 @@ public abstract class AbstractFrameSkin extends WindowSkin
 
         titleBarFlowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
         titleBarFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+
         // TODO Style, like button spacing in TabPaneSkin?
         titleBarFlowPane.getStyles().put("padding", new Insets(2));
 
@@ -439,10 +439,6 @@ public abstract class AbstractFrameSkin extends WindowSkin
         resizeHandle.setCursor(Cursor.RESIZE_SOUTH_EAST);
         windowComponents.add(resizeHandle);
 
-        // Add this as an attribute listener so we can preserve a restore
-        // location when the window is maximized
-        window.getComponentAttributeListeners().add(this);
-
         iconChanged(window, null);
         titleChanged(window, null);
         activeChanged(window);
@@ -464,9 +460,6 @@ public abstract class AbstractFrameSkin extends WindowSkin
         minimizeButton = null;
         maximizeButton = null;
         closeButton = null;
-
-        // Remove this as an attribute listener
-        window.getComponentAttributeListeners().remove(this);
 
         super.uninstall();
     }
@@ -564,10 +557,11 @@ public abstract class AbstractFrameSkin extends WindowSkin
         resizeHandle.setLocation(width - resizeHandle.getWidth() - 2,
             height - resizeHandle.getHeight() - 2);
 
-        Boolean maximized = (Boolean)window.getAttributes().get(Display.MAXIMIZED_ATTRIBUTE);
+        boolean maximized = window.isMaximized();
         resizeHandle.setVisible(resizable
-            && (maximized == null || !maximized)
-            && (window.isPreferredWidthSet() || window.isPreferredHeightSet()));
+            && !maximized
+            && (window.isPreferredWidthSet()
+                || window.isPreferredHeightSet()));
 
         // Size/position content
         Component content = window.getContent();
@@ -903,10 +897,9 @@ public abstract class AbstractFrameSkin extends WindowSkin
 
     private void updateMaximizedState() {
         Window window = (Window)getComponent();
-        Boolean maximized = (Boolean)window.getAttributes().get(Display.MAXIMIZED_ATTRIBUTE);
+        boolean maximized = window.isMaximized();
 
-        if (maximized == null
-            || !maximized) {
+        if (!maximized) {
             maximizeButton.setButtonData(maximizeImage);
 
             if (restoreLocation != null) {
@@ -923,10 +916,10 @@ public abstract class AbstractFrameSkin extends WindowSkin
         boolean consumed = super.mouseDown(button, x, y);
 
         Window window = (Window)getComponent();
-        Boolean maximized = (Boolean)window.getAttributes().get(Display.MAXIMIZED_ATTRIBUTE);
+        boolean maximized = window.isMaximized();
 
         if (button == Mouse.Button.LEFT
-            && (maximized == null || !maximized)) {
+            && !maximized) {
             Rectangle titleBarBounds = titleBarFlowPane.getBounds();
 
             if (titleBarBounds.contains(x, y)) {
@@ -947,26 +940,6 @@ public abstract class AbstractFrameSkin extends WindowSkin
         }
 
         return consumed;
-    }
-
-    public void attributeAdded(Component component, Container.Attribute attribute) {
-        if (attribute == Display.MAXIMIZED_ATTRIBUTE) {
-            updateMaximizedState();
-        }
-    }
-
-    public void attributeUpdated(Component component, Container.Attribute attribute,
-        Object previousValue) {
-        if (attribute == Display.MAXIMIZED_ATTRIBUTE) {
-            updateMaximizedState();
-        }
-    }
-
-    public void attributeRemoved(Component component, Container.Attribute attribute,
-        Object value) {
-        if (attribute == Display.MAXIMIZED_ATTRIBUTE) {
-            updateMaximizedState();
-        }
     }
 
     @Override
@@ -993,6 +966,11 @@ public abstract class AbstractFrameSkin extends WindowSkin
         repaintComponent();
     }
 
+    @Override
+    public void maximizedChanged(Window window) {
+        updateMaximizedState();
+    }
+
     /**
      * Listener for frame button events.
      *
@@ -1005,10 +983,7 @@ public abstract class AbstractFrameSkin extends WindowSkin
         if (button == minimizeButton) {
             window.setDisplayable(false);
         } else if (button == maximizeButton) {
-            // Toggle the maximized state
-            Component.AttributeDictionary windowAttributes = window.getAttributes();
-            Boolean maximized = (Boolean)windowAttributes.get(Display.MAXIMIZED_ATTRIBUTE);
-            windowAttributes.put(Display.MAXIMIZED_ATTRIBUTE, (maximized == null || !maximized));
+            window.setMaximized(window.isMaximized());
         } else if (button == closeButton) {
             window.close();
         }

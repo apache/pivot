@@ -188,7 +188,7 @@ public abstract class Bean implements Dictionary<String, Object> {
      * Verifies that the bean contains at least one property.
      */
     public boolean isEmpty() {
-        return getProperties().hasNext();
+        return !getProperties().hasNext();
     }
 
     /**

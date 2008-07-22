@@ -19,7 +19,6 @@ import java.awt.Color;
 import java.awt.Font;
 
 import pivot.wtk.Application;
-import pivot.wtk.Display;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
 import pivot.wtk.VerticalAlignment;
@@ -40,8 +39,7 @@ public class HelloJava implements Application {
 
         window = new Window();
         window.setContent(label);
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE,
-            Boolean.TRUE);
+        window.setMaximized(true);
         window.open();
     }
 

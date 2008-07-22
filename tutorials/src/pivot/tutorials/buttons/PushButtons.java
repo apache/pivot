@@ -20,7 +20,6 @@ import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
-import pivot.wtk.Display;
 import pivot.wtk.PushButton;
 import pivot.wtk.Window;
 import pivot.wtkx.ComponentLoader;
@@ -44,8 +43,7 @@ public class PushButtons implements Application {
 
         window = new Window();
         window.setContent(content);
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE,
-            Boolean.TRUE);
+        window.setMaximized(true);
         window.open();
     }
 

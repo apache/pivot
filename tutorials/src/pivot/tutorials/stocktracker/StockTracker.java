@@ -38,7 +38,6 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.Container;
-import pivot.wtk.Display;
 import pivot.wtk.Form;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Label;
@@ -182,7 +181,7 @@ public class StockTracker implements Application {
 
         window = new Window();
         window.setContent(content);
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE, Boolean.TRUE);
+        window.setMaximized(true);
         window.open();
 
         refreshTable();
@@ -289,7 +288,7 @@ public class StockTracker implements Application {
         removeSymbolsButton.setEnabled(firstSelectedIndex != -1);
 
         StockQuote stockQuote = null;
-        detailChangeLabel.getAttributes().remove(Form.FLAG_ATTRIBUTE);
+        Form.setFlag(detailChangeLabel, (Form.Flag)null);
 
         if (firstSelectedIndex != -1) {
             int lastSelectedIndex = stocksTableView.getLastSelectedIndex();
@@ -299,8 +298,7 @@ public class StockTracker implements Application {
                 stockQuote = tableData.get(firstSelectedIndex);
 
                 if (stockQuote.getChange() < 0) {
-                    detailChangeLabel.getAttributes().put(Form.FLAG_ATTRIBUTE,
-                        new Form.Flag(Alert.Type.ERROR));
+                    Form.setFlag(detailChangeLabel, new Form.Flag(Alert.Type.ERROR));
                 }
             }
         }

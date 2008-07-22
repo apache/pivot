@@ -159,6 +159,12 @@ public class Window extends TitlePane {
                 listener.focusHostChanged(window);
             }
         }
+
+        public void maximizedChanged(Window window) {
+            for (WindowListener listener : this) {
+                listener.maximizedChanged(window);
+            }
+        }
     }
 
     /**
@@ -190,6 +196,8 @@ public class Window extends TitlePane {
 
     private Image icon = null;
     private Component activeDescendant = null;
+
+    private boolean maximized = false;
 
     private WindowListenerList windowListeners = new WindowListenerList();
     private WindowStateListenerList windowStateListeners = new WindowStateListenerList();
@@ -725,6 +733,20 @@ public class Window extends TitlePane {
                 owner.ownedWindows.remove(j, 1);
                 owner.ownedWindows.insert(this, 0);
             }
+        }
+    }
+
+    public boolean isMaximized() {
+        return maximized;
+    }
+
+    public void setMaximized(boolean maximized) {
+        if (maximized != this.maximized) {
+            this.maximized = maximized;
+
+            invalidate();
+
+            // TODO Fire event
         }
     }
 

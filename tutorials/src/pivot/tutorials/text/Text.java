@@ -19,7 +19,6 @@ import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
-import pivot.wtk.Display;
 import pivot.wtk.TextInput;
 import pivot.wtk.TextInputCharacterListener;
 import pivot.wtk.Window;
@@ -132,7 +131,7 @@ public class Text implements Application {
         });
 
         window.setContent(content);
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE, Boolean.TRUE);
+        window.setMaximized(true);
         window.open();
     }
 

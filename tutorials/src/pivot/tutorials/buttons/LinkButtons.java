@@ -20,7 +20,6 @@ import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.CardPane;
 import pivot.wtk.Component;
-import pivot.wtk.Display;
 import pivot.wtk.LinkButton;
 import pivot.wtk.Window;
 import pivot.wtkx.ComponentLoader;
@@ -51,8 +50,7 @@ public class LinkButtons implements Application {
 
         window = new Window();
         window.setContent(content);
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE,
-            Boolean.TRUE);
+        window.setMaximized(true);
         window.open();
 
     }

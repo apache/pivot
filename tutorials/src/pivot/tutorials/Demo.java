@@ -334,7 +334,7 @@ public class Demo implements Application {
         ApplicationContext.getInstance().setTitle("Pivot Demo");
 
         window = new Window();
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE, Boolean.TRUE);
+        window.setMaximized(true);
         window.setContent(component);
 
         window.open();

@@ -23,7 +23,6 @@ import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.Orientation;
 import pivot.wtk.TabPane;
-import pivot.wtk.media.Image;
 
 class TabPaneLoader extends ContainerLoader {
     public static final String TAB_PANE_TAG = "TabPane";
@@ -71,20 +70,11 @@ class TabPaneLoader extends ContainerLoader {
 
                     if (childElement.hasAttribute(ICON_URL_ATTRIBUTE)) {
                         String iconURLAttribute = childElement.getAttribute(ICON_URL_ATTRIBUTE);
-
-                        // TODO Need a way to identify the type of image to load (picture or
-                        // drawing) - an attribute may be appropriate. If the attribute is
-                        // optional, we can try to determine the type from the file
-                        // extension in the URL.
-
-                        Image icon = Image.load(rootLoader.getResource(iconURLAttribute));
-                        component.getAttributes().put(TabPane.ICON_ATTRIBUTE, icon);
+                        TabPane.setIcon(component, rootLoader.getResource(iconURLAttribute));
                     }
 
                     if (childElement.hasAttribute(LABEL_ATTRIBUTE)) {
-                        String labelAttribute = childElement.getAttribute(LABEL_ATTRIBUTE);
-                        component.getAttributes().put(TabPane.LABEL_ATTRIBUTE,
-                            rootLoader.resolve(labelAttribute).toString());
+                        TabPane.setLabel(component, childElement.getAttribute(LABEL_ATTRIBUTE));
                     }
 
                     tabPane.getTabs().add(component);

@@ -20,7 +20,6 @@ import pivot.wtk.Application;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.Button;
-import pivot.wtk.Display;
 import pivot.wtk.Window;
 import pivot.wtkx.ComponentLoader;
 
@@ -41,9 +40,7 @@ public class CursorTest implements Application {
         window = new Window();
         window.setTitle("Cursor Test");
         window.setContent(content);
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE,
-            Boolean.TRUE);
-
+        window.setMaximized(true);
         window.open();
     }
 

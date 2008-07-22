@@ -18,7 +18,6 @@ package pivot.tutorials.buttons;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
-import pivot.wtk.Display;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.PushButton;
@@ -54,8 +53,7 @@ public class RadioButtons implements Application {
 
         window = new Window();
         window.setContent(content);
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE,
-            Boolean.TRUE);
+        window.setMaximized(true);
         window.open();
     }
 

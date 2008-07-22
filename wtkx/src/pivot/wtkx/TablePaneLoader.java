@@ -107,15 +107,13 @@ class TablePaneLoader extends ContainerLoader {
                                 if (cellElement.hasAttribute(ROW_SPAN_ATTRIBUTE)) {
                                    int rowSpan = Integer.parseInt
                                       (cellElement.getAttribute(ROW_SPAN_ATTRIBUTE));
-                                   component.getAttributes().put
-                                      (TablePane.ROW_SPAN_ATTRIBUTE, rowSpan);
+                                   TablePane.setRowSpan(component, rowSpan);
                                 }
 
                                 if (cellElement.hasAttribute(COLUMN_SPAN_ATTRIBUTE)) {
                                    int columnSpan = Integer.parseInt
                                       (cellElement.getAttribute(COLUMN_SPAN_ATTRIBUTE));
-                                   component.getAttributes().put
-                                      (TablePane.COLUMN_SPAN_ATTRIBUTE, columnSpan);
+                                   TablePane.setColumnSpan(component, columnSpan);
                                 }
 
                                 tablePane.setCellComponent(row, column, component);

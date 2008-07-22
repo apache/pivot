@@ -20,9 +20,9 @@ import pivot.collections.Sequence;
 
 import pivot.wtk.Alert;
 import pivot.wtk.Component;
-import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Form;
+import pivot.wtk.FormAttributeListener;
 import pivot.wtk.FormListener;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
@@ -30,7 +30,8 @@ import pivot.wtk.Label;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
 
-public class FormSkin extends ContainerSkin implements FormListener {
+public class FormSkin extends ContainerSkin
+    implements FormListener, FormAttributeListener {
     private ArrayList<Label> labels = new ArrayList<Label>();
     private ArrayList<ImageView> flagImageViews = new ArrayList<ImageView>();
 
@@ -74,6 +75,7 @@ public class FormSkin extends ContainerSkin implements FormListener {
 
         Form form = (Form)component;
         form.getFormListeners().add(this);
+        form.getFormAttributeListeners().add(this);
 
         // Initialize for existing fields
         for (int i = 0, n = form.getComponents().getLength(); i < n; i++) {
@@ -86,6 +88,7 @@ public class FormSkin extends ContainerSkin implements FormListener {
     public void uninstall() {
         Form form = (Form)getComponent();
         form.getFormListeners().remove(this);
+        form.getFormAttributeListeners().remove(this);
 
         // Remove all added labels and flag image views
         for (int i = 0, n = form.getComponents().getLength(); i < n; i++) {
@@ -453,37 +456,13 @@ public class FormSkin extends ContainerSkin implements FormListener {
         invalidateComponent();
     }
 
-    // Component attribute events
-    public void attributeAdded(Component component, Container.Attribute attribute) {
-        super.attributeAdded(component, attribute);
-        updateField(component, attribute);
+    // Form attribute events
+    public void labelChanged(Form form, Component component, String previousLabel) {
+        updateLabel(form.getFields().indexOf(component));
     }
 
-    public void attributeUpdated(Component component, Container.Attribute attribute,
-        Object previousValue) {
-        super.attributeUpdated(component, attribute, previousValue);
-        updateField(component, attribute);
-    }
-
-    public void attributeRemoved(Component component, Container.Attribute attribute,
-        Object value) {
-        super.attributeRemoved(component, attribute, value);
-        updateField(component, attribute);
-    }
-
-    private void updateField(Component component, Container.Attribute attribute) {
-        Form form = (Form)getComponent();
-        int index = form.getFields().indexOf(component);
-
-        if (index != -1) {
-            if (attribute == Form.LABEL_ATTRIBUTE) {
-                updateLabel(index);
-            } else if (attribute == Form.FLAG_ATTRIBUTE) {
-                updateFlag(index);
-            } else {
-                // No-op
-            }
-        }
+    public void flagChanged(Form form, Component component, Form.Flag previousFlag) {
+        updateFlag(form.getFields().indexOf(component));
     }
 
     private void updateLabel(int index) {
@@ -491,7 +470,7 @@ public class FormSkin extends ContainerSkin implements FormListener {
         Component field = form.getFields().get(index);
 
         Label label = labels.get(index);
-        String labelText = (String)field.getAttributes().get(Form.LABEL_ATTRIBUTE);
+        String labelText = Form.getLabel(field);
         label.setText((labelText == null) ? "" : labelText + ":");
     }
 
@@ -500,7 +479,7 @@ public class FormSkin extends ContainerSkin implements FormListener {
         Component field = form.getFields().get(index);
 
         ImageView flagImageView = flagImageViews.get(index);
-        Form.Flag flag = (Form.Flag)field.getAttributes().get(Form.FLAG_ATTRIBUTE);
+        Form.Flag flag = Form.getFlag(field);
 
         Image flagImage = null;
         String flagMessage = null;

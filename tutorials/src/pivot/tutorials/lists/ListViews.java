@@ -19,7 +19,6 @@ import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
-import pivot.wtk.Display;
 import pivot.wtk.Label;
 import pivot.wtk.ListView;
 import pivot.wtk.ListViewSelectionListener;
@@ -69,8 +68,7 @@ public class ListViews implements Application {
 
         window = new Window();
         window.setContent(content);
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE,
-            Boolean.TRUE);
+        window.setMaximized(true);
         window.open();
     }
 

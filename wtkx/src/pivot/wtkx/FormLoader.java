@@ -54,8 +54,7 @@ class FormLoader extends ContainerLoader {
 
                     if (childElement.hasAttribute(LABEL_ATTRIBUTE)) {
                         String labelAttribute = childElement.getAttribute(LABEL_ATTRIBUTE);
-                        component.getAttributes().put(Form.LABEL_ATTRIBUTE,
-                            rootLoader.resolve(labelAttribute).toString());
+                        Form.setLabel(component, rootLoader.resolve(labelAttribute).toString());
                     }
 
                     if (childElement.hasAttribute(FLAG_TYPE_ATTRIBUTE)) {
@@ -68,7 +67,7 @@ class FormLoader extends ContainerLoader {
                         }
 
                         Form.Flag flag = new Form.Flag(flagType, flagMessage);
-                        component.getAttributes().put(Form.FLAG_ATTRIBUTE, flag);
+                        Form.setFlag(component, flag);
                     }
 
                     form.getFields().add(component);

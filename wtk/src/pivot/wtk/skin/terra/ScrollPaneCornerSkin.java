@@ -15,10 +15,8 @@
  */
 package pivot.wtk.skin.terra;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import pivot.wtk.Component;
@@ -71,8 +69,6 @@ public class ScrollPaneCornerSkin extends ComponentSkin {
     }
 
     public void paint(Graphics2D graphics) {
-        ScrollPane.Corner corner = (ScrollPane.Corner)getComponent();
-
         int width = getWidth();
         int height = getHeight();
 

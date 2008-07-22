@@ -42,25 +42,6 @@ import pivot.util.ListenerList;
  */
 public abstract class Container extends Component {
     /**
-     * Class representing an "attached property", a dynamically assigned
-     * component attribute that has meaning only within a particular container
-     * context.
-     *
-     * @author gbrown
-     */
-    public static class Attribute {
-        private Class<?> type = null;
-
-        protected Attribute(Class<?> type) {
-            this.type = type;
-        }
-
-        public Class<?> getType() {
-            return type;
-        }
-    }
-
-    /**
      * Internal class for managing the container's component list.
      *
      * @author gbrown

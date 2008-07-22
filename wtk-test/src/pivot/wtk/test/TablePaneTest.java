@@ -16,7 +16,6 @@
 package pivot.wtk.test;
 
 import pivot.wtk.Application;
-import pivot.wtk.Display;
 import pivot.wtk.PushButton;
 import pivot.wtk.TablePane;
 import pivot.wtk.Window;
@@ -45,8 +44,7 @@ public class TablePaneTest implements Application {
         window = new Window();
         window.setTitle("TableView Test");
         window.setContent(tablePane);
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE, Boolean.TRUE);
-
+        window.setMaximized(true);
         window.open();
     }
 

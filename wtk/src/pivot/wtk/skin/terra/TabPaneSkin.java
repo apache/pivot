@@ -25,7 +25,6 @@ import pivot.collections.Sequence;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
-import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
@@ -36,6 +35,7 @@ import pivot.wtk.Rectangle;
 import pivot.wtk.TabPane;
 import pivot.wtk.TabPaneListener;
 import pivot.wtk.TabPaneSelectionListener;
+import pivot.wtk.TabPaneAttributeListener;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Button.Group;
 import pivot.wtk.content.ButtonData;
@@ -55,7 +55,8 @@ import pivot.wtk.skin.ContainerSkin;
  * @author gbrown
  */
 public class TabPaneSkin extends ContainerSkin
-    implements TabPaneListener, TabPaneSelectionListener, Button.GroupListener {
+    implements TabPaneListener, TabPaneSelectionListener, TabPaneAttributeListener,
+        Button.GroupListener {
     public static class TabButton extends Button {
         private TabPane tabPane = null;
 
@@ -482,6 +483,7 @@ public class TabPaneSkin extends ContainerSkin
         // Add this as a listener on the tab pane
         tabPane.getTabPaneListeners().add(this);
         tabPane.getTabPaneSelectionListeners().add(this);
+        tabPane.getTabPaneAttributeListeners().add(this);
 
         // Add the button flow pane
         tabPane.getComponents().add(buttonFlowPane);
@@ -492,7 +494,7 @@ public class TabPaneSkin extends ContainerSkin
         // Add buttons for all existing tabs
         for (Component tab : tabPane.getTabs()) {
             TabPaneSkin.TabButton tabButton = new TabPaneSkin.TabButton(tabPane,
-                getButtonData(tab));
+                new ButtonData(TabPane.getIcon(tab), TabPane.getLabel(tab)));
             tabButton.setGroup(tabButtonGroup);
 
             buttonFlowPane.getComponents().add(tabButton);
@@ -505,6 +507,7 @@ public class TabPaneSkin extends ContainerSkin
         // Remove this as a listener on the tab pane
         tabPane.getTabPaneListeners().remove(this);
         tabPane.getTabPaneSelectionListeners().remove(this);
+        tabPane.getTabPaneAttributeListeners().remove(this);
 
         // Remove existing buttons
         buttonFlowPane.getComponents().removeAll();
@@ -946,52 +949,16 @@ public class TabPaneSkin extends ContainerSkin
             || super.containsKey(key));
     }
 
-    @Override
-    public void attributeAdded(Component component, Container.Attribute attribute) {
-        super.attributeAdded(component, attribute);
-
-        if (attribute == TabPane.ICON_ATTRIBUTE
-            || attribute == TabPane.LABEL_ATTRIBUTE) {
-            updateButtonData(component);
-        }
-    }
-
-    @Override
-    public void attributeUpdated(Component component, Container.Attribute attribute,
-        Object previousValue) {
-        super.attributeUpdated(component, attribute, previousValue);
-
-        if (attribute == TabPane.ICON_ATTRIBUTE
-            || attribute == TabPane.LABEL_ATTRIBUTE) {
-            updateButtonData(component);
-        }
-    }
-
-    @Override
-    public void attributeRemoved(Component component, Container.Attribute attribute,
-        Object value) {
-        super.attributeRemoved(component, attribute, value);
-
-        if (attribute == TabPane.ICON_ATTRIBUTE
-            || attribute == TabPane.LABEL_ATTRIBUTE) {
-            updateButtonData(component);
-        }
-    }
-
-    protected ButtonData getButtonData(Component tab) {
-        Image icon = (Image)tab.getAttributes().get(TabPane.ICON_ATTRIBUTE);
-        String label = (String)tab.getAttributes().get(TabPane.LABEL_ATTRIBUTE);
-
-        return new ButtonData(icon, label);
-    }
-
     protected void updateButtonData(Component tab) {
         TabPane tabPane = (TabPane)getComponent();
         int tabIndex = tabPane.getTabs().indexOf(tab);
 
         if (tabIndex != -1) {
-            TabPaneSkin.TabButton tabButton = (TabPaneSkin.TabButton)buttonFlowPane.getComponents().get(tabIndex);
-            tabButton.setButtonData(getButtonData(tab));
+            TabPaneSkin.TabButton tabButton =
+                (TabPaneSkin.TabButton)buttonFlowPane.getComponents().get(tabIndex);
+
+            tabButton.setButtonData(new ButtonData(TabPane.getIcon(tab),
+                TabPane.getLabel(tab)));
         }
     }
 
@@ -1025,7 +992,7 @@ public class TabPaneSkin extends ContainerSkin
         // Create a new button for the tab
         Component tab = tabPane.getTabs().get(index);
         TabPaneSkin.TabButton tabButton = new TabPaneSkin.TabButton(tabPane,
-            getButtonData(tab));
+            new ButtonData(TabPane.getIcon(tab), TabPane.getLabel(tab)));
         tabButton.setGroup(tabButtonGroup);
 
         buttonFlowPane.getComponents().insert(tabButton, index);
@@ -1056,6 +1023,15 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         invalidateComponent();
+    }
+
+    // Tab pane attribute events
+    public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
+        updateButtonData(component);
+    }
+
+    public void labelChanged(TabPane tabPane, Component component, String previousLabel) {
+        updateButtonData(component);
     }
 
     // Button group events

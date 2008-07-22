@@ -21,7 +21,6 @@ import java.awt.Graphics2D;
 
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentAttributeListener;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerListener;
 import pivot.wtk.Dimensions;
@@ -30,7 +29,7 @@ import pivot.wtk.FocusTraversalPolicy;
 import pivot.wtk.Rectangle;
 
 public abstract class ContainerSkin extends ComponentSkin
-    implements ContainerListener, ComponentAttributeListener {
+    implements ContainerListener {
     /**
      * Focus traversal policy that determines traversal order based on the order
      * of components in the container's component sequence.
@@ -112,11 +111,6 @@ public abstract class ContainerSkin extends ComponentSkin
         // Add this as a container listener
         container.getContainerListeners().add(this);
 
-        // Add this as an attribute listener on all child components
-        for (Component childComponent : container.getComponents()) {
-            childComponent.getComponentAttributeListeners().add(this);
-        }
-
         // Set the focus traversal policy
         container.setFocusTraversalPolicy(DEFAULT_FOCUS_TRAVERSAL_POLICY);
     }
@@ -126,11 +120,6 @@ public abstract class ContainerSkin extends ComponentSkin
 
         // Remove this as a container listener
         container.getContainerListeners().remove(this);
-
-        // Remove this as an attribute listener on all child components
-        for (Component childComponent : container.getComponents()) {
-            childComponent.getComponentAttributeListeners().add(this);
-        }
 
         super.uninstall();
     }
@@ -205,15 +194,9 @@ public abstract class ContainerSkin extends ComponentSkin
 
     // Container events
     public void componentInserted(Container container, int index) {
-        Component component = container.getComponents().get(index);
-        component.getComponentAttributeListeners().add(this);
     }
 
     public void componentsRemoved(Container container, int index, Sequence<Component> components) {
-        for (int i = 0, n = components.getLength(); i < n; i++) {
-            Component component = components.get(i);
-            component.getComponentAttributeListeners().remove(this);
-        }
     }
 
     public void contextKeyChanged(Container container, String previousContextKey) {
@@ -223,17 +206,5 @@ public abstract class ContainerSkin extends ComponentSkin
     public void focusTraversalPolicyChanged(Container container,
         FocusTraversalPolicy previousFocusTraversalPolicy) {
         // No-op
-    }
-
-    // Component attribute events
-    public void attributeAdded(Component component, Container.Attribute attribute) {
-    }
-
-    public void attributeUpdated(Component component, Container.Attribute attribute,
-        Object previousValue) {
-    }
-
-    public void attributeRemoved(Component component, Container.Attribute attribute,
-        Object value) {
     }
 }

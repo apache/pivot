@@ -434,7 +434,10 @@ public class ComponentLoader extends Loader {
                         stylesReader = new StringReader(stylesAttribute);
                         JSONSerializer jsonSerializer = new JSONSerializer();
                         Map<String, Object> styles = (Map<String, Object>)jsonSerializer.readObject(stylesReader);
-                        component.applyStyles(styles);
+
+                        for (String key : styles) {
+                            component.getStyles().put(key, styles.get(key));
+                        }
                     } catch (Exception exception) {
                         System.out.println("Unable to apply styles for " + tagName
                             + ": " + exception.getMessage());

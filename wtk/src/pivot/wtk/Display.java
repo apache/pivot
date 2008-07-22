@@ -24,8 +24,6 @@ public final class Display extends Container {
         }
     }
 
-    public static final Attribute MAXIMIZED_ATTRIBUTE = new Attribute(Boolean.class);
-
     private static Display instance = new Display();
 
 	private Display() {

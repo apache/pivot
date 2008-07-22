@@ -141,6 +141,9 @@ public class WindowSkin extends TitlePaneSkin
     public void focusHostChanged(Window window) {
     }
 
+    public void maximizedChanged(Window window) {
+    }
+
     // Window state events
     public void windowOpened(Window window) {
     }

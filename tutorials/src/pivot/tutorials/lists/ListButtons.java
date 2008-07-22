@@ -20,7 +20,6 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
-import pivot.wtk.Display;
 import pivot.wtk.ImageView;
 import pivot.wtk.ListButton;
 import pivot.wtk.ListButtonSelectionListener;
@@ -82,8 +81,7 @@ public class ListButtons implements Application {
 
         window = new Window();
         window.setContent(content);
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE,
-            Boolean.TRUE);
+        window.setMaximized(true);
         window.open();
     }
 

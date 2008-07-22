@@ -20,7 +20,6 @@ import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
-import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Orientation;
@@ -107,8 +106,7 @@ public class FlowPanes implements Application, ButtonStateListener {
 
         window = new Window();
         window.setContent(content);
-        window.getAttributes().put(Display.MAXIMIZED_ATTRIBUTE,
-            Boolean.TRUE);
+        window.setMaximized(true);
         window.open();
     }
 

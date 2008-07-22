@@ -17,8 +17,11 @@ package pivot.wtk;
 
 import java.util.Iterator;
 
+import pivot.beans.Bean;
 import pivot.collections.ArrayList;
+import pivot.collections.Map;
 import pivot.collections.Sequence;
+import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
 import pivot.wtk.Alert;
 
@@ -47,6 +50,9 @@ public class Form extends Container {
          */
         private String message = null;
 
+        public static final String ALERT_TYPE_KEY = "alertType";
+        public static final String MESSAGE_KEY = "message";
+
         /**
          * Creates a new flag with the given alert type and no message.
          *
@@ -68,6 +74,30 @@ public class Form extends Container {
          * no message.
          */
         public Flag(Alert.Type alertType, String message) {
+            setFlag(alertType, message);
+        }
+
+        public Flag(String flag) {
+            if (flag == null) {
+                throw new IllegalArgumentException("flag is null.");
+            }
+
+            Map<String, Object> flagMap = JSONSerializer.parseMap(flag);
+
+            Alert.Type alertType = null;
+            if (flagMap.containsKey(ALERT_TYPE_KEY)) {
+                alertType = Alert.Type.decode(flagMap.get(ALERT_TYPE_KEY).toString());
+            }
+
+            String message = null;
+            if (flagMap.containsKey(MESSAGE_KEY)) {
+                message = flagMap.get(MESSAGE_KEY).toString();
+            }
+
+            setFlag(alertType, message);
+        }
+
+        private void setFlag(Alert.Type alertType, String message) {
             if (alertType == null) {
                 throw new IllegalArgumentException("alertType is null.");
             }
@@ -190,32 +220,50 @@ public class Form extends Container {
         }
     }
 
-
     /**
-     * The backing list for form fields.
+     * Form attribute listener list.
      */
+    private class FormAttributeListenerList extends ListenerList<FormAttributeListener>
+        implements FormAttributeListener {
+        public void labelChanged(Form form, Component component, String previousLabel) {
+            for (FormAttributeListener listener : this) {
+                listener.labelChanged(form, component, previousLabel);
+            }
+        }
+
+        public void flagChanged(Form form, Component component, Form.Flag previousFlag) {
+            for (FormAttributeListener listener : this) {
+                listener.flagChanged(form, component, previousFlag);
+            }
+        }
+    }
+
+    private static class Attributes extends Bean {
+        private String label = null;
+        private Flag flag = null;
+
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(String label) {
+            this.label = label;
+        }
+
+        public Flag getFlag() {
+            return flag;
+        }
+
+        public void setFlag(Flag flag) {
+            this.flag = flag;
+        }
+    }
+
     private ArrayList<Component> fields = new ArrayList<Component>();
-
-    /**
-     * The field sequence wrapper instance.
-     */
     private FieldSequence fieldSequence = new FieldSequence();
 
-    /**
-     * The form listener list instance.
-     */
     private FormListenerList formListeners = new FormListenerList();
-
-    /**
-     * Attribute representing a field label.
-     */
-    public static final Attribute LABEL_ATTRIBUTE = new Attribute(String.class);
-
-    /**
-     * Attribute representing a field flag.
-     */
-    public static final Attribute FLAG_ATTRIBUTE = new Attribute(Flag.class);
-
+    private FormAttributeListenerList formAttributeListeners = new FormAttributeListenerList();
 
     /**
      * Creates a new form.
@@ -249,7 +297,7 @@ public class Form extends Container {
         int count = 0;
 
         for (Component field : fields) {
-            Flag flag = (Flag)field.getAttributes().get(FLAG_ATTRIBUTE);
+            Flag flag = getFlag(field);
 
             if (flag != null
                && (alertType == null
@@ -322,5 +370,61 @@ public class Form extends Container {
      */
     public ListenerList<FormListener> getFormListeners() {
         return formListeners;
+    }
+
+    /**
+     * Returns the form attribute listener list.
+     *
+     * @return
+     * The form attribute listener list.
+     */
+    public ListenerList<FormAttributeListener> getFormAttributeListeners() {
+        return formAttributeListeners;
+    }
+
+    public static String getLabel(Component component) {
+        Attributes attributes = (Attributes)component.getAttributes().get(Form.class);
+        return (attributes == null) ? null : attributes.getLabel();
+    }
+
+    public static void setLabel(Component component, String label) {
+        Attributes attributes = (Attributes)component.getAttributes().get(Form.class);
+        if (attributes == null) {
+            attributes = new Attributes();
+            component.getAttributes().put(Form.class, attributes);
+        }
+
+        String previousLabel = attributes.getLabel();
+        attributes.setLabel(label);
+
+        Form form = (Form)component.getParent();
+        if (form != null) {
+            form.formAttributeListeners.labelChanged(form, component, previousLabel);
+        }
+    }
+
+    public static Flag getFlag(Component component) {
+        Attributes attributes = (Attributes)component.getAttributes().get(Form.class);
+        return (attributes == null) ? null : attributes.getFlag();
+    }
+
+    public static void setFlag(Component component, Flag flag) {
+        Attributes attributes = (Attributes)component.getAttributes().get(Form.class);
+        if (attributes == null) {
+            attributes = new Attributes();
+            component.getAttributes().put(Form.class, attributes);
+        }
+
+        Flag previousFlag = attributes.getFlag();
+        attributes.setFlag(flag);
+
+        Form form = (Form)component.getParent();
+        if (form != null) {
+            form.formAttributeListeners.flagChanged(form, component, previousFlag);
+        }
+    }
+
+    public static final void setFlag(Component component, String flag) {
+        setFlag(component, new Flag(flag));
     }
 }

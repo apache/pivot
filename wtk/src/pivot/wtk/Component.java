@@ -20,7 +20,6 @@ import java.awt.Graphics2D;
 import pivot.beans.Bean;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
-import pivot.collections.Map;
 import pivot.util.ListenerList;
 import pivot.wtk.Mouse.Button;
 import pivot.wtk.Mouse.ScrollType;
@@ -37,10 +36,6 @@ import pivot.wtk.Mouse.ScrollType;
  * different way to visualize the state of the model data defined by the
  * component.
  *
- * NOTE The style and attribute methods return a Dictonary instead of a Map
- * because a Map would fire events with a Map as a source - callers wouldn't
- * know which component fired the event.
- *
  * TODO Add a getShape() method that will support non-rectangular components.
  * DisplaySkin can use this to paint an appropriate drop shadow, and Component
  * can use it to perform hit testing for mouse events and cursor display.
@@ -48,55 +43,6 @@ import pivot.wtk.Mouse.ScrollType;
  * @version 1.0 (3/13/2007)
  */
 public abstract class Component extends Bean implements Visual {
-    /**
-     * Attribute dictionary implementation.
-     *
-     * @author gbrown
-     */
-    public final class AttributeDictionary implements Dictionary<Container.Attribute, Object> {
-        private HashMap<Container.Attribute, Object> attributeMap = new HashMap<Container.Attribute, Object>();
-
-        public Object get(Container.Attribute key) {
-            return attributeMap.get(key);
-        }
-
-        public Object put(Container.Attribute key, Object value) {
-            // Validate value type against attribute type
-            if (value != null
-                && !key.getType().isInstance(value)) {
-                throw new IllegalArgumentException("Value is not an instance of "
-                    + key.getType().toString());
-            }
-
-            boolean update = attributeMap.containsKey(key);
-            Object previousValue = attributeMap.put(key, value);
-
-            if (update) {
-                componentAttributeListeners.attributeUpdated(Component.this, key, previousValue);
-            } else {
-                componentAttributeListeners.attributeAdded(Component.this, key);
-            }
-
-            return previousValue;
-        }
-
-        public Object remove(Container.Attribute key) {
-            Object value = attributeMap.remove(key);
-
-            componentAttributeListeners.attributeRemoved(Component.this, key, value);
-
-            return value;
-        }
-
-        public boolean containsKey(Container.Attribute key) {
-            return attributeMap.containsKey(key);
-        }
-
-        public boolean isEmpty() {
-            return attributeMap.isEmpty();
-        }
-    }
-
     /**
      * Style dictionary implementation.
      *
@@ -264,29 +210,6 @@ public abstract class Component extends Bean implements Visual {
         public void focusedChanged(Component component, boolean temporary) {
             for (ComponentStateListener listener : this) {
                 listener.focusedChanged(component, temporary);
-            }
-        }
-    }
-
-    private class ComponentAttributeListenerList extends
-        ListenerList<ComponentAttributeListener> implements ComponentAttributeListener {
-        public void attributeAdded(Component component, Container.Attribute attribute) {
-            for (ComponentAttributeListener listener : this) {
-                listener.attributeAdded(component, attribute);
-            }
-        }
-
-        public void attributeUpdated(Component component,
-            Container.Attribute attribute, Object previousValue) {
-            for (ComponentAttributeListener listener : this) {
-                listener.attributeUpdated(component, attribute, previousValue);
-            }
-        }
-
-        public void attributeRemoved(Component component,
-            Container.Attribute attribute, Object value) {
-            for (ComponentAttributeListener listener : this) {
-                listener.attributeRemoved(component, attribute, value);
             }
         }
     }
@@ -468,9 +391,10 @@ public abstract class Component extends Bean implements Visual {
     private DropHandler dropHandler = null;
 
     /**
-     * Contains attached properties.
+     * Map of attached attributes.
      */
-    private AttributeDictionary attributeDictionary = new AttributeDictionary();
+    private HashMap<Class<? extends Container>, Object> attributes =
+        new HashMap<Class<? extends Container>, Object>();
 
     /**
      * Proxy class for getting/setting style properties on the skin.
@@ -483,7 +407,6 @@ public abstract class Component extends Bean implements Visual {
     private ComponentListenerList componentListeners = new ComponentListenerList();
     private ComponentLayoutListenerList componentLayoutListeners = new ComponentLayoutListenerList();
     private ComponentStateListenerList componentStateListeners = new ComponentStateListenerList();
-    private ComponentAttributeListenerList componentAttributeListeners = new ComponentAttributeListenerList();
     private ComponentSkinListenerList componentSkinListeners = new ComponentSkinListenerList();
     private ComponentMouseListenerList componentMouseListeners = new ComponentMouseListenerList();
     private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
@@ -1944,10 +1867,6 @@ public abstract class Component extends Bean implements Visual {
         componentDataListeners.userDataChanged(this, previousUserData);
     }
 
-    public AttributeDictionary getAttributes() {
-        return attributeDictionary;
-    }
-
     /**
      * Returns a dictionary instance representing the component's style
      * properties. This is effectively a pass-through to the skin's dictionary
@@ -1960,10 +1879,8 @@ public abstract class Component extends Bean implements Visual {
         return styleDictionary;
     }
 
-    public void applyStyles(Map<String, Object> properties) {
-        for (String key : properties) {
-            styleDictionary.put(key, properties.get(key));
-        }
+    protected Dictionary<Class<? extends Container>, Object> getAttributes() {
+        return attributes;
     }
 
     protected boolean mouseMove(int x, int y) {
@@ -2125,10 +2042,6 @@ public abstract class Component extends Bean implements Visual {
 
     public ListenerList<ComponentStateListener> getComponentStateListeners() {
         return componentStateListeners;
-    }
-
-    public ListenerList<ComponentAttributeListener> getComponentAttributeListeners() {
-        return componentAttributeListeners;
     }
 
     public ListenerList<ComponentSkinListener> getComponentSkinListeners() {

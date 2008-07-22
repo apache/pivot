@@ -25,7 +25,6 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
-import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
@@ -33,13 +32,14 @@ import pivot.wtk.Point;
 import pivot.wtk.Rectangle;
 import pivot.wtk.TablePane;
 import pivot.wtk.TablePaneListener;
+import pivot.wtk.TablePaneAttributeListener;
 
 /**
  *
  * @author tvolkert
  */
 public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
-    TablePaneListener {
+    TablePaneListener, TablePaneAttributeListener {
     private Insets padding = new Insets(0);
     private int spacing = 0;
     private boolean showHorizontalGridLines = false;
@@ -55,12 +55,14 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
         TablePane tablePane = (TablePane)component;
         tablePane.getTablePaneListeners().add(this);
+        tablePane.getTablePaneAttributeListeners().add(this);
     }
 
     @Override
     public void uninstall() {
         TablePane tablePane = (TablePane)getComponent();
         tablePane.getTablePaneListeners().remove(this);
+        tablePane.getTablePaneAttributeListeners().remove(this);
 
         super.uninstall();
     }
@@ -275,25 +277,13 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     if (child.isDisplayable()) {
                         child.setLocation(componentX, componentY);
 
-                        Component.AttributeDictionary childAttributes = child.getAttributes();
-
-                        int colSpan = 1;
-                        if (childAttributes.containsKey(TablePane.COLUMN_SPAN_ATTRIBUTE)) {
-                            colSpan = Math.max(
-                                (Integer)childAttributes.get(TablePane.COLUMN_SPAN_ATTRIBUTE),
-                                1);
-                        }
+                        int colSpan = TablePane.getColumnSpan(child);
                         int childWidth = (colSpan - 1) * spacing;
                         for (int k = 0; k < colSpan; k++) {
                             childWidth += columnWidths[j + k];
                         }
 
-                        int rowSpan = 1;
-                        if (childAttributes.containsKey(TablePane.ROW_SPAN_ATTRIBUTE)) {
-                            rowSpan = Math.max(
-                                (Integer)childAttributes.get(TablePane.ROW_SPAN_ATTRIBUTE),
-                                1);
-                        }
+                        int rowSpan = TablePane.getRowSpan(child);
                         int childHeight = (rowSpan - 1) * spacing;
                         for (int k = 0; k < rowSpan; k++) {
                             childHeight += rowHeights[i + k];
@@ -523,23 +513,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     Component component = tablePane.getCellComponent(i, j);
 
                     if (component != null) {
-                        Component.AttributeDictionary attributes =
-                            component.getAttributes();
-
-                        int rowSpan = 1;
-                        int colSpan = 1;
-
-                        Integer rowSpanAttribute = (Integer)attributes.get
-                            (TablePane.ROW_SPAN_ATTRIBUTE);
-                        if (rowSpanAttribute != null) {
-                            rowSpan = Math.max(rowSpan, rowSpanAttribute);
-                        }
-
-                        Integer colSpanAttribute = (Integer)attributes.get
-                            (TablePane.COLUMN_SPAN_ATTRIBUTE);
-                        if (colSpanAttribute != null) {
-                            colSpan = Math.max(colSpan, colSpanAttribute);
-                        }
+                        int rowSpan = TablePane.getRowSpan(component);
+                        int colSpan = TablePane.getColumnSpan(component);
 
                         if (rowSpan > 1
                             || colSpan > 1) {
@@ -791,39 +766,6 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         setSelectionBackgroundColor(Color.decode(selectionBackgroundColor));
     }
 
-    // ComponentAttributeListener methods
-
-    @Override
-    public void attributeAdded(Component component, Container.Attribute attribute) {
-        if (attribute == TablePane.COLUMN_SPAN_ATTRIBUTE
-            || attribute == TablePane.ROW_SPAN_ATTRIBUTE) {
-            invalidateComponent();
-        } else {
-            super.attributeAdded(component, attribute);
-        }
-    }
-
-    @Override
-    public void attributeUpdated(Component component,
-        Container.Attribute attribute, Object previousValue) {
-        if (attribute == TablePane.COLUMN_SPAN_ATTRIBUTE
-            || attribute == TablePane.ROW_SPAN_ATTRIBUTE) {
-            invalidateComponent();
-        } else {
-            super.attributeUpdated(component, attribute, previousValue);
-        }
-    }
-
-    @Override
-    public void attributeRemoved(Component component,
-        Container.Attribute attribute, Object value) {
-        if (attribute == TablePane.COLUMN_SPAN_ATTRIBUTE
-            || attribute == TablePane.ROW_SPAN_ATTRIBUTE) {
-            invalidateComponent();
-        } else {
-            super.attributeRemoved(component, attribute, value);
-        }
-    }
 
     // TablePane.Skin methods
 
@@ -958,5 +900,17 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     public void cellComponentChanged(TablePane tablePane, int row, int column,
         Component previousComponent) {
         // No-op
+    }
+
+    // TablePaneAttribute events
+
+    public void rowSpanChanged(TablePane tablePane, Component component,
+        int previousRowSpan) {
+        invalidateComponent();
+    }
+
+    public void columnSpanChanged(TablePane tablePane, Component component,
+        int previousColumnSpan) {
+        invalidateComponent();
     }
 }

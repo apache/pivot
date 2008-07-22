@@ -17,7 +17,6 @@ package pivot.wtk.skin;
 
 import java.awt.Color;
 import pivot.wtk.Component;
-import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.Window;
@@ -44,11 +43,13 @@ public class DisplaySkin extends ContainerSkin {
         Display display = (Display)getComponent();
 
         // Set all components to their preferred sizes
-        for (Component window : display.getComponents()) {
+        for (Component component : display.getComponents()) {
+            Window window = (Window)component;
+
             if (window.isDisplayable()) {
-                Boolean maximized = (Boolean)window.getAttributes().get(Display.MAXIMIZED_ATTRIBUTE);
-                if (maximized != null
-                    && maximized) {
+                boolean maximized = window.isMaximized();
+
+                if (maximized) {
                     window.setLocation(0, 0);
                     window.setSize(display.getSize());
                 } else {
@@ -101,20 +102,6 @@ public class DisplaySkin extends ContainerSkin {
         }
 
         return consumed;
-    }
-
-    public void attributeAdded(Component component, Container.Attribute attribute) {
-        getComponent().invalidate();
-    }
-
-    public void attributeUpdated(Component component, Container.Attribute attribute,
-        Object previousValue) {
-        getComponent().invalidate();
-    }
-
-    public void attributeRemoved(Component component, Container.Attribute attribute,
-        Object value) {
-        getComponent().invalidate();
     }
 }
 

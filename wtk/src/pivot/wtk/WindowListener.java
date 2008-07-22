@@ -21,4 +21,5 @@ public interface WindowListener {
     public void iconChanged(Window window, Image previousIcon);
     public void activeChanged(Window window);
     public void focusHostChanged(Window window);
+    public void maximizedChanged(Window window);
 }
