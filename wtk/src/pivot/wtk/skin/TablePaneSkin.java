@@ -22,7 +22,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Line2D;
 
 import pivot.collections.ArrayList;
-import pivot.collections.Map;
+import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
@@ -35,35 +35,17 @@ import pivot.wtk.TablePane;
 import pivot.wtk.TablePaneListener;
 
 /**
- * TODO Respect TablePane.MARGIN_ATTRIBUTE
  *
  * @author tvolkert
  */
 public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     TablePaneListener {
-    // Style properties
-    protected Insets padding = DEFAULT_PADDING;
-    protected int spacing = DEFAULT_SPACING;
-    protected boolean showHorizontalGridLines = DEFAULT_SHOW_HORIZONTAL_GRID_LINES;
-    protected boolean showVerticalGridLines = DEFAULT_SHOW_VERTICAL_GRID_LINES;
-    protected Color gridColor = DEFAULT_GRID_COLOR;
-    protected Color selectionBackgroundColor = DEFAULT_SELECTION_BACKGROUND_COLOR;
-
-    // Default style values
-    private static final Insets DEFAULT_PADDING = new Insets(0);
-    private static final int DEFAULT_SPACING = 0;
-    private static final boolean DEFAULT_SHOW_HORIZONTAL_GRID_LINES = false;
-    private static final boolean DEFAULT_SHOW_VERTICAL_GRID_LINES = false;
-    private static final Color DEFAULT_GRID_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color DEFAULT_SELECTION_BACKGROUND_COLOR = new Color(0xCC, 0xCA, 0xC2);
-
-    // Style keys
-    protected static final String PADDING_KEY = "padding";
-    protected static final String SPACING_KEY = "spacing";
-    protected static final String SHOW_HORIZONTAL_GRID_LINES_KEY = "showHorizontalGridLines";
-    protected static final String SHOW_VERTICAL_GRID_LINES_KEY = "showVerticalGridLines";
-    protected static final String GRID_COLOR_KEY = "gridColor";
-    protected static final String SELECTION_BACKGROUND_COLOR_KEY = "selectionBackgroundColor";
+    private Insets padding = new Insets(0);
+    private int spacing = 0;
+    private boolean showHorizontalGridLines = false;
+    private boolean showVerticalGridLines = false;
+    private Color gridColor = new Color(0x99, 0x99, 0x99);
+    private Color selectionBackgroundColor = new Color(0xCC, 0xCA, 0xC2);
 
     @Override
     public void install(Component component) {
@@ -712,166 +694,101 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         return consumed;
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(PADDING_KEY)) {
-            value = padding;
-        } else if (key.equals(SPACING_KEY)) {
-            value = spacing;
-        } else if (key.equals(SHOW_HORIZONTAL_GRID_LINES_KEY)) {
-            value = showHorizontalGridLines;
-        } else if (key.equals(SHOW_VERTICAL_GRID_LINES_KEY)) {
-            value = showVerticalGridLines;
-        } else if (key.equals(GRID_COLOR_KEY)) {
-            value = gridColor;
-        } else if (key.equals(SELECTION_BACKGROUND_COLOR_KEY)) {
-            value = selectionBackgroundColor;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public Insets getPadding() {
+        return padding;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
         }
 
-        Object previousValue = null;
+        this.padding = padding;
+        invalidateComponent();
+    }
 
-        if (key.equals(PADDING_KEY)) {
-            if (value instanceof Number) {
-                value = new Insets(((Number)value).intValue());
-            } else {
-                if (value instanceof Map<?, ?>) {
-                    value = new Insets((Map<String, Object>)value);
-                }
-            }
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
 
-            validatePropertyType(key, value, Insets.class, false);
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
 
-            previousValue = padding;
-            padding = (Insets)value;
+        setPadding(new Insets(padding));
+    }
 
-            invalidateComponent();
-        } else if (key.equals(SPACING_KEY)) {
-            if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
+    public int getSpacing() {
+        return spacing;
+    }
 
-            validatePropertyType(key, value, Integer.class, false);
+    public void setSpacing(int spacing) {
+        this.spacing = spacing;
+        invalidateComponent();
+    }
 
-            previousValue = spacing;
-            spacing = (Integer)value;
+    public boolean getShowHorizontalGridLines() {
+        return showHorizontalGridLines;
+    }
 
-            invalidateComponent();
-        } else if (key.equals(SHOW_HORIZONTAL_GRID_LINES_KEY)) {
-            if (value instanceof String) {
-                value = Boolean.parseBoolean((String)value);
-            }
+    public void setShowHorizontalGridLines(boolean showHorizontalGridLines) {
+        this.showHorizontalGridLines = showHorizontalGridLines;
+        repaintComponent();
+    }
 
-            validatePropertyType(key, value, Boolean.class, false);
+    public boolean getShowVerticalGridLines() {
+        return showVerticalGridLines;
+    }
 
-            previousValue = showHorizontalGridLines;
-            showHorizontalGridLines = (Boolean)value;
+    public void setShowVerticalGridLines(boolean showVerticalGridLines) {
+        this.showVerticalGridLines = showVerticalGridLines;
+        repaintComponent();
+    }
 
+    public Color getGridColor() {
+        return gridColor;
+    }
+
+    public void setGridColor(Color gridColor) {
+        if (gridColor == null) {
+            throw new IllegalArgumentException("gridColor is null.");
+        }
+
+        this.gridColor = gridColor;
+
+        if (showHorizontalGridLines || showVerticalGridLines) {
             repaintComponent();
-        } else if (key.equals(SHOW_VERTICAL_GRID_LINES_KEY)) {
-            if (value instanceof String) {
-                value = Boolean.parseBoolean((String)value);
-            }
-
-            validatePropertyType(key, value, Boolean.class, false);
-
-            previousValue = showVerticalGridLines;
-            showVerticalGridLines = (Boolean)value;
-
-            repaintComponent();
-        } else if (key.equals(GRID_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = gridColor;
-            gridColor = (Color)value;
-
-            if (showHorizontalGridLines || showVerticalGridLines) {
-                repaintComponent();
-            }
-        } else if (key.equals(SELECTION_BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = selectionBackgroundColor;
-            selectionBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else {
-            super.put(key, value);
         }
-
-        return previousValue;
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setGridColor(String gridColor) {
+        if (gridColor == null) {
+            throw new IllegalArgumentException("gridColor is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(PADDING_KEY)) {
-            previousValue = put(key, DEFAULT_PADDING);
-        } else if (key.equals(SPACING_KEY)) {
-            previousValue = put(key, DEFAULT_SPACING);
-        } else if (key.equals(SHOW_HORIZONTAL_GRID_LINES_KEY)) {
-            previousValue = put(key, DEFAULT_SHOW_HORIZONTAL_GRID_LINES);
-        } else if (key.equals(SHOW_VERTICAL_GRID_LINES_KEY)) {
-            previousValue = put(key, DEFAULT_SHOW_VERTICAL_GRID_LINES);
-        } else if (key.equals(GRID_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_GRID_COLOR);
-        } else if (key.equals(SELECTION_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_SELECTION_BACKGROUND_COLOR);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setGridColor(Color.decode(gridColor));
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(PADDING_KEY)
-            || key.equals(SPACING_KEY)
-            || key.equals(SHOW_HORIZONTAL_GRID_LINES_KEY)
-            || key.equals(SHOW_VERTICAL_GRID_LINES_KEY)
-            || key.equals(GRID_COLOR_KEY)
-            || key.equals(SELECTION_BACKGROUND_COLOR_KEY)
-            || super.containsKey(key));
+    public Color getSelectionBackgroundColor() {
+        return selectionBackgroundColor;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
+    public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
+        if (selectionBackgroundColor == null) {
+            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+        }
+
+        this.selectionBackgroundColor = selectionBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
+        if (selectionBackgroundColor == null) {
+            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+        }
+
+        setSelectionBackgroundColor(Color.decode(selectionBackgroundColor));
     }
 
     // ComponentAttributeListener methods
@@ -879,8 +796,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     @Override
     public void attributeAdded(Component component, Container.Attribute attribute) {
         if (attribute == TablePane.COLUMN_SPAN_ATTRIBUTE
-            || attribute == TablePane.ROW_SPAN_ATTRIBUTE
-            || attribute == TablePane.MARGIN_ATTRIBUTE) {
+            || attribute == TablePane.ROW_SPAN_ATTRIBUTE) {
             invalidateComponent();
         } else {
             super.attributeAdded(component, attribute);
@@ -891,8 +807,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     public void attributeUpdated(Component component,
         Container.Attribute attribute, Object previousValue) {
         if (attribute == TablePane.COLUMN_SPAN_ATTRIBUTE
-            || attribute == TablePane.ROW_SPAN_ATTRIBUTE
-            || attribute == TablePane.MARGIN_ATTRIBUTE) {
+            || attribute == TablePane.ROW_SPAN_ATTRIBUTE) {
             invalidateComponent();
         } else {
             super.attributeUpdated(component, attribute, previousValue);
@@ -903,8 +818,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     public void attributeRemoved(Component component,
         Container.Attribute attribute, Object value) {
         if (attribute == TablePane.COLUMN_SPAN_ATTRIBUTE
-            || attribute == TablePane.ROW_SPAN_ATTRIBUTE
-            || attribute == TablePane.MARGIN_ATTRIBUTE) {
+            || attribute == TablePane.ROW_SPAN_ATTRIBUTE) {
             invalidateComponent();
         } else {
             super.attributeRemoved(component, attribute, value);

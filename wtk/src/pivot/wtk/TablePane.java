@@ -562,8 +562,6 @@ public class TablePane extends Container {
     public static final Attribute ROW_SPAN_ATTRIBUTE = new Attribute(Integer.class);
     public static final Attribute COLUMN_SPAN_ATTRIBUTE = new Attribute(Integer.class);
 
-    public static final Attribute MARGIN_ATTRIBUTE = new Attribute(Insets.class);
-
     /**
      * Creates a new <tt>TablePane</tt> with empty row and column sequences.
      */
