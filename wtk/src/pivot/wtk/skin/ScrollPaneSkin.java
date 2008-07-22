@@ -49,23 +49,12 @@ public class ScrollPaneSkin extends ContainerSkin
     private Corner bottomRightCorner = new Corner(Corner.Placement.BOTTOM_RIGHT);
     private Corner topRightCorner = new Corner(Corner.Placement.TOP_RIGHT);
 
-    // Style properties
-    protected int horizontalReveal = DEFAULT_HORIZONTAL_REVEAL;
-    protected int verticalReveal = DEFAULT_VERTICAL_REVEAL;
+    private int horizontalReveal = 30;
+    private int verticalReveal = 30;
 
-    // Default style values
     private static final int DEFAULT_HORIZONTAL_INCREMENT = 10;
     private static final int DEFAULT_VERTICAL_INCREMENT = 10;
-    private static final int DEFAULT_HORIZONTAL_REVEAL = 30;
-    private static final int DEFAULT_VERTICAL_REVEAL = 30;
     private static final float DEFAULT_SCROLL_BAR_OPACITY = 0.75f;
-
-    // Style keys
-    protected static final String HORIZONTAL_INCREMENT_KEY = "horizontalIncrement";
-    protected static final String VERTICAL_INCREMENT_KEY = "verticalIncrement";
-    protected static final String HORIZONTAL_REVEAL_KEY = "horizontalReveal";
-    protected static final String VERTICAL_REVEAL_KEY = "verticalReveal";
-    protected static final String SCROLL_BAR_OPACITY_KEY = "scrollBarOpacity";
 
     public ScrollPaneSkin() {
         super();
@@ -824,133 +813,53 @@ public class ScrollPaneSkin extends ContainerSkin
         }
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(HORIZONTAL_INCREMENT_KEY)) {
-            value = horizontalScrollBar.getUnitIncrement();
-        } else if (key.equals(VERTICAL_INCREMENT_KEY)) {
-            value = verticalScrollBar.getUnitIncrement();
-        } else if (key.equals(HORIZONTAL_REVEAL_KEY)) {
-            value = horizontalReveal;
-        } else if (key.equals(VERTICAL_REVEAL_KEY)) {
-            value = verticalReveal;
-        } else if (key.equals(SCROLL_BAR_OPACITY_KEY)) {
-            value = horizontalScrollBar.getStyles().get("backgroundOpacity");
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public int getHorizontalIncrement() {
+        return horizontalScrollBar.getUnitIncrement();
     }
 
-    @Override
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(HORIZONTAL_INCREMENT_KEY)) {
-            if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = horizontalScrollBar.getUnitIncrement();
-            horizontalScrollBar.setUnitIncrement((Integer)value);
-        } else if (key.equals(VERTICAL_INCREMENT_KEY)) {
-            if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = verticalScrollBar.getUnitIncrement();
-            verticalScrollBar.setUnitIncrement((Integer)value);
-        } else if (key.equals(HORIZONTAL_REVEAL_KEY)) {
-            if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = horizontalReveal;
-            horizontalReveal = (Integer)value;
-        } else if (key.equals(VERTICAL_REVEAL_KEY)) {
-            if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = verticalReveal;
-            verticalReveal = (Integer)value;
-        } else if (key.equals(SCROLL_BAR_OPACITY_KEY)) {
-            if (value instanceof Double) {
-                value = ((Double)value).floatValue();
-            }
-
-            validatePropertyType(key, value, Float.class, false);
-
-            previousValue = horizontalScrollBar.getStyles().get("backgroundOpacity");
-            horizontalScrollBar.getStyles().put("backgroundOpacity", (Float)value);
-            verticalScrollBar.getStyles().put("backgroundOpacity", (Float)value);
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
+    public void setHorizontalIncrement(int horizontalIncrement) {
+        horizontalScrollBar.setUnitIncrement(horizontalIncrement);
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(HORIZONTAL_INCREMENT_KEY)) {
-            previousValue = put(key, DEFAULT_HORIZONTAL_INCREMENT);
-        } else if (key.equals(VERTICAL_INCREMENT_KEY)) {
-            previousValue = put(key, DEFAULT_VERTICAL_INCREMENT);
-        } else if (key.equals(HORIZONTAL_REVEAL_KEY)) {
-            previousValue = put(key, DEFAULT_HORIZONTAL_REVEAL);
-        } else if (key.equals(VERTICAL_REVEAL_KEY)) {
-            previousValue = put(key, DEFAULT_VERTICAL_REVEAL);
-        } else if (key.equals(SCROLL_BAR_OPACITY_KEY)) {
-            previousValue = put(key, DEFAULT_SCROLL_BAR_OPACITY);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+    public int getVerticalIncrement() {
+        return verticalScrollBar.getUnitIncrement();
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(HORIZONTAL_INCREMENT_KEY)
-            || key.equals(VERTICAL_INCREMENT_KEY)
-            || key.equals(HORIZONTAL_REVEAL_KEY)
-            || key.equals(VERTICAL_REVEAL_KEY)
-            || key.equals(SCROLL_BAR_OPACITY_KEY));
+    public void setVerticalIncrement(int verticalIncrement) {
+        verticalScrollBar.setUnitIncrement(verticalIncrement);
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
+    public int getHorizontalReveal() {
+        return horizontalReveal;
+    }
+
+    public void setHorizontalReveal(int horizontalReveal) {
+        this.horizontalReveal = horizontalReveal;
+    }
+
+    public int getVerticalReveal() {
+        return verticalReveal;
+    }
+
+    public void setVerticalReveal(int verticalReveal) {
+        this.verticalReveal = verticalReveal;
+    }
+
+    public float getScrollBarOpacity() {
+        return (Float)horizontalScrollBar.getStyles().get("backgroundOpacity");
+    }
+
+    public void setScrollBarOpacity(float scrollBarOpacity) {
+        horizontalScrollBar.getStyles().put("backgroundOpacity", scrollBarOpacity);
+        verticalScrollBar.getStyles().put("backgroundOpacity", scrollBarOpacity);
+    }
+
+    public void setScrollBarOpacity(Number scrollBarOpacity) {
+        if (scrollBarOpacity == null) {
+            throw new IllegalArgumentException("scrollBarOpacity is null.");
+        }
+
+        setScrollBarOpacity(scrollBarOpacity.floatValue());
     }
 
     // Viewport.Skin methods
