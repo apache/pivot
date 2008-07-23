@@ -184,12 +184,12 @@ public abstract class ContainerSkin extends ComponentSkin
         repaintComponent();
     }
 
-    public final void setBackgroundOpacity(String backgroundOpacity) {
+    public final void setBackgroundOpacity(Number backgroundOpacity) {
         if (backgroundOpacity == null) {
             throw new IllegalArgumentException("backgroundOpacity is null");
         }
 
-        setBackgroundOpacity(Float.parseFloat(backgroundOpacity));
+        setBackgroundOpacity(backgroundOpacity.floatValue());
     }
 
     // Container events

@@ -542,14 +542,6 @@ public class FlowPaneSkin extends ContainerSkin
         setPadding(new Insets(padding));
     }
 
-    public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(new Insets(padding));
-    }
-
     public int getSpacing() {
         return spacing;
     }
@@ -557,14 +549,6 @@ public class FlowPaneSkin extends ContainerSkin
     public void setSpacing(int spacing) {
         this.spacing = spacing;
         invalidateComponent();
-    }
-
-    public final void setSpacing(String spacing) {
-        if (spacing == null) {
-            throw new IllegalArgumentException("spacing is null.");
-        }
-
-        setSpacing(Integer.parseInt(spacing));
     }
 
     // Flow pane events

@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import java.awt.Graphics2D;
+import java.util.Iterator;
 
 import pivot.beans.Bean;
 import pivot.collections.Dictionary;
@@ -48,7 +49,7 @@ public abstract class Component extends Bean implements Visual {
      *
      * @author gbrown
      */
-    public final class StyleDictionary implements Dictionary<String, Object> {
+    public final class StyleDictionary implements Dictionary<String, Object>, Iterable<String> {
         public Object get(String key) {
             return (skin == null) ? null : skin.get(key);
         }
@@ -58,13 +59,7 @@ public abstract class Component extends Bean implements Visual {
                 throw new IllegalStateException("Skin is not installed.");
             }
 
-            Object previousValue = null;
-            previousValue = skin.put(key, value);
-
-            componentSkinListeners.styleUpdated(Component.this,
-                key, previousValue);
-
-            return previousValue;
+            return skin.put(key, value);
         }
 
         public Object remove(String key) {
@@ -72,12 +67,7 @@ public abstract class Component extends Bean implements Visual {
                 throw new IllegalStateException("Renderer is not installed.");
             }
 
-            Object previousValue = skin.remove(key);
-
-            componentSkinListeners.styleUpdated(Component.this,
-                    key, previousValue);
-
-            return previousValue;
+            return skin.remove(key);
         }
 
         public boolean containsKey(String key) {
@@ -86,6 +76,18 @@ public abstract class Component extends Bean implements Visual {
 
         public boolean isEmpty() {
             return (skin == null) ? true : skin.isEmpty();
+        }
+
+        public Class<?> getType(String property) {
+            return (skin == null) ? null : skin.getType(property);
+        }
+
+        public Iterator<String> iterator() {
+            if (skin == null) {
+                throw new IllegalStateException("Skin is not installed.");
+            }
+
+            return skin.getProperties();
         }
     }
 
@@ -127,6 +129,13 @@ public abstract class Component extends Bean implements Visual {
      */
     private class ComponentListenerList extends ListenerList<ComponentListener>
         implements ComponentListener {
+        public void skinClassChanged(Component component,
+            Class<? extends Skin> previousSkinClass) {
+            for (ComponentListener listener : this) {
+                listener.skinClassChanged(component, previousSkinClass);
+            }
+        }
+
         public void parentChanged(Component component, Container previousParent) {
             for (ComponentListener listener : this) {
                 listener.parentChanged(component, previousParent);
@@ -210,22 +219,6 @@ public abstract class Component extends Bean implements Visual {
         public void focusedChanged(Component component, boolean temporary) {
             for (ComponentStateListener listener : this) {
                 listener.focusedChanged(component, temporary);
-            }
-        }
-    }
-
-    private class ComponentSkinListenerList extends
-        ListenerList<ComponentSkinListener> implements ComponentSkinListener {
-        public void skinClassChanged(Component component,
-            Class<? extends Skin> previousSkinClass) {
-            for (ComponentSkinListener listener : this) {
-                listener.skinClassChanged(component, previousSkinClass);
-            }
-        }
-
-        public void styleUpdated(Component component, String style, Object previousValue) {
-            for (ComponentSkinListener listener : this) {
-                listener.styleUpdated(component, style, previousValue);
             }
         }
     }
@@ -407,12 +400,12 @@ public abstract class Component extends Bean implements Visual {
     private ComponentListenerList componentListeners = new ComponentListenerList();
     private ComponentLayoutListenerList componentLayoutListeners = new ComponentLayoutListenerList();
     private ComponentStateListenerList componentStateListeners = new ComponentStateListenerList();
-    private ComponentSkinListenerList componentSkinListeners = new ComponentSkinListenerList();
     private ComponentMouseListenerList componentMouseListeners = new ComponentMouseListenerList();
     private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
     private ComponentMouseWheelListenerList componentMouseWheelListeners = new ComponentMouseWheelListenerList();
     private ComponentKeyListenerList componentKeyListeners = new ComponentKeyListenerList();
     private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
+
     private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
 
     /**
@@ -421,6 +414,24 @@ public abstract class Component extends Bean implements Visual {
     private static Component focusedComponent = null;
 
     private static int nextHandle = 0;
+
+    @Override
+    public Object get(String key) {
+        // TODO
+        return super.get(key);
+    }
+
+    @Override
+    public Object put(String key, Object value) {
+        // TODO
+        return super.put(key, value);
+    }
+
+    @Override
+    public Iterator<String> getProperties() {
+        // TODO
+        return super.getProperties();
+    }
 
     public int getHandle() {
         return handle;
@@ -468,7 +479,7 @@ public abstract class Component extends Bean implements Visual {
         invalidate();
         repaint();
 
-        componentSkinListeners.skinClassChanged(this, previousSkinClass);
+        componentListeners.skinClassChanged(this, previousSkinClass);
     }
 
     protected Skin getSkin() {
@@ -2042,10 +2053,6 @@ public abstract class Component extends Bean implements Visual {
 
     public ListenerList<ComponentStateListener> getComponentStateListeners() {
         return componentStateListeners;
-    }
-
-    public ListenerList<ComponentSkinListener> getComponentSkinListeners() {
-        return componentSkinListeners;
     }
 
     public ListenerList<ComponentMouseListener> getComponentMouseListeners() {

@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import java.util.Iterator;
+
 import pivot.collections.Dictionary;
 
 /**
@@ -155,4 +157,23 @@ public interface Skin extends Visual, Dictionary<String, Object> {
      * <tt>true</tt> if the property exists; <tt>false</tt>, otherwise.
      */
     public boolean containsKey(String key);
+
+    /**
+     * Returns the type of a style property.
+     *
+     * @param key
+     * The name of the property.
+     *
+     * @return
+     * The property's type.
+     */
+    public Class<?> getType(String key);
+
+    /**
+     * Returns an iterator over the skin's style properties.
+     *
+     * @return
+     * An iterator that enumerates the style properties.
+     */
+    public Iterator<String> getProperties();
 }

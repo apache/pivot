@@ -13,9 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk;
+package pivot.wtkx2;
 
-public interface ComponentSkinListener {
-    public void skinClassChanged(Component component, Class<? extends Skin> previousSkinClass);
-    public void styleUpdated(Component component, String key, Object previousValue);
+public class LoadException extends Exception {
+    public static final long serialVersionUID = 0;
+
+    public LoadException() {
+        this(null, null);
+    }
+
+    public LoadException(String message) {
+        this(message, null);
+    }
+
+    public LoadException(Throwable cause) {
+        this(null, cause);
+    }
+
+    public LoadException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

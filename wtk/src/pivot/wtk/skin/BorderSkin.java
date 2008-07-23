@@ -218,14 +218,6 @@ public class BorderSkin extends TitlePaneSkin {
         repaintComponent();
     }
 
-    public final void setBorderThickness(String borderThickness) {
-        if (borderThickness == null) {
-            throw new IllegalArgumentException("borderThickness is null.");
-        }
-
-        setBorderThickness(Integer.parseInt(borderThickness));
-    }
-
     public Insets getPadding() {
         return padding;
     }
@@ -251,14 +243,6 @@ public class BorderSkin extends TitlePaneSkin {
         setPadding(new Insets(padding));
     }
 
-    public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(new Insets(padding));
-    }
-
     public CornerRadii getCornerRadii() {
         return cornerRadii;
     }
@@ -277,14 +261,6 @@ public class BorderSkin extends TitlePaneSkin {
     }
 
     public final void setCornerRadii(Dictionary<String, ?> cornerRadii) {
-        if (cornerRadii == null) {
-            throw new IllegalArgumentException("cornerRadii is null.");
-        }
-
-        setCornerRadii(new CornerRadii(cornerRadii));
-    }
-
-    public final void setCornerRadii(String cornerRadii) {
         if (cornerRadii == null) {
             throw new IllegalArgumentException("cornerRadii is null.");
         }

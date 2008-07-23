@@ -414,14 +414,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         setPadding(new Insets(padding));
     }
 
-    public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(new Insets(padding));
-    }
-
     public boolean getWrapText() {
         return wrapText;
     }
@@ -429,14 +421,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     public void setWrapText(boolean wrapText) {
         this.wrapText = wrapText;
         invalidateComponent();
-    }
-
-    public final void setWrapText(String wrapText) {
-        if (wrapText == null) {
-            throw new IllegalArgumentException("wrapText is null.");
-        }
-
-        setWrapText(Boolean.parseBoolean(wrapText));
     }
 
     // Label events

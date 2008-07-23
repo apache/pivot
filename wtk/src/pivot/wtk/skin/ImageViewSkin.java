@@ -217,12 +217,12 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         repaintComponent();
     }
 
-    public final void setOpacity(String opacity) {
+    public final void setOpacity(Number opacity) {
         if (opacity == null) {
             throw new IllegalArgumentException("opacity is null.");
         }
 
-        setOpacity(Float.parseFloat(opacity));
+        setOpacity(opacity.floatValue());
     }
 
     public float getScaleX() {
@@ -234,12 +234,12 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         invalidateComponent();
     }
 
-    public final void setScaleX(String scaleX) {
+    public final void setScaleX(Number scaleX) {
         if (scaleX == null) {
             throw new IllegalArgumentException("scaleX is null.");
         }
 
-        setOpacity(Float.parseFloat(scaleX));
+        setOpacity(scaleX.floatValue());
     }
 
     public float getScaleY() {
@@ -251,12 +251,12 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         invalidateComponent();
     }
 
-    public final void setScaleY(String scaleY) {
+    public final void setScaleY(Number scaleY) {
         if (scaleY == null) {
             throw new IllegalArgumentException("scaleY is null.");
         }
 
-        setOpacity(Float.parseFloat(scaleY));
+        setOpacity(scaleY.floatValue());
     }
 
     public HorizontalAlignment getHorizontalAlignment() {

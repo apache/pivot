@@ -456,7 +456,7 @@ public class ComponentLoader extends Loader {
     }
 
     /**
-     * Retrieves the component loader that loaded the specifgied namespace.
+     * Retrieves the component loader that loaded the specified namespace.
      *
      * @param name
      * The name of the component loader, relative to this loader. The loader's
