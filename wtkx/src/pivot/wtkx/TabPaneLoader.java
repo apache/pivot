@@ -74,7 +74,7 @@ class TabPaneLoader extends ContainerLoader {
                     }
 
                     if (childElement.hasAttribute(LABEL_ATTRIBUTE)) {
-                        TabPane.setLabel(component, childElement.getAttribute(LABEL_ATTRIBUTE));
+                        TabPane.setLabel(component, rootLoader.resolve(childElement.getAttribute(LABEL_ATTRIBUTE)).toString());
                     }
 
                     tabPane.getTabs().add(component);
