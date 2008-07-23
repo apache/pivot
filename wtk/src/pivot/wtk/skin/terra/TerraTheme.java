@@ -31,6 +31,7 @@ import pivot.wtk.ComponentStateListener;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerListener;
 import pivot.wtk.Cursor;
+import pivot.wtk.DatePicker;
 import pivot.wtk.Decorator;
 import pivot.wtk.Dialog;
 import pivot.wtk.Display;
@@ -271,6 +272,7 @@ public final class TerraTheme extends Theme {
     public TerraTheme() {
         componentSkinMap.put(Alert.class, AlertSkin.class);
         componentSkinMap.put(Checkbox.class, CheckboxSkin.class);
+        componentSkinMap.put(DatePicker.class, DatePickerSkin.class);
         componentSkinMap.put(Dialog.class, DialogSkin.class);
         componentSkinMap.put(Expander.class, ExpanderSkin.class);
         componentSkinMap.put(Form.class, FormSkin.class);
