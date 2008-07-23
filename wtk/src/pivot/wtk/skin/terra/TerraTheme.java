@@ -3,8 +3,6 @@ package pivot.wtk.skin.terra;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
@@ -59,20 +57,9 @@ public final class TerraTheme extends Theme {
         private Decorator decorator = null;
         private Component component = null;
         private Graphics2D graphics = null;
-        private BufferedImage bufferedImage = null;
+        private BufferedImage blurredImage = null;
 
-        private static final float[] BLUR_KERNEL = {
-            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
-            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
-            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
-            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
-            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
-            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
-            0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f
-        };
-
-        private static final ConvolveOp BLUR = new ConvolveOp(new Kernel(7, 7,
-            BLUR_KERNEL), ConvolveOp.EDGE_NO_OP, null);
+        private static final int BLUR_RADIUS = 9;
 
         public DropShadowDecorator(Decorator decorator) {
             this.decorator = decorator;
@@ -100,34 +87,6 @@ public final class TerraTheme extends Theme {
                 shadowGraphics.setClip(null);
                 shadowGraphics.fillRect(DROP_SHADOW_OFFSET, DROP_SHADOW_OFFSET,
                     component.getWidth(), component.getHeight());
-
-                if (!component.isEnabled()) {
-                    // Redirect the graphics to a buffered image
-                    int width = component.getWidth();
-                    int height = component.getHeight();
-
-                    if (bufferedImage == null
-                        || bufferedImage.getWidth() != width
-                        || bufferedImage.getHeight() != height) {
-                        bufferedImage = new BufferedImage(width, height,
-                            BufferedImage.TYPE_INT_RGB);
-                        Graphics2D tmpGraphics = bufferedImage.createGraphics();
-
-                        decorate = false;
-                        try {
-                            component.paint(tmpGraphics);
-                        } finally {
-                            decorate = true;
-                        }
-                    }
-
-                    Graphics2D tmpGraphics = bufferedImage.createGraphics();
-                    tmpGraphics.setClip(graphics.getClip());
-                    graphics = tmpGraphics;
-                } else {
-                    // Free the buffered image
-                    bufferedImage = null;
-                }
             }
 
             return graphics;
@@ -139,11 +98,46 @@ public final class TerraTheme extends Theme {
             }
 
             if (!component.isEnabled()) {
-                // Blur the buffer image
-                Image blurredImage = BLUR.filter(bufferedImage, null);
+                if (decorate) {
+                    int width = component.getWidth();
+                    int height = component.getHeight();
 
-                // Draw the blurred image to the real graphics
-                this.graphics.drawImage(blurredImage, 0, 0, null);
+                    // Create and cache the blurred image as necessary
+                    if (blurredImage == null
+                        || blurredImage.getWidth() != width
+                        || blurredImage.getHeight() != height) {
+                        blurredImage = new BufferedImage(width, height,
+                            BufferedImage.TYPE_INT_RGB);
+                        Graphics2D imageGraphics = blurredImage.createGraphics();
+
+                        decorate = false;
+                        try {
+                            // Paint the un-blurred component to the image
+                            component.paint(imageGraphics);
+                        } finally {
+                            decorate = true;
+                        }
+
+                        float[] kernel = new float[BLUR_RADIUS * BLUR_RADIUS];
+                        for (int i = 0, n = kernel.length; i < n; i++) {
+                            kernel[i] = 1.0f / n;
+                        }
+
+                        ConvolveOp blur = new ConvolveOp(new Kernel(BLUR_RADIUS, BLUR_RADIUS,
+                            kernel), ConvolveOp.EDGE_NO_OP, null);
+
+                        // Perform the blur operation
+                        blurredImage = blur.filter(blurredImage, null);
+
+                        imageGraphics.dispose();
+                    }
+
+                    // Draw the blurred image to the real graphics
+                    this.graphics.drawImage(blurredImage, 0, 0, null);
+                }
+            } else {
+                // Free the bufered image
+                blurredImage = null;
             }
         }
     }
