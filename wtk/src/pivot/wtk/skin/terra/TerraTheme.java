@@ -50,18 +50,30 @@ import pivot.wtk.Tooltip;
 import pivot.wtk.TreeView;
 import pivot.wtk.Window;
 
+/**
+ *
+ *
+ * @author gbrown
+ * @author tvolkert
+ */
 public final class TerraTheme extends Theme {
-    private static class DropShadowDecorator implements Decorator {
-        private boolean decorate = true;
+    /**
+     * Adds drop shadows to all windows and blurs disabled windows.
+     *
+     * @author gbrown
+     * @author tvolkert
+     */
+    private static class WindowDecorator implements Decorator {
+        private BufferedImage bufferedImage = null;
+        private boolean blurred = false;
 
         private Decorator decorator = null;
         private Component component = null;
         private Graphics2D graphics = null;
-        private BufferedImage blurredImage = null;
 
         private static final int BLUR_RADIUS = 9;
 
-        public DropShadowDecorator(Decorator decorator) {
+        public WindowDecorator(Decorator decorator) {
             this.decorator = decorator;
         }
 
@@ -77,16 +89,34 @@ public final class TerraTheme extends Theme {
             this.component = component;
             this.graphics = graphics;
 
-            if (decorate) {
-                // Paint the drop shadow
-                Graphics2D shadowGraphics = (Graphics2D)graphics.create();
-                shadowGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                    DROP_SHADOW_OPACITY));
-                shadowGraphics.setColor(DROP_SHADOW_COLOR);
+            // Paint the drop shadow
+            Graphics2D shadowGraphics = (Graphics2D)graphics.create();
+            shadowGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                DROP_SHADOW_OPACITY));
+            shadowGraphics.setColor(DROP_SHADOW_COLOR);
 
-                shadowGraphics.setClip(null);
-                shadowGraphics.fillRect(DROP_SHADOW_OFFSET, DROP_SHADOW_OFFSET,
-                    component.getWidth(), component.getHeight());
+            shadowGraphics.setClip(null);
+            shadowGraphics.fillRect(DROP_SHADOW_OFFSET, DROP_SHADOW_OFFSET,
+                component.getWidth(), component.getHeight());
+
+            if (!component.isEnabled()) {
+                // Prepare to blur
+                int width = component.getWidth();
+                int height = component.getHeight();
+
+                if (bufferedImage == null
+                    || bufferedImage.getWidth() != width
+                    || bufferedImage.getHeight() != height) {
+                    // Create the buffered image
+                    bufferedImage = new BufferedImage(width, height,
+                        BufferedImage.TYPE_INT_RGB);
+
+                    graphics = bufferedImage.createGraphics();
+                    blurred = false;
+                } else {
+                    // No need to paint - we'll do it in update()
+                    graphics = null;
+                }
             }
 
             return graphics;
@@ -98,46 +128,29 @@ public final class TerraTheme extends Theme {
             }
 
             if (!component.isEnabled()) {
-                if (decorate) {
-                    int width = component.getWidth();
-                    int height = component.getHeight();
+                if (!blurred) {
+                    Graphics2D imageGraphics = bufferedImage.createGraphics();
 
-                    // Create and cache the blurred image as necessary
-                    if (blurredImage == null
-                        || blurredImage.getWidth() != width
-                        || blurredImage.getHeight() != height) {
-                        blurredImage = new BufferedImage(width, height,
-                            BufferedImage.TYPE_INT_RGB);
-                        Graphics2D imageGraphics = blurredImage.createGraphics();
-
-                        decorate = false;
-                        try {
-                            // Paint the un-blurred component to the image
-                            component.paint(imageGraphics);
-                        } finally {
-                            decorate = true;
-                        }
-
-                        float[] kernel = new float[BLUR_RADIUS * BLUR_RADIUS];
-                        for (int i = 0, n = kernel.length; i < n; i++) {
-                            kernel[i] = 1.0f / n;
-                        }
-
-                        ConvolveOp blur = new ConvolveOp(new Kernel(BLUR_RADIUS, BLUR_RADIUS,
-                            kernel), ConvolveOp.EDGE_NO_OP, null);
-
-                        // Perform the blur operation
-                        blurredImage = blur.filter(blurredImage, null);
-
-                        imageGraphics.dispose();
+                    float[] kernel = new float[BLUR_RADIUS * BLUR_RADIUS];
+                    for (int i = 0, n = kernel.length; i < n; i++) {
+                        kernel[i] = 1f / n;
                     }
 
-                    // Draw the blurred image to the real graphics
-                    this.graphics.drawImage(blurredImage, 0, 0, null);
+                    ConvolveOp blur = new ConvolveOp(new Kernel(BLUR_RADIUS, BLUR_RADIUS,
+                        kernel), ConvolveOp.EDGE_NO_OP, null);
+
+                    // Perform the blur operation
+                    bufferedImage = blur.filter(bufferedImage, null);
+                    blurred = true;
+
+                    imageGraphics.dispose();
                 }
+
+                // Draw the blurred image to the real graphics
+                this.graphics.drawImage(bufferedImage, 0, 0, null);
             } else {
                 // Free the bufered image
-                blurredImage = null;
+                bufferedImage = null;
             }
         }
     }
@@ -302,7 +315,7 @@ public final class TerraTheme extends Theme {
         if (!(window instanceof Popup)) {
             // Attach shadow decorator and repaint
             Decorator decorator = window.getDecorator();
-            window.setDecorator(new DropShadowDecorator(decorator));
+            window.setDecorator(new WindowDecorator(decorator));
             repaintShadowRegion(window);
 
             // Add component listeners
@@ -318,8 +331,8 @@ public final class TerraTheme extends Theme {
             window.getComponentStateListeners().remove(windowMonitor);
 
             // Remove shadow decorator and repaint
-            DropShadowDecorator dropShadowDecorator = (DropShadowDecorator)window.getDecorator();
-            Decorator decorator = dropShadowDecorator.getDecorator();
+            WindowDecorator windowDecorator = (WindowDecorator)window.getDecorator();
+            Decorator decorator = windowDecorator.getDecorator();
             window.setDecorator(decorator);
             repaintShadowRegion(window);
         }

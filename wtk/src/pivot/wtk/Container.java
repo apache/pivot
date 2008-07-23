@@ -378,7 +378,9 @@ public abstract class Container extends Component {
                 }
 
                 // Paint the component
-                component.paint(componentGraphics);
+                if (componentGraphics != null) {
+                    component.paint(componentGraphics);
+                }
 
                 // Update the component
                 if (decorator != null) {
