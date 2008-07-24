@@ -53,8 +53,6 @@ public class TableViewCellRenderer extends Label
 
         if (font instanceof Font) {
             styles.put("font", font);
-        } else {
-            styles.remove("font");
         }
 
         Object color = null;
@@ -75,8 +73,6 @@ public class TableViewCellRenderer extends Label
 
         if (color instanceof Color) {
             styles.put("color", color);
-        } else {
-            styles.remove("color");
         }
     }
 }

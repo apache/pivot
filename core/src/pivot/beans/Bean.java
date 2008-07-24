@@ -28,6 +28,15 @@ import pivot.collections.Dictionary;
  */
 public abstract class Bean implements Dictionary<String, Object> {
     /**
+     * Iterable properties class.
+     */
+    public class Properties implements Iterable<String> {
+        public Iterator<String> iterator() {
+            return new PropertyIterator();
+        }
+    }
+
+    /**
      * Property iterator. Walks the list of methods defined by this object and
      * returns a value for each getter method.
      */
@@ -83,6 +92,8 @@ public abstract class Bean implements Dictionary<String, Object> {
             throw new UnsupportedOperationException();
         }
     }
+
+    private final Properties properties = new Properties();
 
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";
@@ -203,7 +214,24 @@ public abstract class Bean implements Dictionary<String, Object> {
      * Verifies that the bean contains at least one property.
      */
     public boolean isEmpty() {
-        return !getProperties().hasNext();
+        return !properties.iterator().hasNext();
+    }
+
+    /**
+     * Tests the read-only state of a property.
+     *
+     * @param key
+     * The property name.
+     *
+     * @return
+     * <tt>true</tt> if the property is read-only; <tt>false</tt>, otherwise.
+     */
+    public boolean isReadOnly(String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key is null.");
+        }
+
+        return (getSetterMethod(key, getType(key)) == null);
     }
 
     /**
@@ -231,30 +259,13 @@ public abstract class Bean implements Dictionary<String, Object> {
     }
 
     /**
-     * Tests the read-only state of a property.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * <tt>true</tt> if the property is read-only; <tt>false</tt>, otherwise.
-     */
-    public boolean isReadOnly(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (getSetterMethod(key, getType(key)) == null);
-    }
-
-    /**
      * Returns an iterator over this bean's properties.
      *
      * @return
      * A property iterator for this bean.
      */
-    public Iterator<String> getProperties() {
-        return new PropertyIterator();
+    public Iterable<String> getProperties() {
+        return properties;
     }
 
     /**

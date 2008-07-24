@@ -122,8 +122,6 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
             Object labelFont = treeView.getStyles().get("font");
             if (labelFont instanceof Font) {
                 labelStyles.put("font", labelFont);
-            } else {
-                labelStyles.remove("font");
             }
 
             Object color = null;
@@ -143,8 +141,6 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
 
             if (color instanceof Color) {
                 labelStyles.put("color", color);
-            } else {
-                labelStyles.remove("color");
             }
         }
     }

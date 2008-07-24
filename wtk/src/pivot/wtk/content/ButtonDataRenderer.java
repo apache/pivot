@@ -112,8 +112,6 @@ public class ButtonDataRenderer extends FlowPane implements Button.DataRenderer 
             Object labelFont = button.getStyles().get("font");
             if (labelFont instanceof Font) {
                 labelStyles.put("font", labelFont);
-            } else {
-                labelStyles.remove("font");
             }
 
             Object color = button.isEnabled() ?
@@ -122,8 +120,6 @@ public class ButtonDataRenderer extends FlowPane implements Button.DataRenderer 
 
             if (color instanceof Color) {
                 labelStyles.put("color", color);
-            } else {
-                labelStyles.remove("color");
             }
         }
     }

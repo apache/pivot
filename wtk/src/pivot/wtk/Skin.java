@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import java.util.Iterator;
-
 import pivot.collections.Dictionary;
 
 /**
@@ -175,5 +173,5 @@ public interface Skin extends Visual, Dictionary<String, Object> {
      * @return
      * An iterator that enumerates the style properties.
      */
-    public Iterator<String> getProperties();
+    public Iterable<String> getProperties();
 }

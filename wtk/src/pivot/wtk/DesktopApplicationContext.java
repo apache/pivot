@@ -22,8 +22,6 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 
-import javax.imageio.ImageIO;
-
 import pivot.collections.HashMap;
 
 public final class DesktopApplicationContext extends ApplicationContext {
@@ -91,11 +89,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
         hostFrame.setBackground(null);
         hostFrame.setTitle("WTK Application");
 
+        // TODO Create a Pivot icon to use here
+        /*
         try {
-            java.io.InputStream iconInputStream = getClass().getResourceAsStream("vmware.png");
+            java.io.InputStream iconInputStream = getClass().getResourceAsStream("pivot.png");
             hostFrame.setIconImage(ImageIO.read(iconInputStream));
         } catch(Exception exception) {
         }
+        */
 
         // TODO Preserve most recent size
         hostFrame.setSize(800, 600);

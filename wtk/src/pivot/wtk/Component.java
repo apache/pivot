@@ -87,7 +87,7 @@ public abstract class Component extends Bean implements Visual {
                 throw new IllegalStateException("Skin is not installed.");
             }
 
-            return skin.getProperties();
+            return skin.getProperties().iterator();
         }
     }
 
@@ -428,7 +428,7 @@ public abstract class Component extends Bean implements Visual {
     }
 
     @Override
-    public Iterator<String> getProperties() {
+    public Iterable<String> getProperties() {
         // TODO
         return super.getProperties();
     }
