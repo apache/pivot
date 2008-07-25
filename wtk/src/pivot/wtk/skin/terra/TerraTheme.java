@@ -57,6 +57,7 @@ import pivot.wtk.ScrollBar;
 import pivot.wtk.ScrollPane;
 import pivot.wtk.Skin;
 import pivot.wtk.Spacer;
+import pivot.wtk.Spinner;
 import pivot.wtk.SplitPane;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TableView;
@@ -291,6 +292,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(ScrollBar.class, ScrollBarSkin.class);
         componentSkinMap.put(ScrollPane.Corner.class, ScrollPaneCornerSkin.class);
         componentSkinMap.put(Spacer.class, SpacerSkin.class);
+        componentSkinMap.put(Spinner.class, SpinnerSkin.class);
         componentSkinMap.put(SplitPane.class, SplitPaneSkin.class);
         componentSkinMap.put(TableViewHeader.class, TableViewHeaderSkin.class);
         componentSkinMap.put(TableView.class, TableViewSkin.class);
