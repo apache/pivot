@@ -17,6 +17,7 @@ package pivot.wtk.content;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import pivot.collections.List;
 import pivot.collections.ListListener;
@@ -39,6 +40,10 @@ public class IntegerSpinnerData implements List<Integer> {
         }
 
         public Integer next() {
+            if (value > upperBound) {
+                throw new NoSuchElementException();
+            }
+
             int next = value;
             value += increment;
             return next;
