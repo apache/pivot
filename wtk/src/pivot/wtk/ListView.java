@@ -733,7 +733,12 @@ public class ListView extends Component {
 
     public Object getSelectedValue() {
         int index = getSelectedIndex();
-        Object value = valueMapping.valueOf(listData, index);
+        Object value = null;
+
+        if (index >= 0) {
+            value = valueMapping.valueOf(listData, index);
+        }
+
         return value;
     }
 
@@ -895,8 +900,11 @@ public class ListView extends Component {
         }
 
         ValueMapping previousValueMapping = this.valueMapping;
-        this.valueMapping = valueMapping;
-        listViewListeners.valueMappingChanged(this, previousValueMapping);
+
+        if (previousValueMapping != valueMapping) {
+            this.valueMapping = valueMapping;
+            listViewListeners.valueMappingChanged(this, previousValueMapping);
+        }
     }
 
     @Override
