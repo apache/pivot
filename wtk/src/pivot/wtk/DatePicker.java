@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
@@ -142,6 +143,26 @@ public class DatePicker extends Container {
         public int hashCode() {
             Integer hashKey = year + month + day;
             return hashKey.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder buf = new StringBuilder();
+
+            NumberFormat format = NumberFormat.getIntegerInstance();
+            format.setGroupingUsed(false);
+            format.setMinimumIntegerDigits(4);
+
+            buf.append(format.format(year));
+            buf.append("-");
+
+            format.setMinimumIntegerDigits(2);
+
+            buf.append(format.format(month + 1));
+            buf.append("-");
+            buf.append(format.format(day + 1));
+
+            return buf.toString();
         }
     }
 
@@ -271,26 +292,6 @@ public class DatePicker extends Container {
     }
 
     /**
-     * Gets the data binding key that is set on this date picker.
-     */
-    public String getSelectedDateKey() {
-        return selectedDateKey;
-    }
-
-    /**
-     * Sets this date picker's data binding key.
-     */
-    public void setSelectedDateKey(String selectedDateKey) {
-        String previousSelectedDateKey = this.selectedDateKey;
-
-        if ((selectedDateKey == null ^ previousSelectedDateKey == null)
-            || (selectedDateKey != null && !selectedDateKey.equals(previousSelectedDateKey))) {
-            this.selectedDateKey = selectedDateKey;
-            datePickerListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
-        }
-    }
-
-    /**
      * Gets the currently selected date, or <tt>null</tt> if no date is
      * selected.
      */
@@ -328,6 +329,26 @@ public class DatePicker extends Container {
         }
 
         setSelectedDate(new Date(selectedDate));
+    }
+
+    /**
+     * Gets the data binding key that is set on this date picker.
+     */
+    public String getSelectedDateKey() {
+        return selectedDateKey;
+    }
+
+    /**
+     * Sets this date picker's data binding key.
+     */
+    public void setSelectedDateKey(String selectedDateKey) {
+        String previousSelectedDateKey = this.selectedDateKey;
+
+        if ((selectedDateKey == null ^ previousSelectedDateKey == null)
+            || (selectedDateKey != null && !selectedDateKey.equals(previousSelectedDateKey))) {
+            this.selectedDateKey = selectedDateKey;
+            datePickerListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
+        }
     }
 
     /**
