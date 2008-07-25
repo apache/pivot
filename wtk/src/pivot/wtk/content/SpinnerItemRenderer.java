@@ -24,6 +24,12 @@ import pivot.wtk.Label;
 import pivot.wtk.Spinner;
 import pivot.wtk.VerticalAlignment;
 
+/**
+ * Default spinner item renderer, which renders all items as strings by calling
+ * <tt>toString()</tt> on them.
+ *
+ * @author tvolkert
+ */
 public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
     public SpinnerItemRenderer() {
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
