@@ -540,6 +540,7 @@ public class ComponentLoader extends Loader {
         loaderClasses.put(ScrollPaneLoader.SCROLL_PANE_TAG, ScrollPaneLoader.class);
         loaderClasses.put(SpacerLoader.SPACER_TAG, SpacerLoader.class);
         loaderClasses.put(SplitPaneLoader.SPLIT_PANE_TAG, SplitPaneLoader.class);
+        loaderClasses.put(SpinnerLoader.SPINNER_TAG, SpinnerLoader.class);
         loaderClasses.put(StackPaneLoader.STACK_PANE_TAG, StackPaneLoader.class);
         loaderClasses.put(TabPaneLoader.TAB_PANE_TAG, TabPaneLoader.class);
         loaderClasses.put(TablePaneLoader.TABLE_PANE_TAG, TablePaneLoader.class);
