@@ -18,6 +18,7 @@ package pivot.wtk;
 import java.net.URL;
 import java.util.Iterator;
 import pivot.beans.Bean;
+import pivot.beans.BeanInfo;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
@@ -28,6 +29,7 @@ import pivot.wtk.media.Image;
  *
  * @author gbrown
  */
+@BeanInfo(icon="TabPane.png")
 public class TabPane extends Container {
     public final class TabSequence implements Sequence<Component>,
         Iterable<Component> {

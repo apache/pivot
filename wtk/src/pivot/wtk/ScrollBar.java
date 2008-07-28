@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import pivot.beans.BeanInfo;
 import pivot.util.ListenerList;
 
 /**
@@ -22,6 +23,7 @@ import pivot.util.ListenerList;
  *
  * @author tvolkert
  */
+@BeanInfo(icon="ScrollBar.png")
 public class ScrollBar extends Container {
     private class ScrollBarListenerList extends ListenerList<ScrollBarListener>
         implements ScrollBarListener {

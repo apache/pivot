@@ -15,8 +15,10 @@
  */
 package pivot.wtk;
 
+import pivot.beans.BeanInfo;
 import pivot.wtk.content.ButtonDataRenderer;
 
+@BeanInfo(icon="Checkbox.png")
 public class Checkbox extends Button {
     public Checkbox() {
         this(null);

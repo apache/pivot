@@ -18,6 +18,7 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
+
 public class CardPane extends Container {
     private class CardPaneListenerList extends ListenerList<CardPaneListener>
         implements CardPaneListener {

@@ -17,6 +17,7 @@ package pivot.wtk;
 
 import java.util.Comparator;
 
+import pivot.beans.BeanInfo;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
@@ -30,6 +31,7 @@ import pivot.wtk.content.SpinnerItemRenderer;
  *
  * @author tvolkert
  */
+@BeanInfo(icon="Spinner.png")
 public class Spinner extends Container {
     /**
      * Spinner renderer interface.

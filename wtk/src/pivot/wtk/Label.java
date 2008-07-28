@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import pivot.beans.BeanInfo;
 import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
 
@@ -24,6 +25,7 @@ import pivot.util.ListenerList;
  * @author gbrown
  *
  */
+@BeanInfo(icon="Label.png")
 public class Label extends Component {
     private class LabelListenerList extends ListenerList<LabelListener>
         implements LabelListener {

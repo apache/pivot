@@ -18,12 +18,12 @@ package pivot.wtk;
 import java.util.Iterator;
 
 import pivot.beans.Bean;
+import pivot.beans.BeanInfo;
 import pivot.collections.ArrayList;
 import pivot.collections.Map;
 import pivot.collections.Sequence;
 import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
-import pivot.wtk.Alert;
 
 /**
  * A container that arranges field components in a form layout. Each field has
@@ -33,6 +33,7 @@ import pivot.wtk.Alert;
  *
  * @author gbrown
  */
+@BeanInfo(icon="Form.png")
 public class Form extends Container {
     /**
      * Represents an alert associated with a form field.

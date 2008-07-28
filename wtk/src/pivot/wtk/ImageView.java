@@ -15,9 +15,11 @@
  */
 package pivot.wtk;
 
+import pivot.beans.BeanInfo;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
+@BeanInfo(icon="ImageView.png")
 public class ImageView extends Component {
     private class ImageViewListenerList extends ListenerList<ImageViewListener>
         implements ImageViewListener {

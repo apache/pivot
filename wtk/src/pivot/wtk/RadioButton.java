@@ -15,8 +15,10 @@
  */
 package pivot.wtk;
 
+import pivot.beans.BeanInfo;
 import pivot.wtk.content.ButtonDataRenderer;
 
+@BeanInfo(icon="RadioButton.png")
 public class RadioButton extends Button {
     public RadioButton() {
         this(null, null);

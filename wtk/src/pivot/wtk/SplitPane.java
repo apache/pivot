@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import pivot.beans.BeanInfo;
 import pivot.util.ListenerList;
 
 /**
@@ -33,6 +34,7 @@ import pivot.util.ListenerList;
  *
  * @author tvolkert
  */
+@BeanInfo(icon="SplitPane.png")
 public class SplitPane extends Container {
     public enum Region {
         TOP_LEFT,

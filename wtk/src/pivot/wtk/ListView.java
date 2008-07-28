@@ -16,6 +16,8 @@
 package pivot.wtk;
 
 import java.util.Comparator;
+
+import pivot.beans.BeanInfo;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
@@ -40,6 +42,7 @@ import pivot.wtk.content.ListViewItemRenderer;
  *
  * @author gbrown
  */
+@BeanInfo(icon="ListView.png")
 public class ListView extends Component {
     /**
      * Enumeration defining supported selection modes.

@@ -15,8 +15,11 @@
  */
 package pivot.wtk;
 
+import pivot.beans.BeanInfo;
 import pivot.wtk.content.ButtonDataRenderer;
 
+
+@BeanInfo(icon="PushButton.png")
 public class PushButton extends Button {
     public PushButton() {
         this(false, null);

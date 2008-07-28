@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import pivot.beans.BeanInfo;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
@@ -23,6 +24,7 @@ import pivot.util.ListenerList;
  * @author gbrown
  * @author tvolkert
  */
+@BeanInfo(icon="ScrollPane.png")
 public class ScrollPane extends Viewport {
     public enum ScrollBarPolicy {
         AUTO,

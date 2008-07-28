@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import pivot.beans.BeanInfo;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Dictionary;
@@ -28,6 +29,7 @@ import pivot.wtk.content.ListButtonDataRenderer;
  *
  * @author gbrown
  */
+@BeanInfo(icon="ListButton.png")
 public class ListButton extends Button {
     /**
      * List button skin interface. List button skins are required implement

@@ -15,12 +15,15 @@
  */
 package pivot.wtk;
 
+import pivot.beans.BeanInfo;
+
 /**
  * TODO Create subclasses that install inset and outset skins, which will
  * probably have different style properties than BorderSkin.
  *
  * @author gbrown
  */
+@BeanInfo(icon="Border.png")
 public class Border extends TitlePane {
     public Border() {
         this(null);
