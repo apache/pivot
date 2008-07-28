@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.util.ListenerList;
+
 public class Dialog extends Window {
     private class RepositionCallback implements Runnable {
         private static final float GOLDEN_SECTION = 0.382f;
@@ -36,11 +38,30 @@ public class Dialog extends Window {
         }
     }
 
+    /**
+     * Dialog listener list.
+     *
+     * @author tvolkert
+     */
+    private static class DialogListenerList extends ListenerList<DialogListener>
+        implements DialogListener {
+        public void dialogCloseHandlerChanged(Dialog dialog,
+            DialogCloseHandler previousDialogCloseHandler) {
+            for (DialogListener listener : this) {
+                listener.dialogCloseHandlerChanged(dialog, previousDialogCloseHandler);
+            }
+        }
+    }
+
     private boolean modal = false;
     private boolean result = false;
 
-    private DialogListener dialogListener = null;
+    private DialogCloseHandler dialogCloseHandler = null;
+
+    private DialogResultListener dialogResultListener = null;
     private Window disabledOwner = null;
+
+    private DialogListenerList dialogListeners = new DialogListenerList();
 
     public Dialog() {
         this(null, null);
@@ -57,6 +78,19 @@ public class Dialog extends Window {
     public Dialog(String title, Component content) {
         super(title, content);
         installSkin(Dialog.class);
+    }
+
+    public DialogCloseHandler getDialogCloseHandler() {
+        return dialogCloseHandler;
+    }
+
+    public void setDialogCloseHandler(DialogCloseHandler dialogCloseHandler) {
+        DialogCloseHandler previousDialogCloseHandler = this.dialogCloseHandler;
+
+        if (previousDialogCloseHandler != dialogCloseHandler) {
+            this.dialogCloseHandler = dialogCloseHandler;
+            dialogListeners.dialogCloseHandlerChanged(this, previousDialogCloseHandler);
+        }
     }
 
     /**
@@ -86,11 +120,11 @@ public class Dialog extends Window {
      * The dialog's owner. If <tt>null</tt>, the dialog is opened non-modal.
      * Otherwise, it is opened as modal.
      *
-     * @param dialogListener
+     * @param dialogResultListener
      * Optional dialog listener to be called when the dialog is closed.
      */
-    public void open(Window owner, DialogListener dialogListener) {
-        open(owner, owner != null, dialogListener);
+    public void open(Window owner, DialogResultListener dialogResultListener) {
+        open(owner, owner != null, dialogResultListener);
     }
 
     /**
@@ -103,10 +137,10 @@ public class Dialog extends Window {
      * If <tt>true</tt>, the dialog is opened as modal, disabling its owner
      * tree.
      *
-     * @param dialogListener
+     * @param dialogResultListener
      * Optional dialog listener to be called when the dialog is closed.
      */
-    public void open(Window owner, boolean modal, DialogListener dialogListener) {
+    public void open(Window owner, boolean modal, DialogResultListener dialogResultListener) {
         if (isOpen()) {
             throw new IllegalStateException("Window is already open.");
         }
@@ -116,7 +150,7 @@ public class Dialog extends Window {
             throw new IllegalStateException("Can't open un-owned dialog as modal");
         }
 
-        this.dialogListener = dialogListener;
+        this.dialogResultListener = dialogResultListener;
         this.modal = modal;
 
         // Call the base method
@@ -158,31 +192,39 @@ public class Dialog extends Window {
 
     public void close(boolean result) {
         if (!isClosed()) {
-            this.result = result;
+            boolean allowed = true;
 
-            // Enable the ancestor that was disabled when this dialog
-            // was opened
-            if (disabledOwner != null) {
-                disabledOwner.setEnabled(true);
+            if (dialogCloseHandler != null) {
+                allowed = dialogCloseHandler.close(this, result);
+            }
 
-                // Move the owner to the front
-                if (modal) {
-                    disabledOwner.moveToFront();
+            if (allowed) {
+                this.result = result;
+
+                // Enable the ancestor that was disabled when this dialog
+                // was opened
+                if (disabledOwner != null) {
+                    disabledOwner.setEnabled(true);
+
+                    // Move the owner to the front
+                    if (modal) {
+                        disabledOwner.moveToFront();
+                    }
                 }
+
+                // Close the window
+                super.close();
+
+                modal = false;
+                disabledOwner = null;
+
+                // Notify listener
+                if (dialogResultListener != null) {
+                    dialogResultListener.resultReceived(this);
+                }
+
+                dialogResultListener = null;
             }
-
-            // Close the window
-            super.close();
-
-            modal = false;
-            disabledOwner = null;
-
-            // Notify listener
-            if (dialogListener != null) {
-                dialogListener.resultReceived(this);
-            }
-
-            dialogListener = null;
         }
     }
 
@@ -194,11 +236,15 @@ public class Dialog extends Window {
         return disabledOwner;
     }
 
-    public DialogListener getDialogListener() {
-        return dialogListener;
+    public DialogResultListener getDialogResultListener() {
+        return dialogResultListener;
     }
 
     public boolean getResult() {
         return result;
+    }
+
+    public ListenerList<DialogListener> getDialogListeners() {
+        return dialogListeners;
     }
 }

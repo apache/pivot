@@ -15,7 +15,6 @@
  */
 package pivot.wtk;
 
-public interface DialogListener {
-    public void dialogCloseHandlerChanged(Dialog dialog,
-        DialogCloseHandler previousDialogCloseHandler);
+public interface DialogResultListener {
+    public void resultReceived(Dialog dialog);
 }
