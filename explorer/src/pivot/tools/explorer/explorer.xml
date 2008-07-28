@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Copyright (c) 2008 VMware, Inc.
+	
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+	
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+
+<TablePane styles="{padding:3, spacing:2}">
+	<rows>
+		<Row height="1*" />
+		<Row height="-1" />
+	</rows>
+	<columns>
+		<Column width="1*" />
+	</columns>
+	<cells>
+		<SplitPane row="0" column="0"  orientation="horizontal" splitLocation="350">
+			<left>
+				<TabPane tabOrientation="horizontal" selectedIndex="0">
+					<Border row="1" column="0" label="%main.window.components.tab.name" styles="{padding:0, borderColor:'#cccac2'}">
+						<ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+							<view>
+								<TreeView id="trComponents"/>
+							</view>
+						</ScrollPane>
+					</Border>
+				</TabPane>
+			</left>
+			<right>
+				<TabPane tabOrientation="horizontal" selectedIndex="0">
+					<Border row="1" column="0" label="%main.window.properties.tab.name" styles="{padding:0, borderColor:'#cccac2'}">
+						<ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+							<view>
+								<TableView id="tbProperties"
+									selectMode="single">
+									<columns>
+										<Column name="name" width="150"
+											headerData="'Name'" />
+										<Column name="value" width="1*"
+											headerData="'Value'" />
+									</columns>
+								</TableView>
+							</view>
+							<columnHeader>
+								<TableViewHeader id="tbPropertiesHeader"
+									tableViewID="tbProperties" />
+							</columnHeader>
+						</ScrollPane>
+					</Border>
+					<Border row="1" column="0" label="%main.window.styles.tab.name" styles="{padding:0, borderColor:'#cccac2'}">
+						<ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+							<view>
+								<TableView id="tbStyles"
+									selectMode="single">
+									<columns>
+										<Column name="name" width="100" headerData="'Name'" />
+										<Column name="value" width="1*"	headerData="'Value'" />
+									</columns>
+								</TableView>
+							</view>
+							<columnHeader>
+								<TableViewHeader id="tbStylesHeader" tableViewID="tbStyles" />
+							</columnHeader>
+						</ScrollPane>
+					</Border>
+				</TabPane>
+			</right>
+		</SplitPane>
+		<Label row="1" column="0" id="lbStatus" 
+				styles="{horizontalAlignment:'left', verticalAlignment:'center'}" />
+	</cells>
+</TablePane>
