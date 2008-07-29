@@ -34,17 +34,14 @@ public abstract class AbstractTableEntryAdapter implements Dictionary<String, Ob
 		return PropertySheetColumn.valueOf( key == null? "": key.toUpperCase());
 	}
 	
-	@Override
 	public boolean containsKey(String key) {
 		return asColumn( key ) != null;
 	}
 
-	@Override
 	public boolean isEmpty() {
 		return false;
 	}
 
-	@Override
 	public Object remove(String key) {
 		return null;
 	}

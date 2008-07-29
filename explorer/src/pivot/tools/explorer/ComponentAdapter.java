@@ -70,7 +70,6 @@ public class ComponentAdapter
 		return component.getClass().getSimpleName();
 	}
 
-	@Override
 	public boolean containsKey(String key) {
 		return TreeViewNodeRenderer.ICON_URL_KEY.equals(key) ||
 		       TreeViewNodeRenderer.LABEL_KEY.equals(key);
@@ -78,7 +77,6 @@ public class ComponentAdapter
 
 	private URL url;
 	
-	@Override
 	public Object get(String key) {
 		
 		if ( TreeViewNodeRenderer.LABEL_KEY.equals(key) ) {
@@ -95,23 +93,17 @@ public class ComponentAdapter
 		
 	}
 
-	@Override
 	public boolean isEmpty() {
 		return false;
 	}
 
-	@Override
 	public Object put(String key, Object value) {
 		return null;
 	}
 
-	@Override
 	public Object remove(String key) {
 		return null;
 	}
-	
-	
-	
 
 
 }

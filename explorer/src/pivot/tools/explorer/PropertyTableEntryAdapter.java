@@ -13,7 +13,6 @@ class PropertyTableEntryAdapter extends AbstractTableEntryAdapter {
 		super(component, propertyName);
 	}
 
-	@Override
 	public Object get(String key) {
 		
 		switch( asColumn( key )) {
@@ -23,7 +22,6 @@ class PropertyTableEntryAdapter extends AbstractTableEntryAdapter {
 		}
 	}
 
-	@Override
 	public Object put(String key, Object value) {
 		return PropertySheetColumn.VALUE == asColumn( key )? getComponent().put(getName(), value): null;
 	}

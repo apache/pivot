@@ -35,7 +35,7 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 		applicationContext.setTitle(resourceBundle.getString("main.window.name"));
 		
 		String resourceName     = getClass().getName().toLowerCase();
-        String wtkxResourceName = String.format( "%s.xml", resourceName.replace('.','/') );
+        String wtkxResourceName = String.format( "%s.wtkx", resourceName.replace('.','/') );
 		content = componentLoader.load( wtkxResourceName, resourceName );
 
         window = new Window(content);
@@ -71,7 +71,6 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 		return lst;
 	}
 	
-	@Override
 	public void selectionChanged(TreeView treeView) {
 		
 		Sequence<Integer> indexPath = trComponents.getSelectedPath();

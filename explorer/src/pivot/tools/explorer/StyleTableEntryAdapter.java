@@ -14,7 +14,6 @@ class StyleTableEntryAdapter extends AbstractTableEntryAdapter {
 		super(component, styleName );
 	}
 
-	@Override
 	public Object get(String key) {
 		
 		switch( asColumn( key )) {
@@ -28,7 +27,6 @@ class StyleTableEntryAdapter extends AbstractTableEntryAdapter {
 		return getComponent().getStyles();
 	}
 
-	@Override
 	public Object put(String key, Object value) {
 		return PropertySheetColumn.VALUE == asColumn( key )? getStyles().put(getName(), value): null;
 	}
