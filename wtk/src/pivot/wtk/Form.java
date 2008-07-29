@@ -17,7 +17,6 @@ package pivot.wtk;
 
 import java.util.Iterator;
 
-import pivot.beans.Bean;
 import pivot.beans.BeanInfo;
 import pivot.collections.ArrayList;
 import pivot.collections.Map;
@@ -35,6 +34,78 @@ import pivot.util.ListenerList;
  */
 @BeanInfo(icon="Form.png")
 public class Form extends Container {
+    /**
+     * Form field sequence.
+     *
+     * @author gbrown
+     */
+    public final class FieldSequence implements Sequence<Component>,
+        Iterable<Component> {
+        private class FieldIterator implements Iterator<Component> {
+            Iterator<Component> source = null;
+
+            public FieldIterator(Iterator<Component> source) {
+                this.source = source;
+            }
+
+            public boolean hasNext() {
+                return source.hasNext();
+            }
+
+            public Component next() {
+                return source.next();
+            }
+
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        public int add(Component field) {
+            int i = getLength();
+            insert(field, i);
+
+            return i;
+        }
+
+        public void insert(Component field, int index) {
+            insertField(field, index);
+        }
+
+        public Component update(int index, Component field) {
+            throw new UnsupportedOperationException();
+        }
+
+        public int remove(Component field) {
+            int index = indexOf(field);
+            if (index != -1) {
+                remove(index, 1);
+            }
+
+            return index;
+        }
+
+        public Sequence<Component> remove(int index, int count) {
+            return removeFields(index, count);
+        }
+
+        public Component get(int index) {
+            return fields.get(index);
+        }
+
+        public int indexOf(Component field) {
+            return fields.indexOf(field);
+        }
+
+        public int getLength() {
+            return fields.getLength();
+        }
+
+        public Iterator<Component> iterator() {
+            return new FieldIterator(fields.iterator());
+        }
+    }
+
     /**
      * Represents an alert associated with a form field.
      *
@@ -130,78 +201,6 @@ public class Form extends Container {
     }
 
     /**
-     * Form field sequence.
-     *
-     * @author gbrown
-     */
-    public final class FieldSequence implements Sequence<Component>,
-        Iterable<Component> {
-        private class FieldIterator implements Iterator<Component> {
-            Iterator<Component> source = null;
-
-            public FieldIterator(Iterator<Component> source) {
-                this.source = source;
-            }
-
-            public boolean hasNext() {
-                return source.hasNext();
-            }
-
-            public Component next() {
-                return source.next();
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        }
-
-        public int add(Component field) {
-            int i = getLength();
-            insert(field, i);
-
-            return i;
-        }
-
-        public void insert(Component field, int index) {
-            insertField(field, index);
-        }
-
-        public Component update(int index, Component field) {
-            throw new UnsupportedOperationException();
-        }
-
-        public int remove(Component field) {
-            int index = indexOf(field);
-            if (index != -1) {
-                remove(index, 1);
-            }
-
-            return index;
-        }
-
-        public Sequence<Component> remove(int index, int count) {
-            return removeFields(index, count);
-        }
-
-        public Component get(int index) {
-            return fields.get(index);
-        }
-
-        public int indexOf(Component field) {
-            return fields.indexOf(field);
-        }
-
-        public int getLength() {
-            return fields.getLength();
-        }
-
-        public Iterator<Component> iterator() {
-            return new FieldIterator(fields.iterator());
-        }
-    }
-
-    /**
      * Form listener list.
      *
      * @author gbrown
@@ -239,32 +238,14 @@ public class Form extends Container {
         }
     }
 
-    private static class Attributes extends Bean {
-        private String label = null;
-        private Flag flag = null;
-
-        public String getLabel() {
-            return label;
-        }
-
-        public void setLabel(String label) {
-            this.label = label;
-        }
-
-        public Flag getFlag() {
-            return flag;
-        }
-
-        public void setFlag(Flag flag) {
-            this.flag = flag;
-        }
-    }
-
     private ArrayList<Component> fields = new ArrayList<Component>();
     private FieldSequence fieldSequence = new FieldSequence();
 
     private FormListenerList formListeners = new FormListenerList();
     private FormAttributeListenerList formAttributeListeners = new FormAttributeListenerList();
+
+    private static final Attribute LABEL_ATTRIBUTE = new Attribute(Form.class, "label");
+    private static final Attribute FLAG_ATTRIBUTE = new Attribute(Form.class, "flag");
 
     /**
      * Creates a new form.
@@ -384,19 +365,12 @@ public class Form extends Container {
     }
 
     public static String getLabel(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes().get(Form.class);
-        return (attributes == null) ? null : attributes.getLabel();
+        return (String)component.getAttributes().get(LABEL_ATTRIBUTE);
     }
 
     public static void setLabel(Component component, String label) {
-        Attributes attributes = (Attributes)component.getAttributes().get(Form.class);
-        if (attributes == null) {
-            attributes = new Attributes();
-            component.getAttributes().put(Form.class, attributes);
-        }
-
-        String previousLabel = attributes.getLabel();
-        attributes.setLabel(label);
+        String previousLabel = getLabel(component);
+        component.getAttributes().put(LABEL_ATTRIBUTE, label);
 
         Form form = (Form)component.getParent();
         if (form != null) {
@@ -405,19 +379,12 @@ public class Form extends Container {
     }
 
     public static Flag getFlag(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes().get(Form.class);
-        return (attributes == null) ? null : attributes.getFlag();
+        return (Flag)component.getAttributes().get(FLAG_ATTRIBUTE);
     }
 
     public static void setFlag(Component component, Flag flag) {
-        Attributes attributes = (Attributes)component.getAttributes().get(Form.class);
-        if (attributes == null) {
-            attributes = new Attributes();
-            component.getAttributes().put(Form.class, attributes);
-        }
-
-        Flag previousFlag = attributes.getFlag();
-        attributes.setFlag(flag);
+        Flag previousFlag = getFlag(component);
+        component.getAttributes().put(FLAG_ATTRIBUTE, flag);
 
         Form form = (Form)component.getParent();
         if (form != null) {

@@ -17,7 +17,6 @@ package pivot.wtk;
 
 import java.net.URL;
 import java.util.Iterator;
-import pivot.beans.Bean;
 import pivot.beans.BeanInfo;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
@@ -150,27 +149,6 @@ public class TabPane extends Container {
 
     }
 
-    private static class Attributes extends Bean {
-        private String label = null;
-        private Image icon = null;
-
-        public String getLabel() {
-            return label;
-        }
-
-        public void setLabel(String label) {
-            this.label = label;
-        }
-
-        public Image getIcon() {
-            return icon;
-        }
-
-        public void setIcon(Image icon) {
-            this.icon = icon;
-        }
-    }
-
     private Orientation tabOrientation = Orientation.HORIZONTAL;
     private boolean collapsible = false;
     private int selectedIndex = -1;
@@ -181,6 +159,9 @@ public class TabPane extends Container {
     private TabPaneListenerList tabPaneListeners = new TabPaneListenerList();
     private TabPaneSelectionListenerList tabPaneSelectionListeners = new TabPaneSelectionListenerList();
     private TabPaneAttributeListenerList tabPaneAttributeListeners = new TabPaneAttributeListenerList();
+
+    private static final Attribute ICON_ATTRIBUTE = new Attribute(TabPane.class, "icon");
+    private static final Attribute LABEL_ATTRIBUTE = new Attribute(TabPane.class, "label");
 
     public TabPane() {
         this(false);
@@ -294,19 +275,12 @@ public class TabPane extends Container {
     }
 
     public static Image getIcon(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes().get(TabPane.class);
-        return (attributes == null) ? null : attributes.getIcon();
+        return (Image)component.getAttributes().get(ICON_ATTRIBUTE);
     }
 
     public static void setIcon(Component component, Image icon) {
-        Attributes attributes = (Attributes)component.getAttributes().get(TabPane.class);
-        if (attributes == null) {
-            attributes = new Attributes();
-            component.getAttributes().put(TabPane.class, attributes);
-        }
-
-        Image previousIcon = attributes.getIcon();
-        attributes.setIcon(icon);
+        Image previousIcon = getIcon(component);
+        component.getAttributes().put(ICON_ATTRIBUTE, icon);
 
         TabPane tabPane = (TabPane)component.getParent();
         if (tabPane != null) {
@@ -319,19 +293,12 @@ public class TabPane extends Container {
     }
 
     public static String getLabel(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes().get(TabPane.class);
-        return (attributes == null) ? null : attributes.getLabel();
+        return (String)component.getAttributes().get(LABEL_ATTRIBUTE);
     }
 
     public static void setLabel(Component component, String label) {
-        Attributes attributes = (Attributes)component.getAttributes().get(TabPane.class);
-        if (attributes == null) {
-            attributes = new Attributes();
-            component.getAttributes().put(TabPane.class, attributes);
-        }
-
-        String previousLabel = attributes.getLabel();
-        attributes.setLabel(label);
+        String previousLabel = getLabel(component);
+        component.getAttributes().put(LABEL_ATTRIBUTE, label);
 
         TabPane tabPane = (TabPane)component.getParent();
         if (tabPane != null) {

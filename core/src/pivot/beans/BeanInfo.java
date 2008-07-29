@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * TODO
  */
-@Inherited 
+@Inherited
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BeanInfo {
     String icon();

@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
 import pivot.collections.Dictionary;
 
 /**
@@ -30,7 +31,7 @@ public abstract class Bean implements Dictionary<String, Object> {
     /**
      * Iterable properties class.
      */
-    public class Properties implements Iterable<String> {
+    private class Properties implements Iterable<String> {
         public Iterator<String> iterator() {
             return new PropertyIterator();
         }
@@ -68,22 +69,21 @@ public abstract class Bean implements Dictionary<String, Object> {
         }
 
         private void nextProperty() {
-            if (i < methods.length) {
-                String methodName = methods[i++].getName();
+            final int propertyOffset = GET_PREFIX.length();
 
-                while (!methodName.startsWith(GET_PREFIX)
-                    && i < methods.length) {
-                    methodName = methods[i++].getName();
-                }
+            nextProperty = null;
 
-                final int propertyOffset = GET_PREFIX.length();
+            while (i < methods.length
+                && nextProperty == null) {
+                Method method = methods[i++];
+                String methodName = method.getName();
 
-                if (i < methods.length
-                    && methodName.length() > propertyOffset) {
+                if (methodName.startsWith(GET_PREFIX)
+                    && methodName.length() > propertyOffset
+                    && !methodName.endsWith(LISTENERS_SUFFIX)
+                    && method.getParameterTypes().length == 0) {
                     nextProperty = Character.toLowerCase(methodName.charAt(propertyOffset))
                         + methodName.substring(propertyOffset + 1);
-                } else {
-                    nextProperty = null;
                 }
             }
         }
@@ -98,6 +98,7 @@ public abstract class Bean implements Dictionary<String, Object> {
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";
     public static final String SET_PREFIX = "set";
+    public static final String LISTENERS_SUFFIX = "Listeners";
 
     /**
      * Invokes the getter method for the given property.
@@ -266,6 +267,36 @@ public abstract class Bean implements Dictionary<String, Object> {
      */
     public Iterable<String> getProperties() {
         return properties;
+    }
+
+    public Iterable<String> getEventSets() {
+        // TODO Identify methods that start with "get" and end with
+        // "Listeners" and return an instance of ListenerList
+
+        // TODO IMPORTANT Should we return an Iterable<EventSet>? EventSet would
+        // define:
+        // getName():String
+        // getEvents():Iterable<String>
+        // getEventArguments(event:String)
+
+        // TODO Should we call this class EventGroup?
+
+        return null;
+    }
+
+    public Class<?> getEventSetListener(String eventSet) {
+        // TODO
+        return null;
+    }
+
+    public Iterable<String> getEvents(String eventSet) {
+        // TODO
+        return null;
+    }
+
+    public Class<?>[] getEventArguments(String eventSet, String event) {
+        // TODO
+        return null;
     }
 
     /**

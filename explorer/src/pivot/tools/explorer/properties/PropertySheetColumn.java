@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package pivot.tools.explorer.properties;
 

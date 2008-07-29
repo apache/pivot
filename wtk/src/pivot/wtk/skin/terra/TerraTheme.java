@@ -268,7 +268,7 @@ public final class TerraTheme extends Theme {
 
     private static final Color DROP_SHADOW_COLOR = Color.BLACK;
     private static final float DROP_SHADOW_OPACITY = 0.33f;
-    private static final int DROP_SHADOW_OFFSET = 6;
+    private static final int DROP_SHADOW_OFFSET = 4;
 
     public TerraTheme() {
         componentSkinMap.put(Alert.class, AlertSkin.class);

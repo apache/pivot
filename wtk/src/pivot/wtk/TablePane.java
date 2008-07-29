@@ -15,7 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.beans.Bean;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
@@ -565,27 +564,6 @@ public class TablePane extends Container {
         }
     }
 
-    private static class Attributes extends Bean {
-        private int rowSpan = 1;
-        private int columnSpan = 1;
-
-        public int getRowSpan() {
-            return rowSpan;
-        }
-
-        public void setRowSpan(int rowSpan) {
-            this.rowSpan = rowSpan;
-        }
-
-        public int getColumnSpan() {
-            return columnSpan;
-        }
-
-        public void setColumnSpan(int columnSpan) {
-            this.columnSpan = columnSpan;
-        }
-    }
-
     private ArrayList<Row> rows;
     private RowSequence rowSequence = new RowSequence();
 
@@ -599,6 +577,8 @@ public class TablePane extends Container {
     private TablePaneListenerList tablePaneListeners = new TablePaneListenerList();
     private TablePaneAttributeListenerList tablePaneAttributeListeners = new TablePaneAttributeListenerList();
 
+    private static final Attribute ROW_SPAN_ATTRIBUTE = new Attribute(TablePane.class, "rowSpan");
+    private static final Attribute COLUMN_SPAN_ATTRIBUTE = new Attribute(TablePane.class, "columnSpan");
 
     /**
      * Creates a new <tt>TablePane</tt> with empty row and column sequences.
@@ -844,22 +824,16 @@ public class TablePane extends Container {
     }
 
     public static int getRowSpan(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes().get(TablePane.class);
-        return (attributes == null) ? 1 : attributes.getRowSpan();
+        Integer rowSpan = (Integer)component.getAttributes().get(ROW_SPAN_ATTRIBUTE);
+        return (rowSpan == null) ? 1 : rowSpan;
     }
 
     public static void setRowSpan(Component component, int rowSpan) {
-        Attributes attributes = (Attributes)component.getAttributes().get(TablePane.class);
-
-        if (attributes == null) {
-            attributes = new Attributes();
-            component.getAttributes().put(TablePane.class, attributes);
-        }
-
-        int previousRowSpan = attributes.getRowSpan();
-        attributes.setRowSpan(rowSpan);
+        int previousRowSpan = getRowSpan(component);
 
         if (previousRowSpan != rowSpan) {
+            component.getAttributes().put(ROW_SPAN_ATTRIBUTE, rowSpan);
+
             TablePane tablePane = (TablePane)component.getParent();
             if (tablePane != null) {
                 tablePane.tablePaneAttributeListeners.rowSpanChanged(tablePane,
@@ -877,22 +851,16 @@ public class TablePane extends Container {
     }
 
     public static int getColumnSpan(Component component) {
-        Attributes attributes = (Attributes)component.getAttributes().get(TablePane.class);
-        return (attributes == null) ? 1 : attributes.getColumnSpan();
+        Integer columnSpan = (Integer)component.getAttributes().get(COLUMN_SPAN_ATTRIBUTE);
+        return (columnSpan == null) ? 1 : columnSpan;
     }
 
     public static void setColumnSpan(Component component, int columnSpan) {
-        Attributes attributes = (Attributes)component.getAttributes().get(TablePane.class);
-
-        if (attributes == null) {
-            attributes = new Attributes();
-            component.getAttributes().put(TablePane.class, attributes);
-        }
-
-        int previousColumnSpan = attributes.getColumnSpan();
-        attributes.setColumnSpan(columnSpan);
+        int previousColumnSpan = getColumnSpan(component);
 
         if (previousColumnSpan != columnSpan) {
+            component.getAttributes().put(COLUMN_SPAN_ATTRIBUTE, columnSpan);
+
             TablePane tablePane = (TablePane)component.getParent();
             if (tablePane != null) {
                 tablePane.tablePaneAttributeListeners.columnSpanChanged(tablePane,

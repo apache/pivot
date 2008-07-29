@@ -83,12 +83,18 @@ public interface Sequence<T> {
          * The item to remove.
          *
          * @return
-         * The index of the item that was removed, or <tt>-1</tt> if the item
-         * could not be found.
+         * The path of the item that was removed.
          */
-        public static <T> int remove(Sequence<T> sequence, T item) {
-            // TODO
-            return -1;
+        public static <T> Sequence<Integer> remove(Sequence<T> sequence, T item) {
+            Sequence<Integer> path = pathOf(sequence, item);
+            if (path == null) {
+                throw new IllegalArgumentException("item is not a child element "
+                    + " of this sequence.");
+            }
+
+            remove(sequence, path, 1);
+
+            return path;
         }
 
         /**

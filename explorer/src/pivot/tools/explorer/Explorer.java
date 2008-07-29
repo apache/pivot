@@ -18,7 +18,7 @@ import pivot.wtkx.ComponentLoader;
 
 
 public class Explorer extends ApplicationAdapter implements TreeViewSelectionListener {
-	
+
 	private ResourceBundle resourceBundle   = ResourceBundle.getBundle( getClass().getName(), Locale.getDefault());
 	private ComponentLoader componentLoader = new ComponentLoader();
 
@@ -27,29 +27,29 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 	private TreeView  trComponents;
 	private TableView tbProperties, tbStyles;
 	private Label     lbStatus;
-	
+
 	@Override
 	public void startup() throws Exception {
-				
+
 		ApplicationContext applicationContext = ApplicationContext.getInstance();
 		applicationContext.setTitle(resourceBundle.getString("main.window.name"));
-		
+
 		String resourceName     = getClass().getName().toLowerCase();
         String wtkxResourceName = String.format( "%s.wtkx", resourceName.replace('.','/') );
 		content = componentLoader.load( wtkxResourceName, resourceName );
 
         window = new Window(content);
-		window.setMaximized(true); 
+		window.setMaximized(true);
         window.open();
-		
+
         lbStatus     = (Label)     componentLoader.getComponent("lbStatus");
         trComponents = (TreeView)  componentLoader.getComponent("trComponents");
         tbProperties = (TableView) componentLoader.getComponent("tbProperties");
         tbStyles     = (TableView) componentLoader.getComponent("tbStyles");
-        
+
         initComponentTree();
         Component.setFocusedComponent(trComponents);
-        
+
 	}
 
 	@Override
@@ -64,18 +64,18 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 		trComponents.setSelectedPath(pathToFirstElement);
         trComponents.expandBranch(pathToFirstElement);
 	}
-	
+
 	private <T> List<T> oneItemList( T item ) {
 		List<T> lst = new ArrayList<T>();
 		lst.add( item );
 		return lst;
 	}
-	
+
 	public void selectionChanged(TreeView treeView) {
-		
+
 		Sequence<Integer> indexPath = trComponents.getSelectedPath();
 		lbStatus.setText( TreeViewUtils.getStringPath(trComponents, indexPath));
-		
+
 		Sequence<ComponentAdapter> nodePath = TreeViewUtils.getNodePath(trComponents, indexPath);
 		if ( nodePath.getLength() > 0 ) {
 			ComponentAdapter node = nodePath.get( nodePath.getLength()-1 );
@@ -87,7 +87,7 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 //			tbProperties.setTableData( emptyList);
 //			tbStyles.setTableData( emptyList);
 //		}
-		
+
 	}
 
 }

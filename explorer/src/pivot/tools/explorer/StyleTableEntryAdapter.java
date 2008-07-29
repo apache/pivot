@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package pivot.tools.explorer;
 
@@ -9,13 +9,13 @@ import pivot.wtk.Component;
 import pivot.wtk.Component.StyleDictionary;
 
 class StyleTableEntryAdapter extends AbstractTableEntryAdapter {
-	
+
 	public StyleTableEntryAdapter(Component component, String styleName) {
 		super(component, styleName );
 	}
 
 	public Object get(String key) {
-		
+
 		switch( asColumn( key )) {
 			case NAME : return getName();
 			case VALUE: return getStyles().get(getName());
@@ -30,5 +30,5 @@ class StyleTableEntryAdapter extends AbstractTableEntryAdapter {
 	public Object put(String key, Object value) {
 		return PropertySheetColumn.VALUE == asColumn( key )? getStyles().put(getName(), value): null;
 	}
-	
+
 }

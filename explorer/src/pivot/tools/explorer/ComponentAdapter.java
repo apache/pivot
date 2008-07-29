@@ -13,45 +13,45 @@ import pivot.wtk.Container;
 import pivot.wtk.Component.StyleDictionary;
 import pivot.wtk.content.TreeViewNodeRenderer;
 
-public class ComponentAdapter 
-    extends ArrayList<ComponentAdapter> 
-    implements Dictionary<String,Object> { 
-		
+public class ComponentAdapter
+    extends ArrayList<ComponentAdapter>
+    implements Dictionary<String,Object> {
+
 	private Component component;
 	private List<AbstractTableEntryAdapter> properties, styles;
-	
+
 	public ComponentAdapter( Component component, boolean buildHierarchy ) {
 		super();
-		
+
 		if ( component == null ) {
 			throw new IllegalArgumentException( "Component cannot be null");
 		}
-		
+
 		this.component = component;
-		
+
 		if ( buildHierarchy && component instanceof Container ) {
 			for ( Component c: ((Container)component).getComponents()) {
 				add( new ComponentAdapter( c, true ));
 			}
 		}
-		
+
 	}
 
 	public Component getComponent() {
 		return component;
 	}
-	
+
 	public List<AbstractTableEntryAdapter> getProperties() {
 		if (properties == null) {
 			properties = new ArrayList<AbstractTableEntryAdapter>();
 			for ( String s: component.getProperties() ) {
 				properties.add( new PropertyTableEntryAdapter( component, s ));
 			}
-			
+
 		}
 		return properties;
 	}
-	
+
 	public List<AbstractTableEntryAdapter> getStyles() {
 		if (styles == null) {
 			styles = new ArrayList<AbstractTableEntryAdapter>();
@@ -64,7 +64,7 @@ public class ComponentAdapter
 		return styles;
 	}
 
-	
+
 	@Override
 	public String toString() {
 		return component.getClass().getSimpleName();
@@ -76,9 +76,9 @@ public class ComponentAdapter
 	}
 
 	private URL url;
-	
+
 	public Object get(String key) {
-		
+
 		if ( TreeViewNodeRenderer.LABEL_KEY.equals(key) ) {
 			return toString();
 		} else if ( TreeViewNodeRenderer.ICON_URL_KEY.equals(key) ){
@@ -90,7 +90,7 @@ public class ComponentAdapter
 		} else {
 			return null;
 		}
-		
+
 	}
 
 	public boolean isEmpty() {

@@ -5,29 +5,29 @@ import pivot.collections.Sequence;
 import pivot.wtk.TreeView;
 
 public final class TreeViewUtils {
-	
+
 	/**
-	 * Returns tree path with actual nodes 
+	 * Returns tree path with actual nodes
 	 * @param <T>
 	 * @param treeView
 	 * @param indexPath
 	 * @return
 	 */
 	public static final <T extends Sequence<? super T>> Sequence<T> getNodePath( TreeView treeView,  Sequence<Integer> indexPath ) {
-		
+
 		final Sequence<T> result = new ArrayList<T>();
-		
+
 		new TreePathVisitor<T>() {
 			@Override
 			protected void visit(T node) {
 				result.add(node);
 			}
 		}.start(treeView, indexPath);
-		
+
 		return result;
-		
+
 	}
-	
+
 	/**
 	 * Returns string representation of path
 	 * @param treeView
@@ -35,9 +35,9 @@ public final class TreeViewUtils {
 	 * @return
 	 */
 	public static final <T extends Sequence<? super T>> String getStringPath( TreeView treeView,  Sequence<Integer> indexPath ) {
-		
+
 		final StringBuilder sb = new StringBuilder();
-		
+
 		new TreePathVisitor<T>() {
 			@Override
 			protected void visit(T node) {
@@ -45,13 +45,13 @@ public final class TreeViewUtils {
 				sb.append( node.toString() );
 			}
 		}.start(treeView, indexPath);
-		
+
 		return sb.toString();
-		
-	}	
-	
-	
-	
+
+	}
+
+
+
 }
 
 

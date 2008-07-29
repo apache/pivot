@@ -17,6 +17,7 @@ package pivot.wtk;
 
 import java.awt.Graphics2D;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import pivot.beans.Bean;
 import pivot.collections.Dictionary;
@@ -92,6 +93,54 @@ public abstract class Component extends Bean implements Visual {
     }
 
     /**
+     * Iterable attributes class.
+     */
+    private class Properties implements Iterable<String> {
+        public Iterator<String> iterator() {
+            Iterator<String> beanPropertyIterator = Component.super.getProperties().iterator();
+            return new PropertyIterator(beanPropertyIterator);
+        }
+    }
+
+    /**
+     * Property iterator. Walks the list of methods defined by this object and
+     * returns a value for each getter method.
+     */
+    private class PropertyIterator implements Iterator<String> {
+        private Iterator<String> beanPropertyIterator = null;
+        private Iterator<Container.Attribute> attributeIterator = attributes.iterator();
+
+        public PropertyIterator(Iterator<String> beanPropertyIterator) {
+            this.beanPropertyIterator = beanPropertyIterator;
+        }
+
+        public boolean hasNext() {
+            return (beanPropertyIterator.hasNext()
+                || attributeIterator.hasNext());
+        }
+
+        public String next() {
+            String next = null;
+
+            if (beanPropertyIterator.hasNext()) {
+                next = beanPropertyIterator.next();
+            } else {
+                if (attributeIterator.hasNext()) {
+                    next = attributeIterator.next().toString();
+                } else {
+                    throw new NoSuchElementException();
+                }
+            }
+
+            return next;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
      * Holds cached preferred size constraint/value pairs.
      *
      * @author tvolkert
@@ -103,22 +152,6 @@ public abstract class Component extends Bean implements Visual {
         public PreferredSizeCache(int constraint, int value) {
             this.constraint = constraint;
             this.value = value;
-        }
-    }
-
-    /**
-     * Component class listener list.
-     *
-     * @author tvolkert
-     */
-    private static class ComponentClassListenerList
-        extends ListenerList<ComponentClassListener>
-        implements ComponentClassListener {
-
-        public void focusedComponentChanged(Component previousFocusedComponent) {
-            for (ComponentClassListener listener : this) {
-                listener.focusedComponentChanged(previousFocusedComponent);
-            }
         }
     }
 
@@ -307,6 +340,22 @@ public abstract class Component extends Bean implements Visual {
         }
     }
 
+    /**
+     * Component class listener list.
+     *
+     * @author tvolkert
+     */
+    private static class ComponentClassListenerList
+        extends ListenerList<ComponentClassListener>
+        implements ComponentClassListener {
+
+        public void focusedComponentChanged(Component previousFocusedComponent) {
+            for (ComponentClassListener listener : this) {
+                listener.focusedComponentChanged(previousFocusedComponent);
+            }
+        }
+    }
+
     private final int handle = nextHandle++;
 
     /**
@@ -384,10 +433,15 @@ public abstract class Component extends Bean implements Visual {
     private DropHandler dropHandler = null;
 
     /**
+     * Iterable properties instance.
+     */
+    private final Properties properties = new Properties();
+
+    /**
      * Map of attached attributes.
      */
-    private HashMap<Class<? extends Container>, Object> attributes =
-        new HashMap<Class<? extends Container>, Object>();
+    private HashMap<Container.Attribute, Object> attributes =
+        new HashMap<Container.Attribute, Object>();
 
     /**
      * Proxy class for getting/setting style properties on the skin.
@@ -429,8 +483,7 @@ public abstract class Component extends Bean implements Visual {
 
     @Override
     public Iterable<String> getProperties() {
-        // TODO
-        return super.getProperties();
+        return properties;
     }
 
     public int getHandle() {
@@ -1890,7 +1943,7 @@ public abstract class Component extends Bean implements Visual {
         return styleDictionary;
     }
 
-    protected Dictionary<Class<? extends Container>, Object> getAttributes() {
+    protected Dictionary<Container.Attribute, Object> getAttributes() {
         return attributes;
     }
 
