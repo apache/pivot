@@ -29,6 +29,7 @@ import pivot.wtk.ListView;
 class ListViewLoader extends Loader {
     public static final String LIST_VIEW_TAG = "ListView";
 
+    public static final String LIST_DATA_ATTRIBUTE = "listData";
     public static final String SELECT_MODE_ATTRIBUTE = "selectMode";
     public static final String SELECTED_INDEX_ATTRIBUTE = "selectedIndex";
     public static final String SELECTED_INDEXES_ATTRIBUTE = "selectedIndexes";
@@ -49,6 +50,26 @@ class ListViewLoader extends Loader {
         ListView listView = new ListView();
 
         NodeList childNodes = element.getChildNodes();
+
+        if (element.hasAttribute(LIST_DATA_ATTRIBUTE)) {
+            String listDataAttribute = element.getAttribute(LIST_DATA_ATTRIBUTE);
+
+            StringReader listDataReader = null;
+            try {
+                listDataReader = new StringReader(listDataAttribute);
+                JSONSerializer jsonSerializer = new JSONSerializer();
+                List<Object> listData =
+                    (List<Object>)jsonSerializer.readObject(listDataReader);
+
+                listView.setListData(listData);
+            } catch(Exception exception) {
+                throw new LoadException("Unable to apply list data.", exception);
+            } finally {
+                if (listDataReader != null) {
+                    listDataReader.close();
+                }
+            }
+        }
 
         for (int i = 0, n = childNodes.getLength(); i < n; i++) {
             Node childNode = childNodes.item(i);

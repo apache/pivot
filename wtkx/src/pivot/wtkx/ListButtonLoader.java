@@ -21,6 +21,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import pivot.collections.List;
 import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
 import pivot.wtk.Button;
@@ -31,6 +32,7 @@ import pivot.wtk.ListView;
 class ListButtonLoader extends ButtonLoader {
     public static final String LIST_BUTTON_TAG = "ListButton";
 
+    public static final String LIST_DATA_ATTRIBUTE = "listData";
     public static final String SELECTED_INDEX_ATTRIBUTE = "selectedIndex";
     public static final String ITEM_RENDERER_ATTRIBUTE = "itemRenderer";
     public static final String ITEM_RENDERER_STYLES_ATTRIBUTE = "itemRendererStyles";
@@ -51,6 +53,26 @@ class ListButtonLoader extends ButtonLoader {
         ListButton listButton = (ListButton)super.load(element, rootLoader);
 
         NodeList childNodes = element.getChildNodes();
+
+        if (element.hasAttribute(LIST_DATA_ATTRIBUTE)) {
+            String listDataAttribute = element.getAttribute(LIST_DATA_ATTRIBUTE);
+
+            StringReader listDataReader = null;
+            try {
+                listDataReader = new StringReader(listDataAttribute);
+                JSONSerializer jsonSerializer = new JSONSerializer();
+                List<Object> listData =
+                    (List<Object>)jsonSerializer.readObject(listDataReader);
+
+                listButton.setListData(listData);
+            } catch(Exception exception) {
+                throw new LoadException("Unable to apply list data.", exception);
+            } finally {
+                if (listDataReader != null) {
+                    listDataReader.close();
+                }
+            }
+        }
 
         for (int i = 0, n = childNodes.getLength(); i < n; i++) {
             Node childNode = childNodes.item(i);
