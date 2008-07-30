@@ -15,10 +15,9 @@
  */
 package pivot.wtk;
 
-import pivot.beans.BeanInfo;
 import pivot.wtk.content.LinkButtonDataRenderer;
 
-@BeanInfo(icon="LinkButton.png")
+@ComponentInfo(icon="LinkButton.png")
 public class LinkButton extends Button {
     public LinkButton() {
         this(null);

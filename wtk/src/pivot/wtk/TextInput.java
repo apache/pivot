@@ -15,7 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.beans.BeanInfo;
 import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
 import pivot.wtk.skin.terra.TextInputSkin;
@@ -25,7 +24,7 @@ import pivot.wtk.skin.terra.TextInputSkin;
  *
  * @author gbrown
  */
-@BeanInfo(icon="TextInput.png")
+@ComponentInfo(icon="TextInput.png")
 public class TextInput extends Component {
     /**
      * Text input listener list.

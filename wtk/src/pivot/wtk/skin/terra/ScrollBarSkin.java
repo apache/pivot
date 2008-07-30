@@ -386,17 +386,17 @@ public class ScrollBarSkin extends ContainerSkin
 
     protected abstract class ScrollButtonImage extends ImageAsset {
         public int getPreferredWidth(int height) {
-            // The image never gets consulted for its preffferred size
+            // The image never gets consulted for its preferred size
             return 0;
         }
 
         public int getPreferredHeight(int width) {
-            // The image never gets consulted for its preffferred size
+            // The image never gets consulted for its preferred size
             return 0;
         }
 
         public Dimensions getPreferredSize() {
-            // The image never gets consulted for its preffferred size
+            // The image never gets consulted for its preferred size
             return null;
         }
     }
@@ -685,49 +685,22 @@ public class ScrollBarSkin extends ContainerSkin
     private ScrollButton scrollDownButton = null;
     private ScrollHandle scrollHandle = null;
 
-    // Style properties
-    protected int minimumHandleLength = DEFAULT_MINIMUM_HANDLE_LENGTH;
-    protected Color borderColor = DEFAULT_BORDER_COLOR;
-    protected Color scrollButtonImageColor = DEFAULT_SCROLL_BUTTON_IMAGE_COLOR;
-    protected Color scrollButtonBackgroundColor = DEFAULT_SCROLL_BUTTON_BACKGROUND_COLOR;
-    protected Color scrollButtonDisabledBackgroundColor =
-        DEFAULT_SCROLL_BUTTON_DISABLED_BACKGROUND_COLOR;
-    protected Color scrollButtonPressedBackgroundColor =
-        DEFAULT_SCROLL_BUTTON_PRESSED_BACKGROUND_COLOR;
-    protected Color scrollButtonHighlightedBackgroundColor =
-        DEFAULT_SCROLL_BUTTON_HIGHLIGHTED_BACKGROUND_COLOR;
-
-    // Default style values
-    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(0xD9, 0xD2, 0xC7);
-    private static final int DEFAULT_MINIMUM_HANDLE_LENGTH = 31;
-    private static final Color DEFAULT_BORDER_COLOR = new Color(0x81, 0x76, 0x67);
-    private static final Color DEFAULT_SCROLL_BUTTON_IMAGE_COLOR = Color.BLACK;
-    private static final Color DEFAULT_SCROLL_BUTTON_BACKGROUND_COLOR =
+    private static final int minimumHandleLength = 31;
+    private static final Color borderColor = new Color(0x81, 0x76, 0x67);
+    private static final Color scrollButtonImageColor = Color.BLACK;
+    private static final Color scrollButtonBackgroundColor
+        = new Color(0xF0, 0xEC, 0xE7);
+    private static final Color scrollButtonDisabledBackgroundColor =
         new Color(0xF0, 0xEC, 0xE7);
-    private static final Color DEFAULT_SCROLL_BUTTON_DISABLED_BACKGROUND_COLOR =
-        new Color(0xF0, 0xEC, 0xE7);
-    private static final Color DEFAULT_SCROLL_BUTTON_PRESSED_BACKGROUND_COLOR =
+    private static final Color scrollButtonPressedBackgroundColor =
         new Color(0xDF, 0xD7, 0xCD);
-    private static final Color DEFAULT_SCROLL_BUTTON_HIGHLIGHTED_BACKGROUND_COLOR =
+    private static final Color scrollButtonHighlightedBackgroundColor =
         new Color(0xFB, 0xFA, 0xF8);
-
-    // Style keys
-    protected static final String MINIMUM_HANDLE_LENGTH_KEY = "minimumHandleLength";
-    protected static final String BORDER_COLOR_KEY = "borderColor";
-    protected static final String SCROLL_BUTTON_IMAGE_COLOR_KEY = "scrollButtonImageColor";
-    protected static final String SCROLL_BUTTON_BACKGROUND_COLOR_KEY =
-        "scrollButtonBackgroundColor";
-    protected static final String SCROLL_BUTTON_DISABLED_BACKGROUND_COLOR_KEY =
-        "scrollButtonDisabledBackgroundColor";
-    protected static final String SCROLL_BUTTON_PRESSED_BACKGROUND_COLOR_KEY =
-        "scrollButtonPressedBackgroundColor";
-    protected static final String SCROLL_BUTTON_HIGHLIGHTED_BACKGROUND_COLOR_KEY =
-        "scrollButtonHighlightedBackgroundColor";
 
     public ScrollBarSkin() {
         super();
 
-        setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
+        setBackgroundColor(new Color(0xD9, 0xD2, 0xC7));
     }
 
     @Override
@@ -1096,179 +1069,6 @@ public class ScrollBarSkin extends ContainerSkin
         valueScale = (float)numLegalPixelValues / (float)numLegalRealValues;
 
         return valueScale;
-    }
-
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(MINIMUM_HANDLE_LENGTH_KEY)) {
-            value = minimumHandleLength;
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            value = borderColor;
-        } else if (key.equals(SCROLL_BUTTON_IMAGE_COLOR_KEY)) {
-            value = scrollButtonImageColor;
-        } else if (key.equals(SCROLL_BUTTON_BACKGROUND_COLOR_KEY)) {
-            value = scrollButtonBackgroundColor;
-        } else if (key.equals(SCROLL_BUTTON_DISABLED_BACKGROUND_COLOR_KEY)) {
-            value = scrollButtonDisabledBackgroundColor;
-        } else if (key.equals(SCROLL_BUTTON_PRESSED_BACKGROUND_COLOR_KEY)) {
-            value = scrollButtonPressedBackgroundColor;
-        } else if (key.equals(SCROLL_BUTTON_HIGHLIGHTED_BACKGROUND_COLOR_KEY)) {
-            value = scrollButtonHighlightedBackgroundColor;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
-    }
-
-    @Override
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(MINIMUM_HANDLE_LENGTH_KEY)) {
-            if (value instanceof String) {
-                value = Integer.parseInt((String)value);
-            } else if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = minimumHandleLength;
-            minimumHandleLength = (Integer)value;
-
-            repaintComponent();
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = borderColor;
-            borderColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(SCROLL_BUTTON_IMAGE_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = scrollButtonImageColor;
-            scrollButtonImageColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(SCROLL_BUTTON_BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = scrollButtonBackgroundColor;
-            scrollButtonBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(SCROLL_BUTTON_DISABLED_BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = scrollButtonDisabledBackgroundColor;
-            scrollButtonDisabledBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(SCROLL_BUTTON_PRESSED_BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = scrollButtonPressedBackgroundColor;
-            scrollButtonPressedBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(SCROLL_BUTTON_HIGHLIGHTED_BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = scrollButtonHighlightedBackgroundColor;
-            scrollButtonHighlightedBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
-    }
-
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(MINIMUM_HANDLE_LENGTH_KEY)) {
-            previousValue = put(key, DEFAULT_MINIMUM_HANDLE_LENGTH);
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BORDER_COLOR);
-        } else if (key.equals(SCROLL_BUTTON_IMAGE_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_SCROLL_BUTTON_IMAGE_COLOR);
-        } else if (key.equals(SCROLL_BUTTON_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_SCROLL_BUTTON_BACKGROUND_COLOR);
-        } else if (key.equals(SCROLL_BUTTON_DISABLED_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_SCROLL_BUTTON_DISABLED_BACKGROUND_COLOR);
-        } else if (key.equals(SCROLL_BUTTON_PRESSED_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_SCROLL_BUTTON_PRESSED_BACKGROUND_COLOR);
-        } else if (key.equals(SCROLL_BUTTON_HIGHLIGHTED_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_SCROLL_BUTTON_HIGHLIGHTED_BACKGROUND_COLOR);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
-    }
-
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(MINIMUM_HANDLE_LENGTH_KEY)
-            || key.equals(BORDER_COLOR_KEY)
-            || key.equals(SCROLL_BUTTON_IMAGE_COLOR_KEY)
-            || key.equals(SCROLL_BUTTON_BACKGROUND_COLOR_KEY)
-            || key.equals(SCROLL_BUTTON_DISABLED_BACKGROUND_COLOR_KEY)
-            || key.equals(SCROLL_BUTTON_PRESSED_BACKGROUND_COLOR_KEY)
-            || key.equals(SCROLL_BUTTON_HIGHLIGHTED_BACKGROUND_COLOR_KEY)
-            || super.containsKey(key));
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
     }
 
     @Override

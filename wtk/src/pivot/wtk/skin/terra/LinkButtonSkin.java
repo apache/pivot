@@ -27,22 +27,11 @@ import pivot.wtk.Mouse;
 import pivot.wtk.skin.ButtonSkin;
 
 public class LinkButtonSkin extends ButtonSkin {
+    private Font font = new Font("Verdana", Font.PLAIN, 11);
+    private Color color = new Color(0x2c, 0x56, 0x80);
+    private Color disabledColor = new Color(0x99, 0x99, 0x99);
+
     private boolean highlighted = false;
-
-    // Style properties
-    protected Font font = DEFAULT_FONT;
-    protected Color color = DEFAULT_COLOR;
-    protected Color disabledColor = DEFAULT_DISABLED_COLOR;
-
-    // Default style values
-    private static final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 11);
-    private static final Color DEFAULT_COLOR = new Color(0x2c, 0x56, 0x80);
-    private static final Color DEFAULT_DISABLED_COLOR = new Color(0x99, 0x99, 0x99);
-
-    // Style keys
-    protected static final String FONT_KEY = "font";
-    protected static final String COLOR_KEY = "color";
-    protected static final String DISABLED_COLOR_KEY = "disabledColor";
 
     public void install(Component component) {
         validateComponentType(component, LinkButton.class);
@@ -98,110 +87,67 @@ public class LinkButtonSkin extends ButtonSkin {
         return false;
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(FONT_KEY)) {
-            value = font;
-        } else if (key.equals(COLOR_KEY)) {
-            value = color;
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            value = disabledColor;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public Font getFont() {
+        return font;
     }
 
-    @Override
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(FONT_KEY)) {
-            if (value instanceof String) {
-                value = Font.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Font.class, false);
-
-            previousValue = font;
-            font = (Font)value;
-
-            invalidateComponent();
-        } else if (key.equals(COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = color;
-            color = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = disabledColor;
-            disabledColor = (Color)value;
-
-            repaintComponent();
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
+        this.font = font;
+        invalidateComponent();
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(FONT_KEY)) {
-            previousValue = put(key, DEFAULT_FONT);
-        } else if (key.equals(COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_COLOR);
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_DISABLED_COLOR);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setFont(Font.decode(font));
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(FONT_KEY)
-            || key.equals(COLOR_KEY)
-            || key.equals(DISABLED_COLOR_KEY)
-            || super.containsKey(key));
+    public Color getColor() {
+        return color;
     }
 
-    public boolean isEmpty() {
-        return false;
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.color = color;
+        repaintComponent();
+    }
+
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(Color.decode(color));
+    }
+
+    public Color getDisabledColor() {
+        return disabledColor;
+    }
+
+    public void setDisabledColor(Color disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        this.disabledColor = disabledColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledColor(String disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        setDisabledColor(Color.decode(disabledColor));
     }
 
     @Override

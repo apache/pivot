@@ -17,7 +17,6 @@ package pivot.wtk;
 
 import java.util.Comparator;
 
-import pivot.beans.BeanInfo;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.ListListener;
@@ -48,7 +47,7 @@ import pivot.wtk.content.TreeViewNodeRenderer;
  * @author gbrown
  * @author tvolkert
  */
-@BeanInfo(icon="TreeView.png")
+@ComponentInfo(icon="TreeView.png")
 public class TreeView extends Component {
     /**
      * Enumeration defining supported selection modes.

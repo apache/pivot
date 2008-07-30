@@ -17,13 +17,13 @@ class PropertyTableEntryAdapter extends AbstractTableEntryAdapter {
 
 		switch( asColumn( key )) {
 			case NAME : return getName();
-			case VALUE: return getComponent().get(getName());
+			case VALUE: return getBeanDictionary().get(getName());
 			default   : return null;
 		}
 	}
 
 	public Object put(String key, Object value) {
-		return PropertySheetColumn.VALUE == asColumn( key )? getComponent().put(getName(), value): null;
+		return PropertySheetColumn.VALUE == asColumn( key )? getBeanDictionary().put(getName(), value): null;
 	}
 
 }

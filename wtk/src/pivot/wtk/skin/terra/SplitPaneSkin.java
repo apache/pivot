@@ -275,14 +275,14 @@ public class SplitPaneSkin extends ContainerSkin
             Splitter splitter = (Splitter)getComponent();
             SplitPane splitPane = splitter.getSplitPane();
 
-            int splitThickness = (Integer)splitPane.getStyles().get("splitThickness");
+            int splitterThickness = (Integer)splitPane.getStyles().get("splitterThickness");
 
             int lower = 0;
             int upper;
             if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
-                upper = splitPane.getWidth() - splitThickness;
+                upper = splitPane.getWidth() - splitterThickness;
             } else {
-                upper = splitPane.getHeight() - splitThickness;
+                upper = splitPane.getHeight() - splitterThickness;
             }
 
             Span bounds = splitPane.getSplitBounds();
@@ -346,17 +346,8 @@ public class SplitPaneSkin extends ContainerSkin
 
     private Splitter splitter;
 
-    // Style properties
-    protected int splitThickness = DEFAULT_SPLIT_THICKNESS;
-    protected boolean useShadow = DEFAULT_USE_SHADOW;
-
-    // Default style values
-    private static final int DEFAULT_SPLIT_THICKNESS = 6;
-    private static final boolean DEFAULT_USE_SHADOW = false;
-
-    // Style keys
-    protected static final String SPLIT_THICKNESS_KEY = "splitThickness";
-    protected static final String USE_SHADOW_KEY = "useShadow";
+    private int splitterThickness = 6;
+    private boolean useShadow = false;
 
     public SplitPaneSkin() {
         super();
@@ -411,11 +402,11 @@ public class SplitPaneSkin extends ContainerSkin
         Component leftComponent = splitPane.getTopLeftComponent();
         Component rightComponent = splitPane.getBottomRightComponent();
 
-        int rightStart = splitLocation + splitThickness;
+        int rightStart = splitLocation + splitterThickness;
 
         if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
             splitter.setLocation(splitLocation, 0);
-            splitter.setSize(splitThickness, height);
+            splitter.setSize(splitterThickness, height);
 
             if (leftComponent != null) {
                 leftComponent.setLocation(0, 0);
@@ -428,7 +419,7 @@ public class SplitPaneSkin extends ContainerSkin
             }
         } else {
             splitter.setLocation(0, splitLocation);
-            splitter.setSize(width, splitThickness);
+            splitter.setSize(width, splitterThickness);
 
             if (leftComponent != null) {
                 leftComponent.setLocation(0, 0);
@@ -442,90 +433,37 @@ public class SplitPaneSkin extends ContainerSkin
         }
     }
 
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(SPLIT_THICKNESS_KEY)) {
-            value = splitThickness;
-        } else if (key.equals(USE_SHADOW_KEY)) {
-            value = useShadow;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public int getSplitterThickness() {
+        return splitterThickness;
     }
 
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(SPLIT_THICKNESS_KEY)) {
-            if (value instanceof String) {
-                value = Integer.parseInt((String)value);
-            } else if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = splitThickness;
-            splitThickness = (Integer)value;
-
-            invalidateComponent();
-        } else if (key.equals(USE_SHADOW_KEY)) {
-            if (value instanceof String) {
-                value = Boolean.parseBoolean((String)value);
-            }
-
-            validatePropertyType(key, value, Boolean.class, false);
-
-            previousValue = useShadow;
-            useShadow = (Boolean)value;
-        } else {
-            super.put(key, value);
-        }
-
-        return previousValue;
+    public void setSplitterThickness(int splitterThickness) {
+        this.splitterThickness = splitterThickness;
+        invalidateComponent();
     }
 
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setSplitterThickness(String splitterThickness) {
+        if (splitterThickness == null) {
+            throw new IllegalArgumentException("splitterThickness is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(SPLIT_THICKNESS_KEY)) {
-            previousValue = put(key, DEFAULT_SPLIT_THICKNESS);
-        } else if (key.equals(USE_SHADOW_KEY)) {
-            previousValue = put(key, DEFAULT_USE_SHADOW);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setSplitterThickness(Integer.parseInt(splitterThickness));
     }
 
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(SPLIT_THICKNESS_KEY)
-                || key.equals(USE_SHADOW_KEY)
-                || super.containsKey(key));
+    public boolean getUseShadow() {
+        return useShadow;
     }
 
-    public boolean isEmpty() {
-        return false;
+    public void setUseShadow(boolean useShadow) {
+        this.useShadow = useShadow;
+    }
+
+    public final void setUseShadow(String useShadow) {
+        if (useShadow == null) {
+            throw new IllegalArgumentException("useShadow is null.");
+        }
+
+        setUseShadow(Boolean.parseBoolean(useShadow));
     }
 
     public void topLeftComponentChanged(SplitPane splitPane, Component previousTopLeftComponent) {

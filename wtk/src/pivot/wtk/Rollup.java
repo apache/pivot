@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.util.ListenerList;
-import pivot.wtk.skin.terra.RollupSkin;
 
 /**
  * Container that can be expanded or collapsed to respectively show or hide its

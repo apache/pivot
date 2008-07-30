@@ -24,21 +24,12 @@ import java.util.NoSuchElementException;
 import pivot.collections.Dictionary;
 
 /**
- * Abstract class for Pivot "beans". Exposes Java bean properties via the
- * {@link Dictionary} interface.
+ * Exposes Java bean properties of an object via the {@link Dictionary}
+ * interface.
  */
-public abstract class Bean implements Dictionary<String, Object> {
+public class BeanDictionary implements Dictionary<String, Object>, Iterable<String> {
     /**
-     * Iterable properties class.
-     */
-    private class Properties implements Iterable<String> {
-        public Iterator<String> iterator() {
-            return new PropertyIterator();
-        }
-    }
-
-    /**
-     * Property iterator. Walks the list of methods defined by this object and
+     * Property iterator. Walks the list of methods defined by the bean and
      * returns a value for each getter method.
      */
     private class PropertyIterator implements Iterator<String> {
@@ -48,7 +39,7 @@ public abstract class Bean implements Dictionary<String, Object> {
         private String nextProperty = null;
 
         public PropertyIterator() {
-            Class<?> type = Bean.this.getClass();
+            Class<?> type = bean.getClass();
             methods = type.getMethods();
             nextProperty();
         }
@@ -93,12 +84,20 @@ public abstract class Bean implements Dictionary<String, Object> {
         }
     }
 
-    private final Properties properties = new Properties();
+    private Object bean = null;
 
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";
     public static final String SET_PREFIX = "set";
     public static final String LISTENERS_SUFFIX = "Listeners";
+
+    public BeanDictionary(Object bean) {
+        if (bean == null) {
+            throw new IllegalArgumentException("bean is null.");
+        }
+
+        this.bean = bean;
+    }
 
     /**
      * Invokes the getter method for the given property.
@@ -121,7 +120,7 @@ public abstract class Bean implements Dictionary<String, Object> {
 
         if (getterMethod != null) {
             try {
-                value = getterMethod.invoke(this, new Object[] {});
+                value = getterMethod.invoke(bean, new Object[] {});
             } catch(IllegalAccessException exception) {
                 // No-op
             } catch(InvocationTargetException exception) {
@@ -175,7 +174,7 @@ public abstract class Bean implements Dictionary<String, Object> {
         Object previousValue = get(key);
 
         try {
-            setterMethod.invoke(this, new Object[] {value});
+            setterMethod.invoke(bean, new Object[] {value});
         } catch(IllegalAccessException exception) {
             throw new IllegalArgumentException(exception);
         } catch(InvocationTargetException exception) {
@@ -215,7 +214,7 @@ public abstract class Bean implements Dictionary<String, Object> {
      * Verifies that the bean contains at least one property.
      */
     public boolean isEmpty() {
-        return !properties.iterator().hasNext();
+        return !iterator().hasNext();
     }
 
     /**
@@ -260,43 +259,13 @@ public abstract class Bean implements Dictionary<String, Object> {
     }
 
     /**
-     * Returns an iterator over this bean's properties.
+     * Returns an iterator over the bean's properties.
      *
      * @return
      * A property iterator for this bean.
      */
-    public Iterable<String> getProperties() {
-        return properties;
-    }
-
-    public Iterable<String> getEventSets() {
-        // TODO Identify methods that start with "get" and end with
-        // "Listeners" and return an instance of ListenerList
-
-        // TODO IMPORTANT Should we return an Iterable<EventSet>? EventSet would
-        // define:
-        // getName():String
-        // getEvents():Iterable<String>
-        // getEventArguments(event:String)
-
-        // TODO Should we call this class EventGroup?
-
-        return null;
-    }
-
-    public Class<?> getEventSetListener(String eventSet) {
-        // TODO
-        return null;
-    }
-
-    public Iterable<String> getEvents(String eventSet) {
-        // TODO
-        return null;
-    }
-
-    public Class<?>[] getEventArguments(String eventSet, String event) {
-        // TODO
-        return null;
+    public Iterator<String> iterator() {
+        return new PropertyIterator();
     }
 
     /**
@@ -309,7 +278,7 @@ public abstract class Bean implements Dictionary<String, Object> {
      * The getter method, or <tt>null</tt> if the method does not exist.
      */
     private Method getGetterMethod(String key) {
-        Class<?> type = getClass();
+        Class<?> type = bean.getClass();
 
         // Upper-case the first letter
         key = Character.toUpperCase(key.charAt(0)) + key.substring(1);
@@ -342,7 +311,7 @@ public abstract class Bean implements Dictionary<String, Object> {
      * The getter method, or <tt>null</tt> if the method does not exist.
      */
     private Method getSetterMethod(String key, Class<?> valueType) {
-        Class<?> type = getClass();
+        Class<?> type = bean.getClass();
         Method method = null;
 
         if (valueType != null) {

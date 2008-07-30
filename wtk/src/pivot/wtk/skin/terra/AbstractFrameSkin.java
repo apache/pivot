@@ -56,22 +56,10 @@ import pivot.wtk.skin.WindowSkin;
 public abstract class AbstractFrameSkin extends WindowSkin
     implements ButtonPressListener {
     public static class FrameButton extends PushButton {
-        private Window window = null;
-
-        public FrameButton(Window window) {
-            this(window, null);
-        }
-
-        public FrameButton(Window window, Object buttonData) {
+        public FrameButton(Object buttonData) {
             super(buttonData);
 
-            this.window = window;
-
             installSkin(FrameButton.class);
-        }
-
-        public Window getWindow() {
-            return window;
         }
     }
 
@@ -80,30 +68,6 @@ public abstract class AbstractFrameSkin extends WindowSkin
             validateComponentType(component, FrameButton.class);
 
             super.install(component);
-        }
-
-        public void paint(Graphics2D graphics) {
-            // Apply frame styles to the button
-            FrameButton frameButton = (FrameButton)getComponent();
-            Window window = frameButton.getWindow();
-
-            Component.StyleDictionary windowStyles = window.getStyles();
-
-            if (window.isActive()) {
-                color = (Color)windowStyles.get("titleBarColor");
-                backgroundColor = (Color)windowStyles.get("titleBarBackgroundColor");
-                bevelColor = (Color)windowStyles.get("titleBarBevelColor");
-                pressedBevelColor = (Color)windowStyles.get("titleBarPressedBevelColor");
-                borderColor = (Color)windowStyles.get("titleBarBorderColor");
-            } else {
-                color = (Color)windowStyles.get("inactiveTitleBarColor");
-                backgroundColor = (Color)windowStyles.get("inactiveTitleBarBackgroundColor");
-                bevelColor = (Color)windowStyles.get("inactiveTitleBarBevelColor");
-                pressedBevelColor = (Color)windowStyles.get("inactiveTitleBarPressedBevelColor");
-                borderColor = (Color)windowStyles.get("inactiveTitleBarBorderColor");
-            }
-
-            super.paint(graphics);
         }
 
         @Override
@@ -141,7 +105,7 @@ public abstract class AbstractFrameSkin extends WindowSkin
     protected class MinimizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
-            graphics.setPaint(window.isActive() ? titleBarColor : inactiveTitleBarColor);
+            graphics.setPaint(window.isActive() ? TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
             graphics.fill(new Rectangle2D.Double(0, 6, 8, 2));
         }
     }
@@ -149,10 +113,10 @@ public abstract class AbstractFrameSkin extends WindowSkin
     protected class MaximizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
-            graphics.setPaint(window.isActive() ? titleBarColor : inactiveTitleBarColor);
+            graphics.setPaint(window.isActive() ? TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
             graphics.fill(new Rectangle2D.Double(0, 0, 8, 8));
 
-            graphics.setPaint(window.isActive() ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
+            graphics.setPaint(window.isActive() ? TITLE_BAR_BACKGROUND_COLOR : INACTIVE_TITLE_BAR_BACKGROUND_COLOR);
             graphics.fill(new Rectangle2D.Double(2, 2, 4, 4));
         }
     }
@@ -161,11 +125,11 @@ public abstract class AbstractFrameSkin extends WindowSkin
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
             graphics.setPaint(window.isActive() ?
-                titleBarColor : inactiveTitleBarColor);
+                TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
             graphics.fill(new Rectangle2D.Double(1, 1, 6, 6));
 
             graphics.setPaint(window.isActive() ?
-                titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
+                TITLE_BAR_BACKGROUND_COLOR : INACTIVE_TITLE_BAR_BACKGROUND_COLOR);
             graphics.fill(new Rectangle2D.Double(3, 3, 2, 2));
         }
     }
@@ -174,7 +138,7 @@ public abstract class AbstractFrameSkin extends WindowSkin
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
             graphics.setPaint(window.isActive() ?
-                titleBarColor : inactiveTitleBarColor);
+                TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
             graphics.setStroke(new BasicStroke(2));
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -206,7 +170,7 @@ public abstract class AbstractFrameSkin extends WindowSkin
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
-            graphics.setPaint(contentBorderColor);
+            graphics.setPaint(CONTENT_BORDER_COLOR);
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);
@@ -318,69 +282,26 @@ public abstract class AbstractFrameSkin extends WindowSkin
 
     private Point restoreLocation = null;
 
-    private static float INACTIVE_ICON_OPACITY = 0.5f;
+    private boolean resizable = true;
 
-    // Style properties
-    protected Font titleBarFont = DEFAULT_TITLE_BAR_FONT;
-    protected Color titleBarColor = DEFAULT_TITLE_BAR_COLOR;
-    protected Color titleBarBackgroundColor = DEFAULT_TITLE_BAR_BACKGROUND_COLOR;
-    protected Color titleBarBevelColor = DEFAULT_TITLE_BAR_BEVEL_COLOR;
-    protected Color titleBarPressedBevelColor = DEFAULT_TITLE_BAR_PRESSED_BEVEL_COLOR;
-    protected Color titleBarBorderColor = DEFAULT_TITLE_BAR_BORDER_COLOR;
-    protected Color inactiveTitleBarColor = DEFAULT_INACTIVE_TITLE_BAR_COLOR;
-    protected Color inactiveTitleBarBackgroundColor = DEFAULT_INACTIVE_TITLE_BAR_BACKGROUND_COLOR;
-    protected Color inactiveTitleBarBevelColor = DEFAULT_INACTIVE_TITLE_BAR_BEVEL_COLOR;
-    protected Color inactiveTitleBarPressedBevelColor = DEFAULT_INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR;
-    protected Color inactiveTitleBarBorderColor = DEFAULT_INACTIVE_TITLE_BAR_BORDER_COLOR;
-    protected Color contentBorderColor = DEFAULT_CONTENT_BORDER_COLOR;
-    protected Color contentBevelColor = DEFAULT_CONTENT_BEVEL_COLOR;
-    protected Insets padding = DEFAULT_PADDING;
-    protected boolean resizable = DEFAULT_RESIZABLE;
-
-    // Default style values
-    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(0xcc, 0xca, 0xc2);
-
-    private static final Font DEFAULT_TITLE_BAR_FONT = new Font("Verdana", Font.BOLD, 11);
-    private static final Color DEFAULT_TITLE_BAR_COLOR = Color.WHITE;
-    private static final Color DEFAULT_TITLE_BAR_BACKGROUND_COLOR = new Color(0x3c, 0x77, 0xb2);
-    private static final Color DEFAULT_TITLE_BAR_BEVEL_COLOR = new Color(0x45, 0x89, 0xcc);
-    private static final Color DEFAULT_TITLE_BAR_PRESSED_BEVEL_COLOR = new Color(0x34, 0x66, 0x99);
-    private static final Color DEFAULT_TITLE_BAR_BORDER_COLOR = new Color(0x2c, 0x56, 0x80);
-    private static final Color DEFAULT_INACTIVE_TITLE_BAR_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color DEFAULT_INACTIVE_TITLE_BAR_BACKGROUND_COLOR = new Color(0xcc, 0xca, 0xc2);
-    private static final Color DEFAULT_INACTIVE_TITLE_BAR_BEVEL_COLOR = new Color(0xe6, 0xe3, 0xda);
-    private static final Color DEFAULT_INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR = new Color(0xCC, 0xCA, 0xC2);
-    private static final Color DEFAULT_INACTIVE_TITLE_BAR_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color DEFAULT_CONTENT_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color DEFAULT_CONTENT_BEVEL_COLOR = new Color(0xe6, 0xe3, 0xda);
-    private static final Insets DEFAULT_PADDING = new Insets(8);
-    private static final boolean DEFAULT_SHOW_MINIMIZE_BUTTON = true;
-    private static final boolean DEFAULT_SHOW_MAXIMIZE_BUTTON = true;
-    private static final boolean DEFAULT_SHOW_CLOSE_BUTTON = true;
-    private static final boolean DEFAULT_RESIZABLE = true;
-
-    // Style keys
-    protected static final String TITLE_BAR_FONT_KEY = "titleBarFont";
-    protected static final String TITLE_BAR_COLOR_KEY = "titleBarColor";
-    protected static final String TITLE_BAR_BACKGROUND_COLOR_KEY = "titleBarBackgroundColor";
-    protected static final String TITLE_BAR_BEVEL_COLOR_KEY = "titleBarBevelColor";
-    protected static final String TITLE_BAR_PRESSED_BEVEL_COLOR_KEY = "titleBarPressedBevelColor";
-    protected static final String TITLE_BAR_BORDER_COLOR_KEY = "titleBarBorderColor";
-    protected static final String INACTIVE_TITLE_BAR_COLOR_KEY = "inactiveTitleBarColor";
-    protected static final String INACTIVE_TITLE_BAR_BACKGROUND_COLOR_KEY = "inactiveTitleBarBackgroundColor";
-    protected static final String INACTIVE_TITLE_BAR_BEVEL_COLOR_KEY = "inactiveTitleBarBevelColor";
-    protected static final String INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR_KEY = "inactiveTitleBarPressedBevelColor";
-    protected static final String INACTIVE_TITLE_BAR_BORDER_COLOR_KEY = "inactiveTitleBarBorderColor";
-    protected static final String CONTENT_BORDER_COLOR_KEY = "contentBorderColor";
-    protected static final String CONTENT_BEVEL_COLOR_KEY = "contentBevelColor";
-    protected static final String PADDING_KEY = "padding";
-    protected static final String SHOW_MINIMIZE_BUTTON_KEY = "showMinimizeButton";
-    protected static final String SHOW_MAXIMIZE_BUTTON_KEY = "showMaximizeButton";
-    protected static final String SHOW_CLOSE_BUTTON_KEY = "showCloseButton";
-    protected static final String RESIZABLE_KEY = "resizable";
+    private static final Font TITLE_BAR_FONT = new Font("Verdana", Font.BOLD, 11);
+    private static final Color TITLE_BAR_COLOR = Color.WHITE;
+    private static final Color TITLE_BAR_BACKGROUND_COLOR = new Color(0x3c, 0x77, 0xb2);
+    private static final Color TITLE_BAR_BEVEL_COLOR = new Color(0x45, 0x89, 0xcc);
+    private static final Color TITLE_BAR_PRESSED_BEVEL_COLOR = new Color(0x34, 0x66, 0x99);
+    private static final Color TITLE_BAR_BORDER_COLOR = new Color(0x2c, 0x56, 0x80);
+    private static final Color INACTIVE_TITLE_BAR_COLOR = new Color(0x99, 0x99, 0x99);
+    private static final Color INACTIVE_TITLE_BAR_BACKGROUND_COLOR = new Color(0xcc, 0xca, 0xc2);
+    private static final Color INACTIVE_TITLE_BAR_BEVEL_COLOR = new Color(0xe6, 0xe3, 0xda);
+    private static final Color INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR = new Color(0xCC, 0xCA, 0xC2);
+    private static final Color INACTIVE_TITLE_BAR_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
+    private static final Color CONTENT_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
+    private static final Color CONTENT_BEVEL_COLOR = new Color(0xe6, 0xe3, 0xda);
+    private static final Insets PADDING = new Insets(8);
+    private static final float INACTIVE_ICON_OPACITY = 0.5f;
 
     public AbstractFrameSkin() {
-        setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
+        setBackgroundColor(new Color(0xcc, 0xca, 0xc2));
 
         // The title bar flow pane contains two nested flow panes: one for
         // the title contents and the other for the buttons
@@ -398,7 +319,7 @@ public abstract class AbstractFrameSkin extends WindowSkin
         titleFlowPane.getComponents().add(titleLabel);
         titleFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
-        titleLabel.getStyles().put("font", titleBarFont);
+        titleLabel.getStyles().put("font", TITLE_BAR_FONT);
         iconImageView.getStyles().put("backgroundColor", null);
 
         // Initialize the button flow pane
@@ -417,16 +338,10 @@ public abstract class AbstractFrameSkin extends WindowSkin
 
         windowComponents.add(titleBarFlowPane);
 
-        // Create the frame buttons (we'll set an appropriate image on the
-        // maximize button later)
-        minimizeButton = new FrameButton(window, minimizeImage);
-        minimizeButton.setDisplayable(DEFAULT_SHOW_MINIMIZE_BUTTON);
-
-        maximizeButton = new FrameButton(window);
-        maximizeButton.setDisplayable(DEFAULT_SHOW_MAXIMIZE_BUTTON);
-
-        closeButton = new FrameButton(window, closeImage);
-        closeButton.setDisplayable(DEFAULT_SHOW_CLOSE_BUTTON);
+        // Create the frame buttons
+        minimizeButton = new FrameButton(minimizeImage);
+        maximizeButton = new FrameButton(maximizeImage);
+        closeButton = new FrameButton(closeImage);
 
         frameButtonFlowPane.getComponents().add(minimizeButton);
         frameButtonFlowPane.getComponents().add(maximizeButton);
@@ -477,14 +392,14 @@ public abstract class AbstractFrameSkin extends WindowSkin
             && content.isDisplayable()) {
             if (height != -1) {
                 height = Math.max(height - preferredTitleBarSize.height - 4 -
-                    padding.top - padding.bottom, 0);
+                    PADDING.top - PADDING.bottom, 0);
             }
 
             preferredWidth = Math.max(preferredWidth,
                 content.getPreferredWidth(height));
         }
 
-        preferredWidth += (padding.left + padding.right) + 2;
+        preferredWidth += (PADDING.left + PADDING.right) + 2;
 
         return preferredWidth;
     }
@@ -504,13 +419,13 @@ public abstract class AbstractFrameSkin extends WindowSkin
         if (content != null
             && content.isDisplayable()) {
             if (width != -1) {
-                width = Math.max(width - padding.left - padding.right, 0);
+                width = Math.max(width - PADDING.left - PADDING.right, 0);
             }
 
             preferredHeight += content.getPreferredHeight(width);
         }
 
-        preferredHeight += (padding.top + padding.bottom) + 4;
+        preferredHeight += (PADDING.top + PADDING.bottom) + 4;
 
         return preferredHeight;
     }
@@ -535,8 +450,8 @@ public abstract class AbstractFrameSkin extends WindowSkin
             preferredHeight += preferredContentSize.height;
         }
 
-        preferredWidth += (padding.left + padding.right) + 2;
-        preferredHeight += (padding.top + padding.bottom) + 4;
+        preferredWidth += (PADDING.left + PADDING.right) + 2;
+        preferredHeight += (PADDING.top + PADDING.bottom) + 4;
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -570,12 +485,12 @@ public abstract class AbstractFrameSkin extends WindowSkin
             if (content.isDisplayable()) {
                 content.setVisible(true);
 
-                content.setLocation(padding.left + 1,
-                    titleBarFlowPane.getHeight() + padding.top + 3);
+                content.setLocation(PADDING.left + 1,
+                    titleBarFlowPane.getHeight() + PADDING.top + 3);
 
-                int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
+                int contentWidth = Math.max(width - (PADDING.left + PADDING.right + 2), 0);
                 int contentHeight = Math.max(height - (titleBarFlowPane.getHeight()
-                    + padding.top + padding.bottom + 4), 0);
+                    + PADDING.top + PADDING.bottom + 4), 0);
 
                 content.setSize(contentWidth, contentHeight);
             } else {
@@ -600,299 +515,94 @@ public abstract class AbstractFrameSkin extends WindowSkin
         // Draw the title area
         Rectangle titleBarRectangle = new Rectangle(0, 0, width - 1, titleBarSize.height + 1);
         graphics.setPaint(window.isActive() ?
-            titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
+            TITLE_BAR_BACKGROUND_COLOR : INACTIVE_TITLE_BAR_BACKGROUND_COLOR);
         graphics.fill(titleBarRectangle);
 
         graphics.setPaint(window.isActive() ?
-            titleBarBorderColor : inactiveTitleBarBorderColor);
+            TITLE_BAR_BORDER_COLOR : INACTIVE_TITLE_BAR_BORDER_COLOR);
         graphics.draw(titleBarRectangle);
 
         Line2D titleBarBevelLine = new Line2D.Double(titleBarRectangle.x + 1, titleBarRectangle.y + 1,
             titleBarRectangle.width - 1, titleBarRectangle.y + 1);
         graphics.setPaint(window.isActive() ?
-            titleBarBevelColor : inactiveTitleBarBevelColor);
+            TITLE_BAR_BEVEL_COLOR : INACTIVE_TITLE_BAR_BEVEL_COLOR);
         graphics.draw(titleBarBevelLine);
 
         // Draw the content area
         Rectangle contentAreaRectangle = new Rectangle(0, titleBarSize.height + 2,
             width - 1, height - (titleBarSize.height + 3));
-        graphics.setPaint(contentBorderColor);
+        graphics.setPaint(CONTENT_BORDER_COLOR);
         graphics.draw(contentAreaRectangle);
 
         Line2D contentAreaBevelLine = new Line2D.Double(contentAreaRectangle.x + 1, contentAreaRectangle.y + 1,
             contentAreaRectangle.width - 1, contentAreaRectangle.y + 1);
-        graphics.setPaint(contentBevelColor);
+        graphics.setPaint(CONTENT_BEVEL_COLOR);
         graphics.draw(contentAreaBevelLine);
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(TITLE_BAR_FONT_KEY)) {
-            value = titleBarFont;
-        } else if (key.equals(TITLE_BAR_COLOR_KEY)) {
-            value = titleBarColor;
-        } else if (key.equals(TITLE_BAR_BACKGROUND_COLOR_KEY)) {
-            value = titleBarBackgroundColor;
-        } else if (key.equals(TITLE_BAR_BEVEL_COLOR_KEY)) {
-            value = titleBarBevelColor;
-        } else if (key.equals(TITLE_BAR_PRESSED_BEVEL_COLOR_KEY)) {
-            value = titleBarPressedBevelColor;
-        } else if (key.equals(TITLE_BAR_BORDER_COLOR_KEY)) {
-            value = titleBarBorderColor;
-        } else if (key.equals(INACTIVE_TITLE_BAR_COLOR_KEY)) {
-            value = inactiveTitleBarColor;
-        } else if (key.equals(INACTIVE_TITLE_BAR_BACKGROUND_COLOR_KEY)) {
-            value = inactiveTitleBarBackgroundColor;
-        } else if (key.equals(INACTIVE_TITLE_BAR_BEVEL_COLOR_KEY)) {
-            value = inactiveTitleBarBevelColor;
-        } else if (key.equals(INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR_KEY)) {
-            value = inactiveTitleBarPressedBevelColor;
-        } else if (key.equals(INACTIVE_TITLE_BAR_BORDER_COLOR_KEY)) {
-            value = inactiveTitleBarBorderColor;
-        } else if (key.equals(CONTENT_BORDER_COLOR_KEY)) {
-            value = contentBorderColor;
-        } else if (key.equals(CONTENT_BEVEL_COLOR_KEY)) {
-            value = contentBevelColor;
-        } else if (key.equals(PADDING_KEY)) {
-            value = padding;
-        } else if (key.equals(SHOW_MINIMIZE_BUTTON_KEY)) {
-            value = minimizeButton.isDisplayable();
-        } else if (key.equals(SHOW_MAXIMIZE_BUTTON_KEY)) {
-            value = maximizeButton.isDisplayable();
-        } else if (key.equals(SHOW_CLOSE_BUTTON_KEY)) {
-            value = closeButton.isDisplayable();
-        } else if (key.equals(RESIZABLE_KEY)) {
-            value = resizable;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public boolean getShowMinimizeButton() {
+        return minimizeButton.isDisplayable();
     }
 
-    @Override
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(TITLE_BAR_FONT_KEY)) {
-            validatePropertyType(key, value, Font.class, false);
-
-            previousValue = titleBarFont;
-            titleBarFont = (Font)value;
-
-            titleLabel.getStyles().put("font", titleBarFont);
-
-            invalidateComponent();
-        } else if (key.equals(TITLE_BAR_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = titleBarColor;
-            titleBarColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(TITLE_BAR_BACKGROUND_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = titleBarBackgroundColor;
-            titleBarBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(TITLE_BAR_BEVEL_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = titleBarBevelColor;
-            titleBarBevelColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(TITLE_BAR_PRESSED_BEVEL_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = titleBarPressedBevelColor;
-            titleBarPressedBevelColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(TITLE_BAR_BORDER_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = titleBarBorderColor;
-            titleBarBorderColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(INACTIVE_TITLE_BAR_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = inactiveTitleBarColor;
-            inactiveTitleBarColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(INACTIVE_TITLE_BAR_BACKGROUND_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = inactiveTitleBarBackgroundColor;
-            inactiveTitleBarBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(INACTIVE_TITLE_BAR_BEVEL_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = inactiveTitleBarBevelColor;
-            inactiveTitleBarBevelColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = inactiveTitleBarPressedBevelColor;
-            inactiveTitleBarPressedBevelColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(INACTIVE_TITLE_BAR_BORDER_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = inactiveTitleBarBorderColor;
-            inactiveTitleBarBorderColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(CONTENT_BORDER_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = contentBorderColor;
-            contentBorderColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(CONTENT_BEVEL_COLOR_KEY)) {
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = contentBevelColor;
-            contentBevelColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(PADDING_KEY)) {
-            validatePropertyType(key, value, Insets.class, false);
-
-            previousValue = padding;
-            padding = (Insets)value;
-
-            invalidateComponent();
-        } else if (key.equals(SHOW_MINIMIZE_BUTTON_KEY)) {
-            validatePropertyType(key, value, Boolean.class, false);
-
-            previousValue = minimizeButton.isDisplayable();
-            minimizeButton.setDisplayable((Boolean)value);
-        } else if (key.equals(SHOW_MAXIMIZE_BUTTON_KEY)) {
-            validatePropertyType(key, value, Boolean.class, false);
-
-            previousValue = maximizeButton.isDisplayable();
-            maximizeButton.setDisplayable((Boolean)value);
-        } else if (key.equals(SHOW_CLOSE_BUTTON_KEY)) {
-            validatePropertyType(key, value, Boolean.class, false);
-
-            previousValue = closeButton.isDisplayable();
-            closeButton.setDisplayable((Boolean)value);
-        } else if (key.equals(RESIZABLE_KEY)) {
-            validatePropertyType(key, value, Boolean.class, false);
-
-            previousValue = resizable;
-            resizable = (Boolean)value;
-
-            invalidateComponent();
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
+    public void setShowMinimizeButton(boolean showMinimizeButton) {
+        minimizeButton.setDisplayable(showMinimizeButton);
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public void setShowMinimizeButton(String showMinimizeButton) {
+        if (showMinimizeButton == null) {
+            throw new IllegalArgumentException("showMinimizeButton is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(TITLE_BAR_FONT_KEY)) {
-            previousValue = put(key, DEFAULT_TITLE_BAR_FONT);
-        } else if (key.equals(TITLE_BAR_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_TITLE_BAR_COLOR);
-        } else if (key.equals(TITLE_BAR_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_TITLE_BAR_BACKGROUND_COLOR);
-        } else if (key.equals(TITLE_BAR_BEVEL_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_TITLE_BAR_BEVEL_COLOR);
-        } else if (key.equals(TITLE_BAR_PRESSED_BEVEL_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_TITLE_BAR_PRESSED_BEVEL_COLOR);
-        } else if (key.equals(TITLE_BAR_BORDER_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_TITLE_BAR_BORDER_COLOR);
-        } else if (key.equals(INACTIVE_TITLE_BAR_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_INACTIVE_TITLE_BAR_COLOR);
-        } else if (key.equals(INACTIVE_TITLE_BAR_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_INACTIVE_TITLE_BAR_BACKGROUND_COLOR);
-        } else if (key.equals(INACTIVE_TITLE_BAR_BEVEL_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_INACTIVE_TITLE_BAR_BEVEL_COLOR);
-        } else if (key.equals(INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR);
-        } else if (key.equals(INACTIVE_TITLE_BAR_BORDER_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_INACTIVE_TITLE_BAR_BORDER_COLOR);
-        } else if (key.equals(CONTENT_BORDER_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_CONTENT_BORDER_COLOR);
-        } else if (key.equals(CONTENT_BEVEL_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_CONTENT_BEVEL_COLOR);
-        } else if (key.equals(PADDING_KEY)) {
-            previousValue = put(key, DEFAULT_PADDING);
-        } else if (key.equals(SHOW_MINIMIZE_BUTTON_KEY)) {
-            previousValue = put(key, DEFAULT_SHOW_MINIMIZE_BUTTON);
-        } else if (key.equals(SHOW_MAXIMIZE_BUTTON_KEY)) {
-            previousValue = put(key, DEFAULT_SHOW_MAXIMIZE_BUTTON);
-        } else if (key.equals(SHOW_CLOSE_BUTTON_KEY)) {
-            previousValue = put(key, DEFAULT_SHOW_CLOSE_BUTTON);
-        } else if (key.equals(RESIZABLE_KEY)) {
-            previousValue = put(key, DEFAULT_RESIZABLE);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setShowMinimizeButton(Boolean.parseBoolean(showMinimizeButton));
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(TITLE_BAR_FONT_KEY)
-            || key.equals(TITLE_BAR_COLOR_KEY)
-            || key.equals(TITLE_BAR_BACKGROUND_COLOR_KEY)
-            || key.equals(TITLE_BAR_BEVEL_COLOR_KEY)
-            || key.equals(TITLE_BAR_PRESSED_BEVEL_COLOR_KEY)
-            || key.equals(TITLE_BAR_BORDER_COLOR_KEY)
-            || key.equals(INACTIVE_TITLE_BAR_COLOR_KEY)
-            || key.equals(INACTIVE_TITLE_BAR_BACKGROUND_COLOR_KEY)
-            || key.equals(INACTIVE_TITLE_BAR_BEVEL_COLOR_KEY)
-            || key.equals(INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR_KEY)
-            || key.equals(INACTIVE_TITLE_BAR_BORDER_COLOR_KEY)
-            || key.equals(CONTENT_BORDER_COLOR_KEY)
-            || key.equals(CONTENT_BEVEL_COLOR_KEY)
-            || key.equals(PADDING_KEY)
-            || key.equals(SHOW_MINIMIZE_BUTTON_KEY)
-            || key.equals(SHOW_MAXIMIZE_BUTTON_KEY)
-            || key.equals(SHOW_CLOSE_BUTTON_KEY)
-            || super.containsKey(key));
+    public boolean getShowMaximizeButton() {
+        return maximizeButton.isDisplayable();
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
+    public void setShowMaximizeButton(boolean showMaximizeButton) {
+        maximizeButton.setDisplayable(showMaximizeButton);
+    }
+
+    public void setShowMaximizeButton(String showMaximizeButton) {
+        if (showMaximizeButton == null) {
+            throw new IllegalArgumentException("showMaximizeButton is null.");
+        }
+
+        setShowMaximizeButton(Boolean.parseBoolean(showMaximizeButton));
+    }
+
+    public boolean getShowCloseButton() {
+        return closeButton.isDisplayable();
+    }
+
+    public void setShowCloseButton(boolean showCloseButton) {
+        closeButton.setDisplayable(showCloseButton);
+    }
+
+    public void setShowCloseButton(String showCloseButton) {
+        if (showCloseButton == null) {
+            throw new IllegalArgumentException("showCloseButton is null.");
+        }
+
+        setShowCloseButton(Boolean.parseBoolean(showCloseButton));
+    }
+
+    public boolean isResizable() {
+        return resizable;
+    }
+
+    public void setResizable(boolean resizable) {
+        this.resizable = resizable;
+        invalidateComponent();
+    }
+
+    public final void setResizable(String resizable) {
+        if (resizable == null) {
+            throw new IllegalArgumentException("resizable is null.");
+        }
+
+        setResizable(Boolean.parseBoolean(resizable));
     }
 
     private void updateMaximizedState() {
@@ -960,10 +670,29 @@ public abstract class AbstractFrameSkin extends WindowSkin
     public void activeChanged(Window window) {
         boolean active = window.isActive();
 
-        titleLabel.getStyles().put("color", active ? titleBarColor : inactiveTitleBarColor);
-        iconImageView.getStyles().put("opacity", active ? 1.0f : INACTIVE_ICON_OPACITY);
+        titleLabel.getStyles().put("color", active ?
+            TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
+        iconImageView.getStyles().put("opacity", active ?
+            1.0f : INACTIVE_ICON_OPACITY);
+
+        updateButtonStyles(minimizeButton, active);
+        updateButtonStyles(maximizeButton, active);
+        updateButtonStyles(closeButton, active);
 
         repaintComponent();
+    }
+
+    private void updateButtonStyles(FrameButton frameButton, boolean active) {
+        frameButton.getStyles().put("color", active ?
+            TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
+        frameButton.getStyles().put("backgroundColor", active ?
+            TITLE_BAR_BACKGROUND_COLOR : INACTIVE_TITLE_BAR_BACKGROUND_COLOR);
+        frameButton.getStyles().put("bevelColor", active ?
+            TITLE_BAR_BEVEL_COLOR : INACTIVE_TITLE_BAR_BEVEL_COLOR);
+        frameButton.getStyles().put("pressedBevelColor", active ?
+            TITLE_BAR_PRESSED_BEVEL_COLOR : INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR);
+        frameButton.getStyles().put("borderColor", active ?
+            TITLE_BAR_BORDER_COLOR : INACTIVE_TITLE_BAR_BORDER_COLOR);
     }
 
     @Override

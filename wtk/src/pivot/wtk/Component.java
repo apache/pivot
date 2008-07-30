@@ -16,10 +16,9 @@
 package pivot.wtk;
 
 import java.awt.Graphics2D;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
-import pivot.beans.Bean;
+import pivot.beans.BeanDictionary;
+import pivot.beans.PropertyNotFoundException;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.util.ListenerList;
@@ -44,99 +43,28 @@ import pivot.wtk.Mouse.ScrollType;
  *
  * @version 1.0 (3/13/2007)
  */
-public abstract class Component extends Bean implements Visual {
+public abstract class Component implements Visual {
     /**
      * Style dictionary implementation.
      *
      * @author gbrown
      */
-    public final class StyleDictionary implements Dictionary<String, Object>, Iterable<String> {
-        public Object get(String key) {
-            return (skin == null) ? null : skin.get(key);
+    public class StyleDictionary extends BeanDictionary {
+        public StyleDictionary(Skin skin) {
+            super(skin);
         }
 
         public Object put(String key, Object value) {
-            if (skin == null) {
-                throw new IllegalStateException("Skin is not installed.");
+            Object previousValue = null;
+
+            try {
+                previousValue = super.put(key, value);
+            } catch(PropertyNotFoundException exception) {
+                System.out.println("\"" + key + "\" is not a valid style for "
+                    + Component.this);
             }
 
-            return skin.put(key, value);
-        }
-
-        public Object remove(String key) {
-            if (skin == null) {
-                throw new IllegalStateException("Renderer is not installed.");
-            }
-
-            return skin.remove(key);
-        }
-
-        public boolean containsKey(String key) {
-            return (skin == null) ? false : skin.containsKey(key);
-        }
-
-        public boolean isEmpty() {
-            return (skin == null) ? true : skin.isEmpty();
-        }
-
-        public Class<?> getType(String property) {
-            return (skin == null) ? null : skin.getType(property);
-        }
-
-        public Iterator<String> iterator() {
-            if (skin == null) {
-                throw new IllegalStateException("Skin is not installed.");
-            }
-
-            return skin.getProperties().iterator();
-        }
-    }
-
-    /**
-     * Iterable attributes class.
-     */
-    private class Properties implements Iterable<String> {
-        public Iterator<String> iterator() {
-            Iterator<String> beanPropertyIterator = Component.super.getProperties().iterator();
-            return new PropertyIterator(beanPropertyIterator);
-        }
-    }
-
-    /**
-     * Property iterator. Walks the list of methods defined by this object and
-     * returns a value for each getter method.
-     */
-    private class PropertyIterator implements Iterator<String> {
-        private Iterator<String> beanPropertyIterator = null;
-        private Iterator<Container.Attribute> attributeIterator = attributes.iterator();
-
-        public PropertyIterator(Iterator<String> beanPropertyIterator) {
-            this.beanPropertyIterator = beanPropertyIterator;
-        }
-
-        public boolean hasNext() {
-            return (beanPropertyIterator.hasNext()
-                || attributeIterator.hasNext());
-        }
-
-        public String next() {
-            String next = null;
-
-            if (beanPropertyIterator.hasNext()) {
-                next = beanPropertyIterator.next();
-            } else {
-                if (attributeIterator.hasNext()) {
-                    next = attributeIterator.next().toString();
-                } else {
-                    throw new NoSuchElementException();
-                }
-            }
-
-            return next;
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
+            return previousValue;
         }
     }
 
@@ -433,11 +361,6 @@ public abstract class Component extends Bean implements Visual {
     private DropHandler dropHandler = null;
 
     /**
-     * Iterable properties instance.
-     */
-    private final Properties properties = new Properties();
-
-    /**
      * Map of attached attributes.
      */
     private HashMap<Container.Attribute, Object> attributes =
@@ -446,7 +369,7 @@ public abstract class Component extends Bean implements Visual {
     /**
      * Proxy class for getting/setting style properties on the skin.
      */
-    private StyleDictionary styleDictionary = new StyleDictionary();
+    private StyleDictionary styleDictionary = null;
 
     /**
      * Event listener lists.
@@ -468,23 +391,6 @@ public abstract class Component extends Bean implements Visual {
     private static Component focusedComponent = null;
 
     private static int nextHandle = 0;
-
-    @Override
-    public Object get(String key) {
-        // TODO
-        return super.get(key);
-    }
-
-    @Override
-    public Object put(String key, Object value) {
-        // TODO
-        return super.put(key, value);
-    }
-
-    @Override
-    public Iterable<String> getProperties() {
-        return properties;
-    }
 
     public int getHandle() {
         return handle;
@@ -514,6 +420,10 @@ public abstract class Component extends Bean implements Visual {
      * If the skin cannot be installed on this component.
      */
     public void setSkinClass(Class<? extends Skin> skinClass) {
+        if (skinClass == null) {
+            throw new IllegalArgumentException("skinClass is null.");
+        }
+
         Class<? extends Skin> previousSkinClass = null;
 
         if (skin != null) {
@@ -528,6 +438,8 @@ public abstract class Component extends Bean implements Visual {
         } catch (Exception exception) {
             throw new IllegalArgumentException("The skin could not be installed.", exception);
         }
+
+        styleDictionary = new StyleDictionary(skin);
 
         invalidate();
         repaint();

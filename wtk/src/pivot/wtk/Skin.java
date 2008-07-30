@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Dictionary;
-
 /**
  * Interface defining a "skin". A skin is the graphical representation
  * of a component. In MVC terminology, a skin represents the "view" of the
@@ -63,7 +61,7 @@ import pivot.collections.Dictionary;
  *
  * @version 1.0 (4/17/2007)
  */
-public interface Skin extends Visual, Dictionary<String, Object> {
+public interface Skin extends Visual {
     /**
      * Associates a skin with a component. The skin should register any event
      * listeners necessary to respond to changes in the component's state, and
@@ -109,69 +107,4 @@ public interface Skin extends Visual, Dictionary<String, Object> {
 
     public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation);
     public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation);
-
-    /**
-     * Returns the value of a style property.
-     *
-     * @param key
-     * The name of the style property.
-     *
-     * @return
-     * The value of the given property, or <tt>null</tt> if the property
-     * does not exist. The property value may also be <tt>null</tt>; use
-     * {@link #containsKey(String)} to distinguish between these two cases.
-     */
-    public Object get(String key);
-
-    /**
-     * Sets the value of a style property.
-     *
-     * @param key
-     * The name of the style property.
-     *
-     * @param value
-     * The new value for the style property.
-     *
-     * @return
-     * The previous property value.
-     */
-    public Object put(String key, Object value);
-
-    /**
-     * Restores the style property to its default value.
-     *
-     * @param key
-     * The name of the style property.
-     *
-     * @return
-     * The previous property value.
-     */
-    public Object remove(String key);
-
-    /**
-     * Tests the existence of a style property.
-     *
-     * @return
-     * <tt>true</tt> if the property exists; <tt>false</tt>, otherwise.
-     */
-    public boolean containsKey(String key);
-
-    /**
-     * Returns the type of a style property.
-     *
-     * @param key
-     * The name of the property.
-     *
-     * @return
-     * The property's type.
-     */
-    public Class<?> getType(String key);
-
-    /**
-     * Returns an iterator over the skin's style properties.
-     *
-     * @return
-     * An iterator that enumerates the style properties.
-     */
-    public Iterable<String> getProperties();
 }

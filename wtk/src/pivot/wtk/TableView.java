@@ -17,7 +17,6 @@ package pivot.wtk;
 
 import java.util.Comparator;
 
-import pivot.beans.BeanInfo;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.ListListener;
@@ -31,7 +30,7 @@ import pivot.wtk.content.TableViewCellRenderer;
  *
  * @author gbrown
  */
-@BeanInfo(icon="TableView.png")
+@ComponentInfo(icon="TableView.png")
 public class TableView extends Component {
     /**
      * Contains information about a table column.

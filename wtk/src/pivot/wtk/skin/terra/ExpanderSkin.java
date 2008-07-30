@@ -22,7 +22,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-import pivot.collections.Map;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
@@ -68,7 +67,7 @@ public class ExpanderSkin extends TitlePaneSkin
         public ShadeButtonSkin() {
             super();
 
-            padding = new Insets(2);
+            setPadding(new Insets(2));
         }
 
         @Override
@@ -76,22 +75,6 @@ public class ExpanderSkin extends TitlePaneSkin
             validateComponentType(component, ShadeButton.class);
 
             super.install(component);
-        }
-
-        @Override
-        public void paint(Graphics2D graphics) {
-            // Apply expander styles to the button
-            ShadeButton shadeButton = (ShadeButton)getComponent();
-            Expander expander = shadeButton.getExpander();
-
-            Component.StyleDictionary expanderStyles = expander.getStyles();
-
-            backgroundColor = (Color)expanderStyles.get("shadeButtonBackgroundColor");
-            borderColor = (Color)expanderStyles.get("shadeButtonColor");
-            bevelColor = backgroundColor;
-            pressedBevelColor = backgroundColor;
-
-            super.paint(graphics);
         }
 
         @Override
@@ -156,35 +139,14 @@ public class ExpanderSkin extends TitlePaneSkin
 
     private TitleBarMouseHandler titleBarMouseHandler = new TitleBarMouseHandler();
 
-    // Style properties
-    protected Font titleBarFont = DEFAULT_TITLE_BAR_FONT;
-    protected Color titleBarColor = DEFAULT_TITLE_BAR_COLOR;
-    protected Color titleBarBackgroundColor = DEFAULT_TITLE_BAR_BACKGROUND_COLOR;
-    protected Color titleBarBorderColor = DEFAULT_TITLE_BAR_BORDER_COLOR;
-    protected Color shadeButtonColor = DEFAULT_SHADE_BUTTON_COLOR;
-    protected Color shadeButtonBackgroundColor = DEFAULT_SHADE_BUTTON_BACKGROUND_COLOR;
-    protected Color borderColor = DEFAULT_BORDER_COLOR;
-    protected Insets padding = DEFAULT_PADDING;
-
-    // Default style values
-    private static final Font DEFAULT_TITLE_BAR_FONT = new Font("Verdana", Font.BOLD, 11);
-    private static final Color DEFAULT_TITLE_BAR_COLOR = Color.BLACK;
-    private static final Color DEFAULT_TITLE_BAR_BACKGROUND_COLOR = new Color(0xE6, 0xE3, 0xDA);
-    private static final Color DEFAULT_TITLE_BAR_BORDER_COLOR = new Color(0xBD, 0xBD, 0xBD);
-    private static final Color DEFAULT_SHADE_BUTTON_COLOR = new Color(0x66, 0x99, 0xCC);
-    private static final Color DEFAULT_SHADE_BUTTON_BACKGROUND_COLOR = Color.WHITE;
-    private static final Color DEFAULT_BORDER_COLOR = new Color(0xCC, 0xCC, 0xCC);
-    private static final Insets DEFAULT_PADDING = new Insets(4);
-
-    // Style keys
-    protected static final String TITLE_BAR_FONT_KEY = "titleBarFont";
-    protected static final String TITLE_BAR_COLOR_KEY = "titleBarColor";
-    protected static final String TITLE_BAR_BACKGROUND_COLOR_KEY = "titleBarBackgroundColor";
-    protected static final String TITLE_BAR_BORDER_COLOR_KEY = "titleBarBorderColor";
-    protected static final String SHADE_BUTTON_COLOR_KEY = "shadeButtonColor";
-    protected static final String SHADE_BUTTON_BACKGROUND_COLOR_KEY = "shadeButtonBackgroundColor";
-    protected static final String BORDER_COLOR_KEY = "borderColor";
-    protected static final String PADDING_KEY = "padding";
+    private Font titleBarFont = new Font("Verdana", Font.BOLD, 11);
+    private Color titleBarColor = Color.BLACK;
+    private Color titleBarBackgroundColor = new Color(0xE6, 0xE3, 0xDA);
+    private Color titleBarBorderColor = new Color(0xBD, 0xBD, 0xBD);
+    private Color shadeButtonColor = new Color(0x66, 0x99, 0xCC);
+    private Color shadeButtonBackgroundColor = Color.WHITE;
+    private Color borderColor = new Color(0xCC, 0xCC, 0xCC);
+    private Insets padding = new Insets(4);
 
     public ExpanderSkin() {
         setBackgroundColor(Color.WHITE);
@@ -207,8 +169,7 @@ public class ExpanderSkin extends TitlePaneSkin
         titleBarFlowPane.getComponents().add(titleFlowPane);
         titleBarFlowPane.getComponents().add(buttonFlowPane);
 
-        titleLabel.getStyles().put("font", DEFAULT_TITLE_BAR_FONT);
-        titleLabel.getStyles().put("color", DEFAULT_TITLE_BAR_COLOR);
+        // TODO Apply default styles to components
 
         titleFlowPane.getComponents().add(titleLabel);
     }
@@ -358,198 +319,6 @@ public class ExpanderSkin extends TitlePaneSkin
 
         graphics.setPaint(borderColor);
         graphics.draw(new Rectangle2D.Double(0, 0, getWidth() - 1, getHeight() - 1));
-    }
-
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(TITLE_BAR_FONT_KEY)) {
-            value = titleBarFont;
-        } else if (key.equals(TITLE_BAR_COLOR_KEY)) {
-            value = titleBarColor;
-        } else if (key.equals(TITLE_BAR_BACKGROUND_COLOR_KEY)) {
-            value = titleBarBackgroundColor;
-        } else if (key.equals(TITLE_BAR_BORDER_COLOR_KEY)) {
-            value = titleBarBorderColor;
-        } else if (key.equals(SHADE_BUTTON_COLOR_KEY)) {
-            value = shadeButtonColor;
-        } else if (key.equals(SHADE_BUTTON_BACKGROUND_COLOR_KEY)) {
-            value = shadeButtonBackgroundColor;
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            value = borderColor;
-        } else if (key.equals(PADDING_KEY)) {
-            value = padding;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(TITLE_BAR_FONT_KEY)) {
-            if (value instanceof String) {
-                value = Font.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Font.class, false);
-
-            previousValue = titleBarFont;
-            titleBarFont = (Font)value;
-
-            invalidateComponent();
-        } else if (key.equals(TITLE_BAR_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = titleBarColor;
-            titleBarColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(TITLE_BAR_BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = titleBarBackgroundColor;
-            titleBarBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(TITLE_BAR_BORDER_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = titleBarBorderColor;
-            titleBarBorderColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(SHADE_BUTTON_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = shadeButtonColor;
-            shadeButtonColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(SHADE_BUTTON_BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = shadeButtonBackgroundColor;
-            shadeButtonBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = borderColor;
-            borderColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(PADDING_KEY)) {
-            if (value instanceof Number) {
-                value = new Insets(((Number)value).intValue());
-            } else {
-                if (value instanceof Map<?, ?>) {
-                    value = new Insets((Map<String, Object>)value);
-                }
-            }
-
-            validatePropertyType(key, value, Insets.class, false);
-
-            previousValue = padding;
-            padding = (Insets)value;
-
-            invalidateComponent();
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
-    }
-
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(TITLE_BAR_FONT_KEY)) {
-            previousValue = put(key, DEFAULT_TITLE_BAR_FONT);
-        } else if (key.equals(TITLE_BAR_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_TITLE_BAR_COLOR);
-        } else if (key.equals(TITLE_BAR_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_TITLE_BAR_BACKGROUND_COLOR);
-        } else if (key.equals(TITLE_BAR_BORDER_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_TITLE_BAR_BORDER_COLOR);
-        } else if (key.equals(SHADE_BUTTON_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_SHADE_BUTTON_COLOR);
-        } else if (key.equals(SHADE_BUTTON_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_SHADE_BUTTON_BACKGROUND_COLOR);
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BORDER_COLOR);
-        } else if (key.equals(PADDING_KEY)) {
-            previousValue = put(key, DEFAULT_PADDING);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
-    }
-
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(TITLE_BAR_FONT_KEY)
-            || key.equals(TITLE_BAR_COLOR_KEY)
-            || key.equals(TITLE_BAR_BACKGROUND_COLOR_KEY)
-            || key.equals(TITLE_BAR_BORDER_COLOR_KEY)
-            || key.equals(SHADE_BUTTON_COLOR_KEY)
-            || key.equals(SHADE_BUTTON_BACKGROUND_COLOR_KEY)
-            || key.equals(BORDER_COLOR_KEY)
-            || key.equals(PADDING_KEY)
-            || super.containsKey(key));
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
     }
 
     @Override

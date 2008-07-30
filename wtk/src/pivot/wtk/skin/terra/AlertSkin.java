@@ -70,7 +70,7 @@ public class AlertSkin extends DialogSkin
     private Label subjectLabel = null;
 
     public AlertSkin() {
-        resizable = false;
+        setResizable(false);
 
         alertContent.getStyles().put("horizontalAlignment",
             HorizontalAlignment.JUSTIFY);

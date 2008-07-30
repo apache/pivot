@@ -15,10 +15,9 @@
  */
 package pivot.wtk;
 
-import pivot.beans.BeanInfo;
 import pivot.util.ListenerList;
 
-@BeanInfo(icon="Meter.png")
+@ComponentInfo(icon="Meter.png")
 public class Meter extends Component {
     private class MeterListenerList extends ListenerList<MeterListener>
     implements MeterListener {

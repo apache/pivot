@@ -1,14 +1,11 @@
-package pivot.beans;
+package pivot.wtk;
 
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * TODO
- */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-public @interface BeanInfo {
+public @interface ComponentInfo {
     String icon();
 }

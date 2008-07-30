@@ -17,8 +17,6 @@ package pivot.wtk.skin;
 
 import java.awt.Graphics2D;
 
-import pivot.beans.Bean;
-import pivot.beans.PropertyNotFoundException;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentStateListener;
@@ -35,8 +33,7 @@ import pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-public abstract class ComponentSkin extends Bean
-    implements Skin, ComponentStateListener {
+public abstract class ComponentSkin implements Skin, ComponentStateListener {
     /**
      * Base class for "image assets", images generated and used internally by
      * a skin. Image assets cannot be loaded, stored, or drawn to.
@@ -95,20 +92,6 @@ public abstract class ComponentSkin extends Bean
     private int showTooltipTimeoutID = -1;
 
     public static final int SHOW_TOOLTIP_TIMEOUT = 1000;
-
-    @Override
-    public Object put(String key, Object value) {
-        Object previousValue = null;
-
-        try {
-            previousValue = super.put(key, value);
-        } catch(PropertyNotFoundException exception) {
-            System.out.println("\"" + key + "\" not found in component "
-                + getComponent());
-        }
-
-        return previousValue;
-    }
 
     public int getWidth() {
         return width;

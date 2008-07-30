@@ -15,10 +15,9 @@
  */
 package pivot.wtk.content;
 
-import pivot.beans.Bean;
 import pivot.wtk.media.Image;
 
-public class TableViewHeaderData extends Bean {
+public class TableViewHeaderData {
     private Image icon = null;
     private String label = null;
 

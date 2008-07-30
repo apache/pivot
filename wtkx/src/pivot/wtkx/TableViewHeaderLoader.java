@@ -19,6 +19,7 @@ import java.io.StringReader;
 
 import org.w3c.dom.Element;
 
+import pivot.beans.BeanDictionary;
 import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
 import pivot.wtk.Component;
@@ -91,8 +92,9 @@ class TableViewHeaderLoader extends Loader {
                 Map<String, Object> properties =
                     (Map<String, Object>)jsonSerializer.readObject(dataRendererPropertiesReader);
 
+                BeanDictionary dataRendererDictionary = new BeanDictionary(dataRenderer);
                 for (String key : properties) {
-                    dataRenderer.put(key, properties.get(key));
+                    dataRendererDictionary.put(key, properties.get(key));
                 }
             } catch(Exception exception) {
                 throw new LoadException("Unable to apply data renderer properties.", exception);

@@ -37,25 +37,6 @@ public class DialogSkin extends AbstractFrameSkin {
     }
 
     @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(SHOW_MINIMIZE_BUTTON_KEY)) {
-            previousValue = put(key, DEFAULT_SHOW_MINIMIZE_BUTTON);
-        } else if (key.equals(SHOW_MAXIMIZE_BUTTON_KEY)) {
-            previousValue = put(key, DEFAULT_SHOW_MAXIMIZE_BUTTON);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
-    }
-
-    @Override
     public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 

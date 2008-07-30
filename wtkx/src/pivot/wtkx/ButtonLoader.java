@@ -18,6 +18,7 @@ package pivot.wtkx;
 import java.io.StringReader;
 import org.w3c.dom.Element;
 
+import pivot.beans.BeanDictionary;
 import pivot.collections.HashMap;
 import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
@@ -138,8 +139,9 @@ abstract class ButtonLoader extends Loader {
                 Map<String, Object> properties =
                     (Map<String, Object>)jsonSerializer.readObject(itemRendererPropertiesReader);
 
+                BeanDictionary dataRendererDictionary = new BeanDictionary(dataRenderer);
                 for (String key : properties) {
-                    dataRenderer.put(key, properties.get(key));
+                    dataRendererDictionary.put(key, properties.get(key));
                 }
             } catch(Exception exception) {
                 throw new LoadException("Unable to apply item renderer properties.", exception);

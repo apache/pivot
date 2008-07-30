@@ -20,7 +20,6 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
-import pivot.beans.BeanInfo;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.Map;
@@ -41,7 +40,7 @@ import pivot.util.ListenerList;
  *
  * @author gbrown
  */
-@BeanInfo(icon="Container.png")
+@ComponentInfo(icon="Container.png")
 public abstract class Container extends Component {
     /**
      * Internal class for managing the container's component list.

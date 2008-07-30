@@ -24,7 +24,6 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 
 import pivot.collections.List;
-import pivot.collections.Map;
 import pivot.wtk.Border;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
@@ -109,58 +108,21 @@ public class ListButtonSkin extends ButtonSkin
     private Border listViewBorder = null;
     private Popup listViewPopup = null;
 
+    private Font font = new Font("Verdana", Font.PLAIN, 11);
+    private Color color = Color.BLACK;
+    private Color disabledColor = new Color(0x99, 0x99, 0x99);
+    private Color backgroundColor = new Color(0xE6, 0xE3, 0xDA);
+    private Color disabledBackgroundColor = new Color(0xF7, 0xF5, 0xEB);
+    private Color borderColor = new Color(0x99, 0x99, 0x99);
+    private Color disabledBorderColor = new Color(0xCC, 0xCC, 0xCC);
+    private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
+    private Color pressedBevelColor = new Color(0xCC, 0xCA, 0xC2);
+    private Color disabledBevelColor = Color.WHITE;
+    private Insets padding = new Insets(3);
+
     private boolean pressed = false;
 
     private static final int TRIGGER_WIDTH = 14;
-
-    // Style properties
-    protected Font font = DEFAULT_FONT;
-    protected Color color = DEFAULT_COLOR;
-    protected Color disabledColor = DEFAULT_DISABLED_COLOR;
-    protected Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
-    protected Color disabledBackgroundColor = DEFAULT_DISABLED_BACKGROUND_COLOR;
-    protected Color borderColor = DEFAULT_BORDER_COLOR;
-    protected Color disabledBorderColor = DEFAULT_DISABLED_BORDER_COLOR;
-    protected Color bevelColor = DEFAULT_BEVEL_COLOR;
-    protected Color pressedBevelColor = DEFAULT_PRESSED_BEVEL_COLOR;
-    protected Color disabledBevelColor = DEFAULT_DISABLED_BEVEL_COLOR;
-    protected Insets padding = DEFAULT_PADDING;
-
-    // Default style values
-    private static final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 11);
-    private static final Color DEFAULT_COLOR = new Color(0x00, 0x00, 0x00);
-    private static final Color DEFAULT_DISABLED_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(0xE6, 0xE3, 0xDA);
-    private static final Color DEFAULT_DISABLED_BACKGROUND_COLOR = new Color(0xF7, 0xF5, 0xEB);
-    private static final Color DEFAULT_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color DEFAULT_DISABLED_BORDER_COLOR = new Color(0xCC, 0xCC, 0xCC);
-    private static final Color DEFAULT_BEVEL_COLOR = new Color(0xF7, 0xF5, 0xEB);
-    private static final Color DEFAULT_PRESSED_BEVEL_COLOR = new Color(0xCC, 0xCA, 0xC2);
-    private static final Color DEFAULT_DISABLED_BEVEL_COLOR = new Color(0xFF, 0xFF, 0xFF);
-    private static final Insets DEFAULT_PADDING = new Insets(2);
-
-    // Style keys
-    protected static final String FONT_KEY = "font";
-    protected static final String COLOR_KEY = "color";
-    protected static final String DISABLED_COLOR_KEY = "disabledColor";
-    protected static final String BACKGROUND_COLOR_KEY = "backgroundColor";
-    protected static final String DISABLED_BACKGROUND_COLOR_KEY = "disabledBackgroundColor";
-    protected static final String BORDER_COLOR_KEY = "borderColor";
-    protected static final String BEVEL_COLOR_KEY = "bevelColor";
-    protected static final String PRESSED_BEVEL_COLOR_KEY = "pressedBevelColor";
-    protected static final String DISABLED_BEVEL_COLOR_KEY = "disabledBevelColor";
-    protected static final String PADDING_KEY = "padding";
-
-    protected static final String LIST_FONT_KEY = "listFont";
-    protected static final String LIST_COLOR_KEY = "listColor";
-    protected static final String LIST_DISABLED_COLOR_KEY = "listDisabledColor";
-    protected static final String LIST_BACKGROUND_COLOR_KEY = "listBackgroundColor";
-    protected static final String LIST_SELECTION_COLOR_KEY = "listSelectionColor";
-    protected static final String LIST_SELECTION_BACKGROUND_COLOR_KEY = "listSelectionBackgroundColor";
-    protected static final String LIST_INACTIVE_SELECTION_COLOR_KEY = "listInactiveSelectionColor";
-    protected static final String LIST_INACTIVE_SELECTION_BACKGROUND_COLOR_KEY = "listInactiveSelectionBackgroundColor";
-    protected static final String LIST_HIGHLIGHT_COLOR_KEY = "listHighlightColor";
-    protected static final String LIST_HIGHLIGHT_BACKGROUND_COLOR_KEY = "listHighlightBackgroundColor";
 
     public ListButtonSkin() {
         // Create the list view and border
@@ -187,7 +149,7 @@ public class ListButtonSkin extends ButtonSkin
         listButton.getListButtonSelectionListeners().add(this);
 
         listView.setListData(listButton.getListData());
-        listViewBorder.getStyles().put("borderColor", listButton.getStyles().get("borderColor"));
+        listViewBorder.getStyles().put("borderColor", borderColor);
     }
 
     @Override
@@ -343,304 +305,315 @@ public class ListButtonSkin extends ButtonSkin
         triggerGraphics.fill(triggerIconShape);
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(FONT_KEY)) {
-            value = font;
-        } else if (key.equals(COLOR_KEY)) {
-            value = color;
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            value = disabledColor;
-        } else if (key.equals(BACKGROUND_COLOR_KEY)) {
-            value = backgroundColor;
-        } else if (key.equals(DISABLED_BACKGROUND_COLOR_KEY)) {
-            value = disabledBackgroundColor;
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            value = borderColor;
-        } else if (key.equals(BEVEL_COLOR_KEY)) {
-            value = bevelColor;
-        } else if (key.equals(PRESSED_BEVEL_COLOR_KEY)) {
-            value = pressedBevelColor;
-        } else if (key.equals(DISABLED_BEVEL_COLOR_KEY)) {
-            value = disabledBevelColor;
-        } else if (key.equals(PADDING_KEY)) {
-            value = padding;
-        } else if (key.equals(LIST_FONT_KEY)) {
-            value = listView.getStyles().get(ListViewSkin.FONT_KEY);
-        } else if (key.equals(LIST_COLOR_KEY)) {
-            value = listView.getStyles().get(ListViewSkin.COLOR_KEY);
-        } else if (key.equals(LIST_DISABLED_COLOR_KEY)) {
-            value = listView.getStyles().get(ListViewSkin.DISABLED_COLOR_KEY);
-        } else if (key.equals(LIST_BACKGROUND_COLOR_KEY)) {
-            value = listView.getStyles().get(ListViewSkin.BACKGROUND_COLOR_KEY);
-        } else if (key.equals(LIST_SELECTION_COLOR_KEY)) {
-            value = listView.getStyles().get(ListViewSkin.SELECTION_COLOR_KEY);
-        } else if (key.equals(LIST_SELECTION_BACKGROUND_COLOR_KEY)) {
-            value = listView.getStyles().get(ListViewSkin.SELECTION_BACKGROUND_COLOR_KEY);
-        } else if (key.equals(LIST_INACTIVE_SELECTION_COLOR_KEY)) {
-            value = listView.getStyles().get(ListViewSkin.INACTIVE_SELECTION_COLOR_KEY);
-        } else if (key.equals(LIST_INACTIVE_SELECTION_BACKGROUND_COLOR_KEY)) {
-            value = listView.getStyles().get(ListViewSkin.INACTIVE_SELECTION_BACKGROUND_COLOR_KEY);
-        } else if (key.equals(LIST_HIGHLIGHT_COLOR_KEY)) {
-            value = listView.getStyles().get(ListViewSkin.HIGHLIGHT_COLOR_KEY);
-        } else if (key.equals(LIST_HIGHLIGHT_BACKGROUND_COLOR_KEY)) {
-            value = listView.getStyles().get(ListViewSkin.HIGHLIGHT_BACKGROUND_COLOR_KEY);
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
-    }
-
     public ListView getListView() {
         return listView;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(FONT_KEY)) {
-            if (value instanceof String) {
-                value = Font.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Font.class, false);
-
-            previousValue = font;
-            font = (Font)value;
-
-            invalidateComponent();
-        } else if (key.equals(COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = color;
-            color = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = disabledColor;
-            disabledColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = backgroundColor;
-            backgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(DISABLED_BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = disabledBackgroundColor;
-            disabledBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = borderColor;
-            borderColor = (Color)value;
-
-            listViewBorder.getStyles().put("borderColor", borderColor);
-
-            repaintComponent();
-        } else if (key.equals(BEVEL_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = bevelColor;
-            bevelColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(PRESSED_BEVEL_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = pressedBevelColor;
-            pressedBevelColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(DISABLED_BEVEL_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = disabledBevelColor;
-            disabledBevelColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(PADDING_KEY)) {
-            if (value instanceof Number) {
-                value = new Insets(((Number)value).intValue());
-            } else {
-                if (value instanceof Map<?, ?>) {
-                    value = new Insets((Map<String, Object>)value);
-                }
-            }
-
-            validatePropertyType(key, value, Insets.class, false);
-
-            previousValue = padding;
-            padding = (Insets)value;
-
-            invalidateComponent();
-        } else if (key.equals(LIST_FONT_KEY)) {
-            value = listView.getStyles().put(ListViewSkin.FONT_KEY, value);
-        } else if (key.equals(LIST_COLOR_KEY)) {
-            value = listView.getStyles().put(ListViewSkin.COLOR_KEY, value);
-        } else if (key.equals(LIST_DISABLED_COLOR_KEY)) {
-            value = listView.getStyles().put(ListViewSkin.DISABLED_COLOR_KEY, value);
-        } else if (key.equals(LIST_BACKGROUND_COLOR_KEY)) {
-            value = listView.getStyles().put(ListViewSkin.BACKGROUND_COLOR_KEY, value);
-        } else if (key.equals(LIST_SELECTION_COLOR_KEY)) {
-            value = listView.getStyles().put(ListViewSkin.SELECTION_COLOR_KEY, value);
-        } else if (key.equals(LIST_SELECTION_BACKGROUND_COLOR_KEY)) {
-            value = listView.getStyles().put(ListViewSkin.SELECTION_BACKGROUND_COLOR_KEY, value);
-        } else if (key.equals(LIST_INACTIVE_SELECTION_COLOR_KEY)) {
-            value = listView.getStyles().put(ListViewSkin.INACTIVE_SELECTION_COLOR_KEY, value);
-        } else if (key.equals(LIST_INACTIVE_SELECTION_BACKGROUND_COLOR_KEY)) {
-            value = listView.getStyles().put(ListViewSkin.INACTIVE_SELECTION_BACKGROUND_COLOR_KEY, value);
-        } else if (key.equals(LIST_HIGHLIGHT_COLOR_KEY)) {
-            value = listView.getStyles().put(ListViewSkin.HIGHLIGHT_COLOR_KEY, value);
-        } else if (key.equals(LIST_HIGHLIGHT_BACKGROUND_COLOR_KEY)) {
-            value = listView.getStyles().put(ListViewSkin.HIGHLIGHT_BACKGROUND_COLOR_KEY, value);
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
+    public Font getFont() {
+        return font;
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_COLOR);
-        } else if (key.equals(FONT_KEY)) {
-            previousValue = put(key, DEFAULT_FONT);
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_DISABLED_COLOR);
-        } else if (key.equals(BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BACKGROUND_COLOR);
-        } else if (key.equals(DISABLED_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_DISABLED_BACKGROUND_COLOR);
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BORDER_COLOR);
-        } else if (key.equals(BEVEL_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BEVEL_COLOR);
-        } else if (key.equals(PRESSED_BEVEL_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_PRESSED_BEVEL_COLOR);
-        } else if (key.equals(DISABLED_BEVEL_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_DISABLED_BEVEL_COLOR);
-        } else if (key.equals(PADDING_KEY)) {
-            previousValue = put(key, DEFAULT_FONT);
-        } else if (key.equals(LIST_FONT_KEY)) {
-            previousValue = listView.getStyles().remove(ListViewSkin.FONT_KEY);
-        } else if (key.equals(LIST_COLOR_KEY)) {
-            previousValue = listView.getStyles().remove(ListViewSkin.COLOR_KEY);
-        } else if (key.equals(LIST_DISABLED_COLOR_KEY)) {
-            previousValue = listView.getStyles().remove(ListViewSkin.DISABLED_COLOR_KEY);
-        } else if (key.equals(LIST_BACKGROUND_COLOR_KEY)) {
-            previousValue = listView.getStyles().remove(ListViewSkin.BACKGROUND_COLOR_KEY);
-        } else if (key.equals(LIST_SELECTION_COLOR_KEY)) {
-            previousValue = listView.getStyles().remove(ListViewSkin.SELECTION_COLOR_KEY);
-        } else if (key.equals(LIST_SELECTION_BACKGROUND_COLOR_KEY)) {
-            previousValue = listView.getStyles().remove(ListViewSkin.SELECTION_BACKGROUND_COLOR_KEY);
-        } else if (key.equals(LIST_INACTIVE_SELECTION_COLOR_KEY)) {
-            previousValue = listView.getStyles().remove(ListViewSkin.INACTIVE_SELECTION_COLOR_KEY);
-        } else if (key.equals(LIST_INACTIVE_SELECTION_BACKGROUND_COLOR_KEY)) {
-            previousValue = listView.getStyles().remove(ListViewSkin.INACTIVE_SELECTION_BACKGROUND_COLOR_KEY);
-        } else if (key.equals(LIST_HIGHLIGHT_COLOR_KEY)) {
-            previousValue = listView.getStyles().remove(ListViewSkin.HIGHLIGHT_COLOR_KEY);
-        } else if (key.equals(LIST_HIGHLIGHT_BACKGROUND_COLOR_KEY)) {
-            previousValue = listView.getStyles().remove(ListViewSkin.HIGHLIGHT_BACKGROUND_COLOR_KEY);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        this.font = font;
+        invalidateComponent();
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        return (key.equals(FONT_KEY)
-            || key.equals(COLOR_KEY)
-            || key.equals(DISABLED_COLOR_KEY)
-            || key.equals(BACKGROUND_COLOR_KEY)
-            || key.equals(DISABLED_BACKGROUND_COLOR_KEY)
-            || key.equals(BORDER_COLOR_KEY)
-            || key.equals(BEVEL_COLOR_KEY)
-            || key.equals(PRESSED_BEVEL_COLOR_KEY)
-            || key.equals(DISABLED_BEVEL_COLOR_KEY)
-            || key.equals(PADDING_KEY)
-            || key.equals(LIST_FONT_KEY)
-            || key.equals(LIST_COLOR_KEY)
-            || key.equals(LIST_DISABLED_COLOR_KEY)
-            || key.equals(LIST_BACKGROUND_COLOR_KEY)
-            || key.equals(LIST_SELECTION_COLOR_KEY)
-            || key.equals(LIST_SELECTION_BACKGROUND_COLOR_KEY)
-            || key.equals(LIST_INACTIVE_SELECTION_COLOR_KEY)
-            || key.equals(LIST_INACTIVE_SELECTION_BACKGROUND_COLOR_KEY)
-            || key.equals(LIST_HIGHLIGHT_COLOR_KEY)
-            || key.equals(LIST_HIGHLIGHT_BACKGROUND_COLOR_KEY)
-            || super.containsKey(key));
+        setFont(Font.decode(font));
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.color = color;
+        repaintComponent();
+    }
+
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(Color.decode(color));
+    }
+
+    public Color getDisabledColor() {
+        return disabledColor;
+    }
+
+    public void setDisabledColor(Color disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        this.disabledColor = disabledColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledColor(String disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        setDisabledColor(Color.decode(disabledColor));
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null.");
+        }
+
+        this.backgroundColor = backgroundColor;
+        repaintComponent();
+    }
+
+    public final void setBackgroundColor(String backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null.");
+        }
+
+        setBackgroundColor(Color.decode(backgroundColor));
+    }
+
+    public Color getDisabledBackgroundColor() {
+        return disabledBackgroundColor;
+    }
+
+    public void setDisabledBackgroundColor(Color disabledBackgroundColor) {
+        if (disabledBackgroundColor == null) {
+            throw new IllegalArgumentException("disabledBackgroundColor is null.");
+        }
+
+        this.disabledBackgroundColor = disabledBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
+        if (disabledBackgroundColor == null) {
+            throw new IllegalArgumentException("disabledBackgroundColor is null.");
+        }
+
+        setDisabledBackgroundColor(Color.decode(disabledBackgroundColor));
+    }
+
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
+        }
+
+        this.borderColor = borderColor;
+        repaintComponent();
+    }
+
+    public final void setBorderColor(String borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
+        }
+
+        setBorderColor(Color.decode(borderColor));
+    }
+
+    public Color getDisabledBorderColor() {
+        return disabledBorderColor;
+    }
+
+    public void setDisabledBorderColor(Color disabledBorderColor) {
+        if (disabledBorderColor == null) {
+            throw new IllegalArgumentException("disabledBorderColor is null.");
+        }
+
+        this.disabledBorderColor = disabledBorderColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledBorderColor(String disabledBorderColor) {
+        if (disabledBorderColor == null) {
+            throw new IllegalArgumentException("disabledBorderColor is null.");
+        }
+
+        setDisabledBorderColor(Color.decode(disabledBorderColor));
+    }
+
+    public Color getBevelColor() {
+        return bevelColor;
+    }
+
+    public void setBevelColor(Color bevelColor) {
+        if (bevelColor == null) {
+            throw new IllegalArgumentException("bevelColor is null.");
+        }
+
+        this.bevelColor = bevelColor;
+        repaintComponent();
+    }
+
+    public final void setBevelColor(String bevelColor) {
+        if (bevelColor == null) {
+            throw new IllegalArgumentException("bevelColor is null.");
+        }
+
+        setBevelColor(Color.decode(bevelColor));
+    }
+
+    public Color getPressedBevelColor() {
+        return pressedBevelColor;
+    }
+
+    public void setPressedBevelColor(Color pressedBevelColor) {
+        if (pressedBevelColor == null) {
+            throw new IllegalArgumentException("pressedBevelColor is null.");
+        }
+
+        this.pressedBevelColor = pressedBevelColor;
+        repaintComponent();
+    }
+
+    public final void setPressedBevelColor(String pressedBevelColor) {
+        if (pressedBevelColor == null) {
+            throw new IllegalArgumentException("pressedBevelColor is null.");
+        }
+
+        setPressedBevelColor(Color.decode(pressedBevelColor));
+    }
+
+    public Color getDisabledBevelColor() {
+        return disabledBevelColor;
+    }
+
+    public void setDisabledBevelColor(Color disabledBevelColor) {
+        if (disabledBevelColor == null) {
+            throw new IllegalArgumentException("disabledBevelColor is null.");
+        }
+
+        this.disabledBevelColor = disabledBevelColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledBevelColor(String disabledBevelColor) {
+        if (disabledBevelColor == null) {
+            throw new IllegalArgumentException("disabledBevelColor is null.");
+        }
+
+        setDisabledBackgroundColor(Color.decode(disabledBevelColor));
+    }
+
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public Object getListFont() {
+        return listView.getStyles().get("font");
+    }
+
+    public void setListFont(Object listFont) {
+        listView.getStyles().put("font", listFont);
+    }
+
+    public Object getListColor() {
+        return listView.getStyles().get("color");
+    }
+
+    public void setListColor(Object listColor) {
+        listView.getStyles().put("color", listColor);
+    }
+
+    public Object getListDisabledColor() {
+        return listView.getStyles().get("disabledColor");
+    }
+
+    public void setListDisabledColor(Object listDisabledColor) {
+        listView.getStyles().put("disabledColor", listDisabledColor);
+    }
+
+    public Object getListBackgroundColor() {
+        return listView.getStyles().get("backgroundColor");
+    }
+
+    public void setListBackgroundColor(Object listBackgroundColor) {
+        listView.getStyles().put("backgroundColor", listBackgroundColor);
+    }
+
+    public Object getListSelectionColor() {
+        return listView.getStyles().get("selectionColor");
+    }
+
+    public void setListSelectionColor(Object listSelectionColor) {
+        listView.getStyles().put("selectionColor", listSelectionColor);
+    }
+
+    public Object getListSelectionBackgroundColor() {
+        return listView.getStyles().get("selectionBackgroundColor");
+    }
+
+    public void setListSelectionBackgroundColor(Object listSelectionBackgroundColor) {
+        listView.getStyles().put("selectionBackgroundColor", listSelectionBackgroundColor);
+    }
+
+    public Object getListInactiveSelectionColor() {
+        return listView.getStyles().get("inactiveSelectionColor");
+    }
+
+    public void setListInactiveSelectionColor(Object listInactiveSelectionColor) {
+        listView.getStyles().put("inactiveSelectionColor", listInactiveSelectionColor);
+    }
+
+    public Object getListInactiveSelectionBackgroundColor() {
+        return listView.getStyles().get("inactiveSelectionBackgroundColor");
+    }
+
+    public void setListInactiveSelectionBackgroundColor(Object listInactiveSelectionBackgroundColor) {
+        listView.getStyles().put("inactiveSelectionBackgroundColor", listInactiveSelectionBackgroundColor);
+    }
+
+    public Object getListHighlightColor() {
+        return listView.getStyles().get("highlightColor");
+    }
+
+    public void setListHighlightColor(Object listHighlightColor) {
+        listView.getStyles().put("highlightColor", listHighlightColor);
+    }
+
+    public Object getListHighlightBackgroundColor() {
+        return listView.getStyles().get("highlightBackgroundColor");
+    }
+
+    public void setListHighlightBackgroundColor(Object listHighlightBackgroundColor) {
+        listView.getStyles().put("highlightBackgroundColor", listHighlightBackgroundColor);
     }
 
     // Component state events

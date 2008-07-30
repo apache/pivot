@@ -25,17 +25,8 @@ import pivot.wtk.ScrollPane;
 import pivot.wtk.skin.ComponentSkin;
 
 public class ScrollPaneCornerSkin extends ComponentSkin {
-    // Style properties
-    protected Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
-    protected Color color = DEFAULT_COLOR;
-
-    // Default style values
-    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(0xF0, 0xEC, 0xE7);
-    private static final Color DEFAULT_COLOR = new Color(0x81, 0x76, 0x67);
-
-    // Style keys
-    protected static final String BACKGROUND_COLOR_KEY = "backgroundColor";
-    protected static final String COLOR_KEY = "color";
+    private static final Color backgroundColor = new Color(0xF0, 0xEC, 0xE7);
+    private static final Color color = new Color(0x81, 0x76, 0x67);
 
     @Override
     public void install(Component component) {
@@ -74,96 +65,5 @@ public class ScrollPaneCornerSkin extends ComponentSkin {
 
         graphics.setPaint(backgroundColor);
         graphics.fill(new Rectangle2D.Double(0, 0, width, height));
-    }
-
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(BACKGROUND_COLOR_KEY)) {
-            value = backgroundColor;
-        } else if (key.equals(COLOR_KEY)) {
-            value = color;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
-    }
-
-    @Override
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = backgroundColor;
-            backgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = color;
-            color = (Color)value;
-
-            repaintComponent();
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
-    }
-
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BACKGROUND_COLOR);
-        } else if (key.equals(COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_COLOR);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
-    }
-
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(BACKGROUND_COLOR_KEY)
-            || key.equals(COLOR_KEY)
-            || super.containsKey(key));
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
     }
 }

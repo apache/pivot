@@ -17,6 +17,6 @@ package pivot.wtk;
 
 import pivot.collections.Dictionary;
 
-public interface Renderer extends Visual, Dictionary<String, Object> {
+public interface Renderer extends Visual {
     public Dictionary<String, Object> getStyles();
 }

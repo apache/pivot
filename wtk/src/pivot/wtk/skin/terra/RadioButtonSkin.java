@@ -39,47 +39,20 @@ import pivot.wtk.skin.ButtonSkin;
  */
 public class RadioButtonSkin extends ButtonSkin
     implements ButtonStateListener {
+    private Font font = new Font("Verdana", Font.PLAIN, 11);
+    private Color color = Color.BLACK;
+    private Color disabledColor = new Color(0x99, 0x99, 0x99);
+    private int spacing = 3;
+
+    private static final Color BUTTON_COLOR = Color.WHITE;
+    private static final Color BUTTON_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
+    private static final Color BUTTON_SELECTION_COLOR = new Color(0x2c, 0x56, 0x80);
+    private static final Color DISABLED_BUTTON_COLOR = Color.WHITE;
+    private static final Color DISABLED_BUTTON_BORDER_COLOR = new Color(0xcc, 0xcc, 0xcc);
+    private static final Color DISABLED_BUTTON_SELECTION_COLOR = new Color(0x99, 0x99, 0x99);
+
     private static final int BUTTON_DIAMETER = 14;
     private static final int BUTTON_SELECTION_DIAMETER = 6;
-
-    // Style properties
-    protected Font font = DEFAULT_FONT;
-    protected Color color = DEFAULT_COLOR;
-    protected Color buttonColor = DEFAULT_BUTTON_COLOR;
-    protected Color buttonBorderColor = DEFAULT_BUTTON_BORDER_COLOR;
-    protected Color buttonSelectionColor = DEFAULT_BUTTON_SELECTION_COLOR;
-    protected Color disabledColor = DEFAULT_DISABLED_COLOR;
-    protected Color disabledButtonColor = DEFAULT_DISABLED_BUTTON_COLOR;
-    protected Color disabledButtonBorderColor = DEFAULT_DISABLED_BUTTON_BORDER_COLOR;
-    protected Color disabledButtonSelectionColor = DEFAULT_DISABLED_BUTTON_SELECTION_COLOR;
-    protected int spacing = DEFAULT_SPACING;
-
-    // Default style values
-    private static final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 11);
-    private static final Color DEFAULT_COLOR = Color.BLACK;
-    private static final Color DEFAULT_BUTTON_COLOR = Color.WHITE;
-    private static final Color DEFAULT_BUTTON_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color DEFAULT_BUTTON_SELECTION_COLOR = new Color(0x2c, 0x56, 0x80);
-    private static final Color DEFAULT_DISABLED_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color DEFAULT_DISABLED_BUTTON_COLOR = new Color(0xcc, 0xca, 0xc2);
-    private static final Color DEFAULT_DISABLED_BUTTON_BORDER_COLOR = new Color(0xCC, 0xCC, 0xCC);
-    private static final Color DEFAULT_DISABLED_BUTTON_SELECTION_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final int DEFAULT_SPACING = 3;
-
-    // Style keys
-    protected static final String FONT_KEY = "font";
-    protected static final String COLOR_KEY = "color";
-    protected static final String BUTTON_COLOR_KEY = "buttonColor";
-    protected static final String BUTTON_BORDER_COLOR_KEY = "buttonBorderColor";
-    protected static final String BUTTON_SELECTION_COLOR_KEY = "buttonSelectionColor";
-    protected static final String DISABLED_COLOR_KEY = "disabledColor";
-    protected static final String DISABLED_BUTTON_COLOR_KEY = "disabledButtonColor";
-    protected static final String DISABLED_BUTTON_BORDER_COLOR_KEY = "disabledButtonBorderColor";
-    protected static final String DISABLED_BUTTON_SELECTION_COLOR_KEY = "disabledButtonSelectionColor";
-    protected static final String SPACING_KEY = "spacing";
-
-    public RadioButtonSkin() {
-    }
 
     public void install(Component component) {
         validateComponentType(component, RadioButton.class);
@@ -166,7 +139,7 @@ public class RadioButtonSkin extends ButtonSkin
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
             graphics.setStroke(dashStroke);
-            graphics.setColor(buttonBorderColor);
+            graphics.setColor(BUTTON_BORDER_COLOR);
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -178,16 +151,19 @@ public class RadioButtonSkin extends ButtonSkin
     }
 
     private void paintButton(Graphics2D graphics, RadioButton radioButton, int height) {
-        // Paint the button
+        Color buttonColor = null;
         Color buttonBorderColor = null;
         Color buttonSelectionColor = null;
+
         if (radioButton.isEnabled()) {
-            buttonBorderColor = this.buttonBorderColor;
-            buttonSelectionColor = this.buttonSelectionColor;
+            buttonColor = BUTTON_COLOR;
+            buttonBorderColor = BUTTON_BORDER_COLOR;
+            buttonSelectionColor = BUTTON_SELECTION_COLOR;
         }
         else {
-            buttonBorderColor = disabledButtonBorderColor;
-            buttonSelectionColor = disabledButtonSelectionColor;
+            buttonColor = DISABLED_BUTTON_COLOR;
+            buttonBorderColor = DISABLED_BUTTON_BORDER_COLOR;
+            buttonSelectionColor = DISABLED_BUTTON_SELECTION_COLOR;
         }
 
         // Center the button vertically
@@ -220,224 +196,84 @@ public class RadioButtonSkin extends ButtonSkin
         }
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(FONT_KEY)) {
-            value = font;
-        } else if (key.equals(COLOR_KEY)) {
-            value = color;
-        } else if (key.equals(BUTTON_COLOR_KEY)) {
-            value = buttonColor;
-        } else if (key.equals(BUTTON_BORDER_COLOR_KEY)) {
-            value = buttonBorderColor;
-        } else if (key.equals(BUTTON_SELECTION_COLOR_KEY)) {
-            value = buttonSelectionColor;
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            value = disabledColor;
-        } else if (key.equals(DISABLED_BUTTON_COLOR_KEY)) {
-            value = disabledButtonColor;
-        } else if (key.equals(DISABLED_BUTTON_BORDER_COLOR_KEY)) {
-            value = disabledButtonBorderColor;
-        } else if (key.equals(DISABLED_BUTTON_SELECTION_COLOR_KEY)) {
-            value = disabledButtonSelectionColor;
-        } else if (key.equals(SPACING_KEY)) {
-            value = spacing;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public Font getFont() {
+        return font;
     }
 
-    @Override
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(FONT_KEY)) {
-            if (value instanceof String) {
-                value = Font.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Font.class, false);
-
-            previousValue = font;
-            font = (Font)value;
-
-            invalidateComponent();
-        } else if (key.equals(COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = color;
-            color = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(BUTTON_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = buttonColor;
-            buttonColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(BUTTON_BORDER_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = buttonBorderColor;
-            buttonBorderColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(BUTTON_SELECTION_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = buttonSelectionColor;
-            buttonSelectionColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = disabledColor;
-            disabledColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(DISABLED_BUTTON_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = disabledButtonColor;
-            disabledButtonColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(DISABLED_BUTTON_BORDER_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = disabledButtonBorderColor;
-            disabledButtonBorderColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(DISABLED_BUTTON_SELECTION_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = disabledButtonSelectionColor;
-            disabledButtonSelectionColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(SPACING_KEY)) {
-            if (value instanceof String) {
-                value = Integer.parseInt((String)value);
-            } else if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = spacing;
-            spacing = (Integer)value;
-
-            invalidateComponent();
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
+        this.font = font;
+        invalidateComponent();
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(FONT_KEY)) {
-            previousValue = put(key, DEFAULT_FONT);
-        } else if (key.equals(COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_COLOR);
-        } else if (key.equals(BUTTON_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BUTTON_COLOR);
-        } else if (key.equals(BUTTON_BORDER_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BUTTON_BORDER_COLOR);
-        } else if (key.equals(BUTTON_SELECTION_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BUTTON_SELECTION_COLOR);
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_DISABLED_COLOR);
-        } else if (key.equals(DISABLED_BUTTON_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_DISABLED_BUTTON_COLOR);
-        } else if (key.equals(DISABLED_BUTTON_BORDER_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_DISABLED_BUTTON_BORDER_COLOR);
-        } else if (key.equals(DISABLED_BUTTON_SELECTION_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_DISABLED_BUTTON_SELECTION_COLOR);
-        } else if (key.equals(SPACING_KEY)) {
-            previousValue = put(key, DEFAULT_SPACING);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setFont(Font.decode(font));
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(FONT_KEY)
-            || key.equals(COLOR_KEY)
-            || key.equals(BUTTON_COLOR_KEY)
-            || key.equals(BUTTON_BORDER_COLOR_KEY)
-            || key.equals(BUTTON_SELECTION_COLOR_KEY)
-            || key.equals(DISABLED_COLOR_KEY)
-            || key.equals(DISABLED_BUTTON_COLOR_KEY)
-            || key.equals(DISABLED_BUTTON_BORDER_COLOR_KEY)
-            || key.equals(DISABLED_BUTTON_SELECTION_COLOR_KEY)
-            || key.equals(SPACING_KEY)
-            || super.containsKey(key));
+    public Color getColor() {
+        return color;
     }
 
-    public boolean isEmpty() {
-        return false;
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.color = color;
+        repaintComponent();
+    }
+
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(Color.decode(color));
+    }
+
+    public Color getDisabledColor() {
+        return disabledColor;
+    }
+
+    public void setDisabledColor(Color disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        this.disabledColor = disabledColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledColor(String disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        setDisabledColor(Color.decode(disabledColor));
+    }
+
+    public int getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(int spacing) {
+        this.spacing = spacing;
+        invalidateComponent();
+    }
+
+    public final void setSpacing(String spacing) {
+        if (spacing == null) {
+            throw new IllegalArgumentException("spacing is null.");
+        }
+
+        setSpacing(Integer.parseInt(spacing));
     }
 
     @Override

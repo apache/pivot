@@ -49,46 +49,18 @@ import pivot.wtk.skin.ComponentSkin;
 public class ListViewSkin extends ComponentSkin implements ListView.Skin,
     ListViewListener, ListViewItemListener, ListViewItemStateListener,
     ListViewSelectionDetailListener {
+    private Font font = new Font("Verdana", Font.PLAIN, 11);
+    private Color color = Color.BLACK;
+    private Color disabledColor = new Color(0x99, 0x99, 0x99);
+    private Color backgroundColor = Color.WHITE;
+    private Color selectionColor = Color.WHITE;
+    private Color selectionBackgroundColor = new Color(0x14, 0x53, 0x8B);
+    private Color inactiveSelectionColor = Color.BLACK;
+    private Color inactiveSelectionBackgroundColor = new Color(0xcc, 0xca, 0xc2);
+    private Color highlightColor = Color.BLACK;
+    private Color highlightBackgroundColor = new Color(0xe6, 0xe3, 0xda);
+
     private int highlightedIndex = -1;
-
-    // Style properties
-    protected Font font = DEFAULT_FONT;
-    protected Color color = DEFAULT_COLOR;
-    protected Color disabledColor = DEFAULT_DISABLED_COLOR;
-    protected Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
-    protected Color selectionColor = DEFAULT_SELECTION_COLOR;
-    protected Color selectionBackgroundColor = DEFAULT_SELECTION_BACKGROUND_COLOR;
-    protected Color inactiveSelectionColor = DEFAULT_INACTIVE_SELECTION_COLOR;
-    protected Color inactiveSelectionBackgroundColor = DEFAULT_INACTIVE_SELECTION_BACKGROUND_COLOR;
-    protected Color highlightColor = DEFAULT_HIGHLIGHT_COLOR;
-    protected Color highlightBackgroundColor = DEFAULT_HIGHLIGHT_BACKGROUND_COLOR;
-
-    // Default style values
-    private static final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 11);
-    private static final Color DEFAULT_COLOR = Color.BLACK;
-    private static final Color DEFAULT_DISABLED_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color DEFAULT_BACKGROUND_COLOR = Color.WHITE;
-    private static final Color DEFAULT_SELECTION_COLOR = Color.WHITE;
-    private static final Color DEFAULT_SELECTION_BACKGROUND_COLOR = new Color(0x14, 0x53, 0x8B);
-    private static final Color DEFAULT_INACTIVE_SELECTION_COLOR = Color.BLACK;
-    private static final Color DEFAULT_INACTIVE_SELECTION_BACKGROUND_COLOR = new Color(0xcc, 0xca, 0xc2);
-    private static final Color DEFAULT_HIGHLIGHT_COLOR = Color.BLACK;
-    private static final Color DEFAULT_HIGHLIGHT_BACKGROUND_COLOR = new Color(0xe6, 0xe3, 0xda);
-
-    // Style keys
-    protected static final String FONT_KEY = "font";
-    protected static final String COLOR_KEY = "color";
-    protected static final String DISABLED_COLOR_KEY = "disabledColor";
-    protected static final String BACKGROUND_COLOR_KEY = "backgroundColor";
-    protected static final String SELECTION_COLOR_KEY = "selectionColor";
-    protected static final String SELECTION_BACKGROUND_COLOR_KEY = "selectionBackgroundColor";
-    protected static final String INACTIVE_SELECTION_COLOR_KEY = "inactiveSelectionColor";
-    protected static final String INACTIVE_SELECTION_BACKGROUND_COLOR_KEY = "inactiveSelectionBackgroundColor";
-    protected static final String HIGHLIGHT_COLOR_KEY = "highlightColor";
-    protected static final String HIGHLIGHT_BACKGROUND_COLOR_KEY = "highlightBackgroundColor";
-
-    public ListViewSkin() {
-    }
 
     public void install(Component component) {
         validateComponentType(component, ListView.class);
@@ -246,223 +218,215 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         return (listView.getSelectMode() != ListView.SelectMode.NONE);
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(FONT_KEY)) {
-            value = font;
-        } else if (key.equals(COLOR_KEY)) {
-            value = color;
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            value = disabledColor;
-        } else if (key.equals(BACKGROUND_COLOR_KEY)) {
-            value = backgroundColor;
-        } else if (key.equals(SELECTION_COLOR_KEY)) {
-            value = selectionColor;
-        } else if (key.equals(SELECTION_BACKGROUND_COLOR_KEY)) {
-            value = selectionBackgroundColor;
-        } else if (key.equals(INACTIVE_SELECTION_COLOR_KEY)) {
-            value = inactiveSelectionColor;
-        } else if (key.equals(INACTIVE_SELECTION_BACKGROUND_COLOR_KEY)) {
-            value = inactiveSelectionBackgroundColor;
-        } else if (key.equals(HIGHLIGHT_COLOR_KEY)) {
-            value = highlightColor;
-        } else if (key.equals(HIGHLIGHT_BACKGROUND_COLOR_KEY)) {
-            value = highlightBackgroundColor;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public Font getFont() {
+        return font;
     }
 
-    @Override
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(FONT_KEY)) {
-            if (value instanceof String) {
-                value = Font.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Font.class, false);
-
-            previousValue = font;
-            font = (Font)value;
-
-            invalidateComponent();
-        } else if (key.equals(COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = color;
-            color = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = disabledColor;
-            disabledColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = backgroundColor;
-            backgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(SELECTION_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = selectionColor;
-            selectionColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(SELECTION_BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = selectionBackgroundColor;
-            selectionBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(INACTIVE_SELECTION_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = inactiveSelectionColor;
-            inactiveSelectionColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(INACTIVE_SELECTION_BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = inactiveSelectionBackgroundColor;
-            inactiveSelectionBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(HIGHLIGHT_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = highlightColor;
-            highlightColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(HIGHLIGHT_BACKGROUND_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = highlightBackgroundColor;
-            highlightBackgroundColor = (Color)value;
-
-            repaintComponent();
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
+        this.font = font;
+        invalidateComponent();
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(FONT_KEY)) {
-            previousValue = put(key, DEFAULT_FONT);
-        } else if (key.equals(COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_COLOR);
-        } else if (key.equals(DISABLED_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_DISABLED_COLOR);
-        } else if (key.equals(BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BACKGROUND_COLOR);
-        } else if (key.equals(SELECTION_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_SELECTION_COLOR);
-        } else if (key.equals(SELECTION_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_SELECTION_BACKGROUND_COLOR);
-        } else if (key.equals(INACTIVE_SELECTION_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_INACTIVE_SELECTION_COLOR);
-        } else if (key.equals(INACTIVE_SELECTION_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_INACTIVE_SELECTION_BACKGROUND_COLOR);
-        } else if (key.equals(HIGHLIGHT_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_HIGHLIGHT_COLOR);
-        } else if (key.equals(HIGHLIGHT_BACKGROUND_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_HIGHLIGHT_BACKGROUND_COLOR);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setFont(Font.decode(font));
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(FONT_KEY)
-            || key.equals(COLOR_KEY)
-            || key.equals(DISABLED_COLOR_KEY)
-            || key.equals(BACKGROUND_COLOR_KEY)
-            || key.equals(SELECTION_BACKGROUND_COLOR_KEY)
-            || key.equals(SELECTION_BACKGROUND_COLOR_KEY)
-            || key.equals(INACTIVE_SELECTION_COLOR_KEY)
-            || key.equals(INACTIVE_SELECTION_BACKGROUND_COLOR_KEY)
-            || key.equals(HIGHLIGHT_COLOR_KEY)
-            || key.equals(HIGHLIGHT_BACKGROUND_COLOR_KEY)
-            || super.containsKey(key));
+    public Color getColor() {
+        return color;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.color = color;
+        repaintComponent();
+    }
+
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(Color.decode(color));
+    }
+
+    public Color getDisabledColor() {
+        return disabledColor;
+    }
+
+    public void setDisabledColor(Color disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        this.disabledColor = disabledColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledColor(String disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        setDisabledColor(Color.decode(disabledColor));
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null.");
+        }
+
+        this.backgroundColor = backgroundColor;
+        repaintComponent();
+    }
+
+    public final void setBackgroundColor(String backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null.");
+        }
+
+        setBackgroundColor(Color.decode(backgroundColor));
+    }
+
+
+    public Color getSelectionColor() {
+        return selectionColor;
+    }
+
+    public void setSelectionColor(Color selectionColor) {
+        if (selectionColor == null) {
+            throw new IllegalArgumentException("selectionColor is null.");
+        }
+
+        this.selectionColor = selectionColor;
+        repaintComponent();
+    }
+
+    public final void setSelectionColor(String selectionColor) {
+        if (selectionColor == null) {
+            throw new IllegalArgumentException("selectionColor is null.");
+        }
+
+        setSelectionColor(Color.decode(selectionColor));
+    }
+
+    public Color getSelectionBackgroundColor() {
+        return selectionBackgroundColor;
+    }
+
+    public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
+        if (selectionBackgroundColor == null) {
+            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+        }
+
+        this.selectionBackgroundColor = selectionBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
+        if (selectionBackgroundColor == null) {
+            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+        }
+
+        setSelectionBackgroundColor(Color.decode(selectionBackgroundColor));
+    }
+
+    public Color getInactiveSelectionColor() {
+        return inactiveSelectionColor;
+    }
+
+    public void setInactiveSelectionColor(Color inactiveSelectionColor) {
+        if (inactiveSelectionColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionColor is null.");
+        }
+
+        this.inactiveSelectionColor = inactiveSelectionColor;
+        repaintComponent();
+    }
+
+    public final void setInactiveSelectionColor(String inactiveSelectionColor) {
+        if (inactiveSelectionColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionColor is null.");
+        }
+
+        setInactiveSelectionColor(Color.decode(inactiveSelectionColor));
+    }
+
+    public Color getInactiveSelectionBackgroundColor() {
+        return inactiveSelectionBackgroundColor;
+    }
+
+    public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
+        if (inactiveSelectionBackgroundColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
+        }
+
+        this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
+        if (inactiveSelectionBackgroundColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
+        }
+
+        setInactiveSelectionBackgroundColor(Color.decode(inactiveSelectionBackgroundColor));
+    }
+
+    public Color getHighlightColor() {
+        return highlightColor;
+    }
+
+    public void setHighlightColor(Color highlightColor) {
+        if (highlightColor == null) {
+            throw new IllegalArgumentException("highlightColor is null.");
+        }
+
+        this.highlightColor = highlightColor;
+        repaintComponent();
+    }
+
+    public final void setHighlightColor(String highlightColor) {
+        if (highlightColor == null) {
+            throw new IllegalArgumentException("highlightColor is null.");
+        }
+
+        setHighlightColor(Color.decode(highlightColor));
+    }
+
+    public Color getHighlightBackgroundColor() {
+        return highlightBackgroundColor;
+    }
+
+    public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
+        if (highlightBackgroundColor == null) {
+            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+        }
+
+        this.highlightBackgroundColor = highlightBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
+        if (highlightBackgroundColor == null) {
+            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+        }
+
+        setHighlightBackgroundColor(Color.decode(highlightBackgroundColor));
     }
 
     @Override

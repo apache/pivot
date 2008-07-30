@@ -1,11 +1,13 @@
 package pivot.tools.explorer.properties;
 
+import pivot.beans.BeanDictionary;
 import pivot.collections.Dictionary;
 import pivot.wtk.Component;
 
 public abstract class AbstractTableEntryAdapter implements Dictionary<String, Object>{
 
-	private Component component;
+    private Component component;
+	private BeanDictionary beanDictionary;
 	private String entryName;
 
 	public AbstractTableEntryAdapter( Component component, String entryName ) {
@@ -20,6 +22,8 @@ public abstract class AbstractTableEntryAdapter implements Dictionary<String, Ob
 
 		this.component = component;
 		this.entryName = entryName;
+
+		beanDictionary = new BeanDictionary(component);
 	}
 
 	protected String getName() {
@@ -28,6 +32,10 @@ public abstract class AbstractTableEntryAdapter implements Dictionary<String, Ob
 
 	protected Component getComponent() {
 		return component;
+	}
+
+	protected BeanDictionary getBeanDictionary() {
+	    return beanDictionary;
 	}
 
 	protected PropertySheetColumn asColumn( String key ) {

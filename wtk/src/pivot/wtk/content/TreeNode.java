@@ -18,7 +18,6 @@ package pivot.wtk.content;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import pivot.beans.Bean;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.ListListener;
@@ -31,7 +30,7 @@ import pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-public class TreeNode extends Bean implements List<TreeNode> {
+public class TreeNode implements List<TreeNode> {
     private Image icon = null;
     private Image expandedIcon = null;
     private String label = null;

@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.net.URL;
 
+import pivot.beans.BeanDictionary;
 import pivot.collections.Dictionary;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
@@ -78,29 +79,32 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
         Image icon = null;
         String text = null;
 
-        if (item instanceof Dictionary<?, ?>) {
-            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)item;
+        if (item != null) {
+            if (item instanceof Image) {
+                icon = (Image)item;
+            } else if (item instanceof String) {
+                text = (String)item;
+            } else {
+                Dictionary<String, Object> dictionary = (item instanceof Dictionary<?, ?>) ?
+                    (Dictionary<String, Object>)item : new BeanDictionary(item);
 
-            icon = (Image)dictionary.get(ICON_KEY);
-            if (icon == null) {
-                URL iconURL = (URL)dictionary.get(ICON_URL_KEY);
+                icon = (Image)dictionary.get(ICON_KEY);
+                if (icon == null) {
+                    URL iconURL = (URL)dictionary.get(ICON_URL_KEY);
 
-                if (iconURL != null) {
-                    ApplicationContext applicationContext = ApplicationContext.getInstance();
-                    icon = (Image)applicationContext.getResources().get(iconURL);
+                    if (iconURL != null) {
+                        ApplicationContext applicationContext = ApplicationContext.getInstance();
+                        icon = (Image)applicationContext.getResources().get(iconURL);
 
-                    if (icon == null) {
-                        icon = Image.load(iconURL);
-                        applicationContext.getResources().put(iconURL, icon);
+                        if (icon == null) {
+                            icon = Image.load(iconURL);
+                            applicationContext.getResources().put(iconURL, icon);
+                        }
                     }
                 }
-            }
 
-            text = (String)dictionary.get(LABEL_KEY);
-        } else if (item instanceof Image) {
-            icon = (Image)item;
-        } else {
-            text = (item == null) ? null : item.toString();
+                text = (String)dictionary.get(LABEL_KEY);
+            }
         }
 
         // Update the image view

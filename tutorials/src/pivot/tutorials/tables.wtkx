@@ -22,7 +22,7 @@ limitations under the License.
             <Border styles="{padding:0, borderColor:'#cccac2'}">
                 <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="276" preferredHeight="160">
                     <view>
-                        <TableView id="sortableTableView" selectMode="single">
+                        <TableView id="sortableTableView" selectMode="multi">
                             <columns>
                                 <Column name="i" width="48"/>
                                 <Column name="a" width="48"/>

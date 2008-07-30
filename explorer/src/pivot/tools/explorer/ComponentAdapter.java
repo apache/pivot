@@ -3,12 +3,13 @@ package pivot.tools.explorer;
 import java.net.URL;
 import java.util.Iterator;
 
-import pivot.beans.BeanInfo;
+import pivot.beans.BeanDictionary;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.tools.explorer.properties.AbstractTableEntryAdapter;
 import pivot.wtk.Component;
+import pivot.wtk.ComponentInfo;
 import pivot.wtk.Container;
 import pivot.wtk.Component.StyleDictionary;
 import pivot.wtk.content.TreeViewNodeRenderer;
@@ -44,7 +45,9 @@ public class ComponentAdapter
 	public List<AbstractTableEntryAdapter> getProperties() {
 		if (properties == null) {
 			properties = new ArrayList<AbstractTableEntryAdapter>();
-			for ( String s: component.getProperties() ) {
+
+			BeanDictionary beanDictionary = new BeanDictionary(component);
+			for ( String s: beanDictionary ) {
 				properties.add( new PropertyTableEntryAdapter( component, s ));
 			}
 
@@ -83,8 +86,8 @@ public class ComponentAdapter
 			return toString();
 		} else if ( TreeViewNodeRenderer.ICON_URL_KEY.equals(key) ){
 			if ( url == null ) {
-				BeanInfo beanInfo = component.getClass().getAnnotation( BeanInfo.class );
-				url = component.getClass().getResource( beanInfo != null? beanInfo.icon():"component.png");
+			    ComponentInfo componentInfo = component.getClass().getAnnotation( ComponentInfo.class );
+				url = component.getClass().getResource( componentInfo != null? componentInfo.icon():"component.png");
 			}
 			return url;
 		} else {

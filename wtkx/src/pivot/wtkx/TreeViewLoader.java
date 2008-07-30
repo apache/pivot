@@ -20,6 +20,8 @@ import java.io.StringReader;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import pivot.beans.BeanDictionary;
 import pivot.collections.List;
 import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
@@ -130,8 +132,9 @@ class TreeViewLoader extends Loader {
                 Map<String, Object> properties =
                     (Map<String, Object>)jsonSerializer.readObject(nodeRendererPropertiesReader);
 
+                BeanDictionary nodeRendererDictionary = new BeanDictionary(nodeRenderer);
                 for (String key : properties) {
-                    nodeRenderer.put(key, properties.get(key));
+                    nodeRendererDictionary.put(key, properties.get(key));
                 }
             } catch(Exception exception) {
                 throw new LoadException("Unable to apply node renderer properties.", exception);

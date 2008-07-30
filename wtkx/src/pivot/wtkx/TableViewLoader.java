@@ -20,6 +20,8 @@ import java.io.StringReader;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import pivot.beans.BeanDictionary;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Map;
@@ -235,8 +237,9 @@ class TableViewLoader extends Loader {
                             Map<String, Object> properties =
                                 (Map<String, Object>)jsonSerializer.readObject(cellRendererPropertiesReader);
 
+                            BeanDictionary cellRendererDictionary = new BeanDictionary(cellRenderer);
                             for (String key : properties) {
-                                cellRenderer.put(key, properties.get(key));
+                                cellRendererDictionary.put(key, properties.get(key));
                             }
                         } catch(Exception exception) {
                             throw new LoadException("Unable to apply cell renderer properties.", exception);

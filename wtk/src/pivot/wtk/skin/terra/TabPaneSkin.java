@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
-import pivot.collections.Map;
 import pivot.collections.Sequence;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonStateListener;
@@ -69,7 +68,7 @@ public class TabPaneSkin extends ContainerSkin
 
             this.tabPane = tabPane;
 
-            setToggleButton(true);
+            super.setToggleButton(true);
             setDataRenderer(new ButtonDataRenderer());
 
             installSkin(TabButton.class);
@@ -90,10 +89,16 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         @Override
+        public void setToggleButton(boolean toggleButton) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
         public void setTriState(boolean triState) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public void press() {
             super.press();
 
@@ -104,14 +109,16 @@ public class TabPaneSkin extends ContainerSkin
     }
 
     public static class TabButtonSkin extends ButtonSkin implements ButtonStateListener {
+        private Font font = null;
+        private Color color = null;
+        private Color backgroundColor = null;
+        private Color selectedBackgroundColor = null;
+        private Color bevelColor = null;
+        private Color pressedBevelColor = null;
+        private Color borderColor = null;
+        private Insets padding = null;
+
         private boolean pressed = false;
-
-        protected static final String FONT_KEY = "font";
-        protected static final String COLOR_KEY = "color";
-        protected static final String DISABLED_COLOR_KEY = "disabledColor";
-
-        public TabButtonSkin() {
-        }
 
         @Override
         public void install(Component component) {
@@ -119,16 +126,17 @@ public class TabPaneSkin extends ContainerSkin
 
             super.install(component);
 
-            TabPaneSkin.TabButton tabButton = (TabPaneSkin.TabButton)component;
-            tabButton.getButtonStateListeners().add(this);
-        }
-
-        @Override
-        public void uninstall() {
             TabPaneSkin.TabButton tabButton = (TabPaneSkin.TabButton)getComponent();
-            tabButton.getButtonStateListeners().remove(this);
+            TabPane tabPane = tabButton.getTabPane();
 
-            super.uninstall();
+            setFont((Font)tabPane.getStyles().get("buttonFont"));
+            setColor((Color)tabPane.getStyles().get("buttonColor"));
+            setBackgroundColor((Color)tabPane.getStyles().get("inactiveTabColor"));
+            setSelectedBackgroundColor((Color)tabPane.getStyles().get("activeTabColor"));
+            setBevelColor((Color)tabPane.getStyles().get("buttonBevelColor"));
+            setPressedBevelColor((Color)tabPane.getStyles().get("pressedButtonBevelColor"));
+            setBorderColor((Color)tabPane.getStyles().get("borderColor"));
+            setPadding((Insets)tabPane.getStyles().get("buttonPadding"));
         }
 
         public int getPreferredWidth(int height) {
@@ -137,8 +145,6 @@ public class TabPaneSkin extends ContainerSkin
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
-
-            Insets padding = (Insets)tabPane.getStyles().get(BUTTON_PADDING_KEY);
 
             // Include padding in constraint
             if (height != -1) {
@@ -170,8 +176,6 @@ public class TabPaneSkin extends ContainerSkin
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
 
-            Insets padding = (Insets)tabPane.getStyles().get(BUTTON_PADDING_KEY);
-
             // Include padding in constraint
             if (width != -1) {
                 width = Math.max(width - (padding.left + padding.right + 2), 0);
@@ -201,8 +205,6 @@ public class TabPaneSkin extends ContainerSkin
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
-
-            Insets padding = (Insets)tabPane.getStyles().get(BUTTON_PADDING_KEY);
 
             Dimensions preferredContentSize = dataRenderer.getPreferredSize();
 
@@ -238,19 +240,13 @@ public class TabPaneSkin extends ContainerSkin
             TabPane tabPane = tabButton.getTabPane();
             Orientation tabOrientation = tabPane.getTabOrientation();
 
+            Color backgroundColor = (tabButton.isSelected()) ?
+                selectedBackgroundColor : this.backgroundColor;
+            Color bevelColor = (pressed
+                || tabButton.isSelected()) ? pressedBevelColor : this.bevelColor;
+
             int width = getWidth();
             int height = getHeight();
-
-            // Get the style values from the tab pane
-            Component.StyleDictionary tabPaneStyles = tabPane.getStyles();
-
-            Color activeTabColor = (Color)tabPaneStyles.get(ACTIVE_TAB_COLOR_KEY);
-            Color inactiveTabColor = (Color)tabPaneStyles.get(INACTIVE_TAB_COLOR_KEY);
-            Color backgroundColor = (Color)(tabButton.isSelected() ? activeTabColor : inactiveTabColor);
-
-            Color borderColor = (Color)tabPaneStyles.get(BORDER_COLOR_KEY);
-            Color bevelColor = (Color)tabPaneStyles.get(BUTTON_BEVEL_COLOR_KEY);
-            Insets padding = (Insets)tabPaneStyles.get(BUTTON_PADDING_KEY);
 
             // Draw all lines with a 1px solid stroke
             graphics.setStroke(new BasicStroke());
@@ -288,7 +284,7 @@ public class TabPaneSkin extends ContainerSkin
                     }
                 }
 
-                graphics.setPaint(activeTabColor);
+                graphics.setPaint(backgroundColor);
                 graphics.draw(dividerLine);
             }
 
@@ -326,70 +322,85 @@ public class TabPaneSkin extends ContainerSkin
             dataRenderer.paint(contentGraphics);
         }
 
-        public boolean isPressed() {
-            return pressed;
-        }
-
         @Override
         public boolean isFocusable() {
             return false;
         }
 
-        @Override
-        public Object get(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            TabPaneSkin.TabButton tabButton = (TabPaneSkin.TabButton)getComponent();
-            TabPane tabPane = tabButton.getTabPane();
-
-            Object value = null;
-
-            if (key.equals(FONT_KEY)) {
-                value = tabPane.getStyles().get("buttonFont");
-            }
-            else if (key.equals(COLOR_KEY)) {
-                value = tabPane.getStyles().get("buttonColor");
-            }
-            else if (key.equals(DISABLED_COLOR_KEY)) {
-                value = tabPane.getStyles().get("disabledButtonColor");
-            }
-            else {
-                value = super.get(key);
-            }
-
-            return value;
+        public Font getFont() {
+            return font;
         }
 
-        @Override
-        public Object put(String key, Object value) {
-            throw new UnsupportedOperationException();
+        public void setFont(Font font) {
+            assert (font != null);
+            this.font = font;
         }
 
-        @Override
-        public boolean containsKey(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            return (key.equals(FONT_KEY)
-                || key.equals(COLOR_KEY)
-                || key.equals(DISABLED_BUTTON_COLOR_KEY)
-                || super.containsKey(key));
+        public Color getColor() {
+            return color;
         }
 
-        public boolean isEmpty() {
-            return false;
+        public void setColor(Color color) {
+            assert (color != null);
+            this.color = color;
         }
 
-        public void stateChanged(Button button, Button.State previousState) {
-            repaintComponent();
+        public Color getDisabledColor() {
+            return color;
         }
 
-        @Override
-        public void enabledChanged(Component component) {
-            repaintComponent();
+        public Color getBackgroundColor() {
+            return backgroundColor;
+        }
+
+        public void setBackgroundColor(Color backgroundColor) {
+            assert (backgroundColor != null);
+            this.backgroundColor = backgroundColor;
+        }
+
+        public Color getSelectedBackgroundColor() {
+            return selectedBackgroundColor;
+        }
+
+        public void setSelectedBackgroundColor(Color selectedBackgroundColor) {
+            assert (selectedBackgroundColor != null);
+            this.selectedBackgroundColor = selectedBackgroundColor;
+        }
+
+        public Color getBevelColor() {
+            return bevelColor;
+        }
+
+        public void setBevelColor(Color bevelColor) {
+            assert (bevelColor != null);
+            this.bevelColor = bevelColor;
+        }
+
+        public Color getPressedBevelColor() {
+            return pressedBevelColor;
+        }
+
+        public void setPressedBevelColor(Color pressedBevelColor) {
+            assert (pressedBevelColor != null);
+            this.pressedBevelColor = pressedBevelColor;
+        }
+
+        public Color getBorderColor() {
+            return borderColor;
+        }
+
+        public void setBorderColor(Color borderColor) {
+            assert (borderColor != null);
+            this.borderColor = borderColor;
+        }
+
+        public Insets getPadding() {
+            return padding;
+        }
+
+        public void setPadding(Insets padding) {
+            assert (padding != null);
+            this.padding = padding;
         }
 
         @Override
@@ -427,50 +438,34 @@ public class TabPaneSkin extends ContainerSkin
             TabPaneSkin.TabButton tabButton = (TabPaneSkin.TabButton)getComponent();
             tabButton.press();
         }
+
+        @Override
+        public void enabledChanged(Component component) {
+            repaintComponent();
+        }
+
+        public void stateChanged(Button button, Button.State previousState) {
+            repaintComponent();
+        }
     }
 
     protected FlowPane buttonFlowPane = new FlowPane();
     private Button.Group tabButtonGroup = new Button.Group();
 
-    // Style properties
-    protected Color activeTabColor = DEFAULT_ACTIVE_TAB_COLOR;
-    protected Color inactiveTabColor = DEFAULT_INACTIVE_TAB_COLOR;
-    protected Color borderColor = DEFAULT_BORDER_COLOR;
-    protected Insets padding = DEFAULT_PADDING;
-    protected Font buttonFont = DEFAULT_BUTTON_FONT;
-    protected Color buttonColor = DEFAULT_BUTTON_COLOR;
-    protected Color disabledButtonColor = DEFAULT_DISABLED_BUTTON_COLOR;
-    protected Color buttonBevelColor = DEFAULT_BUTTON_BEVEL_COLOR;
-    protected Insets buttonPadding = DEFAULT_BUTTON_PADDING;
-
-    // Default style values
-    private static final Color DEFAULT_ACTIVE_TAB_COLOR = new Color(0xF7, 0xF5, 0xEB);
-    private static final Color DEFAULT_INACTIVE_TAB_COLOR = new Color(0xCC, 0xCA, 0xC2);
-    private static final Color DEFAULT_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Insets DEFAULT_PADDING = new Insets(6);
-    private static final Font DEFAULT_BUTTON_FONT = new Font("Verdana", Font.PLAIN, 11);
-    private static final Color DEFAULT_BUTTON_COLOR = Color.BLACK;
-    private static final Color DEFAULT_DISABLED_BUTTON_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color DEFAULT_BUTTON_BEVEL_COLOR = new Color(0xE6, 0xE3, 0xDA);
-    private static final Insets DEFAULT_BUTTON_PADDING = new Insets(3, 4, 3, 4);
-    private static final int DEFAULT_BUTTON_SPACING = 2;
-
-    // Style keys
-    protected static final String ACTIVE_TAB_COLOR_KEY = "activeTabColor";
-    protected static final String INACTIVE_TAB_COLOR_KEY = "inactiveTabColor";
-    protected static final String BORDER_COLOR_KEY = "borderColor";
-    protected static final String PADDING_KEY = "padding";
-    protected static final String BUTTON_FONT_KEY = "buttonFont";
-    protected static final String BUTTON_COLOR_KEY = "buttonColor";
-    protected static final String DISABLED_BUTTON_COLOR_KEY = "disabledButtonColor";
-    protected static final String BUTTON_BEVEL_COLOR_KEY = "buttonBevelColor";
-    protected static final String BUTTON_PADDING_KEY = "buttonPadding";
-    protected static final String BUTTON_SPACING_KEY = "buttonSpacing";
+    private Color activeTabColor = new Color(0xF7, 0xF5, 0xEB);
+    private Color inactiveTabColor = new Color(0xCC, 0xCA, 0xC2);
+    private Color borderColor = new Color(0x99, 0x99, 0x99);
+    private Insets padding = new Insets(6);
+    private Font buttonFont = new Font("Verdana", Font.PLAIN, 11);
+    private Color buttonColor = Color.BLACK;
+    private Color buttonBevelColor = new Color(0xE6, 0xE3, 0xDA);
+    private Color pressedButtonBevelColor = new Color(0xE6, 0xE3, 0xDA);
+    private Insets buttonPadding = new Insets(3, 4, 3, 4);
 
     public TabPaneSkin() {
         tabButtonGroup.getGroupListeners().add(this);
 
-        buttonFlowPane.getStyles().put("spacing", DEFAULT_BUTTON_SPACING);
+        buttonFlowPane.getStyles().put("spacing", 2);
     }
 
     public void install(Component component) {
@@ -733,220 +728,252 @@ public class TabPaneSkin extends ContainerSkin
         }
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(ACTIVE_TAB_COLOR_KEY)) {
-            value = activeTabColor;
-        } else if (key.equals(INACTIVE_TAB_COLOR_KEY)) {
-            value = inactiveTabColor;
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            value = borderColor;
-        } else if (key.equals(PADDING_KEY)) {
-            value = padding;
-        } else if (key.equals(BUTTON_FONT_KEY)) {
-            value = buttonFont;
-        } else if (key.equals(BUTTON_COLOR_KEY)) {
-            value = buttonColor;
-        } else if (key.equals(DISABLED_BUTTON_COLOR_KEY)) {
-            value = disabledButtonColor;
-        } else if (key.equals(BUTTON_BEVEL_COLOR_KEY)) {
-            value = buttonBevelColor;
-        } else if (key.equals(BUTTON_PADDING_KEY)) {
-            value = buttonPadding;
-        } else if (key.equals(BUTTON_SPACING_KEY)) {
-            value = buttonFlowPane.getStyles().get("spacing");
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public Color getActiveTabColor() {
+        return activeTabColor;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public void setActiveTabColor(Color activeTabColor) {
+        if (activeTabColor == null) {
+            throw new IllegalArgumentException("activeTabColor is null.");
         }
 
-        Object previousValue = null;
+        this.activeTabColor = activeTabColor;
 
-        if (key.equals(ACTIVE_TAB_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = activeTabColor;
-            activeTabColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(INACTIVE_TAB_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = inactiveTabColor;
-            inactiveTabColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = borderColor;
-            borderColor = (Color)value;
-        } else if (key.equals(PADDING_KEY)) {
-            if (value instanceof Number) {
-                value = new Insets(((Number)value).intValue());
-            } else {
-                if (value instanceof Map<?, ?>) {
-                    value = new Insets((Map<String, Object>)value);
-                }
-            }
-
-            validatePropertyType(key, value, Insets.class, false);
-
-            previousValue = padding;
-            padding = (Insets)value;
-
-            invalidateComponent();
-        } else if (key.equals(BUTTON_FONT_KEY)) {
-            if (value instanceof String) {
-                value = Font.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Font.class, false);
-
-            previousValue = buttonFont;
-            buttonFont = (Font)value;
-
-            invalidateComponent();
-        } else if (key.equals(BUTTON_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = buttonColor;
-            buttonColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(DISABLED_BUTTON_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = disabledButtonColor;
-            disabledButtonColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(BUTTON_BEVEL_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = buttonBevelColor;
-            buttonBevelColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(BUTTON_PADDING_KEY)) {
-            if (value instanceof Number) {
-                value = new Insets(((Number)value).intValue());
-            } else {
-                if (value instanceof Map<?, ?>) {
-                    value = new Insets((Map<String, Object>)value);
-                }
-            }
-
-            validatePropertyType(key, value, Insets.class, false);
-
-            previousValue = buttonPadding;
-            buttonPadding = (Insets)value;
-
-            invalidateComponent();
-        } else if (key.equals(BUTTON_SPACING_KEY)) {
-            if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            previousValue = buttonFlowPane.getStyles().put("spacing", value);
-        } else {
-            previousValue = super.put(key, value);
+        for (Component button : buttonFlowPane.getComponents()) {
+            button.getStyles().put("selectedBackgroundColor", activeTabColor);
         }
 
-        return previousValue;
+        repaintComponent();
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setActiveTabColor(String activeTabColor) {
+        if (activeTabColor == null) {
+            throw new IllegalArgumentException("activeTabColor is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(ACTIVE_TAB_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_ACTIVE_TAB_COLOR);
-        } else if (key.equals(INACTIVE_TAB_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_INACTIVE_TAB_COLOR);
-        } else if (key.equals(BORDER_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BORDER_COLOR);
-        } else if (key.equals(PADDING_KEY)) {
-            previousValue = put(key, DEFAULT_PADDING);
-        } else if (key.equals(BUTTON_FONT_KEY)) {
-            previousValue = put(key, DEFAULT_BUTTON_FONT);
-        } else if (key.equals(BUTTON_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BUTTON_COLOR);
-        } else if (key.equals(DISABLED_BUTTON_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_DISABLED_BUTTON_COLOR);
-        } else if (key.equals(BUTTON_BEVEL_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BUTTON_BEVEL_COLOR);
-        } else if (key.equals(BUTTON_PADDING_KEY)) {
-            previousValue = put(key, BUTTON_PADDING_KEY);
-        } else if (key.equals(BUTTON_SPACING_KEY)) {
-            previousValue = put(key, DEFAULT_BUTTON_SPACING);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setActiveTabColor(Color.decode(activeTabColor));
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public Color getInactiveTabColor() {
+        return inactiveTabColor;
+    }
+
+    public void setInactiveTabColor(Color inactiveTabColor) {
+        if (inactiveTabColor == null) {
+            throw new IllegalArgumentException("inactiveTabColor is null.");
         }
 
-        return (key.equals(ACTIVE_TAB_COLOR_KEY)
-            || key.equals(INACTIVE_TAB_COLOR_KEY)
-            || key.equals(BORDER_COLOR_KEY)
-            || key.equals(PADDING_KEY)
-            || key.equals(BUTTON_FONT_KEY)
-            || key.equals(BUTTON_COLOR_KEY)
-            || key.equals(DISABLED_BUTTON_COLOR_KEY)
-            || key.equals(BUTTON_BEVEL_COLOR_KEY)
-            || key.equals(BUTTON_PADDING_KEY)
-            || key.equals(BUTTON_SPACING_KEY)
-            || super.containsKey(key));
+        this.inactiveTabColor = inactiveTabColor;
+
+        for (Component button : buttonFlowPane.getComponents()) {
+            button.getStyles().put("backgroundColor", inactiveTabColor);
+        }
+
+        repaintComponent();
+    }
+
+    public final void setInactiveTabColor(String inactiveTabColor) {
+        if (inactiveTabColor == null) {
+            throw new IllegalArgumentException("inactiveTabColor is null.");
+        }
+
+        setInactiveTabColor(Color.decode(inactiveTabColor));
+    }
+
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
+        }
+
+        this.borderColor = borderColor;
+        repaintComponent();
+    }
+
+    public final void setBorderColor(String borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
+        }
+
+        setBorderColor(Color.decode(borderColor));
+    }
+
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public Font getButtonFont() {
+        return buttonFont;
+    }
+
+    public void setButtonFont(Font buttonFont) {
+        if (buttonFont == null) {
+            throw new IllegalArgumentException("buttonFont is null.");
+        }
+
+        this.buttonFont = buttonFont;
+
+        for (Component button : buttonFlowPane.getComponents()) {
+            button.getStyles().put("font", buttonFont);
+        }
+
+        invalidateComponent();
+    }
+
+    public final void setButtonFont(String buttonFont) {
+        if (buttonFont == null) {
+            throw new IllegalArgumentException("buttonFont is null.");
+        }
+
+        setButtonFont(Font.decode(buttonFont));
+    }
+
+    public Color getButtonColor() {
+        return buttonColor;
+    }
+
+    public void setButtonColor(Color buttonColor) {
+        if (buttonColor == null) {
+            throw new IllegalArgumentException("buttonColor is null.");
+        }
+
+        this.buttonColor = buttonColor;
+
+        for (Component button : buttonFlowPane.getComponents()) {
+            button.getStyles().put("color", buttonColor);
+        }
+
+        repaintComponent();
+    }
+
+    public final void setButtonColor(String buttonColor) {
+        if (buttonColor == null) {
+            throw new IllegalArgumentException("buttonColor is null.");
+        }
+
+        setButtonColor(Color.decode(buttonColor));
+    }
+
+    public Color getButtonBevelColor() {
+        return buttonBevelColor;
+    }
+
+    public void setButtonBevelColor(Color buttonBevelColor) {
+        if (buttonBevelColor == null) {
+            throw new IllegalArgumentException("buttonBevelColor is null.");
+        }
+
+        this.buttonBevelColor = buttonBevelColor;
+
+        for (Component button : buttonFlowPane.getComponents()) {
+            button.getStyles().put("bevelColor", buttonBevelColor);
+        }
+
+        repaintComponent();
+    }
+
+    public final void setButtonBevelColor(String buttonBevelColor) {
+        if (buttonBevelColor == null) {
+            throw new IllegalArgumentException("buttonBevelColor is null.");
+        }
+
+        setButtonBevelColor(Color.decode(buttonBevelColor));
+    }
+
+    public Color getPressedButtonBevelColor() {
+        return pressedButtonBevelColor;
+    }
+
+    public void setPressedButtonBevelColor(Color pressedButtonBevelColor) {
+        if (pressedButtonBevelColor == null) {
+            throw new IllegalArgumentException("pressedButtonBevelColor is null.");
+        }
+
+        this.pressedButtonBevelColor = pressedButtonBevelColor;
+
+        for (Component button : buttonFlowPane.getComponents()) {
+            button.getStyles().put("pressedBevelColor", pressedButtonBevelColor);
+        }
+
+        repaintComponent();
+    }
+
+    public final void setPressedButtonBevelColor(String pressedButtonBevelColor) {
+        if (pressedButtonBevelColor == null) {
+            throw new IllegalArgumentException("pressedButtonBevelColor is null.");
+        }
+
+        setPressedButtonBevelColor(Color.decode(pressedButtonBevelColor));
+    }
+
+    public Insets getButtonPadding() {
+        return buttonPadding;
+    }
+
+    public void setButtonPadding(Insets buttonPadding) {
+        if (buttonPadding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        this.buttonPadding = buttonPadding;
+
+        for (Component button : buttonFlowPane.getComponents()) {
+            button.getStyles().put("padding", buttonPadding);
+        }
+
+        invalidateComponent();
+    }
+
+    public final void setButtonPadding(int buttonPadding) {
+        setButtonPadding(new Insets(buttonPadding));
+    }
+
+    public final void setButtonPadding(String buttonPadding) {
+        if (buttonPadding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        setButtonPadding(new Insets(buttonPadding));
+    }
+
+    public int getButtonSpacing() {
+        return (Integer)buttonFlowPane.getStyles().get("spacing");
+    }
+
+    public void setButtonSpacing(int buttonSpacing) {
+        buttonFlowPane.getStyles().put("spacing", buttonSpacing);
+    }
+
+    public final void setButtonSpacing(String buttonSpacing) {
+        if (buttonSpacing == null) {
+            throw new IllegalArgumentException("buttonSpacing is null.");
+        }
+
+        setButtonSpacing(Integer.parseInt(buttonSpacing));
     }
 
     protected void updateButtonData(Component tab) {

@@ -45,7 +45,6 @@ import pivot.wtk.skin.ContainerSkin;
  */
 public class RollupSkin extends ContainerSkin
     implements RollupListener, ButtonPressListener {
-
     public static class RollupButton extends PushButton {
         private Rollup rollup;
 
@@ -209,26 +208,10 @@ public class RollupSkin extends ContainerSkin
     private CollapseImage collapseImage = new CollapseImage();
     private BulletImage bulletImage = new BulletImage();
 
-    // Style properties
-    protected Color buttonColor = DEFAULT_BUTTON_COLOR;
-    protected int spacing = DEFAULT_SPACING;
-    protected int buffer = DEFAULT_BUFFER;
-    protected boolean firstChildToggles = DEFAULT_FIRST_CHILD_TOGGLES;
-
-    // Default style values
-    private static final Color DEFAULT_BUTTON_COLOR = new Color(0xcc, 0xca, 0xc2);
-    private static final int DEFAULT_SPACING = 4;
-    private static final int DEFAULT_BUFFER = 4;
-    private static final boolean DEFAULT_FIRST_CHILD_TOGGLES = true;
-
-    // Style keys
-    protected static final String BUTTON_COLOR_KEY = "buttonColor";
-    protected static final String SPACING_KEY = "spacing";
-    protected static final String BUFFER_KEY = "buffer";
-    protected static final String FIRST_CHILD_TOGGLES_KEY = "firstChildToggles";
-
-    public RollupSkin() {
-    }
+    private Color buttonColor = new Color(0xcc, 0xca, 0xc2);
+    private int spacing = 4;
+    private int buffer = 4;
+    private boolean firstChildToggles = true;
 
     @Override
     public void install(Component component) {
@@ -391,128 +374,6 @@ public class RollupSkin extends ContainerSkin
             0 : (firstComponent.getHeight() - rollupButtonSize.height) / 2 + 1;
 
         rollupButton.setLocation(0, rollupButtonY);
-    }
-
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(BUTTON_COLOR_KEY)) {
-            value = buttonColor;
-        } else if (key.equals(SPACING_KEY)) {
-            value = spacing;
-        } else if (key.equals(BUFFER_KEY)) {
-            value = buffer;
-        } else if (key.equals(FIRST_CHILD_TOGGLES_KEY)) {
-            value = firstChildToggles;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
-    }
-
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(BUTTON_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = buttonColor;
-            buttonColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(SPACING_KEY)) {
-            if (value instanceof String) {
-                value = Integer.parseInt((String)value);
-            } else if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = spacing;
-            spacing = (Integer)value;
-
-            invalidateComponent();
-        } else if (key.equals(BUFFER_KEY)) {
-            if (value instanceof String) {
-                value = Integer.parseInt((String)value);
-            } else if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = buffer;
-            buffer = (Integer)value;
-
-            invalidateComponent();
-        } else if (key.equals(FIRST_CHILD_TOGGLES_KEY)) {
-            if (value instanceof String) {
-                value = Boolean.parseBoolean((String)value);
-            }
-
-            validatePropertyType(key, value, Boolean.class, false);
-
-            previousValue = firstChildToggles;
-            firstChildToggles = (Boolean)value;
-
-            updateToggleComponent();
-        } else {
-            super.put(key, value);
-        }
-
-        return previousValue;
-    }
-
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(BUTTON_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_BUTTON_COLOR);
-        } else if (key.equals(SPACING_KEY)) {
-            previousValue = put(key, DEFAULT_SPACING);
-        } else if (key.equals(BUFFER_KEY)) {
-            previousValue = put(key, DEFAULT_BUFFER);
-        } else if (key.equals(FIRST_CHILD_TOGGLES_KEY)) {
-            previousValue = put(key, DEFAULT_FIRST_CHILD_TOGGLES);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
-    }
-
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(BUTTON_COLOR_KEY)
-            || key.equals(SPACING_KEY)
-            || key.equals(BUFFER_KEY)
-            || key.equals(FIRST_CHILD_TOGGLES_KEY)
-            || super.containsKey(key));
-    }
-
-    public boolean isEmpty() {
-        return false;
     }
 
     private void updateRollupButton() {

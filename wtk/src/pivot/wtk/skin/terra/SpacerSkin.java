@@ -11,17 +11,9 @@ import pivot.wtk.Spacer;
 import pivot.wtk.skin.ComponentSkin;
 
 public class SpacerSkin extends ComponentSkin {
-    protected Color color = DEFAULT_COLOR;
-    protected int thickness = DEFAULT_THICKNESS;
-    protected int padding = DEFAULT_PADDING;
-
-    private static final Color DEFAULT_COLOR = Color.BLACK;
-    private static final int DEFAULT_THICKNESS = 1;
-    private static final int DEFAULT_PADDING = 4;
-
-    protected static final String COLOR_KEY = "color";
-    protected static final String THICKNESS_KEY = "thickness";
-    protected static final String PADDING_KEY = "padding";
+    private Color color = Color.BLACK;
+    private int thickness = 1;
+    private int padding = 4;
 
     public void install(Component component) {
         validateComponentType(component, Spacer.class);
@@ -64,111 +56,41 @@ public class SpacerSkin extends ComponentSkin {
         return false;
     }
 
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(COLOR_KEY)) {
-            value = color;
-        } else if (key.equals(THICKNESS_KEY)) {
-            value = thickness;
-        } else if (key.equals(PADDING_KEY)) {
-            value = padding;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public Color getColor() {
+        return color;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = color;
-            color = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(THICKNESS_KEY)) {
-            if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = thickness;
-            thickness = (Integer)value;
-
-            invalidateComponent();
-        } else if (key.equals(PADDING_KEY)) {
-            if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, false);
-
-            previousValue = padding;
-            padding = (Integer)value;
-
-            invalidateComponent();
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
+        this.color = color;
+        repaintComponent();
     }
 
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_COLOR);
-        } else if (key.equals(THICKNESS_KEY)) {
-            previousValue = put(key, DEFAULT_THICKNESS);
-        } else if (key.equals(PADDING_KEY)) {
-            previousValue = put(key, DEFAULT_PADDING);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setColor(Color.decode(color));
     }
 
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(COLOR_KEY)
-            || key.equals(THICKNESS_KEY)
-            || key.equals(PADDING_KEY)
-            || super.containsKey(key));
+    public int getThickness() {
+        return thickness;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
+    public void setThickness(int thickness) {
+        this.thickness = thickness;
+        invalidateComponent();
+    }
+
+    public final void setThickness(String thickness) {
+        if (thickness == null) {
+            throw new IllegalArgumentException("thickness is null.");
+        }
+
+        setThickness(Integer.parseInt(thickness));
     }
 }

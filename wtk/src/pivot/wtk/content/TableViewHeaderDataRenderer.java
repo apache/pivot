@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.net.URL;
 
+import pivot.beans.BeanDictionary;
 import pivot.collections.Dictionary;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
@@ -63,31 +64,32 @@ public class TableViewHeaderDataRenderer extends FlowPane
         Image icon = null;
         String text = null;
 
-        if (data instanceof Dictionary<?, ?>) {
-            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)data;
-
-            icon = (Image)dictionary.get(ICON_KEY);
-
-            if (icon == null) {
-                URL iconURL = (URL)dictionary.get(ICON_URL_KEY);
-
-                if (iconURL != null) {
-                    ApplicationContext applicationContext = ApplicationContext.getInstance();
-                    icon = (Image)applicationContext.getResources().get(iconURL);
-
-                    if (icon == null) {
-                        icon = Image.load(iconURL);
-                        applicationContext.getResources().put(iconURL, icon);
-                    }
-                }
-            }
-
-            text = (String)dictionary.get(LABEL_KEY);
-        } else {
+        if (data != null) {
             if (data instanceof Image) {
                 icon = (Image)data;
+            } else if (data instanceof String) {
+                text = (String)data;
             } else {
-                text = (data == null) ? null : data.toString();
+                Dictionary<String, Object> dictionary = (data instanceof Dictionary<?, ?>) ?
+                    (Dictionary<String, Object>)data : new BeanDictionary(data);
+
+                icon = (Image)dictionary.get(ICON_KEY);
+
+                if (icon == null) {
+                    URL iconURL = (URL)dictionary.get(ICON_URL_KEY);
+
+                    if (iconURL != null) {
+                        ApplicationContext applicationContext = ApplicationContext.getInstance();
+                        icon = (Image)applicationContext.getResources().get(iconURL);
+
+                        if (icon == null) {
+                            icon = Image.load(iconURL);
+                            applicationContext.getResources().put(iconURL, icon);
+                        }
+                    }
+                }
+
+                text = (String)dictionary.get(LABEL_KEY);
             }
         }
 

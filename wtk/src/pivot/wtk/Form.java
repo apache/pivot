@@ -17,7 +17,6 @@ package pivot.wtk;
 
 import java.util.Iterator;
 
-import pivot.beans.BeanInfo;
 import pivot.collections.ArrayList;
 import pivot.collections.Map;
 import pivot.collections.Sequence;
@@ -32,7 +31,7 @@ import pivot.util.ListenerList;
  *
  * @author gbrown
  */
-@BeanInfo(icon="Form.png")
+@ComponentInfo(icon="Form.png")
 public class Form extends Container {
     /**
      * Form field sequence.

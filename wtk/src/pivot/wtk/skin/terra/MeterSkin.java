@@ -29,23 +29,13 @@ import pivot.wtk.skin.ComponentSkin;
 
 public class MeterSkin extends ComponentSkin
     implements MeterListener {
+
+    private Color color = new Color(0x6C, 0x9C, 0xCD);
+    private Color gridColor = new Color(0xD9, 0xD9, 0xD9);
+    private float gridFrequency = 0.25f;
+
     private static final int DEFAULT_WIDTH = 100;
     private static final int DEFAULT_HEIGHT = 12;
-
-    // Style properties
-    protected float gridFrequency = DEFAULT_GRID_FREQUENCY;
-    protected Color gridColor = DEFAULT_GRID_COLOR;
-    protected Color color = DEFAULT_COLOR;
-
-    // Default style values
-    private static final float DEFAULT_GRID_FREQUENCY = 0.25f;
-    private static final Color DEFAULT_GRID_COLOR = new Color(0xD9, 0xD9, 0xD9);
-    private static final Color DEFAULT_COLOR = new Color(0x6C, 0x9C, 0xCD);
-
-    // Style keys
-    protected static final String GRID_FREQUENCY_KEY = "gridFrequency";
-    protected static final String GRID_COLOR_KEY = "gridColor";
-    protected static final String COLOR_KEY = "color";
 
     @Override
     public void install(Component component) {
@@ -113,113 +103,6 @@ public class MeterSkin extends ComponentSkin
            double gridX = (double)(i + 1) * gridSeparation;
             graphics.draw(new Line2D.Double(gridX, 0.0, gridX, height - 1.0));
         }
-    }
-
-    @Override
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(GRID_FREQUENCY_KEY)) {
-            value = gridFrequency;
-        } else if (key.equals(GRID_COLOR_KEY)) {
-            value = gridColor;
-        } else if (key.equals(COLOR_KEY)) {
-            value = color;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
-    }
-
-    @Override
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(GRID_FREQUENCY_KEY)) {
-            if (value instanceof String) {
-                value = Float.parseFloat((String)value);
-            }
-
-            validatePropertyType(key, value, Number.class, false);
-
-            previousValue = gridFrequency;
-            gridFrequency = ((Number)value).floatValue();
-
-            repaintComponent();
-        } else if (key.equals(GRID_COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = gridColor;
-            gridColor = (Color)value;
-
-            repaintComponent();
-        } else if (key.equals(COLOR_KEY)) {
-            if (value instanceof String) {
-                value = Color.decode((String)value);
-            }
-
-            validatePropertyType(key, value, Color.class, false);
-
-            previousValue = color;
-            color = (Color)value;
-
-            repaintComponent();
-        } else {
-            previousValue = super.put(key, value);
-        }
-
-        return previousValue;
-    }
-
-    @Override
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(GRID_FREQUENCY_KEY)) {
-            previousValue = put(key, DEFAULT_GRID_FREQUENCY);
-        } else if (key.equals(GRID_COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_GRID_COLOR);
-        } else if (key.equals(COLOR_KEY)) {
-            previousValue = put(key, DEFAULT_COLOR);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
-    }
-
-    @Override
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(GRID_FREQUENCY_KEY)
-            || key.equals(GRID_COLOR_KEY)
-            || key.equals(COLOR_KEY)
-            || super.containsKey(key));
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
     }
 
     /**

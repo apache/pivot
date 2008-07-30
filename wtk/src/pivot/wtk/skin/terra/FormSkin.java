@@ -40,32 +40,14 @@ public class FormSkin extends ContainerSkin
     private static Image errorImage = Image.load(FormSkin.class.getResource("FormSkin-Error-16x16.png"));
     private static Image questionImage = Image.load(FormSkin.class.getResource("FormSkin-Question-16x16.png"));
 
+
+    private boolean rightAlignLabels = false;
+    private HorizontalAlignment fieldAlignment = HorizontalAlignment.LEFT;
+    private int horizontalSpacing = 12;
+    private int verticalSpacing = 6;
+    private int flagImageOffset = 4;
+
     private static final int FLAG_IMAGE_SIZE = 16;
-
-    // Style properties
-    protected boolean rightAlignLabels = DEFAULT_RIGHT_ALIGN_LABELS;
-    protected HorizontalAlignment fieldAlignment = DEFAULT_FIELD_ALIGNMENT;
-    protected int horizontalSpacing = DEFAULT_HORIZONTAL_SPACING;
-    protected int verticalSpacing = DEFAULT_VERTICAL_SPACING;
-    protected int flagImageOffset = DEFAULT_FLAG_IMAGE_OFFSET;
-
-    // Default style values
-    private static final boolean DEFAULT_RIGHT_ALIGN_LABELS = false;
-    private static final HorizontalAlignment DEFAULT_FIELD_ALIGNMENT = HorizontalAlignment.LEFT;
-    private static final int DEFAULT_HORIZONTAL_SPACING = 12;
-    private static final int DEFAULT_VERTICAL_SPACING = 6;
-    private static final int DEFAULT_FLAG_IMAGE_OFFSET = 4;
-
-    // Style keys
-    protected static final String RIGHT_ALIGN_LABELS_KEY = "rightAlignLabels";
-    protected static final String FIELD_ALIGNMENT_KEY = "fieldAlignment";
-    protected static final String HORIZONTAL_SPACING_KEY = "horizontalSpacing";
-    protected static final String VERTICAL_SPACING_KEY = "verticalSpacing";
-    protected static final String FLAG_IMAGE_OFFSET_KEY = "flagImageOffset";
-
-    public FormSkin() {
-        super();
-    }
 
     @Override
     public void install(Component component) {
@@ -283,144 +265,88 @@ public class FormSkin extends ContainerSkin
         }
     }
 
-    public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object value = null;
-
-        if (key.equals(RIGHT_ALIGN_LABELS_KEY)) {
-            value = rightAlignLabels;
-        } else if (key.equals(FIELD_ALIGNMENT_KEY)) {
-            value = fieldAlignment;
-        } else if (key.equals(HORIZONTAL_SPACING_KEY)) {
-            value = horizontalSpacing;
-        } else if (key.equals(VERTICAL_SPACING_KEY)) {
-            value = verticalSpacing;
-        } else if (key.equals(FLAG_IMAGE_OFFSET_KEY)) {
-            value = flagImageOffset;
-        } else {
-            value = super.get(key);
-        }
-
-        return value;
+    public boolean getRightAlignLabels() {
+        return rightAlignLabels;
     }
 
-    public Object put(String key, Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Object previousValue = null;
-
-        if (key.equals(RIGHT_ALIGN_LABELS_KEY)) {
-            if (value instanceof String) {
-                value = Boolean.parseBoolean((String)value);
-            }
-
-            validatePropertyType(key, value, Boolean.class, true);
-
-            previousValue = rightAlignLabels;
-            rightAlignLabels = (Boolean)value;
-
-            repaintComponent();
-        } else if (key.equals(FIELD_ALIGNMENT_KEY)) {
-            if (value instanceof String) {
-                value = HorizontalAlignment.decode((String)value);
-            }
-
-            validatePropertyType(key, value, HorizontalAlignment.class, false);
-
-            previousValue = fieldAlignment;
-            fieldAlignment = (HorizontalAlignment)value;
-
-            invalidateComponent();
-        } else if (key.equals(HORIZONTAL_SPACING_KEY)) {
-            if (value instanceof String) {
-                value = Integer.parseInt((String)value);
-            } else if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, true);
-
-            previousValue = horizontalSpacing;
-            horizontalSpacing = (Integer)value;
-
-            invalidateComponent();
-        } else if (key.equals(VERTICAL_SPACING_KEY)) {
-            if (value instanceof String) {
-                value = Integer.parseInt((String)value);
-            } else if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, true);
-
-            previousValue = verticalSpacing;
-            verticalSpacing = (Integer)value;
-
-            invalidateComponent();
-        } else if (key.equals(FLAG_IMAGE_OFFSET_KEY)) {
-            if (value instanceof String) {
-                value = Integer.parseInt((String)value);
-            } else if (value instanceof Number) {
-                value = ((Number)value).intValue();
-            }
-
-            validatePropertyType(key, value, Integer.class, true);
-
-            previousValue = flagImageOffset;
-            flagImageOffset = (Integer)value;
-
-            invalidateComponent();
-        } else {
-            super.put(key, value);
-        }
-
-        return previousValue;
+    public void setRightAlignLabels(boolean rightAlignLabels) {
+        this.rightAlignLabels = rightAlignLabels;
     }
 
-    public Object remove(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
+    public final void setRightAlignLabels(String rightAlignLabels) {
+        if (rightAlignLabels == null) {
+            throw new IllegalArgumentException("rightAlignLabels is null.");
         }
 
-        Object previousValue = null;
-
-        if (key.equals(RIGHT_ALIGN_LABELS_KEY)) {
-            previousValue = put(key, DEFAULT_RIGHT_ALIGN_LABELS);
-        } else if (key.equals(FIELD_ALIGNMENT_KEY)) {
-            previousValue  = put(key, DEFAULT_FIELD_ALIGNMENT);
-        } else if (key.equals(HORIZONTAL_SPACING_KEY)) {
-            previousValue = put(key, HORIZONTAL_SPACING_KEY);
-        } else if (key.equals(VERTICAL_SPACING_KEY)) {
-            previousValue = put(key, VERTICAL_SPACING_KEY);
-        } else if (key.equals(FLAG_IMAGE_OFFSET_KEY)) {
-            previousValue = put(key, FLAG_IMAGE_OFFSET_KEY);
-        } else {
-            previousValue = super.remove(key);
-        }
-
-        return previousValue;
+        setRightAlignLabels(Boolean.parseBoolean(rightAlignLabels));
     }
 
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (key.equals(RIGHT_ALIGN_LABELS_KEY)
-            || key.equals(FIELD_ALIGNMENT_KEY)
-            || key.equals(HORIZONTAL_SPACING_KEY)
-            || key.equals(VERTICAL_SPACING_KEY)
-            || key.equals(FLAG_IMAGE_OFFSET_KEY)
-            || super.containsKey(key));
+    public HorizontalAlignment getFieldAlignment() {
+        return fieldAlignment;
     }
 
-    public boolean isEmpty() {
-        return false;
+    public void setFieldAlignment(HorizontalAlignment fieldAlignment) {
+        this.fieldAlignment = fieldAlignment;
+        repaintComponent();
+    }
+
+    public final void setFieldAlignment(String fieldAlignment) {
+        if (fieldAlignment == null) {
+            throw new IllegalArgumentException("fieldAlignment is null.");
+        }
+
+        setFieldAlignment(HorizontalAlignment.decode(fieldAlignment));
+    }
+
+    public int getHorizontalSpacing() {
+        return horizontalSpacing;
+    }
+
+    public void setHorizontalSpacing(int horizontalSpacing) {
+        this.horizontalSpacing = horizontalSpacing;
+        invalidateComponent();
+    }
+
+    public final void setHorizontalSpacing(String horizontalSpacing) {
+        if (horizontalSpacing == null) {
+            throw new IllegalArgumentException("horizontalSpacing is null.");
+        }
+
+        setHorizontalSpacing(Integer.parseInt(horizontalSpacing));
+    }
+
+    public int getVerticalSpacing() {
+        return verticalSpacing;
+    }
+
+    public void setVerticalSpacing(int verticalSpacing) {
+        this.verticalSpacing = verticalSpacing;
+        invalidateComponent();
+    }
+
+    public final void setVerticalSpacing(String verticalSpacing) {
+        if (verticalSpacing == null) {
+            throw new IllegalArgumentException("verticalSpacing is null.");
+        }
+
+        setVerticalSpacing(Integer.parseInt(verticalSpacing));
+    }
+
+    public int getFlagImageOffset() {
+        return flagImageOffset;
+    }
+
+    public void setFlagImageOffset(int flagImageOffset) {
+        this.flagImageOffset = flagImageOffset;
+        invalidateComponent();
+    }
+
+    public final void setFlagImageOffset(String flagImageOffset) {
+        if (flagImageOffset == null) {
+            throw new IllegalArgumentException("flagImageOffset is null.");
+        }
+
+        setFlagImageOffset(Integer.parseInt(flagImageOffset));
     }
 
     // Form events
