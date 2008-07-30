@@ -31,7 +31,7 @@ import pivot.util.ListenerList;
  *
  * @author tvolkert
  */
-public class IntegerSpinnerData implements List<Integer> {
+public class NumericSpinnerData implements List<Integer> {
     private class DataIterator implements Iterator<Integer> {
         private int value = lowerBound;
 
@@ -61,27 +61,27 @@ public class IntegerSpinnerData implements List<Integer> {
     private ListListenerList<Integer> listListeners = new ListListenerList<Integer>();
 
     /**
-     * Creates a new <tt>IntegerSpinnerData</tt> instance bounded from
+     * Creates a new <tt>NumericSpinnerData</tt> instance bounded from
      * <tt>Short.MIN_VALUE</tt> to <tt>Short.MAX_VALUE</tt> and an increment
      * of one.
      */
-    public IntegerSpinnerData() {
+    public NumericSpinnerData() {
         this(Short.MIN_VALUE, Short.MAX_VALUE, 1);
     }
 
     /**
-     * Creates a new <tt>IntegerSpinnerData</tt> with the specified bounded
+     * Creates a new <tt>NumericSpinnerData</tt> with the specified bounded
      * range and an increment of one.
      */
-    public IntegerSpinnerData(int lowerBound, int upperBound) {
+    public NumericSpinnerData(int lowerBound, int upperBound) {
         this(lowerBound, upperBound, 1);
     }
 
     /**
-     * Creates a new <tt>IntegerSpinnerData</tt> with the specified bounded
+     * Creates a new <tt>NumericSpinnerData</tt> with the specified bounded
      * range and increment.
      */
-    public IntegerSpinnerData(int lowerBound, int upperBound, int increment) {
+    public NumericSpinnerData(int lowerBound, int upperBound, int increment) {
         if (lowerBound >= upperBound) {
             throw new IllegalArgumentException("Lower bound must be less than upper bound.");
         }
