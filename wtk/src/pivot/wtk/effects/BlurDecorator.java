@@ -78,24 +78,29 @@ public class BlurDecorator implements Decorator {
     }
 
     public Graphics2D prepare(Component component, Graphics2D graphics) {
-        this.component = component;
         this.graphics = graphics;
 
         int width = component.getWidth();
         int height = component.getHeight();
 
-        if (bufferedImage == null
+        if (component != this.component
+            || bufferedImage == null
             || bufferedImage.getWidth() != width
             || bufferedImage.getHeight() != height) {
-            // Create the buffered image
+            // Create (or re-create) the buffered image
             bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-            bufferedImageBlurred = false;
 
+            // Point the graphics at our buffered image to create the pristine
+            // "snapshot" of our component. After it's painted, we'll apply the
+            // blur in our update() method.
             graphics = bufferedImage.createGraphics();
+            bufferedImageBlurred = false;
         } else {
             // No need to paint - we'll do it in update()
             graphics = null;
         }
+
+        this.component = component;
 
         return graphics;
     }

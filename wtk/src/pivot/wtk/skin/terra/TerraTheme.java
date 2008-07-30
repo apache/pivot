@@ -18,9 +18,6 @@ package pivot.wtk.skin.terra;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
 
 import pivot.collections.Sequence;
 import pivot.wtk.Alert;
@@ -67,6 +64,7 @@ import pivot.wtk.Theme;
 import pivot.wtk.Tooltip;
 import pivot.wtk.TreeView;
 import pivot.wtk.Window;
+import pivot.wtk.effects.BlurDecorator;
 
 /**
  *
@@ -76,32 +74,28 @@ import pivot.wtk.Window;
  */
 public final class TerraTheme extends Theme {
     /**
-     * Adds drop shadows to all windows and blurs disabled windows.
+     * Adds drop shadows to all windows.
      *
      * @author gbrown
      * @author tvolkert
      */
     private static class WindowDecorator implements Decorator {
-        private BufferedImage bufferedImage = null;
-        private boolean blurred = false;
-
-        private Decorator decorator = null;
+        private Decorator originalDecorator = null;
+        private Decorator blurDecorator = null;
         private Component component = null;
         private Graphics2D graphics = null;
 
-        private static final int BLUR_RADIUS = 9;
-
-        public WindowDecorator(Decorator decorator) {
-            this.decorator = decorator;
+        public WindowDecorator(Decorator originalDecorator) {
+            this.originalDecorator = originalDecorator;
         }
 
         public Decorator getDecorator() {
-            return decorator;
+            return originalDecorator;
         }
 
         public Graphics2D prepare(Component component, Graphics2D graphics) {
-            if (decorator != null) {
-                graphics = decorator.prepare(component, graphics);
+            if (originalDecorator != null) {
+                graphics = originalDecorator.prepare(component, graphics);
             }
 
             this.component = component;
@@ -118,57 +112,23 @@ public final class TerraTheme extends Theme {
                 component.getWidth(), component.getHeight());
 
             if (!component.isEnabled()) {
-                // Prepare to blur
-                int width = component.getWidth();
-                int height = component.getHeight();
-
-                if (bufferedImage == null
-                    || bufferedImage.getWidth() != width
-                    || bufferedImage.getHeight() != height) {
-                    // Create the buffered image
-                    bufferedImage = new BufferedImage(width, height,
-                        BufferedImage.TYPE_INT_RGB);
-
-                    graphics = bufferedImage.createGraphics();
-                    blurred = false;
-                } else {
-                    // No need to paint - we'll do it in update()
-                    graphics = null;
+                if (blurDecorator == null) {
+                    blurDecorator = new BlurDecorator(9);
                 }
+
+                graphics = blurDecorator.prepare(component, graphics);
             }
 
             return graphics;
         }
 
         public void update() {
-            if (decorator != null) {
-                decorator.update();
+            if (originalDecorator != null) {
+                originalDecorator.update();
             }
 
             if (!component.isEnabled()) {
-                if (!blurred) {
-                    Graphics2D imageGraphics = bufferedImage.createGraphics();
-
-                    float[] kernel = new float[BLUR_RADIUS * BLUR_RADIUS];
-                    for (int i = 0, n = kernel.length; i < n; i++) {
-                        kernel[i] = 1f / n;
-                    }
-
-                    ConvolveOp blur = new ConvolveOp(new Kernel(BLUR_RADIUS, BLUR_RADIUS,
-                        kernel), ConvolveOp.EDGE_NO_OP, null);
-
-                    // Perform the blur operation
-                    bufferedImage = blur.filter(bufferedImage, null);
-                    blurred = true;
-
-                    imageGraphics.dispose();
-                }
-
-                // Draw the blurred image to the real graphics
-                this.graphics.drawImage(bufferedImage, 0, 0, null);
-            } else {
-                // Free the bufered image
-                bufferedImage = null;
+                blurDecorator.update();
             }
         }
     }
@@ -338,8 +298,8 @@ public final class TerraTheme extends Theme {
     private void monitorWindow(Window window) {
         if (!(window instanceof Popup)) {
             // Attach shadow decorator and repaint
-            Decorator decorator = window.getDecorator();
-            window.setDecorator(new WindowDecorator(decorator));
+            Decorator originalDecorator = window.getDecorator();
+            window.setDecorator(new WindowDecorator(originalDecorator));
             repaintShadowRegion(window);
 
             // Add component listeners
@@ -356,8 +316,8 @@ public final class TerraTheme extends Theme {
 
             // Remove shadow decorator and repaint
             WindowDecorator windowDecorator = (WindowDecorator)window.getDecorator();
-            Decorator decorator = windowDecorator.getDecorator();
-            window.setDecorator(decorator);
+            Decorator originalDecorator = windowDecorator.getDecorator();
+            window.setDecorator(originalDecorator);
             repaintShadowRegion(window);
         }
     }
