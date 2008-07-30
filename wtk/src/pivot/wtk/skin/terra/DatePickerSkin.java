@@ -23,6 +23,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.RoundRectangle2D;
 
 import pivot.collections.Sequence;
+import pivot.util.CalendarDate;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
@@ -105,7 +106,7 @@ public class DatePickerSkin extends ContainerSkin
     // DatePickerSelectionListener methods
 
     public void selectedDateChanged(DatePicker datePicker,
-        DatePicker.Date previousSelectedDate) {
+        CalendarDate previousSelectedDate) {
         // TODO
     }
 }

@@ -15,13 +15,11 @@
  */
 package pivot.wtk;
 
-import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import pivot.collections.Dictionary;
+import pivot.util.CalendarDate;
 import pivot.util.ListenerList;
 
 /**
@@ -30,142 +28,6 @@ import pivot.util.ListenerList;
  * @author tvolkert
  */
 public class DatePicker extends Container {
-    /**
-     * Simple "struct" class that represents a specific day capable of being
-     * picked by a <tt>DatePicker</tt>.
-     *
-     * @author tvolkert
-     */
-    public static final class Date {
-        private int year;
-        private int month;
-        private int day;
-
-        /**
-         * Creates a new date representing the current day in the default
-         * timezone and the default locale.
-         */
-        public Date() {
-            GregorianCalendar calendar = new GregorianCalendar();
-            set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH) - 1);
-        }
-
-        /**
-         * Creates a new date representing the specified year, month, and day
-         * of month.
-         *
-         * @param year
-         * The year field (e.g. <tt>2008</tt>)
-         * @param month
-         * The month field, 0-based (e.g. <tt>2</tt> for March)
-         * @param day
-         * The day of the month, 0-based (e.g. <tt>14</tt> for the 15th)
-         */
-        public Date(int year, int month, int day) {
-            set(year, month, day);
-        }
-
-        /**
-         * Creates a new date representing the specified date string. The date
-         * string must be in the <tt>ISO 8601</tt> "calendar date" format,
-         * which is <tt>[YYYY]-[MM]-[DD]</tt>.
-         *
-         * @param date
-         * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g. 2008-07-23)
-         */
-        public Date(String date) {
-            Pattern pattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
-            Matcher matcher = pattern.matcher(date);
-
-            if (!matcher.matches()) {
-                throw new IllegalArgumentException("Invalid date format: " + date);
-            }
-
-            String year = matcher.group(1);
-            String month = matcher.group(2);
-            String day = matcher.group(3);
-
-            set(Integer.parseInt(year), Integer.parseInt(month) - 1,
-                Integer.parseInt(day) - 1);
-        }
-
-        /**
-         * Sets this date's inner fields.
-         */
-        private void set(int year, int month, int day) {
-            this.year = year;
-            this.month = month;
-            this.day = day;
-        }
-
-        /**
-         * Gets the year field (e.g. <tt>2008</tt>).
-         */
-        public int getYear() {
-            return year;
-        }
-
-        /**
-         * Gets the month field, 0-based (e.g. <tt>2</tt> for March).
-         */
-        public int getMonth() {
-            return month;
-        }
-
-        /**
-         * Gets the day of the month, 0-based (e.g. <tt>14</tt> for the 15th).
-         */
-        public int getDay() {
-            return day;
-        }
-
-        /**
-         * Indicates whether some other object is "equal to" this one.
-         * This is the case if the object is a date that represents the same
-         * day as this one.
-         *
-         * @param o
-         * Reference to the object against which to compare
-         */
-        @Override
-        public boolean equals(Object o) {
-            return (o instanceof Date
-                && ((Date)o).year == year
-                && ((Date)o).month == month
-                && ((Date)o).day == day);
-        }
-
-        /**
-         * Returns a hash code value for the object.
-         */
-        @Override
-        public int hashCode() {
-            Integer hashKey = year + month + day;
-            return hashKey.hashCode();
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder buf = new StringBuilder();
-
-            NumberFormat format = NumberFormat.getIntegerInstance();
-            format.setGroupingUsed(false);
-            format.setMinimumIntegerDigits(4);
-
-            buf.append(format.format(year));
-            buf.append("-");
-
-            format.setMinimumIntegerDigits(2);
-
-            buf.append(format.format(month + 1));
-            buf.append("-");
-            buf.append(format.format(day + 1));
-
-            return buf.toString();
-        }
-    }
-
     /**
      * Date picker listener list.
      *
@@ -204,7 +66,7 @@ public class DatePicker extends Container {
         implements DatePickerSelectionListener {
 
         public void selectedDateChanged(DatePicker datePicker,
-            DatePicker.Date previousSelectedDate) {
+            CalendarDate previousSelectedDate) {
             for (DatePickerSelectionListener listener : this) {
                 listener.selectedDateChanged(datePicker, previousSelectedDate);
             }
@@ -214,7 +76,7 @@ public class DatePicker extends Container {
     private int year;
     private int month;
 
-    private Date selectedDate = null;
+    private CalendarDate selectedDate = null;
 
     private String selectedDateKey = null;
 
@@ -295,7 +157,7 @@ public class DatePicker extends Container {
      * Gets the currently selected date, or <tt>null</tt> if no date is
      * selected.
      */
-    public Date getSelectedDate() {
+    public CalendarDate getSelectedDate() {
         return selectedDate;
     }
 
@@ -305,8 +167,8 @@ public class DatePicker extends Container {
      * @param selectedDate
      * The selected date, or <tt>null</tt> to specify no selection
      */
-    public void setSelectedDate(Date selectedDate) {
-        Date previousSelectedDate = this.selectedDate;
+    public void setSelectedDate(CalendarDate selectedDate) {
+        CalendarDate previousSelectedDate = this.selectedDate;
 
         if ((selectedDate == null ^ previousSelectedDate == null)
             || (selectedDate != null && !selectedDate.equals(previousSelectedDate))) {
@@ -328,7 +190,7 @@ public class DatePicker extends Container {
             throw new IllegalArgumentException("selectedDate is null.");
         }
 
-        setSelectedDate(new Date(selectedDate));
+        setSelectedDate(new CalendarDate(selectedDate));
     }
 
     /**
@@ -361,8 +223,8 @@ public class DatePicker extends Container {
             && context.containsKey(selectedDateKey)) {
             Object value = context.get(selectedDateKey);
 
-            if (value instanceof Date) {
-                setSelectedDate((Date)value);
+            if (value instanceof CalendarDate) {
+                setSelectedDate((CalendarDate)value);
             } else if (value instanceof String) {
                 setSelectedDate((String)value);
             } else {

@@ -15,7 +15,9 @@
  */
 package pivot.wtk;
 
+import pivot.util.CalendarDate;
+
 public interface DatePickerSelectionListener {
     public void selectedDateChanged(DatePicker datePicker,
-        DatePicker.Date previousSelectedDate);
+        CalendarDate previousSelectedDate);
 }
