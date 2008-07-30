@@ -282,6 +282,7 @@ public abstract class AbstractFrameSkin extends WindowSkin
 
     private Point restoreLocation = null;
 
+    private Insets padding = new Insets(8);
     private boolean resizable = true;
 
     private static final Font TITLE_BAR_FONT = new Font("Verdana", Font.BOLD, 11);
@@ -297,7 +298,6 @@ public abstract class AbstractFrameSkin extends WindowSkin
     private static final Color INACTIVE_TITLE_BAR_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
     private static final Color CONTENT_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
     private static final Color CONTENT_BEVEL_COLOR = new Color(0xe6, 0xe3, 0xda);
-    private static final Insets PADDING = new Insets(8);
     private static final float INACTIVE_ICON_OPACITY = 0.5f;
 
     public AbstractFrameSkin() {
@@ -392,14 +392,14 @@ public abstract class AbstractFrameSkin extends WindowSkin
             && content.isDisplayable()) {
             if (height != -1) {
                 height = Math.max(height - preferredTitleBarSize.height - 4 -
-                    PADDING.top - PADDING.bottom, 0);
+                    padding.top - padding.bottom, 0);
             }
 
             preferredWidth = Math.max(preferredWidth,
                 content.getPreferredWidth(height));
         }
 
-        preferredWidth += (PADDING.left + PADDING.right) + 2;
+        preferredWidth += (padding.left + padding.right) + 2;
 
         return preferredWidth;
     }
@@ -419,13 +419,13 @@ public abstract class AbstractFrameSkin extends WindowSkin
         if (content != null
             && content.isDisplayable()) {
             if (width != -1) {
-                width = Math.max(width - PADDING.left - PADDING.right, 0);
+                width = Math.max(width - padding.left - padding.right, 0);
             }
 
             preferredHeight += content.getPreferredHeight(width);
         }
 
-        preferredHeight += (PADDING.top + PADDING.bottom) + 4;
+        preferredHeight += (padding.top + padding.bottom) + 4;
 
         return preferredHeight;
     }
@@ -450,8 +450,8 @@ public abstract class AbstractFrameSkin extends WindowSkin
             preferredHeight += preferredContentSize.height;
         }
 
-        preferredWidth += (PADDING.left + PADDING.right) + 2;
-        preferredHeight += (PADDING.top + PADDING.bottom) + 4;
+        preferredWidth += (padding.left + padding.right) + 2;
+        preferredHeight += (padding.top + padding.bottom) + 4;
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -485,12 +485,12 @@ public abstract class AbstractFrameSkin extends WindowSkin
             if (content.isDisplayable()) {
                 content.setVisible(true);
 
-                content.setLocation(PADDING.left + 1,
-                    titleBarFlowPane.getHeight() + PADDING.top + 3);
+                content.setLocation(padding.left + 1,
+                    titleBarFlowPane.getHeight() + padding.top + 3);
 
-                int contentWidth = Math.max(width - (PADDING.left + PADDING.right + 2), 0);
+                int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
                 int contentHeight = Math.max(height - (titleBarFlowPane.getHeight()
-                    + PADDING.top + PADDING.bottom + 4), 0);
+                    + padding.top + padding.bottom + 4), 0);
 
                 content.setSize(contentWidth, contentHeight);
             } else {
@@ -586,6 +586,23 @@ public abstract class AbstractFrameSkin extends WindowSkin
         }
 
         setShowCloseButton(Boolean.parseBoolean(showCloseButton));
+    }
+
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
     }
 
     public boolean isResizable() {
