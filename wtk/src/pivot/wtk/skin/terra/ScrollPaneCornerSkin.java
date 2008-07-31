@@ -25,8 +25,8 @@ import pivot.wtk.ScrollPane;
 import pivot.wtk.skin.ComponentSkin;
 
 public class ScrollPaneCornerSkin extends ComponentSkin {
-    private static final Color backgroundColor = new Color(0xF0, 0xEC, 0xE7);
-    private static final Color color = new Color(0x81, 0x76, 0x67);
+    private Color backgroundColor = new Color(0xF0, 0xEC, 0xE7);
+    private Color color = new Color(0x81, 0x76, 0x67);
 
     @Override
     public void install(Component component) {
@@ -65,5 +65,39 @@ public class ScrollPaneCornerSkin extends ComponentSkin {
 
         graphics.setPaint(backgroundColor);
         graphics.fill(new Rectangle2D.Double(0, 0, width, height));
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        repaintComponent();
+    }
+
+    public final void setBackgroundColor(String backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null.");
+        }
+
+        setBackgroundColor(Color.decode(backgroundColor));
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+        repaintComponent();
+    }
+
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(Color.decode(color));
     }
 }
