@@ -85,7 +85,7 @@
          deprecation="${compiler.deprecation}"
          debug="${compiler.debug}"
          failonerror="true"
-         classpath="${core}/${ant.project.name}-core.jar">
+         classpath="${core}/${ant.project.name}-core.jar:junit.jar">
          <compilerarg value="-Xlint" />
       </javac>
 
