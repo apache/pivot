@@ -45,6 +45,9 @@ public class GrayscaleDecorator implements Decorator {
         // Draw the blurred image to the real graphics
         graphics.drawImage(bufferedImage, 0, 0, null);
 
+        // Free the buffered image
+        bufferedImage = null;
+
         // We redirected the component's graphics to the buffered image
         // graphics, so we dispose of the original graphics ourselves
         graphics.dispose();
