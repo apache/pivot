@@ -247,6 +247,8 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(RollupSkin.RollupButton.class, RollupSkin.RollupButtonSkin.class);
         componentSkinMap.put(ScrollBarSkin.ScrollButton.class, ScrollBarSkin.ScrollButtonSkin.class);
         componentSkinMap.put(ScrollBarSkin.ScrollHandle.class, ScrollBarSkin.ScrollHandleSkin.class);
+        componentSkinMap.put(SpinnerSkin.SpinButton.class, SpinnerSkin.SpinButtonSkin.class);
+        componentSkinMap.put(SpinnerSkin.SpinnerContent.class, SpinnerSkin.SpinnerContentSkin.class);
         componentSkinMap.put(SplitPaneSkin.Splitter.class, SplitPaneSkin.SplitterSkin.class);
         componentSkinMap.put(SplitPaneSkin.SplitterShadow.class, SplitPaneSkin.SplitterShadowSkin.class);
         componentSkinMap.put(TabPaneSkin.TabButton.class, TabPaneSkin.TabButtonSkin.class);

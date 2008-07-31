@@ -19,18 +19,26 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import pivot.collections.List;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
+import pivot.wtk.Keyboard;
+import pivot.wtk.Mouse;
 import pivot.wtk.PushButton;
+import pivot.wtk.Rectangle;
 import pivot.wtk.Spinner;
 import pivot.wtk.SpinnerListener;
 import pivot.wtk.SpinnerSelectionListener;
+import pivot.wtk.media.Image;
+import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
@@ -39,20 +47,531 @@ import pivot.wtk.skin.ContainerSkin;
  * @author tvolkert
  */
 public class SpinnerSkin extends ContainerSkin
-    implements SpinnerListener, SpinnerSelectionListener, ButtonPressListener {
+    implements SpinnerListener, SpinnerSelectionListener {
 
-    private PushButton upButton = new PushButton("^");
-    private PushButton downButton = new PushButton("v");
+    /**
+     * Encapsulates the code needed to perform timer-controlled spinning.
+     */
+    private static class AutomaticSpinner {
+        public Spinner spinner;
+        public int direction;
+
+        private int timeoutID = -1;
+        private int intervalID = -1;
+
+        /**
+         * Starts spinning the specified spinner.
+         *
+         * @param spinner
+         * The spinner to spin
+         *
+         * @param direction
+         * <tt>1</tt> to adjust the spinner's selected index larger;
+         * <tt>-1</tt> to adjust it smaller
+         *
+         * @exception IllegalStateException
+         * If automatic spinner of any spinner is already in progress.
+         * Only one spinner may be automatically spun at one time
+         */
+        public void start(Spinner spinner, int direction) {
+            assert(direction != 0) : "Direction must be positive or negative";
+
+            if (timeoutID != -1
+                || intervalID != -1) {
+                throw new IllegalStateException("Already running");
+            }
+
+            this.spinner = spinner;
+            this.direction = direction;
+
+            // Wait a timeout period, then begin repidly spinning
+            timeoutID = ApplicationContext.setTimeout(new Runnable() {
+                public void run() {
+                    intervalID = ApplicationContext.setInterval(new Runnable() {
+                        public void run() {
+                            spin();
+                        }
+                    }, 30);
+
+                    timeoutID = -1;
+                }
+            }, 400);
+
+            // We initially spin once to register that we've started
+            spin();
+        }
+
+        private void spin() {
+            boolean circular = spinner.isCircular();
+            int selectedIndex = spinner.getSelectedIndex();
+            int count = spinner.getSpinnerData().getLength();
+
+            if (direction > 0) {
+                if (selectedIndex < count - 1) {
+                    spinner.setSelectedIndex(selectedIndex + 1);
+                } else if (circular) {
+                    spinner.setSelectedIndex(0);
+                } else {
+                    stop();
+                }
+            } else {
+                if (selectedIndex > 0) {
+                    spinner.setSelectedIndex(selectedIndex - 1);
+                } else if (circular) {
+                    spinner.setSelectedIndex(count - 1);
+                } else {
+                    stop();
+                }
+            }
+        }
+
+        /**
+         * Stops any automatic spinning in progress.
+         */
+        public void stop() {
+            if (timeoutID != -1) {
+                ApplicationContext.clearTimeout(timeoutID);
+                timeoutID = -1;
+            }
+
+            if (intervalID != -1) {
+                ApplicationContext.clearInterval(intervalID);
+                intervalID = -1;
+            }
+        }
+    }
+
+    /**
+     * Component that holds the content of a spinner. It is the focusable part
+     * of a spinner.
+     *
+     * @author tvolkert
+     */
+    public static final class SpinnerContent extends Component {
+        private Spinner spinner;
+
+        public SpinnerContent(Spinner spinner) {
+            this.spinner = spinner;
+
+            installSkin(SpinnerContent.class);
+        }
+
+        public Spinner getSpinner() {
+            return spinner;
+        }
+    }
+
+    /**
+     * SpinnerContent skin.
+     *
+     * @author tvolkert
+     */
+    public static final class SpinnerContentSkin extends ComponentSkin {
+        private Color borderColor = DEFAULT_BORDER_COLOR;
+
+        @Override
+        public void install(Component component) {
+            validateComponentType(component, SpinnerContent.class);
+
+            super.install(component);
+        }
+
+        public int getPreferredWidth(int height) {
+            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
+            Spinner spinner = spinnerContent.getSpinner();
+            Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
+
+            itemRenderer.render(spinner.getSelectedValue(), spinner);
+            return itemRenderer.getPreferredWidth(height);
+        }
+
+        public int getPreferredHeight(int width) {
+            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
+            Spinner spinner = spinnerContent.getSpinner();
+            Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
+
+            itemRenderer.render(spinner.getSelectedValue(), spinner);
+            return itemRenderer.getPreferredHeight(width);
+        }
+
+        public Dimensions getPreferredSize() {
+            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
+            Spinner spinner = spinnerContent.getSpinner();
+            Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
+
+            itemRenderer.render(spinner.getSelectedValue(), spinner);
+            return itemRenderer.getPreferredSize();
+        }
+
+        public void layout() {
+            // No-op
+        }
+
+        public void paint(Graphics2D graphics) {
+            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
+            Spinner spinner = spinnerContent.getSpinner();
+
+            int width = getWidth();
+            int height = getHeight();
+
+            // Paint the content
+            Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
+            itemRenderer.render(spinner.getSelectedValue(), spinner);
+
+            Graphics2D contentGraphics = (Graphics2D)graphics.create();
+            Dimensions rendererSize = itemRenderer.getPreferredSize();
+            itemRenderer.setSize(rendererSize.width, rendererSize.height);
+            itemRenderer.paint(contentGraphics);
+            contentGraphics.dispose();
+
+            // Paint the focus state
+            if (spinnerContent.isFocused()) {
+                BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
+                    BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+
+                graphics.setStroke(dashStroke);
+                graphics.setColor(borderColor);
+
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
+                graphics.draw(new Rectangle(2, 2, Math.max(width - 5, 0),
+                    Math.max(height - 5, 0)));
+            }
+        }
+
+        public Color getBorderColor() {
+            return borderColor;
+        }
+
+        public void setBorderColor(Color borderColor) {
+            if (borderColor == null) {
+                throw new IllegalArgumentException("borderColor is null.");
+            }
+
+            this.borderColor = borderColor;
+            repaintComponent();
+        }
+
+        public final void setBorderColor(String borderColor) {
+            if (borderColor == null) {
+                throw new IllegalArgumentException("borderColor is null.");
+            }
+
+            setBorderColor(Color.decode(borderColor));
+        }
+
+        @Override
+        public void enabledChanged(Component component) {
+            super.enabledChanged(component);
+
+            repaintComponent();
+        }
+
+        @Override
+        public void focusedChanged(Component component, boolean temporary) {
+            super.focusedChanged(component, temporary);
+
+            repaintComponent();
+        }
+
+        @Override
+        public void mouseClick(Mouse.Button button, int x, int y, int count) {
+            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
+            Component.setFocusedComponent(spinnerContent);
+        }
+
+        @Override
+        public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+            boolean consumed = true;
+
+            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
+            Spinner spinner = spinnerContent.getSpinner();
+
+            boolean circular = spinner.isCircular();
+            int selectedIndex = spinner.getSelectedIndex();
+            int count = spinner.getSpinnerData().getLength();
+
+            if (keyCode == Keyboard.KeyCode.UP) {
+                if (selectedIndex < count - 1) {
+                    spinner.setSelectedIndex(selectedIndex + 1);
+                } else if (circular) {
+                    spinner.setSelectedIndex(0);
+                }
+            } else if (keyCode == Keyboard.KeyCode.DOWN) {
+                if (selectedIndex > 0) {
+                    spinner.setSelectedIndex(selectedIndex - 1);
+                } else if (circular) {
+                    spinner.setSelectedIndex(count - 1);
+                }
+            } else {
+                consumed = super.keyPressed(keyCode, keyLocation);
+            }
+
+            return consumed;
+        }
+    }
+
+    /**
+     *
+     *
+     * @author tvolkert
+     */
+    public static final class SpinButton extends Component {
+        private Spinner spinner;
+        private int direction;
+        private Image buttonImage;
+
+        public SpinButton(Spinner spinner, int direction, Image buttonImage) {
+            this.spinner = spinner;
+            this.direction = direction;
+            this.buttonImage = buttonImage;
+
+            installSkin(SpinButton.class);
+        }
+
+        public Spinner getSpinner() {
+            return spinner;
+        }
+
+        public int getDirection() {
+            return direction;
+        }
+
+        public Image getButtonImage() {
+            return buttonImage;
+        }
+    }
+
+    /**
+     *
+     *
+     * @author tvolkert
+     */
+    public static final class SpinButtonSkin extends ComponentSkin {
+        private boolean highlighted = false;
+        private boolean pressed = false;
+
+        @Override
+        public void install(Component component) {
+            validateComponentType(component, SpinButton.class);
+
+            super.install(component);
+        }
+
+        @Override
+        public boolean isFocusable() {
+            return false;
+        }
+
+        public int getPreferredWidth(int height) {
+            return 13;
+        }
+
+        public int getPreferredHeight(int width) {
+            return 6;
+        }
+
+        public Dimensions getPreferredSize() {
+            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+        }
+
+        public void layout() {
+            // No-op
+        }
+
+        public void paint(Graphics2D graphics) {
+            // Apply spinner styles to the button
+            SpinButton spinButton = (SpinButton)getComponent();
+            Spinner spinner = spinButton.getSpinner();
+            Component.StyleDictionary spinnerStyles = spinner.getStyles();
+
+            Color backgroundColor = null;
+
+            if (spinner.isEnabled()) {
+                if (pressed) {
+                    backgroundColor = (Color)spinnerStyles.get
+                        ("buttonPressedBackgroundColor");
+                } else if (highlighted) {
+                    backgroundColor = (Color)spinnerStyles.get
+                        ("buttonHighlightedBackgroundColor");
+                } else {
+                    backgroundColor = (Color)spinnerStyles.get
+                        ("buttonBackgroundColor");
+                }
+            } else {
+                backgroundColor = (Color)spinnerStyles.get
+                    ("buttonDisabledBackgroundColor");
+            }
+
+            int width = getWidth();
+            int height = getHeight();
+
+            // Paint the background
+            graphics.setPaint(backgroundColor);
+            Rectangle rectangle = new Rectangle(0, 0, width, height);
+            graphics.fill(rectangle);
+
+            // Size the image to be proportional to our size
+            int buttonImageWidth = (int)Math.floor((float)width / 2f);
+            int buttonImageHeight = (int)((float)height / 3f);
+            Image buttonImage = spinButton.getButtonImage();
+            buttonImage.setSize(buttonImageWidth, buttonImageHeight);
+
+            // Paint the image
+            Graphics2D imageGraphics = (Graphics2D)graphics.create();
+            int buttonImageX = (width - buttonImageWidth) / 2;
+            int buttonImageY = (height - buttonImageHeight) / 2;
+            imageGraphics.translate(buttonImageX, buttonImageY);
+            imageGraphics.clipRect(0, 0, buttonImageWidth, buttonImageHeight);
+            buttonImage.paint(imageGraphics);
+            imageGraphics.dispose();
+        }
+
+        @Override
+        public void enabledChanged(Component component) {
+            super.enabledChanged(component);
+
+            automaticSpinner.stop();
+
+            pressed = false;
+            highlighted = false;
+            repaintComponent();
+        }
+
+        @Override
+        public void mouseOver() {
+            super.mouseOver();
+
+            highlighted = true;
+            repaintComponent();
+        }
+
+        @Override
+        public void mouseOut() {
+            super.mouseOut();
+
+            automaticSpinner.stop();
+
+            pressed = false;
+            highlighted = false;
+            repaintComponent();
+        }
+
+        @Override
+        public boolean mouseDown(Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseDown(button, x, y);
+
+            if (button == Mouse.Button.LEFT) {
+                SpinButton spinButton = (SpinButton)getComponent();
+                Spinner spinner = spinButton.getSpinner();
+
+                // Start the automatic spinner. It'll be stopped when we
+                // mouse up or mouse out
+                automaticSpinner.start(spinner, spinButton.getDirection());
+
+                pressed = true;
+                repaintComponent();
+
+                consumed = true;
+            }
+
+            return consumed;
+        }
+
+        @Override
+        public boolean mouseUp(Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseUp(button, x, y);
+
+            if (button == Mouse.Button.LEFT) {
+                automaticSpinner.stop();
+
+                pressed = false;
+                repaintComponent();
+            }
+
+            return consumed;
+        }
+    }
+
+    protected abstract class SpinButtonImage extends ImageAsset {
+        public int getPreferredWidth(int height) {
+            // The image never gets consulted for its preferred size
+            return 0;
+        }
+
+        public int getPreferredHeight(int width) {
+            // The image never gets consulted for its preferred size
+            return 0;
+        }
+
+        public Dimensions getPreferredSize() {
+            // The image never gets consulted for its preferred size
+            return null;
+        }
+    }
+
+    protected class SpinUpImage extends SpinButtonImage {
+        public void paint(Graphics2D graphics) {
+            Spinner spinner = (Spinner)getComponent();
+
+            int width = getWidth();
+            int height = getHeight();
+
+            graphics.setPaint(buttonImageColor);
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+            GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+
+            arrow.moveTo(0, (float)height + 0.5f);
+            arrow.lineTo((float)width / 2.0f, 0);
+            arrow.lineTo(width, (float)height + 0.5f);
+
+            arrow.closePath();
+            graphics.fill(arrow);
+        }
+    }
+
+    protected class SpinDownImage extends SpinButtonImage {
+        public void paint(Graphics2D graphics) {
+            Spinner spinner = (Spinner)getComponent();
+
+            int width = getWidth();
+            int height = getHeight();
+
+            graphics.setPaint(buttonImageColor);
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+            GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+
+            arrow.moveTo(0, 0);
+            arrow.lineTo((float)width / 2.0f, (float)height + 0.5f);
+            arrow.lineTo(width, 0);
+
+            arrow.closePath();
+            graphics.fill(arrow);
+        }
+    }
+
+    private SpinnerContent spinnerContent = null;
+    private SpinButton upButton = null;
+    private SpinButton downButton = null;
 
     private Color color = Color.BLACK;
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private Color borderColor = new Color(0x99, 0x99, 0x99);
+    private Color borderColor = DEFAULT_BORDER_COLOR;
+    private Color buttonImageColor = Color.BLACK;
+    private Color buttonBackgroundColor = new Color(0xF0, 0xEC, 0xE7);
+    private Color buttonDisabledBackgroundColor = new Color(0xF0, 0xEC, 0xE7);
+    private Color buttonPressedBackgroundColor = new Color(0xDF, 0xD7, 0xCD);
+    private Color buttonHighlightedBackgroundColor = new Color(0xFB, 0xFA, 0xF8);
     private Font font = new Font("Verdana", Font.PLAIN, 11);
 
-    public SpinnerSkin() {
-        upButton.getStyles().put("padding", new Insets(0));
-        downButton.getStyles().put("padding", new Insets(0));
-    }
+    private static AutomaticSpinner automaticSpinner = new AutomaticSpinner();
+
+    private static final Color DEFAULT_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
 
     @Override
     public void install(Component component) {
@@ -64,10 +583,14 @@ public class SpinnerSkin extends ContainerSkin
         spinner.getSpinnerListeners().add(this);
         spinner.getSpinnerSelectionListeners().add(this);
 
+        spinnerContent = new SpinnerContent(spinner);
+        spinner.getComponents().add(spinnerContent);
+
+        upButton = new SpinButton(spinner, 1, new SpinUpImage());
         spinner.getComponents().add(upButton);
+
+        downButton = new SpinButton(spinner, -1, new SpinDownImage());
         spinner.getComponents().add(downButton);
-        upButton.getButtonPressListeners().add(this);
-        downButton.getButtonPressListeners().add(this);
     }
 
     @Override
@@ -76,21 +599,21 @@ public class SpinnerSkin extends ContainerSkin
         spinner.getSpinnerListeners().remove(this);
         spinner.getSpinnerSelectionListeners().remove(this);
 
+        spinner.getComponents().remove(spinnerContent);
         spinner.getComponents().remove(upButton);
         spinner.getComponents().remove(downButton);
-        upButton.getButtonPressListeners().remove(this);
-        downButton.getButtonPressListeners().remove(this);
+
+        spinnerContent = null;
+        upButton = null;
+        downButton = null;
 
         super.uninstall();
     }
 
     @Override
     public int getPreferredWidth(int height) {
-        Spinner spinner = (Spinner)getComponent();
-        Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
-
         // Preferred width is the sum of our maximum button width plus the
-        // renderer width, plus the border
+        // content width, plus the border
 
         // Border thickness
         int preferredWidth = 2;
@@ -104,17 +627,13 @@ public class SpinnerSkin extends ContainerSkin
             height = Math.max(height - 2, 0);
         }
 
-        itemRenderer.render(spinner.getSelectedValue(), spinner);
-        preferredWidth += itemRenderer.getPreferredWidth(height);
+        preferredWidth += spinnerContent.getPreferredWidth(height);
 
         return preferredWidth;
     }
 
     @Override
     public int getPreferredHeight(int width) {
-        Spinner spinner = (Spinner)getComponent();
-        Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
-
         // Preferred height is the maximum of the button height and the
         // renderer's preferred height (plus the border), where button
         // height is defined as the larger of the two buttons' preferred
@@ -134,9 +653,8 @@ public class SpinnerSkin extends ContainerSkin
             width = Math.max(width - buttonWidth - 2, 0);
         }
 
-        itemRenderer.render(spinner.getSelectedValue(), spinner);
         preferredHeight = Math.max(preferredHeight,
-            itemRenderer.getPreferredHeight(width) + 2);
+            spinnerContent.getPreferredHeight(width));
 
         return preferredHeight;
     }
@@ -151,39 +669,36 @@ public class SpinnerSkin extends ContainerSkin
         int width = getWidth();
         int height = getHeight();
 
-        int buttonHeight = height / 2;
+        int buttonHeight = (height - 2) / 2;
         int buttonWidth = Math.max(upButton.getPreferredWidth(buttonHeight),
             downButton.getPreferredWidth(buttonHeight));
 
-        upButton.setSize(buttonWidth, buttonHeight);
-        downButton.setSize(buttonWidth, buttonHeight);
+        spinnerContent.setSize(width - buttonWidth - 3, height - 2);
+        spinnerContent.setLocation(1, 1);
 
-        upButton.setLocation(width - buttonWidth, 0);
-        downButton.setLocation(width - buttonWidth, buttonHeight);
+        upButton.setSize(buttonWidth, buttonHeight);
+        upButton.setLocation(width - buttonWidth - 1, 1);
+
+        downButton.setSize(buttonWidth, buttonHeight);
+        downButton.setLocation(width - buttonWidth - 1, height - buttonHeight - 1);
     }
 
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
 
-        Spinner spinner = (Spinner)getComponent();
-        Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
-
         int width = getWidth();
         int height = getHeight();
 
         int buttonWidth = upButton.getWidth();
+        int buttonHeight = upButton.getHeight();
 
         graphics.setStroke(new BasicStroke(0));
         graphics.setPaint(borderColor);
-        graphics.draw(new Rectangle2D.Double(0, 0, width - buttonWidth, height - 1));
-
-        itemRenderer.render(spinner.getSelectedValue(), spinner);
-        itemRenderer.setSize(width - buttonWidth - 2, height - 2);
-
-        Graphics2D contentGraphics = (Graphics2D)graphics.create();
-        contentGraphics.translate(1, 1);
-        contentGraphics.clipRect(0, 0, itemRenderer.getWidth(), itemRenderer.getHeight());
-        itemRenderer.paint(contentGraphics);
+        graphics.draw(new Rectangle2D.Double(0, 0, width - 1, height - 1));
+        graphics.draw(new Line2D.Double(width - buttonWidth - 2, 0,
+            width - buttonWidth - 2, height - 1));
+        graphics.draw(new Line2D.Double(width - buttonWidth - 2, buttonHeight + 1,
+            width - 1, buttonHeight + 1));
     }
 
     public Color getColor() {
@@ -191,7 +706,12 @@ public class SpinnerSkin extends ContainerSkin
     }
 
     public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
         this.color = color;
+
         repaintComponent();
     }
 
@@ -208,7 +728,12 @@ public class SpinnerSkin extends ContainerSkin
     }
 
     public void setDisabledColor(Color disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
         this.disabledColor = disabledColor;
+
         repaintComponent();
     }
 
@@ -225,7 +750,13 @@ public class SpinnerSkin extends ContainerSkin
     }
 
     public void setBorderColor(Color borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
+        }
+
         this.borderColor = borderColor;
+        spinnerContent.getStyles().put("borderColor", borderColor);
+
         repaintComponent();
     }
 
@@ -237,12 +768,102 @@ public class SpinnerSkin extends ContainerSkin
         setBorderColor(Color.decode(borderColor));
     }
 
+    public Color getButtonImageColor() {
+        return buttonImageColor;
+    }
+
+    public void setButtonImageColor(Color buttonImageColor) {
+        this.buttonImageColor = buttonImageColor;
+        repaintComponent();
+    }
+
+    public final void setButtonImageColor(String buttonImageColor) {
+        if (buttonImageColor == null) {
+            throw new IllegalArgumentException("buttonImageColor is null");
+        }
+
+        setButtonImageColor(Color.decode(buttonImageColor));
+    }
+
+    public Color getButtonBackgroundColor() {
+        return buttonBackgroundColor;
+    }
+
+    public void setButtonBackgroundColor(Color buttonBackgroundColor) {
+        this.buttonBackgroundColor = buttonBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setButtonBackgroundColor(String buttonBackgroundColor) {
+        if (buttonBackgroundColor == null) {
+            throw new IllegalArgumentException("buttonBackgroundColor is null");
+        }
+
+        setButtonBackgroundColor(Color.decode(buttonBackgroundColor));
+    }
+
+    public Color getButtonDisabledBackgroundColor() {
+        return buttonDisabledBackgroundColor;
+    }
+
+    public void setButtonDisabledBackgroundColor(Color buttonDisabledBackgroundColor) {
+        this.buttonDisabledBackgroundColor = buttonDisabledBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setButtonDisabledBackgroundColor(String buttonDisabledBackgroundColor) {
+        if (buttonDisabledBackgroundColor == null) {
+            throw new IllegalArgumentException("buttonDisabledBackgroundColor is null");
+        }
+
+        setButtonDisabledBackgroundColor(Color.decode(buttonDisabledBackgroundColor));
+    }
+
+    public Color getButtonPressedBackgroundColor() {
+        return buttonPressedBackgroundColor;
+    }
+
+    public void setButtonPressedBackgroundColor(Color buttonPressedBackgroundColor) {
+        this.buttonPressedBackgroundColor = buttonPressedBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setButtonPressedBackgroundColor(String buttonPressedBackgroundColor) {
+        if (buttonPressedBackgroundColor == null) {
+            throw new IllegalArgumentException("buttonPressedBackgroundColor is null");
+        }
+
+        setButtonPressedBackgroundColor(Color.decode(buttonPressedBackgroundColor));
+    }
+
+    public Color getButtonHighlightedBackgroundColor() {
+        return buttonHighlightedBackgroundColor;
+    }
+
+    public void setButtonHighlightedBackgroundColor(Color buttonHighlightedBackgroundColor) {
+        this.buttonHighlightedBackgroundColor = buttonHighlightedBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setButtonHighlightedBackgroundColor(String buttonHighlightedBackgroundColor) {
+        if (buttonHighlightedBackgroundColor == null) {
+            throw new IllegalArgumentException("buttonHighlightedBackgroundColor is null");
+        }
+
+        setButtonHighlightedBackgroundColor(Color.decode(buttonHighlightedBackgroundColor));
+    }
+
     public Font getFont() {
         return font;
     }
 
     public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
         this.font = font;
+
         invalidateComponent();
     }
 
@@ -283,28 +904,5 @@ public class SpinnerSkin extends ContainerSkin
 
     public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
         invalidateComponent();
-    }
-
-    // ButtonPressListener methods
-
-    public void buttonPressed(Button button) {
-        Spinner spinner = (Spinner)getComponent();
-        boolean circular = spinner.isCircular();
-        int selectedIndex = spinner.getSelectedIndex();
-        int count = spinner.getSpinnerData().getLength();
-
-        if (button == upButton) {
-            if (selectedIndex < count - 1) {
-                spinner.setSelectedIndex(selectedIndex + 1);
-            } else if (circular) {
-                spinner.setSelectedIndex(0);
-            }
-        } else {
-            if (selectedIndex > 0) {
-                spinner.setSelectedIndex(selectedIndex - 1);
-            } else if (circular) {
-                spinner.setSelectedIndex(count - 1);
-            }
-        }
     }
 }
