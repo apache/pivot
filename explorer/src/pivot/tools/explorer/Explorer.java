@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
-import pivot.tools.explorer.tree.TreeViewUtils;
+import pivot.tools.explorer.tree.TreeNodeList;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.Label;
@@ -73,10 +73,8 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 
 	public void selectionChanged(TreeView treeView) {
 
-		Sequence<Integer> indexPath = trComponents.getSelectedPath();
-		lbStatus.setText( TreeViewUtils.getStringPath(trComponents, indexPath));
-
-		Sequence<ComponentAdapter> nodePath = TreeViewUtils.getNodePath(trComponents, indexPath);
+		Sequence<ComponentAdapter> nodePath = TreeNodeList.create(treeView, trComponents.getSelectedPath()); 
+		lbStatus.setText( nodePath.toString() ); 
 		if ( nodePath.getLength() > 0 ) {
 			ComponentAdapter node = nodePath.get( nodePath.getLength()-1 );
 			tbProperties.setTableData( node.getProperties() );
