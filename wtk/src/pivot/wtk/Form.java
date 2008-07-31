@@ -33,6 +33,41 @@ import pivot.util.ListenerList;
  */
 @ComponentInfo(icon="Form.png")
 public class Form extends Container {
+    public static class FormAttributes extends Attributes {
+        private String label = null;
+        private Flag flag = null;
+
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(String label) {
+            String previousLabel = this.label;
+            this.label = label;
+
+            Component component = getComponent();
+            Form form = (Form)component.getParent();
+            if (form != null) {
+                form.formAttributeListeners.labelChanged(form, component, previousLabel);
+            }
+        }
+
+        public Flag getFlag() {
+            return flag;
+        }
+
+        public void setFlag(Flag flag) {
+            Flag previousFlag = this.flag;
+            this.flag = flag;
+
+            Component component = getComponent();
+            Form form = (Form)component.getParent();
+            if (form != null) {
+                form.formAttributeListeners.flagChanged(form, component, previousFlag);
+            }
+        }
+    }
+
     /**
      * Form field sequence.
      *
@@ -243,9 +278,6 @@ public class Form extends Container {
     private FormListenerList formListeners = new FormListenerList();
     private FormAttributeListenerList formAttributeListeners = new FormAttributeListenerList();
 
-    private static final Attribute LABEL_ATTRIBUTE = new Attribute(Form.class, "label");
-    private static final Attribute FLAG_ATTRIBUTE = new Attribute(Form.class, "flag");
-
     /**
      * Creates a new form.
      */
@@ -364,31 +396,39 @@ public class Form extends Container {
     }
 
     public static String getLabel(Component component) {
-        return (String)component.getAttributes().get(LABEL_ATTRIBUTE);
+        FormAttributes formAttributes =
+            (FormAttributes)component.getAttributes().get(FormAttributes.class);
+        return (formAttributes == null) ? null : formAttributes.getLabel();
     }
 
     public static void setLabel(Component component, String label) {
-        String previousLabel = getLabel(component);
-        component.getAttributes().put(LABEL_ATTRIBUTE, label);
+        FormAttributes formAttributes =
+            (FormAttributes)component.getAttributes().get(FormAttributes.class);
 
-        Form form = (Form)component.getParent();
-        if (form != null) {
-            form.formAttributeListeners.labelChanged(form, component, previousLabel);
+        if (formAttributes == null) {
+            formAttributes = new FormAttributes();
+            component.getAttributes().put(formAttributes);
         }
+
+        formAttributes.setLabel(label);
     }
 
     public static Flag getFlag(Component component) {
-        return (Flag)component.getAttributes().get(FLAG_ATTRIBUTE);
+        FormAttributes formAttributes =
+            (FormAttributes)component.getAttributes().get(FormAttributes.class);
+        return (formAttributes == null) ? null : formAttributes.getFlag();
     }
 
     public static void setFlag(Component component, Flag flag) {
-        Flag previousFlag = getFlag(component);
-        component.getAttributes().put(FLAG_ATTRIBUTE, flag);
+        FormAttributes formAttributes =
+            (FormAttributes)component.getAttributes().get(FormAttributes.class);
 
-        Form form = (Form)component.getParent();
-        if (form != null) {
-            form.formAttributeListeners.flagChanged(form, component, previousFlag);
+        if (formAttributes == null) {
+            formAttributes = new FormAttributes();
+            component.getAttributes().put(formAttributes);
         }
+
+        formAttributes.setFlag(flag);
     }
 
     public static final void setFlag(Component component, String flag) {

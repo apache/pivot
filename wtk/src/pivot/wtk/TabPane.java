@@ -29,6 +29,40 @@ import pivot.wtk.media.Image;
  */
 @ComponentInfo(icon="TabPane.png")
 public class TabPane extends Container {
+    public static class TabPaneAttributes extends Attributes {
+        private String label = null;
+        private Image icon = null;
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(String label) {
+            String previousLabel = this.label;
+            this.label = label;
+
+            Component component = getComponent();
+            TabPane tabPane = (TabPane)component.getParent();
+            if (tabPane != null) {
+                tabPane.tabPaneAttributeListeners.labelChanged(tabPane, component, previousLabel);
+            }
+        }
+
+        public Image getIcon() {
+            return icon;
+        }
+
+        public void setIcon(Image icon) {
+            Image previousIcon = this.icon;
+            this.icon = icon;
+
+            Component component = getComponent();
+            TabPane tabPane = (TabPane)component.getParent();
+            if (tabPane != null) {
+                tabPane.tabPaneAttributeListeners.iconChanged(tabPane, component, previousIcon);
+            }
+        }
+    }
+
     public final class TabSequence implements Sequence<Component>,
         Iterable<Component> {
         private class TabIterator implements Iterator<Component> {
@@ -159,9 +193,6 @@ public class TabPane extends Container {
     private TabPaneSelectionListenerList tabPaneSelectionListeners = new TabPaneSelectionListenerList();
     private TabPaneAttributeListenerList tabPaneAttributeListeners = new TabPaneAttributeListenerList();
 
-    private static final Attribute ICON_ATTRIBUTE = new Attribute(TabPane.class, "icon");
-    private static final Attribute LABEL_ATTRIBUTE = new Attribute(TabPane.class, "label");
-
     public TabPane() {
         this(false);
     }
@@ -273,36 +304,44 @@ public class TabPane extends Container {
         return tabPaneAttributeListeners;
     }
 
+    public static String getLabel(Component component) {
+        TabPaneAttributes tabPaneAttributes =
+            (TabPaneAttributes)component.getAttributes().get(TabPaneAttributes.class);
+        return (tabPaneAttributes == null) ? null : tabPaneAttributes.getLabel();
+    }
+
+    public static void setLabel(Component component, String label) {
+        TabPaneAttributes tabPaneAttributes =
+            (TabPaneAttributes)component.getAttributes().get(TabPaneAttributes.class);
+
+        if (tabPaneAttributes == null) {
+            tabPaneAttributes = new TabPaneAttributes();
+            component.getAttributes().put(tabPaneAttributes);
+        }
+
+        tabPaneAttributes.setLabel(label);
+    }
+
     public static Image getIcon(Component component) {
-        return (Image)component.getAttributes().get(ICON_ATTRIBUTE);
+        TabPaneAttributes tabPaneAttributes =
+            (TabPaneAttributes)component.getAttributes().get(TabPaneAttributes.class);
+        return (tabPaneAttributes == null) ? null : tabPaneAttributes.getIcon();
     }
 
     public static void setIcon(Component component, Image icon) {
-        Image previousIcon = getIcon(component);
-        component.getAttributes().put(ICON_ATTRIBUTE, icon);
+        TabPaneAttributes tabPaneAttributes =
+            (TabPaneAttributes)component.getAttributes().get(TabPaneAttributes.class);
 
-        TabPane tabPane = (TabPane)component.getParent();
-        if (tabPane != null) {
-            tabPane.tabPaneAttributeListeners.iconChanged(tabPane, component, previousIcon);
+        if (tabPaneAttributes == null) {
+            tabPaneAttributes = new TabPaneAttributes();
+            component.getAttributes().put(tabPaneAttributes);
         }
+
+        tabPaneAttributes.setIcon(icon);
     }
 
     public static final void setIcon(Component component, URL icon) {
         setIcon(component, Image.load(icon));
-    }
-
-    public static String getLabel(Component component) {
-        return (String)component.getAttributes().get(LABEL_ATTRIBUTE);
-    }
-
-    public static void setLabel(Component component, String label) {
-        String previousLabel = getLabel(component);
-        component.getAttributes().put(LABEL_ATTRIBUTE, label);
-
-        TabPane tabPane = (TabPane)component.getParent();
-        if (tabPane != null) {
-            tabPane.tabPaneAttributeListeners.labelChanged(tabPane, component, previousLabel);
-        }
     }
 }
 

@@ -118,29 +118,6 @@ public abstract class Container extends Component {
         }
     }
 
-    protected static class Attribute {
-        Class<? extends Container> containerClass = null;
-        String property = null;
-
-        public Attribute(Class<? extends Container> containerClass, String property) {
-            assert(containerClass != null) : "containerClass is null.";
-            assert(property != null) : "property is null.";
-
-            this.containerClass = containerClass;
-            this.property = property;
-        }
-
-        @Override
-        public String toString() {
-            return containerClass.getName() + "." + property;
-        }
-
-        @Override
-        public int hashCode() {
-            return containerClass.hashCode();
-        }
-    }
-
     private class ContainerListenerList extends ListenerList<ContainerListener>
         implements ContainerListener {
         public void componentInserted(Container container, int index) {
@@ -202,7 +179,7 @@ public abstract class Container extends Component {
     // an array list will need to perform a lot of copying as owned windows
     // are removed from the list and appended to the end
     private ArrayList<Component> components = new ArrayList<Component>();
-    ComponentSequence componentSequence = new ComponentSequence();
+    private ComponentSequence componentSequence = new ComponentSequence();
 
     private boolean valid = true;
 

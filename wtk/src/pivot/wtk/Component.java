@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import java.awt.Graphics2D;
+import java.util.Iterator;
 
 import pivot.beans.BeanDictionary;
 import pivot.beans.PropertyNotFoundException;
@@ -40,10 +41,20 @@ import pivot.wtk.Mouse.ScrollType;
  * TODO Add a getShape() method that will support non-rectangular components.
  * DisplaySkin can use this to paint an appropriate drop shadow, and Component
  * can use it to perform hit testing for mouse events and cursor display.
- *
- * @version 1.0 (3/13/2007)
  */
 public abstract class Component implements Visual {
+    public static abstract class Attributes {
+        private Component component = null;
+
+        public Component getComponent() {
+            return component;
+        }
+
+        private void setComponent(Component component) {
+            this.component = component;
+        }
+    }
+
     /**
      * Style dictionary implementation.
      *
@@ -59,12 +70,100 @@ public abstract class Component implements Visual {
 
             try {
                 previousValue = super.put(key, value);
+
+                // TODO Fire styleUpdated() event
             } catch(PropertyNotFoundException exception) {
                 System.out.println("\"" + key + "\" is not a valid style for "
                     + Component.this);
             }
 
             return previousValue;
+        }
+    }
+
+    /**
+     * Attributes dictionary implementation.
+     *
+     * @author gbrown
+     */
+    public class AttributesDictionary implements Dictionary<Class<? extends Attributes>, Attributes>,
+        Iterable<Class<? extends Attributes>> {
+        private class AttributesIterator implements Iterator<Class<? extends Attributes>> {
+            Iterator<Class<? extends Attributes>> source = null;
+
+            public AttributesIterator(Iterator<Class<? extends Attributes>> source) {
+                this.source = source;
+            }
+
+            public boolean hasNext() {
+                return source.hasNext();
+            }
+
+            public Class<? extends Attributes> next() {
+                return source.next();
+            }
+
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        private HashMap<Class<? extends Attributes>, Attributes> attributesMap =
+            new HashMap<Class<? extends Attributes>, Attributes>();
+
+        public Attributes get(Class<? extends Attributes> type) {
+            return attributesMap.get(type);
+        }
+
+        public Attributes put(Attributes attributes) {
+            return put(attributes.getClass(), attributes);
+        }
+
+        public Attributes put(Class<? extends Attributes> type, Attributes attributes) {
+            if (attributes.getClass() != type) {
+                throw new IllegalArgumentException("type does not match attributes.");
+            }
+
+            attributes.setComponent(Component.this);
+
+            Attributes previousAttributes = attributesMap.get(type);
+            if (previousAttributes != null) {
+                previousAttributes.setComponent(null);
+            }
+
+            boolean updated = (attributesMap.containsKey(type));
+            attributesMap.put(type, attributes);
+
+            if (updated) {
+                // TODO Fire attributesUpdated() event
+            } else {
+                // TODO Fire attributedAdded() event
+            }
+
+            return previousAttributes;
+        }
+
+        public Attributes remove(Class<? extends Attributes> type) {
+            Attributes attributes = attributesMap.remove(type);
+            if (attributes != null) {
+                attributes.setComponent(null);
+            }
+
+            // TODO Fire attributesRemoved() event
+
+            return attributes;
+        }
+
+        public boolean containsKey(Class<? extends Attributes> type) {
+            return attributesMap.containsKey(type);
+        }
+
+        public boolean isEmpty() {
+            return attributesMap.isEmpty();
+        }
+
+        public Iterator<Class<? extends Attributes>> iterator() {
+            return new AttributesIterator(attributesMap.iterator());
         }
     }
 
@@ -361,15 +460,14 @@ public abstract class Component implements Visual {
     private DropHandler dropHandler = null;
 
     /**
-     * Map of attached attributes.
-     */
-    private HashMap<Container.Attribute, Object> attributes =
-        new HashMap<Container.Attribute, Object>();
-
-    /**
      * Proxy class for getting/setting style properties on the skin.
      */
     private StyleDictionary styleDictionary = null;
+
+    /**
+     * Attached properties.
+     */
+    private AttributesDictionary attributesDictionary = new AttributesDictionary();
 
     /**
      * Event listener lists.
@@ -1848,15 +1946,18 @@ public abstract class Component implements Visual {
      * properties. This is effectively a pass-through to the skin's dictionary
      * implementation. It allows callers to modify the properties of the skin
      * without directly obtaining a reference to the skin.
-     *
-     * @see ComponentStyleListener#styleUpdated(Component, String, Object)
      */
     public StyleDictionary getStyles() {
         return styleDictionary;
     }
 
-    protected Dictionary<Container.Attribute, Object> getAttributes() {
-        return attributes;
+    /**
+     * Returns a dictionary instance representing the component's attributes.
+     * Attributes are used to attach container-specific properties to a
+     * component.
+     */
+    public AttributesDictionary getAttributes() {
+        return attributesDictionary;
     }
 
     protected boolean mouseMove(int x, int y) {
