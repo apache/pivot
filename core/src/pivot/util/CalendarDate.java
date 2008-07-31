@@ -31,6 +31,12 @@ public class CalendarDate implements Comparable<CalendarDate> {
     private int month;
     private int day;
 
+    private static final int[] MONTH_LENGTHS = {
+        31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+    };
+
+    private static final int GREGORIAN_CUTOVER_YEAR = 1582;
+
     /**
      * Creates a new <tt>CalendarDate</tt> representing the current day in the
      * default timezone and the default locale.
@@ -84,16 +90,23 @@ public class CalendarDate implements Comparable<CalendarDate> {
      * Sets this date's inner fields.
      */
     private void set(int year, int month, int day) {
-        if (year < 0) {
-            throw new IllegalArgumentException("Year is negative.");
+        if (year <= GREGORIAN_CUTOVER_YEAR || year > 9999) {
+            throw new IllegalArgumentException("Invalid year: " + year);
         }
 
         if (month < 0 || month > 11) {
-            throw new IllegalArgumentException("Month must be between 0 and 11.");
+            throw new IllegalArgumentException("Invalid month: " + month);
         }
 
-        if (day < 0 || day > 30) {
-            throw new IllegalArgumentException("Day must be between 0 and 30.");
+        int daysInMonth = MONTH_LENGTHS[month];
+
+        boolean isLeapYear = ((year & 3) == 0 && (year % 100 != 0 || year % 400 == 0));
+        if (isLeapYear && month == 1) {
+            daysInMonth++;
+        }
+
+        if (day < 0 || day >= daysInMonth) {
+            throw new IllegalArgumentException("Invalid day: " + day);
         }
 
         this.year = year;
