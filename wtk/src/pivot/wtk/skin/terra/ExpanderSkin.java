@@ -321,6 +321,139 @@ public class ExpanderSkin extends TitlePaneSkin
         graphics.draw(new Rectangle2D.Double(0, 0, getWidth() - 1, getHeight() - 1));
     }
 
+    public Font getTitleBarFont() {
+        return titleBarFont;
+    }
+
+    public void setTitleBarFont(Font titleBarFont) {
+        this.titleBarFont = titleBarFont;
+        invalidateComponent();
+    }
+
+    public final void setTitleBarFont(String titleBarFont) {
+        if (titleBarFont == null) {
+            throw new IllegalArgumentException("titleBarFont is null.");
+        }
+
+        setTitleBarFont(Font.decode(titleBarFont));
+    }
+
+    public Color getTitleBarColor() {
+        return titleBarColor;
+    }
+
+    public void setTitleBarColor(Color titleBarColor) {
+        this.titleBarColor = titleBarColor;
+        repaintComponent();
+    }
+
+    public final void setTitleBarColor(String titleBarColor) {
+        if (titleBarColor == null) {
+            throw new IllegalArgumentException("titleBarColor is null.");
+        }
+
+        setTitleBarColor(Color.decode(titleBarColor));
+    }
+
+    public Color getTitleBarBackgroundColor() {
+        return titleBarBackgroundColor;
+    }
+
+    public void setTitleBarBackgroundColor(Color titleBarBackgroundColor) {
+        this.titleBarBackgroundColor = titleBarBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setTitleBarBackgroundColor(String titleBarBackgroundColor) {
+        if (titleBarBackgroundColor == null) {
+            throw new IllegalArgumentException("titleBarBackgroundColor is null.");
+        }
+
+        setTitleBarBackgroundColor(Color.decode(titleBarBackgroundColor));
+    }
+
+    public Color getTitleBarBorderColor() {
+        return titleBarBorderColor;
+    }
+
+    public void setTitleBarBorderColor(Color titleBarBorderColor) {
+        this.titleBarBorderColor = titleBarBorderColor;
+        repaintComponent();
+    }
+
+    public final void setTitleBarBorderColor(String titleBarBorderColor) {
+        if (titleBarBorderColor == null) {
+            throw new IllegalArgumentException("titleBarBorderColor is null.");
+        }
+
+        setTitleBarBorderColor(Color.decode(titleBarBorderColor));
+    }
+
+    public Color getShadeButtonColor() {
+        return shadeButtonColor;
+    }
+
+    public void setShadeButtonColor(Color shadeButtonColor) {
+        this.shadeButtonColor = shadeButtonColor;
+        repaintComponent();
+    }
+
+    public final void setShadeButtonColor(String shadeButtonColor) {
+        if (shadeButtonColor == null) {
+            throw new IllegalArgumentException("shadeButtonColor is null.");
+        }
+
+        setShadeButtonColor(Color.decode(shadeButtonColor));
+    }
+
+    public Color getShadeButtonBackgroundColor() {
+        return shadeButtonBackgroundColor;
+    }
+
+    public void setShadeButtonBackgroundColor(Color shadeButtonBackgroundColor) {
+        this.shadeButtonBackgroundColor = shadeButtonBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setShadeButtonBackgroundColor(String shadeButtonBackgroundColor) {
+        if (shadeButtonBackgroundColor == null) {
+            throw new IllegalArgumentException("shadeButtonBackgroundColor is null.");
+        }
+
+        setShadeButtonBackgroundColor(Color.decode(shadeButtonBackgroundColor));
+    }
+
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+        repaintComponent();
+    }
+
+    public final void setBorderColor(String borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
+        }
+
+        setBorderColor(Color.decode(borderColor));
+    }
+
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+
     @Override
     public void titleChanged(TitlePane expander, String previousTitle) {
         super.titleChanged(expander, previousTitle);

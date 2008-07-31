@@ -39,6 +39,10 @@ import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
 
+/**
+ *
+ * @author tvolkert
+ */
 public class ScrollBarSkin extends ContainerSkin
     implements ScrollBarListener, ScrollBarValueListener {
 
@@ -685,17 +689,13 @@ public class ScrollBarSkin extends ContainerSkin
     private ScrollButton scrollDownButton = null;
     private ScrollHandle scrollHandle = null;
 
-    private static final int minimumHandleLength = 31;
-    private static final Color borderColor = new Color(0x81, 0x76, 0x67);
-    private static final Color scrollButtonImageColor = Color.BLACK;
-    private static final Color scrollButtonBackgroundColor
-        = new Color(0xF0, 0xEC, 0xE7);
-    private static final Color scrollButtonDisabledBackgroundColor =
-        new Color(0xF0, 0xEC, 0xE7);
-    private static final Color scrollButtonPressedBackgroundColor =
-        new Color(0xDF, 0xD7, 0xCD);
-    private static final Color scrollButtonHighlightedBackgroundColor =
-        new Color(0xFB, 0xFA, 0xF8);
+    private int minimumHandleLength = 31;
+    private Color borderColor = new Color(0x81, 0x76, 0x67);
+    private Color scrollButtonImageColor = Color.BLACK;
+    private Color scrollButtonBackgroundColor = new Color(0xF0, 0xEC, 0xE7);
+    private Color scrollButtonDisabledBackgroundColor = new Color(0xF0, 0xEC, 0xE7);
+    private Color scrollButtonPressedBackgroundColor = new Color(0xDF, 0xD7, 0xCD);
+    private Color scrollButtonHighlightedBackgroundColor = new Color(0xFB, 0xFA, 0xF8);
 
     public ScrollBarSkin() {
         super();
@@ -911,6 +911,119 @@ public class ScrollBarSkin extends ContainerSkin
                 height - scrollDownButtonHeight - 1);
             graphics.draw(line);
         }
+    }
+
+    public int getMinimumHandleLength() {
+        return minimumHandleLength;
+    }
+
+    public void setMinimumHandleLength(int minimumHandleLength) {
+        if (minimumHandleLength != this.minimumHandleLength) {
+            this.minimumHandleLength = minimumHandleLength;
+            repaintComponent();
+        }
+    }
+
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+        repaintComponent();
+    }
+
+    public final void setBorderColor(String borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null");
+        }
+
+        setBorderColor(Color.decode(borderColor));
+    }
+
+    public Color getScrollButtonImageColor() {
+        return scrollButtonImageColor;
+    }
+
+    public void setScrollButtonImageColor(Color scrollButtonImageColor) {
+        this.scrollButtonImageColor = scrollButtonImageColor;
+        repaintComponent();
+    }
+
+    public final void setScrollButtonImageColor(String scrollButtonImageColor) {
+        if (scrollButtonImageColor == null) {
+            throw new IllegalArgumentException("scrollButtonImageColor is null");
+        }
+
+        setScrollButtonImageColor(Color.decode(scrollButtonImageColor));
+    }
+
+    public Color getScrollButtonBackgroundColor() {
+        return scrollButtonBackgroundColor;
+    }
+
+    public void setScrollButtonBackgroundColor(Color scrollButtonBackgroundColor) {
+        this.scrollButtonBackgroundColor = scrollButtonBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setScrollButtonBackgroundColor(String scrollButtonBackgroundColor) {
+        if (scrollButtonBackgroundColor == null) {
+            throw new IllegalArgumentException("scrollButtonBackgroundColor is null");
+        }
+
+        setScrollButtonBackgroundColor(Color.decode(scrollButtonBackgroundColor));
+    }
+
+    public Color getScrollButtonDisabledBackgroundColor() {
+        return scrollButtonDisabledBackgroundColor;
+    }
+
+    public void setScrollButtonDisabledBackgroundColor(Color scrollButtonDisabledBackgroundColor) {
+        this.scrollButtonDisabledBackgroundColor = scrollButtonDisabledBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setScrollButtonDisabledBackgroundColor(String scrollButtonDisabledBackgroundColor) {
+        if (scrollButtonDisabledBackgroundColor == null) {
+            throw new IllegalArgumentException("scrollButtonDisabledBackgroundColor is null");
+        }
+
+        setScrollButtonDisabledBackgroundColor(Color.decode(scrollButtonDisabledBackgroundColor));
+    }
+
+    public Color getScrollButtonPressedBackgroundColor() {
+        return scrollButtonPressedBackgroundColor;
+    }
+
+    public void setScrollButtonPressedBackgroundColor(Color scrollButtonPressedBackgroundColor) {
+        this.scrollButtonPressedBackgroundColor = scrollButtonPressedBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setScrollButtonPressedBackgroundColor(String scrollButtonPressedBackgroundColor) {
+        if (scrollButtonPressedBackgroundColor == null) {
+            throw new IllegalArgumentException("scrollButtonPressedBackgroundColor is null");
+        }
+
+        setScrollButtonPressedBackgroundColor(Color.decode(scrollButtonPressedBackgroundColor));
+    }
+
+    public Color getScrollButtonHighlightedBackgroundColor() {
+        return scrollButtonHighlightedBackgroundColor;
+    }
+
+    public void setScrollButtonHighlightedBackgroundColor(Color scrollButtonHighlightedBackgroundColor) {
+        this.scrollButtonHighlightedBackgroundColor = scrollButtonHighlightedBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setScrollButtonHighlightedBackgroundColor(String scrollButtonHighlightedBackgroundColor) {
+        if (scrollButtonHighlightedBackgroundColor == null) {
+            throw new IllegalArgumentException("scrollButtonHighlightedBackgroundColor is null");
+        }
+
+        setScrollButtonHighlightedBackgroundColor(Color.decode(scrollButtonHighlightedBackgroundColor));
     }
 
     @Override

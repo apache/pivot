@@ -376,6 +376,50 @@ public class RollupSkin extends ContainerSkin
         rollupButton.setLocation(0, rollupButtonY);
     }
 
+    public Color getButtonColor() {
+        return buttonColor;
+    }
+
+    public void setButtonColor(Color buttonColor) {
+        this.buttonColor = buttonColor;
+        repaintComponent();
+    }
+
+    public final void setButtonColor(String buttonColor) {
+        if (buttonColor == null) {
+            throw new IllegalArgumentException("buttonColor is null.");
+        }
+
+        setButtonColor(Color.decode(buttonColor));
+    }
+
+    public int getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(int spacing) {
+        this.spacing = spacing;
+        invalidateComponent();
+    }
+
+    public int getBuffer() {
+        return buffer;
+    }
+
+    public void setBuffer(int buffer) {
+        this.buffer = buffer;
+        invalidateComponent();
+    }
+
+    public boolean getFirstChildToggles() {
+        return firstChildToggles;
+    }
+
+    public void setFirstChildToggles(boolean firstChildToggles) {
+        this.firstChildToggles = firstChildToggles;
+        updateToggleComponent();
+    }
+
     private void updateRollupButton() {
         Rollup rollup = (Rollup)getComponent();
 

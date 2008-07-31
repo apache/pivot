@@ -105,6 +105,57 @@ public class MeterSkin extends ComponentSkin
         }
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+        repaintComponent();
+    }
+
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(Color.decode(color));
+    }
+
+    public Color getGridColor() {
+        return gridColor;
+    }
+
+    public void setGridColor(Color gridColor) {
+        this.gridColor = gridColor;
+        repaintComponent();
+    }
+
+    public final void setGridColor(String gridColor) {
+        if (gridColor == null) {
+            throw new IllegalArgumentException("gridColor is null.");
+        }
+
+        setGridColor(Color.decode(gridColor));
+    }
+
+    public float getGridFrequency() {
+        return gridFrequency;
+    }
+
+    public void setGridFrequency(float gridFrequency) {
+        this.gridFrequency = gridFrequency;
+        repaintComponent();
+    }
+
+    public final void setGridFrequency(Number gridFrequency) {
+        if (gridFrequency == null) {
+            throw new IllegalArgumentException("gridFrequency is null.");
+        }
+
+        setGridFrequency(gridFrequency.floatValue());
+    }
+
     /**
      * Listener for meter percentage changes.
      *
