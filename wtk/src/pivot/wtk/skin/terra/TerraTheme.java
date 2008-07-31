@@ -64,7 +64,6 @@ import pivot.wtk.Theme;
 import pivot.wtk.Tooltip;
 import pivot.wtk.TreeView;
 import pivot.wtk.Window;
-import pivot.wtk.effects.BlurDecorator;
 
 /**
  *
@@ -81,9 +80,6 @@ public final class TerraTheme extends Theme {
      */
     private static class WindowDecorator implements Decorator {
         private Decorator originalDecorator = null;
-        private Decorator blurDecorator = null;
-        private Component component = null;
-        private Graphics2D graphics = null;
 
         public WindowDecorator(Decorator originalDecorator) {
             this.originalDecorator = originalDecorator;
@@ -98,9 +94,6 @@ public final class TerraTheme extends Theme {
                 graphics = originalDecorator.prepare(component, graphics);
             }
 
-            this.component = component;
-            this.graphics = graphics;
-
             // Paint the drop shadow
             Graphics2D shadowGraphics = (Graphics2D)graphics.create();
             shadowGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
@@ -111,24 +104,12 @@ public final class TerraTheme extends Theme {
             shadowGraphics.fillRect(DROP_SHADOW_OFFSET, DROP_SHADOW_OFFSET,
                 component.getWidth(), component.getHeight());
 
-            if (!component.isEnabled()) {
-                if (blurDecorator == null) {
-                    blurDecorator = new BlurDecorator(9);
-                }
-
-                graphics = blurDecorator.prepare(component, graphics);
-            }
-
             return graphics;
         }
 
         public void update() {
             if (originalDecorator != null) {
                 originalDecorator.update();
-            }
-
-            if (!component.isEnabled()) {
-                blurDecorator.update();
             }
         }
     }
