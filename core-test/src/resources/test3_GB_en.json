@@ -1,0 +1,13 @@
+
+{
+    "glossary": {
+		"GlossDiv": {
+			"GlossList": {
+                "GlossEntry": {
+					"Acronym": "XSGML"
+                }
+            }
+        }
+    }
+
+}
