@@ -303,15 +303,15 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
                             && !disabled) {
                             if (selected) {
                                 if (treeView.isFocused()) {
-                                    branchControlColor = this.branchControlSelectionColor;
+                                    branchControlColor = branchControlSelectionColor;
                                 } else {
-                                    branchControlColor = this.branchControlInactiveSelectionColor;
+                                    branchControlColor = branchControlInactiveSelectionColor;
                                 }
                             } else {
                                 branchControlColor = this.branchControlColor;
                             }
                         } else {
-                            branchControlColor = this.branchControlDisabledColor;
+                            branchControlColor = branchControlDisabledColor;
                         }
 
                         GeneralPath shape = new GeneralPath();
@@ -369,6 +369,382 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
             nodeY += nodeHeight + VERTICAL_SPACING;
         }
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        this.font = font;
+        invalidateComponent();
+    }
+
+    public void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(Font.decode(font));
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.color = color;
+        repaintComponent();
+    }
+
+    public void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(Color.decode(color));
+    }
+
+    public Color getDisabledColor() {
+        return disabledColor;
+    }
+
+    public void setDisabledColor(Color disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        this.disabledColor = disabledColor;
+        repaintComponent();
+    }
+
+    public void setDisabledColor(String disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        setDisabledColor(Color.decode(disabledColor));
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null.");
+        }
+
+        this.backgroundColor = backgroundColor;
+        repaintComponent();
+    }
+
+    public void setBackgroundColor(String backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null.");
+        }
+
+        setBackgroundColor(Color.decode(backgroundColor));
+    }
+
+    public Color getSelectionColor() {
+        return selectionColor;
+    }
+
+    public void setSelectionColor(Color selectionColor) {
+        if (selectionColor == null) {
+            throw new IllegalArgumentException("selectionColor is null.");
+        }
+
+        this.selectionColor = selectionColor;
+        repaintComponent();
+    }
+
+    public void setSelectionColor(String selectionColor) {
+        if (selectionColor == null) {
+            throw new IllegalArgumentException("selectionColor is null.");
+        }
+
+        setSelectionColor(Color.decode(selectionColor));
+    }
+
+    public Color getSelectionBackgroundColor() {
+        return selectionBackgroundColor;
+    }
+
+    public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
+        if (selectionBackgroundColor == null) {
+            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+        }
+
+        this.selectionBackgroundColor = selectionBackgroundColor;
+        repaintComponent();
+    }
+
+    public void setSelectionBackgroundColor(String selectionBackgroundColor) {
+        if (selectionBackgroundColor == null) {
+            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+        }
+
+        setSelectionBackgroundColor(Color.decode(selectionBackgroundColor));
+    }
+
+    public Color getInactiveSelectionColor() {
+        return inactiveSelectionColor;
+    }
+
+    public void setInactiveSelectionColor(Color inactiveSelectionColor) {
+        if (inactiveSelectionColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionColor is null.");
+        }
+
+        this.inactiveSelectionColor = inactiveSelectionColor;
+        repaintComponent();
+    }
+
+    public void setInactiveSelectionColor(String inactiveSelectionColor) {
+        if (inactiveSelectionColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionColor is null.");
+        }
+
+        setInactiveSelectionColor(Color.decode(inactiveSelectionColor));
+    }
+
+    public Color getInactiveSelectionBackgroundColor() {
+        return inactiveSelectionBackgroundColor;
+    }
+
+    public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
+        if (inactiveSelectionBackgroundColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
+        }
+
+        this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
+        repaintComponent();
+    }
+
+    public void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
+        if (inactiveSelectionBackgroundColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
+        }
+
+        setInactiveSelectionBackgroundColor(Color.decode(inactiveSelectionBackgroundColor));
+    }
+
+    public Color getHighlightColor() {
+        return highlightColor;
+    }
+
+    public void setHighlightColor(Color highlightColor) {
+        if (highlightColor == null) {
+            throw new IllegalArgumentException("highlightColor is null.");
+        }
+
+        this.highlightColor = highlightColor;
+        repaintComponent();
+    }
+
+    public void setHighlightColor(String highlightColor) {
+        if (highlightColor == null) {
+            throw new IllegalArgumentException("highlightColor is null.");
+        }
+
+        setHighlightColor(Color.decode(highlightColor));
+    }
+
+    public Color getHighlightBackgroundColor() {
+        return highlightBackgroundColor;
+    }
+
+    public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
+        if (highlightBackgroundColor == null) {
+            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+        }
+
+        this.highlightBackgroundColor = highlightBackgroundColor;
+        repaintComponent();
+    }
+
+    public void setHighlightBackgroundColor(String highlightBackgroundColor) {
+        if (highlightBackgroundColor == null) {
+            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+        }
+
+        setHighlightBackgroundColor(Color.decode(highlightBackgroundColor));
+    }
+
+    public int getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(int spacing) {
+        this.spacing = spacing;
+        invalidateComponent();
+    }
+
+    public void setSpacing(Number spacing) {
+        if (spacing == null) {
+            throw new IllegalArgumentException("spacing is null.");
+        }
+
+        setSpacing(spacing.intValue());
+    }
+
+    public int getIndent() {
+        return indent;
+    }
+
+    public void setIndent(int indent) {
+        this.indent = indent;
+        invalidateComponent();
+    }
+
+    public void setIndent(Number indent) {
+        if (indent == null) {
+            throw new IllegalArgumentException("indent is null.");
+        }
+
+        setIndent(indent.intValue());
+    }
+
+    public boolean getShowHighlight() {
+        return showHighlight;
+    }
+
+    public void setShowHighlight(boolean showHighlight) {
+        this.showHighlight = showHighlight;
+        repaintComponent();
+    }
+
+    public boolean getShowBranchControls() {
+        return showBranchControls;
+    }
+
+    public void setShowBranchControls(boolean showBranchControls) {
+        this.showBranchControls = showBranchControls;
+        invalidateComponent();
+    }
+
+    public Color getBranchControlColor() {
+        return branchControlColor;
+    }
+
+    public void setBranchControlColor(Color branchControlColor) {
+        if (branchControlColor == null) {
+            throw new IllegalArgumentException("branchControlColor is null.");
+        }
+
+        this.branchControlColor = branchControlColor;
+        repaintComponent();
+    }
+
+    public void setBranchControlColor(String branchControlColor) {
+        if (branchControlColor == null) {
+            throw new IllegalArgumentException("branchControlColor is null.");
+        }
+
+        setBranchControlColor(Color.decode(branchControlColor));
+    }
+
+    public Color getBranchControlDisabledColor() {
+        return branchControlDisabledColor;
+    }
+
+    public void setBranchControlDisabledColor(Color branchControlDisabledColor) {
+        if (branchControlDisabledColor == null) {
+            throw new IllegalArgumentException("branchControlDisabledColor is null.");
+        }
+
+        this.branchControlDisabledColor = branchControlDisabledColor;
+        repaintComponent();
+    }
+
+    public void setBranchControlDisabledColor(String branchControlDisabledColor) {
+        if (branchControlDisabledColor == null) {
+            throw new IllegalArgumentException("branchControlDisabledColor is null.");
+        }
+
+        setBranchControlDisabledColor(Color.decode(branchControlDisabledColor));
+    }
+
+    public Color getBranchControlSelectionColor() {
+        return branchControlSelectionColor;
+    }
+
+    public void setBranchControlSelectionColor(Color branchControlSelectionColor) {
+        if (branchControlSelectionColor == null) {
+            throw new IllegalArgumentException("branchControlSelectionColor is null.");
+        }
+
+        this.branchControlSelectionColor = branchControlSelectionColor;
+        repaintComponent();
+    }
+
+    public void setBranchControlSelectionColor(String branchControlSelectionColor) {
+        if (branchControlSelectionColor == null) {
+            throw new IllegalArgumentException("branchControlSelectionColor is null.");
+        }
+
+        setBranchControlSelectionColor(Color.decode(branchControlSelectionColor));
+    }
+
+    public Color getBranchControlInactiveSelectionColor() {
+        return branchControlInactiveSelectionColor;
+    }
+
+    public void setBranchControlInactiveSelectionColor(Color branchControlInactiveSelectionColor) {
+        if (branchControlInactiveSelectionColor == null) {
+            throw new IllegalArgumentException("branchControlInactiveSelectionColor is null.");
+        }
+
+        this.branchControlInactiveSelectionColor = branchControlInactiveSelectionColor;
+        repaintComponent();
+    }
+
+    public void setBranchControlInactiveSelectionColor(String branchControlInactiveSelectionColor) {
+        if (branchControlInactiveSelectionColor == null) {
+            throw new IllegalArgumentException("branchControlInactiveSelectionColor is null.");
+        }
+
+        setBranchControlInactiveSelectionColor(Color.decode(branchControlInactiveSelectionColor));
+    }
+
+    public Color getGridColor() {
+        return gridColor;
+    }
+
+    public void setGridColor(Color gridColor) {
+        if (gridColor == null) {
+            throw new IllegalArgumentException("gridColor is null.");
+        }
+
+        this.gridColor = gridColor;
+        repaintComponent();
+    }
+
+    public void setGridColor(String gridColor) {
+        if (gridColor == null) {
+            throw new IllegalArgumentException("gridColor is null.");
+        }
+
+        setGridColor(Color.decode(gridColor));
+    }
+
+    public boolean getShowGridLines() {
+        return showGridLines;
+    }
+
+    public void setShowGridLines(boolean showGridLines) {
+        this.showGridLines = showGridLines;
+        repaintComponent();
     }
 
     /**
