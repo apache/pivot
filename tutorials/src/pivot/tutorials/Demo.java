@@ -22,6 +22,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.util.CalendarDate;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
@@ -47,6 +48,7 @@ import pivot.wtk.Display;
 import pivot.wtk.Rectangle;
 import pivot.wtk.ScrollPane;
 import pivot.wtk.SortDirection;
+import pivot.wtk.Spinner;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TableViewHeaderPressListener;
@@ -55,6 +57,8 @@ import pivot.wtk.TreeView;
 import pivot.wtk.Visual;
 import pivot.wtk.Window;
 import pivot.wtk.WindowStateListener;
+import pivot.wtk.content.CalendarDateSpinnerData;
+import pivot.wtk.content.NumericSpinnerData;
 import pivot.wtk.content.TableRow;
 import pivot.wtk.content.TableViewHeaderData;
 import pivot.wtk.content.TreeViewNodeRenderer;
@@ -305,6 +309,12 @@ public class Demo implements Application {
         editableTreeViewScrollPane = (ScrollPane)componentLoader.getComponent("trees.editableTreeViewScrollPane");
         initializeEditableTreeView();
 
+        Spinner numericSpinner = (Spinner)componentLoader.getComponent("spinners.numericSpinner");
+        initializeNumericSpinner(numericSpinner);
+
+        Spinner dateSpinner = (Spinner)componentLoader.getComponent("spinners.dateSpinner");
+        initializeDateSpinner(dateSpinner);
+
         ImageDragHandler imageDragHandler = new ImageDragHandler();
         ImageDropHandler imageDropHandler = new ImageDropHandler();
         ImageMouseHandler imageMouseHandler = new ImageMouseHandler();
@@ -399,6 +409,22 @@ public class Demo implements Application {
     private void initializeEditableTreeView() {
         TreeViewEditHandler treeViewEditHandler = new TreeViewEditHandler();
         editableTreeView.getComponentMouseButtonListeners().add(treeViewEditHandler);
+    }
+
+    private void initializeNumericSpinner(Spinner numericSpinner) {
+        NumericSpinnerData numericSpinnerData = new NumericSpinnerData(0, 256, 4);
+        numericSpinner.setSpinnerData(numericSpinnerData);
+        numericSpinner.setSelectedIndex(0);
+    }
+
+    private void initializeDateSpinner(Spinner dateSpinner) {
+        CalendarDate lowerBound = new CalendarDate(2008, 0, 0);
+        CalendarDate upperBound = new CalendarDate(2019, 11, 30);
+        CalendarDateSpinnerData spinnerData = new CalendarDateSpinnerData(lowerBound, upperBound);
+
+        CalendarDate today = new CalendarDate();
+        dateSpinner.setSpinnerData(spinnerData);
+        dateSpinner.setSelectedValue(today);
     }
 
     private void initializeAlertButtons() {

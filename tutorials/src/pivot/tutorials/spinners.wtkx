@@ -16,10 +16,19 @@ limitations under the License.
 -->
 
 <Border styles="{borderColor:'#999999'}">
-    <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}}">
-        <Label text="Basic Spinner" styles="{font:'Verdana bold 11'}"/>
-        <Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']" circular="true" selectedIndex="0"
-            preferredWidth="60"/>
+    <FlowPane orientation="horizontal" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+        <FlowPane orientation="vertical">
+            <Label text="Basic Spinner" styles="{font:'Verdana bold 11'}"/>
+            <Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']" circular="true" selectedIndex="0"
+                preferredWidth="60"/>
+        </FlowPane>
+        <FlowPane orientation="vertical">
+            <Label text="Numeric Spinner" styles="{font:'Verdana bold 11'}"/>
+            <Spinner id="numericSpinner" preferredWidth="60"/>
+        </FlowPane>
+        <FlowPane orientation="vertical">
+            <Label text="Date Spinner" styles="{font:'Verdana bold 11'}"/>
+            <Spinner id="dateSpinner" />
+        </FlowPane>
     </FlowPane>
 </Border>
-
