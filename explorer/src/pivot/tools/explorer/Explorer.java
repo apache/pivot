@@ -65,15 +65,11 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 			componentList.add( new ComponentAdapter( c, true ));
 		}
         componentTree.setTreeData( componentList );
-        List<Integer> pathToFirstElement = oneItemList(0);
+        
+        List<Integer> pathToFirstElement = new ArrayList<Integer>( new Integer[]{new Integer(0)});
+        
 		componentTree.setSelectedPath(pathToFirstElement);
         componentTree.expandBranch(pathToFirstElement);
-	}
-
-	private <T> List<T> oneItemList( T item ) {
-		List<T> lst = new ArrayList<T>();
-		lst.add( item );
-		return lst;
 	}
 
 	public void selectionChanged(TreeView treeView) {
