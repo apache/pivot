@@ -51,6 +51,16 @@ public class Spinner extends Container {
     }
 
     /**
+     * Spinner skin interface. Spinner skins must implement this interface to
+     * facilitate additional communication between the component and the skin.
+     *
+     * @author tvolkert
+     */
+    public interface Skin extends pivot.wtk.Skin {
+        public Rectangle getContentBounds();
+    }
+
+    /**
      * Maps spinner item data to and from their ordinal values.
      *
      * @author tvolkert
@@ -305,6 +315,16 @@ public class Spinner extends Container {
         }
     }
 
+    @Override
+    public void setSkinClass(Class<? extends pivot.wtk.Skin> skinClass) {
+        if (!Spinner.Skin.class.isAssignableFrom(skinClass)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + Spinner.Skin.class.getName());
+        }
+
+        super.setSkinClass(skinClass);
+    }
+
     /**
      * Returns the item renderer used for items in this list.
      */
@@ -461,6 +481,18 @@ public class Spinner extends Container {
             Object value = getSelectedValue();
             context.put(selectedValueKey, value);
         }
+    }
+
+    /**
+     * Gets the bounding area of the spinner content (the area in which the
+     * item renderer will render the content).
+     *
+     * @return
+     * The bounding area of the spinner content.
+     */
+    public Rectangle getContentBounds() {
+        Spinner.Skin spinnerSkin = (Spinner.Skin)getSkin();
+        return spinnerSkin.getContentBounds();
     }
 
     /**

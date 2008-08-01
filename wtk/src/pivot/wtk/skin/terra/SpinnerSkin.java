@@ -46,8 +46,8 @@ import pivot.wtk.skin.ContainerSkin;
  *
  * @author tvolkert
  */
-public class SpinnerSkin extends ContainerSkin
-    implements SpinnerListener, SpinnerSelectionListener {
+public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
+    SpinnerListener, SpinnerSelectionListener {
 
     /**
      * Encapsulates the code needed to perform timer-controlled spinning.
@@ -873,6 +873,12 @@ public class SpinnerSkin extends ContainerSkin
         }
 
         setFont(Font.decode(font));
+    }
+
+    // Spinner.Skin methods
+
+    public Rectangle getContentBounds() {
+        return spinnerContent.getBounds();
     }
 
     // SpinnerListener methods
