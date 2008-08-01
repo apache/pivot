@@ -7,7 +7,6 @@ import pivot.beans.BeanDictionary;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
-import pivot.tools.explorer.properties.AbstractTableEntryAdapter;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentInfo;
 import pivot.wtk.Container;
@@ -19,7 +18,8 @@ public class ComponentAdapter
     implements Dictionary<String,Object> {
 
 	private Component component;
-	private List<AbstractTableEntryAdapter> properties, styles;
+	private List<TableEntryAdapter> properties, styles;
+	private BeanDictionary beanDictionary;
 
 	public ComponentAdapter( Component component, boolean buildHierarchy ) {
 		super();
@@ -29,6 +29,8 @@ public class ComponentAdapter
 		}
 
 		this.component = component;
+		beanDictionary = new BeanDictionary(component);
+
 
 		if ( buildHierarchy && component instanceof Container ) {
 			for ( Component c: ((Container)component).getComponents()) {
@@ -42,26 +44,26 @@ public class ComponentAdapter
 		return component;
 	}
 
-	public List<AbstractTableEntryAdapter> getProperties() {
+	public List<TableEntryAdapter> getProperties() {
 		if (properties == null) {
-			properties = new ArrayList<AbstractTableEntryAdapter>();
+			properties = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
 
-			BeanDictionary beanDictionary = new BeanDictionary(component);
 			for ( String s: beanDictionary ) {
-				properties.add( new PropertyTableEntryAdapter( component, s ));
+				properties.add( new TableEntryAdapter( beanDictionary, s ));
 			}
 
+			
 		}
 		return properties;
 	}
 
-	public List<AbstractTableEntryAdapter> getStyles() {
+	public List<TableEntryAdapter> getStyles() {
 		if (styles == null) {
-			styles = new ArrayList<AbstractTableEntryAdapter>();
+			styles = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
 			StyleDictionary sd = component.getStyles();
 			Iterator<String> i = sd.iterator();
 			while( i.hasNext() ) {
-				styles.add( new StyleTableEntryAdapter( component, i.next() ));
+				styles.add( new TableEntryAdapter( component.getStyles(), i.next() ));
 			}
 		}
 		return styles;

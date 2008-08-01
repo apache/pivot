@@ -9,6 +9,7 @@ import pivot.collections.Sequence;
 import pivot.tools.explorer.tree.TreeNodeList;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
+import pivot.wtk.Display;
 import pivot.wtk.Label;
 import pivot.wtk.TableView;
 import pivot.wtk.TreeView;
@@ -23,10 +24,9 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 	private ComponentLoader componentLoader = new ComponentLoader();
 
 	private Window    window;
-	private Component content;
-	private TreeView  trComponents;
-	private TableView tbProperties, tbStyles;
-	private Label     lbStatus;
+	private TreeView  componentTree;
+	private TableView propertiesTable, stylesTable;
+	private Label     statusLabel;
 
 	@Override
 	public void startup() throws Exception {
@@ -34,35 +34,40 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 		ApplicationContext applicationContext = ApplicationContext.getInstance();
 		applicationContext.setTitle(resourceBundle.getString("main.window.name"));
 
-		String resourceName     = getClass().getName().toLowerCase();
-        String wtkxResourceName = String.format( "%s.wtkx", resourceName.replace('.','/') );
-		content = componentLoader.load( wtkxResourceName, resourceName );
+		String className    = getClass().getName().toLowerCase();
+        String resourceName = String.format( "%s.wtkx", className.replace('.','/') );
 
-        window = new Window(content);
+        window = new Window(componentLoader.load( resourceName, className ));
 		window.setMaximized(true);
         window.open();
 
-        lbStatus     = (Label)     componentLoader.getComponent("lbStatus");
-        trComponents = (TreeView)  componentLoader.getComponent("trComponents");
-        tbProperties = (TableView) componentLoader.getComponent("tbProperties");
-        tbStyles     = (TableView) componentLoader.getComponent("tbStyles");
-
-        initComponentTree();
-        Component.setFocusedComponent(trComponents);
+        statusLabel     = (Label)     componentLoader.getComponent("lbStatus");
+        componentTree   = (TreeView)  componentLoader.getComponent("trComponents");
+        propertiesTable = (TableView) componentLoader.getComponent("tbProperties");
+        stylesTable     = (TableView) componentLoader.getComponent("tbStyles");
+           
+        initComponentTree( Display.getInstance().getComponents() );
+        Component.setFocusedComponent(componentTree);
 
 	}
+	
 
 	@Override
 	public void shutdown() throws Exception {
 		if ( window != null) window.close();
 	}
 
-	private void initComponentTree() {
-		trComponents.getTreeViewSelectionListeners().add(this);
-        trComponents.setTreeData(oneItemList( new ComponentAdapter(content, true)) );
+	private void initComponentTree( Iterable<Component> components ) {
+		componentTree.getTreeViewSelectionListeners().add(this);
+		
+		List<ComponentAdapter> componentList = new ArrayList<ComponentAdapter>();
+		for( Component c:  components) {
+			componentList.add( new ComponentAdapter( c, true ));
+		}
+        componentTree.setTreeData( componentList );
         List<Integer> pathToFirstElement = oneItemList(0);
-		trComponents.setSelectedPath(pathToFirstElement);
-        trComponents.expandBranch(pathToFirstElement);
+		componentTree.setSelectedPath(pathToFirstElement);
+        componentTree.expandBranch(pathToFirstElement);
 	}
 
 	private <T> List<T> oneItemList( T item ) {
@@ -73,12 +78,12 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 
 	public void selectionChanged(TreeView treeView) {
 
-		Sequence<ComponentAdapter> nodePath = TreeNodeList.create(treeView, trComponents.getSelectedPath());
-		lbStatus.setText( nodePath.toString() );
+		Sequence<ComponentAdapter> nodePath = TreeNodeList.create(treeView, componentTree.getSelectedPath()); 
+		statusLabel.setText( nodePath.toString() ); 
 		if ( nodePath.getLength() > 0 ) {
 			ComponentAdapter node = nodePath.get( nodePath.getLength()-1 );
-			tbProperties.setTableData( node.getProperties() );
-			tbStyles.setTableData( node.getStyles() );
+			propertiesTable.setTableData( node.getProperties() );
+			stylesTable.setTableData( node.getStyles() );
 		}
 //		else {
 //			ArrayList<Object> emptyList = new ArrayList<Object>();
