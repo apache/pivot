@@ -402,16 +402,24 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         invalidateComponent();
     }
 
-    public final void setPadding(int padding) {
-        setPadding(new Insets(padding));
-    }
-
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
         }
 
         setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
     }
 
     public boolean getWrapText() {

@@ -657,14 +657,6 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         repaintComponent();
     }
 
-    public final void setShowHorizontalGridLines(String showHorizontalGridLines) {
-        if (showHorizontalGridLines == null) {
-            throw new IllegalArgumentException("showHorizontalGridLines is null.");
-        }
-
-        setShowHorizontalGridLines(Boolean.parseBoolean(showHorizontalGridLines));
-    }
-
     public boolean getShowVerticalGridLines() {
         return showVerticalGridLines;
     }
@@ -672,14 +664,6 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     public void setShowVerticalGridLines(boolean showVerticalGridLines) {
         this.showVerticalGridLines = showVerticalGridLines;
         repaintComponent();
-    }
-
-    public final void setShowVerticalGridLines(String showVerticalGridLines) {
-        if (showVerticalGridLines == null) {
-            throw new IllegalArgumentException("showVerticalGridLines is null.");
-        }
-
-        setShowVerticalGridLines(Boolean.parseBoolean(showVerticalGridLines));
     }
 
     @Override
@@ -727,9 +711,8 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         if (rowIndex >= 0
             && !tableView.isRowDisabled(rowIndex)) {
             TableView.SelectMode selectMode = tableView.getSelectMode();
-            int keyboardModifiers = Keyboard.getModifiers();
 
-            if ((keyboardModifiers & Keyboard.Modifier.SHIFT.getMask()) > 0
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                 && selectMode == TableView.SelectMode.MULTI) {
                 // Select the range
                 int startIndex = tableView.getFirstSelectedIndex();
@@ -748,7 +731,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
                 }
 
                 tableView.setSelectedRanges(selectedRanges);
-            } else if ((keyboardModifiers & Keyboard.Modifier.CTRL.getMask()) > 0
+            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
                 && selectMode == TableView.SelectMode.MULTI) {
                 // Toggle the item's selection state
                 if (tableView.isIndexSelected(rowIndex)) {
@@ -796,7 +779,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
                     && tableView.isRowDisabled(index));
 
                 if (index >= 0) {
-                    if ((Keyboard.getModifiers() & Keyboard.Modifier.SHIFT.getMask()) > 0
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                         && tableView.getSelectMode() == TableView.SelectMode.MULTI) {
                         tableView.addSelectedIndex(index);
                     } else {
@@ -820,7 +803,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
                     && tableView.isRowDisabled(index));
 
                 if (index < count) {
-                    if ((Keyboard.getModifiers() & Keyboard.Modifier.SHIFT.getMask()) > 0
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                         && tableView.getSelectMode() == TableView.SelectMode.MULTI) {
                         tableView.addSelectedIndex(index);
                     } else {

@@ -21,14 +21,8 @@ public final class Mouse {
         RIGHT,
         MIDDLE;
 
-        private int mask = 0x00;
-
-        Button() {
-            this.mask = 2 << (ordinal() + 1);
-        }
-
         public int getMask() {
-            return this.mask;
+            return 2 << ordinal();
         }
     }
 
@@ -71,5 +65,17 @@ public final class Mouse {
 
     protected static void setButtons(int buttons) {
         Mouse.buttons = buttons;
+    }
+
+    /**
+     * Tests the pressed state of a modifier.
+     *
+     * @param modifier
+     *
+     * @return
+     * <tt>true</tt> if the modifier is pressed; <tt>false</tt>, otherwise.
+     */
+    public static boolean isPressed(Button button) {
+        return (buttons & button.getMask()) > 0;
     }
 }

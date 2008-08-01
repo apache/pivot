@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
+import pivot.collections.Dictionary;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
@@ -449,10 +450,25 @@ public class ExpanderSkin extends TitlePaneSkin
         invalidateComponent();
     }
 
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
+    }
 
     @Override
     public void titleChanged(TitlePane expander, String previousTitle) {

@@ -322,12 +322,12 @@ public class CheckboxSkin extends ButtonSkin
         invalidateComponent();
     }
 
-    public final void setSpacing(String spacing) {
+    public final void setSpacing(Number spacing) {
         if (spacing == null) {
             throw new IllegalArgumentException("spacing is null.");
         }
 
-        setSpacing(Integer.parseInt(spacing));
+        setSpacing(spacing.intValue());
     }
 
     @Override

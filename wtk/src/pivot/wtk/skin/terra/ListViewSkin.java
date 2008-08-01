@@ -479,9 +479,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         if (itemIndex < listData.getLength()
             && !listView.isItemDisabled(itemIndex)) {
             ListView.SelectMode selectMode = listView.getSelectMode();
-            int keyboardModifiers = Keyboard.getModifiers();
-
-            if ((keyboardModifiers & Keyboard.Modifier.SHIFT.getMask()) > 0
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                 && selectMode == ListView.SelectMode.MULTI) {
                 // Select the range
                 int startIndex = listView.getFirstSelectedIndex();
@@ -500,7 +498,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
                 }
 
                 listView.setSelectedRanges(selectedRanges);
-            } else if ((keyboardModifiers & Keyboard.Modifier.CTRL.getMask()) > 0
+            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
                 && selectMode == ListView.SelectMode.MULTI) {
                 // Toggle the item's selection state
                 if (listView.isIndexSelected(itemIndex)) {
@@ -548,7 +546,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
                     && listView.isItemDisabled(index));
 
                 if (index >= 0) {
-                    if ((Keyboard.getModifiers() & Keyboard.Modifier.SHIFT.getMask()) > 0
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                         && listView.getSelectMode() == ListView.SelectMode.MULTI) {
                         listView.addSelectedIndex(index);
                     } else {
@@ -572,7 +570,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
                     && listView.isItemDisabled(index));
 
                 if (index < count) {
-                    if ((Keyboard.getModifiers() & Keyboard.Modifier.SHIFT.getMask()) > 0
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                         && listView.getSelectMode() == ListView.SelectMode.MULTI) {
                         listView.addSelectedIndex(index);
                     } else {

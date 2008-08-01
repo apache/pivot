@@ -1068,8 +1068,7 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
                             treeView.setSelectedPath(path);
                         }
                     } else if (selectMode == TreeView.SelectMode.MULTI) {
-                        if ((Keyboard.getModifiers()
-                            & Keyboard.Modifier.CTRL.getMask()) > 0) {
+                        if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                             if (treeView.isPathSelected(path)) {
                                 treeView.removeSelectedPath(path);
                             } else {

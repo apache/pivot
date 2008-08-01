@@ -620,7 +620,7 @@ public class ScrollBarSkin extends ContainerSkin
         public void mouseOut() {
             super.mouseOut();
 
-            if ((Mouse.getButtons() & Mouse.Button.LEFT.getMask()) != 0) {
+            if (Mouse.isPressed(Mouse.Button.LEFT)) {
                 // The user is currently dragging the handle.  We don't
                 // un-highlight it until the user releases the left mouse
                 // button.  NOTE the code that actually sets the scroll bar's

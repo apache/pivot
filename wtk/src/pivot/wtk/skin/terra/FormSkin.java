@@ -273,14 +273,6 @@ public class FormSkin extends ContainerSkin
         this.rightAlignLabels = rightAlignLabels;
     }
 
-    public final void setRightAlignLabels(String rightAlignLabels) {
-        if (rightAlignLabels == null) {
-            throw new IllegalArgumentException("rightAlignLabels is null.");
-        }
-
-        setRightAlignLabels(Boolean.parseBoolean(rightAlignLabels));
-    }
-
     public HorizontalAlignment getFieldAlignment() {
         return fieldAlignment;
     }
@@ -307,12 +299,12 @@ public class FormSkin extends ContainerSkin
         invalidateComponent();
     }
 
-    public final void setHorizontalSpacing(String horizontalSpacing) {
+    public final void setHorizontalSpacing(Number horizontalSpacing) {
         if (horizontalSpacing == null) {
             throw new IllegalArgumentException("horizontalSpacing is null.");
         }
 
-        setHorizontalSpacing(Integer.parseInt(horizontalSpacing));
+        setHorizontalSpacing(horizontalSpacing.intValue());
     }
 
     public int getVerticalSpacing() {
@@ -324,12 +316,12 @@ public class FormSkin extends ContainerSkin
         invalidateComponent();
     }
 
-    public final void setVerticalSpacing(String verticalSpacing) {
+    public final void setVerticalSpacing(Number verticalSpacing) {
         if (verticalSpacing == null) {
             throw new IllegalArgumentException("verticalSpacing is null.");
         }
 
-        setVerticalSpacing(Integer.parseInt(verticalSpacing));
+        setVerticalSpacing(verticalSpacing.intValue());
     }
 
     public int getFlagImageOffset() {
@@ -341,12 +333,12 @@ public class FormSkin extends ContainerSkin
         invalidateComponent();
     }
 
-    public final void setFlagImageOffset(String flagImageOffset) {
+    public final void setFlagImageOffset(Number flagImageOffset) {
         if (flagImageOffset == null) {
             throw new IllegalArgumentException("flagImageOffset is null.");
         }
 
-        setFlagImageOffset(Integer.parseInt(flagImageOffset));
+        setFlagImageOffset(flagImageOffset.intValue());
     }
 
     // Form events

@@ -86,11 +86,28 @@ public class SpacerSkin extends ComponentSkin {
         invalidateComponent();
     }
 
-    public final void setThickness(String thickness) {
+    public final void setThickness(Number thickness) {
         if (thickness == null) {
             throw new IllegalArgumentException("thickness is null.");
         }
 
-        setThickness(Integer.parseInt(thickness));
+        setThickness(thickness.intValue());
+    }
+
+    public int getPadding() {
+        return padding;
+    }
+
+    public void setPadding(int padding) {
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setThickness(padding.intValue());
     }
 }

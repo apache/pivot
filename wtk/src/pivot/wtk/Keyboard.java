@@ -24,14 +24,8 @@ public final class Keyboard {
         ALT,
         META;
 
-        private int mask = 0x00;
-
-        Modifier() {
-            this.mask = 2 << (ordinal() + 1);
-        }
-
         public int getMask() {
-            return this.mask;
+            return 2 << ordinal();
         }
     }
 
@@ -189,6 +183,18 @@ public final class Keyboard {
 
     protected static void setModifiers(int modifiers) {
         Keyboard.modifiers = modifiers;
+    }
+
+    /**
+     * Tests the pressed state of a modifier.
+     *
+     * @param modifier
+     *
+     * @return
+     * <tt>true</tt> if the modifier is pressed; <tt>false</tt>, otherwise.
+     */
+    public static boolean isPressed(Modifier modifier) {
+        return (modifiers & modifier.getMask()) > 0;
     }
 }
 

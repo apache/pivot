@@ -29,6 +29,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 
+import pivot.collections.Dictionary;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Clipboard;
 import pivot.wtk.Component;
@@ -791,8 +792,24 @@ public class TextInputSkin extends ComponentSkin
         invalidateComponent();
     }
 
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
     }
 
     @Override
@@ -894,18 +911,18 @@ public class TextInputSkin extends ComponentSkin
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
 
-            if ((keyboardModifiers & Keyboard.Modifier.SHIFT.getMask()) > 0
-                && (keyboardModifiers & Keyboard.Modifier.CTRL.getMask()) > 0) {
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                 // Add all preceding text to the selection
                 selectionLength = selectionStart + selectionLength;
                 selectionStart = 0;
-            } else if ((keyboardModifiers & Keyboard.Modifier.SHIFT.getMask()) > 0) {
+            } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Add the previous character to the selection
                 if (selectionStart > 0) {
                     selectionStart--;
                     selectionLength++;
                 }
-            } else if ((keyboardModifiers & Keyboard.Modifier.CTRL.getMask()) > 0) {
+            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                 // Clear the selection and move the caret to the beginning of
                 // the text
                 selectionStart = 0;
@@ -926,16 +943,16 @@ public class TextInputSkin extends ComponentSkin
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
 
-            if ((keyboardModifiers & Keyboard.Modifier.SHIFT.getMask()) > 0
-                && (keyboardModifiers & Keyboard.Modifier.CTRL.getMask()) > 0) {
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                 // Add all subsequent text to the selection
                 selectionLength = textInput.getCharacterCount() - selectionStart;
-            } else if ((keyboardModifiers & Keyboard.Modifier.SHIFT.getMask()) > 0) {
+            } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Add the next character to the selection
                 if (selectionStart + selectionLength < textInput.getCharacterCount()) {
                     selectionLength++;
                 }
-            } else if ((keyboardModifiers & Keyboard.Modifier.CTRL.getMask()) > 0) {
+            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                 // Clear the selection and move the caret to the end of
                 // the text
                 selectionStart = textInput.getCharacterCount();
@@ -954,13 +971,12 @@ public class TextInputSkin extends ComponentSkin
             }
 
             textInput.setSelection(selectionStart, selectionLength);
-        } else if (keyCode == Keyboard.KeyCode.A) {
-            if ((keyboardModifiers & Keyboard.Modifier.CTRL.getMask()) > 0) {
-                // Select all
-                textInput.setSelection(0, textInput.getCharacterCount());
-            }
+        } else if (keyCode == Keyboard.KeyCode.A
+            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            // Select all
+            textInput.setSelection(0, textInput.getCharacterCount());
         } else if (keyCode == Keyboard.KeyCode.X
-            && (keyboardModifiers & Keyboard.Modifier.CTRL.getMask()) > 0) {
+            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
             // "Cut"
             if (textInput.isPassword()) {
                 ApplicationContext.beep();
@@ -975,7 +991,7 @@ public class TextInputSkin extends ComponentSkin
                 }
             }
         } else if (keyCode == Keyboard.KeyCode.C
-            && (keyboardModifiers & Keyboard.Modifier.CTRL.getMask()) > 0) {
+            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
             // "Copy"
             if (textInput.isPassword()) {
                 ApplicationContext.beep();
@@ -987,7 +1003,7 @@ public class TextInputSkin extends ComponentSkin
                 }
             }
         } else if (keyCode == Keyboard.KeyCode.V
-            && (keyboardModifiers & Keyboard.Modifier.CTRL.getMask()) > 0) {
+            && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
             // "Paste"
             Object clipboardContents = Clipboard.getInstance().get();
 

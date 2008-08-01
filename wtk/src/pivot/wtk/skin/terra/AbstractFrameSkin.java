@@ -24,6 +24,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
+import pivot.collections.Dictionary;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
@@ -548,14 +549,6 @@ public abstract class AbstractFrameSkin extends WindowSkin
         minimizeButton.setDisplayable(showMinimizeButton);
     }
 
-    public void setShowMinimizeButton(String showMinimizeButton) {
-        if (showMinimizeButton == null) {
-            throw new IllegalArgumentException("showMinimizeButton is null.");
-        }
-
-        setShowMinimizeButton(Boolean.parseBoolean(showMinimizeButton));
-    }
-
     public boolean getShowMaximizeButton() {
         return maximizeButton.isDisplayable();
     }
@@ -564,28 +557,12 @@ public abstract class AbstractFrameSkin extends WindowSkin
         maximizeButton.setDisplayable(showMaximizeButton);
     }
 
-    public void setShowMaximizeButton(String showMaximizeButton) {
-        if (showMaximizeButton == null) {
-            throw new IllegalArgumentException("showMaximizeButton is null.");
-        }
-
-        setShowMaximizeButton(Boolean.parseBoolean(showMaximizeButton));
-    }
-
     public boolean getShowCloseButton() {
         return closeButton.isDisplayable();
     }
 
     public void setShowCloseButton(boolean showCloseButton) {
         closeButton.setDisplayable(showCloseButton);
-    }
-
-    public void setShowCloseButton(String showCloseButton) {
-        if (showCloseButton == null) {
-            throw new IllegalArgumentException("showCloseButton is null.");
-        }
-
-        setShowCloseButton(Boolean.parseBoolean(showCloseButton));
     }
 
     public Insets getPadding() {
@@ -601,8 +578,24 @@ public abstract class AbstractFrameSkin extends WindowSkin
         invalidateComponent();
     }
 
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
     }
 
     public boolean isResizable() {
@@ -612,14 +605,6 @@ public abstract class AbstractFrameSkin extends WindowSkin
     public void setResizable(boolean resizable) {
         this.resizable = resizable;
         invalidateComponent();
-    }
-
-    public final void setResizable(String resizable) {
-        if (resizable == null) {
-            throw new IllegalArgumentException("resizable is null.");
-        }
-
-        setResizable(Boolean.parseBoolean(resizable));
     }
 
     private void updateMaximizedState() {

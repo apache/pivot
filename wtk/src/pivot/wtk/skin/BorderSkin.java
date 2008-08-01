@@ -218,6 +218,14 @@ public class BorderSkin extends TitlePaneSkin {
         repaintComponent();
     }
 
+    public void setBorderThickness(Number borderThickness) {
+        if (borderThickness == null) {
+            throw new IllegalArgumentException("borderThickness is null.");
+        }
+
+        setBorderThickness(borderThickness.intValue());
+    }
+
     public Insets getPadding() {
         return padding;
     }
@@ -231,16 +239,24 @@ public class BorderSkin extends TitlePaneSkin {
         invalidateComponent();
     }
 
-    public final void setPadding(int padding) {
-        setPadding(new Insets(padding));
-    }
-
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
         }
 
         setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
     }
 
     public CornerRadii getCornerRadii() {
@@ -256,15 +272,23 @@ public class BorderSkin extends TitlePaneSkin {
         repaintComponent();
     }
 
-    public final void setCornerRadii(int cornerRadii) {
-        setCornerRadii(new CornerRadii(cornerRadii));
-    }
-
     public final void setCornerRadii(Dictionary<String, ?> cornerRadii) {
         if (cornerRadii == null) {
             throw new IllegalArgumentException("cornerRadii is null.");
         }
 
         setCornerRadii(new CornerRadii(cornerRadii));
+    }
+
+    public final void setCornerRadii(int cornerRadii) {
+        setCornerRadii(new CornerRadii(cornerRadii));
+    }
+
+    public void setCornerRadii(Number cornerRadii) {
+        if (cornerRadii == null) {
+            throw new IllegalArgumentException("cornerRadii is null.");
+        }
+
+        setCornerRadii(cornerRadii.intValue());
     }
 }

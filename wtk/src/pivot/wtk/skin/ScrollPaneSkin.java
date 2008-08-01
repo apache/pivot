@@ -337,10 +337,7 @@ public class ScrollPaneSkin extends ContainerSkin
         if (view != null) {
             // The scroll orientation is tied to whether the shift key was
             // presssed while the mouse wheel was scrolled
-            int keyboardModifiers = Keyboard.getModifiers();
-            int shiftMask = Keyboard.Modifier.SHIFT.getMask();
-
-            if ((keyboardModifiers & shiftMask) != 0) {
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Treat the mouse wheel as a horizontal scroll event
                 int previousScrollLeft = scrollPane.getScrollLeft();
                 int newScrollLeft = previousScrollLeft + (scrollAmount * wheelRotation *

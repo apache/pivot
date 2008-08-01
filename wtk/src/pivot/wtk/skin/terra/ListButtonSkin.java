@@ -23,6 +23,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 
+import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.wtk.Border;
 import pivot.wtk.Button;
@@ -532,8 +533,24 @@ public class ListButtonSkin extends ButtonSkin
         invalidateComponent();
     }
 
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
     }
 
     public Object getListFont() {

@@ -78,14 +78,6 @@ public class DisplaySkin extends ContainerSkin {
         this.activeWindowFollowsMouse = activeWindowFollowsMouse;
     }
 
-    public final void setActiveWindowFollowsMouse(String activeWindowFollowsMouse) {
-        if (activeWindowFollowsMouse == null) {
-            throw new IllegalArgumentException("activeWindowFollowsMouse is null.");
-        }
-
-        setActiveWindowFollowsMouse(Boolean.parseBoolean(activeWindowFollowsMouse));
-    }
-
     @Override
     public boolean mouseMove(int x, int y) {
         boolean consumed = super.mouseMove(x, y);
