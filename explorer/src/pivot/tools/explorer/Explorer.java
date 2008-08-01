@@ -45,12 +45,12 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
         componentTree   = (TreeView)  componentLoader.getComponent("trComponents");
         propertiesTable = (TableView) componentLoader.getComponent("tbProperties");
         stylesTable     = (TableView) componentLoader.getComponent("tbStyles");
-           
+
         initComponentTree( Display.getInstance().getComponents() );
         Component.setFocusedComponent(componentTree);
 
 	}
-	
+
 
 	@Override
 	public void shutdown() throws Exception {
@@ -66,7 +66,7 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 			componentList.add( new ComponentAdapter( c, true ));
 		}
         componentTree.setTreeData( componentList );
-        
+
         Sequence<Integer> pathToFirstElement = new ArrayList<Integer>( new Integer[]{new Integer(0)});
 		componentTree.setSelectedPath(pathToFirstElement);
         componentTree.expandBranch(pathToFirstElement);
@@ -74,8 +74,8 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 
 	public void selectionChanged(TreeView treeView) {
 
-		Sequence<ComponentAdapter> nodePath = TreeNodeList.create(treeView, componentTree.getSelectedPath()); 
-		statusLabel.setText( nodePath.toString() ); 
+		Sequence<ComponentAdapter> nodePath = TreeNodeList.create(treeView, componentTree.getSelectedPath());
+		statusLabel.setText( nodePath.toString() );
 		if ( nodePath.getLength() > 0 ) {
 			ComponentAdapter node = nodePath.get( nodePath.getLength()-1 );
 			propertiesTable.setTableData( node.getProperties() );

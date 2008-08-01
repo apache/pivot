@@ -12,18 +12,18 @@ public class TableEntryAdapter implements Dictionary<String, Object>{
 	public static final Comparator<TableEntryAdapter> COMPARATOR = new Comparator<TableEntryAdapter>() {
 
 		public int compare(TableEntryAdapter o1, TableEntryAdapter o2) {
-			
+
 			if ( o1 == o2 ) return 0;
 			if ( o1 == null ) return -1;
 			if ( o2 == null ) return 1;
-			
+
 			return o1.getName().compareTo(o2.getName());
-			
+
 		}
-		
+
 	};
-	
-	
+
+
 	public TableEntryAdapter( Dictionary<String, Object> dictionary, String entryName ) {
 
 		if ( dictionary == null ) {
@@ -54,9 +54,9 @@ public class TableEntryAdapter implements Dictionary<String, Object>{
 
 	public Object put(String key, Object value) {
 		return PropertySheetColumn.VALUE == asColumn( key )? dictionary.put(getName(), value): null;
-	}	
-	
-	
+	}
+
+
 
 	protected PropertySheetColumn asColumn( String key ) {
 		return PropertySheetColumn.valueOf( key == null? "": key.toUpperCase());

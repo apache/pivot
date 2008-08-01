@@ -52,7 +52,7 @@ public class ComponentAdapter
 				properties.add( new TableEntryAdapter( beanDictionary, s ));
 			}
 
-			
+
 		}
 		return properties;
 	}
