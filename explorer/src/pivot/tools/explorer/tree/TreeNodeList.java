@@ -2,6 +2,7 @@ package pivot.tools.explorer.tree;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
+import pivot.tools.explorer.tools.Strings;
 import pivot.wtk.TreeView;
 
 /**
@@ -38,12 +39,7 @@ public class TreeNodeList<T extends Sequence<? super T>> extends ArrayList<T> {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-        for (int i = 0, n = getLength(); i < n; i++) {
-            if (i > 0) sb.append("/");
-            sb.append(get(i));
-        }
-        return sb.toString();
+		return Strings.createDelimited( this, "/");
 	}
 
 }
