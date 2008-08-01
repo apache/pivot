@@ -28,6 +28,8 @@ import pivot.wtk.Component;
 public abstract class Loader {
     protected static class InlineDataList extends ArrayList<InlineDataList>
         implements Dictionary<String, Object> {
+        public static final long serialVersionUID = 0;
+
         private HashMap<String, Object> properties = new HashMap<String, Object>();
         public Object get(String key) {
             return properties.get(key);

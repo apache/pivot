@@ -1,6 +1,10 @@
 package pivot.util;
 
-public class Version implements Comparable<Version> {
+import java.io.Serializable;
+
+public class Version implements Comparable<Version>, Serializable {
+    public static final long serialVersionUID = 0;
+
     private byte majorRevision = 0;
     private byte minorRevision = 0;
     private byte maintenanceRevision = 0;

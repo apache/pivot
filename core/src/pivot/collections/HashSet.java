@@ -15,12 +15,15 @@
  */
 package pivot.collections;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
 import pivot.util.ListenerList;
 
-public class HashSet<E> implements Set<E> {
+public class HashSet<E> implements Set<E>, Serializable {
+    public static final long serialVersionUID = 0;
+
     // TODO We're temporarily using a java.util.HashSet to back this set.
     // Eventually, we'll replace this with an internal set representation.
     protected java.util.HashSet<E> hashSet = null;

@@ -16,15 +16,17 @@
 package pivot.web.test.server;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import pivot.serialization.BinarySerializer;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
+import pivot.serialization.Serializer;
 import sun.misc.BASE64Decoder;
 
 public class WebQueryTestServlet extends HttpServlet {
@@ -74,10 +76,18 @@ public class WebQueryTestServlet extends HttpServlet {
         String queryString = request.getQueryString();
 
         response.setStatus(200);
-        response.setContentType("application/json;charset=utf-8");
-        PrintWriter out = response.getWriter();
-        out.println("\"User " + username + " is authorized to access "
-            + pathInfo + "?" + queryString + "\"");
+
+        Serializer serializer = new BinarySerializer();
+        response.setContentType(serializer.getMIMEType());
+
+        String message = "\"User " + username + " is authorized to access "
+            + pathInfo + "?" + queryString + "\"";
+
+        try {
+            serializer.writeObject(message, response.getOutputStream());
+        } catch(SerializationException exception) {
+            throw new ServletException(exception);
+        }
     }
 
     @Override

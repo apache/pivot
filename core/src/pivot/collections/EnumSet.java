@@ -1,5 +1,6 @@
 package pivot.collections;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -10,7 +11,9 @@ import pivot.util.ListenerList;
  *
  * @param <E>
  */
-public class EnumSet<E extends Enum<E>> implements Set<E> {
+public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
+    public static final long serialVersionUID = 0;
+
     private int bitSet = 0;
     private SetListenerList<E> setListeners = new SetListenerList<E>();
 

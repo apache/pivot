@@ -17,6 +17,8 @@ package pivot.serialization;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 public class BinarySerializer implements Serializer {
@@ -24,14 +26,34 @@ public class BinarySerializer implements Serializer {
 
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
-        // TODO Auto-generated method stub
-        return null;
+        if (inputStream == null) {
+            throw new IllegalArgumentException("inputStream is null.");
+        }
+
+        Object object = null;
+
+        try {
+            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+            object = objectInputStream.readObject();
+        } catch(ClassNotFoundException exception) {
+            throw new SerializationException(exception);
+        }
+
+        return object;
     }
 
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
-        // TODO Auto-generated method stub
+        if (object == null) {
+            throw new IllegalArgumentException("object is null.");
+        }
 
+        if (outputStream == null) {
+            throw new IllegalArgumentException("outputStream is null.");
+        }
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        objectOutputStream.writeObject(object);
     }
 
     public String getMIMEType() {

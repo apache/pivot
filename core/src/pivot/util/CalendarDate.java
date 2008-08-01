@@ -15,6 +15,7 @@
  */
 package pivot.util;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -26,7 +27,9 @@ import java.util.regex.Pattern;
  *
  * @author tvolkert
  */
-public class CalendarDate implements Comparable<CalendarDate> {
+public class CalendarDate implements Comparable<CalendarDate>, Serializable {
+    public static final long serialVersionUID = 0;
+
     private int year;
     private int month;
     private int day;

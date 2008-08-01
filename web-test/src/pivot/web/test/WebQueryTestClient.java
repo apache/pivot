@@ -16,6 +16,8 @@
 package pivot.web.test;
 
 import java.net.URL;
+
+import pivot.serialization.BinarySerializer;
 import pivot.serialization.JSONSerializer;
 import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskListener;
@@ -39,6 +41,7 @@ public class WebQueryTestClient {
         // GET
         GetQuery getQuery = new GetQuery(HOSTNAME, PORT, PATH, SECURE);
         getQuery.getArguments().put("a", "b");
+        getQuery.setSerializer(new BinarySerializer());
         authentication.authenticate(getQuery);
 
         getQuery.execute(new TaskListener<Object>() {

@@ -15,12 +15,15 @@
  */
 package pivot.collections;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
 import pivot.util.ListenerList;
 
-public class ArrayList<T> implements List<T> {
+public class ArrayList<T> implements List<T>, Serializable {
+    public static final long serialVersionUID = 0;
+
     // TODO We're temporarily using a java.util.ArrayList to back this list.
     // Eventually, we'll replace this with an internal array representation.
     protected java.util.ArrayList<T> arrayList = null;

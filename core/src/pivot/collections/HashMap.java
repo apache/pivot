@@ -15,12 +15,15 @@
  */
 package pivot.collections;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
 import pivot.util.ListenerList;
 
-public class HashMap<K, V> implements Map<K, V> {
+public class HashMap<K, V> implements Map<K, V>, Serializable {
+    public static final long serialVersionUID = 0;
+
     // TODO We're temporarily using a java.util.HashMap to back this map.
     // Eventually, we'll replace this with an internal map representation.
     protected java.util.HashMap<K, V> hashMap = null;
