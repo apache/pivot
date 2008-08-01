@@ -1,0 +1,237 @@
+/*
+ * Copyright (c) 2008 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package pivot.wtk.content;
+
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import pivot.collections.List;
+import pivot.collections.ListListener;
+import pivot.collections.Sequence;
+import pivot.util.CalendarDate;
+import pivot.util.ListenerList;
+
+/**
+ * Spinner data model that presents a bounded list of calendar dates.
+ * <p>
+ * This is a lightweight class that spoofs the actual list data  by using an
+ * internal calendar instance from which we create <tt>CalendarDate</tt>
+ * instances on demand.
+ *
+ * @author tvolkert
+ */
+public class CalendarDateSpinnerData implements List<CalendarDate> {
+    /**
+     * Iterator that simply wraps calls to the list. Since the internal list
+     * data is spoofed, each accessor runs in constant time, so there's no
+     * performance hit in making the iterator delegate its implementation to
+     * the list.
+     *
+     * @author tvolkert
+     */
+    private class DataIterator implements Iterator<CalendarDate> {
+        private int index = 0;
+
+        public boolean hasNext() {
+            return (index < length);
+        }
+
+        public CalendarDate next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            return get(index++);
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private GregorianCalendar calendar;
+    private int calendarIndex;
+
+    // Calculated during construction
+    private transient int length;
+
+    private ListListenerList<CalendarDate> listListeners =
+        new ListListenerList<CalendarDate>();
+
+    /**
+     * Creates a new <tt>CalendarDateSpinnerData</tt> bounded from
+     * <tt>1900-01-01</tt> to <tt>2099-12-31</tt>.
+     */
+    public CalendarDateSpinnerData() {
+        this(new CalendarDate(1900, 0, 0), new CalendarDate(2099, 11, 30));
+    }
+
+    /**
+     * Creates a new <tt>CalendarDateSpinnerData</tt> bounded by the specified
+     * calendar dates (inclusive).
+     *
+     * @param lowerBound
+     * The earliest date to include in this spinner data.
+     *
+     * @param upperBound
+     * The latest date to include in this spinner data.
+     */
+    public CalendarDateSpinnerData(CalendarDate lowerBound, CalendarDate upperBound) {
+        if (lowerBound == null) {
+            throw new IllegalArgumentException("lowerBound is null.");
+        }
+
+        if (upperBound == null) {
+            throw new IllegalArgumentException("upperBound is null.");
+        }
+
+        if (lowerBound.compareTo(upperBound) >= 0) {
+            throw new IllegalArgumentException("lowerBound must be before upperBound.");
+        }
+
+        calendar = new GregorianCalendar(lowerBound.getYear(), lowerBound.getMonth(),
+            lowerBound.getDay() + 1);
+        calendarIndex = 0;
+
+        // Calculate our length and cache it, since it is guaranteed to
+        // remain fixed
+        GregorianCalendar upperBoundCalendar = new GregorianCalendar(upperBound.getYear(),
+            upperBound.getMonth(), upperBound.getDay() + 1);
+        long lowerBoundMilliseconds = calendar.getTimeInMillis();
+        long upperBoundMilliseconds = upperBoundCalendar.getTimeInMillis();
+        long indexDiff = (upperBoundMilliseconds - lowerBoundMilliseconds) /
+            (1000 * 60 * 60 * 24);
+        length = (int)indexDiff + 1;
+    }
+
+    /**
+     * Throws <tt>UnsupportedOperationException</tt>.
+     */
+    public int add(CalendarDate item) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Throws <tt>UnsupportedOperationException</tt>.
+     */
+    public void insert(CalendarDate item, int index) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Throws <tt>UnsupportedOperationException</tt>.
+     */
+    public CalendarDate update(int index, CalendarDate item) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Throws <tt>UnsupportedOperationException</tt>.
+     */
+    public int remove(CalendarDate item) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Throws <tt>UnsupportedOperationException</tt>.
+     */
+    public Sequence<CalendarDate> remove(int index, int count) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Gets the calendar date at the specified index.
+     *
+     * @param index
+     * The index of the calendar date to retrieve.
+     */
+    public CalendarDate get(int index) {
+        if (index < 0 || index >= length) {
+            throw new IndexOutOfBoundsException("Index out of bounds: " + index);
+        }
+
+        // Move the calendar's fields to match the specified index
+        calendar.add(Calendar.DAY_OF_YEAR, index - calendarIndex);
+        calendarIndex = index;
+
+        // Calculate the desired fields
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH) - 1;
+
+        return new CalendarDate(year, month, day);
+    }
+
+    public int indexOf(CalendarDate item) {
+        long currentMilliseconds = calendar.getTimeInMillis();
+
+        int year = item.getYear();
+        int month = item.getMonth();
+        int day = item.getDay() + 1;
+
+        GregorianCalendar tmpCalendar = new GregorianCalendar(year, month, day);
+        long itemMilliseconds = tmpCalendar.getTimeInMillis();
+
+        long indexDiff = (itemMilliseconds - currentMilliseconds) / (1000 * 60 * 60 * 24);
+        int index = calendarIndex + (int)indexDiff;
+
+        return (index < 0 || index >= length) ? -1 : index;
+    }
+
+    /**
+     * Throws <tt>UnsupportedOperationException</tt>.
+     */
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Gets the number of entries in this list.
+     *
+     * @return
+     * The number of calendar dates in this list.
+     */
+    public int getLength() {
+        return length;
+    }
+
+    /**
+     * Gets the comparator for this list, which is guaranteed to always be
+     * <tt>null</tt>. This class does not support comparators since there's no
+     * real data to sort (it's all spoofed).
+     */
+    public Comparator<CalendarDate> getComparator() {
+        return null;
+    }
+
+    /**
+     * Throws <tt>UnsupportedOperationException</tt>.
+     */
+    public void setComparator(Comparator<CalendarDate> comparator) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Iterator<CalendarDate> iterator() {
+        return new DataIterator();
+    }
+
+    public ListenerList<ListListener<CalendarDate>> getListListeners() {
+        return listListeners;
+    }
+}
