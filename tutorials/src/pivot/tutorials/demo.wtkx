@@ -45,6 +45,10 @@ limitations under the License.
                         <Component namespace="meters" src="meters.wtkx"/>
                     </Rollup>
                     <Rollup>
+                        <Label text="Spinners" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                        <Component namespace="spinners" src="spinners.wtkx"/>
+                    </Rollup>
+                    <Rollup>
                         <Label text="Tables" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
                         <Component namespace="tables" src="tables.wtkx"/>
                     </Rollup>

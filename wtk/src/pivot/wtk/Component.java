@@ -16,12 +16,10 @@
 package pivot.wtk;
 
 import java.awt.Graphics2D;
-import java.util.Iterator;
 
 import pivot.beans.BeanDictionary;
 import pivot.beans.PropertyNotFoundException;
 import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
 import pivot.util.ListenerList;
 import pivot.wtk.Mouse.Button;
 import pivot.wtk.Mouse.ScrollType;
@@ -70,100 +68,13 @@ public abstract class Component implements Visual {
 
             try {
                 previousValue = super.put(key, value);
-
-                // TODO Fire styleUpdated() event
+                componentListeners.styleUpdated(Component.this, key, previousValue);
             } catch(PropertyNotFoundException exception) {
                 System.out.println("\"" + key + "\" is not a valid style for "
                     + Component.this);
             }
 
             return previousValue;
-        }
-    }
-
-    /**
-     * Attributes dictionary implementation.
-     *
-     * @author gbrown
-     */
-    public class AttributesDictionary implements Dictionary<Class<? extends Attributes>, Attributes>,
-        Iterable<Class<? extends Attributes>> {
-        private class AttributesIterator implements Iterator<Class<? extends Attributes>> {
-            Iterator<Class<? extends Attributes>> source = null;
-
-            public AttributesIterator(Iterator<Class<? extends Attributes>> source) {
-                this.source = source;
-            }
-
-            public boolean hasNext() {
-                return source.hasNext();
-            }
-
-            public Class<? extends Attributes> next() {
-                return source.next();
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        }
-
-        private HashMap<Class<? extends Attributes>, Attributes> attributesMap =
-            new HashMap<Class<? extends Attributes>, Attributes>();
-
-        public Attributes get(Class<? extends Attributes> type) {
-            return attributesMap.get(type);
-        }
-
-        public Attributes put(Attributes attributes) {
-            return put(attributes.getClass(), attributes);
-        }
-
-        public Attributes put(Class<? extends Attributes> type, Attributes attributes) {
-            if (attributes.getClass() != type) {
-                throw new IllegalArgumentException("type does not match attributes.");
-            }
-
-            attributes.setComponent(Component.this);
-
-            Attributes previousAttributes = attributesMap.get(type);
-            if (previousAttributes != null) {
-                previousAttributes.setComponent(null);
-            }
-
-            boolean updated = (attributesMap.containsKey(type));
-            attributesMap.put(type, attributes);
-
-            if (updated) {
-                // TODO Fire attributesUpdated() event
-            } else {
-                // TODO Fire attributedAdded() event
-            }
-
-            return previousAttributes;
-        }
-
-        public Attributes remove(Class<? extends Attributes> type) {
-            Attributes attributes = attributesMap.remove(type);
-            if (attributes != null) {
-                attributes.setComponent(null);
-            }
-
-            // TODO Fire attributesRemoved() event
-
-            return attributes;
-        }
-
-        public boolean containsKey(Class<? extends Attributes> type) {
-            return attributesMap.containsKey(type);
-        }
-
-        public boolean isEmpty() {
-            return attributesMap.isEmpty();
-        }
-
-        public Iterator<Class<? extends Attributes>> iterator() {
-            return new AttributesIterator(attributesMap.iterator());
         }
     }
 
@@ -217,6 +128,12 @@ public abstract class Component implements Visual {
         public void visibleChanged(Component component) {
             for (ComponentListener listener : this) {
                 listener.visibleChanged(component);
+            }
+        }
+
+        public void styleUpdated(Component component, String styleKey, Object previousValue) {
+            for (ComponentListener listener : this) {
+                listener.styleUpdated(component, styleKey, previousValue);
             }
         }
 
@@ -467,7 +384,7 @@ public abstract class Component implements Visual {
     /**
      * Attached properties.
      */
-    private AttributesDictionary attributesDictionary = new AttributesDictionary();
+    private Attributes attributes = null;
 
     /**
      * Event listener lists.
@@ -1951,13 +1868,22 @@ public abstract class Component implements Visual {
         return styleDictionary;
     }
 
-    /**
-     * Returns a dictionary instance representing the component's attributes.
-     * Attributes are used to attach container-specific properties to a
-     * component.
-     */
-    public AttributesDictionary getAttributes() {
-        return attributesDictionary;
+    public Attributes getAttributes() {
+        return attributes;
+    }
+
+    protected void setAttributes(Attributes attributes) {
+        assert (parent != null);
+
+        if (this.attributes != null) {
+            this.attributes.setComponent(null);
+        }
+
+        this.attributes = attributes;
+
+        if (this.attributes != null) {
+            this.attributes.setComponent(this);
+        }
     }
 
     protected boolean mouseMove(int x, int y) {
@@ -2113,6 +2039,18 @@ public abstract class Component implements Visual {
         return consumed;
     }
 
+    @Override
+    public String toString() {
+        String s = this.getClass().getName() + "#" + getHandle();
+
+        Class<? extends Skin> skinClass = getSkinClass();
+        if (skinClass != null) {
+            s += " [" + skinClass.getName() + "]";
+        }
+
+        return s;
+    }
+
     public ListenerList<ComponentListener> getComponentListeners() {
         return componentListeners;
     }
@@ -2139,17 +2077,5 @@ public abstract class Component implements Visual {
 
     public static ListenerList<ComponentClassListener> getComponentClassListeners() {
         return componentClassListeners;
-    }
-
-    @Override
-    public String toString() {
-        String s = this.getClass().getName() + "#" + getHandle();
-
-        Class<? extends Skin> skinClass = getSkinClass();
-        if (skinClass != null) {
-            s += " [" + skinClass.getName() + "]";
-        }
-
-        return s;
     }
 }

@@ -1,12 +1,6 @@
 package pivot.core.test;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-
 import junit.framework.TestCase;
-
-import org.junit.Test;
 
 import pivot.collections.List;
 import pivot.collections.Map;
@@ -23,7 +17,7 @@ public class ResourcesTest extends TestCase {
 
 	/**
 	 * The resource overrides the term for the country.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testRead_GB_Locale() throws Exception {
@@ -36,7 +30,7 @@ public class ResourcesTest extends TestCase {
 	/**
 	 * The resource overrides the term for the country and the acronym for the
 	 * language.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testRead_GB_en_Locale() throws Exception {
@@ -48,7 +42,7 @@ public class ResourcesTest extends TestCase {
 
 	/**
 	 * The resource overrides the term and the acronym for the country.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testRead_GB_en_LocaleExtraOverride() throws Exception {
@@ -86,6 +80,7 @@ public class ResourcesTest extends TestCase {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private static void assertResources(Resources res, String acronym,
 			String term) {
 		assertTrue(res.containsKey("glossary"));

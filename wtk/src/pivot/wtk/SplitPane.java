@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
@@ -247,6 +248,21 @@ public class SplitPane extends Container {
             this.locked = locked;
             splitPaneListeners.lockedChanged(this);
         }
+    }
+
+    @Override
+    protected Sequence<Component> removeComponents(int index, int count) {
+        ComponentSequence components = getComponents();
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = components.get(i);
+            if (component == topLeftComponent
+                || component == bottomRightComponent) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        // Call the base method to remove the components
+        return super.removeComponents(index, count);
     }
 
     public ListenerList<SplitPaneListener> getSplitPaneListeners() {

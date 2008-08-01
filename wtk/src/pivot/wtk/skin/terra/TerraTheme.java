@@ -175,6 +175,10 @@ public final class TerraTheme extends Theme {
             repaintShadowRegion((Window)component);
         }
 
+        public void styleUpdated(Component component, String styleKey, Object previousValue) {
+            // No-op
+        }
+
         public void decoratorChanged(Component component, Decorator previousDecorator) {
             throw new IllegalStateException("Can't change decorator when window is open.");
         }

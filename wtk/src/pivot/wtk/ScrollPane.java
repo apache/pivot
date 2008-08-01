@@ -322,27 +322,18 @@ public class ScrollPane extends Viewport {
 
     @Override
     protected Sequence<Component> removeComponents(int index, int count) {
-        // Call the base method to remove the components
-        Sequence<Component> removed = super.removeComponents(index, count);
-
-        // Ensure that the appropriate instance variable is cleared if the
-        // component being removed maps to the row header, etc.
-        for (int i = 0, n = removed.getLength(); i < n; i++) {
-            Component component = removed.get(i);
-
-            if (component == rowHeader) {
-                rowHeader = null;
-                scrollPaneListeners.rowHeaderChanged(this, component);
-            } else if (component == columnHeader) {
-                columnHeader = null;
-                scrollPaneListeners.columnHeaderChanged(this, component);
-            } else if (component == corner) {
-                corner = null;
-                scrollPaneListeners.cornerChanged(this, component);
+        ComponentSequence components = getComponents();
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = components.get(i);
+            if (component == rowHeader
+                || component == columnHeader
+                || component == corner) {
+                throw new UnsupportedOperationException();
             }
         }
 
-        return removed;
+        // Call the base method to remove the components
+        return super.removeComponents(index, count);
     }
 
     public ListenerList<ScrollPaneListener> getScrollPaneListeners() {

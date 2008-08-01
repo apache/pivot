@@ -129,6 +129,10 @@ public class PopupSkin extends WindowSkin
         popup.close();
     }
 
+    public void styleUpdated(Component component, String styleKey, Object previousValue) {
+        // No-op
+    }
+
     public void decoratorChanged(Component component, Decorator previousDecorator) {
         // No-op
     }

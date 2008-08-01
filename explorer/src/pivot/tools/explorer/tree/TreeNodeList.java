@@ -5,8 +5,8 @@ import pivot.collections.Sequence;
 import pivot.wtk.TreeView;
 
 /**
- * List of tree nodes. Usually represents tree path. 
- * 
+ * List of tree nodes. Usually represents tree path.
+ *
  * @author Eugene Ryzhikov
  * @date   Jul 31, 2008
  *
@@ -22,7 +22,7 @@ public class TreeNodeList<T extends Sequence<? super T>> extends ArrayList<T> {
 	 * @return
 	 */
 	public static final <T extends Sequence<? super T>> TreeNodeList<T> create( final TreeView treeView, final Sequence<Integer> indexPath ) {
-		
+
 		final TreeNodeList<T> result = new TreeNodeList<T>();
 
 		new TreePathVisitor<T>() {
@@ -35,9 +35,9 @@ public class TreeNodeList<T extends Sequence<? super T>> extends ArrayList<T> {
 		return result;
 
 	}
-	
+
 	@Override
-	public String toString() { 
+	public String toString() {
 		StringBuilder sb = new StringBuilder();
         for (int i = 0, n = getLength(); i < n; i++) {
             if (i > 0) sb.append("/");
@@ -45,5 +45,5 @@ public class TreeNodeList<T extends Sequence<? super T>> extends ArrayList<T> {
         }
         return sb.toString();
 	}
-	
+
 }

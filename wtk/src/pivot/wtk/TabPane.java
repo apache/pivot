@@ -261,6 +261,9 @@ public class TabPane extends Container {
         getComponents().add(tab);
         tabs.insert(tab, index);
 
+        // Attach the attributes
+        tab.setAttributes(new TabPaneAttributes());
+
         tabPaneListeners.tabInserted(this, index);
 
         // If the selected tab's index changed as a result of
@@ -280,6 +283,11 @@ public class TabPane extends Container {
         // Remove the tabs from the tab list
         Sequence<Component> removed = tabs.remove(index, count);
 
+        // Detach the attributes
+        for (int i = 0, n = removed.getLength(); i < n; i++) {
+            removed.get(i).setAttributes(null);
+        }
+
         tabPaneListeners.tabsRemoved(this, index, removed);
 
         // Remove the tabs from the component list
@@ -290,6 +298,20 @@ public class TabPane extends Container {
         }
 
         return removed;
+    }
+
+    @Override
+    protected Sequence<Component> removeComponents(int index, int count) {
+        ComponentSequence components = getComponents();
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = components.get(i);
+            if (component.getAttributes() != null) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        // Call the base method to remove the components
+        return super.removeComponents(index, count);
     }
 
     public ListenerList<TabPaneListener> getTabPaneListeners() {
@@ -305,36 +327,28 @@ public class TabPane extends Container {
     }
 
     public static String getLabel(Component component) {
-        TabPaneAttributes tabPaneAttributes =
-            (TabPaneAttributes)component.getAttributes().get(TabPaneAttributes.class);
+        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
         return (tabPaneAttributes == null) ? null : tabPaneAttributes.getLabel();
     }
 
     public static void setLabel(Component component, String label) {
-        TabPaneAttributes tabPaneAttributes =
-            (TabPaneAttributes)component.getAttributes().get(TabPaneAttributes.class);
-
+        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
         if (tabPaneAttributes == null) {
-            tabPaneAttributes = new TabPaneAttributes();
-            component.getAttributes().put(tabPaneAttributes);
+            throw new IllegalStateException();
         }
 
         tabPaneAttributes.setLabel(label);
     }
 
     public static Image getIcon(Component component) {
-        TabPaneAttributes tabPaneAttributes =
-            (TabPaneAttributes)component.getAttributes().get(TabPaneAttributes.class);
+        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
         return (tabPaneAttributes == null) ? null : tabPaneAttributes.getIcon();
     }
 
     public static void setIcon(Component component, Image icon) {
-        TabPaneAttributes tabPaneAttributes =
-            (TabPaneAttributes)component.getAttributes().get(TabPaneAttributes.class);
-
+        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
         if (tabPaneAttributes == null) {
-            tabPaneAttributes = new TabPaneAttributes();
-            component.getAttributes().put(tabPaneAttributes);
+            throw new IllegalStateException();
         }
 
         tabPaneAttributes.setIcon(icon);

@@ -73,8 +73,8 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 
 	public void selectionChanged(TreeView treeView) {
 
-		Sequence<ComponentAdapter> nodePath = TreeNodeList.create(treeView, trComponents.getSelectedPath()); 
-		lbStatus.setText( nodePath.toString() ); 
+		Sequence<ComponentAdapter> nodePath = TreeNodeList.create(treeView, trComponents.getSelectedPath());
+		lbStatus.setText( nodePath.toString() );
 		if ( nodePath.getLength() > 0 ) {
 			ComponentAdapter node = nodePath.get( nodePath.getLength()-1 );
 			tbProperties.setTableData( node.getProperties() );

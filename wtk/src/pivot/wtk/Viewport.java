@@ -139,22 +139,16 @@ public abstract class Viewport extends Container {
 
     @Override
     protected Sequence<Component> removeComponents(int index, int count) {
-        // Call the base method to remove the components
-        Sequence<Component> removed = super.removeComponents(index, count);
-
-        // Ensure that the appropriate instance variable is cleared if the
-        // component being removed maps to the view
-        for (int i = 0, n = removed.getLength(); i < n; i++) {
-            Component component = removed.get(i);
-
+        ComponentSequence components = getComponents();
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = components.get(i);
             if (component == view) {
-                view = null;
-                viewportListeners.viewChanged(this, component);
-                break;
+                throw new UnsupportedOperationException();
             }
         }
 
-        return removed;
+        // Call the base method to remove the components
+        return super.removeComponents(index, count);
     }
 
     public ListenerList<ViewportListener> getViewportListeners() {

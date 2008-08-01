@@ -778,6 +778,9 @@ public class TablePane extends Container {
 
                 // Add the component
                 components.add(component);
+
+                // Attach the attributes
+                component.setAttributes(new TablePaneAttributes());
             }
 
             // Set the component as the new cell component (note that we
@@ -796,6 +799,12 @@ public class TablePane extends Container {
         }
     }
 
+    protected void insertComponent(Component component, int index) {
+        super.insertComponent(component, index);
+
+        component.setAttributes(new TablePaneAttributes());
+    }
+
     /**
      * Overrides the base method to check whether or not a cell component is
      * being removed, and fires the appropriate event in that case.
@@ -811,6 +820,13 @@ public class TablePane extends Container {
      */
     @Override
     protected Sequence<Component> removeComponents(int index, int count) {
+        // Detach the attributes
+        ComponentSequence components = getComponents();
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = components.get(i);
+            component.setAttributes(null);
+        }
+
         // Call the base method to remove the components
         Sequence<Component> removed = super.removeComponents(index, count);
 
@@ -858,18 +874,14 @@ public class TablePane extends Container {
     }
 
     public static int getRowSpan(Component component) {
-        TablePaneAttributes tablePaneAttributes =
-            (TablePaneAttributes)component.getAttributes().get(TablePaneAttributes.class);
-        return (tablePaneAttributes == null) ? 1 : tablePaneAttributes.getRowSpan();
+        TablePaneAttributes tablePaneAttributes = (TablePaneAttributes)component.getAttributes();
+        return (tablePaneAttributes == null) ? -1 : tablePaneAttributes.getRowSpan();
     }
 
     public static void setRowSpan(Component component, int rowSpan) {
-        TablePaneAttributes tablePaneAttributes =
-            (TablePaneAttributes)component.getAttributes().get(TablePaneAttributes.class);
-
+        TablePaneAttributes tablePaneAttributes = (TablePaneAttributes)component.getAttributes();
         if (tablePaneAttributes == null) {
-            tablePaneAttributes = new TablePaneAttributes();
-            component.getAttributes().put(tablePaneAttributes);
+            throw new UnsupportedOperationException();
         }
 
         tablePaneAttributes.setRowSpan(rowSpan);
@@ -884,18 +896,14 @@ public class TablePane extends Container {
     }
 
     public static int getColumnSpan(Component component) {
-        TablePaneAttributes tablePaneAttributes =
-            (TablePaneAttributes)component.getAttributes().get(TablePaneAttributes.class);
-        return (tablePaneAttributes == null) ? 1 : tablePaneAttributes.getColumnSpan();
+        TablePaneAttributes tablePaneAttributes = (TablePaneAttributes)component.getAttributes();
+        return (tablePaneAttributes == null) ? -1 : tablePaneAttributes.getColumnSpan();
     }
 
     public static void setColumnSpan(Component component, int columnSpan) {
-        TablePaneAttributes tablePaneAttributes =
-            (TablePaneAttributes)component.getAttributes().get(TablePaneAttributes.class);
-
+        TablePaneAttributes tablePaneAttributes = (TablePaneAttributes)component.getAttributes();
         if (tablePaneAttributes == null) {
-            tablePaneAttributes = new TablePaneAttributes();
-            component.getAttributes().put(tablePaneAttributes);
+            throw new UnsupportedOperationException();
         }
 
         tablePaneAttributes.setColumnSpan(columnSpan);

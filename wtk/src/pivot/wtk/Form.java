@@ -344,6 +344,9 @@ public class Form extends Container {
         getComponents().add(field);
         fields.insert(field, index);
 
+        // Attach the attributes
+        field.setAttributes(new FormAttributes());
+
         formListeners.fieldInserted(this, index);
     }
 
@@ -363,6 +366,11 @@ public class Form extends Container {
         // Remove the fields from the field list
         Sequence<Component> removed = fields.remove(index, count);
 
+        // Detach the attributes
+        for (int i = 0, n = removed.getLength(); i < n; i++) {
+            removed.get(i).setAttributes(null);
+        }
+
         formListeners.fieldsRemoved(this, index, removed);
 
         // Remove the fields from the component list
@@ -373,6 +381,20 @@ public class Form extends Container {
         }
 
         return removed;
+    }
+
+    @Override
+    protected Sequence<Component> removeComponents(int index, int count) {
+        ComponentSequence components = getComponents();
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = components.get(i);
+            if (component.getAttributes() != null) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        // Call the base method to remove the components
+        return super.removeComponents(index, count);
     }
 
     /**
@@ -396,36 +418,28 @@ public class Form extends Container {
     }
 
     public static String getLabel(Component component) {
-        FormAttributes formAttributes =
-            (FormAttributes)component.getAttributes().get(FormAttributes.class);
+        FormAttributes formAttributes = (FormAttributes)component.getAttributes();
         return (formAttributes == null) ? null : formAttributes.getLabel();
     }
 
     public static void setLabel(Component component, String label) {
-        FormAttributes formAttributes =
-            (FormAttributes)component.getAttributes().get(FormAttributes.class);
-
+        FormAttributes formAttributes = (FormAttributes)component.getAttributes();
         if (formAttributes == null) {
-            formAttributes = new FormAttributes();
-            component.getAttributes().put(formAttributes);
+            throw new IllegalStateException();
         }
 
         formAttributes.setLabel(label);
     }
 
     public static Flag getFlag(Component component) {
-        FormAttributes formAttributes =
-            (FormAttributes)component.getAttributes().get(FormAttributes.class);
+        FormAttributes formAttributes = (FormAttributes)component.getAttributes();
         return (formAttributes == null) ? null : formAttributes.getFlag();
     }
 
     public static void setFlag(Component component, Flag flag) {
-        FormAttributes formAttributes =
-            (FormAttributes)component.getAttributes().get(FormAttributes.class);
-
+        FormAttributes formAttributes = (FormAttributes)component.getAttributes();
         if (formAttributes == null) {
-            formAttributes = new FormAttributes();
-            component.getAttributes().put(formAttributes);
+            throw new IllegalStateException();
         }
 
         formAttributes.setFlag(flag);

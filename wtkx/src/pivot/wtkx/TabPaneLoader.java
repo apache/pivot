@@ -67,6 +67,7 @@ class TabPaneLoader extends ContainerLoader {
                 if (childNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element childElement = (Element)childNode;
                     Component component = componentLoader.load(childElement, rootLoader);
+                    tabPane.getTabs().add(component);
 
                     if (childElement.hasAttribute(ICON_URL_ATTRIBUTE)) {
                         String iconURLAttribute = childElement.getAttribute(ICON_URL_ATTRIBUTE);
@@ -76,8 +77,6 @@ class TabPaneLoader extends ContainerLoader {
                     if (childElement.hasAttribute(LABEL_ATTRIBUTE)) {
                         TabPane.setLabel(component, rootLoader.resolve(childElement.getAttribute(LABEL_ATTRIBUTE)).toString());
                     }
-
-                    tabPane.getTabs().add(component);
                 }
             }
         }

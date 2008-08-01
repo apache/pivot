@@ -17,9 +17,9 @@ import pivot.serialization.SerializationException;
  * applies a country specified resource over-writing the values in the base
  * using the country specified. It then does the same for country/language
  * specific.
- * 
+ *
  * @see java.util.ResourceBundle
- * 
+ *
  * @author brindy
  */
 public class Resources implements Dictionary<String, Object> {
@@ -91,6 +91,7 @@ public class Resources implements Dictionary<String, Object> {
 				"Resources instances are immutable");
 	}
 
+	@SuppressWarnings("unchecked")
 	private void applyOverrides(Map<String, Object> sourceMap,
 			Map<String, Object> overridesMap) {
 
@@ -143,6 +144,7 @@ public class Resources implements Dictionary<String, Object> {
 		return isNullOrMap(source) && isNullOrMap(override);
 	}
 
+	@SuppressWarnings("unchecked")
 	private Map<String, Object> readJSONResource(String baseName)
 			throws IOException, SerializationException {
 		InputStream in = getClass().getClassLoader().getResourceAsStream(

@@ -16,11 +16,7 @@
 package pivot.wtkx;
 
 import java.io.StringReader;
-
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import pivot.beans.BeanDictionary;
 import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
@@ -30,6 +26,7 @@ import pivot.wtk.Spinner;
 class SpinnerLoader extends Loader {
     public static final String SPINNER_TAG = "Spinner";
 
+    public static final String SPINNER_DATA_ATTRIBUTE = "spinnerData";
     public static final String CIRCULAR_ATTRIBUTE = "circular";
     public static final String SELECTED_INDEX_ATTRIBUTE = "selectedIndex";
     public static final String ITEM_RENDERER_ATTRIBUTE = "itemRenderer";
@@ -38,28 +35,15 @@ class SpinnerLoader extends Loader {
     public static final String SELECTED_VALUE_KEY_ATTRIBUTE = "selectedValueKey";
     public static final String VALUE_MAPPING_ATTRIBUTE = "valueMapping";
 
-    public static final String SPINNER_DATA_TAG = "spinnerData";
-
     @Override
     @SuppressWarnings("unchecked")
     protected Component load(Element element, ComponentLoader rootLoader)
         throws LoadException {
         Spinner spinner = new Spinner();
 
-        NodeList childNodes = element.getChildNodes();
-
-        for (int i = 0, n = childNodes.getLength(); i < n; i++) {
-            Node childNode = childNodes.item(i);
-
-            if (childNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element childElement = (Element)childNode;
-                String childTagName = childElement.getTagName();
-
-                if (childTagName.equals(SPINNER_DATA_TAG)) {
-                    InlineDataList elementList = InlineDataList.load(childElement, rootLoader);
-                    spinner.setSpinnerData(elementList);
-                }
-            }
+        if (element.hasAttribute(SPINNER_DATA_ATTRIBUTE)) {
+            String spinnerDataAttribute = element.getAttribute(SPINNER_DATA_ATTRIBUTE);
+            spinner.setSpinnerData(JSONSerializer.parseList(spinnerDataAttribute));
         }
 
         if (element.hasAttribute(CIRCULAR_ATTRIBUTE)) {
