@@ -3,6 +3,7 @@ package pivot.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 import pivot.collections.Dictionary;
 import pivot.collections.Map;
@@ -23,148 +24,136 @@ import pivot.serialization.SerializationException;
  * @author brindy
  */
 public class Resources implements Dictionary<String, Object> {
-	private String baseName = null;
-	private Locale locale = null;
-	private Map<String, Object> resourceMap = null;
 
-	public Resources(String baseName) throws IOException,
-			SerializationException {
-		this(baseName, Locale.getDefault());
-	}
+    private String baseName = null;
+    private Locale locale = null;
+    private Map<String, Object> resourceMap = null;
 
-	public Resources(String baseName, Locale locale) throws IOException,
-			SerializationException {
-		if (locale == null) {
-			throw new IllegalArgumentException("locale is null.");
-		}
+    /**
+     * This constructor calls {@link #Resources(String, Locale)} with the given
+     * baseName and whatever is returned from {@link Locale#getDefault()}
+     *
+     * @see #Resources(String, Locale)
+     */
+    public Resources(String baseName) throws IOException,
+            SerializationException {
+        this(baseName, Locale.getDefault());
+    }
 
-		this.baseName = baseName;
-		this.locale = locale;
+    /**
+     * Full constructor for a Resources instance.
+     *
+     * @param baseName
+     *            the base name of this resource as a fully qualified class name
+     * @param locale
+     *            the locale to use when reading this resource
+     * @throws IOException
+     *             if there is a problem when reading the resource
+     * @throws SerializationException
+     *             if there is a problem deserializing the resource from its
+     *             JSON format
+     * @throws NullPointerException
+     *             if baseName or locale is null
+     * @throws MissingResourceException
+     *             if no resource for the specified base name can be found
+     */
+    public Resources(String baseName, Locale locale) throws IOException,
+            SerializationException {
 
-		resourceMap = readJSONResource(baseName);
+        if (locale == null) {
+            throw new NullPointerException("Locale is null");
+        }
 
-		// try to find resource for the country
-		try {
-			String localeName = buildName(baseName, locale.getCountry());
-			applyOverrides(resourceMap, readJSONResource(localeName));
-		} catch (IllegalArgumentException e) {
-			// this could happen, a warning will have already been generated
-		}
+        this.baseName = baseName;
+        this.locale = locale;
 
-		// try to find resource for language in the country
-		try {
-			String localeName = buildName(baseName, locale.getCountry(), locale
-					.getLanguage());
-			applyOverrides(resourceMap, readJSONResource(localeName));
-		} catch (IllegalArgumentException e) {
-			// this could happen, a warning will have already been generated
-		}
-	}
+        String resourceName = baseName.replaceAll("\\.", "/");
+        resourceMap = readJSONResource(resourceName + ".json");
+        if (null == resourceMap) {
+            throw new MissingResourceException(
+                    "Can't find resource for base name " + baseName
+                            + ", locale " + locale, baseName, "");
+        }
 
-	public boolean containsKey(String key) {
-		return resourceMap.containsKey(key);
-	}
+        // try to find resource for the language (e.g. resourceName_en)
+        Map<String, Object> overrideMap = readJSONResource(resourceName + "_"
+                + locale.getLanguage() + ".json");
+        if (null != overrideMap) {
+            applyOverrides(resourceMap, overrideMap);
+        }
 
-	public Object get(String key) {
-		return resourceMap.get(key);
-	}
+        // try to find resource for the entire locale (e.g. resourceName_en_GB)
+        overrideMap = readJSONResource(resourceName + "_" + locale.toString()
+                + ".json");
+        if (null != overrideMap) {
+            applyOverrides(resourceMap, overrideMap);
+        }
+    }
 
-	public String getBaseName() {
-		return baseName;
-	}
+    public boolean containsKey(String key) {
+        return resourceMap.containsKey(key);
+    }
 
-	public Locale getLocale() {
-		return locale;
-	}
+    public Object get(String key) {
+        return resourceMap.get(key);
+    }
 
-	public boolean isEmpty() {
-		return resourceMap.isEmpty();
-	}
+    public String getBaseName() {
+        return baseName;
+    }
 
-	public Object put(String key, Object value) {
-		throw new UnsupportedOperationException(
-				"Resources instances are immutable");
-	}
+    public Locale getLocale() {
+        return locale;
+    }
 
-	public Object remove(String key) {
-		throw new UnsupportedOperationException(
-				"Resources instances are immutable");
-	}
+    public boolean isEmpty() {
+        return resourceMap.isEmpty();
+    }
 
-	@SuppressWarnings("unchecked")
-	private void applyOverrides(Map<String, Object> sourceMap,
-			Map<String, Object> overridesMap) {
+    public Object put(String key, Object value) {
+        throw new UnsupportedOperationException(
+                "Resources instances are immutable");
+    }
 
-		for (String key : sourceMap) {
-			if (overridesMap.containsKey(key)) {
-				// an override is present!
+    public Object remove(String key) {
+        throw new UnsupportedOperationException(
+                "Resources instances are immutable");
+    }
 
-				Object source = sourceMap.get(key);
-				Object override = overridesMap.get(key);
+    @SuppressWarnings("unchecked")
+    private void applyOverrides(Map<String, Object> sourceMap,
+            Map<String, Object> overridesMap) {
 
-				if (isMap(source, override)) {
-					applyOverrides((Map<String, Object>) source,
-							(Map<String, Object>) override);
-				} else {
-					sourceMap.put(key, overridesMap.get(key));
-				}
+        for (String key : overridesMap) {
+            if (sourceMap.containsKey(key)) {
+                Object source = sourceMap.get(key);
+                Object override = overridesMap.get(key);
 
-			}
-		}
+                if (source instanceof Map && override instanceof Map) {
+                    applyOverrides((Map<String, Object>) source,
+                            (Map<String, Object>) override);
+                } else {
+                    sourceMap.put(key, overridesMap.get(key));
+                }
+            }
+        }
 
-	}
+    }
 
-	private String buildName(String baseName, String... extras) {
-
-		// determine the extension, if any
-		String ext = "";
-		String fileName = baseName;
-		int extIndex = baseName.lastIndexOf(".");
-		if (extIndex > -1) {
-			ext = baseName.substring(extIndex);
-			fileName = baseName.substring(0, extIndex);
-		}
-
-		StringBuffer newName = new StringBuffer();
-		newName.append(fileName);
-
-		for (String extra : extras) {
-			newName.append("_").append(extra);
-		}
-		newName.append(ext);
-
-		return newName.toString();
-	}
-
-	private boolean isNullOrMap(Object o) {
-		return null == o || o instanceof Map;
-	}
-
-	private boolean isMap(Object source, Object override) {
-		return isNullOrMap(source) && isNullOrMap(override);
-	}
-
-	@SuppressWarnings("unchecked")
-	private Map<String, Object> readJSONResource(String baseName)
-			throws IOException, SerializationException {
-		InputStream in = getClass().getClassLoader().getResourceAsStream(
-				baseName);
-		if (null == in) {
-			System.out.println("Localisation warning: No resource at "
-					+ baseName);
-			throw new IllegalArgumentException("No resource at " + baseName);
-		}
-		JSONSerializer serializer = new JSONSerializer();
-		Map<String, Object> resourceMap = null;
-		try {
-			resourceMap = (Map<String, Object>) serializer.readObject(in);
-		} finally {
-			try {
-				in.close();
-			} catch (IOException e) {
-				// can't do anything about this at this point, so ignore
-			}
-		}
-		return resourceMap;
-	}
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> readJSONResource(String name)
+            throws IOException, SerializationException {
+        InputStream in = getClass().getClassLoader().getResourceAsStream(name);
+        if (null == in) {
+            return null;
+        }
+        JSONSerializer serializer = new JSONSerializer();
+        Map<String, Object> resourceMap = null;
+        try {
+            resourceMap = (Map<String, Object>) serializer.readObject(in);
+        } finally {
+            in.close();
+        }
+        return resourceMap;
+    }
 }
