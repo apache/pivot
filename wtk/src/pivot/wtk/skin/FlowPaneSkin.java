@@ -409,8 +409,8 @@ public class FlowPaneSkin extends ContainerSkin
 
                     if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
                         componentX = padding.left;
-                        componentWidth = width - (padding.left
-                            + padding.right);
+                        componentWidth = Math.max(width - (padding.left
+                            + padding.right), 0);
                         componentHeight = component.getPreferredHeight(componentWidth);
                     } else {
                         Dimensions preferredComponentSize = component.getPreferredSize();
