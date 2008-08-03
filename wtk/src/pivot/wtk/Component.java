@@ -16,10 +16,13 @@
 package pivot.wtk;
 
 import java.awt.Graphics2D;
+import java.util.Iterator;
 
 import pivot.beans.BeanDictionary;
 import pivot.beans.PropertyNotFoundException;
+import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
+import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.Mouse.Button;
 import pivot.wtk.Mouse.ScrollType;
@@ -75,6 +78,95 @@ public abstract class Component implements Visual {
             }
 
             return previousValue;
+        }
+    }
+
+    /**
+     *
+     */
+    public final class DecoratorSequence implements Sequence<Decorator>,
+        Iterable<Decorator> {
+        private class DecoratorIterator implements Iterator<Decorator> {
+            Iterator<Decorator> source = null;
+
+            public DecoratorIterator(Iterator<Decorator> source) {
+                this.source = source;
+            }
+
+            public boolean hasNext() {
+                return source.hasNext();
+            }
+
+            public Decorator next() {
+                return source.next();
+            }
+
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        public int add(Decorator decorator) {
+            int i = getLength();
+            insert(decorator, i);
+
+            return i;
+        }
+
+        public void insert(Decorator decorator, int index) {
+            if (decorator == null) {
+                throw new IllegalArgumentException("decorator is null");
+            }
+
+            decorators.insert(decorator, index);
+            repaint();
+
+            componentDecoratorListeners.decoratorInserted(Component.this, index);
+        }
+
+        public Decorator update(int index, Decorator decorator) {
+            throw new UnsupportedOperationException();
+        }
+
+        public int remove(Decorator decorator) {
+            int index = indexOf(decorator);
+            if (index != -1) {
+                remove(index, 1);
+            }
+
+            return index;
+        }
+
+        public Sequence<Decorator> remove(int index, int count) {
+            Sequence<Decorator> removed = decorators.remove(index, count);
+
+            if (count > 0) {
+                repaint();
+                componentDecoratorListeners.decoratorsRemoved(Component.this,
+                    index, removed);
+            }
+
+            return removed;
+        }
+
+        public Sequence<Decorator> removeAll() {
+            return remove(0, getLength());
+        }
+
+        public Decorator get(int index) {
+            return decorators.get(index);
+        }
+
+        public int indexOf(Decorator decorator) {
+            return decorators.indexOf(decorator);
+        }
+
+        public int getLength() {
+            return decorators.getLength();
+        }
+
+        public Iterator<Decorator> iterator() {
+            return new DecoratorIterator(decorators.iterator());
         }
     }
 
@@ -137,12 +229,6 @@ public abstract class Component implements Visual {
             }
         }
 
-        public void decoratorChanged(Component component, Decorator previousDecorator) {
-            for (ComponentListener listener : this) {
-                listener.decoratorChanged(component, previousDecorator);
-            }
-        }
-
         public void cursorChanged(Component component, Cursor previousCursor) {
             for (ComponentListener listener : this) {
                 listener.cursorChanged(component, previousCursor);
@@ -164,6 +250,22 @@ public abstract class Component implements Visual {
         public void dropHandlerChanged(Component component, DropHandler previousDropHandler) {
             for (ComponentListener listener : this) {
                 listener.dropHandlerChanged(component, previousDropHandler);
+            }
+        }
+    }
+
+    private static class ComponentDecoratorListenerList extends
+        ListenerList<ComponentDecoratorListener> implements ComponentDecoratorListener {
+        public void decoratorInserted(Component component, int index) {
+            for (ComponentDecoratorListener listener : this) {
+                listener.decoratorInserted(component, index);
+            }
+        }
+
+        public void decoratorsRemoved(Component component, int index,
+            Sequence<Decorator> decorators) {
+            for (ComponentDecoratorListener listener : this) {
+                listener.decoratorsRemoved(component, index, decorators);
             }
         }
     }
@@ -339,7 +441,8 @@ public abstract class Component implements Visual {
     /**
      * The component's decorator.
      */
-    private Decorator decorator = null;
+    private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
+    private DecoratorSequence decoratorSequence = new DecoratorSequence();
 
     /**
      * The component's enabled flag.
@@ -391,6 +494,7 @@ public abstract class Component implements Visual {
      */
     private ComponentListenerList componentListeners = new ComponentListenerList();
     private ComponentLayoutListenerList componentLayoutListeners = new ComponentLayoutListenerList();
+    private ComponentDecoratorListenerList componentDecoratorListeners = new ComponentDecoratorListenerList();
     private ComponentStateListenerList componentStateListeners = new ComponentStateListenerList();
     private ComponentMouseListenerList componentMouseListeners = new ComponentMouseListenerList();
     private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
@@ -1111,31 +1215,13 @@ public abstract class Component implements Visual {
     }
 
     /**
-     * Returns the component's decorator.
+     * Returns the component's decorator sequence.
      *
      * @return
-     * The component's decorator, or <tt>null</tt> if no decorator is
-     * installed.
+     * The component's decorator sequence
      */
-    public Decorator getDecorator() {
-        return decorator;
-    }
-
-    /**
-     * Sets the component's decorator and repaints the component.
-     *
-     * @param decorator
-     * The component's decorator, or <tt>null</tt> for no decorator.
-     */
-    public void setDecorator(Decorator decorator) {
-        Decorator previousDecorator = this.decorator;
-
-        if (previousDecorator != decorator) {
-            this.decorator = decorator;
-            repaint();
-
-            componentListeners.decoratorChanged(this, previousDecorator);
-        }
+    public DecoratorSequence getDecorators() {
+        return decoratorSequence;
     }
 
     /**
@@ -2053,6 +2139,14 @@ public abstract class Component implements Visual {
 
     public ListenerList<ComponentListener> getComponentListeners() {
         return componentListeners;
+    }
+
+    public ListenerList<ComponentLayoutListener> getComponentLayoutListeners() {
+        return componentLayoutListeners;
+    }
+
+    public ListenerList<ComponentDecoratorListener> getComponentDecoratorListeners() {
+        return componentDecoratorListeners;
     }
 
     public ListenerList<ComponentStateListener> getComponentStateListeners() {

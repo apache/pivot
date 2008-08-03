@@ -22,7 +22,6 @@ public interface ComponentListener {
     public void locationChanged(Component component, int previousX, int previousY);
     public void visibleChanged(Component component);
     public void styleUpdated(Component component, String styleKey, Object previousValue);
-    public void decoratorChanged(Component component, Decorator previousDecorator);
     public void cursorChanged(Component component, Cursor previousCursor);
     public void tooltipTextChanged(Component component, String previousTooltipText);
     public void dragHandlerChanged(Component component, DragHandler previousDragHandler);

@@ -87,11 +87,11 @@ public class LabelTest implements Application {
             }
         };
 
-        window.setDecorator(shadowDecorator);
+        window.getDecorators().add(shadowDecorator);
         window.open();
 
         Alert alert = new Alert(Alert.Type.INFO, "Foo");
-        alert.setDecorator(shadowDecorator);
+        alert.getDecorators().add(shadowDecorator);
 
         alert.open(window);
     }

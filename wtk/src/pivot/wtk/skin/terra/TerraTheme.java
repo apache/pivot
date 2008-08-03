@@ -79,21 +79,7 @@ public final class TerraTheme extends Theme {
      * @author tvolkert
      */
     private static class WindowDecorator implements Decorator {
-        private Decorator originalDecorator = null;
-
-        public WindowDecorator(Decorator originalDecorator) {
-            this.originalDecorator = originalDecorator;
-        }
-
-        public Decorator getDecorator() {
-            return originalDecorator;
-        }
-
         public Graphics2D prepare(Component component, Graphics2D graphics) {
-            if (originalDecorator != null) {
-                graphics = originalDecorator.prepare(component, graphics);
-            }
-
             // Paint the drop shadow
             Graphics2D shadowGraphics = (Graphics2D)graphics.create();
             shadowGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
@@ -108,9 +94,7 @@ public final class TerraTheme extends Theme {
         }
 
         public void update() {
-            if (originalDecorator != null) {
-                originalDecorator.update();
-            }
+            // No-op
         }
     }
 
@@ -179,10 +163,6 @@ public final class TerraTheme extends Theme {
             // No-op
         }
 
-        public void decoratorChanged(Component component, Decorator previousDecorator) {
-            throw new IllegalStateException("Can't change decorator when window is open.");
-        }
-
         public void cursorChanged(Component component, Cursor previousCursor) {
             // No-op
         }
@@ -210,6 +190,8 @@ public final class TerraTheme extends Theme {
 
     private DisplayMonitor displayMonitor = new DisplayMonitor();
     private WindowMonitor windowMonitor = new WindowMonitor();
+
+    private static WindowDecorator windowDecorator = new WindowDecorator();
 
     private static final Color DROP_SHADOW_COLOR = Color.BLACK;
     private static final float DROP_SHADOW_OPACITY = 0.33f;
@@ -285,8 +267,7 @@ public final class TerraTheme extends Theme {
     private void monitorWindow(Window window) {
         if (!(window instanceof Popup)) {
             // Attach shadow decorator and repaint
-            Decorator originalDecorator = window.getDecorator();
-            window.setDecorator(new WindowDecorator(originalDecorator));
+            window.getDecorators().add(windowDecorator);
             repaintShadowRegion(window);
 
             // Add component listeners
@@ -302,9 +283,7 @@ public final class TerraTheme extends Theme {
             window.getComponentStateListeners().remove(windowMonitor);
 
             // Remove shadow decorator and repaint
-            WindowDecorator windowDecorator = (WindowDecorator)window.getDecorator();
-            Decorator originalDecorator = windowDecorator.getDecorator();
-            window.setDecorator(originalDecorator);
+            window.getDecorators().remove(windowDecorator);
             repaintShadowRegion(window);
         }
     }

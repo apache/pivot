@@ -373,8 +373,7 @@ public abstract class Container extends Component {
                 componentGraphics.translate(component.getX(), component.getY());
 
                 // Get the decorator and prepare the component's graphics
-                Decorator decorator = component.getDecorator();
-                if (decorator != null) {
+                for (Decorator decorator : component.getDecorators()) {
                     componentGraphics = decorator.prepare(component, componentGraphics);
                 }
 
@@ -384,7 +383,7 @@ public abstract class Container extends Component {
                 }
 
                 // Update the component
-                if (decorator != null) {
+                for (Decorator decorator : component.getDecorators()) {
                     decorator.update();
                 }
             }
