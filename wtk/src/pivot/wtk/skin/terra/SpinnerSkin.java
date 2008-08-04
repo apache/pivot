@@ -26,13 +26,10 @@ import java.awt.geom.Rectangle2D;
 
 import pivot.collections.List;
 import pivot.wtk.ApplicationContext;
-import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
-import pivot.wtk.PushButton;
 import pivot.wtk.Rectangle;
 import pivot.wtk.Spinner;
 import pivot.wtk.SpinnerListener;
@@ -513,8 +510,6 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
     protected class SpinUpImage extends SpinButtonImage {
         public void paint(Graphics2D graphics) {
-            Spinner spinner = (Spinner)getComponent();
-
             int width = getWidth();
             int height = getHeight();
 
@@ -535,8 +530,6 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
     protected class SpinDownImage extends SpinButtonImage {
         public void paint(Graphics2D graphics) {
-            Spinner spinner = (Spinner)getComponent();
-
             int width = getWidth();
             int height = getHeight();
 
