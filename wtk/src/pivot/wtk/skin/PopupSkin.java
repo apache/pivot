@@ -15,12 +15,15 @@
  */
 package pivot.wtk.skin;
 
+import pivot.collections.Sequence;
+
 import pivot.wtk.Component;
 import pivot.wtk.ComponentListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Cursor;
+import pivot.wtk.Decorator;
 import pivot.wtk.Display;
 import pivot.wtk.DragHandler;
 import pivot.wtk.DropHandler;
@@ -83,6 +86,15 @@ public class PopupSkin extends WindowSkin
 
     // Component events
     public void skinClassChanged(Component component, Class<? extends Skin> previousSkinClass) {
+        // No-op
+    }
+
+    public void decoratorInserted(Component component, int index) {
+        // No-op
+    }
+
+    public void decoratorsRemoved(Component component, int index,
+        Sequence<Decorator> removed) {
         // No-op
     }
 

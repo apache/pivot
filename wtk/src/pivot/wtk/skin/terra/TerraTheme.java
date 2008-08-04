@@ -127,6 +127,15 @@ public final class TerraTheme extends Theme {
             // No-op
         }
 
+        public void decoratorInserted(Component component, int index) {
+            // No-op
+        }
+
+        public void decoratorsRemoved(Component component, int index,
+            Sequence<Decorator> removed) {
+            // No-op
+        }
+
         public void parentChanged(Component component, Container previousParent) {
             // No-op
         }

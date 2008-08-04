@@ -121,7 +121,7 @@ public abstract class Component implements Visual {
             decorators.insert(decorator, index);
             repaint();
 
-            componentDecoratorListeners.decoratorInserted(Component.this, index);
+            componentListeners.decoratorInserted(Component.this, index);
         }
 
         public Decorator update(int index, Decorator decorator) {
@@ -142,8 +142,7 @@ public abstract class Component implements Visual {
 
             if (count > 0) {
                 repaint();
-                componentDecoratorListeners.decoratorsRemoved(Component.this,
-                    index, removed);
+                componentListeners.decoratorsRemoved(Component.this, index, removed);
             }
 
             return removed;
@@ -199,6 +198,19 @@ public abstract class Component implements Visual {
             }
         }
 
+        public void decoratorInserted(Component component, int index) {
+            for (ComponentListener listener : this) {
+                listener.decoratorInserted(component, index);
+            }
+        }
+
+        public void decoratorsRemoved(Component component, int index,
+            Sequence<Decorator> decorators) {
+            for (ComponentListener listener : this) {
+                listener.decoratorsRemoved(component, index, decorators);
+            }
+        }
+
         public void parentChanged(Component component, Container previousParent) {
             for (ComponentListener listener : this) {
                 listener.parentChanged(component, previousParent);
@@ -250,22 +262,6 @@ public abstract class Component implements Visual {
         public void dropHandlerChanged(Component component, DropHandler previousDropHandler) {
             for (ComponentListener listener : this) {
                 listener.dropHandlerChanged(component, previousDropHandler);
-            }
-        }
-    }
-
-    private static class ComponentDecoratorListenerList extends
-        ListenerList<ComponentDecoratorListener> implements ComponentDecoratorListener {
-        public void decoratorInserted(Component component, int index) {
-            for (ComponentDecoratorListener listener : this) {
-                listener.decoratorInserted(component, index);
-            }
-        }
-
-        public void decoratorsRemoved(Component component, int index,
-            Sequence<Decorator> decorators) {
-            for (ComponentDecoratorListener listener : this) {
-                listener.decoratorsRemoved(component, index, decorators);
             }
         }
     }
@@ -494,7 +490,6 @@ public abstract class Component implements Visual {
      */
     private ComponentListenerList componentListeners = new ComponentListenerList();
     private ComponentLayoutListenerList componentLayoutListeners = new ComponentLayoutListenerList();
-    private ComponentDecoratorListenerList componentDecoratorListeners = new ComponentDecoratorListenerList();
     private ComponentStateListenerList componentStateListeners = new ComponentStateListenerList();
     private ComponentMouseListenerList componentMouseListeners = new ComponentMouseListenerList();
     private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
@@ -2143,10 +2138,6 @@ public abstract class Component implements Visual {
 
     public ListenerList<ComponentLayoutListener> getComponentLayoutListeners() {
         return componentLayoutListeners;
-    }
-
-    public ListenerList<ComponentDecoratorListener> getComponentDecoratorListeners() {
-        return componentDecoratorListeners;
     }
 
     public ListenerList<ComponentStateListener> getComponentStateListeners() {

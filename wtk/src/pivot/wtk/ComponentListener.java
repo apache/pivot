@@ -15,8 +15,14 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Sequence;
+
 public interface ComponentListener {
-    public void skinClassChanged(Component component, Class<? extends Skin> previousSkinClass);
+    public void skinClassChanged(Component component,
+        Class<? extends Skin> previousSkinClass);
+    public void decoratorInserted(Component component, int index);
+    public void decoratorsRemoved(Component component, int index,
+        Sequence<Decorator> decorators);
     public void parentChanged(Component component, Container previousParent);
     public void sizeChanged(Component component, int previousWidth, int previousHeight);
     public void locationChanged(Component component, int previousX, int previousY);
