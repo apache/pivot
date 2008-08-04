@@ -362,7 +362,7 @@ public class ExpanderSkin extends TitlePaneSkin
 
     public void setTitleBarBackgroundColor(Color titleBarBackgroundColor) {
         this.titleBarBackgroundColor = titleBarBackgroundColor;
-        repaintComponent();
+        titleBarFlowPane.getStyles().put("backgroundColor", titleBarBackgroundColor);
     }
 
     public final void setTitleBarBackgroundColor(String titleBarBackgroundColor) {
