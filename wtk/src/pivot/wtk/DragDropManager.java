@@ -90,6 +90,8 @@ public final class DragDropManager {
                     representation.getWidth(), representation.getHeight());
 
                 representation.paint(representationGraphics);
+
+                representationGraphics.dispose();
             }
         }
     }

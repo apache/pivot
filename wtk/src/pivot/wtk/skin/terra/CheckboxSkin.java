@@ -140,7 +140,9 @@ public class CheckboxSkin extends ButtonSkin
         int height = getHeight();
 
         // Paint the button
-        paintButton((Graphics2D)graphics.create(), checkbox, height);
+        Graphics2D buttonGraphics = (Graphics2D)graphics.create();
+        paintButton(buttonGraphics, checkbox, height);
+        buttonGraphics.dispose();
 
         // Paint the content
         Button.DataRenderer dataRenderer = checkbox.getDataRenderer();
@@ -151,6 +153,7 @@ public class CheckboxSkin extends ButtonSkin
         contentGraphics.translate(CHECKBOX_SIZE + spacing, 0);
         contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
         dataRenderer.paint(contentGraphics);
+        contentGraphics.dispose();
 
         // Paint the focus state
         if (checkbox.isFocused()) {

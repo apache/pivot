@@ -349,7 +349,9 @@ public abstract class Container extends Component {
         // Give the base method a copy of the graphics context; otherwise,
         // container skins can change the graphics state before it is passed
         // to subcomponents
-        super.paint((Graphics2D)graphics.create());
+        Graphics2D containerGraphics = (Graphics2D)graphics.create();
+        super.paint(containerGraphics);
+        containerGraphics.dispose();
 
         Shape clip = graphics.getClip();
         Rectangle2D clipBounds = (clip == null) ? getBounds() : clip.getBounds();
@@ -386,6 +388,8 @@ public abstract class Container extends Component {
                 for (Decorator decorator : component.getDecorators()) {
                     decorator.update();
                 }
+
+                componentGraphics.dispose();
             }
         }
     }

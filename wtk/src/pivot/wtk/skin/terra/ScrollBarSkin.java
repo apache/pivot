@@ -319,6 +319,7 @@ public class ScrollBarSkin extends ContainerSkin
             imageGraphics.translate(buttonImageX, buttonImageY);
             imageGraphics.clipRect(0, 0, buttonImageWidth, buttonImageHeight);
             buttonImage.paint(imageGraphics);
+            imageGraphics.dispose();
         }
 
         @Override

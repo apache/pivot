@@ -166,6 +166,7 @@ public class BorderSkin extends TitlePaneSkin {
         Graphics2D baseGraphics = (Graphics2D)graphics.create();
         baseGraphics.clip(clipRectangle);
         super.paint(baseGraphics);
+        baseGraphics.dispose();
 
         // Create a shape representing the border
         RoundRectangle2D outerRectangle = new RoundRectangle2D.Double(0, 0,

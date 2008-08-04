@@ -594,6 +594,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     columnX += (columnWidths[j] + spacing);
                 }
             }
+
+            gridGraphics.dispose();
         }
     }
 

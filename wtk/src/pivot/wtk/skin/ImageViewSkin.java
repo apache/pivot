@@ -179,6 +179,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
             imageGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
             image.paint(imageGraphics);
+            imageGraphics.dispose();
         }
     }
 

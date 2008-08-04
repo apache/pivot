@@ -142,6 +142,7 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
         contentGraphics.translate(padding.left + 1, padding.top + 1);
         contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
         dataRenderer.paint(contentGraphics);
+        contentGraphics.dispose();
 
         // Paint the focus state
         if (pushButton.isFocused()) {

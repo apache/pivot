@@ -451,6 +451,8 @@ public class TextInputSkin extends ComponentSkin
 
                 selectionGraphics.setPaint(selectionColor);
                 selectionGraphics.drawString(text, 0, 0);
+
+                selectionGraphics.dispose();
             }
         }
 

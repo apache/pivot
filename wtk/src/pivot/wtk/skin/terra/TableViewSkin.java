@@ -213,6 +213,8 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
                 cellRenderer.setSize(columnWidth, rowHeight - 1);
                 cellRenderer.paint(rendererGraphics);
 
+                rendererGraphics.dispose();
+
                 cellX += columnWidth + 1;
             }
 

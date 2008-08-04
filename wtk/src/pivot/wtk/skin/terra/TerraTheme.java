@@ -90,6 +90,8 @@ public final class TerraTheme extends Theme {
             shadowGraphics.fillRect(DROP_SHADOW_OFFSET, DROP_SHADOW_OFFSET,
                 component.getWidth(), component.getHeight());
 
+            shadowGraphics.dispose();
+
             return graphics;
         }
 

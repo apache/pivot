@@ -266,6 +266,7 @@ public class ListButtonSkin extends ButtonSkin
         contentGraphics.translate(padding.left + 1, padding.top + 1);
         contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
         dataRenderer.paint(contentGraphics);
+        contentGraphics.dispose();
 
         // Paint the focus state
         if (listButton.isFocused()) {
@@ -304,6 +305,8 @@ public class ListButtonSkin extends ButtonSkin
 
         triggerGraphics.draw(triggerIconShape);
         triggerGraphics.fill(triggerIconShape);
+
+        triggerGraphics.dispose();
     }
 
     public ListView getListView() {

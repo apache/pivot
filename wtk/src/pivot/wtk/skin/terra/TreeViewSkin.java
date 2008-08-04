@@ -358,6 +358,7 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 highlighted, disabled);
             nodeRenderer.setSize(nodeWidth, nodeHeight);
             nodeRenderer.paint(rendererGraphics);
+            rendererGraphics.dispose();
 
             // Paint the grid line
             if (showGridLines) {

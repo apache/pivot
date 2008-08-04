@@ -322,6 +322,8 @@ public class TabPaneSkin extends ContainerSkin
 
             contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
             dataRenderer.paint(contentGraphics);
+
+            contentGraphics.dispose();
         }
 
         @Override

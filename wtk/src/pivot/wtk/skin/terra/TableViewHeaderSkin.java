@@ -298,6 +298,7 @@ public class TableViewHeaderSkin extends ComponentSkin
             Graphics2D rendererGraphics = (Graphics2D)graphics.create(cellX, 0,
                 columnWidth, height - 1);
             dataRenderer.paint(rendererGraphics);
+            rendererGraphics.dispose();
 
             // Draw the sort image
             Image sortImage = null;
@@ -326,6 +327,7 @@ public class TableViewHeaderSkin extends ComponentSkin
                     sortImageGraphics.translate(cellX + columnWidth - sortImageMargin,
                         (height - sortImage.getPreferredHeight(-1)) / 2);
                     sortImage.paint(sortImageGraphics);
+                    sortImageGraphics.dispose();
                 }
             }
 

@@ -121,7 +121,9 @@ public class RadioButtonSkin extends ButtonSkin
         int height = getHeight();
 
         // Paint the button
-        paintButton((Graphics2D)graphics.create(), radioButton, height);
+        Graphics2D buttonGraphics = (Graphics2D)graphics.create();
+        paintButton(buttonGraphics, radioButton, height);
+        buttonGraphics.dispose();
 
         // Paint the content
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
@@ -132,6 +134,7 @@ public class RadioButtonSkin extends ButtonSkin
         contentGraphics.translate(BUTTON_DIAMETER + spacing, 0);
         contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
         dataRenderer.paint(contentGraphics);
+        contentGraphics.dispose();
 
         // Paint the focus state
         if (radioButton.isFocused()) {

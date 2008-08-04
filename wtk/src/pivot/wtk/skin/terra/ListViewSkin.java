@@ -180,6 +180,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
             renderer.render(item, listView, selected, highlighted, disabled);
             renderer.setSize(width, itemHeight);
             renderer.paint(rendererGraphics);
+            rendererGraphics.dispose();
         }
     }
 

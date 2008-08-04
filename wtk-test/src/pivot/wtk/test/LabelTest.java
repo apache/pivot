@@ -79,6 +79,7 @@ public class LabelTest implements Application {
 
                 shadowGraphics.setClip(null);
                 shadowGraphics.fillRect(10, 10, component.getWidth(), component.getHeight());
+                shadowGraphics.dispose();
 
                 return graphics;
             }
