@@ -307,9 +307,14 @@
          optimize="${compiler.optimize}"
          deprecation="${compiler.deprecation}"
          debug="${compiler.debug}"
-         failonerror="true"
-         classpath="${core}/${ant.project.name}-core.jar;${wtk}/${ant.project.name}-wtk.jar">
+         failonerror="true">
          <compilerarg value="-Xlint" />
+         <classpath>
+           <pathelement location="${core}/${ant.project.name}-core.jar" />
+           <pathelement location="${wtk}/${ant.project.name}-wtk.jar" />
+           <pathelement location="${wtkx}/lib/stax-api-1.0.jar" />
+           <pathelement location="${wtkx}/lib/stax-1.2.0.jar" />
+         </classpath>
       </javac>
 
       <!-- Rebuild the JAR file -->
