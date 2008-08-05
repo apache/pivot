@@ -31,10 +31,13 @@ public abstract class Image implements Visual {
     public static class LoadTask extends Task<Image> {
         private URL url = null;
 
-        private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
-
         public LoadTask(URL url) {
-            super(DEFAULT_DISPATCHER);
+            super();
+            this.url = url;
+        }
+
+        public LoadTask(URL url, Dispatcher dispatcher) {
+            super(dispatcher);
             this.url = url;
         }
 

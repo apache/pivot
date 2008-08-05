@@ -47,6 +47,10 @@ public class TaskGroup<V> extends Task<Void> implements Group<Task<? extends V>>
     private boolean executing = false;
     private Exception exception;
 
+    public TaskGroup() {
+        super();
+    }
+
     public TaskGroup(Dispatcher dispatcher) {
         super(dispatcher);
     }
