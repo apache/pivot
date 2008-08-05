@@ -27,7 +27,7 @@ import pivot.serialization.BinarySerializer;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
-import sun.misc.BASE64Decoder;
+import pivot.util.Base64;
 
 public class WebQueryTestServlet extends HttpServlet {
     public static final long serialVersionUID = 0;
@@ -57,9 +57,7 @@ public class WebQueryTestServlet extends HttpServlet {
         } else {
             String encodedCredentials = authorization.substring(BASIC_AUTHENTICATION_TAG.length() + 1);
 
-            // TODO Use a different decoder; sun.misc.BASE64Decoder is undocumented
-            BASE64Decoder decoder = new BASE64Decoder();
-            String decodedCredentials = new String(decoder.decodeBuffer(encodedCredentials));
+            String decodedCredentials = new String(Base64.decode(encodedCredentials));
             String[] credentials = decodedCredentials.split(":");
             username = credentials[0];
 
