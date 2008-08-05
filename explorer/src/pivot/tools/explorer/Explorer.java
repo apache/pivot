@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.tools.explorer.tools.Collections;
 import pivot.tools.explorer.tree.TreeNodeList;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
@@ -60,16 +61,15 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 	private void initComponentTree( Iterable<Component> components ) {
 		componentTree.getTreeViewSelectionListeners().add(this);
 
-		// build tree data of component adapters
+		// build tree data
 		List<ComponentAdapter> componentList = new ArrayList<ComponentAdapter>();
 		for( Component c:  components) {
 			componentList.add( new ComponentAdapter( c, true ));
 		}
         componentTree.setTreeData( componentList );
-
-        Sequence<Integer> pathToFirstElement = new ArrayList<Integer>( new Integer[]{new Integer(0)});
-		componentTree.setSelectedPath(pathToFirstElement);
-        componentTree.expandBranch(pathToFirstElement);
+        Sequence<Integer> rootPath = Collections.list(0);
+		componentTree.setSelectedPath(rootPath);
+        componentTree.expandBranch(rootPath);
 	}
 
 	public void selectionChanged(TreeView treeView) {
@@ -81,11 +81,11 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 			propertiesTable.setTableData( node.getProperties() );
 			stylesTable.setTableData( node.getStyles() );
 		}
-//		else {
-//			ArrayList<Object> emptyList = new ArrayList<Object>();
-//			tbProperties.setTableData( emptyList);
-//			tbStyles.setTableData( emptyList);
-//		}
+		else {
+			List<TableEntryAdapter> emptyList = Collections.emptyList();
+			propertiesTable.setTableData( emptyList);
+			stylesTable.setTableData( emptyList);
+		}
 
 	}
 

@@ -13,7 +13,9 @@ import pivot.wtk.TreeView;
  *
  * @param <T>
  */
-public class TreeNodeList<T extends Sequence<? super T>> extends ArrayList<T> {
+public class TreeNodeList<T> extends ArrayList<T> {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Creates tree node path based on provided node index path

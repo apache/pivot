@@ -17,6 +17,8 @@ public class ComponentAdapter
     extends ArrayList<ComponentAdapter>
     implements Dictionary<String,Object> {
 
+	private static final long serialVersionUID = 1L;
+	
 	private Component component;
 	private List<TableEntryAdapter> properties, styles;
 	private BeanDictionary beanDictionary;
