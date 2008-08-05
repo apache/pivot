@@ -57,6 +57,12 @@ public abstract class Task<V> {
 
     private ExecuteCallback executeCallback = null;
 
+    private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
+
+    public Task() {
+        this(DEFAULT_DISPATCHER);
+    }
+
     public Task(Dispatcher dispatcher) {
         if (dispatcher == null) {
             throw new IllegalArgumentException("dispatcher is null.");
