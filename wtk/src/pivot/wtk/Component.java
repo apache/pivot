@@ -22,7 +22,9 @@ import pivot.beans.BeanDictionary;
 import pivot.beans.PropertyNotFoundException;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
+import pivot.collections.Map;
 import pivot.collections.Sequence;
+import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
 import pivot.wtk.Mouse.Button;
 import pivot.wtk.Mouse.ScrollType;
@@ -755,14 +757,6 @@ public abstract class Component implements Visual {
         }
     }
 
-    public final void setPreferredWidth(String preferredWidth) {
-        if (preferredWidth == null) {
-            throw new IllegalArgumentException("preferredWidth is null.");
-        }
-
-        setPreferredWidth(Integer.parseInt(preferredWidth));
-    }
-
     /**
      * Returns a flag indicating whether the preferred width was explicitly
      * set by the caller or is the default value determined by the skin.
@@ -829,14 +823,6 @@ public abstract class Component implements Visual {
             componentLayoutListeners.preferredSizeChanged(this,
                 preferredWidth, previousPreferredHeight);
         }
-    }
-
-    public final void setPreferredHeight(String preferredHeight) {
-        if (preferredHeight == null) {
-            throw new IllegalArgumentException("preferredHeight is null.");
-        }
-
-        setPreferredHeight(Integer.parseInt(preferredHeight));
     }
 
     /**
@@ -950,14 +936,6 @@ public abstract class Component implements Visual {
         }
 
         setPreferredSize(preferredSize.width, preferredSize.height);
-    }
-
-    public final void setPreferredSize(String preferredSize) {
-        if (preferredSize == null) {
-            throw new IllegalArgumentException("preferredSize is null.");
-        }
-
-        setPreferredSize(new Dimensions(preferredSize));
     }
 
     /**
@@ -1199,14 +1177,6 @@ public abstract class Component implements Visual {
 
             componentLayoutListeners.displayableChanged(this);
         }
-    }
-
-    public final void setDisplayable(String displayable) {
-        if (displayable == null) {
-            throw new IllegalArgumentException("displayable is null.");
-        }
-
-        setDisplayable(Boolean.parseBoolean(displayable));
     }
 
     /**
@@ -1602,14 +1572,6 @@ public abstract class Component implements Visual {
         }
     }
 
-    public final void setEnabled(String enabled) {
-        if (enabled == null) {
-            throw new IllegalArgumentException("enabled is null.");
-        }
-
-        setEnabled(Boolean.parseBoolean(enabled));
-    }
-
     /**
      * Determines if this component is blocked. A component is blocked if the
      * component or any of its ancestors is disabled.
@@ -1947,6 +1909,22 @@ public abstract class Component implements Visual {
      */
     public StyleDictionary getStyles() {
         return styleDictionary;
+    }
+
+    /**
+     * Applies a set of styles encoded as a JSON string.
+     *
+     * @param styles
+     */
+    public void setStyles(String styles) {
+        if (styles == null) {
+            throw new IllegalArgumentException("styles is null.");
+        }
+
+        Map<String, Object> styleMap = JSONSerializer.parseMap(styles);
+        for (String key : styleMap) {
+            getStyles().put(key, styleMap.get(key));
+        }
     }
 
     public Attributes getAttributes() {

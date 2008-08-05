@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2008 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pivot.util;
 
 import java.io.IOException;
@@ -24,19 +39,17 @@ import pivot.serialization.SerializationException;
  * @author brindy
  */
 public class Resources implements Dictionary<String, Object> {
-
     private String baseName = null;
     private Locale locale = null;
     private Map<String, Object> resourceMap = null;
 
     /**
      * This constructor calls {@link #Resources(String, Locale)} with the given
-     * baseName and whatever is returned from {@link Locale#getDefault()}
+     * baseName and whatever is returned from {@link Locale#getDefault()}.
      *
      * @see #Resources(String, Locale)
      */
-    public Resources(String baseName) throws IOException,
-            SerializationException {
+    public Resources(String baseName) throws IOException, SerializationException {
         this(baseName, Locale.getDefault());
     }
 
@@ -44,24 +57,28 @@ public class Resources implements Dictionary<String, Object> {
      * Full constructor for a Resources instance.
      *
      * @param baseName
-     *            the base name of this resource as a fully qualified class name
+     * The base name of this resource as a fully qualified class name.
+     *
      * @param locale
-     *            the locale to use when reading this resource
+     * The locale to use when reading this resource.
+     *
      * @throws IOException
-     *             if there is a problem when reading the resource
+     * If there is a problem when reading the resource.
+     *
      * @throws SerializationException
-     *             if there is a problem deserializing the resource from its
-     *             JSON format
-     * @throws NullPointerException
-     *             if baseName or locale is null
+     * If there is a problem deserializing the resource from its JSON format.
+     *
+     * @throws IllegalArgumentException
+     * If baseName or locale is null.
+     *
      * @throws MissingResourceException
-     *             if no resource for the specified base name can be found
+     * If no resource for the specified base name can be found.
      */
     public Resources(String baseName, Locale locale) throws IOException,
-            SerializationException {
+        SerializationException {
 
         if (locale == null) {
-            throw new NullPointerException("Locale is null");
+            throw new IllegalArgumentException("Locale is null");
         }
 
         this.baseName = baseName;
@@ -70,21 +87,19 @@ public class Resources implements Dictionary<String, Object> {
         String resourceName = baseName.replaceAll("\\.", "/");
         resourceMap = readJSONResource(resourceName + ".json");
         if (null == resourceMap) {
-            throw new MissingResourceException(
-                    "Can't find resource for base name " + baseName
-                            + ", locale " + locale, baseName, "");
+            throw new MissingResourceException("Can't find resource for base name "
+                + baseName + ", locale " + locale, baseName, "");
         }
 
         // try to find resource for the language (e.g. resourceName_en)
         Map<String, Object> overrideMap = readJSONResource(resourceName + "_"
-                + locale.getLanguage() + ".json");
-        if (null != overrideMap) {
+            + locale.getLanguage() + ".json");
+        if (overrideMap != null) {
             applyOverrides(resourceMap, overrideMap);
         }
 
         // try to find resource for the entire locale (e.g. resourceName_en_GB)
-        overrideMap = readJSONResource(resourceName + "_" + locale.toString()
-                + ".json");
+        overrideMap = readJSONResource(resourceName + "_" + locale.toString() + ".json");
         if (null != overrideMap) {
             applyOverrides(resourceMap, overrideMap);
         }
@@ -111,18 +126,16 @@ public class Resources implements Dictionary<String, Object> {
     }
 
     public Object put(String key, Object value) {
-        throw new UnsupportedOperationException(
-                "Resources instances are immutable");
+        throw new UnsupportedOperationException("Resources instances are immutable");
     }
 
     public Object remove(String key) {
-        throw new UnsupportedOperationException(
-                "Resources instances are immutable");
+        throw new UnsupportedOperationException("Resources instances are immutable");
     }
 
     @SuppressWarnings("unchecked")
     private void applyOverrides(Map<String, Object> sourceMap,
-            Map<String, Object> overridesMap) {
+        Map<String, Object> overridesMap) {
 
         for (String key : overridesMap) {
             if (sourceMap.containsKey(key)) {
@@ -131,7 +144,7 @@ public class Resources implements Dictionary<String, Object> {
 
                 if (source instanceof Map && override instanceof Map) {
                     applyOverrides((Map<String, Object>) source,
-                            (Map<String, Object>) override);
+                        (Map<String, Object>) override);
                 } else {
                     sourceMap.put(key, overridesMap.get(key));
                 }
@@ -141,12 +154,13 @@ public class Resources implements Dictionary<String, Object> {
     }
 
     @SuppressWarnings("unchecked")
-    private Map<String, Object> readJSONResource(String name)
-            throws IOException, SerializationException {
+    private Map<String, Object> readJSONResource(String name) throws IOException,
+        SerializationException {
         InputStream in = getClass().getClassLoader().getResourceAsStream(name);
         if (null == in) {
             return null;
         }
+
         JSONSerializer serializer = new JSONSerializer();
         Map<String, Object> resourceMap = null;
         try {
@@ -154,6 +168,7 @@ public class Resources implements Dictionary<String, Object> {
         } finally {
             in.close();
         }
+
         return resourceMap;
     }
 }

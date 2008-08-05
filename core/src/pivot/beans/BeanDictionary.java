@@ -340,7 +340,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                     Class<?> primitiveValueType = (Class<?>)primitiveTypeField.get(this);
 
                     try {
-                        method = type.getMethod(SET_PREFIX + key, new Class<?>[] {primitiveValueType});
+                        method = type.getMethod(methodName, new Class<?>[] {primitiveValueType});
                     } catch(NoSuchMethodException exception) {
                         // No-op
                     }
