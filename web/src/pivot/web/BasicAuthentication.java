@@ -15,7 +15,7 @@
  */
 package pivot.web;
 
-import sun.misc.BASE64Encoder;
+import pivot.util.Base64;
 
 public class BasicAuthentication implements Authentication {
     private String username = null;
@@ -36,13 +36,7 @@ public class BasicAuthentication implements Authentication {
 
     public void authenticate(Query<?> query) {
         String credentials = username + ":" + password;
-
-        BASE64Encoder encoder = new BASE64Encoder();
-        String encodedCredentials = encoder.encodeBuffer(credentials.getBytes());
-
-        // TODO Use a different encoder; sun.misc.BASE64Encoder is undocumented
-        // and always appends a carriage return to the string
-        encodedCredentials = encodedCredentials.substring(0, encodedCredentials.length() - 1);
+        String encodedCredentials = Base64.encode(credentials.getBytes());
 
         query.getRequestProperties().put("Authorization", "Basic " + encodedCredentials);
     }
