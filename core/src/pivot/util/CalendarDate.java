@@ -45,8 +45,19 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
      * default timezone and the default locale.
      */
     public CalendarDate() {
-        GregorianCalendar calendar = new GregorianCalendar();
-        set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+        this(new GregorianCalendar());
+    }
+
+    /**
+     * Creates a new <tt>CalendarDate</tt> representing the day contained in
+     * the specified gregorian calendar (assuming the default locale and the
+     * default timezone).
+     *
+     * @param calendar
+     * The calendar containing the year, month, and day fields.
+     */
+    public CalendarDate(GregorianCalendar calendar) {
+        this(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH) - 1);
     }
 
