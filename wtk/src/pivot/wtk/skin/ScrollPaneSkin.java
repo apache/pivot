@@ -78,13 +78,13 @@ public class ScrollPaneSkin extends ContainerSkin
         scrollPane.getViewportListeners().add(this);
         scrollPane.getScrollPaneListeners().add(this);
 
-        scrollPane.getComponents().add(horizontalScrollBar);
-        scrollPane.getComponents().add(verticalScrollBar);
+        scrollPane.add(horizontalScrollBar);
+        scrollPane.add(verticalScrollBar);
 
-        scrollPane.getComponents().add(topLeftCorner);
-        scrollPane.getComponents().add(bottomLeftCorner);
-        scrollPane.getComponents().add(bottomRightCorner);
-        scrollPane.getComponents().add(topRightCorner);
+        scrollPane.add(topLeftCorner);
+        scrollPane.add(bottomLeftCorner);
+        scrollPane.add(bottomRightCorner);
+        scrollPane.add(topRightCorner);
 
         horizontalScrollBar.getScrollBarValueListeners().add(this);
         verticalScrollBar.getScrollBarValueListeners().add(this);
@@ -96,13 +96,13 @@ public class ScrollPaneSkin extends ContainerSkin
         scrollPane.getViewportListeners().remove(this);
         scrollPane.getScrollPaneListeners().remove(this);
 
-        scrollPane.getComponents().remove(horizontalScrollBar);
-        scrollPane.getComponents().remove(verticalScrollBar);
+        scrollPane.remove(horizontalScrollBar);
+        scrollPane.remove(verticalScrollBar);
 
-        scrollPane.getComponents().remove(topLeftCorner);
-        scrollPane.getComponents().remove(bottomLeftCorner);
-        scrollPane.getComponents().remove(bottomRightCorner);
-        scrollPane.getComponents().remove(topRightCorner);
+        scrollPane.remove(topLeftCorner);
+        scrollPane.remove(bottomLeftCorner);
+        scrollPane.remove(bottomRightCorner);
+        scrollPane.remove(topRightCorner);
 
         horizontalScrollBar.getScrollBarValueListeners().remove(this);
         verticalScrollBar.getScrollBarValueListeners().remove(this);

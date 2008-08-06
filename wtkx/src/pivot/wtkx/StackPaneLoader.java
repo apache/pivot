@@ -46,7 +46,7 @@ class StackPaneLoader extends ContainerLoader {
 
                 if (childNode.getNodeType() == Node.ELEMENT_NODE) {
                     Component component = componentLoader.load((Element)childNode, rootLoader);
-                    stackPane.getComponents().add(component);
+                    stackPane.add(component);
                 }
             }
         }

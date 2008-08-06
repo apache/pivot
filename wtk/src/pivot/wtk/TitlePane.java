@@ -81,15 +81,13 @@ public abstract class TitlePane extends Container {
 
     public void setContent(Component content) {
         if (content != this.content) {
-            Container.ComponentSequence components = getComponents();
-
             if (content != null) {
                 if (content.getParent() != null) {
                     throw new IllegalArgumentException("Component already has a parent.");
                 }
 
                 // Add the component
-                components.add(content);
+                add(content);
             }
 
             // Set the component as the new content component (note that we
@@ -100,7 +98,7 @@ public abstract class TitlePane extends Container {
 
             // Remove any previous content component
             if (previousContent != null) {
-                components.remove(previousContent);
+                remove(previousContent);
             }
 
             titlePaneListeners.contentChanged(this, previousContent);
@@ -108,17 +106,16 @@ public abstract class TitlePane extends Container {
     }
 
     @Override
-    protected Sequence<Component> removeComponents(int index, int count) {
-        ComponentSequence components = getComponents();
+    public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
-            Component component = components.get(i);
+            Component component = get(i);
             if (component == content) {
                 throw new UnsupportedOperationException();
             }
         }
 
         // Call the base method to remove the components
-        return super.removeComponents(index, count);
+        return super.remove(index, count);
     }
 
     public ListenerList<TitlePaneListener> getTitlePaneListeners() {

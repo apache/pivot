@@ -41,7 +41,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         int preferredWidth = 0;
         CardPane cardPane = (CardPane)getComponent();
 
-        for (Component component : cardPane.getComponents()) {
+        for (Component component : cardPane) {
             preferredWidth = Math.max(preferredWidth,
                 component.getPreferredWidth(height));
         }
@@ -53,7 +53,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         int preferredHeight = 0;
         CardPane cardPane = (CardPane)getComponent();
 
-        for (Component component : cardPane.getComponents()) {
+        for (Component component : cardPane) {
             preferredHeight = Math.max(preferredHeight,
                 component.getPreferredHeight(width));
         }
@@ -67,7 +67,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
         CardPane cardPane = (CardPane)getComponent();
 
-        for (Component component : cardPane.getComponents()) {
+        for (Component component : cardPane) {
             Dimensions preferredCardSize = component.getPreferredSize();
 
             preferredWidth = Math.max(preferredWidth,
@@ -84,11 +84,10 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         // Hide all cards but the selected card; set the size of the selected
         // card to match the size of the card pane
         CardPane cardPane = (CardPane)getComponent();
-        CardPane.ComponentSequence components = cardPane.getComponents();
         int selectedIndex = cardPane.getSelectedIndex();
 
-        for (int i = 0, n = components.getLength(); i < n; i++) {
-            Component component = components.get(i);
+        for (int i = 0, n = cardPane.getLength(); i < n; i++) {
+            Component component = cardPane.get(i);
             if (i == selectedIndex) {
                 component.setVisible(true);
                 component.setSize(getWidth(), getHeight());

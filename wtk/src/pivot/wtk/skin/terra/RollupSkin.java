@@ -226,7 +226,7 @@ public class RollupSkin extends ContainerSkin
 
         rollupButton = new RollupButton(rollup);
         updateRollupButton();
-        rollup.getComponents().add(rollupButton);
+        rollup.add(rollupButton);
         rollupButton.getButtonPressListeners().add(this);
     }
 
@@ -238,7 +238,7 @@ public class RollupSkin extends ContainerSkin
         toggleComponent = null;
 
         rollupButton.getButtonPressListeners().remove(this);
-        rollup.getComponents().remove(rollupButton);
+        rollup.remove(rollupButton);
         rollupButton = null;
 
         super.uninstall();
@@ -253,8 +253,8 @@ public class RollupSkin extends ContainerSkin
         // Preferred width is the max of our childrens' preferred widths, plus
         // the button width, buffer, and padding. If we're collapsed, we only
         // look at the first child.
-        for (int i = 0, n = rollup.getComponents().getLength(); i < n; i++) {
-            Component component = rollup.getComponents().get(i);
+        for (int i = 0, n = rollup.getLength(); i < n; i++) {
+            Component component = rollup.get(i);
 
             if (component == rollupButton) {
                 // Ignore "private" component
@@ -292,8 +292,8 @@ public class RollupSkin extends ContainerSkin
         int preferredHeight = 0;
 
         int displayableComponentCount = 0;
-        for (int i = 0, n = rollup.getComponents().getLength(); i < n; i++) {
-            Component component = rollup.getComponents().get(i);
+        for (int i = 0, n = rollup.getLength(); i < n; i++) {
+            Component component = rollup.get(i);
 
             if (component == rollupButton) {
                 // Ignore "private" component
@@ -328,8 +328,6 @@ public class RollupSkin extends ContainerSkin
 
     public void layout() {
         Rollup rollup = (Rollup)getComponent();
-        Container.ComponentSequence components = rollup.getComponents();
-
         Dimensions rollupButtonSize = rollupButton.getPreferredSize();
         rollupButton.setSize(rollupButtonSize);
 
@@ -339,8 +337,8 @@ public class RollupSkin extends ContainerSkin
 
         Component firstComponent = null;
 
-        for (int i = 0, n = components.getLength(); i < n; i++) {
-            Component component = components.get(i);
+        for (int i = 0, n = rollup.getLength(); i < n; i++) {
+            Component component = rollup.get(i);
 
             if (component == rollupButton) {
                 // Ignore "private" component
@@ -427,7 +425,7 @@ public class RollupSkin extends ContainerSkin
         Cursor cursor = Cursor.HAND;
 
         // Make sure to account for rollupButton
-        if (rollup.getComponents().getLength() == 2) {
+        if (rollup.getLength() == 2) {
             buttonData = bulletImage;
             cursor = Cursor.DEFAULT;
         } else if (rollup.isExpanded()) {
@@ -446,9 +444,8 @@ public class RollupSkin extends ContainerSkin
 
         toggleComponent = null;
         if (firstChildToggles) {
-            Container.ComponentSequence components = rollup.getComponents();
-            for (int i = 0, n = components.getLength(); i < n; i++) {
-                Component child = components.get(i);
+            for (int i = 0, n = rollup.getLength(); i < n; i++) {
+                Component child = rollup.get(i);
                 if (child != rollupButton) {
                     toggleComponent = child;
                     break;
@@ -457,7 +454,7 @@ public class RollupSkin extends ContainerSkin
         }
 
         if (toggleComponent != null
-            && rollup.getComponents().getLength() > 2) {
+            && rollup.getLength() > 2) {
             // TODO Record original cursor
             toggleComponent.setCursor(Cursor.HAND);
         }

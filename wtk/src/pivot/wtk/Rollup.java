@@ -57,7 +57,7 @@ public class Rollup extends pivot.wtk.Container {
         installSkin(Rollup.class);
 
         if (firstChild != null) {
-            getComponents().add(firstChild);
+            add(firstChild);
         }
     }
 

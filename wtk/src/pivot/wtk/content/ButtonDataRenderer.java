@@ -45,8 +45,8 @@ public class ButtonDataRenderer extends FlowPane implements Button.DataRenderer 
         getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
-        getComponents().add(imageView);
-        getComponents().add(label);
+        add(imageView);
+        add(label);
 
         imageView.getStyles().put("backgroundColor", null);
     }

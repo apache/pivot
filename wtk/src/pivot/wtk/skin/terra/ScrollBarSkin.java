@@ -715,13 +715,13 @@ public class ScrollBarSkin extends ContainerSkin
         scrollBar.getScrollBarValueListeners().add(this);
 
         scrollUpButton = new ScrollButton(scrollBar, -1, new ScrollUpImage());
-        scrollBar.getComponents().add(scrollUpButton);
+        scrollBar.add(scrollUpButton);
 
         scrollDownButton = new ScrollButton(scrollBar, 1, new ScrollDownImage());
-        scrollBar.getComponents().add(scrollDownButton);
+        scrollBar.add(scrollDownButton);
 
         scrollHandle = new ScrollHandle(scrollBar);
-        scrollBar.getComponents().add(scrollHandle);
+        scrollBar.add(scrollHandle);
 
         enabledChanged(scrollBar);
     }
@@ -732,9 +732,9 @@ public class ScrollBarSkin extends ContainerSkin
         scrollBar.getScrollBarListeners().remove(this);
         scrollBar.getScrollBarValueListeners().remove(this);
 
-        scrollBar.getComponents().remove(scrollUpButton);
-        scrollBar.getComponents().remove(scrollDownButton);
-        scrollBar.getComponents().remove(scrollHandle);
+        scrollBar.remove(scrollUpButton);
+        scrollBar.remove(scrollDownButton);
+        scrollBar.remove(scrollHandle);
 
         scrollUpButton = null;
         scrollDownButton = null;

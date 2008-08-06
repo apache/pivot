@@ -114,15 +114,13 @@ public class SplitPane extends Container {
 
     public void setTopLeftComponent(Component topLeftComponent) {
         if (topLeftComponent != this.topLeftComponent) {
-            Container.ComponentSequence components = getComponents();
-
             // Set the component as the new top/left component
             Component previousTopLeftComponent = this.topLeftComponent;
             this.topLeftComponent = topLeftComponent;
 
             // Remove any previous content component
             if (previousTopLeftComponent != null) {
-                components.remove(previousTopLeftComponent);
+                remove(previousTopLeftComponent);
             }
 
             if (topLeftComponent != null) {
@@ -131,7 +129,7 @@ public class SplitPane extends Container {
                 }
 
                 // Add the component
-                components.add(topLeftComponent);
+                add(topLeftComponent);
             }
 
             splitPaneListeners.topLeftComponentChanged(this, previousTopLeftComponent);
@@ -144,15 +142,13 @@ public class SplitPane extends Container {
 
     public void setBottomRightComponent(Component bottomRightComponent) {
         if (bottomRightComponent != this.bottomRightComponent) {
-            Container.ComponentSequence components = getComponents();
-
             // Set the component as the new bottom/right component
             Component previousBottomRightComponent = this.bottomRightComponent;
             this.bottomRightComponent = bottomRightComponent;
 
             // Remove any previous content component
             if (previousBottomRightComponent != null) {
-                components.remove(previousBottomRightComponent);
+                remove(previousBottomRightComponent);
             }
 
             if (bottomRightComponent != null) {
@@ -161,7 +157,7 @@ public class SplitPane extends Container {
                 }
 
                 // Add the component
-                components.add(bottomRightComponent);
+                add(bottomRightComponent);
             }
 
             splitPaneListeners.bottomRightComponentChanged(this, previousBottomRightComponent);
@@ -251,10 +247,9 @@ public class SplitPane extends Container {
     }
 
     @Override
-    protected Sequence<Component> removeComponents(int index, int count) {
-        ComponentSequence components = getComponents();
+    public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
-            Component component = components.get(i);
+            Component component = get(i);
             if (component == topLeftComponent
                 || component == bottomRightComponent) {
                 throw new UnsupportedOperationException();
@@ -262,7 +257,7 @@ public class SplitPane extends Container {
         }
 
         // Call the base method to remove the components
-        return super.removeComponents(index, count);
+        return super.remove(index, count);
     }
 
     public ListenerList<SplitPaneListener> getSplitPaneListeners() {

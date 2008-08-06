@@ -41,80 +41,25 @@ import pivot.util.ListenerList;
  * @author gbrown
  */
 @ComponentInfo(icon="Container.png")
-public abstract class Container extends Component {
-    /**
-     * Internal class for managing the container's component list.
-     *
-     * @author gbrown
-     */
-    public final class ComponentSequence implements Sequence<Component>,
-        Iterable<Component> {
-        private class ComponentIterator implements Iterator<Component> {
-            Iterator<Component> source = null;
+public abstract class Container extends Component
+    implements Sequence<Component>, Iterable<Component> {
+    private class ComponentIterator implements Iterator<Component> {
+        Iterator<Component> source = null;
 
-            public ComponentIterator(Iterator<Component> source) {
-                this.source = source;
-            }
-
-            public boolean hasNext() {
-                return source.hasNext();
-            }
-
-            public Component next() {
-                return source.next();
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
+        public ComponentIterator(Iterator<Component> source) {
+            this.source = source;
         }
 
-        public int add(Component component) {
-            int i = getLength();
-            insert(component, i);
-
-            return i;
+        public boolean hasNext() {
+            return source.hasNext();
         }
 
-        public void insert(Component component, int index) {
-            insertComponent(component, index);
+        public Component next() {
+            return source.next();
         }
 
-        public Component update(int index, Component component) {
+        public void remove() {
             throw new UnsupportedOperationException();
-        }
-
-        public int remove(Component component) {
-            int index = indexOf(component);
-            if (index != -1) {
-                remove(index, 1);
-            }
-
-            return index;
-        }
-
-        public Sequence<Component> remove(int index, int count) {
-            return removeComponents(index, count);
-        }
-
-        public Sequence<Component> removeAll() {
-            return remove(0, getLength());
-        }
-
-        public Component get(int index) {
-            return components.get(index);
-        }
-
-        public int indexOf(Component component) {
-            return components.indexOf(component);
-        }
-
-        public int getLength() {
-            return components.getLength();
-        }
-
-        public Iterator<Component> iterator() {
-            return new ComponentIterator(components.iterator());
         }
     }
 
@@ -179,7 +124,6 @@ public abstract class Container extends Component {
     // an array list will need to perform a lot of copying as owned windows
     // are removed from the list and appended to the end
     private ArrayList<Component> components = new ArrayList<Component>();
-    private ComponentSequence componentSequence = new ComponentSequence();
 
     private boolean valid = true;
 
@@ -195,23 +139,14 @@ public abstract class Container extends Component {
     private ContainerListenerList containerListeners = new ContainerListenerList();
     private ContainerMouseListenerList containerMouseListeners = new ContainerMouseListenerList();
 
-    public ComponentSequence getComponents() {
-        return componentSequence;
+    public int add(Component component) {
+        int i = getLength();
+        insert(component, i);
+
+        return i;
     }
 
-    @Override
-    protected void setParent(Container parent) {
-        // If this container is being removed from the component hierarchy
-        // and contains the focused component, clear the focus
-        if (parent == null
-            && isAncestor(getFocusedComponent())) {
-            setFocusedComponent(null);
-        }
-
-        super.setParent(parent);
-    }
-
-    protected void insertComponent(Component component, int index) {
+    public void insert(Component component, int index) {
         if (component == null) {
             throw new IllegalArgumentException("component is null.");
         }
@@ -235,7 +170,20 @@ public abstract class Container extends Component {
         containerListeners.componentInserted(Container.this, index);
     }
 
-    protected Sequence<Component> removeComponents(int index, int count) {
+    public Component update(int index, Component component) {
+        throw new UnsupportedOperationException();
+    }
+
+    public int remove(Component component) {
+        int index = indexOf(component);
+        if (index != -1) {
+            remove(index, 1);
+        }
+
+        return index;
+    }
+
+    public Sequence<Component> remove(int index, int count) {
         Sequence<Component> removed = components.remove(index, count);
 
         if (count > 0) {
@@ -262,6 +210,38 @@ public abstract class Container extends Component {
         }
 
         return removed;
+    }
+
+    public Sequence<Component> removeAll() {
+        return remove(0, getLength());
+    }
+
+    public Component get(int index) {
+        return components.get(index);
+    }
+
+    public int indexOf(Component component) {
+        return components.indexOf(component);
+    }
+
+    public int getLength() {
+        return components.getLength();
+    }
+
+    public Iterator<Component> iterator() {
+        return new ComponentIterator(components.iterator());
+    }
+
+    @Override
+    protected void setParent(Container parent) {
+        // If this container is being removed from the component hierarchy
+        // and contains the focused component, clear the focus
+        if (parent == null
+            && isAncestor(getFocusedComponent())) {
+            setFocusedComponent(null);
+        }
+
+        super.setParent(parent);
     }
 
     public Component getComponentAt(int x, int y) {

@@ -102,7 +102,7 @@ public final class TerraTheme extends Theme {
 
     private class DisplayMonitor implements ContainerListener {
         public void componentInserted(Container container, int index) {
-            Window window = (Window)container.getComponents().get(index);
+            Window window = (Window)container.get(index);
             monitorWindow(window);
         }
 
@@ -255,7 +255,7 @@ public final class TerraTheme extends Theme {
         Display display = Display.getInstance();
 
         // Monitor existing windows
-        for (Component component : display.getComponents()) {
+        for (Component component : display) {
             monitorWindow((Window)component);
         }
 
@@ -267,7 +267,7 @@ public final class TerraTheme extends Theme {
         Display display = Display.getInstance();
 
         // Un-monitor existing windows
-        for (Component component : display.getComponents()) {
+        for (Component component : display) {
             unmonitorWindow((Window)component);
         }
 

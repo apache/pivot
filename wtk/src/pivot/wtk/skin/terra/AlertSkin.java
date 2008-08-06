@@ -29,7 +29,6 @@ import pivot.wtk.AlertSelectionListener;
 import pivot.wtk.Border;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
-import pivot.wtk.Container;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
@@ -87,8 +86,8 @@ public class AlertSkin extends DialogSkin
         border.getStyles().put("backgroundColor", new Color(0xe6, 0xe3, 0xda));
         border.getStyles().put("borderColor", new Color(0x99, 0x99, 0x99));
         border.getStyles().put("padding", new Insets(12));
-        alertContent.getComponents().add(border);
-        alertContent.getComponents().add(buttonFlowPane);
+        alertContent.add(border);
+        alertContent.add(buttonFlowPane);
 
         TablePane tablePane = new TablePane();
 
@@ -102,7 +101,7 @@ public class AlertSkin extends DialogSkin
 
         FlowPane imageFlow = new FlowPane(Orientation.VERTICAL);
         imageFlow.getStyles().put("verticalAlignment", VerticalAlignment.TOP);
-        imageFlow.getComponents().add(typeImageView);
+        imageFlow.add(typeImageView);
 
         tablePane.setCellComponent(0, 0, imageFlow);
         tablePane.setCellComponent(0, 1, messageFlowPane);
@@ -184,9 +183,9 @@ public class AlertSkin extends DialogSkin
             subjectLabel = new Label(subject);
             subjectLabel.getStyles().put("font", SUBJECT_LABEL_FONT);
             subjectLabel.getStyles().put("wrapText", true);
-            messageFlowPane.getComponents().insert(subjectLabel, 0);
+            messageFlowPane.insert(subjectLabel, 0);
         } else if (subject == null && subjectLabel != null) {
-            messageFlowPane.getComponents().remove(subjectLabel);
+            messageFlowPane.remove(subjectLabel);
             subjectLabel = null;
         } else if (subject != null) {
             subjectLabel.setText(subject);
@@ -195,18 +194,16 @@ public class AlertSkin extends DialogSkin
 
     private void setBodyComponent(Component body, Component previousBody) {
         if (previousBody != null) {
-            messageFlowPane.getComponents().remove(previousBody);
+            messageFlowPane.remove(previousBody);
         }
 
         if (body != null) {
-            messageFlowPane.getComponents().add(body);
+            messageFlowPane.add(body);
         }
     }
 
     private void setOptionButtons(List<String> optionData) {
-        Container.ComponentSequence buttonSequence = buttonFlowPane.getComponents();
-
-        buttonSequence.removeAll();
+        buttonFlowPane.removeAll();
 
         if (optionData != null) {
             int i = 0;
@@ -219,7 +216,7 @@ public class AlertSkin extends DialogSkin
     private void insertOptionButton(String option, int index) {
         PushButton button = new PushButton(option);
         button.getButtonPressListeners().add(this);
-        buttonFlowPane.getComponents().insert(button, index);
+        buttonFlowPane.insert(button, index);
 
         styleOptionButton(button);
     }
@@ -248,7 +245,7 @@ public class AlertSkin extends DialogSkin
             int index = alert.getSelectedOption();
 
             if (index >= 0) {
-                Component.setFocusedComponent(buttonFlowPane.getComponents().get(index));
+                Component.setFocusedComponent(buttonFlowPane.get(index));
             }
         }
     }
@@ -260,7 +257,7 @@ public class AlertSkin extends DialogSkin
 
     @Override
     public void buttonPressed(Button button) {
-        int optionIndex = buttonFlowPane.getComponents().indexOf(button);
+        int optionIndex = buttonFlowPane.indexOf(button);
 
         if (optionIndex >= 0) {
             Alert alert = (Alert)getComponent();
@@ -293,7 +290,7 @@ public class AlertSkin extends DialogSkin
     }
 
     public void optionsRemoved(Alert alert, int index, int count) {
-        Sequence<Component> buttons = buttonFlowPane.getComponents().remove(index, count);
+        Sequence<Component> buttons = buttonFlowPane.remove(index, count);
 
         for (int i = 0, n = buttons.getLength(); i < n; i++) {
             Button button = (Button)buttons.get(i);
@@ -302,7 +299,7 @@ public class AlertSkin extends DialogSkin
     }
 
     public void optionUpdated(Alert alert, int index) {
-        Button button = (Button)buttonFlowPane.getComponents().get(index);
+        Button button = (Button)buttonFlowPane.get(index);
         styleOptionButton(button);
     }
 

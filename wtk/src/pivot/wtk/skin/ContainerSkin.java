@@ -47,22 +47,21 @@ public abstract class ContainerSkin extends ComponentSkin
             }
 
             Component nextComponent = null;
-            Container.ComponentSequence components = container.getComponents();
 
             switch (direction) {
                 case FORWARD: {
                     if (component == null) {
                         // Return the first component in the sequence
-                        if (components.getLength() > 0) {
-                            nextComponent = components.get(0);
+                        if (container.getLength() > 0) {
+                            nextComponent = container.get(0);
                         }
                     } else {
                         // Return the next component in the sequence
-                        int index = components.indexOf(component);
+                        int index = container.indexOf(component);
 
                         if (index >= 0
-                            && index < components.getLength() - 1) {
-                            nextComponent = components.get(index + 1);
+                            && index < container.getLength() - 1) {
+                            nextComponent = container.get(index + 1);
                         }
                     }
 
@@ -72,17 +71,17 @@ public abstract class ContainerSkin extends ComponentSkin
                 case BACKWARD: {
                     if (component == null) {
                         // Return the last component in the sequence
-                        int n = components.getLength();
+                        int n = container.getLength();
                         if (n > 0) {
-                            nextComponent = components.get(n - 1);
+                            nextComponent = container.get(n - 1);
                         }
                     } else {
                         // Return the previous component in the sequence
-                        int index = components.indexOf(component);
+                        int index = container.indexOf(component);
 
                         if (index > 0
-                            && index < components.getLength()) {
-                            nextComponent = components.get(index - 1);
+                            && index < container.getLength()) {
+                            nextComponent = container.get(index - 1);
                         }
                     }
 

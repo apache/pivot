@@ -43,7 +43,7 @@ public class DisplaySkin extends ContainerSkin {
         Display display = (Display)getComponent();
 
         // Set all components to their preferred sizes
-        for (Component component : display.getComponents()) {
+        for (Component component : display) {
             Window window = (Window)component;
 
             if (window.isDisplayable()) {

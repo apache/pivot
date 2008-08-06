@@ -46,8 +46,8 @@ public class TableViewHeaderDataRenderer extends FlowPane
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         getStyles().put("padding", new Insets(1, 2, 1, 2));
 
-        getComponents().add(imageView);
-        getComponents().add(label);
+        add(imageView);
+        add(label);
     }
 
     @Override

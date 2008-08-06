@@ -341,7 +341,7 @@ public class Form extends Container {
         }
 
         // Add the field to the component sequence
-        getComponents().add(field);
+        add(field);
         fields.insert(field, index);
 
         // Attach the attributes
@@ -374,27 +374,25 @@ public class Form extends Container {
         formListeners.fieldsRemoved(this, index, removed);
 
         // Remove the fields from the component list
-        Sequence<Component> components = getComponents();
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             Component field = removed.get(i);
-            components.remove(field);
+            remove(field);
         }
 
         return removed;
     }
 
     @Override
-    protected Sequence<Component> removeComponents(int index, int count) {
-        ComponentSequence components = getComponents();
+    public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
-            Component component = components.get(i);
+            Component component = get(i);
             if (component.getAttributes() != null) {
                 throw new UnsupportedOperationException();
             }
         }
 
         // Call the base method to remove the components
-        return super.removeComponents(index, count);
+        return super.remove(index, count);
     }
 
     /**

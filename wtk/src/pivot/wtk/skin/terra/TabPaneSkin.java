@@ -485,7 +485,7 @@ public class TabPaneSkin extends ContainerSkin
         tabPane.getTabPaneAttributeListeners().add(this);
 
         // Add the button flow pane
-        tabPane.getComponents().add(buttonFlowPane);
+        tabPane.add(buttonFlowPane);
 
         // Apply the current tab orientation
         tabOrientationChanged(tabPane);
@@ -496,7 +496,7 @@ public class TabPaneSkin extends ContainerSkin
                 new ButtonData(TabPane.getIcon(tab), TabPane.getLabel(tab)));
             tabButton.setGroup(tabButtonGroup);
 
-            buttonFlowPane.getComponents().add(tabButton);
+            buttonFlowPane.add(tabButton);
         }
     }
 
@@ -509,10 +509,10 @@ public class TabPaneSkin extends ContainerSkin
         tabPane.getTabPaneAttributeListeners().remove(this);
 
         // Remove existing buttons
-        buttonFlowPane.getComponents().removeAll();
+        buttonFlowPane.removeAll();
 
         // Remove the button flow pane
-        tabPane.getComponents().remove(buttonFlowPane);
+        tabPane.remove(buttonFlowPane);
 
         super.uninstall();
     }
@@ -743,7 +743,7 @@ public class TabPaneSkin extends ContainerSkin
 
         this.activeTabColor = activeTabColor;
 
-        for (Component button : buttonFlowPane.getComponents()) {
+        for (Component button : buttonFlowPane) {
             button.getStyles().put("selectedBackgroundColor", activeTabColor);
         }
 
@@ -769,7 +769,7 @@ public class TabPaneSkin extends ContainerSkin
 
         this.inactiveTabColor = inactiveTabColor;
 
-        for (Component button : buttonFlowPane.getComponents()) {
+        for (Component button : buttonFlowPane) {
             button.getStyles().put("backgroundColor", inactiveTabColor);
         }
 
@@ -849,7 +849,7 @@ public class TabPaneSkin extends ContainerSkin
 
         this.buttonFont = buttonFont;
 
-        for (Component button : buttonFlowPane.getComponents()) {
+        for (Component button : buttonFlowPane) {
             button.getStyles().put("font", buttonFont);
         }
 
@@ -875,7 +875,7 @@ public class TabPaneSkin extends ContainerSkin
 
         this.buttonColor = buttonColor;
 
-        for (Component button : buttonFlowPane.getComponents()) {
+        for (Component button : buttonFlowPane) {
             button.getStyles().put("color", buttonColor);
         }
 
@@ -901,7 +901,7 @@ public class TabPaneSkin extends ContainerSkin
 
         this.buttonBevelColor = buttonBevelColor;
 
-        for (Component button : buttonFlowPane.getComponents()) {
+        for (Component button : buttonFlowPane) {
             button.getStyles().put("bevelColor", buttonBevelColor);
         }
 
@@ -927,7 +927,7 @@ public class TabPaneSkin extends ContainerSkin
 
         this.pressedButtonBevelColor = pressedButtonBevelColor;
 
-        for (Component button : buttonFlowPane.getComponents()) {
+        for (Component button : buttonFlowPane) {
             button.getStyles().put("pressedBevelColor", pressedButtonBevelColor);
         }
 
@@ -953,7 +953,7 @@ public class TabPaneSkin extends ContainerSkin
 
         this.buttonPadding = buttonPadding;
 
-        for (Component button : buttonFlowPane.getComponents()) {
+        for (Component button : buttonFlowPane) {
             button.getStyles().put("padding", buttonPadding);
         }
 
@@ -994,7 +994,7 @@ public class TabPaneSkin extends ContainerSkin
 
         if (tabIndex != -1) {
             TabPaneSkin.TabButton tabButton =
-                (TabPaneSkin.TabButton)buttonFlowPane.getComponents().get(tabIndex);
+                (TabPaneSkin.TabButton)buttonFlowPane.get(tabIndex);
 
             tabButton.setButtonData(new ButtonData(TabPane.getIcon(tab),
                 TabPane.getLabel(tab)));
@@ -1034,12 +1034,12 @@ public class TabPaneSkin extends ContainerSkin
             new ButtonData(TabPane.getIcon(tab), TabPane.getLabel(tab)));
         tabButton.setGroup(tabButtonGroup);
 
-        buttonFlowPane.getComponents().insert(tabButton, index);
+        buttonFlowPane.insert(tabButton, index);
     }
 
     public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
         // Remove the buttons
-        Sequence<Component> removed = buttonFlowPane.getComponents().remove(index, tabs.getLength());
+        Sequence<Component> removed = buttonFlowPane.remove(index, tabs.getLength());
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             TabButton tabButton = (TabButton)removed.get(i);
@@ -1057,7 +1057,7 @@ public class TabPaneSkin extends ContainerSkin
                 button.setSelected(false);
             }
         } else {
-            Button button = (Button)buttonFlowPane.getComponents().get(selectedIndex);
+            Button button = (Button)buttonFlowPane.get(selectedIndex);
             button.setSelected(true);
         }
 
@@ -1076,7 +1076,7 @@ public class TabPaneSkin extends ContainerSkin
     // Button group events
     public void selectionChanged(Group group, Button previousSelection) {
         Button button = tabButtonGroup.getSelection();
-        int index = (button == null) ? -1 : buttonFlowPane.getComponents().indexOf(button);
+        int index = (button == null) ? -1 : buttonFlowPane.indexOf(button);
 
         TabPane tabPane = (TabPane)getComponent();
         tabPane.setSelectedIndex(index);

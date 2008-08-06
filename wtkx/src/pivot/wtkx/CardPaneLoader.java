@@ -47,7 +47,7 @@ class CardPaneLoader extends ContainerLoader {
 
                 if (childNode.getNodeType() == Node.ELEMENT_NODE) {
                     Component component = componentLoader.load((Element)childNode, rootLoader);
-                    cardPane.getComponents().add(component);
+                    cardPane.add(component);
                 }
             }
         }
@@ -56,7 +56,7 @@ class CardPaneLoader extends ContainerLoader {
         if (element.hasAttribute(SELETED_INDEX_ATTRIBUTE)) {
             selectedIndex = Integer.parseInt(element.getAttribute(SELETED_INDEX_ATTRIBUTE));
         } else {
-            selectedIndex = cardPane.getComponents().getLength() - 1;
+            selectedIndex = cardPane.getLength() - 1;
         }
 
         cardPane.setSelectedIndex(selectedIndex);

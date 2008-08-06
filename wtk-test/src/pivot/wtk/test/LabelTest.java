@@ -57,13 +57,13 @@ public class LabelTest implements Application {
         Label label1 = new Label(line1);
         label1.getStyles().put("wrapText", true);
         label1.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-        flowPane.getComponents().add(label1);
+        flowPane.add(label1);
 
         Label label2 = new Label(line2);
         label2.getStyles().put("wrapText", true);
         label2.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         label2.getStyles().put("textDecoration", TextDecoration.UNDERLINE);
-        flowPane.getComponents().add(label2);
+        flowPane.add(label2);
 
         flowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
         flowPane.getStyles().put("padding", new Insets(10));

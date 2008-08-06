@@ -48,7 +48,7 @@ public class CardPane extends Container {
 
     public void setSelectedIndex(int selectedIndex) {
         if (selectedIndex < -1
-            || selectedIndex > getComponents().getLength() - 1) {
+            || selectedIndex > getLength() - 1) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -61,8 +61,8 @@ public class CardPane extends Container {
     }
 
     @Override
-    protected void insertComponent(Component component, int index) {
-        super.insertComponent(component, index);
+    public void insert(Component component, int index) {
+        super.insert(component, index);
 
         // If the selected component's index changed as a result of
         // this insertion, update it
@@ -72,8 +72,8 @@ public class CardPane extends Container {
     }
 
     @Override
-    protected Sequence<Component> removeComponents(int index, int count) {
-        Sequence<Component> removed = super.removeComponents(index, count);
+    public Sequence<Component> remove(int index, int count) {
+        Sequence<Component> removed = super.remove(index, count);
 
         // If the selected component was removed, clear the selection
         if (selectedIndex >= index

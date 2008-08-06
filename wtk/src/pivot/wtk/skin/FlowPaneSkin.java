@@ -17,7 +17,6 @@ package pivot.wtk.skin;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Component;
-import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
 import pivot.wtk.FlowPaneListener;
@@ -55,8 +54,7 @@ public class FlowPaneSkin extends ContainerSkin
         }
 
         FlowPane flowPane = (FlowPane)getComponent();
-        Container.ComponentSequence components = flowPane.getComponents();
-        int n = components.getLength();
+        int n = flowPane.getLength();
 
         Orientation orientation = flowPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
@@ -65,7 +63,7 @@ public class FlowPaneSkin extends ContainerSkin
             int displayableComponentCount = 0;
 
             for (int i = 0; i < n; i++) {
-                Component component = components.get(i);
+                Component component = flowPane.get(i);
 
                 if (component.isDisplayable()) {
                     preferredWidth += component.getPreferredWidth(height);
@@ -88,7 +86,7 @@ public class FlowPaneSkin extends ContainerSkin
                 && height != -1) {
                 int displayableComponentCount = 0;
                 for (int i = 0; i < n; i++) {
-                    Component component = components.get(i);
+                    Component component = flowPane.get(i);
 
                     if (component.isDisplayable()) {
                         totalPreferredHeight += component.getPreferredHeight(-1);
@@ -102,7 +100,7 @@ public class FlowPaneSkin extends ContainerSkin
             }
 
             for (int i = 0; i < n; i++) {
-                Component component = components.get(i);
+                Component component = flowPane.get(i);
 
                 if (component.isDisplayable()) {
                     int componentHeight = -1;
@@ -146,8 +144,7 @@ public class FlowPaneSkin extends ContainerSkin
         }
 
         FlowPane flowPane = (FlowPane)getComponent();
-        Container.ComponentSequence components = flowPane.getComponents();
-        int n = components.getLength();
+        int n = flowPane.getLength();
 
         Orientation orientation = flowPane.getOrientation();
         if (orientation == Orientation.VERTICAL) {
@@ -156,7 +153,7 @@ public class FlowPaneSkin extends ContainerSkin
             int displayableComponentCount = 0;
 
             for (int i = 0; i < n; i++) {
-                Component component = components.get(i);
+                Component component = flowPane.get(i);
 
                 if (component.isDisplayable()) {
                     preferredHeight += component.getPreferredHeight(width);
@@ -181,7 +178,7 @@ public class FlowPaneSkin extends ContainerSkin
                 int displayableComponentCount = 0;
 
                 for (int i = 0; i < n; i++) {
-                    Component component = components.get(i);
+                    Component component = flowPane.get(i);
 
                     if (component.isDisplayable()) {
                         totalPreferredWidth += component.getPreferredWidth(-1);
@@ -195,7 +192,7 @@ public class FlowPaneSkin extends ContainerSkin
             }
 
             for (int i = 0; i < n; i++) {
-                Component component = components.get(i);
+                Component component = flowPane.get(i);
 
                 if (component.isDisplayable()) {
                     int componentWidth = -1;
@@ -235,8 +232,7 @@ public class FlowPaneSkin extends ContainerSkin
 
     public void layout() {
         FlowPane flowPane = (FlowPane)getComponent();
-        Container.ComponentSequence components = flowPane.getComponents();
-        int n = components.getLength();
+        int n = flowPane.getLength();
 
         int width = getWidth();
         int height = getHeight();
@@ -254,7 +250,7 @@ public class FlowPaneSkin extends ContainerSkin
                 int displayableComponentCount = 0;
 
                 for (int i = 0; i < n; i++) {
-                    Component component = components.get(i);
+                    Component component = flowPane.get(i);
 
                     if (component.isDisplayable()) {
                         displayableComponentCount++;
@@ -285,7 +281,7 @@ public class FlowPaneSkin extends ContainerSkin
 
             // Lay out the components
             for (int i = 0; i < n; i++) {
-                Component component = components.get(i);
+                Component component = flowPane.get(i);
 
                 if (component.isDisplayable()) {
                     int componentWidth = 0;
@@ -369,7 +365,7 @@ public class FlowPaneSkin extends ContainerSkin
                 int displayableComponentCount = 0;
 
                 for (int i = 0; i < n; i++) {
-                    Component component = components.get(i);
+                    Component component = flowPane.get(i);
 
                     if (component.isDisplayable()) {
                         displayableComponentCount++;
@@ -400,7 +396,7 @@ public class FlowPaneSkin extends ContainerSkin
 
             // Lay out the components
             for (int i = 0; i < n; i++) {
-                Component component = components.get(i);
+                Component component = flowPane.get(i);
 
                 if (component.isDisplayable()) {
                     int componentWidth = 0;

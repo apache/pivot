@@ -107,15 +107,13 @@ public abstract class Viewport extends Container {
        Component previousView = this.view;
 
         if (view != previousView) {
-            Container.ComponentSequence components = getComponents();
-
             if (view != null) {
                 if (view.getParent() != null) {
                     throw new IllegalArgumentException("Component already has a parent.");
                 }
 
                 // Add the component
-                components.insert(view, 0);
+                insert(view, 0);
             }
 
             // Set the component as the new view component (note that we
@@ -125,7 +123,7 @@ public abstract class Viewport extends Container {
 
             // Remove any previous view component
             if (previousView != null) {
-                components.remove(previousView);
+                remove(previousView);
             }
 
             viewportListeners.viewChanged(this, previousView);
@@ -138,17 +136,16 @@ public abstract class Viewport extends Container {
     }
 
     @Override
-    protected Sequence<Component> removeComponents(int index, int count) {
-        ComponentSequence components = getComponents();
+    public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
-            Component component = components.get(i);
+            Component component = get(i);
             if (component == view) {
                 throw new UnsupportedOperationException();
             }
         }
 
         // Call the base method to remove the components
-        return super.removeComponents(index, count);
+        return super.remove(index, count);
     }
 
     public ListenerList<ViewportListener> getViewportListeners() {

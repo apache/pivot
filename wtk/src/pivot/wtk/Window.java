@@ -365,7 +365,7 @@ public class Window extends TitlePane {
 
         // Add this as child of Display
         Display display = pivot.wtk.Display.getInstance();
-        display.getComponents().add(this);
+        display.add(this);
 
         // Show the window
         setDisplayable(true);
@@ -424,7 +424,7 @@ public class Window extends TitlePane {
             setDisplayable(false);
 
             // Detach from Display
-            Display.getInstance().getComponents().remove(this);
+            Display.getInstance().remove(this);
 
             // Notify listeners
             windowStateListeners.windowClosed(this);
@@ -634,7 +634,7 @@ public class Window extends TitlePane {
         }
 
         // If this window is not currently top-most, move it to the top
-        Sequence<Component> windows = Display.getInstance().getComponents();
+        Display display = Display.getInstance();
 
         Window window = this;
         ArrayStack<Integer> ownedWindowIndexes = new ArrayStack<Integer>();
@@ -646,11 +646,11 @@ public class Window extends TitlePane {
 
             if (j == 0) {
                 // Move the window within the window stack
-                int i = windows.indexOf(window);
+                int i = display.indexOf(window);
 
-                if (i < windows.getLength() - 1) {
-                    windows.remove(i, 1);
-                    windows.add(window);
+                if (i < display.getLength() - 1) {
+                    display.remove(i, 1);
+                    display.add(window);
                 }
             }
 
@@ -707,7 +707,7 @@ public class Window extends TitlePane {
             setFocusedComponent(null);
         }
 
-        Sequence<Component> windows = Display.getInstance().getComponents();
+        Display display = Display.getInstance();
 
         // Ensure that the window and all of its owning ancestors are moved
         // to the back
@@ -715,11 +715,11 @@ public class Window extends TitlePane {
         while (window != null) {
             // If this window is not currently bottom-most, move it to the
             // bottom
-            int i = windows.indexOf(window);
+            int i = display.indexOf(window);
 
             if (i > 0) {
-                windows.remove(i, 1);
-                windows.insert(window, 0);
+                display.remove(i, 1);
+                display.insert(window, 0);
             }
 
             window = window.getOwner();

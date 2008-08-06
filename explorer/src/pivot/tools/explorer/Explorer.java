@@ -47,7 +47,7 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
         propertiesTable = (TableView) componentLoader.getComponent("tbProperties");
         stylesTable     = (TableView) componentLoader.getComponent("tbStyles");
 
-        initComponentTree( Display.getInstance().getComponents() );
+        initComponentTree( Display.getInstance() );
         Component.setFocusedComponent(componentTree);
 
 	}

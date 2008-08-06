@@ -375,8 +375,6 @@ public class TablePane extends Container {
                     removed.get(i).setTablePane(null);
                 }
 
-                Container.ComponentSequence components = getComponents();
-
                 // Reduce capacity in our cell component array
                 Sequence<ArrayList<Component>> removedRowData = cellData.remove
                     (index, count);
@@ -390,7 +388,7 @@ public class TablePane extends Container {
                        Component removedComponent = removedComponents.get(j);
 
                        if (removedComponent != null) {
-                          components.remove(removedComponent);
+                          TablePane.this.remove(removedComponent);
                        }
                     }
                     internalRemoval = false;
@@ -472,8 +470,6 @@ public class TablePane extends Container {
                     removed.get(i).setTablePane(null);
                 }
 
-                Container.ComponentSequence components = getComponents();
-
                 // Reduce capacity in our cell component array
                 for (int i = 0, n = rows.getLength(); i < n; i++) {
                     Sequence<Component> removedComponents = cellData.get(i).remove
@@ -485,7 +481,7 @@ public class TablePane extends Container {
                        Component removedComponent = removedComponents.get(j);
 
                        if (removedComponent != null) {
-                          components.remove(removedComponent);
+                          TablePane.this.remove(removedComponent);
                        }
                     }
                     internalRemoval = false;
@@ -768,7 +764,6 @@ public class TablePane extends Container {
         Component previousComponent = getCellComponent(row, column);
 
         if (previousComponent != component) {
-            Container.ComponentSequence components = getComponents();
             ArrayList<Component> rowData = cellData.get(row);
 
             if (component != null) {
@@ -777,7 +772,7 @@ public class TablePane extends Container {
                 }
 
                 // Add the component
-                components.add(component);
+                add(component);
 
                 // Attach the attributes
                 component.setAttributes(new TablePaneAttributes());
@@ -791,7 +786,7 @@ public class TablePane extends Container {
             // Remove any previous component
             if (previousComponent != null) {
                 internalRemoval = true;
-                components.remove(previousComponent);
+                remove(previousComponent);
                 internalRemoval = false;
             }
 
@@ -799,8 +794,9 @@ public class TablePane extends Container {
         }
     }
 
-    protected void insertComponent(Component component, int index) {
-        super.insertComponent(component, index);
+    @Override
+    public void insert(Component component, int index) {
+        super.insert(component, index);
 
         component.setAttributes(new TablePaneAttributes());
     }
@@ -819,16 +815,15 @@ public class TablePane extends Container {
      * The sequence of components that were removed
      */
     @Override
-    protected Sequence<Component> removeComponents(int index, int count) {
+    public Sequence<Component> remove(int index, int count) {
         // Detach the attributes
-        ComponentSequence components = getComponents();
         for (int i = index, n = index + count; i < n; i++) {
-            Component component = components.get(i);
+            Component component = get(i);
             component.setAttributes(null);
         }
 
         // Call the base method to remove the components
-        Sequence<Component> removed = super.removeComponents(index, count);
+        Sequence<Component> removed = super.remove(index, count);
 
         // Ensure that the appropriate instance variable is cleared if the
         // component being removed maps to a cell component

@@ -30,7 +30,6 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.ComponentMouseButtonListener;
-import pivot.wtk.Container;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
@@ -306,8 +305,8 @@ public abstract class AbstractFrameSkin extends WindowSkin
 
         // The title bar flow pane contains two nested flow panes: one for
         // the title contents and the other for the buttons
-        titleBarFlowPane.getComponents().add(titleFlowPane);
-        titleBarFlowPane.getComponents().add(frameButtonFlowPane);
+        titleBarFlowPane.add(titleFlowPane);
+        titleBarFlowPane.add(frameButtonFlowPane);
 
         titleBarFlowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
         titleBarFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
@@ -316,8 +315,8 @@ public abstract class AbstractFrameSkin extends WindowSkin
         titleBarFlowPane.getStyles().put("padding", new Insets(2));
 
         // Initialize the title flow pane
-        titleFlowPane.getComponents().add(iconImageView);
-        titleFlowPane.getComponents().add(titleLabel);
+        titleFlowPane.add(iconImageView);
+        titleFlowPane.add(titleLabel);
         titleFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
         titleLabel.getStyles().put("font", TITLE_BAR_FONT);
@@ -335,25 +334,24 @@ public abstract class AbstractFrameSkin extends WindowSkin
         super.install(component);
 
         Window window = (Window)component;
-        Container.ComponentSequence windowComponents = window.getComponents();
 
-        windowComponents.add(titleBarFlowPane);
+        window.add(titleBarFlowPane);
 
         // Create the frame buttons
         minimizeButton = new FrameButton(minimizeImage);
         maximizeButton = new FrameButton(maximizeImage);
         closeButton = new FrameButton(closeImage);
 
-        frameButtonFlowPane.getComponents().add(minimizeButton);
-        frameButtonFlowPane.getComponents().add(maximizeButton);
-        frameButtonFlowPane.getComponents().add(closeButton);
+        frameButtonFlowPane.add(minimizeButton);
+        frameButtonFlowPane.add(maximizeButton);
+        frameButtonFlowPane.add(closeButton);
 
         minimizeButton.getButtonPressListeners().add(this);
         maximizeButton.getButtonPressListeners().add(this);
         closeButton.getButtonPressListeners().add(this);
 
         resizeHandle.setCursor(Cursor.RESIZE_SOUTH_EAST);
-        windowComponents.add(resizeHandle);
+        window.add(resizeHandle);
 
         iconChanged(window, null);
         titleChanged(window, null);
@@ -365,13 +363,12 @@ public abstract class AbstractFrameSkin extends WindowSkin
     @Override
     public void uninstall() {
         Window window = (Window)getComponent();
-        Container.ComponentSequence windowComponents = window.getComponents();
 
-        windowComponents.remove(titleBarFlowPane);
+        window.remove(titleBarFlowPane);
 
-        frameButtonFlowPane.getComponents().remove(minimizeButton);
-        frameButtonFlowPane.getComponents().remove(maximizeButton);
-        frameButtonFlowPane.getComponents().remove(closeButton);
+        frameButtonFlowPane.remove(minimizeButton);
+        frameButtonFlowPane.remove(maximizeButton);
+        frameButtonFlowPane.remove(closeButton);
 
         minimizeButton = null;
         maximizeButton = null;

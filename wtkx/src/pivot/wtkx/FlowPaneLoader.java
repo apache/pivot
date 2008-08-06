@@ -52,7 +52,7 @@ class FlowPaneLoader extends ContainerLoader {
 
                 if (childNode.getNodeType() == Node.ELEMENT_NODE) {
                     Component component = componentLoader.load((Element)childNode, rootLoader);
-                    flowPane.getComponents().add(component);
+                    flowPane.add(component);
                 }
             }
         }

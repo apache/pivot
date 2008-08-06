@@ -60,7 +60,7 @@ public class FormSkin extends ContainerSkin
         form.getFormAttributeListeners().add(this);
 
         // Initialize for existing fields
-        for (int i = 0, n = form.getComponents().getLength(); i < n; i++) {
+        for (int i = 0, n = form.getLength(); i < n; i++) {
             updateLabel(i);
             updateFlag(i);
         }
@@ -73,9 +73,9 @@ public class FormSkin extends ContainerSkin
         form.getFormAttributeListeners().remove(this);
 
         // Remove all added labels and flag image views
-        for (int i = 0, n = form.getComponents().getLength(); i < n; i++) {
-            form.getComponents().remove(labels.get(i));
-            form.getComponents().remove(flagImageViews.get(i));
+        for (int i = 0, n = form.getLength(); i < n; i++) {
+            form.remove(labels.get(i));
+            form.remove(flagImageViews.get(i));
         }
 
         super.uninstall();
@@ -346,13 +346,13 @@ public class FormSkin extends ContainerSkin
         // Create the label
         Label label = new Label();
         labels.insert(label, index);
-        form.getComponents().add(label);
+        form.add(label);
         updateLabel(index);
 
         // Create the image view
         ImageView flagImageView = new ImageView();
         flagImageViews.insert(flagImageView, index);
-        form.getComponents().add(flagImageView);
+        form.add(flagImageView);
         updateFlag(index);
 
         invalidateComponent();
@@ -363,12 +363,12 @@ public class FormSkin extends ContainerSkin
 
         Sequence<Label> removedLabels = labels.remove(index, count);
         for (int i = 0, n = removedLabels.getLength(); i < n; i++) {
-            form.getComponents().remove(removedLabels.get(i));
+            form.remove(removedLabels.get(i));
         }
 
         Sequence<ImageView> removedImageViews = flagImageViews.remove(index, count);
         for (int i = 0, n = removedImageViews.getLength(); i < n; i++) {
-            form.getComponents().remove(removedImageViews.get(i));
+            form.remove(removedImageViews.get(i));
         }
 
         invalidateComponent();

@@ -203,8 +203,6 @@ public class ScrollPane extends Viewport {
         Component previousRowHeader = this.rowHeader;
 
         if (rowHeader != previousRowHeader) {
-            Container.ComponentSequence components = getComponents();
-
             if (rowHeader != null) {
                 if (rowHeader.getParent() != null) {
                     throw new IllegalArgumentException("Component already has a parent.");
@@ -217,7 +215,7 @@ public class ScrollPane extends Viewport {
                 }
 
                 // Add the component
-                components.insert(rowHeader, insertionIndex);
+                insert(rowHeader, insertionIndex);
             }
 
             // Set the component as the new row header component (note that we
@@ -227,7 +225,7 @@ public class ScrollPane extends Viewport {
 
             // Remove any previous rowHeader component
             if (previousRowHeader != null) {
-                components.remove(previousRowHeader);
+                remove(previousRowHeader);
             }
 
             scrollPaneListeners.rowHeaderChanged(this, previousRowHeader);
@@ -242,8 +240,6 @@ public class ScrollPane extends Viewport {
         Component previousColumnHeader = this.columnHeader;
 
         if (columnHeader != previousColumnHeader) {
-            Container.ComponentSequence components = getComponents();
-
             if (columnHeader != null) {
                 if (columnHeader.getParent() != null) {
                     throw new IllegalArgumentException("Component already has a parent.");
@@ -256,7 +252,7 @@ public class ScrollPane extends Viewport {
                 }
 
                 // Add the component
-                components.insert(columnHeader, insertionIndex);
+                insert(columnHeader, insertionIndex);
             }
 
             // Set the component as the new column header component (note that
@@ -266,7 +262,7 @@ public class ScrollPane extends Viewport {
 
             // Remove any previous columnHeader component
             if (previousColumnHeader != null) {
-                components.remove(previousColumnHeader);
+                remove(previousColumnHeader);
             }
 
             scrollPaneListeners.columnHeaderChanged(this, previousColumnHeader);
@@ -281,8 +277,6 @@ public class ScrollPane extends Viewport {
         Component previousCorner = this.corner;
 
         if (corner != this.corner) {
-            Container.ComponentSequence components = getComponents();
-
             if (corner != null) {
                 if (corner.getParent() != null) {
                     throw new IllegalArgumentException("Component already has a parent.");
@@ -303,7 +297,7 @@ public class ScrollPane extends Viewport {
                 }
 
                 // Add the component
-                components.insert(corner, insertionIndex);
+                insert(corner, insertionIndex);
             }
 
             // Set the component as the new corner component (note that we
@@ -313,7 +307,7 @@ public class ScrollPane extends Viewport {
 
             // Remove any previous corner component
             if (previousCorner != null) {
-                components.remove(previousCorner);
+                remove(previousCorner);
             }
 
             scrollPaneListeners.cornerChanged(this, previousCorner);
@@ -321,10 +315,9 @@ public class ScrollPane extends Viewport {
     }
 
     @Override
-    protected Sequence<Component> removeComponents(int index, int count) {
-        ComponentSequence components = getComponents();
+    public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
-            Component component = components.get(i);
+            Component component = get(i);
             if (component == rowHeader
                 || component == columnHeader
                 || component == corner) {
@@ -333,7 +326,7 @@ public class ScrollPane extends Viewport {
         }
 
         // Call the base method to remove the components
-        return super.removeComponents(index, count);
+        return super.remove(index, count);
     }
 
     public ListenerList<ScrollPaneListener> getScrollPaneListeners() {

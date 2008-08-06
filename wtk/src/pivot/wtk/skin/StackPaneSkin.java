@@ -30,7 +30,7 @@ public class StackPaneSkin extends ContainerSkin {
         int preferredWidth = 0;
         StackPane stackPane = (StackPane)getComponent();
 
-        for (Component component : stackPane.getComponents()) {
+        for (Component component : stackPane) {
             preferredWidth = Math.max(preferredWidth,
                 component.getPreferredWidth(height));
         }
@@ -42,7 +42,7 @@ public class StackPaneSkin extends ContainerSkin {
         int preferredHeight = 0;
         StackPane stackPane = (StackPane)getComponent();
 
-        for (Component component : stackPane.getComponents()) {
+        for (Component component : stackPane) {
             preferredHeight = Math.max(preferredHeight,
                 component.getPreferredHeight(width));
         }
@@ -56,7 +56,7 @@ public class StackPaneSkin extends ContainerSkin {
 
         StackPane stackPane = (StackPane)getComponent();
 
-        for (Component component : stackPane.getComponents()) {
+        for (Component component : stackPane) {
             Dimensions preferredCardSize = component.getPreferredSize();
 
             preferredWidth = Math.max(preferredWidth,
@@ -75,7 +75,7 @@ public class StackPaneSkin extends ContainerSkin {
 
         int width = getWidth();
         int height = getHeight();
-        for (Component component : stackPane.getComponents()) {
+        for (Component component : stackPane) {
             component.setSize(width, height);
         }
     }

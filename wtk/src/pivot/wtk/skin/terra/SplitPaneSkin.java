@@ -131,7 +131,7 @@ public class SplitPaneSkin extends ContainerSkin
 
                     splitPane.setSplitLocation(splitLocation);
 
-                    splitPane.getComponents().remove(shadow);
+                    splitPane.remove(shadow);
                     shadow = null;
                 }
 
@@ -254,7 +254,7 @@ public class SplitPaneSkin extends ContainerSkin
                 boolean useShadow = (Boolean)splitPane.getStyles().get("useShadow");
                 if (useShadow) {
                     shadow = new SplitterShadow();
-                    splitPane.getComponents().add(shadow);
+                    splitPane.add(shadow);
 
                     if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
                         shadow.setLocation(splitter.getX(), 0);
@@ -363,7 +363,7 @@ public class SplitPaneSkin extends ContainerSkin
         splitPane.getSplitPaneListeners().add(this);
 
         splitter = new Splitter(splitPane);
-        splitPane.getComponents().add(splitter);
+        splitPane.add(splitter);
         splitter.updateCursor();
     }
 
@@ -372,7 +372,7 @@ public class SplitPaneSkin extends ContainerSkin
         SplitPane splitPane = (SplitPane)getComponent();
         splitPane.getSplitPaneListeners().remove(this);
 
-        splitPane.getComponents().remove(splitter);
+        splitPane.remove(splitter);
         splitter = null;
 
         super.uninstall();

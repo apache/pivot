@@ -55,8 +55,8 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
         getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
-        getComponents().add(imageView);
-        getComponents().add(label);
+        add(imageView);
+        add(label);
 
         imageView.setPreferredSize(DEFAULT_ICON_WIDTH, DEFAULT_ICON_HEIGHT);
         imageView.setDisplayable(DEFAULT_SHOW_ICON);

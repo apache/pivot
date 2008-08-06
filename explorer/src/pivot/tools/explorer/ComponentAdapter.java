@@ -35,7 +35,7 @@ public class ComponentAdapter
 
 
 		if ( buildHierarchy && component instanceof Container ) {
-			for ( Component c: ((Container)component).getComponents()) {
+			for ( Component c: ((Container)component) ) {
 				add( new ComponentAdapter( c, true ));
 			}
 		}

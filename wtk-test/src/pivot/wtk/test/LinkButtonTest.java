@@ -36,13 +36,13 @@ public class LinkButtonTest implements Application {
         LinkButton linkButton = null;
 
         linkButton = new LinkButton("ABCDE");
-        flowPane.getComponents().add(linkButton);
+        flowPane.add(linkButton);
 
         linkButton = new LinkButton(image);
-        flowPane.getComponents().add(linkButton);
+        flowPane.add(linkButton);
 
         linkButton = new LinkButton(new ButtonData(image, "12345"));
-        flowPane.getComponents().add(linkButton);
+        flowPane.add(linkButton);
 
         window.setContent(flowPane);
         window.open();

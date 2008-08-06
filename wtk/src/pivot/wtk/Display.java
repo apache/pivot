@@ -53,13 +53,13 @@ public final class Display extends Container {
     }
 
     @Override
-    protected void insertComponent(Component component, int index) {
+    public void insert(Component component, int index) {
         if (!(component instanceof Window)) {
             throw new IllegalArgumentException("component must be an instance "
                 + "of " + Window.class);
         }
 
-        super.insertComponent(component, index);
+        super.insert(component, index);
     }
 
     public static Display getInstance() {

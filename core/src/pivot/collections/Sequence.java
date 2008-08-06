@@ -40,16 +40,15 @@ public interface Sequence<T> {
          * The item to be added to the sequence.
          *
          * @param path
-         * The path of the sequence to which the item should be added. All
-         * ancestor sequences must exist.
+         * The path of the sequence to which the item should be added.
          *
          * @return
          * The index at which the item was inserted, relative to the parent
          * sequence.
          */
+        @SuppressWarnings("unchecked")
         public static <T> int add(Sequence<T> sequence, T item, Sequence<Integer> path) {
-            // TODO
-            return 0;
+            return ((Sequence<T>)get(sequence, path)).add(item);
         }
 
         /**
@@ -59,105 +58,19 @@ public interface Sequence<T> {
          * The root sequence.
          *
          * @param item
-         * The item to be added to the sequence.
+         * The item to be inserted into the sequence.
          *
          * @param path
-         * The path of the sequence into which the item should be inserted. All
-         * ancestor sequences must exist.
+         * The path of the sequence into which the item should be inserted.
          *
          * @param index
-         * The index at which the item should be inserted within its parent
+         * The index at which the item should be inserted within the parent
          * sequence.
          */
-        public static <T> void insert(Sequence<T> sequence, T item, Sequence<Integer> path, int index) {
-            // TODO
-        }
-
-        /**
-         * Removes the first occurrence of an item from a nested sequence.
-         *
-         * @param sequence
-         * The root sequence.
-         *
-         * @param item
-         * The item to remove.
-         *
-         * @return
-         * The path of the item that was removed.
-         */
-        public static <T> Sequence<Integer> remove(Sequence<T> sequence, T item) {
-            Sequence<Integer> path = pathOf(sequence, item);
-            if (path == null) {
-                throw new IllegalArgumentException("item is not a child element "
-                    + " of this sequence.");
-            }
-
-            remove(sequence, path, 1);
-
-            return path;
-        }
-
-        /**
-         * Removes an item from a nested sequence.
-         *
-         * @param sequence
-         * The root sequence.
-         *
-         * @param path
-         * The path of the item to be removed.
-         *
-         * @param count
-         * The number of items to remove, beginning with the index specified by
-         * the last value in the path array.
-         *
-         * @return
-         * An array containing the items that were removed, or <tt>null</tt> if
-         * <tt>count</tt> is 0.
-         */
-        public static <T> Sequence<T> remove(Sequence<T> sequence, Sequence<Integer> path, int count) {
-            // TODO
-            return null;
-        }
-
-        /**
-         * Retrieves an item from a nested sequence.
-         *
-         * @param sequence
-         * The root sequence.
-         *
-         * @param path
-         * The path of the item to retrieve.
-         *
-         * @return
-         * The item at the given path, or <tt>null</tt> if the path is empty.
-         */
         @SuppressWarnings("unchecked")
-        public static <T> T get(Sequence<T> sequence, Sequence<Integer> path) {
-            if (path == null) {
-                throw new IllegalArgumentException("path is null.");
-            }
-
-            T item = null;
-
-            int n = path.getLength();
-            int i = 0;
-            while (i < n - 1) {
-                item = sequence.get(path.get(i));
-
-                if (!(item instanceof Sequence<?>)) {
-                    throw new IllegalArgumentException("Invalid path.");
-                }
-
-                sequence = (Sequence<T>)item;
-
-                i++;
-            }
-
-            if (i >= 0) {
-                item = sequence.get(path.get(i));
-            }
-
-            return item;
+        public static <T> void insert(Sequence<T> sequence, T item, Sequence<Integer> path,
+            int index) {
+            ((Sequence<T>)get(sequence, path)).insert(item, index);
         }
 
         /**
@@ -175,13 +88,106 @@ public interface Sequence<T> {
          * @return
          * The item that was previously stored at the given path.
          */
-        public static <T> T set(Sequence<T> sequence, Sequence<Integer> path, T item) {
-            // TODO
-            return null;
+        @SuppressWarnings("unchecked")
+        public static <T> T update(Sequence<T> sequence, Sequence<Integer> path, T item) {
+            if (sequence == null) {
+                throw new IllegalArgumentException("sequence is null.");
+            }
+
+            if (path == null) {
+                throw new IllegalArgumentException("path is null.");
+            }
+
+            int i = 0, n = path.getLength() - 1;
+            while (i < n) {
+                sequence = (Sequence<T>)sequence.get(path.get(i++));
+            }
+
+            return sequence.update(path.get(i), item);
         }
 
         /**
-         * Returns the index of an item in a nested sequence.
+         * Removes the first occurrence of an item from a nested sequence.
+         *
+         * @param sequence
+         * The root sequence.
+         *
+         * @param item
+         * The item to remove.
+         *
+         * @return
+         * The path of the item that was removed.
+         */
+        public static <T> Sequence<Integer> remove(Sequence<T> sequence, T item) {
+            Sequence<Integer> path = pathOf(sequence, item);
+            if (path == null) {
+                throw new IllegalArgumentException("item is not a descendant of sequence.");
+            }
+
+            remove(sequence, path);
+
+            return path;
+        }
+
+        /**
+         * Removes an item from a nested sequence.
+         *
+         * @param sequence
+         * The root sequence.
+         *
+         * @param path
+         * The path of the item to remove.
+         */
+        @SuppressWarnings("unchecked")
+        public static <T> void remove(Sequence<T> sequence, Sequence<Integer> path) {
+            if (sequence == null) {
+                throw new IllegalArgumentException("sequence is null.");
+            }
+
+            if (path == null) {
+                throw new IllegalArgumentException("path is null.");
+            }
+
+            int i = 0, n = path.getLength() - 1;
+            while (i < n) {
+                sequence = (Sequence<T>)sequence.get(path.get(i++));
+            }
+
+            sequence.remove(path.get(i), 1);
+        }
+
+        /**
+         * Retrieves an item from a nested sequence.
+         *
+         * @param sequence
+         * The root sequence.
+         *
+         * @param path
+         * The path of the item to retrieve.
+         *
+         * @return
+         * The item at the given path, or <tt>null</tt> if the path is empty.
+         */
+        @SuppressWarnings("unchecked")
+        public static <T> T get(Sequence<T> sequence, Sequence<Integer> path) {
+            if (sequence == null) {
+                throw new IllegalArgumentException("sequence is null.");
+            }
+
+            if (path == null) {
+                throw new IllegalArgumentException("path is null.");
+            }
+
+            int i = 0, n = path.getLength() - 1;
+            while (i < n) {
+                sequence = (Sequence<T>)sequence.get(path.get(i++));
+            }
+
+            return sequence.get(i);
+        }
+
+        /**
+         * Returns the path to an item in a nested sequence.
          *
          * @param sequence
          * The root sequence.
@@ -191,11 +197,38 @@ public interface Sequence<T> {
          *
          * @return
          * The path of first occurrence of the item if it exists in the
-         * sequence; <tt>-1</tt>, otherwise.
+         * sequence; <tt>null</tt>, otherwise.
          */
+        @SuppressWarnings("unchecked")
         public static <T> Sequence<Integer> pathOf(Sequence<T> sequence, T item) {
-            // TODO
-            return null;
+            if (sequence == null) {
+                throw new IllegalArgumentException("sequence is null.");
+            }
+
+            if (item == null) {
+                throw new IllegalArgumentException("item is null.");
+            }
+
+            Sequence<Integer> path = null;
+
+            for (int i = 0, n = sequence.getLength(); i < n && path == null; i++) {
+                T t = sequence.get(i);
+
+                if (t.equals(item)) {
+                    path = new ArrayList<Integer>();
+                    path.add(i);
+                } else {
+                    if (t instanceof Sequence) {
+                        path = pathOf((Sequence<T>)t, item);
+
+                        if (path != null) {
+                            path.insert(0, i);
+                        }
+                    }
+                }
+            }
+
+            return path;
         }
 
         /**
@@ -215,6 +248,14 @@ public interface Sequence<T> {
          */
         @SuppressWarnings("unchecked")
         public static <T> int rankOf(Sequence<T> sequence, T item) {
+            if (sequence == null) {
+                throw new IllegalArgumentException("sequence is null.");
+            }
+
+            if (item == null) {
+                throw new IllegalArgumentException("item is null.");
+            }
+
             int rank = -1;
 
             for (int i = 0, n = sequence.getLength(); i < n && rank < 0; i++) {
@@ -222,11 +263,11 @@ public interface Sequence<T> {
 
                 T t = sequence.get(i);
 
-                if (t == item) {
+                if (t.equals(item)) {
                     // The item was found in this sequence
                     rank = -(rank + 1);
                 } else {
-                    if (t instanceof Sequence<?>) {
+                    if (t instanceof Sequence) {
                         int r = rankOf((Sequence<T>)t, item);
 
                         if (r < 0) {

@@ -167,12 +167,12 @@ public class ExpanderSkin extends TitlePaneSkin
         buttonFlowPane = new FlowPane(Orientation.HORIZONTAL);
         buttonFlowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
 
-        titleBarFlowPane.getComponents().add(titleFlowPane);
-        titleBarFlowPane.getComponents().add(buttonFlowPane);
+        titleBarFlowPane.add(titleFlowPane);
+        titleBarFlowPane.add(buttonFlowPane);
 
         // TODO Apply default styles to components
 
-        titleFlowPane.getComponents().add(titleLabel);
+        titleFlowPane.add(titleLabel);
     }
 
     @Override
@@ -183,11 +183,11 @@ public class ExpanderSkin extends TitlePaneSkin
 
         Expander expander = (Expander)component;
         expander.getExpanderListeners().add(this);
-        expander.getComponents().add(titleBarFlowPane);
+        expander.add(titleBarFlowPane);
 
         Image buttonData = expander.isExpanded() ? collapseImage : expandImage;
         shadeButton = new ShadeButton(expander, buttonData);
-        buttonFlowPane.getComponents().add(shadeButton);
+        buttonFlowPane.add(shadeButton);
 
         shadeButton.getButtonPressListeners().add(this);
 
@@ -197,10 +197,10 @@ public class ExpanderSkin extends TitlePaneSkin
     public void uninstall() {
         Expander expander = (Expander)getComponent();
         expander.getExpanderListeners().remove(this);
-        expander.getComponents().remove(titleBarFlowPane);
+        expander.remove(titleBarFlowPane);
 
         shadeButton.getButtonPressListeners().remove(this);
-        buttonFlowPane.getComponents().remove(shadeButton);
+        buttonFlowPane.remove(shadeButton);
         shadeButton = null;
 
         super.uninstall();

@@ -29,7 +29,7 @@ public class TableViewBooleanCellRenderer extends FlowPane
     public TableViewBooleanCellRenderer() {
         super();
 
-        getComponents().add(checkbox);
+        add(checkbox);
 
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);

@@ -52,7 +52,7 @@ class RollupLoader extends ContainerLoader {
 
                 if (childNode.getNodeType() == Node.ELEMENT_NODE) {
                     Component component = componentLoader.load((Element)childNode, rootLoader);
-                    rollup.getComponents().add(component);
+                    rollup.add(component);
                 }
             }
         }

@@ -577,13 +577,13 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         spinner.getSpinnerSelectionListeners().add(this);
 
         spinnerContent = new SpinnerContent(spinner);
-        spinner.getComponents().add(spinnerContent);
+        spinner.add(spinnerContent);
 
         upButton = new SpinButton(spinner, 1, new SpinUpImage());
-        spinner.getComponents().add(upButton);
+        spinner.add(upButton);
 
         downButton = new SpinButton(spinner, -1, new SpinDownImage());
-        spinner.getComponents().add(downButton);
+        spinner.add(downButton);
     }
 
     @Override
@@ -592,9 +592,9 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         spinner.getSpinnerListeners().remove(this);
         spinner.getSpinnerSelectionListeners().remove(this);
 
-        spinner.getComponents().remove(spinnerContent);
-        spinner.getComponents().remove(upButton);
-        spinner.getComponents().remove(downButton);
+        spinner.remove(spinnerContent);
+        spinner.remove(upButton);
+        spinner.remove(downButton);
 
         spinnerContent = null;
         upButton = null;
