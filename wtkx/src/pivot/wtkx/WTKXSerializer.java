@@ -19,6 +19,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -37,6 +38,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.collections.List;
 import pivot.collections.ListListener;
+import pivot.collections.Map;
 import pivot.collections.Sequence;
 import pivot.serialization.Serializer;
 import pivot.serialization.SerializationException;
@@ -45,7 +47,7 @@ import pivot.util.ListenerList;
 /**
  * Loads an object hierarchy from XML.
  *
- * TODO Use a linked stack to process nodes.
+ * TODO Use a linked stack to process nodes instead of an array stack.
  *
  * @author gbrown
  */
@@ -172,13 +174,12 @@ public class WTKXSerializer implements Serializer {
     }
 
     private static class Node {
-        public final boolean typed;
         public final Object value;
-        public final HashMap<String, String> attributes = new HashMap<String, String>();
+        public final Map<String, String> attributes;
 
-        public Node(boolean typed, Object value) {
-            this.typed = typed;
+        public Node(Object value, Map<String, String> attributes) {
             this.value = value;
+            this.attributes = attributes;
         }
     }
 
@@ -194,9 +195,12 @@ public class WTKXSerializer implements Serializer {
 
     public static final String WTKX_PREFIX = "wtkx";
     public static final String ID_ATTRIBUTE = "id";
+
     public static final String INCLUDE_TAG = "include";
     public static final String INCLUDE_SRC_ATTRIBUTE = "src";
     public static final String INCLUDE_NAMESPACE_ATTRIBUTE = "namespace";
+
+    public static final String NULL_TAG = "null";
 
     public static final String MIME_TYPE = "application/wtkx";
 
@@ -230,10 +234,13 @@ public class WTKXSerializer implements Serializer {
     @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
+        long t0 = System.currentTimeMillis();
+
         // Clear any previous named objects and include serializers
         namedObjects.clear();
         includeSerializers.clear();
 
+        // Parse the XML stream
         Object object = null;
         ArrayStack<Node> nodeStack = new ArrayStack<Node>();
 
@@ -247,68 +254,12 @@ public class WTKXSerializer implements Serializer {
 
                 switch (event) {
                     case XMLStreamConstants.START_ELEMENT: {
-                        Node node = null;
-                        String prefix = reader.getPrefix();
-                        String localName = reader.getLocalName();
+                        String id = null;
 
-                        if (prefix != null
-                            && prefix.equals(WTKX_PREFIX)) {
-                            if (localName.equals(INCLUDE_TAG)) {
-                                // The element represents an include
-                                node = new Node(true, null);
-                            } else {
-                                throw new SerializationException("<" + WTKX_PREFIX + ":"
-                                    + localName + "> is not a valid tag.");
-                            }
-                        } else if (Character.isLowerCase(localName.charAt(0))) {
-                            // The element represents a property
-                            Object value = null;
-                            Node parentNode = nodeStack.peek();
+                        // Retrieve the attributes, which will be applied while
+                        // processing the closing tag
+                        HashMap<String, String> attributes = new HashMap<String, String>();
 
-                            if (parentNode.typed) {
-                                BeanDictionary beanDictionary = new BeanDictionary(parentNode.value);
-                                Class<?> propertyType = beanDictionary.getType(localName);
-
-                                // If the property is a read-only sequence, use the
-                                // sequence as the node value; otherwise, create a
-                                // new Element instance for the node value
-                                if (Sequence.class.isAssignableFrom(propertyType)
-                                    && beanDictionary.isReadOnly(localName)) {
-                                    value = beanDictionary.get(localName);
-                                    assert (value != null) :
-                                        "Read-only sequence properties cannot be null.";
-                                } else {
-                                    value = new Element();
-                                }
-                            } else {
-                                // Create an Element to represent the node value
-                                value = new Element();
-                            }
-
-                            node = new Node(false, value);
-                        } else {
-                            // The element represents a typed object
-                            String namespaceURI = reader.getNamespaceURI();
-                            String className = namespaceURI + "."
-                                + localName.replaceAll("\\.", "$");
-
-                            Object value = null;
-                            try {
-                                Class<?> type = Class.forName(className);
-
-                                // TODO If type represents a (non-static) inner class,
-                                // walk up the node list to find an instance of the
-                                // enclosing class
-                                value = type.newInstance();
-                            } catch(Exception exception) {
-                                throw new SerializationException(exception);
-                            }
-
-                            node = new Node(true, value);
-                        }
-
-                        // Retrieve the attributes, which will be applied
-                        // while processing the closing tag
                         for (int i = 0, n = reader.getAttributeCount(); i < n; i++) {
                             String attributePrefix = reader.getAttributePrefix(i);
                             String attributeLocalName = reader.getAttributeLocalName(i);
@@ -317,18 +268,152 @@ public class WTKXSerializer implements Serializer {
                             if (attributePrefix != null
                                 && attributePrefix.equals(WTKX_PREFIX)) {
                                 if (attributeLocalName.equals(ID_ATTRIBUTE)) {
-                                    namedObjects.put(attributeValue, node.value);
+                                    id = attributeValue;
                                 } else {
                                     throw new SerializationException(WTKX_PREFIX + ":"
                                         + attributeLocalName + " is not a valid attribute.");
                                 }
                             } else {
-                                node.attributes.put(attributeLocalName, attributeValue);
+                                attributes.put(attributeLocalName, attributeValue);
                             }
                         }
 
-                        // Push the node onto the stack
-                        nodeStack.push(node);
+                        // Create the node value
+                        Object value = null;
+                        Node parentNode = (nodeStack.getLength() > 0) ? nodeStack.peek() : null;
+
+                        if (parentNode != null
+                            && parentNode.value == null) {
+                            throw new SerializationException("Child elements are not allowed for "
+                                + WTKX_PREFIX + ":" + NULL_TAG + " tag.");
+                        }
+
+                        BeanDictionary parentBeanDictionary = null;
+
+                        String prefix = reader.getPrefix();
+                        String localName = reader.getLocalName();
+
+                        if (prefix != null
+                            && prefix.equals(WTKX_PREFIX)) {
+                            if (localName.equals(INCLUDE_TAG)) {
+                                // The element represents an include
+                                String src = attributes.remove(INCLUDE_SRC_ATTRIBUTE);
+                                if (src == null) {
+                                    throw new SerializationException(INCLUDE_SRC_ATTRIBUTE
+                                        + " attribute is required for " + WTKX_PREFIX + ":" + INCLUDE_TAG
+                                        + " tag.");
+                                }
+
+                                String namespace = attributes.remove(INCLUDE_NAMESPACE_ATTRIBUTE);
+                                if (namespace == null) {
+                                    throw new SerializationException(INCLUDE_NAMESPACE_ATTRIBUTE
+                                        + " attribute is required for " + WTKX_PREFIX + ":" + INCLUDE_TAG
+                                        + " tag.");
+                                }
+
+                                // Process the include
+                                WTKXSerializer serializer =
+                                    new WTKXSerializer((Dictionary<String, Object>)resources.get(namespace));
+                                value = serializer.readObject(new URL(location, src));
+
+                                includeSerializers.put(namespace, serializer);
+                            } else if (localName.equals(NULL_TAG)) {
+                                // The element represents a null value
+                                if (!attributes.isEmpty()) {
+                                    throw new SerializationException("Attributes are not allowed for "
+                                        + WTKX_PREFIX + ":" + NULL_TAG + " tag.");
+                                }
+                            } else {
+                                throw new SerializationException("<" + WTKX_PREFIX + ":"
+                                    + localName + "> is not a valid tag.");
+                            }
+                        } else if (Character.isUpperCase(localName.charAt(0))) {
+                            // The element represents a typed object
+                            String namespaceURI = reader.getNamespaceURI();
+                            String className = namespaceURI + "."
+                                + localName.replaceAll("\\.", "$");
+
+                            try {
+                                Class<?> type = Class.forName(className);
+                                Class<?> enclosingClass = type.getEnclosingClass();
+
+                                if (enclosingClass == null) {
+                                    value = type.newInstance();
+                                } else {
+                                    // The type represents an inner class; walk up the node
+                                    // list to find an instance of the enclosing class
+                                    Object outer = null;
+
+                                    int i = nodeStack.getLength() - 1;
+                                    while (i >= 0
+                                        && outer == null) {
+                                        Node ancestorNode = nodeStack.get(i--);
+                                        if (enclosingClass.isAssignableFrom(ancestorNode.getClass())) {
+                                            outer = ancestorNode.value;
+                                        }
+                                    }
+
+                                    if (outer == null) {
+                                        throw new SerializationException("No enclosing instance of type "
+                                            + enclosingClass.getName() + " was found.");
+                                    }
+
+                                    // Get a reference to a constructor for this type that takes
+                                    // an argument of the type represented by enclosingClass and
+                                    // invoke it
+                                    Constructor<?> constructor =
+                                        type.getConstructor(new Class<?>[] {enclosingClass});
+                                    value = constructor.newInstance(outer);
+                                }
+
+                            } catch(Exception exception) {
+                                throw new SerializationException(exception);
+                            }
+                        } else {
+                            if (parentNode == null) {
+                                throw new SerializationException("Root node must represent a typed object.");
+                            }
+
+                            if (parentNode.value instanceof Element) {
+                                // The element represents a nested untyped object
+                                value = new Element();
+                            } else {
+                                // The element represents a property of a typed parent object
+                                parentBeanDictionary = new BeanDictionary(parentNode.value);
+                                Class<?> propertyType = parentBeanDictionary.getType(localName);
+
+                                if (Sequence.class.isAssignableFrom(propertyType)
+                                    && parentBeanDictionary.isReadOnly(localName)) {
+                                    // The element represents a read-only sequence property
+                                    value = parentBeanDictionary.get(localName);
+                                    assert (value != null) :
+                                        "Read-only sequence properties cannot be null.";
+                                } else {
+                                    // The element represents a writable property; the property
+                                    // value will be set when the closing tag is processed
+                                    value = new Element();
+                                }
+                            }
+                        }
+
+                        // If the element had an ID, add the value to the namedObjects map
+                        if (id != null) {
+                            namedObjects.put(id, value);
+                        }
+
+                        // If the element does not represent a property and the parent node
+                        // is a sequence, append the value to the parent
+                        if (parentBeanDictionary == null
+                            && parentNode != null
+                            && parentNode.value instanceof Sequence) {
+                            // NOTE It is the caller's responsibility to ensure that the value
+                            // is of the correct type for the sequence
+                            Sequence<Object> sequence = (Sequence<Object>)parentNode.value;
+                            sequence.add(value);
+                        }
+
+                        // Append the node to the node stack
+                        nodeStack.push(new Node(value, attributes));
 
                         break;
                     }
@@ -338,71 +423,42 @@ public class WTKXSerializer implements Serializer {
 
                         // Get the node for this element
                         Node node = nodeStack.pop();
+                        Node parentNode = (nodeStack.getLength() > 0) ? nodeStack.peek() : null;
 
-                        if (node.typed
-                            && node.value == null) {
-                            // This node represents an include; remove the src
-                            // and namespace attributes so we don't try to set
-                            // them as properties later
-                            String src = node.attributes.remove(INCLUDE_SRC_ATTRIBUTE);
-                            String namespace = node.attributes.remove(INCLUDE_NAMESPACE_ATTRIBUTE);
+                        // If the node represents a property of a typed parent element
+                        // and the property type matches the node value type, set the
+                        // property to the node value; otherwise, set the property to the
+                        // first child of the node value (which is assumed to be an
+                        // instance of Element)
+                        if (parentNode != null
+                            && !(parentNode.value instanceof Element)
+                            && Character.isLowerCase(localName.charAt(0))) {
+                            BeanDictionary parentBeanDictionary = new BeanDictionary(parentNode.value);
+                            Class<?> propertyType = parentBeanDictionary.getType(localName);
 
-                            // Process the include
-                            WTKXSerializer serializer =
-                                new WTKXSerializer((Dictionary<String, Object>)resources.get(namespace));
-                            includeSerializers.put(namespace, serializer);
-
-                            node = new Node(true, serializer.readObject(new URL(location, src)));
-                        }
-
-                        if (nodeStack.getLength() == 0) {
-                            // This is the last element; return the node value
-                            object = node.value;
-                        } else {
-                            // If the parent node is typed and this is a property
-                            // element (beginning with a lowercase letter), set
-                            // the property value; otherwise, add the node value
-                            // to the untyped parent sequence
-                            Node parentNode = nodeStack.peek();
-
-                            if (parentNode.typed) {
-                                // If this is a property element, try to set the
-                                // property on the parent node; otherwise, just
-                                // ignore the instantiated object (it may be
-                                // referenced elsewhere via ID)
-                                if (Character.isLowerCase(localName.charAt(0))) {
-                                    BeanDictionary beanDictionary =
-                                        new BeanDictionary(parentNode.value);
-                                    Class<?> propertyType = beanDictionary.getType(localName);
-
-                                    if (Sequence.class.isAssignableFrom(propertyType)) {
-                                        if (!beanDictionary.isReadOnly(localName)) {
-                                            // The property refers to a writable sequence;
-                                            // set the property value to this node's value
-                                            beanDictionary.put(localName, node.value);
-                                        }
-                                    } else {
-                                        // The property is not a sequence; set the property
-                                        // value to the first sub-item of this element
-                                        assert(node.value instanceof Element) :
-                                            "Node value is not an element.";
-
-                                        Element element = (Element)node.value;
-                                        beanDictionary.put(localName, element.get(0));
-                                    }
-                                }
+                            if (node.value == null
+                                || propertyType.isAssignableFrom(node.value.getClass())) {
+                                parentBeanDictionary.put(localName, node.value);
                             } else {
-                                // Append the value to the parent sequence; it is the caller's
-                                // responsibility to ensure that the value is of the correct
-                                // type for the sequence
-                                Sequence<Object> sequence = (Sequence<Object>)parentNode.value;
-                                sequence.add(node.value);
+                                assert(node.value instanceof Element) : "Node value is not an element.";
+
+                                Element element = (Element)node.value;
+                                parentBeanDictionary.put(localName, element.get(0));
                             }
                         }
 
-                        // Set the properties
-                        if (!node.attributes.isEmpty()) {
-                            if (node.typed) {
+                        // Apply the attributes
+                        if (node.value != null) {
+                            if (node.value instanceof Dictionary) {
+                                Dictionary<String, Object> dictionary =
+                                    (Dictionary<String, Object>)node.value;
+
+                                for (String attributeLocalName : node.attributes) {
+                                    String attributeValue = node.attributes.get(attributeLocalName);
+                                    dictionary.put(attributeLocalName,
+                                        resolve(attributeValue, Object.class));
+                                }
+                            } else {
                                 BeanDictionary beanDictionary = new BeanDictionary(node.value);
 
                                 for (String attributeLocalName : node.attributes) {
@@ -416,16 +472,12 @@ public class WTKXSerializer implements Serializer {
                                         beanDictionary.put(attributeLocalName, propertyValue);
                                     }
                                 }
-                            } else {
-                                Dictionary<String, Object> dictionary =
-                                    (Dictionary<String, Object>)node.value;
-
-                                for (String attributeLocalName : node.attributes) {
-                                    String attributeValue = node.attributes.get(attributeLocalName);
-                                    dictionary.put(attributeLocalName,
-                                        resolve(attributeValue, Object.class));
-                                }
                             }
+                        }
+
+                        // If the stack is empty, return the node value
+                        if (nodeStack.getLength() == 0) {
+                            object = node.value;
                         }
 
                         break;
@@ -441,6 +493,9 @@ public class WTKXSerializer implements Serializer {
         // Clear the location so the previous value won't be re-used in a
         // subsequent call to this method
         location = null;
+
+        long t1 = System.currentTimeMillis();
+        System.out.println("Parsed WTKX in " + (t1 - t0) + " ms.");
 
         return object;
     }
@@ -488,6 +543,23 @@ public class WTKXSerializer implements Serializer {
         return object;
     }
 
+    /**
+     * Resolves an attribute value. If the property type is a primitive or
+     * primitive wrapper, converts the string value to the primitive type.
+     * Otherwise, resolves the value as either a URL, resource value, or
+     * object reference, depending on the value's prefix. If the value can't
+     * or doesn't need to be resolved, the original attribute value is
+     * returned.
+     *
+     * @param attributeValue
+     * The attribute value to resolve.
+     *
+     * @param propertyType
+     * The property type.
+     *
+     * @return
+     * The resolved value.
+     */
     private Object resolve(String attributeValue, Class<?> propertyType)
         throws MalformedURLException {
         Object resolvedValue = null;
@@ -539,6 +611,18 @@ public class WTKXSerializer implements Serializer {
         return resolvedValue;
     }
 
+    /**
+     * Invokes a static property setter.
+     *
+     * @param attributeLocalName
+     * The attribute name, in the form "ClassName.propertyName".
+     *
+     * @param attributeValue
+     * The attribute value.
+     *
+     * @param object
+     * The object on which to invoke the static setter.
+     */
     private void setStaticProperty(String attributeLocalName, String attributeValue, Object object)
         throws SerializationException, MalformedURLException {
         String propertyName =
