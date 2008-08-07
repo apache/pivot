@@ -103,8 +103,9 @@ public class AlertSkin extends DialogSkin
         imageFlow.getStyles().put("verticalAlignment", VerticalAlignment.TOP);
         imageFlow.add(typeImageView);
 
-        tablePane.setCellComponent(0, 0, imageFlow);
-        tablePane.setCellComponent(0, 1, messageFlowPane);
+        TablePane.Row firstRow = tablePane.getRows().get(0);
+        firstRow.add(imageFlow);
+        firstRow.add(messageFlowPane);
     }
 
     @Override

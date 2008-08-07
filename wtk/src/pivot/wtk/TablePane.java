@@ -24,12 +24,14 @@ import pivot.util.ListenerList;
  * @author tvolkert
  */
 public class TablePane extends Container {
-    public static class Row {
-        private TablePane tablePane = null;
-
+    public static final class Row implements Sequence<Component> {
         private int height = 0;
         private boolean relative = false;
         private boolean selected = false;
+
+        private ArrayList<Component> cells = new ArrayList<Component>();
+
+        private TablePane tablePane = null;
 
         public Row(int height) {
             this(height, false);
@@ -141,6 +143,115 @@ public class TablePane extends Container {
                         tablePane.rows.indexOf(this));
                 }
             }
+        }
+
+        public int add(Component component) {
+            int i = getLength();
+            insert(component, i);
+
+            return i;
+        }
+
+        public void insert(Component component, int index) {
+            if (index < 0
+                || index > cells.getLength()) {
+                throw new IndexOutOfBoundsException();
+            }
+
+            if (component != null
+                && tablePane != null) {
+                // Add the component to the table pane
+                tablePane.add(component);
+
+                // Attach the attributes
+                component.setAttributes(new TablePaneAttributes());
+            }
+
+            cells.insert(component, index);
+
+            if (tablePane != null) {
+                // Notify table pane listeners
+                tablePane.tablePaneListeners.cellInserted(tablePane,
+                    tablePane.rows.indexOf(this), index);
+            }
+        }
+
+        public Component update(int index, Component component) {
+            Component previousComponent = cells.get(index);
+
+            if (component != null
+                && tablePane != null) {
+                // Add the component to the table pane
+                tablePane.add(component);
+
+                // Attach the attributes
+                component.setAttributes(new TablePaneAttributes());
+            }
+
+            cells.update(index, component);
+
+            if (previousComponent != null
+                && tablePane != null) {
+                // Detach the attributes
+                component.setAttributes(null);
+            }
+
+            if (tablePane != null
+                && component != previousComponent) {
+                // Notify table pane listeners
+                tablePane.tablePaneListeners.cellUpdated(tablePane,
+                    tablePane.rows.indexOf(this), index, previousComponent);
+            }
+
+            if (previousComponent != null
+                && tablePane != null) {
+                // Remove the component from the table pane
+                tablePane.remove(component);
+            }
+
+            return previousComponent;
+        }
+
+        public int remove(Component component) {
+            int index = indexOf(component);
+            if (index != -1) {
+                remove(index, 1);
+            }
+
+            return index;
+        }
+
+        public Sequence<Component> remove(int index, int count) {
+            Sequence<Component> removed = cells.remove(index, count);
+
+            if (tablePane != null) {
+                for (int i = 0, n = removed.getLength(); i < n; i++) {
+                    removed.get(i).setAttributes(null);
+                }
+
+                // Notify table pane listeners
+                tablePane.tablePaneListeners.cellsRemoved(tablePane,
+                    tablePane.rows.indexOf(this), index, removed);
+
+                for (int i = 0, n = removed.getLength(); i < n; i++) {
+                    Component component = removed.get(i);
+                    tablePane.remove(component);
+                }
+            }
+
+            return removed;
+        }
+
+        public Component get(int index) {
+            return cells.get(index);
+        }
+
+        public int indexOf(Component component) {
+            return cells.indexOf(component);
+        }
+
+        public int getLength() {
+            return cells.getLength();
         }
     }
 
@@ -322,6 +433,9 @@ public class TablePane extends Container {
      * @author tvolkert
      */
     public final class RowSequence implements Sequence<Row> {
+        protected RowSequence() {
+        }
+
         public int add(Row row) {
             int i = getLength();
             insert(row, i);
@@ -342,12 +456,14 @@ public class TablePane extends Container {
             rows.insert(row, index);
             row.setTablePane(TablePane.this);
 
-            // Add capacity to our cell component array
-            ArrayList<Component> rowData = new ArrayList<Component>(columns.getLength());
-            cellData.insert(rowData, index);
+            for (int i = 0, n = row.getLength(); i < n; i++) {
+                Component component = row.get(i);
 
-            for (int i = 0, n = columns.getLength(); i < n; i++) {
-                rowData.add(null);
+                // Add each component in the row to the table pane
+                TablePane.this.add(component);
+
+                // Attach attributes to each row component
+                component.setAttributes(new TablePaneAttributes());
             }
 
             // Notify listeners
@@ -372,26 +488,19 @@ public class TablePane extends Container {
 
             if (count > 0) {
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
-                    removed.get(i).setTablePane(null);
-                }
+                    Row row = removed.get(i);
 
-                // Reduce capacity in our cell component array
-                Sequence<ArrayList<Component>> removedRowData = cellData.remove
-                    (index, count);
+                    row.setTablePane(null);
 
-                for (int i = 0, n = removedRowData.getLength(); i < n; i++) {
-                    ArrayList<Component> removedComponents = removedRowData.get(i);
+                    for (int j = 0, m = row.getLength(); j < m; j++) {
+                        Component component = row.get(j);
 
-                    internalRemoval = true;
-                    // Remove any components that were in those rows
-                    for (int j = 0, m = removedComponents.getLength(); j < m; j++) {
-                       Component removedComponent = removedComponents.get(j);
+                        // Detach attributes from each row component
+                        component.setAttributes(null);
 
-                       if (removedComponent != null) {
-                          TablePane.this.remove(removedComponent);
-                       }
+                        // Remove each component in the row from the table pane
+                        TablePane.this.remove(component);
                     }
-                    internalRemoval = false;
                 }
 
                 tablePaneListeners.rowsRemoved(TablePane.this, index, removed);
@@ -420,6 +529,9 @@ public class TablePane extends Container {
      * @author tvolkert
      */
     public final class ColumnSequence implements Sequence<Column> {
+        protected ColumnSequence() {
+        }
+
         public int add(Column column) {
             int i = getLength();
             insert(column, i);
@@ -439,11 +551,6 @@ public class TablePane extends Container {
 
             columns.insert(column, index);
             column.setTablePane(TablePane.this);
-
-            // Add capacity to our cell component array
-            for (int i = 0, n = rows.getLength(); i < n; i++) {
-               cellData.get(i).insert(null, index);
-            }
 
             // Notify listeners
             tablePaneListeners.columnInserted(TablePane.this, index);
@@ -468,23 +575,6 @@ public class TablePane extends Container {
             if (count > 0) {
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
                     removed.get(i).setTablePane(null);
-                }
-
-                // Reduce capacity in our cell component array
-                for (int i = 0, n = rows.getLength(); i < n; i++) {
-                    Sequence<Component> removedComponents = cellData.get(i).remove
-                        (index, count);
-
-                    internalRemoval = true;
-                    // Remove any components that were in those columns
-                    for (int j = 0, m = removedComponents.getLength(); j < m; j++) {
-                       Component removedComponent = removedComponents.get(j);
-
-                       if (removedComponent != null) {
-                          TablePane.this.remove(removedComponent);
-                       }
-                    }
-                    internalRemoval = false;
                 }
 
                 tablePaneListeners.columnsRemoved(TablePane.this, index, removed);
@@ -572,10 +662,23 @@ public class TablePane extends Container {
             }
         }
 
-        public void cellComponentChanged(TablePane tablePane, int row, int column,
+        public void cellInserted(TablePane tablePane, int row, int column) {
+            for (TablePaneListener listener : this) {
+                listener.cellInserted(tablePane, row, column);
+            }
+        }
+
+        public void cellsRemoved(TablePane tablePane, int row, int column,
+            Sequence<Component> cells) {
+            for (TablePaneListener listener : this) {
+                listener.cellsRemoved(tablePane, row, column, cells);
+            }
+        }
+
+        public void cellUpdated(TablePane tablePane, int row, int column,
             Component previousComponent) {
             for (TablePaneListener listener : this) {
-                listener.cellComponentChanged(tablePane, row, column, previousComponent);
+                listener.cellUpdated(tablePane, row, column, previousComponent);
             }
         }
     }
@@ -602,10 +705,6 @@ public class TablePane extends Container {
 
     private ArrayList<Column> columns;
     private ColumnSequence columnSequence = new ColumnSequence();
-
-    private ArrayList<ArrayList<Component>> cellData;
-
-    private boolean internalRemoval = false;
 
     private TablePaneListenerList tablePaneListeners = new TablePaneListenerList();
     private TablePaneAttributeListenerList tablePaneAttributeListeners = new TablePaneAttributeListenerList();
@@ -638,16 +737,6 @@ public class TablePane extends Container {
 
         this.rows = new ArrayList<Row>(rows);
         this.columns = new ArrayList<Column>(columns);
-
-        cellData = new ArrayList<ArrayList<Component>>(rows.getLength());
-        for (int i = 0, n = rows.getLength(); i < n; i++) {
-            ArrayList<Component> rowData = new ArrayList<Component>(columns.getLength());
-            cellData.add(rowData);
-
-            for (int j = 0, m = columns.getLength(); j < m; j++) {
-                rowData.add(null);
-            }
-        }
 
         installSkin(TablePane.class);
     }
@@ -723,23 +812,26 @@ public class TablePane extends Container {
     /**
      * Gets the component at the specified cell in this table pane.
      *
-     * @param row
+     * @param rowIndex
      * The row index of the cell
      *
-     * @param column
+     * @param columnIndex
      * The column index of the cell
      *
      * @return
      * The component in the specified cell, or <tt>null</tt> if the cell is
      * empty
      */
-    public Component getCellComponent(int row, int column) {
-        if (row < 0 || row >= rows.getLength()
-            || column < 0 || column >= columns.getLength()) {
-            throw new IndexOutOfBoundsException();
+    public Component getCellComponent(int rowIndex, int columnIndex) {
+        Row row = rows.get(rowIndex);
+
+        Component component = null;
+
+        if (row.getLength() > columnIndex) {
+            component = row.get(columnIndex);
         }
 
-        return cellData.get(row).get(column);
+        return component;
     }
 
     /**
@@ -756,49 +848,7 @@ public class TablePane extends Container {
      * the cell
      */
     public void setCellComponent(int row, int column, Component component) {
-        if (row < 0 || row >= rows.getLength()
-            || column < 0 || column >= columns.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        Component previousComponent = getCellComponent(row, column);
-
-        if (previousComponent != component) {
-            ArrayList<Component> rowData = cellData.get(row);
-
-            if (component != null) {
-                if (component.getParent() != null) {
-                    throw new IllegalArgumentException("Component already has a parent.");
-                }
-
-                // Add the component
-                add(component);
-
-                // Attach the attributes
-                component.setAttributes(new TablePaneAttributes());
-            }
-
-            // Set the component as the new cell component (note that we
-            // set the new component before removing the old one so two
-            // cell component change events don't get fired)
-            rowData.update(column, component);
-
-            // Remove any previous component
-            if (previousComponent != null) {
-                internalRemoval = true;
-                remove(previousComponent);
-                internalRemoval = false;
-            }
-
-            tablePaneListeners.cellComponentChanged(this, row, column, previousComponent);
-        }
-    }
-
-    @Override
-    public void insert(Component component, int index) {
-        super.insert(component, index);
-
-        component.setAttributes(new TablePaneAttributes());
+        rows.get(row).update(column, component);
     }
 
     /**
@@ -816,36 +866,15 @@ public class TablePane extends Container {
      */
     @Override
     public Sequence<Component> remove(int index, int count) {
-        // Detach the attributes
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
-            component.setAttributes(null);
-        }
-
-        // Call the base method to remove the components
-        Sequence<Component> removed = super.remove(index, count);
-
-        // Ensure that the appropriate instance variable is cleared if the
-        // component being removed maps to a cell component
-        if (!internalRemoval) {
-            for (int i = 0, n = removed.getLength(); i < n; i++) {
-                Component component = removed.get(i);
-
-                for (int j = 0, m = rows.getLength(); j < m; j++) {
-                    ArrayList<Component> rowData = cellData.get(j);
-
-                    for (int k = 0, l = columns.getLength(); k < l; k++) {
-                        if (rowData.get(k) == component) {
-                            rowData.update(k, null);
-                            tablePaneListeners.cellComponentChanged(this, j, k,
-                                component);
-                        }
-                    }
-                }
+            if (component.getAttributes() != null) {
+                throw new UnsupportedOperationException();
             }
         }
 
-        return removed;
+        // Call the base method to remove the components
+        return super.remove(index, count);
     }
 
     /**

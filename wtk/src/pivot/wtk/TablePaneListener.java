@@ -37,6 +37,9 @@ public interface TablePaneListener {
     public void columnSelectedChanged(TablePane tablePane, int index);
 
     // Cell methods
-    public void cellComponentChanged(TablePane tablePane, int row, int column,
+    public void cellInserted(TablePane tablePane, int row, int column);
+    public void cellsRemoved(TablePane tablePane, int row, int column,
+        Sequence<Component> cells);
+    public void cellUpdated(TablePane tablePane, int row, int column,
         Component previousComponent);
 }

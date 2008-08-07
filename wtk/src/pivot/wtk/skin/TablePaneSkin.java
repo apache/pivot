@@ -899,9 +899,18 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         repaintComponent(getColumnBounds(index));
     }
 
-    public void cellComponentChanged(TablePane tablePane, int row, int column,
+    public void cellInserted(TablePane tablePane, int row, int column) {
+        invalidateComponent();
+    }
+
+    public void cellsRemoved(TablePane tablePane, int row, int column,
+        Sequence<Component> cells) {
+        invalidateComponent();
+    }
+
+    public void cellUpdated(TablePane tablePane, int row, int column,
         Component previousComponent) {
-        // No-op
+        invalidateComponent();
     }
 
     // TablePaneAttribute events
