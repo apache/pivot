@@ -139,7 +139,7 @@ public abstract class Container extends Component
     private ContainerListenerList containerListeners = new ContainerListenerList();
     private ContainerMouseListenerList containerMouseListeners = new ContainerMouseListenerList();
 
-    public int add(Component component) {
+    public final int add(Component component) {
         int i = getLength();
         insert(component, i);
 
@@ -174,7 +174,7 @@ public abstract class Container extends Component
         throw new UnsupportedOperationException();
     }
 
-    public int remove(Component component) {
+    public final int remove(Component component) {
         int index = indexOf(component);
         if (index != -1) {
             remove(index, 1);
@@ -212,7 +212,7 @@ public abstract class Container extends Component
         return removed;
     }
 
-    public Sequence<Component> removeAll() {
+    public final Sequence<Component> removeAll() {
         return remove(0, getLength());
     }
 

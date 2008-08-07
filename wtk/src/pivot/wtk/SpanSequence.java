@@ -148,14 +148,14 @@ public class SpanSequence implements Sequence<Span> {
     /**
      * Not supported.
      */
-    public void insert(Span span, int index) {
+    public final void insert(Span span, int index) {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Not supported.
      */
-    public Span update(int index, Span span) {
+    public final Span update(int index, Span span) {
         throw new UnsupportedOperationException();
     }
 
