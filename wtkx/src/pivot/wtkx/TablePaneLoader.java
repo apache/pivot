@@ -96,15 +96,19 @@ class TablePaneLoader extends ContainerLoader {
                                         "contain 'column' attribute.");
                                 }
 
-                                int row = Integer.parseInt
+                                int rowIndex = Integer.parseInt
                                     (cellElement.getAttribute(ROW_ATTRIBUTE));
-                                int column = Integer.parseInt
+                                int columnIndex = Integer.parseInt
                                     (cellElement.getAttribute(COLUMN_ATTRIBUTE));
 
                                 Component component = componentLoader.load(cellElement,
                                     rootLoader);
 
-                                tablePane.setCellComponent(row, column, component);
+                                TablePane.Row row = tablePane.getRows().get(rowIndex);
+                                for (int k = row.getLength(); k < columnIndex; k++) {
+                                    row.add(null);
+                                }
+                                row.insert(component, columnIndex);
 
                                 if (cellElement.hasAttribute(ROW_SPAN_ATTRIBUTE)) {
                                    int rowSpan = Integer.parseInt
