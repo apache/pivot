@@ -76,6 +76,20 @@ public class ExpanderSkin extends TitlePaneSkin
             validateComponentType(component, ShadeButton.class);
 
             super.install(component);
+
+            ShadeButton shadeButton = (ShadeButton)component;
+            Expander expander = shadeButton.getExpander();
+
+            Color shadeButtonBackgroundColor = (Color)expander.getStyles().get("shadeButtonBackgroundColor");
+            setBackgroundColor(shadeButtonBackgroundColor);
+            setDisabledBackgroundColor(shadeButtonBackgroundColor);
+
+            setBevelColor(shadeButtonBackgroundColor);
+            setPressedBevelColor(shadeButtonBackgroundColor);
+            setDisabledBevelColor(shadeButtonBackgroundColor);
+
+            Color borderColor = (Color)expander.getStyles().get("borderColor");
+            setBorderColor(borderColor);
         }
 
         @Override
@@ -413,6 +427,7 @@ public class ExpanderSkin extends TitlePaneSkin
 
     public void setShadeButtonBackgroundColor(Color shadeButtonBackgroundColor) {
         this.shadeButtonBackgroundColor = shadeButtonBackgroundColor;
+        shadeButton.getStyles().put("shadeButtonBackgroundColor", shadeButtonBackgroundColor);
         repaintComponent();
     }
 

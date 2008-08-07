@@ -46,7 +46,7 @@ import pivot.wtk.Mouse.ScrollType;
  * can use it to perform hit testing for mouse events and cursor display.
  */
 public abstract class Component implements Visual {
-    public static abstract class Attributes {
+    protected static abstract class Attributes {
         private Component component = null;
 
         public Component getComponent() {
@@ -84,7 +84,9 @@ public abstract class Component implements Visual {
     }
 
     /**
+     * Decorator sequence implementation.
      *
+     * @author tvolkert
      */
     public final class DecoratorSequence implements Sequence<Decorator>,
         Iterable<Decorator> {
@@ -407,6 +409,9 @@ public abstract class Component implements Visual {
      */
     private Skin skin = null;
 
+    /**
+     * The component's preferred width, height, and cache.
+     */
     private int preferredWidth = -1;
     private int preferredHeight = -1;
 
@@ -437,7 +442,7 @@ public abstract class Component implements Visual {
     private boolean displayable = true;
 
     /**
-     * The component's decorator.
+     * The component's decorators.
      */
     private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
     private DecoratorSequence decoratorSequence = new DecoratorSequence();
@@ -545,17 +550,19 @@ public abstract class Component implements Visual {
         if (skin != null) {
             previousSkinClass = skin.getClass();
             skin.uninstall();
-            skin = null;
         }
+
+        styleDictionary = null;
+        skin = null;
 
         try {
             skin = skinClass.newInstance();
-            skin.install(this);
-        } catch (Exception exception) {
+        } catch(Exception exception) {
             throw new IllegalArgumentException("The skin could not be installed.", exception);
         }
 
         styleDictionary = new StyleDictionary(skin);
+        skin.install(this);
 
         invalidate();
         repaint();
@@ -1912,6 +1919,21 @@ public abstract class Component implements Visual {
     }
 
     /**
+     * Applies a set of styles.
+     *
+     * @param styles
+     */
+    public void setStyles(Map<String, Object> styles) {
+        if (styles == null) {
+            throw new IllegalArgumentException("styles is null.");
+        }
+
+        for (String key : styles) {
+            getStyles().put(key, styles.get(key));
+        }
+    }
+
+    /**
      * Applies a set of styles encoded as a JSON string.
      *
      * @param styles
@@ -1921,16 +1943,23 @@ public abstract class Component implements Visual {
             throw new IllegalArgumentException("styles is null.");
         }
 
-        Map<String, Object> styleMap = JSONSerializer.parseMap(styles);
-        for (String key : styleMap) {
-            getStyles().put(key, styleMap.get(key));
-        }
+        setStyles(JSONSerializer.parseMap(styles));
     }
 
-    public Attributes getAttributes() {
+    /**
+     * Returns the currently installed attributes.
+     *
+     * @return
+     */
+    protected Attributes getAttributes() {
         return attributes;
     }
 
+    /**
+     * Sets the attributes.
+     *
+     * @param attributes
+     */
     protected void setAttributes(Attributes attributes) {
         assert (parent != null);
 

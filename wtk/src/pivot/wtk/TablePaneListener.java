@@ -30,8 +30,6 @@ public interface TablePaneListener {
     public void columnInserted(TablePane tablePane, int index);
     public void columnsRemoved(TablePane tablePane, int index,
         Sequence<TablePane.Column> columns);
-    public void columnHeaderDataChanged(TablePane tablePane, int index,
-        Object previousHeaderData);
     public void columnWidthChanged(TablePane tablePane, int index,
         int previousWidth, boolean previousRelative);
     public void columnSelectedChanged(TablePane tablePane, int index);

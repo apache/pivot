@@ -29,7 +29,7 @@ import pivot.wtk.media.Image;
  */
 @ComponentInfo(icon="TabPane.png")
 public class TabPane extends Container {
-    public static class TabPaneAttributes extends Attributes {
+    protected static class TabPaneAttributes extends Attributes {
         private String label = null;
         private Image icon = null;
         public String getLabel() {
@@ -83,6 +83,9 @@ public class TabPane extends Container {
             public void remove() {
                 throw new UnsupportedOperationException();
             }
+        }
+
+        private TabSequence() {
         }
 
         public int add(Component tab) {

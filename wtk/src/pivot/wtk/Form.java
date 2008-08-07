@@ -33,7 +33,7 @@ import pivot.util.ListenerList;
  */
 @ComponentInfo(icon="Form.png")
 public class Form extends Container {
-    public static class FormAttributes extends Attributes {
+    protected static class FormAttributes extends Attributes {
         private String label = null;
         private Flag flag = null;
 
@@ -93,6 +93,9 @@ public class Form extends Container {
             public void remove() {
                 throw new UnsupportedOperationException();
             }
+        }
+
+        private FieldSequence() {
         }
 
         public int add(Component field) {

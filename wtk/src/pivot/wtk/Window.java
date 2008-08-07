@@ -51,6 +51,9 @@ public class Window extends TitlePane {
             }
         }
 
+        private OwnedWindowSequence() {
+        }
+
         public int add(Window window) {
             throw new UnsupportedOperationException();
         }
@@ -746,7 +749,7 @@ public class Window extends TitlePane {
 
             invalidate();
 
-            // TODO Fire event
+            windowListeners.maximizedChanged(this);
         }
     }
 

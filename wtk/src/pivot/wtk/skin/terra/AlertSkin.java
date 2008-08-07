@@ -253,6 +253,8 @@ public class AlertSkin extends DialogSkin
 
     @Override
     public void windowOpened(Window window) {
+        super.windowOpened(window);
+
         focusSelectedOptionButton();
     }
 

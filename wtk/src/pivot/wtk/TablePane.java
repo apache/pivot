@@ -380,7 +380,7 @@ public class TablePane extends Container {
         }
     }
 
-    public static class TablePaneAttributes extends Attributes {
+    protected static class TablePaneAttributes extends Attributes {
         private int rowSpan = 1;
         private int columnSpan = 1;
 
@@ -438,7 +438,7 @@ public class TablePane extends Container {
      * @author tvolkert
      */
     public final class RowSequence implements Sequence<Row> {
-        protected RowSequence() {
+        private RowSequence() {
         }
 
         public int add(Row row) {
@@ -534,7 +534,7 @@ public class TablePane extends Container {
      * @author tvolkert
      */
     public final class ColumnSequence implements Sequence<Column> {
-        protected ColumnSequence() {
+        private ColumnSequence() {
         }
 
         public int add(Column column) {
@@ -646,13 +646,6 @@ public class TablePane extends Container {
             }
         }
 
-        public void columnHeaderDataChanged(TablePane tablePane, int index,
-            Object previousHeaderData) {
-            for (TablePaneListener listener : this) {
-                listener.columnHeaderDataChanged(tablePane, index, previousHeaderData);
-            }
-        }
-
         public void columnWidthChanged(TablePane tablePane, int index,
             int previousWidth, boolean previousRelative) {
             for (TablePaneListener listener : this) {
@@ -705,10 +698,10 @@ public class TablePane extends Container {
         }
     }
 
-    private ArrayList<Row> rows;
+    private ArrayList<Row> rows = null;
     private RowSequence rowSequence = new RowSequence();
 
-    private ArrayList<Column> columns;
+    private ArrayList<Column> columns = null;
     private ColumnSequence columnSequence = new ColumnSequence();
 
     private TablePaneListenerList tablePaneListeners = new TablePaneListenerList();
@@ -718,29 +711,21 @@ public class TablePane extends Container {
      * Creates a new <tt>TablePane</tt> with empty row and column sequences.
      */
     public TablePane() {
-        this(new ArrayList<Row>(), new ArrayList<Column>());
+        this(new ArrayList<Column>());
     }
 
     /**
-     * Creates a new <tt>TablePane</tt> with the specified row and column
-     * sequences.
-     *
-     * @param rows
-     * The row sequence to use. A copy of this sequence will be made
+     * Creates a new <tt>TablePane</tt> with the specified columns.
      *
      * @param columns
      * The column sequence to use. A copy of this sequence will be made
      */
-    public TablePane(Sequence<Row> rows, Sequence<Column> columns) {
-        if (rows == null) {
-            throw new IllegalArgumentException("rows is null");
-        }
-
+    public TablePane(Sequence<Column> columns) {
         if (columns == null) {
             throw new IllegalArgumentException("columns is null");
         }
 
-        this.rows = new ArrayList<Row>(rows);
+        this.rows = new ArrayList<Row>();
         this.columns = new ArrayList<Column>(columns);
 
         installSkin(TablePane.class);

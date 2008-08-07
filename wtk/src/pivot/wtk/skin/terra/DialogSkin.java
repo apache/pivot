@@ -20,20 +20,14 @@ import pivot.wtk.Dialog;
 import pivot.wtk.Keyboard;
 
 public class DialogSkin extends AbstractFrameSkin {
-    private static final boolean DEFAULT_SHOW_MINIMIZE_BUTTON = false;
-    private static final boolean DEFAULT_SHOW_MAXIMIZE_BUTTON = false;
-
-    public DialogSkin() {
-    }
-
     @Override
     public void install(Component component) {
         validateComponentType(component, Dialog.class);
 
         super.install(component);
 
-        minimizeButton.setDisplayable(DEFAULT_SHOW_MINIMIZE_BUTTON);
-        maximizeButton.setDisplayable(DEFAULT_SHOW_MAXIMIZE_BUTTON);
+        setShowMaximizeButton(false);
+        setShowMinimizeButton(false);
     }
 
     @Override

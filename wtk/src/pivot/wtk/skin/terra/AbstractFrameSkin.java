@@ -49,7 +49,7 @@ import pivot.wtk.media.Image;
 import pivot.wtk.skin.WindowSkin;
 
 /**
- * TODO Don't display a resize handle if maximized (or set to default size)?
+ * Abstract base class for Frame and Dialog skins.
  *
  * @author gbrown
  */
@@ -271,10 +271,12 @@ public abstract class AbstractFrameSkin extends WindowSkin
     private ImageView iconImageView = new ImageView();
     private Label titleLabel = new Label();
 
-    protected FrameButton minimizeButton = null;
-    protected FrameButton maximizeButton = null;
-    protected FrameButton closeButton = null;
-    protected ImageView resizeHandle = new ImageView(resizeImage);
+    private FrameButton minimizeButton = null;
+    private FrameButton maximizeButton = null;
+    private FrameButton closeButton = null;
+    private ImageView resizeHandle = new ImageView(resizeImage);
+
+    private DropShadowDecorator dropShadowDecorator = null;
 
     private Point dragOffset = null;
     private MoveMouseHandler moveMouseHandler = new MoveMouseHandler();
@@ -310,8 +312,6 @@ public abstract class AbstractFrameSkin extends WindowSkin
 
         titleBarFlowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
         titleBarFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-
-        // TODO Style, like button spacing in TabPaneSkin?
         titleBarFlowPane.getStyles().put("padding", new Insets(2));
 
         // Initialize the title flow pane
@@ -334,6 +334,10 @@ public abstract class AbstractFrameSkin extends WindowSkin
         super.install(component);
 
         Window window = (Window)component;
+
+        // Attach the drop-shadow decorator
+        dropShadowDecorator = new DropShadowDecorator(window);
+        window.getDecorators().add(dropShadowDecorator);
 
         window.add(titleBarFlowPane);
 
@@ -363,6 +367,11 @@ public abstract class AbstractFrameSkin extends WindowSkin
     @Override
     public void uninstall() {
         Window window = (Window)getComponent();
+
+        // Detach the drop shadow decorator
+        window.getDecorators().remove(dropShadowDecorator);
+        dropShadowDecorator.dispose();
+        dropShadowDecorator = null;
 
         window.remove(titleBarFlowPane);
 
@@ -711,7 +720,7 @@ public abstract class AbstractFrameSkin extends WindowSkin
         if (button == minimizeButton) {
             window.setDisplayable(false);
         } else if (button == maximizeButton) {
-            window.setMaximized(window.isMaximized());
+            window.setMaximized(!window.isMaximized());
         } else if (button == closeButton) {
             window.close();
         }

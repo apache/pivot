@@ -885,11 +885,6 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         invalidateComponent();
     }
 
-    public void columnHeaderDataChanged(TablePane tablePane, int index,
-        Object previousHeaderData) {
-        // No-op
-    }
-
     public void columnWidthChanged(TablePane tablePane, int index,
         int previousWidth, boolean previousRelative) {
         invalidateComponent();
