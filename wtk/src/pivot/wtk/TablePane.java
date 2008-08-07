@@ -823,6 +823,8 @@ public class TablePane extends Container {
      * empty
      */
     public Component getCellComponent(int rowIndex, int columnIndex) {
+        // TODO Just delegate purely to the Row, and let it throw
+        // IndexOutOfBoundsException
         Row row = rows.get(rowIndex);
 
         Component component = null;
