@@ -27,7 +27,7 @@ import pivot.wtk.RadioButton;
 import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
-import pivot.wtkx.ComponentLoader;
+import pivot.wtkx.WTKXSerializer;
 
 public class FlowPanes implements Application, ButtonStateListener {
     private FlowPane flowPane = null;
@@ -53,53 +53,53 @@ public class FlowPanes implements Application, ButtonStateListener {
             Theme.setTheme((Theme)themeClass.newInstance());
         }
 
-        ComponentLoader componentLoader = new ComponentLoader();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
-            componentLoader.load("pivot/tutorials/layout/flowpanes.wtkx");
+            (Component)wtkxSerializer.readObject("pivot/tutorials/layout/flowpanes.wtkx");
 
-        flowPane = (FlowPane)componentLoader.getComponent("flowPane");
+        flowPane = (FlowPane)wtkxSerializer.getObjectByName("flowPane");
 
         // Orientation
         horizontalOrientationButton =
-            (RadioButton)componentLoader.getComponent("horizontalOrientationButton");
+            (RadioButton)wtkxSerializer.getObjectByName("horizontalOrientationButton");
         horizontalOrientationButton.getButtonStateListeners().add(this);
 
         verticalOrientationButton =
-            (RadioButton)componentLoader.getComponent("verticalOrientationButton");
+            (RadioButton)wtkxSerializer.getObjectByName("verticalOrientationButton");
         verticalOrientationButton.getButtonStateListeners().add(this);
 
         // Horizontal alignment
         horizontalAlignmentLeftButton =
-            (RadioButton)componentLoader.getComponent("horizontalAlignmentLeftButton");
+            (RadioButton)wtkxSerializer.getObjectByName("horizontalAlignmentLeftButton");
         horizontalAlignmentLeftButton.getButtonStateListeners().add(this);
 
         horizontalAlignmentRightButton =
-            (RadioButton)componentLoader.getComponent("horizontalAlignmentRightButton");
+            (RadioButton)wtkxSerializer.getObjectByName("horizontalAlignmentRightButton");
         horizontalAlignmentRightButton.getButtonStateListeners().add(this);
 
         horizontalAlignmentCenterButton =
-            (RadioButton)componentLoader.getComponent("horizontalAlignmentCenterButton");
+            (RadioButton)wtkxSerializer.getObjectByName("horizontalAlignmentCenterButton");
         horizontalAlignmentCenterButton.getButtonStateListeners().add(this);
 
         horizontalAlignmentJustifyButton =
-            (RadioButton)componentLoader.getComponent("horizontalAlignmentJustifyButton");
+            (RadioButton)wtkxSerializer.getObjectByName("horizontalAlignmentJustifyButton");
         horizontalAlignmentJustifyButton.getButtonStateListeners().add(this);
 
         // Vertical alignment
         verticalAlignmentTopButton =
-            (RadioButton)componentLoader.getComponent("verticalAlignmentTopButton");
+            (RadioButton)wtkxSerializer.getObjectByName("verticalAlignmentTopButton");
         verticalAlignmentTopButton.getButtonStateListeners().add(this);
 
         verticalAlignmentBottomButton =
-            (RadioButton)componentLoader.getComponent("verticalAlignmentBottomButton");
+            (RadioButton)wtkxSerializer.getObjectByName("verticalAlignmentBottomButton");
         verticalAlignmentBottomButton.getButtonStateListeners().add(this);
 
         verticalAlignmentCenterButton =
-            (RadioButton)componentLoader.getComponent("verticalAlignmentCenterButton");
+            (RadioButton)wtkxSerializer.getObjectByName("verticalAlignmentCenterButton");
         verticalAlignmentCenterButton.getButtonStateListeners().add(this);
 
         verticalAlignmentJustifyButton =
-            (RadioButton)componentLoader.getComponent("verticalAlignmentJustifyButton");
+            (RadioButton)wtkxSerializer.getObjectByName("verticalAlignmentJustifyButton");
         verticalAlignmentJustifyButton.getButtonStateListeners().add(this);
 
         stateChanged(null, null);

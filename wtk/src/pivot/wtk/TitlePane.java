@@ -15,13 +15,11 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
- * NOTE This class is abstract because it does not install a skin by default.
- *
- * @author gbrown
+ * Abstract base class for "title panes", containers that contain a single
+ * content component and present a title.
  */
 public abstract class TitlePane extends Container {
     private class TitlePaneListenerList extends ListenerList<TitlePaneListener>
@@ -40,11 +38,15 @@ public abstract class TitlePane extends Container {
     }
 
     private String title = null;
-    private Component content = null;
     private TitlePaneListenerList titlePaneListeners = new TitlePaneListenerList();
 
-    public TitlePane() {
-        super();
+    @Override
+    public void insert(Component component, int index) {
+        if (getLength() > 0) {
+            throw new IllegalStateException("Content component is already set.");
+        }
+
+        super.insert(component, index);
     }
 
     /**
@@ -76,46 +78,25 @@ public abstract class TitlePane extends Container {
     }
 
     public Component getContent() {
-        return content;
+        return (getLength() > 0) ? get(0) : null;
     }
 
     public void setContent(Component content) {
-        if (content != this.content) {
-            if (content != null) {
-                if (content.getParent() != null) {
-                    throw new IllegalArgumentException("Component already has a parent.");
-                }
+        Component previousContent = getContent();
 
-                // Add the component
-                add(content);
-            }
-
-            // Set the component as the new content component (note that we
-            // set the new component before removing the old one so two
-            // content change events don't get fired)
-            Component previousContent = this.content;
-            this.content = content;
-
+        if (content != previousContent) {
             // Remove any previous content component
             if (previousContent != null) {
                 remove(previousContent);
             }
 
+            // Add the component
+            if (content != null) {
+                add(content);
+            }
+
             titlePaneListeners.contentChanged(this, previousContent);
         }
-    }
-
-    @Override
-    public Sequence<Component> remove(int index, int count) {
-        for (int i = index, n = index + count; i < n; i++) {
-            Component component = get(i);
-            if (component == content) {
-                throw new UnsupportedOperationException();
-            }
-        }
-
-        // Call the base method to remove the components
-        return super.remove(index, count);
     }
 
     public ListenerList<TitlePaneListener> getTitlePaneListeners() {

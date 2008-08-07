@@ -15,13 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane styles="{padding:4, spacing:4}">
+<FlowPane styles="{padding:4, spacing:4}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <Border styles="{padding:0, borderColor:'#cccac2'}">
         <ScrollPane preferredWidth="80" preferredHeight="110"
             horizontalScrollBarPolicy="fill"
             verticalScrollBarPolicy="fillToCapacity">
             <view>
-                <ListView id="listView" selectMode="multi">
+                <ListView wtkx:id="listView" selectMode="multi">
                     <listData>
                         <item label="One"/>
                         <item label="Two"/>
@@ -41,6 +42,6 @@ limitations under the License.
 
     <FlowPane orientation="vertical" preferredWidth="120" styles="{horizontalAlignment:'justify'}">
         <Label text="You selected:"/>
-        <Label id="selectionLabel" styles="{wrapText:true}"/>
+        <Label wtkx:id="selectionLabel" styles="{wrapText:true}"/>
     </FlowPane>
 </FlowPane>

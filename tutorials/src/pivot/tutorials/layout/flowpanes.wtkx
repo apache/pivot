@@ -15,36 +15,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TablePane>
-    <rows>
-        <Row height="-1"/>
-    </rows>
+<TablePane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <columns>
-        <Column width="300"/>
-        <Column width="-1"/>
+        <TablePane.Column width="300"/>
+        <TablePane.Column width="-1"/>
     </columns>
-    <cells>
-        <FlowPane id="flowPane" row="0" column="0" styles="{padding:6, backgroundColor:'#f7f5eb'}">
-            <PushButton buttonData="'One'"/>
-            <PushButton buttonData="'Two'"/>
-            <PushButton buttonData="'Three'"/>
-        </FlowPane>
-        <FlowPane row="0" column="1" orientation="vertical" styles="{padding:6, spacing:8}">
-            <Label text="Orientation" styles="{font:'Verdana bold 11'}"/>
-            <RadioButton id="horizontalOrientationButton" buttonData="'Horizontal'" group="orientation" selected="true"/>
-            <RadioButton id="verticalOrientationButton" buttonData="'Vertical'" group="orientation"/>
 
-            <Label text="Horizontal Alignment" styles="{font:'Verdana bold 11'}"/>
-            <RadioButton id="horizontalAlignmentLeftButton" buttonData="'Left'" group="horizontalAlignment" selected="true"/>
-            <RadioButton id="horizontalAlignmentRightButton" buttonData="'Right'" group="horizontalAlignment"/>
-            <RadioButton id="horizontalAlignmentCenterButton" buttonData="'Center'" group="horizontalAlignment"/>
-            <RadioButton id="horizontalAlignmentJustifyButton" buttonData="'Justify'" group="horizontalAlignment"/>
+    <rows>
+        <TablePane.Row height="-1">
+            <FlowPane wtkx:id="flowPane" styles="{padding:6, backgroundColor:'#f7f5eb'}">
+                <PushButton buttonData="One"/>
+                <PushButton buttonData="Two"/>
+                <PushButton buttonData="Three"/>
+            </FlowPane>
+            <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
+                <Label text="Orientation" styles="{font:'Verdana bold 11'}"/>
+                <RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" group="orientation" selected="true"/>
+                <RadioButton wtkx:id="verticalOrientationButton" buttonData="Vertical" group="orientation"/>
 
-            <Label text="Vertical Alignment" styles="{font:'Verdana bold 11'}"/>
-            <RadioButton id="verticalAlignmentTopButton" buttonData="'Top'" group="verticalAlignment" selected="true"/>
-            <RadioButton id="verticalAlignmentBottomButton" buttonData="'Bottom'" group="verticalAlignment"/>
-            <RadioButton id="verticalAlignmentCenterButton" buttonData="'Center'" group="verticalAlignment"/>
-            <RadioButton id="verticalAlignmentJustifyButton" buttonData="'Justify'" group="verticalAlignment"/>
-        </FlowPane>
-    </cells>
+                <Label text="Horizontal Alignment" styles="{font:'Verdana bold 11'}"/>
+                <RadioButton wtkx:id="horizontalAlignmentLeftButton" buttonData="Left" group="horizontalAlignment" selected="true"/>
+                <RadioButton wtkx:id="horizontalAlignmentRightButton" buttonData="Right" group="horizontalAlignment"/>
+                <RadioButton wtkx:id="horizontalAlignmentCenterButton" buttonData="Center" group="horizontalAlignment"/>
+                <RadioButton wtkx:id="horizontalAlignmentJustifyButton" buttonData="Justify" group="horizontalAlignment"/>
+
+                <Label text="Vertical Alignment" styles="{font:'Verdana bold 11'}"/>
+                <RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top'" group="verticalAlignment" selected="true"/>
+                <RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" group="verticalAlignment"/>
+                <RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" group="verticalAlignment"/>
+                <RadioButton wtkx:id="verticalAlignmentJustifyButton" buttonData="Justify" group="verticalAlignment"/>
+            </FlowPane>
+        </TablePane.Row>
+    </rows>
 </TablePane>

@@ -159,11 +159,11 @@ public class ScrollPane extends Viewport {
         installSkin(ScrollPane.class);
     }
 
-    public ScrollBarPolicy getHorizontalPolicy() {
+    public ScrollBarPolicy getHorizontalScrollBarPolicy() {
         return horizontalScrollBarPolicy;
     }
 
-    public void setHorizontalPolicy(ScrollBarPolicy horizontalScrollBarPolicy) {
+    public void setHorizontalScrollBarPolicy(ScrollBarPolicy horizontalScrollBarPolicy) {
         if (horizontalScrollBarPolicy == null) {
             throw new IllegalArgumentException("horizontalScrollBarPolicy is null");
         }
@@ -177,11 +177,19 @@ public class ScrollPane extends Viewport {
         }
     }
 
-    public ScrollBarPolicy getVerticalPolicy() {
+    public void setHorizontalScrollBarPolicy(String horizontalScrollBarPolicy) {
+        if (horizontalScrollBarPolicy == null) {
+            throw new IllegalArgumentException("horizontalScrollBarPolicy is null.");
+        }
+
+        setHorizontalScrollBarPolicy(ScrollBarPolicy.decode(horizontalScrollBarPolicy));
+    }
+
+    public ScrollBarPolicy getVerticalScrollBarPolicy() {
         return verticalScrollBarPolicy;
     }
 
-    public void setVerticalPolicy(ScrollBarPolicy verticalScrollBarPolicy) {
+    public void setVerticalScrollBarPolicy(ScrollBarPolicy verticalScrollBarPolicy) {
         if (verticalScrollBarPolicy == null) {
             throw new IllegalArgumentException("verticalScrollBarPolicy is null");
         }
@@ -193,6 +201,14 @@ public class ScrollPane extends Viewport {
             scrollPaneListeners.verticalScrollBarPolicyChanged(this,
                 previousVerticalScrollBarPolicy);
         }
+    }
+
+    public void setVerticalScrollBarPolicy(String verticalScrollBarPolicy) {
+        if (verticalScrollBarPolicy == null) {
+            throw new IllegalArgumentException("verticalScrollBarPolicy is null.");
+        }
+
+        setVerticalScrollBarPolicy(ScrollBarPolicy.decode(verticalScrollBarPolicy));
     }
 
     public Component getRowHeader() {

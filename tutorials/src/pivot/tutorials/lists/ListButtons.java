@@ -25,7 +25,7 @@ import pivot.wtk.ListButton;
 import pivot.wtk.ListButtonSelectionListener;
 import pivot.wtk.Window;
 import pivot.wtk.media.Image;
-import pivot.wtkx.ComponentLoader;
+import pivot.wtkx.WTKXSerializer;
 
 public class ListButtons implements Application {
     private class ListButtonSelectionHandler
@@ -40,7 +40,10 @@ public class ListButtons implements Application {
                     (Dictionary<String, Object>)item;
 
                 // Get the image URL for the selected item
-                URL imageURL = (URL)dictionary.get("imageURL");
+                String imageName = (String)dictionary.get("imageName");
+                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                URL imageURL = classLoader.getResource((String)imageName);
+
                 ApplicationContext applicationContext =
                     ApplicationContext.getInstance();
 
@@ -65,14 +68,14 @@ public class ListButtons implements Application {
     private Window window = null;
 
     public void startup() throws Exception {
-        ComponentLoader componentLoader = new ComponentLoader();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
-            componentLoader.load("pivot/tutorials/lists/list_buttons.wtkx");
+            (Component)wtkxSerializer.readObject("pivot/tutorials/lists/list_buttons.wtkx");
 
-        imageView = (ImageView)componentLoader.getComponent("imageView");
+        imageView = (ImageView)wtkxSerializer.getObjectByName("imageView");
 
         ListButton listButton =
-            (ListButton)componentLoader.getComponent("listButton");
+            (ListButton)wtkxSerializer.getObjectByName("listButton");
 
         listButton.getListButtonSelectionListeners().add(new
             ListButtonSelectionHandler());

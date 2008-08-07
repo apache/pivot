@@ -708,6 +708,10 @@ public abstract class Component implements Visual {
         }
     }
 
+    public int getPreferredWidth() {
+        return getPreferredWidth(-1);
+    }
+
     public int getPreferredWidth(int height) {
         int preferredWidth = this.preferredWidth;
 
@@ -774,6 +778,10 @@ public abstract class Component implements Visual {
      */
     public boolean isPreferredWidthSet() {
         return (preferredWidth != -1);
+    }
+
+    public int getPreferredHeight() {
+        return getPreferredHeight(-1);
     }
 
     public int getPreferredHeight(int width) {

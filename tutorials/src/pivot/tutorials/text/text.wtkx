@@ -15,7 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane styles="{padding:4, verticalAlignment:'center'}">
+<FlowPane styles="{padding:4, verticalAlignment:'center'}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <Label text="State:"/>
-    <TextInput id="stateTextInput" textSize="20"/>
+    <TextInput wtkx:id="stateTextInput" textSize="20"/>
 </FlowPane>

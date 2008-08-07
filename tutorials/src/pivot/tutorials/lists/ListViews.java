@@ -24,21 +24,21 @@ import pivot.wtk.ListView;
 import pivot.wtk.ListViewSelectionListener;
 import pivot.wtk.Span;
 import pivot.wtk.Window;
-import pivot.wtkx.ComponentLoader;
+import pivot.wtkx.WTKXSerializer;
 
 public class ListViews implements Application {
     private Window window = null;
 
     @SuppressWarnings("unchecked")
     public void startup() throws Exception {
-        ComponentLoader componentLoader = new ComponentLoader();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
-            componentLoader.load("pivot/tutorials/lists/list_views.wtkx");
+            (Component)wtkxSerializer.readObject("pivot/tutorials/lists/list_views.wtkx");
 
         final Label selectionLabel =
-            (Label)componentLoader.getComponent("selectionLabel");
+            (Label)wtkxSerializer.getObjectByName("selectionLabel");
 
-        ListView listView = (ListView)componentLoader.getComponent("listView");
+        ListView listView = (ListView)wtkxSerializer.getObjectByName("listView");
         listView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
             public void selectionChanged(ListView listView) {
                 String selectionText = "";

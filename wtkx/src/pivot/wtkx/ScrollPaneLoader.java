@@ -48,7 +48,7 @@ class ScrollPaneLoader extends ContainerLoader {
                 ScrollPane.ScrollBarPolicy.decode(horizontalScrollBarPolicyAttribute);
         }
 
-        scrollPane.setHorizontalPolicy(horizontalScrollBarPolicy);
+        scrollPane.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
 
         ScrollPane.ScrollBarPolicy verticalScrollBarPolicy = ScrollPane.ScrollBarPolicy.AUTO;
         if (element.hasAttribute(VERTICAL_SCROLL_BAR_POLICY_ATTRIBUTE)) {
@@ -58,7 +58,7 @@ class ScrollPaneLoader extends ContainerLoader {
                 ScrollPane.ScrollBarPolicy.decode(verticalScrollBarPolicyAttribute);
         }
 
-        scrollPane.setVerticalPolicy(verticalScrollBarPolicy);
+        scrollPane.setVerticalScrollBarPolicy(verticalScrollBarPolicy);
 
         NodeList childNodes = element.getChildNodes();
         int n = childNodes.getLength();

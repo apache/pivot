@@ -15,27 +15,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true, spacing: 1, gridColor:'#cccac2'}">
-    <rows>
-        <Row height="340"/>
-    </rows>
+<TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true, spacing: 1, gridColor:'#cccac2'}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <columns>
-        <Column width="-1"/>
-        <Column width="1*"/>
+        <TablePane.Column width="-1"/>
+        <TablePane.Column width="1*"/>
     </columns>
+    <rows>
+        <TablePane.Row height="340">
+            <FlowPane orientation="vertical" styles="{verticalAlignment:'top', padding: 4}">
+                <Label text="Picture:"/>
+                <ListButton wtkx:id="listButton">
+                    <listData>
+                        <item label="IMG_0725_2.jpg" imageName="pivot/tutorials/IMG_0725_2.jpg"/>
+                        <item label="IMG_0735_2.jpg" imageName="pivot/tutorials/IMG_0735_2.jpg"/>
+                        <item label="IMG_0767_2.jpg" imageName="pivot/tutorials/IMG_0767_2.jpg"/>
+                    </listData>
+                </ListButton>
+            </FlowPane>
 
-    <cells>
-        <FlowPane row="0" column="0" orientation="vertical" styles="{verticalAlignment:'top', padding: 4}">
-            <Label text="Picture:"/>
-            <ListButton id="listButton">
-                <listData>
-                    <item label="IMG_0725_2.jpg" imageURL="@/pivot/tutorials/IMG_0725_2.jpg"/>
-                    <item label="IMG_0735_2.jpg" imageURL="@/pivot/tutorials/IMG_0735_2.jpg"/>
-                    <item label="IMG_0767_2.jpg" imageURL="@/pivot/tutorials/IMG_0767_2.jpg"/>
-                </listData>
-            </ListButton>
-        </FlowPane>
-
-        <ImageView row="0" column="1" id="imageView" styles="{backgroundColor:'#404040'}"/>
-    </cells>
+            <ImageView wtkx:id="imageView" styles="{backgroundColor:'#404040'}"/>
+        </TablePane.Row>
+    </rows>
 </TablePane>

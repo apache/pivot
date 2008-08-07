@@ -22,7 +22,7 @@ import pivot.wtk.Component;
 import pivot.wtk.TextInput;
 import pivot.wtk.TextInputCharacterListener;
 import pivot.wtk.Window;
-import pivot.wtkx.ComponentLoader;
+import pivot.wtkx.WTKXSerializer;
 
 public class Text implements Application {
     private Window window = new Window();
@@ -86,11 +86,12 @@ public class Text implements Application {
     }
 
     public void startup() throws Exception {
-        ComponentLoader componentLoader = new ComponentLoader();
-        Component content = componentLoader.load("pivot/tutorials/text/text.wtkx");
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        Component content =
+            (Component)wtkxSerializer.readObject("pivot/tutorials/text/text.wtkx");
 
         TextInput stateTextInput =
-            (TextInput)componentLoader.getComponent("stateTextInput");
+            (TextInput)wtkxSerializer.getObjectByName("stateTextInput");
 
         stateTextInput.getTextInputCharacterListeners().add(new
             TextInputCharacterListener() {

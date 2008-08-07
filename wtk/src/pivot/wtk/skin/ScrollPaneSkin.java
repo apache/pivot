@@ -130,7 +130,7 @@ public class ScrollPaneSkin extends ContainerSkin
                 preferredColumnHeaderHeight = columnHeader.getPreferredHeight(-1);
             }
 
-            ScrollBarPolicy verticalPolicy = scrollPane.getVerticalPolicy();
+            ScrollBarPolicy verticalPolicy = scrollPane.getVerticalScrollBarPolicy();
 
             if (verticalPolicy != ScrollBarPolicy.FILL) {
                 // Get the unconstrained preferred size of the view
@@ -220,7 +220,7 @@ public class ScrollPaneSkin extends ContainerSkin
                 preferredColumnHeaderHeight = columnHeader.getPreferredHeight(-1);
             }
 
-            ScrollBarPolicy horizontalPolicy = scrollPane.getHorizontalPolicy();
+            ScrollBarPolicy horizontalPolicy = scrollPane.getHorizontalScrollBarPolicy();
 
             if (horizontalPolicy != ScrollBarPolicy.FILL) {
                 // Get the unconstrained preferred size of the view
@@ -314,11 +314,11 @@ public class ScrollPaneSkin extends ContainerSkin
                 preferredHeight += columnHeader.getPreferredHeight(-1);
             }
 
-            if (scrollPane.getHorizontalPolicy() == ScrollBarPolicy.ALWAYS) {
+            if (scrollPane.getHorizontalScrollBarPolicy() == ScrollBarPolicy.ALWAYS) {
                 preferredHeight += horizontalScrollBar.getPreferredHeight(-1);
             }
 
-            if (scrollPane.getVerticalPolicy() == ScrollBarPolicy.ALWAYS) {
+            if (scrollPane.getVerticalScrollBarPolicy() == ScrollBarPolicy.ALWAYS) {
                 preferredWidth += verticalScrollBar.getPreferredWidth(-1);
             }
         }
@@ -520,8 +520,8 @@ public class ScrollPaneSkin extends ContainerSkin
     public void layout() {
         ScrollPane scrollPane = (ScrollPane)getComponent();
 
-        ScrollBarPolicy horizontalPolicy = scrollPane.getHorizontalPolicy();
-        ScrollBarPolicy verticalPolicy = scrollPane.getVerticalPolicy();
+        ScrollBarPolicy horizontalPolicy = scrollPane.getHorizontalScrollBarPolicy();
+        ScrollBarPolicy verticalPolicy = scrollPane.getVerticalScrollBarPolicy();
 
         boolean fillWidthToCapacity = false;
         boolean fillHeightToCapacity = false;

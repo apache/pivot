@@ -1116,6 +1116,14 @@ public class TableView extends Component {
         }
     }
 
+    public void setSelectMode(String selectMode) {
+        if (selectMode == null) {
+            throw new IllegalArgumentException("selectMode is null.");
+        }
+
+        setSelectMode(SelectMode.decode(selectMode));
+    }
+
     /**
      * Returns the disabled state of a given row.
      *

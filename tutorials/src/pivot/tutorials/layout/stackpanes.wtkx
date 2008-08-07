@@ -15,8 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<StackPane>
-	<ImageView src="/pivot/tutorials/layout/03big.jpg"
+<StackPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+	<ImageView image="pivot/tutorials/layout/03big.jpg"
 	    styles="{horizontalAlignment:'left', verticalAlignment:'top',
 	        scaleX:1.5, scaleY:1.25}"/>
 	<Label text="StackPane Demo"

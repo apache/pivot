@@ -115,10 +115,9 @@ public class TablePane extends Container {
         public void setHeight(String height) {
             boolean relative = false;
 
-            int i = height.lastIndexOf(RELATIVE_SIZE_INDICATOR);
-            if (i != -1) {
+            if (height.endsWith("*")) {
                 relative = true;
-                height = height.substring(0, 1);
+                height = height.substring(0, height.length() - 1);
             }
 
             setHeight(Integer.parseInt(height), relative);
@@ -383,10 +382,9 @@ public class TablePane extends Container {
         public void setWidth(String width) {
             boolean relative = false;
 
-            int i = width.lastIndexOf(RELATIVE_SIZE_INDICATOR);
-            if (i != -1) {
+            if (width.endsWith("*")) {
                 relative = true;
-                width = width.substring(0, 1);
+                width = width.substring(0, width.length() - 1);
             }
 
             setWidth(Integer.parseInt(width), relative);

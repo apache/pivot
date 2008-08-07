@@ -18,15 +18,15 @@ package pivot.tutorials.labels;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Window;
-import pivot.wtkx.ComponentLoader;
+import pivot.wtkx.WTKXSerializer;
 
 public class Labels implements Application {
     private Window window = null;
 
     public void startup() throws Exception {
-        ComponentLoader componentLoader = new ComponentLoader();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
-            componentLoader.load("pivot/tutorials/labels/labels.wtkx");
+            (Component)wtkxSerializer.readObject("pivot/tutorials/labels/labels.wtkx");
 
         window = new Window();
         window.setContent(content);

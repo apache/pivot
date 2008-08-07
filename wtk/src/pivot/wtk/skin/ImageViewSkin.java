@@ -240,7 +240,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
             throw new IllegalArgumentException("scaleX is null.");
         }
 
-        setOpacity(scaleX.floatValue());
+        setScaleX(scaleX.floatValue());
     }
 
     public float getScaleY() {
@@ -257,7 +257,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
             throw new IllegalArgumentException("scaleY is null.");
         }
 
-        setOpacity(scaleY.floatValue());
+        setScaleY(scaleY.floatValue());
     }
 
     public HorizontalAlignment getHorizontalAlignment() {

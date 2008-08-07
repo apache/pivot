@@ -67,12 +67,12 @@ limitations under the License.
                             disabledItems="[1, 5]"
                             itemRendererProperties="{iconSize:{width:16, height:16}, showIcon:true}">
                             <listData>
-                                <item iconURL="@anchor.png" label="Anchor"/>
-                                <item iconURL="@bell.png" label="Bell"/>
-                                <item iconURL="@clock.png" label="Clock"/>
-                                <item iconURL="@cup.png" label="Cup"/>
-                                <item iconURL="@house.png" label="House"/>
-                                <item iconURL="@star.png" label="Star"/>
+                                <item icon="@anchor.png" label="Anchor"/>
+                                <item icon="@bell.png" label="Bell"/>
+                                <item icon="@clock.png" label="Clock"/>
+                                <item icon="@cup.png" label="Cup"/>
+                                <item icon="@house.png" label="House"/>
+                                <item icon="@star.png" label="Star"/>
                             </listData>
                         </ListView>
                     </view>
@@ -97,12 +97,12 @@ limitations under the License.
                 <ListButton label="Image" selectedIndex="2"
                     itemRendererProperties="{iconSize:{width:16, height:16}, showIcon:true}">
                     <listData>
-                        <item iconURL="@anchor.png" label="Anchor"/>
-                        <item iconURL="@bell.png" label="Bell"/>
-                        <item iconURL="@clock.png" label="Clock"/>
-                        <item iconURL="@cup.png" label="Cup"/>
-                        <item iconURL="@house.png" label="House"/>
-                        <item iconURL="@star.png" label="Star"/>
+                        <item icon="@anchor.png" label="Anchor"/>
+                        <item icon="@bell.png" label="Bell"/>
+                        <item icon="@clock.png" label="Clock"/>
+                        <item icon="@cup.png" label="Cup"/>
+                        <item icon="@house.png" label="House"/>
+                        <item icon="@star.png" label="Star"/>
                     </listData>
                 </ListButton>
             </Form>
