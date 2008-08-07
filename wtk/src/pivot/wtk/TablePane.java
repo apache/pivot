@@ -115,7 +115,7 @@ public class TablePane extends Container {
         public void setHeight(String height) {
             boolean relative = false;
 
-            if (height.endsWith("*")) {
+            if (height.endsWith(RELATIVE_SIZE_INDICATOR)) {
                 relative = true;
                 height = height.substring(0, height.length() - 1);
             }
@@ -382,7 +382,7 @@ public class TablePane extends Container {
         public void setWidth(String width) {
             boolean relative = false;
 
-            if (width.endsWith("*")) {
+            if (width.endsWith(RELATIVE_SIZE_INDICATOR)) {
                 relative = true;
                 width = width.substring(0, width.length() - 1);
             }
@@ -566,11 +566,13 @@ public class TablePane extends Container {
                     for (int j = 0, m = row.getLength(); j < m; j++) {
                         Component component = row.get(j);
 
-                        // Detach attributes from each row component
-                        component.setAttributes(null);
+                        if (component != null) {
+                            // Detach attributes from each row component
+                            component.setAttributes(null);
 
-                        // Remove each component in the row from the table pane
-                        TablePane.this.remove(component);
+                            // Remove each component in the row from the table pane
+                            TablePane.this.remove(component);
+                        }
                     }
                 }
 
@@ -1001,4 +1003,3 @@ public class TablePane extends Container {
         setColumnSpan(component, Integer.parseInt(columnSpan));
     }
 }
-
