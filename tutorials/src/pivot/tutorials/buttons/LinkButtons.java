@@ -22,26 +22,27 @@ import pivot.wtk.CardPane;
 import pivot.wtk.Component;
 import pivot.wtk.LinkButton;
 import pivot.wtk.Window;
-import pivot.wtkx.ComponentLoader;
+import pivot.wtkx.WTKXSerializer;
 
 public class LinkButtons implements Application {
     private Window window = null;
 
     public void startup() throws Exception {
-        ComponentLoader componentLoader = new ComponentLoader();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+
         Component content =
-            componentLoader.load("pivot/tutorials/buttons/link_buttons.wtkx");
+            (Component)wtkxSerializer.readObject("pivot/tutorials/buttons/link_buttons.wtkx");
 
-        final CardPane cardPane = (CardPane)componentLoader.getComponent("cardPane");
+        final CardPane cardPane = (CardPane)wtkxSerializer.getObjectByName("cardPane");
 
-        LinkButton nextButton = (LinkButton)componentLoader.getComponent("nextButton");
+        LinkButton nextButton = (LinkButton)wtkxSerializer.getObjectByName("nextButton");
         nextButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 cardPane.setSelectedIndex(1);
             }
         });
 
-        LinkButton previousButton = (LinkButton)componentLoader.getComponent("previousButton");
+        LinkButton previousButton = (LinkButton)wtkxSerializer.getObjectByName("previousButton");
         previousButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 cardPane.setSelectedIndex(0);

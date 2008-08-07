@@ -46,7 +46,7 @@ public class DragDropTest implements Application {
             image = imageView.getImage();
 
             if (image != null) {
-                imageView.setImage(null);
+                imageView.setImage((Image)null);
                 offset = new Dimensions(x - (imageView.getWidth() - image.getWidth()) / 2,
                     y - (imageView.getHeight() - image.getHeight()) / 2);
             }

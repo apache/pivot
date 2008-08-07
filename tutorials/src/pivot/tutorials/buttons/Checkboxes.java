@@ -22,7 +22,7 @@ import pivot.wtk.Checkbox;
 import pivot.wtk.Component;
 import pivot.wtk.ImageView;
 import pivot.wtk.Window;
-import pivot.wtkx.ComponentLoader;
+import pivot.wtkx.WTKXSerializer;
 
 public class Checkboxes implements Application {
     private class ButtonPressHandler implements ButtonPressListener {
@@ -36,29 +36,29 @@ public class Checkboxes implements Application {
     private ButtonPressHandler buttonPressHandler = new ButtonPressHandler();
 
     public void startup() throws Exception {
-        ComponentLoader componentLoader = new ComponentLoader();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
-            componentLoader.load("pivot/tutorials/buttons/checkboxes.wtkx");
+            (Component)wtkxSerializer.readObject("pivot/tutorials/buttons/checkboxes.wtkx");
 
         // Wire up user data and event listeners
         Checkbox bellCheckbox =
-            (Checkbox)componentLoader.getComponent("bellCheckbox");
+            (Checkbox)wtkxSerializer.getObjectByName("bellCheckbox");
         ImageView bellImageView =
-            (ImageView)componentLoader.getComponent("bellImageView");
+            (ImageView)wtkxSerializer.getObjectByName("bellImageView");
         bellCheckbox.setUserData(bellImageView);
         bellCheckbox.getButtonPressListeners().add(buttonPressHandler);
 
         Checkbox clockCheckbox =
-            (Checkbox)componentLoader.getComponent("clockCheckbox");
+            (Checkbox)wtkxSerializer.getObjectByName("clockCheckbox");
         ImageView clockImageView =
-            (ImageView)componentLoader.getComponent("clockImageView");
+            (ImageView)wtkxSerializer.getObjectByName("clockImageView");
         clockCheckbox.setUserData(clockImageView);
         clockCheckbox.getButtonPressListeners().add(buttonPressHandler);
 
         Checkbox houseCheckbox =
-            (Checkbox)componentLoader.getComponent("houseCheckbox");
+            (Checkbox)wtkxSerializer.getObjectByName("houseCheckbox");
         ImageView houseImageView =
-            (ImageView)componentLoader.getComponent("houseImageView");
+            (ImageView)wtkxSerializer.getObjectByName("houseImageView");
         houseCheckbox.setUserData(houseImageView);
         houseCheckbox.getButtonPressListeners().add(buttonPressHandler);
 

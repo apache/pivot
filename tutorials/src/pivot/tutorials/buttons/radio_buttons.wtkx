@@ -15,9 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane orientation="vertical" styles="{padding:4}">
-    <RadioButton id="oneButton" buttonData="'One'" group="numbers" selected="true"/>
-    <RadioButton id="twoButton" buttonData="'Two'" group="numbers"/>
-    <RadioButton id="threeButton" buttonData="'Three'" group="numbers"/>
-    <PushButton id="selectButton" buttonData="'Select'"/>
+<FlowPane orientation="vertical" styles="{padding:4}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    <RadioButton wtkx:id="oneButton" buttonData="One" group="numbers" selected="true"/>
+    <RadioButton wtkx:id="twoButton" buttonData="Two" group="numbers"/>
+    <RadioButton wtkx:id="threeButton" buttonData="Three" group="numbers"/>
+    <PushButton wtkx:id="selectButton" buttonData="Select"/>
 </FlowPane>

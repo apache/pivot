@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import pivot.collections.Dictionary;
+import pivot.collections.HashMap;
 import pivot.util.ListenerList;
 
 /**
@@ -194,6 +195,8 @@ public abstract class Button extends Component {
     private ButtonListenerList buttonListeners = new ButtonListenerList();
     private ButtonPressListenerList buttonPressListeners = new ButtonPressListenerList();
     private ButtonStateListenerList buttonStateListeners = new ButtonStateListenerList();
+
+    private static HashMap<String, Group> groups = new HashMap<String, Group>();
 
     public Button() {
         this(null);
@@ -381,7 +384,7 @@ public abstract class Button extends Component {
             // group, and can't be tri-state
             if (!toggleButton) {
                 setSelected(false);
-                setGroup(null);
+                setGroup((Group)null);
                 setTriState(false);
             }
 
@@ -464,6 +467,18 @@ public abstract class Button extends Component {
 
             buttonListeners.groupChanged(this, previousGroup);
         }
+    }
+
+    public void setGroup(String group) {
+        if (group == null) {
+            throw new IllegalArgumentException("group is null.");
+        }
+
+        if (!groups.containsKey(group)) {
+            groups.put(group, new Group());
+        }
+
+        setGroup(groups.get(group));
     }
 
     public String getSelectedKey() {

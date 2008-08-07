@@ -15,14 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<CardPane id="cardPane" selectedIndex="0">
+<CardPane wtkx:id="cardPane" selectedIndex="0"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-        <ImageView src="/pivot/tutorials/IMG_0735_2.jpg"/>
-        <LinkButton id="nextButton" buttonData="{iconURL:'@resultset_next.png', label:'Next'}"/>
+        <ImageView image="pivot/tutorials/IMG_0735_2.jpg"/>
+        <LinkButton wtkx:id="nextButton">
+            <buttonData label="Next" icon="@resultset_next.png"/>
+        </LinkButton>
     </FlowPane>
 
     <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-        <ImageView src="/pivot/tutorials/IMG_0767_2.jpg"/>
-        <LinkButton id="previousButton" buttonData="{iconURL:'@resultset_previous.png', label:'Previous'}"/>
+        <ImageView image="pivot/tutorials/IMG_0767_2.jpg"/>
+        <LinkButton wtkx:id="previousButton">
+            <buttonData label="Previous" icon="@resultset_previous.png"/>
+        </LinkButton>
     </FlowPane>
 </CardPane>

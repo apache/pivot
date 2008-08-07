@@ -207,7 +207,7 @@ public class Demo implements Application {
             image = imageView.getImage();
 
             if (image != null) {
-                imageView.setImage(null);
+                imageView.setImage((Image)null);
                 offset = new Dimensions(x - (imageView.getWidth() - image.getWidth()) / 2,
                     y - (imageView.getHeight() - image.getHeight()) / 2);
             }
@@ -298,8 +298,11 @@ public class Demo implements Application {
     private Window window = null;
 
     public void startup() throws Exception {
+        long t0 = System.currentTimeMillis();
         ComponentLoader componentLoader = new ComponentLoader();
         Component component = componentLoader.load("pivot/tutorials/demo.wtkx");
+        long t1 = System.currentTimeMillis();
+        System.out.println("Loaded WTKX in " + (t1 - t0) + " ms.");
 
         sortableTableView = (TableView)componentLoader.getComponent("tables.sortableTableView");
         sortableTableViewHeader = (TableViewHeader)componentLoader.getComponent("tables.sortableTableViewHeader");

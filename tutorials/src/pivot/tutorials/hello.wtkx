@@ -16,4 +16,5 @@ limitations under the License.
 -->
 
 <Label text="Hello WTKX!"
-    styles="{font:'Arial bold 24', color:'#ff0000', horizontalAlignment:'center', verticalAlignment:'center'}"/>
+    styles="{font:'Arial bold 24', color:'#ff0000', horizontalAlignment:'center', verticalAlignment:'center'}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk"/>

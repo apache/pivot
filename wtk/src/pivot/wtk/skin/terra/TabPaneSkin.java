@@ -1043,7 +1043,7 @@ public class TabPaneSkin extends ContainerSkin
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             TabButton tabButton = (TabButton)removed.get(i);
-            tabButton.setGroup(null);
+            tabButton.setGroup((Group)null);
         }
     }
 

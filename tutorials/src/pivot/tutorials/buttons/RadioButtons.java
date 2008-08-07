@@ -23,24 +23,24 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.PushButton;
 import pivot.wtk.RadioButton;
 import pivot.wtk.Window;
-import pivot.wtkx.ComponentLoader;
+import pivot.wtkx.WTKXSerializer;
 
 public class RadioButtons implements Application {
     private Window window = null;
 
     public void startup() throws Exception {
-        ComponentLoader componentLoader = new ComponentLoader();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
-            componentLoader.load("pivot/tutorials/buttons/radio_buttons.wtkx");
+            (Component)wtkxSerializer.readObject("pivot/tutorials/buttons/radio_buttons.wtkx");
 
         // Get a reference to the button group
         RadioButton oneButton =
-            (RadioButton)componentLoader.getComponent("oneButton");
+            (RadioButton)wtkxSerializer.getObjectByName("oneButton");
         final Button.Group numbersGroup = oneButton.getGroup();
 
         // Add a button press listener
         PushButton selectButton =
-            (PushButton)componentLoader.getComponent("selectButton");
+            (PushButton)wtkxSerializer.getObjectByName("selectButton");
 
         selectButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

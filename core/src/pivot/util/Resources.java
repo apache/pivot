@@ -84,7 +84,7 @@ public class Resources implements Dictionary<String, Object> {
         this.baseName = baseName;
         this.locale = locale;
 
-        String resourceName = baseName.replaceAll("\\.", "/");
+        String resourceName = baseName.replace('.', '/');
         resourceMap = readJSONResource(resourceName + ".json");
         if (null == resourceMap) {
             throw new MissingResourceException("Can't find resource for base name "

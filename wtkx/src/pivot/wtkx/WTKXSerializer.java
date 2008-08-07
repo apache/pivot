@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Comparator;
@@ -330,14 +331,20 @@ public class WTKXSerializer implements Serializer {
                         } else if (Character.isUpperCase(localName.charAt(0))) {
                             // The element represents a typed object
                             String namespaceURI = reader.getNamespaceURI();
+                            if (namespaceURI == null) {
+                                throw new SerializationException("No namespace specified for "
+                                    + localName + " tag.");
+                            }
+
                             String className = namespaceURI + "."
-                                + localName.replaceAll("\\.", "$");
+                                + localName.replace('.', '$');
 
                             try {
                                 Class<?> type = Class.forName(className);
                                 Class<?> enclosingClass = type.getEnclosingClass();
 
-                                if (enclosingClass == null) {
+                                if (enclosingClass == null
+                                    || (type.getModifiers() & Modifier.STATIC) > 0) {
                                     value = type.newInstance();
                                 } else {
                                     // The type represents an inner class; walk up the node
@@ -348,7 +355,7 @@ public class WTKXSerializer implements Serializer {
                                     while (i >= 0
                                         && outer == null) {
                                         Node ancestorNode = nodeStack.get(i--);
-                                        if (enclosingClass.isAssignableFrom(ancestorNode.getClass())) {
+                                        if (enclosingClass.isAssignableFrom(ancestorNode.value.getClass())) {
                                             outer = ancestorNode.value;
                                         }
                                     }
@@ -425,10 +432,10 @@ public class WTKXSerializer implements Serializer {
                         Node node = nodeStack.pop();
                         Node parentNode = (nodeStack.getLength() > 0) ? nodeStack.peek() : null;
 
-                        // If the node represents a property of a typed parent element
-                        // and the property type matches the node value type, set the
-                        // property to the node value; otherwise, set the property to the
-                        // first child of the node value (which is assumed to be an
+                        // If the node represents a writable property of a typed parent
+                        // element and the property type matches the node value type, set
+                        // the property to the node value; otherwise, set the property to
+                        // the first child of the node value (which is assumed to be an
                         // instance of Element)
                         if (parentNode != null
                             && !(parentNode.value instanceof Element)
@@ -438,7 +445,9 @@ public class WTKXSerializer implements Serializer {
 
                             if (node.value == null
                                 || propertyType.isAssignableFrom(node.value.getClass())) {
-                                parentBeanDictionary.put(localName, node.value);
+                                if (!parentBeanDictionary.isReadOnly(localName)) {
+                                    parentBeanDictionary.put(localName, node.value);
+                                }
                             } else {
                                 assert(node.value instanceof Element) : "Node value is not an element.";
 
@@ -566,28 +575,58 @@ public class WTKXSerializer implements Serializer {
 
         if (propertyType == Boolean.class
             || propertyType == Boolean.TYPE) {
-            resolvedValue = Boolean.parseBoolean(attributeValue);
+            try {
+                resolvedValue = Boolean.parseBoolean(attributeValue);
+            } catch(NumberFormatException exception) {
+                resolvedValue = attributeValue;
+            }
         } else if (propertyType == Character.class
             || propertyType == Character.TYPE) {
-            resolvedValue = attributeValue.charAt(0);
+            if (attributeValue.length() > 0) {
+                resolvedValue = attributeValue.charAt(0);
+            }
         } else if (propertyType == Byte.class
             || propertyType == Byte.TYPE) {
-            resolvedValue = Byte.parseByte(attributeValue);
+            try {
+                resolvedValue = Byte.parseByte(attributeValue);
+            } catch(NumberFormatException exception) {
+                resolvedValue = attributeValue;
+            }
         } else if (propertyType == Short.class
             || propertyType == Short.TYPE) {
-            resolvedValue = Short.parseShort(attributeValue);
+            try {
+                resolvedValue = Short.parseShort(attributeValue);
+            } catch(NumberFormatException exception) {
+                resolvedValue = attributeValue;
+            }
         } else if (propertyType == Integer.class
             || propertyType == Integer.TYPE) {
-            resolvedValue = Integer.parseInt(attributeValue);
+            try {
+                resolvedValue = Integer.parseInt(attributeValue);
+            } catch(NumberFormatException exception) {
+                resolvedValue = attributeValue;
+            }
         } else if (propertyType == Long.class
             || propertyType == Long.TYPE) {
-            resolvedValue = Long.parseLong(attributeValue);
+            try {
+                resolvedValue = Long.parseLong(attributeValue);
+            } catch(NumberFormatException exception) {
+                resolvedValue = attributeValue;
+            }
         } else if (propertyType == Float.class
             || propertyType == Float.TYPE) {
-            resolvedValue = Float.parseFloat(attributeValue);
+            try {
+                resolvedValue = Float.parseFloat(attributeValue);
+            } catch(NumberFormatException exception) {
+                resolvedValue = attributeValue;
+            }
         } else if (propertyType == Double.class
             || propertyType == Double.TYPE) {
-            resolvedValue = Double.parseDouble(attributeValue);
+            try {
+                resolvedValue = Double.parseDouble(attributeValue);
+            } catch(NumberFormatException exception) {
+                resolvedValue = attributeValue;
+            }
         } else {
             if (attributeValue.startsWith(URL_PREFIX)) {
                 if (location == null) {

@@ -18,15 +18,15 @@ package pivot.tutorials.buttons;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Window;
-import pivot.wtkx.ComponentLoader;
+import pivot.wtkx.WTKXSerializer;
 
 public class ToggleButtons implements Application {
     private Window window = null;
 
     public void startup() throws Exception {
-        ComponentLoader componentLoader = new ComponentLoader();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
-            componentLoader.load("pivot/tutorials/buttons/toggle_buttons.wtkx");
+            (Component)wtkxSerializer.readObject("pivot/tutorials/buttons/toggle_buttons.wtkx");
 
         window = new Window();
         window.setContent(content);

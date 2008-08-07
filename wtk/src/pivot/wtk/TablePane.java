@@ -33,8 +33,12 @@ public class TablePane extends Container {
 
         private TablePane tablePane = null;
 
+        public Row() {
+            this(0, false, false);
+        }
+
         public Row(int height) {
-            this(height, false);
+            this(height, false, false);
         }
 
         public Row(int height, boolean relative) {
@@ -88,6 +92,36 @@ public class TablePane extends Container {
          */
         public boolean isRelative() {
             return relative;
+        }
+
+        /**
+         * Set the row height.
+         *
+         * @param height
+         * The absolute height of the row.
+         */
+        public void setHeight(int height) {
+            setHeight(height, false);
+        }
+
+        /**
+         * Set the row height.
+         *
+         * @param height
+         * The encoded height of the row. If the string ends with the '*'
+         * character, it is treated as a relative value. Otherwise, it is
+         * considered an absolute value.
+         */
+        public void setHeight(String height) {
+            boolean relative = false;
+
+            int i = height.lastIndexOf(RELATIVE_SIZE_INDICATOR);
+            if (i != -1) {
+                relative = true;
+                height = height.substring(0, 1);
+            }
+
+            setHeight(Integer.parseInt(height), relative);
         }
 
         /**
@@ -267,6 +301,10 @@ public class TablePane extends Container {
         private boolean relative = false;
         private boolean selected = false;
 
+        public Column() {
+            this(0, false, false);
+        }
+
         public Column(int width) {
             this(width, false, false);
         }
@@ -322,6 +360,36 @@ public class TablePane extends Container {
          */
         public boolean isRelative() {
             return relative;
+        }
+
+        /**
+         * Set the column width.
+         *
+         * @param width
+         * The absolute width of the column.
+         */
+        public void setWidth(int width) {
+            setWidth(width, false);
+        }
+
+        /**
+         * Set the column width.
+         *
+         * @param width
+         * The encoded width of the row. If the string ends with the '*'
+         * character, it is treated as a relative value. Otherwise, it is
+         * considered an absolute value.
+         */
+        public void setWidth(String width) {
+            boolean relative = false;
+
+            int i = width.lastIndexOf(RELATIVE_SIZE_INDICATOR);
+            if (i != -1) {
+                relative = true;
+                width = width.substring(0, 1);
+            }
+
+            setWidth(Integer.parseInt(width), relative);
         }
 
         /**
@@ -706,6 +774,8 @@ public class TablePane extends Container {
 
     private TablePaneListenerList tablePaneListeners = new TablePaneListenerList();
     private TablePaneAttributeListenerList tablePaneAttributeListeners = new TablePaneAttributeListenerList();
+
+    public static final String RELATIVE_SIZE_INDICATOR = "*";
 
     /**
      * Creates a new <tt>TablePane</tt> with empty row and column sequences.

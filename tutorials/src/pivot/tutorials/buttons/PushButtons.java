@@ -22,19 +22,19 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.PushButton;
 import pivot.wtk.Window;
-import pivot.wtkx.ComponentLoader;
+import pivot.wtkx.WTKXSerializer;
 
 public class PushButtons implements Application {
     private Window window = null;
 
     public void startup() throws Exception {
-        ComponentLoader componentLoader = new ComponentLoader();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
-            componentLoader.load("pivot/tutorials/buttons/push_buttons.wtkx");
+            (Component)wtkxSerializer.readObject("pivot/tutorials/buttons/push_buttons.wtkx");
 
         // Get a reference to the button and add a button press listener
         PushButton pushButton =
-            (PushButton)componentLoader.getComponent("pushButton");
+            (PushButton)wtkxSerializer.getObjectByName("pushButton");
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 Alert.alert(Alert.Type.INFO, "You clicked me!", window);

@@ -56,7 +56,14 @@ abstract class ButtonLoader extends Loader {
             try {
                 buttonDataReader = new StringReader(buttonDataAttribute);
                 JSONSerializer jsonSerializer = new JSONSerializer();
-                button.setButtonData(rootLoader.resolve(jsonSerializer.readObject(buttonDataReader)));
+
+                Object buttonData = rootLoader.resolve(jsonSerializer.readObject(buttonDataReader));
+                if (buttonData instanceof Map) {
+                    Map<String, Object> buttonDataMap = (Map<String, Object>)buttonData;
+                    buttonDataMap.put("icon", buttonDataMap.remove("iconURL"));
+                }
+
+                button.setButtonData(buttonData);
             } catch(Exception exception) {
                 throw new LoadException("Unable to set button data.", exception);
             } finally {
