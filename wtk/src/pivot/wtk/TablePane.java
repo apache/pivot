@@ -226,7 +226,10 @@ public class TablePane extends Container {
 
             if (tablePane != null) {
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
-                    removed.get(i).setAttributes(null);
+                    Component component = removed.get(i);
+                    if (component != null) {
+                        component.setAttributes(null);
+                    }
                 }
 
                 // Notify table pane listeners
@@ -235,7 +238,9 @@ public class TablePane extends Container {
 
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
                     Component component = removed.get(i);
-                    tablePane.remove(component);
+                    if (component != null) {
+                        tablePane.remove(component);
+                    }
                 }
             }
 

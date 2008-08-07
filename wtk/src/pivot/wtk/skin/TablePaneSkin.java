@@ -290,7 +290,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                         }
 
                         // Set the component's size
-                        child.setSize(childWidth, childHeight);
+                        child.setSize(Math.max(childWidth, 0), Math.max(childHeight, 0));
 
                         // Show the component
                         child.setVisible(true);
