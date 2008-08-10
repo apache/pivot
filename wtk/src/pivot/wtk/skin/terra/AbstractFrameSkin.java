@@ -42,7 +42,6 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.PushButton;
 import pivot.wtk.Rectangle;
-import pivot.wtk.TitlePane;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
 import pivot.wtk.media.Image;
@@ -661,15 +660,15 @@ public abstract class AbstractFrameSkin extends WindowSkin
     }
 
     @Override
-    public void titleChanged(TitlePane dialog, String previousTitle) {
-        String title = dialog.getTitle();
+    public void titleChanged(Window window, String previousTitle) {
+        String title = window.getTitle();
         titleLabel.setDisplayable(title != null);
         titleLabel.setText(title);
     }
 
     @Override
-    public void iconChanged(Window dialog, Image previousIcon) {
-        Image icon = dialog.getIcon();
+    public void iconChanged(Window window, Image previousIcon) {
+        Image icon = window.getIcon();
         iconImageView.setDisplayable(icon != null);
         iconImageView.setImage(icon);
     }

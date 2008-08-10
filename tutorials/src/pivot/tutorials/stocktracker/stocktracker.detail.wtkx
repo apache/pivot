@@ -19,7 +19,7 @@
     styles="{horizontalAlignment:'justify'}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <Label textKey="companyName" styles="{font:'Verdana bold 12'}" />
-    <Spacer />
+    <Separator />
     <Form styles="{rightAlignLabels:true, fieldAlignment:'right'}">
         <fields>
             <Label Form.label="%value" textKey="value" />

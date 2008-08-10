@@ -17,21 +17,61 @@ package pivot.wtk;
 
 import pivot.util.ListenerList;
 
-public class Expander extends TitlePane {
+public class Expander extends Container {
     private class ExpanderListenerList extends ListenerList<ExpanderListener>
     implements ExpanderListener {
+        public void titleChanged(Expander expander, String previousTitle) {
+            for (ExpanderListener listener : this) {
+                listener.titleChanged(expander, previousTitle);
+            }
+        }
+
         public void expandedChanged(Expander expander) {
             for (ExpanderListener listener : this) {
                 listener.expandedChanged(expander);
             }
         }
+
+        public void contentChanged(Expander expander, Component previousContent) {
+            for (ExpanderListener listener : this) {
+                listener.contentChanged(expander, previousContent);
+            }
+        }
     }
 
+    private String title = null;
     private boolean expanded = true;
+    private Component content = null;
+
     private ExpanderListenerList expanderListeners = new ExpanderListenerList();
 
     public Expander() {
         installSkin(Expander.class);
+    }
+
+    /**
+     * Returns the expander's title.
+     *
+     * @return
+     * The pane's title, or <tt>null</tt> if no title is set.
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Sets the expander's title.
+     *
+     * @param title
+     * The new title, or <tt>null</tt> for no title.
+     */
+    public void setTitle(String title) {
+        String previousTitle = this.title;
+
+        if (previousTitle == null ^ title == null) {
+            this.title = title;
+            expanderListeners.titleChanged(this, previousTitle);
+        }
     }
 
     public boolean isExpanded() {
@@ -42,6 +82,32 @@ public class Expander extends TitlePane {
         if (expanded != this.expanded) {
             this.expanded = expanded;
             expanderListeners.expandedChanged(this);
+        }
+    }
+
+    public Component getContent() {
+        return content;
+    }
+
+    public void setContent(Component content) {
+        Component previousContent = this.content;
+
+        if (content != previousContent) {
+            // Remove any previous content component
+            if (previousContent != null) {
+                remove(previousContent);
+            }
+
+            this.content = null;
+
+            // Add the component
+            if (content != null) {
+                add(content);
+            }
+
+            this.content = content;
+
+            expanderListeners.contentChanged(this, previousContent);
         }
     }
 

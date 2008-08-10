@@ -15,9 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane orientation="vertical">
-    <RadioButton buttonData="{iconURL:'@bell.png', label:'Bell'}" group="icons"/>
-    <RadioButton buttonData="{iconURL:'@clock.png', label:'Clock'}" group="icons"/>
-    <RadioButton buttonData="{iconURL:'@house.png', label:'House'}" group="icons"/>
+<FlowPane orientation="vertical"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    <RadioButton group="icons" selected="true">
+        <buttonData label="Bell" icon="@bell.png"/>
+    </RadioButton>
+    <RadioButton group="icons" selected="true">
+        <buttonData label="Clock" icon="@clock.png"/>
+    </RadioButton>
+    <RadioButton group="icons" selected="true">
+        <buttonData label="House" icon="@house.png"/>
+    </RadioButton>
 </FlowPane>
 

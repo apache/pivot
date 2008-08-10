@@ -53,7 +53,7 @@
          <fileset dir="${tutorials}/${src}">
            <include name="pivot/tutorials/stocktracker/**/*.png"/>
            <include name="pivot/tutorials/stocktracker/**/*.jpg"/>
-           <include name="pivot/tutorials/stocktracker/**/*.properties"/>
+           <include name="pivot/tutorials/stocktracker/**/*.json"/>
            <include name="pivot/tutorials/stocktracker/**/*.wtkx"/>
          </fileset>
       </jar>

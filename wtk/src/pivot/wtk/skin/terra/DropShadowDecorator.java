@@ -35,7 +35,7 @@ public class DropShadowDecorator implements Decorator {
         }
 
         public void parentChanged(Component component, Container previousParent) {
-            // No-op
+            visibleChanged(component);
         }
 
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {

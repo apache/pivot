@@ -63,8 +63,7 @@ import pivot.wtk.content.TableRow;
 import pivot.wtk.content.TableViewHeaderData;
 import pivot.wtk.content.TreeViewNodeRenderer;
 import pivot.wtk.media.Image;
-import pivot.wtkx.ComponentLoader;
-import pivot.wtkx.LoadException;
+import pivot.wtkx.WTKXSerializer;
 
 public class Demo implements Application {
     private static class RandomDataComparator implements Comparator<Object> {
@@ -298,57 +297,54 @@ public class Demo implements Application {
     private Window window = null;
 
     public void startup() throws Exception {
-        long t0 = System.currentTimeMillis();
-        ComponentLoader componentLoader = new ComponentLoader();
-        Component component = componentLoader.load("pivot/tutorials/demo.wtkx");
-        long t1 = System.currentTimeMillis();
-        System.out.println("Loaded WTKX in " + (t1 - t0) + " ms.");
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
 
-        sortableTableView = (TableView)componentLoader.getComponent("tables.sortableTableView");
-        sortableTableViewHeader = (TableViewHeader)componentLoader.getComponent("tables.sortableTableViewHeader");
+        sortableTableView = (TableView)wtkxSerializer.getObjectByName("tables.sortableTableView");
+        sortableTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("tables.sortableTableViewHeader");
         initializeSortableTableView();
 
-        editableTreeView = (TreeView)componentLoader.getComponent("trees.editableTreeView");
-        editableTreeViewScrollPane = (ScrollPane)componentLoader.getComponent("trees.editableTreeViewScrollPane");
+        editableTreeView = (TreeView)wtkxSerializer.getObjectByName("trees.editableTreeView");
+        editableTreeViewScrollPane = (ScrollPane)wtkxSerializer.getObjectByName("trees.editableTreeViewScrollPane");
         initializeEditableTreeView();
 
-        Spinner numericSpinner = (Spinner)componentLoader.getComponent("spinners.numericSpinner");
+        Spinner numericSpinner = (Spinner)wtkxSerializer.getObjectByName("spinners.numericSpinner");
         initializeNumericSpinner(numericSpinner);
 
-        Spinner dateSpinner = (Spinner)componentLoader.getComponent("spinners.dateSpinner");
+        Spinner dateSpinner = (Spinner)wtkxSerializer.getObjectByName("spinners.dateSpinner");
         initializeDateSpinner(dateSpinner);
 
         ImageDragHandler imageDragHandler = new ImageDragHandler();
         ImageDropHandler imageDropHandler = new ImageDropHandler();
         ImageMouseHandler imageMouseHandler = new ImageMouseHandler();
 
-        ImageView imageView1 = (ImageView)componentLoader.getComponent("dragdrop.imageView1");
+        ImageView imageView1 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView1");
         imageView1.setDragHandler(imageDragHandler);
         imageView1.setDropHandler(imageDropHandler);
         imageView1.getComponentMouseListeners().add(imageMouseHandler);
 
-        ImageView imageView2 = (ImageView)componentLoader.getComponent("dragdrop.imageView2");
+        ImageView imageView2 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView2");
         imageView2.setDragHandler(imageDragHandler);
         imageView2.setDropHandler(imageDropHandler);
         imageView2.getComponentMouseListeners().add(imageMouseHandler);
 
-        ImageView imageView3 = (ImageView)componentLoader.getComponent("dragdrop.imageView3");
+        ImageView imageView3 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView3");
         imageView3.setDragHandler(imageDragHandler);
         imageView3.setDropHandler(imageDropHandler);
         imageView3.getComponentMouseListeners().add(imageMouseHandler);
 
-        errorAlertButton = (PushButton)componentLoader.getComponent("alerts.errorAlertButton");
-        warningAlertButton = (PushButton)componentLoader.getComponent("alerts.warningAlertButton");
-        questionAlertButton = (PushButton)componentLoader.getComponent("alerts.questionAlertButton");
-        infoAlertButton = (PushButton)componentLoader.getComponent("alerts.infoAlertButton");
-        customAlertButton = (PushButton)componentLoader.getComponent("alerts.customAlertButton");
+        errorAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.errorAlertButton");
+        warningAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.warningAlertButton");
+        questionAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.questionAlertButton");
+        infoAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.infoAlertButton");
+        customAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.customAlertButton");
         initializeAlertButtons();
 
         ApplicationContext.getInstance().setTitle("Pivot Demo");
 
         window = new Window();
         window.setMaximized(true);
-        window.setContent(component);
+        window.setContent(content);
 
         window.open();
     }
@@ -458,15 +454,15 @@ public class Demo implements Application {
         customAlertButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 Alert alert = new Alert(Alert.Type.QUESTION, "Please select your favorite icon:");
+                alert.setTitle("Select Icon");
 
-                ComponentLoader componentLoader = new ComponentLoader();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 try {
-                    alert.setBody(componentLoader.load("pivot/tutorials/alert.wtkx"));
-                } catch(LoadException loadException) {
-                    System.out.println("Unexpected exception: " + loadException);
+                    alert.setBody((Component)wtkxSerializer.readObject("pivot/tutorials/alert.wtkx"));
+                } catch(Exception exception) {
+                    System.out.println(exception);
                 }
 
-                alert.setTitle("Select Icon");
                 alert.open(window);
 
                 ArrayList<String> optionData = new ArrayList<String>();

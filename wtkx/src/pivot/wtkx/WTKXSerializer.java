@@ -208,7 +208,7 @@ public class WTKXSerializer implements Serializer {
     }
 
     private URL location = null;
-    private Dictionary<String, ?> resources = null;
+    private Dictionary<String, Object> resources = null;
 
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
@@ -232,7 +232,7 @@ public class WTKXSerializer implements Serializer {
         this(null);
     }
 
-    public WTKXSerializer(Dictionary<String, ?> resources) {
+    public WTKXSerializer(Dictionary<String, Object> resources) {
         this.resources = resources;
     }
 
@@ -331,9 +331,13 @@ public class WTKXSerializer implements Serializer {
                                 }
 
                                 // Process the include
-                                WTKXSerializer serializer =
-                                    new WTKXSerializer(resources.containsKey(namespace) ?
-                                        (Dictionary<String, Object>)resources.get(namespace) : resources);
+                                Dictionary<String, Object> includeResources = resources;
+                                if (includeResources != null
+                                    && includeResources.containsKey(namespace)) {
+                                    includeResources = (Dictionary<String, Object>)includeResources.get(namespace);
+                                }
+
+                                WTKXSerializer serializer = new WTKXSerializer(includeResources);
                                 nodeValue = serializer.readObject(new URL(location, src));
 
                                 includeSerializers.put(namespace, serializer);

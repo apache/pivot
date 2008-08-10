@@ -38,7 +38,11 @@ import pivot.util.ListenerList;
 public class SplitPane extends Container {
     public enum Region {
         TOP_LEFT,
-        BOTTOM_RIGHT
+        BOTTOM_RIGHT;
+
+        public static Region decode(String value) {
+            return valueOf(value.toUpperCase());
+        }
     }
 
     private class SplitPaneListenerList extends ListenerList<SplitPaneListener>
@@ -164,11 +168,47 @@ public class SplitPane extends Container {
         }
     }
 
+    public Component getTop() {
+        return (orientation == Orientation.HORIZONTAL) ? null : getTopLeftComponent();
+    }
+
+    public void setTop(Component component) {
+        setTopLeftComponent(component);
+    }
+
+    public Component getBottom() {
+        return (orientation == Orientation.HORIZONTAL) ? null : getBottomRightComponent();
+    }
+
+    public void setBottom(Component component) {
+        setBottomRightComponent(component);
+    }
+
+    public Component getLeft() {
+        return (orientation == Orientation.VERTICAL) ? null : getTopLeftComponent();
+    }
+
+    public void setLeft(Component component) {
+        setTopLeftComponent(component);
+    }
+
+    public Component getRight() {
+        return (orientation == Orientation.VERTICAL) ? null : getBottomRightComponent();
+    }
+
+    public void setRight(Component component) {
+        setBottomRightComponent(component);
+    }
+
     public Orientation getOrientation() {
         return orientation;
     }
 
     public void setOrientation(Orientation orientation) {
+        if (orientation == null) {
+            throw new IllegalArgumentException("orientation is null.");
+        }
+
         if (this.orientation != orientation) {
             this.orientation = orientation;
 
@@ -176,16 +216,36 @@ public class SplitPane extends Container {
         }
     }
 
+    public void setOrientation(String orientation) {
+        if (orientation == null) {
+            throw new IllegalArgumentException("orientation is null.");
+        }
+
+        setOrientation(Orientation.decode(orientation));
+    }
+
     public Region getPrimaryRegion() {
         return primaryRegion;
     }
 
     public void setPrimaryRegion(Region primaryRegion) {
+        if (primaryRegion == null) {
+            throw new IllegalArgumentException("primaryRegion is null.");
+        }
+
         if (this.primaryRegion != primaryRegion) {
             this.primaryRegion = primaryRegion;
 
             splitPaneListeners.primaryRegionChanged(this);
         }
+    }
+
+    public void setPrimaryRegion(String primaryRegion) {
+        if (primaryRegion == null) {
+            throw new IllegalArgumentException("primaryRegion is null.");
+        }
+
+        setPrimaryRegion(Region.decode(primaryRegion));
     }
 
     public int getSplitLocation() {

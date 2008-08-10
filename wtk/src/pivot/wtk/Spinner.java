@@ -22,6 +22,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.ListListener;
 import pivot.collections.Sequence;
+import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
 import pivot.wtk.content.SpinnerItemRenderer;
 
@@ -313,6 +314,14 @@ public class Spinner extends Container {
             this.spinnerData = spinnerData;
             spinnerListeners.spinnerDataChanged(this, previousSpinnerData);
         }
+    }
+
+    public void setSpinnerData(String spinnerData) {
+        if (spinnerData == null) {
+            throw new IllegalArgumentException("spinnerData is null.");
+        }
+
+        setSpinnerData(JSONSerializer.parseList(spinnerData));
     }
 
     @Override

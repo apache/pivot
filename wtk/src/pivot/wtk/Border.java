@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.util.ListenerList;
+
 /**
  * TODO Create subclasses that install inset and outset skins, which will
  * probably have different style properties than BorderSkin.
@@ -22,13 +24,80 @@ package pivot.wtk;
  * @author gbrown
  */
 @ComponentInfo(icon="Border.png")
-public class Border extends TitlePane {
+public class Border extends Container {
+    private class BorderListenerList extends ListenerList<BorderListener>
+        implements BorderListener {
+        public void titleChanged(Border border, String previousTitle) {
+            for (BorderListener listener : this) {
+                listener.titleChanged(border, previousTitle);
+            }
+        }
+    }
+
+    private String title = null;
+    private BorderListenerList borderListeners = new BorderListenerList();
+
     public Border() {
         this(null);
     }
 
     public Border(Component content) {
-        this.setContent(content);
         installSkin(Border.class);
+
+        setContent(content);
+    }
+
+    @Override
+    public void insert(Component component, int index) {
+        if (getLength() > 0) {
+            throw new IllegalStateException(Border.class.getName()
+                + " already has a content component.");
+        }
+
+        super.insert(component, index);
+    }
+
+    /**
+     * Returns the border's title.
+     *
+     * @return
+     * The border's title, or <tt>null</tt> if no title is set.
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Sets the border's title.
+     *
+     * @param title
+     * The new title, or <tt>null</tt> for no title.
+     */
+    public void setTitle(String title) {
+        String previousTitle = this.title;
+
+        if (previousTitle == null ^ title == null) {
+            this.title = title;
+            borderListeners.titleChanged(this, previousTitle);
+        }
+    }
+
+    public Component getContent() {
+        return (getLength() > 0) ? get(0) : null;
+    }
+
+    public void setContent(Component content) {
+        Component previousContent = getContent();
+        if (previousContent != null) {
+            remove(previousContent);
+        }
+
+        if (content != null) {
+            add(content);
+        }
+    }
+
+    public ListenerList<BorderListener> getBorderListeners() {
+        return borderListeners;
     }
 }

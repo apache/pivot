@@ -7,7 +7,7 @@ import java.awt.geom.Line2D;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Spacer;
+import pivot.wtk.Separator;
 import pivot.wtk.skin.ComponentSkin;
 
 public class SpacerSkin extends ComponentSkin {
@@ -16,7 +16,7 @@ public class SpacerSkin extends ComponentSkin {
     private int padding = 4;
 
     public void install(Component component) {
-        validateComponentType(component, Spacer.class);
+        validateComponentType(component, Separator.class);
 
         super.install(component);
     }

@@ -37,12 +37,11 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
 import pivot.wtk.PushButton;
 import pivot.wtk.FlowPane;
-import pivot.wtk.TitlePane;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
-import pivot.wtk.skin.TitlePaneSkin;
+import pivot.wtk.skin.ContainerSkin;
 
-public class ExpanderSkin extends TitlePaneSkin
+public class ExpanderSkin extends ContainerSkin
     implements ButtonPressListener, ExpanderListener {
     public static class ShadeButton extends PushButton {
         private Expander expander = null;
@@ -485,15 +484,6 @@ public class ExpanderSkin extends TitlePaneSkin
         setPadding(padding.intValue());
     }
 
-    @Override
-    public void titleChanged(TitlePane expander, String previousTitle) {
-        super.titleChanged(expander, previousTitle);
-
-        String title = expander.getTitle();
-        titleLabel.setDisplayable(title != null);
-        titleLabel.setText(title);
-    }
-
     /**
      * Listener for expander button events.
      *
@@ -506,16 +496,21 @@ public class ExpanderSkin extends TitlePaneSkin
         expander.setExpanded(!expander.isExpanded());
     }
 
-    /**
-     * Listener for expander events.
-     *
-     * @param expander
-     *    The source of the event.
-     */
+    // Expander events
+    public void titleChanged(Expander expander, String previousTitle) {
+        String title = expander.getTitle();
+        titleLabel.setDisplayable(title != null);
+        titleLabel.setText(title);
+    }
+
     public void expandedChanged(Expander expander) {
         Image buttonData = expander.isExpanded() ? collapseImage : expandImage;
         shadeButton.setButtonData(buttonData);
 
+        invalidateComponent();
+    }
+
+    public void contentChanged(Expander expander, Component previousContent) {
         invalidateComponent();
     }
 }

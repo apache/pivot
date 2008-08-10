@@ -29,7 +29,7 @@ import pivot.wtk.WindowListener;
 import pivot.wtk.WindowStateListener;
 import pivot.wtk.media.Image;
 
-public class WindowSkin extends TitlePaneSkin
+public class WindowSkin extends ContainerSkin
     implements WindowListener, WindowStateListener {
     /**
      * Focus traversal policy that always returns the window's content. This
@@ -132,16 +132,28 @@ public class WindowSkin extends TitlePaneSkin
     }
 
     // Window events
+    public void titleChanged(Window window, String previousTitle) {
+        // No-op
+    }
+
     public void iconChanged(Window window, Image previousIcon) {
+        // No-op
+    }
+
+    public void contentChanged(Window window, Component previousContent) {
+        invalidateComponent();
     }
 
     public void activeChanged(Window window) {
+        // No-op
     }
 
     public void focusHostChanged(Window window) {
+        // No-op
     }
 
     public void maximizedChanged(Window window) {
+        // No-op
     }
 
     // Window state events

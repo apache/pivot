@@ -16,9 +16,8 @@
 package pivot.wtk;
 
 import java.util.Iterator;
-
 import pivot.collections.ArrayList;
-import pivot.collections.Map;
+import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
@@ -172,6 +171,15 @@ public class Form extends Container {
             this(alertType, null);
         }
 
+        public Flag(String flag) {
+            this(JSONSerializer.parseMap(flag));
+        }
+
+        public Flag(Dictionary<String, Object> flag) {
+            this(Alert.Type.decode((String)flag.get(ALERT_TYPE_KEY)),
+                (String)flag.get(MESSAGE_KEY));
+        }
+
         /**
          * Creates a new flag with the given type and message.
          *
@@ -183,30 +191,6 @@ public class Form extends Container {
          * no message.
          */
         public Flag(Alert.Type alertType, String message) {
-            setFlag(alertType, message);
-        }
-
-        public Flag(String flag) {
-            if (flag == null) {
-                throw new IllegalArgumentException("flag is null.");
-            }
-
-            Map<String, Object> flagMap = JSONSerializer.parseMap(flag);
-
-            Alert.Type alertType = null;
-            if (flagMap.containsKey(ALERT_TYPE_KEY)) {
-                alertType = Alert.Type.decode(flagMap.get(ALERT_TYPE_KEY).toString());
-            }
-
-            String message = null;
-            if (flagMap.containsKey(MESSAGE_KEY)) {
-                message = flagMap.get(MESSAGE_KEY).toString();
-            }
-
-            setFlag(alertType, message);
-        }
-
-        private void setFlag(Alert.Type alertType, String message) {
             if (alertType == null) {
                 throw new IllegalArgumentException("alertType is null.");
             }
@@ -447,6 +431,10 @@ public class Form extends Container {
     }
 
     public static final void setFlag(Component component, String flag) {
+        if (flag == null) {
+            throw new IllegalArgumentException("flag is null.");
+        }
+
         setFlag(component, new Flag(flag));
     }
 }

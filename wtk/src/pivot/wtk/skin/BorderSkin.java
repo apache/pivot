@@ -22,8 +22,11 @@ import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 
 import pivot.collections.Dictionary;
+import pivot.collections.Sequence;
 import pivot.wtk.Border;
+import pivot.wtk.BorderListener;
 import pivot.wtk.Component;
+import pivot.wtk.Container;
 import pivot.wtk.CornerRadii;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
@@ -35,7 +38,8 @@ import pivot.wtk.Insets;
  *
  * @author gbrown
  */
-public class BorderSkin extends TitlePaneSkin {
+public class BorderSkin extends ContainerSkin
+    implements BorderListener {
     private Color borderColor = Color.BLACK;
     private int borderThickness = 1;
     private Insets padding = new Insets(2);
@@ -291,5 +295,25 @@ public class BorderSkin extends TitlePaneSkin {
         }
 
         setCornerRadii(cornerRadii.intValue());
+    }
+
+    // Container events
+    @Override
+    public void componentInserted(Container container, int index) {
+        super.componentInserted(container, index);
+
+        invalidateComponent();
+    }
+
+    @Override
+    public void componentsRemoved(Container container, int index, Sequence<Component> components) {
+        super.componentsRemoved(container, index, components);
+
+        invalidateComponent();
+    }
+
+    // Border events
+    public void titleChanged(Border border, String previousTitle) {
+        invalidateComponent();
     }
 }

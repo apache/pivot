@@ -223,6 +223,14 @@ public class TabPane extends Container {
         }
     }
 
+    public void setTabOrientation(String tabOrientation) {
+        if (tabOrientation == null) {
+            throw new IllegalArgumentException("tabOrientation is null.");
+        }
+
+        setTabOrientation(Orientation.decode(tabOrientation));
+    }
+
     public boolean isCollapsible() {
         return collapsible;
     }
@@ -356,7 +364,20 @@ public class TabPane extends Container {
     }
 
     public static final void setIcon(Component component, URL icon) {
+        if (icon == null) {
+            throw new IllegalArgumentException("icon is null.");
+        }
+
         setIcon(component, Image.load(icon));
+    }
+
+    public static final void setIcon(Component component, String icon) {
+        if (icon == null) {
+            throw new IllegalArgumentException("icon is null.");
+        }
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        setIcon(component, classLoader.getResource(icon));
     }
 }
 

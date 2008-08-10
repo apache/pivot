@@ -23,7 +23,6 @@ import pivot.beans.BeanDictionary;
 import pivot.collections.Dictionary;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
-import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
@@ -38,11 +37,6 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
 
     public static final String ICON_KEY = "icon";
     public static final String LABEL_KEY = "label";
-
-    public static final String ICON_WIDTH_KEY = "iconWidth";
-    public static final String ICON_HEIGHT_KEY = "iconHeight";
-    public static final String ICON_SIZE_KEY = "iconSize";
-    public static final String SHOW_ICON_KEY = "showIcon";
 
     public static final int DEFAULT_ICON_WIDTH = 16;
     public static final int DEFAULT_ICON_HEIGHT = 16;
@@ -158,24 +152,24 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
         return imageView.getPreferredWidth(-1);
     }
 
+    public void setIconWidth(int iconWidth) {
+        if (iconWidth == -1) {
+            throw new IllegalArgumentException();
+        }
+
+        imageView.setPreferredWidth(iconWidth);
+    }
+
     public int getIconHeight() {
         return imageView.getPreferredHeight(-1);
     }
 
-    public Dimensions getIconSize() {
-        return new Dimensions(getIconWidth(), getIconHeight());
-    }
+    public void setIconHeight(int iconHeight) {
+        if (iconHeight == -1) {
+            throw new IllegalArgumentException();
+        }
 
-    public void setIconSize(Dimensions iconSize) {
-        setIconSize(iconSize.width, iconSize.height);
-    }
-
-    public void setIconSize(int width, int height) {
-        imageView.setPreferredSize(width, height);
-    }
-
-    public void setIconSize(Dictionary<String, Object> iconSize) {
-        setIconSize(new Dimensions(iconSize));
+        imageView.setPreferredHeight(iconHeight);
     }
 
     public boolean getShowIcon() {
@@ -184,9 +178,5 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
 
     public void setShowIcon(boolean showIcon) {
         imageView.setDisplayable(showIcon);
-    }
-
-    public void setShowIcon(String showIcon) {
-        setShowIcon(Boolean.parseBoolean(showIcon));
     }
 }

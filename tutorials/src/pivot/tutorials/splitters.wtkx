@@ -15,23 +15,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{borderColor:'#999999', padding:4}">
+<Border styles="{borderColor:'#999999', padding:4}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <SplitPane orientation="vertical" splitLocation="175"
         preferredWidth="480" preferredHeight="360">
         <top>
             <SplitPane orientation="horizontal" splitLocation="240">
                 <left>
-                    <ImageView src="/pivot/tutorials/IMG_0735_2.jpg"
+                    <ImageView image="pivot/tutorials/IMG_0735_2.jpg"
                         styles="{backgroundColor:'#404040'}"/>
                 </left>
                 <right>
-                    <ImageView src="/pivot/tutorials/IMG_0767_2.jpg"
+                    <ImageView image="pivot/tutorials/IMG_0767_2.jpg"
                         styles="{backgroundColor:'#404040'}"/>
                 </right>
             </SplitPane>
         </top>
         <bottom>
-            <ImageView src="/pivot/tutorials/IMG_0725_2.jpg"
+            <ImageView image="pivot/tutorials/IMG_0725_2.jpg"
                 styles="{backgroundColor:'#404040'}"/>
         </bottom>
     </SplitPane>

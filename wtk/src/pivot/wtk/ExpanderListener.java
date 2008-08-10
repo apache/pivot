@@ -16,5 +16,7 @@
 package pivot.wtk;
 
 public interface ExpanderListener {
+    public void titleChanged(Expander expander, String previousTitle);
     public void expandedChanged(Expander expander);
+    public void contentChanged(Expander expander, Component previousContent);
 }

@@ -15,15 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane>
+<FlowPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <Border styles="{padding:0, borderColor:'#999999'}">
-        <ImageView id="imageView1" src="go-home.png" preferredWidth="48" preferredHeight="48"/>
+        <ImageView wtkx:id="imageView1" image="@go-home.png" preferredWidth="48" preferredHeight="48"/>
     </Border>
     <Border styles="{padding:0, borderColor:'#999999'}">
-        <ImageView id="imageView2" src="weather-few-clouds.png" preferredWidth="48" preferredHeight="48"/>
+        <ImageView wtkx:id="imageView2" image="@weather-few-clouds.png" preferredWidth="48" preferredHeight="48"/>
     </Border>
     <Border styles="{padding:0, borderColor:'#999999'}">
-        <ImageView id="imageView3" preferredWidth="48" preferredHeight="48"/>
+        <ImageView wtkx:id="imageView3" preferredWidth="48" preferredHeight="48"/>
     </Border>
 </FlowPane>
 

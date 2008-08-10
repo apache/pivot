@@ -24,7 +24,7 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
-public class Window extends TitlePane {
+public class Window extends Container {
     /**
      * Internal class for managing the window's owned window list.
      *
@@ -145,9 +145,21 @@ public class Window extends TitlePane {
      */
     private class WindowListenerList extends ListenerList<WindowListener>
         implements WindowListener {
+        public void titleChanged(Window window, String previousTitle) {
+            for (WindowListener listener : this) {
+                listener.titleChanged(window, previousTitle);
+            }
+        }
+
         public void iconChanged(Window window, Image previousIcon) {
             for (WindowListener listener : this) {
                 listener.iconChanged(window, previousIcon);
+            }
+        }
+
+        public void contentChanged(Window window, Component previousContentComponent) {
+            for (WindowListener listener : this) {
+                listener.contentChanged(window, previousContentComponent);
             }
         }
 
@@ -197,7 +209,9 @@ public class Window extends TitlePane {
     private HashMap<Keyboard.KeyStroke, Action> actions = new HashMap<Keyboard.KeyStroke, Action>();
     private ActionDictionary actionDictionary = new ActionDictionary();
 
+    private String title = null;
     private Image icon = null;
+    private Component content = null;
     private Component activeDescendant = null;
 
     private boolean maximized = false;
@@ -435,6 +449,31 @@ public class Window extends TitlePane {
     }
 
     /**
+     * Returns the window's title.
+     *
+     * @return
+     * The pane's title, or <tt>null</tt> if no title is set.
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Sets the window's title.
+     *
+     * @param title
+     * The new title, or <tt>null</tt> for no title.
+     */
+    public void setTitle(String title) {
+        String previousTitle = this.title;
+
+        if (previousTitle == null ^ title == null) {
+            this.title = title;
+            windowListeners.titleChanged(this, previousTitle);
+        }
+    }
+
+    /**
      * Returns the window's icon.
      *
      * @return
@@ -456,6 +495,32 @@ public class Window extends TitlePane {
         if (previousIcon != icon) {
             this.icon = icon;
             windowListeners.iconChanged(this, previousIcon);
+        }
+    }
+
+    public Component getContent() {
+        return content;
+    }
+
+    public void setContent(Component content) {
+        Component previousContent = this.content;
+
+        if (content != previousContent) {
+            // Remove any previous content component
+            if (previousContent != null) {
+                remove(previousContent);
+            }
+
+            this.content = null;
+
+            // Add the component
+            if (content != null) {
+                add(content);
+            }
+
+            this.content = content;
+
+            windowListeners.contentChanged(this, previousContent);
         }
     }
 

@@ -15,7 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{borderColor:'#999999'}">
+<Border styles="{borderColor:'#999999'}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <FlowPane orientation="horizontal" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
         <FlowPane orientation="vertical">
             <Label text="Basic Spinner" styles="{font:'Verdana bold 11'}"/>
@@ -24,11 +25,11 @@ limitations under the License.
         </FlowPane>
         <FlowPane orientation="vertical">
             <Label text="Numeric Spinner" styles="{font:'Verdana bold 11'}"/>
-            <Spinner id="numericSpinner" preferredWidth="60"/>
+            <Spinner wtkx:id="numericSpinner" preferredWidth="60"/>
         </FlowPane>
         <FlowPane orientation="vertical">
             <Label text="Date Spinner" styles="{font:'Verdana bold 11'}"/>
-            <Spinner id="dateSpinner" />
+            <Spinner wtkx:id="dateSpinner" />
         </FlowPane>
     </FlowPane>
 </Border>

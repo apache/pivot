@@ -18,7 +18,9 @@ package pivot.wtk;
 import pivot.wtk.media.Image;
 
 public interface WindowListener {
+    public void titleChanged(Window window, String previousTitle);
     public void iconChanged(Window window, Image previousIcon);
+    public void contentChanged(Window window, Component previousContent);
     public void activeChanged(Window window);
     public void focusHostChanged(Window window);
     public void maximizedChanged(Window window);

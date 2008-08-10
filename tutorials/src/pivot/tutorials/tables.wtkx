@@ -15,26 +15,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{borderColor:'#999999'}">
+<Border styles="{borderColor:'#999999'}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <FlowPane styles="{padding:4, spacing:8}">
         <FlowPane orientation="vertical">
             <Label text="Sortable" styles="{font:'Verdana bold 11'}"/>
             <Border styles="{padding:0, borderColor:'#cccac2'}">
                 <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="276" preferredHeight="160">
                     <view>
-                        <TableView id="sortableTableView" selectMode="multi">
+                        <TableView wtkx:id="sortableTableView" selectMode="multi">
                             <columns>
-                                <Column name="i" width="48"/>
-                                <Column name="a" width="48"/>
-                                <Column name="b" width="48"/>
-                                <Column name="c" width="48"/>
-                                <Column name="d" width="48"/>
-                                <Column name="e" width="1*"/>
+                                <TableView.Column name="i" width="48"/>
+                                <TableView.Column name="a" width="48"/>
+                                <TableView.Column name="b" width="48"/>
+                                <TableView.Column name="c" width="48"/>
+                                <TableView.Column name="d" width="48"/>
+                                <TableView.Column name="e" width="1*"/>
                             </columns>
                         </TableView>
                     </view>
                     <columnHeader>
-                        <TableViewHeader id="sortableTableViewHeader" tableViewID="sortableTableView"/>
+                        <TableViewHeader wtkx:id="sortableTableViewHeader" tableView="$sortableTableView"/>
                     </columnHeader>
                 </ScrollPane>
             </Border>
@@ -46,18 +48,21 @@ limitations under the License.
             <Border styles="{padding:0, borderColor:'#cccac2'}">
                 <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="160">
                     <view>
-                        <TableView id="customTableView" selectMode="multi"
-                            selectedIndexes="[0, 2]" disabledRows="[1, 5]"
+                        <TableView wtkx:id="customTableView" selectMode="multi"
                             styles="{showHorizontalGridLines:false}">
                             <columns>
-                                <Column name="a" width="20"
-                                    headerData="{iconURL:'@flag_red.png'}"
-                                    cellRenderer="pivot.wtk.content.TableViewBooleanCellRenderer"/>
-                                <Column name="b" width="32"
-                                    headerData="'Icon'"
-                                    cellRenderer="pivot.wtk.content.TableViewImageCellRenderer"/>
-                                <Column name="c" width="1*"
-                                    headerData="'Name'"/>
+                                <TableView.Column name="a" width="20">
+                                    <headerData icon="@flag_red.png"/>
+                                    <cellRenderer>
+                                        <content:TableViewBooleanCellRenderer/>
+                                    </cellRenderer>
+                                </TableView.Column>
+                                <TableView.Column name="b" width="32" headerData="Icon">
+                                    <cellRenderer>
+                                        <content:TableViewImageCellRenderer/>
+                                    </cellRenderer>
+                                </TableView.Column>
+                                <TableView.Column name="c" width="1*" headerData="Name"/>
                             </columns>
                             <tableData>
                                 <row a="true" b="@anchor.png" c="Anchor"/>
@@ -70,7 +75,7 @@ limitations under the License.
                         </TableView>
                     </view>
                     <columnHeader>
-                        <TableViewHeader tableViewID="customTableView"/>
+                        <TableViewHeader tableView="$customTableView"/>
                     </columnHeader>
                 </ScrollPane>
             </Border>

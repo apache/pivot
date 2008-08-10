@@ -25,7 +25,6 @@ public class HelloWTKX implements Application {
 
     public void startup() throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-
         Component content =
             (Component)wtkxSerializer.readObject("pivot/tutorials/hello.wtkx");
 

@@ -364,6 +364,14 @@ public abstract class Button extends Component {
         }
     }
 
+    public void setState(String state) {
+        if (state == null) {
+            throw new IllegalArgumentException("state is null.");
+        }
+
+        setState(State.decode(state));
+    }
+
     /**
      * Returns the button's toggle state.
      *

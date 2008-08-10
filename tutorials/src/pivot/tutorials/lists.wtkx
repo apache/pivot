@@ -15,7 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{borderColor:'#999999'}">
+<Border styles="{borderColor:'#999999'}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <FlowPane styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
         <FlowPane orientation="vertical" styles="{spacing:6}">
             <Label text="Basic" styles="{font:'Verdana bold 11'}"/>
@@ -42,7 +44,7 @@ limitations under the License.
             <Border styles="{padding:0, borderColor:'#cccac2'}">
                 <ScrollPane preferredHeight="80">
                     <view>
-                        <ListView selectMode="multi" selectedIndexes="[0, 3, 4]">
+                        <ListView wtkx:id="shapeListView" selectMode="multi">
                             <listData>
                                 <item label="Circle"/>
                                 <item label="Ellipse"/>
@@ -62,10 +64,7 @@ limitations under the License.
             <Border styles="{padding:0, borderColor:'#cccac2'}">
                 <ScrollPane preferredHeight="80">
                     <view>
-                        <ListView selectMode="multi"
-                            selectedIndex="2"
-                            disabledItems="[1, 5]"
-                            itemRendererProperties="{iconSize:{width:16, height:16}, showIcon:true}">
+                        <ListView wtkx:id="iconListView" selectMode="multi" selectedIndex="2">
                             <listData>
                                 <item icon="@anchor.png" label="Anchor"/>
                                 <item icon="@bell.png" label="Bell"/>
@@ -74,6 +73,10 @@ limitations under the License.
                                 <item icon="@house.png" label="House"/>
                                 <item icon="@star.png" label="Star"/>
                             </listData>
+                            <itemRenderer>
+                                <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
+                                    showIcon="true"/>
+                            </itemRenderer>
                         </ListView>
                     </view>
                 </ScrollPane>
@@ -83,28 +86,33 @@ limitations under the License.
         <FlowPane orientation="vertical" styles="{spacing:6}">
             <Label text="List Buttons" styles="{font:'Verdana bold 11'}"/>
             <Form>
-                <ListButton label="Basic" selectedIndex="0">
-                    <listData>
-                        <item label="Red"/>
-                        <item label="Orange"/>
-                        <item label="Yellow"/>
-                        <item label="Green"/>
-                        <item label="Blue"/>
-                        <item label="Purple"/>
-                    </listData>
-                </ListButton>
+                <fields>
+                    <ListButton Form.label="Basic" selectedIndex="0">
+                        <listData>
+                            <item label="Red"/>
+                            <item label="Orange"/>
+                            <item label="Yellow"/>
+                            <item label="Green"/>
+                            <item label="Blue"/>
+                            <item label="Purple"/>
+                        </listData>
+                    </ListButton>
 
-                <ListButton label="Image" selectedIndex="2"
-                    itemRendererProperties="{iconSize:{width:16, height:16}, showIcon:true}">
-                    <listData>
-                        <item icon="@anchor.png" label="Anchor"/>
-                        <item icon="@bell.png" label="Bell"/>
-                        <item icon="@clock.png" label="Clock"/>
-                        <item icon="@cup.png" label="Cup"/>
-                        <item icon="@house.png" label="House"/>
-                        <item icon="@star.png" label="Star"/>
-                    </listData>
-                </ListButton>
+                    <ListButton Form.label="Image" selectedIndex="2">
+                        <listData>
+                            <item icon="@anchor.png" label="Anchor"/>
+                            <item icon="@bell.png" label="Bell"/>
+                            <item icon="@clock.png" label="Clock"/>
+                            <item icon="@cup.png" label="Cup"/>
+                            <item icon="@house.png" label="House"/>
+                            <item icon="@star.png" label="Star"/>
+                        </listData>
+                        <itemRenderer>
+                            <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
+                                showIcon="true"/>
+                        </itemRenderer>
+                    </ListButton>
+                </fields>
             </Form>
         </FlowPane>
     </FlowPane>
