@@ -17,6 +17,7 @@ package pivot.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
@@ -41,26 +42,46 @@ import pivot.serialization.SerializationException;
 public class Resources implements Dictionary<String, Object> {
     private String baseName = null;
     private Locale locale = null;
+    private Charset charset = null;
+
     private Map<String, Object> resourceMap = null;
 
-    /**
-     * This constructor calls {@link #Resources(String, Locale)} with the given
-     * baseName and whatever is returned from {@link Locale#getDefault()}.
-     *
-     * @see #Resources(String, Locale)
-     */
-    public Resources(String baseName) throws IOException, SerializationException {
-        this(baseName, Locale.getDefault());
+    public Resources(String baseName)
+        throws IOException, SerializationException {
+        this(baseName, Locale.getDefault(), Charset.defaultCharset());
+    }
+
+    public Resources(String baseName, Locale locale)
+        throws IOException, SerializationException {
+        this(baseName, locale, Charset.defaultCharset());
+    }
+
+    public Resources(String baseName, String charsetName)
+        throws IOException, SerializationException {
+        this(baseName, Locale.getDefault(), charsetName);
+    }
+
+    public Resources(String baseName, Charset charset)
+        throws IOException, SerializationException {
+        this(baseName, Locale.getDefault(), charset);
+    }
+
+    public Resources(String baseName, Locale locale, String charsetName)
+        throws IOException, SerializationException {
+        this(baseName, locale, Charset.forName(charsetName));
     }
 
     /**
-     * Full constructor for a Resources instance.
+     * Creates a new resource bundle.
      *
      * @param baseName
      * The base name of this resource as a fully qualified class name.
      *
      * @param locale
      * The locale to use when reading this resource.
+     *
+     * @param charset
+     * The character encoding to use when reading this resource.
      *
      * @throws IOException
      * If there is a problem when reading the resource.
@@ -74,15 +95,20 @@ public class Resources implements Dictionary<String, Object> {
      * @throws MissingResourceException
      * If no resource for the specified base name can be found.
      */
-    public Resources(String baseName, Locale locale) throws IOException,
+    public Resources(String baseName, Locale locale, Charset charset) throws IOException,
         SerializationException {
 
         if (locale == null) {
-            throw new IllegalArgumentException("Locale is null");
+            throw new IllegalArgumentException("locale is null");
+        }
+
+        if (charset == null) {
+            throw new IllegalArgumentException("charset is null.");
         }
 
         this.baseName = baseName;
         this.locale = locale;
+        this.charset = charset;
 
         String resourceName = baseName.replace('.', '/');
         resourceMap = readJSONResource(resourceName + ".json");
@@ -161,7 +187,7 @@ public class Resources implements Dictionary<String, Object> {
             return null;
         }
 
-        JSONSerializer serializer = new JSONSerializer();
+        JSONSerializer serializer = new JSONSerializer(charset);
         Map<String, Object> resourceMap = null;
         try {
             resourceMap = (Map<String, Object>) serializer.readObject(in);

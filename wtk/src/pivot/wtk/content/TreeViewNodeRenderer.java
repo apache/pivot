@@ -37,7 +37,6 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
     protected Label label = new Label();
 
     public static final String ICON_KEY = "icon";
-    public static final String ICON_URL_KEY = "iconURL";
     public static final String LABEL_KEY = "label";
 
     public static final String ICON_WIDTH_KEY = "iconWidth";
@@ -88,12 +87,18 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
                 Dictionary<String, Object> dictionary = (node instanceof Dictionary<?, ?>) ?
                     (Dictionary<String, Object>)node : new BeanDictionary(node);
 
-                icon = (Image)dictionary.get(ICON_KEY);
+                Object iconValue = dictionary.get(ICON_KEY);
+                if (iconValue instanceof Image) {
+                    icon = (Image)iconValue;
+                } else {
+                    if (iconValue instanceof String) {
+                        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                        iconValue = classLoader.getResource((String)iconValue);
+                    }
 
-                if (icon == null) {
-                    URL iconURL = (URL)dictionary.get(ICON_URL_KEY);
+                    if (iconValue instanceof URL) {
+                        URL iconURL = (URL)iconValue;
 
-                    if (iconURL != null) {
                         ApplicationContext applicationContext = ApplicationContext.getInstance();
                         icon = (Image)applicationContext.getResources().get(iconURL);
 

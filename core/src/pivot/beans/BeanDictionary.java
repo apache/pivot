@@ -154,7 +154,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
         if (value == null) {
             Method getterMethod = getGetterMethod(key);
             if (getterMethod == null) {
-                throw new IllegalArgumentException("Property \"" + key + "\"" +
+                throw new PropertyNotFoundException("Property \"" + key + "\"" +
                     " does not exist.");
             }
 
@@ -251,7 +251,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
         Method getterMethod = getGetterMethod(key);
 
         if (getterMethod == null) {
-            throw new IllegalArgumentException("Property \"" + key
+            throw new PropertyNotFoundException("Property \"" + key
                 + "\" does not exist.");
         }
 

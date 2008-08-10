@@ -16,6 +16,8 @@
 package pivot.wtk;
 
 public interface TableViewHeaderListener {
+    public void tableViewChanged(TableViewHeader tableViewHeader,
+        TableView previousTableView);
     public void dataRendererChanged(TableViewHeader tableViewHeader,
         TableViewHeader.DataRenderer previousDataRenderer);
 }

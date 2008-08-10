@@ -78,7 +78,7 @@ public class ComponentAdapter
 	}
 
 	public boolean containsKey(String key) {
-		return TreeViewNodeRenderer.ICON_URL_KEY.equals(key) ||
+		return TreeViewNodeRenderer.ICON_KEY.equals(key) ||
 		       TreeViewNodeRenderer.LABEL_KEY.equals(key);
 	}
 
@@ -88,7 +88,7 @@ public class ComponentAdapter
 
 		if ( TreeViewNodeRenderer.LABEL_KEY.equals(key) ) {
 			return toString();
-		} else if ( TreeViewNodeRenderer.ICON_URL_KEY.equals(key) ){
+		} else if ( TreeViewNodeRenderer.ICON_KEY.equals(key) ){
 			if ( url == null ) {
 			    ComponentInfo componentInfo = component.getClass().getAnnotation( ComponentInfo.class );
 				url = component.getClass().getResource( componentInfo != null? componentInfo.icon():"component.png");

@@ -37,6 +37,13 @@ public class TableViewHeader extends Component {
 
     private class TableViewHeaderListenerList extends ListenerList<TableViewHeaderListener>
         implements TableViewHeaderListener {
+        public void tableViewChanged(TableViewHeader tableViewHeader,
+            TableView previousTableView) {
+            for (TableViewHeaderListener listener : this) {
+                listener.tableViewChanged(tableViewHeader, previousTableView);
+            }
+        }
+
         public void dataRendererChanged(TableViewHeader tableViewHeader,
             TableViewHeader.DataRenderer previousDataRenderer) {
             for (TableViewHeaderListener listener : this) {
@@ -60,15 +67,15 @@ public class TableViewHeader extends Component {
     private TableViewHeaderListenerList tableViewHeaderListeners = new TableViewHeaderListenerList();
     private TableViewHeaderPressListenerList tableViewHeaderPressListeners = new TableViewHeaderPressListenerList();
 
+    public TableViewHeader() {
+        this(null);
+    }
+
     public TableViewHeader(TableView tableView) {
-        if (tableView == null) {
-            throw new IllegalArgumentException("tableView is null.");
-        }
-
-        this.tableView = tableView;
-
         setDataRenderer(new TableViewHeaderDataRenderer());
         installSkin(TableViewHeader.class);
+
+        setTableView(tableView);
     }
 
     @Override
@@ -83,6 +90,15 @@ public class TableViewHeader extends Component {
 
     public TableView getTableView() {
         return tableView;
+    }
+
+    public void setTableView(TableView tableView) {
+        TableView previousTableView = this.tableView;
+
+        if (previousTableView != tableView) {
+            this.tableView = tableView;
+            tableViewHeaderListeners.tableViewChanged(this, previousTableView);
+        }
     }
 
     public DataRenderer getDataRenderer() {

@@ -45,14 +45,17 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
     @SuppressWarnings("unchecked")
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
+        String formattedNumber = null;
+
         // Get the row and cell data
         String columnName = column.getName();
-        Dictionary<String, Object> rowData = (Dictionary<String, Object>)value;
-        Object cellData = rowData.get(columnName);
+        if (columnName != null) {
+            Dictionary<String, Object> rowData = (Dictionary<String, Object>)value;
+            Object cellData = rowData.get(columnName);
 
-        String formattedNumber = null;
-        if (cellData instanceof Number) {
-            formattedNumber = numberFormat.format((Number)cellData);
+            if (cellData instanceof Number) {
+                formattedNumber = numberFormat.format((Number)cellData);
+            }
         }
 
         setText(formattedNumber);

@@ -21,12 +21,12 @@ import java.text.DateFormat;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.serialization.CSVSerializer;
+import pivot.util.Resources;
 import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskListener;
 import pivot.web.GetQuery;
@@ -48,10 +48,11 @@ import pivot.wtk.TaskAdapter;
 import pivot.wtk.TextInput;
 import pivot.wtk.TextInputTextListener;
 import pivot.wtk.Window;
-import pivot.wtkx.ComponentLoader;
+import pivot.wtkx.WTKXSerializer;
 
 public class StockTracker implements Application {
     private Locale locale = null;
+    private Resources resources = null;
 
     private ArrayList<String> symbols = new ArrayList<String>();
 
@@ -96,18 +97,16 @@ public class StockTracker implements Application {
         locale = (language == null) ? Locale.getDefault() : new Locale(language);
 
         // Set the application context title
-        ResourceBundle resourceBundle =
-            ResourceBundle.getBundle(StockTracker.class.getName(), locale);
-
-        applicationContext.setTitle(resourceBundle.getString("stockTracker"));
+        resources = new Resources(getClass().getName(), locale, "UTF8");
+        applicationContext.setTitle((String)resources.get("stockTracker"));
 
         // Load the application's UI
-        ComponentLoader componentLoader = new ComponentLoader(locale);
-        Component content = componentLoader.load("pivot/tutorials/stocktracker/stocktracker.wtkx",
-            getClass().getName());
+        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        Component content =
+            (Component)wtkxSerializer.readObject("pivot/tutorials/stocktracker/stocktracker.wtkx");
 
         // Wire up event handlers
-        stocksTableView = (TableView)componentLoader.getComponent("stocksTableView");
+        stocksTableView = (TableView)wtkxSerializer.getObjectByName("stocksTableView");
         stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
             public void selectionChanged(TableView tableView) {
                 refreshDetail();
@@ -128,7 +127,7 @@ public class StockTracker implements Application {
             }
         });
 
-        symbolTextInput = (TextInput)componentLoader.getComponent("symbolTextInput");
+        symbolTextInput = (TextInput)wtkxSerializer.getObjectByName("symbolTextInput");
         symbolTextInput.getTextInputTextListeners().add(new TextInputTextListener() {
             public void textChanged(TextInput textInput) {
                 addSymbolButton.setEnabled(textInput.getCharacterCount() > 0);
@@ -149,23 +148,23 @@ public class StockTracker implements Application {
             }
         });
 
-        addSymbolButton = (Button)componentLoader.getComponent("addSymbolButton");
+        addSymbolButton = (Button)wtkxSerializer.getObjectByName("addSymbolButton");
         addSymbolButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 addSymbol();
             }
         });
 
-        removeSymbolsButton = (Button)componentLoader.getComponent("removeSymbolsButton");
+        removeSymbolsButton = (Button)wtkxSerializer.getObjectByName("removeSymbolsButton");
         removeSymbolsButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 removeSelectedSymbols();
             }
         });
 
-        lastUpdateLabel = (Label)componentLoader.getComponent("lastUpdateLabel");
+        lastUpdateLabel = (Label)wtkxSerializer.getObjectByName("lastUpdateLabel");
 
-        yahooFinanceButton = (Button)componentLoader.getComponent("yahooFinanceButton");
+        yahooFinanceButton = (Button)wtkxSerializer.getObjectByName("yahooFinanceButton");
         yahooFinanceButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 try {
@@ -175,9 +174,9 @@ public class StockTracker implements Application {
             }
         });
 
-        detailRootPane = (Container)componentLoader.getComponent("detail.rootPane");
+        detailRootPane = (Container)wtkxSerializer.getObjectByName("detail.rootPane");
 
-        detailChangeLabel = (Label)componentLoader.getComponent("detail.changeLabel");
+        detailChangeLabel = (Label)wtkxSerializer.getObjectByName("detail.changeLabel");
 
         window = new Window();
         window.setContent(content);
@@ -260,12 +259,9 @@ public class StockTracker implements Application {
                         }
                     }
 
-                    ResourceBundle resourceBundle =
-                        ResourceBundle.getBundle(StockTracker.class.getName(), locale);
-
                     DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
                         DateFormat.MEDIUM, locale);
-                    String lastUpdateText = resourceBundle.getString("lastUpdate")
+                    String lastUpdateText = resources.get("lastUpdate")
                         + ": " + dateFormat.format(new Date());
                     lastUpdateLabel.setText(lastUpdateText);
 

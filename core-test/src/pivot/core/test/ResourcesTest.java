@@ -77,7 +77,7 @@ public class ResourcesTest extends TestCase {
     public void testNullLocale() throws Exception {
         // resource exists, but locale is null
         try {
-            new Resources("resources.test1", null);
+            new Resources("resources.test1");
             fail("Expected NullPointerException");
         } catch (NullPointerException e) {
         }

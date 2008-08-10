@@ -32,6 +32,10 @@
          author="true"
          version="true"
          use="true">
+         <classpath>
+           <pathelement location="${wtkx}/lib/stax-api-1.0.jar" />
+           <pathelement location="${wtkx}/lib/stax-1.2.0.jar" />
+         </classpath>
          <packageset dir="${core}/${src}" includes="**/*"/>
          <packageset dir="${web}/${src}" includes="**/*">
            <exclude name="**/proxy/**"/>

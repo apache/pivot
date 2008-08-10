@@ -15,77 +15,84 @@
 	limitations under the License.
 -->
 
-<TablePane styles="{padding:8, spacing:6}">
-	<rows>
-		<Row height="-1" />
-		<Row height="1*" />
-		<Row height="-1" />
-		<Row height="-1" />
-	</rows>
-	<columns>
-		<Column width="244" />
-		<Column width="1*" />
-	</columns>
+<TablePane styles="{padding:8, spacing:6}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:content="pivot.wtk.content"
+    xmlns:stocktracker="pivot.tutorials.stocktracker"
+    xmlns="pivot.wtk">
+    <columns>
+        <TablePane.Column width="244" />
+        <TablePane.Column width="1*" />
+    </columns>
 
-	<cells>
-		<Label row="0" column="0" text="%stockTracker"
-			styles="{font:'Verdana bold 14', verticalAlignment:'center'}" />
+    <rows>
+        <TablePane.Row height="-1">
+            <Label text="%stockTracker"
+                styles="{font:'Verdana bold 14', verticalAlignment:'center'}" />
+        </TablePane.Row>
 
-		<Border row="1" column="0"
-			styles="{padding:0, borderColor:'#cccac2'}">
-			<ScrollPane horizontalScrollBarPolicy="fillToCapacity"
-				verticalScrollBarPolicy="fillToCapacity">
-				<view>
-					<TableView id="stocksTableView" selectMode="multi"
-						styles="{showHorizontalGridLines:false}">
-						<columns>
-							<Column name="symbol" headerData="'%symbol'"
-								width="80" />
-							<Column name="value" headerData="'%value'"
-								width="80"
-								cellRenderer="pivot.wtk.content.TableViewNumberCellRenderer"
-								cellRendererStyles="{horizontalAlignment:'right'}"
-								cellRendererProperties="{numberFormat:'$0.00'}" />
-							<Column name="change" headerData="'%change'"
-								width="80"
-								cellRenderer="pivot.tutorials.stocktracker.ChangeCellRenderer"
-								cellRendererStyles="{horizontalAlignment:'right'}"
-								cellRendererProperties="{numberFormat:'+0.00;-0.00'}" />
-						</columns>
-					</TableView>
-				</view>
+        <TablePane.Row height="1*">
+            <Border styles="{padding:0, borderColor:'#cccac2'}">
+                <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
+                    verticalScrollBarPolicy="fillToCapacity">
+                    <view>
+                        <TableView wtkx:id="stocksTableView" selectMode="multi"
+                            styles="{showHorizontalGridLines:false}">
+                            <columns>
+                                <TableView.Column name="symbol"
+                                    headerData="%symbol" width="80" />
+                                <TableView.Column name="value" headerData="%value" width="80">
+                                    <cellRenderer>
+                                        <content:TableViewNumberCellRenderer styles="{horizontalAlignment:'right'}"
+                                            numberFormat="$$0.00"/>
+                                    </cellRenderer>
+                                </TableView.Column>
+                                <TableView.Column name="change" headerData="%change" width="80">
+                                    <cellRenderer>
+                                        <stocktracker:ChangeCellRenderer styles="{horizontalAlignment:'right'}"
+                                            numberFormat="+0.00;-0.00"/>
+                                    </cellRenderer>
+                                </TableView.Column>
+                            </columns>
+                        </TableView>
+                    </view>
 
-				<columnHeader>
-					<TableViewHeader tableViewID="stocksTableView" />
-				</columnHeader>
-			</ScrollPane>
-		</Border>
+                    <columnHeader>
+                        <TableViewHeader tableView="$stocksTableView" />
+                    </columnHeader>
+                </ScrollPane>
+            </Border>
 
-		<FlowPane row="2" column="0"
-			styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
-			<Label text="%symbol" styles="{font:'Verdana bold 11'}" />
-			<TextInput id="symbolTextInput" textSize="10"
-				maximumLength="5" />
-			<LinkButton id="addSymbolButton"
-				buttonData="{iconURL:'@add.png'}" enabled="false"
-				tooltipText="%addSymbol" />
-			<LinkButton id="removeSymbolsButton"
-				buttonData="{iconURL:'@delete.png'}" enabled="false"
-				tooltipText="%removeSymbol" />
-		</FlowPane>
+            <Border styles="{padding:6, borderColor:'#cccac2'}">
+                <wtkx:include namespace="detail" src="stocktracker.detail.wtkx" />
+            </Border>
+        </TablePane.Row>
 
-		<Label row="3" column="0" id="lastUpdateLabel"
-			styles="{font:'Verdana italic 10'}" />
+        <TablePane.Row height="-1">
+            <FlowPane
+                styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
+                <Label text="%symbol" styles="{font:'Verdana bold 11'}" />
+                <TextInput wtkx:id="symbolTextInput" textSize="10"
+                    maximumLength="5" />
+                <LinkButton wtkx:id="addSymbolButton" enabled="false"
+                    tooltipText="%addSymbol">
+                    <buttonData icon="@add.png" />
+                </LinkButton>
+                <LinkButton wtkx:id="removeSymbolsButton" enabled="false"
+                    tooltipText="%removeSymbol">
+                    <buttonData icon="@delete.png" />
+                </LinkButton>
+            </FlowPane>
+        </TablePane.Row>
 
-		<Border row="1" column="1"
-			styles="{padding:6, borderColor:'#cccac2'}">
-			<Component namespace="detail" src="stocktracker.detail.wtkx" />
-		</Border>
-
-		<FlowPane row="3" column="1"
-			styles="{horizontalAlignment:'right'}">
-			<Label text="%dataProvidedBy" />
-			<LinkButton id="yahooFinanceButton" buttonData="'%yahooFinance'" />
-		</FlowPane>
-	</cells>
+        <TablePane.Row height="-1">
+            <Label wtkx:id="lastUpdateLabel"
+                styles="{font:'Verdana italic 10'}" />
+            <FlowPane styles="{horizontalAlignment:'right'}">
+                <Label text="%dataProvidedBy" />
+                <LinkButton wtkx:id="yahooFinanceButton"
+                    buttonData="%yahooFinance" />
+            </FlowPane>
+        </TablePane.Row>
+    </rows>
 </TablePane>

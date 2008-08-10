@@ -23,6 +23,8 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
+import java.nio.charset.Charset;
+
 import pivot.collections.ArrayList;
 import pivot.collections.HashMap;
 import pivot.collections.List;
@@ -36,17 +38,35 @@ import pivot.collections.Map;
  * @author gbrown
  */
 public class JSONSerializer implements Serializer {
+    private Charset charset = null;
+
     private int c = -1;
     private boolean alwaysDelimitMapKeys = false;
 
     public static final String MIME_TYPE = "application/json";
+
+    public JSONSerializer() {
+        this(Charset.defaultCharset());
+    }
+
+    public JSONSerializer(String charsetName) {
+        this(Charset.forName(charsetName));
+    }
+
+    public JSONSerializer(Charset charset) {
+        if (charset == null) {
+            throw new IllegalArgumentException("charset is null.");
+        }
+
+        this.charset = charset;
+    }
 
     /**
      * Deserializes data from a JSON stream. See {@link #readObject(Reader)}.
      */
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
-        Reader reader = new InputStreamReader(inputStream);
+        Reader reader = new InputStreamReader(inputStream, charset);
         Object object = readObject(reader);
 
         return object;
@@ -335,7 +355,7 @@ public class JSONSerializer implements Serializer {
         Writer writer = null;
 
         try {
-            writer = new OutputStreamWriter(outputStream);
+            writer = new OutputStreamWriter(outputStream, charset);
             writeObject(object, writer);
         } finally {
             if (writer != null) {

@@ -53,26 +53,28 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
     @SuppressWarnings("unchecked")
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        // Get the row and cell data
-        String columnName = column.getName();
-        Dictionary<String, Object> rowData = (Dictionary<String, Object>)value;
-        Object cellData = rowData.get(columnName);
-
         Image image = null;
 
-        if (cellData instanceof URL) {
-            ApplicationContext applicationContext = ApplicationContext.getInstance();
-            URL imageURL = (URL)cellData;
-            image = (Image)applicationContext.getResources().get(imageURL);
+        // Get the row and cell data
+        String columnName = column.getName();
+        if (columnName != null) {
+            Dictionary<String, Object> rowData = (Dictionary<String, Object>)value;
+            Object cellData = rowData.get(columnName);
 
-            if (image == null) {
-                image = Image.load(imageURL);
-                applicationContext.getResources().put(imageURL, image);
+            if (cellData instanceof URL) {
+                ApplicationContext applicationContext = ApplicationContext.getInstance();
+                URL imageURL = (URL)cellData;
+                image = (Image)applicationContext.getResources().get(imageURL);
+
+                if (image == null) {
+                    image = Image.load(imageURL);
+                    applicationContext.getResources().put(imageURL, image);
+                }
             }
-        }
 
-        if (cellData instanceof Image) {
-            image = (Image)cellData;
+            if (cellData instanceof Image) {
+                image = (Image)cellData;
+            }
         }
 
         setImage(image);

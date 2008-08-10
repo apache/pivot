@@ -166,7 +166,9 @@ public class TableViewHeaderSkin extends ComponentSkin
         tableViewHeader.getTableViewHeaderListeners().add(this);
 
         TableView tableView = tableViewHeader.getTableView();
-        tableView.getTableViewColumnListeners().add(this);
+        if (tableView != null) {
+            tableView.getTableViewColumnListeners().add(this);
+        }
     }
 
     public void uninstall() {
@@ -174,7 +176,9 @@ public class TableViewHeaderSkin extends ComponentSkin
         tableViewHeader.getTableViewHeaderListeners().remove(this);
 
         TableView tableView = tableViewHeader.getTableView();
-        tableView.getTableViewColumnListeners().remove(this);
+        if (tableView != null) {
+            tableView.getTableViewColumnListeners().remove(this);
+        }
 
         super.uninstall();
     }
@@ -184,18 +188,21 @@ public class TableViewHeaderSkin extends ComponentSkin
 
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
         TableView tableView = tableViewHeader.getTableView();
-        TableView.ColumnSequence columns = tableView.getColumns();
 
-        for (int i = 0, n = columns.getLength(); i < n; i++) {
-            TableView.Column column = columns.get(i);
+        if (tableView != null) {
+            TableView.ColumnSequence columns = tableView.getColumns();
 
-            if (!column.isRelative()) {
-                preferredWidth += column.getWidth();
+            for (int i = 0, n = columns.getLength(); i < n; i++) {
+                TableView.Column column = columns.get(i);
 
-                // Include space for vertical gridlines
-                if (i > 0
-                    && i < n - 1) {
-                    preferredWidth++;
+                if (!column.isRelative()) {
+                    preferredWidth += column.getWidth();
+
+                    // Include space for vertical gridlines
+                    if (i > 0
+                        && i < n - 1) {
+                        preferredWidth++;
+                    }
                 }
             }
         }
@@ -204,21 +211,24 @@ public class TableViewHeaderSkin extends ComponentSkin
     }
 
     public int getPreferredHeight(int width) {
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
-        TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
-        TableView tableView = tableViewHeader.getTableView();
-        TableView.ColumnSequence columns = tableView.getColumns();
-
         int preferredHeight = 0;
 
-        for (int i = 0, n = columns.getLength(); i < n; i++) {
-            TableView.Column column = columns.get(i);
-            dataRenderer.render(column.getHeaderData(), tableViewHeader, false);
-            preferredHeight = Math.max(preferredHeight, dataRenderer.getPreferredHeight(-1));
-        }
+        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableView tableView = tableViewHeader.getTableView();
 
-        // Include the bottom border
-        preferredHeight++;
+        if (tableView != null) {
+            TableView.ColumnSequence columns = tableView.getColumns();
+            TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
+
+            for (int i = 0, n = columns.getLength(); i < n; i++) {
+                TableView.Column column = columns.get(i);
+                dataRenderer.render(column.getHeaderData(), tableViewHeader, false);
+                preferredHeight = Math.max(preferredHeight, dataRenderer.getPreferredHeight(-1));
+            }
+
+            // Include the bottom border
+            preferredHeight++;
+        }
 
         return preferredHeight;
     }
@@ -236,8 +246,6 @@ public class TableViewHeaderSkin extends ComponentSkin
         int height = getHeight();
 
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
-        TableView tableView = tableViewHeader.getTableView();
-        TableView.ColumnSequence columns = tableView.getColumns();
 
         Color backgroundColor = null;
         Color bevelColor = null;
@@ -272,87 +280,79 @@ public class TableViewHeaderSkin extends ComponentSkin
         graphics.draw(borderLine);
 
         // Paint the content
-        // TODO Optimize by painting only headers that intersect with the
-        // current clip region?
-        int cellX = 0;
-        Sequence<Integer> columnWidths = getColumnWidths();
-        TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
+        TableView tableView = tableViewHeader.getTableView();
 
-        for (int columnIndex = 0, columnCount = columns.getLength();
-            columnIndex < columnCount; columnIndex++) {
-            TableView.Column column = columns.get(columnIndex);
-            int columnWidth = columnWidths.get(columnIndex);
+        if (tableView != null) {
+            TableView.ColumnSequence columns = tableView.getColumns();
+            Sequence<Integer> columnWidths =
+                TableViewSkin.getColumnWidths(columns, getWidth());
 
-            // Paint the pressed bevel
-            if (columnIndex == pressedHeaderIndex) {
-                bevelLine = new Line2D.Double(cellX, 0, cellX + columnWidth, 0);
-                graphics.setPaint(pressedBevelColor);
-                graphics.draw(bevelLine);
-            }
+            TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
 
-            // Paint the header data
-            Object headerData = column.getHeaderData();
-            dataRenderer.render(headerData, tableViewHeader, false);
-            dataRenderer.setSize(columnWidth, height - 1);
+            int cellX = 0;
+            for (int columnIndex = 0, columnCount = columns.getLength();
+                columnIndex < columnCount; columnIndex++) {
+                TableView.Column column = columns.get(columnIndex);
+                int columnWidth = columnWidths.get(columnIndex);
 
-            Graphics2D rendererGraphics = (Graphics2D)graphics.create(cellX, 0,
-                columnWidth, height - 1);
-            dataRenderer.paint(rendererGraphics);
-            rendererGraphics.dispose();
+                // Paint the pressed bevel
+                if (columnIndex == pressedHeaderIndex) {
+                    bevelLine = new Line2D.Double(cellX, 0, cellX + columnWidth, 0);
+                    graphics.setPaint(pressedBevelColor);
+                    graphics.draw(bevelLine);
+                }
 
-            // Draw the sort image
-            Image sortImage = null;
-            SortDirection sortDirection = column.getSortDirection();
+                // Paint the header data
+                Object headerData = column.getHeaderData();
+                dataRenderer.render(headerData, tableViewHeader, false);
+                dataRenderer.setSize(columnWidth, height - 1);
 
-            if (sortDirection != null) {
-                switch (sortDirection) {
-                    case ASCENDING: {
-                        sortImage = sortAscendingImage;
-                        break;
-                    }
+                Graphics2D rendererGraphics = (Graphics2D)graphics.create(cellX, 0,
+                    columnWidth, height - 1);
+                dataRenderer.paint(rendererGraphics);
+                rendererGraphics.dispose();
 
-                    case DESCENDING: {
-                        sortImage = sortDescendingImage;
-                        break;
+                // Draw the sort image
+                Image sortImage = null;
+                SortDirection sortDirection = column.getSortDirection();
+
+                if (sortDirection != null) {
+                    switch (sortDirection) {
+                        case ASCENDING: {
+                            sortImage = sortAscendingImage;
+                            break;
+                        }
+
+                        case DESCENDING: {
+                            sortImage = sortDescendingImage;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (sortImage != null) {
-                int sortImageMargin = sortImage.getPreferredWidth(-1)
-                + SORT_INDICATOR_PADDING * 2;
+                if (sortImage != null) {
+                    int sortImageMargin = sortImage.getPreferredWidth(-1)
+                    + SORT_INDICATOR_PADDING * 2;
 
-                if (columnWidth >= dataRenderer.getPreferredWidth(-1) + sortImageMargin) {
-                    Graphics2D sortImageGraphics = (Graphics2D)graphics.create();
-                    sortImageGraphics.translate(cellX + columnWidth - sortImageMargin,
-                        (height - sortImage.getPreferredHeight(-1)) / 2);
-                    sortImage.paint(sortImageGraphics);
-                    sortImageGraphics.dispose();
+                    if (columnWidth >= dataRenderer.getPreferredWidth(-1) + sortImageMargin) {
+                        Graphics2D sortImageGraphics = (Graphics2D)graphics.create();
+                        sortImageGraphics.translate(cellX + columnWidth - sortImageMargin,
+                            (height - sortImage.getPreferredHeight(-1)) / 2);
+                        sortImage.paint(sortImageGraphics);
+                        sortImageGraphics.dispose();
+                    }
                 }
+
+                // Draw the divider
+                cellX += columnWidth;
+
+                Line2D dividerLine = new Line2D.Double(cellX, 0, cellX, height - 1);
+                graphics.setPaint(borderColor);
+                graphics.draw(dividerLine);
+
+                cellX++;
             }
-
-            // Draw the divider
-            cellX += columnWidth;
-
-            Line2D dividerLine = new Line2D.Double(cellX, 0, cellX, height - 1);
-            graphics.setPaint(borderColor);
-            graphics.draw(dividerLine);
-
-            cellX++;
         }
-    }
-
-    /**
-     * Returns the column widths for this table header.
-     *
-     * @return
-     * The widths of all columns based on the current overall width.
-     */
-    public Sequence<Integer> getColumnWidths() {
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
-
-        return TableViewSkin.getColumnWidths(tableViewHeader.getTableView().getColumns(),
-            getWidth());
     }
 
     public int getHeaderAt(int x) {
@@ -360,41 +360,56 @@ public class TableViewHeaderSkin extends ComponentSkin
             throw new IllegalArgumentException("x is negative");
         }
 
-        Sequence<Integer> columnWidths = getColumnWidths();
-
-        int i = 0;
-        int n = columnWidths.getLength();
-        int columnX = 0;
-        while (i < n
-            && x > columnX) {
-            columnX += (columnWidths.get(i) + 1);
-            i++;
-        }
-
         int index = -1;
 
-        if (x <= columnX) {
-            index = i - 1;
+        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableView tableView = tableViewHeader.getTableView();
+
+        if (tableView != null) {
+            Sequence<Integer> columnWidths =
+                TableViewSkin.getColumnWidths(tableView.getColumns(), getWidth());
+
+            int i = 0;
+            int n = columnWidths.getLength();
+            int columnX = 0;
+            while (i < n
+                && x > columnX) {
+                columnX += (columnWidths.get(i) + 1);
+                i++;
+            }
+
+            if (x <= columnX) {
+                index = i - 1;
+            }
         }
 
         return index;
     }
 
     public Rectangle getHeaderBounds(int index) {
-        Sequence<Integer> columnWidths = getColumnWidths();
+        Rectangle headerBounds = null;
 
-        if (index < 0
-            || index >= columnWidths.getLength()) {
-            throw new IndexOutOfBoundsException();
+        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableView tableView = tableViewHeader.getTableView();
+
+        if (tableView != null) {
+            Sequence<Integer> columnWidths =
+                TableViewSkin.getColumnWidths(tableView.getColumns(), getWidth());
+
+            if (index < 0
+                || index >= columnWidths.getLength()) {
+                throw new IndexOutOfBoundsException();
+            }
+
+            int cellX = 0;
+            for (int i = 0; i < index; i++) {
+                cellX += (columnWidths.get(i) + 1);
+            }
+
+            headerBounds = new Rectangle(cellX, 0, columnWidths.get(index), getHeight() - 1);
         }
 
-
-        int cellX = 0;
-        for (int i = 0; i < index; i++) {
-            cellX += (columnWidths.get(i) + 1);
-        }
-
-        return new Rectangle(cellX, 0, columnWidths.get(index), getHeight() - 1);
+        return headerBounds;
     }
 
     @Override
@@ -624,22 +639,23 @@ public class TableViewHeaderSkin extends ComponentSkin
     public boolean mouseMove(int x, int y) {
         boolean consumed = super.mouseMove(x, y);
 
-        int headerIndex = getHeaderAt(x);
-        if (headerIndex != -1) {
-            TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
-            TableView tableView = tableViewHeader.getTableView();
-            TableView.ColumnSequence columns = tableView.getColumns();
+        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableView tableView = tableViewHeader.getTableView();
 
-            TableView.Column column = columns.get(headerIndex);
+        if (tableView != null) {
+            int headerIndex = getHeaderAt(x);
 
-            Rectangle headerBounds = getHeaderBounds(headerIndex);
+            if (headerIndex != -1) {
+                Rectangle headerBounds = getHeaderBounds(headerIndex);
+                TableView.Column column = tableView.getColumns().get(headerIndex);
 
-            if (Mouse.getButtons() == 0) {
-                if (!column.isRelative()
-                    && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
-                    ApplicationContext.getInstance().setCursor(Cursor.RESIZE_EAST);
-                } else {
-                    ApplicationContext.getInstance().setCursor(getComponent().getCursor());
+                if (Mouse.getButtons() == 0) {
+                    if (!column.isRelative()
+                        && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
+                        ApplicationContext.getInstance().setCursor(Cursor.RESIZE_EAST);
+                    } else {
+                        ApplicationContext.getInstance().setCursor(getComponent().getCursor());
+                    }
                 }
             }
         }
@@ -652,8 +668,7 @@ public class TableViewHeaderSkin extends ComponentSkin
         super.mouseOut();
 
         if (pressedHeaderIndex != -1) {
-            // TODO Repaint pressed header bounds only
-            repaintComponent();
+            repaintComponent(getHeaderBounds(pressedHeaderIndex));
             pressedHeaderIndex = -1;
         }
     }
@@ -662,30 +677,28 @@ public class TableViewHeaderSkin extends ComponentSkin
     public boolean mouseDown(Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(button, x, y);
 
-        int headerIndex = getHeaderAt(x);
-
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
         TableView tableView = tableViewHeader.getTableView();
-        TableView.ColumnSequence columns = tableView.getColumns();
 
-        TableView.Column column = columns.get(headerIndex);
+        if (tableView != null) {
+            int headerIndex = getHeaderAt(x);
 
-        Rectangle headerBounds = getHeaderBounds(headerIndex);
+            Rectangle headerBounds = getHeaderBounds(headerIndex);
+            TableView.Column column = tableView.getColumns().get(headerIndex);
 
-        if (!column.isRelative()
-            && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
-            // Begin drag
-            Point headerCoordinates = tableViewHeader.mapPointToAncestor(Display.getInstance(),
-                headerBounds.x, 0);
-            DragHandler dragHandler = new DragHandler(column, headerCoordinates.x,
-                headerBounds.x + headerBounds.width - x);
-            Display.getInstance().getComponentMouseListeners().add(dragHandler);
-            Display.getInstance().getComponentMouseButtonListeners().add(dragHandler);
-        } else {
-            pressedHeaderIndex = getHeaderAt(x);
-
-            // TODO Repaint pressed header bounds only
-            repaintComponent();
+            if (!column.isRelative()
+                && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
+                // Begin drag
+                Point headerCoordinates = tableViewHeader.mapPointToAncestor(Display.getInstance(),
+                    headerBounds.x, 0);
+                DragHandler dragHandler = new DragHandler(column, headerCoordinates.x,
+                    headerBounds.x + headerBounds.width - x);
+                Display.getInstance().getComponentMouseListeners().add(dragHandler);
+                Display.getInstance().getComponentMouseButtonListeners().add(dragHandler);
+            } else {
+                pressedHeaderIndex = getHeaderAt(x);
+                repaintComponent(getHeaderBounds(pressedHeaderIndex));
+            }
         }
 
         return consumed;
@@ -695,7 +708,9 @@ public class TableViewHeaderSkin extends ComponentSkin
     public boolean mouseUp(Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseUp(button, x, y);
 
-        repaintComponent();
+        if (pressedHeaderIndex != -1) {
+            repaintComponent(getHeaderBounds(pressedHeaderIndex));
+        }
 
         return consumed;
     }
@@ -712,6 +727,20 @@ public class TableViewHeaderSkin extends ComponentSkin
     }
 
     // Table view header events
+    public void tableViewChanged(TableViewHeader tableViewHeader,
+        TableView previousTableView) {
+        if (previousTableView != null) {
+            previousTableView.getTableViewColumnListeners().remove(this);
+        }
+
+        TableView tableView = tableViewHeader.getTableView();
+        if (tableView != null) {
+            tableView.getTableViewColumnListeners().add(this);
+        }
+
+        invalidateComponent();
+    }
+
     public void dataRendererChanged(TableViewHeader tableViewHeader,
         TableViewHeader.DataRenderer previousDataRenderer) {
         invalidateComponent();

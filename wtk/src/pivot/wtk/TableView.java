@@ -54,6 +54,13 @@ public class TableView extends Component {
         public static final int DEFAULT_WIDTH = 100;
 
         /**
+         * Creates an empty column.
+         */
+        public Column() {
+            this(null, null, DEFAULT_WIDTH, false);
+        }
+
+        /**
          * Creates a new column with no header data and a fixed default width.
          *
          * @param name
@@ -109,10 +116,6 @@ public class TableView extends Component {
          * specifies a fixed column width.
          */
         public Column(String name, Object headerData, int width, boolean relative) {
-            if (name == null) {
-                throw new IllegalArgumentException("name is required.");
-            }
-
             if (width < 0) {
                 throw new IllegalArgumentException("width is negative.");
             }
@@ -227,6 +230,35 @@ public class TableView extends Component {
          */
         public boolean isRelative() {
             return relative;
+        }
+
+        /**
+         * Set the column width.
+         *
+         * @param width
+         * The absolute width of the column.
+         */
+        public void setWidth(int width) {
+            setWidth(width, false);
+        }
+
+        /**
+         * Set the column width.
+         *
+         * @param width
+         * The encoded width of the row. If the string ends with the '*'
+         * character, it is treated as a relative value. Otherwise, it is
+         * considered an absolute value.
+         */
+        public void setWidth(String width) {
+            boolean relative = false;
+
+            if (width.endsWith("*")) {
+                relative = true;
+                width = width.substring(0, width.length() - 1);
+            }
+
+            setWidth(Integer.parseInt(width), relative);
         }
 
         /**

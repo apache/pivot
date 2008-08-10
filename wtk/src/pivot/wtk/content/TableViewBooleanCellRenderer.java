@@ -47,19 +47,21 @@ public class TableViewBooleanCellRenderer extends FlowPane
     @SuppressWarnings("unchecked")
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        // Get the row and cell data
-        String columnName = column.getName();
-        Dictionary<String, Object> rowData = (Dictionary<String, Object>)value;
-        Object cellData = rowData.get(columnName);
-
         boolean checkboxSelected = false;
 
-        if (cellData instanceof String) {
-            cellData = Boolean.parseBoolean((String)cellData);
-        }
+        // Get the row and cell data
+        String columnName = column.getName();
+        if (columnName != null) {
+            Dictionary<String, Object> rowData = (Dictionary<String, Object>)value;
+            Object cellData = rowData.get(columnName);
 
-        if (cellData instanceof Boolean) {
-            checkboxSelected = (Boolean)cellData;
+            if (cellData instanceof String) {
+                cellData = Boolean.parseBoolean((String)cellData);
+            }
+
+            if (cellData instanceof Boolean) {
+                checkboxSelected = (Boolean)cellData;
+            }
         }
 
         checkbox.setSelected(checkboxSelected);
