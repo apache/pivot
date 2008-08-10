@@ -23,7 +23,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
+ * TODO Manually implement internal functionality that currently delegates
+ * to GregorianCalendar to gain performance.
  *
  * @author tvolkert
  */
@@ -164,6 +165,37 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
         }
 
         return result;
+    }
+
+    /**
+     * Gets the number of days in between this calendar date and the specified
+     * calendar date. If this calendar date represents a day after the
+     * specified calendar date, the difference will be positive. If this
+     * calendardate represents a day before the specified calendar date, the
+     * difference will be negative. If the two calendar dates represent the
+     * same day, the difference will be zero.
+     */
+    public int subtract(CalendarDate calendarDate) {
+        GregorianCalendar c1 = toCalendar();
+        GregorianCalendar c2 = calendarDate.toCalendar();
+
+        long t1 = c1.getTimeInMillis();
+        long t2 = c2.getTimeInMillis();
+
+        return (int)((t1 - t2) / (1000l * 60 * 60 * 24));
+    }
+
+    /**
+     * Translates this calendar date to an instance of
+     * <tt>GregorianCalendar</tt>, with the <tt>year</tt>, <tt>month</tt>, and
+     * <tt>dayOfMonth</tt> fields set in the default time zone with the default
+     * locale.
+     *
+     * @return
+     * This calendar date as a <tt>GregorianCalendar</tt>
+     */
+    public GregorianCalendar toCalendar() {
+        return new GregorianCalendar(year, month, day + 1);
     }
 
     /**
