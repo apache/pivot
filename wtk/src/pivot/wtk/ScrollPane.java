@@ -219,6 +219,13 @@ public class ScrollPane extends Viewport {
         Component previousRowHeader = this.rowHeader;
 
         if (rowHeader != previousRowHeader) {
+            // Remove any previous rowHeader component
+            if (previousRowHeader != null) {
+                remove(previousRowHeader);
+            }
+
+            this.rowHeader = null;
+
             if (rowHeader != null) {
                 if (rowHeader.getParent() != null) {
                     throw new IllegalArgumentException("Component already has a parent.");
@@ -234,15 +241,7 @@ public class ScrollPane extends Viewport {
                 insert(rowHeader, insertionIndex);
             }
 
-            // Set the component as the new row header component (note that we
-            // set the new component before removing the old one so two
-            // row header change events don't get fired)
             this.rowHeader = rowHeader;
-
-            // Remove any previous rowHeader component
-            if (previousRowHeader != null) {
-                remove(previousRowHeader);
-            }
 
             scrollPaneListeners.rowHeaderChanged(this, previousRowHeader);
         }
@@ -256,11 +255,14 @@ public class ScrollPane extends Viewport {
         Component previousColumnHeader = this.columnHeader;
 
         if (columnHeader != previousColumnHeader) {
-            if (columnHeader != null) {
-                if (columnHeader.getParent() != null) {
-                    throw new IllegalArgumentException("Component already has a parent.");
-                }
+            // Remove any previous columnHeader component
+            if (previousColumnHeader != null) {
+                remove(previousColumnHeader);
+            }
 
+            this.columnHeader = null;
+
+            if (columnHeader != null) {
                 int insertionIndex = 0;
 
                 if (getView() != null) {
@@ -271,15 +273,7 @@ public class ScrollPane extends Viewport {
                 insert(columnHeader, insertionIndex);
             }
 
-            // Set the component as the new column header component (note that
-            // we set the new component before removing the old one so two
-            // column header change events don't get fired)
             this.columnHeader = columnHeader;
-
-            // Remove any previous columnHeader component
-            if (previousColumnHeader != null) {
-                remove(previousColumnHeader);
-            }
 
             scrollPaneListeners.columnHeaderChanged(this, previousColumnHeader);
         }
@@ -293,11 +287,14 @@ public class ScrollPane extends Viewport {
         Component previousCorner = this.corner;
 
         if (corner != this.corner) {
-            if (corner != null) {
-                if (corner.getParent() != null) {
-                    throw new IllegalArgumentException("Component already has a parent.");
-                }
+            // Remove any previous corner component
+            if (previousCorner != null) {
+                remove(previousCorner);
+            }
 
+            this.corner = null;
+
+            if (corner != null) {
                 int insertionIndex = 0;
 
                 if (getView() != null) {
@@ -316,15 +313,7 @@ public class ScrollPane extends Viewport {
                 insert(corner, insertionIndex);
             }
 
-            // Set the component as the new corner component (note that we
-            // set the new component before removing the old one so two
-            // corner change events don't get fired)
             this.corner = corner;
-
-            // Remove any previous corner component
-            if (previousCorner != null) {
-                remove(previousCorner);
-            }
 
             scrollPaneListeners.cornerChanged(this, previousCorner);
         }

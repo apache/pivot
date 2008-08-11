@@ -252,14 +252,19 @@ public class WTKXSerializer implements Serializer {
     public Object readObject(URL location) throws IOException, SerializationException {
         this.location = location;
 
-        return readObject(new BufferedInputStream(location.openStream()));
+        long t0 = System.currentTimeMillis();
+
+        Object object = readObject(new BufferedInputStream(location.openStream()));
+
+        long t1 = System.currentTimeMillis();
+        System.out.println("Parsed " + location + " in " + (t1 - t0) + " ms.");
+
+        return object;
     }
 
     @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
-        long t0 = System.currentTimeMillis();
-
         // Clear any previous named objects and include serializers
         namedObjects.clear();
         includeSerializers.clear();
@@ -352,6 +357,8 @@ public class WTKXSerializer implements Serializer {
                                     + localName + "> is not a valid tag.");
                             }
                         } else {
+                            String id = null;
+
                             for (int i = 0, n = reader.getAttributeCount(); i < n; i++) {
                                 Attribute attribute = new Attribute(reader.getAttributePrefix(i),
                                     reader.getAttributeNamespace(i),
@@ -359,7 +366,14 @@ public class WTKXSerializer implements Serializer {
                                     reader.getAttributeValue(i),
                                     reader);
 
-                                nodeAttributes.add(attribute);
+                                if (attribute.prefix != null
+                                    && attribute.prefix.equals(WTKX_PREFIX)) {
+                                    if (attribute.localName.equals(ID_ATTRIBUTE)) {
+                                        id = attribute.value;
+                                    }
+                                } else {
+                                    nodeAttributes.add(attribute);
+                                }
                             }
 
                             if (Character.isUpperCase(localName.charAt(0))) {
@@ -406,7 +420,6 @@ public class WTKXSerializer implements Serializer {
                                             type.getConstructor(new Class<?>[] {enclosingClass});
                                         nodeValue = constructor.newInstance(outer);
                                     }
-
                                 } catch(Exception exception) {
                                     throw new SerializationException(exception);
                                 }
@@ -435,6 +448,10 @@ public class WTKXSerializer implements Serializer {
                                         nodeValue = new Element();
                                     }
                                 }
+                            }
+
+                            if (id != null) {
+                                namedObjects.put(id, nodeValue);
                             }
                         }
 
@@ -493,31 +510,26 @@ public class WTKXSerializer implements Serializer {
 
                         // Apply the attributes
                         if (node.value != null) {
-                            Dictionary<String, Object> nodeDictionary;
                             if (node.value instanceof Dictionary) {
-                                nodeDictionary = (Dictionary<String, Object>)node.value;
-                            } else {
-                                nodeDictionary = new BeanDictionary(node.value);
-                            }
+                                Dictionary<String, Object> nodeDictionary = (Dictionary<String, Object>)node.value;
 
-                            for (Attribute attribute : node.attributes) {
-                                if (attribute.prefix != null
-                                    && attribute.prefix.equals(WTKX_PREFIX)) {
-                                    namedObjects.put(attribute.value, node.value);
-                                } else {
+                                for (Attribute attribute : node.attributes) {
+                                    Object propertyValue = resolve(attribute.value, Object.class);
+                                    nodeDictionary.put(attribute.localName, propertyValue);
+                                }
+                            } else {
+                                BeanDictionary beanDictionary = new BeanDictionary(node.value);
+
+                                for (Attribute attribute : node.attributes) {
                                     try {
                                         if (Character.isUpperCase(attribute.localName.charAt(0))) {
                                             setStaticProperty(attribute, node.value);
                                         } else {
                                             Class<?> propertyType;
-                                            if (nodeDictionary instanceof BeanDictionary) {
-                                                propertyType = ((BeanDictionary)nodeDictionary).getType(attribute.localName);
-                                            } else {
-                                                propertyType = Object.class;
-                                            }
+                                            propertyType = beanDictionary.getType(attribute.localName);
 
                                             Object propertyValue = resolve(attribute.value, propertyType);
-                                            nodeDictionary.put(attribute.localName, propertyValue);
+                                            beanDictionary.put(attribute.localName, propertyValue);
                                         }
                                     } catch(PropertyNotFoundException exception) {
                                         System.out.println(attribute + " is not a valid attribute for the "
@@ -545,9 +557,6 @@ public class WTKXSerializer implements Serializer {
         // Clear the location so the previous value won't be re-used in a
         // subsequent call to this method
         location = null;
-
-        long t1 = System.currentTimeMillis();
-        System.out.println("Parsed WTKX in " + (t1 - t0) + " ms.");
 
         return object;
     }

@@ -107,24 +107,19 @@ public abstract class Viewport extends Container {
        Component previousView = this.view;
 
         if (view != previousView) {
-            if (view != null) {
-                if (view.getParent() != null) {
-                    throw new IllegalArgumentException("Component already has a parent.");
-                }
-
-                // Add the component
-                insert(view, 0);
-            }
-
-            // Set the component as the new view component (note that we
-            // set the new component before removing the old one so two
-            // view change events don't get fired)
-            this.view = view;
-
             // Remove any previous view component
             if (previousView != null) {
                 remove(previousView);
             }
+
+            this.view = null;
+
+            // Set the new view component
+            if (view != null) {
+                insert(view, 0);
+            }
+
+            this.view = view;
 
             viewportListeners.viewChanged(this, previousView);
         }

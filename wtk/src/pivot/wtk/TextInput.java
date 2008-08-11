@@ -17,7 +17,6 @@ package pivot.wtk;
 
 import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
-import pivot.wtk.skin.terra.TextInputSkin;
 
 /**
  * A component that allows a user to enter a single line of unformatted text.

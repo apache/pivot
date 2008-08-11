@@ -35,11 +35,10 @@ public class FormSkin extends ContainerSkin
     private ArrayList<Label> labels = new ArrayList<Label>();
     private ArrayList<ImageView> flagImageViews = new ArrayList<ImageView>();
 
-    private static Image informationImage = Image.load(FormSkin.class.getResource("FormSkin-Information-16x16.png"));
-    private static Image warningImage = Image.load(FormSkin.class.getResource("FormSkin-Warning-16x16.png"));
-    private static Image errorImage = Image.load(FormSkin.class.getResource("FormSkin-Error-16x16.png"));
-    private static Image questionImage = Image.load(FormSkin.class.getResource("FormSkin-Question-16x16.png"));
-
+    private static Image informationImage = null;
+    private static Image warningImage = null;
+    private static Image errorImage = null;
+    private static Image questionImage = null;
 
     private boolean rightAlignLabels = false;
     private HorizontalAlignment fieldAlignment = HorizontalAlignment.LEFT;
@@ -408,21 +407,41 @@ public class FormSkin extends ContainerSkin
             if (flagAlertType != null) {
                 switch (flagAlertType) {
                     case INFO: {
+                        if (informationImage == null) {
+                            informationImage =
+                                Image.load(getClass().getResource("FormSkin-Information-16x16.png"));
+                        }
+
                         flagImage = informationImage;
                         break;
                     }
 
                     case WARNING: {
+                        if (warningImage == null) {
+                            warningImage =
+                                Image.load(getClass().getResource("FormSkin-Warning-16x16.png"));
+                        }
+
                         flagImage = warningImage;
                         break;
                     }
 
                     case ERROR: {
+                        if (errorImage == null) {
+                            errorImage =
+                                Image.load(getClass().getResource("FormSkin-Error-16x16.png"));
+                        }
+
                         flagImage = errorImage;
                         break;
                     }
 
                     case QUESTION: {
+                        if (questionImage == null) {
+                            questionImage =
+                                Image.load(getClass().getResource("FormSkin-Question-16x16.png"));
+                        }
+
                         flagImage = questionImage;
                         break;
                     }

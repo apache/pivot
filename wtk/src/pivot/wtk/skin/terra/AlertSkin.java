@@ -68,6 +68,11 @@ public class AlertSkin extends DialogSkin
     private ImageView typeImageView = new ImageView();
     private Label subjectLabel = null;
 
+    private static Image informationImage = null;
+    private static Image warningImage = null;
+    private static Image errorImage = null;
+    private static Image questionImage = null;
+
     public AlertSkin() {
         setResizable(false);
 
@@ -150,33 +155,54 @@ public class AlertSkin extends DialogSkin
     }
 
     private void setTypeImage(Type type) {
-        String resourceName = null;
+        Image typeImage = null;
 
         if (type != null) {
             switch (type) {
-            case ERROR:
-                resourceName = "/pivot/wtk/skin/terra/AlertSkin-Error-32x32.png";
-                break;
-            case WARNING:
-                resourceName = "/pivot/wtk/skin/terra/AlertSkin-Warning-32x32.png";
-                break;
-            case QUESTION:
-                resourceName = "/pivot/wtk/skin/terra/AlertSkin-Question-32x32.png";
-                break;
-            case INFO:
-                resourceName = "/pivot/wtk/skin/terra/AlertSkin-Information-32x32.png";
-                break;
-            case APPLICATION:
-                // TODO
-                break;
+                case INFO: {
+                    if (informationImage == null) {
+                        informationImage =
+                            Image.load(getClass().getResource("AlertSkin-Information-32x32.png"));
+                    }
+
+                    typeImage = informationImage;
+                    break;
+                }
+
+                case WARNING: {
+                    if (warningImage == null) {
+                        warningImage =
+                            Image.load(getClass().getResource("AlertSkin-Warning-32x32.png"));
+                    }
+
+                    typeImage = warningImage;
+                    break;
+                }
+
+                case ERROR: {
+                    if (errorImage == null) {
+                        errorImage =
+                            Image.load(getClass().getResource("AlertSkin-Error-32x32.png"));
+                    }
+
+                    typeImage = errorImage;
+                    break;
+                }
+
+                case QUESTION: {
+                    if (questionImage == null) {
+                        questionImage =
+                            Image.load(getClass().getResource("AlertSkin-Question-32x32.png"));
+                    }
+
+                    typeImage = questionImage;
+                    break;
+                }
             }
+
         }
 
-        Image typeIcon = null;
-        if (resourceName != null) {
-            typeIcon = Image.load(getClass().getResource(resourceName));
-        }
-        typeImageView.setImage(typeIcon);
+        typeImageView.setImage(typeImage);
     }
 
     private void setSubjectLabel(String subject) {

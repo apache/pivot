@@ -132,8 +132,9 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
     }
 
     /**
-     * Invokes the setter method for the given property and value type. If the
-     * value is <tt>null</tt>, the return type of the getter method is used.
+     * Invokes the a setter method for the given property. The method
+     * signature is determined by the type of the value. If the value is
+     * <tt>null</tt>, the return type of the getter method is used.
      *
      * @param key
      * The property name.
@@ -142,7 +143,8 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * The new property value.
      *
      * @return
-     * The previous property value.
+     * Returns <tt>null</tt>, since returning the previous value would require
+     * a call to the getter method, which may not be an efficient operation.
      */
     public Object put(String key, Object value) {
         if (key == null) {
@@ -171,8 +173,6 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                 + " does not exist or is read-only.");
         }
 
-        Object previousValue = get(key);
-
         try {
             setterMethod.invoke(bean, new Object[] {value});
         } catch(IllegalAccessException exception) {
@@ -181,7 +181,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
             throw new IllegalArgumentException(exception);
         }
 
-        return previousValue;
+        return null;
     }
 
     /**

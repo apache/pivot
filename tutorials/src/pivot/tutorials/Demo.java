@@ -463,12 +463,13 @@ public class Demo implements Application {
                     System.out.println(exception);
                 }
 
-                alert.open(window);
-
                 ArrayList<String> optionData = new ArrayList<String>();
                 optionData.add("OK");
                 optionData.add("Cancel");
                 alert.setOptionData(optionData);
+                alert.setSelectedOption(0);
+
+                alert.open(window);
             }
         });
     }

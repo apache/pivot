@@ -166,7 +166,7 @@ public class TextInputSkin extends ComponentSkin
      *
      * @author gbrown
      */
-    private class TextInputCharacterIterator implements AttributedCharacterIterator {
+    private static class TextInputCharacterIterator implements AttributedCharacterIterator {
         public TextInputCharacterIterator(TextInput textInput) {
             // TODO Need index arguments
         }
@@ -879,8 +879,6 @@ public class TextInputSkin extends ComponentSkin
         boolean consumed = false;
 
         TextInput textInput = (TextInput)getComponent();
-
-        int keyboardModifiers = Keyboard.getModifiers();
 
         if (keyCode == Keyboard.KeyCode.DELETE) {
             int selectionStart = textInput.getSelectionStart();

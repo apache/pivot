@@ -106,18 +106,24 @@ limitations under the License.
             <Label text="Expanders" styles="{font:'Verdana bold 11'}"/>
             <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
                 <Expander title="One" expanded="false">
-                    <Label preferredWidth="100" preferredHeight="20" text="Un"
-                        styles="{horizontalAlignment:'center', verticalAlignment:'center', font:'Verdana italic 11'}"/>
+                    <content>
+                        <Label preferredWidth="100" preferredHeight="20" text="Un"
+                            styles="{horizontalAlignment:'center', verticalAlignment:'center', font:'Verdana italic 11'}"/>
+                    </content>
                 </Expander>
 
                 <Expander title="Two" expanded="false">
-                    <Label preferredWidth="100" preferredHeight="80" text="Deux"
-                        styles="{horizontalAlignment:'center', verticalAlignment:'center', font:'Verdana italic 11'}"/>
+                    <content>
+                        <Label preferredWidth="100" preferredHeight="80" text="Deux"
+                            styles="{horizontalAlignment:'center', verticalAlignment:'center', font:'Verdana italic 11'}"/>
+                    </content>
                 </Expander>
 
                 <Expander title="Three">
-                    <Label preferredWidth="100" preferredHeight="50" text="Trois"
-                        styles="{horizontalAlignment:'center', verticalAlignment:'center', font:'Verdana italic 11'}"/>
+                    <content>
+                        <Label preferredWidth="100" preferredHeight="50" text="Trois"
+                            styles="{horizontalAlignment:'center', verticalAlignment:'center', font:'Verdana italic 11'}"/>
+                    </content>
                 </Expander>
             </FlowPane>
         </FlowPane>
