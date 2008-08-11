@@ -1,0 +1,9 @@
+{   mainWindowName: "Pivot Explorer",
+    mainWindowComponentsTabName: "Components",
+    mainWindowPropertiesTabName: "Properties",
+    mainWindowStylesTabName: "Styles",
+    commonBorderStyles: {
+        padding: 0,
+        borderColor: "#cccac2"
+    }
+}

@@ -15,68 +15,69 @@
 	limitations under the License.
 -->
 
-<TablePane styles="{padding:3, spacing:2}">
+<TablePane styles="{padding:3, spacing:2}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    <columns>
+        <TablePane.Column width="1*" />
+    </columns>
+
 	<rows>
-		<Row height="1*" />
-		<Row height="-1" />
+		<TablePane.Row height="1*">
+            <SplitPane orientation="horizontal" splitLocation="350">
+                <left>
+                    <TabPane tabOrientation="horizontal" selectedIndex="0">
+                        <tabs>
+                            <Border TabPane.label="%mainWindowComponentsTabName" styles="{padding:0, borderColor:'#cccac2'}">
+                                <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+                                    <view>
+                                        <TreeView wtkx:id="trComponents"/>
+                                    </view>
+                                </ScrollPane>
+                            </Border>
+                        </tabs>
+                    </TabPane>
+                </left>
+                <right>
+                    <TabPane tabOrientation="horizontal" selectedIndex="0">
+                        <tabs>
+                            <Border TabPane.label="%mainWindowPropertiesTabName" styles="{padding:0, borderColor:'#cccac2'}">
+                                <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+                                    <view>
+                                        <TableView wtkx:id="tbProperties" selectMode="single">
+                                            <columns>
+                                                <TableView.Column name="name" width="150" headerData="Name" />
+                                                <TableView.Column name="value" width="1*" headerData="Value" />
+                                            </columns>
+                                        </TableView>
+                                    </view>
+                                    <columnHeader>
+                                        <TableViewHeader wtkx:id="tbPropertiesHeader" tableView="$tbProperties" />
+                                    </columnHeader>
+                                </ScrollPane>
+                            </Border>
+                            <Border TabPane.label="%mainWindowStylesTabName" styles="{padding:0, borderColor:'#cccac2'}">
+                                <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+                                    <view>
+                                        <TableView wtkx:id="tbStyles" selectMode="single">
+                                            <columns>
+                                                <TableView.Column name="name" width="100" headerData="Name" />
+                                                <TableView.Column name="value" width="1*" headerData="Value" />
+                                            </columns>
+                                        </TableView>
+                                    </view>
+                                    <columnHeader>
+                                        <TableViewHeader wtkx:id="tbStylesHeader" tableView="$tbStyles" />
+                                    </columnHeader>
+                                </ScrollPane>
+                            </Border>
+                        </tabs>
+                    </TabPane>
+                </right>
+            </SplitPane>
+        </TablePane.Row>
+
+		<TablePane.Row height="-1">
+            <Label wtkx:id="lbStatus" styles="{horizontalAlignment:'left', verticalAlignment:'center'}" />
+        </TablePane.Row>
 	</rows>
-	<columns>
-		<Column width="1*" />
-	</columns>
-	<cells>
-		<SplitPane row="0" column="0"  orientation="horizontal" splitLocation="350">
-			<left>
-				<TabPane tabOrientation="horizontal" selectedIndex="0">
-					<Border row="1" column="0" label="%main.window.components.tab.name" styles="{padding:0, borderColor:'#cccac2'}">
-						<ScrollPane horizontalScrollBarPolicy="fillToCapacity">
-							<view>
-								<TreeView id="trComponents"/>
-							</view>
-						</ScrollPane>
-					</Border>
-				</TabPane>
-			</left>
-			<right>
-				<TabPane tabOrientation="horizontal" selectedIndex="0">
-					<Border row="1" column="0" label="%main.window.properties.tab.name" styles="{padding:0, borderColor:'#cccac2'}">
-						<ScrollPane horizontalScrollBarPolicy="fillToCapacity">
-							<view>
-								<TableView id="tbProperties"
-									selectMode="single">
-									<columns>
-										<Column name="name" width="150"
-											headerData="'Name'" />
-										<Column name="value" width="1*"
-											headerData="'Value'" />
-									</columns>
-								</TableView>
-							</view>
-							<columnHeader>
-								<TableViewHeader id="tbPropertiesHeader"
-									tableViewID="tbProperties" />
-							</columnHeader>
-						</ScrollPane>
-					</Border>
-					<Border row="1" column="0" label="%main.window.styles.tab.name" styles="{padding:0, borderColor:'#cccac2'}">
-						<ScrollPane horizontalScrollBarPolicy="fillToCapacity">
-							<view>
-								<TableView id="tbStyles"
-									selectMode="single">
-									<columns>
-										<Column name="name" width="100" headerData="'Name'" />
-										<Column name="value" width="1*"	headerData="'Value'" />
-									</columns>
-								</TableView>
-							</view>
-							<columnHeader>
-								<TableViewHeader id="tbStylesHeader" tableViewID="tbStyles" />
-							</columnHeader>
-						</ScrollPane>
-					</Border>
-				</TabPane>
-			</right>
-		</SplitPane>
-		<Label row="1" column="0" id="lbStatus"
-				styles="{horizontalAlignment:'left', verticalAlignment:'center'}" />
-	</cells>
 </TablePane>

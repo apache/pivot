@@ -762,9 +762,11 @@ public class WTKXSerializer implements Serializer {
         // Resolve the attribute value
         Class<?> propertyType = getterMethod.getReturnType();
         Object propertyValue = resolve(attribute.value, propertyType);
+        Class<?> propertyValueType = (propertyValue == null) ?
+            getterMethod.getReturnType() : propertyValue.getClass();
 
         Method setterMethod = getStaticSetterMethod(propertyClass, propertyName,
-            objectType, propertyValue.getClass());
+            objectType, propertyValueType);
 
         if (setterMethod == null) {
             throw new SerializationException("Unable to determine type for "

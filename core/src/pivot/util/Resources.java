@@ -112,7 +112,7 @@ public class Resources implements Dictionary<String, Object> {
 
         String resourceName = baseName.replace('.', '/');
         resourceMap = readJSONResource(resourceName + ".json");
-        if (null == resourceMap) {
+        if (resourceMap == null) {
             throw new MissingResourceException("Can't find resource for base name "
                 + baseName + ", locale " + locale, baseName, "");
         }
@@ -183,7 +183,7 @@ public class Resources implements Dictionary<String, Object> {
     private Map<String, Object> readJSONResource(String name) throws IOException,
         SerializationException {
         InputStream in = getClass().getClassLoader().getResourceAsStream(name);
-        if (null == in) {
+        if (in == null) {
             return null;
         }
 
