@@ -4,15 +4,12 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentListener;
 import pivot.wtk.Container;
 import pivot.wtk.Cursor;
 import pivot.wtk.Decorator;
 import pivot.wtk.Display;
-import pivot.wtk.DragHandler;
-import pivot.wtk.DropHandler;
 import pivot.wtk.Skin;
 
 /**
@@ -24,13 +21,7 @@ import pivot.wtk.Skin;
 public class DropShadowDecorator implements Decorator {
     private static class ComponentHandler implements ComponentListener {
         public void skinClassChanged(Component component, Class<? extends Skin> previousSkinClass) {
-        }
-
-        public void decoratorInserted(Component component, int index) {
-        }
-
-        public void decoratorsRemoved(Component component, int index,
-            Sequence<Decorator> removed) {
+            // No-op
         }
 
         public void parentChanged(Component component, Container previousParent) {
@@ -80,14 +71,6 @@ public class DropShadowDecorator implements Decorator {
         }
 
         public void tooltipTextChanged(Component component, String previousTooltipText) {
-            // No-op
-        }
-
-        public void dragHandlerChanged(Component component, DragHandler previousDragHandler) {
-            // No-op
-        }
-
-        public void dropHandlerChanged(Component component, DropHandler previousDropHandler) {
             // No-op
         }
     }

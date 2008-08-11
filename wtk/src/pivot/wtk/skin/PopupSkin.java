@@ -15,18 +15,13 @@
  */
 package pivot.wtk.skin;
 
-import pivot.collections.Sequence;
-
 import pivot.wtk.Component;
 import pivot.wtk.ComponentListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Cursor;
-import pivot.wtk.Decorator;
 import pivot.wtk.Display;
-import pivot.wtk.DragHandler;
-import pivot.wtk.DropHandler;
 import pivot.wtk.Mouse;
 import pivot.wtk.Popup;
 import pivot.wtk.Skin;
@@ -89,15 +84,6 @@ public class PopupSkin extends WindowSkin
         // No-op
     }
 
-    public void decoratorInserted(Component component, int index) {
-        // No-op
-    }
-
-    public void decoratorsRemoved(Component component, int index,
-        Sequence<Decorator> removed) {
-        // No-op
-    }
-
     public void parentChanged(Component component, Container previousParent) {
         // Ignore this event if it came from the affiliate's window.
         // The window's parent may change as a result of a z-order change or
@@ -149,14 +135,6 @@ public class PopupSkin extends WindowSkin
     }
 
     public void tooltipTextChanged(Component component, String previousTooltipText) {
-        // No-op
-    }
-
-    public void dragHandlerChanged(Component component, DragHandler previousDragHandler) {
-        // No-op
-    }
-
-    public void dropHandlerChanged(Component component, DropHandler previousDropHandler) {
         // No-op
     }
 

@@ -128,7 +128,7 @@ public abstract class Component implements Visual {
 
             repaint();
 
-            componentListeners.decoratorInserted(Component.this, index);
+            componentDecoratorListeners.decoratorInserted(Component.this, index);
         }
 
         public Decorator update(int index, Decorator decorator) {
@@ -154,7 +154,7 @@ public abstract class Component implements Visual {
 
             if (count > 0) {
                 repaint();
-                componentListeners.decoratorsRemoved(Component.this, index, removed);
+                componentDecoratorListeners.decoratorsRemoved(Component.this, index, removed);
             }
 
             return removed;
@@ -210,19 +210,6 @@ public abstract class Component implements Visual {
             }
         }
 
-        public void decoratorInserted(Component component, int index) {
-            for (ComponentListener listener : this) {
-                listener.decoratorInserted(component, index);
-            }
-        }
-
-        public void decoratorsRemoved(Component component, int index,
-            Sequence<Decorator> decorators) {
-            for (ComponentListener listener : this) {
-                listener.decoratorsRemoved(component, index, decorators);
-            }
-        }
-
         public void parentChanged(Component component, Container previousParent) {
             for (ComponentListener listener : this) {
                 listener.parentChanged(component, previousParent);
@@ -264,18 +251,6 @@ public abstract class Component implements Visual {
                 listener.tooltipTextChanged(component, previousTooltipText);
             }
         }
-
-        public void dragHandlerChanged(Component component, DragHandler previousDragHandler) {
-            for (ComponentListener listener : this) {
-                listener.dragHandlerChanged(component, previousDragHandler);
-            }
-        }
-
-        public void dropHandlerChanged(Component component, DropHandler previousDropHandler) {
-            for (ComponentListener listener : this) {
-                listener.dropHandlerChanged(component, previousDropHandler);
-            }
-        }
     }
 
     private class ComponentLayoutListenerList extends
@@ -306,6 +281,22 @@ public abstract class Component implements Visual {
         public void focusedChanged(Component component, boolean temporary) {
             for (ComponentStateListener listener : this) {
                 listener.focusedChanged(component, temporary);
+            }
+        }
+    }
+
+    private class ComponentDecoratorListenerList extends
+        ListenerList<ComponentDecoratorListener> implements ComponentDecoratorListener {
+        public void decoratorInserted(Component component, int index) {
+            for (ComponentDecoratorListener listener : this) {
+                listener.decoratorInserted(component, index);
+            }
+        }
+
+        public void decoratorsRemoved(Component component, int index,
+            Sequence<Decorator> decorators) {
+            for (ComponentDecoratorListener listener : this) {
+                listener.decoratorsRemoved(component, index, decorators);
             }
         }
     }
@@ -390,6 +381,21 @@ public abstract class Component implements Visual {
         public void userDataChanged(Component component, Object previousValue) {
             for (ComponentDataListener listener : this) {
                 listener.userDataChanged(component, previousValue);
+            }
+        }
+    }
+
+    private class ComponentDragDropListenerList extends
+        ListenerList<ComponentDragDropListener> implements ComponentDragDropListener {
+        public void dragHandlerChanged(Component component, DragHandler previousDragHandler) {
+            for (ComponentDragDropListener listener : this) {
+                listener.dragHandlerChanged(component, previousDragHandler);
+            }
+        }
+
+        public void dropHandlerChanged(Component component, DropHandler previousDropHandler) {
+            for (ComponentDragDropListener listener : this) {
+                listener.dropHandlerChanged(component, previousDropHandler);
             }
         }
     }
@@ -506,11 +512,13 @@ public abstract class Component implements Visual {
     private ComponentListenerList componentListeners = new ComponentListenerList();
     private ComponentLayoutListenerList componentLayoutListeners = new ComponentLayoutListenerList();
     private ComponentStateListenerList componentStateListeners = new ComponentStateListenerList();
+    private ComponentDecoratorListenerList componentDecoratorListeners = new ComponentDecoratorListenerList();
     private ComponentMouseListenerList componentMouseListeners = new ComponentMouseListenerList();
     private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
     private ComponentMouseWheelListenerList componentMouseWheelListeners = new ComponentMouseWheelListenerList();
     private ComponentKeyListenerList componentKeyListeners = new ComponentKeyListenerList();
     private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
+    private ComponentDragDropListenerList componentDragDropListeners = new ComponentDragDropListenerList();
 
     private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
 
@@ -1713,7 +1721,7 @@ public abstract class Component implements Visual {
         DragHandler previousDragHandler = this.dragHandler;
         if (previousDragHandler != dragHandler) {
             this.dragHandler = dragHandler;
-            componentListeners.dragHandlerChanged(this, previousDragHandler);
+            componentDragDropListeners.dragHandlerChanged(this, previousDragHandler);
         }
     }
 
@@ -1738,7 +1746,7 @@ public abstract class Component implements Visual {
         DropHandler previousDropHandler = this.dropHandler;
         if (previousDropHandler != dropHandler) {
             this.dropHandler = dropHandler;
-            componentListeners.dropHandlerChanged(this, previousDropHandler);
+            componentDragDropListeners.dropHandlerChanged(this, previousDropHandler);
         }
     }
 
@@ -2167,6 +2175,10 @@ public abstract class Component implements Visual {
         return componentStateListeners;
     }
 
+    public ListenerList<ComponentDecoratorListener> getComponentDecoratorListeners() {
+        return componentDecoratorListeners;
+    }
+
     public ListenerList<ComponentMouseListener> getComponentMouseListeners() {
         return componentMouseListeners;
     }
@@ -2181,6 +2193,14 @@ public abstract class Component implements Visual {
 
     public ListenerList<ComponentKeyListener> getComponentKeyListeners() {
         return componentKeyListeners;
+    }
+
+    public ListenerList<ComponentDataListener> getComponentDataListeners() {
+        return componentDataListeners;
+    }
+
+    public ListenerList<ComponentDragDropListener> getComponentDragDropListeners() {
+        return componentDragDropListeners;
     }
 
     public static ListenerList<ComponentClassListener> getComponentClassListeners() {
