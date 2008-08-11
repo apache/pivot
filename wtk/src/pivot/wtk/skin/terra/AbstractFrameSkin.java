@@ -335,7 +335,7 @@ public abstract class AbstractFrameSkin extends WindowSkin
         Window window = (Window)component;
 
         // Attach the drop-shadow decorator
-        dropShadowDecorator = new DropShadowDecorator(window);
+        dropShadowDecorator = new DropShadowDecorator();
         window.getDecorators().add(dropShadowDecorator);
 
         window.add(titleBarFlowPane);
@@ -369,7 +369,6 @@ public abstract class AbstractFrameSkin extends WindowSkin
 
         // Detach the drop shadow decorator
         window.getDecorators().remove(dropShadowDecorator);
-        dropShadowDecorator.dispose();
         dropShadowDecorator = null;
 
         window.remove(titleBarFlowPane);

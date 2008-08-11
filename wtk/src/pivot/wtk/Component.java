@@ -87,6 +87,7 @@ public abstract class Component implements Visual {
      * Decorator sequence implementation.
      *
      * @author tvolkert
+     * @author gbrown
      */
     public final class DecoratorSequence implements Sequence<Decorator>,
         Iterable<Decorator> {
@@ -123,6 +124,8 @@ public abstract class Component implements Visual {
             }
 
             decorators.insert(decorator, index);
+            decorator.install(Component.this);
+
             repaint();
 
             componentListeners.decoratorInserted(Component.this, index);
@@ -143,6 +146,11 @@ public abstract class Component implements Visual {
 
         public Sequence<Decorator> remove(int index, int count) {
             Sequence<Decorator> removed = decorators.remove(index, count);
+
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                Decorator decorator = removed.get(i);
+                decorator.uninstall();
+            }
 
             if (count > 0) {
                 repaint();

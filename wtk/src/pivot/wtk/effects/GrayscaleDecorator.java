@@ -30,6 +30,14 @@ public class GrayscaleDecorator implements Decorator {
     private BufferedImage bufferedImage = null;
     private Graphics2D graphics = null;
 
+    public void install(Component component) {
+        // No-op
+    }
+
+    public void uninstall() {
+        // No-op
+    }
+
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         this.graphics = graphics;
 

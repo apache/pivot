@@ -77,6 +77,14 @@ public class BlurDecorator implements Decorator {
         this.blurMagnitude = blurMagnitude;
     }
 
+    public void install(Component component) {
+        // No-op
+    }
+
+    public void uninstall() {
+        // No-op
+    }
+
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         this.graphics = graphics;
 

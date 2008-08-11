@@ -14,16 +14,15 @@ import pivot.wtk.Display;
 import pivot.wtk.DragHandler;
 import pivot.wtk.DropHandler;
 import pivot.wtk.Skin;
-import pivot.wtk.Window;
 
 /**
- * Adds drop shadows to windows.
+ * Adds drop shadows to components.
  *
  * @author gbrown
  * @author tvolkert
  */
 public class DropShadowDecorator implements Decorator {
-    private class WindowHandler implements ComponentListener {
+    private static class ComponentHandler implements ComponentListener {
         public void skinClassChanged(Component component, Class<? extends Skin> previousSkinClass) {
         }
 
@@ -41,35 +40,35 @@ public class DropShadowDecorator implements Decorator {
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
             Display display = Display.getInstance();
 
-            int x = window.getX();
-            int y = window.getY();
+            int x = component.getX();
+            int y = component.getY();
 
             display.repaint(x + DROP_SHADOW_OFFSET, y + DROP_SHADOW_OFFSET,
                 previousWidth, previousHeight);
 
             display.repaint(x + DROP_SHADOW_OFFSET, y + DROP_SHADOW_OFFSET,
-                window.getWidth(), window.getHeight());
+                component.getWidth(), component.getHeight());
         }
 
         public void locationChanged(Component component, int previousX, int previousY) {
             Display display = Display.getInstance();
 
-            int width = window.getWidth();
-            int height = window.getHeight();
+            int width = component.getWidth();
+            int height = component.getHeight();
 
             display.repaint(previousX + DROP_SHADOW_OFFSET,
                 previousY + DROP_SHADOW_OFFSET,
                 width, height);
 
-            display.repaint(window.getX() + DROP_SHADOW_OFFSET,
-                window.getY() + DROP_SHADOW_OFFSET,
+            display.repaint(component.getX() + DROP_SHADOW_OFFSET,
+                component.getY() + DROP_SHADOW_OFFSET,
                 width, height);
         }
 
         public void visibleChanged(Component component) {
-            Display.getInstance().repaint(window.getX() + DROP_SHADOW_OFFSET,
-                window.getY() + DROP_SHADOW_OFFSET,
-                window.getWidth(), window.getHeight());
+            Display.getInstance().repaint(component.getX() + DROP_SHADOW_OFFSET,
+                component.getY() + DROP_SHADOW_OFFSET,
+                component.getWidth(), component.getHeight());
         }
 
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
@@ -93,23 +92,20 @@ public class DropShadowDecorator implements Decorator {
         }
     }
 
-    private WindowHandler windowHandler = new WindowHandler();
+    private Component component = null;
+    private ComponentHandler componentHandler = new ComponentHandler();
 
     public static final Color DROP_SHADOW_COLOR = Color.BLACK;
     public static final float DROP_SHADOW_OPACITY = 0.33f;
     public static final int DROP_SHADOW_OFFSET = 4;
 
-    private Window window = null;
-
-    public DropShadowDecorator(Window window) {
-        window.getComponentListeners().add(windowHandler);
-
-        this.window = window;
+    public void install(Component component) {
+        this.component = component;
+        component.getComponentListeners().add(componentHandler);
     }
 
-    public void dispose() {
-        window.getComponentListeners().remove(windowHandler);
-        window = null;
+    public void uninstall() {
+        component.getComponentListeners().remove(componentHandler);
     }
 
     public Graphics2D prepare(Component component, Graphics2D graphics) {

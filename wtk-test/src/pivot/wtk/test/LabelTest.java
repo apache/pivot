@@ -15,14 +15,7 @@
  */
 package pivot.wtk.test;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics2D;
-
-import pivot.wtk.Alert;
 import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.Decorator;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
 import pivot.wtk.FlowPane;
@@ -71,30 +64,7 @@ public class LabelTest implements Application {
         window.setContent(flowPane);
         window.setPreferredWidth(200);
 
-        Decorator shadowDecorator = new Decorator() {
-            public Graphics2D prepare(Component component, Graphics2D graphics) {
-                Graphics2D shadowGraphics = (Graphics2D)graphics.create();
-                shadowGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-                shadowGraphics.setColor(Color.BLACK);
-
-                shadowGraphics.setClip(null);
-                shadowGraphics.fillRect(10, 10, component.getWidth(), component.getHeight());
-                shadowGraphics.dispose();
-
-                return graphics;
-            }
-
-            public void update() {
-            }
-        };
-
-        window.getDecorators().add(shadowDecorator);
         window.open();
-
-        Alert alert = new Alert(Alert.Type.INFO, "Foo");
-        alert.getDecorators().add(shadowDecorator);
-
-        alert.open(window);
     }
 
     public void shutdown() throws Exception {
