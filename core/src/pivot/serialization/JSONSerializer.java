@@ -26,9 +26,11 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 import pivot.collections.ArrayList;
+import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.collections.List;
 import pivot.collections.Map;
+import pivot.collections.Sequence;
 
 /**
  * Serializes data to and from JavaScript Object Notation (JSON).
@@ -601,21 +603,21 @@ public class JSONSerializer implements Serializer {
             String identifier = identifierBuilder.toString();
 
             if (keyed) {
-                if (!(value instanceof Map<?, ?>)){
+                if (!(value instanceof Dictionary<?, ?>)){
                     throw new IllegalArgumentException("Invalid path.");
                 }
 
                 String key = identifier;
-                Map<String, Object> map = (Map<String, Object>)value;
-                value = map.get(key);
+                Dictionary<String, Object> dictionary = (Dictionary<String, Object>)value;
+                value = dictionary.get(key);
             } else {
-                if (!(value instanceof List<?>)){
+                if (!(value instanceof Sequence<?>)){
                     throw new IllegalArgumentException("Invalid path.");
                 }
 
                 int index = Integer.parseInt(identifier);
-                List<Object> list = (List<Object>)value;
-                value = list.get(index);
+                Sequence<Object> sequence = (Sequence<Object>)value;
+                value = sequence.get(index);
             }
         }
 
