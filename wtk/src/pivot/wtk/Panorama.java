@@ -15,15 +15,8 @@
  */
 package pivot.wtk;
 
-/**
- * TODO This class doesn't extend ScrollPane because it doesn't need to
- * support headers.
- *
- * TODO Add a zoom property (float; represents magnification)
- *
- * @author gbrown
- *
- */
-public class Panorama {
-
+public class Panorama extends Viewport {
+    public Panorama() {
+        installSkin(Panorama.class);
+    }
 }
