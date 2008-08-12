@@ -21,7 +21,7 @@ import pivot.wtk.TablePane;
 import pivot.wtk.Window;
 
 /**
- * Demonstrates a possible issue with TablePane. A one-row, two-column table is
+ * Demonstrates a layout issue with TablePane. A one-row, two-column table is
  * created. The row height is set to 1* so it fills the vertical space. Column
  * 0 is given a default width (-1), and the width of column 1 is set to 1* so
  * it occupies the remaining horizontal space after column 0 is accounted for.
@@ -34,12 +34,13 @@ public class TablePaneTest implements Application {
 
     public void startup() throws Exception {
         TablePane tablePane = new TablePane();
-        tablePane.getRows().add(new TablePane.Row(1, true));
         tablePane.getColumns().add(new TablePane.Column(-1));
         tablePane.getColumns().add(new TablePane.Column(1, true));
 
-        tablePane.setCellComponent(0, 0, new PushButton("Hello"));
-        tablePane.setCellComponent(0, 1, new PushButton("World"));
+        TablePane.Row row = new TablePane.Row(1, true);
+        row.add(new PushButton("Hello"));
+        row.add(new PushButton("World"));
+        tablePane.getRows().add(row);
 
         window = new Window();
         window.setTitle("TableView Test");

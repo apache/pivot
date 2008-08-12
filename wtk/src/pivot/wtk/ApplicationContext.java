@@ -18,8 +18,10 @@ package pivot.wtk;
 import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.Toolkit;
 import java.awt.Shape;
+import java.awt.Transparency;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
@@ -35,7 +37,12 @@ import pivot.collections.HashMap;
 public abstract class ApplicationContext {
     public static class DisplayHost extends java.awt.Component {
         public static final long serialVersionUID = 0;
+
         private Component focusedComponent = null;
+
+        // TODO Do some timing tests to see if TRANSLUCENT has a negative impact
+        // on performance
+        private static final int BACK_BUFFER_TRANSPARENCY = Transparency.OPAQUE;
 
         protected DisplayHost() {
             enableEvents(AWTEvent.COMPONENT_EVENT_MASK
@@ -65,10 +72,10 @@ public abstract class ApplicationContext {
 
             if (!clipBounds.isEmpty()) {
                 try {
-                    if (!paintVolatileBuffered(graphics)) {
+                    if (!paintVolatileBuffered((Graphics2D)graphics)) {
                         System.out.println("Volatile buffer paint failed.");
 
-                        if (!paintBuffered(graphics)) {
+                        if (!paintBuffered((Graphics2D)graphics)) {
                             System.out.println("Standard buffer paint failed.");
 
                             Display.getInstance().paint((Graphics2D)graphics);
@@ -92,26 +99,29 @@ public abstract class ApplicationContext {
          * <tt>true</tt> if the display was painted using the offscreen
          * buffer; <tt>false</tt>, otherwise.
          */
-        private boolean paintBuffered(Graphics graphics) {
+        private boolean paintBuffered(Graphics2D graphics) {
             boolean painted = false;
 
             Shape clip = graphics.getClip();
             java.awt.Rectangle clipBounds = (clip == null) ? getBounds() : clip.getBounds();
 
             // Paint the display into an offscreen buffer
-            java.awt.Image image = createImage(clipBounds.width, clipBounds.height);
+            GraphicsConfiguration gc = graphics.getDeviceConfiguration();
+            java.awt.image.BufferedImage bufferedImage =
+                gc.createCompatibleImage(clipBounds.width, clipBounds.height,
+                    BACK_BUFFER_TRANSPARENCY);
 
-            if (image != null) {
-                Graphics2D imageGraphics = (Graphics2D)image.getGraphics();
-                imageGraphics.setClip(0, 0, clipBounds.width, clipBounds.height);
-                imageGraphics.translate(-clipBounds.x, -clipBounds.y);
+            if (bufferedImage != null) {
+                Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.getGraphics();
+                bufferedImageGraphics.setClip(0, 0, clipBounds.width, clipBounds.height);
+                bufferedImageGraphics.translate(-clipBounds.x, -clipBounds.y);
 
                 try {
-                    Display.getInstance().paint(imageGraphics);
-                    DragDropManager.getInstance().paint((Graphics2D)imageGraphics);
-                    graphics.drawImage(image, clipBounds.x, clipBounds.y, this);
+                    Display.getInstance().paint(bufferedImageGraphics);
+                    DragDropManager.getInstance().paint((Graphics2D)bufferedImageGraphics);
+                    graphics.drawImage(bufferedImage, clipBounds.x, clipBounds.y, this);
                 } finally {
-                    imageGraphics.dispose();
+                    bufferedImageGraphics.dispose();
                 }
 
                 painted = true;
@@ -130,15 +140,17 @@ public abstract class ApplicationContext {
          * <tt>true</tt> if the display was painted using the offscreen
          * buffer; <tt>false</tt>, otherwise.
          */
-        private boolean paintVolatileBuffered(Graphics graphics) {
+        private boolean paintVolatileBuffered(Graphics2D graphics) {
             boolean painted = false;
 
             Shape clip = graphics.getClip();
             java.awt.Rectangle clipBounds = (clip == null) ? getBounds() : clip.getBounds();
 
             // Paint the display into a volatile offscreen buffer
+            GraphicsConfiguration gc = graphics.getDeviceConfiguration();
             java.awt.image.VolatileImage volatileImage =
-                createVolatileImage(clipBounds.width, clipBounds.height);
+                gc.createCompatibleVolatileImage(clipBounds.width, clipBounds.height,
+                    BACK_BUFFER_TRANSPARENCY);
 
             // If we have a valid volatile image, attempt to paint the
             // display to it

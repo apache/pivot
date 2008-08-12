@@ -132,7 +132,18 @@ public abstract class Component implements Visual {
         }
 
         public Decorator update(int index, Decorator decorator) {
-            throw new UnsupportedOperationException();
+            if (decorator == null) {
+                throw new IllegalArgumentException("decorator is null.");
+            }
+
+            Decorator previousDecorator = decorators.update(index, decorator);
+            previousDecorator.uninstall();
+            decorator.install(Component.this);
+
+            componentDecoratorListeners.decoratorUpdated(Component.this, index,
+                previousDecorator);
+
+            return previousDecorator;
         }
 
         public int remove(Decorator decorator) {
@@ -290,6 +301,12 @@ public abstract class Component implements Visual {
         public void decoratorInserted(Component component, int index) {
             for (ComponentDecoratorListener listener : this) {
                 listener.decoratorInserted(component, index);
+            }
+        }
+
+        public void decoratorUpdated(Component component, int index, Decorator previousDecorator) {
+            for (ComponentDecoratorListener listener : this) {
+                listener.decoratorUpdated(component, index, previousDecorator);
             }
         }
 
@@ -1241,16 +1258,14 @@ public abstract class Component implements Visual {
 
         while (component != null
             && coordinates == null) {
-            x += component.x;
-            y += component.y;
-
-            Container parent = component.getParent();
-
-            if (parent == ancestor) {
+            if (component == ancestor) {
                 coordinates = new Point(x, y);
-            }
+            } else {
+                x += component.x;
+                y += component.y;
 
-            component = parent;
+                component = component.getParent();
+            }
         }
 
         return coordinates;
@@ -1277,16 +1292,14 @@ public abstract class Component implements Visual {
 
         while (component != null
             && coordinates == null) {
-            x -= component.x;
-            y -= component.y;
-
-            Container parent = component.getParent();
-
-            if (parent == ancestor) {
+            if (component == ancestor) {
                 coordinates = new Point(x, y);
-            }
+            } else {
+                x -= component.x;
+                y -= component.y;
 
-            component = parent;
+                component = component.getParent();
+            }
         }
 
         return coordinates;

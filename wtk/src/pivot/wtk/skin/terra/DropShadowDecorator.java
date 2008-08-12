@@ -15,6 +15,9 @@ import pivot.wtk.Skin;
 /**
  * Adds drop shadows to components.
  *
+ * TODO Currently only works for Windows - need to convert component coordinates
+ * to display coordinates for it to work with other components.
+ *
  * @author gbrown
  * @author tvolkert
  */
@@ -89,6 +92,7 @@ public class DropShadowDecorator implements Decorator {
 
     public void uninstall() {
         component.getComponentListeners().remove(componentHandler);
+        component = null;
     }
 
     public Graphics2D prepare(Component component, Graphics2D graphics) {
