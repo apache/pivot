@@ -52,8 +52,7 @@ import pivot.wtk.skin.WindowSkin;
  *
  * @author gbrown
  */
-public abstract class AbstractFrameSkin extends WindowSkin
-    implements ButtonPressListener {
+public abstract class AbstractFrameSkin extends WindowSkin {
     public static class FrameButton extends PushButton {
         public FrameButton(Object buttonData) {
             super(buttonData);
@@ -349,9 +348,23 @@ public abstract class AbstractFrameSkin extends WindowSkin
         frameButtonFlowPane.add(maximizeButton);
         frameButtonFlowPane.add(closeButton);
 
-        minimizeButton.getButtonPressListeners().add(this);
-        maximizeButton.getButtonPressListeners().add(this);
-        closeButton.getButtonPressListeners().add(this);
+        ButtonPressListener buttonPressListener = new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                Window window = (Window)getComponent();
+
+                if (button == minimizeButton) {
+                    window.setDisplayable(false);
+                } else if (button == maximizeButton) {
+                    window.setMaximized(!window.isMaximized());
+                } else if (button == closeButton) {
+                    window.close();
+                }
+            }
+        };
+
+        minimizeButton.getButtonPressListeners().add(buttonPressListener);
+        maximizeButton.getButtonPressListeners().add(buttonPressListener);
+        closeButton.getButtonPressListeners().add(buttonPressListener);
 
         resizeHandle.setCursor(Cursor.RESIZE_SOUTH_EAST);
         window.add(resizeHandle);
@@ -704,23 +717,5 @@ public abstract class AbstractFrameSkin extends WindowSkin
     @Override
     public void maximizedChanged(Window window) {
         updateMaximizedState();
-    }
-
-    /**
-     * Listener for frame button events.
-     *
-     * @param button
-     * The source of the button event.
-     */
-    public void buttonPressed(Button button) {
-        Window window = (Window)getComponent();
-
-        if (button == minimizeButton) {
-            window.setDisplayable(false);
-        } else if (button == maximizeButton) {
-            window.setMaximized(!window.isMaximized());
-        } else if (button == closeButton) {
-            window.close();
-        }
     }
 }

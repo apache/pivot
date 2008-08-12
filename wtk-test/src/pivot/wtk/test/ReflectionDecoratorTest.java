@@ -10,12 +10,11 @@ public class ReflectionDecoratorTest implements Application {
     private Alert alert = null;
 
     public void startup() throws Exception {
-        alert = new Alert(Alert.Type.INFO, "Reflection Demo");
-
         ArrayList<String> options = new ArrayList<String>();
         options.add("OK");
         options.add("Cancel");
-        alert.setOptionData(options);
+
+        alert = new Alert(Alert.Type.INFO, "Reflection Demo", options, null);
 
         // Replace the drop shadow decorator with a reflection decorator
         Component.DecoratorSequence decorators = alert.getDecorators();

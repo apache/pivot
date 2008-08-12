@@ -453,22 +453,21 @@ public class Demo implements Application {
 
         customAlertButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                Alert alert = new Alert(Alert.Type.QUESTION, "Please select your favorite icon:");
-                alert.setTitle("Select Icon");
+                ArrayList<String> options = new ArrayList<String>();
+                options.add("OK");
+                options.add("Cancel");
 
+                Component body = null;
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 try {
-                    alert.setBody((Component)wtkxSerializer.readObject("pivot/tutorials/alert.wtkx"));
+                    body = (Component)wtkxSerializer.readObject("pivot/tutorials/alert.wtkx");
                 } catch(Exception exception) {
                     System.out.println(exception);
                 }
 
-                ArrayList<String> optionData = new ArrayList<String>();
-                optionData.add("OK");
-                optionData.add("Cancel");
-                alert.setOptionData(optionData);
-                alert.setSelectedOption(0);
-
+                Alert alert = new Alert(Alert.Type.QUESTION, "Please select your favorite icon:",
+                    options, body);
+                alert.setTitle("Select Icon");
                 alert.open(window);
             }
         });

@@ -31,6 +31,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
@@ -813,11 +815,12 @@ public abstract class ApplicationContext {
 
         exception.printStackTrace();
 
-        Alert alert = new Alert(Alert.Type.ERROR, message);
-        alert.setTitle(exception.getClass().getName());
-
         // TODO i18n
-        alert.getOptionData().add("OK");
+        ArrayList<String> options = new ArrayList<String>();
+        options.add("OK");
+
+        Alert alert = new Alert(Alert.Type.ERROR, message, options, null);
+        alert.setTitle(exception.getClass().getName());
         alert.open();
     }
 

@@ -16,57 +16,36 @@
 package pivot.wtk.skin.terra;
 
 import java.awt.Color;
-import java.awt.Font;
 
-import pivot.collections.List;
-import pivot.collections.Sequence;
-
+import pivot.collections.ArrayList;
 import pivot.wtk.Alert;
-import pivot.wtk.Alert.Type;
 import pivot.wtk.AlertListener;
-import pivot.wtk.AlertOptionListener;
-import pivot.wtk.AlertSelectionListener;
-import pivot.wtk.Border;
 import pivot.wtk.Button;
+import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.FlowPane;
-import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
-import pivot.wtk.Insets;
 import pivot.wtk.Label;
-import pivot.wtk.Orientation;
 import pivot.wtk.PushButton;
-import pivot.wtk.TablePane;
-import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
 import pivot.wtk.media.Image;
+import pivot.wtkx.WTKXSerializer;
 
 /**
+ * Alert skin.
  *
  * @author tvolkert
+ * @author gbrown
  */
 public class AlertSkin extends DialogSkin
-    implements AlertListener, AlertOptionListener, AlertSelectionListener {
-
-    public static final int DEFAULT_ALERT_WIDTH = 300;
-
-    private static final Font SUBJECT_LABEL_FONT =
-        new Font("Verdana", Font.BOLD, 11);
+    implements AlertListener {
     private static final Color OPTION_BUTTON_COLOR = Color.WHITE;
-    private static final Color OPTION_BUTTON_BACKGROUND_COLOR =
-        new Color(0x3c, 0x77, 0xb2);
-    private static final Color OPTION_BUTTON_BORDER_COLOR =
-        new Color(0x2c, 0x56, 0x80);
-    private static final Color OPTION_BUTTON_BEVEL_COLOR =
-        new Color(0x45, 0x89, 0xcc);
-    private static final Color OPTION_BUTTON_PRESSED_BEVEL_COLOR =
-        new Color(0x34, 0x66, 0x99);
+    private static final Color OPTION_BUTTON_BACKGROUND_COLOR = new Color(0x3c, 0x77, 0xb2);
+    private static final Color OPTION_BUTTON_BORDER_COLOR = new Color(0x2c, 0x56, 0x80);
+    private static final Color OPTION_BUTTON_BEVEL_COLOR = new Color(0x45, 0x89, 0xcc);
+    private static final Color OPTION_BUTTON_PRESSED_BEVEL_COLOR = new Color(0x34, 0x66, 0x99);
 
-    private FlowPane alertContent = new FlowPane(Orientation.VERTICAL);
-    private FlowPane messageFlowPane = new FlowPane(Orientation.VERTICAL);
-    private FlowPane buttonFlowPane = new FlowPane(Orientation.HORIZONTAL);
-    private ImageView typeImageView = new ImageView();
-    private Label subjectLabel = null;
+    private ArrayList<Button> optionButtons = new ArrayList<Button>();
 
     private static Image informationImage = null;
     private static Image warningImage = null;
@@ -75,42 +54,6 @@ public class AlertSkin extends DialogSkin
 
     public AlertSkin() {
         setResizable(false);
-
-        alertContent.getStyles().put("horizontalAlignment",
-            HorizontalAlignment.JUSTIFY);
-        alertContent.getStyles().put("spacing", 8);
-        messageFlowPane.getStyles().put("spacing", 10);
-        messageFlowPane.getStyles().put("horizontalAlignment",
-            HorizontalAlignment.JUSTIFY);
-        buttonFlowPane.getStyles().put("horizontalAlignment",
-            HorizontalAlignment.RIGHT);
-        buttonFlowPane.getStyles().put("verticalAlignment",
-            VerticalAlignment.JUSTIFY);
-
-        Border border = new Border();
-        border.getStyles().put("backgroundColor", new Color(0xe6, 0xe3, 0xda));
-        border.getStyles().put("borderColor", new Color(0x99, 0x99, 0x99));
-        border.getStyles().put("padding", new Insets(12));
-        alertContent.add(border);
-        alertContent.add(buttonFlowPane);
-
-        TablePane tablePane = new TablePane();
-
-        tablePane.getRows().add(new TablePane.Row(-1));
-        tablePane.getColumns().add(new TablePane.Column(-1));
-        tablePane.getColumns().add(new TablePane.Column(1, true));
-
-        tablePane.getStyles().put("spacing", 12);
-
-        border.setContent(tablePane);
-
-        FlowPane imageFlow = new FlowPane(Orientation.VERTICAL);
-        imageFlow.getStyles().put("verticalAlignment", VerticalAlignment.TOP);
-        imageFlow.add(typeImageView);
-
-        TablePane.Row firstRow = tablePane.getRows().get(0);
-        firstRow.add(imageFlow);
-        firstRow.add(messageFlowPane);
     }
 
     @Override
@@ -120,223 +63,139 @@ public class AlertSkin extends DialogSkin
         super.install(component);
 
         Alert alert = (Alert)component;
-
         alert.getAlertListeners().add(this);
-        alert.getAlertOptionListeners().add(this);
-        alert.getAlertSelectionListeners().add(this);
 
-        alert.setContent(alertContent);
-        alert.setPreferredWidth(DEFAULT_ALERT_WIDTH);
+        // Load the alert content
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        Component content = null;
 
-        setTypeImage(alert.getType());
-        setSubjectLabel(alert.getSubject());
-        setBodyComponent(alert.getBody(), null);
-        setOptionButtons(alert.getOptionData());
+        try {
+            content = (Component)wtkxSerializer.readObject(getClass().getResource("alert.wtkx"));
+        } catch(Exception exception) {
+            throw new RuntimeException(exception);
+        }
 
-        focusSelectedOptionButton();
+        alert.setContent(content);
+
+        // Set the type image
+        ImageView typeImageView = (ImageView)wtkxSerializer.getObjectByName("typeImageView");
+        Image typeImage = null;
+
+        switch (alert.getType()) {
+            case INFO: {
+                if (informationImage == null) {
+                    informationImage =
+                        Image.load(getClass().getResource("AlertSkin-Information-32x32.png"));
+                }
+
+                typeImage = informationImage;
+                break;
+            }
+
+            case WARNING: {
+                if (warningImage == null) {
+                    warningImage =
+                        Image.load(getClass().getResource("AlertSkin-Warning-32x32.png"));
+                }
+
+                typeImage = warningImage;
+                break;
+            }
+
+            case ERROR: {
+                if (errorImage == null) {
+                    errorImage =
+                        Image.load(getClass().getResource("AlertSkin-Error-32x32.png"));
+                }
+
+                typeImage = errorImage;
+                break;
+            }
+
+            case QUESTION: {
+                if (questionImage == null) {
+                    questionImage =
+                        Image.load(getClass().getResource("AlertSkin-Question-32x32.png"));
+                }
+
+                typeImage = questionImage;
+                break;
+            }
+        }
+
+        typeImageView.setImage(typeImage);
+
+        // Set the message
+        Label messageLabel = (Label)wtkxSerializer.getObjectByName("messageLabel");
+        String message = alert.getMessage();
+        messageLabel.setText(message);
+
+        // Set the body
+        FlowPane messageFlowPane = (FlowPane)wtkxSerializer.getObjectByName("messageFlowPane");
+        Component body = alert.getBody();
+        if (body != null) {
+            messageFlowPane.add(body);
+        }
+
+        // Add the option buttons
+        FlowPane buttonFlowPane = (FlowPane)wtkxSerializer.getObjectByName("buttonFlowPane");
+
+        for (int i = 0, n = alert.getOptionCount(); i < n; i++) {
+            Object option = alert.getOption(i);
+
+            PushButton optionButton = new PushButton(option);
+            optionButton.getStyles().put("color", OPTION_BUTTON_COLOR);
+            optionButton.getStyles().put("backgroundColor", OPTION_BUTTON_BACKGROUND_COLOR);
+            optionButton.getStyles().put("borderColor", OPTION_BUTTON_BORDER_COLOR);
+            optionButton.getStyles().put("bevelColor", OPTION_BUTTON_BEVEL_COLOR);
+            optionButton.getStyles().put("pressedBevelColor", OPTION_BUTTON_PRESSED_BEVEL_COLOR);
+
+            int preferredHeight = optionButton.getPreferredHeight(-1);
+            int minWidth = 3 * preferredHeight;
+            if (optionButton.getPreferredWidth(-1) < minWidth) {
+                optionButton.setPreferredWidth(minWidth);
+            }
+
+            optionButton.getButtonPressListeners().add(new ButtonPressListener() {
+                public void buttonPressed(Button button) {
+                    int optionIndex = optionButtons.indexOf(button);
+
+                    if (optionIndex >= 0) {
+                        Alert alert = (Alert)getComponent();
+                        alert.setSelectedOption(optionIndex);
+                        alert.close(true);
+                    }
+                }
+            });
+
+            buttonFlowPane.add(optionButton);
+            optionButtons.add(optionButton);
+        }
     }
 
     @Override
     public void uninstall() {
         Alert alert = (Alert)getComponent();
-
-        setTypeImage(null);
-        setSubjectLabel(null);
-        setBodyComponent(null, alert.getBody());
-        setOptionButtons(null);
+        alert.getAlertListeners().remove(this);
 
         alert.setContent(null);
 
-        alert.getAlertListeners().remove(this);
-        alert.getAlertOptionListeners().remove(this);
-        alert.getAlertSelectionListeners().remove(this);
-
         super.uninstall();
-    }
-
-    private void setTypeImage(Type type) {
-        Image typeImage = null;
-
-        if (type != null) {
-            switch (type) {
-                case INFO: {
-                    if (informationImage == null) {
-                        informationImage =
-                            Image.load(getClass().getResource("AlertSkin-Information-32x32.png"));
-                    }
-
-                    typeImage = informationImage;
-                    break;
-                }
-
-                case WARNING: {
-                    if (warningImage == null) {
-                        warningImage =
-                            Image.load(getClass().getResource("AlertSkin-Warning-32x32.png"));
-                    }
-
-                    typeImage = warningImage;
-                    break;
-                }
-
-                case ERROR: {
-                    if (errorImage == null) {
-                        errorImage =
-                            Image.load(getClass().getResource("AlertSkin-Error-32x32.png"));
-                    }
-
-                    typeImage = errorImage;
-                    break;
-                }
-
-                case QUESTION: {
-                    if (questionImage == null) {
-                        questionImage =
-                            Image.load(getClass().getResource("AlertSkin-Question-32x32.png"));
-                    }
-
-                    typeImage = questionImage;
-                    break;
-                }
-            }
-
-        }
-
-        typeImageView.setImage(typeImage);
-    }
-
-    private void setSubjectLabel(String subject) {
-        if (subject != null && subjectLabel == null) {
-            subjectLabel = new Label(subject);
-            subjectLabel.getStyles().put("font", SUBJECT_LABEL_FONT);
-            subjectLabel.getStyles().put("wrapText", true);
-            messageFlowPane.insert(subjectLabel, 0);
-        } else if (subject == null && subjectLabel != null) {
-            messageFlowPane.remove(subjectLabel);
-            subjectLabel = null;
-        } else if (subject != null) {
-            subjectLabel.setText(subject);
-        }
-    }
-
-    private void setBodyComponent(Component body, Component previousBody) {
-        if (previousBody != null) {
-            messageFlowPane.remove(previousBody);
-        }
-
-        if (body != null) {
-            messageFlowPane.add(body);
-        }
-    }
-
-    private void setOptionButtons(List<String> optionData) {
-        buttonFlowPane.removeAll();
-
-        if (optionData != null) {
-            int i = 0;
-            for (String option : optionData) {
-                insertOptionButton(option, i++);
-            }
-        }
-    }
-
-    private void insertOptionButton(String option, int index) {
-        PushButton button = new PushButton(option);
-        button.getButtonPressListeners().add(this);
-        buttonFlowPane.insert(button, index);
-
-        styleOptionButton(button);
-    }
-
-    private void styleOptionButton(Button button) {
-        button.setPreferredWidth(-1);
-        int heightConstraint = buttonFlowPane.getPreferredHeight(-1);
-        int preferredWidth = button.getPreferredWidth(heightConstraint);
-
-        int minWidth = 3 * heightConstraint;
-        if (preferredWidth < minWidth) {
-            button.setPreferredWidth(minWidth);
-        }
-
-        button.getStyles().put("color", OPTION_BUTTON_COLOR);
-        button.getStyles().put("backgroundColor", OPTION_BUTTON_BACKGROUND_COLOR);
-        button.getStyles().put("borderColor", OPTION_BUTTON_BORDER_COLOR);
-        button.getStyles().put("bevelColor", OPTION_BUTTON_BEVEL_COLOR);
-        button.getStyles().put("pressedBevelColor", OPTION_BUTTON_PRESSED_BEVEL_COLOR);
-    }
-
-    private void focusSelectedOptionButton() {
-        Alert alert = (Alert)getComponent();
-
-        if (alert.isOpen()) {
-            int index = alert.getSelectedOption();
-
-            if (index >= 0) {
-                Component.setFocusedComponent(buttonFlowPane.get(index));
-            }
-        }
     }
 
     @Override
     public void windowOpened(Window window) {
         super.windowOpened(window);
 
-        focusSelectedOptionButton();
-    }
+        Alert alert = (Alert)window;
+        int index = alert.getSelectedOption();
 
-    @Override
-    public void buttonPressed(Button button) {
-        int optionIndex = buttonFlowPane.indexOf(button);
-
-        if (optionIndex >= 0) {
-            Alert alert = (Alert)getComponent();
-            alert.setSelectedOption(optionIndex);
-            alert.close(true);
-        } else {
-            super.buttonPressed(button);
+        if (index >= 0) {
+            Component.setFocusedComponent(optionButtons.get(index));
         }
-    }
-
-    public void typeChanged(Alert alert, Type previousType) {
-        setTypeImage(alert.getType());
-    }
-
-    public void subjectChanged(Alert alert, String previousSubject) {
-        setSubjectLabel(alert.getSubject());
-    }
-
-    public void bodyChanged(Alert alert, Component previousBody) {
-        setBodyComponent(alert.getBody(), previousBody);
-    }
-
-    public void optionDataChanged(Alert alert, List<String> previousOptionData) {
-        setOptionButtons(alert.getOptionData());
-    }
-
-    public void optionInserted(Alert alert, int index) {
-        String option = alert.getOptionData().get(index);
-        insertOptionButton(option, index);
-    }
-
-    public void optionsRemoved(Alert alert, int index, int count) {
-        Sequence<Component> buttons = buttonFlowPane.remove(index, count);
-
-        for (int i = 0, n = buttons.getLength(); i < n; i++) {
-            Button button = (Button)buttons.get(i);
-            button.getButtonPressListeners().remove(this);
-        }
-    }
-
-    public void optionUpdated(Alert alert, int index) {
-        Button button = (Button)buttonFlowPane.get(index);
-        styleOptionButton(button);
-    }
-
-    public void optionsSorted(Alert alert) {
-        setOptionButtons(alert.getOptionData());
     }
 
     public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
-        focusSelectedOptionButton();
+        alert.close(true);
     }
 }

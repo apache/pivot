@@ -15,82 +15,14 @@
  */
 package pivot.wtk;
 
-import java.util.Iterator;
 import pivot.collections.ArrayList;
 import pivot.collections.ArrayStack;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
-import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
 public class Window extends Container {
-    /**
-     * Internal class for managing the window's owned window list.
-     *
-     * @author gbrown
-     */
-    public final class OwnedWindowSequence implements Sequence<Window> {
-        private class OwnedWindowIterator implements Iterator<Window> {
-            Iterator<Window> source = null;
-
-            public OwnedWindowIterator(Iterator<Window> source) {
-                this.source = source;
-            }
-
-            public boolean hasNext() {
-                return source.hasNext();
-            }
-
-            public Window next() {
-                return source.next();
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        }
-
-        private OwnedWindowSequence() {
-        }
-
-        public int add(Window window) {
-            throw new UnsupportedOperationException();
-        }
-
-        public void insert(Window window, int index) {
-            throw new UnsupportedOperationException();
-        }
-
-        public Window update(int index, Window ownedWindow) {
-            throw new UnsupportedOperationException();
-        }
-
-        public int remove(Window window) {
-            throw new UnsupportedOperationException();
-        }
-
-        public Sequence<Window> remove(int index, int count) {
-            throw new UnsupportedOperationException();
-        }
-
-        public Window get(int index) {
-            return ownedWindows.get(index);
-        }
-
-        public int indexOf(Window window) {
-            return ownedWindows.indexOf(window);
-        }
-
-        public int getLength() {
-            return ownedWindows.getLength();
-        }
-
-        public Iterator<Window> iterator() {
-            return new OwnedWindowIterator(ownedWindows.iterator());
-        }
-    }
-
     /**
      * Class representing the global action map for a window.
      *
@@ -204,7 +136,6 @@ public class Window extends Container {
 
     private Window owner = null;
     private ArrayList<Window> ownedWindows = new ArrayList<Window>();
-    private OwnedWindowSequence ownedWindowSequence = new OwnedWindowSequence();
 
     private HashMap<Keyboard.KeyStroke, Action> actions = new HashMap<Keyboard.KeyStroke, Action>();
     private ActionDictionary actionDictionary = new ActionDictionary();
@@ -311,8 +242,12 @@ public class Window extends Container {
         return (owner == null) ? this : owner.getRootOwner();
     }
 
-    public OwnedWindowSequence getOwnedWindows() {
-        return ownedWindowSequence;
+    public Window getOwnedWindow(int index) {
+        return ownedWindows.get(index);
+    }
+
+    public int getOwnedWindowCount() {
+        return ownedWindows.getLength();
     }
 
     public boolean isOwningAncestorOf(Window window) {

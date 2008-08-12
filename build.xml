@@ -27,14 +27,14 @@
       <delete dir="${doc}"/>
       <delete file="${doc}.zip"/>
 
-      <javadoc packagenames="vmware.*"
+      <javadoc packagenames="pivot.*"
          destdir="${doc}"
          author="true"
          version="true"
          use="true">
          <classpath>
-           <pathelement location="${wtkx}/lib/stax-api-1.0.jar" />
-           <pathelement location="${wtkx}/lib/stax-1.2.0.jar" />
+           <pathelement location="${wtk}/lib/stax-api-1.0.jar" />
+           <pathelement location="${wtk}/lib/stax-1.2.0.jar" />
          </classpath>
          <packageset dir="${core}/${src}" includes="**/*"/>
          <packageset dir="${web}/${src}" includes="**/*">
@@ -216,6 +216,8 @@
          <compilerarg value="-Xlint" />
          <classpath>
            <pathelement location="${core}/${ant.project.name}-core.jar" />
+           <pathelement location="${wtk}/lib/stax-api-1.0.jar" />
+           <pathelement location="${wtk}/lib/stax-1.2.0.jar" />
          </classpath>
       </javac>
 
@@ -226,9 +228,11 @@
            <exclude name="pivot/wtk/skin/terra/**"/>
            <exclude name="pivot/wtk/skin/obsidian/**"/>
          </fileset>
+         <!-- TODO Re-seal this when we eliminate WTKX
          <manifest>
             <attribute name="Sealed" value="true"/>
          </manifest>
+         -->
       </jar>
 
       <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
@@ -316,8 +320,6 @@
          <classpath>
            <pathelement location="${core}/${ant.project.name}-core.jar" />
            <pathelement location="${wtk}/${ant.project.name}-wtk.jar" />
-           <pathelement location="${wtkx}/lib/stax-api-1.0.jar" />
-           <pathelement location="${wtkx}/lib/stax-1.2.0.jar" />
          </classpath>
       </javac>
 
@@ -325,9 +327,11 @@
       <delete file="${wtkx}/${ant.project.name}-wtkx.jar"/>
       <jar jarfile="${wtkx}/${ant.project.name}-wtkx.jar">
          <fileset dir="${wtkx}/${bin}"/>
+         <!-- NOTE This isn't sealed because we have split pivot.wtkx across two JARs.
          <manifest>
             <attribute name="Sealed" value="true"/>
          </manifest>
+         -->
       </jar>
    </target>
 
