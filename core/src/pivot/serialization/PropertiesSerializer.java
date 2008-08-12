@@ -20,8 +20,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import pivot.collections.HashMap;
 import pivot.collections.Map;
+import pivot.collections.adapter.MapAdapter;
 
 /**
  * Serializes data to and from Java the properties file format.
@@ -32,6 +32,10 @@ import pivot.collections.Map;
 public class PropertiesSerializer implements Serializer {
     public static final String MIME_TYPE = "text/plain";
 
+    /**
+     * Returns a {@link pivot.collections.Map} containing the entries in the
+     * properties file. Both keys and values are strings.
+     */
     @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
@@ -42,18 +46,13 @@ public class PropertiesSerializer implements Serializer {
         Properties properties = new Properties();
         properties.load(inputStream);
 
-        HashMap<String, String> map = new HashMap<String, String>();
-
-        for (java.util.Map.Entry<Object, Object> entry : properties.entrySet()) {
-            String key = entry.getKey().toString();
-            String value = entry.getValue().toString();
-
-            map.put(key, value);
-        }
-
-        return map;
+        return new MapAdapter<Object, Object>(properties);
     }
 
+    /**
+     * Writes the entries from a {@link pivot.collections.Map} to a properties
+     * file. Keys must be strings, and values will be converted to strings.
+     */
     @SuppressWarnings("unchecked")
     public void writeObject(Object object, OutputStream outputStream) throws IOException,
         SerializationException {
