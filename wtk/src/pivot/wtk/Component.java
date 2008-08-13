@@ -46,8 +46,11 @@ import pivot.wtk.Mouse.ScrollType;
  * can use it to perform hit testing for mouse events and cursor display.
  */
 public abstract class Component implements Visual {
-    protected static abstract class Attributes {
+    public static abstract class Attributes {
         private Component component = null;
+
+        protected Attributes() {
+        }
 
         public Component getComponent() {
             return component;
@@ -1988,7 +1991,7 @@ public abstract class Component implements Visual {
      *
      * @return
      */
-    protected Attributes getAttributes() {
+    public Attributes getAttributes() {
         return attributes;
     }
 

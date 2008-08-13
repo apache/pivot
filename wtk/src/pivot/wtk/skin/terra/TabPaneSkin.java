@@ -48,6 +48,10 @@ import pivot.wtk.skin.ContainerSkin;
 /**
  * TODO Make tab buttons focusable.
  *
+ * TODO Disable the tab button when the component is disabled.
+ *
+ * TODO Support the displayable flag to show/hide tabs.
+ *
  * TODO Put the button flow pane in a panorama so users can scroll to buttons
  * that are out of view
  *
