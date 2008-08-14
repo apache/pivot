@@ -1,399 +1,347 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project name="pivot" default="build">
-   <property name="src" value="src"/>
-   <property name="bin" value="ant-bin"/>
-   <property name="lib" value="lib"/>
-   <property name="doc" value="doc"/>
+    <property name="src" value="src"/>
+    <property name="bin" value="ant-bin"/>
+    <property name="lib" value="lib"/>
 
-   <property name="core" value="core"/>
-   <property name="coretest" value="core-test"/>
-   <property name="web" value="web"/>
-   <property name="webtest" value="web-test"/>
-   <property name="wtk" value="wtk"/>
-   <property name="wtktest" value="wtk-test"/>
-   <property name="wtkx" value="wtkx"/>
-   <property name="wtkxtest" value="wtkx-test"/>
+    <property name="doc" value="doc"/>
+    <property name="core" value="core"/>
+    <property name="coretest" value="core-test"/>
+    <property name="web" value="web"/>
+    <property name="webtest" value="web-test"/>
+    <property name="wtk" value="wtk"/>
+    <property name="wtktest" value="wtk-test"/>
+    <property name="wtkx" value="wtkx"/>
+    <property name="wtkxtest" value="wtkx-test"/>
 
-   <!-- Compiler properties -->
-   <property name="compiler.optimize" value="true" />
-   <property name="compiler.deprecation" value="true" />
-   <property name="compiler.debug" value="false" />
+    <!-- Compiler properties -->
+    <property name="compiler.optimize" value="true"/>
+    <property name="compiler.deprecation" value="true"/>
+    <property name="compiler.debug" value="false"/>
 
-   <target name="build" depends="core, core-test, web, web-test, wtk, wtk-test, wtkx, wtkx-test"/>
-   <target name="clean" depends="core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, wtkx-clean, wtkx-test-clean"/>
+    <target name="build" depends="core, core-test, web, web-test, wtk, wtk-test, wtkx, wtkx-test"/>
+    <target name="clean" depends="core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, wtkx-clean, wtkx-test-clean"/>
 
-   <target name="doc">
-      <delete dir="${doc}"/>
-      <delete file="${doc}.zip"/>
+    <target name="doc">
+        <delete dir="${doc}"/>
+        <delete file="${doc}.zip"/>
+        <javadoc packagenames="pivot.*" destdir="${doc}" author="true" version="true" use="true">
+            <classpath>
+                <pathelement location="${wtk}/lib/stax-api-1.0.jar"/>
+                <pathelement location="${wtk}/lib/stax-1.2.0.jar"/>
+            </classpath>
+            <packageset dir="${core}/${src}" includes="**/*"/>
+            <packageset dir="${web}/${src}" includes="**/*">
+                <exclude name="**/proxy/**"/>
+            </packageset>
+            <packageset dir="${wtk}/${src}" includes="**/*">
+                <exclude name="**/skin/**"/>
+            </packageset>
+            <packageset dir="${wtkx}/${src}" includes="**/*"/>
+        </javadoc>
+        <zip destfile="${doc}.zip" basedir="doc"/>
+    </target>
 
-      <javadoc packagenames="pivot.*"
-         destdir="${doc}"
-         author="true"
-         version="true"
-         use="true">
-         <classpath>
-           <pathelement location="${wtk}/lib/stax-api-1.0.jar" />
-           <pathelement location="${wtk}/lib/stax-1.2.0.jar" />
-         </classpath>
-         <packageset dir="${core}/${src}" includes="**/*"/>
-         <packageset dir="${web}/${src}" includes="**/*">
-           <exclude name="**/proxy/**"/>
-         </packageset>
-         <packageset dir="${wtk}/${src}" includes="**/*">
-           <exclude name="**/skin/**"/>
-         </packageset>
-         <packageset dir="${wtkx}/${src}" includes="**/*"/>
-      </javadoc>
+    <!-- Core -->
+    <target name="core">
+        <mkdir dir="${core}/${bin}"/>
 
-      <zip destfile="${doc}.zip" basedir="doc"/>
-   </target>
+        <!-- Compile source files -->
+        <javac srcdir="${core}/${src}" destDir="${core}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+            <compilerarg value="-Xlint"/>
+        </javac>
 
-   <!-- Core -->
-   <target name="core">
-      <mkdir dir="${core}/${bin}"/>
+        <!-- Rebuild the JAR file -->
+        <delete file="${core}/${ant.project.name}-core.jar"/>
+        <jar jarfile="${core}/${ant.project.name}-core.jar">
+            <fileset dir="${core}/${bin}"/>
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+            </manifest>
+        </jar>
+    </target>
 
-      <!-- Compile source files -->
-      <javac srcdir="${core}/${src}"
-         destDir="${core}/${bin}"
-         optimize="${compiler.optimize}"
-         deprecation="${compiler.deprecation}"
-         debug="${compiler.debug}"
-         failonerror="true">
-         <compilerarg value="-Xlint" />
-      </javac>
+    <target name="core-clean">
+        <delete dir="${core}/${bin}"/>
+        <delete file="${core}/${ant.project.name}-core.jar"/>
+    </target>
 
-      <!-- Rebuild the JAR file -->
-      <delete file="${core}/${ant.project.name}-core.jar"/>
-      <jar jarfile="${core}/${ant.project.name}-core.jar">
-         <fileset dir="${core}/${bin}"/>
-         <manifest>
-            <attribute name="Sealed" value="true"/>
-         </manifest>
-      </jar>
-   </target>
+    <!-- Core Test -->
+    <target name="core-test" depends="core">
+        <mkdir dir="${coretest}/${bin}"/>
 
-   <target name="core-clean">
-      <delete dir="${core}/${bin}"/>
-      <delete file="${core}/${ant.project.name}-core.jar"/>
-   </target>
+        <!-- Compile source files -->
+        <javac srcdir="${coretest}/${src}" destDir="${coretest}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true" classpath="${core}/${ant.project.name}-core.jar:junit.jar">
+            <compilerarg value="-Xlint"/>
+        </javac>
 
-   <!-- Core Test -->
-   <target name="core-test" depends="core">
-      <mkdir dir="${coretest}/${bin}"/>
+        <!-- Rebuild the JAR file -->
+        <delete file="${coretest}/${ant.project.name}-core.test.jar"/>
+        <jar jarfile="${coretest}/${ant.project.name}-core.test.jar">
+            <fileset dir="${coretest}/${bin}"/>
+        </jar>
+    </target>
 
-      <!-- Compile source files -->
-      <javac srcdir="${coretest}/${src}"
-         destDir="${coretest}/${bin}"
-         optimize="${compiler.optimize}"
-         deprecation="${compiler.deprecation}"
-         debug="${compiler.debug}"
-         failonerror="true"
-         classpath="${core}/${ant.project.name}-core.jar:junit.jar">
-         <compilerarg value="-Xlint" />
-      </javac>
+    <target name="core-test-clean">
+        <delete dir="${coretest}/${bin}"/>
+        <delete file="${coretest}/${ant.project.name}-core.test.jar"/>
+    </target>
 
-      <!-- Rebuild the JAR file -->
-      <delete file="${coretest}/${ant.project.name}-core.test.jar"/>
-      <jar jarfile="${coretest}/${ant.project.name}-core.test.jar">
-         <fileset dir="${coretest}/${bin}"/>
-      </jar>
-   </target>
+    <!-- Web -->
+    <target name="web">
+        <mkdir dir="${web}/${bin}"/>
 
-   <target name="core-test-clean">
-      <delete dir="${coretest}/${bin}"/>
-      <delete file="${coretest}/${ant.project.name}-core.test.jar"/>
-   </target>
+        <!-- Compile source files -->
+        <javac srcdir="${web}/${src}" destDir="${web}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="${core}/${ant.project.name}-core.jar"/>
+                <fileset dir="${web}/${lib}" includes="**/*.jar"/>
+            </classpath>
+        </javac>
 
+        <!-- Rebuild the JAR files -->
+        <delete file="${web}/${ant.project.name}-web.jar"/>
+        <jar jarfile="${web}/${ant.project.name}-web.jar">
+            <fileset dir="${web}/${bin}">
+                <exclude name="pivot/web/proxy/**"/>
+            </fileset>
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+            </manifest>
+        </jar>
 
-   <!-- Web -->
-   <target name="web">
-      <mkdir dir="${web}/${bin}"/>
+        <delete file="${web}/${ant.project.name}-web.proxy.jar"/>
+        <jar jarfile="${web}/${ant.project.name}-web.proxy.jar">
+            <fileset dir="${web}/${bin}">
+                <include name="pivot/web/proxy/*"/>
+            </fileset>
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+            </manifest>
+        </jar>
+    </target>
 
-      <!-- Compile source files -->
-      <javac srcdir="${web}/${src}"
-         destDir="${web}/${bin}"
-         optimize="${compiler.optimize}"
-         deprecation="${compiler.deprecation}"
-         debug="${compiler.debug}"
-         failonerror="true">
-         <compilerarg value="-Xlint"/>
-         <classpath>
-           <pathelement location="${core}/${ant.project.name}-core.jar" />
-           <fileset dir="${web}/${lib}" includes="**/*.jar" />
-         </classpath>
-      </javac>
+    <target name="web-clean">
+        <delete dir="${web}/${bin}"/>
+        <delete file="${web}/${ant.project.name}-web.jar"/>
+        <delete file="${web}/${ant.project.name}-web.proxy.jar"/>
+    </target>
 
-      <!-- Rebuild the JAR files -->
-      <delete file="${web}/${ant.project.name}-web.jar"/>
-      <jar jarfile="${web}/${ant.project.name}-web.jar">
-         <fileset dir="${web}/${bin}">
-            <exclude name="pivot/web/proxy/**"/>
-         </fileset>
-         <manifest>
-            <attribute name="Sealed" value="true"/>
-         </manifest>
-      </jar>
+    <!-- Web Test -->
+    <target name="web-test" depends="web">
+        <mkdir dir="${webtest}/${bin}"/>
 
-      <delete file="${web}/${ant.project.name}-web.proxy.jar"/>
-      <jar jarfile="${web}/${ant.project.name}-web.proxy.jar">
-         <fileset dir="${web}/${bin}">
-           <include name="pivot/web/proxy/*"/>
-         </fileset>
-         <manifest>
-            <attribute name="Sealed" value="true"/>
-         </manifest>
-      </jar>
-   </target>
+        <!-- Compile source files -->
+        <javac srcdir="${webtest}/${src}" destDir="${webtest}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="${core}/${ant.project.name}-core.jar"/>
+                <pathelement location="${web}/${ant.project.name}-web.jar"/>
+                <fileset dir="${web}/${lib}" includes="**/*.jar"/>
+            </classpath>
+        </javac>
 
-   <target name="web-clean">
-      <delete dir="${web}/${bin}"/>
-      <delete file="${web}/${ant.project.name}-web.jar"/>
-      <delete file="${web}/${ant.project.name}-web.proxy.jar"/>
-   </target>
+        <!-- Rebuild the client JAR file -->
+        <delete file="${webtest}/${ant.project.name}-web.test.jar"/>
+        <jar jarfile="${webtest}/${ant.project.name}-web.test.jar">
+            <fileset dir="${webtest}/${bin}">
+                <exclude name="pivot/web/test/server/**"/>
+            </fileset>
+        </jar>
 
-   <!-- Web Test -->
-   <target name="web-test" depends="web">
-      <mkdir dir="${webtest}/${bin}"/>
+        <!-- Rebuild the server WAR file -->
+        <mkdir dir="${webtest}/${lib}"/>
+        <copy file="${core}/${ant.project.name}-core.jar" todir="${webtest}/${lib}"/>
+        <copy file="${web}/${ant.project.name}-web.proxy.jar" todir="${webtest}/${lib}"/>
+        <delete file="${webtest}/${ant.project.name}_web_test.war"/>
+        <war destfile="${webtest}/${ant.project.name}_web_test.war" webxml="${webtest}/web.xml">
+            <classes dir="${webtest}/${bin}">
+                <include name="pivot/web/test/server/**"/>
+            </classes>
+            <lib dir="${webtest}/${lib}"/>
+        </war>
+    </target>
+    <target name="web-test-clean">
+        <delete dir="${webtest}/${bin}"/>
+        <delete dir="${webtest}/${lib}"/>
+        <delete file="${webtest}/${ant.project.name}-web.test.jar"/>
+        <delete file="${webtest}/${ant.project.name}_web_test.war"/>
+    </target>
 
-      <!-- Compile source files -->
-      <javac srcdir="${webtest}/${src}"
-         destDir="${webtest}/${bin}"
-         optimize="${compiler.optimize}"
-         deprecation="${compiler.deprecation}"
-         debug="${compiler.debug}"
-         failonerror="true">
-         <compilerarg value="-Xlint" />
-         <classpath>
-           <pathelement location="${core}/${ant.project.name}-core.jar" />
-           <pathelement location="${web}/${ant.project.name}-web.jar" />
-           <fileset dir="${web}/${lib}" includes="**/*.jar" />
-         </classpath>
-      </javac>
+    <!-- WTK -->
+    <target name="wtk" depends="core">
+        <mkdir dir="${wtk}/${bin}"/>
 
-      <!-- Rebuild the client JAR file -->
-      <delete file="${webtest}/${ant.project.name}-web.test.jar"/>
-      <jar jarfile="${webtest}/${ant.project.name}-web.test.jar">
-         <fileset dir="${webtest}/${bin}">
-            <exclude name="pivot/web/test/server/**"/>
-         </fileset>
-      </jar>
+        <!-- Compile source files -->
+        <javac srcdir="${wtk}/${src}" destDir="${wtk}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="${core}/${ant.project.name}-core.jar"/>
+                <pathelement location="${wtk}/lib/stax-api-1.0.jar"/>
+                <pathelement location="${wtk}/lib/stax-1.2.0.jar"/>
+            </classpath>
+        </javac>
 
-      <!-- Rebuild the server WAR file -->
-      <mkdir dir="${webtest}/${lib}"/>
-      <copy file="${core}/${ant.project.name}-core.jar" todir="${webtest}/${lib}"/>
-      <copy file="${web}/${ant.project.name}-web.proxy.jar" todir="${webtest}/${lib}"/>
+        <!-- Rebuild the JAR file -->
+        <delete file="${wtk}/${ant.project.name}-wtk.jar"/>
+        <jar jarfile="${wtk}/${ant.project.name}-wtk.jar">
+            <fileset dir="${wtk}/${bin}">
+                <exclude name="pivot/wtk/skin/terra/**"/>
+                <exclude name="pivot/wtk/skin/obsidian/**"/>
+            </fileset>
+            <!-- TODO Re-seal this when we eliminate WTKX
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+            </manifest>
+            -->
+            <metainf dir="${wtk}">
+                <include name="services/**"/>
+            </metainf>
+        </jar>
 
-      <delete file="${webtest}/${ant.project.name}_web_test.war"/>
-      <war destfile="${webtest}/${ant.project.name}_web_test.war"
-         webxml="${webtest}/web.xml">
-         <classes dir="${webtest}/${bin}">
-            <include name="pivot/web/test/server/**"/>
-         </classes>
-         <lib dir="${webtest}/${lib}"/>
-      </war>
-   </target>
+        <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
+        <jar jarfile="${wtk}/${ant.project.name}-wtk.terra.jar">
+            <fileset dir="${wtk}/${bin}">
+                <include name="pivot/wtk/skin/terra/**"/>
+            </fileset>
+            <fileset dir="${wtk}/${src}">
+                <include name="pivot/wtk/skin/terra/**"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+            </manifest>
+        </jar>
 
-   <target name="web-test-clean">
-      <delete dir="${webtest}/${bin}"/>
-      <delete dir="${webtest}/${lib}"/>
-      <delete file="${webtest}/${ant.project.name}-web.test.jar"/>
-      <delete file="${webtest}/${ant.project.name}_web_test.war"/>
-   </target>
+        <delete file="${wtk}/${ant.project.name}-wtk.obsidian.jar"/>
+        <jar jarfile="${wtk}/${ant.project.name}-wtk.obsidian.jar">
+            <fileset dir="${wtk}/${bin}">
+                <include name="pivot/wtk/skin/obsidian/**"/>
+            </fileset>
+            <fileset dir="${wtk}/${src}">
+                <include name="pivot/wtk/skin/obsidian/**"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+            </manifest>
+        </jar>
+    </target>
 
+    <target name="wtk-clean">
+        <delete dir="${wtk}/${bin}"/>
+        <delete file="${wtk}/${ant.project.name}-wtk.jar"/>
+        <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
+        <delete file="${wtk}/${ant.project.name}-wtk.obsidian.jar"/>
+    </target>
 
-   <!-- WTK -->
-   <target name="wtk" depends="core">
-      <mkdir dir="${wtk}/${bin}"/>
+    <!-- WTK Test -->
+    <target name="wtk-test" depends="core, wtk">
+        <mkdir dir="${wtktest}/${bin}"/>
 
-      <!-- Compile source files -->
-      <javac srcdir="${wtk}/${src}"
-         destDir="${wtk}/${bin}"
-         optimize="${compiler.optimize}"
-         deprecation="${compiler.deprecation}"
-         debug="${compiler.debug}"
-         failonerror="true">
-         <compilerarg value="-Xlint" />
-         <classpath>
-           <pathelement location="${core}/${ant.project.name}-core.jar" />
-           <pathelement location="${wtk}/lib/stax-api-1.0.jar" />
-           <pathelement location="${wtk}/lib/stax-1.2.0.jar" />
-         </classpath>
-      </javac>
+        <!-- Compile source files -->
+        <javac srcdir="${wtktest}/${src}" destDir="${wtktest}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="${core}/${ant.project.name}-core.jar"/>
+                <pathelement location="${wtk}/${ant.project.name}-wtk.jar"/>
+            </classpath>
+        </javac>
 
-      <!-- Rebuild the JAR file -->
-      <delete file="${wtk}/${ant.project.name}-wtk.jar"/>
-      <jar jarfile="${wtk}/${ant.project.name}-wtk.jar">
-         <fileset dir="${wtk}/${bin}">
-           <exclude name="pivot/wtk/skin/terra/**"/>
-           <exclude name="pivot/wtk/skin/obsidian/**"/>
-         </fileset>
-         <!-- TODO Re-seal this when we eliminate WTKX
-         <manifest>
-            <attribute name="Sealed" value="true"/>
-         </manifest>
-         -->
-      </jar>
+        <!-- Rebuild the JAR file -->
+        <delete file="${wtktest}/${ant.project.name}-wtk.test.jar"/>
+        <jar jarfile="${wtktest}/${ant.project.name}-wtk.test.jar">
+            <fileset dir="${wtktest}/${bin}"/>
+            <fileset dir="${wtktest}/${src}">
+                <include name="**/*.png"/>
+            </fileset>
+        </jar>
+    </target>
 
-      <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
-      <jar jarfile="${wtk}/${ant.project.name}-wtk.terra.jar">
-         <fileset dir="${wtk}/${bin}">
-           <include name="pivot/wtk/skin/terra/**"/>
-         </fileset>
-         <fileset dir="${wtk}/${src}">
-           <include name="pivot/wtk/skin/terra/**"/>
-           <exclude name="**/*.java" />
-         </fileset>
-         <manifest>
-            <attribute name="Sealed" value="true"/>
-         </manifest>
-      </jar>
+    <target name="wtk-test-clean">
+        <delete dir="${wtktest}/${bin}"/>
+        <delete file="${wtktest}/${ant.project.name}-wtk.test.jar"/>
+    </target>
 
-      <delete file="${wtk}/${ant.project.name}-wtk.obsidian.jar"/>
-      <jar jarfile="${wtk}/${ant.project.name}-wtk.obsidian.jar">
-         <fileset dir="${wtk}/${bin}">
-           <include name="pivot/wtk/skin/obsidian/**"/>
-         </fileset>
-         <fileset dir="${wtk}/${src}">
-           <include name="pivot/wtk/skin/obsidian/**"/>
-           <exclude name="**/*.java" />
-         </fileset>
-         <manifest>
-            <attribute name="Sealed" value="true"/>
-         </manifest>
-      </jar>
-   </target>
+    <!-- WTKX -->
+    <target name="wtkx" depends="core, wtk">
+        <mkdir dir="${wtkx}/${bin}"/>
 
-   <target name="wtk-clean">
-      <delete dir="${wtk}/${bin}"/>
-      <delete file="${wtk}/${ant.project.name}-wtk.jar"/>
-      <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
-      <delete file="${wtk}/${ant.project.name}-wtk.obsidian.jar"/>
-   </target>
+        <!-- Compile source files -->
+        <javac srcdir="${wtkx}/${src}" destDir="${wtkx}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="${core}/${ant.project.name}-core.jar"/>
+                <pathelement location="${wtk}/${ant.project.name}-wtk.jar"/>
+            </classpath>
+        </javac>
 
-   <!-- WTK Test -->
-   <target name="wtk-test" depends="core, wtk">
-      <mkdir dir="${wtktest}/${bin}"/>
+        <!-- Rebuild the JAR file -->
+        <delete file="${wtkx}/${ant.project.name}-wtkx.jar"/>
+        <jar jarfile="${wtkx}/${ant.project.name}-wtkx.jar">
+            <fileset dir="${wtkx}/${bin}"/>
+            <!-- NOTE This isn't sealed because we have split pivot.wtkx across two JARs.
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+            </manifest>
+            -->
+        </jar>
+    </target>
 
-      <!-- Compile source files -->
-      <javac srcdir="${wtktest}/${src}"
-         destDir="${wtktest}/${bin}"
-         optimize="${compiler.optimize}"
-         deprecation="${compiler.deprecation}"
-         debug="${compiler.debug}"
-         failonerror="true">
-         <compilerarg value="-Xlint" />
-         <classpath>
-           <pathelement location="${core}/${ant.project.name}-core.jar" />
-           <pathelement location="${wtk}/${ant.project.name}-wtk.jar" />
-         </classpath>
-      </javac>
+    <target name="wtkx-clean">
+        <delete dir="${wtkx}/${bin}"/>
+        <delete file="${wtkx}/${ant.project.name}-wtkx.jar"/>
+    </target>
 
-      <!-- Rebuild the JAR file -->
-      <delete file="${wtktest}/${ant.project.name}-wtk.test.jar"/>
-      <jar jarfile="${wtktest}/${ant.project.name}-wtk.test.jar">
-         <fileset dir="${wtktest}/${bin}"/>
-         <fileset dir="${wtktest}/${src}">
-           <include name="**/*.png" />
-         </fileset>
-      </jar>
-   </target>
+    <!-- WTKX Test -->
+    <target name="wtkx-test" depends="core, wtk, wtkx">
+        <mkdir dir="${wtkxtest}/${bin}"/>
 
-   <target name="wtk-test-clean">
-      <delete dir="${wtktest}/${bin}"/>
-      <delete file="${wtktest}/${ant.project.name}-wtk.test.jar"/>
-   </target>
+        <!-- Compile source files -->
+        <javac srcdir="${wtkxtest}/${src}" destDir="${wtkxtest}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true" classpath="${core}/${ant.project.name}-core.jar;${wtk}/${ant.project.name}-wtk.jar;${wtkx}/${ant.project.name}-wtkx.jar">
+            <compilerarg value="-Xlint"/>
+        </javac>
 
+        <!-- Rebuild the JAR file -->
+        <delete file="${wtkxtest}/${ant.project.name}-wtkx.test.jar"/>
+        <jar jarfile="${wtkxtest}/${ant.project.name}-wtkx.test.jar">
+            <fileset dir="${wtkxtest}/${bin}"/>
+        </jar>
+    </target>
 
-   <!-- WTKX -->
-   <target name="wtkx" depends="core, wtk">
-      <mkdir dir="${wtkx}/${bin}"/>
+    <target name="wtkx-test-clean">
+        <delete dir="${wtkxtest}/${bin}"/>
+        <delete file="${wtkxtest}/${ant.project.name}-wtkx.test.jar"/>
+    </target>
 
-      <!-- Compile source files -->
-      <javac srcdir="${wtkx}/${src}"
-         destDir="${wtkx}/${bin}"
-         optimize="${compiler.optimize}"
-         deprecation="${compiler.deprecation}"
-         debug="${compiler.debug}"
-         failonerror="true">
-         <compilerarg value="-Xlint" />
-         <classpath>
-           <pathelement location="${core}/${ant.project.name}-core.jar" />
-           <pathelement location="${wtk}/${ant.project.name}-wtk.jar" />
-         </classpath>
-      </javac>
+    <!-- Package all source -->
+    <target name="package-source">
+        <delete file="${ant.project.name}-src.zip"/>
+        <zip destfile="${ant.project.name}-src.zip">
+            <fileset dir="${core}/${src}"/>
+            <fileset dir="${coretest}/${src}"/>
+            <fileset dir="${web}/${src}"/>
+            <fileset dir="${webtest}/${src}"/>
+            <fileset dir="${wtk}/${src}"/>
+            <fileset dir="${wtktest}/${src}"/>
+            <fileset dir="${wtkx}/${src}"/>
+            <fileset dir="${wtkxtest}/${src}"/>
+        </zip>
+    </target>
 
-      <!-- Rebuild the JAR file -->
-      <delete file="${wtkx}/${ant.project.name}-wtkx.jar"/>
-      <jar jarfile="${wtkx}/${ant.project.name}-wtkx.jar">
-         <fileset dir="${wtkx}/${bin}"/>
-         <!-- NOTE This isn't sealed because we have split pivot.wtkx across two JARs.
-         <manifest>
-            <attribute name="Sealed" value="true"/>
-         </manifest>
-         -->
-      </jar>
-   </target>
-
-   <target name="wtkx-clean">
-      <delete dir="${wtkx}/${bin}"/>
-      <delete file="${wtkx}/${ant.project.name}-wtkx.jar"/>
-   </target>
-
-   <!-- WTKX Test -->
-   <target name="wtkx-test" depends="core, wtk, wtkx">
-      <mkdir dir="${wtkxtest}/${bin}"/>
-
-      <!-- Compile source files -->
-      <javac srcdir="${wtkxtest}/${src}"
-         destDir="${wtkxtest}/${bin}"
-         optimize="${compiler.optimize}"
-         deprecation="${compiler.deprecation}"
-         debug="${compiler.debug}"
-         failonerror="true"
-         classpath="${core}/${ant.project.name}-core.jar;${wtk}/${ant.project.name}-wtk.jar;${wtkx}/${ant.project.name}-wtkx.jar">
-         <compilerarg value="-Xlint" />
-      </javac>
-
-      <!-- Rebuild the JAR file -->
-      <delete file="${wtkxtest}/${ant.project.name}-wtkx.test.jar"/>
-      <jar jarfile="${wtkxtest}/${ant.project.name}-wtkx.test.jar">
-         <fileset dir="${wtkxtest}/${bin}"/>
-      </jar>
-   </target>
-
-   <target name="wtkx-test-clean">
-      <delete dir="${wtkxtest}/${bin}"/>
-      <delete file="${wtkxtest}/${ant.project.name}-wtkx.test.jar"/>
-   </target>
-
-   <!-- Package all source -->
-   <target name="package-source">
-      <delete file="${ant.project.name}-src.zip"/>
-      <zip destfile="${ant.project.name}-src.zip">
-         <fileset dir="${core}/${src}"/>
-         <fileset dir="${coretest}/${src}"/>
-         <fileset dir="${web}/${src}"/>
-         <fileset dir="${webtest}/${src}"/>
-         <fileset dir="${wtk}/${src}"/>
-         <fileset dir="${wtktest}/${src}"/>
-         <fileset dir="${wtkx}/${src}"/>
-         <fileset dir="${wtkxtest}/${src}"/>
-      </zip>
-   </target>
-
-   <!-- Remove trailing white space in all source files -->
-   <target name="trim-whitespace">
-      <replaceregexp match="[\t ]+$" replace="" flags="gm" byline="true">
-         <fileset dir=".">
-            <include name="**/*.java"/>
-            <include name="**/*.html"/>
-            <include name="**/*.txt"/>
-            <include name="**/*.properties"/>
-            <include name="**/*.xml"/>
-            <include name="**/*.wtkx"/>
-            <include name="**/*.json"/>
-         </fileset>
-      </replaceregexp>
-   </target>
+    <!-- Remove trailing white space in all source files -->
+    <target name="trim-whitespace">
+        <replaceregexp match="[\t ]+$" replace="" flags="gm" byline="true">
+            <fileset dir=".">
+                <include name="**/*.java"/>
+                <include name="**/*.html"/>
+                <include name="**/*.txt"/>
+                <include name="**/*.properties"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.wtkx"/>
+                <include name="**/*.json"/>
+            </fileset>
+        </replaceregexp>
+    </target>
 </project>
