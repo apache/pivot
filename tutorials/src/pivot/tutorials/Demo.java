@@ -468,6 +468,7 @@ public class Demo implements Application {
                 Alert alert = new Alert(Alert.Type.QUESTION, "Please select your favorite icon:",
                     options, body);
                 alert.setTitle("Select Icon");
+                alert.setSelectedOption(0);
                 alert.open(window);
             }
         });

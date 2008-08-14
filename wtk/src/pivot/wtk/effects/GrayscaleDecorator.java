@@ -20,6 +20,7 @@ import java.awt.image.BufferedImage;
 
 import pivot.wtk.Component;
 import pivot.wtk.Decorator;
+import pivot.wtk.Rectangle;
 
 /**
  * Decorator that applies a grayscale conversion to all paint operations.
@@ -29,14 +30,6 @@ import pivot.wtk.Decorator;
 public class GrayscaleDecorator implements Decorator {
     private BufferedImage bufferedImage = null;
     private Graphics2D graphics = null;
-
-    public void install(Component component) {
-        // No-op
-    }
-
-    public void uninstall() {
-        // No-op
-    }
 
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         this.graphics = graphics;
@@ -59,5 +52,9 @@ public class GrayscaleDecorator implements Decorator {
         // We redirected the component's graphics to the buffered image
         // graphics, so we dispose of the original graphics ourselves
         graphics.dispose();
+    }
+
+    public Rectangle transform(Component component, Rectangle bounds) {
+        return bounds;
     }
 }

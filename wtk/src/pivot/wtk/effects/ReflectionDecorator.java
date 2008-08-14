@@ -7,88 +7,29 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import pivot.wtk.Component;
-import pivot.wtk.ComponentListener;
-import pivot.wtk.Container;
-import pivot.wtk.Cursor;
 import pivot.wtk.Decorator;
-import pivot.wtk.Display;
-import pivot.wtk.Point;
 import pivot.wtk.Rectangle;
-import pivot.wtk.Skin;
 
 /**
  * TODO Make gradient properties configurable.
  */
 public class ReflectionDecorator implements Decorator {
-    private class ComponentHandler implements ComponentListener {
-        public void skinClassChanged(Component component, Class<? extends Skin> previousSkinClass) {
-            // No-op
-        }
-
-        public void parentChanged(Component component, Container previousParent) {
-            visibleChanged(component);
-        }
-
-        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            Display display = Display.getInstance();
-            Point origin = component.mapPointToAncestor(display, 0, 0);
-
-            display.repaint(origin.x, origin.y + previousHeight, previousWidth, previousHeight);
-
-            recreateBuffer();
-        }
-
-        public void locationChanged(Component component, int previousX, int previousY) {
-            Container parent = component.getParent();
-            Display display = Display.getInstance();
-            Point previousOrigin = parent.mapPointToAncestor(display, previousX, previousY);
-
-            int width = component.getWidth();
-            int height = component.getHeight();
-            display.repaint(previousOrigin.x, previousOrigin.y + height, width, height);
-        }
-
-        public void visibleChanged(Component component) {
-            Rectangle bounds = component.getBounds();
-            Display display = Display.getInstance();
-            display.repaint(bounds.x, bounds.y + bounds.height, bounds.width, bounds.height);
-        }
-
-        public void styleUpdated(Component component, String styleKey, Object previousValue) {
-            // No-op
-        }
-
-        public void cursorChanged(Component component, Cursor previousCursor) {
-            // No-op
-        }
-
-        public void tooltipTextChanged(Component component, String previousTooltipText) {
-            // No-op
-        }
-    }
-
-    private Component component = null;
-    private ComponentHandler componentHandler = new ComponentHandler();
-
     private BufferedImage bufferedImage = null;
 
     private Graphics2D graphics = null;
     private Graphics2D bufferedImageGraphics = null;
 
-    public void install(Component component) {
-        this.component = component;
-        component.getComponentListeners().add(componentHandler);
-
-        recreateBuffer();
-    }
-
-    public void uninstall() {
-        component.getComponentListeners().remove(componentHandler);
-        component = null;
-    }
-
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         this.graphics = graphics;
+
+        int width = component.getWidth();
+        int height = component.getHeight();
+
+        if (bufferedImage == null
+            || bufferedImage.getWidth() != width
+            || bufferedImage.getHeight() != height) {
+            bufferedImage = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
+        }
 
         bufferedImageGraphics = bufferedImage.createGraphics();
         bufferedImageGraphics.setClip(graphics.getClip());
@@ -131,15 +72,10 @@ public class ReflectionDecorator implements Decorator {
         bufferedImageGraphics.dispose();
     }
 
-    private void recreateBuffer() {
-        int width = component.getWidth();
+    public Rectangle transform(Component component, Rectangle bounds) {
         int height = component.getHeight();
+        bounds.y = (height * 2) - (bounds.y + bounds.height);
 
-        if (width > 0
-            && height > 0) {
-            bufferedImage = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
-        } else {
-            bufferedImage = null;
-        }
+        return bounds;
     }
 }

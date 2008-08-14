@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 
 import pivot.wtk.Component;
 import pivot.wtk.Decorator;
+import pivot.wtk.Rectangle;
 
 public class ShadeDecorator implements Decorator {
     private float opacity;
@@ -59,14 +60,6 @@ public class ShadeDecorator implements Decorator {
         this.color = color;
     }
 
-    public void install(Component component) {
-        // No-op
-    }
-
-    public void uninstall() {
-        // No-op
-    }
-
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         this.graphics = graphics;
         this.component = component;
@@ -78,5 +71,9 @@ public class ShadeDecorator implements Decorator {
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
         graphics.setColor(color);
         graphics.fillRect(0, 0, component.getWidth(), component.getHeight());
+    }
+
+    public Rectangle transform(Component component, Rectangle bounds) {
+        return bounds;
     }
 }

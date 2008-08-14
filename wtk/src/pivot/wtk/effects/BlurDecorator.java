@@ -22,6 +22,7 @@ import java.awt.image.Kernel;
 
 import pivot.wtk.Component;
 import pivot.wtk.Decorator;
+import pivot.wtk.Rectangle;
 
 /**
  * Applies a blur to paint operations. Due to the computational complexity of
@@ -55,7 +56,6 @@ public class BlurDecorator implements Decorator {
     private BufferedImage bufferedImage = null;
     private boolean bufferedImageBlurred = false;
 
-    private Component component = null;
     private Graphics2D graphics = null;
 
     /**
@@ -77,22 +77,13 @@ public class BlurDecorator implements Decorator {
         this.blurMagnitude = blurMagnitude;
     }
 
-    public void install(Component component) {
-        // No-op
-    }
-
-    public void uninstall() {
-        // No-op
-    }
-
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         this.graphics = graphics;
 
         int width = component.getWidth();
         int height = component.getHeight();
 
-        if (component != this.component
-            || bufferedImage == null
+        if (bufferedImage == null
             || bufferedImage.getWidth() != width
             || bufferedImage.getHeight() != height) {
             // Create (or re-create) the buffered image
@@ -107,8 +98,6 @@ public class BlurDecorator implements Decorator {
             // No need to paint - we'll do it in update()
             graphics = null;
         }
-
-        this.component = component;
 
         return graphics;
     }
@@ -134,5 +123,9 @@ public class BlurDecorator implements Decorator {
 
         // Draw the blurred image to the real graphics
         this.graphics.drawImage(bufferedImage, 0, 0, null);
+    }
+
+    public Rectangle transform(Component component, Rectangle bounds) {
+        return bounds;
     }
 }

@@ -196,6 +196,11 @@ public class AlertSkin extends DialogSkin
     }
 
     public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
-        alert.close(true);
+        int index = alert.getSelectedOption();
+
+        if (alert.isOpen()
+            && index >= 0) {
+            Component.setFocusedComponent(optionButtons.get(index));
+        }
     }
 }

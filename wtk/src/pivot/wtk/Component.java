@@ -127,8 +127,6 @@ public abstract class Component implements Visual {
             }
 
             decorators.insert(decorator, index);
-            decorator.install(Component.this);
-
             repaint();
 
             componentDecoratorListeners.decoratorInserted(Component.this, index);
@@ -140,8 +138,7 @@ public abstract class Component implements Visual {
             }
 
             Decorator previousDecorator = decorators.update(index, decorator);
-            previousDecorator.uninstall();
-            decorator.install(Component.this);
+            repaint();
 
             componentDecoratorListeners.decoratorUpdated(Component.this, index,
                 previousDecorator);
@@ -160,11 +157,6 @@ public abstract class Component implements Visual {
 
         public Sequence<Decorator> remove(int index, int count) {
             Sequence<Decorator> removed = decorators.remove(index, count);
-
-            for (int i = 0, n = removed.getLength(); i < n; i++) {
-                Decorator decorator = removed.get(i);
-                decorator.uninstall();
-            }
 
             if (count > 0) {
                 repaint();
@@ -1334,9 +1326,9 @@ public abstract class Component implements Visual {
     }
 
     /**
-     * Determines the visible bounds of an area in component space: the
+     * Determines the visible bounds of an area within a component (the
      * intersection of the area with the visible area of the component
-     * and its ancestors.
+     * and its ancestors).
      *
      * @param x
      * @param y
@@ -1541,10 +1533,42 @@ public abstract class Component implements Visual {
      * Flags the given rectangle as needing to be repainted.
      */
     public void repaint(int x, int y, int width, int height) {
+        // TODO This needs to be a recursive call:
+        //
+        // 1) When we eliminate our singletons to allow multiple Pivot applications
+        // to run in a browser, ApplicationContext.getInstance() will no longer be
+        // available, and walking up the entire component hierarchy to get the
+        // context from the display will be inefficient.
+        //
+        // 2) The current approach only allows us to apply decorators to the component
+        // that is currently being repainted. So, for example, pushing a button in
+        // a dialog calls the button's repaint() method but not its ancestors'. This means
+        // that any decorators attached to the ancestors won't be called.
+        //
+        // We need to walk up the component hierarchy, repainting at each step.
+        // We will need to compute the union of the component's visible area with
+        // the transformed area from the decorators and pass that to the parent
+        // component. Ultimately, the call will reach the display, which will trigger
+        // the actual system repaint.
+
         Rectangle visibleArea = getVisibleArea(x, y, width, height);
 
         if (visibleArea != null) {
-            ApplicationContext.getInstance().repaint(visibleArea.x, visibleArea.y,
+            ApplicationContext applicationContext = ApplicationContext.getInstance();
+            applicationContext.repaint(visibleArea.x, visibleArea.y,
+                visibleArea.width, visibleArea.height);
+
+            // Repaint the area affected by the decorators
+            visibleArea = new Rectangle(x, y, visibleArea.width, visibleArea.height);
+            for (Decorator decorator : decorators) {
+                visibleArea = decorator.transform(this, visibleArea);
+            }
+
+            Point p = mapPointToAncestor(Display.getInstance(), visibleArea.x, visibleArea.y);
+            visibleArea.x = p.x;
+            visibleArea.y = p.y;
+
+            applicationContext.repaint(visibleArea.x, visibleArea.y,
                 visibleArea.width, visibleArea.height);
         }
     }
