@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import java.net.URL;
+
 import pivot.collections.ArrayList;
 import pivot.collections.ArrayStack;
 import pivot.collections.Dictionary;
@@ -431,6 +433,35 @@ public class Window extends Container {
             this.icon = icon;
             windowListeners.iconChanged(this, previousIcon);
         }
+    }
+
+    /**
+     * Sets the window's icon by URL.
+     *
+     * @param icon
+     * The location of the icon to set.
+     */
+    public void setIcon(URL icon) {
+        if (icon == null) {
+            throw new IllegalArgumentException("icon is null.");
+        }
+
+        setIcon(Image.load(icon));
+    }
+
+    /**
+     * Sets the window's icon by resource name.
+     *
+     * @param icon
+     * The resource name of the icon to set.
+     */
+    public void setIcon(String icon) {
+        if (icon == null) {
+            throw new IllegalArgumentException("icon is null.");
+        }
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        setIcon(classLoader.getResource(icon));
     }
 
     public Component getContent() {
