@@ -190,6 +190,7 @@ public class BorderSkin extends ContainerSkin
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
+        // TODO Optimize by using Graphics#fillRoundRect()?
         graphics.fill(borderArea);
     }
 

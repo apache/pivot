@@ -474,8 +474,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             TablePane.Row row = tablePane.getRows().get(i);
 
             if (row.isSelected()) {
-                Rectangle bounds = new Rectangle(0, rowY, width, rowHeights[i]);
-                graphics.fill(bounds);
+                graphics.fillRect(0, rowY, width, rowHeights[i]);
             }
 
             rowY += rowHeights[i] + spacing;
@@ -488,8 +487,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             TablePane.Column column = tablePane.getColumns().get(j);
 
             if (column.isSelected()) {
-                Rectangle bounds = new Rectangle(columnX, 0, columnWidths[j], height);
-                graphics.fill(bounds);
+                graphics.fillRect(columnX, 0, columnWidths[j], height);
             }
 
             columnX += columnWidths[j] + spacing;
@@ -569,9 +567,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     int gridY = Math.max(rowY
                         - (int)Math.ceil((float)spacing * 0.5), 0);
                     int gridWidth = Math.max(width - (padding.left + padding.right), 0);
-                    Line2D horizontalGridLine = new Line2D.Double(padding.left, gridY,
-                        gridWidth - 1, gridY);
-                    gridGraphics.draw(horizontalGridLine);
+                    gridGraphics.drawLine(padding.left, gridY, gridWidth - 1, gridY);
 
                     rowY += (rowHeights[i] + spacing);
                 }
@@ -587,9 +583,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                         - (int)Math.ceil((float)spacing * 0.5), 0);
                     int gridHeight = Math.max(height
                         - (padding.top + padding.bottom), 0);
-                    Line2D verticalGridLine = new Line2D.Double(gridX, padding.top, gridX,
-                        gridHeight - 1);
-                    gridGraphics.draw(verticalGridLine);
+                    gridGraphics.drawLine(gridX, padding.top, gridX, gridHeight - 1);
 
                     columnX += (columnWidths[j] + spacing);
                 }

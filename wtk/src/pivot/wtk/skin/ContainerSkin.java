@@ -139,12 +139,12 @@ public abstract class ContainerSkin extends ComponentSkin
         if (backgroundColor != null
             && backgroundOpacity > 0.0f) {
             if (backgroundOpacity < 1.0f) {
-                graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, backgroundOpacity));
+                graphics.setComposite(AlphaComposite.getInstance
+                    (AlphaComposite.SRC_OVER, backgroundOpacity));
             }
 
             graphics.setPaint(backgroundColor);
-            Rectangle bounds = new Rectangle(0, 0, getWidth(), getHeight());
-            graphics.fill(bounds);
+            graphics.fillRect(0, 0, getWidth(), getHeight());
         }
     }
 

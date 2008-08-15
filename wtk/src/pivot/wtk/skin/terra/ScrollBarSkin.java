@@ -31,7 +31,6 @@ import pivot.wtk.Display;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
 import pivot.wtk.Point;
-import pivot.wtk.Rectangle;
 import pivot.wtk.ScrollBar;
 import pivot.wtk.ScrollBarListener;
 import pivot.wtk.ScrollBarValueListener;
@@ -291,14 +290,12 @@ public class ScrollBarSkin extends ContainerSkin
 
             // Paint the background
             graphics.setPaint(backgroundColor);
-            Rectangle rectangle = new Rectangle(1, 1, width - 2, height - 2);
-            graphics.fill(rectangle);
+            graphics.fillRect(1, 1, width - 2, height - 2);
 
             // Paint the border
             graphics.setPaint((Color)scrollBarStyles.get("borderColor"));
             graphics.setStroke(new BasicStroke());
-            rectangle.setBounds(0, 0, width - 1, height - 1);
-            graphics.draw(rectangle);
+            graphics.drawRect(0, 0, width - 1, height - 1);
 
             // Size the image to be proportional to our size
             int buttonImageWidth, buttonImageHeight;
@@ -430,6 +427,7 @@ public class ScrollBarSkin extends ContainerSkin
             }
 
             arrow.closePath();
+            // TODO Use Graphics#fillPolygon() as optimization?
             graphics.fill(arrow);
         }
     }
@@ -458,6 +456,7 @@ public class ScrollBarSkin extends ContainerSkin
             }
 
             arrow.closePath();
+            // TODO Use Graphics#fillPolygon() as optimization?
             graphics.fill(arrow);
         }
     }
@@ -551,50 +550,34 @@ public class ScrollBarSkin extends ContainerSkin
 
             // Paint the background
             graphics.setPaint(backgroundColor);
-            Rectangle rectangle = new Rectangle(1, 1, width - 2, height - 2);
-            graphics.fill(rectangle);
+            graphics.fillRect(1, 1, width - 2, height - 2);
 
             // Paint the border
             graphics.setPaint((Color)scrollBarStyles.get("borderColor"));
             graphics.setStroke(new BasicStroke());
-            rectangle.setBounds(0, 0, width - 1, height - 1);
-            graphics.draw(rectangle);
-
-            Line2D.Float line = new Line2D.Float();
+            graphics.drawRect(0, 0, width - 1, height - 1);
 
             // Paint the hash marks
             if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
                 int middle = width / 2;
                 graphics.setPaint(new Color(0xB1, 0xA5, 0x94));
-                line.setLine(middle - 3, 4, middle - 3, height - 5);
-                graphics.draw(line);
-                line.setLine(middle, 4, middle, height - 5);
-                graphics.draw(line);
-                line.setLine(middle + 3, 4, middle + 3, height - 5);
-                graphics.draw(line);
+                graphics.drawLine(middle - 3, 4, middle - 3, height - 5);
+                graphics.drawLine(middle, 4, middle, height - 5);
+                graphics.drawLine(middle + 3, 4, middle + 3, height - 5);
                 graphics.setPaint(Color.WHITE);
-                line.setLine(middle - 2, 4, middle - 2, height - 5);
-                graphics.draw(line);
-                line.setLine(middle + 1, 4, middle + 1, height - 5);
-                graphics.draw(line);
-                line.setLine(middle + 4, 4, middle + 4, height - 5);
-                graphics.draw(line);
+                graphics.drawLine(middle - 2, 4, middle - 2, height - 5);
+                graphics.drawLine(middle + 1, 4, middle + 1, height - 5);
+                graphics.drawLine(middle + 4, 4, middle + 4, height - 5);
             } else {
                 int middle = height / 2;
                 graphics.setPaint(new Color(0xB1, 0xA5, 0x94));
-                line.setLine(4, middle - 3, width - 5, middle - 3);
-                graphics.draw(line);
-                line.setLine(4, middle, width - 5, middle);
-                graphics.draw(line);
-                line.setLine(4, middle + 3, width - 5, middle + 3);
-                graphics.draw(line);
+                graphics.drawLine(4, middle - 3, width - 5, middle - 3);
+                graphics.drawLine(4, middle, width - 5, middle);
+                graphics.drawLine(4, middle + 3, width - 5, middle + 3);
                 graphics.setPaint(Color.WHITE);
-                line.setLine(4, middle - 2, width - 5, middle - 2);
-                graphics.draw(line);
-                line.setLine(4, middle + 1, width - 5, middle + 1);
-                graphics.draw(line);
-                line.setLine(4, middle + 4, width - 5, middle + 4);
-                graphics.draw(line);
+                graphics.drawLine(4, middle - 2, width - 5, middle - 2);
+                graphics.drawLine(4, middle + 1, width - 5, middle + 1);
+                graphics.drawLine(4, middle + 4, width - 5, middle + 4);
             }
         }
 
@@ -889,28 +872,23 @@ public class ScrollBarSkin extends ContainerSkin
         graphics.setStroke(new BasicStroke());
         graphics.setPaint(borderColor);
 
-        Line2D.Float line = new Line2D.Float();
-
         // Paint the scroll bar border lines
         if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
             int scrollUpButtonWidth = scrollUpButton.getWidth();
             int scrollDownButtonWidth = scrollDownButton.getWidth();
 
-            line.setLine(scrollUpButtonWidth, 0, width - scrollDownButtonWidth - 1, 0);
-            graphics.draw(line);
-            line.setLine(scrollUpButtonWidth, height - 1,
+            graphics.drawLine(scrollUpButtonWidth, 0,
+                width - scrollDownButtonWidth - 1, 0);
+            graphics.drawLine(scrollUpButtonWidth, height - 1,
                 width - scrollDownButtonWidth - 1, height - 1);
-            graphics.draw(line);
         } else {
             int scrollUpButtonHeight = scrollUpButton.getHeight();
             int scrollDownButtonHeight = scrollDownButton.getHeight();
 
-            line.setLine(0, scrollUpButtonHeight, 0,
+            graphics.drawLine(0, scrollUpButtonHeight, 0,
                 height - scrollDownButtonHeight - 1);
-            graphics.draw(line);
-            line.setLine(width - 1, scrollUpButtonHeight, width - 1,
+            graphics.drawLine(width - 1, scrollUpButtonHeight, width - 1,
                 height - scrollDownButtonHeight - 1);
-            graphics.draw(line);
         }
     }
 

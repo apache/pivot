@@ -212,26 +212,26 @@ public class SplitPaneSkin extends ContainerSkin
                     graphics.setStroke(new BasicStroke());
 
                     graphics.setPaint(dark);
-                    graphics.draw(new Line2D.Double(0, 0, imageWidth - 1, 0));
-                    graphics.draw(new Line2D.Double(0, 3, imageWidth - 1, 3));
-                    graphics.draw(new Line2D.Double(0, 6, imageWidth - 1, 6));
+                    graphics.drawLine(0, 0, imageWidth - 1, 0);
+                    graphics.drawLine(0, 3, imageWidth - 1, 3);
+                    graphics.drawLine(0, 6, imageWidth - 1, 6);
 
                     graphics.setPaint(light);
-                    graphics.draw(new Line2D.Double(0, 1, imageWidth - 1, 1));
-                    graphics.draw(new Line2D.Double(0, 4, imageWidth - 1, 4));
-                    graphics.draw(new Line2D.Double(0, 7, imageWidth - 1, 7));
+                    graphics.drawLine(0, 1, imageWidth - 1, 1);
+                    graphics.drawLine(0, 4, imageWidth - 1, 4);
+                    graphics.drawLine(0, 7, imageWidth - 1, 7);
                 } else {
                     int half = imageHeight / 2;
 
                     graphics.setPaint(dark);
-                    graphics.fill(new Rectangle2D.Double(0, 0, 2, half));
-                    graphics.fill(new Rectangle2D.Double(3, 0, 2, half));
-                    graphics.fill(new Rectangle2D.Double(6, 0, 2, half));
+                    graphics.fillRect(0, 0, 2, half);
+                    graphics.fillRect(3, 0, 2, half);
+                    graphics.fillRect(6, 0, 2, half);
 
                     graphics.setPaint(light);
-                    graphics.fill(new Rectangle2D.Double(0, half, 2, half));
-                    graphics.fill(new Rectangle2D.Double(3, half, 2, half));
-                    graphics.fill(new Rectangle2D.Double(6, half, 2, half));
+                    graphics.fillRect(0, half, 2, half);
+                    graphics.fillRect(3, half, 2, half);
+                    graphics.fillRect(6, half, 2, half);
                 }
             }
         }
@@ -340,7 +340,7 @@ public class SplitPaneSkin extends ContainerSkin
             graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
                 opacity));
 
-            graphics.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
+            graphics.fillRect(0, 0, getWidth(), getHeight());
         }
     }
 
