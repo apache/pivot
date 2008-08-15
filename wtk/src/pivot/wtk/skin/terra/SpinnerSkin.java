@@ -676,8 +676,9 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         downButton.setLocation(width - buttonWidth - 1, height - buttonHeight - 1);
     }
 
-    public void paint(Graphics2D graphics) {
-        super.paint(graphics);
+    @Override
+    public void paintBackground(Graphics2D graphics) {
+        super.paintBackground(graphics);
 
         int width = getWidth();
         int height = getHeight();

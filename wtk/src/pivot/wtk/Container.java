@@ -15,9 +15,6 @@
  */
 package pivot.wtk;
 
-import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 import pivot.collections.ArrayList;
@@ -320,56 +317,6 @@ public abstract class Container extends Component
                 }
             } finally {
                 valid = true;
-            }
-        }
-    }
-
-    @Override
-    public void paint(Graphics2D graphics) {
-        // Give the base method a copy of the graphics context; otherwise,
-        // container skins can change the graphics state before it is passed
-        // to subcomponents
-        Graphics2D containerGraphics = (Graphics2D)graphics.create();
-        super.paint(containerGraphics);
-        containerGraphics.dispose();
-
-        Shape clip = graphics.getClip();
-        Rectangle2D clipBounds = (clip == null) ? getBounds() : clip.getBounds();
-
-        for (int i = 0, n = components.getLength(); i < n; i++) {
-            Component component = components.get(i);
-            Rectangle componentBounds = component.getBounds();
-
-            // Only paint components that are visible and intersect the
-            // current clip rectangle
-            if (component.isVisible()
-                && componentBounds.intersects(clipBounds)) {
-                // Create a copy of the current graphics context
-                Graphics2D componentGraphics = (Graphics2D)graphics.create();
-
-                // Set a clip rectangle so the component can't paint outside
-                // of its boundaries
-                componentGraphics.clip(componentBounds);
-
-                // Translate the context to the component's coordinate system
-                componentGraphics.translate(component.getX(), component.getY());
-
-                // Get the decorator and prepare the component's graphics
-                for (Decorator decorator : component.getDecorators()) {
-                    componentGraphics = decorator.prepare(component, componentGraphics);
-                }
-
-                // Paint the component
-                if (componentGraphics != null) {
-                    component.paint(componentGraphics);
-                }
-
-                // Update the component
-                for (Decorator decorator : component.getDecorators()) {
-                    decorator.update();
-                }
-
-                componentGraphics.dispose();
             }
         }
     }

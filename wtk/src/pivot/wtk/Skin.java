@@ -85,6 +85,12 @@ public interface Skin extends Visual {
     public void uninstall();
 
     /**
+     * Returns the component with which a skin is associated.
+     * @return
+     */
+    public Component getComponent();
+
+    /**
      * If the component on which the skin is installed is a container, lays
      * out the container's children.
      */

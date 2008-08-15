@@ -209,13 +209,6 @@ public abstract class Component implements Visual {
      */
     private class ComponentListenerList extends ListenerList<ComponentListener>
         implements ComponentListener {
-        public void skinClassChanged(Component component,
-            Class<? extends Skin> previousSkinClass) {
-            for (ComponentListener listener : this) {
-                listener.skinClassChanged(component, previousSkinClass);
-            }
-        }
-
         public void parentChanged(Component component, Container previousParent) {
             for (ComponentListener listener : this) {
                 listener.parentChanged(component, previousParent);
@@ -546,60 +539,36 @@ public abstract class Component implements Visual {
     }
 
     /**
-     * Returns the type of the skin that is currently associated with this
-     * component.
+     * Returns the currently installed skin.
+     *
+     * @return
+     * The currently installed skin.
      */
-    public Class<? extends Skin> getSkinClass() {
-        Class<? extends Skin> skinClass = null;
-        if (skin != null) {
-            skinClass = skin.getClass();
-        }
-
-        return skinClass;
+    protected Skin getSkin() {
+        return skin;
     }
 
     /**
-     * Installs a skin on this component, removing any skin that was previously
-     * attached and redrawing the component.
+     * Sets the skin, replacing any previous skin.
      *
-     * @param skinClass
-     * The type of the skin to install.
-     *
-     * @throws IllegalArgumentException
-     * If the skin cannot be installed on this component.
+     * @param skin
+     * The new skin.
      */
-    public void setSkinClass(Class<? extends Skin> skinClass) {
-        if (skinClass == null) {
-            throw new IllegalArgumentException("skinClass is null.");
+    protected void setSkin(Skin skin) {
+        if (skin == null) {
+            throw new IllegalArgumentException("skin is null.");
         }
 
-        Class<? extends Skin> previousSkinClass = null;
-
-        if (skin != null) {
-            previousSkinClass = skin.getClass();
-            skin.uninstall();
+        if (this.skin != null) {
+            this.skin.uninstall();
         }
 
-        styleDictionary = null;
-        skin = null;
-
-        try {
-            skin = skinClass.newInstance();
-        } catch(Exception exception) {
-            throw new IllegalArgumentException("The skin could not be installed.", exception);
-        }
-
+        this.skin = skin;
         styleDictionary = new StyleDictionary(skin);
         skin.install(this);
 
         invalidate();
         repaint();
-
-        componentListeners.skinClassChanged(this, previousSkinClass);
-    }
-
-    protected Skin getSkin() {
-        return skin;
     }
 
     /**
@@ -611,33 +580,43 @@ public abstract class Component implements Visual {
      */
     @SuppressWarnings("unchecked")
     protected void installSkin(Class<? extends Component> componentClass) {
-        assert (skin == null) : "Skin is already installed.";
+        // Walk up component hierarchy from this type; if we find a match
+        // and the super class equals the given component class, install
+        // the skin. Otherwise, ignore - it will be installed later by a
+        // subclass of the component class.
+        Class<?> type = getClass();
 
-        // Walk the class hierarchy of this component's type to find a match
         Theme theme = Theme.getTheme();
+        Class<? extends Skin> skinClass = theme.getSkinClass((Class<? extends Component>)type);
 
-        Class<?> superClass = getClass();
-        Class<? extends Skin> skinClass = null;
+        while (skinClass == null
+            && type != componentClass
+            && type != Component.class) {
+            type = type.getSuperclass();
 
-        while (superClass != componentClass
-            && superClass != Component.class
-            && skinClass == null) {
-            skinClass = theme.getSkinClass((Class<? extends Component>)superClass);
-
-            if (skinClass == null) {
-                superClass = superClass.getSuperclass();
+            if (type != Component.class) {
+                skinClass = theme.getSkinClass((Class<? extends Component>)type);
             }
         }
 
-        assert (superClass != Component.class) : componentClass.getName()
-            + " is not an ancestor of " + getClass().getName();
+        if (type == Component.class) {
+            throw new IllegalArgumentException(componentClass.getName()
+                + " is not an ancestor of " + getClass().getName());
+        }
 
-        if (superClass == componentClass) {
-            skinClass = theme.getSkinClass(componentClass);
-            assert (skinClass != null) :
-                "No skin mapping specified for " + componentClass.getName();
+        if (skinClass == null) {
+            throw new IllegalArgumentException("No skin mapping for "
+                + componentClass.getName() + " found.");
+        }
 
-            setSkinClass(skinClass);
+        if (type == componentClass) {
+            try {
+                setSkin(skinClass.newInstance());
+            } catch(InstantiationException exception) {
+                throw new IllegalArgumentException(exception);
+            } catch(IllegalAccessException exception) {
+                throw new IllegalArgumentException(exception);
+            }
         }
     }
 
@@ -1557,26 +1536,13 @@ public abstract class Component implements Visual {
             ApplicationContext applicationContext = ApplicationContext.getInstance();
             applicationContext.repaint(visibleArea.x, visibleArea.y,
                 visibleArea.width, visibleArea.height);
-
-            // Repaint the area affected by the decorators
-            visibleArea = new Rectangle(x, y, visibleArea.width, visibleArea.height);
-            for (Decorator decorator : decorators) {
-                visibleArea = decorator.transform(this, visibleArea);
-            }
-
-            Point p = mapPointToAncestor(Display.getInstance(), visibleArea.x, visibleArea.y);
-            visibleArea.x = p.x;
-            visibleArea.y = p.y;
-
-            applicationContext.repaint(visibleArea.x, visibleArea.y,
-                visibleArea.width, visibleArea.height);
         }
     }
 
     /**
      * Paints the component. Delegates to the skin.
      */
-    public void paint(Graphics2D graphics) {
+    public final void paint(Graphics2D graphics) {
         if (skin != null) {
             skin.paint(graphics);
         }
@@ -2195,9 +2161,8 @@ public abstract class Component implements Visual {
     public String toString() {
         String s = this.getClass().getName() + "#" + getHandle();
 
-        Class<? extends Skin> skinClass = getSkinClass();
-        if (skinClass != null) {
-            s += " [" + skinClass.getName() + "]";
+        if (skin != null) {
+            s += " [" + skin.getClass().getName() + "]";
         }
 
         return s;

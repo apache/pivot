@@ -18,6 +18,8 @@ package pivot.wtk.skin;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
@@ -136,6 +138,11 @@ public abstract class ContainerSkin extends ComponentSkin
     }
 
     public void paint(Graphics2D graphics) {
+        paintBackground(graphics);
+        paintComponents(graphics);
+    }
+
+    protected void paintBackground(Graphics2D graphics) {
         if (backgroundColor != null
             && backgroundOpacity > 0.0f) {
             if (backgroundOpacity < 1.0f) {
@@ -146,6 +153,39 @@ public abstract class ContainerSkin extends ComponentSkin
             graphics.setPaint(backgroundColor);
             graphics.fillRect(0, 0, getWidth(), getHeight());
         }
+    }
+
+    protected void paintComponents(Graphics2D graphics) {
+        Container container = (Container)getComponent();
+
+        Shape clip = graphics.getClip();
+        Rectangle2D clipBounds = (clip == null) ? container.getBounds() : clip.getBounds();
+
+        for (Component component : container) {
+            Rectangle componentBounds = component.getBounds();
+
+            // Only paint components that are visible and intersect the
+            // current clip rectangle
+            if (component.isVisible()
+                && componentBounds.intersects(clipBounds)) {
+                // Create a copy of the current graphics context and set a clip
+                // rectangle so the component can't paint outside of its
+                // boundaries
+                Graphics2D componentGraphics = (Graphics2D)graphics.create();
+                componentGraphics.clip(componentBounds);
+
+                // Translate the context to the component's coordinate system
+                componentGraphics.translate(component.getX(), component.getY());
+
+                // Paint the component
+                if (componentGraphics != null) {
+                    component.paint(componentGraphics);
+                }
+
+                componentGraphics.dispose();
+            }
+        }
+
     }
 
     /**

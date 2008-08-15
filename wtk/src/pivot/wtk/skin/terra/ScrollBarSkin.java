@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
 
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
@@ -861,8 +860,9 @@ public class ScrollBarSkin extends ContainerSkin
         }
     }
 
-    public void paint(Graphics2D graphics) {
-        super.paint(graphics);
+    @Override
+    public void paintBackground(Graphics2D graphics) {
+        super.paintBackground(graphics);
 
         ScrollBar scrollBar = (ScrollBar)getComponent();
 

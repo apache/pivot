@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 public interface ComponentListener {
-    public void skinClassChanged(Component component, Class<? extends Skin> previousSkinClass);
     public void parentChanged(Component component, Container previousParent);
     public void sizeChanged(Component component, int previousWidth, int previousHeight);
     public void locationChanged(Component component, int previousX, int previousY);

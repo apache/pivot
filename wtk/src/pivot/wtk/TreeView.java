@@ -451,13 +451,13 @@ public class TreeView extends Component {
     }
 
     @Override
-    public void setSkinClass(Class<? extends pivot.wtk.Skin> skinClass) {
-        if (!TreeView.Skin.class.isAssignableFrom(skinClass)) {
+    public void setSkin(pivot.wtk.Skin skin) {
+        if (!(skin instanceof TreeView.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + TreeView.Skin.class.getName());
         }
 
-        super.setSkinClass(skinClass);
+        super.setSkin(skin);
     }
 
     /**

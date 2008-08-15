@@ -763,13 +763,13 @@ public class TableView extends Component {
     }
 
     @Override
-    public void setSkinClass(Class<? extends pivot.wtk.Skin> skinClass) {
-        if (!TableView.Skin.class.isAssignableFrom(skinClass)) {
+    public void setSkin(pivot.wtk.Skin skin) {
+        if (!(skin instanceof TableView.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + TableView.Skin.class.getName());
         }
 
-        super.setSkinClass(skinClass);
+        super.setSkin(skin);
     }
 
     /**

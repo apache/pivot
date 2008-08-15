@@ -56,13 +56,13 @@ public abstract class Viewport extends Container {
     private ViewportListenerList viewportListeners = new ViewportListenerList();
 
     @Override
-    public void setSkinClass(Class<? extends pivot.wtk.Skin> skinClass) {
-        if (!Viewport.Skin.class.isAssignableFrom(skinClass)) {
+    public void setSkin(pivot.wtk.Skin skin) {
+        if (!(skin instanceof Viewport.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + Viewport.Skin.class.getName());
         }
 
-        super.setSkinClass(skinClass);
+        super.setSkin(skin);
     }
 
     public int getScrollTop() {

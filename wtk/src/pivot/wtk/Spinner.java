@@ -325,13 +325,13 @@ public class Spinner extends Container {
     }
 
     @Override
-    public void setSkinClass(Class<? extends pivot.wtk.Skin> skinClass) {
-        if (!Spinner.Skin.class.isAssignableFrom(skinClass)) {
+    public void setSkin(pivot.wtk.Skin skin) {
+        if (!(skin instanceof Spinner.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + Spinner.Skin.class.getName());
         }
 
-        super.setSkinClass(skinClass);
+        super.setSkin(skin);
     }
 
     /**

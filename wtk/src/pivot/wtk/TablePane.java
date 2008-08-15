@@ -801,22 +801,14 @@ public class TablePane extends Container {
         installSkin(TablePane.class);
     }
 
-    /**
-     * Overrides the base method implementation to throw an error if the skin
-     * class is not an instance of {@link TablePane.Skin}. Skin authors writing
-     * skins for <tt>TablePane</tt> must implement this interface.
-     *
-     * @param skinClass
-     * The type of the skin to install.
-     */
     @Override
-    public void setSkinClass(Class<? extends pivot.wtk.Skin> skinClass) {
-        if (!TablePane.Skin.class.isAssignableFrom(skinClass)) {
+    public void setSkin(pivot.wtk.Skin skin) {
+        if (!(skin instanceof TablePane.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + TablePane.Skin.class.getName());
         }
 
-        super.setSkinClass(skinClass);
+        super.setSkin(skin);
     }
 
     /**

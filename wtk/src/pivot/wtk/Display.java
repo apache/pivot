@@ -31,11 +31,11 @@ public final class Display extends Container {
 
 		assert (instance == null) : "Display already exists.";
 
-		super.setSkinClass(DisplaySkin.class);
+		super.setSkin(new DisplaySkin());
 	}
 
 	@Override
-	public void setSkinClass(Class<? extends Skin> skinClass) {
+	public void setSkin(Skin skin) {
 	    throw new UnsupportedOperationException("Can't replace Display skin.");
 	}
 

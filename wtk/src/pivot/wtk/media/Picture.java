@@ -17,17 +17,16 @@ package pivot.wtk.media;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import pivot.wtk.Dimensions;
 
 public class Picture extends Image {
-    private BufferedImage image = null;
+    private BufferedImage bufferedImage = null;
 
     private int width = 0;
     private int height = 0;
 
     protected Picture(BufferedImage image) {
-        this.image = image;
+        this.bufferedImage = image;
     }
 
     public int getWidth() {
@@ -44,7 +43,7 @@ public class Picture extends Image {
     }
 
     public int getPreferredWidth(int height) {
-        BufferedImage image = this.image;
+        BufferedImage image = this.bufferedImage;
 
         int preferredWidth = 0;
 
@@ -68,7 +67,7 @@ public class Picture extends Image {
     }
 
     public int getPreferredHeight(int width) {
-        BufferedImage image = this.image;
+        BufferedImage image = this.bufferedImage;
 
         int preferredHeight = 0;
 
@@ -92,7 +91,7 @@ public class Picture extends Image {
     }
 
     public Dimensions getPreferredSize() {
-        BufferedImage image = this.image;
+        BufferedImage image = this.bufferedImage;
 
         return (image == null) ?
             new Dimensions(0, 0) : new Dimensions(image.getWidth(),
@@ -100,14 +99,14 @@ public class Picture extends Image {
     }
 
     public void paint(Graphics2D graphics) {
-        graphics.drawImage(image, 0, 0, width, height, null);
-    }
-
-    public WritableRaster getRaster() {
-        return image.getRaster();
+        graphics.drawImage(bufferedImage, 0, 0, width, height, null);
     }
 
     public Graphics2D getGraphics() {
-        return image.createGraphics();
+        return bufferedImage.createGraphics();
+    }
+
+    public BufferedImage getBufferedImage() {
+        return bufferedImage;
     }
 }

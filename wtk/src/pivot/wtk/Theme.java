@@ -80,7 +80,7 @@ public abstract class Theme {
         Theme.theme = theme;
 
         // TODO Walk existing component tree from display down and install new
-        // skins; re-install skin by walking up class hierarchy until a skin
-        // match is found (do this here in this method)
+        // skins by calling installSkin() on each component (except for display,
+        // which is not skinnable)
     }
 }

@@ -24,7 +24,6 @@ import pivot.wtk.Cursor;
 import pivot.wtk.Display;
 import pivot.wtk.Mouse;
 import pivot.wtk.Popup;
-import pivot.wtk.Skin;
 import pivot.wtk.Window;
 
 public class PopupSkin extends WindowSkin
@@ -80,10 +79,6 @@ public class PopupSkin extends WindowSkin
     }
 
     // Component events
-    public void skinClassChanged(Component component, Class<? extends Skin> previousSkinClass) {
-        // No-op
-    }
-
     public void parentChanged(Component component, Container previousParent) {
         // Ignore this event if it came from the affiliate's window.
         // The window's parent may change as a result of a z-order change or

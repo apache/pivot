@@ -32,7 +32,6 @@ import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
 import pivot.wtk.Component;
 import pivot.wtk.Cursor;
-import pivot.wtk.Skin;
 
 /**
  * Bootstrap component loader.
@@ -66,7 +65,6 @@ public class ComponentLoader extends Loader {
     public static final String COMPONENT_RESOURCE_BUNDLE_ATTRIBUTE = "resourceBundle";
 
     public static final String ID_ATTRIBUTE = "id";
-    public static final String SKIN_CLASS_ATTRIBUTE = "skinClass";
     public static final String PREFERRED_WIDTH_ATTRIBUTE = "preferredWidth";
     public static final String PREFERRED_HEIGHT_ATTRIBUTE = "preferredHeight";
     public static final String DISPLAYABLE_ATTRIBUTE = "displayable";
@@ -382,17 +380,6 @@ public class ComponentLoader extends Loader {
                     }
 
                     rootLoader.components.put(id, component);
-                }
-
-                if (element.hasAttribute(SKIN_CLASS_ATTRIBUTE)) {
-                    String skinClassAttribute = element.getAttribute(SKIN_CLASS_ATTRIBUTE);
-
-                    try {
-                        Class<?> skinClass = Class.forName(skinClassAttribute);
-                        component.setSkinClass((Class<? extends Skin>)skinClass);
-                    } catch(Exception exception) {
-                        throw new LoadException("Unable to install data renderer.", exception);
-                    }
                 }
 
                 if (element.hasAttribute(PREFERRED_WIDTH_ATTRIBUTE)) {

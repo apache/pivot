@@ -19,7 +19,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
-import java.awt.geom.Line2D;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
@@ -451,8 +450,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
-        super.paint(graphics);
+    public void paintBackground(Graphics2D graphics) {
+        super.paintBackground(graphics);
 
         TablePane tablePane = (TablePane)getComponent();
 

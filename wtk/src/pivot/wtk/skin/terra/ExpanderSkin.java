@@ -318,8 +318,9 @@ public class ExpanderSkin extends ContainerSkin
         }
     }
 
-    public void paint(Graphics2D graphics) {
-        super.paint(graphics);
+    @Override
+    public void paintBackground(Graphics2D graphics) {
+        super.paintBackground(graphics);
 
         graphics.setStroke(new BasicStroke());
 
