@@ -21,8 +21,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 
 import pivot.collections.List;
 import pivot.wtk.ApplicationContext;
@@ -232,8 +230,8 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
                 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
 
-                graphics.draw(new Rectangle(2, 2, Math.max(width - 5, 0),
-                    Math.max(height - 5, 0)));
+                graphics.drawRect(2, 2, Math.max(width - 5, 0),
+                    Math.max(height - 5, 0));
             }
         }
 
@@ -688,11 +686,11 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
         graphics.setStroke(new BasicStroke(0));
         graphics.setPaint(borderColor);
-        graphics.draw(new Rectangle2D.Double(0, 0, width - 1, height - 1));
-        graphics.draw(new Line2D.Double(width - buttonWidth - 2, 0,
-            width - buttonWidth - 2, height - 1));
-        graphics.draw(new Line2D.Double(width - buttonWidth - 2, buttonHeight + 1,
-            width - 1, buttonHeight + 1));
+        graphics.drawRect(0, 0, width - 1, height - 1);
+        graphics.drawLine(width - buttonWidth - 2, 0,
+            width - buttonWidth - 2, height - 1);
+        graphics.drawLine(width - buttonWidth - 2, buttonHeight + 1,
+            width - 1, buttonHeight + 1);
     }
 
     public Color getColor() {
