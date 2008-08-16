@@ -20,10 +20,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 
-import pivot.wtk.Component;
-import pivot.wtk.Decorator;
-import pivot.wtk.Rectangle;
-
 /**
  * Applies a blur to paint operations. Due to the computational complexity of
  * blur operations, this decorator will take a "snapshot" of the component when
@@ -49,14 +45,11 @@ import pivot.wtk.Rectangle;
  * away count less towards the blur.
  *
  * @author tvolkert
+ * @author gbrown
  */
-public class BlurDecorator implements Decorator {
+public class BlurDecorator extends AbstractDecorator {
     private int blurMagnitude;
-
     private BufferedImage bufferedImage = null;
-    private boolean bufferedImageBlurred = false;
-
-    private Graphics2D graphics = null;
 
     /**
      * Creates a <tt>BlurDecorator</tt> with the default blur magnitude.
@@ -77,35 +70,23 @@ public class BlurDecorator implements Decorator {
         this.blurMagnitude = blurMagnitude;
     }
 
-    public Graphics2D prepare(Component component, Graphics2D graphics) {
-        this.graphics = graphics;
-
-        int width = component.getWidth();
-        int height = component.getHeight();
+    public void paint(Graphics2D graphics) {
+        int width = visual.getWidth();
+        int height = visual.getHeight();
 
         if (bufferedImage == null
             || bufferedImage.getWidth() != width
             || bufferedImage.getHeight() != height) {
-            // Create (or re-create) the buffered image
             bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
-            // Point the graphics at our buffered image to create the pristine
-            // "snapshot" of our component. After it's painted, we'll apply the
-            // blur in our update() method.
-            graphics = bufferedImage.createGraphics();
-            bufferedImageBlurred = false;
-        } else {
-            // No need to paint - we'll do it in update()
-            graphics = null;
-        }
+            // Paint the visual to the buffer
+            Graphics2D bufferedImageGraphics = bufferedImage.createGraphics();
+            visual.paint(bufferedImageGraphics);
 
-        return graphics;
-    }
+            // Dispose of the buffered image graphics
+            bufferedImageGraphics.dispose();
 
-    public void update() {
-        if (!bufferedImageBlurred) {
-            Graphics2D imageGraphics = bufferedImage.createGraphics();
-
+            // Perform the blur operation
             float[] kernel = new float[blurMagnitude * blurMagnitude];
             for (int i = 0, n = kernel.length; i < n; i++) {
                 kernel[i] = 1f / n;
@@ -114,18 +95,12 @@ public class BlurDecorator implements Decorator {
             ConvolveOp blur = new ConvolveOp(new Kernel(blurMagnitude, blurMagnitude,
                 kernel), ConvolveOp.EDGE_NO_OP, null);
 
-            // Perform the blur operation
             bufferedImage = blur.filter(bufferedImage, null);
-            bufferedImageBlurred = true;
 
-            imageGraphics.dispose();
+            bufferedImage.flush();
         }
 
         // Draw the blurred image to the real graphics
-        this.graphics.drawImage(bufferedImage, 0, 0, null);
-    }
-
-    public Rectangle transform(Component component, Rectangle bounds) {
-        return bounds;
+        graphics.drawImage(bufferedImage, 0, 0, null);
     }
 }

@@ -150,7 +150,7 @@ public class BorderSkin extends ContainerSkin
     }
 
     @Override
-    public void paintBackground(Graphics2D graphics) {
+    public void paint(Graphics2D graphics) {
         int width = getWidth();
         int height = getHeight();
 
@@ -169,7 +169,7 @@ public class BorderSkin extends ContainerSkin
         // Paint the background
         Graphics2D baseGraphics = (Graphics2D)graphics.create();
         baseGraphics.clip(clipRectangle);
-        super.paintBackground(baseGraphics);
+        super.paint(baseGraphics);
         baseGraphics.dispose();
 
         // Create a shape representing the border

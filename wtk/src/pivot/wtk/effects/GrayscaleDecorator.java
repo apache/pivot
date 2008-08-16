@@ -18,43 +18,34 @@ package pivot.wtk.effects;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import pivot.wtk.Component;
-import pivot.wtk.Decorator;
-import pivot.wtk.Rectangle;
-
 /**
  * Decorator that applies a grayscale conversion to all paint operations.
  *
  * @author tvolkert
  */
-public class GrayscaleDecorator implements Decorator {
+public class GrayscaleDecorator extends AbstractDecorator {
     private BufferedImage bufferedImage = null;
-    private Graphics2D graphics = null;
 
-    public Graphics2D prepare(Component component, Graphics2D graphics) {
-        this.graphics = graphics;
+    public void paint(Graphics2D graphics) {
+        int width = visual.getWidth();
+        int height = visual.getHeight();
 
-        bufferedImage = new BufferedImage(component.getWidth(), component.getHeight(),
-            BufferedImage.TYPE_BYTE_GRAY);
-        graphics = bufferedImage.createGraphics();
-        graphics.setClip(this.graphics.getClip());
+        if (bufferedImage == null
+            || bufferedImage.getWidth() != width
+            || bufferedImage.getHeight() != height) {
+            bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
+        }
 
-        return graphics;
-    }
+        // Paint the visual to the buffer
+        Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.createGraphics();
+        bufferedImageGraphics.setClip(graphics.getClip());
+        visual.paint(bufferedImageGraphics);
 
-    public void update() {
-        // Draw the blurred image to the real graphics
+        // Dispose of the buffered image graphics
+        bufferedImageGraphics.dispose();
+
+        // Draw the grayscale image to the real graphics
+        bufferedImage.flush();
         graphics.drawImage(bufferedImage, 0, 0, null);
-
-        // Free the buffered image
-        bufferedImage = null;
-
-        // We redirected the component's graphics to the buffered image
-        // graphics, so we dispose of the original graphics ourselves
-        graphics.dispose();
-    }
-
-    public Rectangle transform(Component component, Rectangle bounds) {
-        return bounds;
     }
 }

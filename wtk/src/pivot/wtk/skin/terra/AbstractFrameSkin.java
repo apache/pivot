@@ -518,9 +518,9 @@ public abstract class AbstractFrameSkin extends WindowSkin {
     }
 
     @Override
-    public void paintBackground(Graphics2D graphics) {
+    public void paint(Graphics2D graphics) {
         // Call the base class to paint the background
-        super.paintBackground(graphics);
+        super.paint(graphics);
 
         Window window = (Window)getComponent();
 

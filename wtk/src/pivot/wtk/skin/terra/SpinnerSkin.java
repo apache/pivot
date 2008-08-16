@@ -675,8 +675,8 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     @Override
-    public void paintBackground(Graphics2D graphics) {
-        super.paintBackground(graphics);
+    public void paint(Graphics2D graphics) {
+        super.paint(graphics);
 
         int width = getWidth();
         int height = getHeight();

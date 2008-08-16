@@ -126,15 +126,7 @@ public class WTKXSerializer implements Serializer {
 
     public Object readObject(URL location) throws IOException, SerializationException {
         this.location = location;
-
-        long t0 = System.currentTimeMillis();
-
-        Object object = readObject(new BufferedInputStream(location.openStream()));
-
-        long t1 = System.currentTimeMillis();
-        System.out.println("Parsed " + location + " in " + (t1 - t0) + " ms.");
-
-        return object;
+        return readObject(new BufferedInputStream(location.openStream()));
     }
 
     @SuppressWarnings("unchecked")

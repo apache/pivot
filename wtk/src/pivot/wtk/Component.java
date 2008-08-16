@@ -1542,7 +1542,7 @@ public abstract class Component implements Visual {
     /**
      * Paints the component. Delegates to the skin.
      */
-    public final void paint(Graphics2D graphics) {
+    public void paint(Graphics2D graphics) {
         if (skin != null) {
             skin.paint(graphics);
         }

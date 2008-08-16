@@ -450,8 +450,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     @Override
-    public void paintBackground(Graphics2D graphics) {
-        super.paintBackground(graphics);
+    public void paint(Graphics2D graphics) {
+        super.paint(graphics);
 
         TablePane tablePane = (TablePane)getComponent();
 

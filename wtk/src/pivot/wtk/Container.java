@@ -15,6 +15,9 @@
  */
 package pivot.wtk;
 
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 import pivot.collections.ArrayList;
@@ -317,6 +320,63 @@ public abstract class Container extends Component
                 }
             } finally {
                 valid = true;
+            }
+        }
+    }
+
+    @Override
+    public void paint(Graphics2D graphics) {
+        // Give the base method a copy of the graphics context; otherwise,
+        // container skins can change the graphics state before it is passed
+        // to subcomponents
+        Graphics2D containerGraphics = (Graphics2D)graphics.create();
+        super.paint(containerGraphics);
+        containerGraphics.dispose();
+
+        Shape clip = graphics.getClip();
+        Rectangle2D clipBounds = (clip == null) ? getBounds() : clip.getBounds();
+
+        for (Component component : this) {
+            Rectangle componentBounds = component.getBounds();
+
+            // Only paint components that are visible and intersect the
+            // current clip rectangle
+            if (component.isVisible()
+                && componentBounds.intersects(clipBounds)) {
+                // Create a copy of the current graphics context and set a clip
+                // rectangle so the component can't paint outside of its
+                // boundaries
+                Graphics2D componentGraphics = (Graphics2D)graphics.create();
+                componentGraphics.clip(componentBounds);
+
+                // Translate the context to the component's coordinate system
+                componentGraphics.translate(component.getX(), component.getY());
+
+                // Paint the component
+                if (componentGraphics != null) {
+                    // If the component has decorators, prepare them and
+                    // call paint() on the last one. Otherwise, just paint
+                    // the component.
+                    DecoratorSequence decorators = component.getDecorators();
+
+                    if (decorators.getLength() > 0) {
+                        for (int i = 0, n = decorators.getLength(); i < n; i++) {
+                            Decorator decorator = decorators.get(i);
+
+                            if (i == 0) {
+                                decorator.prepare(component);
+                            } else {
+                                decorator.prepare(decorators.get(i - 1));
+                            }
+                        }
+
+                        decorators.get(decorators.getLength() - 1).paint(componentGraphics);
+                    } else {
+                        component.paint(componentGraphics);
+                    }
+                }
+
+                componentGraphics.dispose();
             }
         }
     }

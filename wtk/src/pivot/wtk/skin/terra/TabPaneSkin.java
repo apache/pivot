@@ -675,13 +675,13 @@ public class TabPaneSkin extends ContainerSkin
     }
 
     @Override
-    public void paintBackground(Graphics2D graphics) {
+    public void paint(Graphics2D graphics) {
         TabPane tabPane = (TabPane)getComponent();
 
         Rectangle tabPaneBounds = tabPane.getBounds();
 
         // Call the base class to paint the background
-        super.paintBackground(graphics);
+        super.paint(graphics);
 
         // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
