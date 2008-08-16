@@ -22,6 +22,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.ListListener;
 import pivot.collections.Sequence;
+import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
 import pivot.wtk.content.ListViewItemRenderer;
 
@@ -401,6 +402,21 @@ public class ListView extends Component {
             this.listData = listData;
             listViewListeners.listDataChanged(this, previousListData);
         }
+    }
+
+    /**
+     * Sets the list data. Clears any existing selection state.
+     *
+     * @param listData
+     * A JSON string (must begin with <tt>[</tt> and end with <tt>]</tt>)
+     * denoting the list that will be presented by this list view.
+     */
+    public void setListData(String listData) {
+        if (listData == null) {
+            throw new IllegalArgumentException("listData is null.");
+        }
+
+        setListData(JSONSerializer.parseList(listData));
     }
 
     @Override
