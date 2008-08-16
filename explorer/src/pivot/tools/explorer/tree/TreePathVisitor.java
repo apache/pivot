@@ -3,7 +3,6 @@
  */
 package pivot.tools.explorer.tree;
 
-import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.wtk.TreeView;
 
@@ -16,7 +15,7 @@ import pivot.wtk.TreeView;
  *
  * @param <T> tree node type
  */
-public abstract class TreePathVisitor<T extends Sequence<? super T>> {
+public abstract class TreePathVisitor<T extends Sequence<T>> {
 
 
 	/**
@@ -27,13 +26,13 @@ public abstract class TreePathVisitor<T extends Sequence<? super T>> {
 	@SuppressWarnings("unchecked")
 	public final void start( TreeView treeView, Sequence<Integer> path ) {
 
-		List<T> nodes = (List<T>) treeView.getTreeData();
+		Sequence<T> nodes = (Sequence<T>) treeView.getTreeData();
 
 		for ( int i=0, s=path.getLength(); i< s; i++ ) {
 			T node = nodes.get( path.get(i) );
 			visit( node );
-			if ( node instanceof List<?> ) {
-				nodes = (List<T>)node;
+			if ( node instanceof Sequence<?> ) {
+				nodes = (Sequence<T>) node;
 			} else {
 				throw new RuntimeException( "Node does not support List interface");
 			}

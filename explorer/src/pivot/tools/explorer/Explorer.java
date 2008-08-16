@@ -24,18 +24,20 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 
     private Window window;
     private TreeView componentTree;
-    private TableView propertiesTable, stylesTable;
+    private TableView propertiesTable, stylesTable, attributesTable;
     private Label statusLabel;
+    private Component attributesTab;
 
     @Override
     public void startup() throws Exception {
-        resources = new Resources(getClass().getName(), Locale.getDefault());
+
+    	String className = getClass().getName().toLowerCase();
+        resources = new Resources(className, Locale.getDefault());
         wtkxSerializer = new WTKXSerializer(resources);
 
         ApplicationContext applicationContext = ApplicationContext.getInstance();
         applicationContext.setTitle((String) resources.get("mainWindowName"));
 
-        String className = getClass().getName().toLowerCase();
         String resourceName = String.format("%s.wtkx", className.replace('.', '/'));
 
         window = new Window((Component) wtkxSerializer.readObject(resourceName));
@@ -46,6 +48,8 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
         componentTree = (TreeView) wtkxSerializer.getObjectByName("trComponents");
         propertiesTable = (TableView) wtkxSerializer.getObjectByName("tbProperties");
         stylesTable = (TableView) wtkxSerializer.getObjectByName("tbStyles");
+        attributesTable = (TableView) wtkxSerializer.getObjectByName("tbAttributes");
+        attributesTab = (Component)wtkxSerializer.getObjectByName("tabAttributes");
 
         initComponentTree(Display.getInstance());
         Component.setFocusedComponent(componentTree);
@@ -60,6 +64,8 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
     private void initComponentTree(Iterable<Component> components) {
         componentTree.getTreeViewSelectionListeners().add(this);
 
+//        attributesTab.setEnabled( false );
+        
         // build tree data
         List<ComponentAdapter> componentList = new ArrayList<ComponentAdapter>();
         for (Component c : components) {
@@ -69,6 +75,8 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
         Sequence<Integer> rootPath = Collections.list(0);
         componentTree.setSelectedPath(rootPath);
         componentTree.expandBranch(rootPath);
+        componentTree.setNodeRenderer( new ComponentNodeRenderer() );
+        
     }
 
     public void selectionChanged(TreeView treeView) {
@@ -77,10 +85,17 @@ public class Explorer extends ApplicationAdapter implements TreeViewSelectionLis
 
         statusLabel.setText(nodePath.toString());
 
+        
         if (nodePath.getLength() > 0) {
             ComponentAdapter node = nodePath.get(nodePath.getLength() - 1);
             propertiesTable.setTableData(node.getProperties());
             stylesTable.setTableData(node.getStyles());
+            
+            List<TableEntryAdapter> attrs = node.getAttributes();
+			attributesTable.setTableData(attrs);
+			attributesTab.setDisplayable( attrs.getLength() > 0 );
+            
+            
         } else {
             List<TableEntryAdapter> emptyList = Collections.emptyList();
             propertiesTable.setTableData(emptyList);

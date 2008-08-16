@@ -24,7 +24,7 @@ public class TreeNodeList<T> extends ArrayList<T> {
 	 * @param indexPath
 	 * @return
 	 */
-	public static final <T extends Sequence<? super T>> TreeNodeList<T> create( final TreeView treeView, final Sequence<Integer> indexPath ) {
+	public static final <T extends Sequence<T>> TreeNodeList<T> create( final TreeView treeView, final Sequence<Integer> indexPath ) {
 
 		final TreeNodeList<T> result = new TreeNodeList<T>();
 

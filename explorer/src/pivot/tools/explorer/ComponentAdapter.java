@@ -10,6 +10,7 @@ import pivot.collections.List;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentInfo;
 import pivot.wtk.Container;
+import pivot.wtk.Component.Attributes;
 import pivot.wtk.Component.StyleDictionary;
 import pivot.wtk.content.TreeViewNodeRenderer;
 
@@ -20,8 +21,8 @@ public class ComponentAdapter
 	private static final long serialVersionUID = 1L;
 
 	private Component component;
-	private List<TableEntryAdapter> properties, styles;
-	private BeanDictionary beanDictionary;
+	private List<TableEntryAdapter> properties, styles, attributes;
+	
 
 	public ComponentAdapter( Component component, boolean buildHierarchy ) {
 		super();
@@ -31,7 +32,6 @@ public class ComponentAdapter
 		}
 
 		this.component = component;
-		beanDictionary = new BeanDictionary(component);
 
 
 		if ( buildHierarchy && component instanceof Container ) {
@@ -48,6 +48,8 @@ public class ComponentAdapter
 
 	public List<TableEntryAdapter> getProperties() {
 		if (properties == null) {
+			
+			BeanDictionary beanDictionary = new BeanDictionary(component);
 			properties = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
 
 			for ( String s: beanDictionary ) {
@@ -69,6 +71,23 @@ public class ComponentAdapter
 			}
 		}
 		return styles;
+	}
+	
+	public List<TableEntryAdapter> getAttributes() {
+		if (attributes == null) {
+
+			attributes = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
+			Attributes attrs = component.getAttributes();
+			if (attrs != null) {
+				BeanDictionary beanDictionary = new BeanDictionary(attrs);
+				for ( String s: beanDictionary ) {
+					attributes.add( new TableEntryAdapter( beanDictionary, s ));
+				}
+			}
+
+
+		}
+		return attributes;
 	}
 
 

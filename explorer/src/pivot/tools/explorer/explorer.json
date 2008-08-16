@@ -2,6 +2,7 @@
     mainWindowComponentsTabName: "Components",
     mainWindowPropertiesTabName: "Properties",
     mainWindowStylesTabName: "Styles",
+    mainWindowAttrbutesTabName: "Attributes",
     commonBorderStyles: {
         padding: 0,
         borderColor: "#cccac2"

@@ -27,7 +27,7 @@
                 <left>
                     <TabPane tabOrientation="horizontal" selectedIndex="0">
                         <tabs>
-                            <Border TabPane.label="%mainWindowComponentsTabName" styles="{padding:0, borderColor:'#cccac2'}">
+                            <Border TabPane.label="%mainWindowComponentsTabName" styles="%commonBorderStyles">
                                 <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
                                     <view>
                                         <TreeView wtkx:id="trComponents"/>
@@ -40,7 +40,7 @@
                 <right>
                     <TabPane tabOrientation="horizontal" selectedIndex="0">
                         <tabs>
-                            <Border TabPane.label="%mainWindowPropertiesTabName" styles="{padding:0, borderColor:'#cccac2'}">
+                            <Border TabPane.label="%mainWindowPropertiesTabName" styles="%commonBorderStyles">
                                 <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
                                     <view>
                                         <TableView wtkx:id="tbProperties" selectMode="single">
@@ -55,7 +55,7 @@
                                     </columnHeader>
                                 </ScrollPane>
                             </Border>
-                            <Border TabPane.label="%mainWindowStylesTabName" styles="{padding:0, borderColor:'#cccac2'}">
+                            <Border TabPane.label="%mainWindowStylesTabName" styles="%commonBorderStyles">
                                 <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
                                     <view>
                                         <TableView wtkx:id="tbStyles" selectMode="single">
@@ -67,6 +67,21 @@
                                     </view>
                                     <columnHeader>
                                         <TableViewHeader wtkx:id="tbStylesHeader" tableView="$tbStyles" />
+                                    </columnHeader>
+                                </ScrollPane>
+                            </Border>
+                            <Border wtkx:id="tabAttributes" TabPane.label="%mainWindowAttrbutesTabName" styles="%commonBorderStyles">
+                                <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+                                    <view>
+                                        <TableView wtkx:id="tbAttributes" selectMode="single">
+                                            <columns>
+                                                <TableView.Column name="name" width="100" headerData="Name" />
+                                                <TableView.Column name="value" width="1*" headerData="Value" />
+                                            </columns>
+                                        </TableView>
+                                    </view>
+                                    <columnHeader>
+                                        <TableViewHeader wtkx:id="tbAttributesHeader" tableView="$tbAttributes" />
                                     </columnHeader>
                                 </ScrollPane>
                             </Border>
