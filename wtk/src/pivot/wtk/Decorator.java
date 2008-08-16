@@ -21,4 +21,20 @@ public interface Decorator extends Visual {
      * The affected area in the decorator.
      */
     public Rectangle getDirtyRegion(Rectangle bounds);
+
+    /**
+     * Maps a point in this decorator's coordinate space to the visual's
+     * coordinate space.
+     *
+     * @param x
+     * The x-coordinate in this decorator's coordinate space
+     *
+     * @param y
+     * The y-coordinate in this decorator's coordinate space
+     *
+     * @return
+     * A point containing the translated coordinates, or <tt>null</tt> if the
+     * coordinates cannot be mapped.
+     */
+    public Point mapPointToVisual(int x, int y);
 }

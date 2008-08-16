@@ -1223,7 +1223,7 @@ public abstract class Component implements Visual {
      *
      * @return
      * A point containing the translated coordinates, or <tt>null</tt> if the
-     * component is not a descendant of the specified ancestor
+     * component is not a descendant of the specified ancestor.
      */
     public Point mapPointToAncestor(Container ancestor, int x, int y) {
         Point coordinates = null;
@@ -1257,7 +1257,7 @@ public abstract class Component implements Visual {
      *
      * @return
      * A point containing the translated coordinates, or <tt>null</tt> if the
-     * component is not a descendant of the specified ancestor
+     * component is not a descendant of the specified ancestor.
      */
     public Point mapPointFromAncestor(Container ancestor, int x, int y) {
         Point coordinates = null;

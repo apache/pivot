@@ -17,6 +17,7 @@ package pivot.wtk.effects;
 
 import pivot.wtk.Decorator;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Point;
 import pivot.wtk.Rectangle;
 import pivot.wtk.Visual;
 
@@ -35,6 +36,10 @@ public abstract class AbstractDecorator implements Decorator {
 
     public Rectangle getDirtyRegion(Rectangle bounds) {
         return bounds;
+    }
+
+    public Point mapPointToVisual(int x, int y) {
+        return new Point(x, y);
     }
 
     public int getWidth() {

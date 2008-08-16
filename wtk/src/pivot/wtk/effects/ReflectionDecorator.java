@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 
 import pivot.wtk.Decorator;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Point;
 import pivot.wtk.Rectangle;
 import pivot.wtk.Visual;
 
@@ -32,6 +33,13 @@ public class ReflectionDecorator implements Decorator {
         bounds.y = (height * 2) - (bounds.y + bounds.height);
 
         return bounds;
+    }
+
+    public Point mapPointToVisual(int x, int y) {
+        // TODO If the point is outside the bounds of the source visual,
+        // return null
+
+        return new Point(x, y);
     }
 
     public int getWidth() {
