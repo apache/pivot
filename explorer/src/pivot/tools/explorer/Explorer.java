@@ -27,8 +27,7 @@ import pivot.wtkx.WTKXSerializer;
 
 public class Explorer implements Application, TreeViewSelectionListener {
     private Resources resources;
-    private WTKXSerializer wtkxSerializer;
-
+    
     private Application application;
     
     private Dialog dialog;
@@ -45,15 +44,10 @@ public class Explorer implements Application, TreeViewSelectionListener {
     	// initialize Explorer
     	String className = getClass().getName().toLowerCase();
         resources = new Resources(className, Locale.getDefault());
-        wtkxSerializer = new WTKXSerializer(resources);
-
-        ApplicationContext applicationContext = ApplicationContext.getInstance();
-        applicationContext.setTitle((String) resources.get("mainWindowName"));
+        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
 
         String resourceName = String.format("%s.wtkx", className.replace('.', '/'));
-
         dialog = createMainWindow( application, (Component) wtkxSerializer.readObject(resourceName));
-        dialog.open();
         
         statusLabel = (Label) wtkxSerializer.getObjectByName("lbStatus");
         componentTree = (TreeView) wtkxSerializer.getObjectByName("trComponents");
@@ -62,31 +56,26 @@ public class Explorer implements Application, TreeViewSelectionListener {
         attributesTable = (TableView) wtkxSerializer.getObjectByName("tbAttributes");
         attributesTab = (Component)wtkxSerializer.getObjectByName("tabAttributes");
         
+        initComponentTree(componentTree, Display.getInstance());
         
-        
-        initComponentTree(Display.getInstance());
+        dialog.open();
         Component.setFocusedComponent(componentTree);
+
     }
 
     public void shutdown() throws Exception {
-        if (dialog != null)
-            dialog.close();
-        if ( application != null  ) {
-        	application.shutdown();
-        }
+        dialog.close();
+    	if (application != null) application.shutdown();
     }
+     
     
 
 	public void resume() throws Exception {
-		if ( application != null  ) {
-        	application.resume();
-        }
+		if (application != null) application.resume();
 	}
 
 	public void suspend() throws Exception {
-		if ( application != null  ) {
-        	application.suspend();
-        }
+		if (application != null) application.suspend();
 	}
 
 	/**
@@ -112,7 +101,7 @@ public class Explorer implements Application, TreeViewSelectionListener {
     }
 
     /**
-     * Create and sets up the main explorer window 
+     * Creates and sets up the main explorer window 
      * @param subjectApplication
      * @param content
      * @return
@@ -152,11 +141,9 @@ public class Explorer implements Application, TreeViewSelectionListener {
     	
     }
 
-    private void initComponentTree(Iterable<Component> components) {
-        componentTree.getTreeViewSelectionListeners().add(this);
+    private void initComponentTree( TreeView tree, Iterable<Component> components) {
+    	tree.getTreeViewSelectionListeners().add(this);
 
-//        attributesTab.setEnabled( false );
-        
         // build tree data
         List<ComponentAdapter> componentList = new ArrayList<ComponentAdapter>();
         for (Component c : components) {
@@ -164,20 +151,17 @@ public class Explorer implements Application, TreeViewSelectionListener {
         		componentList.add(new ComponentAdapter(c, true));
         	}
         }
-        componentTree.setTreeData(componentList);
+        tree.setTreeData(componentList);
         Sequence<Integer> rootPath = Collections.list(0);
-        componentTree.setSelectedPath(rootPath);
-        componentTree.expandBranch(rootPath);
-        componentTree.setNodeRenderer( new ComponentNodeRenderer() );
+        tree.setSelectedPath(rootPath);
+        tree.expandBranch(rootPath);
+        tree.setNodeRenderer( new ComponentNodeRenderer() );
         
     }
 
     public void selectionChanged(TreeView treeView) {
-        Sequence<ComponentAdapter> nodePath = TreeNodeList.create(treeView,
-            componentTree.getSelectedPath());
-
+        Sequence<ComponentAdapter> nodePath = TreeNodeList.create(treeView,	treeView.getSelectedPath());
         statusLabel.setText(nodePath.toString());
-
         
         if (nodePath.getLength() > 0) {
         	
