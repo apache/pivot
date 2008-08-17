@@ -141,7 +141,7 @@ public class Explorer implements Application, TreeViewSelectionListener {
     	
     }
 
-    private void initComponentTree( TreeView tree, Iterable<Component> components) {
+    private void initComponentTree(TreeView tree, Iterable<Component> components) {
     	tree.getTreeViewSelectionListeners().add(this);
 
         // build tree data
