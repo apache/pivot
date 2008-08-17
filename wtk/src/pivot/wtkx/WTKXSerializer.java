@@ -438,6 +438,35 @@ public class WTKXSerializer implements Serializer {
     }
 
     /**
+     * Retrieves a included serializer by its namespace.
+     *
+     * @param name
+     * The name of the serializer, relative to this loader. The values's name
+     * is the concatentation of its parent namespaces and its namespace,
+     * separated by periods (e.g. "foo.bar.baz").
+     *
+     * @return The named serializer, or <tt>null</tt> if a serializer with the
+     * given name does not exist.
+     */
+    public WTKXSerializer getSerializerByName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("name is null.");
+        }
+
+        WTKXSerializer serializer = this;
+        String[] namespacePath = name.split("\\.");
+
+        int i = 0;
+        int n = namespacePath.length;
+        while (i < n && serializer != null) {
+            String namespace = namespacePath[i++];
+            serializer = serializer.includeSerializers.get(namespace);
+        }
+
+        return serializer;
+    }
+
+    /**
      * Retrieves a named object.
      *
      * @param name
