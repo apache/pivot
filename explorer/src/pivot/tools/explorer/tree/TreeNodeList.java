@@ -2,7 +2,7 @@ package pivot.tools.explorer.tree;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
-import pivot.tools.explorer.tools.Strings;
+import pivot.tools.explorer.utils.Strings;
 import pivot.wtk.TreeView;
 
 /**

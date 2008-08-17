@@ -76,12 +76,12 @@ public class ComponentAdapter
 	public List<TableEntryAdapter> getAttributes() {
 		if (attributes == null) {
 
-			attributes = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
+			attributes = new ArrayList<TableEntryAdapter>(TableEntryAdapter.COMPARATOR);
 			Attributes attrs = component.getAttributes();
 			if (attrs != null) {
 				BeanDictionary beanDictionary = new BeanDictionary(attrs);
 				for ( String s: beanDictionary ) {
-					attributes.add( new TableEntryAdapter( beanDictionary, s ));
+					attributes.add( new TableEntryAdapter(beanDictionary, s));
 				}
 			}
 
@@ -106,11 +106,12 @@ public class ComponentAdapter
 	public Object get(String key) {
 
 		if ( TreeViewNodeRenderer.LABEL_KEY.equals(key) ) {
-			return toString();
+			return toString() + (component.isDisplayable()? "": " (hidden)");
 		} else if ( TreeViewNodeRenderer.ICON_KEY.equals(key) ){
 			if ( url == null ) {
 			    ComponentInfo componentInfo = component.getClass().getAnnotation( ComponentInfo.class );
-				url = component.getClass().getResource( componentInfo != null? componentInfo.icon():"component.png");
+				url = component.getClass().getResource( 
+					componentInfo != null? componentInfo.icon():"component.png");
 			}
 			return url;
 		} else {

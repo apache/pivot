@@ -15,7 +15,7 @@
 	limitations under the License.
 -->
 
-<TablePane styles="{padding:3, spacing:2}"
+<TablePane styles="{padding:3, spacing:2, }"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <columns>
         <TablePane.Column width="1*" />
@@ -23,7 +23,7 @@
 
 	<rows>
 		<TablePane.Row height="1*">
-            <SplitPane orientation="horizontal" splitLocation="350">
+            <SplitPane orientation="horizontal" splitLocation="150">
                 <left>
                     <TabPane tabOrientation="horizontal" selectedIndex="0">
                         <tabs>

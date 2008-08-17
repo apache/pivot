@@ -4,6 +4,14 @@ import java.util.Comparator;
 
 import pivot.collections.Dictionary;
 
+/**
+ * Adapts dictionary entry (key/value pair) to be shown in the TableView
+ * TableView should have two columns: name and value 
+ * 
+ * @author Eugene Ryzhikov
+ * @date   Aug 16, 2008
+ *
+ */
 public class TableEntryAdapter implements Dictionary<String, Object>{
 
 	private Dictionary<String, Object> dictionary;

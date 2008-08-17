@@ -3,6 +3,7 @@
     mainWindowPropertiesTabName: "Properties",
     mainWindowStylesTabName: "Styles",
     mainWindowAttrbutesTabName: "Attributes",
+    mainWindowSplitLocation: 150,
     commonBorderStyles: {
         padding: 0,
         borderColor: "#cccac2"
