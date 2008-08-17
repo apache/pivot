@@ -145,6 +145,8 @@ public class TableViewHeaderSkin extends ComponentSkin
     private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
     private Color pressedBevelColor = new Color(0xCC, 0xCA, 0xC2);
     private Color disabledBevelColor = Color.WHITE;
+    private boolean headersPressable = true;
+    private boolean columnsResizable = true;
 
     private int pressedHeaderIndex = -1;
 
@@ -627,6 +629,25 @@ public class TableViewHeaderSkin extends ComponentSkin
         setDisabledBackgroundColor(Color.decode(disabledBevelColor));
     }
 
+    public boolean getHeadersPressable() {
+        return headersPressable;
+    }
+
+    public void setHeadersPressable(boolean headersPressable) {
+        this.headersPressable = headersPressable;
+
+        pressedHeaderIndex = -1;
+        repaintComponent();
+    }
+
+    public boolean getColumnsResizable() {
+        return columnsResizable;
+    }
+
+    public void setColumnsResizable(boolean columnsResizable) {
+        this.columnsResizable = columnsResizable;
+    }
+
     @Override
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
@@ -650,7 +671,8 @@ public class TableViewHeaderSkin extends ComponentSkin
                 TableView.Column column = tableView.getColumns().get(headerIndex);
 
                 if (Mouse.getButtons() == 0) {
-                    if (!column.isRelative()
+                    if (columnsResizable
+                        && !column.isRelative()
                         && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
                         ApplicationContext.getInstance().setCursor(Cursor.RESIZE_EAST);
                     } else {
@@ -686,7 +708,8 @@ public class TableViewHeaderSkin extends ComponentSkin
             Rectangle headerBounds = getHeaderBounds(headerIndex);
             TableView.Column column = tableView.getColumns().get(headerIndex);
 
-            if (!column.isRelative()
+            if (columnsResizable
+                && !column.isRelative()
                 && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
                 // Begin drag
                 Point headerCoordinates = tableViewHeader.mapPointToAncestor(Display.getInstance(),
@@ -695,7 +718,7 @@ public class TableViewHeaderSkin extends ComponentSkin
                     headerBounds.x + headerBounds.width - x);
                 Display.getInstance().getComponentMouseListeners().add(dragHandler);
                 Display.getInstance().getComponentMouseButtonListeners().add(dragHandler);
-            } else {
+            } else if (headersPressable) {
                 pressedHeaderIndex = getHeaderAt(x);
                 repaintComponent(getHeaderBounds(pressedHeaderIndex));
             }
@@ -719,7 +742,8 @@ public class TableViewHeaderSkin extends ComponentSkin
     public void mouseClick(Mouse.Button button, int x, int y, int count) {
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
 
-        if (pressedHeaderIndex != -1) {
+        if (pressedHeaderIndex != -1
+            && headersPressable) {
             tableViewHeader.pressHeader(pressedHeaderIndex);
         }
 
