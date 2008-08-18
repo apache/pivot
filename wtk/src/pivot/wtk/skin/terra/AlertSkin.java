@@ -16,6 +16,8 @@
 package pivot.wtk.skin.terra;
 
 import pivot.collections.ArrayList;
+import pivot.collections.Map;
+import pivot.util.Resources;
 import pivot.wtk.Alert;
 import pivot.wtk.AlertListener;
 import pivot.wtk.Button;
@@ -44,11 +46,22 @@ public class AlertSkin extends DialogSkin
     private static Image errorImage = null;
     private static Image questionImage = null;
 
+    private static Resources resources = null;
+
+    static {
+        try {
+            resources = new Resources(AlertSkin.class.getName());
+        } catch(Exception exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
     public AlertSkin() {
         setResizable(false);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void install(Component component) {
         validateComponentType(component, Alert.class);
 
@@ -76,8 +89,8 @@ public class AlertSkin extends DialogSkin
         switch (alert.getType()) {
             case INFO: {
                 if (informationImage == null) {
-                    informationImage =
-                        Image.load(getClass().getResource("AlertSkin-Information-32x32.png"));
+                    String informationImageName = (String)resources.get("informationImageName");
+                    informationImage = Image.load(getClass().getResource(informationImageName));
                 }
 
                 typeImage = informationImage;
@@ -86,8 +99,8 @@ public class AlertSkin extends DialogSkin
 
             case WARNING: {
                 if (warningImage == null) {
-                    warningImage =
-                        Image.load(getClass().getResource("AlertSkin-Warning-32x32.png"));
+                    String warningImageName = (String)resources.get("warningImageName");
+                    warningImage = Image.load(getClass().getResource(warningImageName));
                 }
 
                 typeImage = warningImage;
@@ -96,8 +109,8 @@ public class AlertSkin extends DialogSkin
 
             case ERROR: {
                 if (errorImage == null) {
-                    errorImage =
-                        Image.load(getClass().getResource("AlertSkin-Error-32x32.png"));
+                    String errorImageName = (String)resources.get("errorImageName");
+                    errorImage = Image.load(getClass().getResource(errorImageName));
                 }
 
                 typeImage = errorImage;
@@ -106,8 +119,8 @@ public class AlertSkin extends DialogSkin
 
             case QUESTION: {
                 if (questionImage == null) {
-                    questionImage =
-                        Image.load(getClass().getResource("AlertSkin-Question-32x32.png"));
+                    String questionImageName = (String)resources.get("questionImageName");
+                    questionImage = Image.load(getClass().getResource(questionImageName));
                 }
 
                 typeImage = questionImage;
@@ -136,12 +149,7 @@ public class AlertSkin extends DialogSkin
             Object option = alert.getOption(i);
 
             PushButton optionButton = new PushButton(option);
-
-            try {
-                optionButton.setStyles(getClass().getResource("alert_skin.option_button.json"));
-            } catch(Exception exception) {
-                throw new RuntimeException(exception);
-            }
+            optionButton.setStyles((Map<String, Object>)resources.get("optionButtonStyles"));
 
             int preferredHeight = optionButton.getPreferredHeight(-1);
             int minWidth = 3 * preferredHeight;
