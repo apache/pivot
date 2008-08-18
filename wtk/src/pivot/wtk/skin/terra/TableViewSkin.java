@@ -69,7 +69,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     private Color gridColor = new Color(0xF7, 0xF5, 0xEB);
     private boolean showHorizontalGridLines = true;
     private boolean showVerticalGridLines = true;
-    private boolean includeLastVerticalGridLine = false;
+    private boolean includeTrailingVerticalGridLine = false;
 
     private int highlightedIndex = -1;
 
@@ -104,7 +104,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         TableView.ColumnSequence columns = tableView.getColumns();
 
         int n = columns.getLength();
-        int gridLineStop = includeLastVerticalGridLine ? n : n - 1;
+        int gridLineStop = includeTrailingVerticalGridLine ? n : n - 1;
 
         for (int i = 0; i < n; i++) {
             TableView.Column column = columns.get(i);
@@ -671,12 +671,12 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         repaintComponent();
     }
 
-    public boolean getIncludeLastVerticalGridLine() {
-        return includeLastVerticalGridLine;
+    public boolean getIncludeTrailingVerticalGridLine() {
+        return includeTrailingVerticalGridLine;
     }
 
-    public void setIncludeLastVerticalGridLine(boolean includeLastVerticalGridLine) {
-        this.includeLastVerticalGridLine = includeLastVerticalGridLine;
+    public void setIncludeTrailingVerticalGridLine(boolean includeTrailingVerticalGridLine) {
+        this.includeTrailingVerticalGridLine = includeTrailingVerticalGridLine;
         invalidateComponent();
     }
 
