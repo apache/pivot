@@ -1,0 +1,6 @@
+{   color: "#ffffff",
+    backgroundColor: "#3c77b2",
+    borderColor: "#2c5680",
+    bevelColor: "#4589cc",
+    pressedBevelColor: "#346699"
+}

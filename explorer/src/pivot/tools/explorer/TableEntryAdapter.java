@@ -6,8 +6,8 @@ import pivot.collections.Dictionary;
 
 /**
  * Adapts dictionary entry (key/value pair) to be shown in the TableView
- * TableView should have two columns: name and value 
- * 
+ * TableView should have two columns: name and value
+ *
  * @author Eugene Ryzhikov
  * @date   Aug 16, 2008
  *

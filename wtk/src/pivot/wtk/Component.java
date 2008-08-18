@@ -16,6 +16,8 @@
 package pivot.wtk;
 
 import java.awt.Graphics2D;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Iterator;
 
 import pivot.beans.BeanDictionary;
@@ -25,6 +27,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.Map;
 import pivot.collections.Sequence;
 import pivot.serialization.JSONSerializer;
+import pivot.serialization.SerializationException;
 import pivot.util.ListenerList;
 import pivot.wtk.Mouse.Button;
 import pivot.wtk.Mouse.ScrollType;
@@ -1961,6 +1964,37 @@ public abstract class Component implements Visual {
         for (String key : styles) {
             getStyles().put(key, styles.get(key));
         }
+    }
+
+    /**
+     * Applies a set of styles.
+     *
+     * @param styles
+     * The location of the styles to apply. If the styles have been previously
+     * applied, they will be retrieved from the resource cache in the
+     * application context. Otherwise, they will be loaded from the given
+     * location and added to the cache before being applied.
+     */
+    @SuppressWarnings("unchecked")
+    public void setStyles(URL styles) throws IOException, SerializationException {
+        if (styles == null) {
+            throw new IllegalArgumentException("styles is null.");
+        }
+
+        ApplicationContext applicationContext = ApplicationContext.getInstance();
+
+        Map<String, Object> cachedStyles =
+            (Map<String, Object>)applicationContext.getResources().get(styles);
+
+        if (cachedStyles == null) {
+            JSONSerializer jsonSerializer = new JSONSerializer();
+            cachedStyles =
+                (Map<String, Object>)jsonSerializer.readObject(styles.openStream());
+
+            applicationContext.getResources().put(styles, cachedStyles);
+        }
+
+        setStyles(cachedStyles);
     }
 
     /**

@@ -15,10 +15,14 @@
  */
 package pivot.wtk;
 
+import java.io.IOException;
+
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.serialization.SerializationException;
 import pivot.util.ListenerList;
+import pivot.util.Resources;
 
 public class Alert extends Dialog {
     public enum Type {
@@ -49,6 +53,8 @@ public class Alert extends Dialog {
     private int selectedOption = -1;
 
     private AlertListenerList alertListeners = new AlertListenerList();
+
+    private static Resources resources = null;
 
     public Alert(Type type, String message, Sequence<?> options) {
         this(type, message, options, null);
@@ -130,12 +136,21 @@ public class Alert extends Dialog {
     }
 
     public static void alert(Type type, String message, Window owner) {
-        // TODO i18n
-        List<String> options = new ArrayList<String>();
-        options.add("OK");
+        if (resources == null) {
+            try {
+                resources = new Resources(Alert.class.getName());
+            } catch(IOException exception) {
+                throw new RuntimeException(exception);
+            } catch(SerializationException exception) {
+                throw new RuntimeException(exception);
+            }
+        }
+
+        List<Object> options = new ArrayList<Object>();
+        options.add(resources.get("defaultOption"));
 
         Alert alert = new Alert(type, message, options, null);
-        alert.setTitle("Alert");
+        alert.setTitle((String)resources.get("defaultTitle"));
         alert.setSelectedOption(0);
 
         alert.open(owner);

@@ -22,7 +22,7 @@ public class ComponentAdapter
 
 	private Component component;
 	private List<TableEntryAdapter> properties, styles, attributes;
-	
+
 
 	public ComponentAdapter( Component component, boolean buildHierarchy ) {
 		super();
@@ -48,7 +48,7 @@ public class ComponentAdapter
 
 	public List<TableEntryAdapter> getProperties() {
 		if (properties == null) {
-			
+
 			BeanDictionary beanDictionary = new BeanDictionary(component);
 			properties = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
 
@@ -72,7 +72,7 @@ public class ComponentAdapter
 		}
 		return styles;
 	}
-	
+
 	public List<TableEntryAdapter> getAttributes() {
 		if (attributes == null) {
 
@@ -110,7 +110,7 @@ public class ComponentAdapter
 		} else if ( TreeViewNodeRenderer.ICON_KEY.equals(key) ){
 			if ( url == null ) {
 			    ComponentInfo componentInfo = component.getClass().getAnnotation( ComponentInfo.class );
-				url = component.getClass().getResource( 
+				url = component.getClass().getResource(
 					componentInfo != null? componentInfo.icon():"component.png");
 			}
 			return url;

@@ -15,8 +15,6 @@
  */
 package pivot.wtk.skin.terra;
 
-import java.awt.Color;
-
 import pivot.collections.ArrayList;
 import pivot.wtk.Alert;
 import pivot.wtk.AlertListener;
@@ -39,12 +37,6 @@ import pivot.wtkx.WTKXSerializer;
  */
 public class AlertSkin extends DialogSkin
     implements AlertListener {
-    private static final Color OPTION_BUTTON_COLOR = Color.WHITE;
-    private static final Color OPTION_BUTTON_BACKGROUND_COLOR = new Color(0x3c, 0x77, 0xb2);
-    private static final Color OPTION_BUTTON_BORDER_COLOR = new Color(0x2c, 0x56, 0x80);
-    private static final Color OPTION_BUTTON_BEVEL_COLOR = new Color(0x45, 0x89, 0xcc);
-    private static final Color OPTION_BUTTON_PRESSED_BEVEL_COLOR = new Color(0x34, 0x66, 0x99);
-
     private ArrayList<Button> optionButtons = new ArrayList<Button>();
 
     private static Image informationImage = null;
@@ -70,7 +62,7 @@ public class AlertSkin extends DialogSkin
         Component content = null;
 
         try {
-            content = (Component)wtkxSerializer.readObject(getClass().getResource("alert.wtkx"));
+            content = (Component)wtkxSerializer.readObject(getClass().getResource("alert_skin.wtkx"));
         } catch(Exception exception) {
             throw new RuntimeException(exception);
         }
@@ -144,11 +136,12 @@ public class AlertSkin extends DialogSkin
             Object option = alert.getOption(i);
 
             PushButton optionButton = new PushButton(option);
-            optionButton.getStyles().put("color", OPTION_BUTTON_COLOR);
-            optionButton.getStyles().put("backgroundColor", OPTION_BUTTON_BACKGROUND_COLOR);
-            optionButton.getStyles().put("borderColor", OPTION_BUTTON_BORDER_COLOR);
-            optionButton.getStyles().put("bevelColor", OPTION_BUTTON_BEVEL_COLOR);
-            optionButton.getStyles().put("pressedBevelColor", OPTION_BUTTON_PRESSED_BEVEL_COLOR);
+
+            try {
+                optionButton.setStyles(getClass().getResource("alert_skin.option_button.json"));
+            } catch(Exception exception) {
+                throw new RuntimeException(exception);
+            }
 
             int preferredHeight = optionButton.getPreferredHeight(-1);
             int minWidth = 3 * preferredHeight;
