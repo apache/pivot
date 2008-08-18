@@ -1308,49 +1308,6 @@ public abstract class Component implements Visual {
     }
 
     /**
-     * Determines the visible bounds of an area within a component (the
-     * intersection of the area with the visible area of the component
-     * and its ancestors).
-     *
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     *
-     * @return
-     * The visible bounding rectangle of the given area in display coordinates,
-     * or <tt>null</tt> if the component is either not visible or not part of
-     * the container hierarchy.
-     */
-    public Rectangle getVisibleArea(int x, int y, int width, int height) {
-        Rectangle visibleArea = null;
-
-        Component component = this;
-        Display display = Display.getInstance();
-
-        int top = y;
-        int left = x;
-        int bottom = y + height - 1;
-        int right = x + width - 1;
-
-        while (component != null
-            && component.isVisible()) {
-            top = component.y + Math.max(top, 0);
-            left = component.x + Math.max(left, 0);
-            bottom = component.y + Math.max(Math.min(bottom, component.getHeight() - 1), -1);
-            right = component.x + Math.max(Math.min(right, component.getWidth() - 1), -1);
-
-            if (component == display) {
-                visibleArea = new Rectangle(left, top, right - left + 1, bottom - top + 1);
-            }
-
-            component = component.getParent();
-        }
-
-        return visibleArea;
-    }
-
-    /**
      * If the component is in a viewport, ensures that the given area is
      * visible.
      *
@@ -1506,39 +1463,52 @@ public abstract class Component implements Visual {
 
     /**
      * Flags the given rectangle as needing to be repainted.
+     *
+     * @param rectangle
      */
     public final void repaint(Rectangle rectangle) {
+        if (rectangle == null) {
+            throw new IllegalArgumentException("rectangle is null.");
+        }
+
         repaint(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
     }
 
     /**
      * Flags the given rectangle as needing to be repainted.
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
      */
-    public void repaint(int x, int y, int width, int height) {
-        // TODO This needs to be a recursive call:
-        //
-        // 1) When we eliminate our singletons to allow multiple Pivot applications
-        // to run in a browser, ApplicationContext.getInstance() will no longer be
-        // available, and walking up the entire component hierarchy to get the
-        // context from the display will be inefficient.
-        //
-        // 2) The current approach only allows us to apply decorators to the component
-        // that is currently being repainted. So, for example, pushing a button in
-        // a dialog calls the button's repaint() method but not its ancestors'. This means
-        // that any decorators attached to the ancestors won't be called.
-        //
-        // We need to walk up the component hierarchy, repainting at each step.
-        // We will need to compute the union of the component's visible area with
-        // the transformed area from the decorators and pass that to the parent
-        // component. Ultimately, the call will reach the display, which will trigger
-        // the actual system repaint.
+    public final void repaint(int x, int y, int width, int height) {
+        repaint(x, y, width, height, false);
+    }
 
-        Rectangle visibleArea = getVisibleArea(x, y, width, height);
+    /**
+     * Flags the given rectangle as needing to be repainted or repaints the
+     * rectangle immediately.
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param immediate
+     */
+    public void repaint(int x, int y, int width, int height, boolean immediate) {
+        if (parent != null) {
+            int top = y;
+            int left = x;
+            int bottom = top + height - 1;
+            int right = left + width - 1;
 
-        if (visibleArea != null) {
-            ApplicationContext applicationContext = ApplicationContext.getInstance();
-            applicationContext.repaint(visibleArea.x, visibleArea.y,
-                visibleArea.width, visibleArea.height);
+            top = Math.max(top, 0);
+            left = Math.max(left, 0);
+            bottom = Math.min(bottom, getHeight() - 1);
+            right = Math.min(right, getWidth() - 1);
+
+            parent.repaint(left + this.x, top + this.y, right - left + 1, bottom - top + 1);
         }
     }
 
@@ -1549,30 +1519,6 @@ public abstract class Component implements Visual {
         if (skin != null) {
             skin.paint(graphics);
         }
-    }
-
-    /**
-     * Returns a graphics context that can be used to paint the component.
-     *
-     * @return
-     */
-    public Graphics2D getGraphics() {
-        Graphics2D graphics = null;
-
-        Rectangle visibleBounds = getVisibleArea(0, 0, getWidth(), getHeight());
-
-        if (visibleBounds != null) {
-            graphics = ApplicationContext.getInstance().getGraphics();
-
-            if (graphics != null) {
-                graphics.clip(visibleBounds);
-
-                Point displayLocation = mapPointToAncestor(Display.getInstance(), 0, 0);
-                graphics.translate(displayLocation.x, displayLocation.y);
-            }
-        }
-
-        return graphics;
     }
 
     /**

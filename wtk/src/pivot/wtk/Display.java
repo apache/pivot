@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import java.awt.Graphics2D;
 import pivot.wtk.skin.DisplaySkin;
 
 public final class Display extends Container {
@@ -49,6 +50,18 @@ public final class Display extends Container {
         if (isValid()) {
             super.invalidate();
             ApplicationContext.queueCallback(new ValidateCallback());
+        }
+    }
+
+    @Override
+    public void repaint(int x, int y, int width, int height, boolean immediate) {
+        if (immediate) {
+            Graphics2D graphics = ApplicationContext.getInstance().getGraphics();
+            graphics.clipRect(x, y, width, height);
+            paint(graphics);
+            graphics.dispose();
+        } else {
+            ApplicationContext.getInstance().repaint(x, y, width, height);
         }
     }
 

@@ -269,24 +269,28 @@ public class TextInputSkin extends ComponentSkin
 
     private class BlinkCursorCallback implements Runnable {
         public void run() {
-            TextInput textInput = (TextInput)getComponent();
-            Graphics2D graphics = textInput.getGraphics();
+            caretOn = !caretOn;
 
-            if (graphics != null) {
-                LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-                int ascent = (int)Math.round(lm.getAscent());
+            java.awt.Rectangle caretBounds = caretShapes[0].getBounds();
+            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
 
-                graphics.setXORMode(backgroundColor);
-                graphics.setPaint(Color.BLACK);
-                graphics.translate(padding.left - scrollLeft + 1, padding.top + ascent + 1);
-                graphics.draw(caretShapes[0]);
-                graphics.dispose();
+            int ascent = (int)Math.round(lm.getAscent());
+            caretBounds.x += (padding.left - scrollLeft + 1);
+            caretBounds.y += (padding.top + ascent + 1);
+
+            if (caretBounds.width == 0) {
+                caretBounds.width++;
             }
+
+            TextInput textInput = (TextInput)getComponent();
+            textInput.repaint(caretBounds.x, caretBounds.y,
+                caretBounds.width, caretBounds.height, true);
         }
     }
 
     protected FontRenderContext fontRenderContext = new FontRenderContext(null, true, false);
 
+    private boolean caretOn = true;
     private Shape[] caretShapes = null;
     private Shape logicalHighlightShape = null;
 
@@ -457,7 +461,8 @@ public class TextInputSkin extends ComponentSkin
         }
 
         if (textInput.getSelectionLength() == 0
-            && textInput.isFocused()) {
+            && textInput.isFocused()
+            && caretOn) {
             graphics.setPaint(Color.BLACK);
             graphics.draw(caretShapes[0]);
         }
