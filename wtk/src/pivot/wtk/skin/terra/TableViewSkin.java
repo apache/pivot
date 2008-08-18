@@ -69,6 +69,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     private Color gridColor = new Color(0xF7, 0xF5, 0xEB);
     private boolean showHorizontalGridLines = true;
     private boolean showVerticalGridLines = true;
+    private boolean includeLastVerticalGridLine = false;
 
     private int highlightedIndex = -1;
 
@@ -102,7 +103,10 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         TableView tableView = (TableView)getComponent();
         TableView.ColumnSequence columns = tableView.getColumns();
 
-        for (int i = 0, n = columns.getLength(); i < n; i++) {
+        int n = columns.getLength();
+        int gridLineStop = includeLastVerticalGridLine ? n : n - 1;
+
+        for (int i = 0; i < n; i++) {
             TableView.Column column = columns.get(i);
 
             if (!column.isRelative()) {
@@ -110,8 +114,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
 
                 // Include space for vertical gridlines; even if we are
                 // not painting them, the header does
-                if (i > 0
-                    && i < n - 1) {
+                if (i < gridLineStop) {
                     preferredWidth++;
                 }
             }
@@ -666,6 +669,15 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     public void setShowVerticalGridLines(boolean showVerticalGridLines) {
         this.showVerticalGridLines = showVerticalGridLines;
         repaintComponent();
+    }
+
+    public boolean getIncludeLastVerticalGridLine() {
+        return includeLastVerticalGridLine;
+    }
+
+    public void setIncludeLastVerticalGridLine(boolean includeLastVerticalGridLine) {
+        this.includeLastVerticalGridLine = includeLastVerticalGridLine;
+        invalidateComponent();
     }
 
     @Override

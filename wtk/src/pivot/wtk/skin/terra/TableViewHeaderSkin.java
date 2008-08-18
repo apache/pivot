@@ -147,6 +147,7 @@ public class TableViewHeaderSkin extends ComponentSkin
     private Color disabledBevelColor = Color.WHITE;
     private boolean headersPressable = true;
     private boolean columnsResizable = true;
+    private boolean includeLastVerticalGridLine = false;
 
     private int pressedHeaderIndex = -1;
 
@@ -194,15 +195,17 @@ public class TableViewHeaderSkin extends ComponentSkin
         if (tableView != null) {
             TableView.ColumnSequence columns = tableView.getColumns();
 
-            for (int i = 0, n = columns.getLength(); i < n; i++) {
+            int n = columns.getLength();
+            int gridLineStop = includeLastVerticalGridLine ? n : n - 1;
+
+            for (int i = 0; i < n; i++) {
                 TableView.Column column = columns.get(i);
 
                 if (!column.isRelative()) {
                     preferredWidth += column.getWidth();
 
                     // Include space for vertical gridlines
-                    if (i > 0
-                        && i < n - 1) {
+                    if (i < gridLineStop) {
                         preferredWidth++;
                     }
                 }
@@ -646,6 +649,15 @@ public class TableViewHeaderSkin extends ComponentSkin
 
     public void setColumnsResizable(boolean columnsResizable) {
         this.columnsResizable = columnsResizable;
+    }
+
+    public boolean getIncludeLastVerticalGridLine() {
+        return includeLastVerticalGridLine;
+    }
+
+    public void setIncludeLastVerticalGridLine(boolean includeLastVerticalGridLine) {
+        this.includeLastVerticalGridLine = includeLastVerticalGridLine;
+        invalidateComponent();
     }
 
     @Override
