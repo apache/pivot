@@ -22,7 +22,7 @@
     </columns>
 	<rows>
 		<TablePane.Row height="1*">
-            <SplitPane orientation="horizontal" splitLocation="150">
+            <SplitPane orientation="horizontal" splitLocation="180">
                 <left>
                     <TabPane tabOrientation="horizontal" selectedIndex="0">
                         <tabs>
@@ -59,7 +59,7 @@
                                     <view>
                                         <TableView wtkx:id="tbStyles" selectMode="single">
                                             <columns>
-                                                <TableView.Column name="name" width="100" headerData="Name" />
+                                                <TableView.Column name="name" width="150" headerData="Name" />
                                                 <TableView.Column name="value" width="1*" headerData="Value" />
                                             </columns>
                                         </TableView>
@@ -74,7 +74,7 @@
                                     <view>
                                         <TableView wtkx:id="tbAttributes" selectMode="single">
                                             <columns>
-                                                <TableView.Column name="name" width="100" headerData="Name" />
+                                                <TableView.Column name="name" width="150" headerData="Name" />
                                                 <TableView.Column name="value" width="1*" headerData="Value" />
                                             </columns>
                                         </TableView>

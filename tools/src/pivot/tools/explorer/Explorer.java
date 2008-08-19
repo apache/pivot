@@ -8,6 +8,7 @@ import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.tools.explorer.table.renderer.PropertyValueTableViewCellRenderer;
 import pivot.tools.explorer.tree.TreeNodeList;
+import pivot.tools.explorer.tree.renderer.ComponentNodeRenderer;
 import pivot.tools.explorer.utils.Collections;
 import pivot.util.Resources;
 import pivot.wtk.Application;
@@ -27,10 +28,11 @@ import pivot.wtk.Keyboard.KeyLocation;
 import pivot.wtkx.WTKXSerializer;
 
 public class Explorer implements Application, TreeViewSelectionListener {
+
+	private Resources resources;
+
     private Display display;
     private Dictionary<String, String> properties;
-
-    private Resources resources;
     private Application application;
 
     private Dialog dialog;
@@ -40,8 +42,9 @@ public class Explorer implements Application, TreeViewSelectionListener {
     private Component attributesTab;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        this.display = display;
-        this.properties = properties;
+
+    	this.display = display;
+    	this.properties = properties;
 
     	Application application = getSubjectApplication();
     	application.startup(display, properties);
@@ -69,12 +72,8 @@ public class Explorer implements Application, TreeViewSelectionListener {
     }
 
     public boolean shutdown(boolean optional) throws Exception {
-        boolean shutdown = (application == null) ? true : application.shutdown(optional);
-        if (shutdown) {
-            dialog.close();
-        }
-
-        return shutdown;
+        dialog.close();
+    	return application != null? application.shutdown(optional): true;
     }
 
 

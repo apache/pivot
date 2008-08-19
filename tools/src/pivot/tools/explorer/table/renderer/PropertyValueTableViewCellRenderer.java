@@ -18,23 +18,13 @@ public class PropertyValueTableViewCellRenderer extends TableViewCellRenderer {
 	private TableView.CellRenderer defaultRenderer = new TableViewCellRenderer();
 	private TableView.CellRenderer lastRenderer = defaultRenderer;
 
+
 	public PropertyValueTableViewCellRenderer() {
 		super();
 
-//		map.put(Boolean.class, new TableViewBooleanCellRenderer());
+		map.put(Boolean.class, new BooleanPropertyCelRenderer());
 		map.put(Date.class, new TableViewDateCellRenderer());
-		map.put(Color.class, new ColorTablewViewCellRenderer());
-
-//		TableViewNumberCellRenderer numberRenderer = new TableViewNumberCellRenderer();
-//		map.put(Byte.class, numberRenderer);
-//		map.put(Short.class, numberRenderer);
-//		map.put(Integer.class, numberRenderer);
-//		map.put(Long.class, numberRenderer);
-//		map.put(Float.class, numberRenderer);
-//		map.put(Double.class, numberRenderer);
-//		map.put(BigInteger.class, numberRenderer);
-//		map.put(BigDecimal.class, numberRenderer);
-
+		map.put(Color.class, new ColorTableViewCellRenderer());
 
 	}
 

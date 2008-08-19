@@ -1,11 +1,12 @@
-package pivot.tools.explorer;
+package pivot.tools.explorer.tree.renderer;
 
+import pivot.tools.explorer.ComponentAdapter;
 import pivot.wtk.TreeView;
 import pivot.wtk.content.TreeViewNodeRenderer;
 
 /**
  * Extends standard renderer:
- *   - disabled nodes represent disabled components.
+ *   - disabled nodes represents disabled components.
  *
  * @author Eugene Ryzhikov
  * @date   Aug 16, 2008

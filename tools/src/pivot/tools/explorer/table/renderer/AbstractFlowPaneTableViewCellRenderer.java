@@ -12,10 +12,14 @@ import pivot.wtk.TableView;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.TableView.Column;
 
+/**
+ * Base for renderers which use FlowPane
+ *
+ * @author Eugene Ryzhikov
+ * @date   Aug 19, 2008
+ *
+ */
 public abstract class AbstractFlowPaneTableViewCellRenderer extends FlowPane implements TableView.CellRenderer {
-
-
-	private Component styleComponent = this;
 
 	public AbstractFlowPaneTableViewCellRenderer() {
 		super();
@@ -25,10 +29,6 @@ public abstract class AbstractFlowPaneTableViewCellRenderer extends FlowPane imp
         styles.put("horizontalAlignment", HorizontalAlignment.LEFT);
         styles.put("padding", new Insets(2));
 
-	}
-
-	protected void setStyleComponent( Component component ) {
-		styleComponent = component;
 	}
 
 	@Override
@@ -50,7 +50,21 @@ public abstract class AbstractFlowPaneTableViewCellRenderer extends FlowPane imp
         }
 	}
 
-	protected final void renderStyles(TableView tableView, boolean rowSelected, boolean rowDisabled) {
+	protected Component getStyleComponent() {
+		return this;
+	}
+
+	public final void render(Object value, TableView tableView, Column column, boolean rowSelected, boolean rowHighlighted,
+			boolean rowDisabled) {
+
+		render(getCellData(value, column));
+        renderStyles( getStyleComponent(), tableView, rowSelected, rowDisabled);
+
+	}
+
+	protected abstract void render( Object cellData );
+
+	protected final void renderStyles( Component styleComponent, TableView tableView, boolean rowSelected, boolean rowDisabled) {
         Component.StyleDictionary tableViewStyles = tableView.getStyles();
         Component.StyleDictionary styles = styleComponent.getStyles();
 
@@ -60,21 +74,17 @@ public abstract class AbstractFlowPaneTableViewCellRenderer extends FlowPane imp
             styles.put("font", font);
         }
 
-        Object color = null;
 
+        String styleKey = "disabledColor";
         if (tableView.isEnabled() && !rowDisabled) {
             if (rowSelected) {
-                if (tableView.isFocused()) {
-                    color = tableViewStyles.get("selectionColor");
-                } else {
-                    color = tableViewStyles.get("inactiveSelectionColor");
-                }
+            	styleKey = tableView.isFocused()? "selectionColor": "inactiveSelectionColor";
             } else {
-                color = tableViewStyles.get("color");
+            	styleKey = "color";
             }
-        } else {
-            color = tableViewStyles.get("disabledColor");
         }
+
+        Object color = tableViewStyles.get( styleKey );
 
         if (color instanceof Color) {
             styles.put("color", color);
