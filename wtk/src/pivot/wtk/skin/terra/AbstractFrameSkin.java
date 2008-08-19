@@ -248,9 +248,9 @@ public abstract class AbstractFrameSkin extends WindowSkin {
         }
 
         public void mouseUp(Component component, Mouse.Button button, int x, int y) {
-            Display display = component.getWindow().getDisplay();
-            display.getComponentMouseListeners().remove(this);
-            display.getComponentMouseButtonListeners().remove(this);
+            assert (component instanceof Display);
+            component.getComponentMouseListeners().remove(this);
+            component.getComponentMouseButtonListeners().remove(this);
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y,
