@@ -5,6 +5,7 @@ import java.util.Locale;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.tools.explorer.table.renderer.PropertyValueTableViewCellRenderer;
 import pivot.tools.explorer.tree.TreeNodeList;
 import pivot.tools.explorer.utils.Collections;
 import pivot.util.Resources;
@@ -179,6 +180,12 @@ public class Explorer implements Application, TreeViewSelectionListener {
             propertiesTable.setTableData(emptyList);
             stylesTable.setTableData(emptyList);
         }
+
+        PropertyValueTableViewCellRenderer cellRenderer = new PropertyValueTableViewCellRenderer();
+		propertiesTable.getColumns().get(1).setCellRenderer( cellRenderer );
+        stylesTable.getColumns().get(1).setCellRenderer( cellRenderer );
+        attributesTable.getColumns().get(1).setCellRenderer( cellRenderer );
+
     }
 
 }

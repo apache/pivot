@@ -55,9 +55,13 @@ public class TableEntryAdapter implements Dictionary<String, Object>{
 
 		switch( asColumn( key )) {
 			case NAME : return getName();
-			case VALUE: return dictionary.get(getName());
+			case VALUE: return getValue();
 			default   : return null;
 		}
+	}
+
+	public Object getValue() {
+		return dictionary.get(getName());
 	}
 
 	public Object put(String key, Object value) {
