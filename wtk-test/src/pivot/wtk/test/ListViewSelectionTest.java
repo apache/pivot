@@ -16,8 +16,10 @@
 package pivot.wtk.test;
 
 import pivot.collections.ArrayList;
+import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.wtk.Application;
+import pivot.wtk.Display;
 import pivot.wtk.ListView;
 import pivot.wtk.Span;
 
@@ -48,7 +50,7 @@ public class ListViewSelectionTest implements Application {
         listView.setSelectMode(ListView.SelectMode.MULTI);
     }
 
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties) {
         ArrayList<Span> selectedRanges = new ArrayList<Span>();
         selectedRanges.add(new Span(0, 0));
 
@@ -111,13 +113,14 @@ public class ListViewSelectionTest implements Application {
         verifySelection(4);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 
     protected void dumpSelection() {

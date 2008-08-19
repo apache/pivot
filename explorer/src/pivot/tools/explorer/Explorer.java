@@ -3,6 +3,7 @@ package pivot.tools.explorer;
 import java.util.Locale;
 
 import pivot.collections.ArrayList;
+import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.tools.explorer.table.renderer.PropertyValueTableViewCellRenderer;
@@ -10,7 +11,6 @@ import pivot.tools.explorer.tree.TreeNodeList;
 import pivot.tools.explorer.utils.Collections;
 import pivot.util.Resources;
 import pivot.wtk.Application;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.Dialog;
@@ -27,8 +27,10 @@ import pivot.wtk.Keyboard.KeyLocation;
 import pivot.wtkx.WTKXSerializer;
 
 public class Explorer implements Application, TreeViewSelectionListener {
-    private Resources resources;
+    private Display display;
+    private Dictionary<String, String> properties;
 
+    private Resources resources;
     private Application application;
 
     private Dialog dialog;
@@ -37,10 +39,12 @@ public class Explorer implements Application, TreeViewSelectionListener {
     private Label statusLabel;
     private Component attributesTab;
 
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+        this.display = display;
+        this.properties = properties;
 
     	Application application = getSubjectApplication();
-    	application.startup();
+    	application.startup(display, properties);
 
     	// initialize Explorer
     	String className = getClass().getName().toLowerCase();
@@ -57,16 +61,20 @@ public class Explorer implements Application, TreeViewSelectionListener {
         attributesTable = (TableView) wtkxSerializer.getObjectByName("tbAttributes");
         attributesTab = (Component)wtkxSerializer.getObjectByName("tabAttributes");
 
-        initComponentTree(componentTree, Display.getInstance());
+        initComponentTree(componentTree, display);
 
-        dialog.open();
+        dialog.open(display);
         Component.setFocusedComponent(componentTree);
 
     }
 
-    public void shutdown() throws Exception {
-        dialog.close();
-    	if (application != null) application.shutdown();
+    public boolean shutdown(boolean optional) throws Exception {
+        boolean shutdown = (application == null) ? true : application.shutdown(optional);
+        if (shutdown) {
+            dialog.close();
+        }
+
+        return shutdown;
     }
 
 
@@ -88,7 +96,7 @@ public class Explorer implements Application, TreeViewSelectionListener {
 	 */
     private Application getSubjectApplication() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 
-    	String appClassName = ApplicationContext.getInstance().getProperty("applicationClassName");
+    	String appClassName = properties.get("applicationClassName");
     	if ( appClassName == null ) {
     		throw new IllegalArgumentException("Application class name argument not found");
     	}
@@ -120,7 +128,7 @@ public class Explorer implements Application, TreeViewSelectionListener {
     				return false;
  		}});
 
-        Display.getInstance().getComponentKeyListeners().add(new ComponentKeyListener() {
+        display.getComponentKeyListeners().add(new ComponentKeyListener() {
 
 			public void keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
 

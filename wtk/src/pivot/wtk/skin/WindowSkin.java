@@ -22,6 +22,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
+import pivot.wtk.Display;
 import pivot.wtk.FocusTraversalPolicy;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Window;
@@ -160,6 +161,6 @@ public class WindowSkin extends ContainerSkin
     public void windowOpened(Window window) {
     }
 
-    public void windowClosed(Window window) {
+    public void windowClosed(Window window, Display display) {
     }
 }

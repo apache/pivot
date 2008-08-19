@@ -18,7 +18,9 @@ package pivot.tutorials;
 import java.awt.Color;
 import java.awt.Font;
 
+import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.Display;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
 import pivot.wtk.VerticalAlignment;
@@ -27,7 +29,7 @@ import pivot.wtk.Window;
 public class HelloJava implements Application {
     private Window window = null;
 
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties) {
         Label label = new Label();
         label.setText("Hello World!");
         label.getStyles().put("font", new Font("Arial", Font.BOLD, 24));
@@ -40,16 +42,17 @@ public class HelloJava implements Application {
         window = new Window();
         window.setContent(label);
         window.setMaximized(true);
-        window.open();
+        window.open(display);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         window.close();
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 }

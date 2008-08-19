@@ -19,6 +19,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
+import pivot.wtk.Display;
 import pivot.wtk.Label;
 import pivot.wtk.ListView;
 import pivot.wtk.ListViewSelectionListener;
@@ -30,7 +31,8 @@ public class ListViews implements Application {
     private Window window = null;
 
     @SuppressWarnings("unchecked")
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
             (Component)wtkxSerializer.readObject("pivot/tutorials/lists/list_views.wtkx");
@@ -69,16 +71,17 @@ public class ListViews implements Application {
         window = new Window();
         window.setContent(content);
         window.setMaximized(true);
-        window.open();
+        window.open(display);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         window.close();
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 }

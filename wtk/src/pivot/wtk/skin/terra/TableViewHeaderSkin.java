@@ -24,7 +24,6 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 
 import pivot.collections.Sequence;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.ComponentMouseButtonListener;
@@ -126,9 +125,11 @@ public class TableViewHeaderSkin extends ComponentSkin
         }
 
         public void mouseUp(Component component, Mouse.Button button, int x, int y) {
-            ApplicationContext.getInstance().setCursor(component.getCursor());
-            Display.getInstance().getComponentMouseListeners().remove(this);
-            Display.getInstance().getComponentMouseButtonListeners().remove(this);
+            Mouse.setCursor(component.getCursor());
+
+            assert (component instanceof Display);
+            component.getComponentMouseListeners().remove(this);
+            component.getComponentMouseButtonListeners().remove(this);
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
@@ -686,9 +687,9 @@ public class TableViewHeaderSkin extends ComponentSkin
                     if (columnsResizable
                         && !column.isRelative()
                         && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
-                        ApplicationContext.getInstance().setCursor(Cursor.RESIZE_EAST);
+                        Mouse.setCursor(Cursor.RESIZE_EAST);
                     } else {
-                        ApplicationContext.getInstance().setCursor(getComponent().getCursor());
+                        Mouse.setCursor(getComponent().getCursor());
                     }
                 }
             }
@@ -724,12 +725,14 @@ public class TableViewHeaderSkin extends ComponentSkin
                 && !column.isRelative()
                 && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
                 // Begin drag
-                Point headerCoordinates = tableViewHeader.mapPointToAncestor(Display.getInstance(),
+                Display display = tableViewHeader.getWindow().getDisplay();
+                Point headerCoordinates = tableViewHeader.mapPointToAncestor(display,
                     headerBounds.x, 0);
                 DragHandler dragHandler = new DragHandler(column, headerCoordinates.x,
                     headerBounds.x + headerBounds.width - x);
-                Display.getInstance().getComponentMouseListeners().add(dragHandler);
-                Display.getInstance().getComponentMouseButtonListeners().add(dragHandler);
+
+                display.getComponentMouseListeners().add(dragHandler);
+                display.getComponentMouseButtonListeners().add(dragHandler);
             } else if (headersPressable) {
                 pressedHeaderIndex = getHeaderAt(x);
                 repaintComponent(getHeaderBounds(pressedHeaderIndex));

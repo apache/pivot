@@ -484,7 +484,8 @@ public class ScrollBarSkin extends ContainerSkin
 
             public void mouseUp(Component component, Mouse.Button button, int x, int y) {
                 if (button == Mouse.Button.LEFT) {
-                    Display.getInstance().getComponentMouseButtonListeners().remove(this);
+                    assert (component instanceof Display);
+                    component.getComponentMouseButtonListeners().remove(this);
 
                     highlighted = false;
                     repaintComponent();
@@ -590,7 +591,9 @@ public class ScrollBarSkin extends ContainerSkin
                 // have registered our display mouse handler.  Unregister it
                 // here so as to not register multiple times as we move our
                 // mouse in and out of the handle
-                Display.getInstance().getComponentMouseButtonListeners().remove(displayMouseHandler);
+                Component component = getComponent();
+                Display display = component.getWindow().getDisplay();
+                display.getComponentMouseButtonListeners().remove(displayMouseHandler);
             } else {
                 // The handle is highlighted as long as the mouse is over it or
                 // we're dragging it
@@ -609,7 +612,9 @@ public class ScrollBarSkin extends ContainerSkin
                 // button.  NOTE the code that actually sets the scroll bar's
                 // value during the drag operation is handled by ScrollBarSkin
                 // since it needs access to scroll bar layout information
-                Display.getInstance().getComponentMouseButtonListeners().add(displayMouseHandler);
+                Component component = getComponent();
+                Display display = component.getWindow().getDisplay();
+                display.getComponentMouseButtonListeners().add(displayMouseHandler);
             } else {
                 // If we're not dragging the handle, then we un-highlight it
                 // as soon as the mouse exits
@@ -651,7 +656,8 @@ public class ScrollBarSkin extends ContainerSkin
 
         public void mouseUp(Component component, Mouse.Button button, int x, int y) {
             if (button == Mouse.Button.LEFT) {
-               Display.getInstance().getComponentMouseListeners().remove(this);
+                assert (component instanceof Display);
+                component.getComponentMouseListeners().remove(this);
             }
         }
 
@@ -1018,12 +1024,13 @@ public class ScrollBarSkin extends ContainerSkin
             if (mouseDownComponent == scrollHandle) {
                 // Begin dragging the scroll handle. Register our display
                 // mouse handler to do the actual work
+                Display display = scrollBar.getWindow().getDisplay();
 
-                dragOffset = scrollBar.mapPointToAncestor(Display.getInstance(), x, y);
+                dragOffset = scrollBar.mapPointToAncestor(display, x, y);
                 dragOffset.translate(-scrollHandle.getX(), -scrollHandle.getY());
 
-                Display.getInstance().getComponentMouseListeners().add(displayMouseHandler);
-                Display.getInstance().getComponentMouseButtonListeners().add(displayMouseHandler);
+                display.getComponentMouseListeners().add(displayMouseHandler);
+                display.getComponentMouseButtonListeners().add(displayMouseHandler);
             } else if (mouseDownComponent == null) {
                 // Begin automatic block scrolling. Calculate the direction of
                 // the scroll by checking to see if the user pressed the mouse

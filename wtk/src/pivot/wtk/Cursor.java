@@ -26,6 +26,7 @@ public enum Cursor {
     DEFAULT,
     HAND,
     TEXT,
+    WAIT,
     CROSSHAIR,
     MOVE,
     RESIZE_NORTH,
@@ -50,6 +51,8 @@ public enum Cursor {
             cursor = Cursor.HAND;
         } else if (value.equalsIgnoreCase("text")) {
             cursor = Cursor.TEXT;
+        } else if (value.equalsIgnoreCase("wait")) {
+            cursor = Cursor.WAIT;
         } else if (value.equalsIgnoreCase("crosshair")) {
             cursor = Cursor.CROSSHAIR;
         } else if (value.equalsIgnoreCase("move")) {

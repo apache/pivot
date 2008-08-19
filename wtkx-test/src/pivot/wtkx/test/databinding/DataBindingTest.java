@@ -23,6 +23,7 @@ import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
+import pivot.wtk.Display;
 import pivot.wtk.Form;
 
 import pivot.wtk.Frame;
@@ -62,7 +63,8 @@ public class DataBindingTest implements Application {
     private Frame frame = null;
 
     @SuppressWarnings("unchecked")
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
         // Load the components from the XML file
         ComponentLoader componentLoader = new ComponentLoader();
         Component component = componentLoader.load("pivot/wtkx/test/databinding/application.wtkx");
@@ -70,7 +72,7 @@ public class DataBindingTest implements Application {
         // Create and open the frame
         frame = new Frame();
         frame.setContent(component);
-        frame.open();
+        frame.open(display);
 
         // Populate the form
         InputStream dataStream = getClass().getResourceAsStream("application.json");
@@ -81,13 +83,14 @@ public class DataBindingTest implements Application {
         form.load(data);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         frame.close();
+        return true;
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 }

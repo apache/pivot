@@ -83,13 +83,11 @@ public class TableViewHeaderDataRenderer extends FlowPane
 
                     if (iconValue instanceof URL) {
                         URL iconURL = (URL)iconValue;
-
-                        ApplicationContext applicationContext = ApplicationContext.getInstance();
-                        icon = (Image)applicationContext.getResources().get(iconURL);
+                        icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
 
                         if (icon == null) {
                             icon = Image.load(iconURL);
-                            applicationContext.getResources().put(iconURL, icon);
+                            ApplicationContext.getResourceCache().put(iconURL, icon);
                         }
                     }
                 }

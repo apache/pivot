@@ -201,8 +201,9 @@ public abstract class AbstractFrameSkin extends WindowSkin {
         }
 
         public void mouseUp(Component component, Mouse.Button button, int x, int y) {
-            Display.getInstance().getComponentMouseListeners().remove(this);
-            Display.getInstance().getComponentMouseButtonListeners().remove(this);
+            assert (component instanceof Display);
+            component.getComponentMouseListeners().remove(this);
+            component.getComponentMouseButtonListeners().remove(this);
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y,
@@ -247,8 +248,9 @@ public abstract class AbstractFrameSkin extends WindowSkin {
         }
 
         public void mouseUp(Component component, Mouse.Button button, int x, int y) {
-            Display.getInstance().getComponentMouseListeners().remove(this);
-            Display.getInstance().getComponentMouseButtonListeners().remove(this);
+            Display display = component.getWindow().getDisplay();
+            display.getComponentMouseListeners().remove(this);
+            display.getComponentMouseButtonListeners().remove(this);
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y,
@@ -655,16 +657,18 @@ public abstract class AbstractFrameSkin extends WindowSkin {
             if (titleBarBounds.contains(x, y)) {
                 dragOffset = new Point(x, y);
 
-                Display.getInstance().getComponentMouseListeners().add(moveMouseHandler);
-                Display.getInstance().getComponentMouseButtonListeners().add(moveMouseHandler);
+                Display display = window.getDisplay();
+                display.getComponentMouseListeners().add(moveMouseHandler);
+                display.getComponentMouseButtonListeners().add(moveMouseHandler);
             } else {
                 Rectangle resizeHandleBounds = resizeHandle.getBounds();
 
                 if (resizeHandleBounds.contains(x, y)) {
                     dragOffset = new Point(getWidth() - x, getHeight() - y);
 
-                    Display.getInstance().getComponentMouseListeners().add(resizeMouseHandler);
-                    Display.getInstance().getComponentMouseButtonListeners().add(resizeMouseHandler);
+                    Display display = window.getDisplay();
+                    display.getComponentMouseListeners().add(resizeMouseHandler);
+                    display.getComponentMouseButtonListeners().add(resizeMouseHandler);
                 }
             }
         }

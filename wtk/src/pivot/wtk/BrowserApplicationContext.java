@@ -22,25 +22,49 @@ import java.net.URLDecoder;
 
 import pivot.collections.HashMap;
 
+/**
+ * TODO Set ApplicationContext.current when the applet recieves focus? Or
+ * when the mouse moves over it?
+ */
 public final class BrowserApplicationContext extends ApplicationContext {
     public static final class HostApplet extends java.applet.Applet {
-        static {
-            new BrowserApplicationContext();
-        }
-
         private class InitCallback implements Runnable {
             public void run() {
-                currentHostApplet = HostApplet.this;
+                // Create the application context
+                applicationContext = new BrowserApplicationContext();
 
-                // Add the display host to the applet
-                ApplicationContext applicationContext = ApplicationContext.getInstance();
+                // TODO This is temporary - this should be set when the mouse
+                // moves over the applet
+                ApplicationContext.current = applicationContext;
 
-                // NOTE We must create a new instance of DisplayHost every time
-                // the applet is reloaded. There appears to be a bug in the Java
-                // plugin that precludes re-using a single instance of DisplayHost
-                // across page refreshes, even when the DisplayHost is added to
-                // the applet in init() and removed in destroy().
-                applicationContext.recreateDisplayHost();
+                // Load any properties specified on the query string
+                properties = new HashMap<String, String>();
+
+                URL documentBase = getDocumentBase();
+                String queryString = documentBase.getQuery();
+                if (queryString != null) {
+                    String[] arguments = queryString.split("&");
+
+                    for (int i = 0, n = arguments.length; i < n; i++) {
+                        String argument = arguments[i];
+                        String[] property = argument.split("=");
+
+                        if (property.length == 2) {
+                            String key, value;
+                            try {
+                                final String encoding = "UTF-8";
+                                key = URLDecoder.decode(property[0], encoding);
+                                value = URLDecoder.decode(property[1], encoding);
+                                properties.put(key, value);
+                            } catch(UnsupportedEncodingException exception) {
+                            }
+                        } else {
+                            System.out.println(argument + " is not a valid startup property.");
+                        }
+                    }
+                }
+
+                // Create the display host and add it to the applet
                 DisplayHost displayHost = applicationContext.getDisplayHost();
                 setLayout(new java.awt.BorderLayout());
                 add(displayHost);
@@ -53,79 +77,61 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
                 // Set focus to the display host
                 displayHost.requestFocus();
+
+                // Load the application
+                String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
+                if (applicationClassName == null) {
+                    Alert.alert(Alert.Type.ERROR, "Application class name is required.");
+                } else {
+                    try {
+                        Class<?> applicationClass = Class.forName(applicationClassName);
+                        application = (Application)applicationClass.newInstance();
+                    } catch(Exception exception) {
+                        displaySystemError(exception);
+                    }
+                }
             }
         }
 
         private class StartCallback implements Runnable {
             public void run() {
-                // Initialize and start up the application
-                ApplicationContext applicationContext = ApplicationContext.getInstance();
-
-                String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
-                if (applicationClassName == null) {
-                    Alert.alert(Alert.Type.ERROR, "Application class name is required.");
-                } else {
-                    applicationContext.initialize(applicationClassName);
-                    applicationContext.startupApplication();
+                if (application != null) {
+                    try {
+                        application.startup(applicationContext.getDisplay(), properties);
+                    } catch(Exception exception) {
+                        displaySystemError(exception);
+                    }
                 }
             }
         }
 
         private class StopCallback implements Runnable {
             public void run() {
-                // Shut down the application
-                ApplicationContext applicationContext = ApplicationContext.getInstance();
-                applicationContext.shutdownApplication();
-                applicationContext.uninitialize();
+                try {
+                    application.shutdown(true);
+                } catch(Exception exception) {
+                    displaySystemError(exception);
+                }
             }
         }
 
         private class DestroyCallback implements Runnable {
             public void run() {
-                // Remove the display host from the applet
-                ApplicationContext applicationContext = ApplicationContext.getInstance();
-
-                DisplayHost displayHost = applicationContext.getDisplayHost();
-                remove(displayHost);
-
-                currentHostApplet = null;
+                if (ApplicationContext.current == applicationContext) {
+                    ApplicationContext.current = null;
+                }
             }
         }
 
+        private BrowserApplicationContext applicationContext = null;
         private HashMap<String, String> properties = null;
+        private Application application = null;
 
         public static final long serialVersionUID = 0;
         public static final String APPLICATION_CLASS_NAME_PARAMETER = "applicationClassName";
 
         @Override
         public void init() {
-            // Load any properties specified on the query string
-            properties = new HashMap<String, String>();
-
-            URL documentBase = getDocumentBase();
-            String queryString = documentBase.getQuery();
-            if (queryString != null) {
-                String[] arguments = queryString.split("&");
-
-                for (int i = 0, n = arguments.length; i < n; i++) {
-                    String argument = arguments[i];
-                    String[] property = argument.split("=");
-
-                    if (property.length == 2) {
-                        String key, value;
-                        try {
-                            final String encoding = "UTF-8";
-                            key = URLDecoder.decode(property[0], encoding);
-                            value = URLDecoder.decode(property[1], encoding);
-                            properties.put(key, value);
-                        } catch(UnsupportedEncodingException exception) {
-                        }
-                    } else {
-                        System.out.println(argument + " is not a valid startup property.");
-                    }
-                }
-            }
-
             InitCallback initCallback = new InitCallback();
 
             if (java.awt.EventQueue.isDispatchThread()) {
@@ -171,30 +177,5 @@ public final class BrowserApplicationContext extends ApplicationContext {
         public void update(Graphics graphics) {
             paint(graphics);
         }
-    }
-
-    private static HostApplet currentHostApplet = null;
-
-    public String getTitle() {
-        return null;
-    }
-
-    public void setTitle(String title) {
-        // No-op for applets; title is set in the host page
-    }
-
-    public String getProperty(String name) {
-        return (currentHostApplet.properties.containsKey(name) ?
-            currentHostApplet.properties.get(name) : currentHostApplet.getParameter(name));
-    }
-
-    public void open(URL location) {
-        // TODO Use java.awt.Desktop class when Java 6 is available on OSX
-
-        currentHostApplet.getAppletContext().showDocument(location, "_blank");
-    }
-
-    public void exit() {
-        // No-op for applets
     }
 }

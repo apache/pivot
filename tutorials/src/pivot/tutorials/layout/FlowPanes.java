@@ -15,11 +15,12 @@
  */
 package pivot.tutorials.layout;
 
+import pivot.collections.Dictionary;
 import pivot.wtk.Application;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
+import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Orientation;
@@ -44,9 +45,8 @@ public class FlowPanes implements Application, ButtonStateListener {
 
     private Window window = null;
 
-    public void startup() throws Exception {
-        ApplicationContext applicationContext = ApplicationContext.getInstance();
-        String themeClassName = applicationContext.getProperty("themeClassName");
+    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+        String themeClassName = properties.get("themeClassName");
 
         if (themeClassName != null) {
             Class<?> themeClass = Class.forName(themeClassName);
@@ -107,17 +107,18 @@ public class FlowPanes implements Application, ButtonStateListener {
         window = new Window();
         window.setContent(content);
         window.setMaximized(true);
-        window.open();
+        window.open(display);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         window.close();
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 
     public void stateChanged(Button button, Button.State previousState) {

@@ -649,11 +649,12 @@ public abstract class Component implements Visual {
     public Window getWindow() {
         Component component = this;
 
-        while ((component != null) && !(component instanceof Window)) {
+        while (component != null
+            && !(component instanceof Window)) {
             component = component.getParent();
         }
 
-        return (Window) component;
+        return (Window)component;
     }
 
     public int getWidth() {
@@ -1293,13 +1294,11 @@ public abstract class Component implements Visual {
         boolean showing = true;
 
         Component component = this;
-        Display display = Display.getInstance();
-
         while (component != null
             && showing) {
             Container parent = component.getParent();
             showing &= (component.isVisible()
-                && (parent != null || component == display));
+                && (parent != null || component instanceof Display));
 
             component = parent;
         }
@@ -1927,17 +1926,15 @@ public abstract class Component implements Visual {
             throw new IllegalArgumentException("styles is null.");
         }
 
-        ApplicationContext applicationContext = ApplicationContext.getInstance();
-
         Map<String, Object> cachedStyles =
-            (Map<String, Object>)applicationContext.getResources().get(styles);
+            (Map<String, Object>)ApplicationContext.getResourceCache().get(styles);
 
         if (cachedStyles == null) {
             JSONSerializer jsonSerializer = new JSONSerializer();
             cachedStyles =
                 (Map<String, Object>)jsonSerializer.readObject(styles.openStream());
 
-            applicationContext.getResources().put(styles, cachedStyles);
+            ApplicationContext.getResourceCache().put(styles, cachedStyles);
         }
 
         setStyles(cachedStyles);
@@ -2002,7 +1999,7 @@ public abstract class Component implements Visual {
         if (enabled) {
             // Only change the cursor if no mouse buttons are pressed
             if (Mouse.getButtons() == 0) {
-                ApplicationContext.getInstance().setCursor(cursor);
+                Mouse.setCursor(cursor);
             }
 
             if (skin != null) {
@@ -2019,7 +2016,7 @@ public abstract class Component implements Visual {
         if (enabled) {
             // Only change the cursor if no mouse buttons are pressed
             if (Mouse.getButtons() == 0) {
-                ApplicationContext.getInstance().setCursor((parent == null) ?
+                Mouse.setCursor((parent == null) ?
                     Cursor.DEFAULT : parent.getCursor());
             }
 

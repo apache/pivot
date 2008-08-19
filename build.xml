@@ -17,7 +17,7 @@
     <!-- Compiler properties -->
     <property name="compiler.optimize" value="true"/>
     <property name="compiler.deprecation" value="true"/>
-    <property name="compiler.debug" value="false"/>
+    <property name="compiler.debug" value="true"/>
 
     <target name="build" depends="core, core-test, web, web-test, wtk, wtk-test, wtkx, wtkx-test"/>
     <target name="clean" depends="core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, wtkx-clean, wtkx-test-clean"/>

@@ -20,6 +20,7 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
+import pivot.wtk.Display;
 import pivot.wtk.ImageView;
 import pivot.wtk.ListButton;
 import pivot.wtk.ListButtonSelectionListener;
@@ -44,17 +45,13 @@ public class ListButtons implements Application {
                 ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
                 URL imageURL = classLoader.getResource((String)imageName);
 
-                ApplicationContext applicationContext =
-                    ApplicationContext.getInstance();
-
                 // If the image has not been added to the resource cache yet,
                 // add it
-                Image image =
-                    (Image)applicationContext.getResources().get(imageURL);
+                Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
 
                 if (image == null) {
                     image = Image.load(imageURL);
-                    applicationContext.getResources().put(imageURL, image);
+                    ApplicationContext.getResourceCache().put(imageURL, image);
                 }
 
                 // Update the image
@@ -67,7 +64,7 @@ public class ListButtons implements Application {
     private ImageView imageView = null;
     private Window window = null;
 
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
             (Component)wtkxSerializer.readObject("pivot/tutorials/lists/list_buttons.wtkx");
@@ -85,16 +82,17 @@ public class ListButtons implements Application {
         window = new Window();
         window.setContent(content);
         window.setMaximized(true);
-        window.open();
+        window.open(display);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         window.close();
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 }

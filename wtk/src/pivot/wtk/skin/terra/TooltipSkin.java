@@ -125,7 +125,7 @@ public class TooltipSkin extends WindowSkin
     // Window events
     public void windowOpened(Window window) {
         // Add this as a display mouse and key listener
-        Display display = Display.getInstance();
+        Display display = window.getDisplay();
         display.getComponentMouseListeners().add(this);
         display.getComponentMouseButtonListeners().add(this);
         display.getComponentMouseWheelListeners().add(this);
@@ -134,7 +134,7 @@ public class TooltipSkin extends WindowSkin
 
     public void windowClosed(Window window) {
         // Remove this as a display mouse and key listener
-        Display display = Display.getInstance();
+        Display display = window.getDisplay();
         display.getComponentMouseListeners().remove(this);
         display.getComponentMouseButtonListeners().remove(this);
         display.getComponentMouseWheelListeners().remove(this);

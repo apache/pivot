@@ -95,14 +95,6 @@ public class Dialog extends Window {
 
     /**
      * Opens the dialog.
-     */
-    @Override
-    public void open() {
-        open(null, false, null);
-    }
-
-    /**
-     * Opens the dialog.
      *
      * @owner
      * The dialog's owner. If <tt>null</tt>, the dialog is opened non-modal.
@@ -124,7 +116,7 @@ public class Dialog extends Window {
      * Optional dialog listener to be called when the dialog is closed.
      */
     public void open(Window owner, DialogResultListener dialogResultListener) {
-        open(owner, owner != null, dialogResultListener);
+        open(owner, true, dialogResultListener);
     }
 
     /**
@@ -143,11 +135,6 @@ public class Dialog extends Window {
     public void open(Window owner, boolean modal, DialogResultListener dialogResultListener) {
         if (isOpen()) {
             throw new IllegalStateException("Window is already open.");
-        }
-
-        if (owner == null
-            && modal) {
-            throw new IllegalStateException("Can't open un-owned dialog as modal");
         }
 
         this.dialogResultListener = dialogResultListener;

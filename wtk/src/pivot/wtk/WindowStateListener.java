@@ -17,5 +17,5 @@ package pivot.wtk;
 
 public interface WindowStateListener {
     public void windowOpened(Window window);
-    public void windowClosed(Window window);
+    public void windowClosed(Window window, Display display);
 }

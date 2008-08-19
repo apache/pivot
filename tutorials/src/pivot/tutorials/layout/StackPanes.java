@@ -15,15 +15,17 @@
  */
 package pivot.tutorials.layout;
 
+import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
+import pivot.wtk.Display;
 import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
 public class StackPanes implements Application {
     private Window window = null;
 
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
             (Component)wtkxSerializer.readObject("pivot/tutorials/layout/stackpanes.wtkx");
@@ -31,16 +33,17 @@ public class StackPanes implements Application {
         window = new Window();
         window.setContent(content);
         window.setMaximized(true);
-        window.open();
+        window.open(display);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         window.close();
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 }

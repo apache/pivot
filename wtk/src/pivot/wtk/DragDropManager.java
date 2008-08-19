@@ -30,12 +30,16 @@ import java.awt.Graphics2D;
 // drag/drop content when a drag out/over occurs, respectively?
 
 public final class DragDropManager {
+    private ApplicationContext applicationContext = null;
+
     private Point dragLocation = null;
     private DragHandler dragHandler = null;
 
     public static final int DRAG_THRESHOLD = 4;
 
-    private static DragDropManager instance = new DragDropManager();
+    protected DragDropManager(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     public boolean isActive() {
         return (dragHandler != null);
@@ -73,8 +77,12 @@ public final class DragDropManager {
         return dragHandler.getSupportedDropActions();
     }
 
-    public static DragDropManager getInstance() {
-        return instance;
+    public static DragDropManager getCurrent() {
+        if (ApplicationContext.current == null) {
+            throw new IllegalStateException("No current application context.");
+        }
+
+        return ApplicationContext.current.getDragDropManager();
     }
 
     public void paint(Graphics2D graphics) {
@@ -103,7 +111,7 @@ public final class DragDropManager {
             if (dragLocation != null) {
                 if (Math.abs(x - dragLocation.x) > DRAG_THRESHOLD
                     || Math.abs(y - dragLocation.y) > DRAG_THRESHOLD) {
-                    Display display = Display.getInstance();
+                    Display display = applicationContext.getDisplay();
                     Component dragSource = display.getDescendantAt(dragLocation.x,
                         dragLocation.y);
 
@@ -125,7 +133,7 @@ public final class DragDropManager {
                         dragLocation = null;
                     } else {
                         // A drag handler was found; begin the drag
-                        ApplicationContext.getInstance().setCursor(Cursor.DEFAULT);
+                        Mouse.setCursor(Cursor.DEFAULT);
                         Point componentDragLocation = dragSource.mapPointFromAncestor(display,
                             dragLocation.x, dragLocation.y);
 
@@ -149,7 +157,7 @@ public final class DragDropManager {
 
     protected void mouseUp(Mouse.Button button, int x, int y) {
         if (isActive()) {
-            Display display = Display.getInstance();
+            Display display = applicationContext.getDisplay();
             Component dropTarget = display.getDescendantAt(x, y);
 
             // Look for a drop handler
@@ -179,8 +187,7 @@ public final class DragDropManager {
             dragHandler.endDrag(dropAction);
             dragHandler = null;
 
-            ApplicationContext.getInstance().setCursor(dropTarget == null ?
-                Cursor.DEFAULT : dropTarget.getCursor());
+            Mouse.setCursor(dropTarget == null ? Cursor.DEFAULT : dropTarget.getCursor());
         }
 
         dragLocation = null;
@@ -193,7 +200,6 @@ public final class DragDropManager {
     }
 
     private void invalidate(int x, int y) {
-        ApplicationContext applicationContext = ApplicationContext.getInstance();
         Visual representation = getRepresentation();
         Dimensions offset = getOffset();
 

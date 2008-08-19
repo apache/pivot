@@ -15,17 +15,19 @@
  */
 package pivot.wtk.test;
 
+import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.Display;
 import pivot.wtk.Frame;
 
 public class WindowTest implements Application {
     Frame window1 = new Frame();
     Frame window2 = new Frame();
 
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties) {
         window1.setTitle("Window 1");
         window1.setPreferredSize(320, 240);
-        window1.open();
+        window1.open(display);
 
         Frame window1a = new Frame();
         window1a.setTitle("Window 1 A");
@@ -59,14 +61,15 @@ public class WindowTest implements Application {
         window1bii.open(window1b);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         window1.close();
         window2.close();
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 }

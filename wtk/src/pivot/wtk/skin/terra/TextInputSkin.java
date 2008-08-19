@@ -147,9 +147,9 @@ public class TextInputSkin extends ComponentSkin
             }
 
             // Remove the display mouse listeners
-            Display display = (Display)component;
-            display.getComponentMouseListeners().remove(this);
-            display.getComponentMouseButtonListeners().remove(this);
+            assert (component instanceof Display);
+            component.getComponentMouseListeners().remove(this);
+            component.getComponentMouseButtonListeners().remove(this);
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
@@ -834,7 +834,7 @@ public class TextInputSkin extends ComponentSkin
             // Begin selecting text
             MouseSelectionHandler mouseSelectionHandler = new MouseSelectionHandler();
 
-            Display display = Display.getInstance();
+            Display display = textInput.getWindow().getDisplay();
             display.getComponentMouseListeners().add(mouseSelectionHandler);
             display.getComponentMouseButtonListeners().add(mouseSelectionHandler);
 

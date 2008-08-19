@@ -25,12 +25,10 @@ public final class Display extends Container {
         }
     }
 
-    private static Display instance = new Display();
+    private ApplicationContext applicationContext = null;
 
-	private Display() {
-	    super();
-
-		assert (instance == null) : "Display already exists.";
+	protected Display(ApplicationContext applicationContext) {
+	    this.applicationContext = applicationContext;
 
 		super.setSkin(new DisplaySkin());
 	}
@@ -56,12 +54,12 @@ public final class Display extends Container {
     @Override
     public void repaint(int x, int y, int width, int height, boolean immediate) {
         if (immediate) {
-            Graphics2D graphics = ApplicationContext.getInstance().getGraphics();
+            Graphics2D graphics = applicationContext.getGraphics();
             graphics.clipRect(x, y, width, height);
             paint(graphics);
             graphics.dispose();
         } else {
-            ApplicationContext.getInstance().repaint(x, y, width, height);
+            applicationContext.repaint(x, y, width, height);
         }
     }
 
@@ -74,8 +72,4 @@ public final class Display extends Container {
 
         super.insert(component, index);
     }
-
-    public static Display getInstance() {
-		return instance;
-	}
 }

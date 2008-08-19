@@ -18,9 +18,6 @@ package pivot.wtk;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URL;
 
 import pivot.collections.HashMap;
 
@@ -33,22 +30,33 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
     }
 
-    private class WindowHandler implements WindowListener {
+    private static class WindowHandler implements WindowListener {
         public void windowOpened(WindowEvent event) {
-            initialize(applicationClassName);
-            startupApplication();
+            try {
+                application.startup(applicationContext.getDisplay(), properties);
+            } catch(Exception exception) {
+                displaySystemError(exception);
+            }
         }
 
         public void windowClosing(WindowEvent event) {
-            java.awt.Window window = event.getWindow();
-            window.setVisible(false);
-            window.dispose();
+            boolean shutdown = true;
+
+            try {
+                shutdown = application.shutdown(false);
+            } catch(Exception exception) {
+                displaySystemError(exception);
+            }
+
+            if (shutdown) {
+                java.awt.Window window = event.getWindow();
+                window.setVisible(false);
+                window.dispose();
+            }
         }
 
         public void windowClosed(WindowEvent event) {
-            shutdownApplication();
-            uninitialize();
-            System.exit(0);
+            exit();
         }
 
         public void windowActivated(WindowEvent event) {
@@ -58,85 +66,28 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         public void windowIconified(WindowEvent event) {
-            suspendApplication();
+            try {
+                application.suspend();
+            } catch(Exception exception) {
+                displaySystemError(exception);
+            }
         }
 
         public void windowDeiconified(WindowEvent event) {
-            resumeApplication();
+            try {
+                application.resume();
+            } catch(Exception exception) {
+                displaySystemError(exception);
+            }
         }
-
     }
 
-    private String applicationClassName = null;
-    private HashMap<String, String> properties = null;
-    private HostFrame hostFrame = new HostFrame();
+    private static DesktopApplicationContext applicationContext = null;
+    private static HashMap<String, String> properties = null;
+    private static Application application = null;
 
-    private DesktopApplicationContext(String applicationClassName,
-        HashMap<String, String> properties) {
-        this.applicationClassName = applicationClassName;
-        this.properties = properties;
-
-        // Add the display host to the frame
-        hostFrame.add(displayHost);
-
-        // Add window listeners
-        hostFrame.addWindowListener(new WindowHandler());
-
-        // Disable focus traversal keys
-        hostFrame.setFocusTraversalKeysEnabled(false);
-
-        // Clear the back ground and initialize frame attributes
-        hostFrame.setBackground(null);
-        hostFrame.setTitle("WTK Application");
-
-        // TODO Create a Pivot icon to use here
-        /*
-        try {
-            java.io.InputStream iconInputStream = getClass().getResourceAsStream("pivot.png");
-            hostFrame.setIconImage(ImageIO.read(iconInputStream));
-        } catch(Exception exception) {
-        }
-        */
-
-        // TODO Preserve most recent size
-        hostFrame.setSize(800, 600);
-
-        // Open the window and focus the display host
-        hostFrame.setVisible(true);
-        displayHost.requestFocus();
-    }
-
-    public String getTitle() {
-        return hostFrame.getTitle();
-    }
-
-    public void setTitle(String title) {
-        hostFrame.setTitle(title);
-    }
-
-    public String getProperty(String name) {
-        return properties.get(name);
-    }
-
-    public void open(URL location) {
-    	try {
-    	    Class<?> desktopClass = Class.forName("java.awt.Desktop");
-    	    Method getDesktopMethod = desktopClass.getMethod("getDesktop",
-    		    new Class<?>[] {});
-    	    Method browseMethod = desktopClass.getMethod("browse",
-    		    new Class[] { URI.class });
-    	    Object desktop = getDesktopMethod.invoke(null, (Object[]) null);
-    	    browseMethod.invoke(desktop, location.toURI());
-    	} catch (Exception exception) {
-    	    System.out.println("Unable to open URL in default browser.");
-    	}
-    }
-
-    public void exit() {
-        System.exit(0);
-    }
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        // Get the application class name and startup properties
         String applicationClassName = null;
         HashMap<String, String> properties = new HashMap<String, String>();
 
@@ -158,10 +109,40 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
         }
 
+        // Create the application context
+        applicationContext = new DesktopApplicationContext();
+        ApplicationContext.current = applicationContext;
+
+        // Load the application
         if (applicationClassName == null) {
             System.out.println("Application class name is required.");
         } else {
-            new DesktopApplicationContext(applicationClassName, properties);
+            Class<?> applicationClass = Class.forName(applicationClassName);
+            application = (Application)applicationClass.newInstance();
         }
+
+        // Create the host frame
+        HostFrame hostFrame = new HostFrame();
+
+        // Add the display host to the frame
+        DisplayHost displayHost = applicationContext.getDisplayHost();
+        hostFrame.add(displayHost);
+
+        // Add window listeners
+        hostFrame.addWindowListener(new WindowHandler());
+
+        // Disable focus traversal keys
+        hostFrame.setFocusTraversalKeysEnabled(false);
+
+        // Clear the back ground and initialize frame attributes
+        hostFrame.setBackground(null);
+        hostFrame.setTitle("WTK Application"); // TODO i18n
+
+        // TODO Preserve most recent size
+        hostFrame.setSize(800, 600);
+
+        // Open the window and focus the display host
+        hostFrame.setVisible(true);
+        displayHost.requestFocus();
     }
 }

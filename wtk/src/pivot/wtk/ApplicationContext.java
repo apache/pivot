@@ -28,16 +28,68 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
+/**
+ * TODO Fire events when entries are added to/removed from the cache?
+ */
 public abstract class ApplicationContext {
-    public static class DisplayHost extends java.awt.Component {
+    public static class ResourceCacheDictionary
+        implements Dictionary<URL, Object>, Iterable<URL> {
+        private class KeyIterator implements Iterator<URL> {
+            Iterator<URL> source = null;
+
+            public KeyIterator(Iterator<URL> source) {
+                this.source = source;
+            }
+
+            public boolean hasNext() {
+                return source.hasNext();
+            }
+
+            public URL next() {
+                return source.next();
+            }
+
+            public void remove() {
+                // TODO Support removal?
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        public Object get(URL key) {
+            return resourceCache.get(key);
+        }
+
+        public Object put(URL key, Object value) {
+            return resourceCache.put(key, value);
+        }
+
+        public Object remove(URL key) {
+            return resourceCache.remove(key);
+        }
+
+        public boolean containsKey(URL key) {
+            return resourceCache.containsKey(key);
+        }
+
+        public boolean isEmpty() {
+            return resourceCache.isEmpty();
+        }
+
+        public Iterator<URL> iterator() {
+            return new KeyIterator(resourceCache.iterator());
+        }
+    }
+
+    protected class DisplayHost extends java.awt.Component {
         public static final long serialVersionUID = 0;
 
         private Component focusedComponent = null;
@@ -80,8 +132,8 @@ public abstract class ApplicationContext {
                         if (!paintBuffered((Graphics2D)graphics)) {
                             System.out.println("Standard buffer paint failed.");
 
-                            Display.getInstance().paint((Graphics2D)graphics);
-                            DragDropManager.getInstance().paint((Graphics2D)graphics);
+                            display.paint((Graphics2D)graphics);
+                            dragDropManager.paint((Graphics2D)graphics);
                         }
                     }
                 } catch (RuntimeException exception) {
@@ -119,8 +171,8 @@ public abstract class ApplicationContext {
                 bufferedImageGraphics.translate(-clipBounds.x, -clipBounds.y);
 
                 try {
-                    Display.getInstance().paint(bufferedImageGraphics);
-                    DragDropManager.getInstance().paint((Graphics2D)bufferedImageGraphics);
+                    display.paint(bufferedImageGraphics);
+                    dragDropManager.paint((Graphics2D)bufferedImageGraphics);
                     graphics.drawImage(bufferedImage, clipBounds.x, clipBounds.y, this);
                 } finally {
                     bufferedImageGraphics.dispose();
@@ -166,8 +218,8 @@ public abstract class ApplicationContext {
                     volatileImageGraphics.translate(-clipBounds.x, -clipBounds.y);
 
                     try {
-                        Display.getInstance().paint(volatileImageGraphics);
-                        DragDropManager.getInstance().paint((Graphics2D)volatileImageGraphics);
+                        display.paint(volatileImageGraphics);
+                        dragDropManager.paint((Graphics2D)volatileImageGraphics);
                         graphics.drawImage(volatileImage, clipBounds.x, clipBounds.y, this);
                     } finally {
                         volatileImageGraphics.dispose();
@@ -183,8 +235,6 @@ public abstract class ApplicationContext {
         @Override
         protected void processComponentEvent(ComponentEvent event) {
             super.processComponentEvent(event);
-
-            Display display = Display.getInstance();
 
             switch (event.getID()) {
                 case ComponentEvent.COMPONENT_RESIZED: {
@@ -277,9 +327,6 @@ public abstract class ApplicationContext {
             }
 
             // Process the event
-            Display display = Display.getInstance();
-            DragDropManager dragDropManager = DragDropManager.getInstance();
-
             switch (event.getID()) {
                 case MouseEvent.MOUSE_PRESSED: {
                     display.mouseDown(button, x, y);
@@ -307,9 +354,6 @@ public abstract class ApplicationContext {
             Mouse.setLocation(x, y);
 
             // Process the event
-            Display display = Display.getInstance();
-            DragDropManager dragDropManager = DragDropManager.getInstance();
-
             switch (event.getID()) {
                 case MouseEvent.MOUSE_MOVED:
                 case MouseEvent.MOUSE_DRAGGED: {
@@ -343,8 +387,6 @@ public abstract class ApplicationContext {
             }
 
             // Process the event
-            Display display = Display.getInstance();
-
             switch (event.getID()) {
                 case MouseEvent.MOUSE_WHEEL: {
                     display.mouseWheel(scrollType, event.getScrollAmount(),
@@ -406,7 +448,6 @@ public abstract class ApplicationContext {
 
             // Process the event
             Component focusedComponent = Component.getFocusedComponent();
-            DragDropManager dragDropManager = DragDropManager.getInstance();
 
             if (focusedComponent != null) {
                 switch (event.getID()) {
@@ -461,189 +502,58 @@ public abstract class ApplicationContext {
         }
     }
 
-    // NOTE This member is protected to work around an apparent bug in the
-    // Java plugin. See comment in BrowserApplicationContext.HostApplet() for
-    // details.
-    protected DisplayHost displayHost = new DisplayHost();
+    private Display display = null;
+    private DisplayHost displayHost = null;
+    private DragDropManager dragDropManager = null;
 
-    private Application application = null;
-    private HashMap<URL, Object> resources = new HashMap<URL, Object>();
+    protected static ApplicationContext current = null;
 
-    private boolean applicationStarted = false;
-    private boolean applicationSuspended = false;
+    private static HashMap<URL, Object> resourceCache = new HashMap<URL, Object>();
+    private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
-    private boolean busy = false;
-    private Cursor cursor = Cursor.DEFAULT;
-
-    private static ApplicationContext instance = null;
-
-    private static Timer timer = null;
+    private static Timer timer = new Timer();
     private static HashMap<Integer, TimerTask> timerTaskMap = new HashMap<Integer, TimerTask>();
     private static int nextTimerTaskID = 0;
 
-    private static int DEFAULT_MULTI_CLICK_INTERVAL = 400;
-    private static int DEFAULT_CURSOR_BLINK_RATE = 600;
+    private static final int DEFAULT_MULTI_CLICK_INTERVAL = 400;
+    private static final int DEFAULT_CURSOR_BLINK_RATE = 600;
     private static final String DEFAULT_THEME_CLASS_NAME = "pivot.wtk.skin.terra.TerraTheme";
 
-    /**
-     * Creates the application context.
-     */
-    public ApplicationContext() {
-        assert (ApplicationContext.instance == null) : "An application context already exists.";
+    protected ApplicationContext() {
+        display = new Display(this);
+        displayHost = new DisplayHost();
+        dragDropManager = new DragDropManager(this);
 
-        ApplicationContext.instance = this;
-    }
-
-    /**
-     * Application accessor.
-     */
-    public Application getApplication() {
-        return application;
-    }
-
-    public boolean isApplicationStarted() {
-        return applicationStarted;
-    }
-
-    public boolean isApplicationSuspended() {
-        return applicationSuspended;
-    }
-
-    /**
-     * Returns the busy state of the application context.
-     *
-     * @return <tt>true</tt> if the context is busy; <tt>false</tt>,
-     * otherwise.
-     */
-    public boolean isBusy() {
-        return busy;
-    }
-
-    /**
-     * Sets the busy state of the application context.
-     *
-     * @return <tt>true</tt> if the context is busy; <tt>false</tt>,
-     * otherwise.
-     */
-    public void setBusy(boolean busy) {
-        if (this.busy != busy) {
-            if (displayHost == null) {
-                throw new IllegalStateException("Display host not initialized.");
-            }
-
-            if (busy) {
-                displayHost.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-            } else {
-                setCursor(cursor);
-            }
-
-            this.busy = busy;
+        try {
+            // Load and instantiate the default theme, if possible
+            Class<?> themeClass = Class.forName(DEFAULT_THEME_CLASS_NAME);
+            Theme.setTheme((Theme)themeClass.newInstance());
+        } catch(Exception exception) {
+            // No-op; assume that a custom theme will be installed later
+            // by the caller
+            System.out.println("Warning: Unable to load default theme.");
         }
     }
 
-    public Cursor getCursor() {
-        return cursor;
+    protected Display getDisplay() {
+        return display;
     }
 
-    public void setCursor(Cursor cursor) {
-        if (cursor == null) {
-            throw new IllegalArgumentException("cursor is null.");
-        }
-
-        if (!busy
-            && cursor != this.cursor) {
-            this.cursor = cursor;
-
-            if (displayHost == null) {
-                throw new IllegalStateException("Display host not initialized.");
-            }
-
-            int cursorID = -1;
-
-            switch (cursor) {
-                case DEFAULT: {
-                    cursorID = java.awt.Cursor.DEFAULT_CURSOR;
-                    break;
-                }
-
-                case HAND: {
-                    cursorID = java.awt.Cursor.HAND_CURSOR;
-                    break;
-                }
-
-                case TEXT: {
-                    cursorID = java.awt.Cursor.TEXT_CURSOR;
-                    break;
-                }
-
-                case CROSSHAIR: {
-                    cursorID = java.awt.Cursor.CROSSHAIR_CURSOR;
-                    break;
-                }
-
-                case MOVE: {
-                    cursorID = java.awt.Cursor.MOVE_CURSOR;
-                    break;
-                }
-
-                case RESIZE_NORTH: {
-                    cursorID = java.awt.Cursor.N_RESIZE_CURSOR;
-                    break;
-                }
-
-                case RESIZE_SOUTH: {
-                    cursorID = java.awt.Cursor.S_RESIZE_CURSOR;
-                    break;
-                }
-
-                case RESIZE_EAST: {
-                    cursorID = java.awt.Cursor.E_RESIZE_CURSOR;
-                    break;
-                }
-
-                case RESIZE_WEST: {
-                    cursorID = java.awt.Cursor.W_RESIZE_CURSOR;
-                    break;
-                }
-
-                case RESIZE_NORTH_EAST: {
-                    cursorID = java.awt.Cursor.NE_RESIZE_CURSOR;
-                    break;
-                }
-
-                case RESIZE_SOUTH_WEST: {
-                    cursorID = java.awt.Cursor.SW_RESIZE_CURSOR;
-                    break;
-                }
-
-                case RESIZE_NORTH_WEST: {
-                    cursorID = java.awt.Cursor.NW_RESIZE_CURSOR;
-                    break;
-                }
-
-                case RESIZE_SOUTH_EAST: {
-                    cursorID = java.awt.Cursor.SE_RESIZE_CURSOR;
-                    break;
-                }
-
-                default: {
-                    System.out.println(cursor + " cursor is not supported.");
-                    cursorID = java.awt.Cursor.DEFAULT_CURSOR;
-                    break;
-                }
-            }
-
-            displayHost.setCursor(new java.awt.Cursor(cursorID));
-        }
+    protected DisplayHost getDisplayHost() {
+        return displayHost;
     }
 
-    public void repaint(int x, int y, int width, int height) {
+    protected DragDropManager getDragDropManager() {
+        return dragDropManager;
+    }
+
+    protected void repaint(int x, int y, int width, int height) {
         if (displayHost != null) {
             displayHost.repaint(x, y, width, height);
         }
     }
 
-    public Graphics2D getGraphics() {
+    protected Graphics2D getGraphics() {
         Graphics2D graphics = null;
 
         if (displayHost != null) {
@@ -654,181 +564,49 @@ public abstract class ApplicationContext {
     }
 
     /**
-     * Returns the display host component.
+     * Issues a system alert sound.
      */
-    public DisplayHost getDisplayHost() {
-        return displayHost;
+    public static void beep() {
+        java.awt.Toolkit.getDefaultToolkit().beep();
     }
-
-    /**
-     * Recreates the display host. This is required to work around an apparent
-     * bug in the Java plugin. See source code comments in
-     * BrowserApplicationContext.java for more information.
-     */
-    protected void recreateDisplayHost() {
-        displayHost = new DisplayHost();
-    }
-
-    /**
-     * Returns title of the application context.
-     *
-     * @return
-     * The application context title.
-     */
-    public abstract String getTitle();
-
-    /**
-     * Sets title of the application context.
-     *
-     * @param title
-     * The application context title.
-     */
-    public abstract void setTitle(String title);
-
-    /**
-     * Retrieves the value of a startup property.
-     *
-     * @param name
-     * The property name.
-     *
-     * @return
-     * The property value, or <tt>null</tt> if the property was not specified
-     * at startup.
-     */
-    public abstract String getProperty(String name);
 
     /**
      * Opens the given resource.
      *
      * @param location
      */
-    public abstract void open(URL location);
+    public static void open(URL location) {
+        // TODO Remove dynamic invocation when Java 6 is supported on the Mac
 
-    /**
-     * Terminates the application context.
-     */
-    public abstract void exit();
+        try {
+            Class<?> desktopClass = Class.forName("java.awt.Desktop");
+            Method getDesktopMethod = desktopClass.getMethod("getDesktop",
+                new Class<?>[] {});
+            Method browseMethod = desktopClass.getMethod("browse",
+                new Class[] {URI.class});
+            Object desktop = getDesktopMethod.invoke(null, (Object[]) null);
+            browseMethod.invoke(desktop, location.toURI());
+        } catch (Exception exception) {
+            System.out.println("Unable to open URL in default browser.");
+        }
+    }
 
     /**
      * Resource properties accessor.
      */
-    public Dictionary<URL, Object> getResources() {
-        return resources;
+    public static ResourceCacheDictionary getResourceCache() {
+        return resourceCacheDictionary;
     }
 
     /**
-     * Initializes the application context. Loads the application class and
-     * startup properties and starts the system timer.
+     * Terminates the application context.
      */
-    @SuppressWarnings("unchecked")
-    protected void initialize(String applicationClassName) {
-        assert (applicationClassName != null) : "applicationClassName is null.";
-
+    public static void exit() {
         try {
-            try {
-                // Load and instantiate the default theme, if possible
-                Class<?> themeClass = Class.forName(DEFAULT_THEME_CLASS_NAME);
-                Theme.setTheme((Theme)themeClass.newInstance());
-            } catch(ClassNotFoundException exception) {
-                // No-op; assume that a custom theme will be installed later
-                // by the caller
-                System.out.println("Warning: Unable to load default theme.");
-            }
-
-            // Load and instantiate the application class
-            Class<?> applicationClass = Class.forName(applicationClassName);
-            application = (Application)applicationClass.newInstance();
-
-            // Start the timer
-            timer = new Timer();
-        } catch (Exception exception) {
-            displaySystemError(exception);
+            System.exit(0);
+        } catch(SecurityException exception) {
+            System.out.println("Unable to exit application context.");
         }
-    }
-
-    /**
-     * Un-initializes the application context. Stops the system timer,
-     * cancelling all outstanding timer tasks.
-     */
-    protected void uninitialize() {
-        // Stop the timer
-        if (timer != null) {
-            timer.cancel();
-        }
-
-        timer = null;
-    }
-
-    protected void startupApplication() {
-        if (application != null && !applicationStarted) {
-            try {
-                applicationSuspended = false;
-
-                application.startup();
-                applicationStarted = true;
-            } catch (Exception exception) {
-                displaySystemError(exception);
-            }
-        }
-    }
-
-    protected void shutdownApplication() {
-        if (application != null && applicationStarted) {
-            try {
-                applicationSuspended = false;
-
-                application.shutdown();
-                applicationStarted = false;
-            } catch (Exception exception) {
-                displaySystemError(exception);
-            }
-        }
-    }
-
-    protected void suspendApplication() {
-        if (application != null && !applicationSuspended) {
-            try {
-                application.suspend();
-                applicationSuspended = true;
-            } catch (Exception exception) {
-                displaySystemError(exception);
-            }
-        }
-    }
-
-    protected void resumeApplication() {
-        if (application != null && applicationSuspended) {
-            try {
-                application.resume();
-                applicationSuspended = false;
-            } catch (Exception exception) {
-                displaySystemError(exception);
-            }
-        }
-    }
-
-    private void displaySystemError(Exception exception) {
-        String message = exception.getMessage();
-        if (message == null) {
-            message = exception.toString();
-        }
-
-        exception.printStackTrace();
-
-        // TODO i18n
-        ArrayList<String> options = new ArrayList<String>();
-        options.add("OK");
-
-        Alert alert = new Alert(Alert.Type.ERROR, message, options, null);
-        alert.setTitle(exception.getClass().getName());
-        alert.open();
-    }
-
-    /**
-     * Returns the application context instance.
-     */
-    public static ApplicationContext getInstance() {
-        return instance;
     }
 
     /**
@@ -935,13 +713,6 @@ public abstract class ApplicationContext {
         }
     }
 
-    /**
-     * Issues a system alert sound.
-     */
-    public static void beep() {
-        java.awt.Toolkit.getDefaultToolkit().beep();
-    }
-
     public static int getMultiClickInterval() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Integer multiClickInterval = (Integer)toolkit.getDesktopProperty("awt.multiClickInterval");
@@ -962,5 +733,10 @@ public abstract class ApplicationContext {
         }
 
         return cursorBlinkRate;
+    }
+
+    protected static void displaySystemError(Exception exception) {
+        Alert.alert(Alert.Type.ERROR, exception.getMessage());
+        Thread.dumpStack();
     }
 }

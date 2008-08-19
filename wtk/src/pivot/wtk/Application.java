@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Dictionary;
+
 /**
  * Represents the entry point into a WTK application.
  *
@@ -24,12 +26,12 @@ public interface Application {
     /**
      * Called when the application is starting up.
      */
-    public void startup() throws Exception;
+    public void startup(Display display, Dictionary<String, String> properties) throws Exception;
 
     /**
      * Called when the application is being shut down.
      */
-    public void shutdown() throws Exception;
+    public boolean shutdown(boolean optional) throws Exception;
 
     /**
      * Called to notify the application that it is being suspended.

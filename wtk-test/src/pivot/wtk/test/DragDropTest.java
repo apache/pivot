@@ -16,10 +16,13 @@
 package pivot.wtk.test;
 
 import java.awt.Color;
+
+import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Display;
 import pivot.wtk.DragDropManager;
 import pivot.wtk.DragHandler;
 import pivot.wtk.DropAction;
@@ -81,7 +84,7 @@ public class DragDropTest implements Application {
         public DropAction drop(Component component, int x, int y) {
             DropAction dropAction = null;
 
-            Object dragContent = DragDropManager.getInstance().getContent();
+            Object dragContent = DragDropManager.getCurrent().getContent();
             if (dragContent instanceof Image) {
                 ImageView imageView = (ImageView)component;
                 imageView.setImage((Image)dragContent);
@@ -99,7 +102,7 @@ public class DragDropTest implements Application {
         }
 
         public void mouseOver(Component component) {
-            DragDropManager dragDropManager = DragDropManager.getInstance();
+            DragDropManager dragDropManager = DragDropManager.getCurrent();
             if (dragDropManager.isActive()) {
                 Object dragContent = dragDropManager.getContent();
                 if (dragContent instanceof Image) {
@@ -113,7 +116,7 @@ public class DragDropTest implements Application {
         }
     }
 
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         frame1.setTitle("Frame 1");
         frame1.setPreferredSize(160, 120);
         frame1.getStyles().put("resizable", false);
@@ -129,7 +132,7 @@ public class DragDropTest implements Application {
         imageView1.getComponentMouseListeners().add(imageMouseHandler);
         imageView1.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
         frame1.setContent(imageView1);
-        frame1.open();
+        frame1.open(display);
 
         frame2.setTitle("Frame 2");
         frame2.setPreferredSize(160, 120);
@@ -142,17 +145,18 @@ public class DragDropTest implements Application {
         imageView2.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
         frame2.setContent(imageView2);
 
-        frame2.open();
+        frame2.open(display);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         frame1.close();
         frame2.close();
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 }

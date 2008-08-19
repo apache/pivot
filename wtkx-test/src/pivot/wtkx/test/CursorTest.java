@@ -15,18 +15,21 @@
  */
 package pivot.wtkx.test;
 
+import pivot.collections.Dictionary;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.Button;
+import pivot.wtk.Display;
 import pivot.wtk.Window;
 import pivot.wtkx.ComponentLoader;
 
 public class CursorTest implements Application {
     private Window window = null;
 
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
         ComponentLoader componentLoader = new ComponentLoader();
         Component content = componentLoader.load("pivot/wtkx/test/cursor.wtkx");
 
@@ -41,16 +44,17 @@ public class CursorTest implements Application {
         window.setTitle("Cursor Test");
         window.setContent(content);
         window.setMaximized(true);
-        window.open();
+        window.open(display);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         window.close();
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 }

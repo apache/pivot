@@ -129,9 +129,9 @@ public class Window extends Container {
             }
         }
 
-        public void windowClosed(Window window) {
+        public void windowClosed(Window window, Display display) {
             for (WindowStateListener listener : this) {
-                listener.windowClosed(window);
+                listener.windowClosed(window, display);
             }
         }
     }
@@ -171,6 +171,10 @@ public class Window extends Container {
         setTitle(title);
         setContent(content);
         installSkin(Window.class);
+    }
+
+    public Display getDisplay() {
+        return (Display)getParent();
     }
 
     @Override
@@ -274,51 +278,20 @@ public class Window extends Container {
     }
 
     /**
-     * Opens the window.
-     */
-    public void open() {
-        open(null);
-    }
-
-    /**
      * Opens the window. Opening a window adds it to the display's component
      * sequence. If the window is activatable, it will become the active
      * window.
-     *
-     * @param owner
-     * The window's owner. If <tt>null</tt>, the window will have no owner.
      */
-    public void open(Window owner) {
+    public void open(Display display) {
+        if (display == null) {
+            throw new IllegalArgumentException("display is null.");
+        }
+
         if (isOpen()) {
             throw new IllegalStateException("Window is already open.");
         }
 
-        if (owner != null && !owner.isOpen()) {
-            throw new IllegalStateException("Owner is not open.");
-        }
-
-        if (isAuxilliary()) {
-            if (owner == null) {
-                throw new IllegalArgumentException("Auxilliary windows must have"
-                    + " an owner.");
-            }
-        } else {
-            if (owner != null && owner.isAuxilliary()) {
-                throw new IllegalArgumentException("Primary windows must have a"
-                    + " primary owner.");
-            }
-        }
-
-        // Add this to the owner's owned window list
-        if (owner != null) {
-            owner.ownedWindows.add(this);
-        }
-
-        // Set the owner
-        this.owner = owner;
-
-        // Add this as child of Display
-        Display display = pivot.wtk.Display.getInstance();
+        // Add this as child of display
         display.add(this);
 
         // Show the window
@@ -331,6 +304,43 @@ public class Window extends Container {
         // disabled or incapable of becoming active, will activate the
         // window)
         moveToFront();
+    }
+
+    /**
+     * Opens the window.
+     *
+     * @param owner
+     * The window's owner.
+     */
+    public void open(Window owner) {
+        if (isOpen()) {
+            throw new IllegalStateException("Window is already open.");
+        }
+
+        if (owner == null) {
+            throw new IllegalArgumentException("owner is null.");
+        }
+
+        if (!owner.isOpen()) {
+            throw new IllegalStateException("Owner is not open.");
+        }
+
+        if (!isAuxilliary()
+            && owner.isAuxilliary()) {
+            throw new IllegalArgumentException("Primary windows must have a"
+                + " primary owner.");
+        }
+
+        // Add this to the owner's owned window list
+        if (owner != null) {
+            owner.ownedWindows.add(this);
+        }
+
+        // Set the owner
+        this.owner = owner;
+
+        // Open the window
+        open(owner.getDisplay());
     }
 
     /**
@@ -377,11 +387,12 @@ public class Window extends Container {
             // Hide the window
             setDisplayable(false);
 
-            // Detach from Display
-            Display.getInstance().remove(this);
+            // Detach from display
+            Display display = getDisplay();
+            display.remove(this);
 
             // Notify listeners
-            windowStateListeners.windowClosed(this);
+            windowStateListeners.windowClosed(this, display);
         }
     }
 
@@ -668,7 +679,7 @@ public class Window extends Container {
         }
 
         // If this window is not currently top-most, move it to the top
-        Display display = Display.getInstance();
+        Container parent = getParent();
 
         Window window = this;
         ArrayStack<Integer> ownedWindowIndexes = new ArrayStack<Integer>();
@@ -680,11 +691,11 @@ public class Window extends Container {
 
             if (j == 0) {
                 // Move the window within the window stack
-                int i = display.indexOf(window);
+                int i = parent.indexOf(window);
 
-                if (i < display.getLength() - 1) {
-                    display.remove(i, 1);
-                    display.add(window);
+                if (i < parent.getLength() - 1) {
+                    parent.remove(i, 1);
+                    parent.add(window);
                 }
             }
 
@@ -741,7 +752,7 @@ public class Window extends Container {
             setFocusedComponent(null);
         }
 
-        Display display = Display.getInstance();
+        Container parent = getParent();
 
         // Ensure that the window and all of its owning ancestors are moved
         // to the back
@@ -749,11 +760,11 @@ public class Window extends Container {
         while (window != null) {
             // If this window is not currently bottom-most, move it to the
             // bottom
-            int i = display.indexOf(window);
+            int i = parent.indexOf(window);
 
             if (i > 0) {
-                display.remove(i, 1);
-                display.insert(window, 0);
+                parent.remove(i, 1);
+                parent.insert(window, 0);
             }
 
             window = window.getOwner();

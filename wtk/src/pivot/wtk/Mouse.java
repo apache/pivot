@@ -33,8 +33,8 @@ public final class Mouse {
 
     private static int x = 0;
     private static int y = 0;
-
     private static int buttons = 0x00;
+    private static Cursor cursor = Cursor.DEFAULT;
 
     /**
      * Returns the x-coordinate of the mouse, in Display coordinates.
@@ -77,5 +77,104 @@ public final class Mouse {
      */
     public static boolean isPressed(Button button) {
         return (buttons & button.getMask()) > 0;
+    }
+
+    public static Cursor getCursor() {
+        return cursor;
+    }
+
+    public static void setCursor(Cursor cursor) {
+        if (cursor == null) {
+            throw new IllegalArgumentException("cursor is null.");
+        }
+
+        if (ApplicationContext.current == null) {
+            throw new IllegalStateException("No current application context.");
+        }
+
+        int cursorID = -1;
+
+        switch (cursor) {
+            case DEFAULT: {
+                cursorID = java.awt.Cursor.DEFAULT_CURSOR;
+                break;
+            }
+
+            case HAND: {
+                cursorID = java.awt.Cursor.HAND_CURSOR;
+                break;
+            }
+
+            case TEXT: {
+                cursorID = java.awt.Cursor.TEXT_CURSOR;
+                break;
+            }
+
+            case WAIT: {
+                cursorID = java.awt.Cursor.WAIT_CURSOR;
+                break;
+            }
+
+            case CROSSHAIR: {
+                cursorID = java.awt.Cursor.CROSSHAIR_CURSOR;
+                break;
+            }
+
+            case MOVE: {
+                cursorID = java.awt.Cursor.MOVE_CURSOR;
+                break;
+            }
+
+            case RESIZE_NORTH: {
+                cursorID = java.awt.Cursor.N_RESIZE_CURSOR;
+                break;
+            }
+
+            case RESIZE_SOUTH: {
+                cursorID = java.awt.Cursor.S_RESIZE_CURSOR;
+                break;
+            }
+
+            case RESIZE_EAST: {
+                cursorID = java.awt.Cursor.E_RESIZE_CURSOR;
+                break;
+            }
+
+            case RESIZE_WEST: {
+                cursorID = java.awt.Cursor.W_RESIZE_CURSOR;
+                break;
+            }
+
+            case RESIZE_NORTH_EAST: {
+                cursorID = java.awt.Cursor.NE_RESIZE_CURSOR;
+                break;
+            }
+
+            case RESIZE_SOUTH_WEST: {
+                cursorID = java.awt.Cursor.SW_RESIZE_CURSOR;
+                break;
+            }
+
+            case RESIZE_NORTH_WEST: {
+                cursorID = java.awt.Cursor.NW_RESIZE_CURSOR;
+                break;
+            }
+
+            case RESIZE_SOUTH_EAST: {
+                cursorID = java.awt.Cursor.SE_RESIZE_CURSOR;
+                break;
+            }
+
+            default: {
+                System.out.println(cursor + " cursor is not supported.");
+                cursorID = java.awt.Cursor.DEFAULT_CURSOR;
+                break;
+            }
+        }
+
+        ApplicationContext.DisplayHost displayHost = ApplicationContext.current.getDisplayHost();
+        displayHost.setCursor(new java.awt.Cursor(cursorID));
+
+        Mouse.cursor = cursor;
     }
 }

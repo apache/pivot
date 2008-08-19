@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import pivot.collections.ArrayList;
+import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.serialization.CSVSerializer;
@@ -38,6 +39,7 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.Container;
+import pivot.wtk.Display;
 import pivot.wtk.Form;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Label;
@@ -89,16 +91,12 @@ public class StockTracker implements Application {
         symbols.add("VMW");
     }
 
-    public void startup() throws Exception {
-        ApplicationContext applicationContext = ApplicationContext.getInstance();
-
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
         // Set the locale
-        String language = applicationContext.getProperty(LANGUAGE_PROPERTY_NAME);
+        String language = properties.get(LANGUAGE_PROPERTY_NAME);
         locale = (language == null) ? Locale.getDefault() : new Locale(language);
-
-        // Set the application context title
         resources = new Resources(getClass().getName(), locale, "UTF8");
-        applicationContext.setTitle((String)resources.get("stockTracker"));
 
         // Load the application's UI
         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
@@ -168,7 +166,7 @@ public class StockTracker implements Application {
         yahooFinanceButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 try {
-                    ApplicationContext.getInstance().open(new URL(YAHOO_FINANCE_HOME));
+                    ApplicationContext.open(new URL(YAHOO_FINANCE_HOME));
                 } catch(MalformedURLException exception) {
                 }
             }
@@ -179,9 +177,10 @@ public class StockTracker implements Application {
         detailChangeLabel = (Label)wtkxSerializer.getObjectByName("detail.changeLabel");
 
         window = new Window();
+        window.setTitle((String)resources.get("stockTracker"));
         window.setContent(content);
         window.setMaximized(true);
-        window.open();
+        window.open(display);
 
         refreshTable();
 
@@ -194,14 +193,15 @@ public class StockTracker implements Application {
         Component.setFocusedComponent(symbolTextInput);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         window.close();
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 
     @SuppressWarnings("unchecked")

@@ -32,7 +32,6 @@ import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Display;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.ListButton;
@@ -755,7 +754,7 @@ public class ListButtonSkin extends ButtonSkin
             if (listButton.getListData().getLength() > 0) {
                 // Determine the popup's location and preferred size, relative
                 // to the button
-                Point location = listButton.mapPointToAncestor(Display.getInstance(), 0, 0);
+                Point location = listButton.mapPointToAncestor(button.getWindow().getDisplay(), 0, 0);
                 location.y += getHeight() - 1;
 
                 // TODO Ensure that the popup remains within the bounds of the display

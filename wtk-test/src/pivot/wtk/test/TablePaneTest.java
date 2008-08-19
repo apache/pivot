@@ -15,7 +15,9 @@
  */
 package pivot.wtk.test;
 
+import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.Display;
 import pivot.wtk.PushButton;
 import pivot.wtk.TablePane;
 import pivot.wtk.Window;
@@ -32,7 +34,7 @@ import pivot.wtk.Window;
 public class TablePaneTest implements Application {
     private Window window = null;
 
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties) {
         TablePane tablePane = new TablePane();
         tablePane.getColumns().add(new TablePane.Column(-1));
         tablePane.getColumns().add(new TablePane.Column(1, true));
@@ -46,16 +48,17 @@ public class TablePaneTest implements Application {
         window.setTitle("TableView Test");
         window.setContent(tablePane);
         window.setMaximized(true);
-        window.open();
+        window.open(display);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         window.close();
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 }

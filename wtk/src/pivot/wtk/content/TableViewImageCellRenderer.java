@@ -62,13 +62,12 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
             Object cellData = rowData.get(columnName);
 
             if (cellData instanceof URL) {
-                ApplicationContext applicationContext = ApplicationContext.getInstance();
                 URL imageURL = (URL)cellData;
-                image = (Image)applicationContext.getResources().get(imageURL);
+                image = (Image)ApplicationContext.getResourceCache().get(imageURL);
 
                 if (image == null) {
                     image = Image.load(imageURL);
-                    applicationContext.getResources().put(imageURL, image);
+                    ApplicationContext.getResourceCache().put(imageURL, image);
                 }
             }
 

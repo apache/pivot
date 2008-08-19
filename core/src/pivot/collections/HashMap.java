@@ -44,6 +44,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     }
 
     public HashMap(Comparator<K> comparator) {
+        // TODO
         throw new UnsupportedOperationException("HashMap auto-sorting is not yet supported.");
 
         // this.comparator = comparator;

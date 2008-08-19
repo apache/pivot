@@ -25,7 +25,6 @@ import pivot.collections.Sequence;
 import pivot.util.CalendarDate;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ComponentKeyListener;
@@ -141,7 +140,8 @@ public class Demo implements Application {
                     viewportBounds.width - nodeLabelBounds.x));
                 textInput.getComponentKeyListeners().add(this);
 
-                Point treeViewCoordinates = editableTreeView.mapPointToAncestor(Display.getInstance(), 0, 0);
+                Point treeViewCoordinates =
+                    editableTreeView.mapPointToAncestor(window.getDisplay(), 0, 0);
 
                 popup = new Popup(textInput);
                 popup.setLocation(treeViewCoordinates.x + nodeLabelBounds.x,
@@ -153,7 +153,7 @@ public class Demo implements Application {
                     public void windowOpened(Window window) {
                     }
 
-                    public void windowClosed(Window window) {
+                    public void windowClosed(Window window, Display display) {
                         popup = null;
                     }
                 });
@@ -241,7 +241,7 @@ public class Demo implements Application {
         public DropAction drop(Component component, int x, int y) {
             DropAction dropAction = null;
 
-            Object dragContent = DragDropManager.getInstance().getContent();
+            Object dragContent = DragDropManager.getCurrent().getContent();
             if (dragContent instanceof Image) {
                 ImageView imageView = (ImageView)component;
 
@@ -264,7 +264,7 @@ public class Demo implements Application {
         }
 
         public void mouseOver(Component component) {
-            DragDropManager dragDropManager = DragDropManager.getInstance();
+            DragDropManager dragDropManager = DragDropManager.getCurrent();
 
             if (dragDropManager.isActive()) {
                 Object dragContent = dragDropManager.getContent();
@@ -296,7 +296,7 @@ public class Demo implements Application {
 
     private Window window = null;
 
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
 
@@ -340,13 +340,12 @@ public class Demo implements Application {
         customAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.customAlertButton");
         initializeAlertButtons();
 
-        ApplicationContext.getInstance().setTitle("Pivot Demo");
-
         window = new Window();
+        window.setTitle("Pivot Demo");
         window.setMaximized(true);
         window.setContent(content);
 
-        window.open();
+        window.open(display);
     }
 
     @SuppressWarnings("unchecked")
@@ -474,8 +473,9 @@ public class Demo implements Application {
         });
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) throws Exception {
         window.close();
+        return true;
     }
 
     public void suspend() throws Exception {

@@ -368,12 +368,11 @@ public class TabPane extends Container {
             throw new IllegalArgumentException("icon is null.");
         }
 
-        ApplicationContext applicationContext = ApplicationContext.getInstance();
-        Image iconImage = (Image)applicationContext.getResources().get(icon);
+        Image iconImage = (Image)ApplicationContext.getResourceCache().get(icon);
 
         if (iconImage == null) {
             iconImage = Image.load(icon);
-            applicationContext.getResources().put(icon, iconImage);
+            ApplicationContext.getResourceCache().put(icon, iconImage);
         }
 
         setIcon(component, iconImage);

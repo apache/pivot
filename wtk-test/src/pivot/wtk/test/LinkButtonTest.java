@@ -15,7 +15,9 @@
  */
 package pivot.wtk.test;
 
+import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.LinkButton;
 import pivot.wtk.VerticalAlignment;
@@ -26,7 +28,7 @@ import pivot.wtk.media.Image;
 public class LinkButtonTest implements Application {
     private Window window = new Window();
 
-    public void startup() throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         FlowPane flowPane = new FlowPane();
         flowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         flowPane.getStyles().put("spacing", 8);
@@ -45,16 +47,17 @@ public class LinkButtonTest implements Application {
         flowPane.add(linkButton);
 
         window.setContent(flowPane);
-        window.open();
+        window.open(display);
     }
 
-    public void shutdown() throws Exception {
+    public boolean shutdown(boolean optional) {
         window.close();
+        return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
     }
 }

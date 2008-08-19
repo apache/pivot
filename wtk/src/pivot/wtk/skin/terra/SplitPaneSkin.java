@@ -133,8 +133,9 @@ public class SplitPaneSkin extends ContainerSkin
                     shadow = null;
                 }
 
-                Display.getInstance().getComponentMouseListeners().remove(this);
-                Display.getInstance().getComponentMouseButtonListeners().remove(this);
+                assert (component instanceof Display);
+                component.getComponentMouseListeners().remove(this);
+                component.getComponentMouseButtonListeners().remove(this);
             }
 
             public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
@@ -241,7 +242,9 @@ public class SplitPaneSkin extends ContainerSkin
 
             if (!splitPane.isLocked()) {
                 int splitLocation = splitPane.getSplitLocation();
-                Point displayCoordinates = splitter.mapPointToAncestor(Display.getInstance(), x, y);
+
+                Display display = splitPane.getWindow().getDisplay();
+                Point displayCoordinates = splitter.mapPointToAncestor(display, x, y);
 
                 if (splitPane.getOrientation() == Orientation.HORIZONTAL) {
                     dragOffset = displayCoordinates.x - splitLocation;
@@ -262,8 +265,8 @@ public class SplitPaneSkin extends ContainerSkin
                     shadow.setSize(getWidth(), getHeight());
                 }
 
-                Display.getInstance().getComponentMouseListeners().add(dragHandler);
-                Display.getInstance().getComponentMouseButtonListeners().add(dragHandler);
+                display.getComponentMouseListeners().add(dragHandler);
+                display.getComponentMouseButtonListeners().add(dragHandler);
             }
 
             return false;
