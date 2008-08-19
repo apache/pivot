@@ -13,5 +13,5 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="pivot.wtk.DesktopApplicationContext"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="pivot.tools.explorer.Explorer&#13;&#10;applicationClassName:pivot.tutorials.stocktracker.StockTracker"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="tools"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="explorer"/>
 </launchConfiguration>

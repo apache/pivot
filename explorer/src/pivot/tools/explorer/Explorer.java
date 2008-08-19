@@ -1,4 +1,4 @@
-package pivot.tools;
+package pivot.tools.explorer;
 
 import java.util.Locale;
 
@@ -6,9 +6,6 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
-import pivot.tools.explorer.ComponentAdapter;
-import pivot.tools.explorer.ComponentNodeRenderer;
-import pivot.tools.explorer.TableEntryAdapter;
 import pivot.tools.explorer.table.renderer.PropertyValueTableViewCellRenderer;
 import pivot.tools.explorer.tree.TreeNodeList;
 import pivot.tools.explorer.utils.Collections;
