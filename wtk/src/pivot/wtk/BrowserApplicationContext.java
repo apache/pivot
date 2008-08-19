@@ -66,7 +66,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 DisplayHost displayHost = applicationContext.getDisplayHost();
                 setLayout(new java.awt.BorderLayout());
                 add(displayHost);
-                
+
                 // Add a mouse motion listener to the display host
                 displayHost.addMouseListener(new MouseAdapter() {
                     public void mouseEntered(MouseEvent event) {

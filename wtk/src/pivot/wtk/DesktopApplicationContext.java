@@ -37,7 +37,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             // Clear the background
             setBackground(null);
         }
-        
+
         @Override
         public void update(Graphics graphics) {
             paint(graphics);
@@ -50,7 +50,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             switch(event.getID()) {
                 case WindowEvent.WINDOW_OPENED: {
                     applicationContext.getDisplayHost().requestFocus();
-                    
+
                     try {
                         application.startup(applicationContext.getDisplay(), properties);
                     } catch(Exception exception) {
@@ -59,7 +59,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                     break;
                 }
-                
+
                 case WindowEvent.WINDOW_CLOSING: {
                     boolean shutdown = true;
 
@@ -77,14 +77,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                     break;
                 }
-                
+
                 case WindowEvent.WINDOW_CLOSED: {
                     exit();
                     break;
                 }
             }
         }
-        
+
         @Override
         protected void processWindowStateEvent(WindowEvent event) {
             super.processWindowStateEvent(event);
@@ -99,7 +99,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                     break;
                 }
-                
+
                 case WindowEvent.WINDOW_DEICONIFIED: {
                     try {
                         application.resume();
@@ -116,13 +116,13 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static DesktopApplicationContext applicationContext = null;
     private static HashMap<String, String> properties = null;
     private static Application application = null;
-    
+
     private static final String DEFAULT_HOST_FRAME_TITLE = "Pivot"; // TODO i18n
 
     public static void main(String[] args) throws Exception {
         // Get the application class name and startup properties
         String applicationClassName = null;
-        HashMap<String, String> properties = new HashMap<String, String>();
+        properties = new HashMap<String, String>();
 
         for (int i = 0, n = args.length; i < n; i++) {
             String arg = args[i];
@@ -163,7 +163,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Open the window and focus the display host
         hostFrame.setVisible(true);
-        
+
         Window.getWindowClassListeners().add(new WindowClassListener() {
             public void activeWindowChanged(Window previousActiveWindow) {
                 ApplicationContext.queueCallback(new Runnable() {
@@ -171,7 +171,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         Window activeWindow = Window.getActiveWindow();
 
                         if (activeWindow == null) {
-                            hostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);    
+                            hostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
                         } else {
                             Window rootOwner = activeWindow.getRootOwner();
                             hostFrame.setTitle(rootOwner.getTitle());
