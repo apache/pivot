@@ -16,6 +16,8 @@
 package pivot.wtk;
 
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -32,10 +34,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
             public void run() {
                 // Create the application context
                 applicationContext = new BrowserApplicationContext();
-
-                // TODO This is temporary - this should be set when the mouse
-                // moves over the applet
-                ApplicationContext.current = applicationContext;
 
                 // Load any properties specified on the query string
                 properties = new HashMap<String, String>();
@@ -68,15 +66,23 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 DisplayHost displayHost = applicationContext.getDisplayHost();
                 setLayout(new java.awt.BorderLayout());
                 add(displayHost);
+                
+                // Add a mouse motion listener to the display host
+                displayHost.addMouseListener(new MouseAdapter() {
+                    public void mouseEntered(MouseEvent event) {
+                        ApplicationContext.active = applicationContext;
+                    }
+
+                    public void mouseExited(MouseEvent event) {
+                        ApplicationContext.active = null;
+                    }
+                });
 
                 // Disable focus traversal keys
                 setFocusTraversalKeysEnabled(false);
 
                 // Clear the background
                 setBackground(null);
-
-                // Set focus to the display host
-                displayHost.requestFocus();
 
                 // Load the application
                 String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
@@ -95,6 +101,10 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         private class StartCallback implements Runnable {
             public void run() {
+                // Set focus to the display host
+                DisplayHost displayHost = applicationContext.getDisplayHost();
+                displayHost.requestFocus();
+
                 if (application != null) {
                     try {
                         application.startup(applicationContext.getDisplay(), properties);
@@ -117,8 +127,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         private class DestroyCallback implements Runnable {
             public void run() {
-                if (ApplicationContext.current == applicationContext) {
-                    ApplicationContext.current = null;
+                if (ApplicationContext.active == applicationContext) {
+                    ApplicationContext.active = null;
                 }
             }
         }
@@ -174,6 +184,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
             }
         }
 
+        @Override
         public void update(Graphics graphics) {
             paint(graphics);
         }

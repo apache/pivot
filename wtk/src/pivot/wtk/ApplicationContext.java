@@ -506,7 +506,7 @@ public abstract class ApplicationContext {
     private DisplayHost displayHost = null;
     private DragDropManager dragDropManager = null;
 
-    protected static ApplicationContext current = null;
+    protected static ApplicationContext active = null;
 
     private static HashMap<URL, Object> resourceCache = new HashMap<URL, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();

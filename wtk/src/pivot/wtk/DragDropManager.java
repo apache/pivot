@@ -78,11 +78,11 @@ public final class DragDropManager {
     }
 
     public static DragDropManager getCurrent() {
-        if (ApplicationContext.current == null) {
+        if (ApplicationContext.active == null) {
             throw new IllegalStateException("No current application context.");
         }
 
-        return ApplicationContext.current.getDragDropManager();
+        return ApplicationContext.active.getDragDropManager();
     }
 
     public void paint(Graphics2D graphics) {

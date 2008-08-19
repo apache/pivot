@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <stringAttribute key="bad_container_name" value="\explorer\e"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
@@ -13,5 +13,5 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="pivot.wtk.DesktopApplicationContext"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="pivot.tools.explorer.Explorer&#13;&#10;applicationClassName:pivot.tutorials.stocktracker.StockTracker"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="explorer"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="tools"/>
 </launchConfiguration>

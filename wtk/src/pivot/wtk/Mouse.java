@@ -88,7 +88,7 @@ public final class Mouse {
             throw new IllegalArgumentException("cursor is null.");
         }
 
-        if (ApplicationContext.current == null) {
+        if (ApplicationContext.active == null) {
             throw new IllegalStateException("No current application context.");
         }
 
@@ -172,7 +172,7 @@ public final class Mouse {
             }
         }
 
-        ApplicationContext.DisplayHost displayHost = ApplicationContext.current.getDisplayHost();
+        ApplicationContext.DisplayHost displayHost = ApplicationContext.active.getDisplayHost();
         displayHost.setCursor(new java.awt.Cursor(cursorID));
 
         Mouse.cursor = cursor;

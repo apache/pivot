@@ -15,69 +15,100 @@
  */
 package pivot.wtk;
 
+import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-
 import pivot.collections.HashMap;
 
 public final class DesktopApplicationContext extends ApplicationContext {
     private static class HostFrame extends java.awt.Frame {
         public static final long serialVersionUID = 0;
 
+        private HostFrame() {
+            enableEvents(AWTEvent.WINDOW_EVENT_MASK
+                | AWTEvent.WINDOW_STATE_EVENT_MASK);
+
+            // Add the display host
+            add(applicationContext.getDisplayHost());
+
+            // Disable focus traversal keys
+            setFocusTraversalKeysEnabled(false);
+
+            // Clear the background
+            setBackground(null);
+        }
+        
+        @Override
         public void update(Graphics graphics) {
             paint(graphics);
         }
-    }
 
-    private static class WindowHandler implements WindowListener {
-        public void windowOpened(WindowEvent event) {
-            try {
-                application.startup(applicationContext.getDisplay(), properties);
-            } catch(Exception exception) {
-                displaySystemError(exception);
+        @Override
+        public void processWindowEvent(WindowEvent event) {
+            super.processWindowEvent(event);
+
+            switch(event.getID()) {
+                case WindowEvent.WINDOW_OPENED: {
+                    applicationContext.getDisplayHost().requestFocus();
+                    
+                    try {
+                        application.startup(applicationContext.getDisplay(), properties);
+                    } catch(Exception exception) {
+                        displaySystemError(exception);
+                    }
+
+                    break;
+                }
+                
+                case WindowEvent.WINDOW_CLOSING: {
+                    boolean shutdown = true;
+
+                    try {
+                        shutdown = application.shutdown(false);
+                    } catch(Exception exception) {
+                        displaySystemError(exception);
+                    }
+
+                    if (shutdown) {
+                        java.awt.Window window = event.getWindow();
+                        window.setVisible(false);
+                        window.dispose();
+                    }
+
+                    break;
+                }
+                
+                case WindowEvent.WINDOW_CLOSED: {
+                    exit();
+                    break;
+                }
             }
         }
+        
+        @Override
+        protected void processWindowStateEvent(WindowEvent event) {
+            super.processWindowStateEvent(event);
 
-        public void windowClosing(WindowEvent event) {
-            boolean shutdown = true;
+            switch(event.getID()) {
+                case WindowEvent.WINDOW_ICONIFIED: {
+                    try {
+                        application.suspend();
+                    } catch(Exception exception) {
+                        displaySystemError(exception);
+                    }
 
-            try {
-                shutdown = application.shutdown(false);
-            } catch(Exception exception) {
-                displaySystemError(exception);
-            }
+                    break;
+                }
+                
+                case WindowEvent.WINDOW_DEICONIFIED: {
+                    try {
+                        application.resume();
+                    } catch(Exception exception) {
+                        displaySystemError(exception);
+                    }
 
-            if (shutdown) {
-                java.awt.Window window = event.getWindow();
-                window.setVisible(false);
-                window.dispose();
-            }
-        }
-
-        public void windowClosed(WindowEvent event) {
-            exit();
-        }
-
-        public void windowActivated(WindowEvent event) {
-        }
-
-        public void windowDeactivated(WindowEvent event) {
-        }
-
-        public void windowIconified(WindowEvent event) {
-            try {
-                application.suspend();
-            } catch(Exception exception) {
-                displaySystemError(exception);
-            }
-        }
-
-        public void windowDeiconified(WindowEvent event) {
-            try {
-                application.resume();
-            } catch(Exception exception) {
-                displaySystemError(exception);
+                    break;
+                }
             }
         }
     }
@@ -85,6 +116,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static DesktopApplicationContext applicationContext = null;
     private static HashMap<String, String> properties = null;
     private static Application application = null;
+    
+    private static final String DEFAULT_HOST_FRAME_TITLE = "Pivot"; // TODO i18n
 
     public static void main(String[] args) throws Exception {
         // Get the application class name and startup properties
@@ -111,7 +144,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Create the application context
         applicationContext = new DesktopApplicationContext();
-        ApplicationContext.current = applicationContext;
+        ApplicationContext.active = applicationContext;
 
         // Load the application
         if (applicationClassName == null) {
@@ -122,27 +155,30 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         // Create the host frame
-        HostFrame hostFrame = new HostFrame();
-
-        // Add the display host to the frame
-        DisplayHost displayHost = applicationContext.getDisplayHost();
-        hostFrame.add(displayHost);
-
-        // Add window listeners
-        hostFrame.addWindowListener(new WindowHandler());
-
-        // Disable focus traversal keys
-        hostFrame.setFocusTraversalKeysEnabled(false);
-
-        // Clear the back ground and initialize frame attributes
-        hostFrame.setBackground(null);
-        hostFrame.setTitle("WTK Application"); // TODO i18n
+        final HostFrame hostFrame = new HostFrame();
+        hostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
 
         // TODO Preserve most recent size
         hostFrame.setSize(800, 600);
 
         // Open the window and focus the display host
         hostFrame.setVisible(true);
-        displayHost.requestFocus();
+        
+        Window.getWindowClassListeners().add(new WindowClassListener() {
+            public void activeWindowChanged(Window previousActiveWindow) {
+                ApplicationContext.queueCallback(new Runnable() {
+                    public void run() {
+                        Window activeWindow = Window.getActiveWindow();
+
+                        if (activeWindow == null) {
+                            hostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);    
+                        } else {
+                            Window rootOwner = activeWindow.getRootOwner();
+                            hostFrame.setTitle(rootOwner.getTitle());
+                        }
+                    }
+                });
+            }
+        });
     }
 }
