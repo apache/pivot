@@ -11,16 +11,14 @@
     <property name="webtest" value="web-test"/>
     <property name="wtk" value="wtk"/>
     <property name="wtktest" value="wtk-test"/>
-    <property name="wtkx" value="wtkx"/>
-    <property name="wtkxtest" value="wtkx-test"/>
 
     <!-- Compiler properties -->
     <property name="compiler.optimize" value="true"/>
     <property name="compiler.deprecation" value="true"/>
     <property name="compiler.debug" value="true"/>
 
-    <target name="build" depends="core, core-test, web, web-test, wtk, wtk-test, wtkx, wtkx-test"/>
-    <target name="clean" depends="core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, wtkx-clean, wtkx-test-clean"/>
+    <target name="build" depends="core, core-test, web, web-test, wtk, wtk-test"/>
+    <target name="clean" depends="core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean"/>
 
     <target name="doc">
         <delete dir="${doc}"/>
@@ -37,7 +35,6 @@
             <packageset dir="${wtk}/${src}" includes="**/*">
                 <exclude name="**/skin/**"/>
             </packageset>
-            <packageset dir="${wtkx}/${src}" includes="**/*"/>
         </javadoc>
         <zip destfile="${doc}.zip" basedir="doc"/>
     </target>
@@ -190,11 +187,14 @@
                 <exclude name="pivot/wtk/skin/terra/**"/>
                 <exclude name="pivot/wtk/skin/obsidian/**"/>
             </fileset>
-            <!-- TODO Re-seal this when we eliminate WTKX
+            <fileset dir="${wtk}/${src}">
+                <exclude name="pivot/wtk/skin/terra/**"/>
+                <exclude name="pivot/wtk/skin/obsidian/**"/>
+                <exclude name="**/*.java"/>
+            </fileset>
             <manifest>
                 <attribute name="Sealed" value="true"/>
             </manifest>
-            -->
             <metainf dir="${wtk}">
                 <include name="services/**"/>
             </metainf>
@@ -264,57 +264,6 @@
         <delete file="${wtktest}/${ant.project.name}-wtk.test.jar"/>
     </target>
 
-    <!-- WTKX -->
-    <target name="wtkx" depends="core, wtk">
-        <mkdir dir="${wtkx}/${bin}"/>
-
-        <!-- Compile source files -->
-        <javac srcdir="${wtkx}/${src}" destDir="${wtkx}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
-            <compilerarg value="-Xlint"/>
-            <classpath>
-                <pathelement location="${core}/${ant.project.name}-core.jar"/>
-                <pathelement location="${wtk}/${ant.project.name}-wtk.jar"/>
-            </classpath>
-        </javac>
-
-        <!-- Rebuild the JAR file -->
-        <delete file="${wtkx}/${ant.project.name}-wtkx.jar"/>
-        <jar jarfile="${wtkx}/${ant.project.name}-wtkx.jar">
-            <fileset dir="${wtkx}/${bin}"/>
-            <!-- NOTE This isn't sealed because we have split pivot.wtkx across two JARs.
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-            </manifest>
-            -->
-        </jar>
-    </target>
-
-    <target name="wtkx-clean">
-        <delete dir="${wtkx}/${bin}"/>
-        <delete file="${wtkx}/${ant.project.name}-wtkx.jar"/>
-    </target>
-
-    <!-- WTKX Test -->
-    <target name="wtkx-test" depends="core, wtk, wtkx">
-        <mkdir dir="${wtkxtest}/${bin}"/>
-
-        <!-- Compile source files -->
-        <javac srcdir="${wtkxtest}/${src}" destDir="${wtkxtest}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true" classpath="${core}/${ant.project.name}-core.jar;${wtk}/${ant.project.name}-wtk.jar;${wtkx}/${ant.project.name}-wtkx.jar">
-            <compilerarg value="-Xlint"/>
-        </javac>
-
-        <!-- Rebuild the JAR file -->
-        <delete file="${wtkxtest}/${ant.project.name}-wtkx.test.jar"/>
-        <jar jarfile="${wtkxtest}/${ant.project.name}-wtkx.test.jar">
-            <fileset dir="${wtkxtest}/${bin}"/>
-        </jar>
-    </target>
-
-    <target name="wtkx-test-clean">
-        <delete dir="${wtkxtest}/${bin}"/>
-        <delete file="${wtkxtest}/${ant.project.name}-wtkx.test.jar"/>
-    </target>
-
     <!-- Package all source -->
     <target name="package-source">
         <delete file="${ant.project.name}-src.zip"/>
@@ -325,8 +274,6 @@
             <fileset dir="${webtest}/${src}"/>
             <fileset dir="${wtk}/${src}"/>
             <fileset dir="${wtktest}/${src}"/>
-            <fileset dir="${wtkx}/${src}"/>
-            <fileset dir="${wtkxtest}/${src}"/>
         </zip>
     </target>
 
