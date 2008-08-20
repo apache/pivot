@@ -98,23 +98,13 @@ public class Dialog extends Window {
      *
      * @param display
      * The display on which the dialog will be opened.
-     */
-    @Override
-    public final void open(Display display) {
-        open(display, null);
-    }
-
-    /**
-     * Opens the dialog.
-     *
-     * @param display
-     * The display on which the dialog will be opened.
      *
      * @param dialogResultListener
      * Optional dialog listener to be called when the dialog is closed.
      */
     public void open(Display display, DialogResultListener dialogResultListener) {
         this.dialogResultListener = dialogResultListener;
+        this.modal = false;
         super.open(display);
     }
 
