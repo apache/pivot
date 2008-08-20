@@ -62,6 +62,7 @@ import pivot.wtk.content.TableRow;
 import pivot.wtk.content.TableViewHeaderData;
 import pivot.wtk.content.TreeViewNodeRenderer;
 import pivot.wtk.effects.BlurDecorator;
+import pivot.wtk.effects.FadeDecorator;
 import pivot.wtk.effects.GrayscaleDecorator;
 import pivot.wtk.effects.ReflectionDecorator;
 import pivot.wtk.effects.ShadeDecorator;
@@ -476,9 +477,10 @@ public class Demo implements Application {
 
                 Component.DecoratorSequence alertDecorators = alert.getDecorators();
                 alertDecorators.removeAll();
+                alertDecorators.add(new FadeDecorator());
                 alertDecorators.add(new WatermarkDecorator("Hello World"));
-                alertDecorators.add(new BlurDecorator());
-                alertDecorators.add(new GrayscaleDecorator());
+                // alertDecorators.add(new BlurDecorator());
+                // alertDecorators.add(new GrayscaleDecorator());
                 alertDecorators.add(new ShadeDecorator(0.33f, Color.BLUE));
                 alertDecorators.add(new ReflectionDecorator());
 
