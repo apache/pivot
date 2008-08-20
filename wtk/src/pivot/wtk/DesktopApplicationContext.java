@@ -54,6 +54,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     try {
                         application.startup(applicationContext.getDisplay(), properties);
                     } catch(Exception exception) {
+                        exception.printStackTrace();
                         displaySystemError(exception);
                     }
 
