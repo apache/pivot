@@ -142,17 +142,9 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
      *
      * @author tvolkert
      */
-    public static final class SpinnerContent extends Component {
-        private Spinner spinner;
-
-        public SpinnerContent(Spinner spinner) {
-            this.spinner = spinner;
-
-            installSkin(SpinnerContent.class);
-        }
-
-        public Spinner getSpinner() {
-            return spinner;
+    private class SpinnerContent extends Component {
+        public SpinnerContent() {
+            setSkin(new SpinnerContentSkin());
         }
     }
 
@@ -161,19 +153,9 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
      *
      * @author tvolkert
      */
-    public static final class SpinnerContentSkin extends ComponentSkin {
-        private Color borderColor = DEFAULT_BORDER_COLOR;
-
-        @Override
-        public void install(Component component) {
-            validateComponentType(component, SpinnerContent.class);
-
-            super.install(component);
-        }
-
+    private class SpinnerContentSkin extends ComponentSkin {
         public int getPreferredWidth(int height) {
-            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
-            Spinner spinner = spinnerContent.getSpinner();
+            Spinner spinner = (Spinner)SpinnerSkin.this.getComponent();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
             itemRenderer.render(spinner.getSelectedValue(), spinner);
@@ -181,8 +163,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         public int getPreferredHeight(int width) {
-            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
-            Spinner spinner = spinnerContent.getSpinner();
+            Spinner spinner = (Spinner)SpinnerSkin.this.getComponent();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
             itemRenderer.render(spinner.getSelectedValue(), spinner);
@@ -190,8 +171,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         public Dimensions getPreferredSize() {
-            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
-            Spinner spinner = spinnerContent.getSpinner();
+            Spinner spinner = (Spinner)SpinnerSkin.this.getComponent();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
             itemRenderer.render(spinner.getSelectedValue(), spinner);
@@ -204,7 +184,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
         public void paint(Graphics2D graphics) {
             SpinnerContent spinnerContent = (SpinnerContent)getComponent();
-            Spinner spinner = spinnerContent.getSpinner();
+            Spinner spinner = (Spinner)SpinnerSkin.this.getComponent();
 
             int width = getWidth();
             int height = getHeight();
@@ -235,27 +215,6 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
             }
         }
 
-        public Color getBorderColor() {
-            return borderColor;
-        }
-
-        public void setBorderColor(Color borderColor) {
-            if (borderColor == null) {
-                throw new IllegalArgumentException("borderColor is null.");
-            }
-
-            this.borderColor = borderColor;
-            repaintComponent();
-        }
-
-        public final void setBorderColor(String borderColor) {
-            if (borderColor == null) {
-                throw new IllegalArgumentException("borderColor is null.");
-            }
-
-            setBorderColor(Color.decode(borderColor));
-        }
-
         @Override
         public void enabledChanged(Component component) {
             super.enabledChanged(component);
@@ -271,17 +230,10 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         @Override
-        public void mouseClick(Mouse.Button button, int x, int y, int count) {
-            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
-            Component.setFocusedComponent(spinnerContent);
-        }
-
-        @Override
         public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = true;
 
-            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
-            Spinner spinner = spinnerContent.getSpinner();
+            Spinner spinner = (Spinner)SpinnerSkin.this.getComponent();
 
             boolean circular = spinner.isCircular();
             int selectedIndex = spinner.getSelectedIndex();
@@ -312,21 +264,15 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
      *
      * @author tvolkert
      */
-    public static final class SpinButton extends Component {
-        private Spinner spinner;
+    private class SpinButton extends Component {
         private int direction;
         private Image buttonImage;
 
-        public SpinButton(Spinner spinner, int direction, Image buttonImage) {
-            this.spinner = spinner;
+        public SpinButton(int direction, Image buttonImage) {
             this.direction = direction;
             this.buttonImage = buttonImage;
 
-            installSkin(SpinButton.class);
-        }
-
-        public Spinner getSpinner() {
-            return spinner;
+            setSkin(new SpinButtonSkin());
         }
 
         public int getDirection() {
@@ -343,16 +289,9 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
      *
      * @author tvolkert
      */
-    public static final class SpinButtonSkin extends ComponentSkin {
+    private class SpinButtonSkin extends ComponentSkin {
         private boolean highlighted = false;
         private boolean pressed = false;
-
-        @Override
-        public void install(Component component) {
-            validateComponentType(component, SpinButton.class);
-
-            super.install(component);
-        }
 
         @Override
         public boolean isFocusable() {
@@ -378,25 +317,20 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         public void paint(Graphics2D graphics) {
             // Apply spinner styles to the button
             SpinButton spinButton = (SpinButton)getComponent();
-            Spinner spinner = spinButton.getSpinner();
-            Component.StyleDictionary spinnerStyles = spinner.getStyles();
+            Spinner spinner = (Spinner)SpinnerSkin.this.getComponent();
 
             Color backgroundColor = null;
 
             if (spinner.isEnabled()) {
                 if (pressed) {
-                    backgroundColor = (Color)spinnerStyles.get
-                        ("buttonPressedBackgroundColor");
+                    backgroundColor = buttonPressedBackgroundColor;
                 } else if (highlighted) {
-                    backgroundColor = (Color)spinnerStyles.get
-                        ("buttonHighlightedBackgroundColor");
+                    backgroundColor = buttonHighlightedBackgroundColor;
                 } else {
-                    backgroundColor = (Color)spinnerStyles.get
-                        ("buttonBackgroundColor");
+                    backgroundColor = buttonBackgroundColor;
                 }
             } else {
-                backgroundColor = (Color)spinnerStyles.get
-                    ("buttonDisabledBackgroundColor");
+                backgroundColor = buttonDisabledBackgroundColor;
             }
 
             int width = getWidth();
@@ -459,7 +393,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
             if (button == Mouse.Button.LEFT) {
                 SpinButton spinButton = (SpinButton)getComponent();
-                Spinner spinner = spinButton.getSpinner();
+                Spinner spinner = (Spinner)SpinnerSkin.this.getComponent();
 
                 // Start the automatic spinner. It'll be stopped when we
                 // mouse up or mouse out
@@ -546,9 +480,9 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
     }
 
-    private SpinnerContent spinnerContent = null;
-    private SpinButton upButton = null;
-    private SpinButton downButton = null;
+    private SpinnerContent spinnerContent = new SpinnerContent();
+    private SpinButton upButton = new SpinButton(1, new SpinUpImage());
+    private SpinButton downButton = new SpinButton(-1, new SpinDownImage());
 
     private Color color = Color.BLACK;
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
@@ -574,13 +508,8 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         spinner.getSpinnerListeners().add(this);
         spinner.getSpinnerSelectionListeners().add(this);
 
-        spinnerContent = new SpinnerContent(spinner);
         spinner.add(spinnerContent);
-
-        upButton = new SpinButton(spinner, 1, new SpinUpImage());
         spinner.add(upButton);
-
-        downButton = new SpinButton(spinner, -1, new SpinDownImage());
         spinner.add(downButton);
     }
 
@@ -593,10 +522,6 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         spinner.remove(spinnerContent);
         spinner.remove(upButton);
         spinner.remove(downButton);
-
-        spinnerContent = null;
-        upButton = null;
-        downButton = null;
 
         super.uninstall();
     }
@@ -693,6 +618,11 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
             width - 1, buttonHeight + 1);
     }
 
+    @Override
+    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+        Component.setFocusedComponent(spinnerContent);
+    }
+
     public Color getColor() {
         return color;
     }
@@ -747,7 +677,6 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         this.borderColor = borderColor;
-        spinnerContent.getStyles().put("borderColor", borderColor);
 
         repaintComponent();
     }
