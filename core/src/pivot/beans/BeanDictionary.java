@@ -18,6 +18,7 @@ package pivot.beans;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -60,21 +61,30 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
         }
 
         private void nextProperty() {
-            final int propertyOffset = GET_PREFIX.length();
-
             nextProperty = null;
 
             while (i < methods.length
                 && nextProperty == null) {
                 Method method = methods[i++];
-                String methodName = method.getName();
 
-                if (methodName.startsWith(GET_PREFIX)
-                    && methodName.length() > propertyOffset
-                    && !methodName.endsWith(LISTENERS_SUFFIX)
-                    && method.getParameterTypes().length == 0) {
-                    nextProperty = Character.toLowerCase(methodName.charAt(propertyOffset))
-                        + methodName.substring(propertyOffset + 1);
+                if (method.getParameterTypes().length == 0
+                    && (method.getModifiers() & Modifier.STATIC) == 0) {
+                    String methodName = method.getName();
+
+                    String prefix = null;
+                    if (methodName.startsWith(GET_PREFIX)) {
+                        prefix = GET_PREFIX;
+                    } else {
+                        if (methodName.startsWith(IS_PREFIX)) {
+                            prefix = IS_PREFIX;
+                        }
+                    }
+
+                    if (prefix != null) {
+                        int propertyOffset = prefix.length();
+                        nextProperty = Character.toLowerCase(methodName.charAt(propertyOffset))
+                            + methodName.substring(propertyOffset + 1);
+                    }
                 }
             }
         }

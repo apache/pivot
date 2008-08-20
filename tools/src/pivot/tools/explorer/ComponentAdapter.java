@@ -53,7 +53,9 @@ public class ComponentAdapter
 			properties = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
 
 			for ( String s: beanDictionary ) {
-				properties.add( new TableEntryAdapter( beanDictionary, s ));
+			    if (!beanDictionary.isReadOnly(s)) {
+			        properties.add( new TableEntryAdapter( beanDictionary, s ));
+			    }
 			}
 
 

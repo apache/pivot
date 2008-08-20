@@ -34,7 +34,7 @@
                 <exclude name="pivot/tutorials/stocktracker/**"/>
             </fileset>
         </jar>
-        
+
         <delete file="${tutorials}/${ant.project.name}-stocktracker.jar"/>
         <jar jarfile="${tutorials}/${ant.project.name}-stocktracker.jar">
             <fileset dir="${tutorials}/${bin}">
@@ -45,7 +45,7 @@
             </fileset>
         </jar>
     </target>
-    
+
     <!-- Clean the tutorial classes -->
     <target name="clean">
         <delete dir="${tutorials}/${bin}"/>
