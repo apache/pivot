@@ -126,7 +126,7 @@ public class PanoramaSkin extends ContainerSkin
         // The panorama's preferred size is the preferred size of the view
         Panorama panorama = (Panorama)getComponent();
         Component view = panorama.getView();
-        if (view != null) {
+        if (view == null) {
             preferredSize = new Dimensions(0, 0);
         } else {
             preferredSize = view.getPreferredSize();

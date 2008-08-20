@@ -96,26 +96,51 @@ public class Dialog extends Window {
     /**
      * Opens the dialog.
      *
-     * @owner
-     * The dialog's owner. If <tt>null</tt>, the dialog is opened non-modal.
-     * Otherwise, it is opened as modal.
+     * @param display
+     * The display on which the dialog will be opened.
      */
     @Override
-    public void open(Window owner) {
-        open(owner, owner != null, null);
+    public final void open(Display display) {
+        open(display, null);
     }
 
     /**
      * Opens the dialog.
      *
-     * @owner
+     * @param display
+     * The display on which the dialog will be opened.
+     *
+     * @param dialogResultListener
+     * Optional dialog listener to be called when the dialog is closed.
+     */
+    public void open(Display display, DialogResultListener dialogResultListener) {
+        this.dialogResultListener = dialogResultListener;
+        super.open(display);
+    }
+
+    /**
+     * Opens the dialog.
+     *
+     * @param owner
+     * The dialog's owner. If <tt>null</tt>, the dialog is opened non-modal.
+     * Otherwise, it is opened as modal.
+     */
+    @Override
+    public final void open(Window owner) {
+        open(owner, true, null);
+    }
+
+    /**
+     * Opens the dialog.
+     *
+     * @param owner
      * The dialog's owner. If <tt>null</tt>, the dialog is opened non-modal.
      * Otherwise, it is opened as modal.
      *
      * @param dialogResultListener
      * Optional dialog listener to be called when the dialog is closed.
      */
-    public void open(Window owner, DialogResultListener dialogResultListener) {
+    public final void open(Window owner, DialogResultListener dialogResultListener) {
         open(owner, true, dialogResultListener);
     }
 

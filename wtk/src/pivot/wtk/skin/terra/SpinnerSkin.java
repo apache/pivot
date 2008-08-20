@@ -142,7 +142,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
      *
      * @author tvolkert
      */
-    private class SpinnerContent extends Component {
+    protected class SpinnerContent extends Component {
         public SpinnerContent() {
             setSkin(new SpinnerContentSkin());
         }
@@ -153,7 +153,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
      *
      * @author tvolkert
      */
-    private class SpinnerContentSkin extends ComponentSkin {
+    protected class SpinnerContentSkin extends ComponentSkin {
         public int getPreferredWidth(int height) {
             Spinner spinner = (Spinner)SpinnerSkin.this.getComponent();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
@@ -264,7 +264,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
      *
      * @author tvolkert
      */
-    private class SpinButton extends Component {
+    protected class SpinButton extends Component {
         private int direction;
         private Image buttonImage;
 
@@ -289,7 +289,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
      *
      * @author tvolkert
      */
-    private class SpinButtonSkin extends ComponentSkin {
+    protected class SpinButtonSkin extends ComponentSkin {
         private boolean highlighted = false;
         private boolean pressed = false;
 

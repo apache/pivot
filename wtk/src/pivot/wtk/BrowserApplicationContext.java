@@ -110,6 +110,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                         application.startup(applicationContext.getDisplay(), properties);
                     } catch(Exception exception) {
                         displaySystemError(exception);
+                        exception.printStackTrace();
                     }
                 }
             }
@@ -121,6 +122,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     application.shutdown(true);
                 } catch(Exception exception) {
                     displaySystemError(exception);
+                    exception.printStackTrace();
                 }
             }
         }

@@ -39,14 +39,16 @@ public class JSONSerializerTest {
         " [ \"A\", \"B\", \t\"C\", [\t0, 1, 2, 'abc', true]]",
         "['A', 'B', 'C']",
         "{   }",
+        "{a:null}",
+        "{a:''}",
         "{a:1, b:2",
         "{'1a' : 0, bc : 'hello', n:-100.56, c:true, d:{e:10, f:20}, g:{aa:10, bb:20, cc:30}, m:[1,2, 4]}",
         "{\"a#b\" : '#ff'}"
     };
 
     public static void main(String[] args) {
-        // test1();
-        test2();
+        test1();
+        // test2();
     }
 
     public static void test1() {

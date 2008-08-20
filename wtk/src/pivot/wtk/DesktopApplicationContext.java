@@ -54,8 +54,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     try {
                         application.startup(applicationContext.getDisplay(), properties);
                     } catch(Exception exception) {
-                        exception.printStackTrace();
                         displaySystemError(exception);
+                        exception.printStackTrace();
                     }
 
                     break;
@@ -68,6 +68,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         shutdown = application.shutdown(false);
                     } catch(Exception exception) {
                         displaySystemError(exception);
+                        exception.printStackTrace();
                     }
 
                     if (shutdown) {
@@ -96,6 +97,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         application.suspend();
                     } catch(Exception exception) {
                         displaySystemError(exception);
+                        exception.printStackTrace();
                     }
 
                     break;
@@ -106,6 +108,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         application.resume();
                     } catch(Exception exception) {
                         displaySystemError(exception);
+                        exception.printStackTrace();
                     }
 
                     break;

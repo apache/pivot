@@ -281,6 +281,9 @@ public class Window extends Container {
      * Opens the window. Opening a window adds it to the display's component
      * sequence. If the window is activatable, it will become the active
      * window.
+     *
+     * @param display
+     * The display on which the window will be opened.
      */
     public void open(Display display) {
         if (display == null) {
@@ -338,6 +341,10 @@ public class Window extends Container {
 
         // Set the owner
         this.owner = owner;
+
+        // Ensure that the window's owner tree is visible
+        Window rootOwner = getRootOwner();
+        rootOwner.setDisplayable(true);
 
         // Open the window
         open(owner.getDisplay());
@@ -594,12 +601,8 @@ public class Window extends Container {
                 previousActiveWindow.setActive(false);
             }
 
+            // Activate the window
             if (activeWindow != null) {
-                // Ensure that the window's owner tree is visible
-                Window rootOwner = activeWindow.getRootOwner();
-                rootOwner.setDisplayable(true);
-
-                // Activate the window
                 activeWindow.setActive(true);
             }
 
