@@ -1502,12 +1502,30 @@ public abstract class Component implements Visual {
             int bottom = top + height - 1;
             int right = left + width - 1;
 
-            top = Math.max(top, 0);
-            left = Math.max(left, 0);
-            bottom = Math.min(bottom, getHeight() - 1);
-            right = Math.min(right, getWidth() - 1);
+            x = Math.max(left, 0);
+            y = Math.max(top, 0);
+            width = Math.min(right, getWidth() - 1) - x + 1;
+            height = Math.min(bottom, getHeight() - 1) - y + 1;
 
-            parent.repaint(left + this.x, top + this.y, right - left + 1, bottom - top + 1);
+            parent.repaint(x + this.x, y + this.y, width, height);
+
+            if (decorators.getLength() > 0) {
+                Window window = getWindow();
+
+                if (window != null) {
+                    Display display = window.getDisplay();
+                    Point offset = mapPointToAncestor(display, 0, 0);
+
+                    for (Decorator decorator : decorators) {
+                        Rectangle dirtyRegion = decorator.getDirtyRegion(this, x, y, width, height);
+
+                        if (dirtyRegion != null) {
+                            display.repaint(dirtyRegion.x + offset.x, dirtyRegion.y + offset.y,
+                                dirtyRegion.width, dirtyRegion.height);
+                        }
+                    }
+                }
+            }
         }
     }
 

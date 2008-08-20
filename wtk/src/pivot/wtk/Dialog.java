@@ -98,13 +98,28 @@ public class Dialog extends Window {
      *
      * @param display
      * The display on which the dialog will be opened.
+     */
+    public final void open(Display display) {
+        super.open(display);
+    }
+
+    /**
+     * Opens the dialog.
+     *
+     * @param display
+     * The display on which the dialog will be opened.
      *
      * @param dialogResultListener
      * Optional dialog listener to be called when the dialog is closed.
      */
     public void open(Display display, DialogResultListener dialogResultListener) {
+        if (isOpen()) {
+            throw new IllegalStateException("Dialog is already open.");
+        }
+
         this.dialogResultListener = dialogResultListener;
         this.modal = false;
+
         super.open(display);
     }
 
@@ -149,7 +164,7 @@ public class Dialog extends Window {
      */
     public void open(Window owner, boolean modal, DialogResultListener dialogResultListener) {
         if (isOpen()) {
-            throw new IllegalStateException("Window is already open.");
+            throw new IllegalStateException("Dialog is already open.");
         }
 
         this.dialogResultListener = dialogResultListener;

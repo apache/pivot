@@ -286,12 +286,12 @@ public class Window extends Container {
      * The display on which the window will be opened.
      */
     public void open(Display display) {
-        if (display == null) {
-            throw new IllegalArgumentException("display is null.");
-        }
-
         if (isOpen()) {
             throw new IllegalStateException("Window is already open.");
+        }
+
+        if (display == null) {
+            throw new IllegalArgumentException("display is null.");
         }
 
         // Add this as child of display

@@ -19,9 +19,16 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class ShadeDecorator extends AbstractDecorator {
+import pivot.wtk.Component;
+import pivot.wtk.Decorator;
+import pivot.wtk.Rectangle;
+
+public class ShadeDecorator implements Decorator {
     private float opacity;
     private Color color;
+
+    private Graphics2D graphics;
+    private Component component;
 
     /**
      * Creates a new <tt>ShadeDecorator</tt> with the default opacity and
@@ -53,11 +60,20 @@ public class ShadeDecorator extends AbstractDecorator {
         this.color = color;
     }
 
-    public void paint(Graphics2D graphics) {
-        visual.paint(graphics);
+    public Graphics2D prepare(Component component, Graphics2D graphics) {
+        this.graphics = graphics;
+        this.component = component;
 
+        return graphics;
+    }
+
+    public void update() {
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
         graphics.setColor(color);
-        graphics.fillRect(0, 0, visual.getWidth(), visual.getHeight());
+        graphics.fillRect(0, 0, component.getWidth(), component.getHeight());
+    }
+
+    public Rectangle getDirtyRegion(Component component, int x, int y, int width, int height) {
+        return new Rectangle(x, y, width, height);
     }
 }

@@ -20,6 +20,10 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 
+import pivot.wtk.Component;
+import pivot.wtk.Decorator;
+import pivot.wtk.Rectangle;
+
 /**
  * Applies a blur to paint operations. Due to the computational complexity of
  * blur operations, this decorator will take a "snapshot" of the component when
@@ -45,11 +49,14 @@ import java.awt.image.Kernel;
  * away count less towards the blur.
  *
  * @author tvolkert
- * @author gbrown
  */
-public class BlurDecorator extends AbstractDecorator {
+public class BlurDecorator implements Decorator {
     private int blurMagnitude;
+
+    private Graphics2D graphics = null;
+
     private BufferedImage bufferedImage = null;
+    private Graphics2D bufferedImageGraphics = null;
 
     /**
      * Creates a <tt>BlurDecorator</tt> with the default blur magnitude.
@@ -70,37 +77,41 @@ public class BlurDecorator extends AbstractDecorator {
         this.blurMagnitude = blurMagnitude;
     }
 
-    public void paint(Graphics2D graphics) {
-        int width = visual.getWidth();
-        int height = visual.getHeight();
+    public Graphics2D prepare(Component component, Graphics2D graphics) {
+        this.graphics = graphics;
+
+        int width = component.getWidth();
+        int height = component.getHeight();
 
         if (bufferedImage == null
             || bufferedImage.getWidth() != width
             || bufferedImage.getHeight() != height) {
             bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
-            // Paint the visual to the buffer
-            Graphics2D bufferedImageGraphics = bufferedImage.createGraphics();
-            visual.paint(bufferedImageGraphics);
-
-            // Dispose of the buffered image graphics
-            bufferedImageGraphics.dispose();
-
-            // Perform the blur operation
-            float[] kernel = new float[blurMagnitude * blurMagnitude];
-            for (int i = 0, n = kernel.length; i < n; i++) {
-                kernel[i] = 1f / n;
-            }
-
-            ConvolveOp blur = new ConvolveOp(new Kernel(blurMagnitude, blurMagnitude,
-                kernel), ConvolveOp.EDGE_NO_OP, null);
-
-            bufferedImage = blur.filter(bufferedImage, null);
-
-            bufferedImage.flush();
         }
 
-        // Draw the blurred image to the real graphics
-        graphics.drawImage(bufferedImage, 0, 0, null);
+        bufferedImageGraphics = bufferedImage.createGraphics();
+        bufferedImageGraphics.setClip(graphics.getClip());
+
+        return bufferedImageGraphics;
+    }
+
+    public void update() {
+        bufferedImageGraphics.dispose();
+        bufferedImage.flush();
+
+        float[] kernel = new float[blurMagnitude * blurMagnitude];
+        for (int i = 0, n = kernel.length; i < n; i++) {
+            kernel[i] = 1f / n;
+        }
+
+        ConvolveOp blur = new ConvolveOp(new Kernel(blurMagnitude, blurMagnitude,
+            kernel), ConvolveOp.EDGE_NO_OP, null);
+        bufferedImage = blur.filter(bufferedImage, null);
+
+        this.graphics.drawImage(bufferedImage, 0, 0, null);
+    }
+
+    public Rectangle getDirtyRegion(Component component, int x, int y, int width, int height) {
+        return new Rectangle(x, y, width, height);
     }
 }

@@ -18,34 +18,48 @@ package pivot.wtk.effects;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import pivot.wtk.Component;
+import pivot.wtk.Decorator;
+import pivot.wtk.Rectangle;
+
 /**
  * Decorator that applies a grayscale conversion to all paint operations.
  *
  * @author tvolkert
+ * @author gbrown
  */
-public class GrayscaleDecorator extends AbstractDecorator {
-    private BufferedImage bufferedImage = null;
+public class GrayscaleDecorator implements Decorator {
+    private Graphics2D graphics = null;
 
-    public void paint(Graphics2D graphics) {
-        int width = visual.getWidth();
-        int height = visual.getHeight();
+    private BufferedImage bufferedImage = null;
+    private Graphics2D bufferedImageGraphics = null;
+
+    public Graphics2D prepare(Component component, Graphics2D graphics) {
+        this.graphics = graphics;
+
+        int width = component.getWidth();
+        int height = component.getHeight();
 
         if (bufferedImage == null
-            || bufferedImage.getWidth() != width
-            || bufferedImage.getHeight() != height) {
+            || bufferedImage.getWidth() < width
+            || bufferedImage.getHeight() < height) {
             bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
         }
 
-        // Paint the visual to the buffer
-        Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.createGraphics();
+        bufferedImageGraphics = bufferedImage.createGraphics();
         bufferedImageGraphics.setClip(graphics.getClip());
-        visual.paint(bufferedImageGraphics);
 
-        // Dispose of the buffered image graphics
+        return bufferedImageGraphics;
+    }
+
+    public void update() {
         bufferedImageGraphics.dispose();
-
-        // Draw the grayscale image to the real graphics
         bufferedImage.flush();
+
         graphics.drawImage(bufferedImage, 0, 0, null);
+    }
+
+    public Rectangle getDirtyRegion(Component component, int x, int y, int width, int height) {
+        return new Rectangle(x, y, width, height);
     }
 }

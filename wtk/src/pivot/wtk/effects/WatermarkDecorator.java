@@ -16,164 +16,100 @@
 package pivot.wtk.effects;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.Rectangle2D;
+
+import pivot.wtk.Component;
+import pivot.wtk.Decorator;
+import pivot.wtk.Label;
+import pivot.wtk.Rectangle;
 
 /**
  * Decorator that overlays a watermark over a component.
  *
  * @author tvolkert
+ * @author gbrown
  */
-public class WatermarkDecorator extends AbstractDecorator {
-    private String text;
-    private Font font = DEFAULT_FONT;
-    private float opacity = DEFAULT_OPACITY;
+public class WatermarkDecorator implements Decorator {
+    private double theta = Math.PI / 4d;
+    private float opacity = 0.25f;
+    private Label label = new Label();
 
-    private transient Rectangle2D stringBounds;
+    private Component component = null;
+    private Graphics2D graphics = null;
 
-    private static final Font DEFAULT_FONT = new Font
-        ("Verdana,Bitstream Vera Sans,sans-serif", Font.BOLD, 60);
-    private static final float DEFAULT_OPACITY = 0.1f;
-
-    private static final FontRenderContext fontRenderContext =
-        new FontRenderContext(null, false, false);
-
-    /**
-     * Cretes a new <tt>WatermarkDecorator</tt> with the empty string as its
-     * text.
-     */
     public WatermarkDecorator() {
-        this("");
+        this(null);
     }
 
-    /**
-     * Cretes a new <tt>WatermarkDecorator</tt> with the specified string as
-     * its text.
-     *
-     * @param text
-     * The decorator's text to paint over the decorated visual
-     */
     public WatermarkDecorator(String text) {
+        Font font = (Font)label.getStyles().get("font");
+        label.getStyles().put("font", font.deriveFont(Font.BOLD, 36));
+
         setText(text);
     }
 
-    /**
-     * Gets the text that will be painted over this decorator's visual.
-     *
-     * @return
-     * This decorator's text
-     */
     public String getText() {
-        return text;
+        return label.getText();
     }
 
-    /**
-     * Sets the text that will be painted over this decorator's visual.
-     *
-     * @param text
-     * This decorator's text
-     */
     public void setText(String text) {
-        if (text == null) {
-            throw new IllegalArgumentException("text is null.");
-        }
-
-        this.text = text;
-        updateStringBounds();
+        label.setText(text);
+        label.setSize(label.getPreferredSize());
     }
 
-    /**
-     * Gets the font that will be used when painting this decorator's text.
-     *
-     * @return
-     * This decorator's font
-     */
     public Font getFont() {
-        return font;
+        return (Font)label.getStyles().get("font");
     }
 
-    /**
-     * Sets the font that will be used when painting this decorator's text.
-     *
-     * @param font
-     * This decorator's font
-     */
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
-        this.font = font;
-        updateStringBounds();
+        label.getStyles().put("font", font);
     }
 
-    /**
-     * Sets the font that will be used when painting this decorator's text.
-     *
-     * @param font
-     * This decorator's font
-     */
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
-        setFont(Font.decode(font));
+        label.getStyles().put("font", font);
     }
 
-    /**
-     * Gets the opacity of the watermark.
-     *
-     * @return
-     * This decorator's opacity
-     */
     public float getOpacity() {
         return opacity;
     }
 
-    /**
-     * Gets the opacity of the watermark.
-     *
-     * @param opacity
-     * This decorator's opacity
-     */
     public void setOpacity(float opacity) {
         this.opacity = opacity;
     }
 
-    /**
-     * Updates this decorator's transient string bounds property.
-     */
-    private void updateStringBounds() {
-        stringBounds = font.getStringBounds(text, fontRenderContext);
+    public Graphics2D prepare(Component component, Graphics2D graphics) {
+        this.component = component;
+        this.graphics = graphics;
+
+        return graphics;
     }
 
-    /**
-     * Paints this decorator to the specified graphics context. It first
-     * paints this decorator's visual, then overlays the watermark.
-     *
-     * @param graphics
-     * The graphics context
-     */
-    public void paint(Graphics2D graphics) {
-        visual.paint(graphics);
+    public void update() {
+        final double cosTheta = Math.cos(theta);
+        final double sinTheta = Math.sin(theta);
 
-        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-        graphics.setColor(Color.BLACK);
-        graphics.rotate(Math.PI / 4);
-        graphics.setFont(font);
+        double labelWidth = label.getWidth();
+        double labelHeight = label.getHeight();
 
-        int width = (int)stringBounds.getWidth();
-        int height = (int)stringBounds.getHeight();
+        double rotatedWidth = labelWidth * cosTheta + labelHeight * sinTheta;
+        double rotatedHeight = labelWidth * sinTheta + labelHeight * cosTheta;
 
-        for (int n = visual.getWidth(), x = -n, p = 0; x < n; x += 1.5 * width, p = 0) {
-            for (int m = visual.getHeight(), y = -m; y < m; y += 2 * height, p = 1 - p) {
-                float xOffset = p - 0.5f;
-                graphics.drawString(text, x + (xOffset * width), y);
-            }
-        }
+        Graphics2D watermarkGraphics = (Graphics2D)graphics.create();
+
+        watermarkGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+        watermarkGraphics.translate(((double)component.getWidth() - rotatedWidth) / 2d,
+            ((double)component.getHeight() - rotatedHeight) / 2d + labelWidth * sinTheta);
+        watermarkGraphics.rotate(-theta);
+
+        graphics.setClip(null);
+
+        label.paint(watermarkGraphics);
+
+        watermarkGraphics.dispose();
+    }
+
+    public Rectangle getDirtyRegion(Component component, int x, int y, int width, int height) {
+        return new Rectangle(x, y, width, height);
     }
 }

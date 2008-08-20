@@ -352,30 +352,26 @@ public abstract class Container extends Component
                 // Translate the context to the component's coordinate system
                 componentGraphics.translate(component.getX(), component.getY());
 
-                // Paint the component
-                if (componentGraphics != null) {
-                    // If the component has decorators, prepare them and
-                    // call paint() on the last one. Otherwise, just paint
-                    // the component.
-                    DecoratorSequence decorators = component.getDecorators();
+                // Prepare the decorators
+                Graphics2D decoratedGraphics = componentGraphics;
 
-                    if (decorators.getLength() > 0) {
-                        for (int i = 0, n = decorators.getLength(); i < n; i++) {
-                            Decorator decorator = decorators.get(i);
-
-                            if (i == 0) {
-                                decorator.prepare(component);
-                            } else {
-                                decorator.prepare(decorators.get(i - 1));
-                            }
-                        }
-
-                        decorators.get(decorators.getLength() - 1).paint(componentGraphics);
-                    } else {
-                        component.paint(componentGraphics);
-                    }
+                DecoratorSequence decorators = component.getDecorators();
+                int n = decorators.getLength();
+                for (int i = n - 1; i >= 0; i--) {
+                    Decorator decorator = decorators.get(i);
+                    decoratedGraphics = decorator.prepare(component, decoratedGraphics);
                 }
 
+                // Paint the component
+                component.paint(decoratedGraphics);
+
+                // Update the decorators
+                for (int i = 0; i < n; i++) {
+                    Decorator decorator = decorators.get(i);
+                    decorator.update();
+                }
+
+                // Dispose of the component's graphics
                 componentGraphics.dispose();
             }
         }

@@ -3,11 +3,10 @@ package pivot.wtk.skin.terra;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
 
+import pivot.wtk.Component;
+import pivot.wtk.Decorator;
 import pivot.wtk.Rectangle;
-import pivot.wtk.effects.AbstractDecorator;
 
 /**
  * Adds drop shadows to components.
@@ -15,45 +14,33 @@ import pivot.wtk.effects.AbstractDecorator;
  * @author gbrown
  * @author tvolkert
  */
-public class DropShadowDecorator extends AbstractDecorator {
+public class DropShadowDecorator implements Decorator {
     public static final Color DROP_SHADOW_COLOR = Color.BLACK;
     public static final float DROP_SHADOW_OPACITY = 0.33f;
     public static final int DROP_SHADOW_OFFSET = 4;
 
-    public Rectangle getDirtyRegion(Rectangle bounds) {
-        // TODO Bound to visual width and height plus shadow offset?
-
-        bounds.width += DROP_SHADOW_OFFSET;
-        bounds.height += DROP_SHADOW_OFFSET;
-
-        return bounds;
-    }
-
-    public void paint(Graphics2D graphics) {
-        // Paint the drop shadow
+    public Graphics2D prepare(Component component, Graphics2D graphics) {
         Graphics2D shadowGraphics = (Graphics2D)graphics.create();
-        Shape clip = shadowGraphics.getClip();
-
-        if (clip != null) {
-            Rectangle2D clipBounds = clip.getBounds();
-            clipBounds.setFrame(clipBounds.getX() + DROP_SHADOW_OFFSET,
-                clipBounds.getY() + DROP_SHADOW_OFFSET,
-                clipBounds.getWidth(),
-                clipBounds.getHeight());
-            shadowGraphics.clip(clipBounds);
-        }
+        shadowGraphics.setClip(null);
 
         shadowGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
             DROP_SHADOW_OPACITY));
         shadowGraphics.setColor(DROP_SHADOW_COLOR);
-
         shadowGraphics.fillRect(DROP_SHADOW_OFFSET, DROP_SHADOW_OFFSET,
-            visual.getWidth(), visual.getHeight());
+            component.getWidth(), component.getHeight());
 
         shadowGraphics.dispose();
 
-        // Paint the visual
-        visual.paint(graphics);
+        return graphics;
+    }
+
+    public void update() {
+        // No-op
+    }
+
+    public Rectangle getDirtyRegion(Component component, int x, int y, int width, int height) {
+        return new Rectangle(x + DROP_SHADOW_OFFSET, y + DROP_SHADOW_OFFSET,
+            width, height);
     }
 }
 
