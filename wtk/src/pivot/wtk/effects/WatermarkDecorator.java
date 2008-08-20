@@ -111,6 +111,20 @@ public class WatermarkDecorator extends AbstractDecorator {
     }
 
     /**
+     * Sets the font that will be used when painting this decorator's text.
+     *
+     * @param font
+     * This decorator's font
+     */
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(Font.decode(font));
+    }
+
+    /**
      * Gets the opacity of the watermark.
      *
      * @return
