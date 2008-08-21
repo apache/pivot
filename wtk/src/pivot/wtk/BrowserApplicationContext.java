@@ -87,13 +87,16 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 // Load the application
                 String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
                 if (applicationClassName == null) {
-                    Alert.alert(Alert.Type.ERROR, "Application class name is required.");
+                    Alert.alert(Alert.Type.ERROR, "Application class name is required.",
+                        applicationContext.getDisplay());
                 } else {
                     try {
                         Class<?> applicationClass = Class.forName(applicationClassName);
                         application = (Application)applicationClass.newInstance();
                     } catch(Exception exception) {
-                        displaySystemError(exception);
+                        Alert.alert(Alert.Type.ERROR, exception.getMessage(),
+                            applicationContext.getDisplay());
+                        exception.printStackTrace();
                     }
                 }
             }
@@ -109,7 +112,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     try {
                         application.startup(applicationContext.getDisplay(), properties);
                     } catch(Exception exception) {
-                        displaySystemError(exception);
+                        Alert.alert(Alert.Type.ERROR, exception.getMessage(),
+                            applicationContext.getDisplay());
                         exception.printStackTrace();
                     }
                 }
@@ -121,7 +125,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 try {
                     application.shutdown(true);
                 } catch(Exception exception) {
-                    displaySystemError(exception);
+                    Alert.alert(Alert.Type.ERROR, exception.getMessage(),
+                        applicationContext.getDisplay());
                     exception.printStackTrace();
                 }
             }

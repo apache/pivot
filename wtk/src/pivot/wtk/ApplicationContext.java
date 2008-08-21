@@ -329,6 +329,8 @@ public abstract class ApplicationContext {
             // Process the event
             switch (event.getID()) {
                 case MouseEvent.MOUSE_PRESSED: {
+                    requestFocus();
+
                     display.mouseDown(button, x, y);
                     dragDropManager.mouseDown(button, x, y);
                     break;
@@ -733,10 +735,5 @@ public abstract class ApplicationContext {
         }
 
         return cursorBlinkRate;
-    }
-
-    protected static void displaySystemError(Exception exception) {
-        Alert.alert(Alert.Type.ERROR, exception.getMessage());
-        Thread.dumpStack();
     }
 }

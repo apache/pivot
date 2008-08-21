@@ -54,7 +54,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     try {
                         application.startup(applicationContext.getDisplay(), properties);
                     } catch(Exception exception) {
-                        displaySystemError(exception);
+                        Alert.alert(Alert.Type.ERROR, exception.getMessage(),
+                            applicationContext.getDisplay());
                         exception.printStackTrace();
                     }
 
@@ -67,7 +68,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     try {
                         shutdown = application.shutdown(false);
                     } catch(Exception exception) {
-                        displaySystemError(exception);
+                        Alert.alert(Alert.Type.ERROR, exception.getMessage(),
+                            applicationContext.getDisplay());
                         exception.printStackTrace();
                     }
 
@@ -96,7 +98,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     try {
                         application.suspend();
                     } catch(Exception exception) {
-                        displaySystemError(exception);
+                        Alert.alert(Alert.Type.ERROR, exception.getMessage(),
+                            applicationContext.getDisplay());
                         exception.printStackTrace();
                     }
 
@@ -107,7 +110,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     try {
                         application.resume();
                     } catch(Exception exception) {
-                        displaySystemError(exception);
+                        Alert.alert(Alert.Type.ERROR, exception.getMessage(),
+                            applicationContext.getDisplay());
                         exception.printStackTrace();
                     }
 

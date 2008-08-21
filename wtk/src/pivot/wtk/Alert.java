@@ -128,19 +128,25 @@ public class Alert extends Dialog {
         return alertListeners;
     }
 
-    public static void alert(String message) {
-        alert(Type.INFO, message, null);
+    public static void alert(String message, Display display) {
+        alert(Type.INFO, message, display);
+    }
+
+    public static void alert(Type type, String message, Display display) {
+        Alert alert = createAlert(type, message);
+        alert.open(display);
     }
 
     public static void alert(String message, Window owner) {
         alert(Type.INFO, message, owner);
     }
 
-    public static void alert(Type type, String message) {
-        alert(type, message, null);
+    public static void alert(Type type, String message, Window owner) {
+        Alert alert = createAlert(type, message);
+        alert.open(owner);
     }
 
-    public static void alert(Type type, String message, Window owner) {
+    private static Alert createAlert(Type type, String message) {
         List<Object> options = new ArrayList<Object>();
         options.add(resources.get("defaultOption"));
 
@@ -148,6 +154,6 @@ public class Alert extends Dialog {
         alert.setTitle((String)resources.get("defaultTitle"));
         alert.setSelectedOption(0);
 
-        alert.open(owner);
+        return alert;
     }
 }
