@@ -77,6 +77,12 @@ public class ProxyServlet extends HttpServlet {
         throws IOException, ServletException {
         // Construct the URL
         String path = this.path;
+
+        String pathInfo = request.getPathInfo();
+        if (pathInfo != null) {
+            path += "/" + pathInfo;
+        }
+
         String queryString = request.getQueryString();
         if (queryString != null) {
             path += "?" + queryString;

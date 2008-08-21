@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import pivot.collections.HashMap;
 import pivot.serialization.BinarySerializer;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
@@ -73,16 +74,18 @@ public class WebQueryTestServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
         String queryString = request.getQueryString();
 
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("username", username);
+        map.put("pathInfo", pathInfo);
+        map.put("queryString", queryString);
+
         response.setStatus(200);
 
         Serializer serializer = new BinarySerializer();
         response.setContentType(serializer.getMIMEType());
 
-        String message = "\"User " + username + " is authorized to access "
-            + pathInfo + "?" + queryString + "\"";
-
         try {
-            serializer.writeObject(message, response.getOutputStream());
+            serializer.writeObject(map, response.getOutputStream());
         } catch(SerializationException exception) {
             throw new ServletException(exception);
         }

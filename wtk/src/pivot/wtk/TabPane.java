@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.Iterator;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
+import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
@@ -63,27 +64,7 @@ public class TabPane extends Container {
         }
     }
 
-    public final class TabSequence implements Sequence<Component>,
-        Iterable<Component> {
-        private class TabIterator implements Iterator<Component> {
-            Iterator<Component> source = null;
-
-            public TabIterator(Iterator<Component> source) {
-                this.source = source;
-            }
-
-            public boolean hasNext() {
-                return source.hasNext();
-            }
-
-            public Component next() {
-                return source.next();
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        }
+    public final class TabSequence implements Sequence<Component>, Iterable<Component> {
 
         private TabSequence() {
         }
@@ -129,7 +110,7 @@ public class TabPane extends Container {
         }
 
         public Iterator<Component> iterator() {
-            return new TabIterator(tabs.iterator());
+            return new ImmutableIterator<Component>(tabs.iterator());
         }
     }
 

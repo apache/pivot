@@ -54,6 +54,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
         // updated - it will continue to point to the following node, allowing
         // iteration to continue
 
-        return new java.util.ArrayList<T>(list).iterator();
+        java.util.ArrayList<T> list = new java.util.ArrayList<T>(this.list);
+        return new ImmutableIterator<T>(list.iterator());
     }
 }

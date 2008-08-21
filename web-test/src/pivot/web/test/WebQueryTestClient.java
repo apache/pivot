@@ -17,6 +17,7 @@ package pivot.web.test;
 
 import java.net.URL;
 
+import pivot.collections.Dictionary;
 import pivot.serialization.BinarySerializer;
 import pivot.serialization.JSONSerializer;
 import pivot.util.concurrent.Task;
@@ -32,7 +33,7 @@ public class WebQueryTestClient {
         final boolean useProxy = true;
 
         final String HOSTNAME = "localhost";
-        final String PATH = useProxy ? "/pivot_web_test/proxy" : "/pivot_web_test/webquery/bar";
+        final String PATH = (useProxy ? "/pivot_web_test/proxy" : "/pivot_web_test/webquery") + "/bar/quux";
         final int PORT = 8080;
         final boolean SECURE = false;
 
@@ -45,8 +46,14 @@ public class WebQueryTestClient {
         authentication.authenticate(getQuery);
 
         getQuery.execute(new TaskListener<Object>() {
+            @SuppressWarnings("unchecked")
             public void taskExecuted(Task<Object> task) {
-                System.out.println("GET result: " + task.getResult());
+                Dictionary<String, Object> result = (Dictionary<String, Object>)task.getResult();
+
+                System.out.println("GET result: "
+                    + "username: " + result.get("username") + ", "
+                    + "pathInfo: " + result.get("pathInfo") + ", "
+                    + "queryString: " + result.get("queryString"));
             }
 
             public void executeFailed(Task<Object> task) {

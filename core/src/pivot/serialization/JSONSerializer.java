@@ -319,6 +319,11 @@ public class JSONSerializer implements Serializer {
                 key = keyStringBuilder.toString();
             }
 
+            if (key == null
+                || key.length() == 0) {
+                throw new SerializationException("\"" + key + "\" is not a valid key.");
+            }
+
             skipWhitespace(reader);
 
             if (c != ':') {
@@ -412,6 +417,8 @@ public class JSONSerializer implements Serializer {
 
             int i = 0;
             for (String key : map) {
+                Object value = map.get(key);
+
                 boolean identifier = true;
                 StringBuilder keyStringBuilder = new StringBuilder();
 
@@ -446,7 +453,7 @@ public class JSONSerializer implements Serializer {
                 writer.append(": ");
 
                 // Write the value
-                writeObject(map.get(key), writer);
+                writeObject(value, writer);
 
                 i++;
             }

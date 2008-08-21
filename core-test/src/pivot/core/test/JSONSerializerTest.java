@@ -17,6 +17,8 @@ package pivot.core.test;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+
+import pivot.collections.HashMap;
 import pivot.collections.List;
 import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
@@ -39,16 +41,39 @@ public class JSONSerializerTest {
         " [ \"A\", \"B\", \t\"C\", [\t0, 1, 2, 'abc', true]]",
         "['A', 'B', 'C']",
         "{   }",
+        "{null: 'foo'}",
+        "{: 'foo'}",
+        "{\"\": \"foo\"}",
         "{a:null}",
         "{a:''}",
         "{a:1, b:2",
-        "{'1a' : 0, bc : 'hello', n:-100.56, c:true, d:{e:10, f:20}, g:{aa:10, bb:20, cc:30}, m:[1,2, 4]}",
+        "{\"1a\" : 0, bc : 'hello', n:-100.56, c:true, d:{e:10, f:20}, g:{aa:10, bb:20, cc:30}, m:[1,2, 4]}",
         "{\"a#b\" : '#ff'}"
     };
 
     public static void main(String[] args) {
+        test0();
         test1();
         // test2();
+    }
+
+    public static void test0() {
+        HashMap<String, Object> a = new HashMap<String, Object>();
+        a.put("b", 100);
+
+        HashMap<String, Object> c = new HashMap<String, Object>();
+        c.put("d", "Hello World");
+        a.put("c", c);
+
+        StringWriter writer = new StringWriter();
+        JSONSerializer jsonSerializer = new JSONSerializer();
+        try {
+            jsonSerializer.writeObject(a, writer);
+        } catch(Exception exception) {
+            System.out.println(exception);
+        }
+
+        System.out.println("Output: " + writer);
     }
 
     public static void test1() {

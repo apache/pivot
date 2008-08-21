@@ -20,6 +20,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.serialization.JSONSerializer;
+import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
@@ -72,28 +73,7 @@ public class Form extends Container {
      *
      * @author gbrown
      */
-    public final class FieldSequence implements Sequence<Component>,
-        Iterable<Component> {
-        private class FieldIterator implements Iterator<Component> {
-            Iterator<Component> source = null;
-
-            public FieldIterator(Iterator<Component> source) {
-                this.source = source;
-            }
-
-            public boolean hasNext() {
-                return source.hasNext();
-            }
-
-            public Component next() {
-                return source.next();
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        }
-
+    public final class FieldSequence implements Sequence<Component>, Iterable<Component> {
         private FieldSequence() {
         }
 
@@ -138,7 +118,7 @@ public class Form extends Container {
         }
 
         public Iterator<Component> iterator() {
-            return new FieldIterator(fields.iterator());
+            return new ImmutableIterator<Component>(fields.iterator());
         }
     }
 

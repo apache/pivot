@@ -25,7 +25,7 @@
         </init-param>
         <init-param>
             <param-name>path</param-name>
-            <param-value>/pivot_web_test/webquery/bar</param-value>
+            <param-value>/pivot_web_test/webquery</param-value>
         </init-param>
     </servlet>
 

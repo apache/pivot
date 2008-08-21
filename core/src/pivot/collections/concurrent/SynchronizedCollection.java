@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import pivot.collections.Collection;
+import pivot.util.ImmutableIterator;
 
 /**
  * Abstract base class for synchronized collection wrappers.
@@ -52,6 +53,6 @@ public abstract class SynchronizedCollection<T> implements Collection<T> {
      * instance to ensure thread safety during iteration.
      */
     public Iterator<T> iterator() {
-        return collection.iterator();
+        return new ImmutableIterator<T>(collection.iterator());
     }
 }

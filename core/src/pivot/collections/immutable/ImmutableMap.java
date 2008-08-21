@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.collections.adapter;
+package pivot.collections.immutable;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -23,11 +23,10 @@ import pivot.collections.MapListener;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
-public class MapAdapter<K, V> implements Map<K, V> {
-    private java.util.Map<K, V> map = null;
-    private MapListenerList<K, V> mapListeners = new MapListenerList<K, V>();
+public class ImmutableMap<K, V> {
+    private Map<K, V> map = null;
 
-    public MapAdapter(java.util.Map<K, V> map) {
+    public ImmutableMap(Map<K, V> map) {
         if (map == null) {
             throw new IllegalArgumentException("map is null.");
         }
@@ -40,33 +39,15 @@ public class MapAdapter<K, V> implements Map<K, V> {
     }
 
     public V put(K key, V value) {
-        boolean update = map.containsKey(key);
-        V previousValue = map.put(key, value);
-
-        if (update) {
-            mapListeners.valueUpdated(this, key, previousValue);
-        }
-        else {
-            mapListeners.valueAdded(this, key);
-        }
-
-        return previousValue;
+        throw new UnsupportedOperationException();
     }
 
     public V remove(K key) {
-        V value = null;
-
-        if (map.containsKey(key)) {
-            value = map.remove(key);
-            mapListeners.valueRemoved(this, key, value);
-        }
-
-        return value;
+        throw new UnsupportedOperationException();
     }
 
     public void clear() {
-        map.clear();
-        mapListeners.mapCleared(this);
+        throw new UnsupportedOperationException();
     }
 
     public boolean containsKey(K key) {
@@ -82,19 +63,15 @@ public class MapAdapter<K, V> implements Map<K, V> {
         return null;
     }
 
-    /**
-     * NOTE This method is not supported because it cannot be efficiently
-     * implemented for all map types.
-     */
     public void setComparator(Comparator<K> comparator) {
         throw new UnsupportedOperationException();
     }
 
     public Iterator<K> iterator() {
-        return new ImmutableIterator<K>(map.keySet().iterator());
+        return new ImmutableIterator<K>(map.iterator());
     }
 
     public ListenerList<MapListener<K, V>> getMapListeners() {
-        return mapListeners;
+        throw new UnsupportedOperationException();
     }
 }

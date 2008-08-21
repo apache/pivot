@@ -24,6 +24,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.Map;
 import pivot.collections.Sequence;
+import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
@@ -43,26 +44,6 @@ import pivot.util.ListenerList;
 @ComponentInfo(icon="Container.png")
 public abstract class Container extends Component
     implements Sequence<Component>, Iterable<Component> {
-    private class ComponentIterator implements Iterator<Component> {
-        Iterator<Component> source = null;
-
-        public ComponentIterator(Iterator<Component> source) {
-            this.source = source;
-        }
-
-        public boolean hasNext() {
-            return source.hasNext();
-        }
-
-        public Component next() {
-            return source.next();
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-    }
-
     private class ContainerListenerList extends ListenerList<ContainerListener>
         implements ContainerListener {
         public void componentInserted(Container container, int index) {
@@ -229,7 +210,7 @@ public abstract class Container extends Component
     }
 
     public Iterator<Component> iterator() {
-        return new ComponentIterator(components.iterator());
+        return new ImmutableIterator<Component>(components.iterator());
     }
 
     @Override

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.collections.adapter;
+package pivot.collections.immutable;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -23,11 +23,10 @@ import pivot.collections.SetListener;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
-public class SetAdapter<E> implements Set<E> {
-    private java.util.Set<E> set = null;
-    private SetListenerList<E> setListeners = new SetListenerList<E>();
+public class ImmutableSet<E> {
+    private Set<E> set = null;
 
-    public SetAdapter(java.util.Set<E> set) {
+    public ImmutableSet(Set<E> set) {
         if (set == null) {
             throw new IllegalArgumentException("set is null.");
         }
@@ -36,22 +35,15 @@ public class SetAdapter<E> implements Set<E> {
     }
 
     public void add(E element) {
-        if (!set.contains(element)) {
-            set.add(element);
-            setListeners.elementAdded(this, element);
-        }
+        throw new UnsupportedOperationException();
     }
 
     public void remove(E element) {
-        if (set.contains(element)) {
-            set.remove(element);
-            setListeners.elementRemoved(this, element);
-        }
+        throw new UnsupportedOperationException();
     }
 
     public void clear() {
-        set.clear();
-        setListeners.setCleared(this);
+        throw new UnsupportedOperationException();
     }
 
     public boolean contains(E element) {
@@ -66,10 +58,6 @@ public class SetAdapter<E> implements Set<E> {
         return null;
     }
 
-    /**
-     * NOTE This method is not supported because it cannot be efficiently
-     * implemented for all set types.
-     */
     public void setComparator(Comparator<E> comparator) {
         throw new UnsupportedOperationException();
     }
@@ -79,6 +67,6 @@ public class SetAdapter<E> implements Set<E> {
     }
 
     public ListenerList<SetListener<E>> getSetListeners() {
-        return setListeners;
+        throw new UnsupportedOperationException();
     }
 }

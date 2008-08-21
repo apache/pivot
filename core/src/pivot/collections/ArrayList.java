@@ -29,7 +29,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     protected java.util.ArrayList<T> arrayList = null;
 
     private Comparator<T> comparator = null;
-    private ListListenerList<T> listListeners = new ListListenerList<T>();
+    private transient ListListenerList<T> listListeners = new ListListenerList<T>();
 
     public ArrayList() {
         arrayList = new java.util.ArrayList<T>();

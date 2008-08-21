@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 public class HashMap<K, V> implements Map<K, V>, Serializable {
@@ -29,7 +30,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     protected java.util.HashMap<K, V> hashMap = null;
 
     private Comparator<K> comparator = null;
-    private MapListenerList<K, V> mapListeners = new MapListenerList<K, V>();
+    private transient MapListenerList<K, V> mapListeners = new MapListenerList<K, V>();
 
     public HashMap() {
         hashMap = new java.util.HashMap<K, V>();
@@ -102,7 +103,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     }
 
     public Iterator<K> iterator() {
-        return hashMap.keySet().iterator();
+        // TODO Return an iterator that supports modification?
+        return new ImmutableIterator<K>(hashMap.keySet().iterator());
     }
 
     public ListenerList<MapListener<K, V>> getMapListeners() {

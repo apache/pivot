@@ -22,6 +22,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.ListListener;
 import pivot.collections.Sequence;
+import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
@@ -142,8 +143,7 @@ public class TreeNode implements List<TreeNode> {
     }
 
     public Iterator<TreeNode> iterator() {
-        // TODO Wrap in a custom iterator to capture or prevent removals
-        return nodes.iterator();
+        return new ImmutableIterator<TreeNode>(nodes.iterator());
     }
 
     public ListenerList<ListListener<TreeNode>> getListListeners() {

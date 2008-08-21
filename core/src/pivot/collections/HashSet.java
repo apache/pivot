@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 public class HashSet<E> implements Set<E>, Serializable {
@@ -29,7 +30,7 @@ public class HashSet<E> implements Set<E>, Serializable {
     protected java.util.HashSet<E> hashSet = null;
 
     private Comparator<E> comparator = null;
-    private SetListenerList<E> setListeners = new SetListenerList<E>();
+    private transient SetListenerList<E> setListeners = new SetListenerList<E>();
 
     public HashSet() {
         hashSet = new java.util.HashSet<E>();
@@ -86,7 +87,8 @@ public class HashSet<E> implements Set<E>, Serializable {
     }
 
     public Iterator<E> iterator() {
-        return hashSet.iterator();
+        // TODO Return an iterator that supports modification?
+        return new ImmutableIterator<E>(hashSet.iterator());
     }
 
     public ListenerList<SetListener<E>> getSetListeners() {

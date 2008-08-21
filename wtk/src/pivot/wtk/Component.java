@@ -28,6 +28,7 @@ import pivot.collections.Map;
 import pivot.collections.Sequence;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
+import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 import pivot.wtk.Mouse.Button;
 import pivot.wtk.Mouse.ScrollType;
@@ -97,26 +98,6 @@ public abstract class Component implements Visual {
      */
     public final class DecoratorSequence implements Sequence<Decorator>,
         Iterable<Decorator> {
-        private class DecoratorIterator implements Iterator<Decorator> {
-            Iterator<Decorator> source = null;
-
-            public DecoratorIterator(Iterator<Decorator> source) {
-                this.source = source;
-            }
-
-            public boolean hasNext() {
-                return source.hasNext();
-            }
-
-            public Decorator next() {
-                return source.next();
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        }
-
         public int add(Decorator decorator) {
             int i = getLength();
             insert(decorator, i);
@@ -186,7 +167,7 @@ public abstract class Component implements Visual {
         }
 
         public Iterator<Decorator> iterator() {
-            return new DecoratorIterator(decorators.iterator());
+            return new ImmutableIterator<Decorator>(decorators.iterator());
         }
     }
 

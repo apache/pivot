@@ -50,7 +50,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     }
 
     public Iterator<E> iterator() {
-        // TODO Auto-generated method stub
+        // TODO
         return null;
     }
 }

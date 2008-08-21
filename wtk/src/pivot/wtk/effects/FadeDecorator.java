@@ -18,6 +18,19 @@ public class FadeDecorator implements Decorator {
         this.opacity = opacity;
     }
 
+    public float getOpacity() {
+        return opacity;
+    }
+
+    public void setOpacity(float opacity) {
+        if (opacity < 0f
+            || opacity > 1f) {
+            throw new IllegalArgumentException("opacity must be a value between 0 and 1, inclusive.");
+        }
+
+        this.opacity = opacity;
+    }
+
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
         return graphics;

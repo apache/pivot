@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.collections.adapter;
+package pivot.collections.immutable;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -23,11 +23,10 @@ import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
-public final class ListAdapter<T> implements List<T> {
-    private java.util.List<T> list = null;
-    private ListListenerList<T> listListeners = new ListListenerList<T>();
+public final class ImmutableList<T> implements List<T> {
+    private List<T> list = null;
 
-    public ListAdapter(java.util.List<T> list) {
+    public ImmutableList(List<T> list) {
         if (list == null) {
             throw new IllegalArgumentException("list is null.");
         }
@@ -36,56 +35,26 @@ public final class ListAdapter<T> implements List<T> {
     }
 
     public int add(T item) {
-        int index = list.size();
-        list.add(index, item);
-        listListeners.itemInserted(this, index);
-
-        return index;
+        throw new UnsupportedOperationException();
     }
 
     public void insert(T item, int index) {
-        list.add(index, item);
-        listListeners.itemInserted(this, index);
+        throw new UnsupportedOperationException();
     }
 
     public T update(int index, T item) {
-        T previousItem = list.set(index, item);
-        listListeners.itemUpdated(this, index, previousItem);
-
-        return previousItem;
+        throw new UnsupportedOperationException();
     }
 
-    /**
-     * NOTE This method is not supported because it cannot be efficiently
-     * implemented for all list types.
-     */
     public int remove(T item) {
         throw new UnsupportedOperationException();
     }
 
-    @SuppressWarnings("unchecked")
     public Sequence<T> remove(int index, int count) {
-        java.util.List<T> removedList = null;
-        try {
-            removedList = (java.util.List<T>)list.getClass().newInstance();
-        } catch(IllegalAccessException exception) {
-        } catch(InstantiationException exception) {
-        }
-
-        for (int i = count - 1; i >= 0; i--) {
-            removedList.add(0, list.remove(index + i));
-        }
-
-        // Fire event
-        List<T> removed = new ListAdapter<T>(removedList);
-        listListeners.itemsRemoved(this, index, removed);
-
-        return removed;
-    }
+        throw new UnsupportedOperationException();    }
 
     public void clear() {
-        list.clear();
-        listListeners.itemsRemoved(this, 0, null);
+        throw new UnsupportedOperationException();
     }
 
     public T get(int index) {
@@ -97,17 +66,13 @@ public final class ListAdapter<T> implements List<T> {
     }
 
     public int getLength() {
-        return list.size();
+        return list.getLength();
     }
 
     public Comparator<T> getComparator() {
         return null;
     }
 
-    /**
-     * NOTE This method is not supported because it cannot be efficiently
-     * implemented for all list types.
-     */
     public void setComparator(Comparator<T> comparator) {
         throw new UnsupportedOperationException();
     }
@@ -117,6 +82,6 @@ public final class ListAdapter<T> implements List<T> {
     }
 
     public ListenerList<ListListener<T>> getListListeners() {
-        return listListeners;
+        throw new UnsupportedOperationException();
     }
 }
