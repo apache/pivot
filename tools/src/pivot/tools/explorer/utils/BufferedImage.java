@@ -1,29 +1,28 @@
 package pivot.tools.explorer.utils;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 import pivot.wtk.Dimensions;
 import pivot.wtk.media.Image;
 
 /**
  *
- * Image based on BufferedImage with fixed size
- * Can be used draw images on the fly
+ * In-memory image with fixed size
+ * Can be used to draw images on the fly
  *
  * @author Eugene Ryzhikov
  * @date   Aug 19, 2008
  *
  */
-public class MemoryImage extends Image {
+public class BufferedImage extends Image {
 
-	private BufferedImage image;
+	private java.awt.image.BufferedImage image;
 
-	public MemoryImage( int width, int height ) {
-		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+	public BufferedImage( int width, int height ) {
+		image = new java.awt.image.BufferedImage(width, height, java.awt.image.BufferedImage.TYPE_INT_ARGB);
 	}
 
-	public MemoryImage( int size ) {
+	public BufferedImage( int size ) {
 		this(size,size);
 	}
 

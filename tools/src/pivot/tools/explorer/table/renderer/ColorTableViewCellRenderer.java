@@ -3,7 +3,7 @@ package pivot.tools.explorer.table.renderer;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import pivot.tools.explorer.utils.MemoryImage;
+import pivot.tools.explorer.utils.BufferedImage;
 import pivot.wtk.Component;
 import pivot.wtk.ImageView;
 import pivot.wtk.Label;
@@ -11,9 +11,8 @@ import pivot.wtk.media.Image;
 
 public class ColorTableViewCellRenderer extends AbstractFlowPaneTableViewCellRenderer {
 
-	private Image image = new MemoryImage(14);
-
-	private Label text = new Label();
+	private Image image = new BufferedImage(14);
+	private Label text  = new Label();
 
 
 	public ColorTableViewCellRenderer() {
