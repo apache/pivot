@@ -513,7 +513,7 @@ public abstract class ApplicationContext {
     private static HashMap<URL, Object> resourceCache = new HashMap<URL, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
-    private static Timer timer = new Timer();
+    private static Timer timer = new Timer(true);
     private static HashMap<Integer, TimerTask> timerTaskMap = new HashMap<Integer, TimerTask>();
     private static int nextTimerTaskID = 0;
 
@@ -628,7 +628,17 @@ public abstract class ApplicationContext {
 
         IntervalTask intervalTask = new IntervalTask(runnable);
         timerTaskMap.put(intervalID, intervalTask);
-        timer.schedule(intervalTask, 0, period);
+
+        try {
+            timer.schedule(intervalTask, 0, period);
+        } catch(IllegalStateException exception) {
+            // TODO This is a workaround for an apparent bug in the Mac OSX
+            // Java Plugin, which appears to prematurely kill the timer thread.
+            // Remove this when the issue is fixed.
+            timer = new Timer(true);
+            timerTaskMap.clear();
+            timer.schedule(intervalTask, 0, period);
+        }
 
         return intervalID;
     }
@@ -659,7 +669,17 @@ public abstract class ApplicationContext {
 
         TimeoutTask timeoutTask = new TimeoutTask(runnable, timeoutID);
         timerTaskMap.put(timeoutID, timeoutTask);
-        timer.schedule(timeoutTask, timeout);
+
+        try {
+            timer.schedule(timeoutTask, timeout);
+        } catch(IllegalStateException exception) {
+            // TODO This is a workaround for an apparent bug in the Mac OSX
+            // Java Plugin, which appears to prematurely kill the timer thread.
+            // Remove this when the issue is fixed.
+            timer = new Timer(true);
+            timerTaskMap.clear();
+            timer.schedule(timeoutTask, timeout);
+        }
 
         return timeoutID;
     }
