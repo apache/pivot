@@ -2,19 +2,19 @@
 <project name="pivot" default="build">
     <property name="src" value="src"/>
     <property name="bin" value="ant-bin"/>
-    <property name="tools" value="tools"/>
+    <property name="demos" value="demos"/>
 
     <!-- Compiler properties -->
     <property name="compiler.optimize" value="true"/>
     <property name="compiler.deprecation" value="true"/>
     <property name="compiler.debug" value="true"/>
 
-    <!-- Build tools library -->
+    <!-- Build demos library -->
     <target name="build">
-        <mkdir dir="${tools}/${bin}"/>
+        <mkdir dir="${demos}/${bin}"/>
 
         <!-- Compile source files -->
-        <javac srcdir="${tools}/${src}" destDir="${tools}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+        <javac srcdir="${demos}/${src}" destDir="${demos}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
                 <pathelement location="core/pivot-core.jar"/>
@@ -24,18 +24,18 @@
         </javac>
 
         <!-- Rebuild the JAR file -->
-        <delete file="${tools}/${ant.project.name}-tools.jar"/>
-        <jar jarfile="${tools}/${ant.project.name}-tools.jar">
-            <fileset dir="${tools}/${bin}"/>
-            <fileset dir="${tools}/${src}">
+        <delete file="${demos}/${ant.project.name}-demos.jar"/>
+        <jar jarfile="${demos}/${ant.project.name}-demos.jar">
+            <fileset dir="${demos}/${bin}"/>
+            <fileset dir="${demos}/${src}">
                 <exclude name="**/*.java"/>
             </fileset>
         </jar>
     </target>
 
-    <!-- Clean the tools classes -->
+    <!-- Clean the demos classes -->
     <target name="clean">
-        <delete dir="${tools}/${bin}"/>
-        <delete file="${tools}/${ant.project.name}-tools.jar"/>
+        <delete dir="${demos}/${bin}"/>
+        <delete file="${demos}/${ant.project.name}-demos.jar"/>
     </target>
 </project>

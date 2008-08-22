@@ -9,7 +9,7 @@
     <property name="compiler.deprecation" value="true"/>
     <property name="compiler.debug" value="true"/>
 
-    <!-- Build tutorial library -->
+    <!-- Build tutorials library -->
     <target name="build">
         <mkdir dir="${tutorials}/${bin}"/>
 
