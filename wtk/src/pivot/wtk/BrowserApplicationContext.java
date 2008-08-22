@@ -22,20 +22,41 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 
+import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
-/**
- * TODO Set ApplicationContext.current when the applet recieves focus? Or
- * when the mouse moves over it?
- */
 public final class BrowserApplicationContext extends ApplicationContext {
     public static final class HostApplet extends java.applet.Applet {
+        private class PropertyDictionary implements Dictionary<String, String> {
+            public String get(String key) {
+                String value = properties.containsKey(key) ?
+                    properties.get(key) : getParameter(key);
+                return value;
+            }
+
+            public String put(String key, String value) {
+                throw new UnsupportedOperationException();
+            }
+
+            public String remove(String key) {
+                throw new UnsupportedOperationException();
+            }
+
+            public boolean containsKey(String key) {
+                return properties.containsKey(key);
+            }
+
+            public boolean isEmpty() {
+                return properties.isEmpty();
+            }
+        }
+
         private class InitCallback implements Runnable {
             public void run() {
                 // Create the application context
                 applicationContext = new BrowserApplicationContext();
 
-                // Load any properties specified on the query string
+                // Load properties specified on the query string
                 properties = new HashMap<String, String>();
 
                 URL documentBase = getDocumentBase();
@@ -110,7 +131,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
                 if (application != null) {
                     try {
-                        application.startup(applicationContext.getDisplay(), properties);
+                        application.startup(applicationContext.getDisplay(), propertyDictionary);
                     } catch(Exception exception) {
                         Alert.alert(Alert.Type.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());
@@ -142,6 +163,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         private BrowserApplicationContext applicationContext = null;
         private HashMap<String, String> properties = null;
+        private PropertyDictionary propertyDictionary = new PropertyDictionary();
         private Application application = null;
 
         public static final long serialVersionUID = 0;

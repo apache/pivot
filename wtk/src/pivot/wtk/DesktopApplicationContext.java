@@ -19,6 +19,7 @@ import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
 import pivot.collections.HashMap;
+import pivot.collections.immutable.ImmutableMap;
 
 public final class DesktopApplicationContext extends ApplicationContext {
     private static class HostFrame extends java.awt.Frame {
@@ -52,7 +53,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     applicationContext.getDisplayHost().requestFocus();
 
                     try {
-                        application.startup(applicationContext.getDisplay(), properties);
+                        application.startup(applicationContext.getDisplay(),
+                            new ImmutableMap<String, String>(properties));
                     } catch(Exception exception) {
                         Alert.alert(Alert.Type.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());

@@ -23,7 +23,7 @@ import pivot.collections.SetListener;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
-public class ImmutableSet<E> {
+public class ImmutableSet<E> implements Set<E> {
     private Set<E> set = null;
 
     public ImmutableSet(Set<E> set) {

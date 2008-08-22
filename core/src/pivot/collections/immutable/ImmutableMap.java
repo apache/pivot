@@ -23,7 +23,7 @@ import pivot.collections.MapListener;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
-public class ImmutableMap<K, V> {
+public class ImmutableMap<K, V> implements Map<K, V> {
     private Map<K, V> map = null;
 
     public ImmutableMap(Map<K, V> map) {

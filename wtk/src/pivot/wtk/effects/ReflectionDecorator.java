@@ -83,7 +83,7 @@ public class ReflectionDecorator implements Decorator {
 
         if (parent != null) {
             x += component.getX();
-            y = (component.getHeight() * 2) - height;
+            y = (component.getHeight() * 2) - (y + height) + component.getY();
 
             parent.repaint(x, y, width, height);
         }
