@@ -144,7 +144,7 @@ public abstract class Container extends Component
         components.insert(component, index);
 
         // Repaint the area occupied by the new component
-        repaint(component.getBounds());
+        repaint(component.getDecoratedBounds());
 
         invalidate();
 
@@ -176,10 +176,10 @@ public abstract class Container extends Component
                 component.setParent(null);
 
                 if (repaintArea == null) {
-                    repaintArea = component.getBounds();
+                    repaintArea = component.getDecoratedBounds();
                 }
                 else {
-                    repaintArea.add(component.getBounds());
+                    repaintArea.add(component.getDecoratedBounds());
                 }
             }
 
@@ -318,19 +318,15 @@ public abstract class Container extends Component
         Rectangle2D clipBounds = (clip == null) ? getBounds() : clip.getBounds();
 
         for (Component component : this) {
-            Rectangle componentBounds = component.getBounds();
+            Rectangle decoratedBounds = component.getDecoratedBounds();
 
             // Only paint components that are visible and intersect the
             // current clip rectangle
             if (component.isVisible()
-                && componentBounds.intersects(clipBounds)) {
-                // Create a copy of the current graphics context and set a clip
-                // rectangle so the component can't paint outside of its
-                // boundaries
+                && decoratedBounds.intersects(clipBounds)) {
+                // Create a copy of the current graphics context and
+                // translate to the component's coordinate system
                 Graphics2D componentGraphics = (Graphics2D)graphics.create();
-                componentGraphics.clip(componentBounds);
-
-                // Translate the context to the component's coordinate system
                 componentGraphics.translate(component.getX(), component.getY());
 
                 // Prepare the decorators
@@ -342,6 +338,9 @@ public abstract class Container extends Component
                     Decorator decorator = decorators.get(i);
                     decoratedGraphics = decorator.prepare(component, decoratedGraphics);
                 }
+
+                // Constrain painting to the component's bounds
+                decoratedGraphics.clipRect(0, 0, component.getWidth(), component.getHeight());
 
                 // Paint the component
                 component.paint(decoratedGraphics);

@@ -1,4 +1,4 @@
-package pivot.wtk.skin.terra;
+package pivot.wtk.effects;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -38,9 +38,16 @@ public class DropShadowDecorator implements Decorator {
         // No-op
     }
 
-    public Rectangle getDirtyRegion(Component component, int x, int y, int width, int height) {
-        return new Rectangle(x + DROP_SHADOW_OFFSET, y + DROP_SHADOW_OFFSET,
-            width, height);
+    public Rectangle getBounds(Component component) {
+        Rectangle bounds = component.getBounds();
+        bounds.x += DROP_SHADOW_OFFSET;
+        bounds.y += DROP_SHADOW_OFFSET;
+
+        return bounds;
+    }
+
+    public void repaint(Component component, int x, int y, int width, int height) {
+        // No-op
     }
 }
 

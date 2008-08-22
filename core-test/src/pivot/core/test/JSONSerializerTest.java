@@ -44,6 +44,7 @@ public class JSONSerializerTest {
         "{null: 'foo'}",
         "{: 'foo'}",
         "{\"\": \"foo\"}",
+        "{ my0: 'ABCD\"ABCD' , 'my' : '\"My \\ example 3\"', null: null}",
         "{a:null}",
         "{a:''}",
         "{a:1, b:2",

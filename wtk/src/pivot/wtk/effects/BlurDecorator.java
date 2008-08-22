@@ -111,7 +111,11 @@ public class BlurDecorator implements Decorator {
         this.graphics.drawImage(bufferedImage, 0, 0, null);
     }
 
-    public Rectangle getDirtyRegion(Component component, int x, int y, int width, int height) {
-        return new Rectangle(x, y, width, height);
+    public Rectangle getBounds(Component component) {
+        return component.getBounds();
+    }
+
+    public void repaint(Component component, int x, int y, int width, int height) {
+        // No-op
     }
 }

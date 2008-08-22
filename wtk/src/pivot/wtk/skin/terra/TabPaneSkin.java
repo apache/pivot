@@ -48,7 +48,8 @@ import pivot.wtk.skin.ContainerSkin;
 /**
  * TODO Make tab buttons focusable.
  *
- * TODO Disable the tab button when the component is disabled.
+ * TODO Disable the tab button when the component is disabled (NOTE We need
+ * style properties to present a disabled tab button state).
  *
  * TODO Support the displayable flag to show/hide tabs.
  *
@@ -62,30 +63,23 @@ import pivot.wtk.skin.ContainerSkin;
 public class TabPaneSkin extends ContainerSkin
     implements TabPaneListener, TabPaneSelectionListener, TabPaneAttributeListener,
         Button.GroupListener {
-    public static class TabButton extends Button {
-        private TabPane tabPane = null;
-
-        public TabButton(TabPane tabPane) {
-            this(tabPane, null);
+    protected class TabButton extends Button {
+        public TabButton() {
+            this(null);
         }
 
-        public TabButton(TabPane tabPane, Object buttonData) {
+        public TabButton(Object buttonData) {
             super(buttonData);
-
-            this.tabPane = tabPane;
 
             super.setToggleButton(true);
             setDataRenderer(new ButtonDataRenderer());
 
-            installSkin(TabButton.class);
-        }
-
-        public TabPane getTabPane() {
-            return tabPane;
+            setSkin(new TabButtonSkin());
         }
 
         @Override
         public boolean isEnabled() {
+            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
             return tabPane.isEnabled();
         }
 
@@ -110,64 +104,37 @@ public class TabPaneSkin extends ContainerSkin
 
             // If the tab pane is collapsible, toggle the button selection;
             // otherwise, select it
+            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
             setSelected(tabPane.isCollapsible() ? !isSelected() : true);
         }
     }
 
-    public static class TabButtonSkin extends ButtonSkin implements ButtonStateListener {
-        private Font font = null;
-        private Color color = null;
-        private Color backgroundColor = null;
-        private Color selectedBackgroundColor = null;
-        private Color bevelColor = null;
-        private Color pressedBevelColor = null;
-        private Color borderColor = null;
-        private Insets padding = null;
-
+    protected class TabButtonSkin extends ButtonSkin implements ButtonStateListener {
         private boolean pressed = false;
 
-        @Override
-        public void install(Component component) {
-            validateComponentType(component, TabPaneSkin.TabButton.class);
-
-            super.install(component);
-
-            TabPaneSkin.TabButton tabButton = (TabPaneSkin.TabButton)getComponent();
-            TabPane tabPane = tabButton.getTabPane();
-
-            setFont((Font)tabPane.getStyles().get("buttonFont"));
-            setColor((Color)tabPane.getStyles().get("buttonColor"));
-            setBackgroundColor((Color)tabPane.getStyles().get("inactiveTabColor"));
-            setSelectedBackgroundColor((Color)tabPane.getStyles().get("activeTabColor"));
-            setBevelColor((Color)tabPane.getStyles().get("buttonBevelColor"));
-            setPressedBevelColor((Color)tabPane.getStyles().get("pressedButtonBevelColor"));
-            setBorderColor((Color)tabPane.getStyles().get("borderColor"));
-            setPadding((Insets)tabPane.getStyles().get("buttonPadding"));
-        }
-
         public int getPreferredWidth(int height) {
-            TabPaneSkin.TabButton tabButton = (TabPaneSkin.TabButton)getComponent();
-            TabPane tabPane = tabButton.getTabPane();
+            TabButton tabButton = (TabButton)getComponent();
+            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
 
             // Include padding in constraint
             if (height != -1) {
-                height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+                height = Math.max(height - (buttonPadding.top + buttonPadding.bottom + 2), 0);
             }
 
             int preferredWidth = 0;
             switch (tabPane.getTabOrientation()) {
                 case HORIZONTAL: {
                     preferredWidth = dataRenderer.getPreferredWidth(height)
-                        + padding.left + padding.right + 2;
+                        + buttonPadding.left + buttonPadding.right + 2;
                     break;
                 }
 
                 case VERTICAL: {
                     preferredWidth = dataRenderer.getPreferredHeight(height)
-                        + padding.top + padding.bottom + 2;
+                        + buttonPadding.top + buttonPadding.bottom + 2;
                     break;
                 }
             }
@@ -176,28 +143,28 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         public int getPreferredHeight(int width) {
-            TabPaneSkin.TabButton tabButton = (TabPaneSkin.TabButton)getComponent();
-            TabPane tabPane = tabButton.getTabPane();
+            TabButton tabButton = (TabButton)getComponent();
+            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
 
             // Include padding in constraint
             if (width != -1) {
-                width = Math.max(width - (padding.left + padding.right + 2), 0);
+                width = Math.max(width - (buttonPadding.left + buttonPadding.right + 2), 0);
             }
 
             int preferredHeight = 0;
             switch (tabPane.getTabOrientation()) {
                 case HORIZONTAL: {
                     preferredHeight = dataRenderer.getPreferredHeight(width)
-                        + padding.top + padding.bottom + 2;
+                        + buttonPadding.top + buttonPadding.bottom + 2;
                     break;
                 }
 
                 case VERTICAL: {
                     preferredHeight = dataRenderer.getPreferredWidth(width)
-                        + padding.left + padding.right + 2;
+                        + buttonPadding.left + buttonPadding.right + 2;
                     break;
                 }
             }
@@ -206,8 +173,8 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         public Dimensions getPreferredSize() {
-            TabPaneSkin.TabButton tabButton = (TabPaneSkin.TabButton)getComponent();
-            TabPane tabPane = tabButton.getTabPane();
+            TabButton tabButton = (TabButton)getComponent();
+            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
@@ -219,20 +186,20 @@ public class TabPaneSkin extends ContainerSkin
             switch (tabPane.getTabOrientation()) {
                 case HORIZONTAL: {
                     preferredWidth = preferredContentSize.width
-                        + padding.left + padding.right + 2;
+                        + buttonPadding.left + buttonPadding.right + 2;
 
                     preferredHeight = preferredContentSize.height
-                        + padding.top + padding.bottom + 2;
+                        + buttonPadding.top + buttonPadding.bottom + 2;
 
                     break;
                 }
 
                 case VERTICAL: {
                     preferredWidth = preferredContentSize.height
-                        + padding.top + padding.bottom + 2;
+                        + buttonPadding.top + buttonPadding.bottom + 2;
 
                     preferredHeight = preferredContentSize.width
-                        + padding.left + padding.right + 2;
+                        + buttonPadding.left + buttonPadding.right + 2;
 
                     break;
                 }
@@ -242,14 +209,14 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         public void paint(Graphics2D graphics) {
-            TabPaneSkin.TabButton tabButton = (TabPaneSkin.TabButton)getComponent();
-            TabPane tabPane = tabButton.getTabPane();
+            TabButton tabButton = (TabButton)getComponent();
+            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
             Orientation tabOrientation = tabPane.getTabOrientation();
 
             Color backgroundColor = (tabButton.isSelected()) ?
-                selectedBackgroundColor : this.backgroundColor;
+                activeTabColor : inactiveTabColor;
             Color bevelColor = (pressed
-                || tabButton.isSelected()) ? pressedBevelColor : this.bevelColor;
+                || tabButton.isSelected()) ? pressedButtonBevelColor : buttonBevelColor;
 
             int width = getWidth();
             int height = getHeight();
@@ -306,18 +273,18 @@ public class TabPaneSkin extends ContainerSkin
 
             switch (tabOrientation) {
                 case HORIZONTAL: {
-                    dataRenderer.setSize(Math.max(getWidth() - (padding.left + padding.right + 2), 0),
-                        Math.max(getHeight() - (padding.top + padding.bottom + 2), 0));
+                    dataRenderer.setSize(Math.max(getWidth() - (buttonPadding.left + buttonPadding.right + 2), 0),
+                        Math.max(getHeight() - (buttonPadding.top + buttonPadding.bottom + 2), 0));
 
-                    contentGraphics.translate(padding.left + 1, padding.top + 1);
+                    contentGraphics.translate(buttonPadding.left + 1, buttonPadding.top + 1);
                     break;
                 }
 
                 case VERTICAL: {
-                    dataRenderer.setSize(Math.max(getHeight() - (padding.top + padding.bottom + 2), 0),
-                        Math.max(getWidth() - (padding.left + padding.right + 2), 0));
+                    dataRenderer.setSize(Math.max(getHeight() - (buttonPadding.top + buttonPadding.bottom + 2), 0),
+                        Math.max(getWidth() - (buttonPadding.left + buttonPadding.right + 2), 0));
 
-                    contentGraphics.translate(padding.top + 1, padding.left + 1);
+                    contentGraphics.translate(buttonPadding.top + 1, buttonPadding.left + 1);
                     contentGraphics.rotate(-Math.PI / 2d);
                     contentGraphics.translate(-dataRenderer.getWidth(), 0);
                     break;
@@ -333,82 +300,6 @@ public class TabPaneSkin extends ContainerSkin
         @Override
         public boolean isFocusable() {
             return false;
-        }
-
-        public Font getFont() {
-            return font;
-        }
-
-        public void setFont(Font font) {
-            assert (font != null);
-            this.font = font;
-        }
-
-        public Color getColor() {
-            return color;
-        }
-
-        public void setColor(Color color) {
-            assert (color != null);
-            this.color = color;
-        }
-
-        public Color getDisabledColor() {
-            return color;
-        }
-
-        public Color getBackgroundColor() {
-            return backgroundColor;
-        }
-
-        public void setBackgroundColor(Color backgroundColor) {
-            assert (backgroundColor != null);
-            this.backgroundColor = backgroundColor;
-        }
-
-        public Color getSelectedBackgroundColor() {
-            return selectedBackgroundColor;
-        }
-
-        public void setSelectedBackgroundColor(Color selectedBackgroundColor) {
-            assert (selectedBackgroundColor != null);
-            this.selectedBackgroundColor = selectedBackgroundColor;
-        }
-
-        public Color getBevelColor() {
-            return bevelColor;
-        }
-
-        public void setBevelColor(Color bevelColor) {
-            assert (bevelColor != null);
-            this.bevelColor = bevelColor;
-        }
-
-        public Color getPressedBevelColor() {
-            return pressedBevelColor;
-        }
-
-        public void setPressedBevelColor(Color pressedBevelColor) {
-            assert (pressedBevelColor != null);
-            this.pressedBevelColor = pressedBevelColor;
-        }
-
-        public Color getBorderColor() {
-            return borderColor;
-        }
-
-        public void setBorderColor(Color borderColor) {
-            assert (borderColor != null);
-            this.borderColor = borderColor;
-        }
-
-        public Insets getPadding() {
-            return padding;
-        }
-
-        public void setPadding(Insets padding) {
-            assert (padding != null);
-            this.padding = padding;
         }
 
         @Override
@@ -443,7 +334,7 @@ public class TabPaneSkin extends ContainerSkin
 
         @Override
         public void mouseClick(Mouse.Button button, int x, int y, int count) {
-            TabPaneSkin.TabButton tabButton = (TabPaneSkin.TabButton)getComponent();
+            TabButton tabButton = (TabButton)getComponent();
             tabButton.press();
         }
 
@@ -496,8 +387,8 @@ public class TabPaneSkin extends ContainerSkin
 
         // Add buttons for all existing tabs
         for (Component tab : tabPane.getTabs()) {
-            TabPaneSkin.TabButton tabButton = new TabPaneSkin.TabButton(tabPane,
-                new ButtonData(TabPane.getIcon(tab), TabPane.getLabel(tab)));
+            TabButton tabButton = new TabButton(new ButtonData(TabPane.getIcon(tab),
+                TabPane.getLabel(tab)));
             tabButton.setGroup(tabButtonGroup);
 
             buttonFlowPane.add(tabButton);
@@ -998,8 +889,8 @@ public class TabPaneSkin extends ContainerSkin
         int tabIndex = tabPane.getTabs().indexOf(tab);
 
         if (tabIndex != -1) {
-            TabPaneSkin.TabButton tabButton =
-                (TabPaneSkin.TabButton)buttonFlowPane.get(tabIndex);
+            TabButton tabButton =
+                (TabButton)buttonFlowPane.get(tabIndex);
 
             tabButton.setButtonData(new ButtonData(TabPane.getIcon(tab),
                 TabPane.getLabel(tab)));
@@ -1035,8 +926,8 @@ public class TabPaneSkin extends ContainerSkin
     public void tabInserted(TabPane tabPane, int index) {
         // Create a new button for the tab
         Component tab = tabPane.getTabs().get(index);
-        TabPaneSkin.TabButton tabButton = new TabPaneSkin.TabButton(tabPane,
-            new ButtonData(TabPane.getIcon(tab), TabPane.getLabel(tab)));
+        TabButton tabButton = new TabButton(new ButtonData(TabPane.getIcon(tab),
+            TabPane.getLabel(tab)));
         tabButton.setGroup(tabButtonGroup);
 
         buttonFlowPane.insert(tabButton, index);

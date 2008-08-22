@@ -111,7 +111,12 @@ public abstract class Component implements Visual {
             }
 
             decorators.insert(decorator, index);
-            repaint();
+            if (parent != null) {
+                Rectangle bounds = decorator.getBounds(Component.this);
+                bounds.x += x;
+                bounds.y += y;
+                parent.repaint(bounds);
+            }
 
             componentDecoratorListeners.decoratorInserted(Component.this, index);
         }
@@ -1085,12 +1090,34 @@ public abstract class Component implements Visual {
      * Returns the component's bounding area.
      *
      * @return
-     * A rectangle value containing the component's horizontal and vertical
+     * A rectangle containing the component's horizontal and vertical
      * position relative to the origin of the parent container and the width
      * and height of the component.
      */
     public Rectangle getBounds() {
         return new Rectangle(x, y, getWidth(), getHeight());
+    }
+
+    /**
+     * Returns the union of the component's bounding area with the bounding
+     * areas of its decorators.
+     *
+     * @return
+     * A rectangle containing the bounding area of the component and its
+     * decorators. The <tt>x</tt> and <tt>y</tt> values of the rectangle are
+     * relative to the parent container.
+     */
+    public Rectangle getDecoratedBounds() {
+        Rectangle bounds = new Rectangle(0, 0, getWidth(), getHeight());
+
+        for (Decorator decorator : decorators) {
+            bounds.add(decorator.getBounds(this));
+        }
+
+        bounds.x += x;
+        bounds.y += y;
+
+        return bounds;
     }
 
     /**
@@ -1435,27 +1462,41 @@ public abstract class Component implements Visual {
     }
 
     /**
-     * Flags the entire component as needing to be repainted.
+     * Flags the entire component as needing to be repainted,
+     * including decorators.
      */
-    public final void repaint() {
-        repaint(0, 0, getWidth(), getHeight());
+    public void repaint() {
+        if (parent != null) {
+            parent.repaint(getDecoratedBounds());
+        }
     }
 
     /**
-     * Flags the given rectangle as needing to be repainted.
+     * Flags an area as needing to be repainted.
      *
-     * @param rectangle
+     * @param area
      */
-    public final void repaint(Rectangle rectangle) {
-        if (rectangle == null) {
-            throw new IllegalArgumentException("rectangle is null.");
+    public final void repaint(Rectangle area) {
+        repaint(area, false);
+    }
+
+    /**
+     * Flags an area as needing to be repainted or repaints the rectangle
+     * immediately.
+     *
+     * @param area
+     * @param immediate
+     */
+    public final void repaint(Rectangle area, boolean immediate) {
+        if (area == null) {
+            throw new IllegalArgumentException("area is null.");
         }
 
-        repaint(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+        repaint(area.x, area.y, area.width, area.height, immediate);
     }
 
     /**
-     * Flags the given rectangle as needing to be repainted.
+     * Flags an area as needing to be repainted.
      *
      * @param x
      * @param y
@@ -1467,8 +1508,8 @@ public abstract class Component implements Visual {
     }
 
     /**
-     * Flags the given rectangle as needing to be repainted or repaints the
-     * rectangle immediately.
+     * Flags an area as needing to be repainted or repaints the rectangle
+     * immediately.
      *
      * @param x
      * @param y
@@ -1488,24 +1529,13 @@ public abstract class Component implements Visual {
             width = Math.min(right, getWidth() - 1) - x + 1;
             height = Math.min(bottom, getHeight() - 1) - y + 1;
 
-            parent.repaint(x + this.x, y + this.y, width, height);
-
-            if (decorators.getLength() > 0) {
-                Window window = getWindow();
-
-                if (window != null) {
-                    Display display = window.getDisplay();
-                    Point offset = mapPointToAncestor(display, 0, 0);
-
-                    for (Decorator decorator : decorators) {
-                        Rectangle dirtyRegion = decorator.getDirtyRegion(this, x, y, width, height);
-
-                        if (dirtyRegion != null) {
-                            display.repaint(dirtyRegion.x + offset.x, dirtyRegion.y + offset.y,
-                                dirtyRegion.width, dirtyRegion.height);
-                        }
-                    }
+            if (width > 0
+                && height > 0) {
+                for (Decorator decorator : decorators) {
+                    decorator.repaint(this, x, y, width, height);
                 }
+
+                parent.repaint(x + this.x, y + this.y, width, height);
             }
         }
     }

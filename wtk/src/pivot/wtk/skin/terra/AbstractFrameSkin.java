@@ -44,6 +44,7 @@ import pivot.wtk.PushButton;
 import pivot.wtk.Rectangle;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
+import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.WindowSkin;
 

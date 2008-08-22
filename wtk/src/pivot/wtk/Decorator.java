@@ -6,5 +6,6 @@ public interface Decorator {
     public Graphics2D prepare(Component component, Graphics2D graphics);
     public void update();
 
-    public Rectangle getDirtyRegion(Component component, int x, int y, int width, int height);
+    public Rectangle getBounds(Component component);
+    public void repaint(Component component, int x, int y, int width, int height);
 }

@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import pivot.wtk.Component;
+import pivot.wtk.Container;
 import pivot.wtk.Decorator;
 import pivot.wtk.Rectangle;
 
@@ -64,16 +65,27 @@ public class ReflectionDecorator implements Decorator {
         Graphics2D reflectionGraphics = (Graphics2D)graphics.create();
         reflectionGraphics.scale(1.0, -1.0);
         reflectionGraphics.translate(0, -(height * 2));
-        reflectionGraphics.setClip(graphics.getClip());
-
         reflectionGraphics.drawImage(bufferedImage, 0, 0, null);
 
         // Dispose of the graphics
         reflectionGraphics.dispose();
     }
 
-    public Rectangle getDirtyRegion(Component component, int x, int y, int width, int height) {
-        return new Rectangle(x, (component.getHeight() * 2) - (y + height),
-            width, height);
+    public Rectangle getBounds(Component component) {
+        Rectangle bounds = component.getBounds();
+        bounds.y += bounds.height;
+
+        return bounds;
+    }
+
+    public void repaint(Component component, int x, int y, int width, int height) {
+        Container parent = component.getParent();
+
+        if (parent != null) {
+            x += component.getX();
+            y = (component.getHeight() * 2) - height;
+
+            parent.repaint(x, y, width, height);
+        }
     }
 }
