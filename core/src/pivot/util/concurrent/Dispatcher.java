@@ -71,9 +71,6 @@ public class Dispatcher {
 
         // TODO Start minimum number of pool threads
         threadPool = new ArrayList<Thread>(maximumThreadCount);
-
-        queueMonitorThread = new MonitorThread();
-        queueMonitorThread.start();
     }
 
     /**
@@ -83,6 +80,16 @@ public class Dispatcher {
      * A synchronized queue from which the dispatcher will withdraw runnables.
      */
     public Queue<Runnable> getPendingQueue() {
+        // TODO We need to check for isAlive() here because the Java Plugin
+        // appears to kill the thread when navigating between pages. Revisit
+        // this after J6u10 is generally available.
+
+        if (queueMonitorThread == null
+            || !queueMonitorThread.isAlive()) {
+            queueMonitorThread = new MonitorThread();
+            queueMonitorThread.start();
+        }
+
         return pendingQueue;
     }
 }
