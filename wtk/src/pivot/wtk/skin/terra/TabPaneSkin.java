@@ -639,10 +639,6 @@ public class TabPaneSkin extends ContainerSkin
 
         this.activeTabColor = activeTabColor;
 
-        for (Component button : buttonFlowPane) {
-            button.getStyles().put("selectedBackgroundColor", activeTabColor);
-        }
-
         repaintComponent();
     }
 
@@ -664,10 +660,6 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         this.inactiveTabColor = inactiveTabColor;
-
-        for (Component button : buttonFlowPane) {
-            button.getStyles().put("backgroundColor", inactiveTabColor);
-        }
 
         repaintComponent();
     }
@@ -744,11 +736,6 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         this.buttonFont = buttonFont;
-
-        for (Component button : buttonFlowPane) {
-            button.getStyles().put("font", buttonFont);
-        }
-
         invalidateComponent();
     }
 
@@ -770,11 +757,6 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         this.buttonColor = buttonColor;
-
-        for (Component button : buttonFlowPane) {
-            button.getStyles().put("color", buttonColor);
-        }
-
         repaintComponent();
     }
 
@@ -796,11 +778,6 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         this.buttonBevelColor = buttonBevelColor;
-
-        for (Component button : buttonFlowPane) {
-            button.getStyles().put("bevelColor", buttonBevelColor);
-        }
-
         repaintComponent();
     }
 
@@ -822,11 +799,6 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         this.pressedButtonBevelColor = pressedButtonBevelColor;
-
-        for (Component button : buttonFlowPane) {
-            button.getStyles().put("pressedBevelColor", pressedButtonBevelColor);
-        }
-
         repaintComponent();
     }
 
@@ -848,11 +820,6 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         this.buttonPadding = buttonPadding;
-
-        for (Component button : buttonFlowPane) {
-            button.getStyles().put("padding", buttonPadding);
-        }
-
         invalidateComponent();
     }
 
