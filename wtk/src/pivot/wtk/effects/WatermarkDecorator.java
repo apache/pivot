@@ -88,9 +88,11 @@ public class WatermarkDecorator implements Decorator {
      * The image to paint over the decorated component
      */
     public WatermarkDecorator(String text, Image image) {
-        flowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         flowPane.add(imageView);
         flowPane.add(label);
+
+        flowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        imageView.getStyles().put("opacity", opacity);
 
         Font font = (Font)label.getStyles().get("font");
         label.getStyles().put("font", font.deriveFont(Font.BOLD, 60));
@@ -221,6 +223,7 @@ public class WatermarkDecorator implements Decorator {
      */
     public void setOpacity(float opacity) {
         this.opacity = opacity;
+        imageView.getStyles().put("opacity", opacity);
     }
 
     /**
