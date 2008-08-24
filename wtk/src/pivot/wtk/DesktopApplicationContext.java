@@ -56,9 +56,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         application.startup(applicationContext.getDisplay(),
                             new ImmutableMap<String, String>(properties));
                     } catch(Exception exception) {
+                        exception.printStackTrace();
                         Alert.alert(Alert.Type.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());
-                        exception.printStackTrace();
                     }
 
                     break;
@@ -70,9 +70,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     try {
                         shutdown = application.shutdown(false);
                     } catch(Exception exception) {
+                        exception.printStackTrace();
                         Alert.alert(Alert.Type.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());
-                        exception.printStackTrace();
                     }
 
                     if (shutdown) {
@@ -100,9 +100,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     try {
                         application.suspend();
                     } catch(Exception exception) {
+                        exception.printStackTrace();
                         Alert.alert(Alert.Type.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());
-                        exception.printStackTrace();
                     }
 
                     break;
@@ -112,9 +112,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     try {
                         application.resume();
                     } catch(Exception exception) {
+                        exception.printStackTrace();
                         Alert.alert(Alert.Type.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());
-                        exception.printStackTrace();
                     }
 
                     break;
