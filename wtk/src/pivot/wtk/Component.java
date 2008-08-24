@@ -1238,6 +1238,10 @@ public abstract class Component implements Visual {
      * component is not a descendant of the specified ancestor.
      */
     public Point mapPointToAncestor(Container ancestor, int x, int y) {
+        if (ancestor == null) {
+            throw new IllegalArgumentException("ancestor is null");
+        }
+
         Point coordinates = null;
 
         Component component = this;
@@ -1272,6 +1276,10 @@ public abstract class Component implements Visual {
      * component is not a descendant of the specified ancestor.
      */
     public Point mapPointFromAncestor(Container ancestor, int x, int y) {
+        if (ancestor == null) {
+            throw new IllegalArgumentException("ancestor is null");
+        }
+
         Point coordinates = null;
 
         Component component = this;
