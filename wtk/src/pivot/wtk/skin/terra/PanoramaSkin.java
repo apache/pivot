@@ -4,14 +4,11 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.GeneralPath;
-
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.LinkButton;
-import pivot.wtk.Mouse;
 import pivot.wtk.Panorama;
 import pivot.wtk.Rectangle;
 import pivot.wtk.Viewport;
@@ -19,53 +16,150 @@ import pivot.wtk.ViewportListener;
 import pivot.wtk.skin.ContainerSkin;
 
 public class PanoramaSkin extends ContainerSkin
-    implements Viewport.Skin, ViewportListener,
-    ComponentMouseListener, ComponentMouseButtonListener {
+    implements Viewport.Skin, ViewportListener, ComponentMouseListener {
     /**
      * Abstract base class for button images.
      */
-    protected abstract class ButtonImage extends ImageAsset {
+    protected abstract class ScrollButtonImage extends ImageAsset {
         public int getPreferredWidth(int height) {
-            return 7;
+            return BUTTON_SIZE;
         }
 
         public int getPreferredHeight(int width) {
-            return 7;
+            return BUTTON_SIZE;
         }
 
         public Dimensions getPreferredSize() {
             return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+        }
+
+        public void paint(Graphics2D graphics) {
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+            graphics.setStroke(new BasicStroke(0));
+            graphics.setPaint(BUTTON_COLOR);
         }
     }
 
     /**
      * North button image.
      */
-    protected class NorthImage extends ButtonImage {
+    protected class NorthButtonImage extends ScrollButtonImage {
         public void paint(Graphics2D graphics) {
-            graphics.setStroke(new BasicStroke(0));
-            graphics.setPaint(arrowColor);
+            super.paint(graphics);
 
-            GeneralPath shape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-            shape.moveTo(0, 6);
-            shape.lineTo(3, 3);
-            shape.lineTo(6, 6);
-            shape.closePath();
-
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-            graphics.draw(shape);
-            graphics.fill(shape);
+            int[] xPoints = {3, 6, 9};
+            int[] yPoints = {9, 5, 9};
+            graphics.fillPolygon(xPoints, yPoints, 3);
+            graphics.drawPolygon(xPoints, yPoints, 3);
         }
     }
 
-    // TODO More button images
+    /**
+     * South button image.
+     */
+    protected class SouthButtonImage extends ScrollButtonImage {
+        public void paint(Graphics2D graphics) {
+            super.paint(graphics);
 
-    private Color arrowColor = Color.BLACK;
+            int[] xPoints = {3, 6, 9};
+            int[] yPoints = {5, 9, 5};
+            graphics.fillPolygon(xPoints, yPoints, 3);
+            graphics.drawPolygon(xPoints, yPoints, 3);
+        }
+    }
 
-    private LinkButton northButton = new LinkButton(new NorthImage());
-    // TODO Remaining buttons
+    /**
+     * East button image.
+     */
+    protected class EastButtonImage extends ScrollButtonImage {
+        public void paint(Graphics2D graphics) {
+            super.paint(graphics);
+
+            int[] xPoints = {5, 9, 5};
+            int[] yPoints = {3, 6, 9};
+            graphics.fillPolygon(xPoints, yPoints, 3);
+            graphics.drawPolygon(xPoints, yPoints, 3);
+        }
+    }
+
+    /**
+     * West button image.
+     */
+    protected class WestButtonImage extends ScrollButtonImage {
+        public void paint(Graphics2D graphics) {
+            super.paint(graphics);
+
+            int[] xPoints = {9, 5, 9};
+            int[] yPoints = {3, 6, 9};
+            graphics.fillPolygon(xPoints, yPoints, 3);
+            graphics.drawPolygon(xPoints, yPoints, 3);
+        }
+    }
+
+    private class ScrollCallback implements Runnable {
+        public void run() {
+            Panorama panorama = (Panorama)getComponent();
+
+            if (northButton.isMouseOver()) {
+                int scrollTop = Math.max(panorama.getScrollTop()
+                    - (int)scrollDistance, 0);
+                if (scrollTop == 0) {
+                    ApplicationContext.clearInterval(scrollIntervalID);
+                }
+
+                panorama.setScrollTop(scrollTop);
+            } else if (southButton.isMouseOver()) {
+                int maxScrollTop = getMaxScrollTop();
+                int scrollTop = Math.min(panorama.getScrollTop()
+                    + (int)scrollDistance, maxScrollTop);
+                if (scrollTop == maxScrollTop) {
+                    ApplicationContext.clearInterval(scrollIntervalID);
+                }
+
+                panorama.setScrollTop(scrollTop);
+            } else if (eastButton.isMouseOver()) {
+                int maxScrollLeft = getMaxScrollLeft();
+                int scrollLeft = Math.min(panorama.getScrollLeft()
+                    + (int)scrollDistance, maxScrollLeft);
+                if (scrollLeft == maxScrollLeft) {
+                    ApplicationContext.clearInterval(scrollIntervalID);
+                }
+
+                panorama.setScrollLeft(scrollLeft);
+            } else if (westButton.isMouseOver()) {
+                int scrollLeft = Math.max(panorama.getScrollLeft()
+                    - (int)scrollDistance, 0);
+                if (scrollLeft == 0) {
+                    ApplicationContext.clearInterval(scrollIntervalID);
+                }
+
+                panorama.setScrollLeft(scrollLeft);
+            }
+
+            scrollDistance = Math.min(scrollDistance * SCROLL_ACCELERATION,
+                MAXIMUM_SCROLL_DISTANCE);
+        }
+    }
+
+    private Color BUTTON_COLOR = Color.BLACK;
+
+    private LinkButton northButton = new LinkButton(new NorthButtonImage());
+    private LinkButton southButton = new LinkButton(new SouthButtonImage());
+    private LinkButton eastButton = new LinkButton(new EastButtonImage());
+    private LinkButton westButton = new LinkButton(new WestButtonImage());
+
+    private float scrollDistance = 0;
+    private ScrollCallback scrollCallback = new ScrollCallback();
+    private int scrollIntervalID = -1;
+
+    private static final int SCROLL_RATE = 50;
+    private static final float INITIAL_SCROLL_DISTANCE = 10;
+    private static final float SCROLL_ACCELERATION = 1.06f;
+    private static final float MAXIMUM_SCROLL_DISTANCE = 150f;
+
+    private static final int BUTTON_SIZE = 13;
 
     @Override
     public void install(Component component) {
@@ -76,10 +170,20 @@ public class PanoramaSkin extends ContainerSkin
         Panorama panorama = (Panorama)component;
         panorama.getViewportListeners().add(this);
 
-        // TODO Add scroll arrow link buttons and attach mouse listeners
+        // Add scroll arrow link buttons and attach mouse listeners
         // to them; the mouse handlers should call setScrollTop() and
         // setScrollLeft() on the panorama as appropriate
         panorama.add(northButton);
+        northButton.getComponentMouseListeners().add(this);
+
+        panorama.add(southButton);
+        southButton.getComponentMouseListeners().add(this);
+
+        panorama.add(eastButton);
+        eastButton.getComponentMouseListeners().add(this);
+
+        panorama.add(westButton);
+        westButton.getComponentMouseListeners().add(this);
     }
 
     @Override
@@ -87,8 +191,11 @@ public class PanoramaSkin extends ContainerSkin
         Panorama panorama = (Panorama)getComponent();
         panorama.getViewportListeners().remove(this);
 
-        // TODO Remove scroll arrow link buttons
+        // Remove scroll arrow link buttons
         panorama.remove(northButton);
+        panorama.remove(southButton);
+        panorama.remove(eastButton);
+        panorama.remove(westButton);
     }
 
     @Override
@@ -137,12 +244,61 @@ public class PanoramaSkin extends ContainerSkin
 
     public void layout() {
         Panorama panorama = (Panorama)getComponent();
+        int width = getWidth();
+        int height = getHeight();
+
+        // Assume that the buttons will not be needed
+        northButton.setVisible(false);
+        southButton.setVisible(false);
+        eastButton.setVisible(false);
+        westButton.setVisible(false);
+
         Component view = panorama.getView();
+        if (view != null) {
+            view.setSize(view.getPreferredSize());
+            int viewWidth = view.getWidth();
+            int viewHeight = view.getHeight();
 
-        // TODO Reposition the view so it is consistent with the values of
-        // scroll top and scroll left within the current panorama bounds
+            int scrollTop = panorama.getScrollTop();
+            int maxScrollTop = getMaxScrollTop();
+            if (scrollTop > maxScrollTop) {
+                panorama.setScrollTop(maxScrollTop);
+                scrollTop = maxScrollTop;
+            }
 
-        // TODO Center N, S, E, and W buttons on their respective edges
+            int scrollLeft = panorama.getScrollLeft();
+            int maxScrollLeft = getMaxScrollLeft();
+            if (scrollLeft > maxScrollLeft) {
+                panorama.setScrollLeft(maxScrollLeft);
+                scrollLeft = maxScrollLeft;
+            }
+
+            if (width < viewWidth) {
+                // Show east/west buttons
+                eastButton.setVisible(panorama.isMouseOver()
+                    && scrollLeft < maxScrollLeft);
+                eastButton.setSize(BUTTON_SIZE, Math.max(height - BUTTON_SIZE * 2, 0));
+                eastButton.setLocation(width - eastButton.getWidth(), BUTTON_SIZE);
+
+                westButton.setVisible(panorama.isMouseOver()
+                    && scrollLeft > 0);
+                westButton.setSize(BUTTON_SIZE, Math.max(height - BUTTON_SIZE * 2, 0));
+                westButton.setLocation(0, BUTTON_SIZE);
+            }
+
+            if (height < viewHeight) {
+                // Show north/south buttons
+                northButton.setVisible(panorama.isMouseOver()
+                    && scrollTop > 0);
+                northButton.setSize(Math.max(width - BUTTON_SIZE * 2, 0), BUTTON_SIZE);
+                northButton.setLocation(BUTTON_SIZE, 0);
+
+                southButton.setVisible(panorama.isMouseOver()
+                    && scrollTop < maxScrollTop);
+                southButton.setSize(Math.max(width - BUTTON_SIZE * 2, 0), BUTTON_SIZE);
+                southButton.setLocation(BUTTON_SIZE, height - southButton.getHeight());
+            }
+        }
     }
 
     public Rectangle getViewportBounds() {
@@ -150,77 +306,78 @@ public class PanoramaSkin extends ContainerSkin
         return new Rectangle(0, 0, getWidth(), getHeight());
     }
 
-    // Styles
-    public Color getArrowColor() {
-        return arrowColor;
-    }
+    public int getMaxScrollTop() {
+        int maxScrollTop = 0;
 
-    public void setArrowColor(Color arrowColor) {
-        if (arrowColor == null) {
-            throw new IllegalArgumentException("arrowColor is null.");
+        Panorama panorama = (Panorama)getComponent();
+        int height = getHeight();
+
+        Component view = panorama.getView();
+        if (view != null) {
+            maxScrollTop = Math.max(view.getHeight() - height, 0);
         }
 
-        this.arrowColor = arrowColor;
-        repaintComponent();
+        return maxScrollTop;
     }
 
-    public final void setArrowColor(String arrowColor) {
-        if (arrowColor == null) {
-            throw new IllegalArgumentException("arrowColor is null.");
+    public int getMaxScrollLeft() {
+        int maxScrollLeft = 0;
+
+        Panorama panorama = (Panorama)getComponent();
+        int width = getWidth();
+
+        Component view = panorama.getView();
+        if (view != null) {
+            maxScrollLeft = Math.max(view.getWidth() - width, 0);
         }
 
-        setArrowColor(Color.decode(arrowColor));
+        return maxScrollLeft;
     }
 
     // User input
     @Override
-    public boolean mouseMove(int x, int y) {
-        // TODO
-        return super.mouseMove(x, y);
-    }
-
-    @Override
     public void mouseOver() {
         super.mouseOver();
-        // TODO
+
+        northButton.setVisible(true);
+        southButton.setVisible(true);
+        eastButton.setVisible(true);
+        westButton.setVisible(true);
     }
 
     @Override
     public void mouseOut() {
         super.mouseOut();
-        // TODO
-    }
 
-    @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        // TODO
-        return super.mouseDown(button, x, y);
-    }
-
-    @Override
-    public boolean mouseUp(Mouse.Button button, int x, int y) {
-        // TODO
-        return super.mouseUp(button, x, y);
-    }
-
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
-        super.mouseClick(button, x, y, count);
-        // TODO
-    }
-
-    public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
-        int wheelRotation, int x, int y) {
-        // TODO
-        return super.mouseWheel(scrollType, scrollAmount, wheelRotation, x, y);
+        northButton.setVisible(false);
+        southButton.setVisible(false);
+        eastButton.setVisible(false);
+        westButton.setVisible(false);
     }
 
     // Viewport events
-    public void scrollTopChanged(Viewport scrollPane, int previousScrollTop) {
-        repaintComponent();
+    public void scrollTopChanged(Viewport panorama, int previousScrollTop) {
+        Component view = panorama.getView();
+        if (view != null) {
+            int maxScrollTop = getMaxScrollTop();
+            int scrollTop = Math.min(panorama.getScrollTop(), maxScrollTop);
+            view.setLocation(view.getX(), -scrollTop);
+
+            northButton.setVisible(scrollTop > 0);
+            southButton.setVisible(scrollTop < maxScrollTop);
+        }
     }
 
-    public void scrollLeftChanged(Viewport scrollPane, int previousScrollLeft) {
-        repaintComponent();
+    public void scrollLeftChanged(Viewport panorama, int previousScrollLeft) {
+        Component view = panorama.getView();
+        if (view != null) {
+            int maxScrollLeft = getMaxScrollLeft();
+            int scrollLeft = Math.min(panorama.getScrollLeft(), maxScrollLeft);
+            view.setLocation(-scrollLeft, view.getY());
+
+            westButton.setVisible(scrollLeft > 0);
+            eastButton.setVisible(scrollLeft < maxScrollLeft);
+        }
     }
 
     public void viewChanged(Viewport scrollPane, Component previousView) {
@@ -229,27 +386,17 @@ public class PanoramaSkin extends ContainerSkin
 
     // Component mouse events
     public void mouseMove(Component component, int x, int y) {
-        // TODO
+        // No-op
     }
 
     public void mouseOver(Component component) {
-        // TODO
+        // Start scroll timer
+        scrollDistance = INITIAL_SCROLL_DISTANCE;
+        scrollIntervalID = ApplicationContext.setInterval(scrollCallback, SCROLL_RATE);
     }
 
     public void mouseOut(Component component) {
-        // TODO
-    }
-
-    // Component mouse button events
-    public void mouseDown(Component component, Mouse.Button button, int x, int y) {
-        // TODO
-    }
-
-    public void mouseUp(Component component, Mouse.Button button, int x, int y) {
-        // TODO
-    }
-
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        // TODO
+        // Stop scroll timer
+        ApplicationContext.clearInterval(scrollIntervalID);
     }
 }
