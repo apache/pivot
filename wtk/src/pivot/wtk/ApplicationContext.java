@@ -341,6 +341,16 @@ public abstract class ApplicationContext {
                     dragDropManager.mouseUp(button, x, y);
                     break;
                 }
+
+                case MouseEvent.MOUSE_ENTERED: {
+                    display.mouseOver();
+                    break;
+                }
+
+                case MouseEvent.MOUSE_EXITED: {
+                    display.mouseOut();
+                    break;
+                }
             }
         }
 
