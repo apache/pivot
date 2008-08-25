@@ -36,7 +36,7 @@ import pivot.wtk.media.Image;
  * @author tvolkert
  */
 public class WatermarkDecorator implements Decorator {
-    private float opacity = 0.1f;
+    private float opacity = 0.075f;
     private double theta = Math.PI / 4;
 
     private FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
