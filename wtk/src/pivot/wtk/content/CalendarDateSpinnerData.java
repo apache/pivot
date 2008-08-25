@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.TimeZone;
 
 import pivot.collections.List;
 import pivot.collections.ListListener;
@@ -107,12 +108,14 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
 
         calendar = new GregorianCalendar(lowerBound.getYear(), lowerBound.getMonth(),
             lowerBound.getDay() + 1);
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
         calendarIndex = 0;
 
         // Calculate our length and cache it, since it is guaranteed to
         // remain fixed
         GregorianCalendar upperBoundCalendar = new GregorianCalendar(upperBound.getYear(),
             upperBound.getMonth(), upperBound.getDay() + 1);
+        upperBoundCalendar.setTimeZone(TimeZone.getTimeZone("GMT"));
         long lowerBoundMilliseconds = calendar.getTimeInMillis();
         long upperBoundMilliseconds = upperBoundCalendar.getTimeInMillis();
         long indexDiff = (upperBoundMilliseconds - lowerBoundMilliseconds) /
@@ -186,6 +189,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
         int day = item.getDay() + 1;
 
         GregorianCalendar tmpCalendar = new GregorianCalendar(year, month, day);
+        tmpCalendar.setTimeZone(TimeZone.getTimeZone("GMT"));
         long itemMilliseconds = tmpCalendar.getTimeInMillis();
 
         long indexDiff = (itemMilliseconds - currentMilliseconds) / (1000 * 60 * 60 * 24);
