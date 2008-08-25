@@ -72,10 +72,10 @@ public class ReflectionDecorator implements Decorator {
     }
 
     public Rectangle getBounds(Component component) {
-        Rectangle bounds = component.getBounds();
-        bounds.y += bounds.height;
+        int width = component.getWidth();
+        int height = component.getHeight();
 
-        return bounds;
+        return new Rectangle(0, height, width, height);
     }
 
     public void repaint(Component component, int x, int y, int width, int height) {

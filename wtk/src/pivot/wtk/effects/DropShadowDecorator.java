@@ -39,11 +39,8 @@ public class DropShadowDecorator implements Decorator {
     }
 
     public Rectangle getBounds(Component component) {
-        Rectangle bounds = component.getBounds();
-        bounds.x += DROP_SHADOW_OFFSET;
-        bounds.y += DROP_SHADOW_OFFSET;
-
-        return bounds;
+        return new Rectangle(DROP_SHADOW_OFFSET, DROP_SHADOW_OFFSET,
+            component.getWidth(), component.getHeight());
     }
 
     public void repaint(Component component, int x, int y, int width, int height) {

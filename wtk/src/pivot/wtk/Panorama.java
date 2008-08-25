@@ -17,6 +17,11 @@ package pivot.wtk;
 
 public class Panorama extends Viewport {
     public Panorama() {
+        this(null);
+    }
+
+    public Panorama(Component view) {
         installSkin(Panorama.class);
+        setView(view);
     }
 }

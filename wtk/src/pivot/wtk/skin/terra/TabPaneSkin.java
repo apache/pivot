@@ -379,6 +379,8 @@ public class TabPaneSkin extends ContainerSkin
         tabPane.getTabPaneAttributeListeners().add(this);
 
         // Add the button panorama and flow pane
+        buttonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
+        buttonPanorama.getStyles().put("buttonPadding", 6);
         buttonPanorama.setView(buttonFlowPane);
         tabPane.add(buttonPanorama);
 
@@ -657,7 +659,6 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         this.inactiveTabColor = inactiveTabColor;
-
         repaintComponent();
     }
 
@@ -679,6 +680,7 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         this.borderColor = borderColor;
+        buttonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
         repaintComponent();
     }
 

@@ -32,6 +32,7 @@ import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Display;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.ListButton;
@@ -39,9 +40,11 @@ import pivot.wtk.ListButtonListener;
 import pivot.wtk.ListButtonSelectionListener;
 import pivot.wtk.ListView;
 import pivot.wtk.Mouse;
+import pivot.wtk.Panorama;
 import pivot.wtk.Point;
 import pivot.wtk.Popup;
 import pivot.wtk.Rectangle;
+import pivot.wtk.Window;
 import pivot.wtk.skin.ButtonSkin;
 
 public class ListButtonSkin extends ButtonSkin
@@ -105,6 +108,7 @@ public class ListButtonSkin extends ButtonSkin
     }
 
     private ListView listView = null;
+    private Panorama listViewPanorama = null;
     private Border listViewBorder = null;
     private Popup listViewPopup = null;
 
@@ -125,11 +129,15 @@ public class ListButtonSkin extends ButtonSkin
     private static final int TRIGGER_WIDTH = 14;
 
     public ListButtonSkin() {
-        // Create the list view and border
-        // TODO Add the list view to a Panorama
+        // Create the list view, panorama, and border
         listView = new ListView();
-        listViewBorder = new Border(listView);
-        listViewBorder.getStyles().put("padding", new Insets(0));
+        listViewPanorama = new Panorama(listView);
+        listViewPanorama.getStyles().put("buttonBackgroundColor",
+            listView.getStyles().get("backgroundColor"));
+
+        listViewBorder = new Border(listViewPanorama);
+        listViewBorder.getStyles().put("padding", 0);
+        listViewBorder.getStyles().put("borderColor", borderColor);
 
         // Create the popup
         listViewPopup = new Popup(listViewBorder);
@@ -149,7 +157,6 @@ public class ListButtonSkin extends ButtonSkin
         listButton.getListButtonSelectionListeners().add(this);
 
         listView.setListData(listButton.getListData());
-        listViewBorder.getStyles().put("borderColor", borderColor);
     }
 
     @Override
@@ -427,6 +434,7 @@ public class ListButtonSkin extends ButtonSkin
         }
 
         this.borderColor = borderColor;
+        listViewBorder.getStyles().put("borderColor", borderColor);
         repaintComponent();
     }
 
@@ -585,6 +593,7 @@ public class ListButtonSkin extends ButtonSkin
 
     public void setListBackgroundColor(Object listBackgroundColor) {
         listView.getStyles().put("backgroundColor", listBackgroundColor);
+        listViewPanorama.getStyles().put("buttonBackgroundColor", listBackgroundColor);
     }
 
     public Object getListSelectionColor() {
@@ -754,27 +763,45 @@ public class ListButtonSkin extends ButtonSkin
             if (listButton.getListData().getLength() > 0) {
                 // Determine the popup's location and preferred size, relative
                 // to the button
-                Point location = listButton.mapPointToAncestor(button.getWindow().getDisplay(), 0, 0);
-                location.y += getHeight() - 1;
+                Window window = button.getWindow();
 
-                // TODO Ensure that the popup remains within the bounds of the display
-                listViewPopup.setLocation(location);
-                listViewPopup.open(listButton);
+                if (window != null) {
+                    Display display = button.getWindow().getDisplay();
+                    Point buttonLocation = listButton.mapPointToAncestor(display, 0, 0);
 
-                if (listView.getFirstSelectedIndex() == -1
-                    && listView.getListData().getLength() > 0) {
-                    listView.setSelectedIndex(0);
+                    // Ensure that the popup remains within the bounds of the display
+                    int displayHeight = display.getHeight();
+
+                    int y = buttonLocation.y + getHeight() - 1;
+                    int preferredPopupHeight = listViewBorder.getPreferredHeight();
+
+                    if (y + preferredPopupHeight > displayHeight) {
+                        if (buttonLocation.y - preferredPopupHeight > 0) {
+                            y = buttonLocation.y - preferredPopupHeight + 1;
+                        } else {
+                            preferredPopupHeight = displayHeight - y;
+                        }
+                    } else {
+                        preferredPopupHeight = -1;
+                    }
+
+                    listViewPopup.setLocation(buttonLocation.x, y);
+                    listViewPopup.setPreferredHeight(preferredPopupHeight);
+                    listViewPopup.open(listButton);
+
+                    if (listView.getFirstSelectedIndex() == -1
+                        && listView.getListData().getLength() > 0) {
+                        listView.setSelectedIndex(0);
+                    }
+
+                    Component.setFocusedComponent(listView);
                 }
-
-                Component.setFocusedComponent(listView);
             }
         }
     }
 
     // List button events
     public void listDataChanged(ListButton listButton, List<?> previousListData) {
-        // TODO Clear the button data?
-
         listView.setListData(listButton.getListData());
     }
 

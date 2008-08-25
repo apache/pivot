@@ -5,14 +5,16 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import pivot.wtk.ApplicationContext;
+import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Dimensions;
-import pivot.wtk.LinkButton;
 import pivot.wtk.Panorama;
 import pivot.wtk.Rectangle;
 import pivot.wtk.Viewport;
 import pivot.wtk.ViewportListener;
+import pivot.wtk.content.ButtonDataRenderer;
+import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 public class PanoramaSkin extends ContainerSkin
@@ -38,7 +40,7 @@ public class PanoramaSkin extends ContainerSkin
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
             graphics.setStroke(new BasicStroke(0));
-            graphics.setPaint(BUTTON_COLOR);
+            graphics.setPaint(buttonColor);
         }
     }
 
@@ -49,8 +51,8 @@ public class PanoramaSkin extends ContainerSkin
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = {3, 6, 9};
-            int[] yPoints = {9, 5, 9};
+            int[] xPoints = {0, 3, 6};
+            int[] yPoints = {5, 1, 5};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -63,8 +65,8 @@ public class PanoramaSkin extends ContainerSkin
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = {3, 6, 9};
-            int[] yPoints = {5, 9, 5};
+            int[] xPoints = {0, 3, 6};
+            int[] yPoints = {1, 5, 1};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -77,8 +79,8 @@ public class PanoramaSkin extends ContainerSkin
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = {5, 9, 5};
-            int[] yPoints = {3, 6, 9};
+            int[] xPoints = {1, 5, 1};
+            int[] yPoints = {0, 3, 6};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -91,13 +93,73 @@ public class PanoramaSkin extends ContainerSkin
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = {9, 5, 9};
-            int[] yPoints = {3, 6, 9};
+            int[] xPoints = {5, 1, 5};
+            int[] yPoints = {0, 3, 6};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
     }
 
+    protected class ScrollButton extends Button {
+        public ScrollButton(Object buttonData) {
+            super(buttonData);
+
+            setDataRenderer(new ButtonDataRenderer());
+            setSkin(new ScrollButtonSkin());
+        }
+
+        @Override
+        public void setToggleButton(boolean toggleButton) {
+            throw new UnsupportedOperationException("Link buttons cannot be toggle buttons.");
+        }
+    }
+
+    public class ScrollButtonSkin extends ButtonSkin {
+        public void install(Component component) {
+            validateComponentType(component, ScrollButton.class);
+
+            super.install(component);
+        }
+
+        public int getPreferredWidth(int height) {
+            return BUTTON_SIZE + buttonPadding;
+        }
+
+        public int getPreferredHeight(int width) {
+            return BUTTON_SIZE + buttonPadding;
+        }
+
+        public Dimensions getPreferredSize() {
+            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+        }
+
+        public void paint(Graphics2D graphics) {
+            ScrollButton scrollButton = (ScrollButton)getComponent();
+            int width = getWidth();
+            int height = getHeight();
+
+            if (buttonBackgroundColor != null) {
+                graphics.setColor(buttonBackgroundColor);
+                graphics.fillRect(0, 0, width, height);
+            }
+
+            Button.DataRenderer dataRenderer = scrollButton.getDataRenderer();
+            dataRenderer.render(scrollButton.getButtonData(), scrollButton, false);
+            dataRenderer.setSize(width - buttonPadding * 2, height - buttonPadding * 2);
+
+            graphics.translate(buttonPadding, buttonPadding);
+            dataRenderer.paint(graphics);
+        }
+
+        /**
+         * @return
+         * <tt>false</tt>; link buttons are not focusable.
+         */
+        @Override
+        public boolean isFocusable() {
+            return false;
+        }
+    }
     private class ScrollCallback implements Runnable {
         public void run() {
             Panorama panorama = (Panorama)getComponent();
@@ -143,12 +205,14 @@ public class PanoramaSkin extends ContainerSkin
         }
     }
 
-    private Color BUTTON_COLOR = Color.BLACK;
+    private Color buttonColor = Color.BLACK;
+    private Color buttonBackgroundColor = null;
+    private int buttonPadding = 4;
 
-    private LinkButton northButton = new LinkButton(new NorthButtonImage());
-    private LinkButton southButton = new LinkButton(new SouthButtonImage());
-    private LinkButton eastButton = new LinkButton(new EastButtonImage());
-    private LinkButton westButton = new LinkButton(new WestButtonImage());
+    private ScrollButton northButton = new ScrollButton(new NorthButtonImage());
+    private ScrollButton southButton = new ScrollButton(new SouthButtonImage());
+    private ScrollButton eastButton = new ScrollButton(new EastButtonImage());
+    private ScrollButton westButton = new ScrollButton(new WestButtonImage());
 
     private float scrollDistance = 0;
     private ScrollCallback scrollCallback = new ScrollCallback();
@@ -159,7 +223,7 @@ public class PanoramaSkin extends ContainerSkin
     private static final float SCROLL_ACCELERATION = 1.06f;
     private static final float MAXIMUM_SCROLL_DISTANCE = 150f;
 
-    private static final int BUTTON_SIZE = 13;
+    private static final int BUTTON_SIZE = 7;
 
     @Override
     public void install(Component component) {
@@ -271,19 +335,19 @@ public class PanoramaSkin extends ContainerSkin
 
             if (width < viewWidth) {
                 // Show east/west buttons
-                eastButton.setSize(BUTTON_SIZE, height);
+                eastButton.setSize(eastButton.getPreferredWidth(), height);
                 eastButton.setLocation(width - eastButton.getWidth(), 0);
 
-                westButton.setSize(BUTTON_SIZE, height);
+                westButton.setSize(westButton.getPreferredWidth(), height);
                 westButton.setLocation(0, 0);
             }
 
             if (height < viewHeight) {
                 // Show north/south buttons
-                northButton.setSize(width, BUTTON_SIZE);
+                northButton.setSize(width, northButton.getPreferredHeight());
                 northButton.setLocation(0, 0);
 
-                southButton.setSize(width, BUTTON_SIZE);
+                southButton.setSize(width, southButton.getPreferredHeight());
                 southButton.setLocation(0, height - southButton.getHeight());
             }
         }
@@ -294,7 +358,62 @@ public class PanoramaSkin extends ContainerSkin
         return new Rectangle(0, 0, getWidth(), getHeight());
     }
 
-    public int getMaxScrollTop() {
+    public Color getButtonColor() {
+        return buttonColor;
+    }
+
+    public void setButtonColor(Color buttonColor) {
+        if (buttonColor == null) {
+            throw new IllegalArgumentException("buttonColor is null.");
+        }
+
+        this.buttonColor = buttonColor;
+        repaintComponent();
+    }
+
+    public final void setButtonColor(String buttonColor) {
+        if (buttonColor == null) {
+            throw new IllegalArgumentException("buttonColor is null.");
+        }
+
+        setButtonColor(Color.decode(buttonColor));
+    }
+
+    public Color getButtonBackgroundColor() {
+        return buttonBackgroundColor;
+    }
+
+    public void setButtonBackgroundColor(Color buttonBackgroundColor) {
+        if (buttonBackgroundColor == null) {
+            throw new IllegalArgumentException("buttonBackgroundColor is null.");
+        }
+
+        this.buttonBackgroundColor = buttonBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setButtonBackgroundColor(String buttonBackgroundColor) {
+        if (buttonBackgroundColor == null) {
+            throw new IllegalArgumentException("buttonBackgroundColor is null.");
+        }
+
+        setButtonBackgroundColor(Color.decode(buttonBackgroundColor));
+    }
+
+    public int getButtonPadding() {
+        return buttonPadding;
+    }
+
+    public void setButtonPadding(int buttonPadding) {
+        if (buttonPadding < 0) {
+            throw new IllegalArgumentException("buttonPadding is negative.");
+        }
+
+        this.buttonPadding = buttonPadding;
+        invalidateComponent();
+    }
+
+    protected int getMaxScrollTop() {
         int maxScrollTop = 0;
 
         Panorama panorama = (Panorama)getComponent();
@@ -308,7 +427,7 @@ public class PanoramaSkin extends ContainerSkin
         return maxScrollTop;
     }
 
-    public int getMaxScrollLeft() {
+    protected int getMaxScrollLeft() {
         int maxScrollLeft = 0;
 
         Panorama panorama = (Panorama)getComponent();
