@@ -32,6 +32,7 @@ import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
+import pivot.wtk.Panorama;
 import pivot.wtk.Rectangle;
 import pivot.wtk.TabPane;
 import pivot.wtk.TabPaneListener;
@@ -52,9 +53,6 @@ import pivot.wtk.skin.ContainerSkin;
  * style properties to present a disabled tab button state).
  *
  * TODO Support the displayable flag to show/hide tabs.
- *
- * TODO Put the button flow pane in a panorama so users can scroll to buttons
- * that are out of view
  *
  * TODO Add showCloseButton style.
  *
@@ -348,6 +346,7 @@ public class TabPaneSkin extends ContainerSkin
         }
     }
 
+    protected Panorama buttonPanorama = new Panorama();
     protected FlowPane buttonFlowPane = new FlowPane();
     private Button.Group tabButtonGroup = new Button.Group();
 
@@ -379,8 +378,9 @@ public class TabPaneSkin extends ContainerSkin
         tabPane.getTabPaneSelectionListeners().add(this);
         tabPane.getTabPaneAttributeListeners().add(this);
 
-        // Add the button flow pane
-        tabPane.add(buttonFlowPane);
+        // Add the button panorama and flow pane
+        buttonPanorama.setView(buttonFlowPane);
+        tabPane.add(buttonPanorama);
 
         // Apply the current tab orientation
         tabOrientationChanged(tabPane);
@@ -403,11 +403,8 @@ public class TabPaneSkin extends ContainerSkin
         tabPane.getTabPaneSelectionListeners().remove(this);
         tabPane.getTabPaneAttributeListeners().remove(this);
 
-        // Remove existing buttons
-        buttonFlowPane.removeAll();
-
-        // Remove the button flow pane
-        tabPane.remove(buttonFlowPane);
+        // Remove the button panorama
+        tabPane.remove(buttonPanorama);
 
         super.uninstall();
     }
@@ -421,7 +418,7 @@ public class TabPaneSkin extends ContainerSkin
         switch (tabOrientation) {
             case HORIZONTAL: {
                 if (height != -1) {
-                    height -= buttonFlowPane.getPreferredHeight(-1);
+                    height -= buttonPanorama.getPreferredHeight(-1);
                 }
 
                 if (tabPane.getSelectedIndex() != -1) {
@@ -434,7 +431,7 @@ public class TabPaneSkin extends ContainerSkin
                 }
 
                 preferredWidth = Math.max(preferredWidth,
-                    buttonFlowPane.getPreferredWidth(-1));
+                    buttonPanorama.getPreferredWidth(-1));
 
                 break;
             }
@@ -449,7 +446,7 @@ public class TabPaneSkin extends ContainerSkin
                     preferredWidth += (padding.left + padding.right + 2);
                 }
 
-                preferredWidth += buttonFlowPane.getPreferredWidth(height);
+                preferredWidth += buttonPanorama.getPreferredWidth(height);
 
                 break;
             }
@@ -475,14 +472,14 @@ public class TabPaneSkin extends ContainerSkin
                     preferredHeight += (padding.top + padding.bottom + 2);
                 }
 
-                preferredHeight += buttonFlowPane.getPreferredHeight(width);
+                preferredHeight += buttonPanorama.getPreferredHeight(width);
 
                 break;
             }
 
             case VERTICAL: {
                 if (width != -1) {
-                    width -= buttonFlowPane.getPreferredWidth(-1);
+                    width -= buttonPanorama.getPreferredWidth(-1);
                 }
 
                 if (tabPane.getSelectedIndex() != -1) {
@@ -495,7 +492,7 @@ public class TabPaneSkin extends ContainerSkin
                 }
 
                 preferredHeight = Math.max(preferredHeight,
-                    buttonFlowPane.getPreferredHeight(-1));
+                    buttonPanorama.getPreferredHeight(-1));
 
                 break;
             }
@@ -514,7 +511,7 @@ public class TabPaneSkin extends ContainerSkin
         int width = getWidth();
         int height = getHeight();
 
-        buttonFlowPane.setLocation(0, 0);
+        buttonPanorama.setLocation(0, 0);
 
         int tabX = 0;
         int tabY = 0;
@@ -523,24 +520,24 @@ public class TabPaneSkin extends ContainerSkin
 
         switch (tabPane.getTabOrientation()) {
             case HORIZONTAL: {
-                buttonFlowPane.setSize(width, buttonFlowPane.getPreferredHeight(-1));
+                buttonPanorama.setSize(width, buttonPanorama.getPreferredHeight(-1));
 
                 tabX = padding.left + 1;
-                tabY = padding.top + buttonFlowPane.getHeight() + 1;
+                tabY = padding.top + buttonPanorama.getHeight() + 1;
                 tabWidth = Math.max(width - (padding.left + padding.right + 2), 0);
                 tabHeight = Math.max(height - (padding.top + padding.bottom
-                    + buttonFlowPane.getHeight() + 2), 0);
+                    + buttonPanorama.getHeight() + 2), 0);
 
                 break;
             }
 
             case VERTICAL: {
-                buttonFlowPane.setSize(buttonFlowPane.getPreferredWidth(-1), height);
+                buttonPanorama.setSize(buttonPanorama.getPreferredWidth(-1), height);
 
-                tabX = padding.left + buttonFlowPane.getWidth() + 1;
+                tabX = padding.left + buttonPanorama.getWidth() + 1;
                 tabY = padding.top + 1;
                 tabWidth = Math.max(width - (padding.left + padding.right
-                    + buttonFlowPane.getWidth() + 2), 0);
+                    + buttonPanorama.getWidth() + 2), 0);
                 tabHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
 
                 break;
@@ -588,7 +585,7 @@ public class TabPaneSkin extends ContainerSkin
         switch (tabOrientation) {
             case HORIZONTAL: {
                 x = 0;
-                y = Math.max(buttonFlowPane.getHeight() - 1, 0);
+                y = Math.max(buttonPanorama.getHeight() - 1, 0);
                 width = Math.max(tabPaneBounds.width - 1, 0);
                 height = Math.max(tabPaneBounds.height - y - 1, 0);
 
@@ -596,7 +593,7 @@ public class TabPaneSkin extends ContainerSkin
             }
 
             case VERTICAL: {
-                x = Math.max(buttonFlowPane.getWidth() - 1, 0);
+                x = Math.max(buttonPanorama.getWidth() - 1, 0);
                 y = 0;
                 width = Math.max(tabPaneBounds.width - x - 1, 0);
                 height = Math.max(tabPaneBounds.height - 1, 0);

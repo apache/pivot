@@ -184,6 +184,8 @@ public class PanoramaSkin extends ContainerSkin
 
         panorama.add(westButton);
         westButton.getComponentMouseListeners().add(this);
+
+        updateScrollButtonVisibility();
     }
 
     @Override
@@ -247,12 +249,6 @@ public class PanoramaSkin extends ContainerSkin
         int width = getWidth();
         int height = getHeight();
 
-        // Assume that the buttons will not be needed
-        northButton.setVisible(false);
-        southButton.setVisible(false);
-        eastButton.setVisible(false);
-        westButton.setVisible(false);
-
         Component view = panorama.getView();
         if (view != null) {
             view.setSize(view.getPreferredSize());
@@ -275,28 +271,20 @@ public class PanoramaSkin extends ContainerSkin
 
             if (width < viewWidth) {
                 // Show east/west buttons
-                eastButton.setVisible(panorama.isMouseOver()
-                    && scrollLeft < maxScrollLeft);
-                eastButton.setSize(BUTTON_SIZE, Math.max(height - BUTTON_SIZE * 2, 0));
-                eastButton.setLocation(width - eastButton.getWidth(), BUTTON_SIZE);
+                eastButton.setSize(BUTTON_SIZE, height);
+                eastButton.setLocation(width - eastButton.getWidth(), 0);
 
-                westButton.setVisible(panorama.isMouseOver()
-                    && scrollLeft > 0);
-                westButton.setSize(BUTTON_SIZE, Math.max(height - BUTTON_SIZE * 2, 0));
-                westButton.setLocation(0, BUTTON_SIZE);
+                westButton.setSize(BUTTON_SIZE, height);
+                westButton.setLocation(0, 0);
             }
 
             if (height < viewHeight) {
                 // Show north/south buttons
-                northButton.setVisible(panorama.isMouseOver()
-                    && scrollTop > 0);
-                northButton.setSize(Math.max(width - BUTTON_SIZE * 2, 0), BUTTON_SIZE);
-                northButton.setLocation(BUTTON_SIZE, 0);
+                northButton.setSize(width, BUTTON_SIZE);
+                northButton.setLocation(0, 0);
 
-                southButton.setVisible(panorama.isMouseOver()
-                    && scrollTop < maxScrollTop);
-                southButton.setSize(Math.max(width - BUTTON_SIZE * 2, 0), BUTTON_SIZE);
-                southButton.setLocation(BUTTON_SIZE, height - southButton.getHeight());
+                southButton.setSize(width, BUTTON_SIZE);
+                southButton.setLocation(0, height - southButton.getHeight());
             }
         }
     }
@@ -334,25 +322,36 @@ public class PanoramaSkin extends ContainerSkin
         return maxScrollLeft;
     }
 
+    protected void updateScrollButtonVisibility() {
+        Panorama panorama = (Panorama)getComponent();
+        boolean mouseOver = panorama.isMouseOver();
+
+        int scrollTop = panorama.getScrollTop();
+        int maxScrollTop = getMaxScrollTop();
+        northButton.setVisible(mouseOver
+            && scrollTop > 0);
+        southButton.setVisible(mouseOver
+            && scrollTop < maxScrollTop);
+
+        int scrollLeft = panorama.getScrollLeft();
+        int maxScrollLeft = getMaxScrollLeft();
+        westButton.setVisible(mouseOver
+            && scrollLeft > 0);
+        eastButton.setVisible(mouseOver
+            && scrollLeft < maxScrollLeft);
+    }
+
     // User input
     @Override
     public void mouseOver() {
         super.mouseOver();
-
-        northButton.setVisible(true);
-        southButton.setVisible(true);
-        eastButton.setVisible(true);
-        westButton.setVisible(true);
+        updateScrollButtonVisibility();
     }
 
     @Override
     public void mouseOut() {
         super.mouseOut();
-
-        northButton.setVisible(false);
-        southButton.setVisible(false);
-        eastButton.setVisible(false);
-        westButton.setVisible(false);
+        updateScrollButtonVisibility();
     }
 
     // Viewport events
@@ -362,9 +361,7 @@ public class PanoramaSkin extends ContainerSkin
             int maxScrollTop = getMaxScrollTop();
             int scrollTop = Math.min(panorama.getScrollTop(), maxScrollTop);
             view.setLocation(view.getX(), -scrollTop);
-
-            northButton.setVisible(scrollTop > 0);
-            southButton.setVisible(scrollTop < maxScrollTop);
+            updateScrollButtonVisibility();
         }
     }
 
@@ -374,9 +371,7 @@ public class PanoramaSkin extends ContainerSkin
             int maxScrollLeft = getMaxScrollLeft();
             int scrollLeft = Math.min(panorama.getScrollLeft(), maxScrollLeft);
             view.setLocation(-scrollLeft, view.getY());
-
-            westButton.setVisible(scrollLeft > 0);
-            eastButton.setVisible(scrollLeft < maxScrollLeft);
+            updateScrollButtonVisibility();
         }
     }
 

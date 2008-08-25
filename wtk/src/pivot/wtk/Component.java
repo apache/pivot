@@ -2039,11 +2039,11 @@ public abstract class Component implements Visual {
                 Mouse.setCursor(cursor);
             }
 
+            mouseOver = true;
+
             if (skin != null) {
                 skin.mouseOver();
             }
-
-            mouseOver = true;
 
             componentMouseListeners.mouseOver(this);
         }
@@ -2057,11 +2057,11 @@ public abstract class Component implements Visual {
                     Cursor.DEFAULT : parent.getCursor());
             }
 
+            mouseOver = false;
+
             if (skin != null) {
                 skin.mouseOut();
             }
-
-            mouseOver = false;
 
             componentMouseListeners.mouseOut(this);
         }
