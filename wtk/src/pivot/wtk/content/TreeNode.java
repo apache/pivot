@@ -105,7 +105,12 @@ public class TreeNode implements List<TreeNode> {
     }
 
     public int remove(TreeNode treeNode) {
-        return remove(treeNode);
+        int index = nodes.indexOf(treeNode);
+        if (index != -1) {
+            remove(index, 1);
+        }
+
+        return index;
     }
 
     public Sequence<TreeNode> remove(int index, int count) {
