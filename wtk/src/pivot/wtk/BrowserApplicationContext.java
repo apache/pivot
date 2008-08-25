@@ -16,8 +16,6 @@
 package pivot.wtk;
 
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -87,17 +85,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 DisplayHost displayHost = applicationContext.getDisplayHost();
                 setLayout(new java.awt.BorderLayout());
                 add(displayHost);
-
-                // Add a mouse motion listener to the display host
-                displayHost.addMouseListener(new MouseAdapter() {
-                    public void mouseEntered(MouseEvent event) {
-                        ApplicationContext.active = applicationContext;
-                    }
-
-                    public void mouseExited(MouseEvent event) {
-                        ApplicationContext.active = null;
-                    }
-                });
 
                 // Disable focus traversal keys
                 setFocusTraversalKeysEnabled(false);

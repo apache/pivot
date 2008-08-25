@@ -344,11 +344,13 @@ public abstract class ApplicationContext {
 
                 case MouseEvent.MOUSE_ENTERED: {
                     display.mouseOver();
+                    active = ApplicationContext.this;
                     break;
                 }
 
                 case MouseEvent.MOUSE_EXITED: {
                     display.mouseOut();
+                    active = ApplicationContext.this;
                     break;
                 }
             }
