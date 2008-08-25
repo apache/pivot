@@ -168,6 +168,24 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
     }
 
     /**
+     * Adds the specified number of days to this calendar date and returns the
+     * resulting calendar date. The number of days may be negative, in which
+     * case the result will be a date before this calendar date.
+     *
+     * @param days
+     * The number of days to add to (or subtract from if negative) this
+     * calendar date
+     *
+     * @return
+     * The resulting calendar date
+     */
+    public CalendarDate add(int days) {
+        GregorianCalendar calendar = toCalendar();
+        calendar.add(Calendar.DAY_OF_YEAR, days);
+        return new CalendarDate(calendar);
+    }
+
+    /**
      * Gets the number of days in between this calendar date and the specified
      * calendar date. If this calendar date represents a day after the
      * specified calendar date, the difference will be positive. If this
