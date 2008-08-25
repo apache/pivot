@@ -14,7 +14,13 @@
         <mkdir dir="${tools}/${bin}"/>
 
         <!-- Compile source files -->
-        <javac srcdir="${tools}/${src}" destDir="${tools}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+        <javac srcdir="${tools}/${src}"
+            destDir="${tools}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
                 <pathelement location="core/pivot-core.jar"/>

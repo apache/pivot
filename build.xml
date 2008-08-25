@@ -44,7 +44,13 @@
         <mkdir dir="${core}/${bin}"/>
 
         <!-- Compile source files -->
-        <javac srcdir="${core}/${src}" destDir="${core}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+        <javac srcdir="${core}/${src}"
+            destDir="${core}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
             <compilerarg value="-Xlint"/>
         </javac>
 
@@ -68,7 +74,14 @@
         <mkdir dir="${coretest}/${bin}"/>
 
         <!-- Compile source files -->
-        <javac srcdir="${coretest}/${src}" destDir="${coretest}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true" classpath="${core}/${ant.project.name}-core.jar:junit.jar">
+        <javac srcdir="${coretest}/${src}"
+            destDir="${coretest}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true"
+            classpath="${core}/${ant.project.name}-core.jar:junit.jar">
             <compilerarg value="-Xlint"/>
         </javac>
 
@@ -89,7 +102,13 @@
         <mkdir dir="${web}/${bin}"/>
 
         <!-- Compile source files -->
-        <javac srcdir="${web}/${src}" destDir="${web}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+        <javac srcdir="${web}/${src}"
+            destDir="${web}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
                 <pathelement location="${core}/${ant.project.name}-core.jar"/>
@@ -130,7 +149,13 @@
         <mkdir dir="${webtest}/${bin}"/>
 
         <!-- Compile source files -->
-        <javac srcdir="${webtest}/${src}" destDir="${webtest}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+        <javac srcdir="${webtest}/${src}"
+            destDir="${webtest}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
                 <pathelement location="${core}/${ant.project.name}-core.jar"/>
@@ -171,7 +196,13 @@
         <mkdir dir="${wtk}/${bin}"/>
 
         <!-- Compile source files -->
-        <javac srcdir="${wtk}/${src}" destDir="${wtk}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+        <javac srcdir="${wtk}/${src}"
+            destDir="${wtk}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
                 <pathelement location="${core}/${ant.project.name}-core.jar"/>
@@ -241,7 +272,13 @@
         <mkdir dir="${wtktest}/${bin}"/>
 
         <!-- Compile source files -->
-        <javac srcdir="${wtktest}/${src}" destDir="${wtktest}/${bin}" optimize="${compiler.optimize}" deprecation="${compiler.deprecation}" debug="${compiler.debug}" failonerror="true">
+        <javac srcdir="${wtktest}/${src}"
+            destDir="${wtktest}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
                 <pathelement location="${core}/${ant.project.name}-core.jar"/>
