@@ -112,7 +112,7 @@ public class BlurDecorator implements Decorator {
     }
 
     public Rectangle getBounds(Component component) {
-        return component.getBounds();
+        return new Rectangle(0, 0, component.getWidth(), component.getHeight());
     }
 
     public void repaint(Component component, int x, int y, int width, int height) {

@@ -46,8 +46,6 @@ public class WatermarkDecorator implements Decorator {
     private Component component = null;
     private Graphics2D graphics = null;
 
-    private static final double RADICAL_2 = Math.sqrt(2);
-
     /**
      * Cretes a new <tt>WatermarkDecorator</tt> with no text or image.
      */
@@ -306,7 +304,7 @@ public class WatermarkDecorator implements Decorator {
     }
 
     public Rectangle getBounds(Component component) {
-        return component.getBounds();
+        return new Rectangle(0, 0, component.getWidth(), component.getHeight());
     }
 
     public void repaint(Component component, int x, int y, int width, int height) {

@@ -111,12 +111,7 @@ public abstract class Component implements Visual {
             }
 
             decorators.insert(decorator, index);
-            if (parent != null) {
-                Rectangle bounds = decorator.getBounds(Component.this);
-                bounds.x += x;
-                bounds.y += y;
-                parent.repaint(bounds);
-            }
+            repaint();
 
             componentDecoratorListeners.decoratorInserted(Component.this, index);
         }
