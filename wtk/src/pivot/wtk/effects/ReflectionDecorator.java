@@ -29,7 +29,7 @@ public class ReflectionDecorator implements Decorator {
         if (bufferedImage == null
             || bufferedImage.getWidth() < width
             || bufferedImage.getHeight() < height) {
-            bufferedImage = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
+            bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         }
 
         bufferedImageGraphics = bufferedImage.createGraphics();

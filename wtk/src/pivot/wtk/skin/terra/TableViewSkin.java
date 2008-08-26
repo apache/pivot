@@ -69,6 +69,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     private Color gridColor = new Color(0xF7, 0xF5, 0xEB);
     private boolean showHorizontalGridLines = true;
     private boolean showVerticalGridLines = true;
+    private boolean showHighlight = true;
     private boolean includeTrailingVerticalGridLine = false;
 
     private int highlightedIndex = -1;
@@ -187,7 +188,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
                 rowBackgroundColor = (tableView.isFocused())
                     ? this.selectionBackgroundColor : inactiveSelectionBackgroundColor;
             } else {
-                if (rowHighlighted && !rowDisabled) {
+                if (rowHighlighted && showHighlight && !rowDisabled) {
                     rowBackgroundColor = highlightBackgroundColor;
                 }
             }
@@ -668,6 +669,15 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
 
     public void setShowVerticalGridLines(boolean showVerticalGridLines) {
         this.showVerticalGridLines = showVerticalGridLines;
+        repaintComponent();
+    }
+
+    public boolean getShowHighlight() {
+        return showHighlight;
+    }
+
+    public void setShowHighlight(boolean showHighlight) {
+        this.showHighlight = showHighlight;
         repaintComponent();
     }
 

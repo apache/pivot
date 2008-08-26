@@ -42,8 +42,6 @@ import pivot.wtk.skin.ComponentSkin;
  *
  * TODO Support a "showToggleButtons" style.
  *
- * TODO Support a "showHighlight" style?
- *
  * @author gbrown
  */
 public class ListViewSkin extends ComponentSkin implements ListView.Skin,
@@ -59,6 +57,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
     private Color inactiveSelectionBackgroundColor = new Color(0xcc, 0xca, 0xc2);
     private Color highlightColor = Color.BLACK;
     private Color highlightBackgroundColor = new Color(0xe6, 0xe3, 0xda);
+    private boolean showHighlight = true;
 
     private int highlightedIndex = -1;
 
@@ -163,7 +162,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
                 itemBackgroundColor = (listView.isFocused())
                     ? this.selectionBackgroundColor : inactiveSelectionBackgroundColor;
             } else {
-                if (highlighted && !disabled) {
+                if (highlighted && showHighlight && !disabled) {
                     itemBackgroundColor = highlightBackgroundColor;
                 }
             }
@@ -428,6 +427,15 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         setHighlightBackgroundColor(Color.decode(highlightBackgroundColor));
+    }
+
+    public boolean getShowHighlight() {
+        return showHighlight;
+    }
+
+    public void setShowHighlight(boolean showHighlight) {
+        this.showHighlight = showHighlight;
+        repaintComponent();
     }
 
     @Override
