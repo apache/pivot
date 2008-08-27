@@ -69,7 +69,7 @@ public class TablePane extends Container {
          * The row's table pane, or <tt>null</tt> if the row does not
          * currently belong to a table.
          */
-        protected void setTablePane(TablePane tablePane) {
+        private void setTablePane(TablePane tablePane) {
             this.tablePane = tablePane;
         }
 
@@ -336,7 +336,7 @@ public class TablePane extends Container {
          * The column's table pane, or <tt>null</tt> if the column does not
          * currently belong to a table.
          */
-        protected void setTablePane(TablePane tablePane) {
+        private void setTablePane(TablePane tablePane) {
             this.tablePane = tablePane;
         }
 

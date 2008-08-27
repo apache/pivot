@@ -1,4 +1,4 @@
-package pivot.charts;
+package pivot.charts.skin;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -7,17 +7,24 @@ import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.EntityCollection;
-import org.jfree.chart.event.ChartChangeEvent;
-import org.jfree.chart.event.ChartChangeListener;
 
+import pivot.charts.ChartView;
+import pivot.charts.ChartViewCategoryListener;
+import pivot.charts.ChartViewListener;
+import pivot.charts.ChartViewSeriesListener;
+import pivot.collections.List;
+import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Rectangle;
 import pivot.wtk.skin.ComponentSkin;
 
-public class ChartViewSkin extends ComponentSkin
-    implements ChartView.Skin, ChartViewListener, ChartChangeListener {
+public abstract class ChartViewSkin extends ComponentSkin
+    implements ChartView.Skin,
+        ChartViewListener, ChartViewCategoryListener, ChartViewSeriesListener {
     private BufferedImage bufferedImage = null;
+
+    protected JFreeChart chart = null;
     private ChartRenderingInfo chartRenderingInfo = new ChartRenderingInfo();
 
     private static final int PREFERRED_WIDTH = 320;
@@ -31,22 +38,17 @@ public class ChartViewSkin extends ComponentSkin
         // Add listeners
         ChartView chartView = (ChartView)component;
         chartView.getChartViewListeners().add(this);
-
-        JFreeChart chart = chartView.getChart();
-        if (chart != null) {
-            chart.addChangeListener(this);
-        }
+        chartView.getChartViewCategoryListeners().add(this);
+        chartView.getChartViewSeriesListeners().add(this);
     }
 
     @Override
     public void uninstall() {
+        // Remove listeners
         ChartView chartView = (ChartView)getComponent();
         chartView.getChartViewListeners().remove(this);
-
-        JFreeChart chart = chartView.getChart();
-        if (chart != null) {
-            chart.removeChangeListener(this);
-        }
+        chartView.getChartViewCategoryListeners().remove(this);
+        chartView.getChartViewSeriesListeners().remove(this);
 
         super.uninstall();
     }
@@ -69,9 +71,6 @@ public class ChartViewSkin extends ComponentSkin
     }
 
     public void paint(Graphics2D graphics) {
-        ChartView chartView = (ChartView)getComponent();
-        JFreeChart chart = chartView.getChart();
-
         if (chart != null) {
             int width = getWidth();
             int height = getHeight();
@@ -93,10 +92,17 @@ public class ChartViewSkin extends ComponentSkin
         }
     }
 
-    public ChartEntity getChartEntityAt(int x, int y) {
+    @Override
+    public void repaintComponent() {
+        super.repaintComponent();
+        bufferedImage = null;
+    }
+
+    protected ChartEntity getChartEntityAt(int x, int y) {
         ChartEntity result = null;
 
-        // TODO Update this when we add scaling
+        // TODO Update this when we add scaling (define style getters and
+        // setters for scaleX and scaleY in this class?)
         if (chartRenderingInfo != null) {
             EntityCollection entities = chartRenderingInfo.getEntityCollection();
             result = (entities != null) ? entities.getEntity(x, y) : null;
@@ -105,22 +111,39 @@ public class ChartViewSkin extends ComponentSkin
         return result;
     }
 
-    public void chartChanged(ChartView chartView, JFreeChart previousChart) {
-        // Add/remove listeners
-        if (previousChart != null) {
-            previousChart.removeChangeListener(this);
-        }
-
-        JFreeChart chart = chartView.getChart();
-        if (chart != null) {
-            chart.addChangeListener(this);
-        }
-
-        invalidateComponent();
+    public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
+        repaintComponent();
     }
 
-    public void chartChanged(ChartChangeEvent event) {
-        bufferedImage = null;
+    public void categoryInserted(ChartView chartView, int index) {
+        repaintComponent();
+    }
+
+    public void categoriesRemoved(ChartView chartView, int index, Sequence<ChartView.Category> categories) {
+        repaintComponent();
+    }
+
+    public void categoryKeyChanged(ChartView chartView, int index, String previousKey) {
+        repaintComponent();
+    }
+
+    public void categoryLabelChanged(ChartView chartView, int index, String previousLabel) {
+        repaintComponent();
+    }
+
+    public void seriesInserted(ChartView chartView, int index) {
+        repaintComponent();
+    }
+
+    public void seriesRemoved(ChartView chartView, int index, int count) {
+        repaintComponent();
+    }
+
+    public void seriesUpdated(ChartView chartView, int index) {
+        repaintComponent();
+    }
+
+    public void seriesSorted(ChartView chartView) {
         repaintComponent();
     }
 }

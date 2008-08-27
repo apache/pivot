@@ -146,7 +146,7 @@ public class TableView extends Component {
          * The column's table view, or <tt>null</tt> if the column does not
          * currently belong to a table.
          */
-        protected void setTableView(TableView tableView) {
+        private void setTableView(TableView tableView) {
             this.tableView = tableView;
         }
 
@@ -178,7 +178,7 @@ public class TableView extends Component {
 
                 if (tableView != null) {
                     tableView.tableViewColumnListeners.columnNameChanged(tableView,
-                        tableView.getColumns().indexOf(this), previousName);
+                        tableView.columns.indexOf(this), previousName);
                 }
             }
         }
@@ -208,7 +208,7 @@ public class TableView extends Component {
 
                 if (tableView != null) {
                     tableView.tableViewColumnListeners.columnHeaderDataChanged(tableView,
-                        tableView.getColumns().indexOf(this), previousHeaderData);
+                        tableView.columns.indexOf(this), previousHeaderData);
                 }
             }
         }
@@ -284,7 +284,7 @@ public class TableView extends Component {
 
                 if (tableView != null) {
                     tableView.tableViewColumnListeners.columnWidthChanged(tableView,
-                        tableView.getColumns().indexOf(this), previousWidth,
+                        tableView.columns.indexOf(this), previousWidth,
                         previousRelative);
                 }
             }
@@ -315,7 +315,7 @@ public class TableView extends Component {
 
                 if (tableView != null) {
                     tableView.tableViewColumnListeners.columnSortDirectionChanged(tableView,
-                        tableView.getColumns().indexOf(this), previousSortDirection);
+                        tableView.columns.indexOf(this), previousSortDirection);
                 }
             }
         }
@@ -345,7 +345,7 @@ public class TableView extends Component {
 
                 if (tableView != null) {
                     tableView.tableViewColumnListeners.columnFilterChanged(tableView,
-                        tableView.getColumns().indexOf(this), previousFilter);
+                        tableView.columns.indexOf(this), previousFilter);
                 }
             }
         }
@@ -378,7 +378,7 @@ public class TableView extends Component {
 
                 if (tableView != null) {
                     tableView.tableViewColumnListeners.columnCellRendererChanged(tableView,
-                        tableView.getColumns().indexOf(this), previousCellRenderer);
+                        tableView.columns.indexOf(this), previousCellRenderer);
                 }
             }
         }

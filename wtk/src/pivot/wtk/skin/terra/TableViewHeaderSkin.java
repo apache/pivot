@@ -94,7 +94,7 @@ public class TableViewHeaderSkin extends ComponentSkin
         }
     }
 
-    private class DragHandler
+    private class ResizeHandler
         implements ComponentMouseListener, ComponentMouseButtonListener {
         TableView.Column column = null;
         int headerX = 0;
@@ -102,7 +102,7 @@ public class TableViewHeaderSkin extends ComponentSkin
 
         public static final int MINIMUM_COLUMN_WIDTH = 2;
 
-        public DragHandler(TableView.Column column, int headerX, int offset) {
+        public ResizeHandler(TableView.Column column, int headerX, int offset) {
             assert (!column.isRelative()) : "Relative width columns cannot be resized.";
 
             this.column = column;
@@ -130,6 +130,9 @@ public class TableViewHeaderSkin extends ComponentSkin
             assert (component instanceof Display);
             component.getComponentMouseListeners().remove(this);
             component.getComponentMouseButtonListeners().remove(this);
+
+            resizing = false;
+            Mouse.setCursor(getComponent().getCursor());
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
@@ -151,6 +154,7 @@ public class TableViewHeaderSkin extends ComponentSkin
     private boolean includeTrailingVerticalGridLine = false;
 
     private int pressedHeaderIndex = -1;
+    private boolean resizing = false;
 
     private static final int SORT_INDICATOR_PADDING = 2;
     private static final int RESIZE_HANDLE_SIZE = 6;
@@ -673,25 +677,26 @@ public class TableViewHeaderSkin extends ComponentSkin
     public boolean mouseMove(int x, int y) {
         boolean consumed = super.mouseMove(x, y);
 
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
-        TableView tableView = tableViewHeader.getTableView();
+        if (!resizing) {
+            TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+            TableView tableView = tableViewHeader.getTableView();
 
-        if (tableView != null) {
-            int headerIndex = getHeaderAt(x);
+            if (tableView != null) {
+                int headerIndex = getHeaderAt(x);
 
-            if (headerIndex != -1) {
-                Rectangle headerBounds = getHeaderBounds(headerIndex);
-                TableView.Column column = tableView.getColumns().get(headerIndex);
+                Cursor cursor = tableViewHeader.getCursor();
+                if (headerIndex != -1
+                    && columnsResizable) {
+                    Rectangle headerBounds = getHeaderBounds(headerIndex);
+                    TableView.Column column = tableView.getColumns().get(headerIndex);
 
-                if (Mouse.getButtons() == 0) {
-                    if (columnsResizable
-                        && !column.isRelative()
+                    if (!column.isRelative()
                         && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
-                        Mouse.setCursor(Cursor.RESIZE_EAST);
-                    } else {
-                        Mouse.setCursor(getComponent().getCursor());
+                        cursor = Cursor.RESIZE_EAST;
                     }
                 }
+
+                Mouse.setCursor(cursor);
             }
         }
 
@@ -718,24 +723,29 @@ public class TableViewHeaderSkin extends ComponentSkin
         if (tableView != null) {
             int headerIndex = getHeaderAt(x);
 
-            Rectangle headerBounds = getHeaderBounds(headerIndex);
-            TableView.Column column = tableView.getColumns().get(headerIndex);
+            if (headerIndex != -1) {
+                Rectangle headerBounds = getHeaderBounds(headerIndex);
+                TableView.Column column = tableView.getColumns().get(headerIndex);
 
-            if (columnsResizable
-                && !column.isRelative()
-                && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
-                // Begin drag
-                Display display = tableViewHeader.getWindow().getDisplay();
-                Point headerCoordinates = tableViewHeader.mapPointToAncestor(display,
-                    headerBounds.x, 0);
-                DragHandler dragHandler = new DragHandler(column, headerCoordinates.x,
-                    headerBounds.x + headerBounds.width - x);
+                if (columnsResizable
+                    && !column.isRelative()
+                    && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
+                    // Begin drag
+                    Display display = tableViewHeader.getWindow().getDisplay();
+                    Point headerCoordinates = tableViewHeader.mapPointToAncestor(display,
+                        headerBounds.x, 0);
+                    ResizeHandler dragHandler = new ResizeHandler(column, headerCoordinates.x,
+                        headerBounds.x + headerBounds.width - x);
 
-                display.getComponentMouseListeners().add(dragHandler);
-                display.getComponentMouseButtonListeners().add(dragHandler);
-            } else if (headersPressable) {
-                pressedHeaderIndex = getHeaderAt(x);
-                repaintComponent(getHeaderBounds(pressedHeaderIndex));
+                    display.getComponentMouseListeners().add(dragHandler);
+                    display.getComponentMouseButtonListeners().add(dragHandler);
+
+                    resizing = true;
+                    Mouse.setCursor(Cursor.RESIZE_EAST);
+                } else if (headersPressable) {
+                    pressedHeaderIndex = headerIndex;
+                    repaintComponent(getHeaderBounds(pressedHeaderIndex));
+                }
             }
         }
 

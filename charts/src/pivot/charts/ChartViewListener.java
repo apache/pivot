@@ -1,7 +1,7 @@
 package pivot.charts;
 
-import org.jfree.chart.JFreeChart;
+import pivot.collections.List;
 
 public interface ChartViewListener {
-    public void chartChanged(ChartView chartView, JFreeChart previousChart);
+    public void chartDataChanged(ChartView chartView, List<?> previousChartData);
 }
