@@ -948,7 +948,9 @@ public class ScrollPaneSkin extends ContainerSkin
             rowHeader.setLocation(0, columnHeaderHeight - scrollTop);
         }
 
-        verticalScrollBar.setValue(scrollTop);
+        if (verticalScrollBar.isVisible()) {
+            verticalScrollBar.setValue(scrollTop);
+        }
     }
 
     public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
@@ -977,7 +979,9 @@ public class ScrollPaneSkin extends ContainerSkin
             columnHeader.setLocation(rowHeaderWidth - scrollLeft, 0);
         }
 
-        horizontalScrollBar.setValue(scrollLeft);
+        if (horizontalScrollBar.isVisible()) {
+            horizontalScrollBar.setValue(scrollLeft);
+        }
     }
 
     public void viewChanged(Viewport viewport, Component previousView) {
