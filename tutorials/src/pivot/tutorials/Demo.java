@@ -16,7 +16,6 @@
 package pivot.tutorials;
 
 import java.awt.Color;
-import java.util.Comparator;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
@@ -46,11 +45,9 @@ import pivot.wtk.Component;
 import pivot.wtk.Display;
 import pivot.wtk.Rectangle;
 import pivot.wtk.ScrollPane;
-import pivot.wtk.SortDirection;
 import pivot.wtk.Spinner;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
-import pivot.wtk.TableViewHeaderPressListener;
 import pivot.wtk.TextInput;
 import pivot.wtk.TreeView;
 import pivot.wtk.Visual;
@@ -65,26 +62,6 @@ import pivot.wtk.media.Image;
 import pivot.wtkx.WTKXSerializer;
 
 public class Demo implements Application {
-    private static class RandomDataComparator implements Comparator<Object> {
-        private String columnName = null;
-        private SortDirection sortDirection = null;
-
-        public RandomDataComparator(String columnName, SortDirection sortDirection) {
-            this.columnName = columnName;
-            this.sortDirection = sortDirection;
-        }
-
-        public int compare(Object o1, Object o2) {
-            TableRow tr1 = (TableRow)o1;
-            TableRow tr2 = (TableRow)o2;
-
-            int i1 = (Integer)tr1.get(columnName);
-            int i2 = (Integer)tr2.get(columnName);
-
-            return (i1 - i2) * (sortDirection == SortDirection.ASCENDING ? 1 : -1);
-        }
-    }
-
     private class TreeViewEditHandler
         implements ComponentMouseButtonListener, ComponentKeyListener {
         Sequence<Integer> path = null;
@@ -376,32 +353,7 @@ public class Demo implements Application {
         sortableTableView.setTableData(tableData);
 
         // Install header press listener
-        sortableTableViewHeader.getTableViewHeaderPressListeners().add(new TableViewHeaderPressListener() {
-            public void headerPressed(TableViewHeader tableViewHeader, int index) {
-                TableView tableView = tableViewHeader.getTableView();
-                TableView.ColumnSequence columns = tableView.getColumns();
-                TableView.Column column = columns.get(index);
-
-                Object headerData = column.getHeaderData();
-                if (headerData instanceof TableViewHeaderData) {
-                    SortDirection sortDirection = column.getSortDirection();
-
-                    if (sortDirection == null
-                        || sortDirection == SortDirection.DESCENDING) {
-                        sortDirection = SortDirection.ASCENDING;
-                    } else {
-                        sortDirection = SortDirection.DESCENDING;
-                    }
-
-                    ((List<Object>)tableView.getTableData()).setComparator(new RandomDataComparator(column.getName(), sortDirection));
-
-                    for (int i = 0, n = columns.getLength(); i < n; i++) {
-                        column = columns.get(i);
-                        column.setSortDirection(i == index ? sortDirection : null);
-                    }
-                }
-            }
-        });
+        sortableTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler());
     }
 
     private void initializeEditableTreeView() {

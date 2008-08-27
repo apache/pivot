@@ -143,12 +143,12 @@ public class DropShadowDecorator implements Decorator {
     }
 
     public void update() {
+        componentGraphics.dispose();
+
         BufferedImage shadowImage = createShadow(componentImage);
 
         graphics.drawImage(shadowImage, 0, 0, null);
         graphics.drawImage(componentImage, 0, 0, null);
-
-        graphics.dispose();
     }
 
     public Rectangle getBounds(Component component) {

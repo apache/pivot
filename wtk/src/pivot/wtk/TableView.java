@@ -18,11 +18,13 @@ package pivot.wtk;
 import java.util.Comparator;
 
 import pivot.collections.ArrayList;
+import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.content.TableViewCellRenderer;
+import pivot.wtk.content.TableViewHeaderData;
 
 /**
  * Displays a sequence of items partitioned into columns, optionally allowing a
@@ -428,6 +430,65 @@ public class TableView extends Component {
         public int getColumnAt(int x);
         public Rectangle getRowBounds(int rowIndex);
         public Rectangle getCellBounds(int rowIndex, int columnIndex);
+    }
+
+    /**
+     * Compares two rows. The dictionary values must implement {@link Comparable}.
+     *
+     * TODO Allow a caller to sort on multiple columns.
+     */
+    public static class RowComparator implements Comparator<Dictionary<String, ?>> {
+        private String columnName = null;
+        private SortDirection sortDirection = null;
+
+        public RowComparator(String columnName, SortDirection sortDirection) {
+            this.columnName = columnName;
+            this.sortDirection = sortDirection;
+        }
+
+        @SuppressWarnings("unchecked")
+        public int compare(Dictionary<String, ?> row1, Dictionary<String, ?> row2) {
+            Comparable<Object> comparable = (Comparable<Object>)row1.get(columnName);
+            Object value = row2.get(columnName);
+
+            return (comparable.compareTo(value)) * (sortDirection == SortDirection.ASCENDING ? 1 : -1);
+        }
+    }
+
+    /**
+     * Default sort handler class. Sorts rows using {@link RowComparator}.
+     */
+    public static class SortHandler implements TableViewHeaderPressListener {
+        @SuppressWarnings("unchecked")
+        public void headerPressed(TableViewHeader tableViewHeader, int index) {
+            TableView tableView = tableViewHeader.getTableView();
+            TableView.ColumnSequence columns = tableView.getColumns();
+            TableView.Column column = columns.get(index);
+
+            Object headerData = column.getHeaderData();
+            if (!(headerData instanceof TableViewHeaderData)) {
+                headerData = new TableViewHeaderData((String)headerData);
+                column.setHeaderData(headerData);
+            }
+
+            SortDirection sortDirection = column.getSortDirection();
+
+            if (sortDirection == null
+                || sortDirection == SortDirection.DESCENDING) {
+                sortDirection = SortDirection.ASCENDING;
+            } else {
+                sortDirection = SortDirection.DESCENDING;
+            }
+
+            List<Dictionary<String, ?>> tableData =
+                (List<Dictionary<String, ?>>)tableView.getTableData();
+            tableData.setComparator(new TableView.RowComparator(column.getName(), sortDirection));
+
+            for (int i = 0, n = columns.getLength(); i < n; i++) {
+                column = columns.get(i);
+                column.setSortDirection(i == index ? sortDirection : null);
+            }
+        }
     }
 
     /**
