@@ -69,6 +69,20 @@ public class DropShadowDecorator implements Decorator {
     }
 
     /**
+     * Sets the color used to draw the shadow.
+     *
+     * @param shadowColor
+     * The color used to draw the shadow.
+     */
+    public final void setShadowColor(String shadowColor) {
+        if (shadowColor == null) {
+            throw new IllegalArgumentException("shadowColor is null.");
+        }
+
+        setShadowColor(Color.decode(shadowColor));
+    }
+
+    /**
      * Returns the opacity used to draw the shadow.
      *
      * @return
@@ -133,6 +147,8 @@ public class DropShadowDecorator implements Decorator {
 
         graphics.drawImage(shadowImage, 0, 0, null);
         graphics.drawImage(componentImage, 0, 0, null);
+
+        graphics.dispose();
     }
 
     public Rectangle getBounds(Component component) {
