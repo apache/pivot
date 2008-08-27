@@ -26,7 +26,7 @@ limitations under the License.
                 <columns>
                     <TableView.Column name="colA" headerData="Column A"/>
                     <TableView.Column name="colB" headerData="Column B"/>
-                    <TableView.Column name="colC" headerData="Column C" width="1*"/>
+                    <TableView.Column name="colC" headerData="Column C"/>
                 </columns>
                 <tableData wtkx:id="tableData">
                     <row name="User 1" colA="1.A" colB="1.B" colC="1.C" />
