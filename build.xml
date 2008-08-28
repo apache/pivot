@@ -5,6 +5,8 @@
     <property name="lib" value="lib"/>
 
     <property name="doc" value="doc"/>
+    <property name="charts" value="charts"/>
+    <property name="chartstest" value="charts-test"/>
     <property name="core" value="core"/>
     <property name="coretest" value="core-test"/>
     <property name="web" value="web"/>
@@ -15,10 +17,10 @@
     <!-- Compiler properties -->
     <property name="compiler.optimize" value="true"/>
     <property name="compiler.deprecation" value="true"/>
-    <property name="compiler.debug" value="true"/>
+    <property name="compiler.debug" value="false"/>
 
-    <target name="build" depends="core, core-test, web, web-test, wtk, wtk-test"/>
-    <target name="clean" depends="core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean"/>
+    <target name="build" depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test"/>
+    <target name="clean" depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean"/>
 
     <target name="doc">
         <delete dir="${doc}"/>
@@ -27,7 +29,10 @@
             <classpath>
                 <pathelement location="${wtk}/lib/stax-api-1.0.jar"/>
                 <pathelement location="${wtk}/lib/stax-1.2.0.jar"/>
+                <pathelement location="${charts}/lib/jcommon-1.0.12.jar"/>
+                <pathelement location="${charts}/lib/jfreechart-1.0.9.jar"/>
             </classpath>
+            <packageset dir="${charts}/${src}" includes="**/*"/>
             <packageset dir="${core}/${src}" includes="**/*"/>
             <packageset dir="${web}/${src}" includes="**/*">
                 <exclude name="**/proxy/**"/>
@@ -37,6 +42,74 @@
             </packageset>
         </javadoc>
         <zip destfile="${doc}.zip" basedir="doc"/>
+    </target>
+
+    <!-- Build charts library -->
+    <target name="charts" depends="core, wtk">
+        <mkdir dir="${charts}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${charts}/${src}"
+            destDir="${charts}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="${core}/${ant.project.name}-core.jar"/>
+                <pathelement location="${wtk}/${ant.project.name}-wtk.jar"/>
+                <pathelement location="${charts}/lib/jcommon-1.0.12.jar"/>
+                <pathelement location="${charts}/lib/jfreechart-1.0.9.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${charts}/${ant.project.name}-charts.jar"/>
+        <jar jarfile="${charts}/${ant.project.name}-charts.jar">
+            <fileset dir="${charts}/${bin}"/>
+            <fileset dir="${charts}/${src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="charts-clean">
+        <delete dir="${charts}/${bin}"/>
+        <delete file="${charts}/${ant.project.name}-charts.jar"/>
+    </target>
+
+    <!-- Charts Test -->
+    <target name="charts-test" depends="charts, core, wtk">
+        <mkdir dir="${chartstest}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${chartstest}/${src}"
+            destDir="${chartstest}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="charts/pivot-charts.jar"/>
+                <pathelement location="core/pivot-core.jar"/>
+                <pathelement location="wtk/pivot-wtk.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${chartstest}/${ant.project.name}-charts.test.jar"/>
+        <jar jarfile="${chartstest}/${ant.project.name}-charts.test.jar">
+            <fileset dir="${chartstest}/${bin}"/>
+        </jar>
+    </target>
+
+    <target name="charts-test-clean">
+        <delete dir="${chartstest}/${bin}"/>
+        <delete file="${chartstest}/${ant.project.name}-charts.test.jar"/>
     </target>
 
     <!-- Core -->
