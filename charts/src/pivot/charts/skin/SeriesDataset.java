@@ -13,13 +13,19 @@ import pivot.collections.List;
 @SuppressWarnings("unchecked")
 public class SeriesDataset implements CategoryDataset {
     private ChartView.CategorySequence categories;
+    private String seriesNameKey;
     private List<?> chartData;
 
     private DatasetGroup datasetGroup = null;
 
-    public SeriesDataset(ChartView.CategorySequence categories, List<?> chartData) {
+    public SeriesDataset(ChartView.CategorySequence categories,
+        String seriesNameKey, List<?> chartData) {
         if (categories == null) {
             throw new IllegalArgumentException("categories is null.");
+        }
+
+        if (seriesNameKey == null) {
+            throw new IllegalArgumentException("seriesNameKey is null.");
         }
 
         if (chartData == null) {
@@ -27,6 +33,7 @@ public class SeriesDataset implements CategoryDataset {
         }
 
         this.categories = categories;
+        this.seriesNameKey = seriesNameKey;
         this.chartData = chartData;
     }
 
@@ -46,17 +53,21 @@ public class SeriesDataset implements CategoryDataset {
         return chartData.getLength();
     }
 
-    public int getColumnIndex(Comparable categoryKey) {
-        if (categoryKey == null) {
-            throw new IllegalArgumentException("categoryKey is null.");
+    public int getColumnIndex(Comparable categoryLabel) {
+        if (categoryLabel == null) {
+            throw new IllegalArgumentException("categoryLabel is null.");
         }
 
-        int i = 0;
-        int n = categories.getLength();
-        while (i < n
-            && categoryKey.compareTo(categories.get(i++).getKey()) != 0);
+        int columnIndex = -1;
+        for (int i = 0, n = categories.getLength(); i < n && columnIndex == -1; i++) {
+            ChartView.Category category = categories.get(i);
 
-        return (i == n) ? -1 : i;
+            if (categoryLabel.compareTo(category.getLabel()) == 0) {
+                columnIndex = i;
+            }
+        }
+
+        return columnIndex;
     }
 
     public Comparable getColumnKey(int categoryIndex) {
@@ -65,28 +76,38 @@ public class SeriesDataset implements CategoryDataset {
             throw new IndexOutOfBoundsException();
         }
 
-        return categories.get(categoryIndex).getKey();
+        return categories.get(categoryIndex).getLabel();
     }
 
     public java.util.List getColumnKeys() {
         java.util.ArrayList columnKeys = new java.util.ArrayList(categories.getLength());
         for (int i = 0, n = categories.getLength(); i < n; i++) {
-            columnKeys.add(categories.get(i).getKey());
+            columnKeys.add(categories.get(i).getLabel());
         }
 
         return columnKeys;
     }
 
-    public int getRowIndex(Comparable seriesKey) {
-        if (seriesKey == null) {
-            throw new IllegalArgumentException("seriesKey is null.");
+    public int getRowIndex(Comparable seriesName) {
+        if (seriesName == null) {
+            throw new IllegalArgumentException("seriesName is null.");
         }
 
-        return Integer.parseInt(seriesKey.toString());
+        int rowIndex = -1;
+        for (int i = 0, n = chartData.getLength(); i < n && rowIndex == -1; i++) {
+            Dictionary<String, Object> seriesDictionary = getSeriesDictionary(i);
+
+            if (seriesName.compareTo(seriesDictionary.get(seriesNameKey)) == 0) {
+                rowIndex = i;
+            }
+        }
+
+        return rowIndex;
     }
 
     public Comparable getRowKey(int seriesIndex) {
-        return Integer.toString(seriesIndex);
+        Dictionary<String, Object> seriesDictionary = getSeriesDictionary(seriesIndex);
+        return (String)seriesDictionary.get(seriesNameKey);
     }
 
     public java.util.List getRowKeys() {
@@ -99,23 +120,34 @@ public class SeriesDataset implements CategoryDataset {
     }
 
     public Number getValue(int seriesIndex, int categoryIndex) {
-        return getValue(seriesIndex, getColumnKey(categoryIndex));
-    }
-
-    public Number getValue(Comparable seriesKey, Comparable categoryKey) {
-        return getValue(getRowIndex(seriesKey), categoryKey);
-    }
-
-    public Number getValue(int seriesIndex, Comparable categoryKey) {
         if (seriesIndex < 0
             || seriesIndex > chartData.getLength() - 1) {
             throw new UnknownKeyException("seriesIndex is out of bounds.");
         }
 
-        if (categoryKey == null) {
-            throw new IllegalArgumentException("categoryKey is null.");
+        if (categoryIndex < 0
+            || categoryIndex > categories.getLength() - 1) {
+            throw new IllegalArgumentException("categoryIndex is null.");
         }
 
+        Dictionary<String, Object> seriesDictionary = getSeriesDictionary(seriesIndex);
+
+        ChartView.Category category = categories.get(categoryIndex);
+        String categoryKey = category.getKey();
+
+        Object value = seriesDictionary.get(categoryKey);
+        if (value instanceof String) {
+            value = Double.parseDouble((String)value);
+        }
+
+        return (Number)value;
+    }
+
+    public Number getValue(Comparable seriesName, Comparable categoryLabel) {
+        return getValue(getRowIndex(seriesName), categoryLabel);
+    }
+
+    private Dictionary<String, Object> getSeriesDictionary(int seriesIndex) {
         Object series = chartData.get(seriesIndex);
 
         Dictionary<String, Object> seriesDictionary;
@@ -125,23 +157,14 @@ public class SeriesDataset implements CategoryDataset {
             seriesDictionary = new BeanDictionary(series);
         }
 
-        Object value = seriesDictionary.get(categoryKey.toString());
-        if (value == null) {
-            throw new UnknownKeyException(categoryKey + " is not a valid key.");
-        }
-
-        if (!(value instanceof Number)) {
-            value = Double.parseDouble(value.toString());
-        }
-
-        return (Number)value;
+        return seriesDictionary;
     }
 
     public void addChangeListener(DatasetChangeListener listener) {
-        // TODO
+        // No-op
     }
 
     public void removeChangeListener(DatasetChangeListener listener) {
-        // TODO
+        // No-op
     }
 }

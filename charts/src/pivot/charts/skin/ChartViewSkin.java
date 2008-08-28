@@ -24,7 +24,7 @@ public abstract class ChartViewSkin extends ComponentSkin
         ChartViewListener, ChartViewCategoryListener, ChartViewSeriesListener {
     private BufferedImage bufferedImage = null;
 
-    protected JFreeChart chart = null;
+    private JFreeChart chart = null;
     private ChartRenderingInfo chartRenderingInfo = new ChartRenderingInfo();
 
     private static final int PREFERRED_WIDTH = 320;
@@ -71,25 +71,24 @@ public abstract class ChartViewSkin extends ComponentSkin
     }
 
     public void paint(Graphics2D graphics) {
-        if (chart != null) {
-            int width = getWidth();
-            int height = getHeight();
+        int width = getWidth();
+        int height = getHeight();
 
-            if (bufferedImage == null
-                || bufferedImage.getWidth() != width
-                || bufferedImage.getHeight() != height) {
-                bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        if (bufferedImage == null
+            || bufferedImage.getWidth() != width
+            || bufferedImage.getHeight() != height) {
+            chart = createChart();
 
-                Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.getGraphics();
+            bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.getGraphics();
 
-                Rectangle area = new Rectangle(0, 0, width, height);
-                chart.draw(bufferedImageGraphics, area, chartRenderingInfo);
+            Rectangle area = new Rectangle(0, 0, width, height);
+            chart.draw(bufferedImageGraphics, area, chartRenderingInfo);
 
-                bufferedImageGraphics.dispose();
-            }
-
-            graphics.drawImage(bufferedImage, 0, 0, null);
+            bufferedImageGraphics.dispose();
         }
+
+        graphics.drawImage(bufferedImage, 0, 0, null);
     }
 
     @Override
@@ -98,11 +97,11 @@ public abstract class ChartViewSkin extends ComponentSkin
         bufferedImage = null;
     }
 
+    protected abstract JFreeChart createChart();
+
     protected ChartEntity getChartEntityAt(int x, int y) {
         ChartEntity result = null;
 
-        // TODO Update this when we add scaling (define style getters and
-        // setters for scaleX and scaleY in this class?)
         if (chartRenderingInfo != null) {
             EntityCollection entities = chartRenderingInfo.getEntityCollection();
             result = (entities != null) ? entities.getEntity(x, y) : null;
@@ -111,10 +110,24 @@ public abstract class ChartViewSkin extends ComponentSkin
         return result;
     }
 
+    // Chart view events
+    public void seriesNameKeyChanged(ChartView chartView, String previousSeriesNameKey) {
+        repaintComponent();
+    }
+
+    public void titleChanged(ChartView chartView, String previousTitle) {
+        repaintComponent();
+    }
+
     public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
         repaintComponent();
     }
 
+    public void showLegendChanged(ChartView chartView) {
+        repaintComponent();
+    }
+
+    // Chart view category events
     public void categoryInserted(ChartView chartView, int index) {
         repaintComponent();
     }
@@ -131,6 +144,7 @@ public abstract class ChartViewSkin extends ComponentSkin
         repaintComponent();
     }
 
+    // Chart view series events
     public void seriesInserted(ChartView chartView, int index) {
         repaintComponent();
     }

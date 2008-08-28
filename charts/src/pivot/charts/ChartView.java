@@ -24,6 +24,10 @@ public abstract class ChartView extends Component {
         private String key;
         private String label;
 
+        public Category() {
+            this(null, null);
+        }
+
         public Category(String key) {
             this(key, key);
         }
@@ -102,6 +106,11 @@ public abstract class ChartView extends Component {
 
         public int getSeriesIndex() {
             return seriesIndex;
+        }
+
+        public String toString() {
+            String string = "[" + seriesIndex + "] " + categoryKey;
+            return string;
         }
     }
 
@@ -216,9 +225,27 @@ public abstract class ChartView extends Component {
      */
     private class ChartViewListenerList extends ListenerList<ChartViewListener>
         implements ChartViewListener {
+        public void seriesNameKeyChanged(ChartView chartView, String previousSeriesNameKey) {
+            for (ChartViewListener listener : this) {
+                listener.seriesNameKeyChanged(chartView, previousSeriesNameKey);
+            }
+        }
+
+        public void titleChanged(ChartView chartView, String previousTitle) {
+            for (ChartViewListener listener : this) {
+                listener.titleChanged(chartView, previousTitle);
+            }
+        }
+
         public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
             for (ChartViewListener listener : this) {
                 listener.chartDataChanged(chartView, previousChartData);
+            }
+        }
+
+        public void showLegendChanged(ChartView chartView) {
+            for (ChartViewListener listener : this) {
+                listener.showLegendChanged(chartView);
             }
         }
     }
@@ -283,7 +310,10 @@ public abstract class ChartView extends Component {
         }
     }
 
+    private String seriesNameKey;
     private List<?> chartData;
+    private String title;
+    private boolean showLegend;
 
     private ArrayList<Category> categories = new ArrayList<Category>();
     private CategorySequence categorySequence = new CategorySequence();
@@ -294,18 +324,63 @@ public abstract class ChartView extends Component {
     private ChartViewCategoryListenerList chartViewCategoryListeners = new ChartViewCategoryListenerList();
     private ChartViewSeriesListenerList chartViewSeriesListeners = new ChartViewSeriesListenerList();
 
-    public static final String DEFAULT_SERIES_NAME_KEY = "id";
+    public static final String DEFAULT_SERIES_NAME_KEY = "name";
 
     public ChartView() {
-        this(DEFAULT_SERIES_NAME_KEY, new ArrayList<Object>());
+        this(DEFAULT_SERIES_NAME_KEY, null, new ArrayList<Object>(), true);
     }
 
-    public ChartView(String seriesNameKey, List<?> chartData) {
+    public ChartView(List<?> chartData) {
+        this(null, null, chartData, true);
+    }
+
+    public ChartView(List<?> chartData, boolean showLegend) {
+        this(null, null, chartData, showLegend);
+    }
+
+    public ChartView(String title, List<?> chartData, boolean showLegend) {
+        this(null, title, chartData, showLegend);
+    }
+
+    public ChartView(String seriesNameKey, String title, List<?> chartData, boolean showLegend) {
+        setSeriesNameKey(seriesNameKey);
+        setTitle(title);
         setChartData(chartData);
+        setShowLegend(showLegend);
     }
 
     public CategorySequence getCategories() {
         return categorySequence;
+    }
+
+    public String getSeriesNameKey() {
+        return seriesNameKey;
+    }
+
+    public void setSeriesNameKey(String seriesNameKey) {
+        if (seriesNameKey == null) {
+            throw new IllegalArgumentException("seriesNameKey is null.");
+        }
+
+        String previousSeriesNameKey = this.seriesNameKey;
+
+        if (previousSeriesNameKey != seriesNameKey) {
+            this.seriesNameKey = seriesNameKey;
+            chartViewListeners.seriesNameKeyChanged(this, previousSeriesNameKey);
+        }
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        String previousTitle = this.title;
+
+        if (previousTitle != title) {
+            this.title = title;
+            chartViewListeners.titleChanged(this, previousTitle);
+        }
     }
 
     public List<?> getChartData() {
@@ -329,6 +404,17 @@ public abstract class ChartView extends Component {
 
             this.chartData = chartData;
             chartViewListeners.chartDataChanged(this, previousChartData);
+        }
+    }
+
+    public boolean getShowLegend() {
+        return showLegend;
+    }
+
+    public void setShowLegend(boolean showLegend) {
+        if (this.showLegend != showLegend) {
+            this.showLegend = showLegend;
+            chartViewListeners.showLegendChanged(this);
         }
     }
 
