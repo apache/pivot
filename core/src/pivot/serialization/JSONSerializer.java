@@ -664,18 +664,18 @@ public class JSONSerializer implements Serializer {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Object> getList(Object root, String path) {
-        return (List<Object>)getValue(root, path);
+    public static List<?> getList(Object root, String path) {
+        return (List<?>)getValue(root, path);
     }
 
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> getMap(Object root, String path) {
-        return (Map<String, Object>)getValue(root, path);
+    public static Map<String, ?> getMap(Object root, String path) {
+        return (Map<String, ?>)getValue(root, path);
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Object> parseList(String string) {
-        List<Object> list = null;
+    public static List<?> parseList(String string) {
+        List<?> list = null;
         JSONSerializer jsonSerializer = new JSONSerializer();
 
         Object object = null;
@@ -685,14 +685,14 @@ public class JSONSerializer implements Serializer {
             throw new RuntimeException(exception);
         }
 
-        list = (List<Object>)object;
+        list = (List<?>)object;
 
         return list;
     }
 
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> parseMap(String string) {
-        Map<String, Object> map = null;
+    public static Map<String, ?> parseMap(String string) {
+        Map<String, ?> map = null;
         JSONSerializer jsonSerializer = new JSONSerializer();
 
         Object object = null;
@@ -702,7 +702,7 @@ public class JSONSerializer implements Serializer {
             throw new RuntimeException(exception);
         }
 
-        map = (Map<String, Object>)object;
+        map = (Map<String, ?>)object;
 
         return map;
     }

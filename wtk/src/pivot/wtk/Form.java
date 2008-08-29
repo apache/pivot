@@ -155,7 +155,7 @@ public class Form extends Container {
             this(JSONSerializer.parseMap(flag));
         }
 
-        public Flag(Dictionary<String, Object> flag) {
+        public Flag(Dictionary<String, ?> flag) {
             this(Alert.Type.decode((String)flag.get(ALERT_TYPE_KEY)),
                 (String)flag.get(MESSAGE_KEY));
         }

@@ -1940,7 +1940,7 @@ public abstract class Component implements Visual {
      *
      * @param styles
      */
-    public void setStyles(Map<String, Object> styles) {
+    public void setStyles(Map<String, ?> styles) {
         if (styles == null) {
             throw new IllegalArgumentException("styles is null.");
         }

@@ -102,12 +102,12 @@ public class JSONSerializerTest {
         double d2 = Double.MAX_VALUE;
         String listString = "[" + i + ", " + l1 + ", " + l2 + ", "
             + f + ", " + d1 + ", " + d2 + "]";
-        List<Object> list = JSONSerializer.parseList(listString);
+        List<?> list = JSONSerializer.parseList(listString);
         for (Object item : list) {
             System.out.println(item);
         }
 
-        Map<String, Object> map = JSONSerializer.parseMap("{a:100, b:200, c:300}");
+        Map<String, ?> map = JSONSerializer.parseMap("{a:100, b:200, c:300}");
         for (String key : map) {
             System.out.println(key + ":" + map.get(key));
         }
