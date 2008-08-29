@@ -15,6 +15,8 @@ import pivot.collections.List;
 import pivot.wtk.Component;
 
 public class LineChartViewSkin extends ChartViewSkin {
+    private boolean threeDimensional = false;
+
     @Override
     public void install(Component component) {
         validateComponentType(component, LineChartView.class);
@@ -60,9 +62,15 @@ public class LineChartViewSkin extends ChartViewSkin {
         JFreeChart chart;
         ChartView.CategorySequence categories = chartView.getCategories();
         if (categories.getLength() > 0) {
-            chart = ChartFactory.createLineChart(title, horizontalAxisLabel, verticalAxisLabel,
-                new CategorySeriesDataset(categories, seriesNameKey, chartData),
-                PlotOrientation.VERTICAL, showLegend, false, false);
+            CategorySeriesDataset dataset = new CategorySeriesDataset(categories, seriesNameKey, chartData);
+
+            if (threeDimensional) {
+                chart = ChartFactory.createLineChart3D(title, horizontalAxisLabel, verticalAxisLabel,
+                    dataset, PlotOrientation.VERTICAL, showLegend, false, false);
+            } else {
+                chart = ChartFactory.createLineChart(title, horizontalAxisLabel, verticalAxisLabel,
+                    dataset, PlotOrientation.VERTICAL, showLegend, false, false);
+            }
         } else {
             chart = ChartFactory.createXYLineChart(title, horizontalAxisLabel, verticalAxisLabel,
                 new XYSeriesDataset(seriesNameKey, chartData),
@@ -70,5 +78,14 @@ public class LineChartViewSkin extends ChartViewSkin {
         }
 
         return chart;
+    }
+
+    public boolean isThreeDimensional() {
+        return threeDimensional;
+    }
+
+    public void setThreeDimensional(boolean threeDimensional) {
+        this.threeDimensional = threeDimensional;
+        repaintComponent();
     }
 }

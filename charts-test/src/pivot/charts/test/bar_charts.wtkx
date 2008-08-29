@@ -22,7 +22,8 @@ limitations under the License.
         <charts:BarChartView wtkx:id="categoryBarChartView" TabPane.Label="Category"
             seriesNameKey="name" title="Category Bar Chart Example"
             horizontalAxisLabel="Categories" verticalAxisLabel="Values"
-            showLegend="true">
+            showLegend="true"
+            styles="{stacked:true, threeDimensional:true}">
             <categories>
                 <charts:ChartView.Category key="a" label="A"/>
                 <charts:ChartView.Category key="b" label="B"/>

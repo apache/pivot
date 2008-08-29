@@ -22,17 +22,20 @@ limitations under the License.
         <charts:LineChartView wtkx:id="categoryLineChartView" TabPane.Label="Category"
             seriesNameKey="name" title="Category Line Chart Example"
             horizontalAxisLabel="Categories" verticalAxisLabel="Values"
-            showLegend="false">
+            showLegend="false"
+            styles="{threeDimensional:true}">
             <categories>
                 <charts:ChartView.Category key="a" label="A"/>
                 <charts:ChartView.Category key="b" label="B"/>
                 <charts:ChartView.Category key="c" label="C"/>
+                <charts:ChartView.Category key="d" label="D"/>
+                <charts:ChartView.Category key="e" label="E"/>
             </categories>
 
             <chartData>
-                <series name="Example Series 1" a="43.2" b="27.9" c="79.5"/>
-                <series name="Example Series 2" a="27.9" b="43.2" c="79.5"/>
-                <series name="Example Series 3" a="79.5" b="27.9" c="43.2"/>
+                <series name="Example Series 1" a="43.2" b="27.9" c="79.5" d="10.0" e="20.2"/>
+                <series name="Example Series 2" a="27.9" b="43.2" c="79.5" d="19.0" e="31.6"/>
+                <series name="Example Series 3" a="79.5" b="27.9" c="43.2" d="50.3" e="81.9"/>
             </chartData>
         </charts:LineChartView>
 

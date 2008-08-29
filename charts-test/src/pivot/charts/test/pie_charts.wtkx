@@ -17,6 +17,7 @@ limitations under the License.
 
 <charts:PieChartView wtkx:id="pieChartView"
     seriesNameKey="name" title="Pie Chart Example"
+    styles="{threeDimensional:true}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns="pivot.wtk" xmlns:charts="pivot.charts">
     <categories>
@@ -27,6 +28,5 @@ limitations under the License.
 
     <chartData>
         <series name="Example Series 1" a="43.2" b="27.9" c="79.5"/>
-        <series name="Example Series 2" a="27.9" b="43.2" c="79.5"/>
     </chartData>
 </charts:PieChartView>

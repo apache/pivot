@@ -138,7 +138,7 @@ public class CategorySeriesDataset implements CategoryDataset {
     }
 
     public Number getValue(Comparable seriesName, Comparable categoryLabel) {
-        return getValue(getRowIndex(seriesName), categoryLabel);
+        return getValue(getRowIndex(seriesName), getColumnIndex(categoryLabel));
     }
 
     protected Dictionary<String, ?> getSeriesDictionary(int seriesIndex) {

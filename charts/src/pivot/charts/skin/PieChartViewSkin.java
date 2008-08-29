@@ -8,9 +8,12 @@ import org.jfree.util.TableOrder;
 
 import pivot.charts.PieChartView;
 import pivot.charts.ChartView;
+import pivot.collections.List;
 import pivot.wtk.Component;
 
 public class PieChartViewSkin extends ChartViewSkin {
+    private boolean threeDimensional = false;
+
     @Override
     public void install(Component component) {
         validateComponentType(component, PieChartView.class);
@@ -36,14 +39,33 @@ public class PieChartViewSkin extends ChartViewSkin {
         PieChartView chartView = (PieChartView)getComponent();
 
         String title = chartView.getTitle();
-        CategorySeriesDataset dataset = new CategorySeriesDataset(chartView.getCategories(),
-            chartView.getSeriesNameKey(), chartView.getChartData());
         boolean showLegend = chartView.getShowLegend();
 
-        // TODO Modify plot based on style properties before returning chart;
-        // style setters should call repaintComponent()
+        ChartView.CategorySequence categories = chartView.getCategories();
+        String seriesNameKey = chartView.getSeriesNameKey();
+        List<?> chartData = chartView.getChartData();
 
-        return ChartFactory.createMultiplePieChart(title, dataset, TableOrder.BY_ROW,
-            showLegend, false, false);
+        CategorySeriesDataset dataset = new CategorySeriesDataset(categories,
+            seriesNameKey, chartData);
+
+        JFreeChart chart;
+        if (threeDimensional) {
+            chart = ChartFactory.createMultiplePieChart3D(title, dataset, TableOrder.BY_ROW,
+                showLegend, false, false);
+        } else {
+            chart = ChartFactory.createMultiplePieChart(title, dataset, TableOrder.BY_ROW,
+                showLegend, false, false);
+        }
+
+        return chart;
+    }
+
+    public boolean isThreeDimensional() {
+        return threeDimensional;
+    }
+
+    public void setThreeDimensional(boolean threeDimensional) {
+        this.threeDimensional = threeDimensional;
+        repaintComponent();
     }
 }

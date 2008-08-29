@@ -15,6 +15,9 @@ import pivot.collections.List;
 import pivot.wtk.Component;
 
 public class BarChartViewSkin extends ChartViewSkin {
+    private boolean stacked = false;
+    private boolean threeDimensional = false;
+
     @Override
     public void install(Component component) {
         validateComponentType(component, BarChartView.class);
@@ -57,12 +60,25 @@ public class BarChartViewSkin extends ChartViewSkin {
         List<?> chartData = chartView.getChartData();
 
         // TODO Make plot orientation a style property
+
         JFreeChart chart;
         ChartView.CategorySequence categories = chartView.getCategories();
         if (categories.getLength() > 0) {
-            chart = ChartFactory.createBarChart(title, horizontalAxisLabel, verticalAxisLabel,
-                new CategorySeriesDataset(categories, seriesNameKey, chartData),
-                PlotOrientation.VERTICAL, showLegend, false, false);
+            CategorySeriesDataset dataset = new CategorySeriesDataset(categories, seriesNameKey, chartData);
+
+            if (stacked && threeDimensional) {
+                chart = ChartFactory.createStackedBarChart3D(title, horizontalAxisLabel, verticalAxisLabel,
+                    dataset, PlotOrientation.VERTICAL, showLegend, false, false);
+            } else if (stacked) {
+                chart = ChartFactory.createStackedBarChart(title, horizontalAxisLabel, verticalAxisLabel,
+                    dataset, PlotOrientation.VERTICAL, showLegend, false, false);
+            } else if (threeDimensional) {
+                chart = ChartFactory.createBarChart3D(title, horizontalAxisLabel, verticalAxisLabel,
+                    dataset, PlotOrientation.VERTICAL, showLegend, false, false);
+            } else {
+                chart = ChartFactory.createBarChart(title, horizontalAxisLabel, verticalAxisLabel,
+                    dataset, PlotOrientation.VERTICAL, showLegend, false, false);
+            }
         } else {
             // TODO Make the dateAxis argument a style property
             chart = ChartFactory.createXYBarChart(title, horizontalAxisLabel, false, verticalAxisLabel,
@@ -71,5 +87,23 @@ public class BarChartViewSkin extends ChartViewSkin {
         }
 
         return chart;
+    }
+
+    public boolean isStacked() {
+        return stacked;
+    }
+
+    public void setStacked(boolean stacked) {
+        this.stacked = stacked;
+        repaintComponent();
+    }
+
+    public boolean isThreeDimensional() {
+        return threeDimensional;
+    }
+
+    public void setThreeDimensional(boolean threeDimensional) {
+        this.threeDimensional = threeDimensional;
+        repaintComponent();
     }
 }
