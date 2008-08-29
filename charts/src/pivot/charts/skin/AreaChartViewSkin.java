@@ -23,18 +23,16 @@ import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 
+import pivot.charts.AreaChartView;
 import pivot.charts.ChartView;
-import pivot.charts.LineChartView;
 import pivot.charts.ChartView.Element;
 import pivot.collections.List;
 import pivot.wtk.Component;
 
-public class LineChartViewSkin extends ChartViewSkin {
-    private boolean threeDimensional = false;
-
+public class AreaChartViewSkin extends ChartViewSkin {
     @Override
     public void install(Component component) {
-        validateComponentType(component, LineChartView.class);
+        validateComponentType(component, AreaChartView.class);
         super.install(component);
     }
 
@@ -42,7 +40,6 @@ public class LineChartViewSkin extends ChartViewSkin {
         ChartView.Element element = null;
 
         ChartEntity chartEntity = getChartEntityAt(x, y);
-
         if (chartEntity instanceof CategoryItemEntity) {
             CategoryItemEntity categoryItemEntity = (CategoryItemEntity)chartEntity;
             CategoryDataset dataset = categoryItemEntity.getDataset();
@@ -63,8 +60,9 @@ public class LineChartViewSkin extends ChartViewSkin {
         return element;
     }
 
+    @Override
     protected JFreeChart createChart() {
-        LineChartView chartView = (LineChartView)getComponent();
+        AreaChartView chartView = (AreaChartView)getComponent();
 
         String title = chartView.getTitle();
         String horizontalAxisLabel = chartView.getHorizontalAxisLabel();
@@ -78,29 +76,14 @@ public class LineChartViewSkin extends ChartViewSkin {
         ChartView.CategorySequence categories = chartView.getCategories();
         if (categories.getLength() > 0) {
             CategorySeriesDataset dataset = new CategorySeriesDataset(categories, seriesNameKey, chartData);
-
-            if (threeDimensional) {
-                chart = ChartFactory.createLineChart3D(title, horizontalAxisLabel, verticalAxisLabel,
-                    dataset, PlotOrientation.VERTICAL, showLegend, false, false);
-            } else {
-                chart = ChartFactory.createLineChart(title, horizontalAxisLabel, verticalAxisLabel,
-                    dataset, PlotOrientation.VERTICAL, showLegend, false, false);
-            }
+            chart = ChartFactory.createAreaChart(title, horizontalAxisLabel, verticalAxisLabel,
+                dataset, PlotOrientation.VERTICAL, showLegend, false, false);
         } else {
-            chart = ChartFactory.createXYLineChart(title, horizontalAxisLabel, verticalAxisLabel,
+            chart = ChartFactory.createXYAreaChart(title, horizontalAxisLabel, verticalAxisLabel,
                 new XYSeriesDataset(seriesNameKey, chartData),
                 PlotOrientation.VERTICAL, showLegend, false, false);
         }
 
         return chart;
-    }
-
-    public boolean isThreeDimensional() {
-        return threeDimensional;
-    }
-
-    public void setThreeDimensional(boolean threeDimensional) {
-        this.threeDimensional = threeDimensional;
-        repaintComponent();
     }
 }

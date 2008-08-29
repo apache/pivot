@@ -22,6 +22,8 @@ limitations under the License.
         <wtkx:include src="pie_charts.wtkx" namespace="pieCharts" TabPane.Label="Pie Chart"/>
         <wtkx:include src="bar_charts.wtkx" namespace="barCharts" TabPane.Label="Bar Chart"/>
         <wtkx:include src="line_charts.wtkx" namespace="lineCharts" TabPane.Label="Line Chart"/>
+        <wtkx:include src="area_charts.wtkx" namespace="areaCharts" TabPane.Label="Area Chart"/>
+        <wtkx:include src="high_low_charts.wtkx" namespace="highLowCharts" TabPane.Label="High Low Chart"/>
     </tabs>
 </TabPane>
 

@@ -15,9 +15,10 @@
  */
 package pivot.charts;
 
-public interface ChartViewSeriesListener {
-    public void seriesInserted(ChartView chartView, int index);
-    public void seriesRemoved(ChartView chartView, int index, int count);
-    public void seriesUpdated(ChartView chartView, int index);
-    public void seriesSorted(ChartView chartView);
+import pivot.charts.skin.AreaChartViewSkin;
+
+public class AreaChartView extends ChartView {
+    public AreaChartView() {
+        setSkin(new AreaChartViewSkin());
+    }
 }

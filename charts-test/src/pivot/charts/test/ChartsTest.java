@@ -1,8 +1,10 @@
 package pivot.charts.test;
 
 import pivot.beans.BeanDictionary;
+import pivot.charts.AreaChartView;
 import pivot.charts.BarChartView;
 import pivot.charts.ChartView;
+import pivot.charts.HighLowChartView;
 import pivot.charts.LineChartView;
 import pivot.charts.PieChartView;
 import pivot.collections.Dictionary;
@@ -85,13 +87,22 @@ public class ChartsTest implements Application {
         LineChartView xyLineChartView = (LineChartView)wtkxSerializer.getObjectByName("lineCharts.xyLineChartView");
         xyLineChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
 
+        AreaChartView categoryAreaChartView = (AreaChartView)wtkxSerializer.getObjectByName("areaCharts.categoryAreaChartView");
+        categoryAreaChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
+
+        AreaChartView xyAreaChartView = (AreaChartView)wtkxSerializer.getObjectByName("areaCharts.xyAreaChartView");
+        xyAreaChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
+
+        HighLowChartView highLowChartView = (HighLowChartView)wtkxSerializer.getObjectByName("highLowCharts.highLowChartView");
+        highLowChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
+
         frame.setPreferredSize(640, 480);
         frame.open(display);
     }
 
     public boolean shutdown(boolean optional) throws Exception {
         frame.close();
-        return false;
+        return true;
     }
 
     public void suspend() {

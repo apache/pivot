@@ -1,5 +1,21 @@
+/*
+ * Copyright (c) 2008 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pivot.charts.skin;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -26,6 +42,8 @@ public abstract class ChartViewSkin extends ComponentSkin
 
     private JFreeChart chart = null;
     private ChartRenderingInfo chartRenderingInfo = new ChartRenderingInfo();
+
+    private Color backgroundColor = null;
 
     private static final int PREFERRED_WIDTH = 320;
     private static final int PREFERRED_HEIGHT = 240;
@@ -83,6 +101,7 @@ public abstract class ChartViewSkin extends ComponentSkin
             Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.getGraphics();
 
             Rectangle area = new Rectangle(0, 0, width, height);
+            chart.setBackgroundPaint(backgroundColor);
             chart.draw(bufferedImageGraphics, area, chartRenderingInfo);
 
             bufferedImageGraphics.dispose();
@@ -108,6 +127,15 @@ public abstract class ChartViewSkin extends ComponentSkin
         }
 
         return result;
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        repaintComponent();
     }
 
     // Chart view events
