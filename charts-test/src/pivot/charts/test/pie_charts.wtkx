@@ -15,14 +15,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TabPane selectedIndex="0"
+<charts:PieChartView wtkx:id="pieChartView"
+    seriesNameKey="name" title="Pie Chart Example"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns="pivot.wtk" xmlns:charts="pivot.charts">
-    <tabs>
-        <wtkx:include src="pie_charts.wtkx" namespace="pieCharts" TabPane.Label="Pie Chart"/>
-        <wtkx:include src="bar_charts.wtkx" namespace="barCharts" TabPane.Label="Bar Chart"/>
-        <wtkx:include src="line_charts.wtkx" namespace="lineCharts" TabPane.Label="Line Chart"/>
-    </tabs>
-</TabPane>
+    <categories>
+        <charts:ChartView.Category key="a" label="A"/>
+        <charts:ChartView.Category key="b" label="B"/>
+        <charts:ChartView.Category key="c" label="C"/>
+    </categories>
 
-
+    <chartData>
+        <series name="Example Series 1" a="43.2" b="27.9" c="79.5"/>
+        <series name="Example Series 2" a="27.9" b="43.2" c="79.5"/>
+    </chartData>
+</charts:PieChartView>

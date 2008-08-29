@@ -92,24 +92,40 @@ public abstract class ChartView extends Component {
      * Represents an element of a chart.
      */
     public static class Element {
-        private String categoryKey = null;
-        private int seriesIndex = -1;
+        private int seriesIndex;
+        private int elementIndex;
 
-        public Element(String categoryKey, int seriesIndex) {
-            this.categoryKey = categoryKey;
+        public Element(int seriesIndex, int elementIndex) {
             this.seriesIndex = seriesIndex;
+            this.elementIndex = elementIndex;
         }
 
-        public String getCategoryKey() {
-            return categoryKey;
-        }
-
+        /**
+         * Returns the element's series index.
+         *
+         * @return
+         * The element's series index.
+         */
         public int getSeriesIndex() {
             return seriesIndex;
         }
 
+        /**
+         * Returns the element's index within its series. For a category series,
+         * the element index represents the index of the category in the
+         * category sequence. Otherwise, it represents the index of the item
+         * within the series.
+         *
+         * @return
+         * The element index.
+         */
+        public int getElementIndex() {
+            return elementIndex;
+        }
+
         public String toString() {
-            String string = "[" + seriesIndex + "] " + categoryKey;
+            String string = getClass().getName()
+                + seriesIndex + ", " + elementIndex;
             return string;
         }
     }
@@ -225,6 +241,12 @@ public abstract class ChartView extends Component {
      */
     private class ChartViewListenerList extends ListenerList<ChartViewListener>
         implements ChartViewListener {
+        public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
+            for (ChartViewListener listener : this) {
+                listener.chartDataChanged(chartView, previousChartData);
+            }
+        }
+
         public void seriesNameKeyChanged(ChartView chartView, String previousSeriesNameKey) {
             for (ChartViewListener listener : this) {
                 listener.seriesNameKeyChanged(chartView, previousSeriesNameKey);
@@ -237,9 +259,15 @@ public abstract class ChartView extends Component {
             }
         }
 
-        public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
+        public void horizontalAxisLabelChanged(ChartView chartView, String previousXAxisLabel) {
             for (ChartViewListener listener : this) {
-                listener.chartDataChanged(chartView, previousChartData);
+                listener.horizontalAxisLabelChanged(chartView, previousXAxisLabel);
+            }
+        }
+
+        public void verticalAxisLabelChanged(ChartView chartView, String previousYAxisLabel) {
+            for (ChartViewListener listener : this) {
+                listener.verticalAxisLabelChanged(chartView, previousYAxisLabel);
             }
         }
 
@@ -310,9 +338,12 @@ public abstract class ChartView extends Component {
         }
     }
 
-    private String seriesNameKey;
     private List<?> chartData;
-    private String title;
+    private String seriesNameKey;
+
+    private String title = null;
+    private String horizontalAxisLabel = null;
+    private String verticalAxisLabel = null;
     private boolean showLegend;
 
     private ArrayList<Category> categories = new ArrayList<Category>();
@@ -327,22 +358,10 @@ public abstract class ChartView extends Component {
     public static final String DEFAULT_SERIES_NAME_KEY = "name";
 
     public ChartView() {
-        this(DEFAULT_SERIES_NAME_KEY, null, new ArrayList<Object>(), true);
+        this(DEFAULT_SERIES_NAME_KEY, new ArrayList<Object>());
     }
 
-    public ChartView(List<?> chartData) {
-        this(null, null, chartData, true);
-    }
-
-    public ChartView(List<?> chartData, boolean showLegend) {
-        this(null, null, chartData, showLegend);
-    }
-
-    public ChartView(String title, List<?> chartData, boolean showLegend) {
-        this(null, title, chartData, showLegend);
-    }
-
-    public ChartView(String seriesNameKey, String title, List<?> chartData, boolean showLegend) {
+    public ChartView(String seriesNameKey, List<?> chartData) {
         setSeriesNameKey(seriesNameKey);
         setTitle(title);
         setChartData(chartData);
@@ -351,6 +370,30 @@ public abstract class ChartView extends Component {
 
     public CategorySequence getCategories() {
         return categorySequence;
+    }
+
+    public List<?> getChartData() {
+        return chartData;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setChartData(List<?> chartData) {
+        if (chartData == null) {
+            throw new IllegalArgumentException("chartData is null.");
+        }
+
+        List<?> previousChartData = this.chartData;
+
+        if (previousChartData != chartData) {
+            if (previousChartData != null) {
+                ((List<Object>)previousChartData).getListListeners().remove(chartDataHandler);
+            }
+
+            ((List<Object>)chartData).getListListeners().add(chartDataHandler);
+
+            this.chartData = chartData;
+            chartViewListeners.chartDataChanged(this, previousChartData);
+        }
     }
 
     public String getSeriesNameKey() {
@@ -383,27 +426,29 @@ public abstract class ChartView extends Component {
         }
     }
 
-    public List<?> getChartData() {
-        return chartData;
+    public String getHorizontalAxisLabel() {
+        return horizontalAxisLabel;
     }
 
-    @SuppressWarnings("unchecked")
-    public void setChartData(List<?> chartData) {
-        if (chartData == null) {
-            throw new IllegalArgumentException("chartData is null.");
+    public void setHorizontalAxisLabel(String horizontalAxisLabel) {
+        String previousHorizontalAxisLabel = this.horizontalAxisLabel;
+
+        if (previousHorizontalAxisLabel != horizontalAxisLabel) {
+            this.horizontalAxisLabel = horizontalAxisLabel;
+            chartViewListeners.horizontalAxisLabelChanged(this, previousHorizontalAxisLabel);
         }
+    }
 
-        List<?> previousChartData = this.chartData;
+    public String getVerticalAxisLabel() {
+        return verticalAxisLabel;
+    }
 
-        if (previousChartData != chartData) {
-            if (previousChartData != null) {
-                ((List<Object>)previousChartData).getListListeners().remove(chartDataHandler);
-            }
+    public void setVerticalAxisLabel(String verticalAxisLabel) {
+        String previousVerticalAxisLabel = this.verticalAxisLabel;
 
-            ((List<Object>)chartData).getListListeners().add(chartDataHandler);
-
-            this.chartData = chartData;
-            chartViewListeners.chartDataChanged(this, previousChartData);
+        if (previousVerticalAxisLabel != verticalAxisLabel) {
+            this.verticalAxisLabel = verticalAxisLabel;
+            chartViewListeners.verticalAxisLabelChanged(this, previousVerticalAxisLabel);
         }
     }
 

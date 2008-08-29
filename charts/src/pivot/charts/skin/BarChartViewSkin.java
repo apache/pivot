@@ -4,32 +4,21 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.CategoryItemEntity;
+import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 
 import pivot.charts.BarChartView;
-import pivot.charts.BarChartViewListener;
 import pivot.charts.ChartView;
 import pivot.charts.ChartView.Element;
+import pivot.collections.List;
 import pivot.wtk.Component;
 
-public class BarChartViewSkin extends ChartViewSkin
-    implements BarChartViewListener {
+public class BarChartViewSkin extends ChartViewSkin {
     @Override
     public void install(Component component) {
         validateComponentType(component, BarChartView.class);
         super.install(component);
-
-        BarChartView barChartView = (BarChartView)component;
-        barChartView.getBarChartViewListeners().add(this);
-    }
-
-    @Override
-    public void uninstall() {
-        BarChartView barChartView = (BarChartView)getComponent();
-        barChartView.getBarChartViewListeners().remove(this);
-
-        super.uninstall();
     }
 
     public Element getElementAt(int x, int y) {
@@ -38,12 +27,19 @@ public class BarChartViewSkin extends ChartViewSkin
         ChartEntity chartEntity = getChartEntityAt(x, y);
         if (chartEntity instanceof CategoryItemEntity) {
             CategoryItemEntity categoryItemEntity = (CategoryItemEntity)chartEntity;
-            String categoryKey = (String)categoryItemEntity.getColumnKey();
-
             CategoryDataset dataset = categoryItemEntity.getDataset();
-            int seriesIndex = dataset.getRowIndex(categoryItemEntity.getRowKey());
 
-            element = new ChartView.Element(categoryKey, seriesIndex);
+            String columnKey = (String)categoryItemEntity.getColumnKey();
+            int columnIndex = dataset.getColumnIndex(columnKey);
+
+            String rowKey = (String)categoryItemEntity.getRowKey();
+            int rowIndex = dataset.getRowIndex(rowKey);
+
+            element = new ChartView.Element(rowIndex, columnIndex);
+        } else if (chartEntity instanceof XYItemEntity) {
+            XYItemEntity xyItemEntity = (XYItemEntity)chartEntity;
+            element = new ChartView.Element(xyItemEntity.getSeriesIndex(),
+                xyItemEntity.getItem());
         }
 
         return element;
@@ -53,21 +49,27 @@ public class BarChartViewSkin extends ChartViewSkin
         BarChartView chartView = (BarChartView)getComponent();
 
         String title = chartView.getTitle();
-        String categoryAxisLabel = chartView.getCategoryAxisLabel();
-        String valueAxisLabel = chartView.getValueAxisLabel();
-        SeriesDataset dataset = new SeriesDataset(chartView.getCategories(),
-            chartView.getSeriesNameKey(), chartView.getChartData());
+        String horizontalAxisLabel = chartView.getHorizontalAxisLabel();
+        String verticalAxisLabel = chartView.getVerticalAxisLabel();
         boolean showLegend = chartView.getShowLegend();
 
-        return ChartFactory.createBarChart(title, categoryAxisLabel, valueAxisLabel,
-            dataset, PlotOrientation.HORIZONTAL, showLegend, false, false);
-    }
+        String seriesNameKey = chartView.getSeriesNameKey();
+        List<?> chartData = chartView.getChartData();
 
-    public void categoryAxisLabelChanged(BarChartView barChartView, String previousCategoryAxisLabel) {
-        repaintComponent();
-    }
+        // TODO Make plot orientation a style property
+        JFreeChart chart;
+        ChartView.CategorySequence categories = chartView.getCategories();
+        if (categories.getLength() > 0) {
+            chart = ChartFactory.createBarChart(title, horizontalAxisLabel, verticalAxisLabel,
+                new CategorySeriesDataset(categories, seriesNameKey, chartData),
+                PlotOrientation.VERTICAL, showLegend, false, false);
+        } else {
+            // TODO Make the dateAxis argument a style property
+            chart = ChartFactory.createXYBarChart(title, horizontalAxisLabel, false, verticalAxisLabel,
+                new IntervalSeriesDataset(seriesNameKey, chartData),
+                PlotOrientation.VERTICAL, showLegend, false, false);
+        }
 
-    public void valueAxisLabelChanged(BarChartView barChartView, String previousValueAxisLabel) {
-        repaintComponent();
+        return chart;
     }
 }

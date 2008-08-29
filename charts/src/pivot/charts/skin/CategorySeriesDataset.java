@@ -1,6 +1,5 @@
 package pivot.charts.skin;
 
-import org.jfree.data.UnknownKeyException;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DatasetGroup;
@@ -11,14 +10,14 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 
 @SuppressWarnings("unchecked")
-public class SeriesDataset implements CategoryDataset {
+public class CategorySeriesDataset implements CategoryDataset {
     private ChartView.CategorySequence categories;
     private String seriesNameKey;
     private List<?> chartData;
 
     private DatasetGroup datasetGroup = null;
 
-    public SeriesDataset(ChartView.CategorySequence categories,
+    public CategorySeriesDataset(ChartView.CategorySequence categories,
         String seriesNameKey, List<?> chartData) {
         if (categories == null) {
             throw new IllegalArgumentException("categories is null.");
@@ -95,7 +94,7 @@ public class SeriesDataset implements CategoryDataset {
 
         int rowIndex = -1;
         for (int i = 0, n = chartData.getLength(); i < n && rowIndex == -1; i++) {
-            Dictionary<String, Object> seriesDictionary = getSeriesDictionary(i);
+            Dictionary<String, ?> seriesDictionary = getSeriesDictionary(i);
 
             if (seriesName.compareTo(seriesDictionary.get(seriesNameKey)) == 0) {
                 rowIndex = i;
@@ -106,7 +105,7 @@ public class SeriesDataset implements CategoryDataset {
     }
 
     public Comparable getRowKey(int seriesIndex) {
-        Dictionary<String, Object> seriesDictionary = getSeriesDictionary(seriesIndex);
+        Dictionary<String, ?> seriesDictionary = getSeriesDictionary(seriesIndex);
         return (String)seriesDictionary.get(seriesNameKey);
     }
 
@@ -120,17 +119,12 @@ public class SeriesDataset implements CategoryDataset {
     }
 
     public Number getValue(int seriesIndex, int categoryIndex) {
-        if (seriesIndex < 0
-            || seriesIndex > chartData.getLength() - 1) {
-            throw new UnknownKeyException("seriesIndex is out of bounds.");
-        }
+        Dictionary<String, ?> seriesDictionary = getSeriesDictionary(seriesIndex);
 
         if (categoryIndex < 0
             || categoryIndex > categories.getLength() - 1) {
-            throw new IllegalArgumentException("categoryIndex is null.");
+            throw new IndexOutOfBoundsException();
         }
-
-        Dictionary<String, Object> seriesDictionary = getSeriesDictionary(seriesIndex);
 
         ChartView.Category category = categories.get(categoryIndex);
         String categoryKey = category.getKey();
@@ -147,12 +141,17 @@ public class SeriesDataset implements CategoryDataset {
         return getValue(getRowIndex(seriesName), categoryLabel);
     }
 
-    private Dictionary<String, Object> getSeriesDictionary(int seriesIndex) {
+    protected Dictionary<String, ?> getSeriesDictionary(int seriesIndex) {
+        if (seriesIndex < 0
+            || seriesIndex > chartData.getLength() - 1) {
+            throw new IndexOutOfBoundsException();
+        }
+
         Object series = chartData.get(seriesIndex);
 
-        Dictionary<String, Object> seriesDictionary;
+        Dictionary<String, ?> seriesDictionary;
         if (series instanceof Dictionary<?, ?>) {
-            seriesDictionary = (Dictionary<String, Object>)series;
+            seriesDictionary = (Dictionary<String, ?>)series;
         } else {
             seriesDictionary = new BeanDictionary(series);
         }

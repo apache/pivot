@@ -30,8 +30,16 @@ public class ChartsTest implements Application {
             ChartView.Element element = chartView.getElementAt(x, y);
 
             if (element != null) {
-                String categoryKey = element.getCategoryKey();
                 int seriesIndex = element.getSeriesIndex();
+                int elementIndex = element.getElementIndex();
+
+                String elementLabel;
+                ChartView.CategorySequence categories = chartView.getCategories();
+                if (categories.getLength() > 0) {
+                    elementLabel = "\"" + chartView.getCategories().get(elementIndex).getLabel() + "\"";
+                } else {
+                    elementLabel = Integer.toString(elementIndex);
+                }
 
                 List<?> chartData = chartView.getChartData();
                 Object series = chartData.get(seriesIndex);
@@ -45,7 +53,7 @@ public class ChartsTest implements Application {
 
                 String seriesNameKey = chartView.getSeriesNameKey();
 
-                Alert.alert("You clicked category \"" + categoryKey + "\" in \""
+                Alert.alert("You clicked element " + elementLabel + " in \""
                     + seriesDictionary.get(seriesNameKey) + "\".", frame);
             }
         }
@@ -62,14 +70,20 @@ public class ChartsTest implements Application {
 
         ChartViewMouseButtonHandler chartViewMouseButtonHandler = new ChartViewMouseButtonHandler();
 
-        PieChartView pieChartView = (PieChartView)wtkxSerializer.getObjectByName("pieChartView");
+        PieChartView pieChartView = (PieChartView)wtkxSerializer.getObjectByName("pieCharts.pieChartView");
         pieChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
 
-        BarChartView barChartView = (BarChartView)wtkxSerializer.getObjectByName("barChartView");
-        barChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
+        BarChartView categoryBarChartView = (BarChartView)wtkxSerializer.getObjectByName("barCharts.categoryBarChartView");
+        categoryBarChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
 
-        LineChartView lineChartView = (LineChartView)wtkxSerializer.getObjectByName("lineChartView");
-        lineChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
+        BarChartView xyBarChartView = (BarChartView)wtkxSerializer.getObjectByName("barCharts.xyBarChartView");
+        xyBarChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
+
+        LineChartView categoryLineChartView = (LineChartView)wtkxSerializer.getObjectByName("lineCharts.categoryLineChartView");
+        categoryLineChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
+
+        LineChartView xyLineChartView = (LineChartView)wtkxSerializer.getObjectByName("lineCharts.xyLineChartView");
+        xyLineChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
 
         frame.setPreferredSize(640, 480);
         frame.open(display);

@@ -4,46 +4,43 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.CategoryItemEntity;
 import org.jfree.chart.entity.ChartEntity;
+import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 
 import pivot.charts.ChartView;
 import pivot.charts.LineChartView;
-import pivot.charts.LineChartViewListener;
 import pivot.charts.ChartView.Element;
+import pivot.collections.List;
 import pivot.wtk.Component;
 
-public class LineChartViewSkin extends ChartViewSkin
-    implements LineChartViewListener {
+public class LineChartViewSkin extends ChartViewSkin {
     @Override
     public void install(Component component) {
         validateComponentType(component, LineChartView.class);
         super.install(component);
-
-        LineChartView lineChartView = (LineChartView)component;
-        lineChartView.getLineChartViewListeners().add(this);
-    }
-
-    @Override
-    public void uninstall() {
-        LineChartView lineChartView = (LineChartView)getComponent();
-        lineChartView.getLineChartViewListeners().remove(this);
-
-        super.uninstall();
     }
 
     public Element getElementAt(int x, int y) {
         ChartView.Element element = null;
 
         ChartEntity chartEntity = getChartEntityAt(x, y);
+
         if (chartEntity instanceof CategoryItemEntity) {
             CategoryItemEntity categoryItemEntity = (CategoryItemEntity)chartEntity;
-            String categoryKey = (String)categoryItemEntity.getColumnKey();
-
             CategoryDataset dataset = categoryItemEntity.getDataset();
-            int seriesIndex = dataset.getRowIndex(categoryItemEntity.getRowKey());
 
-            element = new ChartView.Element(categoryKey, seriesIndex);
+            String columnKey = (String)categoryItemEntity.getColumnKey();
+            int columnIndex = dataset.getColumnIndex(columnKey);
+
+            String rowKey = (String)categoryItemEntity.getRowKey();
+            int rowIndex = dataset.getRowIndex(rowKey);
+
+            element = new ChartView.Element(rowIndex, columnIndex);
+        } else if (chartEntity instanceof XYItemEntity) {
+            XYItemEntity xyItemEntity = (XYItemEntity)chartEntity;
+            element = new ChartView.Element(xyItemEntity.getSeriesIndex(),
+                xyItemEntity.getItem());
         }
 
         return element;
@@ -53,21 +50,25 @@ public class LineChartViewSkin extends ChartViewSkin
         LineChartView chartView = (LineChartView)getComponent();
 
         String title = chartView.getTitle();
-        String categoryAxisLabel = chartView.getCategoryAxisLabel();
-        String valueAxisLabel = chartView.getValueAxisLabel();
-        SeriesDataset dataset = new SeriesDataset(chartView.getCategories(),
-            chartView.getSeriesNameKey(), chartView.getChartData());
+        String horizontalAxisLabel = chartView.getHorizontalAxisLabel();
+        String verticalAxisLabel = chartView.getVerticalAxisLabel();
         boolean showLegend = chartView.getShowLegend();
 
-        return ChartFactory.createLineChart(title, categoryAxisLabel, valueAxisLabel, dataset,
-            PlotOrientation.VERTICAL, showLegend, false, false);
-    }
+        String seriesNameKey = chartView.getSeriesNameKey();
+        List<?> chartData = chartView.getChartData();
 
-    public void categoryAxisLabelChanged(LineChartView lineChartView, String previousCategoryAxisLabel) {
-        repaintComponent();
-    }
+        JFreeChart chart;
+        ChartView.CategorySequence categories = chartView.getCategories();
+        if (categories.getLength() > 0) {
+            chart = ChartFactory.createLineChart(title, horizontalAxisLabel, verticalAxisLabel,
+                new CategorySeriesDataset(categories, seriesNameKey, chartData),
+                PlotOrientation.VERTICAL, showLegend, false, false);
+        } else {
+            chart = ChartFactory.createXYLineChart(title, horizontalAxisLabel, verticalAxisLabel,
+                new XYSeriesDataset(seriesNameKey, chartData),
+                PlotOrientation.VERTICAL, showLegend, false, false);
+        }
 
-    public void valueAxisLabelChanged(LineChartView lineChartView, String previousValueAxisLabel) {
-        repaintComponent();
+        return chart;
     }
 }

@@ -111,6 +111,10 @@ public abstract class ChartViewSkin extends ComponentSkin
     }
 
     // Chart view events
+    public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
+        repaintComponent();
+    }
+
     public void seriesNameKeyChanged(ChartView chartView, String previousSeriesNameKey) {
         repaintComponent();
     }
@@ -119,7 +123,11 @@ public abstract class ChartViewSkin extends ComponentSkin
         repaintComponent();
     }
 
-    public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
+    public void horizontalAxisLabelChanged(ChartView chartView, String previousHorizontalAxisLabel) {
+        repaintComponent();
+    }
+
+    public void verticalAxisLabelChanged(ChartView chartView, String previousVerticalAxisLabel) {
         repaintComponent();
     }
 

@@ -23,10 +23,10 @@ public class PieChartViewSkin extends ChartViewSkin {
         ChartEntity chartEntity = getChartEntityAt(x, y);
         if (chartEntity instanceof PieSectionEntity) {
             PieSectionEntity pieSectionEntity = (PieSectionEntity)chartEntity;
-            String categoryKey = (String)pieSectionEntity.getSectionKey();
+            int sectionIndex = pieSectionEntity.getSectionIndex();
             int seriesIndex = pieSectionEntity.getPieIndex();
 
-            element = new ChartView.Element(categoryKey, seriesIndex);
+            element = new ChartView.Element(seriesIndex, sectionIndex);
         }
 
         return element;
@@ -36,9 +36,12 @@ public class PieChartViewSkin extends ChartViewSkin {
         PieChartView chartView = (PieChartView)getComponent();
 
         String title = chartView.getTitle();
-        SeriesDataset dataset = new SeriesDataset(chartView.getCategories(),
+        CategorySeriesDataset dataset = new CategorySeriesDataset(chartView.getCategories(),
             chartView.getSeriesNameKey(), chartView.getChartData());
         boolean showLegend = chartView.getShowLegend();
+
+        // TODO Modify plot based on style properties before returning chart;
+        // style setters should call repaintComponent()
 
         return ChartFactory.createMultiplePieChart(title, dataset, TableOrder.BY_ROW,
             showLegend, false, false);
