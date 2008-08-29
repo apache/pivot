@@ -32,10 +32,23 @@ public class Element implements Dictionary<String, Object>, List<Object> {
         }
     }
 
+    private String tagName;
     private HashMap<String, Object> dictionary = new HashMap<String, Object>();
     private ArrayList<Object> list = new ArrayList<Object>();
 
     private ListListenerList<Object> listListeners = new ListListenerList<Object>();
+
+    public Element(String tagName) {
+        if (tagName == null) {
+            throw new IllegalArgumentException("tagName is null.");
+        }
+
+        this.tagName = tagName;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
 
     // Dictionary methods
     public Object get(String key) {

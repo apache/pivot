@@ -165,6 +165,7 @@ public class WTKXSerializer implements Serializer {
 
                         String prefix = reader.getPrefix();
                         String localName = reader.getLocalName();
+                        String tagName = (prefix == null ? "" : prefix + ":") + localName;
 
                         if (prefix != null
                             && prefix.equals(WTKX_PREFIX)) {
@@ -297,7 +298,7 @@ public class WTKXSerializer implements Serializer {
 
                                 if (parentNode.value instanceof Element) {
                                     // The element represents a nested untyped object
-                                    nodeValue = new Element();
+                                    nodeValue = new Element(tagName);
                                 } else {
                                     // The element represents a property of a typed parent object
                                     parentBeanDictionary = new BeanDictionary(parentNode.value);
@@ -312,7 +313,7 @@ public class WTKXSerializer implements Serializer {
                                     } else {
                                         // The element represents a writable property; the property
                                         // value will be set when the closing tag is processed
-                                        nodeValue = new Element();
+                                        nodeValue = new Element(tagName);
                                     }
                                 }
                             }
@@ -342,6 +343,7 @@ public class WTKXSerializer implements Serializer {
                     case XMLStreamConstants.END_ELEMENT: {
                         String prefix = reader.getPrefix();
                         String localName = reader.getLocalName();
+                        String tagName = (prefix == null ? "" : prefix + ":") + localName;
 
                         // Get the node for this element
                         Node node = nodeStack.pop();
@@ -400,7 +402,7 @@ public class WTKXSerializer implements Serializer {
                                         }
                                     } catch(PropertyNotFoundException exception) {
                                         System.out.println(attribute + " is not a valid attribute for the "
-                                            + (prefix == null ? "" : prefix + ":") + localName + " tag.");
+                                            + tagName + " tag.");
                                     }
                                 }
                             }

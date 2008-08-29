@@ -614,6 +614,13 @@ public abstract class Component implements Visual {
             throw new IllegalStateException(this + " has no skin.");
         }
 
+        // If the mouse is currently over this component, set the cursor
+        // to the default
+        if (mouseOver) {
+            Mouse.setCursor(Cursor.DEFAULT);
+            mouseOver = false;
+        }
+
         // If this component is being removed from the component hierarchy
         // and is currently focused, clear the focus
         if (parent == null
