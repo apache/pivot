@@ -99,7 +99,7 @@ public class FixedColumnTable implements Application {
 
     public boolean shutdown(boolean optional) {
         window.close();
-        return false;
+        return true;
     }
 
     public void suspend() {

@@ -71,8 +71,7 @@ public class DecoratorDemo implements Application {
     public boolean shutdown(boolean optional) {
         reflectionWindow.close();
         fadeFrame.close();
-
-        return false;
+        return true;
     }
 
     public void suspend() {
