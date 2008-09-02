@@ -29,7 +29,6 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.RadioButton;
-import pivot.wtk.Rectangle;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
@@ -147,9 +146,9 @@ public class RadioButtonSkin extends ButtonSkin
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.draw(new Rectangle(BUTTON_DIAMETER + 1, 0,
+            graphics.drawRect(BUTTON_DIAMETER + 1, 0,
                 dataRenderer.getWidth() + spacing * 2 - 2,
-                dataRenderer.getHeight() - 1));
+                dataRenderer.getHeight() - 1);
         }
     }
 

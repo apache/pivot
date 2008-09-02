@@ -20,7 +20,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.Toolkit;
-import java.awt.Shape;
 import java.awt.Transparency;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
@@ -121,8 +120,8 @@ public abstract class ApplicationContext {
             // (for some reason, AWT does not do this automatically)
             ((Graphics2D)graphics).clip(new java.awt.Rectangle(0, 0, getWidth(), getHeight()));
 
-            Shape clip = graphics.getClip();
-            java.awt.Rectangle clipBounds = (clip == null) ? getBounds() : clip.getBounds();
+            java.awt.Rectangle clipBounds = graphics.getClipBounds();
+            System.out.println(clipBounds);
 
             if (!clipBounds.isEmpty()) {
                 try {
@@ -156,11 +155,9 @@ public abstract class ApplicationContext {
         private boolean paintBuffered(Graphics2D graphics) {
             boolean painted = false;
 
-            Shape clip = graphics.getClip();
-            java.awt.Rectangle clipBounds = (clip == null) ? getBounds() : clip.getBounds();
-
             // Paint the display into an offscreen buffer
             GraphicsConfiguration gc = graphics.getDeviceConfiguration();
+            java.awt.Rectangle clipBounds = graphics.getClipBounds();
             java.awt.image.BufferedImage bufferedImage =
                 gc.createCompatibleImage(clipBounds.width, clipBounds.height,
                     BACK_BUFFER_TRANSPARENCY);
@@ -197,11 +194,9 @@ public abstract class ApplicationContext {
         private boolean paintVolatileBuffered(Graphics2D graphics) {
             boolean painted = false;
 
-            Shape clip = graphics.getClip();
-            java.awt.Rectangle clipBounds = (clip == null) ? getBounds() : clip.getBounds();
-
             // Paint the display into a volatile offscreen buffer
             GraphicsConfiguration gc = graphics.getDeviceConfiguration();
+            java.awt.Rectangle clipBounds = graphics.getClipBounds();
             java.awt.image.VolatileImage volatileImage =
                 gc.createCompatibleVolatileImage(clipBounds.width, clipBounds.height,
                     BACK_BUFFER_TRANSPARENCY);
@@ -563,7 +558,25 @@ public abstract class ApplicationContext {
 
     protected void repaint(int x, int y, int width, int height) {
         if (displayHost != null) {
-            displayHost.repaint(x, y, width, height);
+            // Ensure that the repaint call is properly bounded (some
+            // implementations of AWT do not properly clip the repaint call
+            // when x or y is negative: the negative value is converted to 0,
+            // but the width/height is not adjusted)
+            if (x < 0) {
+                width = Math.max(width + x, 0);
+                x = 0;
+            }
+
+            if (y < 0) {
+                height = Math.max(height + y, 0);
+                y = 0;
+            }
+
+            if (width > 0
+                && height > 0) {
+                System.out.println(x + ", " + y + " " + width + "x" + height);
+                displayHost.repaint(x, y, width, height);
+            }
         }
     }
 

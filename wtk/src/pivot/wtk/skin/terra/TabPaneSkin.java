@@ -33,7 +33,7 @@ import pivot.wtk.Insets;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
 import pivot.wtk.Panorama;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.TabPane;
 import pivot.wtk.TabPaneListener;
 import pivot.wtk.TabPaneSelectionListener;
@@ -223,13 +223,13 @@ public class TabPaneSkin extends ContainerSkin
             graphics.setStroke(new BasicStroke());
 
             // Paint the background
-            Rectangle bounds = new Rectangle(0, 0, width - 1, height - 1);
+            Bounds bounds = new Bounds(0, 0, width - 1, height - 1);
             graphics.setPaint(backgroundColor);
-            graphics.fill(bounds);
+            graphics.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
             // Draw the border
             graphics.setPaint(borderColor);
-            graphics.draw(bounds);
+            graphics.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
             // Draw the divider for the selected tab
             Line2D.Double bevelLine = new Line2D.Double(1, 1, width - 2, 1);
@@ -568,7 +568,7 @@ public class TabPaneSkin extends ContainerSkin
     public void paint(Graphics2D graphics) {
         TabPane tabPane = (TabPane)getComponent();
 
-        Rectangle tabPaneBounds = tabPane.getBounds();
+        Bounds tabPaneBounds = tabPane.getBounds();
 
         // Call the base class to paint the background
         super.paint(graphics);
@@ -604,18 +604,18 @@ public class TabPaneSkin extends ContainerSkin
             }
         }
 
-        Rectangle contentBounds = new Rectangle(x, y, width, height);
+        Bounds contentBounds = new Bounds(x, y, width, height);
 
         if (!contentBounds.isEmpty()) {
             // If a tab is selected, paint the active background color; otherwise,
             // paint the inactive background color
             int selectedIndex = tabPane.getSelectedIndex();
             graphics.setPaint((selectedIndex == -1) ? inactiveTabColor : activeTabColor);
-            graphics.fill(contentBounds);
+            graphics.fillRect(contentBounds.x, contentBounds.y, contentBounds.width, contentBounds.height);
 
             // Draw the border
             graphics.setPaint(borderColor);
-            graphics.draw(contentBounds);
+            graphics.drawRect(contentBounds.x, contentBounds.y, contentBounds.width, contentBounds.height);
 
             // Draw the bevel for vertical tabs
             if (tabOrientation == Orientation.VERTICAL) {

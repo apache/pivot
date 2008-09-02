@@ -29,7 +29,7 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Checkbox;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
@@ -166,9 +166,9 @@ public class CheckboxSkin extends ButtonSkin
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.draw(new Rectangle(CHECKBOX_SIZE + 1, 0,
+            graphics.drawRect(CHECKBOX_SIZE + 1, 0,
                 dataRenderer.getWidth() + spacing * 2 - 2,
-                dataRenderer.getHeight() - 1));
+                dataRenderer.getHeight() - 1);
         }
     }
 
@@ -195,12 +195,12 @@ public class CheckboxSkin extends ButtonSkin
         graphics.translate(0, (height - CHECKBOX_SIZE) / 2);
 
         // Paint the border
-        Rectangle buttonRectangle = new Rectangle(0, 0,
+        Bounds buttonRectangle = new Bounds(0, 0,
             CHECKBOX_SIZE - 1, CHECKBOX_SIZE - 1);
         graphics.setPaint(buttonColor);
-        graphics.fill(buttonRectangle);
+        graphics.fillRect(buttonRectangle.x, buttonRectangle.y, buttonRectangle.width, buttonRectangle.height);
         graphics.setPaint(buttonBorderColor);
-        graphics.draw(buttonRectangle);
+        graphics.drawRect(buttonRectangle.x, buttonRectangle.y, buttonRectangle.width, buttonRectangle.height);
 
         // Paint the bevel
         Line2D bevelLine = new Line2D.Double(1, 1, CHECKBOX_SIZE - 2, 1);

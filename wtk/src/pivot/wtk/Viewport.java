@@ -25,7 +25,7 @@ import pivot.util.ListenerList;
  */
 public abstract class Viewport extends Container {
     public interface Skin extends pivot.wtk.Skin {
-        public Rectangle getViewportBounds();
+        public Bounds getViewportBounds();
     }
 
     private class ViewportListenerList extends ListenerList<ViewportListener>
@@ -125,7 +125,7 @@ public abstract class Viewport extends Container {
         }
     }
 
-    public Rectangle getViewportBounds() {
+    public Bounds getViewportBounds() {
         Viewport.Skin viewportSkin = (Viewport.Skin)getSkin();
         return viewportSkin.getViewportBounds();
     }

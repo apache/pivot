@@ -15,12 +15,10 @@
  */
 package pivot.wtk;
 
-import java.awt.geom.Point2D;
-
 import pivot.collections.Dictionary;
 import pivot.serialization.JSONSerializer;
 
-public class Point extends Point2D {
+public class Point {
     public int x = 0;
     public int y = 0;
 
@@ -55,19 +53,6 @@ public class Point extends Point2D {
         this(point.x, point.y);
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setLocation(double x, double y) {
-        this.x = (int)Math.round(x);
-        this.y = (int)Math.round(y);
-    }
-
     public void translate(int dx, int dy) {
         this.x += dx;
         this.y += dy;
@@ -80,9 +65,6 @@ public class Point extends Point2D {
             Point point = (Point)object;
             equals = (x == point.x
                 && y == point.y);
-        }
-        else {
-            equals = super.equals(object);
         }
 
         return equals;

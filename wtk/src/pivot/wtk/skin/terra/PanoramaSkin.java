@@ -10,7 +10,7 @@ import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Panorama;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.Viewport;
 import pivot.wtk.ViewportListener;
 import pivot.wtk.content.ButtonDataRenderer;
@@ -353,9 +353,9 @@ public class PanoramaSkin extends ContainerSkin
         }
     }
 
-    public Rectangle getViewportBounds() {
+    public Bounds getViewportBounds() {
         // The viewport bounds is simply the skin's bounding rectangle
-        return new Rectangle(0, 0, getWidth(), getHeight());
+        return new Bounds(0, 0, getWidth(), getHeight());
     }
 
     public Color getButtonColor() {

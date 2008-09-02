@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.Decorator;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 
 /**
  * TODO Make gradient properties configurable.
@@ -71,11 +71,11 @@ public class ReflectionDecorator implements Decorator {
         reflectionGraphics.dispose();
     }
 
-    public Rectangle getBounds(Component component) {
+    public Bounds getBounds(Component component) {
         int width = component.getWidth();
         int height = component.getHeight();
 
-        return new Rectangle(0, height, width, height);
+        return new Bounds(0, height, width, height);
     }
 
     public void repaint(Component component, int x, int y, int width, int height) {

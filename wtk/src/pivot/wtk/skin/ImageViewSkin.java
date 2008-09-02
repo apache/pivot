@@ -24,7 +24,6 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
 import pivot.wtk.ImageViewListener;
-import pivot.wtk.Rectangle;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
@@ -110,8 +109,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
         if (backgroundColor != null) {
             graphics.setPaint(backgroundColor);
-            Rectangle bounds = new Rectangle(0, 0, getWidth(), getHeight());
-            graphics.fill(bounds);
+            graphics.fillRect(0, 0, getWidth(), getHeight());
         }
 
         Image image = imageView.getImage();
@@ -130,7 +128,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
             if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
                 imageWidth = width;
             } else {
-                imageWidth = imageSize.getWidth() * scaleX;
+                imageWidth = (double)imageSize.width * scaleX;
 
                 switch (horizontalAlignment) {
                     case LEFT: {
@@ -153,7 +151,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
             if (verticalAlignment == VerticalAlignment.JUSTIFY) {
                 imageHeight = height;
             } else {
-                imageHeight = imageSize.getHeight() * scaleY;
+                imageHeight = (double)imageSize.height * scaleY;
 
                 switch (verticalAlignment) {
                     case TOP: {

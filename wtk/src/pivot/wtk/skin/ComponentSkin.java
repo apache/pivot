@@ -23,7 +23,7 @@ import pivot.wtk.ComponentStateListener;
 import pivot.wtk.Direction;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.Skin;
 import pivot.wtk.Tooltip;
 import pivot.wtk.media.Image;
@@ -199,7 +199,7 @@ public abstract class ComponentSkin implements Skin, ComponentStateListener {
         }
     }
 
-    protected void repaintComponent(Rectangle area) {
+    protected void repaintComponent(Bounds area) {
         assert (area != null) : "area is null.";
 
         if (component != null) {

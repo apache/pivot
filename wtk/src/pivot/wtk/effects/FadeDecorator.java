@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 import pivot.wtk.Component;
 import pivot.wtk.Decorator;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 
 public class FadeDecorator implements Decorator {
     private float opacity;
@@ -40,8 +40,8 @@ public class FadeDecorator implements Decorator {
         // No-op
     }
 
-    public Rectangle getBounds(Component component) {
-        return new Rectangle(0, 0, component.getWidth(), component.getHeight());
+    public Bounds getBounds(Component component) {
+        return new Bounds(0, 0, component.getWidth(), component.getHeight());
     }
 
     public void repaint(Component component, int x, int y, int width, int height) {

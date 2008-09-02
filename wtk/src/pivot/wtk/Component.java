@@ -1092,12 +1092,11 @@ public abstract class Component implements Visual {
      * Returns the component's bounding area.
      *
      * @return
-     * A rectangle containing the component's horizontal and vertical
-     * position relative to the origin of the parent container and the width
-     * and height of the component.
+     * The component's bounding area. The <tt>x</tt> and <tt>y</tt> values are
+     * relative to the parent container.
      */
-    public Rectangle getBounds() {
-        return new Rectangle(x, y, getWidth(), getHeight());
+    public Bounds getBounds() {
+        return new Bounds(x, y, getWidth(), getHeight());
     }
 
     /**
@@ -1105,15 +1104,15 @@ public abstract class Component implements Visual {
      * areas of its decorators.
      *
      * @return
-     * A rectangle containing the bounding area of the component and its
-     * decorators. The <tt>x</tt> and <tt>y</tt> values of the rectangle are
-     * relative to the parent container.
+     * The union of the component's bounding area with the bounding areas of
+     * its decorators. The <tt>x</tt> and <tt>y</tt> values are relative to the
+     * parent container.
      */
-    public Rectangle getDecoratedBounds() {
-        Rectangle bounds = new Rectangle(0, 0, getWidth(), getHeight());
+    public Bounds getDecoratedBounds() {
+        Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
 
         for (Decorator decorator : decorators) {
-            bounds.add(decorator.getBounds(this));
+            bounds.union(decorator.getBounds(this));
         }
 
         bounds.x += x;
@@ -1330,7 +1329,7 @@ public abstract class Component implements Visual {
      *
      * @param area
      */
-    public void scrollAreaToVisible(Rectangle area) {
+    public void scrollAreaToVisible(Bounds area) {
         if (area == null) {
             throw new IllegalArgumentException("area is null.");
         }
@@ -1356,7 +1355,7 @@ public abstract class Component implements Visual {
                 Component view = viewport.getView();
 
                 try {
-                    Rectangle viewportBounds = viewport.getViewportBounds();
+                    Bounds viewportBounds = viewport.getViewportBounds();
 
                     int deltaX = 0;
 
@@ -1486,7 +1485,7 @@ public abstract class Component implements Visual {
      *
      * @param area
      */
-    public final void repaint(Rectangle area) {
+    public final void repaint(Bounds area) {
         repaint(area, false);
     }
 
@@ -1497,7 +1496,7 @@ public abstract class Component implements Visual {
      * @param area
      * @param immediate
      */
-    public final void repaint(Rectangle area, boolean immediate) {
+    public final void repaint(Bounds area, boolean immediate) {
         if (area == null) {
             throw new IllegalArgumentException("area is null.");
         }

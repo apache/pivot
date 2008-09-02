@@ -43,7 +43,7 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Panorama;
 import pivot.wtk.Point;
 import pivot.wtk.Popup;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.Window;
 import pivot.wtk.skin.ButtonSkin;
 
@@ -240,8 +240,8 @@ public class ListButtonSkin extends ButtonSkin
 
         // Paint the background
         graphics.setPaint(backgroundColor);
-        Rectangle bounds = new Rectangle(0, 0, getWidth(), getHeight());
-        graphics.fill(bounds);
+        Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
+        graphics.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
         // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
@@ -254,13 +254,13 @@ public class ListButtonSkin extends ButtonSkin
         // Paint the border
         graphics.setPaint(borderColor);
 
-        Rectangle contentBounds = new Rectangle(0, 0,
+        Bounds contentBounds = new Bounds(0, 0,
             Math.max(bounds.width - TRIGGER_WIDTH - 1, 0), Math.max(bounds.height - 1, 0));
-        graphics.draw(contentBounds);
+        graphics.drawRect(contentBounds.x, contentBounds.y, contentBounds.width, contentBounds.height);
 
-        Rectangle triggerBounds = new Rectangle(Math.max(bounds.width - TRIGGER_WIDTH - 1, 0), 0,
+        Bounds triggerBounds = new Bounds(Math.max(bounds.width - TRIGGER_WIDTH - 1, 0), 0,
             TRIGGER_WIDTH, Math.max(bounds.height - 1, 0));
-        graphics.draw(triggerBounds);
+        graphics.drawRect(triggerBounds.x, triggerBounds.y, triggerBounds.width, triggerBounds.height);
 
         // Paint the content
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
@@ -285,8 +285,8 @@ public class ListButtonSkin extends ButtonSkin
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.draw(new Rectangle(2, 2, Math.max(contentBounds.width - 4, 0),
-                Math.max(contentBounds.height - 4, 0)));
+            graphics.drawRect(2, 2, Math.max(contentBounds.width - 4, 0),
+                Math.max(contentBounds.height - 4, 0));
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_OFF);

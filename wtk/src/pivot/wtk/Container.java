@@ -16,8 +16,6 @@
 package pivot.wtk;
 
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 import pivot.collections.ArrayList;
@@ -170,7 +168,7 @@ public abstract class Container extends Component
         if (count > 0) {
             // Set the removed components' parent to null and repaint the area
             // formerly occupied by the components
-            Rectangle repaintArea = null;
+            Bounds repaintArea = null;
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 Component component = removed.get(i);
                 component.setParent(null);
@@ -179,7 +177,7 @@ public abstract class Container extends Component
                     repaintArea = component.getDecoratedBounds();
                 }
                 else {
-                    repaintArea.add(component.getDecoratedBounds());
+                    repaintArea.union(component.getDecoratedBounds());
                 }
             }
 
@@ -232,7 +230,7 @@ public abstract class Container extends Component
         while (i >= 0) {
             component = components.get(i);
             if (component.isVisible()) {
-                Rectangle bounds = component.getBounds();
+                Bounds bounds = component.getBounds();
                 if (bounds.contains(x, y)) {
                     break;
                 }
@@ -314,11 +312,10 @@ public abstract class Container extends Component
         super.paint(containerGraphics);
         containerGraphics.dispose();
 
-        Shape clip = graphics.getClip();
-        Rectangle2D clipBounds = (clip == null) ? getBounds() : clip.getBounds();
+        Bounds clipBounds = new Bounds(graphics.getClipBounds());
 
         for (Component component : this) {
-            Rectangle decoratedBounds = component.getDecoratedBounds();
+            Bounds decoratedBounds = component.getDecoratedBounds();
 
             // Only paint components that are visible and intersect the
             // current clip rectangle

@@ -492,9 +492,9 @@ public class TablePane extends Container {
      */
     public interface Skin extends pivot.wtk.Skin {
         public int getRowAt(int y);
-        public Rectangle getRowBounds(int row);
+        public Bounds getRowBounds(int row);
         public int getColumnAt(int x);
-        public Rectangle getColumnBounds(int column);
+        public Bounds getColumnBounds(int column);
     }
 
     /**

@@ -252,7 +252,7 @@ public class TreeView extends Component {
 
     public interface Skin extends pivot.wtk.Skin {
         public Sequence<Integer> getNodeAt(int y);
-        public Rectangle getNodeBounds(Sequence<Integer> path);
+        public Bounds getNodeBounds(Sequence<Integer> path);
         public int getNodeOffset(Sequence<Integer> path);
     }
 
@@ -775,7 +775,7 @@ public class TreeView extends Component {
         return treeViewSkin.getNodeAt(y);
     }
 
-    public Rectangle getNodeBounds(Sequence<Integer> path) {
+    public Bounds getNodeBounds(Sequence<Integer> path) {
         TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
         return treeViewSkin.getNodeBounds(path);
     }

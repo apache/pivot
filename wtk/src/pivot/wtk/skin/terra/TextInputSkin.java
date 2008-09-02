@@ -41,7 +41,7 @@ import pivot.wtk.Display;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.TextInput;
 import pivot.wtk.TextInputListener;
 import pivot.wtk.TextInputCharacterListener;
@@ -391,17 +391,15 @@ public class TextInputSkin extends ComponentSkin
 
         // Paint the background
         graphics.setPaint(backgroundColor);
-        Rectangle bounds = new Rectangle(0, 0, getWidth(), getHeight());
-        graphics.fill(bounds);
+        Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
+        graphics.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
         // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
 
         // Paint the border
-        Rectangle borderRectangle = new Rectangle(0, 0,
-            bounds.width - 1, bounds.height - 1);
         graphics.setPaint(borderColor);
-        graphics.draw(borderRectangle);
+        graphics.drawRect(0, 0, bounds.width - 1, bounds.height - 1);
 
         // Paint the bevel
         Line2D bevelLine = new Line2D.Double(1, 1, bounds.width - 2, 1);

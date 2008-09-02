@@ -26,7 +26,7 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import pivot.wtk.Component;
 import pivot.wtk.Decorator;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 
 /**
  * Adds drop shadows to components.
@@ -151,8 +151,8 @@ public class DropShadowDecorator implements Decorator {
         graphics.drawImage(componentImage, 0, 0, null);
     }
 
-    public Rectangle getBounds(Component component) {
-        return new Rectangle(0, 0, component.getWidth() + blurRadius * 2,
+    public Bounds getBounds(Component component) {
+        return new Bounds(0, 0, component.getWidth() + blurRadius * 2,
             component.getHeight() + blurRadius * 2);
     }
 

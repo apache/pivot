@@ -29,7 +29,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.SortDirection;
 import pivot.wtk.Span;
 import pivot.wtk.TableView;
@@ -383,13 +383,13 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         return columnIndex;
     }
 
-    public Rectangle getRowBounds(int rowIndex) {
+    public Bounds getRowBounds(int rowIndex) {
         int rowHeight = getRowHeight();
-        return new Rectangle(0, rowIndex * rowHeight, getWidth(), rowHeight);
+        return new Bounds(0, rowIndex * rowHeight, getWidth(), rowHeight);
     }
 
     @SuppressWarnings("unchecked")
-    public Rectangle getCellBounds(int rowIndex, int columnIndex) {
+    public Bounds getCellBounds(int rowIndex, int columnIndex) {
         TableView tableView = (TableView)getComponent();
         List<Object> tableData = (List<Object>)tableView.getTableData();
         Sequence<Integer> columnWidths = getColumnWidths();
@@ -412,7 +412,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
             cellX += (columnWidths.get(i) + 1);
         }
 
-        return new Rectangle(cellX, rowIndex * rowHeight,
+        return new Bounds(cellX, rowIndex * rowHeight,
             columnWidths.get(columnIndex), rowHeight);
     }
 
@@ -715,7 +715,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         super.mouseOut();
 
         if (highlightedIndex != -1) {
-            Rectangle rowBounds = getRowBounds(highlightedIndex);
+            Bounds rowBounds = getRowBounds(highlightedIndex);
             repaintComponent(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
         }
 
@@ -778,7 +778,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
         if (highlightedIndex != -1) {
-            Rectangle rowBounds = getRowBounds(highlightedIndex);
+            Bounds rowBounds = getRowBounds(highlightedIndex);
             repaintComponent(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
         }
 

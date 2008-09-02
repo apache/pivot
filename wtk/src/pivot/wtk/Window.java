@@ -798,13 +798,13 @@ public class Window extends Container {
         }
     }
 
-    public void align(Rectangle bounds,
+    public void align(Bounds bounds,
         HorizontalAlignment horizontalAlignment,
         VerticalAlignment verticalAlignment) {
         align(bounds, horizontalAlignment, 0, verticalAlignment, 0);
     }
 
-    public void align(Rectangle bounds,
+    public void align(Bounds bounds,
         HorizontalAlignment horizontalAlignment, int horizontalOffset,
         VerticalAlignment verticalAlignment, int verticalOffset) {
 

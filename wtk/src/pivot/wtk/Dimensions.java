@@ -54,23 +54,6 @@ public class Dimensions {
         this(dimensions.width, dimensions.height);
     }
 
-    public double getWidth() {
-        return width;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setSize(double width, double height) {
-        this.width = (int)Math.round(width);
-        this.height = (int)Math.round(height);
-    }
-
-    public final void setSize(Dimensions size) {
-        setSize(size.getWidth(), size.getHeight());
-    }
-
     public boolean equals(Object object) {
         boolean equals = false;
 

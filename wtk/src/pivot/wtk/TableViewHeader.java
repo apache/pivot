@@ -32,7 +32,7 @@ public class TableViewHeader extends Component {
      */
     public interface Skin extends pivot.wtk.Skin {
         public int getHeaderAt(int x);
-        public Rectangle getHeaderBounds(int index);
+        public Bounds getHeaderBounds(int index);
     }
 
     private class TableViewHeaderListenerList extends ListenerList<TableViewHeaderListener>
@@ -145,7 +145,7 @@ public class TableViewHeader extends Component {
      * @return
      * The bounding area of the header.
      */
-    public Rectangle getHeaderBounds(int index) {
+    public Bounds getHeaderBounds(int index) {
         TableViewHeader.Skin tableViewHeaderSkin = (TableViewHeader.Skin)getSkin();
         return tableViewHeaderSkin.getHeaderBounds(index);
     }

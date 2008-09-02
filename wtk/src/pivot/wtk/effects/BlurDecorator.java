@@ -22,7 +22,7 @@ import java.awt.image.Kernel;
 
 import pivot.wtk.Component;
 import pivot.wtk.Decorator;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 
 /**
  * Applies a blur to paint operations. Due to the computational complexity of
@@ -111,8 +111,8 @@ public class BlurDecorator implements Decorator {
         this.graphics.drawImage(bufferedImage, 0, 0, null);
     }
 
-    public Rectangle getBounds(Component component) {
-        return new Rectangle(0, 0, component.getWidth(), component.getHeight());
+    public Bounds getBounds(Component component) {
+        return new Bounds(0, 0, component.getWidth(), component.getHeight());
     }
 
     public void repaint(Component component, int x, int y, int width, int height) {

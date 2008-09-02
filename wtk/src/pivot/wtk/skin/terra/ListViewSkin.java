@@ -33,7 +33,7 @@ import pivot.wtk.ListViewItemListener;
 import pivot.wtk.ListViewItemStateListener;
 import pivot.wtk.ListViewSelectionDetailListener;
 import pivot.wtk.Mouse;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.Span;
 import pivot.wtk.skin.ComponentSkin;
 
@@ -204,12 +204,12 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         return index;
     }
 
-    public Rectangle getItemBounds(int index) {
+    public Bounds getItemBounds(int index) {
         ListView listView = (ListView)getComponent();
         ListView.ItemRenderer renderer = listView.getItemRenderer();
 
         int itemHeight = renderer.getPreferredHeight(-1);
-        return new Rectangle(0, index * itemHeight, getWidth(), itemHeight);
+        return new Bounds(0, index * itemHeight, getWidth(), itemHeight);
     }
 
     @Override
@@ -463,7 +463,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         super.mouseOut();
 
         if (highlightedIndex != -1) {
-            Rectangle itemBounds = getItemBounds(highlightedIndex);
+            Bounds itemBounds = getItemBounds(highlightedIndex);
             repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height);
         }
 
@@ -530,7 +530,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
     public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
         if (highlightedIndex != -1) {
-            Rectangle itemBounds = getItemBounds(highlightedIndex);
+            Bounds itemBounds = getItemBounds(highlightedIndex);
             repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height);
         }
 

@@ -41,7 +41,7 @@ import pivot.wtk.Label;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.PushButton;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
@@ -535,26 +535,28 @@ public abstract class AbstractFrameSkin extends WindowSkin {
         graphics.setStroke(new BasicStroke());
 
         // Draw the title area
-        Rectangle titleBarRectangle = new Rectangle(0, 0, width - 1, titleBarSize.height + 1);
+        Bounds titleBarRectangle = new Bounds(0, 0, width - 1, titleBarSize.height + 1);
         graphics.setPaint(window.isActive() ?
             TITLE_BAR_BACKGROUND_COLOR : INACTIVE_TITLE_BAR_BACKGROUND_COLOR);
-        graphics.fill(titleBarRectangle);
+        graphics.fillRect(titleBarRectangle.x, titleBarRectangle.y,
+            titleBarRectangle.width, titleBarRectangle.height);
 
         graphics.setPaint(window.isActive() ?
             TITLE_BAR_BORDER_COLOR : INACTIVE_TITLE_BAR_BORDER_COLOR);
-        graphics.draw(titleBarRectangle);
+        graphics.drawRect(titleBarRectangle.x, titleBarRectangle.y,
+            titleBarRectangle.width, titleBarRectangle.height);
 
-        Line2D titleBarBevelLine = new Line2D.Double(titleBarRectangle.x + 1, titleBarRectangle.y + 1,
-            titleBarRectangle.width - 1, titleBarRectangle.y + 1);
         graphics.setPaint(window.isActive() ?
             TITLE_BAR_BEVEL_COLOR : INACTIVE_TITLE_BAR_BEVEL_COLOR);
-        graphics.draw(titleBarBevelLine);
+        graphics.drawLine(titleBarRectangle.x + 1, titleBarRectangle.y + 1,
+            titleBarRectangle.width - 1, titleBarRectangle.y + 1);
 
         // Draw the content area
-        Rectangle contentAreaRectangle = new Rectangle(0, titleBarSize.height + 2,
+        Bounds contentAreaRectangle = new Bounds(0, titleBarSize.height + 2,
             width - 1, height - (titleBarSize.height + 3));
         graphics.setPaint(CONTENT_BORDER_COLOR);
-        graphics.draw(contentAreaRectangle);
+        graphics.drawRect(contentAreaRectangle.x, contentAreaRectangle.y,
+            contentAreaRectangle.width, contentAreaRectangle.height);
 
         Line2D contentAreaBevelLine = new Line2D.Double(contentAreaRectangle.x + 1, contentAreaRectangle.y + 1,
             contentAreaRectangle.width - 1, contentAreaRectangle.y + 1);
@@ -653,7 +655,7 @@ public abstract class AbstractFrameSkin extends WindowSkin {
 
         if (button == Mouse.Button.LEFT
             && !maximized) {
-            Rectangle titleBarBounds = titleBarFlowPane.getBounds();
+            Bounds titleBarBounds = titleBarFlowPane.getBounds();
 
             if (titleBarBounds.contains(x, y)) {
                 dragOffset = new Point(x, y);
@@ -662,7 +664,7 @@ public abstract class AbstractFrameSkin extends WindowSkin {
                 display.getComponentMouseListeners().add(moveMouseHandler);
                 display.getComponentMouseButtonListeners().add(moveMouseHandler);
             } else {
-                Rectangle resizeHandleBounds = resizeHandle.getBounds();
+                Bounds resizeHandleBounds = resizeHandle.getBounds();
 
                 if (resizeHandleBounds.contains(x, y)) {
                     dragOffset = new Point(getWidth() - x, getHeight() - y);

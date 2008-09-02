@@ -32,7 +32,6 @@ import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Rectangle;
 import pivot.wtk.skin.ComponentSkin;
 
 public abstract class ChartViewSkin extends ComponentSkin
@@ -100,7 +99,7 @@ public abstract class ChartViewSkin extends ComponentSkin
             bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.getGraphics();
 
-            Rectangle area = new Rectangle(0, 0, width, height);
+            java.awt.Rectangle area = new java.awt.Rectangle(0, 0, width, height);
             chart.setBackgroundPaint(backgroundColor);
             chart.draw(bufferedImageGraphics, area, chartRenderingInfo);
 

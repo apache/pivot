@@ -428,8 +428,8 @@ public class TableView extends Component {
     public interface Skin extends pivot.wtk.Skin {
         public int getRowAt(int y);
         public int getColumnAt(int x);
-        public Rectangle getRowBounds(int rowIndex);
-        public Rectangle getCellBounds(int rowIndex, int columnIndex);
+        public Bounds getRowBounds(int rowIndex);
+        public Bounds getCellBounds(int rowIndex, int columnIndex);
     }
 
     /**
@@ -1304,7 +1304,7 @@ public class TableView extends Component {
      * @return
      * The bounding area of the row.
      */
-    public Rectangle getRowBounds(int rowIndex) {
+    public Bounds getRowBounds(int rowIndex) {
         TableView.Skin tableViewSkin = (TableView.Skin)getSkin();
         return tableViewSkin.getRowBounds(rowIndex);
     }
@@ -1321,7 +1321,7 @@ public class TableView extends Component {
      * @return
      * The bounding area of the cell.
      */
-    public Rectangle getCellBounds(int rowIndex, int columnIndex) {
+    public Bounds getCellBounds(int rowIndex, int columnIndex) {
         TableView.Skin tableViewSkin = (TableView.Skin)getSkin();
         return tableViewSkin.getCellBounds(rowIndex, columnIndex);
     }

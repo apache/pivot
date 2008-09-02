@@ -20,7 +20,7 @@ import java.awt.image.BufferedImage;
 
 import pivot.wtk.Component;
 import pivot.wtk.Decorator;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 
 /**
  * Decorator that applies a grayscale conversion to all paint operations.
@@ -59,8 +59,8 @@ public class GrayscaleDecorator implements Decorator {
         graphics.drawImage(bufferedImage, 0, 0, null);
     }
 
-    public Rectangle getBounds(Component component) {
-        return new Rectangle(0, 0, component.getWidth(), component.getHeight());
+    public Bounds getBounds(Component component) {
+        return new Bounds(0, 0, component.getWidth(), component.getHeight());
     }
 
     public void repaint(Component component, int x, int y, int width, int height) {

@@ -19,6 +19,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
@@ -28,7 +29,7 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Point;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.TablePane;
 import pivot.wtk.TablePaneListener;
 import pivot.wtk.TablePaneAttributeListener;
@@ -541,7 +542,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                                 rowY -= (int)(((float)spacing * 0.5f) - 0.5f);
                             }
 
-                            Rectangle bounds = new Rectangle(columnX, rowY,
+                            Rectangle2D.Float bounds = new Rectangle2D.Float(columnX, rowY,
                                 columnWidth, rowHeight);
                             gridClip.subtract(new Area(bounds));
                         }
@@ -789,7 +790,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         return rowIndex;
     }
 
-    public Rectangle getRowBounds(int row) {
+    public Bounds getRowBounds(int row) {
         TablePane tablePane = (TablePane)getComponent();
 
         int width = getWidth();
@@ -804,7 +805,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             rowY += rowHeights[i] + spacing;
         }
 
-        return new Rectangle(0, rowY, width, rowHeights[row]);
+        return new Bounds(0, rowY, width, rowHeights[row]);
     }
 
     public int getColumnAt(int x) {
@@ -832,7 +833,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         return columnIndex;
     }
 
-    public Rectangle getColumnBounds(int column) {
+    public Bounds getColumnBounds(int column) {
         TablePane tablePane = (TablePane)getComponent();
 
         int width = getWidth();
@@ -847,7 +848,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             columnX += columnWidths[j] + spacing;
         }
 
-        return new Rectangle(columnX, 0, columnWidths[column], height);
+        return new Bounds(columnX, 0, columnWidths[column], height);
     }
 
     // TablePaneListener methods

@@ -32,7 +32,7 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.SortDirection;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewColumnListener;
@@ -273,8 +273,7 @@ public class TableViewHeaderSkin extends ComponentSkin
 
         // Paint the background
         graphics.setPaint(backgroundColor);
-        Rectangle bounds = new Rectangle(0, 0, width, height);
-        graphics.fill(bounds);
+        graphics.fillRect(0, 0, width, height);
 
         // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
@@ -396,8 +395,8 @@ public class TableViewHeaderSkin extends ComponentSkin
         return index;
     }
 
-    public Rectangle getHeaderBounds(int index) {
-        Rectangle headerBounds = null;
+    public Bounds getHeaderBounds(int index) {
+        Bounds headerBounds = null;
 
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
         TableView tableView = tableViewHeader.getTableView();
@@ -416,7 +415,7 @@ public class TableViewHeaderSkin extends ComponentSkin
                 cellX += (columnWidths.get(i) + 1);
             }
 
-            headerBounds = new Rectangle(cellX, 0, columnWidths.get(index), getHeight() - 1);
+            headerBounds = new Bounds(cellX, 0, columnWidths.get(index), getHeight() - 1);
         }
 
         return headerBounds;
@@ -687,7 +686,7 @@ public class TableViewHeaderSkin extends ComponentSkin
                 Cursor cursor = tableViewHeader.getCursor();
                 if (headerIndex != -1
                     && columnsResizable) {
-                    Rectangle headerBounds = getHeaderBounds(headerIndex);
+                    Bounds headerBounds = getHeaderBounds(headerIndex);
                     TableView.Column column = tableView.getColumns().get(headerIndex);
 
                     if (!column.isRelative()
@@ -724,7 +723,7 @@ public class TableViewHeaderSkin extends ComponentSkin
             int headerIndex = getHeaderAt(x);
 
             if (headerIndex != -1) {
-                Rectangle headerBounds = getHeaderBounds(headerIndex);
+                Bounds headerBounds = getHeaderBounds(headerIndex);
                 TableView.Column column = tableView.getColumns().get(headerIndex);
 
                 if (columnsResizable

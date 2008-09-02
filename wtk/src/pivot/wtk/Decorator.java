@@ -27,13 +27,13 @@ public interface Decorator {
     public void update();
 
     /**
-     * Returns the decorator's bounding rectangle.
+     * Returns the decorator's bounding area.
      *
      * @param component
      * @return
      * The bounds of the decorator relative to the component's origin.
      */
-    public Rectangle getBounds(Component component);
+    public Bounds getBounds(Component component);
 
     /**
      * Notifies the decorator that an area in the component has been repainted.

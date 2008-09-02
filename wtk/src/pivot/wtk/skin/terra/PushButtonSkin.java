@@ -27,7 +27,7 @@ import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.PushButton;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.skin.AbstractPushButtonSkin;
 
 public class PushButtonSkin extends AbstractPushButtonSkin {
@@ -115,17 +115,15 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
 
         // Paint the background
         graphics.setPaint(backgroundColor);
-        Rectangle bounds = new Rectangle(0, 0, getWidth(), getHeight());
-        graphics.fill(bounds);
+        Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
+        graphics.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
         // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
 
         // Paint the border
-        Rectangle borderRectangle = new Rectangle(0, 0,
-            bounds.width - 1, bounds.height - 1);
         graphics.setPaint(borderColor);
-        graphics.draw(borderRectangle);
+        graphics.drawRect(0, 0, bounds.width - 1, bounds.height - 1);
 
         // Paint the bevel
         Line2D bevelLine = new Line2D.Double(1, 1, bounds.width - 2, 1);
@@ -155,8 +153,8 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.draw(new Rectangle(2, 2, Math.max(bounds.width - 5, 0),
-                Math.max(bounds.height - 5, 0)));
+            graphics.drawRect(2, 2, Math.max(bounds.width - 5, 0),
+                Math.max(bounds.height - 5, 0));
         }
     }
 

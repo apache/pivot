@@ -20,7 +20,7 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.ScrollBar;
 import pivot.wtk.ScrollBarValueListener;
 import pivot.wtk.ScrollPane;
@@ -861,7 +861,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
     // Viewport.Skin methods
 
-    public Rectangle getViewportBounds() {
+    public Bounds getViewportBounds() {
         int x = 0;
         int y = 0;
         int width = getWidth();
@@ -893,7 +893,7 @@ public class ScrollPaneSkin extends ContainerSkin
             width -= verticalScrollBar.getWidth();
         }
 
-        return new Rectangle(x, y, width, height);
+        return new Bounds(x, y, width, height);
     }
 
     // ScrollPaneListener methods

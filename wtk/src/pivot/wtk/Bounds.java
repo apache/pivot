@@ -15,11 +15,10 @@
  */
 package pivot.wtk;
 
-import java.awt.geom.Rectangle2D;
 import pivot.collections.Dictionary;
 import pivot.serialization.JSONSerializer;
 
-public class Rectangle extends Rectangle2D {
+public class Bounds {
     public int x = 0;
     public int y = 0;
     public int width = 0;
@@ -30,14 +29,14 @@ public class Rectangle extends Rectangle2D {
     public static final String WIDTH_KEY = "width";
     public static final String HEIGHT_KEY = "height";
 
-    public Rectangle() {
+    public Bounds() {
     }
 
-    public Rectangle(String rectangle) {
+    public Bounds(String rectangle) {
         this(JSONSerializer.parseMap(rectangle));
     }
 
-    public Rectangle(Dictionary<String, ?> rectangle) {
+    public Bounds(Dictionary<String, ?> rectangle) {
         this(0, 0, 0, 0);
 
         if (rectangle.containsKey(X_KEY)) {
@@ -57,35 +56,23 @@ public class Rectangle extends Rectangle2D {
         }
     }
 
-    public Rectangle(int x, int y, int width, int height) {
+    public Bounds(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
     }
 
-    public Rectangle(Point origin, Dimensions size) {
+    public Bounds(Point origin, Dimensions size) {
         this(origin.x, origin.y, size.width, size.height);
     }
 
-    public Rectangle(Rectangle rectangle) {
+    public Bounds(Bounds rectangle) {
         this(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public double getHeight() {
-        return height;
+    protected Bounds(java.awt.Rectangle rectangle) {
+        this(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
     }
 
     public Point getLocation() {
@@ -96,39 +83,64 @@ public class Rectangle extends Rectangle2D {
         return new Dimensions(width, height);
     }
 
-    public void setBounds(double x, double y, double width, double height) {
-        this.x = (int)Math.floor(x);
-        this.y = (int)Math.floor(y);
-        this.width = (int)Math.ceil(x + width);
-        this.height = (int)Math.ceil(y + height);
+    public void union(Bounds rectangle) {
+        int x1 = Math.min(x, rectangle.x);
+        int y1 = Math.min(y, rectangle.y);
+        int x2 = Math.max(x + width, rectangle.x + rectangle.width);
+        int y2 = Math.max(y + height, rectangle.y + rectangle.height);
+
+        this.x = x1;
+        this.y = y1;
+        this.width = x2 - x1;
+        this.height = y2 - y1;
     }
 
-    public Rectangle createUnion(Rectangle rectangle) {
-        Rectangle destination = new Rectangle();
-        union(this, rectangle, destination);
-        return destination;
+    public void intersect(Bounds rectangle) {
+        int x1 = Math.max(x, rectangle.x);
+        int y1 = Math.max(y, rectangle.y);
+        int x2 = Math.min(x + width, rectangle.x + rectangle.width);
+        int y2 = Math.min(y + height, rectangle.y + rectangle.height);
+
+        this.x = x1;
+        this.y = y1;
+        this.width = x2 - x1;
+        this.height = y2 - y1;
     }
 
-    public Rectangle2D createUnion(Rectangle2D rectangle) {
-        Rectangle2D.Double destination = new Rectangle2D.Double();
-        union(this, rectangle, destination);
-        return destination;
+    public void translate(int dx, int dy) {
+        this.x += dx;
+        this.y += dy;
     }
 
-    public Rectangle createIntersection(Rectangle rectangle) {
-        Rectangle destination = new Rectangle();
-        intersect(this, rectangle, destination);
-        return destination;
+    public boolean contains(Point point) {
+        if (point == null) {
+            throw new IllegalArgumentException("point is null");
+        }
+
+        return contains(point.x, point.y);
     }
 
-    public Rectangle2D createIntersection(Rectangle2D rectangle) {
-        Rectangle2D.Double destination = new Rectangle2D.Double();
-        intersect(this, rectangle, destination);
-        return destination;
+    public boolean contains(int x, int y) {
+        return (x >= this.x
+            && y >= this.y
+            && x < this.x + width
+            && y < this.y + height);
     }
 
-    public void setRect(double x, double y, double width, double height) {
-        setBounds(x, y, width, height);
+    public boolean intersects(Bounds rectangle) {
+        if (rectangle == null) {
+            throw new IllegalArgumentException("rectangle is null");
+        }
+
+        return intersects(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+    }
+
+    public boolean intersects(int x, int y, int width, int height) {
+        return (!isEmpty()
+            && x + width > this.x
+            && y + height > this.y
+            && x < this.x + this.width
+            && y < this.y + this.height);
     }
 
     public boolean isEmpty() {
@@ -136,25 +148,15 @@ public class Rectangle extends Rectangle2D {
             || height <= 0);
     }
 
-    public int outcode(double x, double y) {
-        // TODO Is this the best way to do this? java.awt.Rectangle does
-        // something similar but warns of side effects related to bug 4320890.
-        Rectangle2D.Double rectangle = new Rectangle2D.Double(x, y, width, height);
-        return rectangle.outcode(x, y);
-    }
-
     public boolean equals(Object object) {
         boolean equals = false;
 
-        if (object instanceof Rectangle) {
-            Rectangle rectangle = (Rectangle)object;
+        if (object instanceof Bounds) {
+            Bounds rectangle = (Bounds)object;
             equals = (x == rectangle.x
                 && y == rectangle.y
                 && width == rectangle.width
                 && height == rectangle.height);
-        }
-        else {
-            equals = super.equals(object);
         }
 
         return equals;

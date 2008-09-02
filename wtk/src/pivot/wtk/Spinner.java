@@ -58,7 +58,7 @@ public class Spinner extends Container {
      * @author tvolkert
      */
     public interface Skin extends pivot.wtk.Skin {
-        public Rectangle getContentBounds();
+        public Bounds getContentBounds();
     }
 
     /**
@@ -499,7 +499,7 @@ public class Spinner extends Container {
      * @return
      * The bounding area of the spinner content.
      */
-    public Rectangle getContentBounds() {
+    public Bounds getContentBounds() {
         Spinner.Skin spinnerSkin = (Spinner.Skin)getSkin();
         return spinnerSkin.getContentBounds();
     }

@@ -31,7 +31,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.TreeView;
 import pivot.wtk.TreeViewListener;
 import pivot.wtk.TreeViewBranchListener;
@@ -809,8 +809,8 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * Gets the bounding box defined by the specified node, or <tt>null</tt>
      * if the node is not currently visible.
      */
-    protected Rectangle getNodeBounds(NodeInfo nodeInfo) {
-        Rectangle bounds = null;
+    protected Bounds getNodeBounds(NodeInfo nodeInfo) {
+        Bounds bounds = null;
 
         int index = visibleNodes.indexOf(nodeInfo);
 
@@ -818,7 +818,7 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
             int nodeHeight = getNodeHeight();
             int nodeY = index * (nodeHeight + VERTICAL_SPACING);
 
-            bounds = new Rectangle(0, nodeY, getWidth(), nodeHeight);
+            bounds = new Bounds(0, nodeY, getWidth(), nodeHeight);
         }
 
         return bounds;
@@ -965,7 +965,7 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * Repaints the region occupied by the specified node.
      */
     protected void repaintNode(NodeInfo nodeInfo) {
-        Rectangle bounds = getNodeBounds(nodeInfo);
+        Bounds bounds = getNodeBounds(nodeInfo);
         if (bounds != null) {
             repaintComponent(bounds);
         }
@@ -1245,7 +1245,7 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
         return path;
     }
 
-    public Rectangle getNodeBounds(Sequence<Integer> path) {
+    public Bounds getNodeBounds(Sequence<Integer> path) {
         NodeInfo nodeInfo = getNodeInfoAt(path);
         return getNodeBounds(nodeInfo);
     }

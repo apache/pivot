@@ -43,7 +43,7 @@ import pivot.wtk.Popup;
 import pivot.wtk.PushButton;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.ScrollPane;
 import pivot.wtk.Spinner;
 import pivot.wtk.TableView;
@@ -104,12 +104,12 @@ public class Demo implements Application {
                 List<Object> treeData = (List<Object>)editableTreeView.getTreeData();
                 Dictionary<String, Object> nodeData = (Dictionary<String, Object>)Sequence.Tree.get(treeData, path);
 
-                Rectangle nodeLabelBounds = editableTreeView.getNodeBounds(path);
+                Bounds nodeLabelBounds = editableTreeView.getNodeBounds(path);
                 int nodeLabelOffset = getNodeLabelOffset();
                 nodeLabelBounds.x += nodeLabelOffset;
                 nodeLabelBounds.width -= nodeLabelOffset;
 
-                Rectangle viewportBounds = editableTreeViewScrollPane.getViewportBounds();
+                Bounds viewportBounds = editableTreeViewScrollPane.getViewportBounds();
 
                 TextInput textInput = new TextInput();
                 textInput.setText((String)nodeData.get("label"));

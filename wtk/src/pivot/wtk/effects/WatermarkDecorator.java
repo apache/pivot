@@ -26,7 +26,7 @@ import pivot.wtk.FlowPane;
 import pivot.wtk.ImageView;
 import pivot.wtk.Label;
 import pivot.wtk.Orientation;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
@@ -303,8 +303,8 @@ public class WatermarkDecorator implements Decorator {
         watermarkGraphics.dispose();
     }
 
-    public Rectangle getBounds(Component component) {
-        return new Rectangle(0, 0, component.getWidth(), component.getHeight());
+    public Bounds getBounds(Component component) {
+        return new Bounds(0, 0, component.getWidth(), component.getHeight());
     }
 
     public void repaint(Component component, int x, int y, int width, int height) {

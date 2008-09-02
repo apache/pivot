@@ -28,7 +28,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
-import pivot.wtk.Rectangle;
+import pivot.wtk.Bounds;
 import pivot.wtk.Spinner;
 import pivot.wtk.SpinnerListener;
 import pivot.wtk.SpinnerSelectionListener;
@@ -338,8 +338,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
             // Paint the background
             graphics.setPaint(backgroundColor);
-            Rectangle rectangle = new Rectangle(0, 0, width, height);
-            graphics.fill(rectangle);
+            graphics.fillRect(0, 0, width, height);
 
             // Size the image to be proportional to our size
             int buttonImageWidth = (int)Math.floor((float)width / 2f);
@@ -798,7 +797,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
     // Spinner.Skin methods
 
-    public Rectangle getContentBounds() {
+    public Bounds getContentBounds() {
         return spinnerContent.getBounds();
     }
 
