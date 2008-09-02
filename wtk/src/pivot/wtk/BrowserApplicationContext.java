@@ -131,7 +131,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
         private class StopCallback implements Runnable {
             public void run() {
                 try {
-                    application.shutdown(true);
+                    application.shutdown(false);
                 } catch(Exception exception) {
                     Alert.alert(Alert.Type.ERROR, exception.getMessage(),
                         applicationContext.getDisplay());

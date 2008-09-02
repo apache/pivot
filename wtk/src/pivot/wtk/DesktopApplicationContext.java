@@ -68,7 +68,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     boolean shutdown = true;
 
                     try {
-                        shutdown = application.shutdown(false);
+                        shutdown = application.shutdown(true);
                     } catch(Exception exception) {
                         exception.printStackTrace();
                         Alert.alert(Alert.Type.ERROR, exception.getMessage(),
