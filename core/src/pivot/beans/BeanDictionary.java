@@ -178,7 +178,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
         Method setterMethod = getSetterMethod(key, valueType);
 
         if (setterMethod == null) {
-            throw new IllegalArgumentException("Property \"" + key + "\""
+            throw new PropertyNotFoundException("Property \"" + key + "\""
                 + " of type " + valueType.getName()
                 + " does not exist or is read-only.");
         }
