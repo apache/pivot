@@ -121,7 +121,6 @@ public abstract class ApplicationContext {
             ((Graphics2D)graphics).clip(new java.awt.Rectangle(0, 0, getWidth(), getHeight()));
 
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
-            System.out.println(clipBounds);
 
             if (!clipBounds.isEmpty()) {
                 try {
@@ -574,7 +573,6 @@ public abstract class ApplicationContext {
 
             if (width > 0
                 && height > 0) {
-                System.out.println(x + ", " + y + " " + width + "x" + height);
                 displayHost.repaint(x, y, width, height);
             }
         }
