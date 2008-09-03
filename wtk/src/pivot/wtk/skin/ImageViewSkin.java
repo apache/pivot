@@ -173,6 +173,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
             Graphics2D imageGraphics = (Graphics2D)graphics.create();
             imageGraphics.translate(imageX, imageY);
+            imageGraphics.scale(scaleX, scaleY);
             image.setSize((int)imageWidth, (int)imageHeight);
 
             imageGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
