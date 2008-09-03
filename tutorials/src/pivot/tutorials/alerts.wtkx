@@ -17,16 +17,18 @@ limitations under the License.
 
 <FlowPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <Border styles="{borderColor:'#999999'}">
-        <FlowPane styles="{padding:8}">
-            <FlowPane styles="{padding:{right:8}}">
-                <PushButton wtkx:id="errorAlertButton" buttonData="Error"/>
-                <PushButton wtkx:id="warningAlertButton" buttonData="Warning"/>
-                <PushButton wtkx:id="questionAlertButton" buttonData="Question"/>
-                <PushButton wtkx:id="infoAlertButton" buttonData="Info"/>
-            </FlowPane>
+        <content>
+            <FlowPane styles="{padding:8}">
+                <FlowPane styles="{padding:{right:8}}">
+                    <PushButton wtkx:id="errorAlertButton" buttonData="Error"/>
+                    <PushButton wtkx:id="warningAlertButton" buttonData="Warning"/>
+                    <PushButton wtkx:id="questionAlertButton" buttonData="Question"/>
+                    <PushButton wtkx:id="infoAlertButton" buttonData="Info"/>
+                </FlowPane>
 
-            <PushButton wtkx:id="customAlertButton" buttonData="Custom"/>
-        </FlowPane>
+                <PushButton wtkx:id="customAlertButton" buttonData="Custom"/>
+            </FlowPane>
+        </content>
     </Border>
 </FlowPane>
 

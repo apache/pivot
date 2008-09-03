@@ -17,24 +17,28 @@ limitations under the License.
 
 <FlowPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <Border styles="{borderColor:'#999999'}">
-        <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:12, right:4}}">
-            <Label text="Text Input" styles="{font:'Verdana bold 11'}"/>
-            <Form>
-                <fields>
-                    <TextInput Form.label="Basic" text="Pivot" textSize="12"/>
-                    <TextInput Form.label="Password"
-                        Form.flag="{alertType:'info', message:'This field has a maximum length of 12 characters.'}"
-                        password="true" text="pivot" textSize="12" maximumLength="12" />
-                </fields>
-            </Form>
-        </FlowPane>
+        <content>
+            <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:12, right:4}}">
+                <Label text="Text Input" styles="{font:'Verdana bold 11'}"/>
+                <Form>
+                    <fields>
+                        <TextInput Form.label="Basic" text="Pivot" textSize="12"/>
+                        <TextInput Form.label="Password"
+                            Form.flag="{alertType:'info', message:'This field has a maximum length of 12 characters.'}"
+                            password="true" text="pivot" textSize="12" maximumLength="12" />
+                    </fields>
+                </Form>
+            </FlowPane>
+        </content>
     </Border>
 
     <Border styles="{borderColor:'#999999'}">
-        <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:8, right:4}}">
-            <Label text="Label Wrapping" styles="{font:'Verdana bold 11'}"/>
-            <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,  sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                preferredWidth="320" styles="{font:'Times New Roman 13', wrapText:true}"/>
-        </FlowPane>
+        <content>
+            <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:8, right:4}}">
+                <Label text="Label Wrapping" styles="{font:'Verdana bold 11'}"/>
+                <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,  sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+                    preferredWidth="320" styles="{font:'Times New Roman 13', wrapText:true}"/>
+            </FlowPane>
+        </content>
     </Border>
 </FlowPane>

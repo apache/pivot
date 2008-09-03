@@ -17,19 +17,21 @@ limitations under the License.
 
 <Border styles="{borderColor:'#999999'}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
-    <FlowPane orientation="horizontal" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
-        <FlowPane orientation="vertical">
-            <Label text="Basic Spinner" styles="{font:'Verdana bold 11'}"/>
-            <Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']" circular="true" selectedIndex="0"
-                preferredWidth="60"/>
+    <content>
+        <FlowPane orientation="horizontal" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+            <FlowPane orientation="vertical">
+                <Label text="Basic Spinner" styles="{font:'Verdana bold 11'}"/>
+                <Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']" circular="true" selectedIndex="0"
+                    preferredWidth="60"/>
+            </FlowPane>
+            <FlowPane orientation="vertical">
+                <Label text="Numeric Spinner" styles="{font:'Verdana bold 11'}"/>
+                <Spinner wtkx:id="numericSpinner" preferredWidth="60"/>
+            </FlowPane>
+            <FlowPane orientation="vertical">
+                <Label text="Date Spinner" styles="{font:'Verdana bold 11'}"/>
+                <Spinner wtkx:id="dateSpinner" />
+            </FlowPane>
         </FlowPane>
-        <FlowPane orientation="vertical">
-            <Label text="Numeric Spinner" styles="{font:'Verdana bold 11'}"/>
-            <Spinner wtkx:id="numericSpinner" preferredWidth="60"/>
-        </FlowPane>
-        <FlowPane orientation="vertical">
-            <Label text="Date Spinner" styles="{font:'Verdana bold 11'}"/>
-            <Spinner wtkx:id="dateSpinner" />
-        </FlowPane>
-    </FlowPane>
+    </content>
 </Border>

@@ -33,38 +33,42 @@
 
         <TablePane.Row height="1*">
             <Border styles="{padding:0, borderColor:'#cccac2'}">
-                <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
-                    verticalScrollBarPolicy="fillToCapacity">
-                    <view>
-                        <TableView wtkx:id="stocksTableView" selectMode="multi"
-                            styles="{showHorizontalGridLines:false}">
-                            <columns>
-                                <TableView.Column name="symbol"
-                                    headerData="%symbol" width="80" />
-                                <TableView.Column name="value" headerData="%value" width="80">
-                                    <cellRenderer>
-                                        <content:TableViewNumberCellRenderer styles="{horizontalAlignment:'right'}"
-                                            numberFormat="$$0.00"/>
-                                    </cellRenderer>
-                                </TableView.Column>
-                                <TableView.Column name="change" headerData="%change" width="80">
-                                    <cellRenderer>
-                                        <stocktracker:ChangeCellRenderer styles="{horizontalAlignment:'right'}"
-                                            numberFormat="+0.00;-0.00"/>
-                                    </cellRenderer>
-                                </TableView.Column>
-                            </columns>
-                        </TableView>
-                    </view>
+                <content>
+                    <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
+                        verticalScrollBarPolicy="fillToCapacity">
+                        <view>
+                            <TableView wtkx:id="stocksTableView" selectMode="multi"
+                                styles="{showHorizontalGridLines:false}">
+                                <columns>
+                                    <TableView.Column name="symbol"
+                                        headerData="%symbol" width="80" />
+                                    <TableView.Column name="value" headerData="%value" width="80">
+                                        <cellRenderer>
+                                            <content:TableViewNumberCellRenderer styles="{horizontalAlignment:'right'}"
+                                                numberFormat="$$0.00"/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                    <TableView.Column name="change" headerData="%change" width="80">
+                                        <cellRenderer>
+                                            <stocktracker:ChangeCellRenderer styles="{horizontalAlignment:'right'}"
+                                                numberFormat="+0.00;-0.00"/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                </columns>
+                            </TableView>
+                        </view>
 
-                    <columnHeader>
-                        <TableViewHeader tableView="$stocksTableView" />
-                    </columnHeader>
-                </ScrollPane>
+                        <columnHeader>
+                            <TableViewHeader tableView="$stocksTableView" />
+                        </columnHeader>
+                    </ScrollPane>
+                </content>
             </Border>
 
             <Border styles="{padding:6, borderColor:'#cccac2'}">
-                <wtkx:include namespace="detail" src="stocktracker.detail.wtkx" />
+                <content>
+                    <wtkx:include namespace="detail" src="stocktracker.detail.wtkx" />
+                </content>
             </Border>
         </TablePane.Row>
 

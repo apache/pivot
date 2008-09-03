@@ -21,6 +21,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.ArrayStack;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
+import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
@@ -190,6 +191,19 @@ public class Window extends Container {
         }
 
         super.setParent(parent);
+    }
+
+    @Override
+    public Sequence<Component> remove(int index, int count) {
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = get(i);
+            if (component == content) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        // Call the base method to remove the components
+        return super.remove(index, count);
     }
 
     /**

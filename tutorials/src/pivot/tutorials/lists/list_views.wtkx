@@ -18,26 +18,28 @@ limitations under the License.
 <FlowPane styles="{padding:4, spacing:4}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <Border styles="{padding:0, borderColor:'#cccac2'}">
-        <ScrollPane preferredWidth="80" preferredHeight="110"
-            horizontalScrollBarPolicy="fill"
-            verticalScrollBarPolicy="fillToCapacity">
-            <view>
-                <ListView wtkx:id="listView" selectMode="multi">
-                    <listData>
-                        <item label="One"/>
-                        <item label="Two"/>
-                        <item label="Three"/>
-                        <item label="Four"/>
-                        <item label="Five"/>
-                        <item label="Six"/>
-                        <item label="Seven"/>
-                        <item label="Eight"/>
-                        <item label="Nine"/>
-                        <item label="Ten"/>
-                    </listData>
-                </ListView>
-            </view>
-        </ScrollPane>
+        <content>
+            <ScrollPane preferredWidth="80" preferredHeight="110"
+                horizontalScrollBarPolicy="fill"
+                verticalScrollBarPolicy="fillToCapacity">
+                <view>
+                    <ListView wtkx:id="listView" selectMode="multi">
+                        <listData>
+                            <item label="One"/>
+                            <item label="Two"/>
+                            <item label="Three"/>
+                            <item label="Four"/>
+                            <item label="Five"/>
+                            <item label="Six"/>
+                            <item label="Seven"/>
+                            <item label="Eight"/>
+                            <item label="Nine"/>
+                            <item label="Ten"/>
+                        </listData>
+                    </ListView>
+                </view>
+            </ScrollPane>
+        </content>
     </Border>
 
     <FlowPane orientation="vertical" preferredWidth="120" styles="{horizontalAlignment:'justify'}">

@@ -28,11 +28,13 @@
                     <TabPane tabOrientation="horizontal" selectedIndex="0">
                         <tabs>
                             <Border TabPane.label="%mainWindowComponentsTabName" styles="%commonBorderStyles">
-                                <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
-                                    <view>
-                                        <TreeView wtkx:id="trComponents"/>
-                                    </view>
-                                </ScrollPane>
+                                <content>
+                                    <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+                                        <view>
+                                            <TreeView wtkx:id="trComponents"/>
+                                        </view>
+                                    </ScrollPane>
+                                </content>
                             </Border>
                         </tabs>
                     </TabPane>
@@ -41,34 +43,40 @@
                     <TabPane tabOrientation="horizontal" selectedIndex="0">
                         <tabs>
                             <Border TabPane.label="%mainWindowPropertiesTabName" styles="%commonBorderStyles">
-                                <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
-                                    <view>
-                                        <explorer:PropertySheet wtkx:id="tbProperties" selectMode="single"/>
-                                    </view>
-                                    <columnHeader>
-                                        <TableViewHeader wtkx:id="tbPropertiesHeader" tableView="$tbProperties" />
-                                    </columnHeader>
-                                </ScrollPane>
+                                <content>
+                                    <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+                                        <view>
+                                            <explorer:PropertySheet wtkx:id="tbProperties" selectMode="single"/>
+                                        </view>
+                                        <columnHeader>
+                                            <TableViewHeader wtkx:id="tbPropertiesHeader" tableView="$tbProperties" />
+                                        </columnHeader>
+                                    </ScrollPane>
+                                </content>
                             </Border>
                             <Border TabPane.label="%mainWindowStylesTabName" styles="%commonBorderStyles">
-                                <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
-                                    <view>
-                                        <explorer:PropertySheet wtkx:id="tbStyles" selectMode="single"/>
-                                    </view>
-                                    <columnHeader>
-                                        <TableViewHeader wtkx:id="tbStylesHeader" tableView="$tbStyles" />
-                                    </columnHeader>
-                                </ScrollPane>
+                                <content>
+                                    <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+                                        <view>
+                                            <explorer:PropertySheet wtkx:id="tbStyles" selectMode="single"/>
+                                        </view>
+                                        <columnHeader>
+                                            <TableViewHeader wtkx:id="tbStylesHeader" tableView="$tbStyles" />
+                                        </columnHeader>
+                                    </ScrollPane>
+                                </content>
                             </Border>
                             <Border wtkx:id="tabAttributes" TabPane.label="%mainWindowAttrbutesTabName" styles="%commonBorderStyles">
-                                <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
-                                    <view>
-                                        <explorer:PropertySheet wtkx:id="tbAttributes" selectMode="single"/>
-                                    </view>
-                                    <columnHeader>
-                                        <TableViewHeader wtkx:id="tbAttributesHeader" tableView="$tbAttributes" />
-                                    </columnHeader>
-                                </ScrollPane>
+                                <content>
+                                    <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+                                        <view>
+                                            <explorer:PropertySheet wtkx:id="tbAttributes" selectMode="single"/>
+                                        </view>
+                                        <columnHeader>
+                                            <TableViewHeader wtkx:id="tbAttributesHeader" tableView="$tbAttributes" />
+                                        </columnHeader>
+                                    </ScrollPane>
+                                </content>
                             </Border>
                         </tabs>
                     </TabPane>

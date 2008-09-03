@@ -18,67 +18,73 @@ limitations under the License.
 <Border styles="{borderColor:'#999999'}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
-    <FlowPane styles="{padding:4, spacing:8}">
-        <FlowPane orientation="vertical">
-            <Label text="Sortable" styles="{font:'Verdana bold 11'}"/>
-            <Border styles="{padding:0, borderColor:'#cccac2'}">
-                <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="276" preferredHeight="160">
-                    <view>
-                        <TableView wtkx:id="sortableTableView" selectMode="multi">
-                            <columns>
-                                <TableView.Column name="i" width="48"/>
-                                <TableView.Column name="a" width="48"/>
-                                <TableView.Column name="b" width="48"/>
-                                <TableView.Column name="c" width="48"/>
-                                <TableView.Column name="d" width="48"/>
-                                <TableView.Column name="e" width="1*"/>
-                            </columns>
-                        </TableView>
-                    </view>
-                    <columnHeader>
-                        <TableViewHeader wtkx:id="sortableTableViewHeader" tableView="$sortableTableView"/>
-                    </columnHeader>
-                </ScrollPane>
-            </Border>
+    <content>
+        <FlowPane styles="{padding:4, spacing:8}">
+            <FlowPane orientation="vertical">
+                <Label text="Sortable" styles="{font:'Verdana bold 11'}"/>
+                <Border styles="{padding:0, borderColor:'#cccac2'}">
+                    <content>
+                        <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="276" preferredHeight="160">
+                            <view>
+                                <TableView wtkx:id="sortableTableView" selectMode="multi">
+                                    <columns>
+                                        <TableView.Column name="i" width="48"/>
+                                        <TableView.Column name="a" width="48"/>
+                                        <TableView.Column name="b" width="48"/>
+                                        <TableView.Column name="c" width="48"/>
+                                        <TableView.Column name="d" width="48"/>
+                                        <TableView.Column name="e" width="1*"/>
+                                    </columns>
+                                </TableView>
+                            </view>
+                            <columnHeader>
+                                <TableViewHeader wtkx:id="sortableTableViewHeader" tableView="$sortableTableView"/>
+                            </columnHeader>
+                        </ScrollPane>
+                    </content>
+                </Border>
 
-        </FlowPane>
+            </FlowPane>
 
-        <FlowPane orientation="vertical">
-            <Label text="Custom Content" styles="{font:'Verdana bold 11'}"/>
-            <Border styles="{padding:0, borderColor:'#cccac2'}">
-                <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="160">
-                    <view>
-                        <TableView wtkx:id="customTableView" selectMode="multi"
-                            styles="{showHorizontalGridLines:false}">
-                            <columns>
-                                <TableView.Column name="a" width="20">
-                                    <headerData icon="@flag_red.png"/>
-                                    <cellRenderer>
-                                        <content:TableViewBooleanCellRenderer/>
-                                    </cellRenderer>
-                                </TableView.Column>
-                                <TableView.Column name="b" width="32" headerData="Icon">
-                                    <cellRenderer>
-                                        <content:TableViewImageCellRenderer/>
-                                    </cellRenderer>
-                                </TableView.Column>
-                                <TableView.Column name="c" width="1*" headerData="Name"/>
-                            </columns>
-                            <tableData>
-                                <row a="true" b="@anchor.png" c="Anchor"/>
-                                <row a="false" b="@bell.png" c="Bell"/>
-                                <row a="false" b="@clock.png" c="Clock"/>
-                                <row a="true" b="@cup.png" c="Cup"/>
-                                <row a="false" b="@house.png" c="House"/>
-                                <row a="true" b="@star.png" c="Star"/>
-                            </tableData>
-                        </TableView>
-                    </view>
-                    <columnHeader>
-                        <TableViewHeader tableView="$customTableView"/>
-                    </columnHeader>
-                </ScrollPane>
-            </Border>
+            <FlowPane orientation="vertical">
+                <Label text="Custom Content" styles="{font:'Verdana bold 11'}"/>
+                <Border styles="{padding:0, borderColor:'#cccac2'}">
+                    <content>
+                        <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="160">
+                            <view>
+                                <TableView wtkx:id="customTableView" selectMode="multi"
+                                    styles="{showHorizontalGridLines:false}">
+                                    <columns>
+                                        <TableView.Column name="a" width="20">
+                                            <headerData icon="@flag_red.png"/>
+                                            <cellRenderer>
+                                                <content:TableViewBooleanCellRenderer/>
+                                            </cellRenderer>
+                                        </TableView.Column>
+                                        <TableView.Column name="b" width="32" headerData="Icon">
+                                            <cellRenderer>
+                                                <content:TableViewImageCellRenderer/>
+                                            </cellRenderer>
+                                        </TableView.Column>
+                                        <TableView.Column name="c" width="1*" headerData="Name"/>
+                                    </columns>
+                                    <tableData>
+                                        <row a="true" b="@anchor.png" c="Anchor"/>
+                                        <row a="false" b="@bell.png" c="Bell"/>
+                                        <row a="false" b="@clock.png" c="Clock"/>
+                                        <row a="true" b="@cup.png" c="Cup"/>
+                                        <row a="false" b="@house.png" c="House"/>
+                                        <row a="true" b="@star.png" c="Star"/>
+                                    </tableData>
+                                </TableView>
+                            </view>
+                            <columnHeader>
+                                <TableViewHeader tableView="$customTableView"/>
+                            </columnHeader>
+                        </ScrollPane>
+                    </content>
+                </Border>
+            </FlowPane>
         </FlowPane>
-    </FlowPane>
+    </content>
 </Border>

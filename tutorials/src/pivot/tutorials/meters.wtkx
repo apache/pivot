@@ -17,27 +17,29 @@ limitations under the License.
 
 <Border styles="{borderColor:'#999999'}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
-    <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
-        <FlowPane styles="{spacing:6}">
-            <Meter percentage="0.4"/>
-            <Label text="40%"/>
+    <content>
+        <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
+            <FlowPane styles="{spacing:6}">
+                <Meter percentage="0.4"/>
+                <Label text="40%"/>
+            </FlowPane>
+            <FlowPane styles="{spacing:6}">
+                <Meter percentage="0.4" styles="{gridFrequency:0.1}"/>
+                <Label text="40%"/>
+            </FlowPane>
+            <FlowPane styles="{spacing:6}">
+                <Meter percentage="0.75"/>
+                <Label text="75%"/>
+            </FlowPane>
+            <FlowPane styles="{spacing:6}">
+                <Meter percentage="0.75" styles="{gridFrequency:0.1}"/>
+                <Label text="75%"/>
+            </FlowPane>
+            <FlowPane styles="{spacing:6}">
+                <Meter percentage="0.95" styles="{color:'#ff0000', gridColor:'#000000'}"/>
+                <Label text="Danger: 95%!"/>
+            </FlowPane>
         </FlowPane>
-        <FlowPane styles="{spacing:6}">
-            <Meter percentage="0.4" styles="{gridFrequency:0.1}"/>
-            <Label text="40%"/>
-        </FlowPane>
-        <FlowPane styles="{spacing:6}">
-            <Meter percentage="0.75"/>
-            <Label text="75%"/>
-        </FlowPane>
-        <FlowPane styles="{spacing:6}">
-            <Meter percentage="0.75" styles="{gridFrequency:0.1}"/>
-            <Label text="75%"/>
-        </FlowPane>
-        <FlowPane styles="{spacing:6}">
-            <Meter percentage="0.95" styles="{color:'#ff0000', gridColor:'#000000'}"/>
-            <Label text="Danger: 95%!"/>
-        </FlowPane>
-    </FlowPane>
+    </content>
 </Border>
 

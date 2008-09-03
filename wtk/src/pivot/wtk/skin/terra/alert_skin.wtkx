@@ -19,23 +19,25 @@ limitations under the License.
     preferredWidth="300"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <Border styles="{backgroundColor:'#e6e3da', borderColor:'#999999', padding:12}">
-        <TablePane styles="{spacing:12}">
-            <columns>
-                <TablePane.Column width="-1"/>
-                <TablePane.Column width="1*"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="-1">
-                    <FlowPane styles="{verticalAlignment:'top'}">
-                        <ImageView wtkx:id="typeImageView"/>
-                    </FlowPane>
-                    <FlowPane wtkx:id="messageFlowPane" orientation="vertical"
-                        styles="{spacing:10, horizontalAlignment:'justify'}">
-                        <Label wtkx:id="messageLabel" styles="{font:'Verdana bold 11', wrapText:true}"/>
-                    </FlowPane>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
+        <content>
+            <TablePane styles="{spacing:12}">
+                <columns>
+                    <TablePane.Column width="-1"/>
+                    <TablePane.Column width="1*"/>
+                </columns>
+                <rows>
+                    <TablePane.Row height="-1">
+                        <FlowPane styles="{verticalAlignment:'top'}">
+                            <ImageView wtkx:id="typeImageView"/>
+                        </FlowPane>
+                        <FlowPane wtkx:id="messageFlowPane" orientation="vertical"
+                            styles="{spacing:10, horizontalAlignment:'justify'}">
+                            <Label wtkx:id="messageLabel" styles="{font:'Verdana bold 11', wrapText:true}"/>
+                        </FlowPane>
+                    </TablePane.Row>
+                </rows>
+            </TablePane>
+        </content>
     </Border>
     <FlowPane wtkx:id="buttonFlowPane"
         styles="{horizontalAlignment:'right', verticalAlignment:'justify'}"/>

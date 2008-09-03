@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
@@ -32,9 +33,16 @@ public class Border extends Container {
                 listener.titleChanged(border, previousTitle);
             }
         }
+
+        public void contentChanged(Border border, Component previousContent) {
+            for (BorderListener listener : this) {
+                listener.contentChanged(border, previousContent);
+            }
+        }
     }
 
     private String title = null;
+    private Component content = null;
     private BorderListenerList borderListeners = new BorderListenerList();
 
     public Border() {
@@ -45,16 +53,6 @@ public class Border extends Container {
         installSkin(Border.class);
 
         setContent(content);
-    }
-
-    @Override
-    public void insert(Component component, int index) {
-        if (getLength() > 0) {
-            throw new IllegalStateException(Border.class.getName()
-                + " already has a content component.");
-        }
-
-        super.insert(component, index);
     }
 
     /**
@@ -83,18 +81,42 @@ public class Border extends Container {
     }
 
     public Component getContent() {
-        return (getLength() > 0) ? get(0) : null;
+        return content;
     }
 
     public void setContent(Component content) {
-        Component previousContent = getContent();
-        if (previousContent != null) {
-            remove(previousContent);
+        Component previousContent = this.content;
+
+        if (content != previousContent) {
+            // Remove any previous content component
+            if (previousContent != null) {
+                remove(previousContent);
+            }
+
+            this.content = null;
+
+            // Add the component
+            if (content != null) {
+                add(content);
+            }
+
+            this.content = content;
+
+            borderListeners.contentChanged(this, previousContent);
+        }
+    }
+
+    @Override
+    public Sequence<Component> remove(int index, int count) {
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = get(i);
+            if (component == content) {
+                throw new UnsupportedOperationException();
+            }
         }
 
-        if (content != null) {
-            add(content);
-        }
+        // Call the base method to remove the components
+        return super.remove(index, count);
     }
 
     public ListenerList<BorderListener> getBorderListeners() {

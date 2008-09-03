@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 public class Expander extends Container {
@@ -109,6 +110,19 @@ public class Expander extends Container {
 
             expanderListeners.contentChanged(this, previousContent);
         }
+    }
+
+    @Override
+    public Sequence<Component> remove(int index, int count) {
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = get(i);
+            if (component == content) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        // Call the base method to remove the components
+        return super.remove(index, count);
     }
 
     public ListenerList<ExpanderListener> getExpanderListeners() {

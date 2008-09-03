@@ -317,4 +317,8 @@ public class BorderSkin extends ContainerSkin
     public void titleChanged(Border border, String previousTitle) {
         invalidateComponent();
     }
+
+    public void contentChanged(Border border, Component previousContent) {
+        invalidateComponent();
+    }
 }
