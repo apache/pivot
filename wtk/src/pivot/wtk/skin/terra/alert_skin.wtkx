@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <Border styles="{backgroundColor:'#e6e3da', borderColor:'#999999', padding:12}">
         <content>
-            <TablePane styles="{spacing:12}">
+            <TablePane styles="{horizontalSpacing:12, verticalSpacing:12}">
                 <columns>
                     <TablePane.Column width="-1"/>
                     <TablePane.Column width="1*"/>

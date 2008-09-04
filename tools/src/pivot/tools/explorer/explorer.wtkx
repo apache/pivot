@@ -15,7 +15,7 @@
 	limitations under the License.
 -->
 
-<TablePane styles="{padding:3, spacing:2 }"
+<TablePane styles="{padding:3, verticalSpacing:2}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk"
     xmlns:explorer="pivot.tools.explorer">
     <columns>
