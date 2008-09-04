@@ -16,70 +16,28 @@
 package pivot.wtk.media;
 
 import java.awt.Graphics2D;
-
-import pivot.collections.Sequence;
-import pivot.wtk.media.drawing.Shape;
+import pivot.wtk.Bounds;
+import pivot.wtk.media.drawing.Group;
 
 public class Drawing extends Image {
-    public class ShapeSequence implements Sequence<Shape> {
-        public int add(Shape shape) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public void insert(Shape shape, int index) {
-            // TODO Auto-generated method stub
-
-        }
-
-        public Shape update(int index, Shape shape) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        public int remove(Shape shape) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public Sequence<Shape> remove(int index, int count) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        public Shape get(int index) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        public int indexOf(Shape shape) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getLength() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-    }
+    private Group shapes = new Group();
 
     public int getWidth() {
-        // TODO
-        return 0;
+        Bounds bounds = shapes.getBounds();
+        return bounds.width + bounds.x;
     }
 
     public int getHeight() {
-        // TODO
-        return 0;
+        Bounds bounds = shapes.getBounds();
+        return bounds.height + bounds.y;
     }
 
     public void paint(Graphics2D graphics) {
-        // TODO Apply a scale based on the difference between the preferred
-        // size and the actual size
+        graphics.clipRect(0, 0, getWidth(), getHeight());
+        shapes.paint(graphics);
     }
 
-    public ShapeSequence getShapes() {
-        // TODO
-        return null;
+    public Group getShapes() {
+        return shapes;
     }
 }

@@ -167,6 +167,8 @@ public class WTKXSerializer implements Serializer {
                         String localName = reader.getLocalName();
                         String tagName = (prefix == null ? "" : prefix + ":") + localName;
 
+                        String id = null;
+
                         if (prefix != null
                             && prefix.equals(WTKX_PREFIX)) {
                             if (localName.equals(INCLUDE_TAG)) {
@@ -186,6 +188,8 @@ public class WTKXSerializer implements Serializer {
                                         src = attribute.value;
                                     } else if (attribute.localName.equals(INCLUDE_NAMESPACE_ATTRIBUTE)) {
                                         namespace = attribute.value;
+                                    } else if (attribute.localName.equals(ID_ATTRIBUTE)) {
+                                        id = attribute.value;
                                     } else {
                                         nodeAttributes.add(attribute);
                                     }
@@ -193,12 +197,6 @@ public class WTKXSerializer implements Serializer {
 
                                 if (src == null) {
                                     throw new SerializationException(INCLUDE_SRC_ATTRIBUTE
-                                        + " attribute is required for " + WTKX_PREFIX + ":" + INCLUDE_TAG
-                                        + " tag.");
-                                }
-
-                                if (namespace == null) {
-                                    throw new SerializationException(INCLUDE_NAMESPACE_ATTRIBUTE
                                         + " attribute is required for " + WTKX_PREFIX + ":" + INCLUDE_TAG
                                         + " tag.");
                                 }
@@ -211,9 +209,11 @@ public class WTKXSerializer implements Serializer {
                                 }
 
                                 WTKXSerializer serializer = new WTKXSerializer(includeResources);
-                                nodeValue = serializer.readObject(new URL(location, src));
+                                if (namespace != null) {
+                                    includeSerializers.put(namespace, serializer);
+                                }
 
-                                includeSerializers.put(namespace, serializer);
+                                nodeValue = serializer.readObject(new URL(location, src));
                             } else if (localName.equals(NULL_TAG)) {
                                 // The element represents a null value
                                 if (nodeAttributes.getLength() > 0) {
@@ -225,8 +225,6 @@ public class WTKXSerializer implements Serializer {
                                     + localName + "> is not a valid tag.");
                             }
                         } else {
-                            String id = null;
-
                             for (int i = 0, n = reader.getAttributeCount(); i < n; i++) {
                                 Attribute attribute = new Attribute(reader.getAttributePrefix(i),
                                     reader.getAttributeNamespace(i),
@@ -318,9 +316,12 @@ public class WTKXSerializer implements Serializer {
                                 }
                             }
 
-                            if (id != null) {
-                                namedObjects.put(id, nodeValue);
-                            }
+                        }
+
+                        // If the node has an ID, add its value to the named
+                        // object map
+                        if (id != null) {
+                            namedObjects.put(id, nodeValue);
                         }
 
                         // If the element does not represent a property and the parent node

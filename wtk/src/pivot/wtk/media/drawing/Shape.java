@@ -117,7 +117,7 @@ public abstract class Shape {
             throw new IllegalArgumentException("fill is null.");
         }
 
-        // TODO Support an encoding for gradient paints?
+        // TODO Support an encoding for gradient paints
 
         setFill(Color.decode(fill));
     }
@@ -153,10 +153,6 @@ public abstract class Shape {
     }
 
     public void paint(Graphics2D graphics) {
-        graphics = (Graphics2D)graphics.create();
-
-        // TODO Apply transform to graphics
-
         if (fill != null) {
             graphics.setPaint(fill);
             fill(graphics);
@@ -167,8 +163,6 @@ public abstract class Shape {
             graphics.setStroke(new BasicStroke(strokeThickness));
             stroke(graphics);
         }
-
-        graphics.dispose();
     }
 
     public abstract void fill(Graphics2D graphics);
