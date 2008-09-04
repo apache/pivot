@@ -639,10 +639,6 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         // No-op
     }
 
-    public void valueMappingChanged(ListView listView, ListView.ValueMapping previousValueMapping) {
-        // No-op
-    }
-
     // List view item events
     public void itemInserted(ListView listView, int index) {
         invalidateComponent();

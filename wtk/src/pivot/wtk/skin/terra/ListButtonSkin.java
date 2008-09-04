@@ -813,10 +813,6 @@ public class ListButtonSkin extends ButtonSkin
         // No-op
     }
 
-    public void valueMappingChanged(ListButton listButton, ListView.ValueMapping previousValueMapping) {
-        // No-op
-    }
-
     // List button selection events
     public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
         // Set the selected item as the button data

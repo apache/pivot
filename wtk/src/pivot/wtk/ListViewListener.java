@@ -23,5 +23,4 @@ public interface ListViewListener {
     public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode);
     public void selectedValueKeyChanged(ListView listView, String previousSelectedIndexKey);
     public void selectedValuesKeyChanged(ListView listView, String previousSelectedValuesKey);
-    public void valueMappingChanged(ListView listView, ListView.ValueMapping previousValueMapping);
 }

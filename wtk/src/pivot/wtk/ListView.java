@@ -108,16 +108,6 @@ public class ListView extends Component {
     }
 
     /**
-     * Maps list item data to and from their ordinal values.
-     *
-     * @author gbrown
-     */
-    public interface ValueMapping {
-        public int indexOf(List<?> list, Object value);
-        public Object valueOf(List<?> list, int index);
-    }
-
-    /**
      * List event handler.
      *
      * @author gbrown
@@ -215,12 +205,6 @@ public class ListView extends Component {
         public void selectedValuesKeyChanged(ListView listView, String previousSelectedValuesKey) {
             for (ListViewListener listener : this) {
                 listener.selectedValuesKeyChanged(listView, previousSelectedValuesKey);
-            }
-        }
-
-        public void valueMappingChanged(ListView listView, ListView.ValueMapping previousValueMapping) {
-            for (ListViewListener listener : this) {
-                listener.valueMappingChanged(listView, previousValueMapping);
             }
         }
     }
@@ -324,17 +308,6 @@ public class ListView extends Component {
     private String selectedValueKey = null;
     private String selectedValuesKey = null;
 
-    private ValueMapping valueMapping = new ValueMapping() {
-        @SuppressWarnings("unchecked")
-        public int indexOf(List<?> list, Object value) {
-            return ((List<Object>)list).indexOf(value);
-        }
-
-        public Object valueOf(List<?> list, int index) {
-            return list.get(index);
-        }
-    };
-
     private ListViewListenerList listViewListeners = new ListViewListenerList();
     private ListViewItemListenerList listViewItemListeners = new ListViewItemListenerList();
     private ListViewItemStateListenerList listViewItemStateListeners =
@@ -343,7 +316,6 @@ public class ListView extends Component {
         new ListViewSelectionListenerList();
     private ListViewSelectionDetailListenerList listViewSelectionDetailListeners =
         new ListViewSelectionDetailListenerList();
-
 
     /**
      * Creates a list view populated with an empty array list.
@@ -754,18 +726,19 @@ public class ListView extends Component {
         Object value = null;
 
         if (index >= 0) {
-            value = valueMapping.valueOf(listData, index);
+            value = listData.get(index);
         }
 
         return value;
     }
 
+    @SuppressWarnings("unchecked")
     public void setSelectedValue(Object value) {
         if (value == null) {
             throw new IllegalArgumentException("value is null");
         }
 
-        int index = valueMapping.indexOf(listData, value);
+        int index = ((List<Object>)listData).indexOf(value);
         if (index == -1) {
             throw new IllegalArgumentException("\"" + value + "\" is not a valid selection.");
         }
@@ -780,7 +753,7 @@ public class ListView extends Component {
             Span span = selectedRanges.get(i);
 
             for (int index = span.getStart(), end = span.getEnd(); index <= end; index++) {
-                Object value = valueMapping.valueOf(listData, index);
+                Object value = listData.get(index);
                 values.add(value);
             }
         }
@@ -788,6 +761,7 @@ public class ListView extends Component {
         return values;
     }
 
+    @SuppressWarnings("unchecked")
     public void setSelectedValues(Sequence<Object> values) {
         ArrayList<Span> selectedRanges = new ArrayList<Span>();
 
@@ -797,7 +771,7 @@ public class ListView extends Component {
                 throw new IllegalArgumentException("value is null");
             }
 
-            int index = valueMapping.indexOf(listData, value);
+            int index = ((List<Object>)listData).indexOf(value);
             if (index == -1) {
                 throw new IllegalArgumentException("\"" + value + "\" is not a valid selection.");
             }
@@ -914,23 +888,6 @@ public class ListView extends Component {
         String previousSelectedValuesKey = this.selectedValuesKey;
         this.selectedValuesKey = selectedValuesKey;
         listViewListeners.selectedValuesKeyChanged(this, previousSelectedValuesKey);
-    }
-
-    public ValueMapping getValueMapping() {
-        return valueMapping;
-    }
-
-    public void setValueMapping(ValueMapping valueMapping) {
-        if (valueMapping == null) {
-            throw new IllegalArgumentException("valueMapping is null.");
-        }
-
-        ValueMapping previousValueMapping = this.valueMapping;
-
-        if (previousValueMapping != valueMapping) {
-            this.valueMapping = valueMapping;
-            listViewListeners.valueMappingChanged(this, previousValueMapping);
-        }
     }
 
     @Override

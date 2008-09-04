@@ -822,11 +822,6 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         // No-op
     }
 
-    public void valueMappingChanged(Spinner spinner,
-        Spinner.ValueMapping previousValueMapping) {
-        invalidateComponent();
-    }
-
     // SpinnerSelectionListener methods
 
     public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {

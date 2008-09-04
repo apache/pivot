@@ -19,10 +19,7 @@ import pivot.collections.List;
 
 public interface SpinnerListener {
     public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData);
-    public void itemRendererChanged(Spinner spinner,
-        Spinner.ItemRenderer previousItemRenderer);
+    public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer);
     public void circularChanged(Spinner spinner);
     public void selectedValueKeyChanged(Spinner spinner, String previousSelectedValueKey);
-    public void valueMappingChanged(Spinner spinner,
-        Spinner.ValueMapping previousValueMapping);
 }

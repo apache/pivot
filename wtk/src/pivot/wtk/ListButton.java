@@ -19,7 +19,6 @@ import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
-import pivot.wtk.ListView.ValueMapping;
 import pivot.wtk.content.ListButtonDataRenderer;
 
 /**
@@ -62,12 +61,6 @@ public class ListButton extends Button {
         public void selectedValueKeyChanged(ListButton listButton, String previousSelectedValueKey) {
             for (ListButtonListener listener : this) {
                 listener.selectedValueKeyChanged(listButton, previousSelectedValueKey);
-            }
-        }
-
-        public void valueMappingChanged(ListButton listButton, ListView.ValueMapping previousValueMapping) {
-            for (ListButtonListener listener : this) {
-                listener.valueMappingChanged(listButton, previousValueMapping);
             }
         }
     }
@@ -284,22 +277,6 @@ public class ListButton extends Button {
         String previousSelectedValueKey = listView.getSelectedValueKey();
         listView.setSelectedValueKey(selectedValueKey);
         listButtonListeners.selectedValueKeyChanged(this, previousSelectedValueKey);
-    }
-
-    public ValueMapping getValueMapping() {
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
-
-        return listView.getValueMapping();
-    }
-
-    public void setValueMapping(ValueMapping valueMapping) {
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
-
-        ListView.ValueMapping previousValueMapping = listView.getValueMapping();
-        listView.setValueMapping(valueMapping);
-        listButtonListeners.valueMappingChanged(this, previousValueMapping);
     }
 
     @Override

@@ -62,16 +62,6 @@ public class Spinner extends Container {
     }
 
     /**
-     * Maps spinner item data to and from their ordinal values.
-     *
-     * @author tvolkert
-     */
-    public interface ValueMapping {
-        public int indexOf(List<?> list, Object value);
-        public Object valueOf(List<?> list, int index);
-    }
-
-    /**
      * List event handler.
      *
      * @author tvolkert
@@ -175,13 +165,6 @@ public class Spinner extends Container {
                 listener.selectedValueKeyChanged(spinner, previousSelectedValueKey);
             }
         }
-
-        public void valueMappingChanged(Spinner spinner,
-            Spinner.ValueMapping previousValueMapping) {
-            for (SpinnerListener listener : this) {
-                listener.valueMappingChanged(spinner, previousValueMapping);
-            }
-        }
     }
 
     /**
@@ -240,17 +223,6 @@ public class Spinner extends Container {
     private int selectedIndex = -1;
 
     private String selectedValueKey = null;
-
-    private ValueMapping valueMapping = new ValueMapping() {
-        @SuppressWarnings("unchecked")
-        public int indexOf(List<?> list, Object value) {
-            return ((List<Object>)list).indexOf(value);
-        }
-
-        public Object valueOf(List<?> list, int index) {
-            return list.get(index);
-        }
-    };
 
     private SpinnerListenerList spinnerListeners = new SpinnerListenerList();
     private SpinnerItemListenerList spinnerItemListeners = new SpinnerItemListenerList();
@@ -402,29 +374,24 @@ public class Spinner extends Container {
         }
     }
 
-    /**
-     *
-     */
     public Object getSelectedValue() {
         int index = getSelectedIndex();
         Object value = null;
 
         if (index >= 0) {
-            value = valueMapping.valueOf(spinnerData, index);
+            value = spinnerData.get(index);
         }
 
         return value;
     }
 
-    /**
-     *
-     */
+    @SuppressWarnings("unchecked")
     public void setSelectedValue(Object value) {
         if (value == null) {
             throw new IllegalArgumentException("value is null");
         }
 
-        int index = valueMapping.indexOf(spinnerData, value);
+        int index = ((List<Object>)spinnerData).indexOf(value);
         if (index == -1) {
             throw new IllegalArgumentException("\"" + value + "\" is not a valid selection.");
         }
@@ -449,29 +416,6 @@ public class Spinner extends Container {
             || (selectedValueKey != null && !selectedValueKey.equals(previousSelectedValueKey))) {
             this.selectedValueKey = selectedValueKey;
             spinnerListeners.selectedValueKeyChanged(this, previousSelectedValueKey);
-        }
-    }
-
-    /**
-     *
-     */
-    public ValueMapping getValueMapping() {
-        return valueMapping;
-    }
-
-    /**
-     *
-     */
-    public void setValueMapping(ValueMapping valueMapping) {
-        if (valueMapping == null) {
-            throw new IllegalArgumentException("valueMapping is null.");
-        }
-
-        ValueMapping previousValueMapping = this.valueMapping;
-
-        if (previousValueMapping != valueMapping) {
-            this.valueMapping = valueMapping;
-            spinnerListeners.valueMappingChanged(this, previousValueMapping);
         }
     }
 

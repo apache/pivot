@@ -21,5 +21,4 @@ public interface ListButtonListener {
     public void listDataChanged(ListButton listButton, List<?> previousListData);
     public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer);
     public void selectedValueKeyChanged(ListButton listButton, String previousSelectedValueKey);
-    public void valueMappingChanged(ListButton listButton, ListView.ValueMapping previousValueMapping);
 }
