@@ -16,23 +16,20 @@ import pivot.wtk.ViewportListener;
 import pivot.wtk.content.ButtonDataRenderer;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
+import pivot.wtk.media.Image;
 
 public class PanoramaSkin extends ContainerSkin
     implements Viewport.Skin, ViewportListener, ComponentMouseListener {
     /**
      * Abstract base class for button images.
      */
-    protected abstract class ScrollButtonImage extends ImageAsset {
-        public int getPreferredWidth(int height) {
+    protected abstract class ScrollButtonImage extends Image {
+        public int getWidth() {
             return BUTTON_SIZE;
         }
 
-        public int getPreferredHeight(int width) {
+        public int getHeight() {
             return BUTTON_SIZE;
-        }
-
-        public Dimensions getPreferredSize() {
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
         }
 
         public void paint(Graphics2D graphics) {

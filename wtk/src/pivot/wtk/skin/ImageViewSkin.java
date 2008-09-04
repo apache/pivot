@@ -37,8 +37,6 @@ import pivot.wtk.media.Image;
 public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     private Color backgroundColor = null;
     private float opacity = 1.0f;
-    private float scaleX = 1.0f;
-    private float scaleY = 1.0f;
     private HorizontalAlignment horizontalAlignment = HorizontalAlignment.CENTER;
     private VerticalAlignment verticalAlignment = VerticalAlignment.CENTER;
 
@@ -59,45 +57,25 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     public int getPreferredWidth(int height) {
-        int preferredWidth = 0;
-
         ImageView imageView = (ImageView)getComponent();
         Image image = imageView.getImage();
 
-        if (image != null) {
-            preferredWidth = (int)Math.round((double)image.getPreferredWidth(-1) * scaleX);
-        }
-
-        return preferredWidth;
+        return (image == null) ? 0 : image.getWidth();
     }
 
     public int getPreferredHeight(int width) {
-        int preferredHeight = 0;
-
         ImageView imageView = (ImageView)getComponent();
         Image image = imageView.getImage();
 
-        if (image != null) {
-            preferredHeight = (int)Math.round((double)image.getPreferredHeight(-1) * scaleY);
-        }
-
-        return preferredHeight;
+        return (image == null) ? 0 : image.getHeight();
     }
 
     public Dimensions getPreferredSize() {
-        int preferredWidth = 0;
-        int preferredHeight = 0;
-
         ImageView imageView = (ImageView)getComponent();
         Image image = imageView.getImage();
 
-        if (image != null) {
-            preferredWidth = (int)Math.round((double)image.getPreferredWidth(-1) * scaleX);
-
-            preferredHeight = (int)Math.round((double)image.getPreferredHeight(-1) * scaleY);
-        }
-
-        return new Dimensions(preferredWidth, preferredHeight);
+        return (image == null) ? new Dimensions(0, 0) : new Dimensions(image.getWidth(),
+            image.getHeight());
     }
 
     public void layout() {
@@ -106,76 +84,55 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
     public void paint(Graphics2D graphics) {
         ImageView imageView = (ImageView)getComponent();
+        Image image = imageView.getImage();
+
+        int width = getWidth();
+        int height = getHeight();
 
         if (backgroundColor != null) {
             graphics.setPaint(backgroundColor);
-            graphics.fillRect(0, 0, getWidth(), getHeight());
+            graphics.fillRect(0, 0, width, height);
         }
 
-        Image image = imageView.getImage();
-
         if (image != null) {
-            // Paint the image centered in the available space
-            double width = getWidth();
-            double height = getHeight();
+            Dimensions imageSize = image.getSize();
 
-            double imageX = 0;
-            double imageY = 0;
-            double imageWidth = 0;
-            double imageHeight = 0;
-            Dimensions imageSize = image.getPreferredSize();
+            int imageX, imageY;
+            float scaleX, scaleY;
 
             if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
-                imageWidth = width;
+                imageX = 0;
+                scaleX = (float)width / (float)imageSize.width;
             } else {
-                imageWidth = (double)imageSize.width * scaleX;
+                scaleX = 1.0f;
 
-                switch (horizontalAlignment) {
-                    case LEFT: {
-                        imageX = 0;
-                        break;
-                    }
-
-                    case CENTER: {
-                        imageX = (width - imageWidth) / 2d;
-                        break;
-                    }
-
-                    case RIGHT: {
-                        imageX = width - imageWidth;
-                        break;
-                    }
+                if (horizontalAlignment == HorizontalAlignment.CENTER) {
+                    imageX = (width - imageSize.width) / 2;
+                } else if (horizontalAlignment == HorizontalAlignment.RIGHT) {
+                    imageX = width - imageSize.width;
+                } else {
+                    imageX = 0;
                 }
             }
 
             if (verticalAlignment == VerticalAlignment.JUSTIFY) {
-                imageHeight = height;
+                imageY = 0;
+                scaleY = (float)height / (float)imageSize.height;
             } else {
-                imageHeight = (double)imageSize.height * scaleY;
+                scaleY = 1.0f;
 
-                switch (verticalAlignment) {
-                    case TOP: {
-                        imageY = 0;
-                        break;
-                    }
-
-                    case CENTER: {
-                        imageY = (height - imageHeight) / 2d;
-                        break;
-                    }
-
-                    case BOTTOM: {
-                        imageY = height - imageHeight;
-                        break;
-                    }
+                if (verticalAlignment == VerticalAlignment.CENTER) {
+                    imageY = (height - imageSize.height) / 2;
+                } else if (verticalAlignment == VerticalAlignment.BOTTOM) {
+                    imageY = height - imageSize.height;
+                } else {
+                    imageY = 0;
                 }
             }
 
             Graphics2D imageGraphics = (Graphics2D)graphics.create();
             imageGraphics.translate(imageX, imageY);
             imageGraphics.scale(scaleX, scaleY);
-            image.setSize((int)imageWidth, (int)imageHeight);
-
             imageGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
             image.paint(imageGraphics);
             imageGraphics.dispose();
@@ -223,40 +180,6 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         }
 
         setOpacity(opacity.floatValue());
-    }
-
-    public float getScaleX() {
-        return scaleX;
-    }
-
-    public void setScaleX(float scaleX) {
-        this.scaleX = scaleX;
-        invalidateComponent();
-    }
-
-    public final void setScaleX(Number scaleX) {
-        if (scaleX == null) {
-            throw new IllegalArgumentException("scaleX is null.");
-        }
-
-        setScaleX(scaleX.floatValue());
-    }
-
-    public float getScaleY() {
-        return scaleY;
-    }
-
-    public void setScaleY(float scaleY) {
-        this.scaleY = scaleY;
-        invalidateComponent();
-    }
-
-    public final void setScaleY(Number scaleY) {
-        if (scaleY == null) {
-            throw new IllegalArgumentException("scaleY is null.");
-        }
-
-        setScaleY(scaleY.floatValue());
     }
 
     public HorizontalAlignment getHorizontalAlignment() {

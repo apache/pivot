@@ -15,7 +15,6 @@
  */
 package pivot.wtk.media;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -25,6 +24,7 @@ import pivot.util.concurrent.Dispatcher;
 import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskListener;
 import pivot.util.concurrent.TaskExecutionException;
+import pivot.wtk.Dimensions;
 import pivot.wtk.Visual;
 
 public abstract class Image implements Visual {
@@ -77,6 +77,10 @@ public abstract class Image implements Visual {
         }
     }
 
+    public Dimensions getSize() {
+        return new Dimensions(getWidth(), getHeight());
+    }
+
     public static Image load(URL url) {
         LoadTask loadTask = new LoadTask(url);
 
@@ -95,9 +99,4 @@ public abstract class Image implements Visual {
         loadTask.execute(loadListener);
         return loadTask;
     }
-
-    /**
-     * Returns a graphics instance that allows a caller to draw on the image.
-     */
-    public abstract Graphics2D getGraphics();
 }

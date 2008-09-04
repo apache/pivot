@@ -15,8 +15,6 @@
  */
 package pivot.wtk.skin;
 
-import java.awt.Graphics2D;
-
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentStateListener;
@@ -26,7 +24,6 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Bounds;
 import pivot.wtk.Skin;
 import pivot.wtk.Tooltip;
-import pivot.wtk.media.Image;
 
 /**
  * Abstract base class for WTK skins.
@@ -34,37 +31,6 @@ import pivot.wtk.media.Image;
  * @author gbrown
  */
 public abstract class ComponentSkin implements Skin, ComponentStateListener {
-    /**
-     * Base class for "image assets", images generated and used internally by
-     * a skin. Image assets cannot be loaded, stored, or drawn to.
-     *
-     * TODO We may want to support the concept of a "video asset" as well.
-     *
-     * @author gbrown
-     */
-    public abstract class ImageAsset extends Image {
-        private int width = 0;
-        private int height = 0;
-
-        public int getWidth() {
-            return width;
-        }
-
-        public int getHeight() {
-            return height;
-        }
-
-        public void setSize(int width, int height) {
-            this.width = width;
-            this.height = height;
-        }
-
-        @Override
-        public Graphics2D getGraphics() {
-            throw new UnsupportedOperationException();
-        }
-    }
-
     private class ShowTooltipCallback implements Runnable {
         public void run() {
             Component component = getComponent();

@@ -129,21 +129,41 @@ public class Alert extends Dialog {
     }
 
     public static void alert(String message, Display display) {
-        alert(Type.INFO, message, display);
+        alert(Type.INFO, message, display, null);
+    }
+
+    public static void alert(String message, Display display,
+        DialogResultListener dialogResultListener) {
+        alert(Type.INFO, message, display, dialogResultListener);
     }
 
     public static void alert(Type type, String message, Display display) {
+        alert(type, message, display, null);
+    }
+
+    public static void alert(Type type, String message, Display display,
+        DialogResultListener dialogResultListener) {
         Alert alert = createAlert(type, message);
-        alert.open(display);
+        alert.open(display, dialogResultListener);
     }
 
     public static void alert(String message, Window owner) {
-        alert(Type.INFO, message, owner);
+        alert(Type.INFO, message, owner, null);
+    }
+
+    public static void alert(String message, Window owner,
+        DialogResultListener dialogResultListener) {
+        alert(Type.INFO, message, owner, dialogResultListener);
     }
 
     public static void alert(Type type, String message, Window owner) {
+        alert(type, message, owner, null);
+    }
+
+    public static void alert(Type type, String message, Window owner,
+        DialogResultListener dialogResultListener) {
         Alert alert = createAlert(type, message);
-        alert.open(owner);
+        alert.open(owner, dialogResultListener);
     }
 
     private static Alert createAlert(Type type, String message) {

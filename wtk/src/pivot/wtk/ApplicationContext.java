@@ -35,6 +35,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
+import pivot.util.ImmutableIterator;
 
 /**
  * TODO Fire events when entries are added to/removed from the cache?
@@ -42,27 +43,6 @@ import pivot.collections.HashMap;
 public abstract class ApplicationContext {
     public static class ResourceCacheDictionary
         implements Dictionary<URL, Object>, Iterable<URL> {
-        private class KeyIterator implements Iterator<URL> {
-            Iterator<URL> source = null;
-
-            public KeyIterator(Iterator<URL> source) {
-                this.source = source;
-            }
-
-            public boolean hasNext() {
-                return source.hasNext();
-            }
-
-            public URL next() {
-                return source.next();
-            }
-
-            public void remove() {
-                // TODO Support removal?
-                throw new UnsupportedOperationException();
-            }
-        }
-
         public Object get(URL key) {
             return resourceCache.get(key);
         }
@@ -84,7 +64,7 @@ public abstract class ApplicationContext {
         }
 
         public Iterator<URL> iterator() {
-            return new KeyIterator(resourceCache.iterator());
+            return new ImmutableIterator<URL>(resourceCache.iterator());
         }
     }
 
@@ -92,10 +72,6 @@ public abstract class ApplicationContext {
         public static final long serialVersionUID = 0;
 
         private Component focusedComponent = null;
-
-        // TODO Do some timing tests to see if TRANSLUCENT has a negative impact
-        // on performance
-        private static final int BACK_BUFFER_TRANSPARENCY = Transparency.OPAQUE;
 
         protected DisplayHost() {
             enableEvents(AWTEvent.COMPONENT_EVENT_MASK
@@ -159,7 +135,7 @@ public abstract class ApplicationContext {
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
             java.awt.image.BufferedImage bufferedImage =
                 gc.createCompatibleImage(clipBounds.width, clipBounds.height,
-                    BACK_BUFFER_TRANSPARENCY);
+                    Transparency.OPAQUE);
 
             if (bufferedImage != null) {
                 Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.getGraphics();
@@ -198,7 +174,7 @@ public abstract class ApplicationContext {
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
             java.awt.image.VolatileImage volatileImage =
                 gc.createCompatibleVolatileImage(clipBounds.width, clipBounds.height,
-                    BACK_BUFFER_TRANSPARENCY);
+                    Transparency.OPAQUE);
 
             // If we have a valid volatile image, attempt to paint the
             // display to it

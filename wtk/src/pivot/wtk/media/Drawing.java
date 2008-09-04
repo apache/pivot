@@ -16,12 +16,53 @@
 package pivot.wtk.media;
 
 import java.awt.Graphics2D;
-import java.awt.Shape;
 
-import pivot.collections.List;
-import pivot.wtk.Dimensions;
+import pivot.collections.Sequence;
+import pivot.wtk.media.drawing.Shape;
 
 public class Drawing extends Image {
+    public class ShapeSequence implements Sequence<Shape> {
+        public int add(Shape shape) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        public void insert(Shape shape, int index) {
+            // TODO Auto-generated method stub
+
+        }
+
+        public Shape update(int index, Shape shape) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        public int remove(Shape shape) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        public Sequence<Shape> remove(int index, int count) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        public Shape get(int index) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        public int indexOf(Shape shape) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        public int getLength() {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+    }
+
     public int getWidth() {
         // TODO
         return 0;
@@ -32,40 +73,12 @@ public class Drawing extends Image {
         return 0;
     }
 
-    public void setSize(int width, int height) {
-        // TODO
-    }
-
-    public int getPreferredWidth(int height) {
-        // TODO
-        return 0;
-    }
-
-    public int getPreferredHeight(int width) {
-        // TODO
-        return 0;
-    }
-
-    public Dimensions getPreferredSize() {
-        // TODO
-        return null;
-    }
-
     public void paint(Graphics2D graphics) {
-        // TODO
+        // TODO Apply a scale based on the difference between the preferred
+        // size and the actual size
     }
 
-    public List<Shape> getShapes() {
-        // TODO
-        return null;
-    }
-
-    public List<Drawing> getDrawings() {
-        // TODO
-        return null;
-    }
-
-    public Graphics2D getGraphics() {
+    public ShapeSequence getShapes() {
         // TODO
         return null;
     }

@@ -119,17 +119,13 @@ public class RollupSkin extends ContainerSkin
         }
     }
 
-    protected abstract class ButtonImage extends ImageAsset {
-        public int getPreferredWidth(int height) {
+    protected abstract class ButtonImage extends Image {
+        public int getWidth() {
             return 7;
         }
 
-        public int getPreferredHeight(int width) {
+        public int getHeight() {
             return 7;
-        }
-
-        public Dimensions getPreferredSize() {
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
         }
     }
 

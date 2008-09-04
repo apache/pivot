@@ -343,7 +343,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
             // Size the image to be proportional to our size
             int buttonImageWidth = (int)Math.floor((float)width / 2f);
             int buttonImageHeight = (int)((float)height / 3f);
-            Image buttonImage = spinButton.getButtonImage();
+            SpinButtonImage buttonImage = (SpinButtonImage)spinButton.getButtonImage();
             buttonImage.setSize(buttonImageWidth, buttonImageHeight);
 
             // Paint the image
@@ -422,20 +422,21 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
     }
 
-    protected abstract class SpinButtonImage extends ImageAsset {
-        public int getPreferredWidth(int height) {
-            // The image never gets consulted for its preferred size
-            return 0;
+    protected abstract class SpinButtonImage extends Image {
+        private int width = 0;
+        private int height = 0;
+
+        public int getWidth() {
+            return width;
         }
 
-        public int getPreferredHeight(int width) {
-            // The image never gets consulted for its preferred size
-            return 0;
+        public int getHeight() {
+            return height;
         }
 
-        public Dimensions getPreferredSize() {
-            // The image never gets consulted for its preferred size
-            return null;
+        public void setSize(int width, int height) {
+            this.width = width;
+            this.height = height;
         }
     }
 

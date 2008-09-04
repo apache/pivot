@@ -43,18 +43,18 @@ import pivot.wtk.skin.ComponentSkin;
 
 public class TableViewHeaderSkin extends ComponentSkin
     implements TableViewHeader.Skin, TableViewHeaderListener, TableViewColumnListener {
-    private class SortIndicatorImage extends ImageAsset {
+    private class SortIndicatorImage extends Image {
         private SortDirection sortDirection = null;
 
         public SortIndicatorImage(SortDirection sortDirection) {
             this.sortDirection = sortDirection;
         }
 
-        public int getPreferredWidth(int height) {
+        public int getWidth() {
             return 7;
         }
 
-        public int getPreferredHeight(int width) {
+        public int getHeight() {
             return 4;
         }
 
@@ -340,13 +340,13 @@ public class TableViewHeaderSkin extends ComponentSkin
                 }
 
                 if (sortImage != null) {
-                    int sortImageMargin = sortImage.getPreferredWidth(-1)
+                    int sortImageMargin = sortImage.getWidth()
                     + SORT_INDICATOR_PADDING * 2;
 
                     if (columnWidth >= dataRenderer.getPreferredWidth(-1) + sortImageMargin) {
                         Graphics2D sortImageGraphics = (Graphics2D)graphics.create();
                         sortImageGraphics.translate(cellX + columnWidth - sortImageMargin,
-                            (height - sortImage.getPreferredHeight(-1)) / 2);
+                            (height - sortImage.getHeight()) / 2);
                         sortImage.paint(sortImageGraphics);
                         sortImageGraphics.dispose();
                     }

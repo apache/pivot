@@ -49,7 +49,7 @@ import pivot.wtk.Mouse.ScrollType;
  * DisplaySkin can use this to paint an appropriate drop shadow, and Component
  * can use it to perform hit testing for mouse events and cursor display.
  */
-public abstract class Component implements Visual {
+public abstract class Component implements LayoutVisual {
     public static abstract class Attributes {
         private Component component = null;
 

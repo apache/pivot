@@ -87,17 +87,13 @@ public abstract class AbstractFrameSkin extends WindowSkin {
         }
     }
 
-    protected abstract class ButtonImage extends ImageAsset {
-        public int getPreferredWidth(int height) {
+    protected abstract class ButtonImage extends Image {
+        public int getWidth() {
             return 8;
         }
 
-        public int getPreferredHeight(int width) {
+        public int getHeight() {
             return 8;
-        }
-
-        public Dimensions getPreferredSize() {
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
         }
     }
 
@@ -148,17 +144,13 @@ public abstract class AbstractFrameSkin extends WindowSkin {
         }
     }
 
-    protected class ResizeImage extends ImageAsset {
-        public int getPreferredWidth(int height) {
+    protected class ResizeImage extends Image {
+        public int getWidth() {
             return 5;
         }
 
-        public int getPreferredHeight(int width) {
+        public int getHeight() {
             return 5;
-        }
-
-        public Dimensions getPreferredSize() {
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
         }
 
         public void paint(Graphics2D graphics) {

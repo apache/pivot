@@ -97,17 +97,13 @@ public class ExpanderSkin extends ContainerSkin
         }
     }
 
-    protected abstract class ButtonImage extends ImageAsset {
-        public int getPreferredWidth(int height) {
+    protected abstract class ButtonImage extends Image {
+        public int getWidth() {
             return 6;
         }
 
-        public int getPreferredHeight(int width) {
+        public int getHeight() {
             return 6;
-        }
-
-        public Dimensions getPreferredSize() {
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
         }
     }
 
