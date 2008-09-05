@@ -26,7 +26,7 @@ import pivot.util.ListenerList;
  */
 @ComponentInfo(icon="Border.png")
 public class Border extends Container {
-    private class BorderListenerList extends ListenerList<BorderListener>
+    private static class BorderListenerList extends ListenerList<BorderListener>
         implements BorderListener {
         public void titleChanged(Border border, String previousTitle) {
             for (BorderListener listener : this) {

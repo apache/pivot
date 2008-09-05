@@ -114,7 +114,7 @@ public class TabPane extends Container {
         }
     }
 
-    private class TabPaneListenerList extends ListenerList<TabPaneListener>
+    private static class TabPaneListenerList extends ListenerList<TabPaneListener>
         implements TabPaneListener {
         public void tabOrientationChanged(TabPane tabPane) {
             for (TabPaneListener listener : this) {
@@ -141,7 +141,7 @@ public class TabPane extends Container {
         }
     }
 
-    private class TabPaneSelectionListenerList extends ListenerList<TabPaneSelectionListener>
+    private static class TabPaneSelectionListenerList extends ListenerList<TabPaneSelectionListener>
         implements TabPaneSelectionListener {
         public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
             for (TabPaneSelectionListener listener : this) {
@@ -150,7 +150,7 @@ public class TabPane extends Container {
         }
     }
 
-    private class TabPaneAttributeListenerList extends ListenerList<TabPaneAttributeListener>
+    private static class TabPaneAttributeListenerList extends ListenerList<TabPaneAttributeListener>
         implements TabPaneAttributeListener {
         public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
             for (TabPaneAttributeListener listener : this) {

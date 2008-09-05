@@ -33,7 +33,7 @@ public class DatePicker extends Container {
      *
      * @author tvolkert
      */
-    private class DatePickerListenerList extends ListenerList<DatePickerListener>
+    private static class DatePickerListenerList extends ListenerList<DatePickerListener>
         implements DatePickerListener {
 
         public void yearChanged(DatePicker datePicker, int previousYear) {
@@ -61,7 +61,7 @@ public class DatePicker extends Container {
      *
      * @author tvolkert
      */
-    private class DatePickerSelectionListenerList
+    private static class DatePickerSelectionListenerList
         extends ListenerList<DatePickerSelectionListener>
         implements DatePickerSelectionListener {
 

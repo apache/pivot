@@ -26,7 +26,7 @@ import pivot.util.ListenerList;
  */
 @ComponentInfo(icon="Label.png")
 public class Label extends Component {
-    private class LabelListenerList extends ListenerList<LabelListener>
+    private static class LabelListenerList extends ListenerList<LabelListener>
         implements LabelListener {
         public void textChanged(Label label, String previousText) {
             for (LabelListener listener : this) {

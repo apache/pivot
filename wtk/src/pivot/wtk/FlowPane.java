@@ -22,7 +22,7 @@ import pivot.util.ListenerList;
  * @author gbrown
  */
 public class FlowPane extends Container {
-    private class FlowPaneListenerList extends ListenerList<FlowPaneListener>
+    private static class FlowPaneListenerList extends ListenerList<FlowPaneListener>
         implements FlowPaneListener {
         public void orientationChanged(FlowPane flowPane) {
             for (FlowPaneListener listener : this) {

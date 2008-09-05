@@ -58,7 +58,7 @@ public class ScrollPane extends Viewport {
         }
     }
 
-    private class ScrollPaneListenerList extends ListenerList<ScrollPaneListener>
+    private static class ScrollPaneListenerList extends ListenerList<ScrollPaneListener>
         implements ScrollPaneListener {
 
         public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,

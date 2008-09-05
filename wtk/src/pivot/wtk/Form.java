@@ -206,7 +206,7 @@ public class Form extends Container {
      *
      * @author gbrown
      */
-    private class FormListenerList extends ListenerList<FormListener>
+    private static class FormListenerList extends ListenerList<FormListener>
         implements FormListener {
         public void fieldInserted(Form form, int index) {
             for (FormListener listener : this) {
@@ -224,7 +224,7 @@ public class Form extends Container {
     /**
      * Form attribute listener list.
      */
-    private class FormAttributeListenerList extends ListenerList<FormAttributeListener>
+    private static class FormAttributeListenerList extends ListenerList<FormAttributeListener>
         implements FormAttributeListener {
         public void labelChanged(Form form, Component component, String previousLabel) {
             for (FormAttributeListener listener : this) {

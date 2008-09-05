@@ -78,7 +78,7 @@ public class Window extends Container {
      *
      * @author gbrown
      */
-    private class WindowListenerList extends ListenerList<WindowListener>
+    private static class WindowListenerList extends ListenerList<WindowListener>
         implements WindowListener {
         public void titleChanged(Window window, String previousTitle) {
             for (WindowListener listener : this) {
@@ -122,7 +122,7 @@ public class Window extends Container {
      *
      * @author gbrown
      */
-    private class WindowStateListenerList extends ListenerList<WindowStateListener>
+    private static class WindowStateListenerList extends ListenerList<WindowStateListener>
         implements WindowStateListener {
         public void windowOpened(Window window) {
             for (WindowStateListener listener : this) {

@@ -21,7 +21,7 @@ import pivot.wtk.media.Image;
 
 @ComponentInfo(icon="ImageView.png")
 public class ImageView extends Component {
-    private class ImageViewListenerList extends ListenerList<ImageViewListener>
+    private static class ImageViewListenerList extends ListenerList<ImageViewListener>
         implements ImageViewListener {
         public void imageChanged(ImageView imageView, Image previousImage) {
             for (ImageViewListener listener : this) {

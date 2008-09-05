@@ -28,7 +28,7 @@ public abstract class Viewport extends Container {
         public Bounds getViewportBounds();
     }
 
-    private class ViewportListenerList extends ListenerList<ViewportListener>
+    private static class ViewportListenerList extends ListenerList<ViewportListener>
         implements ViewportListener {
 
         public void scrollTopChanged(Viewport viewport, int previousScrollTop) {

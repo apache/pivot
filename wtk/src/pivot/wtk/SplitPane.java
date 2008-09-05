@@ -45,7 +45,7 @@ public class SplitPane extends Container {
         }
     }
 
-    private class SplitPaneListenerList extends ListenerList<SplitPaneListener>
+    private static class SplitPaneListenerList extends ListenerList<SplitPaneListener>
         implements SplitPaneListener {
         public void topLeftComponentChanged(SplitPane splitPane, Component previousTopLeftComponent) {
             for (SplitPaneListener listener : this) {

@@ -19,7 +19,7 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 public class Expander extends Container {
-    private class ExpanderListenerList extends ListenerList<ExpanderListener>
+    private static class ExpanderListenerList extends ListenerList<ExpanderListener>
     implements ExpanderListener {
         public void titleChanged(Expander expander, String previousTitle) {
             for (ExpanderListener listener : this) {

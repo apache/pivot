@@ -27,7 +27,7 @@ import pivot.util.ListenerList;
  * @author tvolkert
  */
 public class Rollup extends pivot.wtk.Container {
-    private class RollupListenerList extends ListenerList<RollupListener>
+    private static class RollupListenerList extends ListenerList<RollupListener>
         implements RollupListener {
         public void expandedChanged(Rollup rollup) {
             for (RollupListener listener : this) {

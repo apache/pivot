@@ -626,7 +626,7 @@ public class TableView extends Component {
      *
      * @author gbrown
      */
-    private class TableViewListenerList extends ListenerList<TableViewListener>
+    private static class TableViewListenerList extends ListenerList<TableViewListener>
         implements TableViewListener {
         public void tableDataChanged(TableView tableView, List<?> previousTableData) {
             for (TableViewListener listener : this) {
@@ -646,7 +646,7 @@ public class TableView extends Component {
      *
      * @author gbrown
      */
-    private class TableViewColumnListenerList extends ListenerList<TableViewColumnListener>
+    private static class TableViewColumnListenerList extends ListenerList<TableViewColumnListener>
         implements TableViewColumnListener {
         public void columnInserted(TableView tableView, int index) {
             for (TableViewColumnListener listener : this) {
@@ -702,7 +702,7 @@ public class TableView extends Component {
      *
      * @author gbrown
      */
-    private class TableViewRowListenerList extends ListenerList<TableViewRowListener>
+    private static class TableViewRowListenerList extends ListenerList<TableViewRowListener>
         implements TableViewRowListener {
         public void rowInserted(TableView tableView, int index) {
             for (TableViewRowListener listener : this) {
@@ -735,7 +735,7 @@ public class TableView extends Component {
      *
      * @author gbrown
      */
-    private class TableViewRowStateListenerList extends ListenerList<TableViewRowStateListener>
+    private static class TableViewRowStateListenerList extends ListenerList<TableViewRowStateListener>
         implements TableViewRowStateListener {
         public void rowDisabledChanged(TableView tableView, int index) {
             for (TableViewRowStateListener listener : this) {
@@ -749,7 +749,7 @@ public class TableView extends Component {
      *
      * @author gbrown
      */
-    private class TableViewSelectionListenerList extends ListenerList<TableViewSelectionListener>
+    private static class TableViewSelectionListenerList extends ListenerList<TableViewSelectionListener>
         implements TableViewSelectionListener {
         public void selectionChanged(TableView tableView) {
             for (TableViewSelectionListener listener : this) {
@@ -763,7 +763,7 @@ public class TableView extends Component {
      *
      * @author gbrown
      */
-    private class TableViewSelectionDetailListenerList extends ListenerList<TableViewSelectionDetailListener>
+    private static class TableViewSelectionDetailListenerList extends ListenerList<TableViewSelectionDetailListener>
         implements TableViewSelectionDetailListener {
         public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
             for (TableViewSelectionDetailListener listener : this) {

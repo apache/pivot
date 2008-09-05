@@ -176,7 +176,7 @@ public abstract class Component implements LayoutVisual {
      *
      * @author tvolkert
      */
-    private class PreferredSizeCache {
+    private static class PreferredSizeCache {
         public int constraint;
         public int value;
 
@@ -191,7 +191,7 @@ public abstract class Component implements LayoutVisual {
      *
      * @author gbrown
      */
-    private class ComponentListenerList extends ListenerList<ComponentListener>
+    private static class ComponentListenerList extends ListenerList<ComponentListener>
         implements ComponentListener {
         public void parentChanged(Component component, Container previousParent) {
             for (ComponentListener listener : this) {
@@ -236,7 +236,7 @@ public abstract class Component implements LayoutVisual {
         }
     }
 
-    private class ComponentLayoutListenerList extends
+    private static class ComponentLayoutListenerList extends
         ListenerList<ComponentLayoutListener> implements ComponentLayoutListener {
         public void preferredSizeChanged(Component component,
             int previousPreferredWidth, int previousPreferredHeight) {
@@ -253,7 +253,7 @@ public abstract class Component implements LayoutVisual {
         }
     }
 
-    private class ComponentStateListenerList extends
+    private static class ComponentStateListenerList extends
         ListenerList<ComponentStateListener> implements ComponentStateListener {
         public void enabledChanged(Component component) {
             for (ComponentStateListener listener : this) {
@@ -268,7 +268,7 @@ public abstract class Component implements LayoutVisual {
         }
     }
 
-    private class ComponentDecoratorListenerList extends
+    private static class ComponentDecoratorListenerList extends
         ListenerList<ComponentDecoratorListener> implements ComponentDecoratorListener {
         public void decoratorInserted(Component component, int index) {
             for (ComponentDecoratorListener listener : this) {
@@ -290,7 +290,7 @@ public abstract class Component implements LayoutVisual {
         }
     }
 
-    private class ComponentMouseListenerList extends ListenerList<ComponentMouseListener>
+    private static class ComponentMouseListenerList extends ListenerList<ComponentMouseListener>
         implements ComponentMouseListener {
         public void mouseMove(Component component, int x, int y) {
             for (ComponentMouseListener listener : this) {
@@ -311,7 +311,7 @@ public abstract class Component implements LayoutVisual {
         }
     }
 
-    private class ComponentMouseButtonListenerList
+    private static class ComponentMouseButtonListenerList
         extends ListenerList<ComponentMouseButtonListener>
         implements ComponentMouseButtonListener {
         public void mouseDown(Component component, Button button, int x, int y) {
@@ -333,7 +333,7 @@ public abstract class Component implements LayoutVisual {
         }
     }
 
-    private class ComponentMouseWheelListenerList
+    private static class ComponentMouseWheelListenerList
         extends ListenerList<ComponentMouseWheelListener>
         implements ComponentMouseWheelListener {
         public void mouseWheel(Component component, ScrollType scrollType,
@@ -344,7 +344,7 @@ public abstract class Component implements LayoutVisual {
         }
     }
 
-    private class ComponentKeyListenerList extends ListenerList<ComponentKeyListener>
+    private static class ComponentKeyListenerList extends ListenerList<ComponentKeyListener>
         implements ComponentKeyListener {
         public void keyTyped(Component component, char character) {
             for (ComponentKeyListener listener : this) {
@@ -365,7 +365,7 @@ public abstract class Component implements LayoutVisual {
         }
     }
 
-    private class ComponentDataListenerList extends
+    private static class ComponentDataListenerList extends
         ListenerList<ComponentDataListener> implements ComponentDataListener {
         public void userDataChanged(Component component, Object previousValue) {
             for (ComponentDataListener listener : this) {
@@ -374,7 +374,7 @@ public abstract class Component implements LayoutVisual {
         }
     }
 
-    private class ComponentDragDropListenerList extends
+    private static class ComponentDragDropListenerList extends
         ListenerList<ComponentDragDropListener> implements ComponentDragDropListener {
         public void dragHandlerChanged(Component component, DragHandler previousDragHandler) {
             for (ComponentDragDropListener listener : this) {

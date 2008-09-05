@@ -35,7 +35,7 @@ public class TableViewHeader extends Component {
         public Bounds getHeaderBounds(int index);
     }
 
-    private class TableViewHeaderListenerList extends ListenerList<TableViewHeaderListener>
+    private static class TableViewHeaderListenerList extends ListenerList<TableViewHeaderListener>
         implements TableViewHeaderListener {
         public void tableViewChanged(TableViewHeader tableViewHeader,
             TableView previousTableView) {
@@ -52,7 +52,7 @@ public class TableViewHeader extends Component {
         }
     }
 
-    private class TableViewHeaderPressListenerList extends ListenerList<TableViewHeaderPressListener>
+    private static class TableViewHeaderPressListenerList extends ListenerList<TableViewHeaderPressListener>
         implements TableViewHeaderPressListener {
         public void headerPressed(TableViewHeader tableViewHeader, int index) {
             for (TableViewHeaderPressListener listener : this) {

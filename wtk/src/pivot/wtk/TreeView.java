@@ -105,7 +105,7 @@ public class TreeView extends Component {
      *
      * @author tvolkert
      */
-    private class TreeViewListenerList extends ListenerList<TreeViewListener>
+    private static class TreeViewListenerList extends ListenerList<TreeViewListener>
         implements TreeViewListener {
 
         public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
@@ -139,7 +139,7 @@ public class TreeView extends Component {
      *
      * @author tvolkert
      */
-    private class TreeViewBranchListenerList extends ListenerList<TreeViewBranchListener>
+    private static class TreeViewBranchListenerList extends ListenerList<TreeViewBranchListener>
         implements TreeViewBranchListener {
         public void branchExpanded(TreeView treeView, Sequence<Integer> path) {
             for (TreeViewBranchListener listener : this) {
@@ -159,7 +159,7 @@ public class TreeView extends Component {
      *
      * @author tvolkert
      */
-    private class TreeViewNodeListenerList extends ListenerList<TreeViewNodeListener>
+    private static class TreeViewNodeListenerList extends ListenerList<TreeViewNodeListener>
         implements TreeViewNodeListener {
         public void nodeInserted(TreeView treeView, Sequence<Integer> path, int index) {
             for (TreeViewNodeListener listener : this) {
@@ -192,7 +192,7 @@ public class TreeView extends Component {
      *
      * @author tvolkert
      */
-    private class TreeViewNodeStateListenerList
+    private static class TreeViewNodeStateListenerList
         extends ListenerList<TreeViewNodeStateListener>
         implements TreeViewNodeStateListener {
         public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {
@@ -207,7 +207,7 @@ public class TreeView extends Component {
      *
      * @author tvolkert
      */
-    private class TreeViewSelectionListenerList
+    private static class TreeViewSelectionListenerList
         extends ListenerList<TreeViewSelectionListener>
         implements TreeViewSelectionListener {
         public void selectionChanged(TreeView treeView) {
@@ -222,7 +222,7 @@ public class TreeView extends Component {
      *
      * @author tvolkert
      */
-    private class TreeViewSelectionDetailListenerList
+    private static class TreeViewSelectionDetailListenerList
         extends ListenerList<TreeViewSelectionDetailListener>
         implements TreeViewSelectionDetailListener {
         public void selectedPathAdded(TreeView treeView, Sequence<Integer> path) {

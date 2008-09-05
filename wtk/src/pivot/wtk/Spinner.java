@@ -138,7 +138,7 @@ public class Spinner extends Container {
      *
      * @author tvolkert
      */
-    private class SpinnerListenerList extends ListenerList<SpinnerListener>
+    private static class SpinnerListenerList extends ListenerList<SpinnerListener>
         implements SpinnerListener {
         public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
             for (SpinnerListener listener : this) {
@@ -172,7 +172,7 @@ public class Spinner extends Container {
      *
      * @author tvolkert
      */
-    private class SpinnerItemListenerList extends ListenerList<SpinnerItemListener>
+    private static class SpinnerItemListenerList extends ListenerList<SpinnerItemListener>
         implements SpinnerItemListener {
         public void itemInserted(Spinner spinner, int index) {
             for (SpinnerItemListener listener : this) {
@@ -204,7 +204,7 @@ public class Spinner extends Container {
      *
      * @author tvolkert
      */
-    private class SpinnerSelectionListenerList
+    private static class SpinnerSelectionListenerList
         extends ListenerList<SpinnerSelectionListener>
         implements SpinnerSelectionListener {
         public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {

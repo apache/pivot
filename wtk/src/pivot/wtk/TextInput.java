@@ -30,7 +30,7 @@ public class TextInput extends Component {
      *
      * @author gbrown
      */
-    private class TextInputListenerList extends ListenerList<TextInputListener>
+    private static class TextInputListenerList extends ListenerList<TextInputListener>
         implements TextInputListener {
         public void textKeyChanged(TextInput textInput, String previousTextKey) {
             for (TextInputListener listener : this) {
@@ -62,7 +62,7 @@ public class TextInput extends Component {
      *
      * @author gbrown
      */
-    private class TextInputTextListenerList extends ListenerList<TextInputTextListener>
+    private static class TextInputTextListenerList extends ListenerList<TextInputTextListener>
         implements TextInputTextListener {
         public void textChanged(TextInput textInput) {
             for (TextInputTextListener listener : this) {
@@ -76,7 +76,7 @@ public class TextInput extends Component {
      *
      * @author gbrown
      */
-    private class TextInputCharacterListenerList extends ListenerList<TextInputCharacterListener>
+    private static class TextInputCharacterListenerList extends ListenerList<TextInputCharacterListener>
         implements TextInputCharacterListener {
         public void charactersInserted(TextInput textInput, int index, int count) {
             for (TextInputCharacterListener listener : this) {
@@ -102,7 +102,7 @@ public class TextInput extends Component {
      *
      * @author gbrown
      */
-    private class TextInputSelectionListenerList extends ListenerList<TextInputSelectionListener>
+    private static class TextInputSelectionListenerList extends ListenerList<TextInputSelectionListener>
         implements TextInputSelectionListener {
         public void selectionChanged(TextInput textInput,
             int previousSelectionStart, int previousSelectionEnd) {

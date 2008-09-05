@@ -34,7 +34,7 @@ public class Alert extends Dialog {
         }
     }
 
-    private class AlertListenerList extends ListenerList<AlertListener>
+    private static class AlertListenerList extends ListenerList<AlertListener>
         implements AlertListener {
         public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
             for (AlertListener listener : this) {

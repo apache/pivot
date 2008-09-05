@@ -672,7 +672,7 @@ public class TablePane extends Container {
     /**
      * Internal listener list.
      */
-    private class TablePaneListenerList extends ListenerList<TablePaneListener>
+    private static class TablePaneListenerList extends ListenerList<TablePaneListener>
         implements TablePaneListener {
         public void rowInserted(TablePane tablePane, int index) {
             for (TablePaneListener listener : this) {
@@ -749,7 +749,7 @@ public class TablePane extends Container {
         }
     }
 
-    private class TablePaneAttributeListenerList extends ListenerList<TablePaneAttributeListener>
+    private static class TablePaneAttributeListenerList extends ListenerList<TablePaneAttributeListener>
         implements TablePaneAttributeListener {
         public void rowSpanChanged(TablePane tablePane, Component component,
             int previousRowSpan) {

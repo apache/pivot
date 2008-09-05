@@ -19,7 +19,7 @@ import pivot.util.ListenerList;
 
 @ComponentInfo(icon="Meter.png")
 public class Meter extends Component {
-    private class MeterListenerList extends ListenerList<MeterListener>
+    private static class MeterListenerList extends ListenerList<MeterListener>
     implements MeterListener {
         public void percentageChanged(Meter meter, double oldPercentage) {
             for (MeterListener listener : this) {

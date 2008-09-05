@@ -20,7 +20,7 @@ import pivot.util.ListenerList;
 
 
 public class CardPane extends Container {
-    private class CardPaneListenerList extends ListenerList<CardPaneListener>
+    private static class CardPaneListenerList extends ListenerList<CardPaneListener>
         implements CardPaneListener {
         public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
             for (CardPaneListener listener : this) {

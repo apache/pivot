@@ -44,7 +44,7 @@ public class ListButton extends Button {
      *
      * @author gbrown
      */
-    private class ListButtonListenerList extends ListenerList<ListButtonListener>
+    private static class ListButtonListenerList extends ListenerList<ListButtonListener>
         implements ListButtonListener {
         public void listDataChanged(ListButton listButton, List<?> previousListData) {
             for (ListButtonListener listener : this) {
@@ -70,7 +70,7 @@ public class ListButton extends Button {
      *
      * @author gbrown
      */
-    private class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
+    private static class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
         implements ListButtonSelectionListener {
         public void selectedIndexChanged(ListButton listButton, int previousIndex) {
             for (ListButtonSelectionListener listener : this) {

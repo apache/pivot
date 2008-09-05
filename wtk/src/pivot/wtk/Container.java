@@ -42,7 +42,7 @@ import pivot.util.ListenerList;
 @ComponentInfo(icon="Container.png")
 public abstract class Container extends Component
     implements Sequence<Component>, Iterable<Component> {
-    private class ContainerListenerList extends ListenerList<ContainerListener>
+    private static class ContainerListenerList extends ListenerList<ContainerListener>
         implements ContainerListener {
         public void componentInserted(Container container, int index) {
             for (ContainerListener listener : this) {
@@ -70,7 +70,7 @@ public abstract class Container extends Component
         }
     }
 
-    private class ContainerMouseListenerList extends ListenerList<ContainerMouseListener>
+    private static class ContainerMouseListenerList extends ListenerList<ContainerMouseListener>
         implements ContainerMouseListener {
         public void mouseMove(Container container, int x, int y) {
             for (ContainerMouseListener listener : this) {

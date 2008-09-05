@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.util.ListenerList;
 
 public class Tooltip extends Window {
-    private class TooltipListenerList extends ListenerList<TooltipListener>
+    private static class TooltipListenerList extends ListenerList<TooltipListener>
         implements TooltipListener {
         public void tooltipTextChanged(Tooltip tooltip, String previousTooltipText) {
             for (TooltipListener listener : this) {

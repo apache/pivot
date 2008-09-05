@@ -174,7 +174,7 @@ public class ListView extends Component {
      *
      * @author gbrown
      */
-    private class ListViewListenerList extends ListenerList<ListViewListener> implements
+    private static class ListViewListenerList extends ListenerList<ListViewListener> implements
             ListViewListener {
         public void listDataChanged(ListView listView, List<?> previousListData) {
             for (ListViewListener listener : this) {
@@ -214,7 +214,7 @@ public class ListView extends Component {
      *
      * @author gbrown
      */
-    private class ListViewItemListenerList extends ListenerList<ListViewItemListener>
+    private static class ListViewItemListenerList extends ListenerList<ListViewItemListener>
         implements ListViewItemListener {
         public void itemInserted(ListView listView, int index) {
             for (ListViewItemListener listener : this) {
@@ -246,7 +246,7 @@ public class ListView extends Component {
      *
      * @author gbrown
      */
-    private class ListViewItemStateListenerList extends ListenerList<ListViewItemStateListener>
+    private static class ListViewItemStateListenerList extends ListenerList<ListViewItemStateListener>
         implements ListViewItemStateListener {
         public void itemDisabledChanged(ListView listView, int index) {
             for (ListViewItemStateListener listener : this) {
@@ -260,7 +260,7 @@ public class ListView extends Component {
      *
      * @author gbrown
      */
-    private class ListViewSelectionListenerList extends ListenerList<ListViewSelectionListener>
+    private static class ListViewSelectionListenerList extends ListenerList<ListViewSelectionListener>
         implements ListViewSelectionListener {
         public void selectionChanged(ListView listView) {
             for (ListViewSelectionListener listener : this) {
@@ -274,7 +274,7 @@ public class ListView extends Component {
      *
      * @author gbrown
      */
-    private class ListViewSelectionDetailListenerList extends ListenerList<ListViewSelectionDetailListener>
+    private static class ListViewSelectionDetailListenerList extends ListenerList<ListViewSelectionDetailListener>
         implements ListViewSelectionDetailListener {
         public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
             for (ListViewSelectionDetailListener listener : this) {

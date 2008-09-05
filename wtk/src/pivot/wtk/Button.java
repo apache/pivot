@@ -55,7 +55,7 @@ public abstract class Button extends Component {
      * @author gbrown
      */
     public static class Group {
-        private class GroupListenerList extends ListenerList<GroupListener>
+        private static class GroupListenerList extends ListenerList<GroupListener>
             implements GroupListener {
             public void selectionChanged(Group group, Button previousSelection) {
                 for (GroupListener listener : this) {
@@ -102,7 +102,7 @@ public abstract class Button extends Component {
      *
      * @author gbrown
      */
-    private class ButtonListenerList extends ListenerList<ButtonListener>
+    private static class ButtonListenerList extends ListenerList<ButtonListener>
         implements ButtonListener {
         public void buttonDataChanged(Button button, Object previousButtonData) {
             for (ButtonListener listener : this) {
@@ -158,7 +158,7 @@ public abstract class Button extends Component {
      *
      * @author gbrown
      */
-    private class ButtonPressListenerList extends ListenerList<ButtonPressListener>
+    private static class ButtonPressListenerList extends ListenerList<ButtonPressListener>
         implements ButtonPressListener {
         public void buttonPressed(Button button) {
             for (ButtonPressListener listener : this) {
@@ -172,7 +172,7 @@ public abstract class Button extends Component {
      *
      * @author gbrown
      */
-    private class ButtonStateListenerList extends ListenerList<ButtonStateListener>
+    private static class ButtonStateListenerList extends ListenerList<ButtonStateListener>
         implements ButtonStateListener {
         public void stateChanged(Button button, Button.State previousState) {
             for (ButtonStateListener listener : this) {

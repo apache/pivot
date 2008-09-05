@@ -24,7 +24,7 @@ import pivot.util.ListenerList;
  */
 @ComponentInfo(icon="ScrollBar.png")
 public class ScrollBar extends Container {
-    private class ScrollBarListenerList extends ListenerList<ScrollBarListener>
+    private static class ScrollBarListenerList extends ListenerList<ScrollBarListener>
         implements ScrollBarListener {
         public void orientationChanged(ScrollBar scrollBar,
             Orientation previousOrientation) {
@@ -55,7 +55,7 @@ public class ScrollBar extends Container {
         }
     }
 
-    private class ScrollBarValueListenerList extends ListenerList<ScrollBarValueListener>
+    private static class ScrollBarValueListenerList extends ListenerList<ScrollBarValueListener>
         implements ScrollBarValueListener {
         public void valueChanged(ScrollBar scrollBar, int previousValue) {
             for (ScrollBarValueListener listener : this) {
