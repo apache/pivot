@@ -4,6 +4,9 @@ import java.awt.Graphics2D;
 
 import pivot.wtk.Bounds;
 
+/**
+ * TODO Throw in setStroke() and setFill()?
+ */
 public class Clone extends Shape {
     private Shape source = null;
 
@@ -32,5 +35,10 @@ public class Clone extends Shape {
         if (source != null) {
             source.stroke(graphics);
         }
+    }
+
+    @Override
+    public boolean contains(int x, int y) {
+        return (source == null) ? false : source.contains(x, y);
     }
 }

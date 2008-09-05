@@ -11,7 +11,7 @@ import pivot.wtk.Bounds;
 import pivot.wtk.Point;
 
 public abstract class Shape {
-    public final class TransformSequence extends Transform
+    public static final class TransformSequence extends Transform
         implements Sequence<Transform>, Iterable<Transform> {
         public float[][] getMatrix() {
             // TODO
@@ -64,12 +64,24 @@ public abstract class Shape {
         }
     }
 
+    private Group parent = null;
+
     private int x = 0;
     private int y = 0;
 
     private Paint fill = null;
     private Paint stroke = Color.BLACK;
     private int strokeThickness = 1;
+
+    private TransformSequence transform = new TransformSequence();
+
+    public Group getParent() {
+        return parent;
+    }
+
+    protected void setParent(Group parent) {
+        this.parent = parent;
+    }
 
     public int getX() {
         return x;
@@ -135,7 +147,7 @@ public abstract class Shape {
             throw new IllegalArgumentException("stroke is null.");
         }
 
-        // TODO Support an encoding for gradient paints?
+        // TODO Support an encoding for gradient paints
 
         setStroke(Color.decode(stroke));
     }
@@ -148,8 +160,7 @@ public abstract class Shape {
     public abstract Bounds getUntransformedBounds();
 
     public TransformSequence getTransform() {
-        // TODO
-        return null;
+        return transform;
     }
 
     public void paint(Graphics2D graphics) {
@@ -167,4 +178,6 @@ public abstract class Shape {
 
     public abstract void fill(Graphics2D graphics);
     public abstract void stroke(Graphics2D graphics);
+
+    public abstract boolean contains(int x, int y);
 }

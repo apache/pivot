@@ -9,6 +9,8 @@ import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Keyboard;
+import pivot.wtk.Mouse;
 import pivot.wtk.Panorama;
 import pivot.wtk.Bounds;
 import pivot.wtk.Viewport;
@@ -355,6 +357,67 @@ public class PanoramaSkin extends ContainerSkin
         return new Bounds(0, 0, getWidth(), getHeight());
     }
 
+    @Override
+    public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
+        int wheelRotation, int x, int y) {
+        boolean consumed = false;
+
+        Panorama panorama = (Panorama)getComponent();
+        Component view = panorama.getView();
+
+        if (view != null) {
+            // The scroll orientation is tied to whether the shift key was
+            // presssed while the mouse wheel was scrolled
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                // Treat the mouse wheel as a horizontal scroll event
+                int previousScrollLeft = panorama.getScrollLeft();
+                int newScrollLeft = previousScrollLeft + (scrollAmount * wheelRotation *
+                    (int)INITIAL_SCROLL_DISTANCE);
+
+                if (wheelRotation > 0) {
+                    int maxScrollLeft = getMaxScrollLeft();
+                    newScrollLeft = Math.min(newScrollLeft, maxScrollLeft);
+
+                    if (previousScrollLeft < maxScrollLeft) {
+                        consumed = true;
+                    }
+                } else {
+                    newScrollLeft = Math.max(newScrollLeft, 0);
+
+                    if (previousScrollLeft > 0) {
+                        consumed = true;
+                    }
+                }
+
+                panorama.setScrollLeft(newScrollLeft);
+            } else {
+                // Treat the mouse wheel as a vertical scroll event
+                int previousScrollTop = panorama.getScrollTop();
+                int newScrollTop = previousScrollTop + (scrollAmount * wheelRotation *
+                    (int)INITIAL_SCROLL_DISTANCE);
+
+                if (wheelRotation > 0) {
+                    int maxScrollTop = getMaxScrollTop();
+                    newScrollTop = Math.min(newScrollTop, maxScrollTop);
+
+                    if (previousScrollTop < maxScrollTop) {
+                        consumed = true;
+                    }
+                } else {
+                    newScrollTop = Math.max(newScrollTop, 0);
+
+                    if (previousScrollTop > 0) {
+                        consumed = true;
+                    }
+                }
+
+                panorama.setScrollTop(newScrollTop);
+            }
+        }
+
+        return consumed;
+    }
+
     public Color getButtonColor() {
         return buttonColor;
     }
@@ -491,7 +554,7 @@ public class PanoramaSkin extends ContainerSkin
         }
     }
 
-    public void viewChanged(Viewport scrollPane, Component previousView) {
+    public void viewChanged(Viewport panorama, Component previousView) {
         invalidateComponent();
     }
 

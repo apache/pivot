@@ -8,6 +8,9 @@ import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.wtk.Bounds;
 
+/**
+ * TODO Throw in setStroke() and setFill()?
+ */
 public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     private ArrayList<Shape> shapes = new ArrayList<Shape>();
 
@@ -17,12 +20,12 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     }
 
     public void paint(Graphics2D graphics) {
-        super.paint(graphics);
-
         for (Shape shape : this) {
             Graphics2D shapeGraphics = (Graphics2D)graphics.create();
 
-            // TODO Apply transform to graphics
+            // TODO Translate to origin, then apply transform to graphics
+
+            // TODO Only paint if shape bounds intersects clip bounds
 
             shape.paint(shapeGraphics);
             shapeGraphics.dispose();
@@ -47,12 +50,14 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     public void insert(Shape shape, int index) {
         shapes.insert(shape, index);
 
+        // TODO Set parent
         // TODO Update bounds
     }
 
     public Shape update(int index, Shape shape) {
         Shape previousShape = shapes.update(index, shape);
 
+        // TODO Set parent
         // TODO Update bounds
 
         return previousShape;
@@ -71,6 +76,7 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     public Sequence<Shape> remove(int index, int count) {
         Sequence<Shape> removed = shapes.remove(index, count);
 
+        // TODO Clear parent
         // TODO Update bounds
 
         return removed;
@@ -86,6 +92,23 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
 
     public int getLength() {
         return shapes.getLength();
+    }
+
+    @Override
+    public boolean contains(int x, int y) {
+        // TODO
+        return false;
+    }
+
+    public Shape getShapeAt(int x, int y) {
+        // TODO Walk shape list from top to bottom; if shape bounds contains
+        // x, y, call contains() on the shape
+        return null;
+    }
+
+    public Shape getDescendantAt(int x, int y) {
+        // TODO Mirror behavior of Container#getDescendantAt()
+        return null;
     }
 
     public Iterator<Shape> iterator() {

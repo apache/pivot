@@ -64,4 +64,10 @@ public class Rectangle extends Shape {
     public void stroke(Graphics2D graphics) {
         graphics.drawRect(getX(), getY(), width, height);
     }
+
+    @Override
+    public boolean contains(int x, int y) {
+        // TODO
+        return false;
+    }
 }
