@@ -43,7 +43,7 @@ public class ListButtons implements Application {
                 // Get the image URL for the selected item
                 String imageName = (String)dictionary.get("imageName");
                 ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                URL imageURL = classLoader.getResource((String)imageName);
+                URL imageURL = classLoader.getResource(imageName);
 
                 // If the image has not been added to the resource cache yet,
                 // add it

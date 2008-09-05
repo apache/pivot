@@ -303,9 +303,9 @@ public class ListButtonSkin extends ButtonSkin
         triggerGraphics.setStroke(new BasicStroke(0));
         triggerGraphics.setPaint(color);
 
-        int tx = triggerBounds.x + (int)Math.round((triggerBounds.width
+        int tx = triggerBounds.x + Math.round((triggerBounds.width
             - triggerIconShape.getBounds().width) / 2f);
-        int ty = triggerBounds.y + (int)Math.round((triggerBounds.height
+        int ty = triggerBounds.y + Math.round((triggerBounds.height
             - triggerIconShape.getBounds().height) / 2f);
         triggerGraphics.translate(tx, ty);
 

@@ -167,8 +167,8 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         Shape clip = graphics.getClip();
         if (clip != null) {
             Rectangle2D clipBounds = clip.getBounds();
-            rowStart = (int)Math.floor((double)clipBounds.getY() / (double)rowHeight);
-            rowEnd = Math.min(rowEnd, (int)Math.ceil((double)(clipBounds.getY()
+            rowStart = (int)Math.floor(clipBounds.getY() / (double)rowHeight);
+            rowEnd = Math.min(rowEnd, (int)Math.ceil((clipBounds.getY()
                 + clipBounds.getHeight()) / (double)rowHeight) - 1);
         }
 

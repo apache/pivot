@@ -40,8 +40,8 @@ public final class Base64 {
             lookup[i] = (char)('0' + j);
         }
 
-        lookup[62] = (char)'+';
-        lookup[63] = (char)'/';
+        lookup[62] = '+';
+        lookup[63] = '/';
 
         // Populate the reverse lookup array
 

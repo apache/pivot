@@ -39,7 +39,7 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
     }
 
     public void setDateFormat(String dateFormat) {
-        setDateFormat(new SimpleDateFormat((String)dateFormat));
+        setDateFormat(new SimpleDateFormat(dateFormat));
     }
 
     @Override

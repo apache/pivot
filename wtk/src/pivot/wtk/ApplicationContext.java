@@ -144,7 +144,7 @@ public abstract class ApplicationContext {
 
                 try {
                     display.paint(bufferedImageGraphics);
-                    dragDropManager.paint((Graphics2D)bufferedImageGraphics);
+                    dragDropManager.paint(bufferedImageGraphics);
                     graphics.drawImage(bufferedImage, clipBounds.x, clipBounds.y, this);
                 } finally {
                     bufferedImageGraphics.dispose();
@@ -189,7 +189,7 @@ public abstract class ApplicationContext {
 
                     try {
                         display.paint(volatileImageGraphics);
-                        dragDropManager.paint((Graphics2D)volatileImageGraphics);
+                        dragDropManager.paint(volatileImageGraphics);
                         graphics.drawImage(volatileImage, clipBounds.x, clipBounds.y, this);
                     } finally {
                         volatileImageGraphics.dispose();
@@ -694,7 +694,7 @@ public abstract class ApplicationContext {
     }
 
     private static void clearTimerTask(int timerTaskID) {
-        TimerTask timerTask = (TimerTask)timerTaskMap.remove(timerTaskID);
+        TimerTask timerTask = timerTaskMap.remove(timerTaskID);
         if (timerTask != null) {
             timerTask.cancel();
         }

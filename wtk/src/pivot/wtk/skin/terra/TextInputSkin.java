@@ -274,7 +274,7 @@ public class TextInputSkin extends ComponentSkin
             java.awt.Rectangle caretBounds = caretShapes[0].getBounds();
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
 
-            int ascent = (int)Math.round(lm.getAscent());
+            int ascent = Math.round(lm.getAscent());
             caretBounds.x += (padding.left - scrollLeft + 1);
             caretBounds.y += (padding.top + ascent + 1);
 
@@ -410,7 +410,7 @@ public class TextInputSkin extends ComponentSkin
         String text = getText();
 
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-        int ascent = (int)Math.round(lm.getAscent());
+        int ascent = Math.round(lm.getAscent());
 
         graphics.translate(padding.left - scrollLeft + 1, padding.top + ascent + 1);
 

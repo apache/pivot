@@ -38,7 +38,7 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
     }
 
     public void setNumberFormat(String numberFormat) {
-        setNumberFormat(new DecimalFormat((String)numberFormat));
+        setNumberFormat(new DecimalFormat(numberFormat));
     }
 
     @Override

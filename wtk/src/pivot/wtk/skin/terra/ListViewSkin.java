@@ -143,8 +143,8 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         Shape clip = graphics.getClip();
         if (clip != null) {
             Rectangle2D clipBounds = clip.getBounds();
-            itemStart = (int)Math.floor((double)clipBounds.getY() / (double)itemHeight);
-            itemEnd = Math.min(itemEnd, (int)Math.ceil((double)(clipBounds.getY()
+            itemStart = (int)Math.floor(clipBounds.getY() / (double)itemHeight);
+            itemEnd = Math.min(itemEnd, (int)Math.ceil((clipBounds.getY()
                 + clipBounds.getHeight()) / (double)itemHeight) - 1);
         }
 
