@@ -7,6 +7,8 @@ import pivot.collections.Sequence;
  *
  * @param <T>
  * The value type.
+ *
+ * @author gbrown
  */
 public interface ValueSeries<T> extends Series, Sequence<T> {
 }

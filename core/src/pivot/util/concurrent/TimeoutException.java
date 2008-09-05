@@ -15,6 +15,11 @@
  */
 package pivot.util.concurrent;
 
+/**
+ * Thrown when an executing task has timed out.
+ *
+ * @author gbrown
+ */
 public class TimeoutException extends RuntimeException {
     public static final long serialVersionUID = 0;
 

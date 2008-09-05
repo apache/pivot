@@ -18,6 +18,11 @@ package pivot.web;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * <p>Executes an HTTP POST operation.</p>
+ *
+ * @author gbrown
+ */
 public class PostQuery extends Query<URL> {
     private Object value = null;
 
@@ -29,14 +34,33 @@ public class PostQuery extends Query<URL> {
         super(hostname, port, path, secure);
     }
 
+    /**
+     * Returns the value that will be POSTed to the server when the query is
+     * executed.
+     */
     public Object getValue() {
         return value;
     }
 
+    /**
+     * Sets the value that will be POSTed to the server when the query is
+     * executed.
+     *
+     * @param value
+     * The value to POST to the server.
+     */
     public void setValue(Object value) {
         this.value = value;
     }
 
+    /**
+     * Synchronously executes the POST operation.
+     *
+     * @return
+     * A URL that uniquely identifies the location of the resource created
+     * on the server by the operation, or <tt>null</tt> if the server did
+     * not return a location.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public URL execute() throws QueryException {

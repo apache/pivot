@@ -20,10 +20,21 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 
+/**
+ * <p>Implementation of the {@link Serializer} interface that uses Java's
+ * internal serialization mechanism to read and write values. All values in the
+ * object hierarchy are required to implement {@link Serializable}.</p>
+ *
+ * @author gbrown
+ */
 public class BinarySerializer implements Serializer {
     public static final String MIME_TYPE = "application/x-java-serialized-object";
 
+    /**
+     * Reads a sequence of serialized objects from an input stream.
+     */
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
         if (inputStream == null) {
@@ -42,6 +53,9 @@ public class BinarySerializer implements Serializer {
         return object;
     }
 
+    /**
+     * Writes a sequence of serializable objects to an output stream.
+     */
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
         if (object == null) {

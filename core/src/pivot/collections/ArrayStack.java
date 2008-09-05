@@ -15,6 +15,12 @@
  */
 package pivot.collections;
 
+/**
+ * <p>Implementation of the {@link Stack} interface that is backed by an
+ * array.</p>
+ *
+ * @author gbrown
+ */
 public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
     public static final long serialVersionUID = 0;
 

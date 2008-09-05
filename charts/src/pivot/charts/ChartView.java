@@ -104,7 +104,7 @@ public abstract class ChartView extends Component {
     }
 
     /**
-     * Represents an element of a chart.
+     * Represents an element of a chart, such as a bar or a pie wedge.
      */
     public static class Element {
         private int seriesIndex;

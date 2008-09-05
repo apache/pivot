@@ -15,6 +15,12 @@
  */
 package pivot.collections;
 
+/**
+ * <p>Implementation of the {@link Stack} interface that is backed by a linked
+ * list.</p>
+ *
+ * <p>TODO This class is currently incomplete.</p>
+ */
 public class LinkedStack<T> extends LinkedList<T> implements Stack<T> {
 
     public void push(T item) {

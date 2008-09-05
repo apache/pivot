@@ -15,6 +15,11 @@
  */
 package pivot.web;
 
+/**
+ * <p>Executes an HTTP DELETE operation.</p>
+ *
+ * @author gbrown
+ */
 public class DeleteQuery extends Query<Void> {
     public DeleteQuery(String hostname, String path) {
         this(hostname, DEFAULT_PORT, path, false);
@@ -24,6 +29,9 @@ public class DeleteQuery extends Query<Void> {
         super(hostname, port, path, secure);
     }
 
+    /**
+     * Synchronously executes the DELETE operation.
+     */
     @Override
     public Void execute() throws QueryException {
         execute(Method.DELETE, null);

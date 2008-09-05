@@ -16,13 +16,14 @@
 package pivot.collections.concurrent;
 
 import java.util.Comparator;
+
 import pivot.collections.Map;
 import pivot.collections.MapListener;
 import pivot.util.ListenerList;
 import pivot.util.concurrent.SynchronizedListenerList;
 
 /**
- * Synchronized map wrapper.
+ * <p>Synchronized implementation of the {@link Map} interface.</p>
  *
  * @author gbrown
  */

@@ -23,6 +23,11 @@ import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
+/**
+ * <p>Unmodifiable implementation of the {@link List} interface.</p>
+ *
+ * @author gbrown
+ */
 public final class ImmutableList<T> implements List<T> {
     private List<T> list = null;
 

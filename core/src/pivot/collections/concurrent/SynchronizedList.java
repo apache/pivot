@@ -23,15 +23,15 @@ import pivot.util.ListenerList;
 import pivot.util.concurrent.SynchronizedListenerList;
 
 /**
- * Synchronized list wrapper.
+ * <p>Synchronized implementation of the {@link List} interface.</p>
  *
  * @author gbrown
  */
 public class SynchronizedList<T> extends SynchronizedCollection<T>
     implements List<T> {
     /**
-     * Synchronized list listener list implementation. Proxies events fired
-     * by inner list to listeners of synchronized list.
+     * <p>Synchronized list listener list implementation. Proxies events fired
+     * by inner list to listeners of synchronized list.</p>
      *
      * @author gbrown
      */

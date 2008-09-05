@@ -22,10 +22,10 @@ import pivot.collections.Collection;
 import pivot.util.ImmutableIterator;
 
 /**
- * Abstract base class for synchronized collection wrappers.
+ * <p>Abstract base class for synchronized collection wrappers.</p>
  *
- * NOTE In order to guarantee thread-safe access, all access to the backing
- * collection must be via the synchronized wrapper.
+ * <p>NOTE In order to guarantee thread-safe access, all access to the backing
+ * collection must be via the synchronized wrapper.</p>
  *
  * @author gbrown
  */

@@ -15,9 +15,40 @@
  */
 package pivot.charts;
 
+/**
+ * Chart view series listener interface.
+ *
+ * @author gbrown
+ */
 public interface ChartViewSeriesListener {
+    /**
+     * Fired when a series is inserted into a chart view's data set.
+     *
+     * @param chartView
+     * @param index
+     */
     public void seriesInserted(ChartView chartView, int index);
+
+    /**
+     * Fired when a series is removed from a chart view's data set.
+     *
+     * @param chartView
+     * @param index
+     * @param count
+     */
     public void seriesRemoved(ChartView chartView, int index, int count);
+
+    /**
+     * Fired when a series is updated in a chart view's data set.
+     * @param chartView
+     * @param index
+     */
     public void seriesUpdated(ChartView chartView, int index);
+
+    /**
+     * Fired when a chart view's series data is sorted.
+     *
+     * @param chartView
+     */
     public void seriesSorted(ChartView chartView);
 }

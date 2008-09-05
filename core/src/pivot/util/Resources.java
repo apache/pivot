@@ -27,13 +27,13 @@ import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
 
 /**
- * This class reads a JSON resource at {@link #baseName} using
- * {@link ClassLoader#getResourceAsStream(String)}. It applies localisation to
+ * <p>Reads a JSON resource at {@link #baseName} using
+ * {@link ClassLoader#getResourceAsStream(String)}. It applies localization to
  * the resource using a method similar to that of
  * {@link java.util.ResourceBundle} in that it loads the base resource, then
  * applies a country specified resource over-writing the values in the base
  * using the country specified. It then does the same for country/language
- * specific.
+ * specific.</p>
  *
  * @see java.util.ResourceBundle
  *

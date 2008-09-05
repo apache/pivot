@@ -17,11 +17,56 @@ package pivot.charts;
 
 import pivot.collections.List;
 
+/**
+ * Chart view listener interface.
+ *
+ * @author gbrown
+ */
 public interface ChartViewListener {
+    /**
+     * Fired when a chart view's data changes.
+     *
+     * @param chartView
+     * @param previousChartData
+     */
     public void chartDataChanged(ChartView chartView, List<?> previousChartData);
+
+    /**
+     * Fired when a chart view's series name key changes.
+     *
+     * @param chartView
+     * @param previousSeriesNameKey
+     */
     public void seriesNameKeyChanged(ChartView chartView, String previousSeriesNameKey);
+
+    /**
+     * Fired when a chart view's title changes.
+     *
+     * @param chartView
+     * @param previousTitle
+     */
     public void titleChanged(ChartView chartView, String previousTitle);
+
+    /**
+     * Fired when a chart view's horizontal axis label changes.
+     *
+     * @param chartView
+     * @param previousHorizontalAxisLabel
+     */
     public void horizontalAxisLabelChanged(ChartView chartView, String previousHorizontalAxisLabel);
+
+    /**
+     * Fired when a chart view's vertical axis label changes.
+     *
+     * @param chartView
+     * @param previousVerticalAxisLabel
+     */
     public void verticalAxisLabelChanged(ChartView chartView, String previousVerticalAxisLabel);
+
+    /**
+     * Fired when a chart view's "show legend" flag changes.
+     *
+     * @param chartView
+     */
     public void showLegendChanged(ChartView chartView);
 }

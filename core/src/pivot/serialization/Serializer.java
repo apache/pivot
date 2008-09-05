@@ -20,8 +20,8 @@ import java.io.OutputStream;
 import java.io.IOException;
 
 /**
- * Defines an interface for writing objects to and reading objects from a data
- * stream.
+ * <p>Defines an interface for writing objects to and reading objects from a data
+ * stream.</p>
  *
  * @author gbrown
  */
@@ -48,5 +48,8 @@ public interface Serializer {
      */
     public void writeObject(Object object, OutputStream outputStream) throws IOException, SerializationException;
 
+    /**
+     * Returns the MIME type of the data read and written by this serializer.
+     */
     public String getMIMEType();
 }

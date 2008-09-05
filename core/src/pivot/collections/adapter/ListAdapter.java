@@ -23,6 +23,10 @@ import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
+/**
+ * <p>Implementation of the {@link List} interface that is backed by an
+ * instance of <tt>java.util.List</tt>.</p>
+ */
 public final class ListAdapter<T> implements List<T> {
     private java.util.List<T> list = null;
     private ListListenerList<T> listListeners = new ListListenerList<T>();

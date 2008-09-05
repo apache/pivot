@@ -31,15 +31,25 @@ import pivot.collections.List;
 import pivot.collections.Sequence;
 
 /**
- * Reads data from and writes data to a comma-separated value (CSV) file.
+ * <p>Implementation of the {@link Serializer} interface that reads data from
+ * and writes data to a comma-separated value (CSV) file.</p>
  *
- * TODO Add "firstLineContainsKeys" flag.
+ * <p>TODO Allow caller to specify a class that does not implement Dictionary.
+ * We can use BeanDictionary to allow the caller to instantiate and populate
+ * arbitrary types.</p>
  *
- * TODO Add support for variable delimiters.
+ * <p>TODO Add "firstLineContainsKeys" flag.</p>
+ *
+ * <p>TODO Add support for variable delimiters.</p>
+ *
+ * @author gbrown
  */
 public class CSVSerializer implements Serializer {
     public static final String MIME_TYPE = "text/csv";
 
+    /**
+     * <p>Class representing the serializers key sequence.</p>
+     */
     public class KeySequence implements Sequence<String> {
         public int add(String item) {
             return keys.add(item);
@@ -83,14 +93,27 @@ public class CSVSerializer implements Serializer {
     public CSVSerializer() {
     }
 
+    /**
+     * Returns a sequence representing the fields that will be read or written
+     * by this serializer.
+     */
     public KeySequence getKeys() {
         return keySequence;
     }
 
+    /**
+     * Returns the item class that will be instantiated by the serializer during
+     * a read operation.
+     */
     public Class<?> getItemClass() {
         return itemClass;
     }
 
+    /**
+     * Sets the item class that will be instantiated by the serializer during
+     * a read operation. The class must implement the {@link Dictionary}
+     * interface.
+     */
     public void setItemClass(Class<?> itemClass) {
         if (itemClass == null) {
             throw new IllegalArgumentException("itemClass is null.");
@@ -100,15 +123,12 @@ public class CSVSerializer implements Serializer {
     }
 
     /**
-     * Reads values from a comma-separated value file.
+     * Reads values from a comma-separated value stream.
      *
      * @param inputStream
-     * The input stream from which to read data.
+     * The input stream from which data will be read.
      *
-     * @return
-     * An instance of List<Object> containing the data read from the CSV file.
-     * The list items are instances of Dictionary<String, Object> populated by
-     * mapping columns in the CSV file to keys in the key sequence.
+     * @see #readObject(Reader)
      */
     @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream)
@@ -119,6 +139,17 @@ public class CSVSerializer implements Serializer {
         return object;
     }
 
+    /**
+     * Reads values from a comma-separated value stream.
+     *
+     * @param reader
+     * The reader from which data will be read.
+     *
+     * @return
+     * An instance of List<Object> containing the data read from the CSV file.
+     * The list items are instances of Dictionary<String, Object> populated by
+     * mapping columns in the CSV file to keys in the key sequence.
+     */
     public Object readObject(Reader reader)
         throws IOException, SerializationException {
         ArrayList<Dictionary<String, Object>> items = new ArrayList<Dictionary<String, Object>>();
@@ -222,13 +253,14 @@ public class CSVSerializer implements Serializer {
     }
 
     /**
-     * Writes values to a comma-separated file.
+     * Writes values to a comma-separated value stream.
      *
      * @param object
-     * An instance of List<Object> containing the data to write to the CSV
-     * file. List items must be instances of Dictionary<String, Object>. The
-     * dictionary values will be written out in the order specified by the
-     * key sequence.
+     *
+     * @param outputStream
+     * The output stream to which data will be written.
+     *
+     * @see #writeObject(Object, Writer)
      */
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
@@ -244,6 +276,18 @@ public class CSVSerializer implements Serializer {
         }
     }
 
+    /**
+     * Writes values to a comma-separated value stream.
+     *
+     * @param object
+     * An instance of List<Object> containing the data to write to the CSV
+     * file. List items must be instances of Dictionary<String, Object>. The
+     * dictionary values will be written out in the order specified by the
+     * key sequence.
+     *
+     * @param writer
+     * The writer to which data will be written.
+     */
     @SuppressWarnings("unchecked")
     public void writeObject(Object object, Writer writer)
         throws IOException, SerializationException {

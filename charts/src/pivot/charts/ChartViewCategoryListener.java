@@ -17,10 +17,44 @@ package pivot.charts;
 
 import pivot.collections.Sequence;
 
+/**
+ * Chart view category listener interface.
+ *
+ * @author gbrown
+ */
 public interface ChartViewCategoryListener {
+    /**
+     * Fired when a category is inserted into a chart view.
+     *
+     * @param chartView
+     * @param index
+     */
     public void categoryInserted(ChartView chartView, int index);
+
+    /**
+     * Fired when a category is removed from a chart view.
+     *
+     * @param chartView
+     * @param index
+     * @param categories
+     */
     public void categoriesRemoved(ChartView chartView, int index, Sequence<ChartView.Category> categories);
 
+    /**
+     * Fired when a chart view's category key changes.
+     *
+     * @param chartView
+     * @param index
+     * @param previousKey
+     */
     public void categoryKeyChanged(ChartView chartView, int index, String previousKey);
+
+    /**
+     * Fired when a chart view's category label changes.
+     *
+     * @param chartView
+     * @param index
+     * @param previousLabel
+     */
     public void categoryLabelChanged(ChartView chartView, int index, String previousLabel);
 }

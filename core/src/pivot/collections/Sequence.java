@@ -18,14 +18,14 @@ package pivot.collections;
 import java.util.Comparator;
 
 /**
- * Interface representing an ordered sequence of items.
+ * <p>Interface representing an ordered sequence of items.</p>
  *
  * @author gbrown
  */
 public interface Sequence<T> {
     /**
-     * Collection of static utility methods providing path access to nested
-     * sequence data.
+     * <p>Collection of static utility methods providing path access to nested
+     * sequence data.</p>
      *
      * @author gbrown
      */
@@ -286,7 +286,7 @@ public interface Sequence<T> {
     }
 
     /**
-     * Contains utility methods for searching sequences.
+     * <p>Contains utility methods for searching sequences.</p>
      *
      * @author gbrown, tvolkert
      */
@@ -365,7 +365,7 @@ public interface Sequence<T> {
      */
     public static class Sort {
         /**
-         * Performs a quicksort on the sequence.
+         * <p>Performs a quicksort on the sequence.</p>
          *
          * @param sequence
          * The sequence to sort.

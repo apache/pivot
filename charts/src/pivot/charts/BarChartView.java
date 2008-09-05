@@ -17,6 +17,11 @@ package pivot.charts;
 
 import pivot.charts.skin.BarChartViewSkin;
 
+/**
+ * <p>Presents chart data using a bar plot.</p>
+ *
+ * @author gbrown
+ */
 public class BarChartView extends ChartView {
     public BarChartView() {
         setSkin(new BarChartViewSkin());

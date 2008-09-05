@@ -29,6 +29,24 @@ import pivot.serialization.Serializer;
 import pivot.util.concurrent.Dispatcher;
 import pivot.util.concurrent.Task;
 
+/**
+ * <p>Abstract base class for web queries. A web query is an asynchronous
+ * operation that executes one of the following HTTP methods:</p>
+ *
+ * <ul>
+ * <li>GET</li>
+ * <li>POST</li>
+ * <li>PUT</li>
+ * <li>DELETE</li>
+ * </ul>
+ *
+ * @param <V>
+ * The type of the value retrieved or sent via the query. For GET and POST
+ * operations, the type is {@link Object}. For PUT and DELETE, it is
+ * {@link Void}.
+ *
+ * @author gbrown
+ */
 public abstract class Query<V> extends Task<V> {
     protected enum Method {
         GET,
@@ -37,6 +55,9 @@ public abstract class Query<V> extends Task<V> {
         DELETE
     }
 
+    /**
+     * Arguments dictionary implementation.
+     */
     public final class ArgumentsDictionary implements Dictionary<String, String> {
         public String get(String key) {
             return arguments.get(key);
@@ -59,6 +80,9 @@ public abstract class Query<V> extends Task<V> {
         }
     }
 
+    /**
+     * Request properties dictionary implementation.
+     */
     public final class RequestPropertiesDictionary implements Dictionary<String, String> {
         public String get(String key) {
             return requestProperties.get(key);
@@ -81,6 +105,9 @@ public abstract class Query<V> extends Task<V> {
         }
     }
 
+    /**
+     * Response properties dictionary implementation.
+     */
     public final class ResponsePropertiesDictionary implements Dictionary<String, String> {
         public String get(String key) {
             return responseProperties.get(key);
@@ -123,6 +150,14 @@ public abstract class Query<V> extends Task<V> {
     private static final String HTTPS_PROTOCOL = "https";
     private static final String URL_ENCODING = "UTF-8";
 
+    /**
+     * Creates a new web query.
+     *
+     * @param hostname
+     * @param port
+     * @param path
+     * @param secure
+     */
     public Query(String hostname, int port, String path, boolean secure) {
         super(DEFAULT_DISPATCHER);
 
@@ -184,22 +219,44 @@ public abstract class Query<V> extends Task<V> {
         return location;
     }
 
+    /**
+     * Returns the web query's arguments dictionary. Arguments are passed via
+     * the query string of the web query's URL.
+     */
     public ArgumentsDictionary getArguments() {
         return argumentsDictionary;
     }
 
+    /**
+     * Returns the web query's request property dictionary. Request properties
+     * are passed via HTTP headers when the query is executed.
+     */
     public RequestPropertiesDictionary getRequestProperties() {
         return requestPropertiesDictionary;
     }
 
+    /**
+     * Returns the web query's response property dictionary. Response properties
+     * are returned via HTTP headers when the query is executed.
+     */
     public ResponsePropertiesDictionary getResponseProperties() {
         return responsePropertiesDictionary;
     }
 
+    /**
+     * Returns the serializer used to stream the value passed to or from the
+     * web query. By default, an instance of {@link JSONSerializer} is used.
+     */
     public Serializer getSerializer() {
         return serializer;
     }
 
+    /**
+     * Sets the serializer used to stream the value passed to or from the
+     * web query.
+     *
+     * @param serializer
+     */
     public void setSerializer(Serializer serializer) {
         if (serializer == null) {
             throw new IllegalArgumentException("serializer is null.");

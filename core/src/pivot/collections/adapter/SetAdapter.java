@@ -23,6 +23,10 @@ import pivot.collections.SetListener;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
+/**
+ * <p>Implementation of the {@link Set} interface that is backed by an
+ * instance of <tt>java.util.Set</tt>.</p>
+ */
 public class SetAdapter<E> implements Set<E> {
     private java.util.Set<E> set = null;
     private SetListenerList<E> setListeners = new SetListenerList<E>();

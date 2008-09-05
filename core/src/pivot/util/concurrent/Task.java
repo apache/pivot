@@ -15,7 +15,20 @@
  */
 package pivot.util.concurrent;
 
+/**
+ * <p>Abstract base class for "tasks". A task is an asynchronous operation that
+ * may optionally return a value.</p>
+ *
+ * @param V
+ * The type of the value returned by the operation. May be {@link Void} to
+ * indicate that the task does not return a value.
+ *
+ * @author gbrown
+ */
 public abstract class Task<V> {
+    /**
+     * <p>Task execution callback that is posted to the dispatcher queue.</p>
+     */
     private class ExecuteCallback implements Runnable {
         public void run() {
             V result = null;
@@ -71,8 +84,24 @@ public abstract class Task<V> {
         this.dispatcher = dispatcher;
     }
 
+    /**
+     * Synchronously executes the task.
+     *
+     * @return
+     * The result of the task's execution.
+     *
+     * @throws TaskExecutionException
+     * If an error occurs while executing the task.
+     */
     public abstract V execute() throws TaskExecutionException;
 
+    /**
+     * Asynchronously executes the task. The caller is notified of the task's
+     * completion via the listener argument.
+     *
+     * @param taskListener
+     * The listener to be notified when the task completes.
+     */
     public synchronized void execute(TaskListener<V> taskListener) {
         if (taskListener == null) {
             throw new IllegalArgumentException("taskListener is null.");
@@ -93,6 +122,9 @@ public abstract class Task<V> {
         dispatcher.getPendingQueue().enqueue(executeCallback);
     }
 
+    /**
+     * Returns the dispatcher used to execute this task.
+     */
     public Dispatcher getDispatcher() {
         return dispatcher;
     }
@@ -110,22 +142,56 @@ public abstract class Task<V> {
         return result;
     }
 
+    /**
+     * Returns the fault that occurred while executing the task.
+     *
+     * @return
+     * The task fault, or <tt>null</tt> if the task is still executing or
+     * has succeeded. Callers should call {@link #isPending()} to distinguish
+     * between these cases.
+     */
     public synchronized Exception getFault() {
         return fault;
     }
 
-    public synchronized TaskListener<V> getTaskListener() {
-        return taskListener;
+    /**
+     * Returns the pending state of the task.
+     *
+     * @return
+     * <tt>true</tt> if the task is awaiting execution or currently executing;
+     * <tt>false</tt>, otherwise.
+     */
+    public synchronized boolean isPending() {
+        return (taskListener != null);
     }
 
+
+    /**
+     * Returns the timeout value for this task.
+     *
+     * @see #setTimeout(long)
+     */
     public synchronized long getTimeout() {
         return timeout;
     }
 
+    /**
+     * Sets the timeout value for this task. It is the responsibility of the
+     * implementing class to respect this value.
+     *
+     * @param timeout
+     * The time by which the task must complete execution. If the timeout is
+     * exceeded, a {@link TimeoutException} will be thrown.
+     */
     public synchronized void setTimeout(long timeout) {
         this.timeout = timeout;
     }
 
+    /**
+     * Sets the abort flag for this task to <tt>true</tt>. It is the
+     * responsibility of the implementing class to respect this value and
+     * throw a {@link AbortException}.
+     */
     public synchronized void abort() {
         if (taskListener == null) {
             throw new IllegalStateException("Task is not currently pending.");

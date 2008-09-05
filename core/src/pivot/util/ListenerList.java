@@ -18,17 +18,19 @@ package pivot.util;
 import java.util.Iterator;
 
 /**
- * Abstract base class for listener lists.
+ * <p>Abstract base class for listener lists.</p>
  *
- * NOTE This class is not thread-safe.
+ * <p>NOTE This class is not thread-safe.</p>
+ *
+ * <p>TODO Should this class implement Sequence&lt;T&gt;?</p>
+ *
+ * <p>TODO Eliminate dependency on java.util.ArrayList and use an internal
+ * linked list (not an instance of pivot.collections.LinkedList, since
+ * that will create a circular dependency).</p>
  *
  * @author gbrown
  */
 public abstract class ListenerList<T> implements Iterable<T> {
-    // TODO Eliminate dependency on java.util.ArrayList and use an internal
-    // linked list (not an instance of pivot.collections.LinkedList, since
-    // that will create a circular dependency).
-
     private java.util.ArrayList<T> list = new java.util.ArrayList<T>();
 
     public void add(T listener) {

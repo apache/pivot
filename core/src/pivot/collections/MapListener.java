@@ -18,7 +18,7 @@ package pivot.collections;
 import java.util.Comparator;
 
 /**
- * Interface definition for map events.
+ * <p>Interface definition for map events.</p>
  *
  * @author gbrown
  */

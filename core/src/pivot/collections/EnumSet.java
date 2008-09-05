@@ -7,9 +7,9 @@ import java.util.Iterator;
 import pivot.util.ListenerList;
 
 /**
- * TODO This class is experimental and has not been tested.
- *
- * @param <E>
+ * <p>Implementation of the {@link Set} interface that is backed by a bitfield
+ * representing enum values. Enum values are mapped to the bitfield by their
+ * ordinal value.</p>
  */
 public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     public static final long serialVersionUID = 0;

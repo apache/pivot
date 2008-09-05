@@ -18,7 +18,7 @@ package pivot.collections;
 import java.util.Comparator;
 
 /**
- * Interface definition for set events.
+ * <p>Interface definition for set events.</p>
  *
  * @author gbrown
  */

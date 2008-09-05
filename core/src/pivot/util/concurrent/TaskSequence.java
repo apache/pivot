@@ -18,11 +18,12 @@ package pivot.util.concurrent;
 import pivot.collections.Sequence;
 
 /**
- * TODO Class that runs a sequence of tasks in series and notifies listeners
- * when all tasks are complete.
+ * <p>Class that runs a sequence of tasks in series and notifies listeners
+ * when all tasks are complete. Callers can retrieve task results or faults by
+ * calling {@link Task#getResult()} and {@link Task#getFault()},
+ * respectively.</p>
  *
- * NOTE Callers can retrieve task results or faults by calling
- * {@link Task#getResult()} and {@link Task#getFault()}, respectively.
+ * <p>TODO This class is currently incomplete.</p>
  *
  * @author gbrown
  */

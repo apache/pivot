@@ -17,6 +17,11 @@ package pivot.util;
 
 import java.util.Iterator;
 
+/**
+ * <p>Immutable implementation of the {@link Iterator} interface.</p>
+ *
+ * @author gbrown
+ */
 public class ImmutableIterator<T> implements Iterator<T> {
     Iterator<T> iterator;
 

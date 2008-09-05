@@ -129,7 +129,9 @@ public class FlowPanes implements Application, ButtonStateListener {
             orientation = Orientation.VERTICAL;
         }
 
-        flowPane.setOrientation(orientation);
+        if (orientation != null) {
+            flowPane.setOrientation(orientation);
+        }
 
         HorizontalAlignment horizontalAlignment = null;
         if (horizontalAlignmentLeftButton.isSelected()) {
@@ -142,7 +144,9 @@ public class FlowPanes implements Application, ButtonStateListener {
             horizontalAlignment = HorizontalAlignment.JUSTIFY;
         }
 
-        flowPane.getStyles().put("horizontalAlignment", horizontalAlignment);
+        if (horizontalAlignment != null) {
+            flowPane.getStyles().put("horizontalAlignment", horizontalAlignment);
+        }
 
         VerticalAlignment verticalAlignment = null;
         if (verticalAlignmentTopButton.isSelected()) {
@@ -155,6 +159,8 @@ public class FlowPanes implements Application, ButtonStateListener {
             verticalAlignment = VerticalAlignment.JUSTIFY;
         }
 
-        flowPane.getStyles().put("verticalAlignment", verticalAlignment);
+        if (verticalAlignment != null) {
+            flowPane.getStyles().put("verticalAlignment", verticalAlignment);
+        }
     }
 }

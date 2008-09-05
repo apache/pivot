@@ -17,6 +17,11 @@ package pivot.charts;
 
 import pivot.charts.skin.PieChartViewSkin;
 
+/**
+ * <p>Presents chart data using a pie plot.</p>
+ *
+ * @author gbrown
+ */
 public class PieChartView extends ChartView {
     public PieChartView() {
         setSkin(new PieChartViewSkin());

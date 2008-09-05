@@ -19,7 +19,7 @@ import java.util.Comparator;
 import pivot.util.ListenerList;
 
 /**
- * Collection interface representing a group of unique elements.
+ * <p>Collection interface representing a group of unique elements.</p>
  *
  * @author gbrown
  */
@@ -57,22 +57,22 @@ public interface Set<E> extends Group<E>, Collection<E> {
     }
 
     /**
-     * @see pivot.collections.SetListener#elementAdded(Set, Object)
+     * @see SetListener#elementAdded(Set, Object)
      */
     public void add(E element);
 
     /**
-     * @see pivot.collections.SetListener#elementRemoved(Set, Object)
+     * @see SetListener#elementRemoved(Set, Object)
      */
     public void remove(E element);
 
     /**
-     * @see pivot.collections.SetListener#setCleared(Set)
+     * @see SetListener#setCleared(Set)
      */
     public void clear();
 
     /**
-     * @see pivot.collections.SetListener#setCleared(Set)
+     * @see SetListener#setCleared(Set)
      */
     public void setComparator(Comparator<E> comparator);
 

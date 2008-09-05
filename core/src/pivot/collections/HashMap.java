@@ -22,11 +22,16 @@ import java.util.Iterator;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
+/**
+ * <p>Implementation of the {@link Map} interface that is backed by a
+ * hashtable.</p>
+ *
+ * <p>TODO We're temporarily using a java.util.HashMap to back this map.
+ * Eventually, we'll replace this with an internal map representation.</p>
+ */
 public class HashMap<K, V> implements Map<K, V>, Serializable {
     public static final long serialVersionUID = 0;
 
-    // TODO We're temporarily using a java.util.HashMap to back this map.
-    // Eventually, we'll replace this with an internal map representation.
     protected java.util.HashMap<K, V> hashMap = null;
 
     private Comparator<K> comparator = null;

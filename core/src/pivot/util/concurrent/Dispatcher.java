@@ -22,8 +22,16 @@ import pivot.collections.List;
 import pivot.collections.concurrent.SynchronizedQueue;
 
 /**
- * TODO Is there a way to throw an AbortException when an item is removed
- * from the queue, without having to rely on methods like abort()?
+ * <p>Operates a thread pool for dispatching runnable tasks. Runnables are
+ * added to a pending queue and dispatched as threads become available to
+ * execute them.</p>
+ *
+ * <p>TODO This class is currently functional but not complete. Runnables are
+ * currently dispatched as soon as they are added to the queue. Need to complete
+ * the pooling implementation.</p>
+ *
+ * <p>TODO Is there a way to throw an AbortException when an item is removed
+ * from the queue, without having to rely on methods like abort()?</p>
  *
  * @author gbrown
  * @author tvolkert

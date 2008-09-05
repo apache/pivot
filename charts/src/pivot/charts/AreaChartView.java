@@ -17,6 +17,11 @@ package pivot.charts;
 
 import pivot.charts.skin.AreaChartViewSkin;
 
+/**
+ * <p>Presents chart data using an area plot.</p>
+ *
+ * @author gbrown
+ */
 public class AreaChartView extends ChartView {
     public AreaChartView() {
         setSkin(new AreaChartViewSkin());

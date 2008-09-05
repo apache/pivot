@@ -15,6 +15,11 @@
  */
 package pivot.web;
 
+/**
+ * <p>Executes an HTTP GET operation.</p>
+ *
+ * @author gbrown
+ */
 public class GetQuery extends Query<Object> {
     public GetQuery(String hostname, String path) {
         this(hostname, DEFAULT_PORT, path, false);
@@ -24,6 +29,12 @@ public class GetQuery extends Query<Object> {
         super(hostname, port, path, secure);
     }
 
+    /**
+     * Synchronously executes the GET operation.
+     *
+     * @return
+     * The result of the operation, deserialized using the query's serializer.
+     */
     @Override
     public Object execute() throws QueryException {
         return execute(Method.GET, null);

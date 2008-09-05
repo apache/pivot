@@ -20,7 +20,7 @@ import java.util.Comparator;
 import pivot.util.ListenerList;
 
 /**
- * Collection interface representing set of key/value pairs.
+ * <p>Collection interface representing set of key/value pairs.</p>
  *
  * @author gbrown
  */
@@ -73,25 +73,25 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
      * @param value
      * The value to be associated with the given key.
      *
-     * @see pivot.collections.MapListener#valueAdded(Map, Object)
-     * @see pivot.collections.MapListener#valueUpdated(Map, Object, Object)
+     * @see MapListener#valueAdded(Map, Object)
+     * @see MapListener#valueUpdated(Map, Object, Object)
      */
     public V put(K key, V value);
 
     /**
-     * @see pivot.collections.MapListener#valueRemoved(Map, Object, Object)
+     * @see MapListener#valueRemoved(Map, Object, Object)
      */
     public V remove(K key);
 
     /**
      * Removes all entries in the map.
      *
-     * @see pivot.collections.MapListener#mapCleared(Map)
+     * @see MapListener#mapCleared(Map)
      */
     public void clear();
 
     /**
-     * @see pivot.collections.MapListener#comparatorChanged(Collection)
+     * @see MapListener#comparatorChanged(Map, Comparator)
      */
     public void setComparator(Comparator<K> comparator);
 

@@ -16,13 +16,14 @@
 package pivot.collections.concurrent;
 
 import java.util.Comparator;
+
 import pivot.collections.Set;
 import pivot.collections.SetListener;
 import pivot.util.ListenerList;
 import pivot.util.concurrent.SynchronizedListenerList;
 
 /**
- * Synchronized set wrapper.
+ * <p>Synchronized implementation of the {@link Set} interface.</p>
  *
  * @author gbrown
  */

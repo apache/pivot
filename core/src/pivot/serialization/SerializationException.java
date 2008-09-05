@@ -15,6 +15,11 @@
  */
 package pivot.serialization;
 
+/**
+ * Thrown when an error is encountered during serialization.
+ *
+ * @author gbrown
+ */
 public class SerializationException extends Exception {
     public static final long serialVersionUID = 0;
 

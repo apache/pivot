@@ -17,6 +17,11 @@ package pivot.collections.concurrent;
 
 import pivot.collections.Stack;
 
+/**
+ * <p>Synchronized implementation of the {@link Stack} interface.</p>
+ *
+ * @author gbrown
+ */
 public class SynchronizedStack<T> extends SynchronizedList<T>
     implements Stack<T> {
     public SynchronizedStack(Stack<T> stack) {

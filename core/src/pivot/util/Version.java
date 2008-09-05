@@ -2,6 +2,15 @@ package pivot.util;
 
 import java.io.Serializable;
 
+/**
+ * <p>Represents a version number defined as:</p>
+ *
+ * <p><i>major</i>.<i>minor</i>.<i>maintenance</i>_<i>update</i></p>
+ *
+ * <p>for example, "JDK 1.6.0_10".</p>
+ *
+ * @author gbrown
+ */
 public class Version implements Comparable<Version>, Serializable {
     public static final long serialVersionUID = 0;
 

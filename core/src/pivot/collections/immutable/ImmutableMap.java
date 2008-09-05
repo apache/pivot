@@ -23,6 +23,11 @@ import pivot.collections.MapListener;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
+/**
+ * <p>Unmodifiable implementation of the {@link Map} interface.</p>
+ *
+ * @author gbrown
+ */
 public class ImmutableMap<K, V> implements Map<K, V> {
     private Map<K, V> map = null;
 

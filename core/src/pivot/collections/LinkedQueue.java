@@ -15,6 +15,12 @@
  */
 package pivot.collections;
 
+/**
+ * <p>Implementation of the {@link Queue} interface that is backed by a linked
+ * list.</p>
+ *
+ * <p>TODO This class is currently incomplete.</p>
+ */
 public class LinkedQueue<T> extends LinkedList<T> implements Queue<T> {
 
     public void enqueue(T item) {

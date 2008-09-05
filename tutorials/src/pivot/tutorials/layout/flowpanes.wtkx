@@ -40,7 +40,7 @@ limitations under the License.
                 <RadioButton wtkx:id="horizontalAlignmentJustifyButton" buttonData="Justify" group="horizontalAlignment"/>
 
                 <Label text="Vertical Alignment" styles="{font:'Verdana bold 11'}"/>
-                <RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top'" group="verticalAlignment" selected="true"/>
+                <RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top" group="verticalAlignment" selected="true"/>
                 <RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" group="verticalAlignment"/>
                 <RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" group="verticalAlignment"/>
                 <RadioButton wtkx:id="verticalAlignmentJustifyButton" buttonData="Justify" group="verticalAlignment"/>

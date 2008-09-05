@@ -19,13 +19,13 @@ import java.util.Comparator;
 import pivot.util.ListenerList;
 
 /**
- * Collection interface representing an ordered sequence of items.
+ * <p>Collection interface representing an ordered sequence of items.</p>
  *
  * @author gbrown
  */
 public interface List<T> extends Sequence<T>, Collection<T> {
     /**
-     * List listener list implementation.
+     * <p>List listener list implementation.</p>
      *
      * @author gbrown
      */
@@ -82,7 +82,7 @@ public interface List<T> extends Sequence<T>, Collection<T> {
      * If the list is sorted and the insertion point of the item does not match
      * the given index.
      *
-     * @see pivot.collections.ListListener#itemInserted(List, int)
+     * @see ListListener#itemInserted(List, int)
      */
     public void insert(T item, int index);
 
@@ -99,17 +99,17 @@ public interface List<T> extends Sequence<T>, Collection<T> {
      * If the list is sorted and the index of the updated item would be
      * different than its current index.
      *
-     * @see pivot.collections.ListListener#itemUpdated(List, int, Object)
+     * @see ListListener#itemUpdated(List, int, Object)
      */
     public T update(int index, T item);
 
     /**
-     * @see pivot.collections.ListListener#itemsRemoved(List, int, Object[])
+     * @see ListListener#itemsRemoved(List, int, Sequence)
      */
     public Sequence<T> remove(int index, int count);
 
     /**
-     * @see pivot.collections.ListListener#itemsRemoved(List, int, Object[])
+     * @see ListListener#itemsRemoved(List, int, Sequence)
      */
     public void clear();
 
@@ -123,7 +123,7 @@ public interface List<T> extends Sequence<T>, Collection<T> {
     public int getLength();
 
     /**
-     * @see pivot.collections.ListListener#comparatorChanged(Collection)
+     * @see ListListener#comparatorChanged(List, Comparator)
      */
     public void setComparator(Comparator<T> comparator);
 

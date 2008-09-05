@@ -17,6 +17,9 @@ package pivot.web;
 
 import pivot.util.concurrent.TaskExecutionException;
 
+/**
+ * Thrown when an error occurs while executing a web query.
+ */
 public class QueryException extends TaskExecutionException {
     public static final long serialVersionUID = 0;
 
@@ -38,6 +41,12 @@ public class QueryException extends TaskExecutionException {
         super(cause);
     }
 
+    /**
+     * Returns the HTTP status code corresponding to the exception.
+     *
+     * @return
+     * An HTTP status code reflecting the nature of the exception.
+     */
     public int getStatus() {
         return status;
     }

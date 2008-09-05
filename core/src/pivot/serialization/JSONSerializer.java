@@ -33,9 +33,10 @@ import pivot.collections.Map;
 import pivot.collections.Sequence;
 
 /**
- * Serializes data to and from JavaScript Object Notation (JSON).
+ * <p>Implementation of the {@link Serializer} interface that reads data from
+ * and writes data to a JavaScript Object Notation (JSON) file.</p>
  *
- * TODO Wrap reader in a CountingReader that tracks line/character index.
+ * <p>TODO Wrap reader in a CountingReader that tracks line/character index.</p>
  *
  * @author gbrown
  */
@@ -64,7 +65,12 @@ public class JSONSerializer implements Serializer {
     }
 
     /**
-     * Deserializes data from a JSON stream. See {@link #readObject(Reader)}.
+     * Reads data from a JSON stream.
+     *
+     * @param inputStream
+     * The input stream from which data will be read.
+     *
+     * @see #readObject(Reader)
      */
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
@@ -75,7 +81,10 @@ public class JSONSerializer implements Serializer {
     }
 
     /**
-     * Deserializes data from a JSON stream.
+     * Reads data from a JSON stream.
+     *
+     * @param reader
+     * The reader from which data will be read.
      *
      * @return
      * One of the following types, depending on the content of the stream:
@@ -355,7 +364,14 @@ public class JSONSerializer implements Serializer {
     }
 
     /**
-     * Serializes data to a JSON stream. See {@link #writeObject(Object, OutputStream)
+     * Writes data to a JSON stream.
+     *
+     * @param object
+     *
+     * @param outputStream
+     * The output stream to which data will be written.
+     *
+     * @see #writeObject(Object, Writer)
      */
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
@@ -372,7 +388,7 @@ public class JSONSerializer implements Serializer {
     }
 
     /**
-     * Serializes data to a JSON stream.
+     * Writes data to a JSON stream.
      *
      * @param object
      * The object to serialize. Must be one of the following types:
@@ -384,6 +400,9 @@ public class JSONSerializer implements Serializer {
      * <li>pivot.collections.List</li>
      * <li>pivot.collections.Map</li>
      * </ul>
+     *
+     * @param writer
+     * The writer to which data will be written.
      */
     @SuppressWarnings("unchecked")
     public void writeObject(Object object, Writer writer)
@@ -472,8 +491,6 @@ public class JSONSerializer implements Serializer {
     /**
      * Returns a flag indicating whether or not map keys will always be
      * quote-delimited.
-     *
-     * @return
      */
     public boolean getAlwaysDelimitMapKeys() {
         return alwaysDelimitMapKeys;
@@ -631,48 +648,137 @@ public class JSONSerializer implements Serializer {
         return value;
     }
 
+    /**
+     * Returns the value at the given path as a string.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
     public static String getString(Object root, String path) {
         return (String)getValue(root, path);
     }
 
+    /**
+     * Returns the value at the given path as a number.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
     public static Number getNumber(Object root, String path) {
         return (Number)getValue(root, path);
     }
 
+    /**
+     * Returns the value at the given path as a short.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
     public static Short getShort(Object root, String path) {
         return (Short)getValue(root, path);
     }
 
+    /**
+     * Returns the value at the given path as an integer.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
     public static Integer getInteger(Object root, String path) {
         return (Integer)getValue(root, path);
     }
 
+    /**
+     * Returns the value at the given path as a long.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
     public static Long getLong(Object root, String path) {
         return (Long)getValue(root, path);
     }
 
+    /**
+     * Returns the value at the given path as a float.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
     public static Float getFloat(Object root, String path) {
         return (Float)getValue(root, path);
     }
 
+    /**
+     * Returns the value at the given path as a double.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
     public static Double getDouble(Object root, String path) {
         return (Double)getValue(root, path);
     }
 
+    /**
+     * Returns the value at the given path as a boolean.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
     public static Boolean getBoolean(Object root, String path) {
         return (Boolean)getValue(root, path);
     }
 
+    /**
+     * Returns the value at the given path as a list.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
     @SuppressWarnings("unchecked")
     public static List<?> getList(Object root, String path) {
         return (List<?>)getValue(root, path);
     }
 
+    /**
+     * Returns the value at the given path as a map.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
     @SuppressWarnings("unchecked")
     public static Map<String, ?> getMap(Object root, String path) {
         return (Map<String, ?>)getValue(root, path);
     }
 
+    /**
+     * Parses a JSON-formatted array value into a list.
+     *
+     * @param string
+     * A string containing a JSON array (e.g. "[1, 2, 3]").
+     *
+     * @return
+     * A {@link List} instance containing the parsed JSON data.
+     */
     @SuppressWarnings("unchecked")
     public static List<?> parseList(String string) {
         List<?> list = null;
@@ -690,6 +796,15 @@ public class JSONSerializer implements Serializer {
         return list;
     }
 
+    /**
+     * Parses a JSON-formatted object value into a map.
+     *
+     * @param string
+     * A string containing a JSON object (e.g. "{a:1, b:2, c:3}").
+     *
+     * @return
+     * A {@link Map} instance containing the parsed JSON data.
+     */
     @SuppressWarnings("unchecked")
     public static Map<String, ?> parseMap(String string) {
         Map<String, ?> map = null;

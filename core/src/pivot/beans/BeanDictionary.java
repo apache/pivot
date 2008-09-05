@@ -25,13 +25,21 @@ import java.util.NoSuchElementException;
 import pivot.collections.Dictionary;
 
 /**
- * Exposes Java bean properties of an object via the {@link Dictionary}
- * interface.
+ * <p>Exposes Java bean properties of an object via the {@link Dictionary}
+ * interface. A call to {@link Dictionary#get(Object)} invokes the getter for
+ * the corresponding property, and a call to
+ * {@link Dictionary#put(Object, Object)} invokes the property's setter.</p>
+ *
+ * <p>Properties may provide multiple setters; the appropriate setter to invoke
+ * is determined by the type of the value being set. If the value is
+ * <tt>null</tt>, the return type of the getter method is used.</p>
+ *
+ * @author gbrown
  */
 public class BeanDictionary implements Dictionary<String, Object>, Iterable<String> {
     /**
-     * Property iterator. Walks the list of methods defined by the bean and
-     * returns a value for each getter method.
+     * <p>Property iterator. Walks the list of methods defined by the bean and
+     * returns a value for each getter method.</p>
      */
     private class PropertyIterator implements Iterator<String> {
         private Method[] methods = null;
@@ -101,6 +109,12 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
     public static final String SET_PREFIX = "set";
     public static final String LISTENERS_SUFFIX = "Listeners";
 
+    /**
+     * Creates a new bean dictionary.
+     *
+     * @param bean
+     * The bean object to wrap.
+     */
     public BeanDictionary(Object bean) {
         if (bean == null) {
             throw new IllegalArgumentException("bean is null.");
@@ -155,6 +169,9 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * @return
      * Returns <tt>null</tt>, since returning the previous value would require
      * a call to the getter method, which may not be an efficient operation.
+     *
+     * @throws PropertyNotFoundException
+     * If the given property does not exist or is read-only.
      */
     public Object put(String key, Object value) {
         if (key == null) {

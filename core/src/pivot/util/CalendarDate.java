@@ -23,8 +23,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TODO Manually implement internal functionality that currently delegates
- * to GregorianCalendar to gain performance.
+ * <p>Represents a Gregorian calendar date that has no association with any
+ * particular time zone.</p>
+ *
+ * <p>TODO Manually implement internal functionality that currently delegates
+ * to GregorianCalendar to gain performance.</p>
  *
  * @author tvolkert
  */

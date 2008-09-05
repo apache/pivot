@@ -19,9 +19,10 @@ import pivot.collections.Group;
 import pivot.collections.HashMap;
 
 /**
- * Class that runs a group of tasks in parallel and notifies listeners
+ * <p>Class that runs a group of tasks in parallel and notifies listeners
  * when all tasks are complete. Callers can retrieve task results or faults by
- * calling {@link Task#getResult()} and {@link Task#getFault()}, respectively.
+ * calling {@link Task#getResult()} and {@link Task#getFault()},
+ * respectively.</p>
  *
  * @author tvolkert
  * @author gbrown

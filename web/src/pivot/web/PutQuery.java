@@ -15,6 +15,11 @@
  */
 package pivot.web;
 
+/**
+ * <p>Executes an HTTP PUT operation.</p>
+ *
+ * @author gbrown
+ */
 public class PutQuery extends Query<Void> {
     private Object value = null;
 
@@ -26,14 +31,28 @@ public class PutQuery extends Query<Void> {
         super(hostname, port, path, secure);
     }
 
+    /**
+     * Returns the value that will be PUT to the server when the query is
+     * executed.
+     */
     public Object getValue() {
         return value;
     }
 
+    /**
+     * Sets the value that will be PUT to the server when the query is
+     * executed.
+     *
+     * @param value
+     * The value to PUT to the server.
+     */
     public void setValue(Object value) {
         this.value = value;
     }
 
+    /**
+     * Synchronously executes the PUT operation.
+     */
     @Override
     public Void execute() throws QueryException {
         execute(Method.PUT, value);

@@ -15,6 +15,12 @@
  */
 package pivot.beans;
 
+/**
+ * <p>Thrown when a caller attempts to set the value of a non-existent bean
+ * property.</p>
+ *
+ * @author gbrown
+ */
 public class PropertyNotFoundException extends RuntimeException {
     public static final long serialVersionUID = 0;
 

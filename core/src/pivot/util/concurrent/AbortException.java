@@ -15,6 +15,11 @@
  */
 package pivot.util.concurrent;
 
+/**
+ * <p>Thrown when a task is aborted.</p>
+ *
+ * @author gbrown
+ */
 public class AbortException extends RuntimeException {
     public static final long serialVersionUID = 0;
 

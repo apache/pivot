@@ -17,6 +17,11 @@ package pivot.charts;
 
 import pivot.charts.skin.LineChartViewSkin;
 
+/**
+ * <p>Presents chart data using a line plot.</p>
+ *
+ * @author gbrown
+ */
 public class LineChartView extends ChartView {
     public LineChartView() {
         setSkin(new LineChartViewSkin());

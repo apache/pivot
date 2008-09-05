@@ -17,6 +17,11 @@ package pivot.collections.concurrent;
 
 import pivot.collections.Queue;
 
+/**
+ * <p>Synchronized implementation of the {@link Queue} interface.</p>
+ *
+ * @author gbrown
+ */
 public class SynchronizedQueue<T> extends SynchronizedList<T>
     implements Queue<T> {
     public SynchronizedQueue(Queue<T> queue) {

@@ -15,6 +15,11 @@
  */
 package pivot.web;
 
+/**
+ * <p>Interface for attaching authentication information to a web query.</p>
+ *
+ * @author gbrown
+ */
 public interface Authentication {
     public void authenticate(Query<?> query);
 }

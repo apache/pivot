@@ -23,6 +23,11 @@ import pivot.collections.SetListener;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
+/**
+ * <p>Unmodifiable implementation of the {@link Set} interface.</p>
+ *
+ * @author gbrown
+ */
 public class ImmutableSet<E> implements Set<E> {
     private Set<E> set = null;
 

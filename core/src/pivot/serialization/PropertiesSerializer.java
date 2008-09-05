@@ -24,7 +24,8 @@ import pivot.collections.Map;
 import pivot.collections.adapter.MapAdapter;
 
 /**
- * Serializes data to and from Java the properties file format.
+ * <p>Implementation of the {@link Serializer} interface that reads data from
+ * and writes data to the Java properties file format.</p>
  *
  * @author smartini
  * @author gbrown
@@ -33,8 +34,14 @@ public class PropertiesSerializer implements Serializer {
     public static final String MIME_TYPE = "text/plain";
 
     /**
-     * Returns a {@link pivot.collections.Map} containing the entries in the
-     * properties file. Both keys and values are strings.
+     * Reads data from a properties stream.
+     *
+     * @param inputStream
+     * The input stream from which data will be read.
+     *
+     * @return
+     * An instance of {@link Map} containing the data read from the properties
+     * file. Both keys and values are strings.
      */
     @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream) throws IOException,
@@ -50,8 +57,15 @@ public class PropertiesSerializer implements Serializer {
     }
 
     /**
-     * Writes the entries from a {@link pivot.collections.Map} to a properties
-     * file. Keys must be strings, and values will be converted to strings.
+     * Writes data to a properties stream.
+     *
+     * @param object
+     * An instance of {@link Map} containing the data to be written to the
+     * properties file. Keys must be strings, and values will be converted to
+     * strings.
+     *
+     * @param outputStream
+     * The output stream to which data will be written.
      */
     @SuppressWarnings("unchecked")
     public void writeObject(Object object, OutputStream outputStream) throws IOException,
