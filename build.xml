@@ -104,6 +104,9 @@
         <delete file="${chartstest}/${ant.project.name}-charts.test.jar"/>
         <jar jarfile="${chartstest}/${ant.project.name}-charts.test.jar">
             <fileset dir="${chartstest}/${bin}"/>
+            <fileset dir="${chartstest}/${src}">
+                <exclude name="**/*.java"/>
+            </fileset>
         </jar>
     </target>
 
@@ -364,7 +367,7 @@
         <jar jarfile="${wtktest}/${ant.project.name}-wtk.test.jar">
             <fileset dir="${wtktest}/${bin}"/>
             <fileset dir="${wtktest}/${src}">
-                <include name="**/*.png"/>
+                <exclude name="**/*.java"/>
             </fileset>
         </jar>
     </target>
