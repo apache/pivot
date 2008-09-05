@@ -513,7 +513,7 @@ public class Window extends Container {
 
             // Add the component
             if (content != null) {
-                add(content);
+                insert(content, 0);
             }
 
             this.content = content;
