@@ -25,17 +25,15 @@ import pivot.serialization.Serializer;
 
 public class PropertiesSerializerTest
 {
-
     @SuppressWarnings("unchecked")
-	public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         Serializer serializer = new PropertiesSerializer();
 
         Map<String, Object> testMap = new HashMap<String, Object>();
         testMap.put("hello",   "Hello World");
         testMap.put("number",  123.456);
         testMap.put("boolean", true);
-        testMap.put("i18n",    "€ & àèìòù");  // test some chars to encode ...
+        testMap.put("i18n",    "Â€ & ××˜×œ×¢×©");  // test some chars to encode ...
         testMap.put("object",  new Object());
 
         ByteArrayOutputStream outputStream = null;
