@@ -35,12 +35,12 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
     private Color color = Color.BLACK;
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
     private Color backgroundColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color disabledBackgroundColor = new Color(0xF7, 0xF5, 0xEB);
+    private Color disabledBackgroundColor = new Color(0xE6, 0xE3, 0xDA);
     private Color borderColor = new Color(0x99, 0x99, 0x99);
-    private Color disabledBorderColor = new Color(0xCC, 0xCC, 0xCC);
+    private Color disabledBorderColor = new Color(0xB2, 0xB2, 0xB2);
     private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
     private Color pressedBevelColor = new Color(0xCC, 0xCA, 0xC2);
-    private Color disabledBevelColor = Color.WHITE;
+    private Color disabledBevelColor = new Color(0xE6, 0xE3, 0xDA);
     private Insets padding = new Insets(3);
 
     public int getPreferredWidth(int height) {
