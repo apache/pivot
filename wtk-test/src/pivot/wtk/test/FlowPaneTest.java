@@ -7,14 +7,14 @@ import pivot.wtk.Display;
 import pivot.wtk.Frame;
 import pivot.wtkx.WTKXSerializer;
 
-public class FormTest implements Application {
+public class FlowPaneTest implements Application {
     private Frame frame = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("form_test.wtkx")));
-        frame.setTitle("Form Test");
+        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("flow_pane_test.wtkx")));
+        frame.setTitle("Flow Pane Test");
         frame.setPreferredSize(480, 360);
         frame.open(display);
     }

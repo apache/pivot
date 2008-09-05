@@ -288,39 +288,6 @@ public class FlowPaneSkin extends ContainerSkin
                     int componentHeight = 0;
                     int componentY = 0;
 
-                    if (verticalAlignment == VerticalAlignment.JUSTIFY) {
-                        componentY = padding.top;
-                        componentHeight = Math.max(height - (padding.top
-                            + padding.bottom), 0);
-                        componentWidth = component.getPreferredWidth(componentHeight);
-                    } else {
-                        Dimensions preferredComponentSize = component.getPreferredSize();
-
-                        componentWidth = preferredComponentSize.width;
-                        componentHeight = preferredComponentSize.height;
-
-                        switch (verticalAlignment) {
-                            case TOP: {
-                                componentY = padding.top;
-                                break;
-                            }
-
-                            case CENTER: {
-                                componentY = (int)Math.round((double)(height - componentHeight) / 2);
-                                break;
-                            }
-
-                            case BOTTOM: {
-                                componentY = height - padding.bottom
-                                    - componentHeight;
-                                break;
-                            }
-                        }
-                    }
-
-                    // Set the component's position
-                    component.setLocation(componentX, componentY);
-
                     // If the contents are horizontally justified, scale the
                     // component's width to match the available space
                     if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
@@ -329,19 +296,51 @@ public class FlowPaneSkin extends ContainerSkin
                             double widthScale = ((double)(width - fixedWidth)
                                 / (double)(preferredWidth - fixedWidth));
 
-                            componentWidth = (int)Math.max(Math.round((double)componentWidth
+                            componentWidth = (int)Math.max(Math.round((double)component.getPreferredWidth(-1)
                                 * widthScale), 0);
 
-                            if (verticalAlignment != VerticalAlignment.JUSTIFY) {
+                            if (verticalAlignment == VerticalAlignment.JUSTIFY) {
+                                componentY = padding.top;
+                                componentHeight = Math.max(height - (padding.top
+                                    + padding.bottom), 0);
+                            } else {
                                 componentHeight = component.getPreferredHeight(componentWidth);
                             }
+                        }
+                    } else {
+                        if (verticalAlignment == VerticalAlignment.JUSTIFY) {
+                            componentY = padding.top;
+                            componentHeight = Math.max(height - (padding.top
+                                + padding.bottom), 0);
+                            componentWidth = component.getPreferredWidth(componentHeight);
                         } else {
-                            componentWidth = 0;
+                            Dimensions preferredComponentSize = component.getPreferredSize();
+                            componentWidth = preferredComponentSize.width;
+                            componentHeight = preferredComponentSize.height;
                         }
                     }
 
-                    // Set the component's size
+                    switch (verticalAlignment) {
+                        case TOP: {
+                            componentY = padding.top;
+                            break;
+                        }
+
+                        case CENTER: {
+                            componentY = (int)Math.round((double)(height - componentHeight) / 2);
+                            break;
+                        }
+
+                        case BOTTOM: {
+                            componentY = height - padding.bottom
+                                - componentHeight;
+                            break;
+                        }
+                    }
+
+                    // Set the component's size and position
                     component.setSize(componentWidth, componentHeight);
+                    component.setLocation(componentX, componentY);
 
                     // Ensure that the component is visible
                     component.setVisible(true);
@@ -409,32 +408,7 @@ public class FlowPaneSkin extends ContainerSkin
                             + padding.right), 0);
                         componentHeight = component.getPreferredHeight(componentWidth);
                     } else {
-                        Dimensions preferredComponentSize = component.getPreferredSize();
-
-                        componentWidth = preferredComponentSize.width;
-                        componentHeight = preferredComponentSize.height;
-
-                        switch (horizontalAlignment) {
-                            case LEFT: {
-                                componentX = padding.left;
-                                break;
-                            }
-
-                            case CENTER: {
-                                componentX = (int)Math.round((double)(width - componentWidth) / 2);
-                                break;
-                            }
-
-                            case RIGHT: {
-                                componentX = width - padding.right
-                                    - componentWidth;
-                                break;
-                            }
-                        }
                     }
-
-                    // Set the component's position
-                    component.setLocation(componentX, componentY);
 
                     // If the contents are vertically justified, scale the
                     // component's height to match the available space
@@ -444,19 +418,51 @@ public class FlowPaneSkin extends ContainerSkin
                             double heightScale = (double)(height - fixedHeight)
                                 / (double)(preferredHeight - fixedHeight);
 
-                            componentHeight = (int)Math.max(Math.round((double)componentHeight
+                            componentHeight = (int)Math.max(Math.round((double)component.getPreferredHeight(-1)
                                 * heightScale), 0);
 
-                            if (horizontalAlignment != HorizontalAlignment.JUSTIFY) {
+                            if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
+                                componentX = padding.left;
+                                componentWidth = Math.max(width - (padding.left
+                                    + padding.right), 0);
+                            } else {
                                 componentWidth = component.getPreferredWidth(componentHeight);
                             }
+                        }
+                    } else {
+                        if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
+                            componentX = padding.left;
+                            componentWidth = Math.max(width - (padding.left
+                                + padding.right), 0);
+                            componentHeight = component.getPreferredHeight(componentWidth);
                         } else {
-                            componentHeight = 0;
+                            Dimensions preferredComponentSize = component.getPreferredSize();
+                            componentWidth = preferredComponentSize.width;
+                            componentHeight = preferredComponentSize.height;
                         }
                     }
 
-                    // Set the component's size
+                    switch (horizontalAlignment) {
+                        case LEFT: {
+                            componentX = padding.left;
+                            break;
+                        }
+
+                        case CENTER: {
+                            componentX = (int)Math.round((double)(width - componentWidth) / 2);
+                            break;
+                        }
+
+                        case RIGHT: {
+                            componentX = width - padding.right
+                                - componentWidth;
+                            break;
+                        }
+                    }
+
+                    // Set the component's size and position
                     component.setSize(componentWidth, componentHeight);
+                    component.setLocation(componentX, componentY);
 
                     // Ensure that the component is visible
                     component.setVisible(true);
