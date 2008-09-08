@@ -3,7 +3,7 @@ package pivot.wtk;
 /**
  * Interface representing a visual that is used in layout.
  */
-public interface LayoutVisual extends Visual {
+public interface ConstrainedVisual extends Visual {
     /**
      * Sets the visual's render size.
      *

@@ -61,7 +61,7 @@ package pivot.wtk;
  *
  * @version 1.0 (4/17/2007)
  */
-public interface Skin extends LayoutVisual {
+public interface Skin extends ConstrainedVisual {
     /**
      * Associates a skin with a component. The skin should register any event
      * listeners necessary to respond to changes in the component's state, and

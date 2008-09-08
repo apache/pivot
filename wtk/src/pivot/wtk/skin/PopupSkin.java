@@ -134,11 +134,14 @@ public class PopupSkin extends WindowSkin
 
     // Component mouse events
     public void mouseDown(Component component, Mouse.Button button, int x, int y) {
-        // If the event did not occur over this component, close the popup
+        // If the event did not occur within a window that is owned by this
+        // popup, close the popup
         Display display = (Display)component;
         Popup popup = (Popup)getComponent();
 
-        if (display.getComponentAt(x, y) != popup) {
+        Window window = (Window)display.getComponentAt(x, y);
+        if (window == null
+            || !popup.isOwningAncestorOf(window)) {
             popup.close();
         }
     }
