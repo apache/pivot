@@ -23,16 +23,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <p>Represents a Gregorian calendar date that has no association with any
- * particular time zone.</p>
- *
- * <p>TODO Manually implement internal functionality that currently delegates
- * to GregorianCalendar to gain performance.</p>
+ * <tt>CalendarDate</tt> allows a specific day to be identified within the
+ * gregorian calendar system. This identification has no association with any
+ * particular time zone and no notion of the time of day.
  *
  * @author tvolkert
  */
 public class CalendarDate implements Comparable<CalendarDate>, Serializable {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 3974393986540543704L;
 
     private int year;
     private int month;
@@ -71,8 +69,10 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
      *
      * @param year
      * The year field (e.g. <tt>2008</tt>)
+     *
      * @param month
      * The month field, 0-based (e.g. <tt>2</tt> for March)
+     *
      * @param day
      * The day of the month, 0-based (e.g. <tt>14</tt> for the 15th)
      */
@@ -134,6 +134,9 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
 
     /**
      * Gets the year field (e.g. <tt>2008</tt>).
+     *
+     * @return
+     * This calendar date's <tt>year</tt> field
      */
     public int getYear() {
         return year;
@@ -141,6 +144,9 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
 
     /**
      * Gets the month field, 0-based (e.g. <tt>2</tt> for March).
+     *
+     * @return
+     * This calendar date's <tt>month</tt> field
      */
     public int getMonth() {
         return month;
@@ -148,6 +154,9 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
 
     /**
      * Gets the day of the month, 0-based (e.g. <tt>14</tt> for the 15th).
+     *
+     * @return
+     * This calendar date's <tt>day</tt> field
      */
     public int getDay() {
         return day;
@@ -155,6 +164,14 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
 
     /**
      * Compares this calendar date with another calendar date.
+     *
+     * @param calendarDate
+     * The calendar date against which to compare
+     *
+     * @return
+     * A negative number, zero, or a positive number if the specified calendar
+     * date is less than, equal to, or greater than this calendar date,
+     * respectively.
      */
     public int compareTo(CalendarDate calendarDate) {
         int result = year - calendarDate.year;
@@ -174,6 +191,12 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
      * Adds the specified number of days to this calendar date and returns the
      * resulting calendar date. The number of days may be negative, in which
      * case the result will be a date before this calendar date.
+     * <p>
+     * More formally, it is defined that given calendar dates <tt>c1</tt> and
+     * <tt>c2</tt>, the following will return <tt>true</tt>:
+     * <pre>
+     *    c1.add(c2.subtract(c1)).equals(c2);
+     * </pre>
      *
      * @param days
      * The number of days to add to (or subtract from if negative) this
@@ -195,6 +218,19 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
      * calendardate represents a day before the specified calendar date, the
      * difference will be negative. If the two calendar dates represent the
      * same day, the difference will be zero.
+     * <p>
+     * More formally, it is defined that given calendar dates <tt>c1</tt> and
+     * <tt>c2</tt>, the following will return <tt>true</tt>:
+     * <pre>
+     *    c1.add(c2.subtract(c1)).equals(c2);
+     * </pre>
+     *
+     * @param calendarDate
+     * The calendar date to subtract from this calendar date
+     *
+     * @return
+     * The number of days in between this calendar date and
+     * <tt>calendarDate</tt>
      */
     public int subtract(CalendarDate calendarDate) {
         GregorianCalendar c1 = toCalendar();
@@ -221,8 +257,8 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
 
     /**
      * Indicates whether some other object is "equal to" this one.
-     * This is the case if the object is a date that represents the same
-     * day as this one.
+     * This is the case if the object is a calendar date that represents the
+     * same day as this one.
      *
      * @param o
      * Reference to the object against which to compare
