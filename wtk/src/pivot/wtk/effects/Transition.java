@@ -156,7 +156,7 @@ public abstract class Transition {
      * percent complete.
      */
     public float getPercentComplete() {
-        return (float)(currentTime - startTime) / (float)(startTime + duration);
+        return (float)(currentTime - startTime) / (float)(duration);
     }
 
     /**
@@ -170,6 +170,8 @@ public abstract class Transition {
         }
 
         startTime = System.currentTimeMillis();
+        currentTime = startTime;
+
         intervalID = ApplicationContext.setInterval(updateCallback, getInterval());
 
         update();
