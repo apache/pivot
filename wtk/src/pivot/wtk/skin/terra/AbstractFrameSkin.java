@@ -28,6 +28,7 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
+import pivot.wtk.ComponentLayoutListener;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Cursor;
@@ -52,8 +53,10 @@ import pivot.wtk.skin.WindowSkin;
  * Abstract base class for Frame and Dialog skins.
  *
  * @author gbrown
+ * @author tvolkert
  */
-public abstract class AbstractFrameSkin extends WindowSkin {
+public abstract class AbstractFrameSkin extends WindowSkin
+    implements ComponentLayoutListener {
     public static class FrameButton extends PushButton {
         public FrameButton(Object buttonData) {
             super(buttonData);
@@ -328,6 +331,9 @@ public abstract class AbstractFrameSkin extends WindowSkin {
 
         Window window = (Window)component;
 
+        // Attach listeners
+        window.getComponentLayoutListeners().add(this);
+
         // Attach the drop-shadow decorator
         dropShadowDecorator = new DropShadowDecorator();
         window.getDecorators().add(dropShadowDecorator);
@@ -361,7 +367,6 @@ public abstract class AbstractFrameSkin extends WindowSkin {
         maximizeButton.getButtonPressListeners().add(buttonPressListener);
         closeButton.getButtonPressListeners().add(buttonPressListener);
 
-        resizeHandle.setCursor(Cursor.RESIZE_SOUTH_EAST);
         window.add(resizeHandle);
 
         iconChanged(window, null);
@@ -369,11 +374,15 @@ public abstract class AbstractFrameSkin extends WindowSkin {
         activeChanged(window);
 
         updateMaximizedState();
+        updateResizeHandleCursor();
     }
 
     @Override
     public void uninstall() {
         Window window = (Window)getComponent();
+
+        // Detach listeners
+        window.getComponentLayoutListeners().remove(this);
 
         // Detach the drop shadow decorator
         window.getDecorators().remove(dropShadowDecorator);
@@ -714,8 +723,39 @@ public abstract class AbstractFrameSkin extends WindowSkin {
             TITLE_BAR_BORDER_COLOR : INACTIVE_TITLE_BAR_BORDER_COLOR);
     }
 
+    private void updateResizeHandleCursor() {
+        Window window = (Window)getComponent();
+
+        Cursor cursor = Cursor.DEFAULT;
+
+        boolean preferredWidthSet = window.isPreferredWidthSet();
+        boolean preferredHeightSet = window.isPreferredHeightSet();
+
+        if (preferredWidthSet
+            && preferredHeightSet) {
+            cursor = Cursor.RESIZE_SOUTH_EAST;
+        } else if (preferredWidthSet) {
+            cursor = Cursor.RESIZE_EAST;
+        } else if (preferredHeightSet) {
+            cursor = Cursor.RESIZE_SOUTH;
+        }
+
+        resizeHandle.setCursor(cursor);
+    }
+
     @Override
     public void maximizedChanged(Window window) {
         updateMaximizedState();
+    }
+
+    // ComponentLayoutListener methods
+
+    public void preferredSizeChanged(Component component,
+        int previousPreferredWidth, int previousPreferredHeight) {
+        updateResizeHandleCursor();
+    }
+
+    public void displayableChanged(Component component) {
+        // No-op
     }
 }
