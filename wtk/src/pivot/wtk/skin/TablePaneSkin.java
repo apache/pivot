@@ -26,8 +26,6 @@ import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
-import pivot.wtk.Keyboard;
-import pivot.wtk.Point;
 import pivot.wtk.Bounds;
 import pivot.wtk.TablePane;
 import pivot.wtk.TablePaneListener;
