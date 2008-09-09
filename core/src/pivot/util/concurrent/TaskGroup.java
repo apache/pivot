@@ -27,26 +27,25 @@ import pivot.collections.HashMap;
  * @author tvolkert
  * @author gbrown
  */
-public class TaskGroup<V> extends Task<Void> implements Group<Task<? extends V>> {
-    private class TaskHandler implements TaskListener<Object> {
-        public void taskExecuted(Task<Object> task) {
+public class TaskGroup<V> extends Task<Void> implements Group<Task<V>> {
+    private class TaskHandler implements TaskListener<V> {
+        public void taskExecuted(Task<V> task) {
             synchronized (TaskGroup.this) {
                 tasks.put(task, Boolean.TRUE);
                 TaskGroup.this.notify();
             }
         }
 
-        public void executeFailed(Task<Object> task) {
+        public void executeFailed(Task<V> task) {
             synchronized (TaskGroup.this) {
-                exception = task.getFault();
+                tasks.put(task, Boolean.TRUE);
                 TaskGroup.this.notify();
             }
         }
     }
 
-    private HashMap<Task<Object>, Boolean> tasks = new HashMap<Task<Object>, Boolean>();
+    private HashMap<Task<V>, Boolean> tasks = new HashMap<Task<V>, Boolean>();
     private boolean executing = false;
-    private Exception exception;
 
     public TaskGroup() {
         super();
@@ -63,7 +62,7 @@ public class TaskGroup<V> extends Task<Void> implements Group<Task<? extends V>>
         try {
             TaskHandler taskHandler = new TaskHandler();
 
-            for (Task<Object> task : tasks) {
+            for (Task<V> task : tasks) {
                 tasks.put(task, Boolean.FALSE);
                 task.execute(taskHandler);
             }
@@ -77,12 +76,8 @@ public class TaskGroup<V> extends Task<Void> implements Group<Task<? extends V>>
                     throw new TaskExecutionException(ex);
                 }
 
-                if (exception != null) {
-                    throw new TaskExecutionException(exception);
-                }
-
                 complete = true;
-                for (Task<Object> task : tasks) {
+                for (Task<V> task : tasks) {
                     if (!tasks.get(task)) {
                         complete = false;
                         break;
@@ -96,27 +91,24 @@ public class TaskGroup<V> extends Task<Void> implements Group<Task<? extends V>>
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    public synchronized void add(Task<? extends V> element) {
+    public synchronized void add(Task<V> element) {
         if (executing) {
             throw new IllegalStateException("Task group is executing.");
         }
 
-        tasks.put((Task<Object>)element, Boolean.FALSE);
+        tasks.put(element, Boolean.FALSE);
     }
 
-    @SuppressWarnings("unchecked")
-    public synchronized void remove(Task<? extends V> element) {
+    public synchronized void remove(Task<V> element) {
         if (executing) {
             throw new IllegalStateException("Task group is executing.");
         }
 
-        tasks.remove((Task<Object>)element);
+        tasks.remove(element);
     }
 
-    @SuppressWarnings("unchecked")
-    public boolean contains(Task<? extends V> element) {
-        return tasks.containsKey((Task<Object>)element);
+    public boolean contains(Task<V> element) {
+        return tasks.containsKey(element);
     }
 
     public boolean isEmpty() {
