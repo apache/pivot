@@ -15,6 +15,7 @@
  */
 package pivot.util.concurrent;
 
+import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 
 /**
@@ -23,57 +24,106 @@ import pivot.collections.Sequence;
  * calling {@link Task#getResult()} and {@link Task#getFault()},
  * respectively.</p>
  *
- * <p>TODO This class is currently incomplete.</p>
- *
  * @author gbrown
  */
-public class TaskSequence<V> extends Task<Void> implements Sequence<Task<? extends V>> {
+public class TaskSequence<V> extends Task<Void> implements Sequence<Task<V>> {
+    private ArrayList<Task<V>> tasks = new ArrayList<Task<V>>();
+    private int activeTaskIndex = -1;
+
+    public TaskSequence() {
+        super();
+    }
+
     public TaskSequence(Dispatcher dispatcher) {
         super(dispatcher);
     }
 
     @Override
-    public Void execute() {
-        // TODO Execute all tasks using this task's dispatcher
+    public synchronized Void execute() throws TaskExecutionException {
+        TaskListener<V> taskListener = new TaskListener<V>() {
+            public void taskExecuted(Task<V> task) {
+                synchronized (TaskSequence.this) {
+                    TaskSequence.this.notify();
+                }
+            }
+
+            public void executeFailed(Task<V> task) {
+                synchronized (TaskSequence.this) {
+                    TaskSequence.this.notify();
+                }
+            }
+        };
+
+        activeTaskIndex = 0;
+
+        while (activeTaskIndex < tasks.getLength()) {
+            Task<V> activeTask = tasks.get(activeTaskIndex);
+            activeTask.execute(taskListener);
+
+            try {
+                wait();
+            } catch (InterruptedException exception) {
+                throw new TaskExecutionException(exception);
+            }
+
+            activeTaskIndex++;
+        }
+
+        activeTaskIndex = -1;
+
         return null;
     }
 
-    public int add(Task<? extends V> task) {
-        // TODO
-        return 0;
+    public int add(Task<V> task) {
+        int index = tasks.getLength();
+        insert(task, index);
+
+        return index;
     }
 
-    public void insert(Task<? extends V> task, int index) {
-        // TODO Auto-generated method stub
+    public synchronized void insert(Task<V> task, int index) {
+        if (activeTaskIndex != -1) {
+            throw new IllegalStateException();
+        }
+
+        tasks.insert(task, index);
     }
 
-    public int remove(Task<? extends V> task) {
-        // TODO
-        return -1;
+    public synchronized Task<V> update(int index, Task<V> task) {
+        if (activeTaskIndex != -1) {
+            throw new IllegalStateException();
+        }
+
+        return tasks.update(index, task);
     }
 
-    public Sequence<Task<? extends V>> remove(int index, int count) {
-        // TODO Auto-generated method stub
-        return null;
+    public int remove(Task<V> task) {
+        int index = tasks.indexOf(task);
+        if (index != -1) {
+            tasks.remove(index, 1);
+        }
+
+        return index;
+    }
+
+    public synchronized Sequence<Task<V>> remove(int index, int count) {
+        if (activeTaskIndex != -1) {
+            throw new IllegalStateException();
+        }
+
+        return tasks.remove(index, count);
     }
 
     public Task<V> get(int index) {
-        // TODO Auto-generated method stub
-        return null;
+        return tasks.get(index);
     }
 
-    public Task<V> update(int index, Task<? extends V> task) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
-    public int indexOf(Task<? extends V> task) {
-        // TODO
-        return -1;
+    public int indexOf(Task<V> task) {
+        return tasks.indexOf(task);
     }
 
     public int getLength() {
-        // TODO Auto-generated method stub
-        return 0;
+        return tasks.getLength();
     }
 }

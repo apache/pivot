@@ -149,6 +149,17 @@ public abstract class Transition {
     }
 
     /**
+     * Returns the elapsed time since the transition started.
+     *
+     * @return
+     * Returns the amount of time that has passed since the transition
+     * was started.
+     */
+    public long getElapsedTime() {
+        return currentTime - startTime;
+    }
+
+    /**
      * Returns the percentage of the transition that has completed.
      *
      * @return
