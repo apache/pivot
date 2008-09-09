@@ -41,6 +41,8 @@ public class DropShadowDecorator implements Decorator {
     private Color shadowColor = Color.BLACK;
     private float shadowOpacity = 0.33f;
     private int blurRadius = 5;
+    private int xOffset = 5;
+    private int yOffset = 5;
 
     private Component component = null;
     private Graphics2D graphics = null;
@@ -108,7 +110,7 @@ public class DropShadowDecorator implements Decorator {
      * @return
      * The blur radius used to draw the shadow.
      */
-    public float getBlurRadius() {
+    public int getBlurRadius() {
         return blurRadius;
     }
 
@@ -120,6 +122,46 @@ public class DropShadowDecorator implements Decorator {
      */
     public void setBlurRadius(int blurRadius) {
         this.blurRadius = blurRadius;
+    }
+
+    /**
+     * Returns the amount that the drop shadow will be offset along the x axis.
+     *
+     * @return
+     * The x offset used to draw the shadow
+     */
+    public int getXOffset() {
+        return xOffset;
+    }
+
+    /**
+     * Sets the amount that the drop shadow will be offset along the x axis.
+     *
+     * @param xOffset
+     * The x offset used to draw the shadow
+     */
+    public void setXOffset(int xOffset) {
+        this.xOffset = xOffset;
+    }
+
+    /**
+     * Returns the amount that the drop shadow will be offset along the y axis.
+     *
+     * @return
+     * The y offset used to draw the shadow
+     */
+    public int getYOffset() {
+        return yOffset;
+    }
+
+    /**
+     * Sets the amount that the drop shadow will be offset along the y axis.
+     *
+     * @param yOffset
+     * The y offset used to draw the shadow
+     */
+    public void setYOffset(int yOffset) {
+        this.yOffset = yOffset;
     }
 
     public Graphics2D prepare(Component component, Graphics2D graphics) {
@@ -147,12 +189,13 @@ public class DropShadowDecorator implements Decorator {
 
         BufferedImage shadowImage = createShadow(componentImage);
 
-        graphics.drawImage(shadowImage, 0, 0, null);
+        graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
         graphics.drawImage(componentImage, 0, 0, null);
     }
 
     public Bounds getBounds(Component component) {
-        return new Bounds(0, 0, component.getWidth() + blurRadius * 2,
+        return new Bounds(xOffset - blurRadius, yOffset - blurRadius,
+            component.getWidth() + blurRadius * 2,
             component.getHeight() + blurRadius * 2);
     }
 
