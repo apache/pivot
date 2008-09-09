@@ -1324,8 +1324,83 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * If the component is in a viewport, ensures that the given area is
-     * visible.
+     * Determines the visible bounds of an area within a component (the
+     * intersection of the area with the visible area of the component
+     * and its ancestors).
+     *
+     * @return
+     * The visible bounds of the given area in display coordinates,
+     * or <tt>null</tt> if the component is either not showing (see
+     * {@link #isShowing()}) or not part of the container hierarchy
+     */
+    public Bounds getVisibleArea(Bounds area) {
+        if (area == null) {
+            throw new IllegalArgumentException("area is null.");
+        }
+
+        return getVisibleArea(area.x, area.y, area.width, area.height);
+    }
+
+    /**
+     * Determines the visible bounds of an area within a component (the
+     * intersection of the area with the visible area of the component
+     * and its ancestors).
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     *
+     * @return
+     * The visible bounds of the given area in display coordinates,
+     * or <tt>null</tt> if the component is either not showing (see
+     * {@link #isShowing()}) or not part of the container hierarchy
+     */
+    public Bounds getVisibleArea(int x, int y, int width, int height) {
+        Bounds visibleArea = null;
+
+        Component component = this;
+
+        int top = y;
+        int left = x;
+        int bottom = y + height - 1;
+        int right = x + width - 1;
+
+        while (component != null
+            && component.isVisible()) {
+            int topCutoff = 0;
+            int leftCutoff = 0;
+            int bottomCutoff = component.getHeight() - 1;
+            int rightCutoff = component.getWidth() - 1;
+
+            if (component instanceof Viewport) {
+                Viewport viewport = (Viewport)component;
+                Bounds viewportBounds = viewport.getViewportBounds();
+
+                topCutoff = viewportBounds.y;
+                leftCutoff = viewportBounds.x;
+                bottomCutoff = topCutoff + viewportBounds.height - 1;
+                rightCutoff = leftCutoff + viewportBounds.width - 1;
+            }
+
+            top = component.y + Math.max(top, topCutoff);
+            left = component.x + Math.max(left, leftCutoff);
+            bottom = component.y + Math.max(Math.min(bottom, bottomCutoff), -1);
+            right = component.x + Math.max(Math.min(right, rightCutoff), -1);
+
+            if (component instanceof Display) {
+                visibleArea = new Bounds(left, top, right - left + 1, bottom - top + 1);
+            }
+
+            component = component.getParent();
+        }
+
+        return visibleArea;
+    }
+
+    /**
+     * Ensures that the given area of a component is visible within the
+     * viewports of all applicable ancestors.
      *
      * @param area
      */
@@ -1338,8 +1413,8 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * If the component is in a viewport, ensures that the given area is
-     * visible.
+     * Ensures that the given area of a component is visible within the
+     * viewports of all applicable ancestors.
      *
      * @param x
      * @param y
