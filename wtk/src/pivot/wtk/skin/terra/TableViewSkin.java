@@ -392,6 +392,24 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         return new Bounds(0, rowIndex * rowHeight, getWidth(), rowHeight);
     }
 
+    public Bounds getColumnBounds(int columnIndex) {
+        Sequence<Integer> columnWidths = getColumnWidths();
+        int columnCount = columnWidths.getLength();
+
+        if (columnIndex < 0
+            || columnIndex >= columnCount) {
+            throw new IndexOutOfBoundsException("Column index out of bounds: " +
+                columnIndex);
+        }
+
+        int columnX = 0;
+        for (int i = 0; i < columnIndex; i++) {
+            columnX += (columnWidths.get(i) + 1);
+        }
+
+        return new Bounds(columnX, 0, columnWidths.get(columnIndex), getHeight());
+    }
+
     @SuppressWarnings("unchecked")
     public Bounds getCellBounds(int rowIndex, int columnIndex) {
         TableView tableView = (TableView)getComponent();

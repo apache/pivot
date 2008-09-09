@@ -429,6 +429,7 @@ public class TableView extends Component {
         public int getRowAt(int y);
         public int getColumnAt(int x);
         public Bounds getRowBounds(int rowIndex);
+        public Bounds getColumnBounds(int columnIndex);
         public Bounds getCellBounds(int rowIndex, int columnIndex);
     }
 
@@ -1307,6 +1308,20 @@ public class TableView extends Component {
     public Bounds getRowBounds(int rowIndex) {
         TableView.Skin tableViewSkin = (TableView.Skin)getSkin();
         return tableViewSkin.getRowBounds(rowIndex);
+    }
+
+    /**
+     * Returns the bounding area of a given column.
+     *
+     * @param columnIndex
+     * The column index.
+     *
+     * @return
+     * The bounding area of the column.
+     */
+    public Bounds getColumnBounds(int columnIndex) {
+        TableView.Skin tableViewSkin = (TableView.Skin)getSkin();
+        return tableViewSkin.getColumnBounds(columnIndex);
     }
 
     /**
