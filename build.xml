@@ -37,9 +37,7 @@
             <packageset dir="${web}/${src}" includes="**/*">
                 <exclude name="**/proxy/**"/>
             </packageset>
-            <packageset dir="${wtk}/${src}" includes="**/*">
-                <exclude name="**/skin/**"/>
-            </packageset>
+            <packageset dir="${wtk}/${src}" includes="**/*"/>
         </javadoc>
         <zip destfile="${doc}.zip" basedir="doc"/>
     </target>
