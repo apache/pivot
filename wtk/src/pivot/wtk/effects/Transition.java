@@ -1,11 +1,33 @@
+/*
+ * Copyright (c) 2008 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pivot.wtk.effects;
 
 import pivot.wtk.ApplicationContext;
 
+/**
+ *
+ *
+ * @author gbrown
+ */
 public abstract class Transition {
     private int duration;
     private int rate;
     private boolean repeat;
+
+    private TransitionListener transitionListener;
 
     private long startTime = 0;
     private long currentTime = 0;
@@ -25,6 +47,10 @@ public abstract class Transition {
                 } else {
                     currentTime = endTime;
                     stop();
+
+                    if (transitionListener != null) {
+                        transitionListener.transitionCompleted(Transition.this);
+                    }
                 }
             }
 
@@ -175,10 +201,26 @@ public abstract class Transition {
      * state and starts a timer that will repeatedly call {@link #update()} at
      * the current rate.
      */
-    public void start() {
+    public final void start() {
+        start(null);
+    }
+
+    /**
+     * Starts the transition. Calls {@link #update()} to establish the initial
+     * state and starts a timer that will repeatedly call {@link #update()} at
+     * the current rate. The specified <tt>TransitionListener</tt> will be
+     * notified when the transition completes.
+     *
+     * @param transitionListener
+     * The listener to get notified when the transition completes, or
+     * <tt>null</tt> if no notification is necessary
+     */
+    public void start(TransitionListener transitionListener) {
         if (intervalID != -1) {
             throw new IllegalStateException("Transition is currently running.");
         }
+
+        this.transitionListener = transitionListener;
 
         startTime = System.currentTimeMillis();
         currentTime = startTime;
