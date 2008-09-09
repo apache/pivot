@@ -23,6 +23,11 @@ import pivot.wtk.Component;
 import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
+/**
+ *
+ *
+ * @author tvolkert
+ */
 public class ShadeDecorator implements Decorator {
     private float opacity;
     private Color color;
@@ -58,6 +63,60 @@ public class ShadeDecorator implements Decorator {
 
         this.opacity = opacity;
         this.color = color;
+    }
+
+    /**
+     *
+     */
+    public float getOpacity() {
+        return opacity;
+    }
+
+    /**
+     *
+     */
+    public void setOpacity(float opacity) {
+        this.opacity = opacity;
+    }
+
+    /**
+     *
+     */
+    public void setOpacity(Number opacity) {
+        if (opacity == null) {
+            throw new IllegalArgumentException("opacity is null.");
+        }
+
+        setOpacity(opacity.floatValue());
+    }
+
+    /**
+     *
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     *
+     */
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.color = color;
+    }
+
+    /**
+     *
+     */
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(Color.decode(color));
     }
 
     public Graphics2D prepare(Component component, Graphics2D graphics) {
