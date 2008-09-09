@@ -115,4 +115,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     public ListenerList<MapListener<K, V>> getMapListeners() {
         return mapListeners;
     }
+
+    public String toString() {
+        return hashMap.toString();
+    }
 }
