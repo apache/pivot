@@ -43,10 +43,6 @@ import pivot.wtk.skin.ComponentSkin;
 /**
  * NOTE This skin assumes a fixed renderer height.
  *
- * TODO Support an "alternateRowBackgroundColor" style.
- *
- * TODO Support a "showHighlight" style?
- *
  * TODO Add disableMouseSelection style to support the case where selection
  * should be enabled but the caller wants to implement the management of it;
  * e.g. changing a message's flag state in an email client.
@@ -66,6 +62,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     private Color inactiveSelectionBackgroundColor = new Color(0xcc, 0xca, 0xc2);
     private Color highlightColor = Color.BLACK;
     private Color highlightBackgroundColor = new Color(0xe6, 0xe3, 0xda);
+    private Color alternateRowColor = new Color(0xF7, 0xF5, 0xEB);
     private Color gridColor = new Color(0xF7, 0xF5, 0xEB);
     private boolean showHorizontalGridLines = true;
     private boolean showVerticalGridLines = true;
@@ -190,6 +187,11 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
             } else {
                 if (rowHighlighted && showHighlight && !rowDisabled) {
                     rowBackgroundColor = highlightBackgroundColor;
+                } else {
+                    if (alternateRowColor != null
+                        && rowIndex % 2 > 0) {
+                        rowBackgroundColor = alternateRowColor;
+                    }
                 }
             }
 
@@ -293,6 +295,8 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     /**
      * Returns the column widths, determined by applying relative size values
      * to the available width.
+     *
+     * TODO Cache these values and recalculate only when size changes.
      *
      * @param columns
      * The columns whose widths are to be determined.
@@ -631,6 +635,23 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         setHighlightBackgroundColor(Color.decode(highlightBackgroundColor));
+    }
+
+    public Color getAlternateRowColor() {
+        return alternateRowColor;
+    }
+
+    public void setAlternateRowColor(Color alternateRowColor) {
+        this.alternateRowColor = alternateRowColor;
+        repaintComponent();
+    }
+
+    public final void setAlternateRowColor(String alternateRowColor) {
+        if (alternateRowColor == null) {
+            throw new IllegalArgumentException("alternateRowColor is null.");
+        }
+
+        setAlternateRowColor(Color.decode(alternateRowColor));
     }
 
     public Color getGridColor() {
