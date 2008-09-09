@@ -137,8 +137,11 @@ public abstract class ComponentSkin implements Skin, ComponentStateListener {
             Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                 Direction.BACKWARD : Direction.FORWARD;
 
+            Component previousFocusedComponent = Component.getFocusedComponent();
             Component.transferFocus(direction);
-            consumed = true;
+            Component focusedComponent = Component.getFocusedComponent();
+
+            consumed = (previousFocusedComponent != focusedComponent);
         }
 
         return consumed;
