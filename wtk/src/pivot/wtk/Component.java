@@ -1547,13 +1547,20 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Flags the entire component as needing to be repainted,
-     * including decorators.
+     * Flags the entire component as needing to be repainted.
      */
     public void repaint() {
-        if (parent != null) {
-            parent.repaint(getDecoratedBounds());
-        }
+        repaint(false);
+    }
+
+    /**
+     * Flags the entire component as needing to be repainted or repaints
+     * the entire component immediately.
+     *
+     * @param immediate
+     */
+    public void repaint(boolean immediate) {
+        repaint(0, 0, getWidth(), getHeight(), immediate);
     }
 
     /**

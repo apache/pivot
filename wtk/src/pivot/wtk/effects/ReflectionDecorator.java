@@ -7,9 +7,11 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import pivot.wtk.Component;
-import pivot.wtk.Container;
 import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
+import pivot.wtk.Display;
+import pivot.wtk.Point;
+import pivot.wtk.Window;
 
 /**
  * TODO Make gradient properties configurable.
@@ -79,13 +81,16 @@ public class ReflectionDecorator implements Decorator {
     }
 
     public void repaint(Component component, int x, int y, int width, int height) {
-        Container parent = component.getParent();
+        Window window = component.getWindow();
 
-        if (parent != null) {
-            x += component.getX();
-            y = (component.getHeight() * 2) - (y + height) + component.getY();
+        if (window != null) {
+            Display display = window.getDisplay();
 
-            parent.repaint(x, y, width, height);
+            if (display != null) {
+                Point point = component.mapPointToAncestor(display, x,
+                    (component.getHeight() * 2) - (y + height));
+                display.repaint(point.x, point.y, width, height);
+            }
         }
     }
 }

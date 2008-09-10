@@ -79,7 +79,7 @@ public interface Skin extends ConstrainedVisual {
     public void install(Component component);
 
     /**
-     * Disassociates a skin from a component. The skin should unregister any
+     * Dissociates a skin from a component. The skin should unregister any
      * event listeners and subcomponents added in install().
      */
     public void uninstall();

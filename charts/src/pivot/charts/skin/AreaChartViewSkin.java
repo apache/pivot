@@ -25,7 +25,6 @@ import org.jfree.data.category.CategoryDataset;
 
 import pivot.charts.AreaChartView;
 import pivot.charts.ChartView;
-import pivot.charts.ChartView.Element;
 import pivot.collections.List;
 import pivot.wtk.Component;
 
@@ -36,7 +35,7 @@ public class AreaChartViewSkin extends ChartViewSkin {
         super.install(component);
     }
 
-    public Element getElementAt(int x, int y) {
+    public ChartView.Element getElementAt(int x, int y) {
         ChartView.Element element = null;
 
         ChartEntity chartEntity = getChartEntityAt(x, y);
