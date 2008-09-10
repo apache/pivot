@@ -39,7 +39,7 @@ public class Explorer implements Application, TreeViewSelectionListener {
     private TreeView componentTree;
     private TableView propertiesTable, stylesTable, attributesTable;
     private Label statusLabel;
-    private Component attributesTab;
+    private Component attributesTab; 
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
 
@@ -148,9 +148,14 @@ public class Explorer implements Application, TreeViewSelectionListener {
         return dialog;
 
     }
+    
 
-    private void initComponentTree(TreeView tree, Iterable<Component> components) {
+    private void initComponentTree(final TreeView tree, Iterable<Component> components) {
+
     	tree.getTreeViewSelectionListeners().add(this);
+    	
+    	//TODO: use preferences to toggle highlighting
+    	tree.getComponentMouseListeners().add(new ComponentHighlighter(tree));
 
         // build tree data
         List<ComponentAdapter> componentList = new ArrayList<ComponentAdapter>();
@@ -193,6 +198,6 @@ public class Explorer implements Application, TreeViewSelectionListener {
         stylesTable.getColumns().get(1).setCellRenderer( cellRenderer );
         attributesTable.getColumns().get(1).setCellRenderer( cellRenderer );
 
-    }
+    }    
 
 }
