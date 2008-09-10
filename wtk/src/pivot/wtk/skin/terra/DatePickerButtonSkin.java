@@ -275,9 +275,9 @@ public class DatePickerButtonSkin extends ButtonSkin
         triggerGraphics.setStroke(new BasicStroke(0));
         triggerGraphics.setPaint(color);
 
-        int tx = triggerX + (int)Math.round((TRIGGER_WIDTH
+        int tx = triggerX + Math.round((TRIGGER_WIDTH
             - triggerIconShape.getBounds().width) / 2f);
-        int ty = triggerY + (int)Math.round((triggerHeight
+        int ty = triggerY + Math.round((triggerHeight
             - triggerIconShape.getBounds().height) / 2f);
         triggerGraphics.translate(tx, ty);
 
