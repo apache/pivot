@@ -19,7 +19,7 @@ public interface MenuPopupListener {
     /**
      * Called when a menu popup's data has changed.
      *
-     * @param menuView
+     * @param menuPopup
      * The source of the event.
      */
     public void menuDataChanged(MenuPopup menuPopup, Menu.ItemGroup previousMenuData);

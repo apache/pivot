@@ -586,7 +586,7 @@ public class Window extends Container {
      * enabled. If the window is not currently visible, it will be made
      * visible.
      *
-     * @param window
+     * @param activeWindow
      * The window to activate, or <tt>null</tt> to clear the active window.
      */
     public static void setActiveWindow(Window activeWindow) {

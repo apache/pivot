@@ -144,7 +144,7 @@ public class Form extends Container {
         /**
          * Creates a new flag with the given alert type and no message.
          *
-         * @param type
+         * @param alertType
          * The type of the flag.
          */
         public Flag(Alert.Type alertType) {
@@ -163,7 +163,7 @@ public class Form extends Container {
         /**
          * Creates a new flag with the given type and message.
          *
-         * @param type
+         * @param alertType
          * The type of the flag.
          *
          * @param message
@@ -270,8 +270,6 @@ public class Form extends Container {
      * @param alertType
      * The alert type to count, or <tt>null</tt> to return the count of all
      * flagged fields regardless of alert type.
-     *
-     * @return
      */
     public int getFlaggedFieldCount(Alert.Type alertType) {
         int count = 0;

@@ -304,8 +304,9 @@ public class TableView extends Component {
         /**
          * Sets the column's sort direction.
          *
-         * @param selected
-         * <tt>true</tt> to select the column; <tt>false</tt> to de-select it.
+         * @param sortDirection
+         * The column's sort direction, or <tt>null</tt> to specify no
+         * sort direction
          */
         public void setSortDirection(SortDirection sortDirection) {
             SortDirection previousSortDirection = this.sortDirection;
@@ -934,7 +935,8 @@ public class TableView extends Component {
      * connecting spans will be consolidated, and the resulting selection will
      * be sorted in ascending order.
      *
-     * @param selection
+     * @param selectedRanges
+     * The new selection
      */
     public void setSelectedRanges(Sequence<Span> selectedRanges) {
         if (selectedRanges == null) {
@@ -1070,8 +1072,11 @@ public class TableView extends Component {
     /**
      * Removes a range of indexes from the selection.
      *
-     * @param range
-     * The range to remove.
+     * @param rangeStart
+     * The start of the range to remove.
+     *
+     * @param rangeEnd
+     * The end of the range to remove.
      */
     public void removeSelectedRange(int rangeStart, int rangeEnd) {
         removeSelectedRange(new Span(rangeStart, rangeEnd));

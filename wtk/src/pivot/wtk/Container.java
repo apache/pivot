@@ -445,8 +445,8 @@ public abstract class Container extends Component
     /**
      * Sets the component's context key.
      *
-     * @param bindKey
-     * The bind key, or <tt>null</tt> to clear the binding.
+     * @param contextKey
+     * The context key, or <tt>null</tt> to clear the context.
      */
     public void setContextKey(String contextKey) {
         String previousContextKey = this.contextKey;

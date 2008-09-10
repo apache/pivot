@@ -477,7 +477,7 @@ public class ListView extends Component {
      * connecting spans will be consolidated, and the resulting selection will
      * be sorted in ascending order.
      *
-     * @param selection
+     * @param selectedRanges
      */
     public void setSelectedRanges(Sequence<Span> selectedRanges) {
         if (selectedRanges == null) {
@@ -613,8 +613,11 @@ public class ListView extends Component {
     /**
      * Removes a range of indexes from the selection.
      *
-     * @param range
-     * The range to remove.
+     * @param rangeStart
+     * The start of the range to remove.
+     *
+     * @param rangeEnd
+     * The end of the range to remove.
      */
     public void removeSelectedRange(int rangeStart, int rangeEnd) {
         removeSelectedRange(new Span(rangeStart, rangeEnd));

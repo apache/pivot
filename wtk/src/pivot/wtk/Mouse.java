@@ -68,9 +68,9 @@ public final class Mouse {
     }
 
     /**
-     * Tests the pressed state of a modifier.
+     * Tests the pressed state of a button.
      *
-     * @param modifier
+     * @param button
      *
      * @return
      * <tt>true</tt> if the modifier is pressed; <tt>false</tt>, otherwise.

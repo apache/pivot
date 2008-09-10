@@ -61,7 +61,7 @@ public class BlurDecorator implements Decorator {
     /**
      * Creates a <tt>BlurDecorator</tt> with the default blur magnitude.
      *
-     * @see BlurDecorator(int)
+     * @see #BlurDecorator(int)
      */
     public BlurDecorator() {
         this(9);

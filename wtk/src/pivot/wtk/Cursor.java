@@ -16,9 +16,7 @@
 package pivot.wtk;
 
 /**
- * NOTE The system "wait" cursor is not included in this enum since it applies
- * to the application as a whole, rather than a single component. To show/hide
- * the wait cursor, use {@link ApplicationContext#setBlocked(boolean)}.
+ *
  *
  * @author gbrown
  */

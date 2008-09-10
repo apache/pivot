@@ -157,7 +157,7 @@ public class Menu extends Component {
          * look up the action in the global action map when the menu item is
          * selected and execute the mapped action.
          *
-         * @param actionKey
+         * @param actionTrigger
          * The menu item's action key, or <tt>null</tt> if no action key is
          * defined.
          */

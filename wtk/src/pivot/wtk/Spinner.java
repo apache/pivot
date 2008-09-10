@@ -362,7 +362,7 @@ public class Spinner extends Container {
     /**
      * Sets the selection to the specified index.
      *
-     * @param index
+     * @param selectedIndex
      * The index to select, or <tt>-1</tt> to clear the selection.
      */
     public void setSelectedIndex(int selectedIndex) {

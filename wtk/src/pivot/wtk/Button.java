@@ -287,8 +287,6 @@ public abstract class Button extends Component {
 
     /**
      * Returns the button's selected state.
-     *
-     * @return
      */
     public boolean isSelected() {
         return (getState() == State.SELECTED);
@@ -305,8 +303,6 @@ public abstract class Button extends Component {
 
     /**
      * Returns the button's selection state.
-     *
-     * @return
      */
     public State getState() {
         return state;
@@ -374,8 +370,6 @@ public abstract class Button extends Component {
 
     /**
      * Returns the button's toggle state.
-     *
-     * @return
      */
     public boolean isToggleButton() {
         return toggleButton;
@@ -404,7 +398,6 @@ public abstract class Button extends Component {
 
     /**
      * Returns the button's tri-state state.
-     * @return
      */
     public boolean isTriState() {
         return triState;
@@ -433,8 +426,6 @@ public abstract class Button extends Component {
 
     /**
      * Returns the button's group.
-     *
-     * @return
      */
     public Group getGroup() {
         return group;

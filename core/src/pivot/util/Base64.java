@@ -67,6 +67,12 @@ public final class Base64 {
     }
 
     /**
+     * This class is not instantiable.
+     */
+    private Base64() {
+    }
+
+    /**
      * Encodes the specified data into a base64 string.
      *
      * @param bytes

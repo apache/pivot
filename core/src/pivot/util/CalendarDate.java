@@ -68,13 +68,13 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
      * month, and day of month.
      *
      * @param year
-     * The year field (e.g. <tt>2008</tt>)
+     * The year field. (e.g. <tt>2008</tt>)
      *
      * @param month
-     * The month field, 0-based (e.g. <tt>2</tt> for March)
+     * The month field, 0-based. (e.g. <tt>2</tt> for March)
      *
      * @param day
-     * The day of the month, 0-based (e.g. <tt>14</tt> for the 15th)
+     * The day of the month, 0-based. (e.g. <tt>14</tt> for the 15th)
      */
     public CalendarDate(int year, int month, int day) {
         set(year, month, day);
@@ -86,7 +86,7 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
      * which is <tt>[YYYY]-[MM]-[DD]</tt>.
      *
      * @param date
-     * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g. 2008-07-23)
+     * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt>. (e.g. 2008-07-23)
      */
     public CalendarDate(String date) {
         Pattern pattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
@@ -133,7 +133,7 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
     }
 
     /**
-     * Gets the year field (e.g. <tt>2008</tt>).
+     * Gets the year field. (e.g. <tt>2008</tt>).
      *
      * @return
      * This calendar date's <tt>year</tt> field
@@ -143,7 +143,7 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
     }
 
     /**
-     * Gets the month field, 0-based (e.g. <tt>2</tt> for March).
+     * Gets the month field, 0-based. (e.g. <tt>2</tt> for March).
      *
      * @return
      * This calendar date's <tt>month</tt> field
@@ -153,7 +153,7 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
     }
 
     /**
-     * Gets the day of the month, 0-based (e.g. <tt>14</tt> for the 15th).
+     * Gets the day of the month, 0-based. (e.g. <tt>14</tt> for the 15th).
      *
      * @return
      * This calendar date's <tt>day</tt> field

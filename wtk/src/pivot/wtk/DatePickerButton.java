@@ -234,7 +234,7 @@ public class DatePickerButton extends Button {
      * string. The date string must be in the <tt>ISO 8601</tt> "calendar date"
      * format, which is <tt>[YYYY]-[MM]-[DD]</tt>.
      *
-     * @param date
+     * @param selectedDate
      * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g. 2008-07-23)
      */
     public final void setSelectedDate(String selectedDate) {

@@ -1306,6 +1306,7 @@ public abstract class Component implements ConstrainedVisual {
      * must be open.
      *
      * @return
+     * <tt>true</tt> if this component is showing; <tt>false</tt> otherwise
      */
     public boolean isShowing() {
         boolean showing = true;
@@ -1869,7 +1870,7 @@ public abstract class Component implements ConstrainedVisual {
      * Sets the focused component. The component must be focusable, unblocked,
      * and showing, and its window must be open.
      *
-     * @param component
+     * @param focusedComponent
      * The component to focus, or <tt>null</tt> to clear the focus.
      */
     public static void setFocusedComponent(Component focusedComponent) {
@@ -1879,7 +1880,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Sets the focused component.
      *
-     * @param component
+     * @param focusedComponent
      * The component to focus, or <tt>null</tt> to clear the focus.
      *
      * @param temporary
@@ -2070,6 +2071,7 @@ public abstract class Component implements ConstrainedVisual {
      * Returns the currently installed attributes.
      *
      * @return
+     * This component's attributes
      */
     public Attributes getAttributes() {
         return attributes;

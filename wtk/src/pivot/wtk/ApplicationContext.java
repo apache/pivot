@@ -660,8 +660,6 @@ public abstract class ApplicationContext {
      *
      * @param timeout
      * The time after which the task should begin executing.
-     *
-     * @return
      */
     public static int setTimeout(Runnable runnable, long timeout) {
         int timeoutID = nextTimerTaskID++;
