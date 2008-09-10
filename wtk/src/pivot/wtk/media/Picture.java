@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
 public class Picture extends Image {
     private BufferedImage bufferedImage = null;
 
-    protected Picture(BufferedImage bufferedImage) {
+    public Picture(BufferedImage bufferedImage) {
         if (bufferedImage == null) {
             throw new IllegalArgumentException("bufferedImage is null.");
         }
