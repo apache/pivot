@@ -78,6 +78,7 @@
             <fileset dir="${charts}/${bin}"/>
             <fileset dir="${charts}/${src}">
                 <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
             </fileset>
         </jar>
     </target>
@@ -113,6 +114,7 @@
             <fileset dir="${chartstest}/${bin}"/>
             <fileset dir="${chartstest}/${src}">
                 <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
             </fileset>
         </jar>
     </target>
@@ -146,6 +148,10 @@
                 <attribute name="Version" value="${version}"/>
             </manifest>
             <fileset dir="${core}/${bin}"/>
+            <fileset dir="${core}/${src}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
         </jar>
     </target>
 
@@ -174,6 +180,10 @@
         <delete file="${coretest}/${ant.project.name}-core.test.jar"/>
         <jar jarfile="${coretest}/${ant.project.name}-core.test.jar">
             <fileset dir="${coretest}/${bin}"/>
+            <fileset dir="${coretest}/${src}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
         </jar>
     </target>
 
@@ -212,6 +222,11 @@
             <fileset dir="${web}/${bin}">
                 <exclude name="pivot/web/proxy/**"/>
             </fileset>
+            <fileset dir="${web}/${src}">
+                <exclude name="pivot/web/proxy/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
         </jar>
 
         <delete file="${web}/${ant.project.name}-web.proxy.jar"/>
@@ -223,6 +238,11 @@
             </manifest>
             <fileset dir="${web}/${bin}">
                 <include name="pivot/web/proxy/*"/>
+            </fileset>
+            <fileset dir="${web}/${src}">
+                <include name="pivot/web/proxy/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
             </fileset>
         </jar>
     </target>
@@ -259,6 +279,11 @@
             <fileset dir="${webtest}/${bin}">
                 <exclude name="pivot/web/test/server/**"/>
             </fileset>
+            <fileset dir="${webtest}/${src}">
+                <exclude name="pivot/web/test/server/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
         </jar>
 
         <!-- Rebuild the server WAR file -->
@@ -269,6 +294,11 @@
         <war destfile="${webtest}/${ant.project.name}_web_test.war" webxml="${webtest}/web.xml">
             <classes dir="${webtest}/${bin}">
                 <include name="pivot/web/test/server/**"/>
+            </classes>
+            <classes dir="${webtest}/${src}">
+                <include name="pivot/web/test/server/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
             </classes>
             <lib dir="${webtest}/${lib}"/>
         </war>
@@ -319,6 +349,7 @@
                 <exclude name="pivot/wtk/skin/terra/**"/>
                 <exclude name="pivot/wtk/skin/obsidian/**"/>
                 <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
             </fileset>
         </jar>
 
@@ -335,6 +366,7 @@
             <fileset dir="${wtk}/${src}">
                 <include name="pivot/wtk/skin/terra/**"/>
                 <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
             </fileset>
         </jar>
 
@@ -351,6 +383,7 @@
             <fileset dir="${wtk}/${src}">
                 <include name="pivot/wtk/skin/obsidian/**"/>
                 <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
             </fileset>
         </jar>
     </target>
@@ -387,6 +420,7 @@
             <fileset dir="${wtktest}/${bin}"/>
             <fileset dir="${wtktest}/${src}">
                 <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
             </fileset>
         </jar>
     </target>
