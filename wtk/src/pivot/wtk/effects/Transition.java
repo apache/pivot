@@ -38,6 +38,12 @@ public abstract class Transition {
 
     private final Runnable updateCallback = new Runnable() {
         public void run() {
+            if (intervalID == -1) {
+                // TODO Figure out why this is happening
+                System.out.println("Interval task executed after it was cancelled.");
+                return;
+            }
+
             currentTime = System.currentTimeMillis();
 
             long endTime = startTime + duration;
@@ -194,6 +200,17 @@ public abstract class Transition {
      */
     public float getPercentComplete() {
         return (float)(currentTime - startTime) / (float)(duration);
+    }
+
+    /**
+     * Tells whether or not the transition is currently running.
+     *
+     * @return
+     * <tt>true</tt> if the transition is currently running; <tt>false</tt> if
+     * it is not
+     */
+    public boolean isRunning() {
+        return (intervalID != -1);
     }
 
     /**
