@@ -25,6 +25,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import pivot.wtk.Component;
+import pivot.wtk.Container;
 import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
@@ -200,7 +201,13 @@ public class DropShadowDecorator implements Decorator {
     }
 
     public void repaint(Component component, int x, int y, int width, int height) {
-        // No-op
+        Container parent = component.getParent();
+        if (parent != null) {
+            parent.repaint(x + xOffset - blurRadius + component.getX(),
+                y + yOffset - blurRadius + component.getY(),
+                width + blurRadius * 2,
+                height + blurRadius * 2);
+        }
     }
 
     /**
