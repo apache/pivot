@@ -58,6 +58,7 @@ import pivot.wtk.content.NumericSpinnerData;
 import pivot.wtk.content.TableRow;
 import pivot.wtk.content.TableViewHeaderData;
 import pivot.wtk.content.TreeViewNodeRenderer;
+import pivot.wtk.effects.ReflectionDecorator;
 import pivot.wtk.media.Image;
 import pivot.wtkx.WTKXSerializer;
 
@@ -420,6 +421,8 @@ public class Demo implements Application {
                     options, body);
                 alert.setTitle("Select Icon");
                 alert.setSelectedOption(0);
+                alert.getDecorators().update(0, new ReflectionDecorator());
+
                 alert.open(window);
             }
         });

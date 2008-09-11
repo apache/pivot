@@ -365,4 +365,9 @@ public class ScaleDecorator implements Decorator {
             parent.repaint(x, y, width, height);
         }
     }
+
+    public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
+        // TODO
+        return new Bounds(x, y, width, height);
+    }
 }

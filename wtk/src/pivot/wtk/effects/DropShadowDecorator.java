@@ -25,7 +25,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import pivot.wtk.Component;
-import pivot.wtk.Container;
 import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
@@ -190,24 +189,16 @@ public class DropShadowDecorator implements Decorator {
 
         BufferedImage shadowImage = createShadow(componentImage);
 
+        graphics.setClip(null);
         graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
         graphics.drawImage(componentImage, 0, 0, null);
     }
 
-    public Bounds getBounds(Component component) {
-        return new Bounds(xOffset - blurRadius, yOffset - blurRadius,
-            component.getWidth() + blurRadius * 2,
-            component.getHeight() + blurRadius * 2);
-    }
-
-    public void repaint(Component component, int x, int y, int width, int height) {
-        Container parent = component.getParent();
-        if (parent != null) {
-            parent.repaint(x + xOffset - blurRadius + component.getX(),
-                y + yOffset - blurRadius + component.getY(),
-                width + blurRadius * 2,
-                height + blurRadius * 2);
-        }
+    public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
+        return new Bounds(x + xOffset - blurRadius + component.getX(),
+            y + yOffset - blurRadius + component.getY(),
+            width + blurRadius * 2,
+            height + blurRadius * 2);
     }
 
     /**

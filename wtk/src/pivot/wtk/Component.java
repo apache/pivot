@@ -1100,28 +1100,6 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the union of the component's bounding area with the bounding
-     * areas of its decorators.
-     *
-     * @return
-     * The union of the component's bounding area with the bounding areas of
-     * its decorators. The <tt>x</tt> and <tt>y</tt> values are relative to the
-     * parent container.
-     */
-    public Bounds getDecoratedBounds() {
-        Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
-
-        for (Decorator decorator : decorators) {
-            bounds.union(decorator.getBounds(this));
-        }
-
-        bounds.x += x;
-        bounds.y += y;
-
-        return bounds;
-    }
-
-    /**
      * Returns the component's visibility.
      *
      * @return
@@ -1623,11 +1601,15 @@ public abstract class Component implements ConstrainedVisual {
 
             if (width > 0
                 && height > 0) {
-                for (Decorator decorator : decorators) {
-                    decorator.repaint(this, x, y, width, height);
-                }
-
                 parent.repaint(x + this.x, y + this.y, width, height);
+
+                for (Decorator decorator : decorators) {
+                    Bounds affectedArea = decorator.getAffectedArea(this, x, y, width, height);
+                    parent.repaint(affectedArea.x + this.x,
+                        affectedArea.y + this.y,
+                        affectedArea.width,
+                        affectedArea.height);
+                }
             }
         }
     }

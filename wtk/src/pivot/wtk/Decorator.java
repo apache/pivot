@@ -27,22 +27,18 @@ public interface Decorator {
     public void update();
 
     /**
-     * Returns the decorator's bounding area.
-     *
-     * @param component
-     * @return
-     * The bounds of the decorator relative to the component's origin.
-     */
-    public Bounds getBounds(Component component);
-
-    /**
-     * Notifies the decorator that an area in the component has been repainted.
+     * Returns the bounds of the area affected by a change to a given region
+     * within a component.
      *
      * @param component
      * @param x
      * @param y
      * @param width
      * @param height
+     *
+     * @return
+     * The bounds of the affected area, relative to the component's
+     * origin. The bounds may exceed the actual bounds of the component.
      */
-    public void repaint(Component component, int x, int y, int width, int height);
+    public Bounds getAffectedArea(Component component, int x, int y, int width, int height);
 }

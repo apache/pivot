@@ -303,11 +303,7 @@ public class WatermarkDecorator implements Decorator {
         watermarkGraphics.dispose();
     }
 
-    public Bounds getBounds(Component component) {
-        return new Bounds(0, 0, component.getWidth(), component.getHeight());
-    }
-
-    public void repaint(Component component, int x, int y, int width, int height) {
-        // No-op
+    public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
+        return new Bounds(x, y, width, height);
     }
 }

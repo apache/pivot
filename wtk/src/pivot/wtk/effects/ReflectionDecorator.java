@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import pivot.wtk.Component;
-import pivot.wtk.Container;
 import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
@@ -65,25 +64,17 @@ public class ReflectionDecorator implements Decorator {
         Graphics2D reflectionGraphics = (Graphics2D)graphics.create();
         reflectionGraphics.scale(1.0, -1.0);
         reflectionGraphics.translate(0, -(height * 2));
+
+        reflectionGraphics.setClip(null);
         reflectionGraphics.drawImage(bufferedImage, 0, 0, null);
 
         // Dispose of the graphics
         reflectionGraphics.dispose();
     }
 
-    public Bounds getBounds(Component component) {
-        int width = component.getWidth();
-        int height = component.getHeight();
-
-        return new Bounds(0, height, width, height);
-    }
-
-    public void repaint(Component component, int x, int y, int width, int height) {
-        Container parent = component.getParent();
-        if (parent != null) {
-            parent.repaint(x + component.getX(),
-                (component.getHeight() * 2) - (y + height) + component.getY(),
-                width, height);
-        }
+    public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
+        return new Bounds(x + component.getX(),
+            (component.getHeight() * 2) - (y + height) + component.getY(),
+            width, height);
     }
 }
