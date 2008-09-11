@@ -791,23 +791,13 @@ public class ScrollPaneSkin extends ContainerSkin
         // we adjust the scrollTop and scrollLeft values; otherwise we might
         // try to set structure values that are out of bounds.
 
-        if (horizontalScrollBarHeight > 0) {
-            int viewportWidth = Math.max(width - rowHeaderWidth -
-                verticalScrollBarWidth, 0);
-            horizontalScrollBar.setScope(0, viewWidth,
-                Math.min(viewWidth, viewportWidth));
-            horizontalScrollBar.setBlockIncrement(Math.max(1,
-                viewportWidth - horizontalReveal));
-        }
+        int viewportWidth = Math.max(width - rowHeaderWidth - verticalScrollBarWidth, 0);
+        horizontalScrollBar.setScope(0, viewWidth, Math.min(viewWidth, viewportWidth));
+        horizontalScrollBar.setBlockIncrement(Math.max(1, viewportWidth - horizontalReveal));
 
-        if (verticalScrollBarWidth > 0) {
-            int viewportHeight = Math.max(height - columnHeaderHeight -
-                horizontalScrollBarHeight, 0);
-            verticalScrollBar.setScope(0, viewHeight,
-                Math.min(viewHeight, viewportHeight));
-            verticalScrollBar.setBlockIncrement(Math.max(1,
-                viewportHeight - verticalReveal));
-        }
+        int viewportHeight = Math.max(height - columnHeaderHeight - horizontalScrollBarHeight, 0);
+        verticalScrollBar.setScope(0, viewHeight, Math.min(viewHeight, viewportHeight));
+        verticalScrollBar.setBlockIncrement(Math.max(1, viewportHeight - verticalReveal));
     }
 
     public int getHorizontalIncrement() {
@@ -948,9 +938,7 @@ public class ScrollPaneSkin extends ContainerSkin
             rowHeader.setLocation(0, columnHeaderHeight - scrollTop);
         }
 
-        if (verticalScrollBar.isVisible()) {
-            verticalScrollBar.setValue(scrollTop);
-        }
+        verticalScrollBar.setValue(scrollTop);
     }
 
     public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
@@ -979,9 +967,7 @@ public class ScrollPaneSkin extends ContainerSkin
             columnHeader.setLocation(rowHeaderWidth - scrollLeft, 0);
         }
 
-        if (horizontalScrollBar.isVisible()) {
-            horizontalScrollBar.setValue(scrollLeft);
-        }
+        horizontalScrollBar.setValue(scrollLeft);
     }
 
     public void viewChanged(Viewport viewport, Component previousView) {
