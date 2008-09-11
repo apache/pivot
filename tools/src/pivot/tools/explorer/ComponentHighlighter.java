@@ -14,8 +14,8 @@ import pivot.wtk.TreeView;
 
 
 /**
- * Mouse Listener to highlight components under mouse 
- * 
+ * Mouse Listener to highlight components under mouse
+ *
  * @author Eugene Ryzhikov
  * @date   Sep 10, 2008
  *

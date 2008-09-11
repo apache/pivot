@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package pivot.tools.explorer;
 
@@ -12,13 +12,13 @@ import pivot.wtk.effects.ShadeDecorator;
 /**
  * Currently based on ShadDecorator
  * plus slightly darker border around the component
- * 
+ *
  * @author Eugene Ryzhikov
  * @date   Sep 10, 2008
  *
  */
 final class ComponentHighlightDecorator extends ShadeDecorator {
-	
+
 	private Graphics2D graphics;
 	private Component component;
 
@@ -38,5 +38,5 @@ final class ComponentHighlightDecorator extends ShadeDecorator {
 		this.component = component;
 		return this.graphics = super.prepare(component, graphics);
 	}
-	
+
 }
