@@ -60,7 +60,7 @@ public abstract class Transition {
                 }
             }
 
-            update();
+            update(getPercentComplete());
         }
     };
 
@@ -82,6 +82,10 @@ public abstract class Transition {
      * Transition rate, in frames per second.
      */
     public Transition(int duration, int rate, boolean repeat) {
+        if (duration <= 0) {
+            throw new IllegalArgumentException("duration must be positive.");
+        }
+
         this.duration = duration;
         this.rate = rate;
         this.repeat = repeat;
@@ -214,19 +218,20 @@ public abstract class Transition {
     }
 
     /**
-     * Starts the transition. Calls {@link #update()} to establish the initial
-     * state and starts a timer that will repeatedly call {@link #update()} at
-     * the current rate.
+     * Starts the transition. Calls {@link #update(float)} to establish the
+     * initial state and starts a timer that will repeatedly call
+     * {@link #update(float)} at the current rate.
      */
     public final void start() {
         start(null);
     }
 
     /**
-     * Starts the transition. Calls {@link #update()} to establish the initial
-     * state and starts a timer that will repeatedly call {@link #update()} at
-     * the current rate. The specified <tt>TransitionListener</tt> will be
-     * notified when the transition completes.
+     * Starts the transition. Calls {@link #update(float)} to establish the
+     * initial state and starts a timer that will repeatedly call
+     * {@link #update(float)} at the current rate. The specified
+     * <tt>TransitionListener</tt> will be notified when the transition
+     * completes.
      *
      * @param transitionListener
      * The listener to get notified when the transition completes, or
@@ -244,7 +249,7 @@ public abstract class Transition {
 
         intervalID = ApplicationContext.setInterval(updateCallback, getInterval());
 
-        update();
+        update(0f);
     }
 
     /**
@@ -261,5 +266,5 @@ public abstract class Transition {
      * Called repeatedly while the transition is running to update the
      * transition's state.
      */
-    protected abstract void update();
+    protected abstract void update(float percentComplete);
 }

@@ -22,12 +22,10 @@ public class CollapseTransition extends Transition {
     }
 
     @Override
-    protected void update() {
-        int duration = getDuration();
-
-        float percentComplete = getPercentComplete();
-
+    protected void update(float percentComplete) {
         if (percentComplete < 1.0f) {
+            int duration = getDuration();
+
             int width = (int)((float)initialWidth * (1.0f - percentComplete));
 
             width = (int)easing.easeInOut(getElapsedTime(), initialWidth, width - initialWidth, duration);
