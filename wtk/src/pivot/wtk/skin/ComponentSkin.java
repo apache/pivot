@@ -221,8 +221,17 @@ public abstract class ComponentSkin implements Skin, ComponentStateListener {
         }
     }
 
-    // State listener methods
+    // ComponentStateListener methods
+
+    public boolean previewEnabledChange(Component component) {
+        return true;
+    }
+
     public void enabledChanged(Component component) {
+    }
+
+    public boolean previewFocusedChange(Component component, boolean temporary) {
+        return true;
     }
 
     public void focusedChanged(Component component, boolean temporary) {

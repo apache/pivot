@@ -6,7 +6,7 @@ import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Dialog;
-import pivot.wtk.DialogResultListener;
+import pivot.wtk.DialogStateListener;
 import pivot.wtk.Display;
 
 public class ReflectionDecoratorTest implements Application {
@@ -26,8 +26,12 @@ public class ReflectionDecoratorTest implements Application {
         options.add("Cancel");
 
         Alert alert = new Alert(Alert.Type.QUESTION, "Shutdown?", options);
-        alert.open(display, new DialogResultListener() {
-            public void resultReceived(Dialog dialog) {
+        alert.open(display, new DialogStateListener() {
+            public boolean previewDialogClose(Dialog dialog, boolean result) {
+                return true;
+            }
+
+            public void dialogClosed(Dialog dialog) {
                 Alert alert = (Alert)dialog;
 
                 if (alert.getResult()) {

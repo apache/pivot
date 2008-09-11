@@ -739,6 +739,20 @@ public class TableView extends Component {
      */
     private static class TableViewRowStateListenerList extends ListenerList<TableViewRowStateListener>
         implements TableViewRowStateListener {
+        public boolean previewRowDisabledChange(TableView tableView, int index) {
+            boolean allowed = true;
+
+            for (TableViewRowStateListener listener : this) {
+                allowed = listener.previewRowDisabledChange(tableView, index);
+
+                if (!allowed) {
+                    break;
+                }
+            }
+
+            return allowed;
+        }
+
         public void rowDisabledChanged(TableView tableView, int index) {
             for (TableViewRowStateListener listener : this) {
                 listener.rowDisabledChanged(tableView, index);
@@ -1249,8 +1263,9 @@ public class TableView extends Component {
     public void setRowDisabled(int index, boolean disabled) {
         int i = Sequence.Search.binarySearch(disabledIndexes, index);
 
-        if ((i < 0 && disabled)
-            || (i >= 0 && !disabled)) {
+        if (((i < 0 && disabled)
+            || (i >= 0 && !disabled))
+            && tableViewRowStateListeners.previewRowDisabledChange(this, index)) {
             if (disabled) {
                 disabledIndexes.insert(index, -(i + 1));
             } else {

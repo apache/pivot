@@ -174,6 +174,20 @@ public abstract class Button extends Component {
      */
     private static class ButtonStateListenerList extends ListenerList<ButtonStateListener>
         implements ButtonStateListener {
+        public boolean previewStateChange(Button button, Button.State state) {
+            boolean allowed = true;
+
+            for (ButtonStateListener listener : this) {
+                allowed = listener.previewStateChange(button, state);
+
+                if (!allowed) {
+                    break;
+                }
+            }
+
+            return allowed;
+        }
+
         public void stateChanged(Button button, Button.State previousState) {
             for (ButtonStateListener listener : this) {
                 listener.stateChanged(button, previousState);
@@ -329,7 +343,8 @@ public abstract class Button extends Component {
 
         State previousState = this.state;
 
-        if (previousState != state) {
+        if (previousState != state
+            && buttonStateListeners.previewStateChange(this, state)) {
             this.state = state;
 
             if (group != null) {

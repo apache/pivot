@@ -15,6 +15,32 @@
  */
 package pivot.wtk;
 
+/**
+ *
+ *
+ * @author gbrown
+ * @author tvolkert
+ */
 public interface ListViewItemStateListener {
+    /**
+     *
+     *
+     * @param listView
+     *
+     * @param index
+     *
+     * @return
+     * <tt>true</tt> to allow the item's disabled state to change;
+     * <tt>false</tt> to disallow it
+     */
+    public boolean previewItemDisabledChange(ListView listView, int index);
+
+    /**
+     *
+     *
+     * @param listView
+     *
+     * @param index
+     */
     public void itemDisabledChanged(ListView listView, int index);
 }

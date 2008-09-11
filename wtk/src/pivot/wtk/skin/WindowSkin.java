@@ -132,7 +132,8 @@ public class WindowSkin extends ContainerSkin
         return super.keyReleased(keyCode, keyLocation);
     }
 
-    // Window events
+    // WindowListener methods
+
     public void titleChanged(Window window, String previousTitle) {
         // No-op
     }
@@ -157,8 +158,17 @@ public class WindowSkin extends ContainerSkin
         // No-op
     }
 
-    // Window state events
+    // WindowStateListener methods
+
+    public boolean previewWindowOpen(Window window, Display display) {
+        return true;
+    }
+
     public void windowOpened(Window window) {
+    }
+
+    public boolean previewWindowClose(Window window) {
+        return true;
     }
 
     public void windowClosed(Window window, Display display) {

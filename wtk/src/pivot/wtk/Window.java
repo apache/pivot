@@ -124,10 +124,38 @@ public class Window extends Container {
      */
     private static class WindowStateListenerList extends ListenerList<WindowStateListener>
         implements WindowStateListener {
+        public boolean previewWindowOpen(Window window, Display display) {
+            boolean allowed = true;
+
+            for (WindowStateListener listener : this) {
+                allowed = listener.previewWindowOpen(window, display);
+
+                if (!allowed) {
+                    break;
+                }
+            }
+
+            return allowed;
+        }
+
         public void windowOpened(Window window) {
             for (WindowStateListener listener : this) {
                 listener.windowOpened(window);
             }
+        }
+
+        public boolean previewWindowClose(Window window) {
+            boolean allowed = true;
+
+            for (WindowStateListener listener : this) {
+                allowed = listener.previewWindowClose(window);
+
+                if (!allowed) {
+                    break;
+                }
+            }
+
+            return allowed;
         }
 
         public void windowClosed(Window window, Display display) {
@@ -308,19 +336,21 @@ public class Window extends Container {
             throw new IllegalArgumentException("display is null.");
         }
 
-        // Add this as child of display
-        display.add(this);
+        if (windowStateListeners.previewWindowOpen(this, display)) {
+            // Add this as child of display
+            display.add(this);
 
-        // Show the window
-        setDisplayable(true);
+            // Show the window
+            setDisplayable(true);
 
-        // Notify listeners
-        windowStateListeners.windowOpened(this);
+            // Notify listeners
+            windowStateListeners.windowOpened(this);
 
-        // Move this window to the front (which, unless this window is
-        // disabled or incapable of becoming active, will activate the
-        // window)
-        moveToFront();
+            // Move this window to the front (which, unless this window is
+            // disabled or incapable of becoming active, will activate the
+            // window)
+            moveToFront();
+        }
     }
 
     /**
@@ -349,19 +379,26 @@ public class Window extends Container {
         }
 
         // Add this to the owner's owned window list
-        if (owner != null) {
-            owner.ownedWindows.add(this);
-        }
+        owner.ownedWindows.add(this);
 
         // Set the owner
         this.owner = owner;
 
-        // Ensure that the window's owner tree is visible
-        Window rootOwner = getRootOwner();
-        rootOwner.setDisplayable(true);
-
         // Open the window
         open(owner.getDisplay());
+
+        // Did the state listeners allow us to open?
+        if (isOpen()) {
+            // Ensure that the window's owner tree is visible
+            Window rootOwner = getRootOwner();
+            rootOwner.setDisplayable(true);
+        } else {
+            // Remove this from the owner's owned window list
+            owner.ownedWindows.remove(this);
+
+            // Clear the owner
+            this.owner = null;
+        }
     }
 
     /**
@@ -381,7 +418,8 @@ public class Window extends Container {
      * was the focus host, the focused component will be cleared.
      */
     public void close() {
-        if (!isClosed()) {
+        if (!isClosed()
+            && windowStateListeners.previewWindowClose(this)) {
             if (isActive()) {
                 setActiveWindow(null);
             }

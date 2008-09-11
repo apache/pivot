@@ -128,7 +128,15 @@ public class Demo implements Application {
 
                 // Ensure that we clear the popup reference
                 popup.getWindowStateListeners().add(new WindowStateListener() {
+                    public boolean previewWindowOpen(Window window, Display display) {
+                        return true;
+                    }
+
                     public void windowOpened(Window window) {
+                    }
+
+                    public boolean previewWindowClose(Window window) {
+                        return true;
                     }
 
                     public void windowClosed(Window window, Display display) {

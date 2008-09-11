@@ -15,6 +15,32 @@
  */
 package pivot.wtk;
 
+/**
+ *
+ *
+ * @author gbrown
+ * @author tvolkert
+ */
 public interface TableViewRowStateListener {
+    /**
+     *
+     *
+     * @param tableView
+     *
+     * @param index
+     *
+     * @return
+     * <tt>true</tt> to allow the row's disabled state to change;
+     * <tt>false</tt> to disallow it
+     */
+    public boolean previewRowDisabledChange(TableView tableView, int index);
+
+    /**
+     *
+     *
+     * @param tableView
+     *
+     * @param index
+     */
     public void rowDisabledChanged(TableView tableView, int index);
 }

@@ -248,6 +248,20 @@ public class ListView extends Component {
      */
     private static class ListViewItemStateListenerList extends ListenerList<ListViewItemStateListener>
         implements ListViewItemStateListener {
+        public boolean previewItemDisabledChange(ListView listView, int index) {
+            boolean allowed = true;
+
+            for (ListViewItemStateListener listener : this) {
+                allowed = listener.previewItemDisabledChange(listView, index);
+
+                if (!allowed) {
+                    break;
+                }
+            }
+
+            return allowed;
+        }
+
         public void itemDisabledChanged(ListView listView, int index) {
             for (ListViewItemStateListener listener : this) {
                 listener.itemDisabledChanged(listView, index);
@@ -851,8 +865,9 @@ public class ListView extends Component {
     public void setItemDisabled(int index, boolean disabled) {
         int i = Sequence.Search.binarySearch(disabledIndexes, index);
 
-        if ((i < 0 && disabled)
-            || (i >= 0 && !disabled)) {
+        if (((i < 0 && disabled)
+            || (i >= 0 && !disabled))
+            && listViewItemStateListeners.previewItemDisabledChange(this, index)) {
             if (disabled) {
                 disabledIndexes.insert(index, -(i + 1));
             } else {

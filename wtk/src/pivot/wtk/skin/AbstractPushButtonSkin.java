@@ -127,6 +127,12 @@ public abstract class AbstractPushButtonSkin extends ButtonSkin
         return consumed;
     }
 
+    // ButtonStateListener methods
+
+    public boolean previewStateChange(Button button, Button.State state) {
+        return true;
+    }
+
     public void stateChanged(Button toggleButton, Button.State previousState) {
         repaintComponent();
     }

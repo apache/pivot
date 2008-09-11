@@ -965,7 +965,12 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         repaintComponent();
     }
 
-    // Table view row state events
+    // TableViewRowStateListener methods
+
+    public boolean previewRowDisabledChange(TableView tableView, int index) {
+        return true;
+    }
+
     public void rowDisabledChanged(TableView tableView, int index) {
         repaintComponent(getRowBounds(index));
     }

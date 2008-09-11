@@ -370,6 +370,12 @@ public class CheckboxSkin extends ButtonSkin
         return consumed;
     }
 
+    // ButtonStateListener methods
+
+    public boolean previewStateChange(Button button, Button.State state) {
+        return true;
+    }
+
     public void stateChanged(Button button, Button.State previousState) {
         repaintComponent();
     }

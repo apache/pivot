@@ -255,10 +255,38 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentStateListenerList extends
         ListenerList<ComponentStateListener> implements ComponentStateListener {
+        public boolean previewEnabledChange(Component component) {
+            boolean allowed = true;
+
+            for (ComponentStateListener listener : this) {
+                allowed = listener.previewEnabledChange(component);
+
+                if (!allowed) {
+                    break;
+                }
+            }
+
+            return allowed;
+        }
+
         public void enabledChanged(Component component) {
             for (ComponentStateListener listener : this) {
                 listener.enabledChanged(component);
             }
+        }
+
+        public boolean previewFocusedChange(Component component, boolean temporary) {
+            boolean allowed = true;
+
+            for (ComponentStateListener listener : this) {
+                allowed = listener.previewFocusedChange(component, temporary);
+
+                if (!allowed) {
+                    break;
+                }
+            }
+
+            return allowed;
         }
 
         public void focusedChanged(Component component, boolean temporary) {
@@ -1641,7 +1669,8 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>true</tt> if the component is enabled; <tt>false</tt>, otherwise.
      */
     public void setEnabled(boolean enabled) {
-        if (this.enabled != enabled) {
+        if (this.enabled != enabled
+            && componentStateListeners.previewEnabledChange(this)) {
             if (!enabled) {
                 // If this component has the focus, clear it
                 if (isFocused()) {
@@ -1894,21 +1923,28 @@ public abstract class Component implements ConstrainedVisual {
                 }
             }
 
-            // Set the focused component
-            Component.focusedComponent = focusedComponent;
+            if ((previousFocusedComponent == null
+                || previousFocusedComponent.componentStateListeners.previewFocusedChange
+                (previousFocusedComponent, temporary))
+                && (focusedComponent == null
+                || focusedComponent.componentStateListeners.previewFocusedChange
+                (focusedComponent, temporary))) {
+                // Set the focused component
+                Component.focusedComponent = focusedComponent;
 
-            // Notify the components of the state change
-            if (previousFocusedComponent != null) {
-                previousFocusedComponent.setFocused(false, temporary);
-                previousFocusedComponent.getWindow().descendantLostFocus(previousFocusedComponent);
+                // Notify the components of the state change
+                if (previousFocusedComponent != null) {
+                    previousFocusedComponent.setFocused(false, temporary);
+                    previousFocusedComponent.getWindow().descendantLostFocus(previousFocusedComponent);
+                }
+
+                if (focusedComponent != null) {
+                    focusedComponent.setFocused(true, temporary);
+                    focusedComponent.getWindow().descendantGainedFocus(focusedComponent);
+                }
+
+                componentClassListeners.focusedComponentChanged(previousFocusedComponent);
             }
-
-            if (focusedComponent != null) {
-                focusedComponent.setFocused(true, temporary);
-                focusedComponent.getWindow().descendantGainedFocus(focusedComponent);
-            }
-
-            componentClassListeners.focusedComponentChanged(previousFocusedComponent);
         }
     }
 

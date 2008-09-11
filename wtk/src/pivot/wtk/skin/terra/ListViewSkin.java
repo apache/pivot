@@ -656,7 +656,12 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         repaintComponent();
     }
 
-    // List view item state events
+    // ListViewItemStateListener methods
+
+    public boolean previewItemDisabledChange(ListView listView, int index) {
+        return true;
+    }
+
     public void itemDisabledChanged(ListView listView, int index) {
         repaintComponent(getItemBounds(index));
     }

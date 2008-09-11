@@ -195,6 +195,20 @@ public class TreeView extends Component {
     private static class TreeViewNodeStateListenerList
         extends ListenerList<TreeViewNodeStateListener>
         implements TreeViewNodeStateListener {
+        public boolean previewNodeDisabledChange(TreeView treeView, Sequence<Integer> path) {
+            boolean allowed = true;
+
+            for (TreeViewNodeStateListener listener : this) {
+                allowed = listener.previewNodeDisabledChange(treeView, path);
+
+                if (!allowed) {
+                    break;
+                }
+            }
+
+            return allowed;
+        }
+
         public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {
             for (TreeViewNodeStateListener listener : this) {
                 listener.nodeDisabledChanged(treeView, path);
@@ -714,8 +728,9 @@ public class TreeView extends Component {
     public void setNodeDisabled(Sequence<Integer> path, boolean disabled) {
         int index = disabledPaths.indexOf(path);
 
-        if ((index < 0 && disabled)
-            || (index >= 0 && !disabled)) {
+        if (((index < 0 && disabled)
+            || (index >= 0 && !disabled))
+            && treeViewNodeStateListeners.previewNodeDisabledChange(this, path)) {
             if (disabled) {
                 disabledPaths.add(path);
             } else {

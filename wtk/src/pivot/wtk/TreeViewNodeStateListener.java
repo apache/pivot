@@ -17,6 +17,32 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 
+/**
+ *
+ *
+ * @author gbrown
+ * @author tvolkert
+ */
 public interface TreeViewNodeStateListener {
+    /**
+     *
+     *
+     * @param treeView
+     *
+     * @param path
+     *
+     * @return
+     * <tt>true</tt> to allow the node's disabled state to change;
+     * <tt>false</tt> to disallow it
+     */
+    public boolean previewNodeDisabledChange(TreeView treeView, Sequence<Integer> path);
+
+    /**
+     *
+     *
+     * @param treeView
+     *
+     * @param path
+     */
     public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path);
 }

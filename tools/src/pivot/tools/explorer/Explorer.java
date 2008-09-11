@@ -15,7 +15,7 @@ import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.Dialog;
-import pivot.wtk.DialogCloseHandler;
+import pivot.wtk.DialogStateListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
@@ -66,7 +66,16 @@ public class Explorer implements Application, TreeViewSelectionListener {
 
         initComponentTree(componentTree, display);
 
-        dialog.open(display);
+        dialog.open(display, new DialogStateListener() {
+            public boolean previewDialogClose(Dialog dialog, boolean result) {
+                dialog.moveToBack();
+                return false;
+            }
+
+            public void dialogClosed(Dialog dialog) {
+                // No-op
+            }
+        });
         Component.setFocusedComponent(componentTree);
 
     }
@@ -120,12 +129,6 @@ public class Explorer implements Application, TreeViewSelectionListener {
             	String.format("Pivot Explorer ('%s')", subjectApplication.getClass().getName()),
             	content );
         dialog.setPreferredSize( new Dimensions( 600, 400 ));
-
-        dialog.setDialogCloseHandler( new DialogCloseHandler(){
-    			public boolean close(Dialog dialog, boolean result) {
-    				dialog.moveToBack();
-    				return false;
- 		}});
 
         display.getComponentKeyListeners().add(new ComponentKeyListener() {
 

@@ -107,7 +107,7 @@ public class TabPaneSkin extends ContainerSkin
         }
     }
 
-    protected class TabButtonSkin extends ButtonSkin implements ButtonStateListener {
+    protected class TabButtonSkin extends ButtonSkin {
         private boolean pressed = false;
 
         public int getPreferredWidth(int height) {
@@ -338,10 +338,6 @@ public class TabPaneSkin extends ContainerSkin
 
         @Override
         public void enabledChanged(Component component) {
-            repaintComponent();
-        }
-
-        public void stateChanged(Button button, Button.State previousState) {
             repaintComponent();
         }
     }

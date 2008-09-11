@@ -1384,7 +1384,11 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
         // TODO
     }
 
-    // TreeViewNodeListener methods
+    // TreeViewNodeStateListener methods
+
+    public boolean previewNodeDisabledChange(TreeView treeView, Sequence<Integer> path) {
+        return true;
+    }
 
     public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {
         NodeInfo nodeInfo = getNodeInfoAt(path);

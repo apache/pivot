@@ -121,6 +121,10 @@ public class FlowPanes implements Application, ButtonStateListener {
     public void resume() {
     }
 
+    public boolean previewStateChange(Button button, Button.State state) {
+        return true;
+    }
+
     public void stateChanged(Button button, Button.State previousState) {
         Orientation orientation = null;
         if (horizontalOrientationButton.isSelected()) {

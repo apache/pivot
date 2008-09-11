@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.util.ListenerList;
-
 public class Dialog extends Window {
     private class RepositionCallback implements Runnable {
         private static final float GOLDEN_SECTION = 0.382f;
@@ -38,30 +36,11 @@ public class Dialog extends Window {
         }
     }
 
-    /**
-     * Dialog listener list.
-     *
-     * @author tvolkert
-     */
-    private static class DialogListenerList extends ListenerList<DialogListener>
-        implements DialogListener {
-        public void dialogCloseHandlerChanged(Dialog dialog,
-            DialogCloseHandler previousDialogCloseHandler) {
-            for (DialogListener listener : this) {
-                listener.dialogCloseHandlerChanged(dialog, previousDialogCloseHandler);
-            }
-        }
-    }
-
     private boolean modal = false;
     private boolean result = false;
 
-    private DialogCloseHandler dialogCloseHandler = null;
-
-    private DialogResultListener dialogResultListener = null;
+    private DialogStateListener dialogStateListener = null;
     private Window disabledOwner = null;
-
-    private DialogListenerList dialogListeners = new DialogListenerList();
 
     public Dialog() {
         this(null, null);
@@ -80,19 +59,6 @@ public class Dialog extends Window {
         installSkin(Dialog.class);
     }
 
-    public DialogCloseHandler getDialogCloseHandler() {
-        return dialogCloseHandler;
-    }
-
-    public void setDialogCloseHandler(DialogCloseHandler dialogCloseHandler) {
-        DialogCloseHandler previousDialogCloseHandler = this.dialogCloseHandler;
-
-        if (previousDialogCloseHandler != dialogCloseHandler) {
-            this.dialogCloseHandler = dialogCloseHandler;
-            dialogListeners.dialogCloseHandlerChanged(this, previousDialogCloseHandler);
-        }
-    }
-
     /**
      * Opens the dialog.
      *
@@ -109,15 +75,15 @@ public class Dialog extends Window {
      * @param display
      * The display on which the dialog will be opened.
      *
-     * @param dialogResultListener
-     * Optional dialog listener to be called when the dialog is closed.
+     * @param dialogStateListener
+     * Optional dialog state listener to be called when the dialog is closed.
      */
-    public void open(Display display, DialogResultListener dialogResultListener) {
+    public void open(Display display, DialogStateListener dialogStateListener) {
         if (isOpen()) {
             throw new IllegalStateException("Dialog is already open.");
         }
 
-        this.dialogResultListener = dialogResultListener;
+        this.dialogStateListener = dialogStateListener;
         this.modal = false;
 
         super.open(display);
@@ -142,11 +108,11 @@ public class Dialog extends Window {
      * The dialog's owner. If <tt>null</tt>, the dialog is opened non-modal.
      * Otherwise, it is opened as modal.
      *
-     * @param dialogResultListener
-     * Optional dialog listener to be called when the dialog is closed.
+     * @param dialogStateListener
+     * Optional dialog state listener to be called when the dialog is closed.
      */
-    public final void open(Window owner, DialogResultListener dialogResultListener) {
-        open(owner, true, dialogResultListener);
+    public final void open(Window owner, DialogStateListener dialogStateListener) {
+        open(owner, true, dialogStateListener);
     }
 
     /**
@@ -159,15 +125,15 @@ public class Dialog extends Window {
      * If <tt>true</tt>, the dialog is opened as modal, disabling its owner
      * tree.
      *
-     * @param dialogResultListener
-     * Optional dialog listener to be called when the dialog is closed.
+     * @param dialogStateListener
+     * Optional dialog state listener to be called when the dialog is closed.
      */
-    public void open(Window owner, boolean modal, DialogResultListener dialogResultListener) {
+    public void open(Window owner, boolean modal, DialogStateListener dialogStateListener) {
         if (isOpen()) {
             throw new IllegalStateException("Dialog is already open.");
         }
 
-        this.dialogResultListener = dialogResultListener;
+        this.dialogStateListener = dialogStateListener;
         this.modal = modal;
 
         // Call the base method
@@ -211,36 +177,39 @@ public class Dialog extends Window {
         if (!isClosed()) {
             boolean allowed = true;
 
-            if (dialogCloseHandler != null) {
-                allowed = dialogCloseHandler.close(this, result);
+            if (dialogStateListener != null) {
+                allowed = dialogStateListener.previewDialogClose(this, result);
             }
 
             if (allowed) {
-                this.result = result;
-
-                // Enable the ancestor that was disabled when this dialog
-                // was opened
-                if (disabledOwner != null) {
-                    disabledOwner.setEnabled(true);
-
-                    // Move the owner to the front
-                    if (modal) {
-                        disabledOwner.moveToFront();
-                    }
-                }
-
                 // Close the window
                 super.close();
 
-                modal = false;
-                disabledOwner = null;
+                // Only proceed if the state listeners allowed us to close
+                if (isClosed()) {
+                    this.result = result;
 
-                // Notify listener
-                if (dialogResultListener != null) {
-                    dialogResultListener.resultReceived(this);
+                    // Enable the ancestor that was disabled when this dialog
+                    // was opened
+                    if (disabledOwner != null) {
+                        disabledOwner.setEnabled(true);
+
+                        // Move the owner to the front
+                        if (modal) {
+                            disabledOwner.moveToFront();
+                        }
+                    }
+
+                    modal = false;
+                    disabledOwner = null;
+
+                    // Notify listener
+                    if (dialogStateListener != null) {
+                        dialogStateListener.dialogClosed(this);
+                    }
+
+                    dialogStateListener = null;
                 }
-
-                dialogResultListener = null;
             }
         }
     }
@@ -253,15 +222,11 @@ public class Dialog extends Window {
         return disabledOwner;
     }
 
-    public DialogResultListener getDialogResultListener() {
-        return dialogResultListener;
+    public DialogStateListener getDialogStateListener() {
+        return dialogStateListener;
     }
 
     public boolean getResult() {
         return result;
-    }
-
-    public ListenerList<DialogListener> getDialogListeners() {
-        return dialogListeners;
     }
 }

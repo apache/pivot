@@ -15,6 +15,31 @@
  */
 package pivot.wtk;
 
+/**
+ *
+ *
+ * @author gbrown
+ * @author tvolkert
+ */
 public interface ButtonStateListener {
+    /**
+     *
+     *
+     * @param button
+     *
+     * @param state
+     *
+     * @return
+     * <tt>true</tt> to allow the state change; <tt>false</tt> to disallow it
+     */
+    public boolean previewStateChange(Button button, Button.State state);
+
+    /**
+     *
+     *
+     * @param button
+     *
+     * @param previousState
+     */
     public void stateChanged(Button button, Button.State previousState);
 }

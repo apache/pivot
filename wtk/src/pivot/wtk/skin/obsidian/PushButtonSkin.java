@@ -30,8 +30,7 @@ import pivot.wtk.Insets;
 import pivot.wtk.PushButton;
 import pivot.wtk.skin.AbstractPushButtonSkin;
 
-public class PushButtonSkin extends AbstractPushButtonSkin
-    implements ButtonStateListener {
+public class PushButtonSkin extends AbstractPushButtonSkin {
     // Style properties
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = Color.WHITE;

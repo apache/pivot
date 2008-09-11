@@ -15,7 +15,50 @@
  */
 package pivot.wtk;
 
+/**
+ *
+ *
+ * @author gbrown
+ * @author tvolkert
+ */
 public interface ComponentStateListener {
+    /**
+     *
+     *
+     * @param component
+     *
+     * @return
+     * <tt>true</tt> to allow the enabled state to change; <tt>false</tt> to
+     * disallow it
+     */
+    public boolean previewEnabledChange(Component component);
+
+    /**
+     *
+     *
+     * @param component
+     */
     public void enabledChanged(Component component);
+
+    /**
+     *
+     *
+     * @param component
+     *
+     * @param temporary
+     *
+     * @return
+     * <tt>true</tt> to allow the focus state to change; <tt>false</tt> to
+     * disallow it
+     */
+    public boolean previewFocusedChange(Component component, boolean temporary);
+
+    /**
+     *
+     *
+     * @param component
+     *
+     * @param temporary
+     */
     public void focusedChanged(Component component, boolean temporary);
 }
