@@ -4,6 +4,7 @@
     mainWindowStylesTabName: "Styles",
     mainWindowAttrbutesTabName: "Attributes",
     mainWindowSplitLocation: 150,
+    options: "Options",
     commonBorderStyles: {
         padding: 0,
         borderColor: "#cccac2"

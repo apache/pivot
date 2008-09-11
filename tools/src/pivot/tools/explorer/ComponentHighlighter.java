@@ -11,14 +11,21 @@ import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Decorator;
 import pivot.wtk.TreeView;
-import pivot.wtk.effects.ShadeDecorator;
 
+
+/**
+ * Mouse Listener to highlight components under mouse 
+ * 
+ * @author Eugene Ryzhikov
+ * @date   Sep 10, 2008
+ *
+ */
 //TODO: Color and opacity should come from preferences
 final class ComponentHighlighter implements ComponentMouseListener {
 
 	private final TreeView tree;
+	private Decorator componentDecorator = new ComponentHighlightDecorator(0.33f, Color.CYAN.brighter());
 	private Component lastDecoratedComponent;
-	private Decorator componentDecorator = new ShadeDecorator(0.33f, Color.CYAN.brighter());
 
 	public ComponentHighlighter(TreeView tree) {
 		this.tree = tree;
@@ -44,8 +51,7 @@ final class ComponentHighlighter implements ComponentMouseListener {
 		highlightComponent(null);
 	}
 
-	public void mouseOver(Component component) {
-	}
+	public void mouseOver(Component component) {}
 
 	private void highlightComponent(Component component) {
 
@@ -53,11 +59,11 @@ final class ComponentHighlighter implements ComponentMouseListener {
 			lastDecoratedComponent.getDecorators().remove(componentDecorator);
 		}
 
-		if (component != null) {
-			component.getDecorators().add(componentDecorator);
-		}
-
 		lastDecoratedComponent = component;
+
+		if (lastDecoratedComponent != null) {
+			lastDecoratedComponent.getDecorators().add(componentDecorator);
+		}
 
 	}
 }
