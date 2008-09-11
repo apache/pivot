@@ -1,4 +1,9 @@
 /*
+ * Copyright (c) 2003 Robert Penner, all rights reserved.
+ *
+ * This work is subject to the terms in
+ * http://www.robertpenner.com/easing_terms_of_use.html.
+ *
  * Copyright (c) 2008 VMware, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,35 +21,20 @@
 package pivot.wtk.effects.easing;
 
 /**
- *
+ * Easing operation based on a sine curve.
  *
  * @author gbrown
  */
-public class Back implements Easing {
-    private float overshoot;
-
-    public Back() {
-        this(1.70158f);
-    }
-
-    public Back(float overshoot) {
-        this.overshoot = overshoot;
-    }
-
+public class Sine {
     public float easeIn(float time, float begin, float change, float duration) {
-        return change * (time /= duration) * time * ((overshoot + 1) * time - overshoot) + begin;
-    }
-
-    public float easeInOut(float time, float begin, float change, float duration) {
-        return change * ((time = time / duration - 1) * time * ((overshoot + 1) * time + overshoot) + 1) + begin;
+        return -change * (float)Math.cos(time / duration * (Math.PI/2)) + change + begin;
     }
 
     public float easeOut(float time, float begin, float change, float duration) {
-        if ((time /= duration / 2) < 1) {
-            return change / 2 * (time * time * (((overshoot *= (1.525)) + 1) * time - overshoot)) + begin;
-        } else {
-            return change / 2 * ((time -= 2) * time * (((overshoot *= (1.525)) + 1) * time + overshoot) + 2) + begin;
-        }
+        return change * (float)Math.sin(time / duration * (Math.PI/2)) + begin;
     }
 
+    public float easeInOut(float time, float begin, float change, float duration) {
+        return -change / 2f * (float)(Math.cos(Math.PI * time / duration) - 1) + begin;
+    }
 }

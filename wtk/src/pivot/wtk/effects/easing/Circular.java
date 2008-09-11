@@ -21,20 +21,24 @@
 package pivot.wtk.effects.easing;
 
 /**
- * Linear easing operation.
+ * Circular easing operation.
  *
  * @author gbrown
  */
-public class Linear implements Easing {
+public class Circular implements Easing {
     public float easeIn(float time, float begin, float change, float duration) {
-        return change * time / duration + begin;
+        return -change * ((float)Math.sqrt(1f - (time /= duration) * time) - 1f) + begin;
     }
 
     public float easeOut(float time, float begin, float change, float duration) {
-        return change * time / duration + begin;
+        return change * (float)Math.sqrt(1f - (time = time / duration - 1f) * time) + begin;
     }
 
     public float easeInOut(float time, float begin, float change, float duration) {
-        return change * time / duration + begin;
+        if ((time /= duration / 2f) < 1f) {
+            return -change / 2f * ((float)Math.sqrt(1f - time * time) - 1f) + begin;
+        } else {
+            return change / 2f * ((float)Math.sqrt(1f - (time -= 2f) * time) + 1f) + begin;
+        }
     }
 }

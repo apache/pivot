@@ -1,4 +1,9 @@
 /*
+ * Copyright (c) 2003 Robert Penner, all rights reserved.
+ *
+ * This work is subject to the terms in
+ * http://www.robertpenner.com/easing_terms_of_use.html.
+ *
  * Copyright (c) 2008 VMware, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +21,7 @@
 package pivot.wtk.effects.easing;
 
 /**
- *
+ * Interface representing an "easing" operation.
  *
  * @author gbrown
  */

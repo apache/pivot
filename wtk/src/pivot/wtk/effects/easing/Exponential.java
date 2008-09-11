@@ -21,20 +21,34 @@
 package pivot.wtk.effects.easing;
 
 /**
- * Linear easing operation.
+ * Exponential easing operation.
  *
  * @author gbrown
  */
-public class Linear implements Easing {
+public class Exponential implements Easing {
     public float easeIn(float time, float begin, float change, float duration) {
-        return change * time / duration + begin;
+        return (time == 0) ? begin
+            : change * (float)Math.pow(2, 10 * (time / duration - 1f)) + begin;
     }
 
     public float easeOut(float time, float begin, float change, float duration) {
-        return change * time / duration + begin;
+        return (time == duration) ? begin + change
+            : change * ((float)-Math.pow(2, -10 * time / duration) + 1f) + begin;
     }
 
     public float easeInOut(float time, float begin, float change, float duration) {
-        return change * time / duration + begin;
+        if (time == 0) {
+            return begin;
+        }
+
+        if (time == duration) {
+            return begin + change;
+        }
+
+        if ((time /= duration / 2f) < 1) {
+            return change / 2f * (float)Math.pow(2, 10 * (time - 1)) + begin;
+        }
+
+        return change / 2f * ((float)-Math.pow(2, -10 * --time) + 2) + begin;
     }
 }
