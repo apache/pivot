@@ -191,8 +191,8 @@ public abstract class Transition {
      * Returns the amount of time that has passed since the transition
      * was started.
      */
-    public long getElapsedTime() {
-        return currentTime - startTime;
+    public int getElapsedTime() {
+        return (int)(currentTime - startTime);
     }
 
     /**
