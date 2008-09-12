@@ -24,7 +24,7 @@ public class CollapseTransition extends Transition {
     public void start(TransitionListener transitionListener) {
         component.getDecorators().add(fadeDecorator);
 
-        super.start();
+        super.start(transitionListener);
     }
 
     @Override
