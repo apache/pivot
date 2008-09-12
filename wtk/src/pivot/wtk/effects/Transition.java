@@ -60,7 +60,7 @@ public abstract class Transition {
                 }
             }
 
-            update(getPercentComplete());
+            update();
         }
     };
 
@@ -218,18 +218,18 @@ public abstract class Transition {
     }
 
     /**
-     * Starts the transition. Calls {@link #update(float)} to establish the
+     * Starts the transition. Calls {@link #update()} to establish the
      * initial state and starts a timer that will repeatedly call
-     * {@link #update(float)} at the current rate.
+     * {@link #update()} at the current rate.
      */
     public final void start() {
         start(null);
     }
 
     /**
-     * Starts the transition. Calls {@link #update(float)} to establish the
+     * Starts the transition. Calls {@link #update()} to establish the
      * initial state and starts a timer that will repeatedly call
-     * {@link #update(float)} at the current rate. The specified
+     * {@link #update()} at the current rate. The specified
      * <tt>TransitionListener</tt> will be notified when the transition
      * completes.
      *
@@ -249,7 +249,7 @@ public abstract class Transition {
 
         intervalID = ApplicationContext.setInterval(updateCallback, getInterval());
 
-        update(0f);
+        update();
     }
 
     /**
@@ -266,5 +266,5 @@ public abstract class Transition {
      * Called repeatedly while the transition is running to update the
      * transition's state.
      */
-    protected abstract void update(float percentComplete);
+    protected abstract void update();
 }

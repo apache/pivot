@@ -3,6 +3,7 @@ package pivot.demos.transition;
 import pivot.wtk.Component;
 import pivot.wtk.effects.FadeDecorator;
 import pivot.wtk.effects.Transition;
+import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.effects.easing.Easing;
 import pivot.wtk.effects.easing.Quadratic;
 
@@ -17,12 +18,26 @@ public class CollapseTransition extends Transition {
 
         this.component = component;
         initialWidth = component.getWidth();
-
-        component.getDecorators().add(fadeDecorator);
     }
 
     @Override
-    protected void update(float percentComplete) {
+    public void start(TransitionListener transitionListener) {
+        component.getDecorators().add(fadeDecorator);
+
+        super.start();
+    }
+
+    @Override
+    public void stop() {
+        component.getDecorators().remove(fadeDecorator);
+
+        super.stop();
+    }
+
+    @Override
+    protected void update() {
+        float percentComplete = getPercentComplete();
+
         if (percentComplete < 1.0f) {
             int duration = getDuration();
 
@@ -33,8 +48,6 @@ public class CollapseTransition extends Transition {
 
             fadeDecorator.setOpacity(1.0f - percentComplete);
             component.repaint();
-        } else {
-            component.getParent().remove(component);
         }
     }
 }
