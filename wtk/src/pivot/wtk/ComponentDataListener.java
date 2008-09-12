@@ -15,6 +15,17 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Component data listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ComponentDataListener {
+    /**
+     * Called when a component's user data has changed.
+     *
+     * @param component
+     * @param previousValue
+     */
     public void userDataChanged(Component component, Object previousValue);
 }

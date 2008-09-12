@@ -16,14 +16,14 @@
 package pivot.wtk;
 
 /**
- *
+ * <p>Component state listener interface.</p>
  *
  * @author gbrown
  * @author tvolkert
  */
 public interface ComponentStateListener {
     /**
-     *
+     * Called to preview an enabled change event.
      *
      * @param component
      *
@@ -34,17 +34,16 @@ public interface ComponentStateListener {
     public boolean previewEnabledChange(Component component);
 
     /**
-     *
+     * Called when a component's enabled state has changed.
      *
      * @param component
      */
     public void enabledChanged(Component component);
 
     /**
-     *
+     * Called to preview a focused change event.
      *
      * @param component
-     *
      * @param temporary
      *
      * @return
@@ -54,10 +53,9 @@ public interface ComponentStateListener {
     public boolean previewFocusedChange(Component component, boolean temporary);
 
     /**
-     *
+     * Called when a component's focused state has changed.
      *
      * @param component
-     *
      * @param temporary
      */
     public void focusedChanged(Component component, boolean temporary);

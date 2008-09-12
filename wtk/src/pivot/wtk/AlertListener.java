@@ -15,6 +15,17 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Alert listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface AlertListener {
+    /**
+     * Called when an alert's selected option has changed.
+     *
+     * @param alert
+     * @param previousSelectedOption
+     */
     public void selectedOptionChanged(Alert alert, int previousSelectedOption);
 }

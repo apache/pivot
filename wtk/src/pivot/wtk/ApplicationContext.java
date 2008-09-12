@@ -38,9 +38,18 @@ import pivot.collections.HashMap;
 import pivot.util.ImmutableIterator;
 
 /**
- * TODO Fire events when entries are added to/removed from the cache?
+ * <p>Base class for application contexts.</p>
+ *
+ * <p>TODO Fire events when entries are added to/removed from the cache?</p>
+ *
+ * @author gbrown
  */
 public abstract class ApplicationContext {
+    /**
+     * <p>Resource cache dictionary implementation.</p>
+     *
+     * @author gbrown
+     */
     public static class ResourceCacheDictionary
         implements Dictionary<URL, Object>, Iterable<URL> {
         public Object get(URL key) {
@@ -68,6 +77,11 @@ public abstract class ApplicationContext {
         }
     }
 
+    /**
+     * <p>Native AWT display host.</p>
+     *
+     * @author gbrown
+     */
     protected class DisplayHost extends java.awt.Component {
         public static final long serialVersionUID = 0;
 

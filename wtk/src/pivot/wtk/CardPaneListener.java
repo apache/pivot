@@ -15,6 +15,17 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Card pane listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface CardPaneListener {
+    /**
+     * Called when a card pane's selected index has changed.
+     *
+     * @param cardPane
+     * @param previousSelectedIndex
+     */
     public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex);
 }

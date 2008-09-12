@@ -17,18 +17,18 @@ package pivot.wtk;
 
 import java.awt.Graphics2D;
 
-// NOTE We need framework support for painting because, without it, a drop
-// target will never get mouse events (over, move, up, out) - the window
-// carrying the content representation would block user input to anything
-// beneath it.
-
-// TODO If Escape is pressed, cancel drag (call endDrag(null))
-
-// TODO Paint an appropriate overlay icon if drop action is copy or link
-
-// TODO ApplicationContext.DisplayHost should marshall/unmarshall native
-// drag/drop content when a drag out/over occurs, respectively?
-
+/**
+ * <p>Provides framework support for drag/drop operations.</p>
+ *
+ * <p>TODO If Escape is pressed, cancel drag (call endDrag(null))</p>
+ *
+ * <p>TODO Paint an appropriate overlay icon if drop action is copy or link</p>
+ *
+ * <p>TODO ApplicationContext.DisplayHost should marshall/unmarshall native
+ * drag/drop content when a drag out/over occurs, respectively?</p>
+ *
+ * @author gbrown
+ */
 public final class DragDropManager {
     private ApplicationContext applicationContext = null;
 

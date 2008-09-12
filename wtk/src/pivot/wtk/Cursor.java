@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- *
+ * <p>Enumeration defining the supported mouse cursor types.</p>
  *
  * @author gbrown
  */

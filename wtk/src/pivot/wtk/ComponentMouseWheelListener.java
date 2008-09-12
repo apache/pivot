@@ -15,7 +15,22 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Component mouse wheel listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ComponentMouseWheelListener {
+    /**
+     * Called when the mouse wheel is scrolled over a component.
+     *
+     * @param component
+     * @param scrollType
+     * @param scrollAmount
+     * @param wheelRotation
+     * @param x
+     * @param y
+     */
     public void mouseWheel(Component component, Mouse.ScrollType scrollType,
         int scrollAmount, int wheelRotation, int x, int y);
 }

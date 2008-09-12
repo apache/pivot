@@ -18,18 +18,31 @@ package pivot.wtk;
 import pivot.collections.Dictionary;
 
 /**
- * Represents the entry point into a WTK application.
+ * <p>Represents the entry point into a WTK application.</p>
  *
  * @author gbrown
  */
 public interface Application {
     /**
      * Called when the application is starting up.
+     *
+     * @param display
+     * The display on which this application was started.
+     *
+     * @param properties
+     * Initialization properties passed to the application.
      */
     public void startup(Display display, Dictionary<String, String> properties) throws Exception;
 
     /**
      * Called when the application is being shut down.
+     *
+     * @param optional
+     * If <tt>true</tt>, the shutdown may be canceled by returning a value of
+     * <tt>false</tt>.
+     *
+     * @return
+     * <tt>true</tt> to continue shutdown, <tt>false</tt> to cancel.
      */
     public boolean shutdown(boolean optional) throws Exception;
 

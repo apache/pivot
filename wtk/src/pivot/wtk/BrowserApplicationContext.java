@@ -23,7 +23,17 @@ import java.net.URLDecoder;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
+/**
+ * <p>Application context used to execute applications in a web browser.</p>
+ *
+ * @author gbrown
+ */
 public final class BrowserApplicationContext extends ApplicationContext {
+    /**
+     * <p>Applet used to host applications in a web browser.</p>
+     *
+     * @author gbrown
+     */
     public static final class HostApplet extends java.applet.Applet {
         private class PropertyDictionary implements Dictionary<String, String> {
             public String get(String key) {

@@ -15,7 +15,21 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Interface representing an action. Actions are common application behaviors
+ * that are generally added to a window's global action map and triggered by
+ * user interface elements such as buttons and menus.</p>
+ *
+ * @author gbrown
+ */
 public interface Action {
+    /**
+     * Returns a text description of the action.
+     */
     public String getDescription();
+
+    /**
+     * Performs the action.
+     */
     public void perform();
 }

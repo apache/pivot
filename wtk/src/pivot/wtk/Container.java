@@ -26,13 +26,14 @@ import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
- * Base class for containers.
+ * <p>Base class for containers.</p>
+ * <p>NOTES:</p>
  * <ul>
  * <li>Child components that have special meaning to a container should be
- * installed via a dedicated method (such as <tt>setContentComponent()</tt>);
- * additional components may be added by the skin when installed. Other
- * components may still be added but may not be rendered properly by the
- * installed skin.</li>
+ * installed via a dedicated method (for example,
+ * {@link pivot.wtk.Window#setContent(Component)}); additional components may
+ * be added by the skin when installed. Other components may still be added but
+ * may not be rendered properly by the installed skin.</li>
  * <li>Callers should not rely on component position within container to mean
  * anything other than paint order.</li>
  * </ul>

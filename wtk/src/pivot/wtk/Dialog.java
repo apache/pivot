@@ -15,6 +15,12 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Class representing a "dialog". A dialog is a window whose primary
+ * purpose is to facilitate interaction between an application and a user.</p>
+ *
+ * @author gbrown
+ */
 public class Dialog extends Window {
     private class RepositionCallback implements Runnable {
         private static final float GOLDEN_SECTION = 0.382f;

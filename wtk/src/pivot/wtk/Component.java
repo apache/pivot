@@ -34,22 +34,27 @@ import pivot.wtk.Mouse.Button;
 import pivot.wtk.Mouse.ScrollType;
 
 /**
- * Top level abstract base class for all components. In MVC terminology, a
+ * <p>Top level abstract base class for all components. In MVC terminology, a
  * component represents the "controller". It has no inherent visual
  * representation and acts as an intermediary between the component's data (the
  * "model") and the skin, an implementation of <tt>pivot.wtk.Skin</tt> which
- * serves as the "view".
+ * serves as the "view".</p>
  *
- * Components may have multiple skins, including skins packaged as part of a
+ * <p>Components may have multiple skins, including skins packaged as part of a
  * "theme" as well as custom skins defined by a caller. Each skin represents a
  * different way to visualize the state of the model data defined by the
- * component.
+ * component.</p>
  *
- * TODO Add a getShape() method that will support non-rectangular components.
- * DisplaySkin can use this to paint an appropriate drop shadow, and Component
- * can use it to perform hit testing for mouse events and cursor display.
+ * <p>TODO Add a contains() method or some equivalent that will support mouse
+ * interaction with non-rectangular components.</p>
  */
 public abstract class Component implements ConstrainedVisual {
+    /**
+     * Abstract base class for component "attributes". Attributes are attached
+     * properties that are specific to a particular component type.
+     *
+     * @author gbrown
+     */
     public static abstract class Attributes {
         private Component component = null;
 

@@ -17,10 +17,45 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 
+/**
+ * <p>Container listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ContainerListener  {
+    /**
+     * Called when a component has been inserted into a container's component
+     * sequence.
+     *
+     * @param container
+     * @param index
+     */
     public void componentInserted(Container container, int index);
+
+    /**
+     * Called when components have been removed from a container's component
+     * sequence.
+     *
+     * @param container
+     * @param index
+     * @param components
+     */
     public void componentsRemoved(Container container, int index, Sequence<Component> components);
+
+    /**
+     * Called when a container's context key has changed.
+     *
+     * @param container
+     * @param previousContextKey
+     */
     public void contextKeyChanged(Container container, String previousContextKey);
+
+    /**
+     * Called when a container's focus traversal policy has changed.
+     *
+     * @param container
+     * @param previousFocusTraversalPolicy
+     */
     public void focusTraversalPolicyChanged(Container container,
         FocusTraversalPolicy previousFocusTraversalPolicy);
 }

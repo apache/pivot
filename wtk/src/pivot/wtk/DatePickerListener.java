@@ -15,9 +15,34 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Date picker listener interface.</p>
+ *
+ * @author tvolkert
+ */
 public interface DatePickerListener {
+    /**
+     * Called when a date picker's year value has changed.
+     *
+     * @param datePicker
+     * @param previousYear
+     */
     public void yearChanged(DatePicker datePicker, int previousYear);
+
+    /**
+     * Called when a date picker's month value has changed.
+     *
+     * @param datePicker
+     * @param previousMonth
+     */
     public void monthChanged(DatePicker datePicker, int previousMonth);
+
+    /**
+     * Called when a date picker's selected date key has changed.
+     *
+     * @param datePicker
+     * @param previousSelectedDateKey
+     */
     public void selectedDateKeyChanged(DatePicker datePicker,
         String previousSelectedDateKey);
 }

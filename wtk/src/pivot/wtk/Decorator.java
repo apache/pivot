@@ -2,6 +2,12 @@ package pivot.wtk;
 
 import java.awt.Graphics2D;
 
+/**
+ * <p>Interface defining a component "decorator". Decorators allow a caller to
+ * attach additional visual effects to a component.</p>
+ *
+ * @author gbrown
+ */
 public interface Decorator {
     /**
      * Prepares the graphics context into which the component or prior

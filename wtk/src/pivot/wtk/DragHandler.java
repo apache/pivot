@@ -15,12 +15,47 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Interface representing the source of a drag/drop operation.</p>
+ *
+ * @author gbrown
+ */
 public interface DragHandler {
+    /**
+     * Called when a drag operation is initiated.
+     *
+     * @param component
+     * @param x
+     * @param y
+     */
     public boolean beginDrag(Component component, int x, int y);
+
+    /**
+     * Called when a drag operation completes.
+     *
+     * @param dropAction
+     */
     public void endDrag(DropAction dropAction);
 
+    /**
+     * Returns the content of the drag operation (i.e. the item being dragged).
+     */
     public Object getContent();
+
+    /**
+     * Returns a visual representation of the drag content.
+     */
     public Visual getRepresentation();
+
+    /**
+     * Returns the offset from the mouse pointer location at which the
+     * representation should be drawn.
+     */
     public Dimensions getOffset();
+
+    /**
+     * Returns a bitfield containing the drop operations supported by this
+     * handler.
+     */
     public int getSupportedDropActions();
 }

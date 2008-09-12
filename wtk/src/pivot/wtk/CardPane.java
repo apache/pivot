@@ -18,7 +18,12 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
-
+/**
+ * <p>Container that behaves like a deck of cards, only one of which may be
+ * visible at a time.</p>
+ *
+ * @author gbrown
+ */
 public class CardPane extends Container {
     private static class CardPaneListenerList extends ListenerList<CardPaneListener>
         implements CardPaneListener {

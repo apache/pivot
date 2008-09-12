@@ -16,18 +16,15 @@
 package pivot.wtk;
 
 /**
- * <tt>DialogStateListener</tt> instances may be attached to <tt>Dialog</tt>
- * objects to intercept the closing of the dialog and validate that the dialog
- * is allowed to close.
+ * <p>Dialog state listener interface.</p>
  *
  * @author tvolkert
  */
 public interface DialogStateListener {
     /**
-     *
+     * Called to preview a dialog close event.
      *
      * @param dialog
-     *
      * @param result
      *
      * @return
@@ -36,7 +33,7 @@ public interface DialogStateListener {
     public boolean previewDialogClose(Dialog dialog, boolean result);
 
     /**
-     *
+     * Called when a dialog has closed.
      *
      * @param dialog
      */

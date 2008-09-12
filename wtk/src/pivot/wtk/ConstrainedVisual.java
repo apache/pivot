@@ -1,7 +1,9 @@
 package pivot.wtk;
 
 /**
- * Interface representing a visual that is used in layout.
+ * <p>Interface representing a visual that is used in layout.</p>
+ *
+ * @author gbrown
  */
 public interface ConstrainedVisual extends Visual {
     /**

@@ -19,8 +19,10 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
- * TODO Create subclasses that install inset and outset skins, which will
- * probably have different style properties than BorderSkin.
+ * <p>Container that displays a border.</p>
+ *
+ * <p>TODO Create subclasses that install inset and outset skins, which will
+ * probably have different style properties than BorderSkin?</p>
  *
  * @author gbrown
  */
@@ -80,10 +82,23 @@ public class Border extends Container {
         }
     }
 
+    /**
+     * Returns the border's content component.
+     *
+     * @return
+     * The border's content component, or <tt>null</tt> if the border does
+     * not have a content component.
+     */
     public Component getContent() {
         return content;
     }
 
+    /**
+     * Sets the border's content component.
+     *
+     * @param content
+     * The border's content component, or <tt>null</tt> for no content.
+     */
     public void setContent(Component content) {
         Component previousContent = this.content;
 

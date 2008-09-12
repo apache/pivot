@@ -15,8 +15,26 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Component layout listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ComponentLayoutListener {
+    /**
+     * Called when a component's preferred size has changed.
+     *
+     * @param component
+     * @param previousPreferredWidth
+     * @param previousPreferredHeight
+     */
     public void preferredSizeChanged(Component component,
         int previousPreferredWidth, int previousPreferredHeight);
+
+    /**
+     * Called when a component's displayable flag has changed.
+     *
+     * @param component
+     */
     public void displayableChanged(Component component);
 }

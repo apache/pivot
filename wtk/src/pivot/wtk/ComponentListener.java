@@ -15,12 +15,68 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Component listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ComponentListener {
+    /**
+     * Called when a component's parent has changed (when the component is
+     * either added to or removed from a container).
+     *
+     * @param component
+     * @param previousParent
+     */
     public void parentChanged(Component component, Container previousParent);
+
+    /**
+     * Called when a component's size has changed.
+     *
+     * @param component
+     * @param previousWidth
+     * @param previousHeight
+     */
     public void sizeChanged(Component component, int previousWidth, int previousHeight);
+
+    /**
+     * Called when a component's location has changed.
+     *
+     * @param component
+     * @param previousX
+     * @param previousY
+     */
     public void locationChanged(Component component, int previousX, int previousY);
+
+    /**
+     * Called when a component's visible flag has changed.
+     *
+     * @param component
+     */
     public void visibleChanged(Component component);
+
+    /**
+     * Called when a component style has been updated.
+     *
+     * @param component
+     * @param styleKey
+     * @param previousValue
+     */
     public void styleUpdated(Component component, String styleKey, Object previousValue);
+
+    /**
+     * Called when a component's cursor has changed.
+     *
+     * @param component
+     * @param previousCursor
+     */
     public void cursorChanged(Component component, Cursor previousCursor);
+
+    /**
+     * Called when a component's tooltip text has changed.
+     *
+     * @param component
+     * @param previousTooltipText
+     */
     public void tooltipTextChanged(Component component, String previousTooltipText);
 }

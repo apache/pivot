@@ -15,8 +15,40 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Component mouse button listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ComponentMouseButtonListener {
+    /**
+     * Called when a mouse button is pressed over a component.
+     *
+     * @param component
+     * @param button
+     * @param x
+     * @param y
+     */
     public void mouseDown(Component component, Mouse.Button button, int x, int y);
+
+    /**
+     * Called when a mouse button is released over a component.
+     *
+     * @param component
+     * @param button
+     * @param x
+     * @param y
+     */
     public void mouseUp(Component component, Mouse.Button button, int x, int y);
+
+    /**
+     * Called when a mouse button is clicked over a component.
+     *
+     * @param component
+     * @param button
+     * @param x
+     * @param y
+     * @param count
+     */
     public void mouseClick(Component component, Mouse.Button button, int x, int y, int count);
 }

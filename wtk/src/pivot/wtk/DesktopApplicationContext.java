@@ -21,6 +21,12 @@ import java.awt.event.WindowEvent;
 import pivot.collections.HashMap;
 import pivot.collections.immutable.ImmutableMap;
 
+/**
+ * <p>Application context used to execute applications in a native frame
+ * window.</p>
+ *
+ * @author gbrown
+ */
 public final class DesktopApplicationContext extends ApplicationContext {
     private static class HostFrame extends java.awt.Frame {
         public static final long serialVersionUID = 0;

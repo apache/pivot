@@ -15,6 +15,18 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Interface representing the destination of a drag/drop operation.</p>
+ *
+ * @author gbrown
+ */
 public interface DropHandler {
+    /**
+     * Called when an item is dropped during a drag/drop operation.
+     *
+     * @param component
+     * @param x
+     * @param y
+     */
     public DropAction drop(Component component, int x, int y);
 }

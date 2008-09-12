@@ -15,6 +15,16 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Component class listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ComponentClassListener {
+    /**
+     * Called when the focused component changes.
+     *
+     * @param previousFocusedComponent
+     */
     public void focusedComponentChanged(Component previousFocusedComponent);
 }

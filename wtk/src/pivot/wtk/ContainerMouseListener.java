@@ -15,10 +15,53 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Container mouse listener interface. Container mouse events are
+ * "tunneling" events and are fired as the event propagates down the component
+ * hierarchy.</p>
+ *
+ * @author gbrown
+ */
 public interface ContainerMouseListener {
+    /**
+     * Called when the mouse is moved over a container.
+     *
+     * @param container
+     * @param x
+     * @param y
+     */
     public void mouseMove(Container container, int x, int y);
+
+    /**
+     * Called when the mouse is pressed over a container.
+     *
+     * @param container
+     * @param button
+     * @param x
+     * @param y
+     */
     public void mouseDown(Container container, Mouse.Button button, int x, int y);
+
+    /**
+     * Called when the mouse is released over a container.
+     *
+     * @param container
+     * @param button
+     * @param x
+     * @param y
+     */
     public void mouseUp(Container container, Mouse.Button button, int x, int y);
+
+    /**
+     * Called when the mouse wheel is scrolled over a container.
+     *
+     * @param container
+     * @param scrollType
+     * @param scrollAmount
+     * @param wheelRotation
+     * @param x
+     * @param y
+     */
     public void mouseWheel(Container container, Mouse.ScrollType scrollType,
         int scrollAmount, int wheelRotation, int x, int y);
 }

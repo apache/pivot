@@ -15,10 +15,35 @@
  */
 package pivot.wtk;
 
-
+/**
+ * <p>Component key listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ComponentKeyListener {
+    /**
+     * Called when a key has been typed.
+     *
+     * @param component
+     * @param character
+     */
     public void keyTyped(Component component, char character);
 
+    /**
+     * Called when a key has been pressed.
+     *
+     * @param component
+     * @param keyCode
+     * @param keyLocation
+     */
     public void keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation);
+
+    /**
+     * Called when a key has been released.
+     *
+     * @param component
+     * @param keyCode
+     * @param keyLocation
+     */
     public void keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation);
 }

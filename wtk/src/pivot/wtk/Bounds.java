@@ -18,6 +18,11 @@ package pivot.wtk;
 import pivot.collections.Dictionary;
 import pivot.serialization.JSONSerializer;
 
+/**
+ * <p>Class representing the bounds of an object.</p>
+ *
+ * @author gbrown
+ */
 public class Bounds {
     public int x = 0;
     public int y = 0;
@@ -37,8 +42,6 @@ public class Bounds {
     }
 
     public Bounds(Dictionary<String, ?> rectangle) {
-        this(0, 0, 0, 0);
-
         if (rectangle.containsKey(X_KEY)) {
             x = (Integer)rectangle.get(X_KEY);
         }
@@ -64,15 +67,40 @@ public class Bounds {
     }
 
     public Bounds(Point origin, Dimensions size) {
-        this(origin.x, origin.y, size.width, size.height);
+        if (origin == null) {
+            throw new IllegalArgumentException("origin is null.");
+        }
+
+        if (size == null) {
+            throw new IllegalArgumentException("size is null.");
+        }
+
+        x = origin.x;
+        y = origin.y;
+        width = size.width;
+        height = size.height;
     }
 
-    public Bounds(Bounds rectangle) {
-        this(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+    public Bounds(Bounds bounds) {
+        if (bounds == null) {
+            throw new IllegalArgumentException("bounds is null.");
+        }
+
+        x = bounds.x;
+        y = bounds.y;
+        width = bounds.width;
+        height = bounds.height;
     }
 
     protected Bounds(java.awt.Rectangle rectangle) {
-        this(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+        if (rectangle == null) {
+            throw new IllegalArgumentException("rectangle is null.");
+        }
+
+        x = rectangle.x;
+        y = rectangle.y;
+        width = rectangle.width;
+        height = rectangle.height;
     }
 
     public Point getLocation() {

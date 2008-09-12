@@ -17,6 +17,11 @@ package pivot.wtk;
 
 import pivot.wtk.content.ButtonDataRenderer;
 
+/**
+ * <p>Component representing a checkbox.</p>
+ *
+ * @author gbrown
+ */
 @ComponentInfo(icon="Checkbox.png")
 public class Checkbox extends Button {
     public Checkbox() {

@@ -15,16 +15,14 @@
  */
 package pivot.wtk;
 
-import pivot.collections.ArrayList;
-import pivot.collections.List;
 import pivot.collections.Dictionary;
 import pivot.util.CalendarDate;
 import pivot.util.ListenerList;
 import pivot.wtk.content.ButtonDataRenderer;
 
 /**
- * A component that allows a user to select a calendar date. The date picker
- * is hidden until the user pushes the button.
+ * <p>A component that allows a user to select a calendar date. The date picker
+ * is hidden until the user pushes the button.</p>
  *
  * @author tvolkert
  */

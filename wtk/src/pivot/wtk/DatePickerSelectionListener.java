@@ -17,7 +17,18 @@ package pivot.wtk;
 
 import pivot.util.CalendarDate;
 
+/**
+ * <p>Date picker selection listener interface.</p>
+ *
+ * @author tvolkert
+ */
 public interface DatePickerSelectionListener {
+    /**
+     * Called when a date picker's selected date has changed.
+     *
+     * @param datePicker
+     * @param previousSelectedDate
+     */
     public void selectedDateChanged(DatePicker datePicker,
         CalendarDate previousSelectedDate);
 }

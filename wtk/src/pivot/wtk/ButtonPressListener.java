@@ -15,6 +15,16 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Button press listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ButtonPressListener {
+    /**
+     * Called when a button is pressed.
+     *
+     * @param button
+     */
     public void buttonPressed(Button button);
 }

@@ -18,6 +18,11 @@ package pivot.wtk;
 import java.awt.Graphics2D;
 import pivot.wtk.skin.DisplaySkin;
 
+/**
+ * <p>Container representing the root of a component hierarchy.</p>
+ *
+ * @author gbrown
+ */
 public final class Display extends Container {
     private class ValidateCallback implements Runnable {
         public void run() {

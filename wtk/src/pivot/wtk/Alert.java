@@ -21,6 +21,13 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.util.Resources;
 
+/**
+ * <p>Class representing an "alert", a dialog commonly used to perform simple
+ * user interaction.</p>
+ *
+ * @author tvolkert
+ * @author gbrown
+ */
 public class Alert extends Dialog {
     public enum Type {
         ERROR,

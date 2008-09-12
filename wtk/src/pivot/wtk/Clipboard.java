@@ -26,19 +26,27 @@ import pivot.serialization.Serializer;
 import pivot.serialization.JSONSerializer;
 
 /**
- * TODO Copy data to system clipboard when allowed (and the data format is
- * supported).
+ * Singleton class providing a means of sharing data between components and
+ * applications.
  *
- * TODO Use a list of Class:Serializer mapping, so we can prioritize? Using
+ * <p>TODO Copy data to system clipboard when allowed (and the data format is
+ * supported).</p>
+ *
+ * <p>TODO Use a list of Class:Serializer mapping, so we can prioritize? Using
  * this approach, we could walk the list and use the first matching serializer
  * (e.g. to use BinarySerializer for classes that implement Serializable).
  * Alternatively, this would let us serialize to all matching types (though
- * this could be a peformance issue).
+ * this could be a peformance issue).</p>
  *
- * Another alternative is to require the caller to specify the serializer(s)
- * at put() time.
+ * <p>Another alternative is to require the caller to specify the serializer(s)
+ * at put() time.</p>
  */
 public class Clipboard {
+    /**
+     * Serializer dictionary implementation.
+     *
+     * @author gbrown
+     */
     public static final class SerializerDictionary
         implements Dictionary<Class<?>, Class<? extends Serializer>> {
         public Class<? extends Serializer> get(Class<?> type) {

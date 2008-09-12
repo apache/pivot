@@ -17,13 +17,71 @@ package pivot.wtk;
 
 import pivot.wtk.Keyboard;
 
+/**
+ * <p>Button listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ButtonListener {
+    /**
+     * Called when a button's data has changed.
+     *
+     * @param button
+     * @param previousButtonData
+     */
     public void buttonDataChanged(Button button, Object previousButtonData);
+
+    /**
+     * Called when a button's data renderer has changed.
+     *
+     * @param button
+     * @param previousDataRenderer
+     */
     public void dataRendererChanged(Button button, Button.DataRenderer previousDataRenderer);
+
+    /**
+     * Called when a button's action trigger has changed.
+     *
+     * @param button
+     * @param previousActionTrigger
+     */
     public void actionTriggerChanged(Button button, Keyboard.KeyStroke previousActionTrigger);
+
+    /**
+     * Called when a button's toggle button flag has changed.
+     *
+     * @param button
+     */
     public void toggleButtonChanged(Button button);
+
+    /**
+     * Called when a button's tri-state flag has changed.
+     *
+     * @param button
+     */
     public void triStateChanged(Button button);
+
+    /**
+     * Called when a button's group has changed.
+     *
+     * @param button
+     * @param previousGroup
+     */
     public void groupChanged(Button button, Button.Group previousGroup);
+
+    /**
+     * Called when a button's selected key has changed.
+     *
+     * @param button
+     * @param previousSelectedKey
+     */
     public void selectedKeyChanged(Button button, String previousSelectedKey);
+
+    /**
+     * Called when a button's state key has changed.
+     *
+     * @param button
+     * @param previousStateKey
+     */
     public void stateKeyChanged(Button button, String previousStateKey);
 }

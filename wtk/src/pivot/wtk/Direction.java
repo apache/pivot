@@ -15,6 +15,11 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Enumeration representing a two-dimensional direction.</p>
+ *
+ * @author gbrown
+ */
 public enum Direction {
     FORWARD,
     BACKWARD;
