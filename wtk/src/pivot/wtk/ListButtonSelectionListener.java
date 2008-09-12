@@ -15,6 +15,17 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>List button selection listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ListButtonSelectionListener {
+    /**
+     * Called when a list button's selected index has changed.
+     *
+     * @param listButton
+     * @param previousIndex
+     */
     public void selectedIndexChanged(ListButton listButton, int previousIndex);
 }

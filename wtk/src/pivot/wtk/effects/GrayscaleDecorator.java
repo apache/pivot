@@ -23,7 +23,7 @@ import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**
- * Decorator that applies a grayscale conversion to all paint operations.
+ * <p>Decorator that applies a grayscale conversion to a component.</p>
  *
  * @author tvolkert
  * @author gbrown

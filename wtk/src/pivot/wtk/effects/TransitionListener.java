@@ -16,10 +16,15 @@
 package pivot.wtk.effects;
 
 /**
- * Listener that gets notified when transitions complete.
+ * <p>Transition listener interface.</p>
  *
  * @author tvolkert
  */
 public interface TransitionListener {
+    /**
+     * Called when a transition has completed.
+     *
+     * @param transition
+     */
     public void transitionCompleted(Transition transition);
 }

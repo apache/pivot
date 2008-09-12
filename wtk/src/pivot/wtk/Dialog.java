@@ -16,8 +16,8 @@
 package pivot.wtk;
 
 /**
- * <p>Class representing a "dialog". A dialog is a window whose primary
- * purpose is to facilitate interaction between an application and a user.</p>
+ * <p>Window class whose primary purpose is to facilitate interaction between
+ * an application and a user.</p>
  *
  * @author gbrown
  */

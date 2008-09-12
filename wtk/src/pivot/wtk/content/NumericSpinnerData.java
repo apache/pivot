@@ -25,9 +25,9 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
- * Spinner data model that presents a bounded list of integers. This is a
+ * <p>Spinner data model that presents a bounded list of integers. This is a
  * lightweight class that spoofs the actual list data (no data is stored in
- * the list).
+ * the list).</p>
  *
  * @author tvolkert
  */

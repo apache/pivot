@@ -15,6 +15,11 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Viewport reprensenting a scrollable panorama.</p>
+ *
+ * @author gbrown
+ */
 public class Panorama extends Viewport {
     public Panorama() {
         this(null);

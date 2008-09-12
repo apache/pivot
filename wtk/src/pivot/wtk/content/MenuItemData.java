@@ -18,8 +18,7 @@ package pivot.wtk.content;
 import pivot.wtk.media.Image;
 
 /**
- * Default menu item data implementation. The data is immutable because it has
- * no way to notify the button if changed.
+ * <p>Default menu item data implementation.</p>
  *
  * @author gbrown
  */

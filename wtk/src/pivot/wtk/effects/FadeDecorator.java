@@ -7,6 +7,11 @@ import pivot.wtk.Component;
 import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
+/**
+ * <p>Decorator that applies an opacity to a component.</p>
+ *
+ * @author gbrown
+ */
 public class FadeDecorator implements Decorator {
     private float opacity;
 

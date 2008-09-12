@@ -17,6 +17,11 @@ package pivot.wtk.content;
 
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Default table header data implementation.</p>
+ *
+ * @author gbrown
+ */
 public class TableViewHeaderData {
     private Image icon = null;
     private String label = null;

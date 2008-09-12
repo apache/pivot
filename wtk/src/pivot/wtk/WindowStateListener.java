@@ -16,17 +16,16 @@
 package pivot.wtk;
 
 /**
- *
+ * <p>Window state listener interface.</p>
  *
  * @author gbrown
  * @author tvolkert
  */
 public interface WindowStateListener {
     /**
-     *
+     * Called to preview a window open event.
      *
      * @param window
-     *
      * @param display
      *
      * @return
@@ -35,14 +34,14 @@ public interface WindowStateListener {
     public boolean previewWindowOpen(Window window, Display display);
 
     /**
-     *
+     * Called when a window has opened.
      *
      * @param window
      */
     public void windowOpened(Window window);
 
     /**
-     *
+     * Called to preview a window close event.
      *
      * @param window
      *
@@ -52,10 +51,9 @@ public interface WindowStateListener {
     public boolean previewWindowClose(Window window);
 
     /**
-     *
+     * Called when a window has closed.
      *
      * @param window
-     *
      * @param display
      */
     public void windowClosed(Window window, Display display);

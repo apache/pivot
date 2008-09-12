@@ -25,9 +25,15 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Top-level container representing the entry point into a user
+ * interface. Windows are direct descendants of the display.</p>
+ *
+ * @author gbrown
+ */
 public class Window extends Container {
     /**
-     * Class representing the global action map for a window.
+     * <p>Action dictionary implementation.</p>
      *
      * @author gbrown
      */

@@ -16,17 +16,16 @@
 package pivot.wtk;
 
 /**
- *
+ * <p>List view item state listener interface.</p>
  *
  * @author gbrown
  * @author tvolkert
  */
 public interface ListViewItemStateListener {
     /**
-     *
+     * Called to preview an item disabled state change.
      *
      * @param listView
-     *
      * @param index
      *
      * @return
@@ -36,10 +35,9 @@ public interface ListViewItemStateListener {
     public boolean previewItemDisabledChange(ListView listView, int index);
 
     /**
-     *
+     * Called when an item's disabled state has changed.
      *
      * @param listView
-     *
      * @param index
      */
     public void itemDisabledChanged(ListView listView, int index);

@@ -15,6 +15,16 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Flow pane listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface FlowPaneListener {
+    /**
+     * Called when a flow pane's orientation has changed.
+     *
+     * @param flowPane
+     */
     public void orientationChanged(FlowPane flowPane);
 }

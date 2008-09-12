@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.collections.Dictionary;
-import pivot.serialization.JSONSerializer;
 
 /**
  * <p>Class representing the corner radii of a rectangular object.</p>
@@ -41,11 +40,11 @@ public class CornerRadii {
         this(radius, radius, radius, radius);
     }
 
-    public CornerRadii(String cornerRadii) {
-        this(JSONSerializer.parseMap(cornerRadii));
-    }
-
     public CornerRadii(Dictionary<String, ?> cornerRadii) {
+        if (cornerRadii == null) {
+            throw new IllegalArgumentException("cornerRadii is null.");
+        }
+
         if (cornerRadii.containsKey(TOP_LEFT_KEY)) {
             topLeft = (Integer)cornerRadii.get(TOP_LEFT_KEY);
         }

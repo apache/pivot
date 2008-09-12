@@ -15,6 +15,11 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Enumeration representing text decoration styles.</p>
+ *
+ * @author gbrown
+ */
 public enum TextDecoration {
     UNDERLINE,
     STRIKETHROUGH;

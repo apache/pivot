@@ -31,6 +31,11 @@ import pivot.wtk.ImageView;
 import pivot.wtk.Label;
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Default button data renderer.</p>
+ *
+ * @author gbrown
+ */
 public class ButtonDataRenderer extends FlowPane implements Button.DataRenderer {
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();

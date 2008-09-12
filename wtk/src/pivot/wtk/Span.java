@@ -16,12 +16,12 @@
 package pivot.wtk;
 
 import pivot.collections.Dictionary;
-import pivot.serialization.JSONSerializer;
 
 /**
- * Class representing a range of integer values. The range includes all values
- * in the interval <i>[start, end]</i>. Values may be negative, but the value
- * of <tt>start</tt> must be less than or equal to the value of <tt>end</tt>.
+ * <p>Class representing a range of integer values. The range includes all
+ * values in the interval <i>[start, end]</i>. Values may be negative, but the
+ * value of <tt>start</tt> must be less than or equal to the value of
+ * <tt>end</tt>.</p>
  *
  * @author gbrown
  */
@@ -32,48 +32,33 @@ public class Span {
     public static final String START_KEY = "start";
     public static final String END_KEY = "end";
 
-    /**
-     * Creates a span with start and end values of 0.
-     */
     public Span() {
     }
 
-    public Span(String span) {
-        this(JSONSerializer.parseMap(span));
-    }
-
     public Span(Dictionary<String, ?> span) {
-        this(0, 0);
-
-        if (span.containsKey(START_KEY)) {
-            start = (Integer)span.get(START_KEY);
+        if (span == null) {
+            throw new IllegalArgumentException("span is null.");
         }
 
-        if (span.containsKey(END_KEY)) {
-            end = (Integer)span.get(END_KEY);
+        if (!span.containsKey(START_KEY)) {
+            throw new IllegalArgumentException(START_KEY + " is required.");
         }
+
+        if (!span.containsKey(END_KEY)) {
+            throw new IllegalArgumentException(END_KEY + " is required.");
+        }
+
+        setRange((Integer)span.get(START_KEY), (Integer)span.get(END_KEY));
     }
 
-    /**
-     * Creates a span that is a copy of the given span.
-     *
-     * @param span
-     */
     public Span(Span span) {
-        this(span.start, span.end);
+        if (span == null) {
+            throw new IllegalArgumentException("span is null.");
+        }
+
+        setRange(span.start, span.end);
     }
 
-    /**
-     * Creates a span with the given start and end values.
-     *
-     * @param start
-     * The first value in the span. Must be less than or equal to
-     * <tt>end</tt>.
-     *
-     * @param end
-     * The last value in the span. Must be greater than or equal to
-     * <tt>start</tt>.
-     */
     public Span(int start, int end) {
         setRange(start, end);
     }

@@ -17,6 +17,11 @@ package pivot.wtk.content;
 
 import pivot.wtk.Button;
 
+/**
+ * <p>Default menu button data renderer.</p>
+ *
+ * @author gbrown
+ */
 public class MenuButtonDataRenderer extends ButtonDataRenderer {
     @Override
     public void render(Object data, Button button, boolean highlight) {

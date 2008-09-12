@@ -15,6 +15,16 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Text input text listener.</p>
+ *
+ * @author gbrown
+ */
 public interface TextInputTextListener {
+    /**
+     * Called when a text input's text has changed.
+     *
+     * @param textInput
+     */
     public void textChanged(TextInput textInput);
 }

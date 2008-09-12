@@ -15,6 +15,11 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Enumeration representing horizontal alignment values.</p>
+ *
+ * @author gbrown
+ */
 public enum HorizontalAlignment {
     RIGHT,
     LEFT,

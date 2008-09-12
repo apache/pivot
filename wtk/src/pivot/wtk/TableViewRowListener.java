@@ -15,6 +15,11 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Table view row listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface TableViewRowListener {
     /**
      * Called when a row has been inserted into the table view.

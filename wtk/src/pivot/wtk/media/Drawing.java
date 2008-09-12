@@ -19,6 +19,11 @@ import java.awt.Graphics2D;
 import pivot.wtk.Bounds;
 import pivot.wtk.media.drawing.Group;
 
+/**
+ * <p>Image representing a vector drawing.</p>
+ *
+ * @author gbrown
+ */
 public class Drawing extends Image {
     private Group shapes = new Group();
 

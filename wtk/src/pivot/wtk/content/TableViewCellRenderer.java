@@ -25,6 +25,11 @@ import pivot.wtk.Label;
 import pivot.wtk.TableView;
 import pivot.wtk.VerticalAlignment;
 
+/**
+ * <p>Default table cell renderer. Renders cell contents as a string.</p>
+ *
+ * @author gbrown
+ */
 public class TableViewCellRenderer extends Label
     implements TableView.CellRenderer {
     public TableViewCellRenderer() {

@@ -15,6 +15,16 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>List view selection listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ListViewSelectionListener {
+    /**
+     * Called when a list view's selection state has changed.
+     *
+     * @param listView
+     */
     public void selectionChanged(ListView listView);
 }

@@ -15,6 +15,17 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Tooltip listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface TooltipListener {
+    /**
+     * Called when a tooltip's tooltip text property has changed.
+     *
+     * @param tooltip
+     * @param previousTooltipText
+     */
     public void tooltipTextChanged(Tooltip tooltip, String previousTooltipText);
 }

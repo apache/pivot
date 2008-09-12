@@ -15,12 +15,20 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Menu popup listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface MenuPopupListener {
     /**
-     * Called when a menu popup's data has changed.
+     * Called when a menu popup's menu data has changed.
      *
      * @param menuPopup
      * The source of the event.
+     *
+     * @param previousMenuData
+     * The previous menu data.
      */
     public void menuDataChanged(MenuPopup menuPopup, Menu.ItemGroup previousMenuData);
 }

@@ -24,12 +24,20 @@ import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
 /**
- * TODO Add a corner component.
+ * <p>Container that provides access to a set of components via selectable
+ * tabs.</p>
+ *
+ * <p>TODO Add a corner component.</p>
  *
  * @author gbrown
  */
 @ComponentInfo(icon="TabPane.png")
 public class TabPane extends Container {
+    /**
+     * <p>Defines tab attributes.</p>
+     *
+     * @author gbrown
+     */
     protected static class TabPaneAttributes extends Attributes {
         private String label = null;
         private Image icon = null;
@@ -64,8 +72,12 @@ public class TabPane extends Container {
         }
     }
 
+    /**
+     * <p>Tab sequence implementation.</p>
+     *
+     * @author gbrown
+     */
     public final class TabSequence implements Sequence<Component>, Iterable<Component> {
-
         private TabSequence() {
         }
 

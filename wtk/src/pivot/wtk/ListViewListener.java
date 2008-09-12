@@ -17,10 +17,49 @@ package pivot.wtk;
 
 import pivot.collections.List;
 
+/**
+ * <p>List view listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ListViewListener {
+    /**
+     * Called when a list view's list data has changed.
+     *
+     * @param listView
+     * @param previousListData
+     */
     public void listDataChanged(ListView listView, List<?> previousListData);
+
+    /**
+     * Called when a list view's item renderer has changed.
+     *
+     * @param listView
+     * @param previousItemRenderer
+     */
     public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer);
+
+    /**
+     * Called when a list view's select mode has changed.
+     *
+     * @param listView
+     * @param previousSelectMode
+     */
     public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode);
+
+    /**
+     * Called when a list view's selected value key has changed.
+     *
+     * @param listView
+     * @param previousSelectedIndexKey
+     */
     public void selectedValueKeyChanged(ListView listView, String previousSelectedIndexKey);
+
+    /**
+     * Called when a list view's selected values key has changed.
+     *
+     * @param listView
+     * @param previousSelectedValuesKey
+     */
     public void selectedValuesKeyChanged(ListView listView, String previousSelectedValuesKey);
 }

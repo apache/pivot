@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.collections.Dictionary;
-import pivot.serialization.JSONSerializer;
 
 /**
  * <p>Class representing the dimensions of an object.</p>
@@ -33,11 +32,11 @@ public class Dimensions {
     public Dimensions() {
     }
 
-    public Dimensions(String dimensions) {
-        this(JSONSerializer.parseMap(dimensions));
-    }
-
     public Dimensions(Dictionary<String, ?> dimensions) {
+        if (dimensions == null) {
+            throw new IllegalArgumentException("dimensions is null.");
+        }
+
         if (dimensions.containsKey(WIDTH_KEY)) {
             width = (Integer)dimensions.get(WIDTH_KEY);
         }

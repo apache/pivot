@@ -17,7 +17,17 @@ package pivot.wtk;
 
 import java.awt.event.KeyEvent;
 
+/**
+ * <p>Class representing the system keyboard.</p>
+ *
+ * @author gbrown
+ */
 public final class Keyboard {
+    /**
+     * <p>Enumeration representing keyboard modifiers.</p>
+     *
+     * @author gbrown
+     */
     public enum Modifier {
         SHIFT,
         CTRL,
@@ -29,6 +39,11 @@ public final class Keyboard {
         }
     }
 
+    /**
+     * <p>Enumeration representing key locations.</p>
+     *
+     * @author gbrown
+     */
     public enum KeyLocation {
         STANDARD,
         LEFT,
@@ -37,7 +52,8 @@ public final class Keyboard {
     }
 
     /**
-     * Represents a keystroke, a combination of a keycode and modifier flags.
+     * <p>Represents a keystroke, a combination of a keycode and modifier
+     * flags.</p>
      *
      * @author gbrown
      */
@@ -82,7 +98,8 @@ public final class Keyboard {
     }
 
     /**
-     * Contains a set of key code constants that are common to all locales.
+     * <p>Contains a set of key code constants that are common to all
+     * locales.</p>
      *
      * @author gbrown
      */

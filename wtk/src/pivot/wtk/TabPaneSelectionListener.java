@@ -15,6 +15,17 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Tab pane selection listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface TabPaneSelectionListener {
+    /**
+     * Called when a tab pane's selected index has changed.
+     *
+     * @param tabPane
+     * @param previousSelectedIndex
+     */
     public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex);
 }

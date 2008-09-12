@@ -21,8 +21,9 @@
 package pivot.wtk.effects.easing;
 
 /**
- * Quartic easing operation.
+ * <p>Quartic easing operation.</p>
  *
+ * @author Robert Penner
  * @author gbrown
  */
 public class Quartic implements Easing {

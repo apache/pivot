@@ -17,6 +17,11 @@ package pivot.wtk;
 
 import pivot.wtk.content.ButtonDataRenderer;
 
+/**
+ * <p>Component representing a "radio button".</p>
+ *
+ * @author gbrown
+ */
 @ComponentInfo(icon="RadioButton.png")
 public class RadioButton extends Button {
     public RadioButton() {

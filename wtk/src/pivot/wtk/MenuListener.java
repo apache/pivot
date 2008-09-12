@@ -16,13 +16,13 @@
 package pivot.wtk;
 
 /**
- * Interface definition for menu events.
+ * <p>Menu listener interface.</p>
  *
  * @author gbrown
  */
 public interface MenuListener {
     /**
-     * Called when a menu's data has changed.
+     * Called when a menu's menu data has changed.
      *
      * @param menu
      * The source of the event.

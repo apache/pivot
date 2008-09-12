@@ -15,6 +15,16 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Table view selection listener.</p>
+ *
+ * @author gbrown
+ */
 public interface TableViewSelectionListener {
+    /**
+     * Called when a table view's selection state has changed.
+     *
+     * @param tableView
+     */
     public void selectionChanged(TableView tableView);
 }

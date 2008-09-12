@@ -15,7 +15,25 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Label listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface LabelListener {
+    /**
+     * Called when a label's text has changed.
+     *
+     * @param label
+     * @param previousText
+     */
     public void textChanged(Label label, String previousText);
+
+    /**
+     * Called when a label's text key has changed.
+     *
+     * @param label
+     * @param previousTextKey
+     */
     public void textKeyChanged(Label label, String previousTextKey);
 }

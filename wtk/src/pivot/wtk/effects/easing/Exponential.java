@@ -21,8 +21,9 @@
 package pivot.wtk.effects.easing;
 
 /**
- * Exponential easing operation.
+ * <p>Exponential easing operation.</p>
  *
+ * @author Robert Penner
  * @author gbrown
  */
 public class Exponential implements Easing {

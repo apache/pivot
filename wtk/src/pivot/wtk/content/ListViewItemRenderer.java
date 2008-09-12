@@ -32,6 +32,11 @@ import pivot.wtk.ListView;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Default list view item renderer.</p>
+ *
+ * @author gbrown
+ */
 public class ListViewItemRenderer extends FlowPane implements ListView.ItemRenderer {
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();

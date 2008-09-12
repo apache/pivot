@@ -21,11 +21,18 @@ import pivot.util.ListenerList;
 import pivot.wtk.content.MenuItemDataRenderer;
 
 /**
- * Class representing a menu.
+ * <p>Component that presents a cascading menu.</p>
+ *
+ * <p>TODO Complete MenuSkin class.</p>
  *
  * @author gbrown
  */
 public class Menu extends Component {
+    /**
+     * <p>Class representing a menu item.</p>
+     *
+     * @author gbrown
+     */
     public static class Item {
         private Section section = null;
 
@@ -179,7 +186,8 @@ public class Menu extends Component {
     }
 
     /**
-     * An item group is a collection of menu items grouped into sections.
+     * <p>Class representing a menu item group. A menu item group is a
+     * collection of menu items grouped into sections.</p>
      *
      * @author gbrown
      */
@@ -198,7 +206,8 @@ public class Menu extends Component {
     }
 
     /**
-     * A section is a grouping of menu items within an item group.
+     * <p>Class representing a menu section. A section is a grouping of menu items
+     * within an item group.</p>
      *
      * @author gbrown
      */
@@ -262,7 +271,7 @@ public class Menu extends Component {
     }
 
     /**
-     * Menu item renderer interface.
+     * <p>Menu item renderer interface.</p>
      *
      * @author gbrown
      */

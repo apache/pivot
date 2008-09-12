@@ -21,8 +21,9 @@
 package pivot.wtk.effects.easing;
 
 /**
- * Circular easing operation.
+ * <p>Circular easing operation.</p>
  *
+ * @author Robert Penner
  * @author gbrown
  */
 public class Circular implements Easing {

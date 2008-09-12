@@ -29,6 +29,11 @@ import pivot.util.Resources;
  * @author gbrown
  */
 public class Alert extends Dialog {
+    /**
+     * <p>Enumeration defining an alert's type.</p>
+     *
+     * @author gbrown
+     */
     public enum Type {
         ERROR,
         WARNING,

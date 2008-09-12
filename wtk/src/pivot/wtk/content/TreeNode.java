@@ -27,7 +27,7 @@ import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
 /**
- * Default tree node implementation.
+ * <p>Default tree node implementation.</p>
  *
  * @author gbrown
  */

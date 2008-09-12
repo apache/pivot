@@ -17,6 +17,15 @@ package pivot.wtk;
 
 import pivot.collections.Dictionary;
 
+/**
+ * <p>Base interface for "renderers". Renderers are used to customize the
+ * appearance of a component's content.</p>
+ *
+ * @author gbrown
+ */
 public interface Renderer extends ConstrainedVisual {
+    /**
+     * Returns the renderer's style dictionary.
+     */
     public Dictionary<String, Object> getStyles();
 }

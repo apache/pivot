@@ -17,6 +17,11 @@ package pivot.wtk;
 
 import pivot.util.ListenerList;
 
+/**
+ * <p>Component that displays progress information.</p>
+ *
+ * @author tvolkert
+ */
 @ComponentInfo(icon="Meter.png")
 public class Meter extends Component {
     private static class MeterListenerList extends ListenerList<MeterListener>

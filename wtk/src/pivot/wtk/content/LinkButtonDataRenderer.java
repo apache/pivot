@@ -18,6 +18,11 @@ package pivot.wtk.content;
 import pivot.wtk.Button;
 import pivot.wtk.TextDecoration;
 
+/**
+ * <p>Default link button data renderer.</p>
+ *
+ * @author gbrown
+ */
 public class LinkButtonDataRenderer extends ButtonDataRenderer {
     public LinkButtonDataRenderer() {
         label.getStyles().put("wrapText", true);

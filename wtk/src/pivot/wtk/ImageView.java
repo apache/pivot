@@ -19,6 +19,11 @@ import java.net.URL;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Component that displays an image.</p>
+ *
+ * @author gbrown
+ */
 @ComponentInfo(icon="ImageView.png")
 public class ImageView extends Component {
     private static class ImageViewListenerList extends ListenerList<ImageViewListener>

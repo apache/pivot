@@ -15,7 +15,27 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Form attribute listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface FormAttributeListener {
+    /**
+     * Called when a component's label attribute has changed.
+     *
+     * @param form
+     * @param component
+     * @param previousLabel
+     */
     public void labelChanged(Form form, Component component, String previousLabel);
+
+    /**
+     * Called when a component's flag attribute has changed.
+     *
+     * @param form
+     * @param component
+     * @param previousFlag
+     */
     public void flagChanged(Form form, Component component, Form.Flag previousFlag);
 }

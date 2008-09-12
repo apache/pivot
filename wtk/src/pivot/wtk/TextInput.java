@@ -19,7 +19,8 @@ import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
 
 /**
- * A component that allows a user to enter a single line of unformatted text.
+ * <p>A component that allows a user to enter a single line of unformatted
+ * text.</p>
  *
  * @author gbrown
  */

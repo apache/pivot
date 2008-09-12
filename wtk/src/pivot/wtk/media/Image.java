@@ -27,7 +27,18 @@ import pivot.util.concurrent.TaskExecutionException;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Visual;
 
+/**
+ * <p>Abstract base class for images. An image is either a bitmapped "picture"
+ * or a vector "drawing".</p>
+ *
+ * @author gbrown
+ */
 public abstract class Image implements Visual {
+    /**
+     * <p>Task that executes an image load operation.</p>
+     *
+     * @author gbrown
+     */
     public static class LoadTask extends Task<Image> {
         private URL url = null;
 

@@ -20,6 +20,12 @@ import java.text.NumberFormat;
 import pivot.collections.Dictionary;
 import pivot.wtk.TableView;
 
+/**
+ * <p>Default renderer for table view cells that contain numeric data. Renders
+ * cell contents as a formatted number.</p>
+ *
+ * @author gbrown
+ */
 public class TableViewNumberCellRenderer extends TableViewCellRenderer {
     private NumberFormat numberFormat = DEFAULT_NUMBER_FORMAT;
 

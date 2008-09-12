@@ -19,10 +19,9 @@ import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
 
 /**
- * Component representing a displayable string of text.
+ * <p>Component that displays a string of text.</p>
  *
  * @author gbrown
- *
  */
 @ComponentInfo(icon="Label.png")
 public class Label extends Component {

@@ -15,7 +15,19 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Text input selection listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface TextInputSelectionListener {
+    /**
+     * Called when a text input's selection state has changed.
+     *
+     * @param textInput
+     * @param previousSelectionStart
+     * @param previousSelectionLength
+     */
     public void selectionChanged(TextInput textInput,
         int previousSelectionStart, int previousSelectionLength);
 }

@@ -19,8 +19,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
 /**
- * Default table row implementation. Represents items that can be displayed
- * in a table.
+ * <p>Default table row implementation.</p>
  *
  * @author gbrown
  */

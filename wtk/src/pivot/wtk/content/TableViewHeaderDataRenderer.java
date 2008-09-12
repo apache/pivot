@@ -32,6 +32,11 @@ import pivot.wtk.TableViewHeader;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Default table view header data renderer.</p>
+ *
+ * @author gbrown
+ */
 public class TableViewHeaderDataRenderer extends FlowPane
     implements TableViewHeader.DataRenderer {
     protected ImageView imageView = new ImageView();

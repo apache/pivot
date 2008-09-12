@@ -19,13 +19,16 @@ import pivot.wtk.TablePane;
 import pivot.wtk.Menu;
 
 /**
- * TODO This renderer should query the skin for "gutter" style so it knows
- * where to paint the icon.
+ * <p>Default menu item data renderer.</p>
  *
- * TODO Define get/setPaintIconInGutter() methods.
+ * <p>TODO Complete this class.</p>
+ *
+ * <p>TODO This renderer should query the skin for "gutter" style so it knows
+ * where to paint the icon.</p>
+ *
+ * <p>TODO Define get/setPaintIconInGutter() methods.</p>
  *
  * @author gbrown
- *
  */
 public class MenuItemDataRenderer extends TablePane implements Menu.ItemDataRenderer {
     public void render(Object item, Menu menu, boolean checked,

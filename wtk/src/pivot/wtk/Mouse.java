@@ -15,7 +15,17 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Class representing the system mouse.</p>
+ *
+ * @author gbrown
+ */
 public final class Mouse {
+    /**
+     * <p>Enumeration representing mouse buttons.</p>
+     *
+     * @author gbrown
+     */
     public enum Button {
         LEFT,
         RIGHT,
@@ -26,6 +36,11 @@ public final class Mouse {
         }
     }
 
+    /**
+     * <p>Enumeration defining supported scroll types.</p>
+     *
+     * @author gbrown
+     */
     public enum ScrollType {
         UNIT,
         BLOCK

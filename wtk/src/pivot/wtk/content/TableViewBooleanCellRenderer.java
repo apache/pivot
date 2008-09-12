@@ -22,6 +22,12 @@ import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.TableView;
 import pivot.wtk.VerticalAlignment;
 
+/**
+ * <p>Default renderer for table view cells that contain boolean data. Renders
+ * cell contents as a checkbox.</p>
+ *
+ * @author gbrown
+ */
 public class TableViewBooleanCellRenderer extends FlowPane
     implements TableView.CellRenderer {
     private Checkbox checkbox = new Checkbox();

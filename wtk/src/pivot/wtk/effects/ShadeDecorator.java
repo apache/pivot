@@ -24,7 +24,9 @@ import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**
- *
+ * <p>Decorator that applies a "shade" to a component. The shade is a rectangle
+ * of the same size as the component that is painted over the component using a
+ * given color and opacity value.</p>
  *
  * @author tvolkert
  */
@@ -49,6 +51,7 @@ public class ShadeDecorator implements Decorator {
      *
      * @param opacity
      * The opacity of the shade, between 0 and 1, exclusive.
+     *
      * @param color
      * The color of the shade.
      */

@@ -16,17 +16,16 @@
 package pivot.wtk;
 
 /**
- *
+ * <p>Table view row state listener interface.</p>
  *
  * @author gbrown
  * @author tvolkert
  */
 public interface TableViewRowStateListener {
     /**
-     *
+     * Called to preview a row disable change event.
      *
      * @param tableView
-     *
      * @param index
      *
      * @return
@@ -36,10 +35,9 @@ public interface TableViewRowStateListener {
     public boolean previewRowDisabledChange(TableView tableView, int index);
 
     /**
-     *
+     * Called when a row's disabled state has changed.
      *
      * @param tableView
-     *
      * @param index
      */
     public void rowDisabledChanged(TableView tableView, int index);

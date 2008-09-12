@@ -17,7 +17,11 @@ package pivot.wtk;
 
 import pivot.wtk.content.ButtonDataRenderer;
 
-
+/**
+ * <p>Component representing a push button.</p>
+ *
+ * @author gbrown
+ */
 @ComponentInfo(icon="PushButton.png")
 public class PushButton extends Button {
     public PushButton() {

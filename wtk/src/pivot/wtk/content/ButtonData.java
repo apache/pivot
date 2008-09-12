@@ -18,8 +18,7 @@ package pivot.wtk.content;
 import pivot.wtk.media.Image;
 
 /**
- * Default button data implementation. The data is immutable because it has
- * no way to notify the button if changed.
+ * <p>Default button data implementation.</p>
  *
  * @author gbrown
  */

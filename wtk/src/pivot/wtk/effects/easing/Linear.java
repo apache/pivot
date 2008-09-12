@@ -21,8 +21,9 @@
 package pivot.wtk.effects.easing;
 
 /**
- * Linear easing operation.
+ * <p>Linear easing operation.</p>
  *
+ * @author Robert Penner
  * @author gbrown
  */
 public class Linear implements Easing {

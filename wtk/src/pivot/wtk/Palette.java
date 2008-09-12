@@ -16,7 +16,11 @@
 package pivot.wtk;
 
 /**
- * TODO Hide this window when the owner becomes inactive.
+ * <p>Window representing a "tool palette".</p>
+ *
+ * <p>TODO Complete this class and associated skin class.</p>
+ *
+ * <p>TODO Hide this window when the owner becomes inactive.</p>
  *
  * @author gbrown
  */

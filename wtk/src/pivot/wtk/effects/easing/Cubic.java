@@ -21,8 +21,9 @@
 package pivot.wtk.effects.easing;
 
 /**
- * Cubic easing operation.
+ * <p>Cubic easing operation.</p>
  *
+ * @author Robert Penner
  * @author gbrown
  */
 public class Cubic implements Easing {

@@ -25,28 +25,23 @@ import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**
- * Applies a blur to paint operations. Due to the computational complexity of
- * blur operations, this decorator will take a "snapshot" of the component when
- * the decorator first gets applied. It will then re-use that snapshot for all
- * future paints, meaning that the component will not reflect updates to it
- * when it is painted. As such, this decorator is best used on components whose
- * contents are known to be static while the blur is in effect.
- * <p>
- * Blurs are given an integer magnitude, which represents the intensity of the
- * blur. This value translates to a grid of pixels (<tt>blurMagnitude^2</tt>),
+ * <p>Decorator that applies a blur to a component.</p>
+ *
+ * <p>Blurs are given an integer magnitude, which represents the intensity of
+ * the blur. This value translates to a grid of pixels (<tt>blurMagnitude^2</tt>),
  * where each pixel value is calculated by consulting its neighboring pixels
  * according to the grid. Because of this, note that you will get "prettier"
  * blurring if you choose odd values for the blur magnitude; this allows the
  * pixel in question to reside at the center of the grid, thus preventing any
  * arbitrary shifting of pixels. Also note that the greater the intensity of
  * the blur, the greater the intensity of the calculations necessary to
- * accomplish the blur (and the longer it will take to perform the blur).
- * <p>
- * TODO Increase size of buffered image to account for edge conditions of the
- * blur.
- * <p>
- * TODO Use unequal values in the blur kernel to make pixels that are farther
- * away count less towards the blur.
+ * accomplish the blur (and the longer it will take to perform the blur).</p>
+ *
+ * <p>TODO Increase size of buffered image to account for edge conditions of the
+ * blur.</p>
+ *
+ * <p>TODO Use unequal values in the blur kernel to make pixels that are farther
+ * away count less towards the blur.</p>
  *
  * @author tvolkert
  */

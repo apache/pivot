@@ -15,6 +15,11 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Container class representing a decorated frame window.</p>
+ *
+ * @author gbrown
+ */
 public class Frame extends Window {
     public Frame() {
         this(null, null);

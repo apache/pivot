@@ -18,11 +18,6 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
-/**
- * TODO Document
- *
- * @author tvolkert
- */
 public abstract class Viewport extends Container {
     public interface Skin extends pivot.wtk.Skin {
         public Bounds getViewportBounds();

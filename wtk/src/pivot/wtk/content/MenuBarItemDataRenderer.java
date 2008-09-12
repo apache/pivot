@@ -18,6 +18,13 @@ package pivot.wtk.content;
 import pivot.wtk.Label;
 import pivot.wtk.MenuBar;
 
+/**
+ * <p>Default menu bar item data renderer.</p>
+ *
+ * <p>TODO Complete this class.</p>
+ *
+ * @author gbrown
+ */
 public class MenuBarItemDataRenderer extends Label implements MenuBar.ItemDataRenderer {
     public void render(Object item, MenuBar menu, boolean highlighted) {
         // TODO

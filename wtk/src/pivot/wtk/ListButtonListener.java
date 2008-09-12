@@ -17,8 +17,33 @@ package pivot.wtk;
 
 import pivot.collections.List;
 
+/**
+ * <p>List button listener list interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ListButtonListener {
+    /**
+     * Called when a list button's list data has changed.
+     *
+     * @param listButton
+     * @param previousListData
+     */
     public void listDataChanged(ListButton listButton, List<?> previousListData);
+
+    /**
+     * Called when a list button's item renderer has changed.
+     *
+     * @param listButton
+     * @param previousItemRenderer
+     */
     public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer);
+
+    /**
+     * Called when a list button's selected value key has changed.
+     *
+     * @param listButton
+     * @param previousSelectedValueKey
+     */
     public void selectedValueKeyChanged(ListButton listButton, String previousSelectedValueKey);
 }

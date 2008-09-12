@@ -22,16 +22,16 @@ import pivot.util.ListenerList;
 import pivot.wtk.content.ListButtonDataRenderer;
 
 /**
- * A component that allows a user to select one of several options. The options
- * are hidden until the user pushes the button.
+ * <p>Component that allows a user to select one of several list options. The
+ * options are hidden until the user pushes the button.</p>
  *
  * @author gbrown
  */
 @ComponentInfo(icon="ListButton.png")
 public class ListButton extends Button {
     /**
-     * List button skin interface. List button skins are required implement
-     * this.
+     * <p>List button skin interface. List button skins are required implement
+     * this.</p>
      *
      * @author gbrown
      */

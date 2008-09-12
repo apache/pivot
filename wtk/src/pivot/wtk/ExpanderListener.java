@@ -15,8 +15,32 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Expander listener list.</p>
+ *
+ * @author tvolkert
+ */
 public interface ExpanderListener {
+    /**
+     * Called when an expander's title has changed.
+     *
+     * @param expander
+     * @param previousTitle
+     */
     public void titleChanged(Expander expander, String previousTitle);
+
+    /**
+     * Called when an expander's expanded state has changed.
+     *
+     * @param expander
+     */
     public void expandedChanged(Expander expander);
+
+    /**
+     * Called when an expander's content component has changed.
+     *
+     * @param expander
+     * @param previousContent
+     */
     public void contentChanged(Expander expander, Component previousContent);
 }

@@ -15,6 +15,17 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Menu selection listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface MenuSelectionListener {
+    /**
+     * Called when a menu item has been selected.
+     *
+     * @param menu
+     * @param menuItem
+     */
     public void menuItemSelected(Menu menu, Menu.Item menuItem);
 }

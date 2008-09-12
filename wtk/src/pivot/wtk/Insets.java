@@ -16,8 +16,12 @@
 package pivot.wtk;
 
 import pivot.collections.Dictionary;
-import pivot.serialization.JSONSerializer;
 
+/**
+ * <p>Class representing the insets of an object.</p>
+ *
+ * @author gbrown
+ */
 public class Insets {
     public int top = 0;
     public int left = 0;
@@ -29,16 +33,20 @@ public class Insets {
     public static final String BOTTOM_KEY = "bottom";
     public static final String RIGHT_KEY = "right";
 
-    public Insets(int inset) {
-        this(inset, inset, inset, inset);
+    public Insets() {
     }
 
-    public Insets(String insets) {
-        this(JSONSerializer.parseMap(insets));
+    public Insets(int inset) {
+        top = inset;
+        left = inset;
+        bottom = inset;
+        right = inset;
     }
 
     public Insets(Dictionary<String, ?> insets) {
-        this(0, 0, 0, 0);
+        if (insets == null) {
+            throw new IllegalArgumentException("insets is null.");
+        }
 
         if (insets.containsKey(TOP_KEY)) {
             top = ((Number)insets.get(TOP_KEY)).intValue();
@@ -65,7 +73,14 @@ public class Insets {
     }
 
     public Insets(Insets insets) {
-        this(insets.top, insets.left, insets.bottom, insets.right);
+        if (insets == null) {
+            throw new IllegalArgumentException("insets is null.");
+        }
+
+        this.top = insets.top;
+        this.left = insets.left;
+        this.bottom = insets.bottom;
+        this.right = insets.right;
     }
 
     public boolean equals(Object object) {

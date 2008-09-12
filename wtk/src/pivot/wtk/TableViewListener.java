@@ -17,7 +17,25 @@ package pivot.wtk;
 
 import pivot.collections.List;
 
+/**
+ * <p>Table view listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface TableViewListener {
+    /**
+     * Called when a table view's table data has changed.
+     *
+     * @param tableView
+     * @param previousTableData
+     */
     public void tableDataChanged(TableView tableView, List<?> previousTableData);
+
+    /**
+     * Called when a table view's select mode has changed.
+     *
+     * @param tableView
+     * @param previousSelectMode
+     */
     public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode);
 }

@@ -20,13 +20,18 @@ import pivot.collections.Sequence;
 import pivot.wtk.Menu.ItemGroup;
 
 /**
- * TODO Make Menu constructor protected?
+ * <p>Component representing a horizontal menu bar.</p>
  *
- * TODO Add ItemGroupRenderer interface and property (including change event)
+ * <p>TODO Complete this class and associated skin class.</p>
  *
  * @author gbrown
  */
 public class MenuBar extends Component {
+    /**
+     * Menu bar item group sequence.
+     *
+     * @author gbrown
+     */
     public final class ItemGroupSequence implements Sequence<ItemGroup>,
         Iterable<ItemGroup> {
         public int add(ItemGroup item) {
@@ -74,6 +79,11 @@ public class MenuBar extends Component {
 
     }
 
+    /**
+     * <p>Menu bar item data renderer interface.</p>
+     *
+     * @author gbrown
+     */
     public interface ItemDataRenderer {
         public void render(Object item, MenuBar menuBar, boolean highlighted);
     }

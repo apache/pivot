@@ -15,6 +15,17 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Table view header press listener.</p>
+ *
+ * @author gbrown
+ */
 public interface TableViewHeaderPressListener {
+    /**
+     * Called when a table view header has been pressed.
+     *
+     * @param tableViewHeader
+     * @param index
+     */
     public void headerPressed(TableViewHeader tableViewHeader, int index);
 }

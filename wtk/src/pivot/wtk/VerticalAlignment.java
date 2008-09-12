@@ -15,6 +15,11 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Enumeration representing vertical alignment values.</p>
+ *
+ * @author gbrown
+ */
 public enum VerticalAlignment {
     TOP,
     BOTTOM,

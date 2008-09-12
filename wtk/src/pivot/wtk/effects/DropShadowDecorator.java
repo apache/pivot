@@ -29,7 +29,7 @@ import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**
- * Adds drop shadows to components.
+ * <p>Decorator that adds a drop shadows to a component.</p>
  *
  * @author gbrown
  * @author tvolkert

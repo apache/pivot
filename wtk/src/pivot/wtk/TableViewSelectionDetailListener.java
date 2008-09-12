@@ -17,8 +17,35 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 
+/**
+ * <p>Table view selection detail listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface TableViewSelectionDetailListener {
+    /**
+     * Called when a range has been added to a table view's selection.
+     *
+     * @param tableView
+     * @param rangeStart
+     * @param rangeEnd
+     */
     public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd);
+
+    /**
+     * Called when a range has been removed from a table view's selection.
+     *
+     * @param tableView
+     * @param rangeStart
+     * @param rangeEnd
+     */
     public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd);
+
+    /**
+     * Called when a table view's selection state has been reset.
+     *
+     * @param tableView
+     * @param previousSelectedRanges
+     */
     public void selectionReset(TableView tableView, Sequence<Span> previousSelectedRanges);
 }

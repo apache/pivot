@@ -21,8 +21,9 @@
 package pivot.wtk.effects.easing;
 
 /**
- * Interface representing an "easing" operation.
+ * <p>Base interface for easing operations.</p>
  *
+ * @author Robert Penner
  * @author gbrown
  */
 public interface Easing {

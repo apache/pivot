@@ -15,8 +15,34 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Text input character listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface TextInputCharacterListener {
+    /**
+     * Called when characters have been inserted into a text input.
+     *
+     * @param textInput
+     * @param index
+     * @param count
+     */
     public void charactersInserted(TextInput textInput, int index, int count);
+
+    /**
+     * Called when characters have been removed from a text input.
+     *
+     * @param textInput
+     * @param index
+     * @param count
+     */
     public void charactersRemoved(TextInput textInput, int index, int count);
+
+    /**
+     * Called when a text input's character state has been reset.
+     *
+     * @param textInput
+     */
     public void charactersReset(TextInput textInput);
 }

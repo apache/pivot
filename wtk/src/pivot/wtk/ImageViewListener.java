@@ -17,6 +17,17 @@ package pivot.wtk;
 
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Image view listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ImageViewListener {
+    /**
+     * Called when an image view's image has changed.
+     *
+     * @param imageView
+     * @param previousImage
+     */
     public void imageChanged(ImageView imageView, Image previousImage);
 }

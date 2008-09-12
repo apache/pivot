@@ -15,6 +15,11 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Enumeration defining a two-dimensional orientation.</p>
+ *
+ * @author gbrown
+ */
 public enum Orientation {
     HORIZONTAL,
     VERTICAL;

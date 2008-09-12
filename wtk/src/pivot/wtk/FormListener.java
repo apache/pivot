@@ -17,7 +17,26 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 
+/**
+ * <p>Form listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface FormListener {
+    /**
+     * Called when a field has been inserted into a form's field sequence.
+     *
+     * @param form
+     * @param index
+     */
     public void fieldInserted(Form form, int index);
+
+    /**
+     * Called when a field has been removed from a form's field sequence.
+     *
+     * @param form
+     * @param index
+     * @param fields
+     */
     public void fieldsRemoved(Form form, int index, Sequence<Component> fields);
 }

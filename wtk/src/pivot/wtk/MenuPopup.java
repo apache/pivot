@@ -17,6 +17,13 @@ package pivot.wtk;
 
 import pivot.util.ListenerList;
 
+/**
+ * <p>Popup class representing a context menu.</p>
+ *
+ * <p>TODO Complete this class and associated skin class.</p>
+ *
+ * @author gbrown
+ */
 public class MenuPopup extends Popup {
     public Menu.ItemGroup getMenuData() {
         // TODO

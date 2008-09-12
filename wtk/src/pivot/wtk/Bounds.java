@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.collections.Dictionary;
-import pivot.serialization.JSONSerializer;
 
 /**
  * <p>Class representing the bounds of an object.</p>
@@ -37,25 +36,25 @@ public class Bounds {
     public Bounds() {
     }
 
-    public Bounds(String rectangle) {
-        this(JSONSerializer.parseMap(rectangle));
-    }
-
-    public Bounds(Dictionary<String, ?> rectangle) {
-        if (rectangle.containsKey(X_KEY)) {
-            x = (Integer)rectangle.get(X_KEY);
+    public Bounds(Dictionary<String, ?> bounds) {
+        if (bounds == null) {
+            throw new IllegalArgumentException("bounds is null.");
         }
 
-        if (rectangle.containsKey(Y_KEY)) {
-            y = (Integer)rectangle.get(Y_KEY);
+        if (bounds.containsKey(X_KEY)) {
+            x = (Integer)bounds.get(X_KEY);
         }
 
-        if (rectangle.containsKey(WIDTH_KEY)) {
-            width = (Integer)rectangle.get(WIDTH_KEY);
+        if (bounds.containsKey(Y_KEY)) {
+            y = (Integer)bounds.get(Y_KEY);
         }
 
-        if (rectangle.containsKey(HEIGHT_KEY)) {
-            height = (Integer)rectangle.get(HEIGHT_KEY);
+        if (bounds.containsKey(WIDTH_KEY)) {
+            width = (Integer)bounds.get(WIDTH_KEY);
+        }
+
+        if (bounds.containsKey(HEIGHT_KEY)) {
+            height = (Integer)bounds.get(HEIGHT_KEY);
         }
     }
 
@@ -111,11 +110,11 @@ public class Bounds {
         return new Dimensions(width, height);
     }
 
-    public void union(Bounds rectangle) {
-        int x1 = Math.min(x, rectangle.x);
-        int y1 = Math.min(y, rectangle.y);
-        int x2 = Math.max(x + width, rectangle.x + rectangle.width);
-        int y2 = Math.max(y + height, rectangle.y + rectangle.height);
+    public void union(Bounds bounds) {
+        int x1 = Math.min(x, bounds.x);
+        int y1 = Math.min(y, bounds.y);
+        int x2 = Math.max(x + width, bounds.x + bounds.width);
+        int y2 = Math.max(y + height, bounds.y + bounds.height);
 
         this.x = x1;
         this.y = y1;
@@ -123,11 +122,11 @@ public class Bounds {
         this.height = y2 - y1;
     }
 
-    public void intersect(Bounds rectangle) {
-        int x1 = Math.max(x, rectangle.x);
-        int y1 = Math.max(y, rectangle.y);
-        int x2 = Math.min(x + width, rectangle.x + rectangle.width);
-        int y2 = Math.min(y + height, rectangle.y + rectangle.height);
+    public void intersect(Bounds bounds) {
+        int x1 = Math.max(x, bounds.x);
+        int y1 = Math.max(y, bounds.y);
+        int x2 = Math.min(x + width, bounds.x + bounds.width);
+        int y2 = Math.min(y + height, bounds.y + bounds.height);
 
         this.x = x1;
         this.y = y1;
@@ -155,12 +154,12 @@ public class Bounds {
             && y < this.y + height);
     }
 
-    public boolean intersects(Bounds rectangle) {
-        if (rectangle == null) {
-            throw new IllegalArgumentException("rectangle is null");
+    public boolean intersects(Bounds bounds) {
+        if (bounds == null) {
+            throw new IllegalArgumentException("bounds is null");
         }
 
-        return intersects(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+        return intersects(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
     public boolean intersects(int x, int y, int width, int height) {
@@ -180,11 +179,11 @@ public class Bounds {
         boolean equals = false;
 
         if (object instanceof Bounds) {
-            Bounds rectangle = (Bounds)object;
-            equals = (x == rectangle.x
-                && y == rectangle.y
-                && width == rectangle.width
-                && height == rectangle.height);
+            Bounds bounds = (Bounds)object;
+            equals = (x == bounds.x
+                && y == bounds.y
+                && width == bounds.width
+                && height == bounds.height);
         }
 
         return equals;

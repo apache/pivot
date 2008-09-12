@@ -15,9 +15,27 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Table view header listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface TableViewHeaderListener {
+    /**
+     * Called when a table view header's table view has changed.
+     *
+     * @param tableViewHeader
+     * @param previousTableView
+     */
     public void tableViewChanged(TableViewHeader tableViewHeader,
         TableView previousTableView);
+
+    /**
+     * Called when a table view header's data renderer has changed.
+     *
+     * @param tableViewHeader
+     * @param previousDataRenderer
+     */
     public void dataRendererChanged(TableViewHeader tableViewHeader,
         TableViewHeader.DataRenderer previousDataRenderer);
 }

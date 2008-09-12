@@ -18,7 +18,8 @@ package pivot.wtk.effects;
 import pivot.wtk.ApplicationContext;
 
 /**
- *
+ * <p>Abstract base class for "transitions", which are animated application
+ * effects.</p>
  *
  * @author gbrown
  */

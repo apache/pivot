@@ -18,15 +18,24 @@ package pivot.wtk;
 import pivot.util.ListenerList;
 import pivot.wtk.content.TableViewHeaderDataRenderer;
 
+/**
+ * <p>Component representing a table view header.</p>
+ *
+ * @author gbrown
+ */
 public class TableViewHeader extends Component {
+    /**
+     * Table view header data renderer interface.
+     *
+     * @author gbrown
+     */
     public interface DataRenderer extends Renderer {
         public void render(Object data, TableViewHeader tableViewHeader, boolean highlighted);
     }
 
     /**
-     * Table view skin interface. Table view skins may optionally implement
-     * this interface to facilitate additional communication between the
-     * component and the skin.
+     * <p>Table view header skin interface. Table view header skins must
+     * implement this.</p>
      *
      * @author gbrown
      */

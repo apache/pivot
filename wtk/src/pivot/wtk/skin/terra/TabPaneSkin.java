@@ -24,7 +24,6 @@ import java.awt.geom.Line2D;
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.wtk.Button;
-import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
@@ -822,28 +821,12 @@ public class TabPaneSkin extends ContainerSkin
         setButtonPadding(new Insets(buttonPadding));
     }
 
-    public final void setButtonPadding(String buttonPadding) {
-        if (buttonPadding == null) {
-            throw new IllegalArgumentException("buttonPadding is null.");
-        }
-
-        setButtonPadding(new Insets(buttonPadding));
-    }
-
     public int getButtonSpacing() {
         return (Integer)buttonFlowPane.getStyles().get("spacing");
     }
 
     public void setButtonSpacing(int buttonSpacing) {
         buttonFlowPane.getStyles().put("spacing", buttonSpacing);
-    }
-
-    public final void setButtonSpacing(String buttonSpacing) {
-        if (buttonSpacing == null) {
-            throw new IllegalArgumentException("buttonSpacing is null.");
-        }
-
-        setButtonSpacing(Integer.parseInt(buttonSpacing));
     }
 
     protected void updateButtonData(Component tab) {

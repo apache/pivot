@@ -17,7 +17,27 @@ package pivot.wtk;
 
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Tab pane attribute listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface TabPaneAttributeListener {
+    /**
+     * Called when a tab's icon attribute has changed.
+     *
+     * @param tabPane
+     * @param component
+     * @param previousIcon
+     */
     public void iconChanged(TabPane tabPane, Component component, Image previousIcon);
+
+    /**
+     * Called when a tab's label attribute has changed.
+     *
+     * @param tabPane
+     * @param component
+     * @param previousLabel
+     */
     public void labelChanged(TabPane tabPane, Component component, String previousLabel);
 }

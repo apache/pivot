@@ -31,6 +31,11 @@ import pivot.wtk.TreeView;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Default tree node renderer.</p>
+ *
+ * @author gbrown
+ */
 public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRenderer {
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();

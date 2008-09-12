@@ -15,6 +15,11 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>List view item listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface ListViewItemListener {
     /**
      * Called when an item has been inserted into the list view.

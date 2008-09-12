@@ -18,6 +18,11 @@ package pivot.wtk.media;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+/**
+ * <p>Image representing a bitmapped picture.</p>
+ *
+ * @author gbrown
+ */
 public class Picture extends Image {
     private BufferedImage bufferedImage = null;
 

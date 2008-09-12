@@ -23,6 +23,11 @@ import pivot.wtk.TableView;
 import pivot.wtk.TableView.CellRenderer;
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Default renderer for table view cells that contain image data.</p>
+ *
+ * @author gbrown
+ */
 public class TableViewImageCellRenderer extends ImageView implements CellRenderer {
     public static int DEFAULT_HEIGHT = 16;
 

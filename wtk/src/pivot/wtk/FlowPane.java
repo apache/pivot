@@ -18,6 +18,8 @@ package pivot.wtk;
 import pivot.util.ListenerList;
 
 /**
+ * <p>Container that arranges components in a line, either vertically or
+ * horizontally.</p>
  *
  * @author gbrown
  */

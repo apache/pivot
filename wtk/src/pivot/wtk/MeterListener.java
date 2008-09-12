@@ -15,7 +15,25 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Meter listener interface.</p>
+ *
+ * @author tvolkert
+ */
 public interface MeterListener {
+    /**
+     * Called when a meter's percentage value has changed.
+     *
+     * @param meter
+     * @param previousPercentage
+     */
     public void percentageChanged(Meter meter, double previousPercentage);
+
+    /**
+     * Called when a meter's text has changed.
+     *
+     * @param meter
+     * @param previousText
+     */
     public void textChanged(Meter meter, String previousText);
 }

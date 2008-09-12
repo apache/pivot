@@ -17,9 +17,40 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 
+/**
+ * <p>Tab pane listener interface.</p>
+ *
+ * @author gbrown
+ */
 public interface TabPaneListener {
+    /**
+     * Called when a tab pane's orientation has changed.
+     *
+     * @param tabPane
+     */
     public void tabOrientationChanged(TabPane tabPane);
+
+    /**
+     * Called when a tab pane's collapsible flag has changed.
+     *
+     * @param tabPane
+     */
     public void collapsibleChanged(TabPane tabPane);
+
+    /**
+     * Called when a tab has been inserted into a tab pane's tab sequence.
+     *
+     * @param tabPane
+     * @param index
+     */
     public void tabInserted(TabPane tabPane, int index);
+
+    /**
+     * Called when a tab has been removed from a tab pane's tab sequence.
+     *
+     * @param tabPane
+     * @param index
+     * @param tabs
+     */
     public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs);
 }

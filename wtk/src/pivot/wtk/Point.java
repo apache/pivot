@@ -16,8 +16,12 @@
 package pivot.wtk;
 
 import pivot.collections.Dictionary;
-import pivot.serialization.JSONSerializer;
 
+/**
+ * <p>Class representing the location of an object.</p>
+ *
+ * @author gbrown
+ */
 public class Point {
     public int x = 0;
     public int y = 0;
@@ -28,12 +32,10 @@ public class Point {
     public Point() {
     }
 
-    public Point(String point) {
-        this(JSONSerializer.parseMap(point));
-    }
-
     public Point(Dictionary<String, ?> point) {
-        this(0, 0);
+        if (point == null) {
+            throw new IllegalArgumentException("point is null.");
+        }
 
         if (point.containsKey(X_KEY)) {
             x = (Integer)point.get(X_KEY);
@@ -50,7 +52,12 @@ public class Point {
     }
 
     public Point(Point point) {
-        this(point.x, point.y);
+        if (point == null) {
+            throw new IllegalArgumentException("point is null.");
+        }
+
+        this.x = point.x;
+        this.y = point.y;
     }
 
     public void translate(int dx, int dy) {

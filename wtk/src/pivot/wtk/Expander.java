@@ -18,6 +18,12 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
+/**
+ * <p>Navigation container that allows a user to expand and collapse a content
+ * component.</p>
+ *
+ * @author tvolkert
+ */
 public class Expander extends Container {
     private static class ExpanderListenerList extends ListenerList<ExpanderListener>
     implements ExpanderListener {

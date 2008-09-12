@@ -28,10 +28,12 @@ import pivot.wtk.skin.TablePaneSkin;
 import pivot.wtk.skin.WindowSkin;
 
 /**
- * Base class for Pivot themes. Note that concrete Theme implementations should
- * be declared as final. If multiple third-party libraries attempted to extend
- * a theme, it would cause a conflict, as only one could be used in any given
- * application.
+ * <p>Base class for Pivot themes. A theme defines a complete "look and feel"
+ * for a Pivot application.</p>
+ *
+ * <p>Note that concrete Theme implementations should be declared as final. If
+ * multiple third-party libraries attempted to extend a theme, it would cause a
+ * conflict, as only one could be used in any given application.</p>
  */
 public abstract class Theme {
     protected HashMap<Class<? extends Component>, Class<? extends Skin>> componentSkinMap =

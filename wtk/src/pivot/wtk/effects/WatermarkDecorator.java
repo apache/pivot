@@ -31,7 +31,7 @@ import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
 /**
- * Decorator that overlays a watermark over a component.
+ * <p>Decorator that paints a watermark effect over a component.</p>
  *
  * @author tvolkert
  */
