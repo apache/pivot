@@ -34,6 +34,11 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.skin.ComponentSkin;
 
+/**
+ * <p>Abstract base class for chart view skins.</p>
+ *
+ * @author gbrown
+ */
 public abstract class ChartViewSkin extends ComponentSkin
     implements ChartView.Skin,
         ChartViewListener, ChartViewCategoryListener, ChartViewSeriesListener {

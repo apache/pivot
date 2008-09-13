@@ -16,7 +16,7 @@
 package pivot.charts;
 
 /**
- * Chart view series listener interface.
+ * <p>Chart view series listener interface.</p>
  *
  * @author gbrown
  */

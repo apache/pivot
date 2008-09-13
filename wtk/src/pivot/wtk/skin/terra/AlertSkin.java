@@ -32,7 +32,7 @@ import pivot.wtk.media.Image;
 import pivot.wtkx.WTKXSerializer;
 
 /**
- * Alert skin.
+ * <p>Alert skin.</p>
  *
  * @author tvolkert
  * @author gbrown

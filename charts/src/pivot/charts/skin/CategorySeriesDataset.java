@@ -24,6 +24,11 @@ import pivot.charts.ChartView;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 
+/**
+ * <p>Implementation of JFreeChart CategoryDataset.</p>
+ *
+ * @author gbrown
+ */
 @SuppressWarnings("unchecked")
 public class CategorySeriesDataset implements CategoryDataset {
     private ChartView.CategorySequence categories;

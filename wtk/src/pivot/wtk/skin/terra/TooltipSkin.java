@@ -34,6 +34,11 @@ import pivot.wtk.TooltipListener;
 import pivot.wtk.Window;
 import pivot.wtk.skin.WindowSkin;
 
+/**
+ * <p>Tooltip skin.</p>
+ *
+ * @author gbrown
+ */
 public class TooltipSkin extends WindowSkin
     implements ComponentMouseListener, ComponentMouseButtonListener, ComponentMouseWheelListener,
         ComponentKeyListener, TooltipListener {

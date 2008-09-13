@@ -26,6 +26,11 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Popup;
 import pivot.wtk.Window;
 
+/**
+ * <p>Popup skin.</p>
+ *
+ * @author gbrown
+ */
 public class PopupSkin extends WindowSkin
     implements ComponentListener, ComponentMouseButtonListener, ContainerMouseListener {
     public PopupSkin() {

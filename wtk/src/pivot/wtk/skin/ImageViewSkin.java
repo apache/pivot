@@ -28,9 +28,9 @@ import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
 /**
- * TODO Add flipHorizontal and flipVertical styles
+ * <p>Image view skin.</p>
  *
- * TODO Add rotation style
+ * <p>TODO Add rotation style</p>
  *
  * @author gbrown
  */

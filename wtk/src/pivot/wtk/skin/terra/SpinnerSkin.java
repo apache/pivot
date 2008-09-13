@@ -37,7 +37,7 @@ import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * Spinner skin
+ * <p>Spinner skin.</p>
  *
  * @author tvolkert
  */

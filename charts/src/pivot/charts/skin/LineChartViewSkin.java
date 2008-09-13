@@ -28,6 +28,11 @@ import pivot.charts.LineChartView;
 import pivot.collections.List;
 import pivot.wtk.Component;
 
+/**
+ * <p>Line chart view skin.</p>
+ *
+ * @author gbrown
+ */
 public class LineChartViewSkin extends ChartViewSkin {
     private boolean threeDimensional = false;
 

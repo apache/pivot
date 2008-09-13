@@ -28,6 +28,11 @@ import pivot.charts.ChartView;
 import pivot.collections.List;
 import pivot.wtk.Component;
 
+/**
+ * <p>Area chart view skin.</p>
+ *
+ * @author gbrown
+ */
 public class AreaChartViewSkin extends ChartViewSkin {
     @Override
     public void install(Component component) {

@@ -19,6 +19,11 @@ import pivot.wtk.StackPane;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 
+/**
+ * <p>Stack pane skin.</<p>
+ *
+ * @author gbrown
+ */
 public class StackPaneSkin extends ContainerSkin {
     public void install(Component component) {
         validateComponentType(component, StackPane.class);

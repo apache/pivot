@@ -30,6 +30,11 @@ import pivot.wtk.WindowListener;
 import pivot.wtk.WindowStateListener;
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Window skin.</p>
+ *
+ * @author gbrown
+ */
 public class WindowSkin extends ContainerSkin
     implements WindowListener, WindowStateListener {
     /**

@@ -26,7 +26,7 @@ import pivot.wtk.Skin;
 import pivot.wtk.Tooltip;
 
 /**
- * Abstract base class for WTK skins.
+ * <p>Abstract base class for component skins.</p>
  *
  * @author gbrown
  */

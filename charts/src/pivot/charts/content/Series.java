@@ -1,7 +1,7 @@
 package pivot.charts.content;
 
 /**
- * Base interface for a category series.
+ * <p>Base interface for a category series.</p>
  *
  * @author gbrown
  */

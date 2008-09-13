@@ -38,9 +38,11 @@ import pivot.wtk.Span;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * NOTE This skin assumes a fixed renderer height.
+ * <p>List view skin.</p>
  *
- * TODO Support a "showToggleButtons" style.
+ * <p>NOTE This skin assumes a fixed renderer height.</p>
+ *
+ * <p>TODO Support a "showToggleButtons" style.</p>
  *
  * @author gbrown
  */

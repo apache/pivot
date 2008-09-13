@@ -23,10 +23,13 @@ import pivot.wtk.Mouse;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * TODO This class contains a MenuPopup instance?
+ * <p>Menu button skin.</p>
+ *
+ * <p>TODO Complete this class.</p>
+ *
+ * <p>TODO This class contains a MenuPopup instance?</p>
  *
  * @author gbrown
- *
  */
 public class MenuButtonSkin extends ButtonSkin {
     public void layout() {

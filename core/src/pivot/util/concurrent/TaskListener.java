@@ -16,7 +16,7 @@
 package pivot.util.concurrent;
 
 /**
- * Task listener interface.
+ * <p>Task listener interface.</p>
  *
  * @param <V>
  * The return type of the task.

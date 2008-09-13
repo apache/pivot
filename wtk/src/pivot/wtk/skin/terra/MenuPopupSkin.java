@@ -20,9 +20,13 @@ import pivot.wtk.MenuPopup;
 import pivot.wtk.skin.WindowSkin;
 
 /**
- * TODO Implement skin methods.
+ * <p>Menu popup skin.</p>
  *
- * TODO Create a panorama and add the component's Menu to it.
+ * <p>TODO Complete this class.</p>
+ *
+ * <p>TODO Implement skin methods.</p>
+ *
+ * <p>TODO Create a panorama and add the component's Menu to it.</p>
  *
  * @author gbrown
  */

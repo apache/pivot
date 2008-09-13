@@ -21,7 +21,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
 
 import pivot.util.CalendarDate;
 import pivot.wtk.Border;
@@ -29,7 +28,6 @@ import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
-import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.DatePicker;
 import pivot.wtk.DatePickerButton;
 import pivot.wtk.DatePickerButtonListener;
@@ -43,6 +41,11 @@ import pivot.wtk.Point;
 import pivot.wtk.Popup;
 import pivot.wtk.skin.ButtonSkin;
 
+/**
+ * <p>Date picker button skin.</p>
+ *
+ * @author gbrown
+ */
 public class DatePickerButtonSkin extends ButtonSkin
     implements DatePickerButton.Skin, ButtonPressListener,
                DatePickerButtonListener, DatePickerButtonSelectionListener {

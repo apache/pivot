@@ -32,6 +32,7 @@ import pivot.wtk.TablePaneListener;
 import pivot.wtk.TablePaneAttributeListener;
 
 /**
+ * <p>Table pane skin.</p>
  *
  * @author tvolkert
  */

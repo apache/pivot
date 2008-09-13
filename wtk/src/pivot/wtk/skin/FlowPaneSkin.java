@@ -26,10 +26,9 @@ import pivot.wtk.Orientation;
 import pivot.wtk.VerticalAlignment;
 
 /**
- * TODO Add support for "direction" style (an instance of Direction)
+ * <p>Flow pane skin.</p>
  *
  * @author gbrown
- *
  */
 public class FlowPaneSkin extends ContainerSkin
     implements FlowPaneListener {

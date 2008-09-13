@@ -33,7 +33,9 @@ import pivot.wtk.Bounds;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * TODO Button alignment style (vertical only).
+ * <p>Checkbox skin.</p>
+ *
+ * <p>TODO Button alignment style (vertical only).</p>
  *
  * @author gbrown
  */

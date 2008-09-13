@@ -39,7 +39,7 @@ import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * Rollup skin.
+ * <p>Rollup skin.</p>
  *
  * @author tvolkert
  */

@@ -11,6 +11,11 @@ import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
+/**
+ * <p>Class representing an untyped node in a WTKX document.</p>
+ *
+ * @author gbrown
+ */
 public class Element implements Dictionary<String, Object>, List<Object> {
     private class ItemIterator implements Iterator<Object> {
         Iterator<Object> source = null;

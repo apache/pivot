@@ -41,6 +41,11 @@ import pivot.wtk.TableViewHeaderListener;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
 
+/**
+ * <p>Table view header skin.</p>
+ *
+ * @author gbrown
+ */
 public class TableViewHeaderSkin extends ComponentSkin
     implements TableViewHeader.Skin, TableViewHeaderListener, TableViewColumnListener {
     private class SortIndicatorImage extends Image {

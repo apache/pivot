@@ -25,7 +25,7 @@ import pivot.util.ListenerList;
 import pivot.wtk.Component;
 
 /**
- * Abstract base class for chart views.
+ * <p>Abstract base class for chart views.</p>
  *
  * @author gbrown
  */

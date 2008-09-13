@@ -48,7 +48,7 @@ import pivot.wtk.Tooltip;
 import pivot.wtk.TreeView;
 
 /**
- * Terra theme.
+ * <p>Terra theme.</p>
  *
  * @author gbrown
  * @author tvolkert

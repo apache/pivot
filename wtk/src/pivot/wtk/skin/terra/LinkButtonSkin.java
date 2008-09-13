@@ -26,6 +26,11 @@ import pivot.wtk.LinkButton;
 import pivot.wtk.Mouse;
 import pivot.wtk.skin.ButtonSkin;
 
+/**
+ * <p>Link button skin.</p>
+ *
+ * @author gbrown
+ */
 public class LinkButtonSkin extends ButtonSkin {
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = new Color(0x2c, 0x56, 0x80);

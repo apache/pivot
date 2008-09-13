@@ -4,6 +4,11 @@ import pivot.wtk.PushButton;
 import pivot.wtk.RadioButton;
 import pivot.wtk.Theme;
 
+/**
+ * <p>Obsidian theme.</p>
+ *
+ * @author gbrown
+ */
 public final class ObsidianTheme extends Theme {
     public ObsidianTheme() {
         componentSkinMap.put(PushButton.class, PushButtonSkin.class);
@@ -11,10 +16,8 @@ public final class ObsidianTheme extends Theme {
     }
 
     public void install() {
-        // TODO
     }
 
     public void uninstall() {
-        // TODO
     }
 }

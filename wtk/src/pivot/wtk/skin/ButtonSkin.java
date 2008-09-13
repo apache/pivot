@@ -21,6 +21,11 @@ import pivot.wtk.Component;
 import pivot.wtk.Cursor;
 import pivot.wtk.Keyboard;
 
+/**
+ * <p>Abstract base class for button skins.</p>
+ *
+ * @author gbrown
+ */
 public abstract class ButtonSkin extends ComponentSkin implements ButtonListener {
     public ButtonSkin() {
     }

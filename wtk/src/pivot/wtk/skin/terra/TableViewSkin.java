@@ -41,11 +41,13 @@ import pivot.wtk.TableViewSelectionDetailListener;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * NOTE This skin assumes a fixed renderer height.
+ * <p>Table view skin.</p>
  *
- * TODO Add disableMouseSelection style to support the case where selection
+ * <p>NOTE This skin assumes a fixed renderer height.</p>
+ *
+ * <p>TODO Add disableMouseSelection style to support the case where selection
  * should be enabled but the caller wants to implement the management of it;
- * e.g. changing a message's flag state in an email client.
+ * e.g. changing a message's flag state in an email client.</p>
  *
  * @author gbrown
  */

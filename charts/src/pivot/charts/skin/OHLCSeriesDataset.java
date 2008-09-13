@@ -7,6 +7,11 @@ import org.jfree.data.xy.OHLCDataset;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 
+/**
+ * <p>Implementation of JFreeChart OHLCDataset.</p>
+ *
+ * @author gbrown
+ */
 public class OHLCSeriesDataset extends XYSeriesDataset implements OHLCDataset {
     public static final String DATE_KEY = "date";
     public static final String OPEN_KEY = "open";

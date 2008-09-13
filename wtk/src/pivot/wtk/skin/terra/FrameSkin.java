@@ -18,6 +18,11 @@ package pivot.wtk.skin.terra;
 import pivot.wtk.Component;
 import pivot.wtk.Frame;
 
+/**
+ * <p>Frame skin.</p>
+ *
+ * @author gbrown
+ */
 public class FrameSkin extends AbstractFrameSkin {
     public FrameSkin() {
     }

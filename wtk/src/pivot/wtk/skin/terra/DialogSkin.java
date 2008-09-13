@@ -19,6 +19,11 @@ import pivot.wtk.Component;
 import pivot.wtk.Dialog;
 import pivot.wtk.Keyboard;
 
+/**
+ * <p>Dialog skin.</p>
+ *
+ * @author gbrown
+ */
 public class DialogSkin extends AbstractFrameSkin {
     @Override
     public void install(Component component) {

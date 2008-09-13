@@ -30,6 +30,11 @@ import pivot.collections.List;
 import pivot.collections.Map;
 import pivot.wtk.Component;
 
+/**
+ * <p>Pie chart view skin.</p>
+ *
+ * @author gbrown
+ */
 public class PieChartViewSkin extends ChartViewSkin {
     private Map<String, Number> explodePercentages = new HashMap<String, Number>();
 

@@ -35,7 +35,6 @@ import pivot.wtk.DatePickerSelectionListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
-import pivot.wtk.Insets;
 import pivot.wtk.Label;
 import pivot.wtk.PushButton;
 import pivot.wtk.TablePane;
@@ -44,7 +43,7 @@ import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * Date picker skin.
+ * <p>Date picker skin.</p>
  *
  * @author tvolkert
  */

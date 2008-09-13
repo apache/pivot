@@ -50,13 +50,18 @@ import pivot.wtk.media.Image;
 import pivot.wtk.skin.WindowSkin;
 
 /**
- * Abstract base class for Frame and Dialog skins.
+ * <p>Abstract base class for Frame and Dialog skins.</p>
  *
  * @author gbrown
  * @author tvolkert
  */
 public abstract class AbstractFrameSkin extends WindowSkin
     implements ComponentLayoutListener {
+    /**
+     * <p>Frame button.</p>
+     *
+     * @author gbrown
+     */
     public static class FrameButton extends PushButton {
         public FrameButton(Object buttonData) {
             super(buttonData);
@@ -65,6 +70,11 @@ public abstract class AbstractFrameSkin extends WindowSkin
         }
     }
 
+    /**
+     * <p>Frame button skin.</p>
+     *
+     * @author gbrown
+     */
     public static class FrameButtonSkin extends PushButtonSkin {
         public void install(Component component) {
             validateComponentType(component, FrameButton.class);
@@ -90,6 +100,11 @@ public abstract class AbstractFrameSkin extends WindowSkin
         }
     }
 
+    /**
+     * <p>Abstract base class for frame button images.</p>
+     *
+     * @author gbrown
+     */
     protected abstract class ButtonImage extends Image {
         public int getWidth() {
             return 8;
@@ -100,6 +115,11 @@ public abstract class AbstractFrameSkin extends WindowSkin
         }
     }
 
+    /**
+     * <p>Minimize button image.</p>
+     *
+     * @author gbrown
+     */
     protected class MinimizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
@@ -108,6 +128,11 @@ public abstract class AbstractFrameSkin extends WindowSkin
         }
     }
 
+    /**
+     * <p>Maximize button image.</p>
+     *
+     * @author gbrown
+     */
     protected class MaximizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
@@ -119,6 +144,11 @@ public abstract class AbstractFrameSkin extends WindowSkin
         }
     }
 
+    /**
+     * <p>Restore button image.</p>
+     *
+     * @author gbrown
+     */
     protected class RestoreImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
@@ -132,6 +162,11 @@ public abstract class AbstractFrameSkin extends WindowSkin
         }
     }
 
+    /**
+     * <p>Close button image.</p>
+     *
+     * @author gbrown
+     */
     protected class CloseImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
@@ -147,6 +182,11 @@ public abstract class AbstractFrameSkin extends WindowSkin
         }
     }
 
+    /**
+     * <p>Resize button image.</p>
+     *
+     * @author gbrown
+     */
     protected class ResizeImage extends Image {
         public int getWidth() {
             return 5;

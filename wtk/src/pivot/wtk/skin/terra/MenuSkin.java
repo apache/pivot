@@ -28,17 +28,19 @@ import pivot.wtk.MenuListener;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * TODO Create a shared AbstractMenuSkin that this and MenuSkin can share?
+ * <p>Menu skin.</p>
  *
- * TODO Define a "gutter" style that a renderer can query so it knows where
- * to paint a checkbox or icon.
+ * <p>TODO Create a shared AbstractMenuSkin that this and MenuSkin can share?</p>
  *
- * TODO The renderer is painted into the left side of the menu; the skin paints
- * the accelerator key and the group expander.
+ * <p>TODO Define a "gutter" style that a renderer can query so it knows where
+ * to paint a checkbox or icon.</p>
  *
- * TODO Define an inner SectionVisual class that will paint individual sections;
+ * <p>TODO The renderer is painted into the left side of the menu; the skin paints
+ * the accelerator key and the group expander.</p>
+ *
+ * <p>TODO Define an inner SectionVisual class that will paint individual sections;
  * this class will also listen for list events on the section and call
- * invalidateComponent() as needed.
+ * invalidateComponent() as needed.</p>
  *
  * @author gbrown
  */

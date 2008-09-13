@@ -41,6 +41,11 @@ import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
 
+/**
+ * <p>Expander skin.</p>
+ *
+ * @author gbrown
+ */
 public class ExpanderSkin extends ContainerSkin
     implements ButtonPressListener, ExpanderListener {
     public static class ShadeButton extends PushButton {

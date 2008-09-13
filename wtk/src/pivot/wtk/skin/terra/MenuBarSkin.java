@@ -26,7 +26,11 @@ import pivot.wtk.MenuBarListener;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * TODO This class contains a MenuPopup instance?
+ * <p>Menu bar skin.</p>
+ *
+ * <p>TODO Complete this class.</p>
+ *
+ * <p>TODO This class contains a MenuPopup instance?</p>
  *
  * @author gbrown
  */

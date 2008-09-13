@@ -20,6 +20,11 @@ import org.jfree.data.xy.IntervalXYDataset;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 
+/**
+ * <p>Implementation of JFreeChart IntervalXYDataset.</p>
+ *
+ * @author gbrown
+ */
 public class IntervalSeriesDataset extends XYSeriesDataset implements IntervalXYDataset {
     public static final String WIDTH_KEY = "width";
     public static final String HEIGHT_KEY = "height";

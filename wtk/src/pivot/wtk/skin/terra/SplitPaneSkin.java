@@ -35,6 +35,11 @@ import pivot.wtk.SplitPaneListener;
 import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
 
+/**
+ * <p>Split pane skin.</p>
+ *
+ * @author gbrown
+ */
 public class SplitPaneSkin extends ContainerSkin
     implements SplitPaneListener {
 

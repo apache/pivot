@@ -25,6 +25,11 @@ import pivot.beans.BeanDictionary;
 import pivot.charts.ChartView;
 import pivot.collections.Dictionary;
 
+/**
+ * <p>Implementation of JFreeChart PieDataset.</p>
+ *
+ * @author gbrown
+ */
 @SuppressWarnings("unchecked")
 public class PieSeriesDataset implements PieDataset {
     private ChartView.CategorySequence categories;

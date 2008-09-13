@@ -27,6 +27,11 @@ import pivot.wtk.Meter;
 import pivot.wtk.MeterListener;
 import pivot.wtk.skin.ComponentSkin;
 
+/**
+ * <p>Meter skin.</p>
+ *
+ * @author gbrown
+ */
 public class MeterSkin extends ComponentSkin
     implements MeterListener {
 

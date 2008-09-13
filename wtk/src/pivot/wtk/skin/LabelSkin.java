@@ -41,10 +41,9 @@ import pivot.wtk.TextDecoration;
 import pivot.wtk.VerticalAlignment;
 
 /**
- * NOTE Labels always present a single line of text; carriage return characters
- * are ignored.
+ * <p>Label skin.</p>
  *
- * TODO showEllipsis style
+ * <p>TODO showEllipsis style</p>
  *
  * @author gbrown
  */

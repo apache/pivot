@@ -24,12 +24,16 @@ import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 
 import pivot.wtk.Button;
-import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.PushButton;
 import pivot.wtk.skin.AbstractPushButtonSkin;
 
+/**
+ * <p>Push button skin.</p>
+ *
+ * @author gbrown
+ */
 public class PushButtonSkin extends AbstractPushButtonSkin {
     // Style properties
     private Font font = new Font("Verdana", Font.PLAIN, 11);

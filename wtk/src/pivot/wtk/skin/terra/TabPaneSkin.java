@@ -46,14 +46,17 @@ import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * TODO Make tab buttons focusable.
+ * <p>Tab pane skin.</p>
  *
- * TODO Disable the tab button when the component is disabled (NOTE We need
- * style properties to present a disabled tab button state).
+ * <p>TODO Make tab buttons focusable?</p>
  *
- * TODO Support the displayable flag to show/hide tabs.
+ * TODO Disable the tab button when the component is disabled? We'd need
+ * style properties to present a disabled tab button state. We'd also need
+ * to manage button enabled state independently of tab pane enabled state.</p>
  *
- * TODO Add showCloseButton style.
+ * <p>TODO Support the displayable flag to show/hide tabs.</p>
+ *
+ * <p>TODO Add showCloseButton style.</p>
  *
  * @author gbrown
  */

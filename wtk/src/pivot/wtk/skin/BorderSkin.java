@@ -32,9 +32,9 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 
 /**
- * TODO Draw title
+ * <p>Border skin.</p>
  *
- * TODO Add titleAlignment style (horizontal only)
+ * <p>TODO Draw title.</p>
  *
  * @author gbrown
  */

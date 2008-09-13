@@ -28,6 +28,11 @@ import pivot.charts.ChartView;
 import pivot.collections.List;
 import pivot.wtk.Component;
 
+/**
+ * <p>Bar chart view skin.</p>
+ *
+ * @author gbrown
+ */
 public class BarChartViewSkin extends ChartViewSkin {
     private boolean stacked = false;
     private boolean threeDimensional = false;

@@ -10,6 +10,11 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Separator;
 import pivot.wtk.skin.ComponentSkin;
 
+/**
+ * <p>Spacer skin.</p>
+ *
+ * @author gbrown
+ */
 public class SpacerSkin extends ComponentSkin {
     private Color color = Color.BLACK;
     private int thickness = 1;

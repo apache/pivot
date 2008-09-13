@@ -32,7 +32,9 @@ import pivot.wtk.RadioButton;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * TODO Button alignment style (vertical only).
+ * <p>Radio button skin.</p>
+ *
+ * <p>TODO Button alignment style (vertical only).</p>
  *
  * @author gbrown
  */

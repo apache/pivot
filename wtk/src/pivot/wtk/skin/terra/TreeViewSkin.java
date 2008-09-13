@@ -41,6 +41,7 @@ import pivot.wtk.TreeViewSelectionDetailListener;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
+ * <p>Tree view skin.</p>
  *
  * @author tvolkert
  */

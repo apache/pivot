@@ -30,6 +30,11 @@ import pivot.wtk.Label;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
 
+/**
+ * <p>Form skin.</p>
+ *
+ * @author gbrown
+ */
 public class FormSkin extends ContainerSkin
     implements FormListener, FormAttributeListener {
     private ArrayList<Label> labels = new ArrayList<Label>();

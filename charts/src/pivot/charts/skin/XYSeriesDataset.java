@@ -24,6 +24,11 @@ import pivot.beans.BeanDictionary;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 
+/**
+ * <p>Implementation of JFreeChart XYDataset.</p>
+ *
+ * @author gbrown
+ */
 @SuppressWarnings("unchecked")
 public class XYSeriesDataset implements XYDataset {
     private String seriesNameKey;

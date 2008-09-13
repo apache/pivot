@@ -20,6 +20,11 @@ import pivot.wtk.CardPaneListener;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 
+/**
+ * <p>Card pane skin.</p>
+ *
+ * @author gbrown
+ */
 public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public void install(Component component) {
         validateComponentType(component, CardPane.class);

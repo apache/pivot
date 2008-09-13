@@ -47,6 +47,11 @@ import pivot.wtk.Bounds;
 import pivot.wtk.Window;
 import pivot.wtk.skin.ButtonSkin;
 
+/**
+ * <p>List button skin.</p>
+ *
+ * @author gbrown
+ */
 public class ListButtonSkin extends ButtonSkin
     implements ListButton.Skin, ButtonPressListener,
         ListButtonListener, ListButtonSelectionListener {

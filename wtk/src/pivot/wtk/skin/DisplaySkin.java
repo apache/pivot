@@ -21,6 +21,11 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.Window;
 
+/**
+ * <p>Display skin.</p>
+ *
+ * @author gbrown
+ */
 public class DisplaySkin extends ContainerSkin {
     // Style properties
     private boolean activeWindowFollowsMouse = false;

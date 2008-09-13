@@ -38,6 +38,7 @@ import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
+ * <p>Scroll bar skin.</p>
  *
  * @author tvolkert
  */

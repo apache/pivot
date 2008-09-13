@@ -27,6 +27,11 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.FocusTraversalPolicy;
 
+/**
+ * <p>Abstract base class for container skins.</p>
+ *
+ * @author gbrown
+ */
 public abstract class ContainerSkin extends ComponentSkin
     implements ContainerListener {
     /**

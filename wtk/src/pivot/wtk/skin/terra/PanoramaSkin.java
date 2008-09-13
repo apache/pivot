@@ -20,6 +20,12 @@ import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
 import pivot.wtk.media.Image;
 
+/**
+ * <p>Panorama skin.</p>
+ *
+ * @author gbrown
+
+ */
 public class PanoramaSkin extends ContainerSkin
     implements Viewport.Skin, ViewportListener, ComponentMouseListener {
     /**

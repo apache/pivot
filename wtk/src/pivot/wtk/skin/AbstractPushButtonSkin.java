@@ -7,6 +7,11 @@ import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.PushButton;
 
+/**
+ * <p>Abstract base class for push button skins.</p>
+ *
+ * @author gbrown
+ */
 public abstract class AbstractPushButtonSkin extends ButtonSkin
     implements ButtonStateListener {
     protected boolean highlighted = false;

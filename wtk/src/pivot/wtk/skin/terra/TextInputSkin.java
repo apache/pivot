@@ -48,6 +48,11 @@ import pivot.wtk.TextInputCharacterListener;
 import pivot.wtk.TextInputSelectionListener;
 import pivot.wtk.skin.ComponentSkin;
 
+/**
+ * <p>Text input skin.</p>
+ *
+ * @author gbrown
+ */
 public class TextInputSkin extends ComponentSkin
     implements TextInputListener, TextInputCharacterListener, TextInputSelectionListener {
     private class MouseSelectionHandler

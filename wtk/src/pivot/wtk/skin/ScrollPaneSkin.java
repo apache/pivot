@@ -31,9 +31,7 @@ import pivot.wtk.Viewport;
 import pivot.wtk.ViewportListener;
 
 /**
- * Note that ScrollPaneSkin is a member of pivot.wtk.skin, not
- * pivot.wtk.skin.terra. This is because the fundamental behavior of the skin
- * should not change across themes, though the appearance of a scroll bar may.
+ * <p>Scroll pane skin.</p>
  *
  * @author tvolkert
  */
