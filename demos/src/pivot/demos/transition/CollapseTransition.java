@@ -48,6 +48,8 @@ public class CollapseTransition extends Transition {
 
             fadeDecorator.setOpacity(1.0f - percentComplete);
             component.repaint();
+        } else {
+            component.getParent().remove(component);
         }
     }
 }
