@@ -15,7 +15,9 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
+import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
 
 /**
@@ -293,6 +295,22 @@ public class SplitPane extends Container {
         }
 
         splitPaneListeners.splitBoundsChanged(this, previousSplitBounds);
+    }
+
+    public final void setSplitBounds(Dictionary<String, ?> splitBounds) {
+        if (splitBounds == null) {
+            throw new IllegalArgumentException("splitBounds is null.");
+        }
+
+        setSplitBounds(new Span(splitBounds));
+    }
+
+    public final void setSplitBounds(String splitBounds) {
+        if (splitBounds == null) {
+            throw new IllegalArgumentException("splitBounds is null.");
+        }
+
+        setSplitBounds(JSONSerializer.parseMap(splitBounds));
     }
 
     public boolean isLocked() {
