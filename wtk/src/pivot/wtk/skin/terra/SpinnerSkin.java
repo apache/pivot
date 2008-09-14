@@ -231,28 +231,35 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
         @Override
         public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-            boolean consumed = true;
+            boolean consumed = false;
 
             Spinner spinner = (Spinner)SpinnerSkin.this.getComponent();
 
             boolean circular = spinner.isCircular();
-            int selectedIndex = spinner.getSelectedIndex();
             int count = spinner.getSpinnerData().getLength();
+
+            int selectedIndex = spinner.getSelectedIndex();
+            int newSelectedIndex = selectedIndex;
 
             if (keyCode == Keyboard.KeyCode.UP) {
                 if (selectedIndex < count - 1) {
-                    spinner.setSelectedIndex(selectedIndex + 1);
+                    newSelectedIndex++;
                 } else if (circular) {
-                    spinner.setSelectedIndex(0);
+                    newSelectedIndex = 0;
                 }
             } else if (keyCode == Keyboard.KeyCode.DOWN) {
                 if (selectedIndex > 0) {
-                    spinner.setSelectedIndex(selectedIndex - 1);
+                    newSelectedIndex--;
                 } else if (circular) {
-                    spinner.setSelectedIndex(count - 1);
+                    newSelectedIndex = count - 1;
                 }
             } else {
                 consumed = super.keyPressed(keyCode, keyLocation);
+            }
+
+            if (newSelectedIndex != selectedIndex) {
+                spinner.setSelectedIndex(newSelectedIndex);
+                consumed = true;
             }
 
             return consumed;

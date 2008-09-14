@@ -401,42 +401,42 @@ public class ScrollPaneSkin extends ContainerSkin
 
                 scrollPane.setScrollTop(newScrollTop);
 
-                consumed = true;
+                consumed = (newScrollTop != scrollTop);
             } else if (keyCode == Keyboard.KeyCode.DOWN) {
                 int newScrollTop = Math.min(scrollTop +
                     verticalScrollBar.getUnitIncrement(), getMaxScrollTop());
 
                 scrollPane.setScrollTop(newScrollTop);
 
-                consumed = true;
+                consumed = (newScrollTop != scrollTop);
             } else if (keyCode == Keyboard.KeyCode.LEFT) {
                 int newScrollLeft = Math.max(scrollLeft -
                     horizontalScrollBar.getUnitIncrement(), 0);
 
                 scrollPane.setScrollLeft(newScrollLeft);
 
-                consumed = true;
+                consumed = (newScrollLeft != scrollLeft);
             } else if (keyCode == Keyboard.KeyCode.RIGHT) {
                 int newScrollLeft = Math.min(scrollLeft +
                     horizontalScrollBar.getUnitIncrement(), getMaxScrollLeft());
 
                 scrollPane.setScrollLeft(newScrollLeft);
 
-                consumed = true;
+                consumed = (newScrollLeft != scrollLeft);
             } else if (keyCode == Keyboard.KeyCode.PAGE_UP) {
                 int increment = verticalScrollBar.getBlockIncrement();
                 int newScrollTop = Math.max(scrollTop - increment, 0);
 
                 scrollPane.setScrollTop(newScrollTop);
 
-                consumed = true;
+                consumed = (newScrollTop != scrollTop);
             } else if (keyCode == Keyboard.KeyCode.PAGE_DOWN) {
                 int increment = verticalScrollBar.getBlockIncrement();
                 int newScrollTop = Math.min(scrollTop + increment, getMaxScrollTop());
 
                 scrollPane.setScrollTop(newScrollTop);
 
-                consumed = true;
+                consumed = (newScrollTop != scrollTop);
             }
         }
 
