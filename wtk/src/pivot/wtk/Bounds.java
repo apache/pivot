@@ -154,6 +154,22 @@ public class Bounds {
             && y < this.y + height);
     }
 
+    public boolean contains(Bounds bounds) {
+        if (bounds == null) {
+            throw new IllegalArgumentException("bounds is null");
+        }
+
+        return contains(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+
+    public boolean contains(int x, int y, int width, int height) {
+        return (!isEmpty()
+            && x >= this.x
+            && y >= this.y
+            && x + width <= this.x + this.width
+            && y + height <= this.y + this.height);
+    }
+
     public boolean intersects(Bounds bounds) {
         if (bounds == null) {
             throw new IllegalArgumentException("bounds is null");
