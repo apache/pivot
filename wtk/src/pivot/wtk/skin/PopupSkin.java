@@ -17,7 +17,6 @@ package pivot.wtk.skin;
 
 import pivot.wtk.Component;
 import pivot.wtk.ComponentListener;
-import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Cursor;
@@ -32,7 +31,7 @@ import pivot.wtk.Window;
  * @author gbrown
  */
 public class PopupSkin extends WindowSkin
-    implements ComponentListener, ComponentMouseButtonListener, ContainerMouseListener {
+    implements ComponentListener, ContainerMouseListener {
     public PopupSkin() {
         super();
     }
@@ -54,7 +53,6 @@ public class PopupSkin extends WindowSkin
     public void windowOpened(Window window) {
         // Add this as a component and container mouse listener on display
         Display display = window.getDisplay();
-        display.getComponentMouseButtonListeners().add(this);
         display.getContainerMouseListeners().add(this);
 
         // Add this as a component listener on the affiliate's ancestry
@@ -69,7 +67,6 @@ public class PopupSkin extends WindowSkin
 
     public void windowClosed(Window window, Display display) {
         // Remove this as a component and container mouse listener on display
-        display.getComponentMouseButtonListeners().remove(this);
         display.getContainerMouseListeners().remove(this);
 
         // Remove this as a component listener on the affiliate's ancestry
@@ -82,7 +79,8 @@ public class PopupSkin extends WindowSkin
         }
     }
 
-    // Component events
+    // ComponentListener methods
+
     public void parentChanged(Component component, Container previousParent) {
         // Ignore this event if it came from the affiliate's window.
         // The window's parent may change as a result of a z-order change or
@@ -137,31 +135,13 @@ public class PopupSkin extends WindowSkin
         // No-op
     }
 
-    // Component mouse events
-    public void mouseDown(Component component, Mouse.Button button, int x, int y) {
-        // If the event did not occur within a window that is owned by this
-        // popup, close the popup
-        Display display = (Display)component;
-        Popup popup = (Popup)getComponent();
+    // ContainerMouseListener methods
 
-        Window window = (Window)display.getComponentAt(x, y);
-        if (window == null
-            || !popup.isOwningAncestorOf(window)) {
-            popup.close();
-        }
-    }
-
-    public void mouseUp(Component component, Mouse.Button button, int x, int y) {
-    }
-
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-    }
-
-    // Container mouse events
     public void mouseMove(Container container, int x, int y) {
     }
 
     public void mouseDown(Container container, Mouse.Button button, int x, int y) {
+        mouseEvent(container, x, y);
     }
 
     public void mouseUp(Container container, Mouse.Button button, int x, int y) {
@@ -169,12 +149,28 @@ public class PopupSkin extends WindowSkin
 
     public void mouseWheel(Container container, Mouse.ScrollType scrollType,
         int scrollAmount, int wheelRotation, int x, int y) {
-        // If the event did not occur over this component, close the popup
+        mouseEvent(container, x, y);
+    }
+
+    private void mouseEvent(Container container, int x, int y) {
+        // If the event did not occur within a window that is owned by this
+        // popup and did not occur within the popup's affiliate, close the popup
         Display display = (Display)container;
         Popup popup = (Popup)getComponent();
 
-        if (display.getComponentAt(x, y) != popup) {
-            popup.close();
+        Window window = (Window)display.getComponentAt(x, y);
+        if (window == null
+            || !popup.isOwningAncestorOf(window)) {
+            Component affiliate = popup.getAffiliate();
+            Component descendant = display.getDescendantAt(x, y);
+
+            boolean withinAffiliate = (affiliate instanceof Container) ?
+                ((Container)affiliate).isAncestor(descendant) :
+                (affiliate != null && descendant == affiliate);
+
+            if (!withinAffiliate) {
+                popup.close();
+            }
         }
     }
 }
