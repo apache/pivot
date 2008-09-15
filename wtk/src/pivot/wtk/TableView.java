@@ -22,6 +22,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.ListListener;
 import pivot.collections.Sequence;
+import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
 import pivot.wtk.content.TableViewCellRenderer;
 import pivot.wtk.content.TableViewHeaderData;
@@ -898,6 +899,21 @@ public class TableView extends Component {
             this.tableData = tableData;
             tableViewListeners.tableDataChanged(this, previousTableData);
         }
+    }
+
+    /**
+     * Sets the table data. Clears any existing selection state.
+     *
+     * @param tableData
+     * A JSON string (must begin with <tt>[</tt> and end with <tt>]</tt>)
+     * denoting the data to be presented by this table.
+     */
+    public void setTableData(String tableData) {
+        if (tableData == null) {
+            throw new IllegalArgumentException("tableData is null.");
+        }
+
+        setTableData(JSONSerializer.parseList(tableData));
     }
 
     /**
