@@ -32,6 +32,7 @@ import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Direction;
 import pivot.wtk.Display;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
@@ -68,18 +69,25 @@ public class ListButtonSkin extends ButtonSkin
                     break;
                 }
 
+                case Keyboard.KeyCode.TAB:
                 case Keyboard.KeyCode.ENTER: {
                     ListButton listButton = (ListButton)getComponent();
 
                     int index = listView.getSelectedIndex();
-                    Object data = listView.getListData().get(index);
 
                     listView.clearSelection();
                     listButton.setSelectedIndex(index);
-                    listButton.setButtonData(data);
 
                     listViewPopup.close();
                     Component.setFocusedComponent(getComponent());
+
+                    if (keyCode == Keyboard.KeyCode.TAB) {
+                        // Also transfer the focus
+                        Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
+                            Direction.BACKWARD : Direction.FORWARD;
+                        Component.transferFocus(direction);
+                    }
+
                     break;
                 }
             }
@@ -101,11 +109,9 @@ public class ListButtonSkin extends ButtonSkin
             ListButton listButton = (ListButton)getComponent();
 
             int index = listView.getSelectedIndex();
-            Object data = listView.getListData().get(index);
 
             listView.clearSelection();
             listButton.setSelectedIndex(index);
-            listButton.setButtonData(data);
 
             listViewPopup.close();
             Component.setFocusedComponent(getComponent());
@@ -724,7 +730,6 @@ public class ListButtonSkin extends ButtonSkin
         }
     }
 
-    // Component key events
     @Override
     public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
@@ -733,6 +738,22 @@ public class ListButtonSkin extends ButtonSkin
             pressed = true;
             repaintComponent();
             consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.UP) {
+            ListButton listButton = (ListButton)getComponent();
+            int selectedIndex = listButton.getSelectedIndex();
+
+            if (selectedIndex > 0) {
+                listButton.setSelectedIndex(selectedIndex - 1);
+                consumed = true;
+            }
+        } else if (keyCode == Keyboard.KeyCode.DOWN) {
+            ListButton listButton = (ListButton)getComponent();
+            int selectedIndex = listButton.getSelectedIndex();
+
+            if (selectedIndex < listButton.getListData().getLength() - 1) {
+                listButton.setSelectedIndex(selectedIndex + 1);
+                consumed = true;
+            }
         } else {
             consumed = super.keyPressed(keyCode, keyLocation);
         }
