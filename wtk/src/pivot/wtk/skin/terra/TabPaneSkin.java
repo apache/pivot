@@ -414,6 +414,7 @@ public class TabPaneSkin extends ContainerSkin
 
         TabPane tabPane = (TabPane)getComponent();
         Orientation tabOrientation = tabPane.getTabOrientation();
+        Component corner = tabPane.getCorner();
 
         switch (tabOrientation) {
             case HORIZONTAL: {
@@ -430,8 +431,15 @@ public class TabPaneSkin extends ContainerSkin
                     preferredWidth += (padding.left + padding.right + 2);
                 }
 
+                int buttonAreaPreferredWidth = buttonPanorama.getPreferredWidth(-1);
+
+                if (corner != null
+                    && corner.isDisplayable()) {
+                    buttonAreaPreferredWidth += corner.getPreferredWidth(-1);
+                }
+
                 preferredWidth = Math.max(preferredWidth,
-                    buttonPanorama.getPreferredWidth(-1));
+                    buttonAreaPreferredWidth);
 
                 break;
             }
@@ -460,6 +468,7 @@ public class TabPaneSkin extends ContainerSkin
 
         TabPane tabPane = (TabPane)getComponent();
         Orientation tabOrientation = tabPane.getTabOrientation();
+        Component corner = tabPane.getCorner();
 
         switch (tabOrientation) {
             case HORIZONTAL: {
@@ -491,8 +500,15 @@ public class TabPaneSkin extends ContainerSkin
                     preferredHeight += (padding.top + padding.bottom + 2);
                 }
 
+                int buttonAreaPreferredHeight = buttonPanorama.getPreferredHeight(-1);
+
+                if (corner != null
+                    && corner.isDisplayable()) {
+                    buttonAreaPreferredHeight += corner.getPreferredHeight(-1);
+                }
+
                 preferredHeight = Math.max(preferredHeight,
-                    buttonPanorama.getPreferredHeight(-1));
+                    buttonAreaPreferredHeight);
 
                 break;
             }
@@ -508,6 +524,8 @@ public class TabPaneSkin extends ContainerSkin
 
     public void layout() {
         TabPane tabPane = (TabPane)getComponent();
+        Component corner = tabPane.getCorner();
+
         int width = getWidth();
         int height = getHeight();
 
@@ -518,9 +536,26 @@ public class TabPaneSkin extends ContainerSkin
         int tabWidth = 0;
         int tabHeight = 0;
 
+        Dimensions buttonPanoramaPreferredSize = buttonPanorama.getPreferredSize();
+
         switch (tabPane.getTabOrientation()) {
             case HORIZONTAL: {
-                buttonPanorama.setSize(width, buttonPanorama.getPreferredHeight(-1));
+                int buttonPanoramaWidth = Math.min(width,
+                    buttonPanoramaPreferredSize.width);
+
+                buttonPanorama.setSize(buttonPanoramaWidth,
+                    buttonPanoramaPreferredSize.height);
+
+                if (corner != null) {
+                    if (corner.isDisplayable()) {
+                        corner.setVisible(true);
+                        corner.setLocation(buttonPanoramaWidth, 0);
+                        corner.setSize(width - buttonPanoramaWidth,
+                            buttonPanoramaPreferredSize.height);
+                    } else {
+                        corner.setVisible(false);
+                    }
+                }
 
                 tabX = padding.left + 1;
                 tabY = padding.top + buttonPanorama.getHeight() + 1;
@@ -532,7 +567,22 @@ public class TabPaneSkin extends ContainerSkin
             }
 
             case VERTICAL: {
-                buttonPanorama.setSize(buttonPanorama.getPreferredWidth(-1), height);
+                int buttonPanoramaHeight = Math.min(height,
+                    buttonPanoramaPreferredSize.height);
+
+                buttonPanorama.setSize(buttonPanoramaPreferredSize.width,
+                    buttonPanoramaHeight);
+
+                if (corner != null) {
+                    if (corner.isDisplayable()) {
+                        corner.setVisible(true);
+                        corner.setLocation(0, buttonPanoramaHeight);
+                        corner.setSize(buttonPanoramaPreferredSize.width,
+                            height - buttonPanoramaHeight);
+                    } else {
+                        corner.setVisible(false);
+                    }
+                }
 
                 tabX = padding.left + buttonPanorama.getWidth() + 1;
                 tabY = padding.top + 1;
@@ -845,7 +895,8 @@ public class TabPaneSkin extends ContainerSkin
         }
     }
 
-    // Tab pane events
+    // TabPaneListener methods
+
     public void tabOrientationChanged(TabPane tabPane) {
         Orientation tabOrientation = tabPane.getTabOrientation();
 
@@ -889,6 +940,10 @@ public class TabPaneSkin extends ContainerSkin
             TabButton tabButton = (TabButton)removed.get(i);
             tabButton.setGroup((Group)null);
         }
+    }
+
+    public void cornerChanged(TabPane tabPane, Component previousCorner) {
+        invalidateComponent();
     }
 
     // Tab pane selection events

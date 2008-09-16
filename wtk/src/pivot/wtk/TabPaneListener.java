@@ -53,4 +53,13 @@ public interface TabPaneListener {
      * @param tabs
      */
     public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs);
+
+    /**
+     * Called when a tab pane's corner component (the component in the free
+     * space next to the tabs) has changed.
+     *
+     * @param tabPane
+     * @param previousCorner
+     */
+    public void cornerChanged(TabPane tabPane, Component previousCorner);
 }

@@ -27,8 +27,6 @@ import pivot.wtk.media.Image;
  * <p>Container that provides access to a set of components via selectable
  * tabs.</p>
  *
- * <p>TODO Add a corner component.</p>
- *
  * @author gbrown
  */
 @ComponentInfo(icon="TabPane.png")
@@ -151,6 +149,12 @@ public class TabPane extends Container {
                 listener.collapsibleChanged(tabPane);
             }
         }
+
+        public void cornerChanged(TabPane tabPane, Component previousCorner) {
+            for (TabPaneListener listener : this) {
+                listener.cornerChanged(tabPane, previousCorner);
+            }
+        }
     }
 
     private static class TabPaneSelectionListenerList extends ListenerList<TabPaneSelectionListener>
@@ -184,6 +188,8 @@ public class TabPane extends Container {
 
     private ArrayList<Component> tabs = new ArrayList<Component>();
     private TabSequence tabSequence = new TabSequence();
+
+    private Component corner = null;
 
     private TabPaneListenerList tabPaneListeners = new TabPaneListenerList();
     private TabPaneSelectionListenerList tabPaneSelectionListeners = new TabPaneSelectionListenerList();
@@ -252,6 +258,32 @@ public class TabPane extends Container {
         return tabSequence;
     }
 
+    public Component getCorner() {
+        return corner;
+    }
+
+    public void setCorner(Component corner) {
+        Component previousCorner = this.corner;
+
+        if (previousCorner != corner) {
+            // Remove any previous corner component
+            this.corner = null;
+
+            if (previousCorner != null) {
+                remove(previousCorner);
+            }
+
+            // Set the new corner component
+            if (corner != null) {
+                insert(corner, 0);
+            }
+
+            this.corner = corner;
+
+            tabPaneListeners.cornerChanged(this, previousCorner);
+        }
+    }
+
     protected void insertTab(Component tab, int index) {
         if (tab == null) {
             throw new IllegalArgumentException("tab is null.");
@@ -307,7 +339,8 @@ public class TabPane extends Container {
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
-            if (component.getAttributes() != null) {
+            if (component == corner
+                || component.getAttributes() != null) {
                 throw new UnsupportedOperationException();
             }
         }
