@@ -103,11 +103,11 @@ public abstract class Viewport extends Container {
 
         if (view != previousView) {
             // Remove any previous view component
+            this.view = null;
+
             if (previousView != null) {
                 remove(previousView);
             }
-
-            this.view = null;
 
             // Set the new view component
             if (view != null) {
