@@ -87,14 +87,7 @@ public class ListButtonSkin extends ButtonSkin
                     listButton.setSelectedIndex(index);
 
                     listViewPopup.close();
-
-                    if (keyCode == Keyboard.KeyCode.TAB) {
-                        Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                            Direction.BACKWARD : Direction.FORWARD;
-                        listButton.transferFocus(direction);
-                    } else {
-                        listButton.requestFocus();
-                    }
+                    listButton.requestFocus();
 
                     break;
                 }
