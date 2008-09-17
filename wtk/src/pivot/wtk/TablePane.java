@@ -143,9 +143,8 @@ public class TablePane extends Container {
                 this.relative = relative;
 
                 if (tablePane != null) {
-                    tablePane.tablePaneListeners.rowHeightChanged(tablePane,
-                        tablePane.rows.indexOf(this), previousHeight,
-                        previousRelative);
+                    tablePane.tablePaneListeners.rowHeightChanged(this,
+                        previousHeight, previousRelative);
                 }
             }
         }
@@ -172,8 +171,7 @@ public class TablePane extends Container {
                 this.selected = selected;
 
                 if (tablePane != null) {
-                    tablePane.tablePaneListeners.rowSelectedChanged(tablePane,
-                        tablePane.rows.indexOf(this));
+                    tablePane.tablePaneListeners.rowSelectedChanged(this);
                 }
             }
         }
@@ -204,8 +202,7 @@ public class TablePane extends Container {
 
             if (tablePane != null) {
                 // Notify table pane listeners
-                tablePane.tablePaneListeners.cellInserted(tablePane,
-                    tablePane.rows.indexOf(this), index);
+                tablePane.tablePaneListeners.cellInserted(this, index);
             }
         }
 
@@ -232,8 +229,8 @@ public class TablePane extends Container {
             if (tablePane != null
                 && component != previousComponent) {
                 // Notify table pane listeners
-                tablePane.tablePaneListeners.cellUpdated(tablePane,
-                    tablePane.rows.indexOf(this), index, previousComponent);
+                tablePane.tablePaneListeners.cellUpdated(this, index,
+                    previousComponent);
             }
 
             if (previousComponent != null
@@ -266,8 +263,7 @@ public class TablePane extends Container {
                 }
 
                 // Notify table pane listeners
-                tablePane.tablePaneListeners.cellsRemoved(tablePane,
-                    tablePane.rows.indexOf(this), index, removed);
+                tablePane.tablePaneListeners.cellsRemoved(this, index, removed);
 
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
                     Component component = removed.get(i);
@@ -410,9 +406,8 @@ public class TablePane extends Container {
                 this.relative = relative;
 
                 if (tablePane != null) {
-                    tablePane.tablePaneListeners.columnWidthChanged(tablePane,
-                        tablePane.columns.indexOf(this), previousWidth,
-                        previousRelative);
+                    tablePane.tablePaneListeners.columnWidthChanged(this,
+                        previousWidth, previousRelative);
                 }
             }
         }
@@ -439,8 +434,7 @@ public class TablePane extends Container {
                 this.selected = selected;
 
                 if (tablePane != null) {
-                    tablePane.tablePaneListeners.columnSelectedChanged(tablePane,
-                        tablePane.columns.indexOf(this));
+                    tablePane.tablePaneListeners.columnSelectedChanged(this);
                 }
             }
         }
@@ -687,17 +681,16 @@ public class TablePane extends Container {
             }
         }
 
-        public void rowHeightChanged(TablePane tablePane, int index,
-            int previousHeight, boolean previousRelative) {
+        public void rowHeightChanged(TablePane.Row row, int previousHeight,
+            boolean previousRelative) {
             for (TablePaneListener listener : this) {
-                listener.rowHeightChanged(tablePane, index, previousHeight,
-                    previousRelative);
+                listener.rowHeightChanged(row, previousHeight, previousRelative);
             }
         }
 
-        public void rowSelectedChanged(TablePane tablePane, int index) {
+        public void rowSelectedChanged(TablePane.Row row) {
             for (TablePaneListener listener : this) {
-                listener.rowSelectedChanged(tablePane, index);
+                listener.rowSelectedChanged(row);
             }
         }
 
@@ -714,37 +707,36 @@ public class TablePane extends Container {
             }
         }
 
-        public void columnWidthChanged(TablePane tablePane, int index,
-            int previousWidth, boolean previousRelative) {
+        public void columnWidthChanged(TablePane.Column column, int previousWidth,
+            boolean previousRelative) {
             for (TablePaneListener listener : this) {
-                listener.columnWidthChanged(tablePane, index, previousWidth,
-                    previousRelative);
+                listener.columnWidthChanged(column, previousWidth, previousRelative);
             }
         }
 
-        public void columnSelectedChanged(TablePane tablePane, int index) {
+        public void columnSelectedChanged(TablePane.Column column) {
             for (TablePaneListener listener : this) {
-                listener.columnSelectedChanged(tablePane, index);
+                listener.columnSelectedChanged(column);
             }
         }
 
-        public void cellInserted(TablePane tablePane, int row, int column) {
+        public void cellInserted(TablePane.Row row, int column) {
             for (TablePaneListener listener : this) {
-                listener.cellInserted(tablePane, row, column);
+                listener.cellInserted(row, column);
             }
         }
 
-        public void cellsRemoved(TablePane tablePane, int row, int column,
-            Sequence<Component> cells) {
+        public void cellsRemoved(TablePane.Row row, int column,
+            Sequence<Component> removed) {
             for (TablePaneListener listener : this) {
-                listener.cellsRemoved(tablePane, row, column, cells);
+                listener.cellsRemoved(row, column, removed);
             }
         }
 
-        public void cellUpdated(TablePane tablePane, int row, int column,
+        public void cellUpdated(TablePane.Row row, int column,
             Component previousComponent) {
             for (TablePaneListener listener : this) {
-                listener.cellUpdated(tablePane, row, column, previousComponent);
+                listener.cellUpdated(row, column, previousComponent);
             }
         }
     }

@@ -925,28 +925,28 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         invalidateComponent();
     }
 
-    public void columnNameChanged(TableView tableView, int index, String previousName) {
+    public void columnNameChanged(TableView.Column column, String previousName) {
         invalidateComponent();
     }
 
-    public void columnHeaderDataChanged(TableView tableView, int index, Object previousHeaderData) {
+    public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData) {
         // No-op
     }
 
-    public void columnWidthChanged(TableView tableView, int index, int previousWidth, boolean previousRelative)  {
+    public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative)  {
         invalidateComponent();
     }
 
-    public void columnSortDirectionChanged(TableView tableView, int index, SortDirection previousSortDirection) {
+    public void columnSortDirectionChanged(TableView.Column column, SortDirection previousSortDirection) {
         // No-op
         // TODO Repaint; paint a "selection" color for the sorted column
     }
 
-    public void columnFilterChanged(TableView tableView, int index, Object previousFilter) {
+    public void columnFilterChanged(TableView.Column column, Object previousFilter) {
         // No-op
     }
 
-    public void columnCellRendererChanged(TableView tableView, int index, TableView.CellRenderer previousCellRenderer) {
+    public void columnCellRendererChanged(TableView.Column column, TableView.CellRenderer previousCellRenderer) {
         invalidateComponent();
     }
 

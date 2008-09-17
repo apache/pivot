@@ -20,6 +20,12 @@ import java.awt.event.KeyEvent;
 /**
  * <p>Class representing the system keyboard.</p>
  *
+ * <p>TODO Provide access to java.awt.event.KeyEvent#getKeyText() method.</p>
+ *
+ * <p>TODO Provide a means to decode enums as well as key codes. We can handle
+ * key codes via reflection - look for a field with the given name and obtain
+ * its value. We can handle this in a decode() method of KeyStroke.</p>
+ *
  * @author gbrown
  */
 public final class Keyboard {

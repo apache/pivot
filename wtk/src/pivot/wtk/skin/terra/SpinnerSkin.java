@@ -210,8 +210,8 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
                 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
 
-                graphics.drawRect(2, 2, Math.max(width - 5, 0),
-                    Math.max(height - 5, 0));
+                graphics.drawRect(1, 1, Math.max(width - 3, 0),
+                    Math.max(height - 3, 0));
             }
         }
 

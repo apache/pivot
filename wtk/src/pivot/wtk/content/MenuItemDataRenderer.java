@@ -28,6 +28,7 @@ public class MenuItemDataRenderer extends FlowPane implements Button.DataRendere
         // TODO Query the skin for "gutter" style so we know where to paint
         // the icon and keyboard shortcut
 
-        // TODO
+        // TODO Render the icon, label, and shortcut (which may be a string -
+        // convert it to a Keyboard.KeyStroke)
     }
 }

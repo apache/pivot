@@ -22,22 +22,22 @@ public interface TablePaneListener {
     public void rowInserted(TablePane tablePane, int index);
     public void rowsRemoved(TablePane tablePane, int index,
         Sequence<TablePane.Row> rows);
-    public void rowHeightChanged(TablePane tablePane, int index,
-        int previousHeight, boolean previousRelative);
-    public void rowSelectedChanged(TablePane tablePane, int index);
+    public void rowHeightChanged(TablePane.Row row, int previousHeight,
+        boolean previousRelative);
+    public void rowSelectedChanged(TablePane.Row row);
 
     // Column methods
     public void columnInserted(TablePane tablePane, int index);
     public void columnsRemoved(TablePane tablePane, int index,
         Sequence<TablePane.Column> columns);
-    public void columnWidthChanged(TablePane tablePane, int index,
-        int previousWidth, boolean previousRelative);
-    public void columnSelectedChanged(TablePane tablePane, int index);
+    public void columnWidthChanged(TablePane.Column column, int previousWidth,
+        boolean previousRelative);
+    public void columnSelectedChanged(TablePane.Column column);
 
     // Cell methods
-    public void cellInserted(TablePane tablePane, int row, int column);
-    public void cellsRemoved(TablePane tablePane, int row, int column,
-        Sequence<Component> cells);
-    public void cellUpdated(TablePane tablePane, int row, int column,
+    public void cellInserted(TablePane.Row row, int column);
+    public void cellsRemoved(TablePane.Row row, int column,
+        Sequence<Component> removed);
+    public void cellUpdated(TablePane.Row row, int column,
         Component previousComponent);
 }

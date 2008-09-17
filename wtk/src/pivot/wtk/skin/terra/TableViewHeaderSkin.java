@@ -808,27 +808,27 @@ public class TableViewHeaderSkin extends ComponentSkin
         invalidateComponent();
     }
 
-    public void columnNameChanged(TableView tableView, int index, String previousName) {
+    public void columnNameChanged(TableView.Column column, String previousName) {
         // No-op
     }
 
-    public void columnHeaderDataChanged(TableView tableView, int index, Object previousHeaderData) {
+    public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData) {
         invalidateComponent();
     }
 
-    public void columnWidthChanged(TableView tableView, int index, int previousWidth, boolean previousRelative) {
+    public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative) {
         invalidateComponent();
     }
 
-    public void columnSortDirectionChanged(TableView tableView, int index, SortDirection previousSortDirection) {
+    public void columnSortDirectionChanged(TableView.Column column, SortDirection previousSortDirection) {
         repaintComponent();
     }
 
-    public void columnFilterChanged(TableView tableView, int index, Object previousFilter) {
+    public void columnFilterChanged(TableView.Column column, Object previousFilter) {
         // No-op
     }
 
-    public void columnCellRendererChanged(TableView tableView, int index, TableView.CellRenderer previousCellRenderer) {
+    public void columnCellRendererChanged(TableView.Column column, TableView.CellRenderer previousCellRenderer) {
         // No-op
     }
 }

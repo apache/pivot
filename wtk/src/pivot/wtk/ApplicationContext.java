@@ -446,25 +446,50 @@ public abstract class ApplicationContext {
 
             // Process the event
             Component focusedComponent = Component.getFocusedComponent();
+            Window activeWindow = Window.getActiveWindow();
 
-            if (focusedComponent != null) {
-                switch (event.getID()) {
-                    case KeyEvent.KEY_TYPED: {
+            switch (event.getID()) {
+                case KeyEvent.KEY_TYPED: {
+                    if (focusedComponent != null) {
                         focusedComponent.keyTyped(event.getKeyChar());
-                        break;
                     }
 
-                    case KeyEvent.KEY_PRESSED: {
+                    if (activeWindow != null
+                        && !activeWindow.isFocusHost()) {
+                        activeWindow.keyTyped(event.getKeyChar());
+                    }
+
+                    break;
+                }
+
+                case KeyEvent.KEY_PRESSED: {
+                    if (focusedComponent != null) {
                         focusedComponent.keyPressed(event.getKeyCode(), keyLocation);
-                        dragDropManager.keyPressed(event.getKeyCode(), keyLocation);
-                        break;
                     }
 
-                    case KeyEvent.KEY_RELEASED: {
-                        focusedComponent.keyReleased(event.getKeyCode(), keyLocation);
-                        dragDropManager.keyReleased(event.getKeyCode(), keyLocation);
-                        break;
+                    if (activeWindow != null
+                        && !activeWindow.isFocusHost()) {
+                        activeWindow.keyPressed(event.getKeyCode(), keyLocation);
                     }
+
+                    dragDropManager.keyPressed(event.getKeyCode(), keyLocation);
+
+                    break;
+                }
+
+                case KeyEvent.KEY_RELEASED: {
+                    if (focusedComponent != null) {
+                        focusedComponent.keyReleased(event.getKeyCode(), keyLocation);
+                    }
+
+                    if (activeWindow != null
+                        && !activeWindow.isFocusHost()) {
+                        activeWindow.keyReleased(event.getKeyCode(), keyLocation);
+                    }
+
+                    dragDropManager.keyReleased(event.getKeyCode(), keyLocation);
+
+                    break;
                 }
             }
 

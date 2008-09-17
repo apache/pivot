@@ -36,61 +36,56 @@ public interface TableViewColumnListener {
      *
      * @param tableView
      * @param index
+     * @param columns
      */
     public void columnsRemoved(TableView tableView, int index, Sequence<TableView.Column> columns);
 
     /**
      * Called when a column's name has changed.
      *
-     * @param tableView
-     * @param index
+     * @param column
      * @param previousName
      */
-    public void columnNameChanged(TableView tableView, int index, String previousName);
+    public void columnNameChanged(TableView.Column column, String previousName);
 
     /**
      * Called when a column's header data has changed.
      *
-     * @param tableView
-     * @param index
+     * @param column
      * @param previousHeaderData
      */
-    public void columnHeaderDataChanged(TableView tableView, int index, Object previousHeaderData);
+    public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData);
 
     /**
      * Called when a column's width has changed.
      *
-     * @param tableView
-     * @param index
+     * @param column
      * @param previousWidth
      * @param previousRelative
      */
-    public void columnWidthChanged(TableView tableView, int index, int previousWidth, boolean previousRelative);
+    public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative);
 
     /**
      * Called when a column's sort direction has changed.
      *
-     * @param tableView
-     * @param index
+     * @param column
      * @param previousSortDirection
      */
-    public void columnSortDirectionChanged(TableView tableView, int index, SortDirection previousSortDirection);
+    public void columnSortDirectionChanged(TableView.Column column, SortDirection previousSortDirection);
 
     /**
      * Called when a column's filter has changed.
      *
-     * @param tableView
-     * @param index
+     * @param column
      * @param previousFilter
      */
-    public void columnFilterChanged(TableView tableView, int index, Object previousFilter);
+    public void columnFilterChanged(TableView.Column column, Object previousFilter);
 
     /**
      * Called when a column's cell renderer has changed.
      *
-     * @param tableView
-     * @param index
+     * @param column
      * @param previousCellRenderer
      */
-    public void columnCellRendererChanged(TableView tableView, int index, TableView.CellRenderer previousCellRenderer);
+    public void columnCellRendererChanged(TableView.Column column, TableView.CellRenderer previousCellRenderer);
 }

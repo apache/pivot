@@ -1331,13 +1331,14 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         invalidateComponent();
     }
 
-    public void rowHeightChanged(TablePane tablePane, int index,
-        int previousHeight, boolean previousRelative) {
+    public void rowHeightChanged(TablePane.Row row, int previousHeight,
+        boolean previousRelative) {
         invalidateComponent();
     }
 
-    public void rowSelectedChanged(TablePane tablePane, int index) {
-        repaintComponent(getRowBounds(index));
+    public void rowSelectedChanged(TablePane.Row row) {
+        TablePane tablePane = row.getTablePane();
+        repaintComponent(getRowBounds(tablePane.getRows().indexOf(row)));
     }
 
     public void columnInserted(TablePane tablePane, int index) {
@@ -1349,25 +1350,26 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         invalidateComponent();
     }
 
-    public void columnWidthChanged(TablePane tablePane, int index,
-        int previousWidth, boolean previousRelative) {
+    public void columnWidthChanged(TablePane.Column column, int previousWidth,
+        boolean previousRelative) {
         invalidateComponent();
     }
 
-    public void columnSelectedChanged(TablePane tablePane, int index) {
-        repaintComponent(getColumnBounds(index));
+    public void columnSelectedChanged(TablePane.Column column) {
+        TablePane tablePane = column.getTablePane();
+        repaintComponent(getColumnBounds(tablePane.getColumns().indexOf(column)));
     }
 
-    public void cellInserted(TablePane tablePane, int row, int column) {
+    public void cellInserted(TablePane.Row row, int column) {
         invalidateComponent();
     }
 
-    public void cellsRemoved(TablePane tablePane, int row, int column,
-        Sequence<Component> cells) {
+    public void cellsRemoved(TablePane.Row row, int column,
+        Sequence<Component> removed) {
         invalidateComponent();
     }
 
-    public void cellUpdated(TablePane tablePane, int row, int column,
+    public void cellUpdated(TablePane.Row row, int column,
         Component previousComponent) {
         invalidateComponent();
     }

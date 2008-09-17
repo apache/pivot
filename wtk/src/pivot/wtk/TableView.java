@@ -178,8 +178,8 @@ public class TableView extends Component {
                 this.name = name;
 
                 if (tableView != null) {
-                    tableView.tableViewColumnListeners.columnNameChanged(tableView,
-                        tableView.columns.indexOf(this), previousName);
+                    tableView.tableViewColumnListeners.columnNameChanged(this,
+                        previousName);
                 }
             }
         }
@@ -208,8 +208,8 @@ public class TableView extends Component {
                 this.headerData = headerData;
 
                 if (tableView != null) {
-                    tableView.tableViewColumnListeners.columnHeaderDataChanged(tableView,
-                        tableView.columns.indexOf(this), previousHeaderData);
+                    tableView.tableViewColumnListeners.columnHeaderDataChanged(this,
+                        previousHeaderData);
                 }
             }
         }
@@ -284,9 +284,8 @@ public class TableView extends Component {
                 this.relative = relative;
 
                 if (tableView != null) {
-                    tableView.tableViewColumnListeners.columnWidthChanged(tableView,
-                        tableView.columns.indexOf(this), previousWidth,
-                        previousRelative);
+                    tableView.tableViewColumnListeners.columnWidthChanged(this,
+                        previousWidth, previousRelative);
                 }
             }
         }
@@ -316,8 +315,8 @@ public class TableView extends Component {
                 this.sortDirection = sortDirection;
 
                 if (tableView != null) {
-                    tableView.tableViewColumnListeners.columnSortDirectionChanged(tableView,
-                        tableView.columns.indexOf(this), previousSortDirection);
+                    tableView.tableViewColumnListeners.columnSortDirectionChanged(this,
+                        previousSortDirection);
                 }
             }
         }
@@ -346,8 +345,8 @@ public class TableView extends Component {
                 this.filter = filter;
 
                 if (tableView != null) {
-                    tableView.tableViewColumnListeners.columnFilterChanged(tableView,
-                        tableView.columns.indexOf(this), previousFilter);
+                    tableView.tableViewColumnListeners.columnFilterChanged(this,
+                        previousFilter);
                 }
             }
         }
@@ -379,8 +378,8 @@ public class TableView extends Component {
                 this.cellRenderer = cellRenderer;
 
                 if (tableView != null) {
-                    tableView.tableViewColumnListeners.columnCellRendererChanged(tableView,
-                        tableView.columns.indexOf(this), previousCellRenderer);
+                    tableView.tableViewColumnListeners.columnCellRendererChanged(this,
+                        previousCellRenderer);
                 }
             }
         }
@@ -664,39 +663,39 @@ public class TableView extends Component {
             }
         }
 
-        public void columnNameChanged(TableView tableView, int index, String previousName) {
+        public void columnNameChanged(Column column, String previousName) {
             for (TableViewColumnListener listener : this) {
-                listener.columnNameChanged(tableView, index, previousName);
+                listener.columnNameChanged(column, previousName);
             }
         }
 
-        public void columnHeaderDataChanged(TableView tableView, int index, Object previousHeaderData) {
+        public void columnHeaderDataChanged(Column column, Object previousHeaderData) {
             for (TableViewColumnListener listener : this) {
-                listener.columnHeaderDataChanged(tableView, index, previousHeaderData);
+                listener.columnHeaderDataChanged(column, previousHeaderData);
             }
         }
 
-        public void columnWidthChanged(TableView tableView, int index, int previousWidth, boolean previousRelative) {
+        public void columnWidthChanged(Column column, int previousWidth, boolean previousRelative) {
             for (TableViewColumnListener listener : this) {
-                listener.columnWidthChanged(tableView, index, previousWidth, previousRelative);
+                listener.columnWidthChanged(column, previousWidth, previousRelative);
             }
         }
 
-        public void columnSortDirectionChanged(TableView tableView, int index, SortDirection previousSortDirection) {
+        public void columnSortDirectionChanged(Column column, SortDirection previousSortDirection) {
             for (TableViewColumnListener listener : this) {
-                listener.columnSortDirectionChanged(tableView, index, previousSortDirection);
+                listener.columnSortDirectionChanged(column, previousSortDirection);
             }
         }
 
-        public void columnFilterChanged(TableView tableView, int index, Object previousFilter) {
+        public void columnFilterChanged(Column column, Object previousFilter) {
             for (TableViewColumnListener listener : this) {
-                listener.columnFilterChanged(tableView, index, previousFilter);
+                listener.columnFilterChanged(column, previousFilter);
             }
         }
 
-        public void columnCellRendererChanged(TableView tableView, int index, TableView.CellRenderer previousCellRenderer) {
+        public void columnCellRendererChanged(Column column, TableView.CellRenderer previousCellRenderer) {
             for (TableViewColumnListener listener : this) {
-                listener.columnCellRendererChanged(tableView, index, previousCellRenderer);
+                listener.columnCellRendererChanged(column, previousCellRenderer);
             }
         }
     }
