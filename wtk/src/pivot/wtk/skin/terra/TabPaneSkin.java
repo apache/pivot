@@ -419,7 +419,15 @@ public class TabPaneSkin extends ContainerSkin
         switch (tabOrientation) {
             case HORIZONTAL: {
                 if (height != -1) {
-                    height -= buttonPanorama.getPreferredHeight(-1);
+                    if (corner != null
+                        && corner.isDisplayable()) {
+                        height = Math.max(height - Math.max(corner.getPreferredHeight(-1),
+                            Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0)), 0);
+                    } else {
+                        height = Math.max(height - (buttonPanorama.getPreferredHeight(-1) - 1), 0);
+                    }
+
+                    height = Math.max(height - (padding.top + padding.bottom + 2), 0);
                 }
 
                 if (tabPane.getSelectedIndex() != -1) {
@@ -445,6 +453,10 @@ public class TabPaneSkin extends ContainerSkin
             }
 
             case VERTICAL: {
+                if (height != -1) {
+                    height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+                }
+
                 if (tabPane.getSelectedIndex() != -1) {
                     for (Component tab : tabPane.getTabs()) {
                         preferredWidth = Math.max(preferredWidth,
@@ -452,9 +464,17 @@ public class TabPaneSkin extends ContainerSkin
                     }
 
                     preferredWidth += (padding.left + padding.right + 2);
+                } else {
+                    preferredWidth += 1;
                 }
 
-                preferredWidth += buttonPanorama.getPreferredWidth(height);
+                if (corner != null
+                    && corner.isDisplayable()) {
+                    preferredWidth += Math.max(corner.getPreferredWidth(-1),
+                        Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0));
+                } else {
+                    preferredWidth += Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0);
+                }
 
                 break;
             }
@@ -472,6 +492,10 @@ public class TabPaneSkin extends ContainerSkin
 
         switch (tabOrientation) {
             case HORIZONTAL: {
+                if (width != -1) {
+                    width = Math.max(width - (padding.left + padding.right + 2), 0);
+                }
+
                 if (tabPane.getSelectedIndex() != -1) {
                     for (Component tab : tabPane.getTabs()) {
                         preferredHeight = Math.max(preferredHeight,
@@ -479,16 +503,32 @@ public class TabPaneSkin extends ContainerSkin
                     }
 
                     preferredHeight += (padding.top + padding.bottom + 2);
+                } else {
+                    preferredHeight += 1;
                 }
 
-                preferredHeight += buttonPanorama.getPreferredHeight(width);
+                if (corner != null
+                    && corner.isDisplayable()) {
+                    preferredHeight += Math.max(corner.getPreferredHeight(-1),
+                        Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0));
+                } else {
+                    preferredHeight += Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0);
+                }
 
                 break;
             }
 
             case VERTICAL: {
                 if (width != -1) {
-                    width -= buttonPanorama.getPreferredWidth(-1);
+                    if (corner != null
+                        && corner.isDisplayable()) {
+                        width = Math.max(width - Math.max(corner.getPreferredWidth(-1),
+                            Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0)), 0);
+                    } else {
+                        width = Math.max(width - (buttonPanorama.getPreferredWidth(-1) - 1), 0);
+                    }
+
+                    width = Math.max(width - (padding.left + padding.right + 2), 0);
                 }
 
                 if (tabPane.getSelectedIndex() != -1) {
@@ -529,8 +569,6 @@ public class TabPaneSkin extends ContainerSkin
         int width = getWidth();
         int height = getHeight();
 
-        buttonPanorama.setLocation(0, 0);
-
         int tabX = 0;
         int tabY = 0;
         int tabWidth = 0;
@@ -542,52 +580,70 @@ public class TabPaneSkin extends ContainerSkin
             case HORIZONTAL: {
                 int buttonPanoramaWidth = Math.min(width,
                     buttonPanoramaPreferredSize.width);
-
-                buttonPanorama.setSize(buttonPanoramaWidth,
-                    buttonPanoramaPreferredSize.height);
+                int buttonPanoramaHeight = buttonPanoramaPreferredSize.height;
+                int buttonPanoramaX = 0;
+                int buttonPanoramaY = 0;
 
                 if (corner != null) {
                     if (corner.isDisplayable()) {
+                        int cornerWidth = width - buttonPanoramaWidth;
+                        int cornerHeight = corner.getPreferredHeight(-1);
+                        int cornerX = buttonPanoramaWidth;
+                        int cornerY = Math.max(buttonPanoramaHeight - cornerHeight - 1, 0);
+
+                        buttonPanoramaY = Math.max(cornerHeight - buttonPanoramaHeight + 1, 0);
+
                         corner.setVisible(true);
-                        corner.setLocation(buttonPanoramaWidth, 0);
-                        corner.setSize(width - buttonPanoramaWidth,
-                            buttonPanoramaPreferredSize.height);
+                        corner.setLocation(cornerX, cornerY);
+                        corner.setSize(cornerWidth, cornerHeight);
                     } else {
                         corner.setVisible(false);
                     }
                 }
 
+                buttonPanorama.setLocation(buttonPanoramaX, buttonPanoramaY);
+                buttonPanorama.setSize(buttonPanoramaWidth, buttonPanoramaHeight);
+
                 tabX = padding.left + 1;
-                tabY = padding.top + buttonPanorama.getHeight() + 1;
+                tabY = padding.top + buttonPanoramaY + buttonPanoramaHeight;
                 tabWidth = Math.max(width - (padding.left + padding.right + 2), 0);
                 tabHeight = Math.max(height - (padding.top + padding.bottom
-                    + buttonPanorama.getHeight() + 2), 0);
+                    + buttonPanoramaY + buttonPanoramaHeight + 1), 0);
 
                 break;
             }
 
             case VERTICAL: {
+                int buttonPanoramaWidth = buttonPanoramaPreferredSize.width;
                 int buttonPanoramaHeight = Math.min(height,
                     buttonPanoramaPreferredSize.height);
-
-                buttonPanorama.setSize(buttonPanoramaPreferredSize.width,
-                    buttonPanoramaHeight);
+                int buttonPanoramaX = 0;
+                int buttonPanoramaY = 0;
 
                 if (corner != null) {
                     if (corner.isDisplayable()) {
+                        int cornerWidth = corner.getPreferredWidth(-1);
+                        int cornerHeight = height - buttonPanoramaHeight;
+                        int cornerX = Math.max(buttonPanoramaWidth - cornerWidth - 1, 0);
+                        int cornerY = buttonPanoramaHeight;
+
+                        buttonPanoramaX = Math.max(cornerWidth - buttonPanoramaWidth + 1, 0);
+
                         corner.setVisible(true);
-                        corner.setLocation(0, buttonPanoramaHeight);
-                        corner.setSize(buttonPanoramaPreferredSize.width,
-                            height - buttonPanoramaHeight);
+                        corner.setLocation(cornerX, cornerY);
+                        corner.setSize(cornerWidth, cornerHeight);
                     } else {
                         corner.setVisible(false);
                     }
                 }
 
-                tabX = padding.left + buttonPanorama.getWidth() + 1;
+                buttonPanorama.setLocation(buttonPanoramaX, buttonPanoramaY);
+                buttonPanorama.setSize(buttonPanoramaWidth, buttonPanoramaHeight);
+
+                tabX = padding.left + buttonPanoramaX + buttonPanoramaWidth;
                 tabY = padding.top + 1;
                 tabWidth = Math.max(width - (padding.left + padding.right
-                    + buttonPanorama.getWidth() + 2), 0);
+                    + buttonPanoramaX + buttonPanoramaWidth + 1), 0);
                 tabHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
 
                 break;
@@ -635,18 +691,18 @@ public class TabPaneSkin extends ContainerSkin
         switch (tabOrientation) {
             case HORIZONTAL: {
                 x = 0;
-                y = Math.max(buttonPanorama.getHeight() - 1, 0);
-                width = Math.max(tabPaneBounds.width - 1, 0);
-                height = Math.max(tabPaneBounds.height - y - 1, 0);
+                y = Math.max(buttonPanorama.getY() + buttonPanorama.getHeight() - 1, 0);
+                width = tabPaneBounds.width;
+                height = Math.max(tabPaneBounds.height - y, 0);
 
                 break;
             }
 
             case VERTICAL: {
-                x = Math.max(buttonPanorama.getWidth() - 1, 0);
+                x = Math.max(buttonPanorama.getX() + buttonPanorama.getWidth() - 1, 0);
                 y = 0;
-                width = Math.max(tabPaneBounds.width - x - 1, 0);
-                height = Math.max(tabPaneBounds.height - 1, 0);
+                width = Math.max(tabPaneBounds.width - x, 0);
+                height = tabPaneBounds.height;
 
                 break;
             }
@@ -659,18 +715,21 @@ public class TabPaneSkin extends ContainerSkin
             // paint the inactive background color
             int selectedIndex = tabPane.getSelectedIndex();
             graphics.setPaint((selectedIndex == -1) ? inactiveTabColor : activeTabColor);
-            graphics.fillRect(contentBounds.x, contentBounds.y, contentBounds.width, contentBounds.height);
+            graphics.fillRect(contentBounds.x, contentBounds.y,
+                contentBounds.width, contentBounds.height);
 
             // Draw the border
             graphics.setPaint(borderColor);
-            graphics.drawRect(contentBounds.x, contentBounds.y, contentBounds.width, contentBounds.height);
+            graphics.drawRect(contentBounds.x, contentBounds.y,
+                Math.max(contentBounds.width - 1, 0),
+                Math.max(contentBounds.height - 1, 0));
 
             // Draw the bevel for vertical tabs
             if (tabOrientation == Orientation.VERTICAL) {
-                Line2D bevelLine = new Line2D.Double(contentBounds.x + 1, contentBounds.y + 1,
-                    contentBounds.x + contentBounds.width - 1, contentBounds.y + 1);
                 graphics.setPaint(buttonBevelColor);
-                graphics.draw(bevelLine);
+                graphics.drawLine(contentBounds.x + 1, contentBounds.y + 1,
+                    contentBounds.x + contentBounds.width - 1,
+                    contentBounds.y + 1);
             }
         }
     }
