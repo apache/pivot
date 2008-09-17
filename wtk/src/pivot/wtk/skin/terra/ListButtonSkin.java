@@ -73,7 +73,7 @@ public class ListButtonSkin extends ButtonSkin
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
                     listViewPopup.close();
-                    Component.setFocusedComponent(getComponent());
+                    getComponent().requestFocus();
                     break;
                 }
 
@@ -87,13 +87,13 @@ public class ListButtonSkin extends ButtonSkin
                     listButton.setSelectedIndex(index);
 
                     listViewPopup.close();
-                    Component.setFocusedComponent(getComponent());
 
                     if (keyCode == Keyboard.KeyCode.TAB) {
-                        // Also transfer the focus
                         Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                             Direction.BACKWARD : Direction.FORWARD;
-                        Component.transferFocus(direction);
+                        listButton.transferFocus(direction);
+                    } else {
+                        listButton.requestFocus();
                     }
 
                     break;
@@ -122,7 +122,7 @@ public class ListButtonSkin extends ButtonSkin
             listButton.setSelectedIndex(index);
 
             listViewPopup.close();
-            Component.setFocusedComponent(getComponent());
+            getComponent().requestFocus();
         }
     }
 
@@ -729,12 +729,11 @@ public class ListButtonSkin extends ButtonSkin
     public void mouseClick(Mouse.Button button, int x, int y, int count) {
         ListButton listButton = (ListButton)getComponent();
 
-        Component.setFocusedComponent(listButton);
-
+        listButton.requestFocus();
         listButton.press();
 
         if (listView.isShowing()) {
-            Component.setFocusedComponent(listView);
+            listView.requestFocus();
         }
     }
 
@@ -828,7 +827,7 @@ public class ListButtonSkin extends ButtonSkin
                         listView.setSelectedIndex(0);
                     }
 
-                    Component.setFocusedComponent(listView);
+                    listView.requestFocus();
                 }
             }
         }

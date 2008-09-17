@@ -56,7 +56,6 @@ public class WindowSkin extends ContainerSkin
     private static final FocusTraversalPolicy DEFAULT_FOCUS_TRAVERSAL_POLICY = new WindowFocusTraversalPolicy();
 
     public WindowSkin() {
-        super();
         setBackgroundColor(Color.WHITE);
     }
 

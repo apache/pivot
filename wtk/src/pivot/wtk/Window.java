@@ -434,7 +434,7 @@ public class Window extends Container {
             }
 
             if (isFocusHost()) {
-                setFocusedComponent(null);
+                clearFocus();
             }
 
             // Close all owned windows (create a copy of the owned window
@@ -604,14 +604,14 @@ public class Window extends Container {
                 if (isAncestor(activeDescendant)
                     && activeDescendant.isEnabled()
                     && activeDescendant.isShowing()) {
-                    setFocusedComponent(activeDescendant, true);
+                    activeDescendant.requestFocus(true);
                 } else {
                     activeDescendant = null;
                 }
             }
         } else {
             // Temporarily clear the focus
-            setFocusedComponent(null, true);
+            clearFocus(true);
         }
 
         windowListeners.activeChanged(this);
@@ -813,7 +813,7 @@ public class Window extends Container {
 
         if (isFocusHost()) {
             // Clear the focus
-            setFocusedComponent(null);
+            clearFocus();
         }
 
         Container parent = getParent();

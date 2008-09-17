@@ -478,7 +478,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         ListView listView = (ListView)getComponent();
 
         if (isFocusable()) {
-            Component.setFocusedComponent(listView);
+            listView.requestFocus();
         }
 
         List<Object> listData = (List<Object>)listView.getListData();

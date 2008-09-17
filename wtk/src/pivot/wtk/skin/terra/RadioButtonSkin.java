@@ -298,7 +298,7 @@ public class RadioButtonSkin extends ButtonSkin
     public void mouseClick(Mouse.Button button, int x, int y, int count) {
         RadioButton radioButton = (RadioButton)getComponent();
 
-        Component.setFocusedComponent(radioButton);
+        radioButton.requestFocus();
         radioButton.press();
     }
 

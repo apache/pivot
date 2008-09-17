@@ -209,7 +209,7 @@ public abstract class Container extends Component
         // and contains the focused component, clear the focus
         if (parent == null
             && isAncestor(getFocusedComponent())) {
-            setFocusedComponent(null);
+            clearFocus();
         }
 
         super.setParent(parent);
@@ -260,7 +260,7 @@ public abstract class Container extends Component
         // component, clear the focus
         if (!visible
             && isAncestor(getFocusedComponent())) {
-            setFocusedComponent(null);
+            clearFocus();
         }
 
         super.setVisible(visible);
@@ -355,7 +355,7 @@ public abstract class Container extends Component
             if (!enabled) {
                 // If this container contains the focused component, clear the focus
                 if (isAncestor(getFocusedComponent())) {
-                    setFocusedComponent(null);
+                    clearFocus();
                 }
             }
         }
@@ -403,6 +403,17 @@ public abstract class Container extends Component
     @Override
     public final boolean isFocusable() {
         return false;
+    }
+
+    @Override
+    /**
+     * Requests that focus be set to the first focusable component in this
+     * container.
+     */
+    public void requestFocus() {
+        if (getLength() > 0) {
+            get(0).requestFocus();
+        }
     }
 
     /**

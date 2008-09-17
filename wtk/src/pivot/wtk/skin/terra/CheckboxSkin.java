@@ -353,7 +353,7 @@ public class CheckboxSkin extends ButtonSkin
     public void mouseClick(Mouse.Button button, int x, int y, int count) {
         Checkbox checkbox = (Checkbox)getComponent();
 
-        Component.setFocusedComponent(checkbox);
+        checkbox.requestFocus();
         checkbox.press();
     }
 

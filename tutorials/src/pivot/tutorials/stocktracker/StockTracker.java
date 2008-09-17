@@ -190,7 +190,7 @@ public class StockTracker implements Application {
             }
         }, REFRESH_INTERVAL);
 
-        Component.setFocusedComponent(symbolTextInput);
+        symbolTextInput.requestFocus();
     }
 
     public boolean shutdown(boolean optional) {

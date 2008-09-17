@@ -250,7 +250,7 @@ public abstract class ApplicationContext {
             switch(event.getID()) {
                 case FocusEvent.FOCUS_GAINED: {
                     if (focusedComponent != null) {
-                        Component.setFocusedComponent(focusedComponent, true);
+                        focusedComponent.requestFocus(true);
                     }
 
                     break;
@@ -258,7 +258,7 @@ public abstract class ApplicationContext {
 
                 case FocusEvent.FOCUS_LOST: {
                     focusedComponent = Component.getFocusedComponent();
-                    Component.setFocusedComponent(null, true);
+                    Component.clearFocus(true);
 
                     break;
                 }

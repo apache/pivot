@@ -146,7 +146,7 @@ public class Demo implements Application {
 
                 popup.open(editableTreeView);
 
-                Component.setFocusedComponent(textInput);
+                textInput.requestFocus();
             }
 
             armed = false;
@@ -168,12 +168,12 @@ public class Demo implements Application {
                 nodeData.put("label", text);
 
                 popup.close();
-                Component.setFocusedComponent(editableTreeView);
+                editableTreeView.requestFocus();
             }
 
             if (keyCode == Keyboard.KeyCode.ESCAPE) {
                 popup.close();
-                Component.setFocusedComponent(editableTreeView);
+                editableTreeView.requestFocus();
             }
         }
 

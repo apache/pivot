@@ -192,7 +192,7 @@ public class AlertSkin extends DialogSkin
         int index = alert.getSelectedOption();
 
         if (index >= 0) {
-            Component.setFocusedComponent(optionButtons.get(index));
+            optionButtons.get(index).requestFocus();
         }
     }
 
@@ -201,7 +201,7 @@ public class AlertSkin extends DialogSkin
 
         if (alert.isOpen()
             && index >= 0) {
-            Component.setFocusedComponent(optionButtons.get(index));
+            optionButtons.get(index).requestFocus();
         }
     }
 }

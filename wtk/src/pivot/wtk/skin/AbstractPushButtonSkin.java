@@ -94,7 +94,7 @@ public abstract class AbstractPushButtonSkin extends ButtonSkin
         PushButton pushButton = (PushButton)getComponent();
 
         if (pushButton.isFocusable()) {
-            Component.setFocusedComponent(pushButton);
+            pushButton.requestFocus();
         }
 
         pushButton.press();

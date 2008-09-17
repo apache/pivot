@@ -76,8 +76,8 @@ public class Explorer implements Application, TreeViewSelectionListener {
                 // No-op
             }
         });
-        Component.setFocusedComponent(componentTree);
 
+        componentTree.requestFocus();
     }
 
     public boolean shutdown(boolean optional) throws Exception {

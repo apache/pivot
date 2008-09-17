@@ -658,7 +658,7 @@ public abstract class Component implements ConstrainedVisual {
         // and is currently focused, clear the focus
         if (parent == null
             && isFocused()) {
-            setFocusedComponent(null);
+            clearFocus();
         }
 
         Container previousParent = this.parent;
@@ -1159,7 +1159,7 @@ public abstract class Component implements ConstrainedVisual {
             // the focus
             if (!visible
                 && isFocused()) {
-                setFocusedComponent(null);
+                clearFocus();
             }
 
             // Redraw the region formerly occupied by this component
@@ -1679,7 +1679,7 @@ public abstract class Component implements ConstrainedVisual {
             if (!enabled) {
                 // If this component has the focus, clear it
                 if (isFocused()) {
-                    setFocusedComponent(null);
+                    clearFocus();
                 }
 
                 // Ensure that the mouse out event is processed
@@ -1879,85 +1879,43 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the currently focused component.
-     *
-     * @return
-     * The component that currently has the focus, or <tt>null</tt> if no
-     * component is focused.
+     * Requests that focus be given to this component.
      */
-    public static Component getFocusedComponent() {
-        return focusedComponent;
+    public void requestFocus() {
+        requestFocus(false);
     }
 
     /**
-     * Sets the focused component. The component must be focusable, unblocked,
-     * and showing, and its window must be open.
-     *
-     * @param focusedComponent
-     * The component to focus, or <tt>null</tt> to clear the focus.
-     */
-    public static void setFocusedComponent(Component focusedComponent) {
-        setFocusedComponent(focusedComponent, false);
-    }
-
-    /**
-     * Sets the focused component.
-     *
-     * @param focusedComponent
-     * The component to focus, or <tt>null</tt> to clear the focus.
+     * Requests that focus be given to this component.
      *
      * @param temporary
-     * <tt>true</tt> if this focus change is or was temporary; <tt>false</tt>,
-     * if it is permanent.
+     * If <tt>true</tt>, indicates that focus is being restored from a
+     * temporary loss.
      */
-    protected static void setFocusedComponent(Component focusedComponent, boolean temporary) {
-        Component previousFocusedComponent = Component.focusedComponent;
-
-        if (previousFocusedComponent != focusedComponent) {
-            if (focusedComponent != null) {
-                if (!focusedComponent.isFocusable()) {
-                    throw new IllegalArgumentException("focusedComponent is not focusable.");
-                }
-
-                if (focusedComponent.isBlocked()) {
-                    throw new IllegalArgumentException("focusedComponent is blocked.");
-                }
-
-                if (!focusedComponent.isShowing()) {
-                    throw new IllegalArgumentException("focusedComponent is not showing.");
-                }
-            }
-
-            if ((previousFocusedComponent == null
-                || previousFocusedComponent.componentStateListeners.previewFocusedChange
-                (previousFocusedComponent, temporary))
-                && (focusedComponent == null
-                || focusedComponent.componentStateListeners.previewFocusedChange
-                (focusedComponent, temporary))) {
-                // Set the focused component
-                Component.focusedComponent = focusedComponent;
-
-                // Notify the components of the state change
-                if (previousFocusedComponent != null) {
-                    previousFocusedComponent.setFocused(false, temporary);
-                    previousFocusedComponent.getWindow().descendantLostFocus(previousFocusedComponent);
-                }
-
-                if (focusedComponent != null) {
-                    focusedComponent.setFocused(true, temporary);
-                    focusedComponent.getWindow().descendantGainedFocus(focusedComponent);
-                }
-
-                componentClassListeners.focusedComponentChanged(previousFocusedComponent);
-            }
+    protected void requestFocus(boolean temporary) {
+        if (!isFocusable()) {
+            throw new IllegalArgumentException("Component is not focusable.");
         }
+
+        if (!isShowing()) {
+            throw new IllegalArgumentException("Component is not showing.");
+        }
+
+        if (isBlocked()) {
+            throw new IllegalArgumentException("Component is blocked.");
+        }
+
+        setFocusedComponent(this, temporary);
     }
 
     /**
      * Transfers focus to the next focusable component.
+     *
+     * @param direction
+     * The direction in which to transfer focus.
      */
-    public static void transferFocus(Direction direction) {
-        Component component = focusedComponent;
+    public void transferFocus(Direction direction) {
+        Component component = this;
 
         // Loop until we either find a component that is capable of receiving
         // the focus or we run out of components
@@ -1997,7 +1955,74 @@ public abstract class Component implements ConstrainedVisual {
                 && component.isShowing()));
 
         // Focus the component (which may be null)
-        setFocusedComponent(component);
+        setFocusedComponent(component, false);
+    }
+
+    /**
+     * Returns the currently focused component.
+     *
+     * @return
+     * The component that currently has the focus, or <tt>null</tt> if no
+     * component is focused.
+     */
+    public static Component getFocusedComponent() {
+        return focusedComponent;
+    }
+
+    /**
+     * Sets the focused component.
+     *
+     * @param focusedComponent
+     * The component to focus, or <tt>null</tt> to clear the focus.
+     *
+     * @param temporary
+     * <tt>true</tt> if this focus change is or was temporary; <tt>false</tt>,
+     * if it is permanent.
+     */
+    private static void setFocusedComponent(Component focusedComponent, boolean temporary) {
+        Component previousFocusedComponent = Component.focusedComponent;
+
+        if (previousFocusedComponent != focusedComponent) {
+            if ((previousFocusedComponent == null
+                || previousFocusedComponent.componentStateListeners.previewFocusedChange(previousFocusedComponent,
+                    temporary))
+                && (focusedComponent == null
+                    || focusedComponent.componentStateListeners.previewFocusedChange(focusedComponent,
+                        temporary))) {
+                // Set the focused component
+                Component.focusedComponent = focusedComponent;
+
+                // Notify the components of the state change
+                if (previousFocusedComponent != null) {
+                    previousFocusedComponent.setFocused(false, temporary);
+                    previousFocusedComponent.getWindow().descendantLostFocus(previousFocusedComponent);
+                }
+
+                if (focusedComponent != null) {
+                    focusedComponent.setFocused(true, temporary);
+                    focusedComponent.getWindow().descendantGainedFocus(focusedComponent);
+                }
+
+                componentClassListeners.focusedComponentChanged(previousFocusedComponent);
+            }
+        }
+    }
+
+    /**
+     * Clears the focus.
+     */
+    public static void clearFocus() {
+        clearFocus(false);
+    }
+
+    /**
+     * Clears the focus.
+     *
+     * @param temporary
+     * If <tt>true</tt>, the focus is being cleared temporarily.
+     */
+    protected static void clearFocus(boolean temporary) {
+        setFocusedComponent(null, temporary);
     }
 
     /**

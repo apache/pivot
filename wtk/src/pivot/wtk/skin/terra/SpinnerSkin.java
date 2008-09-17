@@ -505,6 +505,10 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
     private static final Color DEFAULT_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
 
+    public SpinnerSkin() {
+        setBackgroundColor(Color.WHITE);
+    }
+
     @Override
     public void install(Component component) {
         validateComponentType(component, Spinner.class);
@@ -627,7 +631,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
     @Override
     public void mouseClick(Mouse.Button button, int x, int y, int count) {
-        Component.setFocusedComponent(spinnerContent);
+        spinnerContent.requestFocus();
     }
 
     public Color getColor() {

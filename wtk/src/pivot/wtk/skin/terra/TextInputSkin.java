@@ -842,7 +842,7 @@ public class TextInputSkin extends ComponentSkin
             display.getComponentMouseButtonListeners().add(mouseSelectionHandler);
 
             // Set focus to the text input
-            Component.setFocusedComponent(textInput);
+            textInput.requestFocus();
         }
 
         return super.mouseDown(button, x, y);

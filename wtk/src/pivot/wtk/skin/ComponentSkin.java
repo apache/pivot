@@ -138,7 +138,8 @@ public abstract class ComponentSkin implements Skin, ComponentStateListener {
                 Direction.BACKWARD : Direction.FORWARD;
 
             Component previousFocusedComponent = Component.getFocusedComponent();
-            Component.transferFocus(direction);
+            previousFocusedComponent.transferFocus(direction);
+
             Component focusedComponent = Component.getFocusedComponent();
 
             consumed = (previousFocusedComponent != focusedComponent);

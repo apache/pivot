@@ -60,7 +60,7 @@ public class DatePickerButtonSkin extends ButtonSkin
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
                     datePickerPopup.close();
-                    Component.setFocusedComponent(getComponent());
+                    getComponent().requestFocus();
                     break;
                 }
             }
@@ -324,8 +324,7 @@ public class DatePickerButtonSkin extends ButtonSkin
     public void mouseClick(Mouse.Button button, int x, int y, int count) {
         DatePickerButton datePickerButton = (DatePickerButton)getComponent();
 
-        Component.setFocusedComponent(datePickerButton);
-
+        datePickerButton.requestFocus();
         datePickerButton.press();
     }
 
@@ -442,6 +441,6 @@ public class DatePickerButtonSkin extends ButtonSkin
         datePickerButton.setButtonData(selectedDate);
 
         datePickerPopup.close();
-        Component.setFocusedComponent(getComponent());
+        getComponent().requestFocus();
     }
 }

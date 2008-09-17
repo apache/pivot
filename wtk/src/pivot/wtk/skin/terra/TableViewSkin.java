@@ -768,7 +768,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         TableView tableView = (TableView)getComponent();
 
         if (isFocusable()) {
-            Component.setFocusedComponent(tableView);
+            tableView.requestFocus();
         }
 
         int rowIndex = getRowAt(y);

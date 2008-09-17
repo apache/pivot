@@ -1024,8 +1024,7 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         if (button == Mouse.Button.LEFT) {
             TreeView treeView = (TreeView)getComponent();
-
-            Component.setFocusedComponent(treeView);
+            treeView.requestFocus();
 
             NodeInfo nodeInfo = getNodeInfoAt(y);
 
