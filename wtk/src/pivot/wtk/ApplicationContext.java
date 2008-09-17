@@ -469,13 +469,14 @@ public abstract class ApplicationContext {
                         consumed = focusedComponent.keyPressed(event.getKeyCode(), keyLocation);
                     }
 
-                    if (!consumed
-                        && activeWindow != null
-                        && !activeWindow.isFocusHost()) {
-                        activeWindow.keyPressed(event.getKeyCode(), keyLocation);
-                    }
+                    if (!consumed) {
+                        if (activeWindow != null
+                            && !activeWindow.isFocusHost()) {
+                            activeWindow.keyPressed(event.getKeyCode(), keyLocation);
+                        }
 
-                    dragDropManager.keyPressed(event.getKeyCode(), keyLocation);
+                        dragDropManager.keyPressed(event.getKeyCode(), keyLocation);
+                    }
 
                     break;
                 }
@@ -487,13 +488,14 @@ public abstract class ApplicationContext {
                         consumed = focusedComponent.keyReleased(event.getKeyCode(), keyLocation);
                     }
 
-                    if (!consumed
-                        && activeWindow != null
-                        && !activeWindow.isFocusHost()) {
-                        activeWindow.keyReleased(event.getKeyCode(), keyLocation);
-                    }
+                    if (!consumed) {
+                        if (activeWindow != null
+                            && !activeWindow.isFocusHost()) {
+                            activeWindow.keyReleased(event.getKeyCode(), keyLocation);
+                        }
 
-                    dragDropManager.keyReleased(event.getKeyCode(), keyLocation);
+                        dragDropManager.keyReleased(event.getKeyCode(), keyLocation);
+                    }
 
                     break;
                 }
