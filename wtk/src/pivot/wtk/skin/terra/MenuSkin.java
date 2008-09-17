@@ -16,35 +16,19 @@
 package pivot.wtk.skin.terra;
 
 import java.awt.Graphics2D;
-import java.util.Comparator;
 
-import pivot.collections.List;
-import pivot.collections.ListListener;
-import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Menu;
 import pivot.wtk.MenuListener;
-import pivot.wtk.skin.ComponentSkin;
+import pivot.wtk.skin.ButtonSkin;
 
 /**
- * <p>Menu skin.</p>
- *
- * <p>TODO Create a shared AbstractMenuSkin that this and MenuSkin can share?</p>
- *
- * <p>TODO Define a "gutter" style that a renderer can query so it knows where
- * to paint a checkbox or icon.</p>
- *
- * <p>TODO The renderer is painted into the left side of the menu; the skin paints
- * the accelerator key and the group expander.</p>
- *
- * <p>TODO Define an inner SectionVisual class that will paint individual sections;
- * this class will also listen for list events on the section and call
- * invalidateComponent() as needed.</p>
+ * TODO Define left and right gutter styles that the renderer can query.
  *
  * @author gbrown
  */
-public class MenuSkin extends ComponentSkin implements MenuListener, ListListener<Menu.Section> {
+public class MenuSkin extends ButtonSkin implements MenuListener {
     public void install(Component component) {
         validateComponentType(component, Menu.class);
 
@@ -52,15 +36,13 @@ public class MenuSkin extends ComponentSkin implements MenuListener, ListListene
 
         // TODO Add this as a menu listener
         // TODO Add this as a menu item listener
-
-        // TODO Add this as a list listener on the item group
     }
 
     public void uninstall() {
         // TODO Remove this as a menu listener
         // TODO Remove this as a menu item listener
 
-        // TODO Remove this as a list listener on the item group
+        super.uninstall();
     }
 
     public int getPreferredWidth(int height) {
@@ -88,23 +70,23 @@ public class MenuSkin extends ComponentSkin implements MenuListener, ListListene
 
     }
 
-    public void menuDataChanged(Menu menu, Menu.ItemGroup previousMenuData) {
-        // TODO
+    public void sectionInserted(Menu menu, int index) {
+        invalidateComponent();
     }
 
-    public void itemInserted(List<Menu.Section> list, int index) {
-        // TODO
+    public void sectionsRemoved(Menu menu, int index, int count) {
+        invalidateComponent();
     }
 
-    public void itemsRemoved(List<Menu.Section> list, int index, Sequence<Menu.Section> items) {
-        // TODO
+    public void itemInserted(Menu.Section section, int index) {
+        invalidateComponent();
     }
 
-    public void itemUpdated(List<Menu.Section> list, int index, Menu.Section previousItem) {
-        // TODO
+    public void itemsRemoved(Menu.Section section, int index, int count) {
+        invalidateComponent();
     }
 
-    public void comparatorChanged(List<Menu.Section> list, Comparator<Menu.Section> previousComparator) {
-        // TODO
+    public void itemMenuChanged(Menu.Item menuItem, Menu previousMenu) {
+        // No-op
     }
 }

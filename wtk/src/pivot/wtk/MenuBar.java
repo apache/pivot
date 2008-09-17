@@ -16,99 +16,119 @@
 package pivot.wtk;
 
 import java.util.Iterator;
+
+import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
-import pivot.wtk.Menu.ItemGroup;
+import pivot.util.ImmutableIterator;
+import pivot.util.ListenerList;
 
 /**
  * <p>Component representing a horizontal menu bar.</p>
  *
- * <p>TODO Complete this class and associated skin class.</p>
- *
  * @author gbrown
  */
-public class MenuBar extends Component {
+public class MenuBar extends Container {
     /**
-     * Menu bar item group sequence.
+     * <p>Component representing a menu bar item.</p>
      *
      * @author gbrown
      */
-    public final class ItemGroupSequence implements Sequence<ItemGroup>,
-        Iterable<ItemGroup> {
-        public int add(ItemGroup item) {
-            // TODO Auto-generated method stub
-            return 0;
+    public static class Item extends Button {
+        private MenuBar menuBar = null;
+        private Menu menu = null;
+
+        public Item() {
+            this(null);
         }
 
-        public void insert(ItemGroup item, int index) {
-            // TODO Auto-generated method stub
+        public Item(Object buttonData) {
+            super(buttonData);
         }
 
-        public ItemGroup update(int index, ItemGroup item) {
+        public MenuBar getMenuBar() {
+            return menuBar;
+        }
+
+        private void setMenuBar(MenuBar menuBar) {
+            this.menuBar = menuBar;
+        }
+
+        public Menu getMenu() {
+            return menu;
+        }
+
+        public void setMenu(Menu menu) {
+            Menu previousMenu = this.menu;
+
+            if (previousMenu != menu) {
+                this.menu = menu;
+
+                // TODO Fire event
+            }
+        }
+    }
+
+    /**
+     * <p>Item sequence implementation.</p>
+     *
+     * @author gbrown
+     */
+    public final class ItemSequence implements Sequence<Item>, Iterable<Item> {
+        public int add(Item item) {
+            int index = getLength();
+            insert(item, index);
+
+            return index;
+        }
+
+        public void insert(Item item, int index) {
+            // TODO
+        }
+
+        public Item update(int index, Item item) {
             throw new UnsupportedOperationException();
         }
 
-        public int remove(ItemGroup item) {
-            // TODO Auto-generated method stub
-            return 0;
+        public int remove(Item item) {
+            int index = items.indexOf(item);
+            if (index != -1) {
+                remove(index, 1);
+            }
+
+            return index;
         }
 
-        public Sequence<ItemGroup> remove(int index, int count) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        public ItemGroup get(int index) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        public int indexOf(ItemGroup item) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getLength() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public Iterator<ItemGroup> iterator() {
+        public Sequence<Item> remove(int index, int count) {
             // TODO
             return null;
         }
 
-    }
-
-    /**
-     * <p>Menu bar item data renderer interface.</p>
-     *
-     * @author gbrown
-     */
-    public interface ItemDataRenderer {
-        public void render(Object item, MenuBar menuBar, boolean highlighted);
-    }
-
-    public MenuBar() {
-        // TODO
-
-        installSkin(MenuBar.class);
-    }
-
-    public ItemGroupSequence getMenuItemGroups() {
-        // TODO
-        return null;
-    }
-
-    public ItemDataRenderer getItemDataRenderer() {
-        // TODO
-        return null;
-    }
-
-    public void setItemDataRenderer(ItemDataRenderer itemDataRenderer) {
-        if (itemDataRenderer == null) {
-            throw new IllegalArgumentException("itemDataRenderer is null.");
+        public Item get(int index) {
+            return items.get(index);
         }
 
-        // TODO Fire event
+        public int indexOf(Item item) {
+            return items.indexOf(item);
+        }
+
+        public int getLength() {
+            return items.getLength();
+        }
+
+        public Iterator<Item> iterator() {
+            return new ImmutableIterator<Item>(items.iterator());
+        }
+    }
+
+    private ArrayList<Item> items = new ArrayList<Item>();
+    private ItemSequence itemSequence = new ItemSequence();
+
+    public ItemSequence getItems() {
+        return itemSequence;
+    }
+
+    public ListenerList<MenuBarListener> getMenuBarListeners() {
+        // TODO
+        return null;
     }
 }

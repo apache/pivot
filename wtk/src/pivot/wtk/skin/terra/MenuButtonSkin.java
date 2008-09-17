@@ -18,23 +18,39 @@ package pivot.wtk.skin.terra;
 import java.awt.Graphics2D;
 
 import pivot.wtk.Button;
+import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Menu;
+import pivot.wtk.MenuButton;
+import pivot.wtk.MenuButtonListener;
 import pivot.wtk.Mouse;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
  * <p>Menu button skin.</p>
  *
- * <p>TODO Complete this class.</p>
- *
- * <p>TODO This class contains a MenuPopup instance?</p>
- *
  * @author gbrown
  */
-public class MenuButtonSkin extends ButtonSkin {
-    public void layout() {
-        // TODO Auto-generated method stub
+public class MenuButtonSkin extends ButtonSkin implements MenuButtonListener {
+    @Override
+    public void install(Component component) {
+        validateComponentType(component, MenuButton.class);
 
+        super.install(component);
+
+        // TODO
+    }
+
+    @Override
+    public void uninstall() {
+        // TODO
+
+        super.uninstall();
+    }
+
+    public int getPreferredWidth(int height) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     public int getPreferredHeight(int width) {
@@ -47,9 +63,9 @@ public class MenuButtonSkin extends ButtonSkin {
         return null;
     }
 
-    public int getPreferredWidth(int height) {
+    public void layout() {
         // TODO Auto-generated method stub
-        return 0;
+
     }
 
     public void paint(Graphics2D graphics) {
@@ -67,5 +83,13 @@ public class MenuButtonSkin extends ButtonSkin {
         // occurs over the trigger
 
         return super.mouseDown(button, x, y);
+    }
+
+    public void menuChanged(MenuButton menuButton, Menu previousMenu) {
+        // TODO?
+    }
+
+    public void repeatableChanged(MenuButton menuButton) {
+        // TODO?
     }
 }

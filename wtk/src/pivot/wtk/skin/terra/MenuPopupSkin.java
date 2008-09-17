@@ -15,25 +15,66 @@
  */
 package pivot.wtk.skin.terra;
 
+import java.awt.Graphics2D;
+
 import pivot.wtk.Component;
+import pivot.wtk.Dimensions;
+import pivot.wtk.Menu;
 import pivot.wtk.MenuPopup;
-import pivot.wtk.skin.WindowSkin;
+import pivot.wtk.MenuPopupListener;
+import pivot.wtk.skin.PopupSkin;
 
 /**
- * <p>Menu popup skin.</p>
+ * TODO Implement skin methods.
  *
- * <p>TODO Complete this class.</p>
- *
- * <p>TODO Implement skin methods.</p>
- *
- * <p>TODO Create a panorama and add the component's Menu to it.</p>
+ * TODO Create a panorama and add the component's Menu to it.
  *
  * @author gbrown
  */
-public class MenuPopupSkin extends WindowSkin  {
+public class MenuPopupSkin extends PopupSkin
+    implements MenuPopupListener {
+    @Override
     public void install(Component component) {
         validateComponentType(component, MenuPopup.class);
 
         super.install(component);
+
+        // TODO
+    }
+
+    @Override
+    public void uninstall() {
+        // TODO
+
+        super.uninstall();
+    }
+
+    public int getPreferredWidth(int height) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public int getPreferredHeight(int width) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public Dimensions getPreferredSize() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void layout() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void paint(Graphics2D graphics) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
+        // TODO?
     }
 }

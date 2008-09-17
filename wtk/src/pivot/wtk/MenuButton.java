@@ -21,31 +21,27 @@ import pivot.util.ListenerList;
  * <p>Component that allows a user to select one of several menu options. The
  * options are hidden until the user pushes the button.</p>
  *
- * <p>TODO Complete this class and associated skin class.</p>
- *
- * <p>TODO The repeatable flag is used to trigger "split button" behavior.
+ * <p>NOTE The repeatable flag is used to trigger "split button" behavior.
  * When true, the button reflects the selected value and allows a user to
  * repeatedly press the left half of the button, firing additional menu
  * selection events for the selected item. Pressing the right half of the
  * button continues to fire button press events and display the menu.</p>
  *
- * <p>TODO When a menu item is selected, sets menu item data as button data;
- * sets menu item action key as button action key.</p>
- *
  * @author gbrown
  */
 public class MenuButton extends Button {
+    private Menu menu = null;
+
     @Override
     public void setToggleButton(boolean toggleButton) {
         throw new UnsupportedOperationException("Menu buttons cannot be toggle buttons.");
     }
 
-    public Menu.ItemGroup getMenuData() {
-        // TODO
-        return null;
+    public Menu getMenu() {
+        return menu;
     }
 
-    public void setMenuData(Menu.ItemGroup menuData) {
+    public void setMenu(Menu menu) {
         // TODO
     }
 
@@ -58,16 +54,7 @@ public class MenuButton extends Button {
         // TODO
     }
 
-    public void selectMenuItem(Menu.Item menuItem) {
-        // TODO Fire event
-    }
-
     public ListenerList<MenuButtonListener> getMenuButtonListeners() {
-        // TODO
-        return null;
-    }
-
-    public ListenerList<MenuSelectionListener> getMenuSelectionListeners() {
         // TODO
         return null;
     }

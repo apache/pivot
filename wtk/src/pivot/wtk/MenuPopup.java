@@ -20,30 +20,20 @@ import pivot.util.ListenerList;
 /**
  * <p>Popup class representing a context menu.</p>
  *
- * <p>TODO Complete this class and associated skin class.</p>
- *
  * @author gbrown
  */
 public class MenuPopup extends Popup {
-    public Menu.ItemGroup getMenuData() {
-        // TODO
-        return null;
+    private Menu menu = null;
+
+    public Menu getMenu() {
+        return menu;
     }
 
-    public void setMenuData(Menu.ItemGroup menuData) {
+    public void setMenu(Menu menu) {
         // TODO
-    }
-
-    public void selectMenuItem(Menu.Item menuItem) {
-        // TODO Fire event
     }
 
     public ListenerList<MenuPopupListener> getMenuPopupListeners() {
-        // TODO
-        return null;
-    }
-
-    public ListenerList<MenuSelectionListener> getMenuSelectionListeners() {
         // TODO
         return null;
     }

@@ -15,24 +15,19 @@
  */
 package pivot.wtk.content;
 
-import pivot.wtk.TablePane;
-import pivot.wtk.Menu;
+import pivot.wtk.Button;
+import pivot.wtk.FlowPane;
 
 /**
  * <p>Default menu item data renderer.</p>
  *
- * <p>TODO Complete this class.</p>
- *
- * <p>TODO This renderer should query the skin for "gutter" style so it knows
- * where to paint the icon.</p>
- *
- * <p>TODO Define get/setPaintIconInGutter() methods.</p>
- *
  * @author gbrown
  */
-public class MenuItemDataRenderer extends TablePane implements Menu.ItemDataRenderer {
-    public void render(Object item, Menu menu, boolean checked,
-        boolean disabled, boolean highlighted) {
+public class MenuItemDataRenderer extends FlowPane implements Button.DataRenderer {
+    public void render(Object data, Button button, boolean highlighted) {
+        // TODO Query the skin for "gutter" style so we know where to paint
+        // the icon and keyboard shortcut
+
         // TODO
     }
 }

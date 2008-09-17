@@ -15,6 +15,7 @@
  */
 package pivot.wtk.content;
 
+import pivot.wtk.Keyboard;
 import pivot.wtk.media.Image;
 
 /**
@@ -22,9 +23,27 @@ import pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-public class MenuItemData {
-    private Image icon = null;
-    private String label = null;
+public class MenuItemData extends ButtonData {
+    private Keyboard.KeyStroke keyboardShortcut = null;
+    /**
+     * Constructor.
+     *
+     * @param icon
+     * The icon to display in the menu item.
+     */
+    public MenuItemData(Image icon) {
+        this(icon, null, null);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param label
+     * The label to display in the menu item.
+     */
+    public MenuItemData(String label) {
+        this(null, label, null);
+    }
 
     /**
      * Constructor.
@@ -36,27 +55,28 @@ public class MenuItemData {
      * The label to display in the menu item.
      */
     public MenuItemData(Image icon, String label) {
-        this.icon = icon;
-        this.label = label;
+        this(icon, label, null);
     }
 
     /**
-     * Returns this item's icon.
+     * Constructor.
      *
-     * @return
-     * The item's icon, or <tt>null</tt> if the item does not include an icon.
+     * @param icon
+     * The icon to display in the menu item.
+     *
+     * @param label
+     * The label to display in the menu item.
+     *
+     * @param keyboardShortcut
+     * The keyboard shortcut associated with this menu item.
      */
-    public Image getIcon() {
-        return icon;
+    public MenuItemData(Image icon, String label, Keyboard.KeyStroke keyboardShortcut) {
+        super(icon, label);
+
+        this.keyboardShortcut = keyboardShortcut;
     }
 
-    /**
-     * Returns this item's label.
-     *
-     * @return
-     * The item's label, or <tt>null</tt> if the item does not include a label.
-     */
-    public String getLabel() {
-        return label;
+    public Keyboard.KeyStroke getKeyboardShortcut() {
+        return keyboardShortcut;
     }
 }

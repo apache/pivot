@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk.content;
-
-import pivot.wtk.Label;
-import pivot.wtk.MenuBar;
+package pivot.wtk;
 
 /**
- * <p>Default menu bar item data renderer.</p>
- *
- * <p>TODO Complete this class.</p>
+ * <p>Menu item listener interface.</p>
  *
  * @author gbrown
  */
-public class MenuBarItemDataRenderer extends Label implements MenuBar.ItemDataRenderer {
-    public void render(Object item, MenuBar menu, boolean highlighted) {
-        // TODO
-    }
+public interface MenuItemListener {
+    public void itemPressed(Menu.Item menuItem);
+    public void itemStateChanged(Menu.Item menuItem, Button.State previousItemState);
 }

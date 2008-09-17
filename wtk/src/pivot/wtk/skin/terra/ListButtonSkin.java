@@ -51,6 +51,14 @@ import pivot.wtk.skin.ButtonSkin;
 /**
  * <p>List button skin.</p>
  *
+ * TODO Rather than blindly closing when a mouse down is received, we could
+ * instead cache the selection state in container mouse down and compare it
+ * to the current state in component mouse down. If different, we close the
+ * popup.
+ *
+ * TODO Extend Popup instead of adding event listeners? May slightly simplify
+ * implementation.
+ *
  * @author gbrown
  */
 public class ListButtonSkin extends ButtonSkin

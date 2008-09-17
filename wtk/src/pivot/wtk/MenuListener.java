@@ -21,14 +21,11 @@ package pivot.wtk;
  * @author gbrown
  */
 public interface MenuListener {
-    /**
-     * Called when a menu's menu data has changed.
-     *
-     * @param menu
-     * The source of the event.
-     *
-     * @param previousMenuData
-     * The previous menu data.
-     */
-    public void menuDataChanged(Menu menu, Menu.ItemGroup previousMenuData);
+    public void sectionInserted(Menu menu, int index);
+    public void sectionsRemoved(Menu menu, int index, int count);
+
+    public void itemInserted(Menu.Section section, int index);
+    public void itemsRemoved(Menu.Section section, int index, int count);
+
+    public void itemMenuChanged(Menu.Item menuItem, Menu previousMenu);
 }

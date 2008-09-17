@@ -15,38 +15,14 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Sequence;
-
 /**
  * <p>Menu bar listener interface.</p>
  *
  * @author gbrown
  */
 public interface MenuBarListener {
-    /**
-     * Called when a menu bar's item data renderer has changed.
-     *
-     * @param menuBar
-     * @param previousItemDataRenderer
-     */
-    public void itemDataRendererChanged(MenuBar menuBar, MenuBar.ItemDataRenderer previousItemDataRenderer);
+    public void itemInserted(MenuBar menuBar, int index);
+    public void itemsRemoved(MenuBar menuBar, int index, int count);
 
-    /**
-     * Called when a menu item group has been inserted into a menu bar's item
-     * group sequence.
-     *
-     * @param menuBar
-     * @param index
-     */
-    public void menuItemGroupInserted(MenuBar menuBar, int index);
-
-    /**
-     * Called when a menu item group has been removed from a menu bar's item
-     * group sequence.
-     *
-     * @param menuBar
-     * @param index
-     * @param menuItemGroups
-     */
-    public void menuItemGroupsRemoved(MenuBar menuBar, int index, Sequence<Menu.ItemGroup> menuItemGroups);
+    public void itemMenuChanged(MenuBar.Item menuBarItem, Menu previousMenu);
 }

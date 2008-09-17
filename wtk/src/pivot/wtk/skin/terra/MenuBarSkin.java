@@ -17,24 +17,19 @@ package pivot.wtk.skin.terra;
 
 import java.awt.Graphics2D;
 
-import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Menu;
 import pivot.wtk.MenuBar;
 import pivot.wtk.MenuBarListener;
-import pivot.wtk.skin.ComponentSkin;
+import pivot.wtk.skin.ContainerSkin;
 
 /**
- * <p>Menu bar skin.</p>
- *
- * <p>TODO Complete this class.</p>
- *
- * <p>TODO This class contains a MenuPopup instance?</p>
+ * TODO This class contains a MenuPopup instance?
  *
  * @author gbrown
  */
-public class MenuBarSkin extends ComponentSkin implements MenuBarListener {
+public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
     public void install(Component component) {
         validateComponentType(component, MenuBar.class);
 
@@ -72,16 +67,17 @@ public class MenuBarSkin extends ComponentSkin implements MenuBarListener {
 
     }
 
-    public void itemDataRendererChanged(MenuBar menuBar,
-        MenuBar.ItemDataRenderer previousItemDataRenderer) {
-        // TODO
+    public void itemInserted(MenuBar menuBar, int index) {
+        invalidateComponent();
     }
 
-    public void menuItemGroupInserted(MenuBar menuBar, int index) {
-        // TODO
+    public void itemsRemoved(MenuBar menuBar, int index, int count) {
+        invalidateComponent();
     }
 
-    public void menuItemGroupsRemoved(MenuBar menuBar, int index, Sequence<Menu.ItemGroup> menuItemGroups) {
-        // TODO
+    public void itemMenuChanged(MenuBar.Item menuBarItem, Menu previousMenu) {
+        // TODO Limit to item bounds?
+
+        repaintComponent();
     }
 }
