@@ -116,9 +116,9 @@ public abstract class Button extends Component {
             }
         }
 
-        public void actionTriggerChanged(Button button, Keyboard.KeyStroke previousActionTrigger) {
+        public void actionChanged(Button button, Action previousAction) {
             for (ButtonListener listener : this) {
-                listener.actionTriggerChanged(button, previousActionTrigger);
+                listener.actionChanged(button, previousAction);
             }
         }
 
@@ -197,7 +197,13 @@ public abstract class Button extends Component {
 
     private Object buttonData = null;
     private DataRenderer dataRenderer = null;
-    private Keyboard.KeyStroke actionTrigger = null;
+    private Action action = null;
+    private ActionListener actionListener = new ActionListener() {
+        public void enabledChanged(Action action) {
+            setEnabled(action.isEnabled());
+        }
+    };
+
     private State state = null;
     private Group group = null;
 
@@ -251,49 +257,80 @@ public abstract class Button extends Component {
     }
 
     /**
-     * Returns the action trigger for this button.
+     * Returns the action associated with this button.
      *
      * @return
-     * The button's action trigger, or <tt>null</tt> if no action trigger is
-     * defined.
+     * The button's action, or <tt>null</tt> if no action is defined.
      */
-    public Keyboard.KeyStroke getActionTrigger() {
-        return actionTrigger;
+    public Action getAction() {
+        return action;
     }
 
     /**
-     * Sets this button's action trigger. If specified, the trigger is used to
-     * look up the action in the global action map when the button is pressed
-     * and execute the mapped action.
+     * Sets this button's action.
      *
-     * @param actionTrigger
-     * The button's action trigger, or <tt>null</tt> if no action trigger is
-     * defined.
+     * @param action
+     * The action to be triggered when this button is pressed, or <tt>null</tt>
+     * for no action.
      */
-    public void setActionTrigger(Keyboard.KeyStroke actionTrigger) {
-        Keyboard.KeyStroke previousActionTrigger = this.actionTrigger;
+    public void setAction(Action action) {
+        Action previousAction = this.action;
 
-        if (previousActionTrigger != actionTrigger) {
-            this.actionTrigger = actionTrigger;
-            buttonListeners.actionTriggerChanged(this, previousActionTrigger);
+        if (previousAction != action) {
+            if (previousAction != null) {
+                previousAction.getActionListeners().remove(actionListener);
+            }
+
+            if (action != null) {
+                action.getActionListeners().add(actionListener);
+            }
+
+            this.action = action;
+
+            buttonListeners.actionChanged(this, previousAction);
         }
     }
 
     /**
-     * "Presses" the button. Performs the action associated with the button
-     * via the action key, if any.
+     * Sets this button's action.
+     *
+     * @param actionID
+     * The ID of the action to be triggered when this button is pressed.
+     *
+     * @throws IllegalArgumentException
+     * If an action with the given ID does not exist.
+     */
+    public void setAction(String actionID) {
+        if (action == null) {
+            throw new IllegalArgumentException("action is null");
+        }
+
+        Action action = Action.getActions().get(actionID);
+        if (action == null) {
+            throw new IllegalArgumentException("An action with ID "
+                + actionID + " does not exist.");
+        }
+
+        setAction(action);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        if (action != null
+            && enabled != action.isEnabled()) {
+            throw new IllegalArgumentException("Button and action enabled"
+                + " states are not consistent.");
+        }
+
+        super.setEnabled(enabled);
+    }
+
+    /**
+     * "Presses" the button. Performs any action associated with the button.
      */
     public void press() {
-        if (actionTrigger != null) {
-            Window window = getWindow();
-
-            if (window != null) {
-                Action action = window.getActions().get(actionTrigger);
-
-                if (action != null) {
-                    action.perform();
-                }
-            }
+        if (action != null) {
+            action.perform();
         }
 
         buttonPressListeners.buttonPressed(this);

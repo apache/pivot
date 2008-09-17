@@ -15,11 +15,11 @@
  */
 package pivot.wtk.skin;
 
+import pivot.wtk.Action;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonListener;
 import pivot.wtk.Component;
 import pivot.wtk.Cursor;
-import pivot.wtk.Keyboard;
 
 /**
  * <p>Abstract base class for button skins.</p>
@@ -64,7 +64,7 @@ public abstract class ButtonSkin extends ComponentSkin implements ButtonListener
         invalidateComponent();
     }
 
-    public void actionTriggerChanged(Button button, Keyboard.KeyStroke previousActionTrigger) {
+    public void actionChanged(Button button, Action previousAction) {
         // No-op
     }
 

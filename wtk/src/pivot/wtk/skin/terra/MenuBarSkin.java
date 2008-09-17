@@ -27,6 +27,10 @@ import pivot.wtk.skin.ContainerSkin;
 /**
  * TODO This class contains a MenuPopup instance?
  *
+ * TODO This class will listen for key events on the menu popup and open the
+ * next or previous menu when the user hits tab/shift-tab or the right/left
+ * arrow keys.
+ *
  * @author gbrown
  */
 public class MenuBarSkin extends ContainerSkin implements MenuBarListener {

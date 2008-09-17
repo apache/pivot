@@ -39,6 +39,9 @@ public class Window extends Container {
      */
     public final class ActionDictionary
         implements Dictionary<Keyboard.KeyStroke, Action> {
+        private ActionDictionary() {
+        }
+
         public Action get(Keyboard.KeyStroke key) {
             return actions.get(key);
         }

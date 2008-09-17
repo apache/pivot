@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.wtk.Keyboard;
-
 /**
  * <p>Button listener interface.</p>
  *
@@ -40,12 +38,12 @@ public interface ButtonListener {
     public void dataRendererChanged(Button button, Button.DataRenderer previousDataRenderer);
 
     /**
-     * Called when a button's action trigger has changed.
+     * Called when a button's action has changed.
      *
      * @param button
-     * @param previousActionTrigger
+     * @param previousAction
      */
-    public void actionTriggerChanged(Button button, Keyboard.KeyStroke previousActionTrigger);
+    public void actionChanged(Button button, Action previousAction);
 
     /**
      * Called when a button's toggle button flag has changed.
