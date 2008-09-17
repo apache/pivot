@@ -15,6 +15,20 @@
  */
 package pivot.wtk;
 
+/**
+ * Defines event listener methods that pertain to scroll bar values.
+ * Developers register for such events by adding themselves to a scroll bar's
+ * list of "scroll bar value listeners" (see
+ * {@link ScrollBar#getScrollBarValueListeners()}).
+ *
+ * @author tvolkert
+ */
 public interface ScrollBarValueListener {
+    /**
+     * Called when a scroll bar's value has changed.
+     *
+     * @param scrollBar
+     * @param previousValue
+     */
     public void valueChanged(ScrollBar scrollBar, int previousValue);
 }

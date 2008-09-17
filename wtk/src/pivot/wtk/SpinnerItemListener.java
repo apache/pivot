@@ -15,9 +15,44 @@
  */
 package pivot.wtk;
 
+/**
+ * Defines event listener methods that pertain to spinner data items.
+ * Developers register for such events by adding themselves to a spinner's
+ * list of "spinner item listeners" (see
+ * {@link Spinner#getSpinnerItemListeners()}).
+ *
+ * @author tvolkert
+ */
 public interface SpinnerItemListener {
+    /**
+     * Called when an item is inserted into the spinner data.
+     *
+     * @param spinner
+     * @param index
+     */
     public void itemInserted(Spinner spinner, int index);
+
+    /**
+     * Called when items are removed from the spinner data.
+     *
+     * @param spinner
+     * @param index
+     * @param count
+     */
     public void itemsRemoved(Spinner spinner, int index, int count);
+
+    /**
+     * Called when an item is updated within the spinner data.
+     *
+     * @param spinner
+     * @param index
+     */
     public void itemUpdated(Spinner spinner, int index);
+
+    /**
+     * Called when the spinner data is sorted
+     *
+     * @param spinner
+     */
     public void itemsSorted(Spinner spinner);
 }

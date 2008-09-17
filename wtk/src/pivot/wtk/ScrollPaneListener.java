@@ -15,14 +15,55 @@
  */
 package pivot.wtk;
 
+/**
+ * Defines event listener methods that pertain to scroll panes.
+ * Developers register for such events by adding themselves to a scroll pane's
+ * list of "scroll pane listeners" (see
+ * {@link ScrollPane#getScrollPaneListeners()}).
+ *
+ * @author tvolkert
+ */
 public interface ScrollPaneListener {
+    /**
+     * Called when the scroll pane's horizontal scroll bar policy changed.
+     *
+     * @param scrollPane
+     * @param previousPolicy
+     */
     public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
         ScrollPane.ScrollBarPolicy previousPolicy);
+
+    /**
+     * Called when the scroll pane's vertical scroll bar policy changed.
+     *
+     * @param scrollPane
+     * @param previousPolicy
+     */
     public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
         ScrollPane.ScrollBarPolicy previousPolicy);
 
+    /**
+     * Called when the scroll pane's row header changed.
+     *
+     * @param scrollPane
+     * @param previousRowHeader
+     */
     public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader);
+
+    /**
+     * Called when the scroll pane's column header changed.
+     *
+     * @param scrollPane
+     * @param previousColumnHeader
+     */
     public void columnHeaderChanged(ScrollPane scrollPane,
         Component previousColumnHeader);
+
+    /**
+     * Called when the scroll pane's corner component changed.
+     *
+     * @param scrollPane
+     * @param previousCorner
+     */
     public void cornerChanged(ScrollPane scrollPane, Component previousCorner);
 }

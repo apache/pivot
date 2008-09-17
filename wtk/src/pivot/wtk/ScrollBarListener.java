@@ -15,10 +15,47 @@
  */
 package pivot.wtk;
 
+/**
+ * Defines event listener methods that pertain to scroll bar structure.
+ * Developers register for such events by adding themselves to a scroll bar's
+ * list of "scroll bar listeners" (see
+ * {@link ScrollBar#getScrollBarListeners()}).
+ *
+ * @author tvolkert
+ */
 public interface ScrollBarListener {
+    /**
+     * Called when a scroll bar's orientation has changed.
+     *
+     * @param scrollBar
+     * @param previousOrientation
+     */
     public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation);
+
+    /**
+     * Called when a scroll bar's scope has changed.
+     *
+     * @param scrollBar
+     * @param previousRangeStart
+     * @param previousRangeEnd
+     * @param previousExtent
+     */
     public void scopeChanged(ScrollBar scrollBar, int previousRangeStart,
         int previousRangeEnd, int previousExtent);
+
+    /**
+     * Called when a scroll bar's unit increment has changed.
+     *
+     * @param scrollBar
+     * @param previousUnitIncrement
+     */
     public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement);
+
+    /**
+     * Called when a scroll bar's block increment ahs changed.
+     *
+     * @param scrollBar
+     * @param previousBlockIncrement
+     */
     public void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement);
 }
