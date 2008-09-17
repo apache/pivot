@@ -1,6 +1,8 @@
 package pivot.wtk.test;
 
 import pivot.collections.Dictionary;
+import pivot.wtk.Action;
+import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
@@ -13,6 +15,16 @@ public class SpinnerFocusTest implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
+        Action action = new Action("buttonAction") {
+            public String getDescription() {
+                return null;
+            }
+
+            public void perform() {
+                Alert.alert("Foo", frame);
+            }
+        };
+
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("spinner_focus_test.wtkx")));
         frame.setTitle("Spinner Focus Test");
@@ -20,6 +32,8 @@ public class SpinnerFocusTest implements Application {
 
         Spinner spinner = (Spinner)wtkxSerializer.getObjectByName("spinner");
         spinner.requestFocus();
+
+        action.setEnabled(false);
     }
 
     public boolean shutdown(boolean optional) {

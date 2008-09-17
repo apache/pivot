@@ -78,13 +78,20 @@ public abstract class Action {
     private static HashMap<String, Action> actions = new HashMap<String, Action>();
     private static ActionDictionary actionDictionary = new ActionDictionary();
 
-    public Action(String id) {
-        if (actions.containsKey(id)) {
-            throw new IllegalArgumentException("Action ID " + id + " is already in use.");
-        }
+    public Action() {
+        this(null);
+    }
 
+    public Action(String id) {
         this.id = id;
-        actions.put(id, this);
+
+        if (id != null) {
+            if (actions.containsKey(id)) {
+                throw new IllegalArgumentException("Action ID " + id + " is already in use.");
+            }
+
+            actions.put(id, this);
+        }
     }
 
     public String getID() {

@@ -463,11 +463,14 @@ public abstract class ApplicationContext {
                 }
 
                 case KeyEvent.KEY_PRESSED: {
+                    boolean consumed = false;
+
                     if (focusedComponent != null) {
-                        focusedComponent.keyPressed(event.getKeyCode(), keyLocation);
+                        consumed = focusedComponent.keyPressed(event.getKeyCode(), keyLocation);
                     }
 
-                    if (activeWindow != null
+                    if (!consumed
+                        && activeWindow != null
                         && !activeWindow.isFocusHost()) {
                         activeWindow.keyPressed(event.getKeyCode(), keyLocation);
                     }
@@ -478,11 +481,14 @@ public abstract class ApplicationContext {
                 }
 
                 case KeyEvent.KEY_RELEASED: {
+                    boolean consumed = false;
+
                     if (focusedComponent != null) {
-                        focusedComponent.keyReleased(event.getKeyCode(), keyLocation);
+                        consumed = focusedComponent.keyReleased(event.getKeyCode(), keyLocation);
                     }
 
-                    if (activeWindow != null
+                    if (!consumed
+                        && activeWindow != null
                         && !activeWindow.isFocusHost()) {
                         activeWindow.keyReleased(event.getKeyCode(), keyLocation);
                     }

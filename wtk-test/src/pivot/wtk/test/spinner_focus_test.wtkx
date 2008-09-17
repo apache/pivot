@@ -17,7 +17,7 @@ limitations under the License.
 
 <FlowPane styles="{verticalAlignment:'center'}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
-    <PushButton buttonData="Button"/>
+    <PushButton wtkx:id="pushButton" buttonData="Button" action="buttonAction"/>
     <Spinner wtkx:id="spinner" preferredWidth="60"
         spinnerData="['One', 'Two', 'Three', 'Four', 'Five']" circular="true"
         selectedIndex="0"/>

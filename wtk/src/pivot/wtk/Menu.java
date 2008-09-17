@@ -45,6 +45,16 @@ public class Menu extends Container {
             super(buttonData);
         }
 
+        @Override
+        protected void setParent(Container parent) {
+            if (!(parent instanceof Menu)) {
+                throw new IllegalArgumentException("Parent must be an instance of "
+                    + Menu.class.getName());
+            }
+
+            super.setParent(parent);
+        }
+
         public Section getSection() {
             return section;
         }

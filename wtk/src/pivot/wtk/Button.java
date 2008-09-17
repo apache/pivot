@@ -301,8 +301,8 @@ public abstract class Button extends Component {
      * If an action with the given ID does not exist.
      */
     public void setAction(String actionID) {
-        if (action == null) {
-            throw new IllegalArgumentException("action is null");
+        if (actionID == null) {
+            throw new IllegalArgumentException("actionID is null");
         }
 
         Action action = Action.getActions().get(actionID);
