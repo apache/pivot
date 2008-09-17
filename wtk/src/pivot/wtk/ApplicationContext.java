@@ -115,11 +115,7 @@ public abstract class ApplicationContext {
             if (!clipBounds.isEmpty()) {
                 try {
                     if (!paintVolatileBuffered((Graphics2D)graphics)) {
-                        System.out.println("Volatile buffer paint failed.");
-
                         if (!paintBuffered((Graphics2D)graphics)) {
-                            System.out.println("Standard buffer paint failed.");
-
                             display.paint((Graphics2D)graphics);
                             dragDropManager.paint((Graphics2D)graphics);
                         }
@@ -454,9 +450,14 @@ public abstract class ApplicationContext {
                         focusedComponent.keyTyped(event.getKeyChar());
                     }
 
+                    // TODO What if the focused component has since changed by
+                    // virtue of the keyTyped() call? Do we operate on the new
+                    // focused component or the pointer we have in hand?
                     if (activeWindow != null
-                        && !activeWindow.isFocusHost()) {
-                        activeWindow.keyTyped(event.getKeyChar());
+                        && (focusedComponent == null
+                        || activeWindow.isOwningAncestorOf(focusedComponent.getWindow()))) {
+                        // TODO Call distinct method on the active window here
+                        //activeWindow.??(event.getKeyChar());
                     }
 
                     break;
@@ -471,8 +472,9 @@ public abstract class ApplicationContext {
 
                     if (!consumed) {
                         if (activeWindow != null
-                            && !activeWindow.isFocusHost()) {
-                            activeWindow.keyPressed(event.getKeyCode(), keyLocation);
+                            && (focusedComponent == null
+                            || activeWindow.isOwningAncestorOf(focusedComponent.getWindow()))) {
+                            //activeWindow.??(event.getKeyCode(), keyLocation);
                         }
 
                         dragDropManager.keyPressed(event.getKeyCode(), keyLocation);
@@ -490,8 +492,9 @@ public abstract class ApplicationContext {
 
                     if (!consumed) {
                         if (activeWindow != null
-                            && !activeWindow.isFocusHost()) {
-                            activeWindow.keyReleased(event.getKeyCode(), keyLocation);
+                            && (focusedComponent == null
+                            || activeWindow.isOwningAncestorOf(focusedComponent.getWindow()))) {
+                            //activeWindow.??(event.getKeyCode(), keyLocation);
                         }
 
                         dragDropManager.keyReleased(event.getKeyCode(), keyLocation);
