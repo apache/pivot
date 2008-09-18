@@ -14,7 +14,7 @@
 
     <servlet>
         <servlet-name>ProxyServlet</servlet-name>
-        <servlet-class>pivot.web.proxy.ProxyServlet</servlet-class>
+        <servlet-class>pivot.web.server.ProxyServlet</servlet-class>
         <init-param>
             <param-name>hostname</param-name>
             <param-value>localhost</param-value>

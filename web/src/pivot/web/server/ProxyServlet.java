@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.web.proxy;
+package pivot.web.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
