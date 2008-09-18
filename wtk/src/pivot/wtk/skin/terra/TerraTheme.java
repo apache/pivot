@@ -65,10 +65,12 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(LinkButton.class, LinkButtonSkin.class);
         componentSkinMap.put(ListButton.class, ListButtonSkin.class);
         componentSkinMap.put(ListView.class, ListViewSkin.class);
+        componentSkinMap.put(Menu.class, MenuSkin.class);
+        componentSkinMap.put(Menu.Item.class, MenuItemSkin.class);
         componentSkinMap.put(MenuBar.class, MenuBarSkin.class);
+        componentSkinMap.put(MenuBar.Item.class, MenuBarItemSkin.class);
         componentSkinMap.put(MenuButton.class, MenuButtonSkin.class);
         componentSkinMap.put(MenuPopup.class, MenuPopupSkin.class);
-        componentSkinMap.put(Menu.class, MenuSkin.class);
         componentSkinMap.put(Meter.class, MeterSkin.class);
         componentSkinMap.put(Panorama.class, PanoramaSkin.class);
         componentSkinMap.put(PushButton.class, PushButtonSkin.class);
@@ -76,7 +78,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Rollup.class, RollupSkin.class);
         componentSkinMap.put(ScrollBar.class, ScrollBarSkin.class);
         componentSkinMap.put(ScrollPane.Corner.class, ScrollPaneCornerSkin.class);
-        componentSkinMap.put(Separator.class, SpacerSkin.class);
+        componentSkinMap.put(Separator.class, SeparatorSkin.class);
         componentSkinMap.put(Spinner.class, SpinnerSkin.class);
         componentSkinMap.put(SplitPane.class, SplitPaneSkin.class);
         componentSkinMap.put(TableViewHeader.class, TableViewHeaderSkin.class);

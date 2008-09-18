@@ -19,30 +19,28 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
-import pivot.wtk.Frame;
+import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
-public class FlowPaneTest implements Application {
-    private Frame frame = null;
+public class MenuTest implements Application {
+    private Window window = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("flow_pane_test.wtkx")));
-        frame.setTitle("Flow Pane Test");
-        frame.setPreferredSize(480, 360);
-        frame.open(display);
+        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("menu_test.wtkx")));
+        window.setTitle("Menu Test");
+        window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        frame.close();
+        window.close();
         return true;
     }
 
-    public void resume() {
+    public void suspend() {
     }
 
-
-    public void suspend() {
+    public void resume() {
     }
 }

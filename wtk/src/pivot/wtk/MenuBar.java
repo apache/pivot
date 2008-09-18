@@ -21,6 +21,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
+import pivot.wtk.content.ButtonDataRenderer;
 
 /**
  * <p>Component representing a horizontal menu bar.</p>
@@ -43,13 +44,16 @@ public class MenuBar extends Container {
 
         public Item(Object buttonData) {
             super(buttonData);
+
+            setDataRenderer(new ButtonDataRenderer());
+            installSkin(Item.class);
         }
 
         @Override
         protected void setParent(Container parent) {
-            if (!(parent instanceof Menu)) {
+            if (!(parent instanceof MenuBar)) {
                 throw new IllegalArgumentException("Parent must be an instance of "
-                    + Menu.class.getName());
+                    + MenuBar.class.getName());
             }
 
             super.setParent(parent);
@@ -76,6 +80,20 @@ public class MenuBar extends Container {
                 // TODO Fire event
             }
         }
+
+        @Override
+        public void setToggleButton(boolean toggleButton) {
+            throw new UnsupportedOperationException("Menu bar items cannot be toggle buttons.");
+        }
+    }
+
+    /**
+     * <p>Item listener interface.</p>
+     *
+     * @author gbrown
+     */
+    public interface ItemListener {
+        public void menuChanged(Item item, Menu previousMenu);
     }
 
     /**
@@ -132,6 +150,10 @@ public class MenuBar extends Container {
 
     private ArrayList<Item> items = new ArrayList<Item>();
     private ItemSequence itemSequence = new ItemSequence();
+
+    public MenuBar() {
+        installSkin(MenuBar.class);
+    }
 
     public ItemSequence getItems() {
         return itemSequence;

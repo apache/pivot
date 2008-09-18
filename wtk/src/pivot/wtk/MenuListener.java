@@ -23,9 +23,6 @@ package pivot.wtk;
 public interface MenuListener {
     public void sectionInserted(Menu menu, int index);
     public void sectionsRemoved(Menu menu, int index, int count);
-
     public void itemInserted(Menu.Section section, int index);
     public void itemsRemoved(Menu.Section section, int index, int count);
-
-    public void itemMenuChanged(Menu.Item menuItem, Menu previousMenu);
 }

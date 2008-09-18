@@ -21,6 +21,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
+import pivot.wtk.content.MenuItemDataRenderer;
 
 /**
  * <p>Component that presents a cascading menu.</p>
@@ -34,8 +35,19 @@ public class Menu extends Container {
      * @author gbrown
      */
     public static class Item extends Button {
+        private static class ItemListenerList extends ListenerList<ItemListener>
+            implements ItemListener {
+            public void menuChanged(Item item, Menu previousMenu) {
+                for (ItemListener listener : this) {
+                    listener.menuChanged(item, previousMenu);
+                }
+            }
+        }
+
         private Section section = null;
         private Menu menu = null;
+
+        private ItemListenerList itemListeners = new ItemListenerList();
 
         public Item() {
             this(null);
@@ -43,6 +55,9 @@ public class Menu extends Container {
 
         public Item(Object buttonData) {
             super(buttonData);
+
+            setDataRenderer(new MenuItemDataRenderer());
+            installSkin(Item.class);
         }
 
         @Override
@@ -72,10 +87,40 @@ public class Menu extends Container {
 
             if (previousMenu != menu) {
                 this.menu = menu;
-
-                // TODO Fire event
+                itemListeners.menuChanged(this, previousMenu);
             }
         }
+
+        @Override
+        public void setTriState(boolean triState) {
+            throw new UnsupportedOperationException("Menu items can't be tri-state.");
+        }
+
+        public void press() {
+            super.press();
+
+            if (isToggleButton()) {
+                setSelected(getGroup() == null ? !isSelected() : true);
+            }
+
+            if (section != null
+                && section.menu != null) {
+                section.menu.menuItemListeners.itemPressed(this);
+            }
+        }
+
+        public ListenerList<ItemListener> getItemListeners() {
+            return itemListeners;
+        }
+    }
+
+    /**
+     * <p>Item listener interface.</p>
+     *
+     * @author gbrown
+     */
+    public interface ItemListener {
+        public void menuChanged(Item item, Menu previousMenu);
     }
 
     /**
@@ -104,7 +149,17 @@ public class Menu extends Container {
         }
 
         public void insert(Item item, int index) {
-            // TODO
+            if (item.getSection() != null) {
+                throw new IllegalArgumentException("item already has a section.");
+            }
+
+            items.insert(item, index);
+            item.setSection(this);
+
+            if (menu != null) {
+                menu.add(item);
+                menu.menuListeners.itemInserted(this, index);
+            }
         }
 
         public Item update(int index, Item item) {
@@ -121,8 +176,23 @@ public class Menu extends Container {
         }
 
         public Sequence<Item> remove(int index, int count) {
-            // TODO
-            return null;
+            Sequence<Item> removed = items.remove(index, count);
+
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                Item item = removed.get(i);
+
+                item.setSection(null);
+
+                if (menu != null) {
+                    menu.remove(item);
+                }
+            }
+
+            if (menu != null) {
+                menu.menuListeners.itemsRemoved(this, index, count);
+            }
+
+            return removed;
         }
 
         public Item get(int index) {
@@ -147,7 +217,7 @@ public class Menu extends Container {
      *
      * @author gbrown
      */
-    public final class SectionSequence implements Sequence<Section> {
+    public final class SectionSequence implements Sequence<Section>, Iterable<Section> {
         private SectionSequence() {
         }
 
@@ -159,7 +229,18 @@ public class Menu extends Container {
         }
 
         public void insert(Section section, int index) {
-            // TODO
+            if (section.getMenu() != null) {
+                throw new IllegalArgumentException("section already has a menu.");
+            }
+
+            sections.insert(section, index);
+            section.setMenu(Menu.this);
+
+            for (int i = 0, n = section.getLength(); i < n; i++) {
+                Menu.this.add(section.get(i));
+            }
+
+            menuListeners.sectionInserted(Menu.this, index);
         }
 
         public Section update(int index, Section section) {
@@ -176,8 +257,21 @@ public class Menu extends Container {
         }
 
         public Sequence<Section> remove(int index, int count) {
-            // TODO
-            return null;
+            Sequence<Section> removed = sections.remove(index, count);
+
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                Section section = removed.get(i);
+
+                section.setMenu(null);
+
+                for (Item item : section) {
+                    Menu.this.remove(item);
+                }
+            }
+
+            menuListeners.sectionsRemoved(Menu.this, index, count);
+
+            return removed;
         }
 
         public Section get(int index) {
@@ -191,22 +285,67 @@ public class Menu extends Container {
         public int getLength() {
             return sections.getLength();
         }
+
+        public Iterator<Section> iterator() {
+            return new ImmutableIterator<Section>(sections.iterator());
+        }
+    }
+
+    private static class MenuListenerList extends ListenerList<MenuListener>
+        implements MenuListener {
+        public void sectionInserted(Menu menu, int index) {
+            for (MenuListener listener : this) {
+                listener.sectionInserted(menu, index);
+            }
+        }
+
+        public void sectionsRemoved(Menu menu, int index, int count) {
+            for (MenuListener listener : this) {
+                listener.sectionsRemoved(menu, index, count);
+            }
+        }
+
+        public void itemInserted(Menu.Section section, int index) {
+            for (MenuListener listener : this) {
+                listener.itemInserted(section, index);
+            }
+        }
+
+        public void itemsRemoved(Menu.Section section, int index, int count) {
+            for (MenuListener listener : this) {
+                listener.itemsRemoved(section, index, count);
+            }
+        }
+    }
+
+    private static class MenuItemListenerList extends ListenerList<MenuItemPressListener>
+        implements MenuItemPressListener {
+        public void itemPressed(Menu.Item menuItem) {
+            for (MenuItemPressListener listener : this) {
+                listener.itemPressed(menuItem);
+            }
+        }
     }
 
     private ArrayList<Section> sections = new ArrayList<Section>();
     private SectionSequence sectionSequence = new SectionSequence();
+
+    private MenuListenerList menuListeners = new MenuListenerList();
+    private MenuItemListenerList menuItemListeners = new MenuItemListenerList();
+
+    public Menu() {
+        installSkin(Menu.class);
+    }
 
     public SectionSequence getSections() {
         return sectionSequence;
     }
 
     public ListenerList<MenuListener> getMenuListeners() {
-        // TODO
-        return null;
+        return menuListeners;
     }
 
-    public ListenerList<MenuItemListener> getMenuItemListeners() {
-        // TODO
-        return null;
+    public ListenerList<MenuItemPressListener> getMenuItemListeners() {
+        return menuItemListeners;
     }
 }

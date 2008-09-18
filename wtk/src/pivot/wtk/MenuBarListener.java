@@ -23,6 +23,4 @@ package pivot.wtk;
 public interface MenuBarListener {
     public void itemInserted(MenuBar menuBar, int index);
     public void itemsRemoved(MenuBar menuBar, int index, int count);
-
-    public void itemMenuChanged(MenuBar.Item menuBarItem, Menu previousMenu);
 }

@@ -15,7 +15,7 @@ import pivot.wtk.skin.ComponentSkin;
  *
  * @author gbrown
  */
-public class SpacerSkin extends ComponentSkin {
+public class SeparatorSkin extends ComponentSkin {
     private Color color = Color.BLACK;
     private int thickness = 1;
     private int padding = 4;

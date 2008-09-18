@@ -16,11 +16,10 @@
 package pivot.wtk;
 
 /**
- * <p>Menu item listener interface.</p>
+ * <p>Menu item press listener interface.</p>
  *
  * @author gbrown
  */
-public interface MenuItemListener {
+public interface MenuItemPressListener {
     public void itemPressed(Menu.Item menuItem);
-    public void itemStateChanged(Menu.Item menuItem, Button.State previousItemState);
 }
