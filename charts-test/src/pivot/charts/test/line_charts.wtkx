@@ -19,7 +19,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns="pivot.wtk" xmlns:charts="pivot.charts">
     <tabs>
-        <charts:LineChartView wtkx:id="categoryLineChartView" TabPane.Label="Category"
+        <charts:LineChartView wtkx:id="categoryLineChartView" TabPane.name="Category"
             seriesNameKey="name" title="Category Line Chart Example"
             horizontalAxisLabel="Categories" verticalAxisLabel="Values"
             showLegend="false"
@@ -39,7 +39,7 @@ limitations under the License.
             </chartData>
         </charts:LineChartView>
 
-        <charts:LineChartView wtkx:id="xyLineChartView" TabPane.Label="XY"
+        <charts:LineChartView wtkx:id="xyLineChartView" TabPane.name="XY"
             seriesNameKey="name" title="XY Line Chart Example"
             horizontalAxisLabel="X" verticalAxisLabel="Y">
             <chartData>

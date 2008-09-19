@@ -19,11 +19,11 @@ limitations under the License.
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns="pivot.wtk" xmlns:charts="pivot.charts">
     <tabs>
-        <wtkx:include src="pie_charts.wtkx" namespace="pieCharts" TabPane.Label="Pie Chart"/>
-        <wtkx:include src="bar_charts.wtkx" namespace="barCharts" TabPane.Label="Bar Chart"/>
-        <wtkx:include src="line_charts.wtkx" namespace="lineCharts" TabPane.Label="Line Chart"/>
-        <wtkx:include src="area_charts.wtkx" namespace="areaCharts" TabPane.Label="Area Chart"/>
-        <wtkx:include src="high_low_charts.wtkx" namespace="highLowCharts" TabPane.Label="High Low Chart"/>
+        <wtkx:include src="pie_charts.wtkx" namespace="pieCharts" TabPane.name="Pie Chart"/>
+        <wtkx:include src="bar_charts.wtkx" namespace="barCharts" TabPane.name="Bar Chart"/>
+        <wtkx:include src="line_charts.wtkx" namespace="lineCharts" TabPane.name="Line Chart"/>
+        <wtkx:include src="area_charts.wtkx" namespace="areaCharts" TabPane.name="Area Chart"/>
+        <wtkx:include src="high_low_charts.wtkx" namespace="highLowCharts" TabPane.name="High Low Chart"/>
     </tabs>
 </TabPane>
 
