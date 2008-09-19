@@ -50,4 +50,10 @@ public class QueryException extends TaskExecutionException {
     public int getStatus() {
         return status;
     }
+
+    @Override
+    public String getLocalizedMessage() {
+        String message = super.getLocalizedMessage();
+        return (message != null ? (status + " " + message) : String.valueOf(status));
+    }
 }
