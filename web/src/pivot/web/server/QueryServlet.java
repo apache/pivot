@@ -36,8 +36,8 @@ import pivot.util.Base64;
 
 /**
  * Base class for all web query servlets. It is the server counterpart to
- * {@link pivot.web.Query}. Subclasses will generally only have to override one
- * or more of the following methods:
+ * {@link pivot.web.Query pivot.web.Query}. Subclasses will generally only have
+ * to override one or more of the following methods:
  * <ul>
  *   <li>{@link #doGet()}</li>
  *   <li>{@link #doPost(Object)}</li>
