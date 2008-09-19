@@ -16,16 +16,20 @@
 package pivot.web;
 
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Iterator;
+
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.Serializer;
+import pivot.util.ListenerList;
 import pivot.util.concurrent.Dispatcher;
 import pivot.util.concurrent.Task;
 
@@ -41,13 +45,19 @@ import pivot.util.concurrent.Task;
  * </ul>
  *
  * @param <V>
- * The type of the value retrieved or sent via the query. For GET and POST
- * operations, the type is {@link Object}. For PUT and DELETE, it is
- * {@link Void}.
+ * The type of the value retrieved or sent via the query. For GET operations,
+ * it is {@link Object}; for POST operations, the type is {@link URL}. For PUT
+ * and DELETE, it is {@link Void}.
  *
  * @author gbrown
+ * @author tvolkert
  */
 public abstract class Query<V> extends Task<V> {
+    /**
+     * The supoprted HTTP methods.
+     *
+     * @author gbrown
+     */
     protected enum Method {
         GET,
         POST,
@@ -58,7 +68,8 @@ public abstract class Query<V> extends Task<V> {
     /**
      * Arguments dictionary implementation.
      */
-    public final class ArgumentsDictionary implements Dictionary<String, String> {
+    public final class ArgumentsDictionary
+        implements Dictionary<String, String>, Iterable<String> {
         public String get(String key) {
             return arguments.get(key);
         }
@@ -78,12 +89,17 @@ public abstract class Query<V> extends Task<V> {
         public boolean isEmpty() {
             return arguments.isEmpty();
         }
+
+        public Iterator<String> iterator() {
+            return arguments.iterator();
+        }
     }
 
     /**
      * Request properties dictionary implementation.
      */
-    public final class RequestPropertiesDictionary implements Dictionary<String, String> {
+    public final class RequestPropertiesDictionary
+        implements Dictionary<String, String>, Iterable<String> {
         public String get(String key) {
             return requestProperties.get(key);
         }
@@ -103,12 +119,17 @@ public abstract class Query<V> extends Task<V> {
         public boolean isEmpty() {
             return requestProperties.isEmpty();
         }
+
+        public Iterator<String> iterator() {
+            return requestProperties.iterator();
+        }
     }
 
     /**
      * Response properties dictionary implementation.
      */
-    public final class ResponsePropertiesDictionary implements Dictionary<String, String> {
+    public final class ResponsePropertiesDictionary
+        implements Dictionary<String, String>, Iterable<String> {
         public String get(String key) {
             return responseProperties.get(key);
         }
@@ -128,6 +149,147 @@ public abstract class Query<V> extends Task<V> {
         public boolean isEmpty() {
             return responseProperties.isEmpty();
         }
+
+        public Iterator<String> iterator() {
+            return responseProperties.iterator();
+        }
+    }
+
+    /**
+     * Output stream that monitors the bytes that are written to it by
+     * incrementing the <tt>bytesSent</tt> member variable.
+     *
+     * @author tvolkert
+     */
+    private class MonitoredOutputStream extends OutputStream {
+        private OutputStream outputStream;
+
+        public MonitoredOutputStream(OutputStream outputStream) {
+            this.outputStream = outputStream;
+        }
+
+        public void close() throws IOException {
+            outputStream.close();
+        }
+
+        public void flush() throws IOException {
+            outputStream.flush();
+        }
+
+        public void write(byte[] b) throws IOException {
+            outputStream.write(b);
+            bytesSent += b.length;
+        }
+
+        public void write(byte[] b, int off, int len) throws IOException {
+            outputStream.write(b, off, len);
+            bytesSent += len;
+        }
+
+        public void write(int b) throws IOException {
+            outputStream.write(b);
+            bytesSent++;
+        }
+    }
+
+    /**
+     * Input stream that monitors the bytes that are read from it by
+     * incrementing the <tt>bytesReceived</tt> member variable.
+     *
+     * @author tvolkert
+     */
+    private class MonitoredInputStream extends InputStream {
+        private InputStream inputStream;
+
+        long mark = 0;
+
+        public MonitoredInputStream(InputStream inputStream) {
+            this.inputStream = inputStream;
+        }
+
+        public int read() throws IOException {
+            int result = inputStream.read();
+
+            if (result != -1) {
+                bytesReceived++;
+            }
+
+            return result;
+        }
+
+        public int read(byte b[]) throws IOException {
+            int count = inputStream.read(b);
+
+            if (count != -1) {
+                bytesReceived += count;
+            }
+
+            return count;
+        }
+
+        public int read(byte b[], int off, int len) throws IOException {
+            int count = inputStream.read(b, off, len);
+
+            if (count != -1) {
+                bytesReceived += count;
+            }
+
+            return count;
+        }
+
+        public long skip(long n) throws IOException {
+            long count = inputStream.skip(n);
+            bytesReceived += count;
+            return count;
+        }
+
+        public int available() throws IOException {
+            return inputStream.available();
+        }
+
+        public void close() throws IOException {
+            inputStream.close();
+        }
+
+        public void mark(int readLimit) {
+            inputStream.mark(readLimit);
+            mark = bytesReceived;
+        }
+
+        public void reset() throws IOException {
+            inputStream.reset();
+            bytesReceived = mark;
+        }
+
+        public boolean markSupported() {
+            return inputStream.markSupported();
+        }
+    }
+
+    /**
+     * Query listener list.
+     *
+     * @author tvolkert
+     */
+    private static class QueryListenerList extends ListenerList<QueryListener>
+        implements QueryListener {
+        public void connected(Query query) {
+            for (QueryListener listener : this) {
+                listener.connected(query);
+            }
+        }
+
+        public void requestSent(Query query) {
+            for (QueryListener listener : this) {
+                listener.requestSent(query);
+            }
+        }
+
+        public void responseReceived(Query query) {
+            for (QueryListener listener : this) {
+                listener.responseReceived(query);
+            }
+        }
     }
 
     private URL locationContext = null;
@@ -141,6 +303,12 @@ public abstract class Query<V> extends Task<V> {
     private ResponsePropertiesDictionary responsePropertiesDictionary = new ResponsePropertiesDictionary();
 
     private Serializer serializer = new JSONSerializer();
+
+    private volatile long bytesSent = 0;
+    private volatile long bytesReceived = 0;
+    private volatile long bytesExpected = -1;
+
+    private QueryListenerList queryListeners = new QueryListenerList();
 
     private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
 
@@ -164,7 +332,7 @@ public abstract class Query<V> extends Task<V> {
         try {
             locationContext = new URL(secure ? HTTPS_PROTOCOL : HTTP_PROTOCOL,
                 hostname, port, path);
-        } catch(MalformedURLException exception) {
+        } catch (MalformedURLException exception) {
             throw new IllegalArgumentException("Unable to construct context URL.",
                 exception);
         }
@@ -198,7 +366,7 @@ public abstract class Query<V> extends Task<V> {
 
                 queryStringBuilder.append(URLEncoder.encode(key, URL_ENCODING)
                     + "=" + URLEncoder.encode(arguments.get(key), URL_ENCODING));
-            } catch(UnsupportedEncodingException exception) {
+            } catch (UnsupportedEncodingException exception) {
                 throw new IllegalStateException("Unable to construct query string.", exception);
             }
         }
@@ -212,7 +380,7 @@ public abstract class Query<V> extends Task<V> {
                 locationContext.getHost(),
                 locationContext.getPort(),
                 locationContext.getPath() + queryString);
-        } catch(MalformedURLException exception) {
+        } catch (MalformedURLException exception) {
             throw new IllegalStateException("Unable to construct query URL.", exception);
         }
 
@@ -265,15 +433,68 @@ public abstract class Query<V> extends Task<V> {
         this.serializer = serializer;
     }
 
+    /**
+     * Gets the number of bytes that have been sent in the body of this
+     * query's HTTP request. This will only be non-zero for POST and PUT
+     * requests, as GET and DELETE requests send no content to the server.
+     * <p>
+     * For POST and PUT requests, this number will increment in between the
+     * {@link QueryListener#connected(Query) connected} and
+     * {@link QueryListener#requestSent(Query) requestSent} phases of the
+     * <tt>QueryListener</tt> lifecycle methods. Interested listeners can poll
+     * for this value during that phase.
+     */
+    public long getBytesSent() {
+        return bytesSent;
+    }
+
+    /**
+     * Gets the number of bytes that have been received from the server in the
+     * body of the server's HTTP response. This will generally only be non-zero
+     * for GET requests, as POST, PUT, and DELETE requests generally don't
+     * solicit response content from the server.
+     * <p>
+     * This number will increment in between the
+     * {@link QueryListener#requestSent(Query) requestSent} and
+     * {@link QueryListener#responseReceived(Query) responseReceived} phases of
+     * the <tt>QueryListener</tt> lifecycle methods. Interested listeners can
+     * poll for this value during that phase.
+     */
+    public long getBytesReceived() {
+        return bytesReceived;
+    }
+
+    /**
+     * Gets the number of bytes that are expected to be received from the
+     * server in the body of the server's HTTP response. This value reflects
+     * the <tt>Content-Length</tt> HTTP response header and is thus merely an
+     * expectation. The actual total number of bytes that will be received is
+     * not known for certain until the full response has been received.
+     * <p>
+     * If the server did not specify a <tt>Content-Length</tt> HTTP response
+     * header, a value of <tt>-1</tt> will be returned to indicate that this
+     * value is unknown.
+     */
+    public long getBytesExpected() {
+        return bytesExpected;
+    }
+
     protected Object execute(Method method, Object value)
         throws QueryException {
         URL location = getLocation();
         HttpURLConnection connection = null;
 
+        bytesSent = 0;
+        bytesReceived = 0;
+        bytesExpected = -1;
+
         int status = -1;
         String message = null;
 
         try {
+            // Clear any properties from a previous response
+            responseProperties.clear();
+
             // Open a connection
             connection = (HttpURLConnection)location.openConnection();
             connection.setRequestMethod(method.toString());
@@ -292,13 +513,14 @@ public abstract class Query<V> extends Task<V> {
 
             // Connect to the server
             connection.connect();
+            queryListeners.connected(this);
 
             // Write the request body
             if (method == Method.POST || method == Method.PUT) {
                 OutputStream outputStream = null;
                 try {
                     outputStream = connection.getOutputStream();
-                    serializer.writeObject(value, outputStream);
+                    serializer.writeObject(value, new MonitoredOutputStream(outputStream));
                 } finally {
                     if (outputStream != null) {
                         outputStream.close();
@@ -306,11 +528,15 @@ public abstract class Query<V> extends Task<V> {
                 }
             }
 
+            // Notify listeners that the request has been sent
+            queryListeners.requestSent(this);
+
+            // Record the content length
+            bytesExpected = connection.getContentLength();
+
             // Set the response info
             status = connection.getResponseCode();
             message = connection.getResponseMessage();
-
-            responseProperties.clear();
 
             // NOTE Header indexes start at 1, not 0
             int i = 1;
@@ -325,14 +551,17 @@ public abstract class Query<V> extends Task<V> {
                 InputStream inputStream = null;
                 try {
                     inputStream = connection.getInputStream();
-                    value = serializer.readObject(inputStream);
+                    value = serializer.readObject(new MonitoredInputStream(inputStream));
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();
                     }
                 }
             }
-        } catch(Exception exception) {
+
+            // Notify listeners that the response has been received
+            queryListeners.responseReceived(this);
+        } catch (Exception exception) {
             throw new QueryException(exception);
         }
 
@@ -343,5 +572,12 @@ public abstract class Query<V> extends Task<V> {
         }
 
         return value;
+    }
+
+    /**
+     * Gets the query's <tt>QueryListener</tt>s.
+     */
+    public ListenerList<QueryListener> getQueryListeners() {
+        return queryListeners;
     }
 }
