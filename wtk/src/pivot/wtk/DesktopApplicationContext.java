@@ -63,8 +63,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             new ImmutableMap<String, String>(properties));
                     } catch(Exception exception) {
                         exception.printStackTrace();
-                        Alert.alert(Alert.Type.ERROR, exception.getMessage(),
-                            applicationContext.getDisplay());
+                        String message = exception.getMessage();
+                        if (message == null) {
+                            message = exception.getClass().getName();
+                        }
+
+                        Alert.alert(Alert.Type.ERROR, message, applicationContext.getDisplay());
                     }
 
                     break;

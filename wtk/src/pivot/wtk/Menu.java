@@ -62,7 +62,8 @@ public class Menu extends Container {
 
         @Override
         protected void setParent(Container parent) {
-            if (!(parent instanceof Menu)) {
+            if (parent != null
+                && !(parent instanceof Menu)) {
                 throw new IllegalArgumentException("Parent must be an instance of "
                     + Menu.class.getName());
             }
@@ -83,7 +84,8 @@ public class Menu extends Container {
         }
 
         public void setMenu(Menu menu) {
-            if (menu.getItem() != null) {
+            if (menu != null
+                && menu.getItem() != null) {
                 throw new IllegalArgumentException("menu already belongs to an item.");
             }
 
@@ -117,13 +119,14 @@ public class Menu extends Container {
                 setSelected(getGroup() == null ? !isSelected() : true);
             }
 
-            Item item = this;
-
-            while (item != null
-                && item.section != null
-                && item.section.menu != null) {
-                item.section.menu.menuItemListeners.itemPressed(this);
-                item = item.section.menu.item;
+            if (menu == null) {
+                Item item = this;
+                while (item != null
+                    && item.section != null
+                    && item.section.menu != null) {
+                    item.section.menu.menuItemListeners.itemSelected(this);
+                    item = item.section.menu.item;
+                }
             }
         }
 
@@ -336,11 +339,11 @@ public class Menu extends Container {
         }
     }
 
-    private static class MenuItemListenerList extends ListenerList<MenuItemPressListener>
-        implements MenuItemPressListener {
-        public void itemPressed(Menu.Item menuItem) {
-            for (MenuItemPressListener listener : this) {
-                listener.itemPressed(menuItem);
+    private static class MenuItemListenerList extends ListenerList<MenuItemSelectionListener>
+        implements MenuItemSelectionListener {
+        public void itemSelected(Menu.Item menuItem) {
+            for (MenuItemSelectionListener listener : this) {
+                listener.itemSelected(menuItem);
             }
         }
     }
@@ -372,7 +375,7 @@ public class Menu extends Container {
         return menuListeners;
     }
 
-    public ListenerList<MenuItemPressListener> getMenuItemPressListeners() {
+    public ListenerList<MenuItemSelectionListener> getMenuItemPressListeners() {
         return menuItemListeners;
     }
 }

@@ -21,7 +21,8 @@ package pivot.wtk;
  * closes automatically when:</p>
  * <ul>
  * <li>A component mouse down event or a container mouse wheel event occurs
- * outside its own bounds or the bounds of any of its owned windows.</li>
+ * outside the bounds of its affiliate, itself, or any of its owned
+ * windows.</li>
  * <li>The absolute location of its affiliate component changes.</li>
  * <li>The absolute visibility of its affiliate component (the affiliate's
  * "showing" state) changes.</li>

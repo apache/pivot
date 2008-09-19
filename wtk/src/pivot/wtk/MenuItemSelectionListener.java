@@ -16,15 +16,15 @@
 package pivot.wtk;
 
 /**
- * <p>Menu item press listener interface.</p>
+ * <p>Menu item selection listener interface.</p>
  *
  * @author gbrown
  */
-public interface MenuItemPressListener {
+public interface MenuItemSelectionListener {
     /**
-     * Called when a descendant item of this menu has been pressed.
+     * Called when a descendant item of this menu has been selected.
      *
      * @param menuItem
      */
-    public void itemPressed(Menu.Item menuItem);
+    public void itemSelected(Menu.Item menuItem);
 }

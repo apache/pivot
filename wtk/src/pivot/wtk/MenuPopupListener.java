@@ -21,5 +21,11 @@ package pivot.wtk;
  * @author gbrown
  */
 public interface MenuPopupListener {
+    /**
+     * Called when a menu popup's menu has changed.
+     *
+     * @param menuPopup
+     * @param previousMenu
+     */
     public void menuChanged(MenuPopup menuPopup, Menu previousMenu);
 }

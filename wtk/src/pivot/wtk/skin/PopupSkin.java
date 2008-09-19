@@ -153,8 +153,9 @@ public class PopupSkin extends WindowSkin
     }
 
     private void mouseEvent(Container container, int x, int y) {
-        // If the event did not occur within a window that is owned by this
-        // popup and did not occur within the popup's affiliate, close the popup
+        // If the event did not occur within a window that is owned by
+        // this popup and did not occur within the popup's affiliate, close
+        // the popup
         Display display = (Display)container;
         Popup popup = (Popup)getComponent();
 
@@ -164,11 +165,10 @@ public class PopupSkin extends WindowSkin
             Component affiliate = popup.getAffiliate();
             Component descendant = display.getDescendantAt(x, y);
 
-            boolean withinAffiliate = (affiliate instanceof Container) ?
-                ((Container)affiliate).isAncestor(descendant) :
-                (affiliate != null && descendant == affiliate);
-
-            if (!withinAffiliate) {
+            if (affiliate == null
+                || (affiliate instanceof Container
+                    && !((Container)affiliate).isAncestor(descendant))
+                || descendant != affiliate) {
                 popup.close();
             }
         }

@@ -20,14 +20,17 @@ import pivot.wtk.Action;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
+import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Display;
-import pivot.wtk.Window;
+import pivot.wtk.Menu;
+import pivot.wtk.MenuPopup;
+import pivot.wtk.Mouse;
 import pivot.wtkx.WTKXSerializer;
 
 public class MenuTest implements Application {
-    private Window window = null;
+    private MenuPopup menuPopup = null;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(final Display display, Dictionary<String, String> properties)
         throws Exception {
         new Action("testAction") {
             public String getDescription() {
@@ -35,18 +38,30 @@ public class MenuTest implements Application {
             }
 
             public void perform() {
-                Alert.alert("Test action performed.", window);
+                Alert.alert("Test action performed.", display);
             }
         };
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("menu_test.wtkx")));
-        window.setTitle("Menu Test");
-        window.open(display);
+        menuPopup = new MenuPopup((Menu)wtkxSerializer.readObject(getClass().getResource("menu_test.wtkx")));
+
+        display.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
+            public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+                if (button == Mouse.Button.RIGHT) {
+                    menuPopup.open(display, x, y);
+                }
+            }
+
+            public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+            }
+
+            public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            }
+        });
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        menuPopup.close();
         return true;
     }
 

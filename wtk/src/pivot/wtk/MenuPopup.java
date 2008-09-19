@@ -18,23 +18,60 @@ package pivot.wtk;
 import pivot.util.ListenerList;
 
 /**
- * <p>Popup class representing a context menu.</p>
+ * <p>Popup class that displays a cascading menu.</p>
  *
  * @author gbrown
  */
 public class MenuPopup extends Popup {
-    private Menu menu = null;
+    private class MenuPopupListenerList extends ListenerList<MenuPopupListener>
+        implements MenuPopupListener {
+        public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
+            for (MenuPopupListener listener : this) {
+                listener.menuChanged(menuPopup, previousMenu);
+            }
+        }
+    }
+
+    private Menu menu;
+
+    private MenuPopupListenerList menuPopupListeners = new MenuPopupListenerList();
+
+    public MenuPopup() {
+        this(null);
+    }
+
+    public MenuPopup(Menu menu) {
+        setMenu(menu);
+
+        installSkin(MenuPopup.class);
+    }
 
     public Menu getMenu() {
         return menu;
     }
 
     public void setMenu(Menu menu) {
-        // TODO
+        Menu previousMenu = this.menu;
+
+        if (previousMenu != menu) {
+            this.menu = menu;
+            menuPopupListeners.menuChanged(this, previousMenu);
+        }
+    }
+
+    public void open(Display display, int x, int y) {
+        // TODO Determine x, y and width, height
+        setLocation(x, y);
+        super.open(display);
+    }
+
+    public void open(Window owner, int x, int y) {
+        // TODO Determine x, y and width, height
+        setLocation(x, y);
+        super.open(owner);
     }
 
     public ListenerList<MenuPopupListener> getMenuPopupListeners() {
-        // TODO
-        return null;
+        return menuPopupListeners;
     }
 }

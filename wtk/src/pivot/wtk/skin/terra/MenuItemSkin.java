@@ -6,25 +6,20 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 import pivot.wtk.ApplicationContext;
-import pivot.wtk.Border;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Menu;
-import pivot.wtk.MenuItemPressListener;
+import pivot.wtk.MenuPopup;
 import pivot.wtk.Mouse;
-import pivot.wtk.Panorama;
 import pivot.wtk.Point;
-import pivot.wtk.Popup;
 import pivot.wtk.Window;
-import pivot.wtk.WindowListener;
 import pivot.wtk.Menu.Item;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
@@ -67,88 +62,15 @@ public class MenuItemSkin extends ButtonSkin
         }
     }
 
-    private Panorama menuPanorama;
-    private Border menuBorder;
-    private Popup menuPopup;
+    private MenuPopup menuPopup = new MenuPopup();
 
     private int buttonPressTimeoutID = -1;
 
     private int buttonPressInterval = 200;
     private Image checkmarkImage = new CheckmarkImage();
 
-    private MenuItemPressListener menuItemPressListener = new MenuItemPressListener() {
-        public void itemPressed(Menu.Item item) {
-            if (item.getMenu() == null) {
-                menuPopup.close();
-            }
-        }
-    };
-
     public static final int EXPANDER_SIZE = 11;
     public static final int EXPANDER_ICON_SIZE = 5;
-
-    public MenuItemSkin() {
-        menuPanorama = new Panorama();
-
-        menuBorder = new Border(menuPanorama);
-
-        // TODO Make border color styleable
-        menuBorder.getStyles().put("borderColor", new Color(0x99, 0x99, 0x99));
-        menuBorder.getStyles().put("padding", 0);
-
-        menuPopup = new Popup(menuBorder);
-
-        // Add popup window listener
-        menuPopup.getWindowListeners().add(new WindowListener() {
-            public void titleChanged(Window window, String previousTitle) {
-                // No-op
-            }
-
-            public void iconChanged(Window window, Image previousIcon) {
-                // No-op
-            }
-
-            public void contentChanged(Window window, Component previousContent) {
-                // No-op
-            }
-
-            public void activeChanged(Window window) {
-                // No-op
-            }
-
-            public void focusHostChanged(Window window) {
-                if (!window.isFocusHost()) {
-                    Component focusedComponent = Component.getFocusedComponent();
-                    if (focusedComponent != null
-                        && !window.isOwningAncestorOf(focusedComponent.getWindow())) {
-                        window.close();
-                    }
-                }
-            }
-
-            public void maximizedChanged(Window window) {
-                // No-op
-            }
-        });
-
-        // Add popup key listener
-        menuPopup.getComponentKeyListeners().add(new ComponentKeyListener() {
-            public void keyTyped(Component component, char character) {
-                // No-op
-            }
-
-            public void keyPressed(Component component, int keyCode,
-                Keyboard.KeyLocation keyLocation) {
-                menuPopup.close();
-                getComponent().requestFocus();
-            }
-
-            public void keyReleased(Component component, int keyCode,
-                Keyboard.KeyLocation keyLocation) {
-                // No-op
-            }
-        });
-    }
 
     @Override
     public void install(Component component) {
@@ -280,6 +202,7 @@ public class MenuItemSkin extends ButtonSkin
 
     @Override
     public void mouseOut() {
+        super.mouseOut();
         ApplicationContext.clearInterval(buttonPressTimeoutID);
     }
 
@@ -293,17 +216,20 @@ public class MenuItemSkin extends ButtonSkin
 
     @Override
     public void mouseClick(Mouse.Button button, int x, int y, int count) {
+        super.mouseClick(button, x, y, count);
+
         Menu.Item menuItem = (Menu.Item)getComponent();
         menuItem.press();
     }
 
     @Override
     public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
+        boolean consumed = super.keyPressed(keyCode, keyLocation);
 
         ApplicationContext.clearInterval(buttonPressTimeoutID);
 
         Menu.Item menuItem = (Menu.Item)getComponent();
+        Menu menu = menuItem.getMenu();
 
         if (keyCode == Keyboard.KeyCode.UP) {
             menuItem.transferFocus(Direction.BACKWARD);
@@ -311,6 +237,18 @@ public class MenuItemSkin extends ButtonSkin
         } else if (keyCode == Keyboard.KeyCode.DOWN) {
             menuItem.transferFocus(Direction.FORWARD);
             consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.LEFT) {
+            Menu parentMenu = menuItem.getSection().getMenu();
+            Menu.Item parentMenuItem = parentMenu.getItem();
+            if (parentMenuItem != null) {
+                parentMenuItem.requestFocus();
+            }
+
+            menuPopup.close();
+        } else if (keyCode == Keyboard.KeyCode.RIGHT) {
+            if (menu != null) {
+                menuItem.press();
+            }
         } else if (keyCode == Keyboard.KeyCode.TAB) {
             // No-op
         } else {
@@ -322,7 +260,7 @@ public class MenuItemSkin extends ButtonSkin
 
     @Override
     public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
+        boolean consumed = super.keyReleased(keyCode, keyLocation);
 
         Menu.Item menuItem = (Menu.Item)getComponent();
 
@@ -345,18 +283,6 @@ public class MenuItemSkin extends ButtonSkin
 
     @Override
     public void focusedChanged(Component component, boolean temporary) {
-        super.focusedChanged(component, temporary);
-
-        // Close the popup if focus was transferred to a component whose
-        // window is not an owned descendant of the popup
-        if (!component.isFocused()) {
-            Component focusedComponent = Component.getFocusedComponent();
-            if (focusedComponent != null
-                && !menuPopup.isOwningAncestorOf(focusedComponent.getWindow())) {
-                menuPopup.close();
-            }
-        }
-
         repaintComponent();
     }
 
@@ -366,34 +292,17 @@ public class MenuItemSkin extends ButtonSkin
 
         if (menu != null
             && !menuPopup.isOpen()) {
-            menuPanorama.setView(menu);
-
             // Determine the popup's location and preferred size, relative
             // to the menu item
             Window window = menuItem.getWindow();
 
             if (window != null) {
                 Display display = menuItem.getWindow().getDisplay();
-                Point menuItemLocation = menuItem.mapPointToAncestor(display, 0, 0);
+                Point menuItemLocation = menuItem.mapPointToAncestor(display, getWidth(), 0);
 
-                // Ensure that the popup remains within the bounds of the display
-                int displayWidth = display.getWidth();
+                // TODO Ensure that the popup remains within the bounds of the display
 
-                int x = menuItemLocation.x + getWidth() - 1;
-                int preferredPopupWidth = menuBorder.getPreferredWidth();
-
-                if (x + preferredPopupWidth > displayWidth) {
-                    if (menuItemLocation.x - preferredPopupWidth > 0) {
-                        x = menuItemLocation.x - preferredPopupWidth + 1;
-                    } else {
-                        preferredPopupWidth = displayWidth - x;
-                    }
-                } else {
-                    preferredPopupWidth = -1;
-                }
-
-                menuPopup.setLocation(x, menuItemLocation.y);
-                menuPopup.setPreferredWidth(preferredPopupWidth);
+                menuPopup.setLocation(menuItemLocation.x, menuItemLocation.y);
                 menuPopup.open(menuItem);
 
                 menu.requestFocus();
@@ -410,15 +319,7 @@ public class MenuItemSkin extends ButtonSkin
     }
 
     public void menuChanged(Item item, Menu previousMenu) {
-        if (previousMenu != null) {
-            previousMenu.getMenuItemPressListeners().remove(menuItemPressListener);
-        }
-
-        Menu menu = item.getMenu();
-        if (menu != null) {
-            menu.getMenuItemPressListeners().add(menuItemPressListener);
-        }
-
+        menuPopup.setMenu(item.getMenu());
         repaintComponent();
     }
 }

@@ -84,7 +84,7 @@ public class MenuSkin extends ContainerSkin implements MenuListener {
             Menu.Section section = sections.get(i);
 
             for (Menu.Item item : section) {
-                preferredHeight += item.getPreferredHeight();
+                preferredHeight += item.getPreferredHeight(width);
             }
 
             if (i > 0) {
@@ -106,7 +106,7 @@ public class MenuSkin extends ContainerSkin implements MenuListener {
             Menu.Section section = sections.get(i);
 
             for (Menu.Item item : section) {
-                preferredWidth = Math.max(item.getPreferredWidth(-1),
+                preferredWidth = Math.max(item.getPreferredWidth(),
                     preferredWidth);
                 preferredHeight += item.getPreferredHeight();
             }
@@ -123,13 +123,14 @@ public class MenuSkin extends ContainerSkin implements MenuListener {
         Menu menu = (Menu)getComponent();
         Menu.SectionSequence sections = menu.getSections();
 
+        int width = getWidth();
         int itemY = 0;
 
         for (int i = 0, n = sections.getLength(); i < n; i++) {
             Menu.Section section = sections.get(i);
 
             for (Menu.Item item : section) {
-                item.setSize(item.getPreferredSize());
+                item.setSize(width, item.getPreferredHeight(width));
                 item.setLocation(0, itemY);
 
                 itemY += item.getHeight();

@@ -93,6 +93,10 @@ public class Dialog extends Window {
         this.modal = false;
 
         super.open(display);
+
+        if (!isOpen()) {
+            this.dialogStateListener = null;
+        }
     }
 
     /**
@@ -145,32 +149,37 @@ public class Dialog extends Window {
         // Call the base method
         super.open(owner);
 
-        if (modal) {
-            // Walk owner tree to find the nearest enabled owning ancestor
-            // and disable it
-            Window disabledOwner = null;
+        if (isOpen()) {
+            if (modal) {
+                // Walk owner tree to find the nearest enabled owning ancestor
+                // and disable it
+                Window disabledOwner = null;
 
-            while (owner != null
-                && owner.isEnabled()) {
-                disabledOwner = owner;
-                owner = owner.getOwner();
+                while (owner != null
+                    && owner.isEnabled()) {
+                    disabledOwner = owner;
+                    owner = owner.getOwner();
+                }
+
+                // Disable the ancestor and maintain a reference to it so we can
+                // enable it when this dialog is closed
+                if (disabledOwner != null) {
+                    disabledOwner.setEnabled(false);
+                }
+
+                this.disabledOwner = disabledOwner;
+
+                // Disabling the owner tree also disabled this dialog; re-enable it
+                // and make it the active window
+                setEnabled(true);
+                setActiveWindow(this);
+
+                // Align the dialog with its owner
+                ApplicationContext.queueCallback(new RepositionCallback());
             }
-
-            // Disable the ancestor and maintain a reference to it so we can
-            // enable it when this dialog is closed
-            if (disabledOwner != null) {
-                disabledOwner.setEnabled(false);
-            }
-
-            this.disabledOwner = disabledOwner;
-
-            // Disabling the owner tree also disabled this dialog; re-enable it
-            // and make it the active window
-            setEnabled(true);
-            setActiveWindow(this);
-
-            // Align the dialog with its owner
-            ApplicationContext.queueCallback(new RepositionCallback());
+        } else {
+            this.dialogStateListener = null;
+            this.modal = false;
         }
     }
 
@@ -180,42 +189,36 @@ public class Dialog extends Window {
     }
 
     public void close(boolean result) {
-        if (!isClosed()) {
-            boolean allowed = true;
+        if (!isClosed()
+            && (dialogStateListener == null
+                || dialogStateListener.previewDialogClose(this, result))) {
+            // Close the window
+            super.close();
 
-            if (dialogStateListener != null) {
-                allowed = dialogStateListener.previewDialogClose(this, result);
-            }
+            // Only proceed if the state listeners allowed us to close
+            if (isClosed()) {
+                this.result = result;
 
-            if (allowed) {
-                // Close the window
-                super.close();
+                // Enable the ancestor that was disabled when this dialog
+                // was opened
+                if (disabledOwner != null) {
+                    disabledOwner.setEnabled(true);
 
-                // Only proceed if the state listeners allowed us to close
-                if (isClosed()) {
-                    this.result = result;
-
-                    // Enable the ancestor that was disabled when this dialog
-                    // was opened
-                    if (disabledOwner != null) {
-                        disabledOwner.setEnabled(true);
-
-                        // Move the owner to the front
-                        if (modal) {
-                            disabledOwner.moveToFront();
-                        }
+                    // Move the owner to the front
+                    if (modal) {
+                        disabledOwner.moveToFront();
                     }
-
-                    modal = false;
-                    disabledOwner = null;
-
-                    // Notify listener
-                    if (dialogStateListener != null) {
-                        dialogStateListener.dialogClosed(this);
-                    }
-
-                    dialogStateListener = null;
                 }
+
+                modal = false;
+                disabledOwner = null;
+
+                // Notify listener
+                if (dialogStateListener != null) {
+                    dialogStateListener.dialogClosed(this);
+                }
+
+                dialogStateListener = null;
             }
         }
     }

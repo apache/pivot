@@ -103,12 +103,12 @@ public class Border extends Container {
         Component previousContent = this.content;
 
         if (content != previousContent) {
+            this.content = null;
+
             // Remove any previous content component
             if (previousContent != null) {
                 remove(previousContent);
             }
-
-            this.content = null;
 
             // Add the component
             if (content != null) {

@@ -15,66 +15,113 @@
  */
 package pivot.wtk.skin.terra;
 
-import java.awt.Graphics2D;
+import java.awt.Color;
 
+import pivot.wtk.Border;
 import pivot.wtk.Component;
-import pivot.wtk.Dimensions;
+import pivot.wtk.Keyboard;
 import pivot.wtk.Menu;
+import pivot.wtk.MenuItemSelectionListener;
 import pivot.wtk.MenuPopup;
 import pivot.wtk.MenuPopupListener;
+import pivot.wtk.Panorama;
+import pivot.wtk.Window;
 import pivot.wtk.skin.PopupSkin;
 
-/**
- * TODO Implement skin methods.
- *
- * TODO Create a panorama and add the component's Menu to it.
- *
- * @author gbrown
- */
 public class MenuPopupSkin extends PopupSkin
     implements MenuPopupListener {
+    private Panorama panorama;
+    private Border border;
+
+    private MenuItemSelectionListener menuItemPressListener = new MenuItemSelectionListener() {
+        public void itemSelected(Menu.Item item) {
+            MenuPopup menuPopup = (MenuPopup)getComponent();
+            menuPopup.close();
+        }
+    };
+
+    public MenuPopupSkin() {
+        panorama = new Panorama();
+        border = new Border(panorama);
+
+        // TODO Make border color styleable; inherit from parent popup?
+        border.getStyles().put("borderColor", new Color(0x99, 0x99, 0x99));
+        border.getStyles().put("padding", 0);
+    }
+
     @Override
     public void install(Component component) {
         validateComponentType(component, MenuPopup.class);
 
         super.install(component);
 
-        // TODO
+        MenuPopup menuPopup = (MenuPopup)component;
+        menuPopup.getMenuPopupListeners().add(this);
+
+        Menu menu = menuPopup.getMenu();
+        if (menu != null) {
+            menu.getMenuItemPressListeners().add(menuItemPressListener);
+        }
+
+        border.setContent(menu);
+        menuPopup.setContent(border);
     }
 
     @Override
     public void uninstall() {
-        // TODO
+        MenuPopup menuPopup = (MenuPopup)getComponent();
+        menuPopup.getMenuPopupListeners().remove(this);
+
+        Menu menu = menuPopup.getMenu();
+        if (menu != null) {
+            menu.getMenuItemPressListeners().remove(menuItemPressListener);
+        }
+
+        border.setContent(null);
+        menuPopup.setContent(null);
 
         super.uninstall();
     }
 
-    public int getPreferredWidth(int height) {
-        // TODO Auto-generated method stub
-        return 0;
+    @Override
+    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyPressed(keyCode, keyLocation);
+
+        if (keyCode == Keyboard.KeyCode.ESCAPE) {
+            MenuPopup menuPopup = (MenuPopup)getComponent();
+            Component affiliate = menuPopup.getAffiliate();
+            if (affiliate != null) {
+                affiliate.requestFocus();
+            }
+
+            menuPopup.close();
+        }
+
+        return consumed;
     }
 
-    public int getPreferredHeight(int width) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+    @Override
+    public void focusHostChanged(Window window) {
+        if (!window.isFocusHost()) {
+            Component focusedComponent = Component.getFocusedComponent();
 
-    public Dimensions getPreferredSize() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void layout() {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void paint(Graphics2D graphics) {
-        // TODO Auto-generated method stub
-
+            if (focusedComponent != null
+                && !window.isOwningAncestorOf(focusedComponent.getWindow())) {
+                window.close();
+            }
+        }
     }
 
     public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
-        // TODO?
+        if (previousMenu != null) {
+            previousMenu.getMenuItemPressListeners().remove(menuItemPressListener);
+        }
+
+        Menu menu = menuPopup.getMenu();
+        if (menu != null) {
+            menu.getMenuItemPressListeners().add(menuItemPressListener);
+        }
+
+        border.setContent(menu);
     }
 }

@@ -122,6 +122,7 @@ public class WindowSkin extends ContainerSkin
         }
     }
 
+    @Override
     public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
         // Perform any action defined in the global action map for this keystroke
         Keyboard.KeyStroke keyStroke = new Keyboard.KeyStroke(keyCode, Keyboard.getModifiers());

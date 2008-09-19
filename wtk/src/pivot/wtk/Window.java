@@ -349,9 +349,6 @@ public class Window extends Container {
             // Add this as child of display
             display.add(this);
 
-            // Show the window
-            setDisplayable(true);
-
             // Notify listeners
             windowStateListeners.windowOpened(this);
 
@@ -389,23 +386,15 @@ public class Window extends Container {
 
         // Add this to the owner's owned window list
         owner.ownedWindows.add(this);
-
-        // Set the owner
         this.owner = owner;
 
         // Open the window
         open(owner.getDisplay());
 
-        // Did the state listeners allow us to open?
-        if (isOpen()) {
-            // Ensure that the window's owner tree is visible
-            Window rootOwner = getRootOwner();
-            rootOwner.setDisplayable(true);
-        } else {
-            // Remove this from the owner's owned window list
+        if (!isOpen()) {
+            // A preview listener prevented the window from opening; remove
+            // this from the owner's owned window list
             owner.ownedWindows.remove(this);
-
-            // Clear the owner
             this.owner = null;
         }
     }
@@ -433,10 +422,6 @@ public class Window extends Container {
                 setActiveWindow(null);
             }
 
-            if (isFocusHost()) {
-                clearFocus();
-            }
-
             // Close all owned windows (create a copy of the owned window
             // list so owned windows can remove themselves from the list
             // without interrupting the iteration)
@@ -451,9 +436,6 @@ public class Window extends Container {
 
             // Clear the owner
             owner = null;
-
-            // Hide the window
-            setDisplayable(false);
 
             // Detach from display
             Display display = getDisplay();
@@ -916,8 +898,7 @@ public class Window extends Container {
         if (isEnabled()) {
             // Bring this window to the front
             moveToFront();
-        }
-        else {
+        } else {
             ApplicationContext.beep();
 
             // Bring the window's owner tree to the front
