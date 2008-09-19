@@ -94,8 +94,9 @@ public class Popup extends Window {
 
     @Override
     public void close() {
-        affiliate = null;
-
-        super.close();
+        if (!isClosed()) {
+            affiliate = null;
+            super.close();
+        }
     }
 }

@@ -83,10 +83,23 @@ public class Menu extends Container {
         }
 
         public void setMenu(Menu menu) {
+            if (menu.getItem() != null) {
+                throw new IllegalArgumentException("menu already belongs to an item.");
+            }
+
             Menu previousMenu = this.menu;
 
             if (previousMenu != menu) {
+                if (previousMenu != null) {
+                    previousMenu.setItem(null);
+                }
+
+                if (menu != null) {
+                    menu.setItem(this);
+                }
+
                 this.menu = menu;
+
                 itemListeners.menuChanged(this, previousMenu);
             }
         }
@@ -96,6 +109,7 @@ public class Menu extends Container {
             throw new UnsupportedOperationException("Menu items can't be tri-state.");
         }
 
+        @Override
         public void press() {
             super.press();
 
@@ -103,9 +117,13 @@ public class Menu extends Container {
                 setSelected(getGroup() == null ? !isSelected() : true);
             }
 
-            if (section != null
-                && section.menu != null) {
-                section.menu.menuItemListeners.itemPressed(this);
+            Item item = this;
+
+            while (item != null
+                && item.section != null
+                && item.section.menu != null) {
+                item.section.menu.menuItemListeners.itemPressed(this);
+                item = item.section.menu.item;
             }
         }
 
@@ -327,6 +345,7 @@ public class Menu extends Container {
         }
     }
 
+    private Item item = null;
     private ArrayList<Section> sections = new ArrayList<Section>();
     private SectionSequence sectionSequence = new SectionSequence();
 
@@ -337,6 +356,14 @@ public class Menu extends Container {
         installSkin(Menu.class);
     }
 
+    public Item getItem() {
+        return item;
+    }
+
+    private void setItem(Item item) {
+        this.item = item;
+    }
+
     public SectionSequence getSections() {
         return sectionSequence;
     }
@@ -345,7 +372,7 @@ public class Menu extends Container {
         return menuListeners;
     }
 
-    public ListenerList<MenuItemPressListener> getMenuItemListeners() {
+    public ListenerList<MenuItemPressListener> getMenuItemPressListeners() {
         return menuItemListeners;
     }
 }

@@ -246,7 +246,7 @@ public class WTKXSerializer implements Serializer {
                                 // The element represents a typed object
                                 String namespaceURI = reader.getNamespaceURI();
                                 if (namespaceURI == null) {
-                                    throw new SerializationException("No namespace specified for "
+                                    throw new SerializationException("No XML namespace specified for "
                                         + localName + " tag.");
                                 }
 

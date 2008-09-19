@@ -142,7 +142,7 @@ public class MenuItemDataRenderer extends FlowPane implements Button.DataRendere
 
         Object color;
         if (button.isEnabled()) {
-            if (button.isFocused()) {
+            if (highlighted) {
                 color = menu.getStyles().get("highlightColor");
             } else {
                 color = menu.getStyles().get("color");

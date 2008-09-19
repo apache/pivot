@@ -16,6 +16,8 @@
 package pivot.wtk.test;
 
 import pivot.collections.Dictionary;
+import pivot.wtk.Action;
+import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
@@ -27,6 +29,16 @@ public class MenuTest implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
+        new Action("testAction") {
+            public String getDescription() {
+                return "Test Action";
+            }
+
+            public void perform() {
+                Alert.alert("Test action performed.", window);
+            }
+        };
+
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("menu_test.wtkx")));
         window.setTitle("Menu Test");

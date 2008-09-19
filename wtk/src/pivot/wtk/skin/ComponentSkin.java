@@ -133,7 +133,8 @@ public abstract class ComponentSkin implements Skin, ComponentStateListener {
     public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        if (keyCode == Keyboard.KeyCode.TAB) {
+        if (keyCode == Keyboard.KeyCode.TAB
+            && getComponent().isFocused()) {
             Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                 Direction.BACKWARD : Direction.FORWARD;
 

@@ -796,10 +796,10 @@ public class ListButtonSkin extends ButtonSkin
             if (listButton.getListData().getLength() > 0) {
                 // Determine the popup's location and preferred size, relative
                 // to the button
-                Window window = button.getWindow();
+                Window window = listButton.getWindow();
 
                 if (window != null) {
-                    Display display = button.getWindow().getDisplay();
+                    Display display = listButton.getWindow().getDisplay();
                     Point buttonLocation = listButton.mapPointToAncestor(display, 0, 0);
 
                     // Ensure that the popup remains within the bounds of the display

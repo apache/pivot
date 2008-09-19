@@ -21,5 +21,10 @@ package pivot.wtk;
  * @author gbrown
  */
 public interface MenuItemPressListener {
+    /**
+     * Called when a descendant item of this menu has been pressed.
+     *
+     * @param menuItem
+     */
     public void itemPressed(Menu.Item menuItem);
 }
