@@ -37,20 +37,21 @@ public class TabPane extends Container {
      * @author gbrown
      */
     protected static class TabPaneAttributes extends Attributes {
-        private String label = null;
+        private String name = null;
         private Image icon = null;
-        public String getLabel() {
-            return label;
+
+        public String getName() {
+            return name;
         }
 
-        public void setLabel(String label) {
-            String previousLabel = this.label;
-            this.label = label;
+        public void setName(String name) {
+            String previousName = this.name;
+            this.name = name;
 
             Component component = getComponent();
             TabPane tabPane = (TabPane)component.getParent();
             if (tabPane != null) {
-                tabPane.tabPaneAttributeListeners.labelChanged(tabPane, component, previousLabel);
+                tabPane.tabPaneAttributeListeners.nameChanged(tabPane, component, previousName);
             }
         }
 
@@ -168,18 +169,17 @@ public class TabPane extends Container {
 
     private static class TabPaneAttributeListenerList extends ListenerList<TabPaneAttributeListener>
         implements TabPaneAttributeListener {
+        public void nameChanged(TabPane tabPane, Component component, String previousName) {
+            for (TabPaneAttributeListener listener : this) {
+                listener.nameChanged(tabPane, component, previousName);
+            }
+        }
+
         public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
             for (TabPaneAttributeListener listener : this) {
                 listener.iconChanged(tabPane, component, previousIcon);
             }
         }
-
-        public void labelChanged(TabPane tabPane, Component component, String previousLabel) {
-            for (TabPaneAttributeListener listener : this) {
-                listener.labelChanged(tabPane, component, previousLabel);
-            }
-        }
-
     }
 
     private Orientation tabOrientation = Orientation.HORIZONTAL;
@@ -361,18 +361,18 @@ public class TabPane extends Container {
         return tabPaneAttributeListeners;
     }
 
-    public static String getLabel(Component component) {
+    public static String getName(Component component) {
         TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
-        return (tabPaneAttributes == null) ? null : tabPaneAttributes.getLabel();
+        return (tabPaneAttributes == null) ? null : tabPaneAttributes.getName();
     }
 
-    public static void setLabel(Component component, String label) {
+    public static void setName(Component component, String name) {
         TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
         if (tabPaneAttributes == null) {
             throw new IllegalStateException();
         }
 
-        tabPaneAttributes.setLabel(label);
+        tabPaneAttributes.setName(name);
     }
 
     public static Image getIcon(Component component) {

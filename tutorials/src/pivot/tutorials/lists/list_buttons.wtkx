@@ -27,9 +27,9 @@ limitations under the License.
                 <Label text="Picture:"/>
                 <ListButton wtkx:id="listButton">
                     <listData>
-                        <item label="IMG_0725_2.jpg" imageName="pivot/tutorials/IMG_0725_2.jpg"/>
-                        <item label="IMG_0735_2.jpg" imageName="pivot/tutorials/IMG_0735_2.jpg"/>
-                        <item label="IMG_0767_2.jpg" imageName="pivot/tutorials/IMG_0767_2.jpg"/>
+                        <item text="IMG_0725_2.jpg" imageName="pivot/tutorials/IMG_0725_2.jpg"/>
+                        <item text="IMG_0735_2.jpg" imageName="pivot/tutorials/IMG_0735_2.jpg"/>
+                        <item text="IMG_0767_2.jpg" imageName="pivot/tutorials/IMG_0767_2.jpg"/>
                     </listData>
                 </ListButton>
             </FlowPane>

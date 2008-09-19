@@ -39,21 +39,21 @@ public class Form extends Container {
      * @author gbrown
      */
     protected static class FormAttributes extends Attributes {
-        private String label = null;
+        private String name = null;
         private Flag flag = null;
 
-        public String getLabel() {
-            return label;
+        public String getName() {
+            return name;
         }
 
-        public void setLabel(String label) {
-            String previousLabel = this.label;
-            this.label = label;
+        public void setName(String name) {
+            String previousName = this.name;
+            this.name = name;
 
             Component component = getComponent();
             Form form = (Form)component.getParent();
             if (form != null) {
-                form.formAttributeListeners.labelChanged(form, component, previousLabel);
+                form.formAttributeListeners.nameChanged(form, component, previousName);
             }
         }
 
@@ -231,9 +231,9 @@ public class Form extends Container {
      */
     private static class FormAttributeListenerList extends ListenerList<FormAttributeListener>
         implements FormAttributeListener {
-        public void labelChanged(Form form, Component component, String previousLabel) {
+        public void nameChanged(Form form, Component component, String previousName) {
             for (FormAttributeListener listener : this) {
-                listener.labelChanged(form, component, previousLabel);
+                listener.nameChanged(form, component, previousName);
             }
         }
 
@@ -385,18 +385,18 @@ public class Form extends Container {
         return formAttributeListeners;
     }
 
-    public static String getLabel(Component component) {
+    public static String getName(Component component) {
         FormAttributes formAttributes = (FormAttributes)component.getAttributes();
-        return (formAttributes == null) ? null : formAttributes.getLabel();
+        return (formAttributes == null) ? null : formAttributes.getName();
     }
 
-    public static void setLabel(Component component, String label) {
+    public static void setName(Component component, String name) {
         FormAttributes formAttributes = (FormAttributes)component.getAttributes();
         if (formAttributes == null) {
             throw new IllegalStateException();
         }
 
-        formAttributes.setLabel(label);
+        formAttributes.setName(name);
     }
 
     public static Flag getFlag(Component component) {

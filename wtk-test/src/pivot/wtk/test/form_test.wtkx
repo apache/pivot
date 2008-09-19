@@ -18,7 +18,7 @@ limitations under the License.
 <Form styles="{rightAlignLabels:true, fieldAlignment:'justify'}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <fields>
-        <Label Form.label="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
+        <Label Form.name="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
             styles="{wrapText:true}"/>
     </fields>
 </Form>

@@ -20,14 +20,14 @@ limitations under the License.
     <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
         <ImageView image="pivot/tutorials/IMG_0735_2.jpg"/>
         <LinkButton wtkx:id="nextButton">
-            <buttonData label="Next" icon="@resultset_next.png"/>
+            <buttonData text="Next" icon="@resultset_next.png"/>
         </LinkButton>
     </FlowPane>
 
     <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
         <ImageView image="pivot/tutorials/IMG_0767_2.jpg"/>
         <LinkButton wtkx:id="previousButton">
-            <buttonData label="Previous" icon="@resultset_previous.png"/>
+            <buttonData text="Previous" icon="@resultset_previous.png"/>
         </LinkButton>
     </FlowPane>
 </CardPane>

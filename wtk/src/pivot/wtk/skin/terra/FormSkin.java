@@ -65,7 +65,7 @@ public class FormSkin extends ContainerSkin
 
         // Initialize for existing fields
         for (int i = 0, n = form.getLength(); i < n; i++) {
-            updateLabel(i);
+            updateName(i);
             updateFlag(i);
         }
     }
@@ -351,7 +351,7 @@ public class FormSkin extends ContainerSkin
         Label label = new Label();
         labels.insert(label, index);
         form.add(label);
-        updateLabel(index);
+        updateName(index);
 
         // Create the image view
         ImageView flagImageView = new ImageView();
@@ -379,21 +379,21 @@ public class FormSkin extends ContainerSkin
     }
 
     // Form attribute events
-    public void labelChanged(Form form, Component component, String previousLabel) {
-        updateLabel(form.getFields().indexOf(component));
+    public void nameChanged(Form form, Component component, String previousName) {
+        updateName(form.getFields().indexOf(component));
     }
 
     public void flagChanged(Form form, Component component, Form.Flag previousFlag) {
         updateFlag(form.getFields().indexOf(component));
     }
 
-    private void updateLabel(int index) {
+    private void updateName(int index) {
         Form form = (Form)getComponent();
         Component field = form.getFields().get(index);
 
         Label label = labels.get(index);
-        String labelText = Form.getLabel(field);
-        label.setText((labelText == null) ? "" : labelText + ":");
+        String name = Form.getName(field);
+        label.setText((name == null) ? "" : name + ":");
     }
 
     private void updateFlag(int index) {

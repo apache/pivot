@@ -29,10 +29,11 @@
         <delete dir="${doc}"/>
         <javadoc packagenames="pivot.*" destdir="${doc}" author="true" version="true" use="true">
             <classpath>
-                <pathelement location="${wtk}/lib/stax-api-1.0.jar"/>
-                <pathelement location="${wtk}/lib/stax-1.2.0.jar"/>
                 <pathelement location="${charts}/lib/jcommon-1.0.12.jar"/>
                 <pathelement location="${charts}/lib/jfreechart-1.0.9.jar"/>
+                <pathelement location="${web}/lib/servlet-api.jar"/>
+                <pathelement location="${wtk}/lib/stax-api-1.0.jar"/>
+                <pathelement location="${wtk}/lib/stax-1.2.0.jar"/>
             </classpath>
             <packageset dir="${charts}/${src}" includes="**/*"/>
             <packageset dir="${core}/${src}" includes="**/*"/>

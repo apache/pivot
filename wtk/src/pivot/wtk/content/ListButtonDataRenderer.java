@@ -28,8 +28,6 @@ import pivot.wtk.HorizontalAlignment;
  */
 public class ListButtonDataRenderer extends ButtonDataRenderer {
     public ListButtonDataRenderer() {
-        super();
-
         getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
     }
 
@@ -37,12 +35,6 @@ public class ListButtonDataRenderer extends ButtonDataRenderer {
     public void render(Object data, Button button, boolean highlight) {
         if (data == null) {
             data = "";
-        } else {
-            if (data instanceof ListItem) {
-                // Translate list item to button data
-                ListItem listItem = (ListItem)data;
-                data = new ButtonData(listItem.getIcon(), listItem.getLabel());
-            }
         }
 
         super.render(data, button, highlight);

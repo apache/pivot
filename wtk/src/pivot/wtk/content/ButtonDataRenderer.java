@@ -41,11 +41,9 @@ public class ButtonDataRenderer extends FlowPane implements Button.DataRenderer 
     protected Label label = new Label();
 
     public static final String ICON_KEY = "icon";
-    public static final String LABEL_KEY = "label";
+    public static final String TEXT_KEY = "text";
 
     public ButtonDataRenderer() {
-        super();
-
         getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
@@ -98,7 +96,7 @@ public class ButtonDataRenderer extends FlowPane implements Button.DataRenderer 
                     }
                 }
 
-                text = (String)dictionary.get(LABEL_KEY);
+                text = (String)dictionary.get(TEXT_KEY);
             }
         }
 

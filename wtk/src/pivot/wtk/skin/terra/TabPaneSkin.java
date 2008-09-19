@@ -388,7 +388,7 @@ public class TabPaneSkin extends ContainerSkin
         // Add buttons for all existing tabs
         for (Component tab : tabPane.getTabs()) {
             TabButton tabButton = new TabButton(new ButtonData(TabPane.getIcon(tab),
-                TabPane.getLabel(tab)));
+                TabPane.getName(tab)));
             tabButton.setGroup(tabButtonGroup);
 
             buttonFlowPane.add(tabButton);
@@ -950,7 +950,7 @@ public class TabPaneSkin extends ContainerSkin
                 (TabButton)buttonFlowPane.get(tabIndex);
 
             tabButton.setButtonData(new ButtonData(TabPane.getIcon(tab),
-                TabPane.getLabel(tab)));
+                TabPane.getName(tab)));
         }
     }
 
@@ -985,7 +985,7 @@ public class TabPaneSkin extends ContainerSkin
         // Create a new button for the tab
         Component tab = tabPane.getTabs().get(index);
         TabButton tabButton = new TabButton(new ButtonData(TabPane.getIcon(tab),
-            TabPane.getLabel(tab)));
+            TabPane.getName(tab)));
         tabButton.setGroup(tabButtonGroup);
 
         buttonFlowPane.insert(tabButton, index);
@@ -1023,11 +1023,11 @@ public class TabPaneSkin extends ContainerSkin
     }
 
     // Tab pane attribute events
-    public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
+    public void nameChanged(TabPane tabPane, Component component, String previousName) {
         updateButtonData(component);
     }
 
-    public void labelChanged(TabPane tabPane, Component component, String previousLabel) {
+    public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
         updateButtonData(component);
     }
 

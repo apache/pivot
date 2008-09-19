@@ -42,7 +42,7 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
     protected Label label = new Label();
 
     public static final String ICON_KEY = "icon";
-    public static final String LABEL_KEY = "label";
+    public static final String TEXT_KEY = "text";
 
     public static final int DEFAULT_ICON_WIDTH = 16;
     public static final int DEFAULT_ICON_HEIGHT = 16;
@@ -106,7 +106,7 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
                         }
                     }
 
-                text = (String)dictionary.get(LABEL_KEY);
+                text = (String)dictionary.get(TEXT_KEY);
             }
         }
 

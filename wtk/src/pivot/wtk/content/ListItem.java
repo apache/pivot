@@ -24,7 +24,7 @@ import pivot.wtk.media.Image;
  */
 public class ListItem {
     private Image icon = null;
-    private String label = null;
+    private String text = null;
 
     public ListItem() {
         this(null, null);
@@ -34,13 +34,13 @@ public class ListItem {
         this(icon, null);
     }
 
-    public ListItem(String label) {
-        this(null, label);
+    public ListItem(String text) {
+        this(null, text);
     }
 
-    public ListItem(Image icon, String label) {
+    public ListItem(Image icon, String text) {
         this.icon = icon;
-        this.label = label;
+        this.text = text;
     }
 
     public Image getIcon() {
@@ -51,11 +51,11 @@ public class ListItem {
         this.icon = icon;
     }
 
-    public String getLabel() {
-        return label;
+    public String getText() {
+        return text;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setText(String text) {
+        this.text = text;
     }
 }

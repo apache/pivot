@@ -28,12 +28,12 @@ limitations under the License.
                             <view>
                                 <ListView selectMode="single" selectedIndex="0">
                                     <listData>
-                                        <item label="Red"/>
-                                        <item label="Orange"/>
-                                        <item label="Yellow"/>
-                                        <item label="Green"/>
-                                        <item label="Blue"/>
-                                        <item label="Purple"/>
+                                        <item text="Red"/>
+                                        <item text="Orange"/>
+                                        <item text="Yellow"/>
+                                        <item text="Green"/>
+                                        <item text="Blue"/>
+                                        <item text="Purple"/>
                                     </listData>
                                 </ListView>
                             </view>
@@ -50,12 +50,12 @@ limitations under the License.
                             <view>
                                 <ListView wtkx:id="shapeListView" selectMode="multi">
                                     <listData>
-                                        <item label="Circle"/>
-                                        <item label="Ellipse"/>
-                                        <item label="Square"/>
-                                        <item label="Rectangle"/>
-                                        <item label="Hexagon"/>
-                                        <item label="Octagon"/>
+                                        <item text="Circle"/>
+                                        <item text="Ellipse"/>
+                                        <item text="Square"/>
+                                        <item text="Rectangle"/>
+                                        <item text="Hexagon"/>
+                                        <item text="Octagon"/>
                                     </listData>
                                 </ListView>
                             </view>
@@ -72,12 +72,12 @@ limitations under the License.
                             <view>
                                 <ListView wtkx:id="iconListView" selectMode="multi" selectedIndex="2">
                                     <listData>
-                                        <item icon="@anchor.png" label="Anchor"/>
-                                        <item icon="@bell.png" label="Bell"/>
-                                        <item icon="@clock.png" label="Clock"/>
-                                        <item icon="@cup.png" label="Cup"/>
-                                        <item icon="@house.png" label="House"/>
-                                        <item icon="@star.png" label="Star"/>
+                                        <item icon="@anchor.png" text="Anchor"/>
+                                        <item icon="@bell.png" text="Bell"/>
+                                        <item icon="@clock.png" text="Clock"/>
+                                        <item icon="@cup.png" text="Cup"/>
+                                        <item icon="@house.png" text="House"/>
+                                        <item icon="@star.png" text="Star"/>
                                     </listData>
                                     <itemRenderer>
                                         <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
@@ -94,25 +94,25 @@ limitations under the License.
                 <Label text="List Buttons" styles="{font:'Verdana bold 11'}"/>
                 <Form>
                     <fields>
-                        <ListButton Form.label="Basic" selectedIndex="0">
+                        <ListButton Form.name="Basic" selectedIndex="0">
                             <listData>
-                                <item label="Red"/>
-                                <item label="Orange"/>
-                                <item label="Yellow"/>
-                                <item label="Green"/>
-                                <item label="Blue"/>
-                                <item label="Purple"/>
+                                <item text="Red"/>
+                                <item text="Orange"/>
+                                <item text="Yellow"/>
+                                <item text="Green"/>
+                                <item text="Blue"/>
+                                <item text="Purple"/>
                             </listData>
                         </ListButton>
 
-                        <ListButton Form.label="Image" selectedIndex="2">
+                        <ListButton Form.name="Image" selectedIndex="2">
                             <listData>
-                                <item icon="@anchor.png" label="Anchor"/>
-                                <item icon="@bell.png" label="Bell"/>
-                                <item icon="@clock.png" label="Clock"/>
-                                <item icon="@cup.png" label="Cup"/>
-                                <item icon="@house.png" label="House"/>
-                                <item icon="@star.png" label="Star"/>
+                                <item icon="@anchor.png" text="Anchor"/>
+                                <item icon="@bell.png" text="Bell"/>
+                                <item icon="@clock.png" text="Clock"/>
+                                <item icon="@cup.png" text="Cup"/>
+                                <item icon="@house.png" text="House"/>
+                                <item icon="@star.png" text="Star"/>
                             </listData>
                             <itemRenderer>
                                 <content:ListViewItemRenderer iconWidth="16" iconHeight="16"

@@ -24,6 +24,15 @@ import pivot.wtk.media.Image;
  */
 public interface TabPaneAttributeListener {
     /**
+     * Called when a tab's name attribute has changed.
+     *
+     * @param tabPane
+     * @param component
+     * @param previousName
+     */
+    public void nameChanged(TabPane tabPane, Component component, String previousName);
+
+    /**
      * Called when a tab's icon attribute has changed.
      *
      * @param tabPane
@@ -31,13 +40,4 @@ public interface TabPaneAttributeListener {
      * @param previousIcon
      */
     public void iconChanged(TabPane tabPane, Component component, Image previousIcon);
-
-    /**
-     * Called when a tab's label attribute has changed.
-     *
-     * @param tabPane
-     * @param component
-     * @param previousLabel
-     */
-    public void labelChanged(TabPane tabPane, Component component, String previousLabel);
 }

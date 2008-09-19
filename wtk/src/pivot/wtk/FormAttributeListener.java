@@ -22,16 +22,16 @@ package pivot.wtk;
  */
 public interface FormAttributeListener {
     /**
-     * Called when a component's label attribute has changed.
+     * Called when a fields's name attribute has changed.
      *
      * @param form
      * @param component
-     * @param previousLabel
+     * @param previousName
      */
-    public void labelChanged(Form form, Component component, String previousLabel);
+    public void nameChanged(Form form, Component component, String previousName);
 
     /**
-     * Called when a component's flag attribute has changed.
+     * Called when a field's flag attribute has changed.
      *
      * @param form
      * @param component

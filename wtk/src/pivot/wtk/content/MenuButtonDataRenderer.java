@@ -16,6 +16,7 @@
 package pivot.wtk.content;
 
 import pivot.wtk.Button;
+import pivot.wtk.HorizontalAlignment;
 
 /**
  * <p>Default menu button data renderer.</p>
@@ -23,12 +24,14 @@ import pivot.wtk.Button;
  * @author gbrown
  */
 public class MenuButtonDataRenderer extends ButtonDataRenderer {
+    public MenuButtonDataRenderer() {
+        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+    }
+
     @Override
     public void render(Object data, Button button, boolean highlight) {
-        if (data instanceof MenuItemData) {
-            // Translate menu item data to button data
-            MenuItemData menuItemData = (MenuItemData)data;
-            data = new ButtonData(menuItemData.getIcon(), menuItemData.getLabel());
+        if (data == null) {
+            data = "";
         }
 
         super.render(data, button, highlight);

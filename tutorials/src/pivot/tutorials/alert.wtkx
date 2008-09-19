@@ -18,13 +18,13 @@ limitations under the License.
 <FlowPane orientation="vertical"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <RadioButton group="icons" selected="true">
-        <buttonData label="Bell" icon="@bell.png"/>
+        <buttonData text="Bell" icon="@bell.png"/>
     </RadioButton>
     <RadioButton group="icons" selected="true">
-        <buttonData label="Clock" icon="@clock.png"/>
+        <buttonData text="Clock" icon="@clock.png"/>
     </RadioButton>
     <RadioButton group="icons" selected="true">
-        <buttonData label="House" icon="@house.png"/>
+        <buttonData text="House" icon="@house.png"/>
     </RadioButton>
 </FlowPane>
 

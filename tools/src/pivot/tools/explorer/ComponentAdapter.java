@@ -100,14 +100,14 @@ public class ComponentAdapter
 
 	public boolean containsKey(String key) {
 		return TreeViewNodeRenderer.ICON_KEY.equals(key) ||
-		       TreeViewNodeRenderer.LABEL_KEY.equals(key);
+		       TreeViewNodeRenderer.TEXT_KEY.equals(key);
 	}
 
 	private URL url;
 
 	public Object get(String key) {
 
-		if ( TreeViewNodeRenderer.LABEL_KEY.equals(key) ) {
+		if ( TreeViewNodeRenderer.TEXT_KEY.equals(key) ) {
 			return toString() + (component.isDisplayable()? "": " (hidden)");
 		} else if ( TreeViewNodeRenderer.ICON_KEY.equals(key) ){
 			if ( url == null ) {

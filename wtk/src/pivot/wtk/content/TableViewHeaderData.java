@@ -24,7 +24,7 @@ import pivot.wtk.media.Image;
  */
 public class TableViewHeaderData {
     private Image icon = null;
-    private String label = null;
+    private String text = null;
 
     public TableViewHeaderData() {
         this(null, null);
@@ -34,20 +34,28 @@ public class TableViewHeaderData {
         this(icon, null);
     }
 
-    public TableViewHeaderData(String label) {
-        this(null, label);
+    public TableViewHeaderData(String text) {
+        this(null, text);
     }
 
-    public TableViewHeaderData(Image icon, String label) {
+    public TableViewHeaderData(Image icon, String text) {
         this.icon = icon;
-        this.label = label;
+        this.text = text;
     }
 
     public Image getIcon() {
         return icon;
     }
 
-    public String getLabel() {
-        return label;
+    public void setIcon(Image icon) {
+        this.icon = icon;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

@@ -18,12 +18,12 @@ limitations under the License.
 <FlowPane styles="{padding:4, horizontalAlignment:'center', verticalAlignment:'center'}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <PushButton toggleButton="true">
-        <buttonData label="Anchor" icon="pivot/tutorials/anchor.png"/>
+        <buttonData text="Anchor" icon="pivot/tutorials/anchor.png"/>
     </PushButton>
     <PushButton toggleButton="true">
-        <buttonData label="Cup" icon="pivot/tutorials/cup.png"/>
+        <buttonData text="Cup" icon="pivot/tutorials/cup.png"/>
     </PushButton>
     <PushButton toggleButton="true">
-        <buttonData label="Star" icon="pivot/tutorials/star.png"/>
+        <buttonData text="Star" icon="pivot/tutorials/star.png"/>
     </PushButton>
 </FlowPane>

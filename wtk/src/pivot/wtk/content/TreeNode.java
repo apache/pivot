@@ -34,7 +34,7 @@ import pivot.wtk.media.Image;
 public class TreeNode implements List<TreeNode> {
     private Image icon = null;
     private Image expandedIcon = null;
-    private String label = null;
+    private String text = null;
 
     private ArrayList<TreeNode> nodes = new ArrayList<TreeNode>();
     private ListListenerList<TreeNode> listListeners = new ListListenerList<TreeNode>();
@@ -47,18 +47,18 @@ public class TreeNode implements List<TreeNode> {
         this(icon, null, null);
     }
 
-    public TreeNode(String label) {
-        this(null, null, label);
+    public TreeNode(String text) {
+        this(null, null, text);
     }
 
-    public TreeNode(Image icon, String label) {
-        this(icon, null, label);
+    public TreeNode(Image icon, String text) {
+        this(icon, null, text);
     }
 
-    public TreeNode(Image icon, Image expandedIcon, String label) {
+    public TreeNode(Image icon, Image expandedIcon, String text) {
         this.icon = icon;
         this.expandedIcon = expandedIcon;
-        this.label = label;
+        this.text = text;
     }
 
     public Image getIcon() {
@@ -77,12 +77,12 @@ public class TreeNode implements List<TreeNode> {
         this.expandedIcon = expandedIcon;
     }
 
-    public String getLabel() {
-        return label;
+    public String getText() {
+        return text;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int add(TreeNode treeNode) {
