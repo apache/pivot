@@ -34,6 +34,7 @@
                 <pathelement location="${web}/lib/servlet-api.jar"/>
                 <pathelement location="${wtk}/lib/stax-api-1.0.jar"/>
                 <pathelement location="${wtk}/lib/stax-1.2.0.jar"/>
+                <fileset dir="${web}/${lib}" includes="**/*.jar"/>
             </classpath>
             <packageset dir="${charts}/${src}" includes="**/*"/>
             <packageset dir="${core}/${src}" includes="**/*"/>
