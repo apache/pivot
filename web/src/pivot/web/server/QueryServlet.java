@@ -22,6 +22,7 @@ import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.Iterator;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -49,6 +50,22 @@ import pivot.util.Base64;
  */
 public abstract class QueryServlet extends HttpServlet {
     static final long serialVersionUID = -646654620936816287L;
+
+    /**
+     * The supported HTTP methods.
+     *
+     * @author tvolkert
+     */
+    protected enum Method {
+        GET,
+        POST,
+        PUT,
+        DELETE;
+
+        public static Method decode(String value) {
+            return valueOf(value.toUpperCase());
+        }
+    }
 
     /**
      * User credentials, which will be made availale if the servlet's
@@ -178,6 +195,7 @@ public abstract class QueryServlet extends HttpServlet {
     private String queryPath;
     private int port;
     private boolean secure;
+    private Method method;
 
     private HashMap<String, String> arguments = new HashMap<String, String>();
     private HashMap<String, String> requestProperties = new HashMap<String, String>();
@@ -233,6 +251,13 @@ public abstract class QueryServlet extends HttpServlet {
      */
     public boolean isSecure() {
         return secure;
+    }
+
+    /**
+     * Gets the HTTP method with which the current request was made.
+     */
+    public Method getMethod() {
+        return method;
     }
 
     /**
@@ -340,6 +365,26 @@ public abstract class QueryServlet extends HttpServlet {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Authorizes the current request, and throws a <tt>LoginException</tt> if
+     * the request is not authorized. This method will only be called if the
+     * <tt>authenticationRequired</tt> flag is set to <tt>true</tt>. Subclasses
+     * wishing to authorize the authenticated user credentials may override
+     * this method to perform that authorization. On the other hand, the
+     * <tt>authorize</tt> method of <tt>QueryServlet</tt> does nothing, so
+     * subclasses that wish to authenticate the request but not authorization
+     * it may simply not override this method.
+     * <p>
+     * This method is guaranteed to be called after the arguments and request
+     * properties have been made available.
+     *
+     * @throws LoginException
+     * Thrown if the request is not authorized
+     */
+    protected void authorize() throws LoginException {
+        // No-op
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -351,12 +396,7 @@ public abstract class QueryServlet extends HttpServlet {
 
             if (authorization == null) {
                 proceed = false;
-
-                response.setHeader("WWW-Authenticate", "BASIC realm=\""
-                    + request.getServletPath() +"\"");
-                response.setStatus(401);
-                response.setContentLength(0);
-                response.flushBuffer();
+                doUnauthorized(request, response);
             } else {
                 String encodedCredentials = authorization.substring
                     (BASIC_AUTHENTICATION_TAG.length() + 1);
@@ -391,6 +431,7 @@ public abstract class QueryServlet extends HttpServlet {
                 queryPath = request.getRequestURI();
                 port = request.getLocalPort();
                 secure = url.getProtocol().equalsIgnoreCase(HTTPS_PROTOCOL);
+                method = Method.decode(request.getMethod());
 
                 if (queryPath.startsWith(contextPath)) {
                     queryPath = queryPath.substring(contextPath.length());
@@ -428,6 +469,17 @@ public abstract class QueryServlet extends HttpServlet {
                 requestProperties.put(headerName, headerValue);
             }
 
+            if (authenticationRequired) {
+                try {
+                    authorize();
+                } catch (LoginException ex) {
+                    proceed = false;
+                    doUnauthorized(request, response);
+                }
+            }
+        }
+
+        if (proceed) {
             super.service(request, response);
         }
     }
@@ -516,6 +568,18 @@ public abstract class QueryServlet extends HttpServlet {
     protected final void doTrace(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
         doMethodNotAllowed(response);
+    }
+
+    /**
+     *
+     */
+    private void doUnauthorized(HttpServletRequest request, HttpServletResponse response)
+        throws IOException {
+        response.setHeader("WWW-Authenticate", "BASIC realm=\""
+            + request.getServletPath() +"\"");
+        response.setStatus(401);
+        response.setContentLength(0);
+        response.flushBuffer();
     }
 
     /**
