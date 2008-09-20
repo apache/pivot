@@ -28,6 +28,7 @@ import java.util.Iterator;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.serialization.JSONSerializer;
+import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
 import pivot.util.ListenerList;
 import pivot.util.concurrent.Dispatcher;
@@ -531,12 +532,18 @@ public abstract class Query<V> extends Task<V> {
             // Notify listeners that the request has been sent
             queryListeners.requestSent(this);
 
-            // Record the content length
-            bytesExpected = connection.getContentLength();
-
             // Set the response info
             status = connection.getResponseCode();
             message = connection.getResponseMessage();
+
+            // If the response was anything other than 2xx, throw an exception
+            int statusPrefix = status / 100;
+            if (statusPrefix != 2) {
+                throw new QueryException(status, message);
+            }
+
+            // Record the content length
+            bytesExpected = connection.getContentLength();
 
             // NOTE Header indexes start at 1, not 0
             int i = 1;
@@ -561,14 +568,10 @@ public abstract class Query<V> extends Task<V> {
 
             // Notify listeners that the response has been received
             queryListeners.responseReceived(this);
-        } catch (Exception exception) {
+        } catch (IOException exception) {
             throw new QueryException(exception);
-        }
-
-        // If the response was anything other than 2xx, throw an exception
-        int statusPrefix = status / 100;
-        if (statusPrefix != 2) {
-            throw new QueryException(status, message);
+        } catch (SerializationException exception) {
+            throw new QueryException(exception);
         }
 
         return value;
