@@ -510,6 +510,19 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     @Override
+    public void setSize(int width, int height) {
+        int previousWidth = getWidth();
+        int previousHeight = getHeight();
+
+        super.setSize(width, height);
+
+        if (previousWidth != width
+            || previousHeight != height) {
+            automaticSpinner.stop();
+        }
+    }
+
+    @Override
     public void install(Component component) {
         validateComponentType(component, Spinner.class);
 
@@ -637,7 +650,6 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
     protected void invalidateContent() {
         spinnerContent.invalidate();
         spinnerContent.repaint();
-        automaticSpinner.stop();
     }
 
     public Color getColor() {
