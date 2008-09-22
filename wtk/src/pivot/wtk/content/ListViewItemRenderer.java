@@ -124,7 +124,7 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
         Component.StyleDictionary listViewStyles = listView.getStyles();
 
         Component.StyleDictionary imageViewStyles = imageView.getStyles();
-        Component.StyleDictionary labelStyles = imageView.getStyles();
+        Component.StyleDictionary labelStyles = label.getStyles();
 
         imageViewStyles.put("opacity", listView.isEnabled() ? 1.0f : 0.5f);
 
