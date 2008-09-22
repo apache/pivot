@@ -1995,12 +1995,11 @@ public abstract class Component implements ConstrainedVisual {
                 // Notify the components of the state change
                 if (previousFocusedComponent != null) {
                     previousFocusedComponent.setFocused(false, temporary);
-                    previousFocusedComponent.getWindow().descendantLostFocus(previousFocusedComponent);
                 }
 
                 if (focusedComponent != null) {
                     focusedComponent.setFocused(true, temporary);
-                    focusedComponent.getWindow().descendantGainedFocus(focusedComponent);
+                    focusedComponent.getWindow().setActiveDescendant(focusedComponent);
                 }
 
                 componentClassListeners.focusedComponentChanged(previousFocusedComponent);

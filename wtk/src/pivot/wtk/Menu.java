@@ -371,6 +371,20 @@ public class Menu extends Container {
         return sectionSequence;
     }
 
+    @Override
+    public Sequence<Component> remove(int index, int count) {
+        for (int i = index, n = index + count; i < n; i++) {
+            Item item = (Item)get(i);
+
+            if (item.getSection() != null) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        // Call the base method to remove the components
+        return super.remove(index, count);
+    }
+
     public ListenerList<MenuListener> getMenuListeners() {
         return menuListeners;
     }

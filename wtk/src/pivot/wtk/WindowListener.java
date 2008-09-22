@@ -55,13 +55,6 @@ public interface WindowListener {
     public void activeChanged(Window window);
 
     /**
-     * Called when a window's focus host state has changed.
-     *
-     * @param window
-     */
-    public void focusHostChanged(Window window);
-
-    /**
      * Called when a window's maximized state has changed.
      *
      * @param window

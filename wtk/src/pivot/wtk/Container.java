@@ -439,6 +439,19 @@ public abstract class Container extends Component
     }
 
     /**
+     * Tests whether this container is an ancestor of the currently focused
+     * component.
+     *
+     * @return
+     * <tt>true</tt> if a component is focused and this container is an
+     * ancestor of the component; <tt>false</tt>, otherwise.
+     */
+    public boolean containsFocus() {
+        Component focusedComponent = getFocusedComponent();
+        return (focusedComponent != null && isAncestor(focusedComponent));
+    }
+
+    /**
      * Returns the container's context key.
      *
      * @return

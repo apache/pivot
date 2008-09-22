@@ -155,10 +155,6 @@ public class WindowSkin extends ContainerSkin
         // No-op
     }
 
-    public void focusHostChanged(Window window) {
-        // No-op
-    }
-
     public void maximizedChanged(Window window) {
         // No-op
     }

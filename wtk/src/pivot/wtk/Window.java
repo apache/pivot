@@ -113,12 +113,6 @@ public class Window extends Container {
             }
         }
 
-        public void focusHostChanged(Window window) {
-            for (WindowListener listener : this) {
-                listener.focusHostChanged(window);
-            }
-        }
-
         public void maximizedChanged(Window window) {
             for (WindowListener listener : this) {
                 listener.maximizedChanged(window);
@@ -432,10 +426,8 @@ public class Window extends Container {
             // Remove this from the owner's owned window list
             if (owner != null) {
                 owner.ownedWindows.remove(this);
+                owner = null;
             }
-
-            // Clear the owner
-            owner = null;
 
             // Detach from display
             Display display = getDisplay();
@@ -654,50 +646,20 @@ public class Window extends Container {
     }
 
     /**
-     * Determines if this window is the focus host.
-     *
-     * @return
-     * <tt>true</tt> if this window is an ancestor of the component that
-     * currently has the focus; <tt>false</tt>, otherwise.
+     * Returns the window descendant that currently has the focus.
      */
-    public boolean isFocusHost() {
-        Component focusedComponent = getFocusedComponent();
-        return (focusedComponent != null
-            && focusedComponent.getWindow() == this);
+    public Component getActiveDescendant() {
+        return activeDescendant;
     }
 
     /**
-     * Notifies the window that one of its descendants has gained the focus.
+     * Sets the window's active descendant, the descendant that currently
+     * has the focus.
      *
-     * @param previousFocusedComponent
-     * The component that previously had the focus.
+     * @param activeDescendant
      */
-    protected void descendantGainedFocus(Component previousFocusedComponent) {
-        // Maintain a reference to the focused component so we can
-        // restore it later
-        activeDescendant = getFocusedComponent();
-
-        // Notify listeners if this window's focus host state changed
-        if (previousFocusedComponent == null
-            || previousFocusedComponent.getWindow() != this) {
-            windowListeners.focusHostChanged(this);
-        }
-    }
-
-    /**
-     * Notifies the window that one of its descendants has lost the focus.
-     *
-     * @param descendant
-     * The descendant that previously had the focus.
-     */
-    protected void descendantLostFocus(Component descendant) {
-        Component focusedComponent = getFocusedComponent();
-
-        // Notify listeners if this window's focus host state changed
-        if (focusedComponent == null
-            || focusedComponent.getWindow() != this) {
-            windowListeners.focusHostChanged(this);
-        }
+    protected void setActiveDescendant(Component activeDescendant) {
+        this.activeDescendant = activeDescendant;
     }
 
     /**
@@ -793,7 +755,7 @@ public class Window extends Container {
             setActiveWindow(null);
         }
 
-        if (isFocusHost()) {
+        if (containsFocus()) {
             // Clear the focus
             clearFocus();
         }

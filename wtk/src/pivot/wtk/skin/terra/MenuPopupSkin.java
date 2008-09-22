@@ -19,6 +19,8 @@ import java.awt.Color;
 
 import pivot.wtk.Border;
 import pivot.wtk.Component;
+import pivot.wtk.ComponentClassListener;
+import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Menu;
 import pivot.wtk.MenuItemSelectionListener;
@@ -28,8 +30,13 @@ import pivot.wtk.Panorama;
 import pivot.wtk.Window;
 import pivot.wtk.skin.PopupSkin;
 
+/**
+ * <p>Menu popup skin.</p>
+ *
+ * @author gbrown
+ */
 public class MenuPopupSkin extends PopupSkin
-    implements MenuPopupListener {
+    implements MenuPopupListener, ComponentClassListener {
     private Panorama panorama;
     private Border border;
 
@@ -58,6 +65,10 @@ public class MenuPopupSkin extends PopupSkin
         MenuPopup menuPopup = (MenuPopup)component;
         menuPopup.getMenuPopupListeners().add(this);
 
+        if (menuPopup.isOpen()) {
+            Component.getComponentClassListeners().add(this);
+        }
+
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
             menu.getMenuItemPressListeners().add(menuItemPressListener);
@@ -71,6 +82,10 @@ public class MenuPopupSkin extends PopupSkin
     public void uninstall() {
         MenuPopup menuPopup = (MenuPopup)getComponent();
         menuPopup.getMenuPopupListeners().remove(this);
+
+        if (menuPopup.isOpen()) {
+            Component.getComponentClassListeners().remove(this);
+        }
 
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
@@ -101,15 +116,15 @@ public class MenuPopupSkin extends PopupSkin
     }
 
     @Override
-    public void focusHostChanged(Window window) {
-        if (!window.isFocusHost()) {
-            Component focusedComponent = Component.getFocusedComponent();
+    public void windowOpened(Window window) {
+        super.windowOpened(window);
+        Component.getComponentClassListeners().add(this);
+    }
 
-            if (focusedComponent != null
-                && !window.isOwningAncestorOf(focusedComponent.getWindow())) {
-                window.close();
-            }
-        }
+    @Override
+    public void windowClosed(Window window, Display display) {
+        super.windowClosed(window, display);
+        Component.getComponentClassListeners().remove(this);
     }
 
     public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
@@ -123,5 +138,20 @@ public class MenuPopupSkin extends PopupSkin
         }
 
         border.setContent(menu);
+    }
+
+    public void focusedComponentChanged(Component previousFocusedComponent) {
+        MenuPopup menuPopup = (MenuPopup)getComponent();
+
+        if (!menuPopup.containsFocus()) {
+            Component affiliate = menuPopup.getAffiliate();
+            Component focusedComponent = Component.getFocusedComponent();
+
+            if (focusedComponent != null
+                && focusedComponent != affiliate
+                && !menuPopup.isOwningAncestorOf(focusedComponent.getWindow())) {
+                menuPopup.close();
+            }
+        }
     }
 }

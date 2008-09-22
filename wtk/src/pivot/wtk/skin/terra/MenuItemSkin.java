@@ -20,10 +20,14 @@ import pivot.wtk.MenuPopup;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.Window;
-import pivot.wtk.Menu.Item;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
 
+/**
+ * <p>Menu item skin.</p>
+ *
+ * @author gbrown
+ */
 public class MenuItemSkin extends ButtonSkin
     implements ButtonPressListener, ButtonStateListener, Menu.ItemListener {
     public final class CheckmarkImage extends Image {
@@ -242,13 +246,22 @@ public class MenuItemSkin extends ButtonSkin
             Menu.Item parentMenuItem = parentMenu.getItem();
             if (parentMenuItem != null) {
                 parentMenuItem.requestFocus();
+                consumed = true;
             }
 
             menuPopup.close();
         } else if (keyCode == Keyboard.KeyCode.RIGHT) {
             if (menu != null) {
-                menuItem.press();
+                if (!menuPopup.isOpen()) {
+                    menuItem.press();
+                }
+
+                menu.requestFocus();
+                consumed = true;
             }
+        } else if (keyCode == Keyboard.KeyCode.ENTER) {
+            menuItem.press();
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.TAB) {
             // No-op
         } else {
@@ -266,6 +279,7 @@ public class MenuItemSkin extends ButtonSkin
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
             menuItem.press();
+            consumed = true;
         } else {
             consumed = super.keyReleased(keyCode, keyLocation);
         }
@@ -297,15 +311,13 @@ public class MenuItemSkin extends ButtonSkin
             Window window = menuItem.getWindow();
 
             if (window != null) {
-                Display display = menuItem.getWindow().getDisplay();
+                Display display = window.getDisplay();
                 Point menuItemLocation = menuItem.mapPointToAncestor(display, getWidth(), 0);
 
                 // TODO Ensure that the popup remains within the bounds of the display
 
                 menuPopup.setLocation(menuItemLocation.x, menuItemLocation.y);
                 menuPopup.open(menuItem);
-
-                menu.requestFocus();
             }
         }
     }
@@ -318,7 +330,7 @@ public class MenuItemSkin extends ButtonSkin
         repaintComponent();
     }
 
-    public void menuChanged(Item item, Menu previousMenu) {
+    public void menuChanged(Menu.Item item, Menu previousMenu) {
         menuPopup.setMenu(item.getMenu());
         repaintComponent();
     }

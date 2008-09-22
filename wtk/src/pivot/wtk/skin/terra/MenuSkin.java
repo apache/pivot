@@ -25,6 +25,11 @@ import pivot.wtk.Menu;
 import pivot.wtk.MenuListener;
 import pivot.wtk.skin.ContainerSkin;
 
+/**
+ * <p>Menu skin.</p>
+ *
+ * @author gbrown
+ */
 public class MenuSkin extends ContainerSkin implements MenuListener {
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = Color.BLACK;

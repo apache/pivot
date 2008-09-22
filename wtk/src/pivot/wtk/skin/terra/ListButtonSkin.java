@@ -710,8 +710,6 @@ public class ListButtonSkin extends ButtonSkin
         pressed = true;
         repaintComponent();
 
-        consumed |= listViewPopup.isOpen();
-
         return consumed;
     }
 

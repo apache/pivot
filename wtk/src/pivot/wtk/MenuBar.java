@@ -21,7 +21,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
-import pivot.wtk.content.ButtonDataRenderer;
+import pivot.wtk.content.MenuBarItemDataRenderer;
 
 /**
  * <p>Component representing a horizontal menu bar.</p>
@@ -35,8 +35,19 @@ public class MenuBar extends Container {
      * @author gbrown
      */
     public static class Item extends Button {
+        private static class ItemListenerList extends ListenerList<ItemListener>
+            implements ItemListener {
+            public void menuChanged(Item item, Menu previousMenu) {
+                for (ItemListener listener : this) {
+                    listener.menuChanged(item, previousMenu);
+                }
+            }
+        }
+
         private MenuBar menuBar = null;
         private Menu menu = null;
+
+        private ItemListenerList itemListeners = new ItemListenerList();
 
         public Item() {
             this(null);
@@ -45,7 +56,7 @@ public class MenuBar extends Container {
         public Item(Object buttonData) {
             super(buttonData);
 
-            setDataRenderer(new ButtonDataRenderer());
+            setDataRenderer(new MenuBarItemDataRenderer());
             installSkin(Item.class);
         }
 
@@ -72,18 +83,26 @@ public class MenuBar extends Container {
         }
 
         public void setMenu(Menu menu) {
+            if (menu != null
+                && menu.getItem() != null) {
+                throw new IllegalArgumentException("menu already belongs to an item.");
+            }
+
             Menu previousMenu = this.menu;
 
             if (previousMenu != menu) {
                 this.menu = menu;
-
-                // TODO Fire event
+                itemListeners.menuChanged(this, previousMenu);
             }
         }
 
         @Override
         public void setToggleButton(boolean toggleButton) {
             throw new UnsupportedOperationException("Menu bar items cannot be toggle buttons.");
+        }
+
+        public ListenerList<ItemListener> getItemListeners() {
+            return itemListeners;
         }
     }
 
@@ -110,7 +129,15 @@ public class MenuBar extends Container {
         }
 
         public void insert(Item item, int index) {
-            // TODO
+            if (item.getMenuBar() != null) {
+                throw new IllegalArgumentException("item already has a menu bar.");
+            }
+
+            MenuBar.this.add(item);
+            items.insert(item, index);
+            item.setMenuBar(MenuBar.this);
+
+            menuBarListeners.itemInserted(MenuBar.this, index);
         }
 
         public Item update(int index, Item item) {
@@ -127,8 +154,17 @@ public class MenuBar extends Container {
         }
 
         public Sequence<Item> remove(int index, int count) {
-            // TODO
-            return null;
+            Sequence<Item> removed = items.remove(index, count);
+
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                Item item = removed.get(i);
+                item.setMenuBar(null);
+                MenuBar.this.remove(item);
+            }
+
+            menuBarListeners.itemsRemoved(MenuBar.this, index, count);
+
+            return removed;
         }
 
         public Item get(int index) {
@@ -148,8 +184,33 @@ public class MenuBar extends Container {
         }
     }
 
+    private class MenuBarListenerList extends ListenerList<MenuBarListener>
+        implements MenuBarListener {
+        public void itemInserted(MenuBar menuBar, int index) {
+            for (MenuBarListener listener : this) {
+                listener.itemInserted(menuBar, index);
+            }
+        }
+
+        public void itemsRemoved(MenuBar menuBar, int index, int count) {
+            for (MenuBarListener listener : this) {
+                listener.itemsRemoved(menuBar, index, count);
+            }
+        }
+
+        public void activeChanged(MenuBar menuBar) {
+            for (MenuBarListener listener : this) {
+                listener.activeChanged(menuBar);
+            }
+        }
+    }
+
     private ArrayList<Item> items = new ArrayList<Item>();
     private ItemSequence itemSequence = new ItemSequence();
+
+    private boolean active = false;
+
+    private MenuBarListenerList menuBarListeners = new MenuBarListenerList();
 
     public MenuBar() {
         installSkin(MenuBar.class);
@@ -159,8 +220,32 @@ public class MenuBar extends Container {
         return itemSequence;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        if (this.active != active) {
+            this.active = active;
+            menuBarListeners.activeChanged(this);
+        }
+    }
+
+    @Override
+    public Sequence<Component> remove(int index, int count) {
+        for (int i = index, n = index + count; i < n; i++) {
+            Item item = (Item)get(i);
+
+            if (item.getMenuBar() != null) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        // Call the base method to remove the components
+        return super.remove(index, count);
+    }
+
     public ListenerList<MenuBarListener> getMenuBarListeners() {
-        // TODO
-        return null;
+        return menuBarListeners;
     }
 }

@@ -19,15 +19,20 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Action;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Display;
+import pivot.wtk.Label;
 import pivot.wtk.Menu;
+import pivot.wtk.MenuBar;
 import pivot.wtk.MenuPopup;
 import pivot.wtk.Mouse;
+import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
 public class MenuTest implements Application {
+    private Window window = null;
     private MenuPopup menuPopup = null;
 
     public void startup(final Display display, Dictionary<String, String> properties)
@@ -43,12 +48,16 @@ public class MenuTest implements Application {
         };
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        menuPopup = new MenuPopup((Menu)wtkxSerializer.readObject(getClass().getResource("menu_test.wtkx")));
+        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("menu_test.wtkx")));
+        final MenuBar menuBar = (MenuBar)wtkxSerializer.getObjectByName("menuBar");
+        Label label = (Label)wtkxSerializer.getObjectByName("label");
 
-        display.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
+        menuPopup = new MenuPopup((Menu)wtkxSerializer.readObject(getClass().getResource("menu_popup.wtkx")));
+
+        label.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
             public void mouseDown(Component component, Mouse.Button button, int x, int y) {
                 if (button == Mouse.Button.RIGHT) {
-                    menuPopup.open(display, x, y);
+                    menuPopup.open(display, component.mapPointToAncestor(display, x, y));
                 }
             }
 
@@ -58,10 +67,19 @@ public class MenuTest implements Application {
             public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             }
         });
+
+        window.setMaximized(true);
+        window.open(display);
+
+        ApplicationContext.queueCallback(new Runnable() {
+            public void run() {
+                menuBar.requestFocus();
+            }
+        });
     }
 
     public boolean shutdown(boolean optional) {
-        menuPopup.close();
+        window.close();
         return true;
     }
 

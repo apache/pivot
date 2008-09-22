@@ -36,7 +36,6 @@ import pivot.wtk.RadioButton;
 import pivot.wtk.Rollup;
 import pivot.wtk.ScrollBar;
 import pivot.wtk.ScrollPane;
-import pivot.wtk.Separator;
 import pivot.wtk.Spinner;
 import pivot.wtk.SplitPane;
 import pivot.wtk.TableViewHeader;
@@ -78,7 +77,6 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Rollup.class, RollupSkin.class);
         componentSkinMap.put(ScrollBar.class, ScrollBarSkin.class);
         componentSkinMap.put(ScrollPane.Corner.class, ScrollPaneCornerSkin.class);
-        componentSkinMap.put(Separator.class, SeparatorSkin.class);
         componentSkinMap.put(Spinner.class, SpinnerSkin.class);
         componentSkinMap.put(SplitPane.class, SplitPaneSkin.class);
         componentSkinMap.put(TableViewHeader.class, TableViewHeaderSkin.class);

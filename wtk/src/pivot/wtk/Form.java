@@ -90,7 +90,22 @@ public class Form extends Container {
         }
 
         public void insert(Component field, int index) {
-            insertField(field, index);
+            if (field == null) {
+                throw new IllegalArgumentException("field is null.");
+            }
+
+            if (field.getParent() != null) {
+                throw new IllegalArgumentException("Field component already has a parent.");
+            }
+
+            // Add the field to the component sequence
+            Form.this.add(field);
+            fields.insert(field, index);
+
+            // Attach the attributes
+            field.setAttributes(new FormAttributes());
+
+            formListeners.fieldInserted(Form.this, index);
         }
 
         public Component update(int index, Component field) {
@@ -107,7 +122,23 @@ public class Form extends Container {
         }
 
         public Sequence<Component> remove(int index, int count) {
-            return removeFields(index, count);
+            // Remove the fields from the field list
+            Sequence<Component> removed = fields.remove(index, count);
+
+            // Detach the attributes
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                removed.get(i).setAttributes(null);
+            }
+
+            formListeners.fieldsRemoved(Form.this, index, removed);
+
+            // Remove the fields from the component list
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                Component field = removed.get(i);
+                Form.this.remove(field);
+            }
+
+            return removed;
         }
 
         public Component get(int index) {
@@ -290,66 +321,6 @@ public class Form extends Container {
         }
 
         return count;
-    }
-
-    /**
-     * Inserts a field into the field sequence.
-     *
-     * @param field
-     * The field to insert.
-     *
-     * @param index
-     * The insertion index.
-     */
-    protected void insertField(Component field, int index) {
-        if (field == null) {
-            throw new IllegalArgumentException("field is null.");
-        }
-
-        if (field.getParent() != null) {
-            throw new IllegalArgumentException("Field component already has a parent.");
-        }
-
-        // Add the field to the component sequence
-        add(field);
-        fields.insert(field, index);
-
-        // Attach the attributes
-        field.setAttributes(new FormAttributes());
-
-        formListeners.fieldInserted(this, index);
-    }
-
-    /**
-     * Removes fields from the field sequence.
-     *
-     * @param index
-     * The index of the first field to remove.
-     *
-     * @param count
-     * The number of fields to remove.
-     *
-     * @return
-     * An array containing the field components that were removed.
-     */
-    protected Sequence<Component> removeFields(int index, int count) {
-        // Remove the fields from the field list
-        Sequence<Component> removed = fields.remove(index, count);
-
-        // Detach the attributes
-        for (int i = 0, n = removed.getLength(); i < n; i++) {
-            removed.get(i).setAttributes(null);
-        }
-
-        formListeners.fieldsRemoved(this, index, removed);
-
-        // Remove the fields from the component list
-        for (int i = 0, n = removed.getLength(); i < n; i++) {
-            Component field = removed.get(i);
-            remove(field);
-        }
-
-        return removed;
     }
 
     @Override

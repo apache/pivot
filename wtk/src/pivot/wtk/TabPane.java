@@ -88,7 +88,28 @@ public class TabPane extends Container {
         }
 
         public void insert(Component tab, int index) {
-            insertTab(tab, index);
+            if (tab == null) {
+                throw new IllegalArgumentException("tab is null.");
+            }
+
+            if (tab.getParent() != null) {
+                throw new IllegalArgumentException("Tab already has a parent.");
+            }
+
+            // Add the tab to the component sequence
+            TabPane.this.add(tab);
+            tabs.insert(tab, index);
+
+            // Attach the attributes
+            tab.setAttributes(new TabPaneAttributes());
+
+            tabPaneListeners.tabInserted(TabPane.this, index);
+
+            // If the selected tab's index changed as a result of
+            // this insertion, update it
+            if (selectedIndex >= index) {
+                setSelectedIndex(selectedIndex + 1);
+            }
         }
 
         public Component update(int index, Component tab) {
@@ -105,7 +126,29 @@ public class TabPane extends Container {
         }
 
         public Sequence<Component> remove(int index, int count) {
-            return removeTabs(index, count);
+            // If the selected tab is being removed, clear the selection
+            if (selectedIndex >= index
+                && selectedIndex < index + count) {
+                setSelectedIndex(-1);
+            }
+
+            // Remove the tabs from the tab list
+            Sequence<Component> removed = tabs.remove(index, count);
+
+            // Detach the attributes
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                removed.get(i).setAttributes(null);
+            }
+
+            tabPaneListeners.tabsRemoved(TabPane.this, index, removed);
+
+            // Remove the tabs from the component list
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                Component tab = removed.get(i);
+                TabPane.this.remove(tab);
+            }
+
+            return removed;
         }
 
         public Component get(int index) {
@@ -282,57 +325,6 @@ public class TabPane extends Container {
 
             tabPaneListeners.cornerChanged(this, previousCorner);
         }
-    }
-
-    protected void insertTab(Component tab, int index) {
-        if (tab == null) {
-            throw new IllegalArgumentException("tab is null.");
-        }
-
-        if (tab.getParent() != null) {
-            throw new IllegalArgumentException("Tab already has a parent.");
-        }
-
-        // Add the tab to the component sequence
-        add(tab);
-        tabs.insert(tab, index);
-
-        // Attach the attributes
-        tab.setAttributes(new TabPaneAttributes());
-
-        tabPaneListeners.tabInserted(this, index);
-
-        // If the selected tab's index changed as a result of
-        // this insertion, update it
-        if (selectedIndex >= index) {
-            setSelectedIndex(selectedIndex + 1);
-        }
-    }
-
-    protected Sequence<Component> removeTabs(int index, int count) {
-        // If the selected tab is being removed, clear the selection
-        if (selectedIndex >= index
-            && selectedIndex < index + count) {
-            setSelectedIndex(-1);
-        }
-
-        // Remove the tabs from the tab list
-        Sequence<Component> removed = tabs.remove(index, count);
-
-        // Detach the attributes
-        for (int i = 0, n = removed.getLength(); i < n; i++) {
-            removed.get(i).setAttributes(null);
-        }
-
-        tabPaneListeners.tabsRemoved(this, index, removed);
-
-        // Remove the tabs from the component list
-        for (int i = 0, n = removed.getLength(); i < n; i++) {
-            Component tab = removed.get(i);
-            remove(tab);
-        }
-
-        return removed;
     }
 
     @Override

@@ -65,10 +65,26 @@ public class MenuPopup extends Popup {
         super.open(display);
     }
 
+    public void open(Display display, Point location) {
+        if (location == null) {
+            throw new IllegalArgumentException("location is null.");
+        }
+
+        open(display, location.x, location.y);
+    }
+
     public void open(Window owner, int x, int y) {
         // TODO Determine x, y and width, height
         setLocation(x, y);
         super.open(owner);
+    }
+
+    public void open(Window owner, Point location) {
+        if (location == null) {
+            throw new IllegalArgumentException("location is null.");
+        }
+
+        open(owner, location.x, location.y);
     }
 
     public ListenerList<MenuPopupListener> getMenuPopupListeners() {

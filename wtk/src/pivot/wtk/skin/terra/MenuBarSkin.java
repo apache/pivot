@@ -15,60 +15,232 @@
  */
 package pivot.wtk.skin.terra;
 
-import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Font;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Menu;
 import pivot.wtk.MenuBar;
 import pivot.wtk.MenuBarListener;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * TODO This class contains a MenuPopup instance?
- *
- * TODO This class will listen for key events on the menu popup and open the
- * next or previous menu when the user hits tab/shift-tab or the right/left
- * arrow keys.
+ * <p>Menu bar skin.</p>
  *
  * @author gbrown
  */
 public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
+    private Font font = new Font("Verdana", Font.PLAIN, 11);
+    private Color color = Color.BLACK;
+    private Color disabledColor = new Color(0x99, 0x99, 0x99);
+    private Color highlightColor = Color.WHITE;
+    private Color highlightBackgroundColor = new Color(0x14, 0x53, 0x8B);
+    private int spacing = 2;
+
+    public MenuBarSkin() {
+        setBackgroundColor(Color.WHITE);
+    }
+
     public void install(Component component) {
         validateComponentType(component, MenuBar.class);
 
         super.install(component);
 
-        // TODO
+        MenuBar menuBar = (MenuBar)component;
+        menuBar.getMenuBarListeners().add(this);
     }
 
     public void uninstall() {
-        // TODO
+        MenuBar menuBar = (MenuBar)getComponent();
+        menuBar.getMenuBarListeners().remove(this);
+
+        super.uninstall();
     }
 
     public int getPreferredWidth(int height) {
-        // TODO Auto-generated method stub
-        return 0;
+        int preferredWidth = 0;
+
+        MenuBar menuBar = (MenuBar)getComponent();
+        MenuBar.ItemSequence items = menuBar.getItems();
+
+        for (int i = 0, n = items.getLength(); i < n; i++) {
+            MenuBar.Item item = items.get(i);
+            preferredWidth += item.getPreferredWidth(height);
+
+            if (i > 0) {
+                preferredWidth += spacing;
+            }
+        }
+
+        return preferredWidth;
     }
 
     public int getPreferredHeight(int width) {
-        // TODO Auto-generated method stub
-        return 0;
+        int preferredHeight = 0;
+
+        MenuBar menuBar = (MenuBar)getComponent();
+        MenuBar.ItemSequence items = menuBar.getItems();
+
+        for (int i = 0, n = items.getLength(); i < n; i++) {
+            MenuBar.Item item = items.get(i);
+            preferredHeight = Math.max(item.getPreferredHeight(width), preferredHeight);
+        }
+
+        return preferredHeight;
     }
 
     public Dimensions getPreferredSize() {
-        // TODO Auto-generated method stub
-        return null;
+        int preferredWidth = 0;
+        int preferredHeight = 0;
+
+        MenuBar menuBar = (MenuBar)getComponent();
+        MenuBar.ItemSequence items = menuBar.getItems();
+
+        for (int i = 0, n = items.getLength(); i < n; i++) {
+            MenuBar.Item item = items.get(i);
+
+            preferredWidth += item.getPreferredWidth(-1);
+
+            if (i > 0) {
+                preferredWidth += spacing;
+            }
+
+            preferredHeight = Math.max(item.getPreferredHeight(-1), preferredHeight);
+        }
+
+        return new Dimensions(preferredWidth, preferredHeight);
     }
 
     public void layout() {
-        // TODO Auto-generated method stub
+        MenuBar menuBar = (MenuBar)getComponent();
 
+        int height = getHeight();
+        int itemX = 0;
+
+        for (MenuBar.Item item : menuBar.getItems()) {
+            item.setSize(item.getPreferredWidth(height), height);
+            item.setLocation(itemX, 0);
+
+            itemX += item.getWidth() + spacing;
+        }
     }
 
-    public void paint(Graphics2D graphics) {
-        // TODO Auto-generated method stub
+    public Font getFont() {
+        return font;
+    }
 
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        this.font = font;
+        invalidateComponent();
+    }
+
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(Font.decode(font));
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.color = color;
+        repaintComponent();
+    }
+
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(Color.decode(color));
+    }
+
+    public Color getDisabledColor() {
+        return disabledColor;
+    }
+
+    public void setDisabledColor(Color disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        this.disabledColor = disabledColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledColor(String disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        setDisabledColor(Color.decode(disabledColor));
+    }
+
+    public Color getHighlightColor() {
+        return highlightColor;
+    }
+
+    public void setHighlightColor(Color highlightColor) {
+        if (highlightColor == null) {
+            throw new IllegalArgumentException("highlightColor is null.");
+        }
+
+        this.highlightColor = highlightColor;
+        repaintComponent();
+    }
+
+    public final void setHighlightColor(String highlightColor) {
+        if (highlightColor == null) {
+            throw new IllegalArgumentException("highlightColor is null.");
+        }
+
+        setHighlightColor(Color.decode(highlightColor));
+    }
+
+    public Color getHighlightBackgroundColor() {
+        return highlightBackgroundColor;
+    }
+
+    public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
+        if (highlightBackgroundColor == null) {
+            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+        }
+
+        this.highlightBackgroundColor = highlightBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
+        if (highlightBackgroundColor == null) {
+            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+        }
+
+        setHighlightBackgroundColor(Color.decode(highlightBackgroundColor));
+    }
+
+    public int getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(int spacing) {
+        if (spacing < 0) {
+            throw new IllegalArgumentException("Spacing is negative.");
+        }
+
+        this.spacing = spacing;
+        invalidateComponent();
     }
 
     public void itemInserted(MenuBar menuBar, int index) {
@@ -79,9 +251,7 @@ public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
         invalidateComponent();
     }
 
-    public void itemMenuChanged(MenuBar.Item menuBarItem, Menu previousMenu) {
-        // TODO Limit to item bounds?
-
-        repaintComponent();
+    public void activeChanged(MenuBar menuBar) {
+        // No-op
     }
 }

@@ -1,4 +1,4 @@
-package pivot.wtk.skin.terra;
+package pivot.wtk.skin;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -8,7 +8,6 @@ import java.awt.geom.Line2D;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Separator;
-import pivot.wtk.skin.ComponentSkin;
 
 /**
  * <p>Spacer skin.</p>
@@ -113,6 +112,6 @@ public class SeparatorSkin extends ComponentSkin {
             throw new IllegalArgumentException("padding is null.");
         }
 
-        setThickness(padding.intValue());
+        setPadding(padding.intValue());
     }
 }

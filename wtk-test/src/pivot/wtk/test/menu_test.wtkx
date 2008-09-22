@@ -15,69 +15,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Menu xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
-    <sections>
-        <Menu.Section>
-            <Menu.Item buttonData="Menu Item 1">
-                <menu>
-                    <Menu>
-                        <sections>
-                            <Menu.Section>
-                                <Menu.Item buttonData="Menu Item 1A" action="testAction"/>
-                                <Menu.Item buttonData="Menu Item 1Ax"/>
-                                <Menu.Item buttonData="Menu Item 1B">
-                                    <menu>
-                                        <Menu>
-                                            <sections>
-                                                <Menu.Section>
-                                                    <Menu.Item buttonData="Menu Item 1Bi"/>
-                                                    <Menu.Item buttonData="Menu Item 1Bii"/>
-                                                    <Menu.Item buttonData="Menu Item 1Biii"/>
-                                                </Menu.Section>
-                                            </sections>
-                                        </Menu>
-                                    </menu>
-                                </Menu.Item>
-                                <Menu.Item buttonData="Menu Item 1C" action="testAction"/>
-                                <Menu.Item buttonData="Menu Item 1D">
-                                    <menu>
-                                        <Menu>
-                                            <sections>
-                                                <Menu.Section>
-                                                    <Menu.Item buttonData="Menu Item 1Di"/>
-                                                    <Menu.Item buttonData="Menu Item 1Dii"/>
-                                                    <Menu.Item buttonData="Menu Item 1Diii"/>
-                                                </Menu.Section>
-                                            </sections>
-                                        </Menu>
-                                    </menu>
-                                </Menu.Item>
-                            </Menu.Section>
-                        </sections>
-                    </Menu>
-                </menu>
-            </Menu.Item>
-            <Menu.Item buttonData="Menu Item 2" toggleButton="true" selected="true"/>
-        </Menu.Section>
-        <Menu.Section>
-            <Menu.Item buttonData="Menu Item 3" toggleButton="true" group="a" selected="true"/>
-            <Menu.Item buttonData="Menu Item 4" toggleButton="true" group="a" />
-            <Menu.Item buttonData="Menu Item 5" toggleButton="true" group="a" />
-        </Menu.Section>
-        <Menu.Section>
-            <Menu.Item buttonData="Menu Item 6">
-                <menu>
-                    <Menu>
-                        <sections>
-                            <Menu.Section>
-                                <Menu.Item buttonData="Menu Item 6A"/>
-                                <Menu.Item buttonData="Menu Item 6B"/>
-                            </Menu.Section>
-                        </sections>
-                    </Menu>
-                </menu>
-            </Menu.Item>
-            <Menu.Item buttonData="Menu Item 7"/>
-        </Menu.Section>
-    </sections>
-</Menu>
+<TablePane styles="{backgroundColor:'#cccac2'}"
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    <columns>
+        <TablePane.Column width="1*"/>
+    </columns>
+    <rows>
+        <TablePane.Row height="-1">
+             <wtkx:include wtkx:id="menuBar" src="menu_bar.wtkx"/>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
+             <Separator styles="{color:'#999999', padding:0}"/>
+        </TablePane.Row>
+        <TablePane.Row height="1*">
+            <Label wtkx:id="label" text="Right-click Me"
+                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+        </TablePane.Row>
+    </rows>
+</TablePane>
