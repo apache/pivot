@@ -19,6 +19,7 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
+import pivot.wtk.SortDirection;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TableViewSelectionListener;
@@ -73,7 +74,7 @@ public class FixedColumnTable implements Application {
                 TableView.ColumnSequence columns = fixedTableView.getColumns();
                 for (int i = 0, n = columns.getLength(); i < n; i++) {
                     TableView.Column column = columns.get(i);
-                    column.setSortDirection(null);
+                    column.setSortDirection((SortDirection)null);
                 }
             }
         });
@@ -85,7 +86,7 @@ public class FixedColumnTable implements Application {
                 TableView.ColumnSequence columns = primaryTableView.getColumns();
                 for (int i = 0, n = columns.getLength(); i < n; i++) {
                     TableView.Column column = columns.get(i);
-                    column.setSortDirection(null);
+                    column.setSortDirection((SortDirection)null);
                 }
             }
         });

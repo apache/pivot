@@ -322,6 +322,18 @@ public class TableView extends Component {
         }
 
         /**
+         * Sets the column's sort direction.
+         *
+         * @param sortDirection
+         * The column's sort direction, or <tt>null</tt> to specify no
+         * sort direction
+         */
+        public final void setSortDirection(String sortDirection) {
+            setSortDirection(sortDirection == null ? (SortDirection)null :
+                SortDirection.decode(sortDirection));
+        }
+
+        /**
          * Returns the column's filter.
          *
          * @return
