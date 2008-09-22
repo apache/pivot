@@ -112,16 +112,24 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
 
         // Update the image view
         imageView.setImage(icon);
-        imageView.getStyles().put("opacity", listView.isEnabled() ? 1.0f : 0.5f);
 
         // Show/hide the label
         label.setText(text);
 
-        if (text != null) {
-            // Update the label styles
-            Component.StyleDictionary labelStyles = label.getStyles();
+        renderStyles(listView, selected, highlighted, disabled);
+    }
 
-            Object labelFont = listView.getStyles().get("font");
+    protected void renderStyles(ListView listView, boolean selected,
+        boolean highlighted, boolean disabled) {
+        Component.StyleDictionary listViewStyles = listView.getStyles();
+
+        Component.StyleDictionary imageViewStyles = imageView.getStyles();
+        Component.StyleDictionary labelStyles = imageView.getStyles();
+
+        imageViewStyles.put("opacity", listView.isEnabled() ? 1.0f : 0.5f);
+
+        if (label.getText() != null) {
+            Object labelFont = listViewStyles.get("font");
             if (labelFont instanceof Font) {
                 labelStyles.put("font", labelFont);
             }
@@ -130,15 +138,15 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
             if (listView.isEnabled() && !disabled) {
                 if (selected) {
                     if (listView.isFocused()) {
-                        color = listView.getStyles().get("selectionColor");
+                        color = listViewStyles.get("selectionColor");
                     } else {
-                        color = listView.getStyles().get("inactiveSelectionColor");
+                        color = listViewStyles.get("inactiveSelectionColor");
                     }
                 } else {
-                    color = listView.getStyles().get("color");
+                    color = listViewStyles.get("color");
                 }
             } else {
-                color = listView.getStyles().get("disabledColor");
+                color = listViewStyles.get("disabledColor");
             }
 
             if (color instanceof Color) {
