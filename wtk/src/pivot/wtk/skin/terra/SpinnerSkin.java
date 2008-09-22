@@ -634,6 +634,11 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         spinnerContent.requestFocus();
     }
 
+    protected void invalidateContent() {
+        spinnerContent.invalidate();
+        spinnerContent.repaint();
+    }
+
     public Color getColor() {
         return color;
     }
@@ -796,7 +801,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
         this.font = font;
 
-        invalidateComponent();
+        invalidateContent();
     }
 
     public final void setFont(String font) {
@@ -816,12 +821,12 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
     // SpinnerListener methods
 
     public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
-        invalidateComponent();
+        invalidateContent();
     }
 
     public void itemRendererChanged(Spinner spinner,
         Spinner.ItemRenderer previousItemRenderer) {
-        invalidateComponent();
+        invalidateContent();
     }
 
     public void circularChanged(Spinner spinner) {
@@ -836,6 +841,6 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
     // SpinnerSelectionListener methods
 
     public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
-        invalidateComponent();
+        invalidateContent();
     }
 }
