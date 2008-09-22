@@ -356,6 +356,56 @@ public interface Sequence<T> {
             // Item not found
             return -(low + 1);
         }
+
+        /**
+         * Performs a linear search of a sequence for the given comparable item.
+         * See {@link #linearSearch(Sequence, Object, Comparator)}.
+         */
+        public static <T extends Comparable<? super T>> int linearSearch(Sequence<T> sequence, T item) {
+            Comparator<T> comparator = new Comparator<T>() {
+                public int compare(T t1, T t2) {
+                    return t1.compareTo(t2);
+                }
+            };
+
+            return linearSearch(sequence, item, comparator);
+        }
+
+        /**
+         * Performs a linear search of a sequence for the given item.
+         *
+         * @param sequence
+         * The sequence to search.
+         *
+         * @param item
+         * The item to search for.
+         *
+         * @param comparator
+         * Comparator that will be used to determine logical equality.
+         *
+         * @return
+         * The index of <tt>item</tt>, if it is contained in the sequence;
+         * otherwise, <tt>-1</tt>.
+         * <p>
+         * If the sequence contains multiple elements equal to the specified
+         * item, this will return the first occurrence.
+         */
+        public static <T> int linearSearch(Sequence<T> sequence, T item,
+            Comparator<T> comparator) {
+            int index = -1;
+
+            for (int i = 0, n = sequence.getLength(); i < n; i++) {
+                T current = sequence.get(i);
+
+                if (comparator.compare(current, item) == 0) {
+                    // Item found
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
+        }
     }
 
     /**
