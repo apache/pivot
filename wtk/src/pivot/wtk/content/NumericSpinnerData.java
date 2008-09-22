@@ -16,6 +16,7 @@
 package pivot.wtk.content;
 
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -25,14 +26,36 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
- * <p>Spinner data model that presents a bounded list of integers. This is a
+ * Spinner data model that presents a bounded list of integers. This is a
  * lightweight class that spoofs the actual list data (no data is stored in
- * the list).</p>
+ * the list).
+ * <p>
+ * The iterator returned by this class's <tt>iterator</tt> method is
+ * <i>fail-fast</i>: if the data is structurally modified at any time after
+ * the iterator is created, in any way except through the iterator's own
+ * remove or add methods, the iterator will throw a
+ * <tt>ConcurrentModificationException</tt>. Thus, in the face of concurrent
+ * modification, the iterator fails quickly and cleanly, rather than risking
+ * arbitrary, non-deterministic behavior at an undetermined time in the
+ * future.
+ * <p>
+ * Note that the fail-fast behavior of an iterator cannot be guaranteed
+ * as it is, generally speaking, impossible to make any hard guarantees in the
+ * presence of unsynchronized concurrent modification.  Fail-fast iterators
+ * throw <tt>ConcurrentModificationException</tt> on a best-effort basis.
+ * Therefore, it would be wrong to write a program that depended on this
+ * exception for its correctness: <i>the fail-fast behavior of iterators
+ * should be used only to detect bugs.</i>
  *
  * @author tvolkert
  */
 public class NumericSpinnerData implements List<Integer> {
     private class DataIterator implements Iterator<Integer> {
+        // Parity members to support ConcurrentModificationException check
+        private int lowerBound = NumericSpinnerData.this.lowerBound;
+        private int upperBound = NumericSpinnerData.this.upperBound;
+        private int increment = NumericSpinnerData.this.increment;
+
         private int value = lowerBound;
 
         public boolean hasNext() {
@@ -40,6 +63,12 @@ public class NumericSpinnerData implements List<Integer> {
         }
 
         public Integer next() {
+            if (lowerBound != NumericSpinnerData.this.lowerBound
+                || upperBound != NumericSpinnerData.this.upperBound
+                || increment != NumericSpinnerData.this.increment) {
+                throw new ConcurrentModificationException();
+            }
+
             if (value > upperBound) {
                 throw new NoSuchElementException();
             }
@@ -95,6 +124,33 @@ public class NumericSpinnerData implements List<Integer> {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
         this.increment = increment;
+    }
+
+    public int getLowerBound() {
+        return lowerBound;
+    }
+
+    public void setLowerBound(int lowerBound) {
+        this.lowerBound = lowerBound;
+        // TODO Notify listListeners of change
+    }
+
+    public int getUpperBound() {
+        return upperBound;
+    }
+
+    public void setUpperBound(int upperBound) {
+        this.upperBound = upperBound;
+        // TODO Notify listListeners of change
+    }
+
+    public int getIncrement() {
+        return increment;
+    }
+
+    public void setIncrement(int increment) {
+        this.increment = increment;
+        // TODO Notify listListeners of change
     }
 
     public int add(Integer item) {
