@@ -637,6 +637,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
     protected void invalidateContent() {
         spinnerContent.invalidate();
         spinnerContent.repaint();
+        automaticSpinner.stop();
     }
 
     public Color getColor() {
