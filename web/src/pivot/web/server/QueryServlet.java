@@ -208,6 +208,7 @@ public abstract class QueryServlet extends HttpServlet {
     private Serializer serializer = new JSONSerializer();
 
     private static final String BASIC_AUTHENTICATION_TAG = "Basic";
+    private static final String HTTP_PROTOCOL = "http";
     private static final String HTTPS_PROTOCOL = "https";
     private static final String URL_ENCODING = "UTF-8";
 
@@ -251,6 +252,13 @@ public abstract class QueryServlet extends HttpServlet {
      */
     public boolean isSecure() {
         return secure;
+    }
+
+    /**
+     * Returns the name of the HTTP protocol that the request is using.
+     */
+    public String getProtocol() {
+        return isSecure() ? HTTPS_PROTOCOL : HTTP_PROTOCOL;
     }
 
     /**
