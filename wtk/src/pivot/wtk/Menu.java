@@ -113,11 +113,11 @@ public class Menu extends Container {
 
         @Override
         public void press() {
-            super.press();
-
             if (isToggleButton()) {
                 setSelected(getGroup() == null ? !isSelected() : true);
             }
+
+            super.press();
 
             if (menu == null) {
                 Item item = this;

@@ -127,10 +127,12 @@ public class MenuItemDataRenderer extends FlowPane implements Button.DataRendere
         // Update the image view
         Menu.Item menuItem = (Menu.Item)button;
         Menu menu = menuItem.getSection().getMenu();
+
         int margin = (Integer)menu.getStyles().get("margin");
+        Insets padding = (Insets)getStyles().get("padding");
 
         imageView.setImage(icon);
-        imageView.setPreferredWidth(margin);
+        imageView.setPreferredWidth(margin - padding.left * 2);
         imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
 
         // Update the labels

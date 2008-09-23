@@ -593,6 +593,10 @@ public abstract class Button extends Component {
         }
     }
 
+    public static Group getGroup(String groupName) {
+        return groups.get(groupName);
+    }
+
     public ListenerList<ButtonListener> getButtonListeners() {
         return buttonListeners;
     }

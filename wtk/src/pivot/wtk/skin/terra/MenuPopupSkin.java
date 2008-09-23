@@ -28,6 +28,7 @@ import pivot.wtk.MenuPopup;
 import pivot.wtk.MenuPopupListener;
 import pivot.wtk.Panorama;
 import pivot.wtk.Window;
+import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.skin.PopupSkin;
 
 /**
@@ -40,6 +41,8 @@ public class MenuPopupSkin extends PopupSkin
     private Panorama panorama;
     private Border border;
 
+    private DropShadowDecorator dropShadowDecorator = null;
+
     private MenuItemSelectionListener menuItemPressListener = new MenuItemSelectionListener() {
         public void itemSelected(Menu.Item item) {
             MenuPopup menuPopup = (MenuPopup)getComponent();
@@ -48,11 +51,13 @@ public class MenuPopupSkin extends PopupSkin
     };
 
     public MenuPopupSkin() {
+        setBackgroundColor((Color)null);
+
         panorama = new Panorama();
         border = new Border(panorama);
 
-        // TODO Make border color styleable; inherit from parent popup?
         border.getStyles().put("borderColor", new Color(0x99, 0x99, 0x99));
+        border.getStyles().put("backgroundColor", null);
         border.getStyles().put("padding", 0);
     }
 
@@ -76,6 +81,10 @@ public class MenuPopupSkin extends PopupSkin
 
         border.setContent(menu);
         menuPopup.setContent(border);
+
+        // Attach the drop-shadow decorator
+        dropShadowDecorator = new DropShadowDecorator();
+        menuPopup.getDecorators().add(dropShadowDecorator);
     }
 
     @Override
@@ -95,7 +104,27 @@ public class MenuPopupSkin extends PopupSkin
         border.setContent(null);
         menuPopup.setContent(null);
 
+        // Detach the drop shadow decorator
+        menuPopup.getDecorators().remove(dropShadowDecorator);
+        dropShadowDecorator = null;
+
         super.uninstall();
+    }
+
+    public Color getBorderColor() {
+        return (Color)border.getStyles().get("borderColor");
+    }
+
+    public void setBorderColor(Color borderColor) {
+        border.getStyles().put("borderColor", borderColor);
+    }
+
+    public void setBorderColor(String borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
+        }
+
+        border.getStyles().put("borderColor", borderColor);
     }
 
     @Override

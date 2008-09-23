@@ -46,8 +46,6 @@ public class PushButton extends Button {
     }
 
     public void press() {
-        super.press();
-
         if (isToggleButton()) {
             // If the button is not part of a group, cycle through the
             // available states; otherwise, select the button
@@ -68,5 +66,7 @@ public class PushButton extends Button {
                 setSelected(true);
             }
         }
+
+        super.press();
     }
 }

@@ -53,6 +53,7 @@ public class MenuTest implements Application {
         Label label = (Label)wtkxSerializer.getObjectByName("label");
 
         menuPopup = new MenuPopup((Menu)wtkxSerializer.readObject(getClass().getResource("menu_popup.wtkx")));
+        menuPopup.getStyles().put("borderColor", "#00ff00");
 
         label.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
             public void mouseDown(Component component, Mouse.Button button, int x, int y) {

@@ -41,8 +41,6 @@ public class Checkbox extends Button {
     }
 
     public void press() {
-        super.press();
-
         State state = getState();
 
         if (state == State.SELECTED) {
@@ -54,6 +52,8 @@ public class Checkbox extends Button {
         else {
             setState(State.SELECTED);
         }
+
+        super.press();
     }
 
     @Override

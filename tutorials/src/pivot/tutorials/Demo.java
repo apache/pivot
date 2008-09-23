@@ -16,14 +16,17 @@
 package pivot.tutorials;
 
 import java.awt.Color;
+import java.net.URL;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.util.CalendarDate;
+import pivot.wtk.Action;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ComponentKeyListener;
@@ -37,6 +40,8 @@ import pivot.wtk.DropHandler;
 import pivot.wtk.ImageView;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
+import pivot.wtk.Menu;
+import pivot.wtk.MenuPopup;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.Popup;
@@ -268,6 +273,9 @@ public class Demo implements Application {
         }
     }
 
+    private MenuPopup menuPopup = null;
+    private ImageView menuImageView = null;
+
     private TableView sortableTableView = null;
     private TableViewHeader sortableTableViewHeader = null;
 
@@ -282,9 +290,52 @@ public class Demo implements Application {
 
     private Window window = null;
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(final Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
+
+        new Action("selectImageAction") {
+            public String getDescription() {
+                return "Select Image Action";
+            }
+
+            public void perform() {
+                Button.Group imageMenuGroup = Button.getGroup("imageMenuGroup");
+                Button selectedItem = imageMenuGroup.getSelection();
+
+                String imageName = (String)selectedItem.getUserData();
+
+                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                URL imageURL = classLoader.getResource(imageName);
+
+                // If the image has not been added to the resource cache yet,
+                // add it
+                Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+
+                if (image == null) {
+                    image = Image.load(imageURL);
+                    ApplicationContext.getResourceCache().put(imageURL, image);
+                }
+
+                // Update the image
+                menuImageView.setImage(image);
+            }
+        };
+
+        menuImageView = (ImageView)wtkxSerializer.getObjectByName("menus.imageView");
+        menuImageView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
+            public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+                if (button == Mouse.Button.RIGHT) {
+                    menuPopup.open(display, component.mapPointToAncestor(display, x, y));
+                }
+            }
+
+            public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+            }
+
+            public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            }
+        });
 
         sortableTableView = (TableView)wtkxSerializer.getObjectByName("tables.sortableTableView");
         sortableTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("tables.sortableTableViewHeader");
@@ -325,6 +376,8 @@ public class Demo implements Application {
         infoAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.infoAlertButton");
         customAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.customAlertButton");
         initializeAlertButtons();
+
+        menuPopup = new MenuPopup((Menu)wtkxSerializer.readObject("pivot/tutorials/menu_popup.wtkx"));
 
         window = new Window();
         window.setTitle("Pivot Demo");

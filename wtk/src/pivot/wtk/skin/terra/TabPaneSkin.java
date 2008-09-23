@@ -100,12 +100,12 @@ public class TabPaneSkin extends ContainerSkin
 
         @Override
         public void press() {
-            super.press();
-
             // If the tab pane is collapsible, toggle the button selection;
             // otherwise, select it
             TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
             setSelected(tabPane.isCollapsible() ? !isSelected() : true);
+
+            super.press();
         }
     }
 

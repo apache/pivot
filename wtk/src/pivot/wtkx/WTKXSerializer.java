@@ -58,7 +58,8 @@ public class WTKXSerializer implements Serializer {
         public Attribute(String prefix, String namespace, String localName, String value,
             XMLStreamReader reader) {
             if (value.length() == 0) {
-                throw new IllegalArgumentException("Attribute value is empty.");
+                throw new IllegalArgumentException("Value of \"" + localName
+                    + "\" attribute is missing.");
             }
 
             this.prefix = prefix;

@@ -186,6 +186,22 @@ public class MenuItemSkin extends ButtonSkin
         return checkmarkImage;
     }
 
+    public Color getPopupBorderColor() {
+        return (Color)menuPopup.getStyles().get("borderColor");
+    }
+
+    public void setPopupBorderColor(Color popupBorderColor) {
+        menuPopup.getStyles().put("borderColor", popupBorderColor);
+    }
+
+    public void setPopupBorderColor(String popupBorderColor) {
+        if (popupBorderColor == null) {
+            throw new IllegalArgumentException("popupBorderColor is null.");
+        }
+
+        menuPopup.getStyles().put("borderColor", popupBorderColor);
+    }
+
     @Override
     public void mouseOver() {
         super.mouseOver();

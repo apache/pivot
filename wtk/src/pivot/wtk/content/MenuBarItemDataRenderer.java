@@ -105,30 +105,40 @@ public class MenuBarItemDataRenderer extends FlowPane implements Button.DataRend
         MenuBar.Item menuBarItem = (MenuBar.Item)button;
         MenuBar menuBar = menuBarItem.getMenuBar();
 
-        imageView.setImage(icon);
-        imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
+        if (icon == null) {
+            imageView.setDisplayable(false);
+        } else {
+            imageView.setDisplayable(true);
+            imageView.setImage(icon);
+            imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
+        }
 
         // Update the label
-        Object font = menuBar.getStyles().get("font");
-        if (font instanceof Font) {
-            label.getStyles().put("font", font);
-        }
-
-        Object color;
-        if (button.isEnabled()) {
-            if (highlighted) {
-                color = menuBar.getStyles().get("highlightColor");
-            } else {
-                color = menuBar.getStyles().get("color");
-            }
+        if (text == null) {
+            label.setDisplayable(false);
         } else {
-            color = menuBar.getStyles().get("disabledColor");
-        }
+            label.setDisplayable(true);
+            Object font = menuBar.getStyles().get("font");
+            if (font instanceof Font) {
+                label.getStyles().put("font", font);
+            }
 
-        if (color instanceof Color) {
-            label.getStyles().put("color", color);
-        }
+            Object color;
+            if (button.isEnabled()) {
+                if (highlighted) {
+                    color = menuBar.getStyles().get("highlightColor");
+                } else {
+                    color = menuBar.getStyles().get("color");
+                }
+            } else {
+                color = menuBar.getStyles().get("disabledColor");
+            }
 
-        label.setText(text);
+            if (color instanceof Color) {
+                label.getStyles().put("color", color);
+            }
+
+            label.setText(text);
+        }
     }
 }

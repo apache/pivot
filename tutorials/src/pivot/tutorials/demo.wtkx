@@ -44,6 +44,10 @@ limitations under the License.
                                 <wtkx:include namespace="splitters" src="splitters.wtkx"/>
                             </Rollup>
                             <Rollup>
+                                <Label text="Menus" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                                <wtkx:include namespace="menus" src="menus.wtkx"/>
+                            </Rollup>
+                            <Rollup>
                                 <Label text="Meters" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
                                 <wtkx:include namespace="meters" src="meters.wtkx"/>
                             </Rollup>

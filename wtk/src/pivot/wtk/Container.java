@@ -256,10 +256,8 @@ public abstract class Container extends Component
 
     @Override
     public void setVisible(boolean visible) {
-        // If this container is being hidden and contains the focused
-        // component, clear the focus
         if (!visible
-            && isAncestor(getFocusedComponent())) {
+            && containsFocus()) {
             clearFocus();
         }
 
@@ -351,13 +349,9 @@ public abstract class Container extends Component
 
     @Override
     public void setEnabled(boolean enabled) {
-        if (isEnabled() != enabled) {
-            if (!enabled) {
-                // If this container contains the focused component, clear the focus
-                if (isAncestor(getFocusedComponent())) {
-                    clearFocus();
-                }
-            }
+        if (!enabled
+            && containsFocus()) {
+            clearFocus();
         }
 
         super.setEnabled(enabled);
@@ -523,6 +517,13 @@ public abstract class Container extends Component
             // Notify container listeners
             containerMouseListeners.mouseMove(this, x, y);
 
+            // Clear the mouse over component if its visibility or enabled
+            // state has changed
+            if (mouseOverComponent != null
+                && !(mouseOverComponent.isEnabled() && mouseOverComponent.isVisible())) {
+                mouseOverComponent = null;
+            }
+
             // Synthesize mouse over/out events
             Component component = getComponentAt(x, y);
 
@@ -608,6 +609,13 @@ public abstract class Container extends Component
         if (isEnabled()) {
             // Notify container listeners
             containerMouseListeners.mouseUp(this, button, x, y);
+
+            // Clear the mouse down component if its visibility or enabled
+            // state has changed
+            if (mouseDownComponent != null
+                && !(mouseDownComponent.isEnabled() && mouseDownComponent.isVisible())) {
+                mouseDownComponent = null;
+            }
 
             // Propagate event to subcomponents
             Component component = getComponentAt(x, y);

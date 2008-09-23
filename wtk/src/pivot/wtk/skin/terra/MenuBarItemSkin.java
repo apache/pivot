@@ -110,6 +110,22 @@ public class MenuBarItemSkin extends ButtonSkin
         dataRenderer.paint(graphics);
     }
 
+    public Color getPopupBorderColor() {
+        return (Color)menuPopup.getStyles().get("borderColor");
+    }
+
+    public void setPopupBorderColor(Color popupBorderColor) {
+        menuPopup.getStyles().put("borderColor", popupBorderColor);
+    }
+
+    public void setPopupBorderColor(String popupBorderColor) {
+        if (popupBorderColor == null) {
+            throw new IllegalArgumentException("popupBorderColor is null.");
+        }
+
+        menuPopup.getStyles().put("borderColor", popupBorderColor);
+    }
+
     @Override
     public void mouseOver() {
         super.mouseOver();
@@ -258,13 +274,15 @@ public class MenuBarItemSkin extends ButtonSkin
                     public void windowClosed(Window window, Display display) {
                         window.getWindowStateListeners().remove(this);
 
-                        Component focusedComponent = Component.getFocusedComponent();
-                        if (focusedComponent == null
-                            || !menuBar.isAncestor(focusedComponent)) {
-                            menuBar.setActive(false);
+                        if (menuBarItem.isFocused()) {
+                            Component.clearFocus();
+                        } else {
+                            repaintComponent();
                         }
 
-                        repaintComponent();
+                        if (!menuBar.containsFocus()) {
+                            menuBar.setActive(false);
+                        }
                     }
                 });
             }

@@ -18,7 +18,7 @@ limitations under the License.
 <Menu xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <sections>
         <Menu.Section>
-            <Menu.Item buttonData="Menu Item 1">
+            <Menu.Item buttonData="Menu Item 1" styles="{popupBorderColor:'#ff0000'}">
                 <menu>
                     <Menu>
                         <sections>
