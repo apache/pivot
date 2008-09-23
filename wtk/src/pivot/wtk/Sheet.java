@@ -15,6 +15,12 @@
  */
 package pivot.wtk;
 
+/**
+ * <p>Window class representing a "sheet". A sheet behaves like a dialog that is
+ * modal only over a window's content component.</p>
+ *
+ * @author gbrown
+ */
 public class Sheet extends Window {
     private boolean result = false;
     private SheetStateListener sheetStateListener = null;

@@ -26,6 +26,11 @@ import pivot.wtk.Sheet;
 import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.skin.WindowSkin;
 
+/**
+ * <p>Sheet skin class.</p>
+ *
+ * @author gbrown
+ */
 public class SheetSkin extends WindowSkin {
     private Color borderColor = new Color(0x99, 0x99, 0x99);
     private Insets padding = new Insets(8);

@@ -18,7 +18,7 @@ package pivot.wtk;
 /**
  * <p>Sheet state listener interface.</p>
  *
- * @author tvolkert
+ * @author gbrown
  */
 public interface SheetStateListener {
     /**
