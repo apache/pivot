@@ -22,7 +22,24 @@ limitations under the License.
                 <Menu>
                     <sections>
                         <Menu.Section>
-                            <Menu.Item buttonData="Option 1.1"/>
+                            <Menu.Item buttonData="Option 1.1">
+                                <menu>
+                                    <Menu>
+                                        <sections>
+                                            <Menu.Section>
+                                                <Menu.Item buttonData="Option 1.1.1" action="testAction"/>
+                                                <Menu.Item buttonData="Option 1.1.2"/>
+                                                <Menu.Item buttonData="Option 1.1.3"/>
+                                            </Menu.Section>
+                                            <Menu.Section>
+                                                <Menu.Item buttonData="Option 1.1.4"/>
+                                                <Menu.Item buttonData="Option 1.1.5"/>
+                                                <Menu.Item buttonData="Option 1.1.6"/>
+                                            </Menu.Section>
+                                        </sections>
+                                    </Menu>
+                                </menu>
+                            </Menu.Item>
                         </Menu.Section>
                         <Menu.Section>
                             <Menu.Item buttonData="Option 1.4"/>

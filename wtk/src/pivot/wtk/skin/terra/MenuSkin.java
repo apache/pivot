@@ -40,6 +40,7 @@ public class MenuSkin extends ContainerSkin implements MenuListener {
     private int margin = 20;
     private Color separatorColor = new Color(0x99, 0x99, 0x99);
     private int sectionSpacing = 7;
+    private boolean showKeyboardShortcuts = true;
 
     public MenuSkin() {
         setBackgroundColor(Color.WHITE);
@@ -325,6 +326,15 @@ public class MenuSkin extends ContainerSkin implements MenuListener {
         }
 
         this.sectionSpacing = sectionSpacing;
+        invalidateComponent();
+    }
+
+    public boolean getShowKeyboardShortcuts() {
+        return showKeyboardShortcuts;
+    }
+
+    public void setShowKeyboardShortcuts(boolean showKeyboardShortcuts) {
+        this.showKeyboardShortcuts = showKeyboardShortcuts;
         invalidateComponent();
     }
 

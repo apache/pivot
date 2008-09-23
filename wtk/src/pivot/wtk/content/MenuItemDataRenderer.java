@@ -112,7 +112,7 @@ public class MenuItemDataRenderer extends FlowPane implements Button.DataRendere
                     keyboardShortcut = (Keyboard.KeyStroke)keyboardShortcutValue;
                 } else {
                     if (keyboardShortcutValue instanceof String) {
-                        // TODO Parse string value
+                        keyboardShortcut = Keyboard.KeyStroke.decode((String)keyboardShortcutValue);
                     }
                 }
             }
@@ -137,7 +137,8 @@ public class MenuItemDataRenderer extends FlowPane implements Button.DataRendere
         Object font = menu.getStyles().get("font");
         if (font instanceof Font) {
             textLabel.getStyles().put("font", font);
-            keyboardShortcutLabel.getStyles().put("font", font);
+            keyboardShortcutLabel.getStyles().put("font",
+                ((Font)font).deriveFont(Font.ITALIC));
         }
 
         Object color;
@@ -158,7 +159,17 @@ public class MenuItemDataRenderer extends FlowPane implements Button.DataRendere
 
         textLabel.setText(text);
 
-        // TODO Convert keyboard shortcut to localized string
-        keyboardShortcutLabel.setText(null);
+        boolean showKeyboardShortcuts = false;
+        if (menu.getStyles().containsKey("showKeyboardShortcuts")) {
+            showKeyboardShortcuts = (Boolean)menu.getStyles().get("showKeyboardShortcuts");
+        }
+
+        if (showKeyboardShortcuts) {
+            keyboardShortcutLabel.setDisplayable(true);
+            keyboardShortcutLabel.setText(keyboardShortcut == null ?
+                null : keyboardShortcut.toString());
+        } else {
+            keyboardShortcutLabel.setDisplayable(false);
+        }
     }
 }

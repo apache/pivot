@@ -30,7 +30,7 @@ import pivot.wtk.skin.ContainerSkin;
  * @author gbrown
  */
 public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
+    private Font font = new Font("Verdana", Font.BOLD, 11);
     private Color color = Color.BLACK;
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
     private Color highlightColor = Color.WHITE;

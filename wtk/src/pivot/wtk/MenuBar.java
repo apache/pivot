@@ -227,6 +227,11 @@ public class MenuBar extends Container {
     public void setActive(boolean active) {
         if (this.active != active) {
             this.active = active;
+
+            if (!active) {
+                getWindow().setActiveDescendant(null);
+            }
+
             menuBarListeners.activeChanged(this);
         }
     }

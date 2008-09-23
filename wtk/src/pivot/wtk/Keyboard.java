@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import java.awt.event.KeyEvent;
+import java.lang.reflect.Field;
 
 /**
  * <p>Class representing the system keyboard.</p>
@@ -43,6 +44,10 @@ public final class Keyboard {
         public int getMask() {
             return 2 << ordinal();
         }
+
+        public static Modifier decode(String value) {
+            return valueOf(value.toUpperCase());
+        }
     }
 
     /**
@@ -54,7 +59,11 @@ public final class Keyboard {
         STANDARD,
         LEFT,
         RIGHT,
-        KEYPAD
+        KEYPAD;
+
+        public static KeyLocation decode(String value) {
+            return valueOf(value.toUpperCase());
+        }
     }
 
     /**
@@ -100,6 +109,58 @@ public final class Keyboard {
             // However, if Sun changes the key code values in the future,
             // this may no longer be safe.
             return keyCode << 4 | modifiers;
+        }
+
+        @Override
+        public String toString() {
+            int awtModifiers = 0x00;
+
+            if ((modifiers & Modifier.META.getMask()) == Modifier.META.getMask()) {
+                awtModifiers |= KeyEvent.META_DOWN_MASK;
+            }
+
+            if ((modifiers & Modifier.CTRL.getMask()) == Modifier.CTRL.getMask()) {
+                awtModifiers |= KeyEvent.CTRL_DOWN_MASK;
+            }
+
+            if ((modifiers & Modifier.ALT.getMask()) == Modifier.ALT.getMask()) {
+                awtModifiers |= KeyEvent.ALT_DOWN_MASK;
+            }
+
+            if ((modifiers & Modifier.SHIFT.getMask()) == Modifier.SHIFT.getMask()) {
+                awtModifiers |= KeyEvent.SHIFT_DOWN_MASK;
+            }
+
+            return KeyEvent.getModifiersExText(awtModifiers)
+                + KeyEvent.getKeyText(keyCode);
+        }
+
+        public static KeyStroke decode(String value) {
+            if (value == null) {
+                throw new IllegalArgumentException("value is null.");
+            }
+
+            int keyCode = KeyCode.UNDEFINED;
+            int modifiers = 0x00;
+
+            String[] keys = value.split("-");
+            for (int i = 0, n = keys.length; i < n; i++) {
+                if (i < n - 1) {
+                    // Modifier
+                    Modifier modifier = Modifier.decode(keys[i]);
+                    modifiers |= modifier.getMask();
+                } else {
+                    // Keycode
+                    try {
+                        Field keyCodeField = KeyCode.class.getField(keys[i].toUpperCase());
+                        keyCode = (Integer)keyCodeField.get(null);
+                    } catch(Exception exception) {
+                        throw new IllegalArgumentException(exception);
+                    }
+                }
+            }
+
+            return new KeyStroke(keyCode, modifiers);
         }
     }
 

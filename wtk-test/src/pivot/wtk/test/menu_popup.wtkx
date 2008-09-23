@@ -23,8 +23,12 @@ limitations under the License.
                     <Menu>
                         <sections>
                             <Menu.Section>
-                                <Menu.Item buttonData="Menu Item 1A" action="testAction"/>
-                                <Menu.Item buttonData="Menu Item 1Ax"/>
+                                <Menu.Item action="testAction">
+                                    <buttonData text="Menu Item 1A" keyboardShortcut="META-A"/>
+                                </Menu.Item>
+                                <Menu.Item>
+                                    <buttonData text="Menu Item 1Ax" keyboardShortcut="CTRL-ALT-X"/>
+                                </Menu.Item>
                                 <Menu.Item buttonData="Menu Item 1B">
                                     <menu>
                                         <Menu>

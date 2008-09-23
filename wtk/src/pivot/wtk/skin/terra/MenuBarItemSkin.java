@@ -25,10 +25,6 @@ import pivot.wtk.skin.ButtonSkin;
 /**
  * <p>Menu bar item skin.</p>
  *
- * TODO This class will listen for key events on the menu popup and open the
- * next or previous menu when the user hits tab/shift-tab or the right/left
- * arrow keys.
- *
  * @author gbrown
  */
 public class MenuBarItemSkin extends ButtonSkin
@@ -273,7 +269,8 @@ public class MenuBarItemSkin extends ButtonSkin
                 });
             }
         } else {
-            if (!menuPopup.containsFocus()) {
+            if (!temporary
+                && !menuPopup.containsFocus()) {
                 menuPopup.close();
             }
         }
