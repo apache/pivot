@@ -63,12 +63,16 @@ public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
         MenuBar menuBar = (MenuBar)getComponent();
         MenuBar.ItemSequence items = menuBar.getItems();
 
+        int j = 0;
         for (int i = 0, n = items.getLength(); i < n; i++) {
-            MenuBar.Item item = items.get(i);
-            preferredWidth += item.getPreferredWidth(height);
-
-            if (i > 0) {
+            if (j > 0) {
                 preferredWidth += spacing;
+            }
+
+            MenuBar.Item item = items.get(i);
+            if (item.isDisplayable()) {
+                preferredWidth += item.getPreferredWidth(height);
+                j++;
             }
         }
 
@@ -83,7 +87,9 @@ public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
 
         for (int i = 0, n = items.getLength(); i < n; i++) {
             MenuBar.Item item = items.get(i);
-            preferredHeight = Math.max(item.getPreferredHeight(width), preferredHeight);
+            if (item.isDisplayable()) {
+                preferredHeight = Math.max(item.getPreferredHeight(width), preferredHeight);
+            }
         }
 
         return preferredHeight;
@@ -96,16 +102,17 @@ public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
         MenuBar menuBar = (MenuBar)getComponent();
         MenuBar.ItemSequence items = menuBar.getItems();
 
+        int j = 0;
         for (int i = 0, n = items.getLength(); i < n; i++) {
-            MenuBar.Item item = items.get(i);
-
-            preferredWidth += item.getPreferredWidth(-1);
-
-            if (i > 0) {
+            if (j > 0) {
                 preferredWidth += spacing;
             }
 
-            preferredHeight = Math.max(item.getPreferredHeight(-1), preferredHeight);
+            MenuBar.Item item = items.get(i);
+            if (item.isDisplayable()) {
+                preferredWidth += item.getPreferredWidth(-1);
+                preferredHeight = Math.max(item.getPreferredHeight(-1), preferredHeight);
+            }
         }
 
         return new Dimensions(preferredWidth, preferredHeight);
@@ -118,10 +125,15 @@ public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
         int itemX = 0;
 
         for (MenuBar.Item item : menuBar.getItems()) {
-            item.setSize(item.getPreferredWidth(height), height);
-            item.setLocation(itemX, 0);
+            if (item.isDisplayable()) {
+                item.setVisible(true);
+                item.setSize(item.getPreferredWidth(height), height);
+                item.setLocation(itemX, 0);
 
-            itemX += item.getWidth() + spacing;
+                itemX += item.getWidth() + spacing;
+            } else {
+                item.setVisible(false);
+            }
         }
     }
 

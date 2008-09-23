@@ -17,14 +17,12 @@ package pivot.wtk.skin;
 
 import java.awt.Color;
 
-import pivot.wtk.Action;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.Display;
 import pivot.wtk.FocusTraversalPolicy;
-import pivot.wtk.Keyboard;
 import pivot.wtk.Window;
 import pivot.wtk.WindowListener;
 import pivot.wtk.WindowStateListener;
@@ -120,21 +118,6 @@ public class WindowSkin extends ContainerSkin
                 content.setVisible(false);
             }
         }
-    }
-
-    @Override
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
-        // Perform any action defined in the global action map for this keystroke
-        Keyboard.KeyStroke keyStroke = new Keyboard.KeyStroke(keyCode, Keyboard.getModifiers());
-
-        Window window = (Window)getComponent();
-        Action action = window.getActions().get(keyStroke);
-
-        if (action != null) {
-            action.perform();
-        }
-
-        return super.keyReleased(keyCode, keyLocation);
     }
 
     // WindowListener methods

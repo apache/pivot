@@ -16,27 +16,27 @@
 package pivot.wtk;
 
 /**
- * <p>Dialog state listener interface.</p>
+ * <p>Sheet state listener interface.</p>
  *
  * @author tvolkert
  */
-public interface DialogStateListener {
+public interface SheetStateListener {
     /**
-     * Called to preview a dialog close event.
+     * Called to preview a sheet close event.
      *
-     * @param dialog
+     * @param sheet
      * @param result
      *
      * @return
-     * <tt>true</tt> to allow the dialog to close; <tt>false</tt> to
+     * <tt>true</tt> to allow the sheet to close; <tt>false</tt> to
      * disallow it.
      */
-    public boolean previewDialogClose(Dialog dialog, boolean result);
+    public boolean previewSheetClose(Sheet sheet, boolean result);
 
     /**
-     * Called when a dialog has closed.
+     * Called when a sheet has closed.
      *
-     * @param dialog
+     * @param sheet
      */
-    public void dialogClosed(Dialog dialog);
+    public void sheetClosed(Sheet sheet);
 }

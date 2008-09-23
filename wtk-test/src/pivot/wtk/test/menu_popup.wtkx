@@ -49,7 +49,7 @@ limitations under the License.
                                             <sections>
                                                 <Menu.Section>
                                                     <Menu.Item buttonData="Menu Item 1Di"/>
-                                                    <Menu.Item buttonData="Menu Item 1Dii"/>
+                                                    <Menu.Item buttonData="Menu Item 1Dii" displayable="false"/>
                                                     <Menu.Item buttonData="Menu Item 1Diii"/>
                                                 </Menu.Section>
                                             </sections>

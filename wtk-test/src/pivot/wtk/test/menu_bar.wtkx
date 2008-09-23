@@ -49,6 +49,25 @@ limitations under the License.
             </menu>
         </MenuBar.Item>
 
+        <MenuBar.Item buttonData="Menu 1a" displayable="false">
+            <menu>
+                <Menu>
+                    <sections>
+                        <Menu.Section>
+                            <Menu.Item buttonData="Option 1a.1"/>
+                            <Menu.Item buttonData="Option 1a.2"/>
+                        </Menu.Section>
+                        <Menu.Section>
+                            <Menu.Item buttonData="Option 1a.3"/>
+                            <Menu.Item buttonData="Option 1a.4"/>
+                            <Menu.Item buttonData="Option 1a.5"/>
+                            <Menu.Item buttonData="Option 1a.6"/>
+                        </Menu.Section>
+                    </sections>
+                </Menu>
+            </menu>
+        </MenuBar.Item>
+
         <MenuBar.Item buttonData="Menu 2">
             <menu>
                 <Menu>

@@ -108,7 +108,8 @@ public final class Keyboard {
             // shifting by 4 bits to append the modifiers should be OK.
             // However, if Sun changes the key code values in the future,
             // this may no longer be safe.
-            return keyCode << 4 | modifiers;
+            int hashCode = keyCode << 4 | modifiers;
+            return hashCode;
         }
 
         @Override

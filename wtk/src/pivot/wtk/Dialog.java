@@ -227,15 +227,15 @@ public class Dialog extends Window {
         return modal;
     }
 
+    public boolean getResult() {
+        return result;
+    }
+
     public Window getDisabledOwner() {
         return disabledOwner;
     }
 
     public DialogStateListener getDialogStateListener() {
         return dialogStateListener;
-    }
-
-    public boolean getResult() {
-        return result;
     }
 }

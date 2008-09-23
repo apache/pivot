@@ -419,26 +419,26 @@ public abstract class ApplicationContext {
             }
 
             // Set Keyboard state
-            int modifierMask = event.getModifiersEx();
-            int modifierBitfield = 0x00;
+            int awtModifiers = event.getModifiersEx();
+            int modifiers = 0x00;
 
-            if ((modifierMask & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK) {
-                modifierBitfield |= Keyboard.Modifier.SHIFT.getMask();
+            if ((awtModifiers & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK) {
+                modifiers |= Keyboard.Modifier.SHIFT.getMask();
             }
 
-            if ((modifierMask & KeyEvent.CTRL_DOWN_MASK) == KeyEvent.CTRL_DOWN_MASK) {
-                modifierBitfield |= Keyboard.Modifier.CTRL.getMask();
+            if ((awtModifiers & KeyEvent.CTRL_DOWN_MASK) == KeyEvent.CTRL_DOWN_MASK) {
+                modifiers |= Keyboard.Modifier.CTRL.getMask();
             }
 
-            if ((modifierMask & KeyEvent.ALT_DOWN_MASK) == KeyEvent.ALT_DOWN_MASK) {
-                modifierBitfield |= Keyboard.Modifier.ALT.getMask();
+            if ((awtModifiers & KeyEvent.ALT_DOWN_MASK) == KeyEvent.ALT_DOWN_MASK) {
+                modifiers |= Keyboard.Modifier.ALT.getMask();
             }
 
-            if ((modifierMask & KeyEvent.META_DOWN_MASK) == KeyEvent.META_DOWN_MASK) {
-                modifierBitfield |= Keyboard.Modifier.META.getMask();
+            if ((awtModifiers & KeyEvent.META_DOWN_MASK) == KeyEvent.META_DOWN_MASK) {
+                modifiers |= Keyboard.Modifier.META.getMask();
             }
 
-            Keyboard.setModifiers(modifierBitfield);
+            Keyboard.setModifiers(modifiers);
 
             // Process the event
             Component focusedComponent = Component.getFocusedComponent();
@@ -450,34 +450,19 @@ public abstract class ApplicationContext {
                         focusedComponent.keyTyped(event.getKeyChar());
                     }
 
-                    // TODO What if the focused component has since changed by
-                    // virtue of the keyTyped() call? Do we operate on the new
-                    // focused component or the pointer we have in hand?
-                    if (activeWindow != null
-                        && (focusedComponent == null
-                        || activeWindow.isOwningAncestorOf(focusedComponent.getWindow()))) {
-                        // TODO Call distinct method on the active window here
-                        //activeWindow.??(event.getKeyChar());
-                    }
-
                     break;
                 }
 
                 case KeyEvent.KEY_PRESSED: {
                     boolean consumed = false;
+                    int keyCode = event.getKeyCode();
 
                     if (focusedComponent != null) {
-                        consumed = focusedComponent.keyPressed(event.getKeyCode(), keyLocation);
+                        consumed = focusedComponent.keyPressed(keyCode, keyLocation);
                     }
 
                     if (!consumed) {
-                        if (activeWindow != null
-                            && (focusedComponent == null
-                            || activeWindow.isOwningAncestorOf(focusedComponent.getWindow()))) {
-                            //activeWindow.??(event.getKeyCode(), keyLocation);
-                        }
-
-                        dragDropManager.keyPressed(event.getKeyCode(), keyLocation);
+                        dragDropManager.keyPressed(keyCode, keyLocation);
                     }
 
                     break;
@@ -485,19 +470,25 @@ public abstract class ApplicationContext {
 
                 case KeyEvent.KEY_RELEASED: {
                     boolean consumed = false;
+                    int keyCode = event.getKeyCode();
 
                     if (focusedComponent != null) {
-                        consumed = focusedComponent.keyReleased(event.getKeyCode(), keyLocation);
+                        consumed = focusedComponent.keyReleased(keyCode, keyLocation);
                     }
 
                     if (!consumed) {
-                        if (activeWindow != null
-                            && (focusedComponent == null
-                            || activeWindow.isOwningAncestorOf(focusedComponent.getWindow()))) {
-                            //activeWindow.??(event.getKeyCode(), keyLocation);
-                        }
+                        dragDropManager.keyReleased(keyCode, keyLocation);
 
-                        dragDropManager.keyReleased(event.getKeyCode(), keyLocation);
+                        if (activeWindow != null) {
+                            // Perform any action defined for this keystroke
+                            // in the active window's action dictionary
+                            Keyboard.KeyStroke keyStroke = new Keyboard.KeyStroke(keyCode,
+                                modifiers);
+                            Action action = activeWindow.getActions().get(keyStroke);
+                            if (action != null) {
+                                action.perform();
+                            }
+                        }
                     }
 
                     break;

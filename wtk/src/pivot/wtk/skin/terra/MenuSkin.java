@@ -72,8 +72,10 @@ public class MenuSkin extends ContainerSkin implements MenuListener {
             Menu.Section section = sections.get(i);
 
             for (Menu.Item item : section) {
-                preferredWidth = Math.max(item.getPreferredWidth(-1),
-                    preferredWidth);
+                if (item.isDisplayable()) {
+                    preferredWidth = Math.max(item.getPreferredWidth(-1),
+                        preferredWidth);
+                }
             }
         }
 
@@ -90,7 +92,9 @@ public class MenuSkin extends ContainerSkin implements MenuListener {
             Menu.Section section = sections.get(i);
 
             for (Menu.Item item : section) {
-                preferredHeight += item.getPreferredHeight(width);
+                if (item.isDisplayable()) {
+                    preferredHeight += item.getPreferredHeight(width);
+                }
             }
 
             if (i > 0) {
@@ -112,9 +116,11 @@ public class MenuSkin extends ContainerSkin implements MenuListener {
             Menu.Section section = sections.get(i);
 
             for (Menu.Item item : section) {
-                preferredWidth = Math.max(item.getPreferredWidth(),
-                    preferredWidth);
-                preferredHeight += item.getPreferredHeight();
+                if (item.isDisplayable()) {
+                    preferredWidth = Math.max(item.getPreferredWidth(),
+                        preferredWidth);
+                    preferredHeight += item.getPreferredHeight();
+                }
             }
 
             if (i > 0) {
@@ -136,10 +142,15 @@ public class MenuSkin extends ContainerSkin implements MenuListener {
             Menu.Section section = sections.get(i);
 
             for (Menu.Item item : section) {
-                item.setSize(width, item.getPreferredHeight(width));
-                item.setLocation(0, itemY);
+                if (item.isDisplayable()) {
+                    item.setVisible(true);
+                    item.setSize(width, item.getPreferredHeight(width));
+                    item.setLocation(0, itemY);
 
-                itemY += item.getHeight();
+                    itemY += item.getHeight();
+                } else {
+                    item.setVisible(false);
+                }
             }
 
             itemY += sectionSpacing;

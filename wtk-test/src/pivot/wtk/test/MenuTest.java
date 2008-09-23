@@ -23,6 +23,7 @@ import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Display;
+import pivot.wtk.Keyboard;
 import pivot.wtk.Label;
 import pivot.wtk.Menu;
 import pivot.wtk.MenuBar;
@@ -37,7 +38,7 @@ public class MenuTest implements Application {
 
     public void startup(final Display display, Dictionary<String, String> properties)
         throws Exception {
-        new Action("testAction") {
+        Action testAction = new Action("testAction") {
             public String getDescription() {
                 return "Test Action";
             }
@@ -69,6 +70,8 @@ public class MenuTest implements Application {
             }
         });
 
+        window.getActions().put(new Keyboard.KeyStroke(Keyboard.KeyCode.A,
+            Keyboard.Modifier.META.getMask()), testAction);
         window.setMaximized(true);
         window.open(display);
 

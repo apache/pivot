@@ -38,17 +38,28 @@ import pivot.wtk.Bounds;
  * @author Sebastien Petrucci
  */
 public class DropShadowDecorator implements Decorator {
+    private int blurRadius;
+    private int xOffset;
+    private int yOffset;
+
     private Color shadowColor = Color.BLACK;
     private float shadowOpacity = 0.33f;
-    private int blurRadius = 5;
-    private int xOffset = 5;
-    private int yOffset = 5;
 
     private Component component = null;
     private Graphics2D graphics = null;
 
     private BufferedImage componentImage = null;
     private Graphics2D componentGraphics = null;
+
+    public DropShadowDecorator() {
+        this(5, 5, 5);
+    }
+
+    public DropShadowDecorator(int blurRadius, int xOffset, int yOffset) {
+        this.blurRadius = blurRadius;
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
+    }
 
     /**
      * Returns the color used to draw the shadow.
