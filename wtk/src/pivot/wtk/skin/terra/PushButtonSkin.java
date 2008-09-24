@@ -24,6 +24,7 @@ import java.awt.geom.Line2D;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Button;
+import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.PushButton;
@@ -48,6 +49,7 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
     private Color disabledBevelColor = new Color(0xE6, 0xE3, 0xDA);
     private Insets padding = new Insets(3);
     private float preferredAspectRatio = Float.NaN;
+    private boolean toolbar = false;
 
     public int getPreferredWidth(int height) {
         PushButton pushButton = (PushButton)getComponent();
@@ -136,43 +138,53 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
     public void paint(Graphics2D graphics) {
         PushButton pushButton = (PushButton)getComponent();
 
+        int width = getWidth();
+        int height = getHeight();
+
         Color backgroundColor = null;
         Color bevelColor = null;
         Color borderColor = null;
 
-        if (pushButton.isEnabled()) {
-            backgroundColor = this.backgroundColor;
-            bevelColor = (pressed
-                || pushButton.isSelected()) ? pressedBevelColor : this.bevelColor;
-            borderColor = this.borderColor;
-        }
-        else {
-            backgroundColor = disabledBackgroundColor;
-            bevelColor = disabledBevelColor;
-            borderColor = disabledBorderColor;
+        if (!toolbar
+            || highlighted) {
+            if (pushButton.isEnabled()) {
+                backgroundColor = this.backgroundColor;
+                bevelColor = (pressed
+                    || pushButton.isSelected()) ? pressedBevelColor : this.bevelColor;
+                borderColor = this.borderColor;
+            } else {
+                backgroundColor = disabledBackgroundColor;
+                bevelColor = disabledBevelColor;
+                borderColor = disabledBorderColor;
+            }
         }
 
         // Paint the background
-        graphics.setPaint(backgroundColor);
-        Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
-        graphics.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+        if (backgroundColor != null) {
+            graphics.setPaint(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+        }
 
         // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
 
         // Paint the border
-        graphics.setPaint(borderColor);
-        graphics.drawRect(0, 0, bounds.width - 1, bounds.height - 1);
+        if (borderColor != null) {
+            graphics.setPaint(borderColor);
+            graphics.drawRect(0, 0, width - 1, height - 1);
+        }
 
         // Paint the bevel
-        Line2D bevelLine = new Line2D.Double(1, 1, bounds.width - 2, 1);
-        graphics.setPaint(bevelColor);
-        graphics.draw(bevelLine);
+        if (bevelColor != null) {
+            Line2D bevelLine = new Line2D.Double(1, 1, width - 2, 1);
+            graphics.setPaint(bevelColor);
+            graphics.draw(bevelLine);
+        }
 
         // Paint the content
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
-        dataRenderer.render(pushButton.getButtonData(), pushButton, false);
-        dataRenderer.setSize(Math.max(bounds.width - (padding.left + padding.right + 2), 0),
+        dataRenderer.render(pushButton.getButtonData(), pushButton, highlighted);
+        dataRenderer.setSize(Math.max(width - (padding.left + padding.right + 2), 0),
             Math.max(getHeight() - (padding.top + padding.bottom + 2), 0));
 
         Graphics2D contentGraphics = (Graphics2D)graphics.create();
@@ -187,14 +199,19 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
             graphics.setStroke(dashStroke);
-            graphics.setColor(borderColor);
+            graphics.setColor(this.borderColor);
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.drawRect(2, 2, Math.max(bounds.width - 5, 0),
-                Math.max(bounds.height - 5, 0));
+            graphics.drawRect(2, 2, Math.max(width - 5, 0),
+                Math.max(height - 5, 0));
         }
+    }
+
+    @Override
+    public boolean isFocusable() {
+        return !toolbar;
     }
 
     public Font getFont() {
@@ -455,5 +472,20 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
         }
 
         setPreferredAspectRatio(preferredAspectRatio.floatValue());
+    }
+
+    public boolean isToolbar() {
+        return toolbar;
+    }
+
+    public void setToolbar(boolean toolbar) {
+        this.toolbar = toolbar;
+
+        if (toolbar &&
+            getComponent().isFocused()) {
+            Component.clearFocus();
+        }
+
+        repaintComponent();
     }
 }
