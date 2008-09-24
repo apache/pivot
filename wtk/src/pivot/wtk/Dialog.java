@@ -43,10 +43,9 @@ public class Dialog extends Window {
     }
 
     private boolean modal = false;
-    private boolean result = false;
-
     private DialogStateListener dialogStateListener = null;
     private Window disabledOwner = null;
+    private boolean result = false;
 
     public Dialog() {
         this(null, null);
@@ -70,53 +69,34 @@ public class Dialog extends Window {
      *
      * @param display
      * The display on which the dialog will be opened.
-     */
-    public final void open(Display display) {
-        super.open(display);
-    }
-
-    /**
-     * Opens the dialog.
-     *
-     * @param display
-     * The display on which the dialog will be opened.
      *
      * @param dialogStateListener
      * Optional dialog state listener to be called when the dialog is closed.
      */
-    public void open(Display display, DialogStateListener dialogStateListener) {
-        if (isOpen()) {
-            throw new IllegalStateException("Dialog is already open.");
-        }
-
-        this.dialogStateListener = dialogStateListener;
-        this.modal = false;
-
+    public final void open(Display display, DialogStateListener dialogStateListener) {
         super.open(display);
 
-        if (!isOpen()) {
-            this.dialogStateListener = null;
+        if (isOpen()) {
+            this.dialogStateListener = dialogStateListener;
+            this.modal = false;
         }
     }
 
     /**
-     * Opens the dialog.
+     * Opens the dialog as modal over its owner.
      *
      * @param owner
-     * The dialog's owner. If <tt>null</tt>, the dialog is opened non-modal.
-     * Otherwise, it is opened as modal.
+     * The dialog's owner.
      */
-    @Override
-    public final void open(Window owner) {
-        open(owner, true, null);
+    public final void open(Window owner, boolean modal) {
+        open(owner, modal, null);
     }
 
     /**
-     * Opens the dialog.
+     * Opens the dialog as modal over its owner.
      *
      * @param owner
-     * The dialog's owner. If <tt>null</tt>, the dialog is opened non-modal.
-     * Otherwise, it is opened as modal.
+     * The dialog's owner.
      *
      * @param dialogStateListener
      * Optional dialog state listener to be called when the dialog is closed.
@@ -138,18 +118,13 @@ public class Dialog extends Window {
      * @param dialogStateListener
      * Optional dialog state listener to be called when the dialog is closed.
      */
-    public void open(Window owner, boolean modal, DialogStateListener dialogStateListener) {
-        if (isOpen()) {
-            throw new IllegalStateException("Dialog is already open.");
-        }
-
-        this.dialogStateListener = dialogStateListener;
-        this.modal = modal;
-
-        // Call the base method
+    public final void open(Window owner, boolean modal, DialogStateListener dialogStateListener) {
         super.open(owner);
 
         if (isOpen()) {
+            this.dialogStateListener = dialogStateListener;
+            this.modal = modal;
+
             if (modal) {
                 // Walk owner tree to find the nearest enabled owning ancestor
                 // and disable it
@@ -177,9 +152,6 @@ public class Dialog extends Window {
                 // Align the dialog with its owner
                 ApplicationContext.queueCallback(new RepositionCallback());
             }
-        } else {
-            this.dialogStateListener = null;
-            this.modal = false;
         }
     }
 
@@ -192,10 +164,8 @@ public class Dialog extends Window {
         if (!isClosed()
             && (dialogStateListener == null
                 || dialogStateListener.previewDialogClose(this, result))) {
-            // Close the window
             super.close();
 
-            // Only proceed if the state listeners allowed us to close
             if (isClosed()) {
                 this.result = result;
 
@@ -227,15 +197,15 @@ public class Dialog extends Window {
         return modal;
     }
 
-    public boolean getResult() {
-        return result;
+    public DialogStateListener getDialogStateListener() {
+        return dialogStateListener;
     }
 
     public Window getDisabledOwner() {
         return disabledOwner;
     }
 
-    public DialogStateListener getDialogStateListener() {
-        return dialogStateListener;
+    public boolean getResult() {
+        return result;
     }
 }

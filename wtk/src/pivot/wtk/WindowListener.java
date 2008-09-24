@@ -48,6 +48,14 @@ public interface WindowListener {
     public void contentChanged(Window window, Component previousContent);
 
     /**
+     * Called when a window's owner has changed.
+     *
+     * @param window
+     * @param previousOwner
+     */
+    public void ownerChanged(Window window, Window previousOwner);
+
+    /**
      * Called when a window's active state has changed.
      *
      * @param window

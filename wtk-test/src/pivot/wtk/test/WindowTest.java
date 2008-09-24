@@ -17,6 +17,7 @@ package pivot.wtk.test;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.Dialog;
 import pivot.wtk.Display;
 import pivot.wtk.Frame;
 
@@ -59,6 +60,21 @@ public class WindowTest implements Application {
         window1bii.setTitle("Window 1 B II");
         window1bii.setPreferredSize(160, 60);
         window1bii.open(window1b);
+
+        Frame dialogOwner = new Frame();
+        dialogOwner.setTitle("Dialog Owner");
+        dialogOwner.setPreferredSize(160, 60);
+        dialogOwner.open(display);
+
+        Dialog dialog = new Dialog();
+        dialog.setTitle("Dialog 1");
+        dialog.setPreferredSize(160, 60);
+        dialog.open(dialogOwner, true);
+
+        Dialog dialog2 = new Dialog();
+        dialog2.setTitle("Dialog 2");
+        dialog2.setPreferredSize(160, 60);
+        dialog2.open(dialog, true);
     }
 
     public boolean shutdown(boolean optional) {

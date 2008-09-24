@@ -80,24 +80,20 @@ public class Popup extends Window {
      * The component with which the popup is affiliated.
      */
     public void open(Component affiliate) {
-        if (isOpen()) {
-            throw new IllegalStateException("Popup is already open.");
-        }
-
         if (affiliate == null) {
             throw new IllegalArgumentException("affiliate is null.");
         }
 
-        this.affiliate = affiliate;
-
         super.open(affiliate.getWindow());
+
+        this.affiliate = affiliate;
     }
 
     @Override
     public void close() {
         if (!isClosed()) {
-            affiliate = null;
             super.close();
+            affiliate = null;
         }
     }
 }

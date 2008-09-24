@@ -93,14 +93,8 @@ public class Sheet extends Window {
         return true;
     }
 
-    /**
-     * Opens the sheet.
-     *
-     * @throws UnsupportedOperationException
-     * If the sheet does not have an owner, or the owner has no content.
-     */
-    public final void open(Display display) {
-        Window owner = getOwner();
+    @Override
+    public final void setOwner(Window owner) {
         if (owner == null) {
             throw new UnsupportedOperationException("A sheet must have an owner.");
         }
@@ -109,55 +103,29 @@ public class Sheet extends Window {
             throw new UnsupportedOperationException("A sheet's owner must have a content component.");
         }
 
-        super.open(display);
+        super.setOwner(owner);
     }
 
-    /**
-     * Opens the sheet.
-     *
-     * @param owner
-     * The sheet's owner.
-     */
     @Override
-    public final void open(Window owner) {
-        open(owner, null);
+    public void open(Display display) {
+        super.open(display);
+
+        if (isOpen()) {
+            Window owner = getOwner();
+            owner.getComponentListeners().add(ownerListener);
+
+            Component content = owner.getContent();
+            content.setEnabled(false);
+
+            ApplicationContext.queueCallback(repositionCallback);
+        }
     }
 
-    /**
-     * Opens the sheet.
-     *
-     * @param owner
-     * The sheet's owner.
-     *
-     * @param sheetStateListener
-     * Optional sheet state listener to be called when the sheet is closed.
-     */
-    public void open(Window owner, SheetStateListener sheetStateListener) {
-        if (owner == null) {
-            throw new UnsupportedOperationException("A sheet must have an owner.");
-        }
-
-        Component content = owner.getContent();
-
-        if (content == null) {
-            throw new UnsupportedOperationException("A sheet's owner must have a content component.");
-        }
+    public final void open(Window owner, SheetStateListener sheetStateListener) {
+        open(owner);
 
         if (isOpen()) {
-            throw new IllegalStateException("Sheet is already open.");
-        }
-
-        this.sheetStateListener = sheetStateListener;
-
-        super.open(owner);
-
-        if (isOpen()) {
-            content.setEnabled(false);
-            owner.getComponentListeners().add(ownerListener);
-            ApplicationContext.queueCallback(repositionCallback);
-        } else {
-            // A preview listener vetoed the open event
-            this.sheetStateListener = null;
+            this.sheetStateListener = sheetStateListener;
         }
     }
 
@@ -170,16 +138,16 @@ public class Sheet extends Window {
         if (!isClosed()
             && (sheetStateListener == null
                 || sheetStateListener.previewSheetClose(this, result))) {
-            Window owner = getOwner();
-            Component content = owner.getContent();
-
             super.close();
 
             if (isClosed()) {
                 this.result = result;
 
-                content.setEnabled(true);
+                Window owner = getOwner();
                 owner.getComponentListeners().remove(ownerListener);
+
+                Component content = owner.getContent();
+                content.setEnabled(true);
 
                 owner.moveToFront();
 
@@ -192,11 +160,11 @@ public class Sheet extends Window {
         }
     }
 
-    public boolean getResult() {
-        return result;
-    }
-
     public SheetStateListener getSheetStateListener() {
         return sheetStateListener;
+    }
+
+    public boolean getResult() {
+        return result;
     }
 }

@@ -7,6 +7,6 @@
     options: "Options",
     commonBorderStyles: {
         padding: 0,
-        borderColor: "#cccac2"
+        color: "#cccac2"
     }
 }

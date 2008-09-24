@@ -142,6 +142,10 @@ public class WindowSkin extends ContainerSkin
         invalidateComponent();
     }
 
+    public void ownerChanged(Window window, Window previousOwner) {
+        // No-op
+    }
+
     public void activeChanged(Window window) {
         // No-op
     }

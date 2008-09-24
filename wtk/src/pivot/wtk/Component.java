@@ -1978,12 +1978,7 @@ public abstract class Component implements ConstrainedVisual {
                     previousFocusedComponent.setFocused(false, temporary);
                 }
 
-                if (focusedComponent == null) {
-                    if (previousFocusedComponent != null
-                        && !temporary) {
-                        previousFocusedComponent.getWindow().setActiveDescendant(null);
-                    }
-                } else {
+                if (focusedComponent != null) {
                     focusedComponent.setFocused(true, temporary);
                     focusedComponent.getWindow().setActiveDescendant(focusedComponent);
                 }
@@ -2149,8 +2144,8 @@ public abstract class Component implements ConstrainedVisual {
 
     protected void mouseOver() {
         if (enabled) {
-            // Only change the cursor if no mouse buttons are pressed
-            if (Mouse.getButtons() == 0) {
+            // Only change the cursor if a drag/drop is not active
+            if (!DragDropManager.getCurrent().isActive()) {
                 Mouse.setCursor(cursor);
             }
 
@@ -2162,8 +2157,8 @@ public abstract class Component implements ConstrainedVisual {
 
     protected void mouseOut() {
         if (enabled) {
-            // Only change the cursor if no mouse buttons are pressed
-            if (Mouse.getButtons() == 0) {
+            // Only change the cursor if a drag/drop is not active
+            if (!DragDropManager.getCurrent().isActive()) {
                 Mouse.setCursor((parent == null) ?
                     Cursor.DEFAULT : parent.getCursor());
             }
@@ -2260,7 +2255,6 @@ public abstract class Component implements ConstrainedVisual {
     @Override
     public String toString() {
         String s = this.getClass().getName() + "#" + getHandle();
-        s += " [" + skin.getClass().getName() + "]";
         return s;
     }
 
