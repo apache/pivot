@@ -209,7 +209,7 @@ public abstract class Container extends Component
         // and contains the focused component, clear the focus
         if (parent == null
             && isAncestor(getFocusedComponent())) {
-            clearFocus();
+            clearFocus(true);
         }
 
         super.setParent(parent);
@@ -258,7 +258,7 @@ public abstract class Container extends Component
     public void setVisible(boolean visible) {
         if (!visible
             && containsFocus()) {
-            clearFocus();
+            clearFocus(true);
         }
 
         super.setVisible(visible);
@@ -351,7 +351,7 @@ public abstract class Container extends Component
     public void setEnabled(boolean enabled) {
         if (!enabled
             && containsFocus()) {
-            clearFocus();
+            clearFocus(true);
         }
 
         super.setEnabled(enabled);

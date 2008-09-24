@@ -1978,7 +1978,12 @@ public abstract class Component implements ConstrainedVisual {
                     previousFocusedComponent.setFocused(false, temporary);
                 }
 
-                if (focusedComponent != null) {
+                if (focusedComponent == null) {
+                    if (previousFocusedComponent != null
+                        && !temporary) {
+                        previousFocusedComponent.getWindow().setActiveDescendant(null);
+                    }
+                } else {
                     focusedComponent.setFocused(true, temporary);
                     focusedComponent.getWindow().setActiveDescendant(focusedComponent);
                 }

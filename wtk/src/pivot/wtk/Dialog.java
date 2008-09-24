@@ -68,12 +68,18 @@ public class Dialog extends Window {
      * Opens the dialog.
      *
      * @param display
-     * The display on which the dialog will be opened.
-     *
-     * @param dialogStateListener
-     * Optional dialog state listener to be called when the dialog is closed.
      */
-    public final void open(Display display, DialogStateListener dialogStateListener) {
+    public final void open(Display display) {
+        open(display, null);
+    }
+
+    /**
+     * Opens the dialog.
+     *
+     * @param display
+     * @param dialogStateListener
+     */
+    public void open(Display display, DialogStateListener dialogStateListener) {
         super.open(display);
 
         if (isOpen()) {
@@ -86,7 +92,16 @@ public class Dialog extends Window {
      * Opens the dialog as modal over its owner.
      *
      * @param owner
-     * The dialog's owner.
+     */
+    public final void open(Window owner) {
+        open(owner, true, null);
+    }
+
+    /**
+     * Opens the dialog.
+     *
+     * @param owner
+     * @param modal
      */
     public final void open(Window owner, boolean modal) {
         open(owner, modal, null);
@@ -118,7 +133,7 @@ public class Dialog extends Window {
      * @param dialogStateListener
      * Optional dialog state listener to be called when the dialog is closed.
      */
-    public final void open(Window owner, boolean modal, DialogStateListener dialogStateListener) {
+    public void open(Window owner, boolean modal, DialogStateListener dialogStateListener) {
         super.open(owner);
 
         if (isOpen()) {

@@ -402,7 +402,7 @@ public class Window extends Container {
      * @param owner
      * The window's owner.
      */
-    public final void open(Window owner) {
+    public void open(Window owner) {
         if (owner == null) {
             throw new IllegalArgumentException("owner is null.");
         }
@@ -774,10 +774,6 @@ public class Window extends Container {
 
         if (isActive()) {
             setActiveWindow(null);
-        }
-
-        if (containsFocus()) {
-            clearFocus();
         }
 
         Display display = getDisplay();

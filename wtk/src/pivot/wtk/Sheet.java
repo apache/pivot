@@ -121,8 +121,12 @@ public class Sheet extends Window {
         }
     }
 
-    public final void open(Window owner, SheetStateListener sheetStateListener) {
-        open(owner);
+    public final void open(Window owner) {
+        open(owner, null);
+    }
+
+    public void open(Window owner, SheetStateListener sheetStateListener) {
+        super.open(owner);
 
         if (isOpen()) {
             this.sheetStateListener = sheetStateListener;
