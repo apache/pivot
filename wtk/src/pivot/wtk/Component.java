@@ -642,11 +642,6 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     protected void setParent(Container parent) {
-        if (parent != null
-            && skin == null) {
-            throw new IllegalStateException(this + " has no skin.");
-        }
-
         // If the mouse is currently over this component, set the cursor
         // to the default
         if (mouseOver) {
@@ -679,11 +674,11 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     public int getWidth() {
-        return (skin == null) ? 0 : skin.getWidth();
+        return skin.getWidth();
     }
 
     public int getHeight() {
-        return (skin == null) ? 0 : skin.getHeight();
+        return skin.getHeight();
     }
 
     public Dimensions getSize() {
@@ -714,29 +709,27 @@ public abstract class Component implements ConstrainedVisual {
             throw new IllegalArgumentException("height is negative.");
         }
 
-        if (skin != null) {
-            int previousWidth = getWidth();
-            int previousHeight = getHeight();
+        int previousWidth = getWidth();
+        int previousHeight = getHeight();
 
-            if (width != previousWidth
-                || height != previousHeight) {
-                // This component's size changed, most likely as a result
-                // of being laid out; it must be flagged as invalid to ensure
-                // that layout is propagated downward when validate() is
-                // called on it
-                invalidate();
+        if (width != previousWidth
+            || height != previousHeight) {
+            // This component's size changed, most likely as a result
+            // of being laid out; it must be flagged as invalid to ensure
+            // that layout is propagated downward when validate() is
+            // called on it
+            invalidate();
 
-                // Redraw the region formerly occupied by this component
-                repaint();
+            // Redraw the region formerly occupied by this component
+            repaint();
 
-                // Set the size of the skin
-                skin.setSize(width, height);
+            // Set the size of the skin
+            skin.setSize(width, height);
 
-                // Redraw the region currently occupied by this component
-                repaint();
+            // Redraw the region currently occupied by this component
+            repaint();
 
-                componentListeners.sizeChanged(this, previousWidth, previousHeight);
-            }
+            componentListeners.sizeChanged(this, previousWidth, previousHeight);
         }
     }
 
@@ -747,8 +740,7 @@ public abstract class Component implements ConstrainedVisual {
     public int getPreferredWidth(int height) {
         int preferredWidth = this.preferredWidth;
 
-        if (preferredWidth == -1
-            && skin != null) {
+        if (preferredWidth == -1) {
             if (height == -1) {
                 height = preferredHeight;
             }
@@ -819,8 +811,7 @@ public abstract class Component implements ConstrainedVisual {
     public int getPreferredHeight(int width) {
         int preferredHeight = this.preferredHeight;
 
-        if (preferredHeight == -1
-            && skin != null) {
+        if (preferredHeight == -1) {
             if (width == -1) {
                 width = preferredWidth;
             }
@@ -894,81 +885,75 @@ public abstract class Component implements ConstrainedVisual {
             && isPreferredHeightSet()) {
             preferredSize = new Dimensions(preferredWidth, preferredHeight);
         } else if (isPreferredWidthSet()) {
-            if (skin != null) {
-                int preferredHeight;
+            int preferredHeight;
 
-                if (preferredHeightCache != null
-                    && preferredHeightCache.constraint == preferredWidth) {
-                    preferredHeight = preferredHeightCache.value;
-                } else {
-                    preferredHeight = skin.getPreferredHeight(preferredWidth);
+            if (preferredHeightCache != null
+                && preferredHeightCache.constraint == preferredWidth) {
+                preferredHeight = preferredHeightCache.value;
+            } else {
+                preferredHeight = skin.getPreferredHeight(preferredWidth);
 
-                    if (isValid()) {
-                        // Update the cache
-                        if (preferredHeightCache == null) {
-                            preferredHeightCache = new PreferredSizeCache(preferredWidth,
-                                preferredHeight);
-                        } else {
-                            preferredHeightCache.constraint = preferredWidth;
-                            preferredHeightCache.value = preferredHeight;
-                        }
+                if (isValid()) {
+                    // Update the cache
+                    if (preferredHeightCache == null) {
+                        preferredHeightCache = new PreferredSizeCache(preferredWidth,
+                            preferredHeight);
+                    } else {
+                        preferredHeightCache.constraint = preferredWidth;
+                        preferredHeightCache.value = preferredHeight;
                     }
                 }
-
-                preferredSize = new Dimensions(preferredWidth, preferredHeight);
             }
+
+            preferredSize = new Dimensions(preferredWidth, preferredHeight);
         } else if (isPreferredHeightSet()) {
-            if (skin != null) {
-                int preferredWidth;
+            int preferredWidth;
 
-                if (preferredWidthCache != null
-                    && preferredWidthCache.constraint == preferredHeight) {
-                    preferredWidth = preferredWidthCache.value;
-                } else {
-                    preferredWidth = skin.getPreferredWidth(preferredHeight);
+            if (preferredWidthCache != null
+                && preferredWidthCache.constraint == preferredHeight) {
+                preferredWidth = preferredWidthCache.value;
+            } else {
+                preferredWidth = skin.getPreferredWidth(preferredHeight);
 
-                    if (isValid()) {
-                        // Update the cache
-                        if (preferredWidthCache == null) {
-                            preferredWidthCache = new PreferredSizeCache(preferredHeight,
-                                preferredWidth);
-                        } else {
-                            preferredWidthCache.constraint = preferredHeight;
-                            preferredWidthCache.value = preferredWidth;
-                        }
+                if (isValid()) {
+                    // Update the cache
+                    if (preferredWidthCache == null) {
+                        preferredWidthCache = new PreferredSizeCache(preferredHeight,
+                            preferredWidth);
+                    } else {
+                        preferredWidthCache.constraint = preferredHeight;
+                        preferredWidthCache.value = preferredWidth;
                     }
                 }
-
-                preferredSize = new Dimensions(preferredWidth, preferredHeight);
             }
+
+            preferredSize = new Dimensions(preferredWidth, preferredHeight);
         } else {
-            if (skin != null) {
-                if (preferredWidthCache != null
-                    && preferredWidthCache.constraint == -1
-                    && preferredHeightCache != null
-                    && preferredHeightCache.constraint == -1) {
-                    preferredSize = new Dimensions(preferredWidthCache.value,
-                        preferredHeightCache.value);
-                } else {
-                    preferredSize = skin.getPreferredSize();
+            if (preferredWidthCache != null
+                && preferredWidthCache.constraint == -1
+                && preferredHeightCache != null
+                && preferredHeightCache.constraint == -1) {
+                preferredSize = new Dimensions(preferredWidthCache.value,
+                    preferredHeightCache.value);
+            } else {
+                preferredSize = skin.getPreferredSize();
 
-                    if (isValid()) {
-                        // Update the cache
-                        if (preferredWidthCache == null) {
-                            preferredWidthCache = new PreferredSizeCache(-1,
-                                preferredSize.width);
-                        } else {
-                            preferredWidthCache.constraint = -1;
-                            preferredWidthCache.value = preferredSize.width;
-                        }
+                if (isValid()) {
+                    // Update the cache
+                    if (preferredWidthCache == null) {
+                        preferredWidthCache = new PreferredSizeCache(-1,
+                            preferredSize.width);
+                    } else {
+                        preferredWidthCache.constraint = -1;
+                        preferredWidthCache.value = preferredSize.width;
+                    }
 
-                        if (preferredHeightCache == null) {
-                            preferredHeightCache = new PreferredSizeCache(-1,
-                                preferredSize.height);
-                        } else {
-                            preferredHeightCache.constraint = -1;
-                            preferredHeightCache.value = preferredSize.height;
-                        }
+                    if (preferredHeightCache == null) {
+                        preferredHeightCache = new PreferredSizeCache(-1,
+                            preferredSize.height);
+                    } else {
+                        preferredHeightCache.constraint = -1;
+                        preferredHeightCache.value = preferredSize.height;
                     }
                 }
             }
@@ -1549,11 +1534,9 @@ public abstract class Component implements ConstrainedVisual {
      * implementation of layout() will be a no-op.
      */
     public void validate() {
-        if (skin != null) {
-            if (getWidth() > 0
-                && getHeight() > 0) {
-                skin.layout();
-            }
+        if (getWidth() > 0
+            && getHeight() > 0) {
+            skin.layout();
         }
     }
 
@@ -1651,9 +1634,7 @@ public abstract class Component implements ConstrainedVisual {
      * Paints the component. Delegates to the skin.
      */
     public void paint(Graphics2D graphics) {
-        if (skin != null) {
-            skin.paint(graphics);
-        }
+        skin.paint(graphics);
     }
 
     /**
@@ -1849,7 +1830,7 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>true</tt> if the component is enabled and visible.
      */
     public boolean isFocusable() {
-        return (skin == null) ? false : skin.isFocusable();
+        return skin.isFocusable();
     }
 
     /**
@@ -2159,10 +2140,7 @@ public abstract class Component implements ConstrainedVisual {
         boolean consumed = false;
 
         if (enabled) {
-            if (skin != null) {
-                consumed = skin.mouseMove(x, y);
-            }
-
+            consumed = skin.mouseMove(x, y);
             componentMouseListeners.mouseMove(this, x, y);
         }
 
@@ -2177,11 +2155,7 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             mouseOver = true;
-
-            if (skin != null) {
-                skin.mouseOver();
-            }
-
+            skin.mouseOver();
             componentMouseListeners.mouseOver(this);
         }
     }
@@ -2195,11 +2169,7 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             mouseOver = false;
-
-            if (skin != null) {
-                skin.mouseOut();
-            }
-
+            skin.mouseOut();
             componentMouseListeners.mouseOut(this);
         }
     }
@@ -2208,10 +2178,7 @@ public abstract class Component implements ConstrainedVisual {
         boolean consumed = false;
 
         if (enabled) {
-            if (skin != null) {
-                consumed = skin.mouseDown(button, x, y);
-            }
-
+            consumed = skin.mouseDown(button, x, y);
             componentMouseButtonListeners.mouseDown(this, button, x, y);
         }
 
@@ -2222,10 +2189,7 @@ public abstract class Component implements ConstrainedVisual {
         boolean consumed = false;
 
         if (enabled) {
-            if (skin != null) {
-                consumed = skin.mouseUp(button, x, y);
-            }
-
+            consumed = skin.mouseUp(button, x, y);
             componentMouseButtonListeners.mouseUp(this, button, x, y);
         }
 
@@ -2234,10 +2198,7 @@ public abstract class Component implements ConstrainedVisual {
 
     protected void mouseClick(Mouse.Button button, int x, int y, int count) {
         if (enabled) {
-            if (skin != null) {
-                skin.mouseClick(button, x, y, count);
-            }
-
+            skin.mouseClick(button, x, y, count);
             componentMouseButtonListeners.mouseClick(this, button, x, y, count);
         }
     }
@@ -2247,10 +2208,7 @@ public abstract class Component implements ConstrainedVisual {
         boolean consumed = false;
 
         if (enabled) {
-            if (skin != null) {
-                consumed = skin.mouseWheel(scrollType, scrollAmount, wheelRotation, x, y);
-            }
-
+            consumed = skin.mouseWheel(scrollType, scrollAmount, wheelRotation, x, y);
             componentMouseWheelListeners.mouseWheel(this, scrollType, scrollAmount,
                 wheelRotation, x, y);
         }
@@ -2260,10 +2218,7 @@ public abstract class Component implements ConstrainedVisual {
 
     protected void keyTyped(char character) {
         if (enabled) {
-            if (skin != null) {
-                skin.keyTyped(character);
-            }
-
+            skin.keyTyped(character);
             componentKeyListeners.keyTyped(this, character);
 
             if (parent != null) {
@@ -2276,10 +2231,7 @@ public abstract class Component implements ConstrainedVisual {
         boolean consumed = false;
 
         if (enabled) {
-            if (skin != null) {
-                consumed = skin.keyPressed(keyCode, keyLocation);
-            }
-
+            consumed = skin.keyPressed(keyCode, keyLocation);
             componentKeyListeners.keyPressed(this, keyCode, keyLocation);
 
             if (!consumed && parent != null) {
@@ -2294,10 +2246,7 @@ public abstract class Component implements ConstrainedVisual {
         boolean consumed = false;
 
         if (enabled) {
-            if (skin != null) {
-                consumed = skin.keyReleased(keyCode, keyLocation);
-            }
-
+            consumed = skin.keyReleased(keyCode, keyLocation);
             componentKeyListeners.keyReleased(this, keyCode, keyLocation);
 
             if (!consumed && parent != null) {
@@ -2311,11 +2260,7 @@ public abstract class Component implements ConstrainedVisual {
     @Override
     public String toString() {
         String s = this.getClass().getName() + "#" + getHandle();
-
-        if (skin != null) {
-            s += " [" + skin.getClass().getName() + "]";
-        }
-
+        s += " [" + skin.getClass().getName() + "]";
         return s;
     }
 
