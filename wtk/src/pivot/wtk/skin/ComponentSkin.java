@@ -18,6 +18,7 @@ package pivot.wtk.skin;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentStateListener;
+import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
@@ -84,6 +85,10 @@ public abstract class ComponentSkin implements Skin, ComponentStateListener {
         component.getComponentStateListeners().remove(this);
 
         component = null;
+    }
+
+    public Dimensions getPreferredSize() {
+        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
     public boolean mouseMove(int x, int y) {

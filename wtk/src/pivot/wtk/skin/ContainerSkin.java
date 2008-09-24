@@ -23,7 +23,6 @@ import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerListener;
-import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.FocusTraversalPolicy;
 
@@ -156,10 +155,6 @@ public abstract class ContainerSkin extends ComponentSkin
 
     public int getPreferredHeight(int width) {
         return 0;
-    }
-
-    public Dimensions getPreferredSize() {
-        return new Dimensions(0, 0);
     }
 
     public void paint(Graphics2D graphics) {
