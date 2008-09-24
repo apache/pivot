@@ -15,8 +15,11 @@
  */
 package pivot.wtk;
 
+import java.util.Iterator;
+
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
+import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
@@ -32,7 +35,7 @@ public abstract class Action {
      * @author gbrown
      */
     public static final class ActionDictionary
-        implements Dictionary<String, Action> {
+        implements Dictionary<String, Action>, Iterable<String> {
         private ActionDictionary() {
         }
 
@@ -40,16 +43,34 @@ public abstract class Action {
             return actions.get(id);
         }
 
-        public Action put(String id, Action value) {
-            return actions.put(id, value);
+        public Action put(String id, Action action) {
+            if (action == null) {
+                throw new IllegalArgumentException("action is null.");
+            }
+
+            Action previousAction = actions.put(id, action);
+
+            if (previousAction != null) {
+                previousAction.id = null;
+            }
+
+            action.id = id;
 
             // TODO Fire ActionClassListener#actionAdded()/actionUpdated()
+
+            return previousAction;
         }
 
         public Action remove(String id) {
-            return actions.remove(id);
+            Action previousAction = actions.remove(id);
+
+            if (previousAction != null) {
+                previousAction.id = null;
+            }
 
             // TODO Fire ActionClassListener#actionRemoved()
+
+            return previousAction;
         }
 
         public boolean containsKey(String id) {
@@ -58,6 +79,10 @@ public abstract class Action {
 
         public boolean isEmpty() {
             return actions.isEmpty();
+        }
+
+        public Iterator<String> iterator() {
+            return new ImmutableIterator<String>(actions.iterator());
         }
     }
 
