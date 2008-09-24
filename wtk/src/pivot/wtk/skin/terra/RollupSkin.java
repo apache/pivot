@@ -39,33 +39,23 @@ import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * <p>Rollup skin.</p>
+ * Rollup skin.
+ * <p>
+ * TODO Optimize this class by performing preferred size calculation in one
+ * pass.
  *
  * @author tvolkert
  */
 public class RollupSkin extends ContainerSkin
     implements RollupListener, ButtonPressListener {
-    public static class RollupButton extends PushButton {
-        private Rollup rollup;
-
-        public RollupButton(Rollup rollup) {
-            this(rollup, null);
-        }
-
-        public RollupButton(Rollup rollup, Object buttonData) {
-            super(buttonData);
-
-            this.rollup = rollup;
-
-            installSkin(RollupButton.class);
-        }
-
-        public Rollup getRollup() {
-            return rollup;
+    protected class RollupButton extends PushButton {
+        public RollupButton() {
+            super(null);
+            setSkin(new RollupButtonSkin());
         }
     }
 
-    public static class RollupButtonSkin extends ButtonSkin {
+    protected class RollupButtonSkin extends ButtonSkin {
         @Override
         public void install(Component component) {
             validateComponentType(component, RollupButton.class);
@@ -207,6 +197,7 @@ public class RollupSkin extends ContainerSkin
     private Color buttonColor = new Color(0xcc, 0xca, 0xc2);
     private int spacing = 4;
     private int buffer = 4;
+    private boolean justify = false;
     private boolean firstChildToggles = true;
 
     @Override
@@ -220,7 +211,7 @@ public class RollupSkin extends ContainerSkin
 
         updateToggleComponent();
 
-        rollupButton = new RollupButton(rollup);
+        rollupButton = new RollupButton();
         updateRollupButton();
         rollup.add(rollupButton);
         rollupButton.getButtonPressListeners().add(this);
@@ -279,10 +270,13 @@ public class RollupSkin extends ContainerSkin
 
         // Preferred height is the sum of our childrens' preferred heights,
         // plus spacing and padding.
-        Dimensions rollupButtonSize = rollupButton.getPreferredSize();
+        Dimensions rollupButtonPreferredSize = rollupButton.getPreferredSize();
 
-        if (width != -1) {
-            width -= rollupButtonSize.width + buffer;
+        if (justify
+            && width != -1) {
+            width = Math.max(width - rollupButtonPreferredSize.width - buffer, 0);
+        } else {
+            width = -1;
         }
 
         int preferredHeight = 0;
@@ -311,15 +305,10 @@ public class RollupSkin extends ContainerSkin
             preferredHeight += (displayableComponentCount - 1) * spacing;
         }
 
-        preferredHeight = Math.max(preferredHeight, rollupButtonSize.height);
+        preferredHeight = Math.max(preferredHeight,
+            rollupButtonPreferredSize.height);
 
         return preferredHeight;
-    }
-
-    @Override
-    public Dimensions getPreferredSize() {
-        // TODO Optimize
-        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
     public void layout() {
@@ -329,7 +318,7 @@ public class RollupSkin extends ContainerSkin
 
         int x = rollupButtonSize.width + buffer;
         int y = 0;
-        int componentWidth = Math.max(getWidth() - rollupButtonSize.width - buffer, 0);
+        int justifiedWidth = Math.max(getWidth() - rollupButtonSize.width - buffer, 0);
 
         Component firstComponent = null;
 
@@ -351,7 +340,15 @@ public class RollupSkin extends ContainerSkin
                 // We lay this child out and make sure it's painted.
                 component.setVisible(true);
 
-                int componentHeight = component.getPreferredHeight(componentWidth);
+                int componentWidth, componentHeight;
+                if (justify) {
+                    componentWidth = justifiedWidth;
+                    componentHeight = component.getPreferredHeight(componentWidth);
+                } else {
+                    Dimensions componentPreferredSize = component.getPreferredSize();
+                    componentWidth = componentPreferredSize.width;
+                    componentHeight = componentPreferredSize.height;
+                }
 
                 component.setLocation(x, y);
                 component.setSize(componentWidth, componentHeight);
@@ -402,6 +399,15 @@ public class RollupSkin extends ContainerSkin
 
     public void setBuffer(int buffer) {
         this.buffer = buffer;
+        invalidateComponent();
+    }
+
+    public boolean getJustify() {
+        return justify;
+    }
+
+    public void setJustify(boolean justify) {
+        this.justify = justify;
         invalidateComponent();
     }
 
