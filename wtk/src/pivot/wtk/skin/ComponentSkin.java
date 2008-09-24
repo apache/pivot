@@ -58,7 +58,7 @@ public abstract class ComponentSkin implements Skin, ComponentStateListener {
     private ShowTooltipCallback showTooltipCallback = new ShowTooltipCallback();
     private int showTooltipTimeoutID = -1;
 
-    public static final int SHOW_TOOLTIP_TIMEOUT = 1000;
+    public static final int SHOW_TOOLTIP_TIMEOUT = 500;
 
     public int getWidth() {
         return width;
