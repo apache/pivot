@@ -55,7 +55,7 @@ import pivot.util.concurrent.Task;
  */
 public abstract class Query<V> extends Task<V> {
     /**
-     * The supoprted HTTP methods.
+     * The supported HTTP methods.
      *
      * @author gbrown
      */
@@ -272,22 +272,22 @@ public abstract class Query<V> extends Task<V> {
      *
      * @author tvolkert
      */
-    private static class QueryListenerList extends ListenerList<QueryListener>
-        implements QueryListener {
-        public void connected(Query query) {
-            for (QueryListener listener : this) {
+    private static class QueryListenerList<V> extends ListenerList<QueryListener<V>>
+        implements QueryListener<V> {
+        public void connected(Query<V> query) {
+            for (QueryListener<V> listener : this) {
                 listener.connected(query);
             }
         }
 
-        public void requestSent(Query query) {
-            for (QueryListener listener : this) {
+        public void requestSent(Query<V> query) {
+            for (QueryListener<V> listener : this) {
                 listener.requestSent(query);
             }
         }
 
-        public void responseReceived(Query query) {
-            for (QueryListener listener : this) {
+        public void responseReceived(Query<V> query) {
+            for (QueryListener<V> listener : this) {
                 listener.responseReceived(query);
             }
         }
@@ -309,7 +309,7 @@ public abstract class Query<V> extends Task<V> {
     private volatile long bytesReceived = 0;
     private volatile long bytesExpected = -1;
 
-    private QueryListenerList queryListeners = new QueryListenerList();
+    private QueryListenerList<V> queryListeners = new QueryListenerList<V>();
 
     private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
 
@@ -580,7 +580,7 @@ public abstract class Query<V> extends Task<V> {
     /**
      * Gets the query's <tt>QueryListener</tt>s.
      */
-    public ListenerList<QueryListener> getQueryListeners() {
+    public ListenerList<QueryListener<V>> getQueryListeners() {
         return queryListeners;
     }
 }

@@ -28,14 +28,14 @@ package pivot.web;
  *
  * @author tvolkert
  */
-public interface QueryListener {
+public interface QueryListener<V> {
     /**
      * Called when a query has connected to the server but the request has not
      * yet been sent.
      *
      * @param query
      */
-    public void connected(Query query);
+    public void connected(Query<V> query);
 
     /**
      * Called when the request has been sent to the server but the response has
@@ -43,12 +43,12 @@ public interface QueryListener {
      *
      * @param query
      */
-    public void requestSent(Query query);
+    public void requestSent(Query<V> query);
 
     /**
      * Called when a response has been received from the server.
      *
      * @param query
      */
-    public void responseReceived(Query query);
+    public void responseReceived(Query<V> query);
 }
