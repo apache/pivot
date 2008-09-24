@@ -38,8 +38,8 @@ import pivot.wtk.Insets;
  */
 public class BorderSkin extends ContainerSkin
     implements BorderListener {
-    private Color borderColor = Color.BLACK;
-    private int borderThickness = 1;
+    private Color color = Color.BLACK;
+    private int thickness = 1;
     private Insets padding = new Insets(2);
     private CornerRadii cornerRadii = new CornerRadii(0);
 
@@ -64,14 +64,14 @@ public class BorderSkin extends ContainerSkin
         if (content != null
             && content.isDisplayable()) {
             if (height != -1) {
-                height = Math.max(height - (borderThickness * 2) -
+                height = Math.max(height - (thickness * 2) -
                     padding.top - padding.bottom, 0);
             }
 
             preferredWidth = content.getPreferredWidth(height);
         }
 
-        preferredWidth += (padding.left + padding.right) + (borderThickness * 2);
+        preferredWidth += (padding.left + padding.right) + (thickness * 2);
 
         return preferredWidth;
     }
@@ -86,14 +86,14 @@ public class BorderSkin extends ContainerSkin
         if (content != null
             && content.isDisplayable()) {
             if (width != -1) {
-                width = Math.max(width - (borderThickness * 2)
+                width = Math.max(width - (thickness * 2)
                     - padding.left - padding.right, 0);
             }
 
             preferredHeight = content.getPreferredHeight(width);
         }
 
-        preferredHeight += (padding.top + padding.bottom) + (borderThickness * 2);
+        preferredHeight += (padding.top + padding.bottom) + (thickness * 2);
 
         return preferredHeight;
     }
@@ -113,8 +113,8 @@ public class BorderSkin extends ContainerSkin
             preferredHeight = preferredContentSize.height;
         }
 
-        preferredWidth += (padding.left + padding.right) + (borderThickness * 2);
-        preferredHeight += (padding.top + padding.bottom) + (borderThickness * 2);
+        preferredWidth += (padding.left + padding.right) + (thickness * 2);
+        preferredHeight += (padding.top + padding.bottom) + (thickness * 2);
 
         Dimensions preferredSize = new Dimensions(preferredWidth, preferredHeight);
 
@@ -132,13 +132,13 @@ public class BorderSkin extends ContainerSkin
             if (content.isDisplayable()) {
                 content.setVisible(true);
 
-                content.setLocation(padding.left + borderThickness,
-                    padding.top + borderThickness);
+                content.setLocation(padding.left + thickness,
+                    padding.top + thickness);
 
                 int contentWidth = Math.max(width - (padding.left + padding.right
-                    + (borderThickness * 2)), 0);
+                    + (thickness * 2)), 0);
                 int contentHeight = Math.max(height - (padding.top + padding.bottom
-                    + (borderThickness * 2)), 0);
+                    + (thickness * 2)), 0);
 
                 content.setSize(contentWidth, contentHeight);
             } else {
@@ -159,10 +159,10 @@ public class BorderSkin extends ContainerSkin
         // Clip the background to a rectangle that is effectively the middle
         // of the border thickness, so we don't anti-alias the background
         // with the outer edge of the border
-        RoundRectangle2D clipRectangle = new RoundRectangle2D.Double(borderThickness / 2,
-            borderThickness / 2,
-            width - borderThickness, height - borderThickness,
-            cornerRadius - borderThickness / 2, cornerRadius - borderThickness / 2);
+        RoundRectangle2D clipRectangle = new RoundRectangle2D.Double(thickness / 2,
+            thickness / 2,
+            width - thickness, height - thickness,
+            cornerRadius - thickness / 2, cornerRadius - thickness / 2);
 
         // Paint the background
         Graphics2D baseGraphics = (Graphics2D)graphics.create();
@@ -175,16 +175,16 @@ public class BorderSkin extends ContainerSkin
             width, height,
             cornerRadius, cornerRadius);
 
-        RoundRectangle2D innerRectangle = new RoundRectangle2D.Double(borderThickness,
-            borderThickness,
-            width - borderThickness * 2, height - borderThickness * 2,
-            Math.max(cornerRadius - borderThickness, 0),
-            Math.max(cornerRadius - borderThickness, 0));
+        RoundRectangle2D innerRectangle = new RoundRectangle2D.Double(thickness,
+            thickness,
+            width - thickness * 2, height - thickness * 2,
+            Math.max(cornerRadius - thickness, 0),
+            Math.max(cornerRadius - thickness, 0));
 
         Area borderArea = new Area(outerRectangle);
         borderArea.subtract(new Area(innerRectangle));
 
-        graphics.setPaint(borderColor);
+        graphics.setPaint(color);
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -192,42 +192,42 @@ public class BorderSkin extends ContainerSkin
         graphics.fill(borderArea);
     }
 
-    public Color getBorderColor() {
-        return borderColor;
+    public Color getColor() {
+        return color;
     }
 
-    public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
         }
 
-        this.borderColor = borderColor;
+        this.color = color;
         repaintComponent();
     }
 
-    public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
         }
 
-        setBorderColor(Color.decode(borderColor));
+        setColor(Color.decode(color));
     }
 
-    public int getBorderThickness() {
-        return borderThickness;
+    public int getThickness() {
+        return thickness;
     }
 
-    public void setBorderThickness(int borderThickness) {
-        this.borderThickness = borderThickness;
+    public void setThickness(int thickness) {
+        this.thickness = thickness;
         repaintComponent();
     }
 
-    public void setBorderThickness(Number borderThickness) {
-        if (borderThickness == null) {
-            throw new IllegalArgumentException("borderThickness is null.");
+    public void setThickness(Number thickness) {
+        if (thickness == null) {
+            throw new IllegalArgumentException("thickness is null.");
         }
 
-        setBorderThickness(borderThickness.intValue());
+        setThickness(thickness.intValue());
     }
 
     public Insets getPadding() {

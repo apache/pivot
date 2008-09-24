@@ -41,6 +41,16 @@ public abstract class ContainerSkin extends ComponentSkin
      * @author gbrown
      */
     public static class IndexFocusTraversalPolicy implements FocusTraversalPolicy {
+        private boolean wrap;
+
+        public IndexFocusTraversalPolicy() {
+            this(false);
+        }
+
+        public IndexFocusTraversalPolicy(boolean wrap) {
+            this.wrap = wrap;
+        }
+
         public Component getNextComponent(Container container, Component component, Direction direction) {
             if (container == null) {
                 throw new IllegalArgumentException("container is null.");
@@ -52,44 +62,56 @@ public abstract class ContainerSkin extends ComponentSkin
 
             Component nextComponent = null;
 
-            switch (direction) {
-                case FORWARD: {
-                    if (component == null) {
-                        // Return the first component in the sequence
-                        if (container.getLength() > 0) {
+            int n = container.getLength();
+            if (n > 0) {
+                switch (direction) {
+                    case FORWARD: {
+                        if (component == null) {
+                            // Return the first component in the sequence
                             nextComponent = container.get(0);
-                        }
-                    } else {
-                        // Return the next component in the sequence
-                        int index = container.indexOf(component);
+                        } else {
+                            // Return the next component in the sequence
+                            int index = container.indexOf(component);
+                            if (index == -1) {
+                                throw new IllegalArgumentException();
+                            }
 
-                        if (index >= 0
-                            && index < container.getLength() - 1) {
-                            nextComponent = container.get(index + 1);
+                            if (index < n - 1) {
+                                nextComponent = container.get(index + 1);
+                            } else {
+                                if (wrap
+                                    && container.containsFocus()) {
+                                    nextComponent = container.get(0);
+                                }
+                            }
                         }
+
+                        break;
                     }
 
-                    break;
-                }
-
-                case BACKWARD: {
-                    if (component == null) {
-                        // Return the last component in the sequence
-                        int n = container.getLength();
-                        if (n > 0) {
+                    case BACKWARD: {
+                        if (component == null) {
+                            // Return the last component in the sequence
                             nextComponent = container.get(n - 1);
-                        }
-                    } else {
-                        // Return the previous component in the sequence
-                        int index = container.indexOf(component);
+                        } else {
+                            // Return the previous component in the sequence
+                            int index = container.indexOf(component);
+                            if (index == -1) {
+                                throw new IllegalArgumentException();
+                            }
 
-                        if (index > 0
-                            && index < container.getLength()) {
-                            nextComponent = container.get(index - 1);
+                            if (index > 0) {
+                                nextComponent = container.get(index - 1);
+                            } else {
+                                if (wrap
+                                    && container.containsFocus()) {
+                                    nextComponent = container.get(n - 1);
+                                }
+                            }
                         }
+
+                        break;
                     }
-
-                    break;
                 }
             }
 
@@ -100,8 +122,6 @@ public abstract class ContainerSkin extends ComponentSkin
     // Style properties
     private Color backgroundColor = null;
     private float backgroundOpacity = 1.0f;
-
-    private static final FocusTraversalPolicy DEFAULT_FOCUS_TRAVERSAL_POLICY = new IndexFocusTraversalPolicy();
 
     @Override
     public void install(Component component) {
@@ -115,7 +135,7 @@ public abstract class ContainerSkin extends ComponentSkin
         container.getContainerListeners().add(this);
 
         // Set the focus traversal policy
-        container.setFocusTraversalPolicy(DEFAULT_FOCUS_TRAVERSAL_POLICY);
+        container.setFocusTraversalPolicy(new IndexFocusTraversalPolicy());
     }
 
     public void uninstall() {
@@ -123,6 +143,9 @@ public abstract class ContainerSkin extends ComponentSkin
 
         // Remove this as a container listener
         container.getContainerListeners().remove(this);
+
+        // Clear the focus traversal policy
+        container.setFocusTraversalPolicy(null);
 
         super.uninstall();
     }

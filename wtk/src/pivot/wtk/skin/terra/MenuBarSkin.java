@@ -48,11 +48,15 @@ public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
 
         MenuBar menuBar = (MenuBar)component;
         menuBar.getMenuBarListeners().add(this);
+
+        menuBar.setFocusTraversalPolicy(new IndexFocusTraversalPolicy(true));
     }
 
     public void uninstall() {
         MenuBar menuBar = (MenuBar)getComponent();
         menuBar.getMenuBarListeners().remove(this);
+
+        menuBar.setFocusTraversalPolicy(null);
 
         super.uninstall();
     }

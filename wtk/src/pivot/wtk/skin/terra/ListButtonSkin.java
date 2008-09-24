@@ -156,7 +156,7 @@ public class ListButtonSkin extends ButtonSkin
 
         listViewBorder = new Border(listViewPanorama);
         listViewBorder.getStyles().put("padding", 0);
-        listViewBorder.getStyles().put("borderColor", borderColor);
+        listViewBorder.getStyles().put("color", borderColor);
 
         // Create the popup
         listViewPopup = new Popup(listViewBorder);
@@ -453,7 +453,7 @@ public class ListButtonSkin extends ButtonSkin
         }
 
         this.borderColor = borderColor;
-        listViewBorder.getStyles().put("borderColor", borderColor);
+        listViewBorder.getStyles().put("color", borderColor);
         repaintComponent();
     }
 

@@ -45,11 +45,11 @@ public class TooltipSkin extends WindowSkin
     private Label label = new Label();
     private Border border = new Border();
 
-    private static final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 11);
-    private static final Color DEFAULT_COLOR = Color.BLACK;
-    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(0xff, 0xff, 0xe0);
-    private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
-    private static final Insets DEFAULT_PADDING = new Insets(2);
+    private static final Font FONT = new Font("Verdana", Font.PLAIN, 11);
+    private static final Color COLOR = Color.BLACK;
+    private static final Color BACKGROUND_COLOR = new Color(0xff, 0xff, 0xe0);
+    private static final Color BORDER_COLOR = Color.BLACK;
+    private static final Insets PADDING = new Insets(2);
 
     public TooltipSkin() {
         // Add the label to the border
@@ -57,13 +57,13 @@ public class TooltipSkin extends WindowSkin
 
         // Apply the default styles
         Component.StyleDictionary labelStyles = label.getStyles();
-        labelStyles.put("font", DEFAULT_FONT);
-        labelStyles.put("color", DEFAULT_COLOR);
+        labelStyles.put("font", FONT);
+        labelStyles.put("color", COLOR);
 
         Component.StyleDictionary borderStyles = border.getStyles();
-        borderStyles.put("backgroundColor", DEFAULT_BACKGROUND_COLOR);
-        borderStyles.put("borderColor", DEFAULT_BORDER_COLOR);
-        borderStyles.put("padding", DEFAULT_PADDING);
+        borderStyles.put("backgroundColor", BACKGROUND_COLOR);
+        borderStyles.put("color", BORDER_COLOR);
+        borderStyles.put("padding", PADDING);
     }
 
     @Override

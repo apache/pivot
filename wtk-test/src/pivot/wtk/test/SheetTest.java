@@ -28,13 +28,14 @@ import pivot.wtk.PushButton;
 import pivot.wtk.Sheet;
 import pivot.wtk.TablePane;
 import pivot.wtk.VerticalAlignment;
+import pivot.wtk.media.Image;
 
 public class SheetTest implements Application {
     private Frame frame = null;
 
     public void startup(final Display display, Dictionary<String, String> properties)
         throws Exception {
-        PushButton windowContent = new PushButton("Window Content");
+        PushButton windowContent = new PushButton(Image.load(getClass().getResource("IMG_0767_2.jpg")));
         windowContent.setPreferredSize(480, 360);
 
         frame = new Frame(windowContent);
@@ -59,6 +60,7 @@ public class SheetTest implements Application {
         flowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
 
         PushButton closeButton = new PushButton("Close");
+        closeButton.getStyles().put("preferredAspectRatio", 3);
         flowPane.add(closeButton);
 
         closeButton.getButtonPressListeners().add(new ButtonPressListener() {

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{borderColor:'#999999'}"
+<Border styles="{color:'#999999'}"
 	xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
 	<content>
 		<TablePane styles="{backgroundColor:'#404040'}">

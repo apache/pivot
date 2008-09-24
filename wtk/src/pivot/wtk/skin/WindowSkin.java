@@ -45,13 +45,19 @@ public class WindowSkin extends ContainerSkin
         public Component getNextComponent(Container container, Component component, Direction direction) {
             assert (container instanceof Window) : "container is not a Window";
 
+            if (container == null) {
+                throw new IllegalArgumentException("container is null.");
+            }
+
+            if (direction == null) {
+                throw new IllegalArgumentException("direction is null.");
+            }
+
             Window window = (Window)container;
 
             return window.getContent();
         }
     }
-
-    private static final FocusTraversalPolicy DEFAULT_FOCUS_TRAVERSAL_POLICY = new WindowFocusTraversalPolicy();
 
     public WindowSkin() {
         setBackgroundColor(Color.WHITE);
@@ -67,7 +73,7 @@ public class WindowSkin extends ContainerSkin
         window.getWindowListeners().add(this);
         window.getWindowStateListeners().add(this);
 
-        window.setFocusTraversalPolicy(DEFAULT_FOCUS_TRAVERSAL_POLICY);
+        window.setFocusTraversalPolicy(new WindowFocusTraversalPolicy());
     }
 
     @Override
@@ -75,6 +81,8 @@ public class WindowSkin extends ContainerSkin
         Window window = (Window)getComponent();
         window.getWindowListeners().remove(this);
         window.getWindowStateListeners().remove(this);
+
+        window.setFocusTraversalPolicy(null);
 
         super.uninstall();
     }

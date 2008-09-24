@@ -150,12 +150,7 @@ public class AlertSkin extends DialogSkin
 
             PushButton optionButton = new PushButton(option);
             optionButton.setStyles((Map<String, Object>)resources.get("optionButtonStyles"));
-
-            int preferredHeight = optionButton.getPreferredHeight(-1);
-            int minWidth = 3 * preferredHeight;
-            if (optionButton.getPreferredWidth(-1) < minWidth) {
-                optionButton.setPreferredWidth(minWidth);
-            }
+            optionButton.getStyles().put("preferredAspectRatio", 3);
 
             optionButton.getButtonPressListeners().add(new ButtonPressListener() {
                 public void buttonPressed(Button button) {

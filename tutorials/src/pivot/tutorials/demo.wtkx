@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{borderColor:'#cccac2', backgroundColor:'#cccac2', padding:8}"
+<Border styles="{color:'#cccac2', backgroundColor:'#cccac2', padding:8}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <content>
-        <Border styles="{borderColor:'#999999', backgroundColor:'#f7f5eb', padding:0}">
+        <Border styles="{color:'#999999', backgroundColor:'#f7f5eb', padding:0}">
             <content>
                 <ScrollPane>
                     <view>

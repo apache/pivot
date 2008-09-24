@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{borderColor:'#999999'}"
+<Border styles="{color:'#999999'}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <content>
         <FlowPane styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
             <FlowPane orientation="vertical" styles="{spacing:6}">
                 <Label text="Basic" styles="{font:'Verdana bold 11'}"/>
-                <Border styles="{padding:0, borderColor:'#cccac2'}">
+                <Border styles="{padding:0, color:'#cccac2'}">
                     <content>
                         <ScrollPane preferredHeight="80">
                             <view>
@@ -44,7 +44,7 @@ limitations under the License.
 
             <FlowPane orientation="vertical" styles="{spacing:6}">
                 <Label text="Multi-Select" styles="{font:'Verdana bold 11'}"/>
-                <Border styles="{padding:0, borderColor:'#cccac2'}">
+                <Border styles="{padding:0, color:'#cccac2'}">
                     <content>
                         <ScrollPane preferredHeight="80">
                             <view>
@@ -66,7 +66,7 @@ limitations under the License.
 
             <FlowPane orientation="vertical" styles="{spacing:6}">
                 <Label text="Image" styles="{font:'Verdana bold 11'}"/>
-                <Border styles="{padding:0, borderColor:'#cccac2'}">
+                <Border styles="{padding:0, color:'#cccac2'}">
                     <content>
                         <ScrollPane preferredHeight="80">
                             <view>

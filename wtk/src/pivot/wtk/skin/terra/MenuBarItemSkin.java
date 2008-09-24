@@ -218,6 +218,8 @@ public class MenuBarItemSkin extends ButtonSkin
 
     @Override
     public void focusedChanged(Component component, boolean temporary) {
+        super.focusedChanged(component, temporary);
+
         final MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
         final MenuBar menuBar = menuBarItem.getMenuBar();
 

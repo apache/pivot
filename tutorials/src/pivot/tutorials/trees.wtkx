@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{borderColor:'#999999'}"
+<Border styles="{color:'#999999'}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <content>
         <FlowPane styles="{padding:4, spacing:10}">
             <FlowPane orientation="vertical">
                 <Label text="Simple" styles="{font:'Verdana bold 11'}"/>
-                <Border styles="{borderColor:'#999999', padding:0}">
+                <Border styles="{color:'#999999', padding:0}">
                     <content>
                         <ScrollPane preferredWidth="160" preferredHeight="240"
                             horizontalScrollBarPolicy="fillToCapacity">
@@ -82,7 +82,7 @@ limitations under the License.
 
             <FlowPane orientation="vertical">
                 <Label text="Editable" styles="{font:'Verdana bold 11'}"/>
-                <Border styles="{borderColor:'#999999', padding:0}">
+                <Border styles="{color:'#999999', padding:0}">
                     <content>
                         <ScrollPane wtkx:id="editableTreeViewScrollPane" preferredWidth="160" preferredHeight="240"
                             horizontalScrollBarPolicy="fillToCapacity">
@@ -146,7 +146,7 @@ limitations under the License.
 
             <FlowPane orientation="vertical">
                 <Label text="Multi-Select" styles="{font:'Verdana bold 11'}"/>
-                <Border styles="{borderColor:'#999999', padding:0}">
+                <Border styles="{color:'#999999', padding:0}">
                     <content>
                         <ScrollPane preferredWidth="160" preferredHeight="240"
                             horizontalScrollBarPolicy="fillToCapacity">

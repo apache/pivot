@@ -47,6 +47,7 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
     private Color pressedBevelColor = new Color(0xCC, 0xCA, 0xC2);
     private Color disabledBevelColor = new Color(0xE6, 0xE3, 0xDA);
     private Insets padding = new Insets(3);
+    private float preferredAspectRatio = Float.NaN;
 
     public int getPreferredWidth(int height) {
         PushButton pushButton = (PushButton)getComponent();
@@ -55,12 +56,22 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
         dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
         // Include padding in constraint
-        if (height != -1) {
-            height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+        int contentHeight = height;
+        if (contentHeight != -1) {
+            contentHeight = Math.max(contentHeight - (padding.top + padding.bottom + 2), 0);
         }
 
-        int preferredWidth = dataRenderer.getPreferredWidth(height)
+        int preferredWidth = dataRenderer.getPreferredWidth(contentHeight)
             + padding.left + padding.right + 2;
+
+        // Adjust for preferred aspect ratio
+        if (!Float.isNaN(preferredAspectRatio)
+            && preferredAspectRatio >= 1) {
+            if (height != -1
+                && (float)preferredWidth / (float)height < preferredAspectRatio) {
+                preferredWidth = (int)((float)height * preferredAspectRatio);
+            }
+        }
 
         return preferredWidth;
     }
@@ -72,12 +83,22 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
         dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
         // Include padding in constraint
-        if (width != -1) {
-            width = Math.max(width - (padding.left + padding.right + 2), 0);
+        int contentWidth = width;
+        if (contentWidth != -1) {
+            contentWidth = Math.max(contentWidth - (padding.left + padding.right + 2), 0);
         }
 
-        int preferredHeight = dataRenderer.getPreferredHeight(width)
+        int preferredHeight = dataRenderer.getPreferredHeight(contentWidth)
             + padding.top + padding.bottom + 2;
+
+        // Adjust for preferred aspect ratio
+        if (!Float.isNaN(preferredAspectRatio)
+            && preferredAspectRatio >= 1) {
+            if (width != -1
+                && (float)width / (float)preferredHeight < preferredAspectRatio) {
+                preferredHeight = (int)((float)width / preferredAspectRatio);
+            }
+        }
 
         return preferredHeight;
     }
@@ -95,6 +116,19 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
 
         int preferredHeight = preferredContentSize.height
             + padding.top + padding.bottom + 2;
+
+        // Adjust for preferred aspect ratio
+        if (!Float.isNaN(preferredAspectRatio)) {
+            if (preferredAspectRatio >= 1) {
+                if ((float)preferredWidth / (float)preferredHeight < preferredAspectRatio) {
+                    preferredWidth = (int)((float)preferredHeight * preferredAspectRatio);
+                }
+            } else {
+                if ((float)preferredWidth / (float)preferredHeight > preferredAspectRatio) {
+                    preferredHeight = (int)((float)preferredWidth / preferredAspectRatio);
+                }
+            }
+        }
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -404,5 +438,22 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
         }
 
         setPadding(padding.intValue());
+    }
+
+    public float getPreferredAspectRatio() {
+        return preferredAspectRatio;
+    }
+
+    public void setPreferredAspectRatio(float preferredAspectRatio) {
+        this.preferredAspectRatio = preferredAspectRatio;
+        invalidateComponent();
+    }
+
+    public final void setPreferredAspectRatio(Number preferredAspectRatio) {
+        if (preferredAspectRatio == null) {
+            throw new IllegalArgumentException("preferredAspectRatio is null.");
+        }
+
+        setPreferredAspectRatio(preferredAspectRatio.floatValue());
     }
 }

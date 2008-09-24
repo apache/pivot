@@ -56,7 +56,7 @@ public class MenuPopupSkin extends PopupSkin
         panorama = new Panorama();
         border = new Border(panorama);
 
-        border.getStyles().put("borderColor", new Color(0x99, 0x99, 0x99));
+        border.getStyles().put("color", new Color(0x99, 0x99, 0x99));
         border.getStyles().put("backgroundColor", null);
         border.getStyles().put("padding", 0);
     }
@@ -112,11 +112,11 @@ public class MenuPopupSkin extends PopupSkin
     }
 
     public Color getBorderColor() {
-        return (Color)border.getStyles().get("borderColor");
+        return (Color)border.getStyles().get("color");
     }
 
     public void setBorderColor(Color borderColor) {
-        border.getStyles().put("borderColor", borderColor);
+        border.getStyles().put("color", borderColor);
     }
 
     public void setBorderColor(String borderColor) {
@@ -124,7 +124,7 @@ public class MenuPopupSkin extends PopupSkin
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        border.getStyles().put("borderColor", borderColor);
+        border.getStyles().put("color", borderColor);
     }
 
     @Override

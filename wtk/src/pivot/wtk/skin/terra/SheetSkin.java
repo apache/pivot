@@ -19,10 +19,15 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import pivot.collections.Dictionary;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
+import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Display;
 import pivot.wtk.Insets;
+import pivot.wtk.Mouse;
 import pivot.wtk.Sheet;
+import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.skin.WindowSkin;
 
@@ -33,7 +38,28 @@ import pivot.wtk.skin.WindowSkin;
  */
 public class SheetSkin extends WindowSkin {
     private Color borderColor = new Color(0x99, 0x99, 0x99);
+    private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
     private Insets padding = new Insets(8);
+
+    private ComponentMouseButtonListener ownerMouseButtonListener =
+        new ComponentMouseButtonListener() {
+        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+            Window owner = (Window)component;
+            Component ownerContent = owner.getContent();
+
+            if (ownerContent != null
+                && !ownerContent.isEnabled()
+                && owner.getComponentAt(x, y) == ownerContent) {
+                ApplicationContext.beep();
+            }
+        }
+
+        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        }
+
+        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        }
+    };
 
     private DropShadowDecorator dropShadowDecorator = null;
 
@@ -162,6 +188,9 @@ public class SheetSkin extends WindowSkin {
 
         graphics.setPaint(borderColor);
         graphics.drawRect(0, 0, width - 1, height - 1);
+
+        graphics.setPaint(bevelColor);
+        graphics.drawLine(1, height - 2, width - 2, height - 2);
     }
 
     public Color getBorderColor() {
@@ -183,6 +212,27 @@ public class SheetSkin extends WindowSkin {
         }
 
         setBorderColor(Color.decode(borderColor));
+    }
+
+    public Color getBevelColor() {
+        return bevelColor;
+    }
+
+    public void setBevelColor(Color bevelColor) {
+        if (bevelColor == null) {
+            throw new IllegalArgumentException("bevelColor is null.");
+        }
+
+        this.bevelColor = bevelColor;
+        repaintComponent();
+    }
+
+    public final void setBevelColor(String bevelColor) {
+        if (bevelColor == null) {
+            throw new IllegalArgumentException("bevelColor is null.");
+        }
+
+        setBevelColor(Color.decode(bevelColor));
     }
 
     public Insets getPadding() {
@@ -216,5 +266,21 @@ public class SheetSkin extends WindowSkin {
         }
 
         setPadding(padding.intValue());
+    }
+
+    @Override
+    public void windowOpened(Window window) {
+        super.windowOpened(window);
+
+        Window owner = window.getOwner();
+        owner.getComponentMouseButtonListeners().add(ownerMouseButtonListener);
+    }
+
+    @Override
+    public void windowClosed(Window window, Display display) {
+        super.windowClosed(window, display);
+
+        Window owner = window.getOwner();
+        owner.getComponentMouseButtonListeners().remove(ownerMouseButtonListener);
     }
 }

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{padding:0, borderColor:'#cccac2'}"
+<Border styles="{color:'#cccac2', padding:0}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <content>
         <ScrollPane horizontalScrollBarPolicy="fillToCapacity">

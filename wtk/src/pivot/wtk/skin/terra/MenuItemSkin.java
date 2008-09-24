@@ -313,6 +313,8 @@ public class MenuItemSkin extends ButtonSkin
 
     @Override
     public void focusedChanged(Component component, boolean temporary) {
+        super.focusedChanged(component, temporary);
+
         repaintComponent();
     }
 
