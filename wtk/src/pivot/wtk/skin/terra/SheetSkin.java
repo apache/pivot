@@ -25,6 +25,7 @@ import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.Insets;
+import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Sheet;
 import pivot.wtk.Window;
@@ -194,6 +195,25 @@ public class SheetSkin extends WindowSkin {
         graphics.drawLine(1, height - 2, width - 2, height - 2);
     }
 
+    @Override
+    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = false;
+
+        Sheet sheet = (Sheet)getComponent();
+
+        if (keyCode == Keyboard.KeyCode.ENTER) {
+            sheet.close(true);
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
+            sheet.close(false);
+            consumed = true;
+        } else {
+            consumed = super.keyPressed(keyCode, keyLocation);
+        }
+
+        return consumed;
+    }
+
     public Color getBorderColor() {
         return borderColor;
     }
@@ -275,25 +295,25 @@ public class SheetSkin extends WindowSkin {
 
         Window owner = window.getOwner();
         owner.getComponentMouseButtonListeners().add(ownerMouseButtonListener);
-        
-        // TODO Start the open transition        
+
+        // TODO Start the open transition
     }
 
     @Override
     public boolean previewWindowClose(Window window) {
-        // TODO If the open transition is running, stop it and record the 
+        // TODO If the open transition is running, stop it and record the
         // current y-value; use this to start the close transition
-        
-        // TODO Start a close transition, return false, and close the window 
+
+        // TODO Start a close transition, return false, and close the window
         // when the transition is complete
-        
+
         return true;
     }
-    
+
     @Override
     public void windowClosed(Window window, Display display) {
         super.windowClosed(window, display);
-        
+
         Window owner = window.getOwner();
         owner.getComponentMouseButtonListeners().remove(ownerMouseButtonListener);
     }
