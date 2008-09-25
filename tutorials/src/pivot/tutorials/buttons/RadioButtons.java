@@ -22,6 +22,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Display;
+import pivot.wtk.MessageType;
 import pivot.wtk.PushButton;
 import pivot.wtk.RadioButton;
 import pivot.wtk.Window;
@@ -49,7 +50,7 @@ public class RadioButtons implements Application {
                 String message = "You selected \""
                     + numbersGroup.getSelection().getButtonData()
                     + "\".";
-                Alert.alert(Alert.Type.INFO, message, window);
+                Alert.alert(MessageType.INFO, message, window);
             }
         });
 

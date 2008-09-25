@@ -22,6 +22,7 @@ import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
+import pivot.wtk.MessageType;
 import pivot.wtk.PushButton;
 import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
@@ -39,7 +40,7 @@ public class PushButtons implements Application {
             (PushButton)wtkxSerializer.getObjectByName("pushButton");
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                Alert.alert(Alert.Type.INFO, "You clicked me!", window);
+                Alert.alert(MessageType.INFO, "You clicked me!", window);
             }
         });
 

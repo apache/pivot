@@ -29,23 +29,6 @@ import pivot.util.Resources;
  * @author gbrown
  */
 public class Alert extends Dialog {
-    /**
-     * <p>Enumeration defining an alert's type.</p>
-     *
-     * @author gbrown
-     */
-    public enum Type {
-        ERROR,
-        WARNING,
-        QUESTION,
-        INFO,
-        APPLICATION;
-
-        public static Type decode(String value) {
-            return valueOf(value.toUpperCase());
-        }
-    }
-
     private static class AlertListenerList extends ListenerList<AlertListener>
         implements AlertListener {
         public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
@@ -55,7 +38,7 @@ public class Alert extends Dialog {
         }
     }
 
-    private Type type = null;
+    private MessageType type = null;
     private String message = null;
     private Component body = null;
     private Sequence<?> options = null;
@@ -73,17 +56,13 @@ public class Alert extends Dialog {
         }
     }
 
-    public Alert(Type type, String message, Sequence<?> options) {
+    public Alert(MessageType type, String message, Sequence<?> options) {
         this(type, message, options, null);
     }
 
-    public Alert(Type type, String message, Sequence<?> options, Component body) {
+    public Alert(MessageType type, String message, Sequence<?> options, Component body) {
         if (type == null) {
             throw new IllegalArgumentException("type is null.");
-        }
-
-        if (message == null) {
-            throw new IllegalArgumentException("message is null.");
         }
 
         if (options == null) {
@@ -98,7 +77,7 @@ public class Alert extends Dialog {
         installSkin(Alert.class);
     }
 
-    public Type getType() {
+    public MessageType getMessageType() {
         return type;
     }
 
@@ -141,44 +120,44 @@ public class Alert extends Dialog {
     }
 
     public static void alert(String message, Display display) {
-        alert(Type.INFO, message, display, null);
+        alert(MessageType.INFO, message, display, null);
     }
 
     public static void alert(String message, Display display,
         DialogStateListener dialogStateListener) {
-        alert(Type.INFO, message, display, dialogStateListener);
+        alert(MessageType.INFO, message, display, dialogStateListener);
     }
 
-    public static void alert(Type type, String message, Display display) {
+    public static void alert(MessageType type, String message, Display display) {
         alert(type, message, display, null);
     }
 
-    public static void alert(Type type, String message, Display display,
+    public static void alert(MessageType type, String message, Display display,
         DialogStateListener dialogStateListener) {
         Alert alert = createAlert(type, message);
         alert.open(display, dialogStateListener);
     }
 
     public static void alert(String message, Window owner) {
-        alert(Type.INFO, message, owner, null);
+        alert(MessageType.INFO, message, owner, null);
     }
 
     public static void alert(String message, Window owner,
         DialogStateListener dialogStateListener) {
-        alert(Type.INFO, message, owner, dialogStateListener);
+        alert(MessageType.INFO, message, owner, dialogStateListener);
     }
 
-    public static void alert(Type type, String message, Window owner) {
+    public static void alert(MessageType type, String message, Window owner) {
         alert(type, message, owner, null);
     }
 
-    public static void alert(Type type, String message, Window owner,
+    public static void alert(MessageType type, String message, Window owner,
         DialogStateListener dialogStateListener) {
         Alert alert = createAlert(type, message);
         alert.open(owner, dialogStateListener);
     }
 
-    private static Alert createAlert(Type type, String message) {
+    private static Alert createAlert(MessageType type, String message) {
         List<Object> options = new ArrayList<Object>();
         options.add(resources.get("defaultOption"));
 

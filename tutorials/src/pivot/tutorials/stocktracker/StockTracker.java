@@ -31,7 +31,6 @@ import pivot.util.Resources;
 import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskListener;
 import pivot.web.GetQuery;
-import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
@@ -43,6 +42,7 @@ import pivot.wtk.Display;
 import pivot.wtk.Form;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Label;
+import pivot.wtk.MessageType;
 import pivot.wtk.Span;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewSelectionListener;
@@ -294,7 +294,7 @@ public class StockTracker implements Application {
                 stockQuote = tableData.get(firstSelectedIndex);
 
                 if (stockQuote.getChange() < 0) {
-                    Form.setFlag(detailChangeLabel, new Form.Flag(Alert.Type.ERROR));
+                    Form.setFlag(detailChangeLabel, new Form.Flag(MessageType.ERROR));
                 }
             }
         }

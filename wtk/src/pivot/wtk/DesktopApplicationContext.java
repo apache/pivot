@@ -68,7 +68,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             message = exception.getClass().getName();
                         }
 
-                        Alert.alert(Alert.Type.ERROR, message, applicationContext.getDisplay());
+                        Alert.alert(MessageType.ERROR, message, applicationContext.getDisplay());
                     }
 
                     break;
@@ -81,7 +81,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         shutdown = application.shutdown(true);
                     } catch(Exception exception) {
                         exception.printStackTrace();
-                        Alert.alert(Alert.Type.ERROR, exception.getMessage(),
+                        Alert.alert(MessageType.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());
                     }
 
@@ -111,7 +111,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         application.suspend();
                     } catch(Exception exception) {
                         exception.printStackTrace();
-                        Alert.alert(Alert.Type.ERROR, exception.getMessage(),
+                        Alert.alert(MessageType.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());
                     }
 
@@ -123,7 +123,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         application.resume();
                     } catch(Exception exception) {
                         exception.printStackTrace();
-                        Alert.alert(Alert.Type.ERROR, exception.getMessage(),
+                        Alert.alert(MessageType.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());
                     }
 

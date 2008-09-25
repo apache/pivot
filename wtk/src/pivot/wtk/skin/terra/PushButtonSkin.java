@@ -28,7 +28,6 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.PushButton;
-import pivot.wtk.Bounds;
 import pivot.wtk.skin.AbstractPushButtonSkin;
 
 /**

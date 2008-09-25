@@ -24,7 +24,7 @@ limitations under the License.
                     <fields>
                         <TextInput Form.name="Basic" text="Pivot" textSize="12"/>
                         <TextInput Form.name="Password"
-                            Form.flag="{alertType:'info', message:'This field has a maximum length of 12 characters.'}"
+                            Form.flag="{messageType:'info', message:'This field has a maximum length of 12 characters.'}"
                             password="true" text="pivot" textSize="12" maximumLength="12" />
                     </fields>
                 </Form>

@@ -18,7 +18,6 @@ package pivot.wtk.skin.terra;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 
-import pivot.wtk.Alert;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Form;
@@ -27,6 +26,7 @@ import pivot.wtk.FormListener;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
 import pivot.wtk.Label;
+import pivot.wtk.MessageType;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
 
@@ -407,10 +407,10 @@ public class FormSkin extends ContainerSkin
         String flagMessage = null;
 
         if (flag != null) {
-            Alert.Type flagAlertType = flag.getAlertType();
+            MessageType flagMessageType = flag.getMessageType();
 
-            if (flagAlertType != null) {
-                switch (flagAlertType) {
+            if (flagMessageType != null) {
+                switch (flagMessageType) {
                     case INFO: {
                         if (informationImage == null) {
                             informationImage =

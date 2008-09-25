@@ -86,7 +86,7 @@ public class AlertSkin extends DialogSkin
         ImageView typeImageView = (ImageView)wtkxSerializer.getObjectByName("typeImageView");
         Image typeImage = null;
 
-        switch (alert.getType()) {
+        switch (alert.getMessageType()) {
             case INFO: {
                 if (informationImage == null) {
                     String informationImageName = (String)resources.get("informationImageName");

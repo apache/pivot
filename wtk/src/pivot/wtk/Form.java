@@ -159,32 +159,32 @@ public class Form extends Container {
     }
 
     /**
-     * Represents an alert associated with a form field.
+     * Represents an message alert associated with a form field.
      *
      * @author gbrown
      */
     public static class Flag {
         /**
-         * The flag's alert type.
+         * The flag's message type.
          */
-        private Alert.Type alertType = null;
+        private MessageType messageType = null;
 
         /**
          * The flag message. May be <tt>null</tt>.
          */
         private String message = null;
 
-        public static final String ALERT_TYPE_KEY = "alertType";
+        public static final String MESSAGE_TYPE_KEY = "messageType";
         public static final String MESSAGE_KEY = "message";
 
         /**
-         * Creates a new flag with the given alert type and no message.
+         * Creates a new flag with the given message type and no message.
          *
-         * @param alertType
+         * @param messageType
          * The type of the flag.
          */
-        public Flag(Alert.Type alertType) {
-            this(alertType, null);
+        public Flag(MessageType messageType) {
+            this(messageType, null);
         }
 
         public Flag(String flag) {
@@ -192,37 +192,37 @@ public class Form extends Container {
         }
 
         public Flag(Dictionary<String, ?> flag) {
-            this(Alert.Type.decode((String)flag.get(ALERT_TYPE_KEY)),
+            this(MessageType.decode((String)flag.get(MESSAGE_TYPE_KEY)),
                 (String)flag.get(MESSAGE_KEY));
         }
 
         /**
          * Creates a new flag with the given type and message.
          *
-         * @param alertType
+         * @param messageType
          * The type of the flag.
          *
          * @param message
          * The message text associated with the flag, or <tt>null</tt> for
          * no message.
          */
-        public Flag(Alert.Type alertType, String message) {
-            if (alertType == null) {
-                throw new IllegalArgumentException("alertType is null.");
+        public Flag(MessageType messageType, String message) {
+            if (messageType == null) {
+                throw new IllegalArgumentException("messageType is null.");
             }
 
-            this.alertType = alertType;
+            this.messageType = messageType;
             this.message = message;
         }
 
         /**
-         * Returns the flag's alert type.
+         * Returns the flag's message type.
          *
          * @return
-         * The alert type of the flag.
+         * The message type of the flag.
          */
-        public Alert.Type getAlertType() {
-            return alertType;
+        public MessageType getMessageType() {
+            return messageType;
         }
 
         /**
@@ -303,19 +303,19 @@ public class Form extends Container {
     /**
      * Returns the number of fields that are flagged with a given flag type.
      *
-     * @param alertType
-     * The alert type to count, or <tt>null</tt> to return the count of all
-     * flagged fields regardless of alert type.
+     * @param messageType
+     * The message type to count, or <tt>null</tt> to return the count of all
+     * flagged fields regardless of message type.
      */
-    public int getFlaggedFieldCount(Alert.Type alertType) {
+    public int getFlaggedFieldCount(MessageType messageType) {
         int count = 0;
 
         for (Component field : fields) {
             Flag flag = getFlag(field);
 
             if (flag != null
-               && (alertType == null
-                   || flag.getAlertType() == alertType)) {
+               && (messageType == null
+                   || flag.getMessageType() == messageType)) {
                 count++;
             }
         }

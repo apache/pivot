@@ -42,6 +42,7 @@ import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Menu;
 import pivot.wtk.MenuPopup;
+import pivot.wtk.MessageType;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.Popup;
@@ -442,25 +443,25 @@ public class Demo implements Application {
     private void initializeAlertButtons() {
         errorAlertButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                Alert.alert(Alert.Type.ERROR, "This is an error alert.", window);
+                Alert.alert(MessageType.ERROR, "This is an error alert.", window);
             }
         });
 
         warningAlertButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                Alert.alert(Alert.Type.WARNING, "This is a warning alert.", window);
+                Alert.alert(MessageType.WARNING, "This is a warning alert.", window);
             }
         });
 
         questionAlertButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                Alert.alert(Alert.Type.QUESTION, "This is a question alert.", window);
+                Alert.alert(MessageType.QUESTION, "This is a question alert.", window);
             }
         });
 
         infoAlertButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                Alert.alert(Alert.Type.INFO, "This is an info alert.", window);
+                Alert.alert(MessageType.INFO, "This is an info alert.", window);
             }
         });
 
@@ -478,7 +479,7 @@ public class Demo implements Application {
                     System.out.println(exception);
                 }
 
-                Alert alert = new Alert(Alert.Type.QUESTION, "Please select your favorite icon:",
+                Alert alert = new Alert(MessageType.QUESTION, "Please select your favorite icon:",
                     options, body);
                 alert.setTitle("Select Icon");
                 alert.setSelectedOption(0);
