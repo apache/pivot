@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.collections.ArrayList;
-import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
