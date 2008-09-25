@@ -2150,7 +2150,9 @@ public abstract class Component implements ConstrainedVisual {
     protected void mouseOver() {
         if (enabled) {
             // Only change the cursor if a drag/drop is not active
-            if (!DragDropManager.getCurrent().isActive()) {
+            DragDropManager dragDropManager = DragDropManager.getCurrent();
+            if (dragDropManager != null
+                && !dragDropManager.isActive()) {
                 Mouse.setCursor(cursor);
             }
 
@@ -2163,7 +2165,9 @@ public abstract class Component implements ConstrainedVisual {
     protected void mouseOut() {
         if (enabled) {
             // Only change the cursor if a drag/drop is not active
-            if (!DragDropManager.getCurrent().isActive()) {
+            DragDropManager dragDropManager = DragDropManager.getCurrent();
+            if (dragDropManager != null
+                && !dragDropManager.isActive()) {
                 Mouse.setCursor((parent == null) ?
                     Cursor.DEFAULT : parent.getCursor());
             }

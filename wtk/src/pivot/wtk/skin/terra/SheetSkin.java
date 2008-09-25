@@ -29,6 +29,7 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Sheet;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
+import pivot.wtk.effects.TranslationDecorator;
 import pivot.wtk.skin.WindowSkin;
 
 /**
@@ -274,12 +275,25 @@ public class SheetSkin extends WindowSkin {
 
         Window owner = window.getOwner();
         owner.getComponentMouseButtonListeners().add(ownerMouseButtonListener);
+        
+        // TODO Start the open transition        
     }
 
     @Override
+    public boolean previewWindowClose(Window window) {
+        // TODO If the open transition is running, stop it and record the 
+        // current y-value; use this to start the close transition
+        
+        // TODO Start a close transition, return false, and close the window 
+        // when the transition is complete
+        
+        return true;
+    }
+    
+    @Override
     public void windowClosed(Window window, Display display) {
         super.windowClosed(window, display);
-
+        
         Window owner = window.getOwner();
         owner.getComponentMouseButtonListeners().remove(ownerMouseButtonListener);
     }

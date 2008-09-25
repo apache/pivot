@@ -302,7 +302,8 @@ public abstract class Container extends Component
         super.paint(containerGraphics);
         containerGraphics.dispose();
 
-        Bounds clipBounds = new Bounds(graphics.getClipBounds());
+        java.awt.Rectangle awtClipBounds = graphics.getClipBounds(); 
+        Bounds clipBounds = (awtClipBounds == null) ? getBounds() : new Bounds(awtClipBounds);
 
         for (Component component : this) {
             // Calculate the decorated bounds

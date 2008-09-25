@@ -111,8 +111,8 @@ public abstract class ApplicationContext {
             ((Graphics2D)graphics).clip(new java.awt.Rectangle(0, 0, getWidth(), getHeight()));
 
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
-
-            if (!clipBounds.isEmpty()) {
+            if (clipBounds != null
+                && !clipBounds.isEmpty()) {
                 try {
                     if (!paintVolatileBuffered((Graphics2D)graphics)) {
                         if (!paintBuffered((Graphics2D)graphics)) {

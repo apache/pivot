@@ -108,13 +108,7 @@ public abstract class Action {
     }
 
     public Action(String id) {
-        this.id = id;
-
         if (id != null) {
-            if (actions.containsKey(id)) {
-                throw new IllegalArgumentException("Action ID " + id + " is already in use.");
-            }
-
             actions.put(id, this);
         }
     }
