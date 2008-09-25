@@ -31,6 +31,7 @@ import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
 import pivot.util.ListenerList;
+import pivot.util.concurrent.AbortException;
 import pivot.util.concurrent.Dispatcher;
 import pivot.util.concurrent.Task;
 
@@ -174,20 +175,36 @@ public abstract class Query<V> extends Task<V> {
         }
 
         public void flush() throws IOException {
+            if (abort) {
+                throw new AbortException();
+            }
+
             outputStream.flush();
         }
 
         public void write(byte[] b) throws IOException {
+            if (abort) {
+                throw new AbortException();
+            }
+
             outputStream.write(b);
             bytesSent += b.length;
         }
 
         public void write(byte[] b, int off, int len) throws IOException {
+            if (abort) {
+                throw new AbortException();
+            }
+
             outputStream.write(b, off, len);
             bytesSent += len;
         }
 
         public void write(int b) throws IOException {
+            if (abort) {
+                throw new AbortException();
+            }
+
             outputStream.write(b);
             bytesSent++;
         }
@@ -209,6 +226,10 @@ public abstract class Query<V> extends Task<V> {
         }
 
         public int read() throws IOException {
+            if (abort) {
+                throw new AbortException();
+            }
+
             int result = inputStream.read();
 
             if (result != -1) {
@@ -219,6 +240,10 @@ public abstract class Query<V> extends Task<V> {
         }
 
         public int read(byte b[]) throws IOException {
+            if (abort) {
+                throw new AbortException();
+            }
+
             int count = inputStream.read(b);
 
             if (count != -1) {
@@ -229,6 +254,10 @@ public abstract class Query<V> extends Task<V> {
         }
 
         public int read(byte b[], int off, int len) throws IOException {
+            if (abort) {
+                throw new AbortException();
+            }
+
             int count = inputStream.read(b, off, len);
 
             if (count != -1) {
@@ -239,12 +268,20 @@ public abstract class Query<V> extends Task<V> {
         }
 
         public long skip(long n) throws IOException {
+            if (abort) {
+                throw new AbortException();
+            }
+
             long count = inputStream.skip(n);
             bytesReceived += count;
             return count;
         }
 
         public int available() throws IOException {
+            if (abort) {
+                throw new AbortException();
+            }
+
             return inputStream.available();
         }
 
@@ -253,11 +290,19 @@ public abstract class Query<V> extends Task<V> {
         }
 
         public void mark(int readLimit) {
+            if (abort) {
+                throw new AbortException();
+            }
+
             inputStream.mark(readLimit);
             mark = bytesReceived;
         }
 
         public void reset() throws IOException {
+            if (abort) {
+                throw new AbortException();
+            }
+
             inputStream.reset();
             bytesReceived = mark;
         }
