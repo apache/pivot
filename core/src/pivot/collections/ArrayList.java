@@ -35,6 +35,8 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     protected java.util.ArrayList<T> arrayList = null;
 
+    private transient boolean sorting = false;
+
     private Comparator<T> comparator = null;
     private transient ListListenerList<T> listListeners = new ListListenerList<T>();
 
@@ -107,7 +109,9 @@ public class ArrayList<T> implements List<T>, Serializable {
         T previousItem = arrayList.get(index);
         arrayList.set(index, item);
 
-        listListeners.itemUpdated(this, index, previousItem);
+        if (!sorting) {
+            listListeners.itemUpdated(this, index, previousItem);
+        }
 
         return previousItem;
     }
@@ -182,7 +186,10 @@ public class ArrayList<T> implements List<T>, Serializable {
                 // Temporarily clear the comparator so it doesn't interfere
                 // with the sort
                 this.comparator = null;
+
+                sorting = true;
                 Sort.quickSort(this, comparator);
+                sorting = false;
             }
 
             this.comparator = comparator;
