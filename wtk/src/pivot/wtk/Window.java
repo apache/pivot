@@ -628,7 +628,7 @@ public class Window extends Container {
             // otherwise, clear the active descendant
             if (activeDescendant != null) {
                 if (isAncestor(activeDescendant)
-                    && activeDescendant.isEnabled()
+                    && !activeDescendant.isBlocked()
                     && activeDescendant.isShowing()) {
                     activeDescendant.requestFocus(true);
                 } else {
