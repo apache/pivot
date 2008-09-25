@@ -22,6 +22,9 @@ package pivot.wtk;
  * @author gbrown
  */
 public class Dialog extends Window {
+    public interface Skin extends pivot.wtk.Skin, DialogStateListener {
+    }
+
     private class RepositionCallback implements Runnable {
         private static final float GOLDEN_SECTION = 0.382f;
 
@@ -62,6 +65,16 @@ public class Dialog extends Window {
     public Dialog(String title, Component content) {
         super(title, content);
         installSkin(Dialog.class);
+    }
+
+    @Override
+    protected void setSkin(pivot.wtk.Skin skin) {
+        if (!(skin instanceof Dialog.Skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + Dialog.Skin.class.getName());
+        }
+
+        super.setSkin(skin);
     }
 
     /**
@@ -176,9 +189,12 @@ public class Dialog extends Window {
     }
 
     public void close(boolean result) {
+        Dialog.Skin dialogSkin = (Dialog.Skin)getSkin();
+
         if (!isClosed()
             && (dialogStateListener == null
-                || dialogStateListener.previewDialogClose(this, result))) {
+                || (dialogStateListener.previewDialogClose(this, result))
+                    && dialogSkin.previewDialogClose(this, result))) {
             super.close();
 
             if (isClosed()) {
@@ -200,6 +216,7 @@ public class Dialog extends Window {
 
                 // Notify listener
                 if (dialogStateListener != null) {
+                    dialogSkin.dialogClosed(this);
                     dialogStateListener.dialogClosed(this);
                 }
 

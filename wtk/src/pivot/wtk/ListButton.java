@@ -122,7 +122,7 @@ public class ListButton extends Button {
     }
 
     @Override
-    public void setSkin(pivot.wtk.Skin skin) {
+    protected void setSkin(pivot.wtk.Skin skin) {
         if (!(skin instanceof ListButton.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + ListButton.Skin.class.getName());

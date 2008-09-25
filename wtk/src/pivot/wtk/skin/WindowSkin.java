@@ -25,7 +25,6 @@ import pivot.wtk.Display;
 import pivot.wtk.FocusTraversalPolicy;
 import pivot.wtk.Window;
 import pivot.wtk.WindowListener;
-import pivot.wtk.WindowStateListener;
 import pivot.wtk.media.Image;
 
 /**
@@ -34,7 +33,7 @@ import pivot.wtk.media.Image;
  * @author gbrown
  */
 public class WindowSkin extends ContainerSkin
-    implements WindowListener, WindowStateListener {
+    implements Window.Skin, WindowListener {
     /**
      * Focus traversal policy that always returns the window's content. This
      * ensures that focus does not traverse out of the window.
@@ -71,7 +70,6 @@ public class WindowSkin extends ContainerSkin
 
         Window window = (Window)component;
         window.getWindowListeners().add(this);
-        window.getWindowStateListeners().add(this);
 
         window.setFocusTraversalPolicy(new WindowFocusTraversalPolicy());
     }
@@ -80,7 +78,6 @@ public class WindowSkin extends ContainerSkin
     public void uninstall() {
         Window window = (Window)getComponent();
         window.getWindowListeners().remove(this);
-        window.getWindowStateListeners().remove(this);
 
         window.setFocusTraversalPolicy(null);
 

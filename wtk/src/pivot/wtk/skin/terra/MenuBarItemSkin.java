@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
-import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.Cursor;
@@ -28,7 +27,7 @@ import pivot.wtk.skin.ButtonSkin;
  * @author gbrown
  */
 public class MenuBarItemSkin extends ButtonSkin
-    implements ButtonPressListener, ButtonStateListener, MenuBar.ItemListener {
+    implements ButtonPressListener, MenuBar.ItemListener {
     private MenuPopup menuPopup = new MenuPopup();
 
     public MenuBarItemSkin() {
@@ -69,7 +68,6 @@ public class MenuBarItemSkin extends ButtonSkin
 
         MenuBar.Item menuBarItem = (MenuBar.Item)component;
         menuBarItem.getButtonPressListeners().add(this);
-        menuBarItem.getButtonStateListeners().add(this);
         menuBarItem.getItemListeners().add(this);
 
         menuBarItem.setCursor(Cursor.DEFAULT);
@@ -79,7 +77,6 @@ public class MenuBarItemSkin extends ButtonSkin
     public void uninstall() {
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
         menuBarItem.getButtonPressListeners().remove(this);
-        menuBarItem.getButtonStateListeners().remove(this);
         menuBarItem.getItemListeners().remove(this);
 
         super.uninstall();
@@ -310,10 +307,7 @@ public class MenuBarItemSkin extends ButtonSkin
         }
     }
 
-    public boolean previewStateChange(Button button, Button.State state) {
-        return true;
-    }
-
+    @Override
     public void stateChanged(Button button, Button.State previousState) {
         repaintComponent();
     }

@@ -1,7 +1,6 @@
 package pivot.wtk.skin;
 
 import pivot.wtk.Button;
-import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
@@ -12,8 +11,7 @@ import pivot.wtk.PushButton;
  *
  * @author gbrown
  */
-public abstract class AbstractPushButtonSkin extends ButtonSkin
-    implements ButtonStateListener {
+public abstract class AbstractPushButtonSkin extends ButtonSkin {
     protected boolean highlighted = false;
     protected boolean pressed = false;
 
@@ -22,17 +20,6 @@ public abstract class AbstractPushButtonSkin extends ButtonSkin
         validateComponentType(component, PushButton.class);
 
         super.install(component);
-
-        PushButton pushButton = (PushButton)component;
-        pushButton.getButtonStateListeners().add(this);
-    }
-
-    @Override
-    public void uninstall() {
-        PushButton pushButton = (PushButton)getComponent();
-        pushButton.getButtonStateListeners().remove(this);
-
-        super.uninstall();
     }
 
     @Override
@@ -132,12 +119,7 @@ public abstract class AbstractPushButtonSkin extends ButtonSkin
         return consumed;
     }
 
-    // ButtonStateListener methods
-
-    public boolean previewStateChange(Button button, Button.State state) {
-        return true;
-    }
-
+    @Override
     public void stateChanged(Button toggleButton, Button.State previousState) {
         repaintComponent();
     }

@@ -794,7 +794,7 @@ public class TablePane extends Container {
     }
 
     @Override
-    public void setSkin(pivot.wtk.Skin skin) {
+    protected void setSkin(pivot.wtk.Skin skin) {
         if (!(skin instanceof TablePane.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + TablePane.Skin.class.getName());

@@ -206,8 +206,8 @@ public class DropShadowDecorator implements Decorator {
     }
 
     public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
-        return new Bounds(x + xOffset - blurRadius + component.getX(),
-            y + yOffset - blurRadius + component.getY(),
+        return new Bounds(x + xOffset - blurRadius + Math.max(component.getX(), 0),
+            y + yOffset - blurRadius + Math.max(component.getY(), 0),
             width + blurRadius * 2,
             height + blurRadius * 2);
     }

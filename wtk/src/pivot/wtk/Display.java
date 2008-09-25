@@ -39,7 +39,7 @@ public final class Display extends Container {
 	}
 
 	@Override
-	public void setSkin(Skin skin) {
+	protected void setSkin(pivot.wtk.Skin skin) {
 	    throw new UnsupportedOperationException("Can't replace Display skin.");
 	}
 

@@ -22,6 +22,14 @@ package pivot.wtk;
  * @author gbrown
  */
 public class Sheet extends Window {
+    /**
+     * <p>Sheet skin interface.</p>
+     *
+     * @author gbrown
+     */
+    public interface Skin extends pivot.wtk.Skin, SheetStateListener {
+    }
+
     private boolean result = false;
     private SheetStateListener sheetStateListener = null;
 
@@ -94,6 +102,16 @@ public class Sheet extends Window {
     }
 
     @Override
+    protected void setSkin(pivot.wtk.Skin skin) {
+        if (!(skin instanceof Sheet.Skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + Sheet.Skin.class.getName());
+        }
+
+        super.setSkin(skin);
+    }
+
+    @Override
     public final void setOwner(Window owner) {
         if (owner == null) {
             throw new UnsupportedOperationException("A sheet must have an owner.");
@@ -139,9 +157,12 @@ public class Sheet extends Window {
     }
 
     public void close(boolean result) {
+        Sheet.Skin sheetSkin = (Sheet.Skin)getSkin();
+
         if (!isClosed()
             && (sheetStateListener == null
-                || sheetStateListener.previewSheetClose(this, result))) {
+                || sheetStateListener.previewSheetClose(this, result))
+            && sheetSkin.previewSheetClose(this, result)) {
             super.close();
 
             if (isClosed()) {
@@ -156,6 +177,7 @@ public class Sheet extends Window {
                 owner.moveToFront();
 
                 if (sheetStateListener != null) {
+                    sheetSkin.sheetClosed(this);
                     sheetStateListener.sheetClosed(this);
                 }
 

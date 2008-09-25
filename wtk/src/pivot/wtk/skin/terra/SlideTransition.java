@@ -34,7 +34,7 @@ public class SlideTransition extends Transition {
     private int y;
 
     private Easing easing = new Quadratic();
-    private TranslationDecorator translationDecorator = new TranslationDecorator();
+    private TranslationDecorator translationDecorator = new TranslationDecorator(true);
 
     public SlideTransition(Component component, int x0, int x1, int y0, int y1,
         boolean reverse, int duration, int rate) {
@@ -58,15 +58,13 @@ public class SlideTransition extends Transition {
     @Override
     public void start(TransitionListener transitionListener) {
         component.getDecorators().add(translationDecorator);
-
         super.start(transitionListener);
     }
 
     @Override
     public void stop() {
-        component.getDecorators().remove(translationDecorator);
-
         super.stop();
+        component.getDecorators().remove(translationDecorator);
     }
 
     @Override
@@ -83,6 +81,7 @@ public class SlideTransition extends Transition {
         y = (int)(reverse ? easing.easeOut(elapsedTime, y0, deltaY, duration)
             : easing.easeOut(elapsedTime, y0, deltaY, duration));
 
+        component.repaint();
         translationDecorator.setOffset(x, y);
         component.repaint();
     }

@@ -100,6 +100,17 @@ public class TreeView extends Component {
         }
     }
 
+    public interface NodeRenderer extends Renderer {
+        public void render(Object node, TreeView treeView, boolean expanded,
+            boolean selected, boolean highlighted, boolean disabled);
+    }
+
+    public interface Skin extends pivot.wtk.Skin, TreeViewNodeStateListener {
+        public Sequence<Integer> getNodeAt(int y);
+        public Bounds getNodeBounds(Sequence<Integer> path);
+        public int getNodeOffset(Sequence<Integer> path);
+    }
+
     /**
      * Tree view listener list.
      *
@@ -257,17 +268,6 @@ public class TreeView extends Component {
                 listener.selectionReset(treeView, previousSelectedPaths);
             }
         }
-    }
-
-    public interface NodeRenderer extends Renderer {
-        public void render(Object node, TreeView treeView, boolean expanded,
-            boolean selected, boolean highlighted, boolean disabled);
-    }
-
-    public interface Skin extends pivot.wtk.Skin {
-        public Sequence<Integer> getNodeAt(int y);
-        public Bounds getNodeBounds(Sequence<Integer> path);
-        public int getNodeOffset(Sequence<Integer> path);
     }
 
     /**
@@ -465,7 +465,7 @@ public class TreeView extends Component {
     }
 
     @Override
-    public void setSkin(pivot.wtk.Skin skin) {
+    protected void setSkin(pivot.wtk.Skin skin) {
         if (!(skin instanceof TreeView.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + TreeView.Skin.class.getName());
@@ -726,17 +726,21 @@ public class TreeView extends Component {
      * <tt>true</tt> to disable the node; <tt>false</tt>, otherwise
      */
     public void setNodeDisabled(Sequence<Integer> path, boolean disabled) {
+        TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
+
         int index = disabledPaths.indexOf(path);
 
         if (((index < 0 && disabled)
             || (index >= 0 && !disabled))
-            && treeViewNodeStateListeners.previewNodeDisabledChange(this, path)) {
+            && treeViewNodeStateListeners.previewNodeDisabledChange(this, path)
+            && treeViewSkin.previewNodeDisabledChange(this, path)) {
             if (disabled) {
                 disabledPaths.add(path);
             } else {
                 disabledPaths.remove(index, 1);
             }
 
+            treeViewSkin.nodeDisabledChanged(this, path);
             treeViewNodeStateListeners.nodeDisabledChanged(this, path);
         }
     }

@@ -51,7 +51,7 @@ public abstract class Viewport extends Container {
     private ViewportListenerList viewportListeners = new ViewportListenerList();
 
     @Override
-    public void setSkin(pivot.wtk.Skin skin) {
+    protected void setSkin(pivot.wtk.Skin skin) {
         if (!(skin instanceof Viewport.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + Viewport.Skin.class.getName());

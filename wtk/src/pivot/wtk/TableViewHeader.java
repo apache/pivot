@@ -88,7 +88,7 @@ public class TableViewHeader extends Component {
     }
 
     @Override
-    public void setSkin(pivot.wtk.Skin skin) {
+    protected void setSkin(pivot.wtk.Skin skin) {
         if (!(skin instanceof TableViewHeader.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + TableViewHeader.Skin.class.getName());

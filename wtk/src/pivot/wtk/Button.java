@@ -98,6 +98,14 @@ public abstract class Button extends Component {
     }
 
     /**
+     * <p>Button skin interface.</p>
+     *
+     * @author gbrown
+     */
+    public interface Skin extends pivot.wtk.Skin, ButtonStateListener {
+    }
+
+    /**
      * Button listener list.
      *
      * @author gbrown
@@ -224,6 +232,16 @@ public abstract class Button extends Component {
 
     public Button(Object buttonData) {
         this.buttonData = buttonData;
+    }
+
+    @Override
+    protected void setSkin(pivot.wtk.Skin skin) {
+        if (!(skin instanceof Button.Skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + Button.Skin.class.getName());
+        }
+
+        super.setSkin(skin);
     }
 
     public Object getButtonData() {
@@ -378,10 +396,13 @@ public abstract class Button extends Component {
             throw new IllegalArgumentException("Button is not tri-state.");
         }
 
+        Button.Skin buttonSkin = (Button.Skin)getSkin();
+
         State previousState = this.state;
 
         if (previousState != state
-            && buttonStateListeners.previewStateChange(this, state)) {
+            && buttonStateListeners.previewStateChange(this, state)
+            && buttonSkin.previewStateChange(this, state)) {
             this.state = state;
 
             if (group != null) {
@@ -408,6 +429,7 @@ public abstract class Button extends Component {
                 }
             }
 
+            buttonSkin.stateChanged(this, previousState);
             buttonStateListeners.stateChanged(this, previousState);
         }
     }

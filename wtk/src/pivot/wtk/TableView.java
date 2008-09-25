@@ -437,7 +437,7 @@ public class TableView extends Component {
      *
      * @author gbrown
      */
-    public interface Skin extends pivot.wtk.Skin {
+    public interface Skin extends pivot.wtk.Skin, TableViewRowStateListener {
         public int getRowAt(int y);
         public int getColumnAt(int x);
         public Bounds getRowBounds(int rowIndex);
@@ -853,7 +853,7 @@ public class TableView extends Component {
     }
 
     @Override
-    public void setSkin(pivot.wtk.Skin skin) {
+    protected void setSkin(pivot.wtk.Skin skin) {
         if (!(skin instanceof TableView.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + TableView.Skin.class.getName());
@@ -1289,17 +1289,21 @@ public class TableView extends Component {
      * <tt>true</tt> to disable the row; <tt>false</tt>, otherwise.
      */
     public void setRowDisabled(int index, boolean disabled) {
+        TableView.Skin tableViewSkin = (TableView.Skin)getSkin();
+
         int i = Sequence.Search.binarySearch(disabledIndexes, index);
 
         if (((i < 0 && disabled)
             || (i >= 0 && !disabled))
-            && tableViewRowStateListeners.previewRowDisabledChange(this, index)) {
+            && tableViewRowStateListeners.previewRowDisabledChange(this, index)
+            && tableViewSkin.previewRowDisabledChange(this, index)) {
             if (disabled) {
                 disabledIndexes.insert(index, -(i + 1));
             } else {
                 disabledIndexes.remove(i, 1);
             }
 
+            tableViewSkin.rowDisabledChanged(this, index);
             tableViewRowStateListeners.rowDisabledChanged(this, index);
         }
     }

@@ -8,7 +8,6 @@ import java.awt.RenderingHints;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
-import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
@@ -29,7 +28,7 @@ import pivot.wtk.skin.ButtonSkin;
  * @author gbrown
  */
 public class MenuItemSkin extends ButtonSkin
-    implements ButtonPressListener, ButtonStateListener, Menu.ItemListener {
+    implements ButtonPressListener, Menu.ItemListener {
     public final class CheckmarkImage extends Image {
         public static final int SIZE = 14;
         public static final int CHECKMARK_SIZE = 10;
@@ -84,7 +83,6 @@ public class MenuItemSkin extends ButtonSkin
 
         Menu.Item menuItem = (Menu.Item)component;
         menuItem.getButtonPressListeners().add(this);
-        menuItem.getButtonStateListeners().add(this);
         menuItem.getItemListeners().add(this);
 
         menuItem.setCursor(Cursor.DEFAULT);
@@ -96,7 +94,6 @@ public class MenuItemSkin extends ButtonSkin
 
         Menu.Item menuItem = (Menu.Item)getComponent();
         menuItem.getButtonPressListeners().remove(this);
-        menuItem.getButtonStateListeners().remove(this);
         menuItem.getItemListeners().remove(this);
 
         super.uninstall();
@@ -340,10 +337,7 @@ public class MenuItemSkin extends ButtonSkin
         }
     }
 
-    public boolean previewStateChange(Button button, Button.State state) {
-        return true;
-    }
-
+    @Override
     public void stateChanged(Button button, Button.State previousState) {
         repaintComponent();
     }

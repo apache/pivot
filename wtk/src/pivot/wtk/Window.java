@@ -33,6 +33,14 @@ import pivot.wtk.media.Image;
  */
 public class Window extends Container {
     /**
+     * <p>Window skin interface.</p>
+     *
+     * @author gbrown
+     */
+    public interface Skin extends pivot.wtk.Skin, WindowStateListener {
+    }
+
+    /**
      * <p>Action dictionary implementation.</p>
      *
      * @author gbrown
@@ -234,6 +242,16 @@ public class Window extends Container {
     }
 
     @Override
+    protected void setSkin(pivot.wtk.Skin skin) {
+        if (!(skin instanceof Window.Skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + Window.Skin.class.getName());
+        }
+
+        super.setSkin(skin);
+    }
+
+    @Override
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
@@ -396,15 +414,19 @@ public class Window extends Container {
             throw new IllegalArgumentException("Owner is opened on a different display.");
         }
 
+        Window.Skin windowSkin = (Window.Skin)getSkin();
+
         if (!isOpen()
             && !opening
-            && windowStateListeners.previewWindowOpen(this, display)) {
+            && windowStateListeners.previewWindowOpen(this, display)
+            && windowSkin.previewWindowOpen(this, display)) {
             opening = true;
 
             // Add this as child of display
             display.add(this);
 
             // Notify listeners
+            windowSkin.windowOpened(this);
             windowStateListeners.windowOpened(this);
 
             // Move this window to the front (which, unless this window is
@@ -463,9 +485,12 @@ public class Window extends Container {
      * was the focus host, the focused component will be cleared.
      */
     public void close() {
+        Window.Skin windowSkin = (Window.Skin)getSkin();
+
         if (!isClosed()
             && !closing
-            && windowStateListeners.previewWindowClose(this)) {
+            && windowStateListeners.previewWindowClose(this)
+            && windowSkin.previewWindowClose(this)) {
             closing = true;
 
             if (isActive()) {
@@ -484,6 +509,7 @@ public class Window extends Container {
             display.remove(this);
 
             // Notify listeners
+            windowSkin.windowClosed(this, display);
             windowStateListeners.windowClosed(this, display);
 
             closing = false;

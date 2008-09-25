@@ -23,7 +23,6 @@ import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Display;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
@@ -42,7 +41,7 @@ import pivot.wtk.skin.WindowSkin;
  * @author gbrown
  * @author tvolkert
  */
-public class SheetSkin extends WindowSkin {
+public class SheetSkin extends WindowSkin implements Sheet.Skin {
     private Color borderColor = new Color(0x99, 0x99, 0x99);
     private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
     private Insets padding = new Insets(8);
@@ -329,8 +328,7 @@ public class SheetSkin extends WindowSkin {
         });
     }
 
-    @Override
-    public boolean previewWindowClose(final Window window) {
+    public boolean previewSheetClose(final Sheet sheet, final boolean result) {
         // Start a close transition, return false, and close the window
         // when the transition is complete
         boolean close = true;
@@ -353,11 +351,11 @@ public class SheetSkin extends WindowSkin {
             }
 
             if (duration > 0) {
-                closeTransition = new SlideTransition(window, beginX, 0,
-                    beginY, -window.getHeight(), true, duration, SLIDE_RATE);
+                closeTransition = new SlideTransition(sheet, beginX, 0,
+                    beginY, -sheet.getHeight(), true, duration, SLIDE_RATE);
                 closeTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
-                        window.close();
+                        sheet.close(result);
                         closeTransition = null;
                     }
                 });
@@ -371,11 +369,8 @@ public class SheetSkin extends WindowSkin {
         return close;
     }
 
-    @Override
-    public void windowClosed(Window window, Display display) {
-        super.windowClosed(window, display);
-
-        Window owner = window.getOwner();
+    public void sheetClosed(Sheet sheet) {
+        Window owner = sheet.getOwner();
         owner.getComponentMouseButtonListeners().remove(ownerMouseButtonListener);
     }
 }

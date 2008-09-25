@@ -71,12 +71,20 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
+     * <p>Component skin interface.</p>
+     *
+     * @author gbrown
+     */
+    public interface Skin extends pivot.wtk.Skin, ComponentStateListener {
+    }
+
+    /**
      * Style dictionary implementation.
      *
      * @author gbrown
      */
     public class StyleDictionary extends BeanDictionary {
-        public StyleDictionary(Skin skin) {
+        public StyleDictionary(pivot.wtk.Skin skin) {
             super(skin);
         }
 
@@ -443,7 +451,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * The currently installed skin, or null if no skin is installed.
      */
-    private Skin skin = null;
+    private pivot.wtk.Skin skin = null;
 
     /**
      * The component's preferred width, height, and cache.
@@ -561,7 +569,7 @@ public abstract class Component implements ConstrainedVisual {
      * @return
      * The currently installed skin.
      */
-    protected Skin getSkin() {
+    protected pivot.wtk.Skin getSkin() {
         return skin;
     }
 
@@ -571,9 +579,14 @@ public abstract class Component implements ConstrainedVisual {
      * @param skin
      * The new skin.
      */
-    protected void setSkin(Skin skin) {
+    protected void setSkin(pivot.wtk.Skin skin) {
         if (skin == null) {
             throw new IllegalArgumentException("skin is null.");
+        }
+
+        if (!(skin instanceof Component.Skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + Component.Skin.class.getName());
         }
 
         if (this.skin != null) {
@@ -604,7 +617,7 @@ public abstract class Component implements ConstrainedVisual {
         Class<?> type = getClass();
 
         Theme theme = Theme.getTheme();
-        Class<? extends Skin> skinClass = theme.getSkinClass((Class<? extends Component>)type);
+        Class<? extends pivot.wtk.Skin> skinClass = theme.getSkinClass((Class<? extends Component>)type);
 
         while (skinClass == null
             && type != componentClass
@@ -1655,8 +1668,11 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>true</tt> if the component is enabled; <tt>false</tt>, otherwise.
      */
     public void setEnabled(boolean enabled) {
+        Component.Skin componentSkin = (Component.Skin)getSkin();
+
         if (this.enabled != enabled
-            && componentStateListeners.previewEnabledChange(this)) {
+            && componentStateListeners.previewEnabledChange(this)
+            && componentSkin.previewEnabledChange(this)) {
             if (!enabled) {
                 // If this component has the focus, clear it
                 if (isFocused()) {
@@ -1671,6 +1687,7 @@ public abstract class Component implements ConstrainedVisual {
 
             this.enabled = enabled;
 
+            componentSkin.enabledChanged(this);
             componentStateListeners.enabledChanged(this);
         }
     }
@@ -1856,6 +1873,8 @@ public abstract class Component implements ConstrainedVisual {
      * otherwise.
      */
     protected void setFocused(boolean focused, boolean temporary) {
+        Component.Skin componentSkin = (Component.Skin)getSkin();
+        componentSkin.focusedChanged(this, temporary);
         componentStateListeners.focusedChanged(this, temporary);
     }
 
@@ -1965,11 +1984,11 @@ public abstract class Component implements ConstrainedVisual {
 
         if (previousFocusedComponent != focusedComponent) {
             if ((previousFocusedComponent == null
-                || previousFocusedComponent.componentStateListeners.previewFocusedChange(previousFocusedComponent,
-                    temporary))
+                || (previousFocusedComponent.componentStateListeners.previewFocusedChange(previousFocusedComponent, temporary)
+                    && ((Component.Skin)previousFocusedComponent.getSkin()).previewFocusedChange(previousFocusedComponent, temporary)))
                 && (focusedComponent == null
-                    || focusedComponent.componentStateListeners.previewFocusedChange(focusedComponent,
-                        temporary))) {
+                    || (focusedComponent.componentStateListeners.previewFocusedChange(focusedComponent, temporary)
+                        && ((Component.Skin)focusedComponent.getSkin()).previewFocusedChange(focusedComponent, temporary)))) {
                 // Set the focused component
                 Component.focusedComponent = focusedComponent;
 

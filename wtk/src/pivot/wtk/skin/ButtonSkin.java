@@ -26,10 +26,8 @@ import pivot.wtk.Cursor;
  *
  * @author gbrown
  */
-public abstract class ButtonSkin extends ComponentSkin implements ButtonListener {
-    public ButtonSkin() {
-    }
-
+public abstract class ButtonSkin extends ComponentSkin
+    implements Button.Skin, ButtonListener {
     @Override
     public void install(Component component) {
         validateComponentType(component, Button.class);
@@ -53,6 +51,14 @@ public abstract class ButtonSkin extends ComponentSkin implements ButtonListener
     }
 
     public void layout() {
+        // No-op
+    }
+
+    public boolean previewStateChange(Button button, Button.State state) {
+        return true;
+    }
+
+    public void stateChanged(Button toggleButton, Button.State previousState) {
         // No-op
     }
 

@@ -297,7 +297,7 @@ public class Spinner extends Container {
     }
 
     @Override
-    public void setSkin(pivot.wtk.Skin skin) {
+    protected void setSkin(pivot.wtk.Skin skin) {
         if (!(skin instanceof Spinner.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + Spinner.Skin.class.getName());

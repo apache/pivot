@@ -30,12 +30,18 @@ import pivot.wtk.Point;
 public class TranslationDecorator implements Decorator {
     private int x = 0;
     private int y = 0;
+    private boolean clip = false;
 
     public TranslationDecorator() {
     }
 
-    public TranslationDecorator(int x, int y) {
+    public TranslationDecorator(boolean clip) {
+        setClip(clip);
+    }
+
+    public TranslationDecorator(int x, int y, boolean clip) {
         setOffset(x, y);
+        setClip(clip);
     }
 
     public int getX() {
@@ -71,6 +77,14 @@ public class TranslationDecorator implements Decorator {
         this.y = y;
     }
 
+    public boolean getClip() {
+        return clip;
+    }
+
+    public void setClip(boolean clip) {
+        this.clip = clip;
+    }
+
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         graphics.translate(x, y);
         return graphics;
@@ -81,7 +95,9 @@ public class TranslationDecorator implements Decorator {
 
     public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
         Bounds affectedArea = new Bounds(x + this.x, y + this.y, width, height);
-        affectedArea.intersect(component.getBounds());
+        if (clip) {
+            affectedArea.intersect(component.getBounds());
+        }
 
         return affectedArea;
     }

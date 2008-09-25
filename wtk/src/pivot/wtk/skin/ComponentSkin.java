@@ -17,7 +17,6 @@ package pivot.wtk.skin;
 
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentStateListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.Keyboard;
@@ -31,7 +30,7 @@ import pivot.wtk.Tooltip;
  *
  * @author gbrown
  */
-public abstract class ComponentSkin implements Skin, ComponentStateListener {
+public abstract class ComponentSkin implements Skin, Component.Skin {
     private class ShowTooltipCallback implements Runnable {
         public void run() {
             Component component = getComponent();
@@ -77,13 +76,9 @@ public abstract class ComponentSkin implements Skin, ComponentStateListener {
         assert(this.component == null) : "Skin is already installed on a component.";
 
         this.component = component;
-
-        component.getComponentStateListeners().add(this);
     }
 
     public void uninstall() {
-        component.getComponentStateListeners().remove(this);
-
         component = null;
     }
 

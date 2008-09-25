@@ -113,7 +113,7 @@ public class DatePickerButton extends Button {
     }
 
     @Override
-    public void setSkin(pivot.wtk.Skin skin) {
+    protected void setSkin(pivot.wtk.Skin skin) {
         if (!(skin instanceof DatePickerButton.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
                 + DatePickerButton.Skin.class.getName());

@@ -24,7 +24,6 @@ import java.awt.geom.Ellipse2D;
 
 import pivot.wtk.Component;
 import pivot.wtk.Button;
-import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
@@ -38,8 +37,7 @@ import pivot.wtk.skin.ButtonSkin;
  *
  * @author gbrown
  */
-public class RadioButtonSkin extends ButtonSkin
-    implements ButtonStateListener {
+public class RadioButtonSkin extends ButtonSkin {
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = Color.BLACK;
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
@@ -59,16 +57,6 @@ public class RadioButtonSkin extends ButtonSkin
         validateComponentType(component, RadioButton.class);
 
         super.install(component);
-
-        RadioButton radioButton = (RadioButton)component;
-        radioButton.getButtonStateListeners().add(this);
-    }
-
-    public void uninstall() {
-        RadioButton radioButton = (RadioButton)getComponent();
-        radioButton.getButtonStateListeners().remove(this);
-
-        super.uninstall();
     }
 
     public int getPreferredWidth(int height) {
@@ -317,12 +305,7 @@ public class RadioButtonSkin extends ButtonSkin
         return consumed;
     }
 
-    // ButtonStateListener methods
-
-    public boolean previewStateChange(Button button, Button.State state) {
-        return true;
-    }
-
+    @Override
     public void stateChanged(Button button, Button.State previousState) {
         repaintComponent();
     }
