@@ -32,6 +32,7 @@ import pivot.wtk.media.Image;
 
 public class SheetTest implements Application {
     private Frame frame = null;
+    private Sheet sheet = null;
 
     public void startup(final Display display, Dictionary<String, String> properties)
         throws Exception {
@@ -42,7 +43,7 @@ public class SheetTest implements Application {
         frame.getStyles().put("padding", 0);
         frame.open(display);
 
-        TablePane tablePane = new TablePane();
+        final TablePane tablePane = new TablePane();
         tablePane.setPreferredSize(320, 240);
         tablePane.getColumns().add(new TablePane.Column(1, true));
         tablePane.getRows().add(new TablePane.Row(1, true));
@@ -63,15 +64,19 @@ public class SheetTest implements Application {
         closeButton.getStyles().put("preferredAspectRatio", 3);
         flowPane.add(closeButton);
 
+        sheet = new Sheet(tablePane);
+
         closeButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 button.getWindow().close();
-                frame.requestFocus();
             }
         });
 
-        Sheet sheet = new Sheet(tablePane);
-        sheet.open(frame);
+        windowContent.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                sheet.open(frame);
+            }
+        });
     }
 
     public boolean shutdown(boolean optional) {

@@ -185,6 +185,9 @@ public class Window extends Container {
     private Component content = null;
     private Component activeDescendant = null;
 
+    private boolean opening = false;
+    private boolean closing = false;
+
     private boolean maximized = false;
 
     private WindowListenerList windowListeners = new WindowListenerList();
@@ -356,6 +359,16 @@ public class Window extends Container {
     }
 
     /**
+     * Returns this window's opening state.
+     *
+     * @return
+     * <tt>true</tt> if the window is open; <tt>false</tt>, otherwise.
+     */
+    public boolean isOpening() {
+        return opening;
+    }
+
+    /**
      * Opens the window. Opening a window adds it to the display's component
      * sequence. If the window is activatable, it will become the active
      * window.
@@ -364,12 +377,13 @@ public class Window extends Container {
      * The display on which the window will be opened.
      */
     public void open(Display display) {
-        if (isOpen()) {
-            throw new IllegalStateException("Window is already open.");
-        }
-
         if (display == null) {
             throw new IllegalArgumentException("display is null.");
+        }
+
+        if (isOpen()
+            && getDisplay() != display) {
+            throw new IllegalStateException("Window is already open on a different display.");
         }
 
         if (owner != null
@@ -382,7 +396,11 @@ public class Window extends Container {
             throw new IllegalArgumentException("Owner is opened on a different display.");
         }
 
-        if (windowStateListeners.previewWindowOpen(this, display)) {
+        if (!isOpen()
+            && !opening
+            && windowStateListeners.previewWindowOpen(this, display)) {
+            opening = true;
+
             // Add this as child of display
             display.add(this);
 
@@ -393,6 +411,8 @@ public class Window extends Container {
             // disabled or incapable of becoming active, will activate the
             // window)
             moveToFront();
+
+            opening = false;
         }
     }
 
@@ -407,8 +427,9 @@ public class Window extends Container {
             throw new IllegalArgumentException("owner is null.");
         }
 
-        if (isOpen()) {
-            throw new IllegalStateException("Window is already open.");
+        if (isOpen()
+            && getOwner() != owner) {
+            throw new IllegalStateException("Window is already open with a different owner.");
         }
 
         setOwner(owner);
@@ -426,6 +447,16 @@ public class Window extends Container {
     }
 
     /**
+     * Returns this window's closing state.
+     *
+     * @return
+     * <tt>true</tt> if the window is closing; <tt>false</tt>, otherwise.
+     */
+    public boolean isClosing() {
+        return closing;
+    }
+
+    /**
      * Closes the window. Closing a window closes all owned windows and
      * removes the window from the display's component sequence. If the window
      * was the active window, the active window will be cleared. If the window
@@ -433,7 +464,10 @@ public class Window extends Container {
      */
     public void close() {
         if (!isClosed()
+            && !closing
             && windowStateListeners.previewWindowClose(this)) {
+            closing = true;
+
             if (isActive()) {
                 setActiveWindow(null);
             }
@@ -451,6 +485,8 @@ public class Window extends Container {
 
             // Notify listeners
             windowStateListeners.windowClosed(this, display);
+
+            closing = false;
         }
     }
 

@@ -38,7 +38,7 @@ limitations under the License.
                             </Menu.Item>
                         </Menu.Section>
                         <Menu.Section>
-                            <Menu.Item>
+                            <Menu.Item enabled="false">
                                 <buttonData text="Save" icon="@document-save.png"/>
                             </Menu.Item>
                             <Menu.Item>

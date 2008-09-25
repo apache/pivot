@@ -24,53 +24,53 @@ import pivot.wtk.Point;
 
 /**
  * <p>Decorator that translates the paint origin of its component.</p>
- * 
+ *
  * @author gbrown
  */
 public class TranslationDecorator implements Decorator {
     private int x = 0;
     private int y = 0;
-    
+
     public TranslationDecorator() {
     }
-    
+
     public TranslationDecorator(int x, int y) {
         setOffset(x, y);
     }
-    
+
     public int getX() {
         return x;
     }
-    
+
     public void setX(int x) {
         this.x = x;
     }
-    
+
     public int getY() {
         return y;
     }
-    
+
     public void setY(int y) {
         this.y = y;
     }
-    
+
     public Point getOffset() {
         return new Point(x, y);
     }
-    
+
     public void setOffset(Point offset) {
         if (offset == null) {
             throw new IllegalArgumentException("offset is null.");
         }
-        
+
         setOffset(offset.x, offset.y);
     }
-    
+
     public void setOffset(int x, int y) {
         this.x = x;
         this.y = y;
     }
-    
+
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         graphics.translate(x, y);
         return graphics;
@@ -82,7 +82,7 @@ public class TranslationDecorator implements Decorator {
     public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
         Bounds affectedArea = new Bounds(x + this.x, y + this.y, width, height);
         affectedArea.intersect(component.getBounds());
-        
+
         return affectedArea;
     }
 }

@@ -30,7 +30,8 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Sheet;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
-import pivot.wtk.effects.TranslationDecorator;
+import pivot.wtk.effects.Transition;
+import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.WindowSkin;
 
 /**
@@ -42,6 +43,9 @@ public class SheetSkin extends WindowSkin {
     private Color borderColor = new Color(0x99, 0x99, 0x99);
     private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
     private Insets padding = new Insets(8);
+
+    private SlideTransition openTransition = null;
+    private SlideTransition closeTransition = null;
 
     private ComponentMouseButtonListener ownerMouseButtonListener =
         new ComponentMouseButtonListener() {
@@ -290,24 +294,48 @@ public class SheetSkin extends WindowSkin {
     }
 
     @Override
-    public void windowOpened(Window window) {
+    public void windowOpened(final Window window) {
         super.windowOpened(window);
 
         Window owner = window.getOwner();
         owner.getComponentMouseButtonListeners().add(ownerMouseButtonListener);
 
-        // TODO Start the open transition
+        ApplicationContext.queueCallback(new Runnable() {
+            public void run() {
+                openTransition = new SlideTransition(window, 0, 0,
+                    -window.getHeight(), 0, false, 300, 30);
+                openTransition.start(new TransitionListener() {
+                    public void transitionCompleted(Transition transition) {
+                        openTransition = null;
+                    }
+                });
+            }
+        });
     }
 
     @Override
-    public boolean previewWindowClose(Window window) {
+    public boolean previewWindowClose(final Window window) {
         // TODO If the open transition is running, stop it and record the
         // current y-value; use this to start the close transition
 
-        // TODO Start a close transition, return false, and close the window
+        // Start a close transition, return false, and close the window
         // when the transition is complete
+        boolean close = false;
+        if (closeTransition == null) {
+            closeTransition = new SlideTransition(window, 0, 0,
+                0, -window.getHeight(), true, 300, 30);
+            closeTransition.start(new TransitionListener() {
+                public void transitionCompleted(Transition transition) {
+                    window.close();
+                    closeTransition = null;
+                }
+            });
+            close = false;
+        } else {
+            close = !closeTransition.isRunning();
+        }
 
-        return true;
+        return close;
     }
 
     @Override

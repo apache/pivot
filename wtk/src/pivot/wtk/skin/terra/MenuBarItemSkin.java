@@ -31,6 +31,36 @@ public class MenuBarItemSkin extends ButtonSkin
     implements ButtonPressListener, ButtonStateListener, MenuBar.ItemListener {
     private MenuPopup menuPopup = new MenuPopup();
 
+    public MenuBarItemSkin() {
+        menuPopup.getWindowStateListeners().add(new WindowStateListener() {
+            public boolean previewWindowOpen(Window window, Display display) {
+                return true;
+            }
+
+            public void windowOpened(Window window) {
+                // No-op
+            }
+
+            public boolean previewWindowClose(Window window) {
+                return true;
+            }
+
+            public void windowClosed(Window window, Display display) {
+                MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+                if (menuBarItem.isFocused()) {
+                    Component.clearFocus();
+                } else {
+                    repaintComponent();
+                }
+
+                MenuBar menuBar = menuBarItem.getMenuBar();
+                if (!menuBar.containsFocus()) {
+                    menuBar.setActive(false);
+                }
+            }
+        });
+    }
+
     @Override
     public void install(Component component) {
         validateComponentType(component, MenuBar.Item.class);
@@ -221,7 +251,6 @@ public class MenuBarItemSkin extends ButtonSkin
         super.focusedChanged(component, temporary);
 
         final MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        final MenuBar menuBar = menuBarItem.getMenuBar();
 
         if (component.isFocused()) {
             if (!menuPopup.isOpen()) {
@@ -255,36 +284,6 @@ public class MenuBarItemSkin extends ButtonSkin
 
                     public void keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                         // No-op
-                    }
-                });
-
-                // When window closes, deactivate the menu bar if it is not
-                // an ancestor of the focused component
-                menuPopup.getWindowStateListeners().add(new WindowStateListener() {
-                    public boolean previewWindowOpen(Window window, Display display) {
-                        return true;
-                    }
-
-                    public void windowOpened(Window window) {
-                        // No-op
-                    }
-
-                    public boolean previewWindowClose(Window window) {
-                        return true;
-                    }
-
-                    public void windowClosed(Window window, Display display) {
-                        window.getWindowStateListeners().remove(this);
-
-                        if (menuBarItem.isFocused()) {
-                            Component.clearFocus();
-                        } else {
-                            repaintComponent();
-                        }
-
-                        if (!menuBar.containsFocus()) {
-                            menuBar.setActive(false);
-                        }
                     }
                 });
             }
