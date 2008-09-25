@@ -35,7 +35,9 @@ import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.WindowSkin;
 
 /**
- * <p>Sheet skin class.</p>
+ * Sheet skin class.
+ * <p>
+ * TODO Add support for the "resizable" flag. It current exists but does nothing.
  *
  * @author gbrown
  */
@@ -43,6 +45,7 @@ public class SheetSkin extends WindowSkin {
     private Color borderColor = new Color(0x99, 0x99, 0x99);
     private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
     private Insets padding = new Insets(8);
+    private boolean resizable = false;
 
     private SlideTransition openTransition = null;
     private SlideTransition closeTransition = null;
@@ -291,6 +294,15 @@ public class SheetSkin extends WindowSkin {
         }
 
         setPadding(padding.intValue());
+    }
+
+    public boolean isResizable() {
+        return resizable;
+    }
+
+    public void setResizable(boolean resizable) {
+        this.resizable = resizable;
+        invalidateComponent();
     }
 
     @Override

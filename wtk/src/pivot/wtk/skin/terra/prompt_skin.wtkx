@@ -18,7 +18,7 @@ limitations under the License.
 <FlowPane orientation="vertical" styles="{spacing:8, horizontalAlignment:'justify'}"
     preferredWidth="300"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
-    <Border styles="{backgroundColor:'#e6e3da', color:'#999999', padding:12}">
+    <Border styles="{backgroundColor:'#ffffff', color:'#999999', padding:12}">
         <content>
             <TablePane styles="{horizontalSpacing:12, verticalSpacing:12}">
                 <columns>

@@ -1,0 +1,12 @@
+{   informationImageName: "message_type-information.png",
+    warningImageName: "message_type-warning.png",
+    errorImageName: "message_type-error.png",
+    questionImageName: "message_type-question.png",
+    optionButtonStyles:
+    {   color: "#ffffff",
+        backgroundColor: "#3c77b2",
+        borderColor: "#2c5680",
+        bevelColor: "#4589cc",
+        pressedBevelColor: "#346699"
+    }
+}
