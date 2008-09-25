@@ -200,14 +200,23 @@ public class DropShadowDecorator implements Decorator {
 
         BufferedImage shadowImage = createShadow(componentImage);
 
-        graphics.setClip(null);
+        java.awt.Shape clip = graphics.getClip();
+        if (clip != null) {
+            java.awt.Rectangle clipBounds = clip.getBounds();
+            Bounds affectedArea = getAffectedArea(component, clipBounds.x, clipBounds.y,
+                clipBounds.width, clipBounds.height);
+            clipBounds = affectedArea.toRectangle();
+            graphics.setClip(clipBounds);
+        }
+
         graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
+        graphics.setClip(clip);
         graphics.drawImage(componentImage, 0, 0, null);
     }
 
     public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
-        return new Bounds(x + xOffset - blurRadius + Math.max(component.getX(), 0),
-            y + yOffset - blurRadius + Math.max(component.getY(), 0),
+        return new Bounds(x + xOffset - blurRadius,
+            y + yOffset - blurRadius,
             width + blurRadius * 2,
             height + blurRadius * 2);
     }

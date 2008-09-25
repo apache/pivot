@@ -91,7 +91,7 @@ public class Bounds {
         height = bounds.height;
     }
 
-    protected Bounds(java.awt.Rectangle rectangle) {
+    public Bounds(java.awt.Rectangle rectangle) {
         if (rectangle == null) {
             throw new IllegalArgumentException("rectangle is null.");
         }
@@ -203,6 +203,10 @@ public class Bounds {
         }
 
         return equals;
+    }
+
+    public java.awt.Rectangle toRectangle() {
+        return new java.awt.Rectangle(x, y, width, height);
     }
 
     public String toString() {

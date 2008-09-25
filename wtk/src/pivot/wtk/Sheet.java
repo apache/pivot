@@ -39,11 +39,11 @@ public class Sheet extends Window {
         }
 
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            ApplicationContext.queueCallback(repositionCallback);
+            alignToOwnerContent();
         }
 
         public void locationChanged(Component component, int previousX, int previousY) {
-            ApplicationContext.queueCallback(repositionCallback);
+            alignToOwnerContent();
         }
 
         public void visibleChanged(Component component) {
@@ -60,16 +60,6 @@ public class Sheet extends Window {
 
         public void tooltipTextChanged(Component component, String previousTooltipText) {
             // No-op
-        }
-    };
-
-    private Runnable repositionCallback = new Runnable() {
-        public void run() {
-            Window owner = getOwner();
-            Component content = owner.getContent();
-            Point contentLocation = content.mapPointToAncestor(owner.getDisplay(), 0, 0);
-            setLocation(contentLocation.x + (content.getWidth() - getWidth()) / 2,
-                contentLocation.y);
         }
     };
 
@@ -135,7 +125,11 @@ public class Sheet extends Window {
             Component content = owner.getContent();
             content.setEnabled(false);
 
-            ApplicationContext.queueCallback(repositionCallback);
+            ApplicationContext.queueCallback(new Runnable() {
+                public void run() {
+                    alignToOwnerContent();
+                }
+            });
         }
     }
 
@@ -192,5 +186,13 @@ public class Sheet extends Window {
 
     public boolean getResult() {
         return result;
+    }
+
+    private void alignToOwnerContent() {
+        Window owner = getOwner();
+        Component content = owner.getContent();
+        Point contentLocation = content.mapPointToAncestor(owner.getDisplay(), 0, 0);
+        setLocation(contentLocation.x + (content.getWidth() - getWidth()) / 2,
+            contentLocation.y);
     }
 }

@@ -81,7 +81,6 @@ public class SlideTransition extends Transition {
         y = (int)(reverse ? easing.easeOut(elapsedTime, y0, deltaY, duration)
             : easing.easeOut(elapsedTime, y0, deltaY, duration));
 
-        component.repaint();
         translationDecorator.setOffset(x, y);
         component.repaint();
     }

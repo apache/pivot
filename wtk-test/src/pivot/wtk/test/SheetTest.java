@@ -28,6 +28,8 @@ import pivot.wtk.PushButton;
 import pivot.wtk.Sheet;
 import pivot.wtk.TablePane;
 import pivot.wtk.VerticalAlignment;
+import pivot.wtk.Window;
+import pivot.wtk.WindowStateListener;
 import pivot.wtk.media.Image;
 
 public class SheetTest implements Application {
@@ -60,7 +62,7 @@ public class SheetTest implements Application {
 
         flowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
 
-        PushButton closeButton = new PushButton("Close");
+        final PushButton closeButton = new PushButton("Close");
         closeButton.getStyles().put("preferredAspectRatio", 3);
         flowPane.add(closeButton);
 
@@ -75,6 +77,23 @@ public class SheetTest implements Application {
         windowContent.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 sheet.open(frame);
+            }
+        });
+
+        sheet.getWindowStateListeners().add(new WindowStateListener() {
+            public boolean previewWindowOpen(Window window, Display display) {
+                return true;
+            }
+
+            public void windowOpened(Window window) {
+                closeButton.requestFocus();
+            }
+
+            public boolean previewWindowClose(Window window) {
+                return true;
+            }
+
+            public void windowClosed(Window window, Display display) {
             }
         });
     }

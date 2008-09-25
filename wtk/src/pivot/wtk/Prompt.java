@@ -23,7 +23,7 @@ import pivot.util.ListenerList;
  * user interaction.
  * <p>
  * <tt>Prompt</tt> is a semantic sibling of <tt>Alert</tt>, but whereas
- * alerts are sheets, prompts are sheets, meaning that an alert will be modal
+ * alerts are dialogs, prompts are sheets, meaning that an alert will be modal
  * over its entire owner hierarchy (its entire "application", in common usage)
  * but a prompt will be modal only over its owner's content.
  *
