@@ -40,6 +40,7 @@ import pivot.wtk.skin.WindowSkin;
  * TODO Add support for the "resizable" flag. It current exists but does nothing.
  *
  * @author gbrown
+ * @author tvolkert
  */
 public class SheetSkin extends WindowSkin {
     private Color borderColor = new Color(0x99, 0x99, 0x99);
@@ -71,6 +72,9 @@ public class SheetSkin extends WindowSkin {
     };
 
     private DropShadowDecorator dropShadowDecorator = null;
+
+    private static final int SLIDE_DURATION = 300;
+    private static final int SLIDE_RATE = 30;
 
     public SheetSkin() {
         setBackgroundColor(new Color(0xF7, 0xF5, 0xEB));
@@ -315,7 +319,7 @@ public class SheetSkin extends WindowSkin {
         ApplicationContext.queueCallback(new Runnable() {
             public void run() {
                 openTransition = new SlideTransition(window, 0, 0,
-                    -window.getHeight(), 0, false, 300, 30);
+                    -window.getHeight(), 0, false, SLIDE_DURATION, SLIDE_RATE);
                 openTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
                         openTransition = null;
@@ -327,22 +331,39 @@ public class SheetSkin extends WindowSkin {
 
     @Override
     public boolean previewWindowClose(final Window window) {
-        // TODO If the open transition is running, stop it and record the
-        // current y-value; use this to start the close transition
-
         // Start a close transition, return false, and close the window
         // when the transition is complete
-        boolean close = false;
+        boolean close = true;
+
         if (closeTransition == null) {
-            closeTransition = new SlideTransition(window, 0, 0,
-                0, -window.getHeight(), true, 300, 30);
-            closeTransition.start(new TransitionListener() {
-                public void transitionCompleted(Transition transition) {
-                    window.close();
-                    closeTransition = null;
-                }
-            });
-            close = false;
+            int duration = SLIDE_DURATION;
+            int beginX = 0;
+            int beginY = 0;
+
+            if (openTransition != null) {
+                // Stop the open transition
+                openTransition.stop();
+
+                // Record its progress so we can reverse it at the right point
+                duration = openTransition.getElapsedTime();
+                beginX = openTransition.getX();
+                beginY = openTransition.getY();
+
+                openTransition = null;
+            }
+
+            if (duration > 0) {
+                closeTransition = new SlideTransition(window, beginX, 0,
+                    beginY, -window.getHeight(), true, duration, SLIDE_RATE);
+                closeTransition.start(new TransitionListener() {
+                    public void transitionCompleted(Transition transition) {
+                        window.close();
+                        closeTransition = null;
+                    }
+                });
+
+                close = false;
+            }
         } else {
             close = !closeTransition.isRunning();
         }

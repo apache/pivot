@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2008 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pivot.wtk.skin.terra;
 
 import pivot.wtk.Component;
@@ -9,11 +24,14 @@ import pivot.wtk.effects.easing.Quadratic;
 
 public class SlideTransition extends Transition {
     private Component component;
-    int x0;
-    int x1;
-    int y0;
-    int y1;
-    boolean reverse;
+    private int x0;
+    private int x1;
+    private int y0;
+    private int y1;
+    private boolean reverse;
+
+    private int x;
+    private int y;
 
     private Easing easing = new Quadratic();
     private TranslationDecorator translationDecorator = new TranslationDecorator();
@@ -27,6 +45,14 @@ public class SlideTransition extends Transition {
         this.y0 = y0;
         this.y1 = y1;
         this.reverse = reverse;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     @Override
@@ -50,11 +76,11 @@ public class SlideTransition extends Transition {
         float percentComplete = getPercentComplete();
 
         float deltaX = (float)(x1 - x0) * percentComplete;
-        int x = (int)(reverse ? easing.easeIn(elapsedTime, x0, deltaX, duration)
+        x = (int)(reverse ? easing.easeIn(elapsedTime, x0, deltaX, duration)
             : easing.easeOut(elapsedTime, x0, deltaX, duration));
 
         float deltaY = (float)(y1 - y0) * percentComplete;
-        int y = (int)(reverse ? easing.easeOut(elapsedTime, y0, deltaY, duration)
+        y = (int)(reverse ? easing.easeOut(elapsedTime, y0, deltaY, duration)
             : easing.easeOut(elapsedTime, y0, deltaY, duration));
 
         translationDecorator.setOffset(x, y);
