@@ -64,6 +64,21 @@ limitations under the License.
                         </PushButton>
                     </FlowPane>
                 </FlowPane>
+
+                <FlowPane orientation="vertical">
+                    <Label text="Tool Bar Buttons" styles="{font:'Verdana bold 11'}"/>
+                    <FlowPane>
+                        <PushButton styles="{toolbar:true}">
+                            <buttonData icon="@bell.png"/>
+                        </PushButton>
+                        <PushButton styles="{toolbar:true}">
+                            <buttonData icon="@clock.png"/>
+                        </PushButton>
+                        <PushButton enabled="false" styles="{toolbar:true}">
+                            <buttonData icon="@house.png"/>
+                        </PushButton>
+                    </FlowPane>
+                </FlowPane>
             </FlowPane>
         </content>
     </Border>
