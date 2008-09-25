@@ -72,7 +72,7 @@ public class SheetSkin extends WindowSkin implements Sheet.Skin {
 
     private DropShadowDecorator dropShadowDecorator = null;
 
-    private static final int SLIDE_DURATION = 300;
+    private static final int SLIDE_DURATION = 250;
     private static final int SLIDE_RATE = 30;
 
     public SheetSkin() {
