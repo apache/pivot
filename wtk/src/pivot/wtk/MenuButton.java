@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import pivot.util.ListenerList;
+import pivot.wtk.content.ButtonDataRenderer;
 
 /**
  * <p>Component that allows a user to select one of several menu options. The
@@ -27,12 +28,33 @@ import pivot.util.ListenerList;
  * selection events for the selected item. Pressing the right half of the
  * button continues to fire button press events and display the menu.</p>
  *
- * <p>TODO This class is currently incomplete.</p>
- *
  * @author gbrown
  */
 public class MenuButton extends Button {
+    private static class MenuButtonListenerList extends ListenerList<MenuButtonListener>
+        implements MenuButtonListener {
+        public void menuChanged(MenuButton menuButton, Menu previousMenu) {
+            for (MenuButtonListener listener : this) {
+                listener.menuChanged(menuButton, previousMenu);
+            }
+        }
+
+        public void repeatableChanged(MenuButton menuButton) {
+            for (MenuButtonListener listener : this) {
+                listener.repeatableChanged(menuButton);
+            }
+        }
+    }
+
     private Menu menu = null;
+    private boolean repeatable = false;
+
+    private MenuButtonListenerList menuButtonListeners = new MenuButtonListenerList();
+
+    public MenuButton() {
+        setDataRenderer(new ButtonDataRenderer());
+        installSkin(MenuButton.class);
+    }
 
     @Override
     public void setToggleButton(boolean toggleButton) {
@@ -44,20 +66,31 @@ public class MenuButton extends Button {
     }
 
     public void setMenu(Menu menu) {
-        // TODO
+        if (menu != null
+            && menu.getItem() != null) {
+            throw new IllegalArgumentException("menu already belongs to an item.");
+        }
+
+        Menu previousMenu = this.menu;
+
+        if (previousMenu != menu) {
+            this.menu = menu;
+            menuButtonListeners.menuChanged(this, previousMenu);
+        }
     }
 
     public boolean isRepeatable() {
-        // TODO
-        return false;
+        return repeatable;
     }
 
     public void setRepeatable(boolean repeatable) {
-        // TODO
+        if (this.repeatable != repeatable) {
+            this.repeatable = repeatable;
+            menuButtonListeners.repeatableChanged(this);
+        }
     }
 
     public ListenerList<MenuButtonListener> getMenuButtonListeners() {
-        // TODO
-        return null;
+        return menuButtonListeners;
     }
 }

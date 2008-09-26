@@ -1,0 +1,116 @@
+<Border styles="{color:'#999999'}"
+	xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+	<content>
+		<FlowPane orientation="vertical"
+			styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+			<FlowPane orientation="vertical">
+				<Label text="Menu Buttons" styles="{font:'Verdana bold 11'}" />
+				<FlowPane orientation="vertical">
+			        <MenuButton>
+			            <buttonData text="File"/>
+			            <menu>
+			                <Menu>
+			                    <sections>
+			                        <Menu.Section>
+			                            <Menu.Item>
+			                                <buttonData text="New" icon="@document-new.png"/>
+			                            </Menu.Item>
+			                            <Menu.Item>
+			                                <buttonData text="Open" icon="@document-open.png"/>
+			                            </Menu.Item>
+			                        </Menu.Section>
+			                        <Menu.Section>
+			                            <Menu.Item>
+			                                <buttonData text="Close"/>
+			                            </Menu.Item>
+			                            <Menu.Item>
+			                                <buttonData text="Close All"/>
+			                            </Menu.Item>
+			                        </Menu.Section>
+			                        <Menu.Section>
+			                            <Menu.Item enabled="false">
+			                                <buttonData text="Save" icon="@document-save.png"/>
+			                            </Menu.Item>
+			                            <Menu.Item>
+			                                <buttonData text="Save As" icon="@document-save-as.png"/>
+			                                <menu>
+			                                    <Menu>
+			                                        <sections>
+			                                            <Menu.Section>
+			                                                <Menu.Item buttonData="JPEG"/>
+			                                                <Menu.Item buttonData="PNG"/>
+			                                                <Menu.Item buttonData="GIF"/>
+			                                                <Menu.Item buttonData="PDF"/>
+			                                            </Menu.Section>
+			                                        </sections>
+			                                    </Menu>
+			                                </menu>
+			                            </Menu.Item>
+			                        </Menu.Section>
+			                    </sections>
+			                </Menu>
+			            </menu>
+			        </MenuButton>
+
+			        <MenuButton styles="{spacing:2}">
+			            <buttonData text="Edit" icon="@page_edit.png"/>
+			            <menu>
+			                <Menu>
+			                    <sections>
+			                        <Menu.Section>
+			                            <Menu.Item>
+			                                <buttonData text="Undo" icon="@edit-undo.png"/>
+			                            </Menu.Item>
+			                            <Menu.Item>
+			                                <buttonData text="Redo" icon="@edit-redo.png"/>
+			                            </Menu.Item>
+			                        </Menu.Section>
+			                        <Menu.Section>
+			                            <Menu.Item>
+			                                <buttonData text="Cut" icon="@edit-cut.png"/>
+			                            </Menu.Item>
+			                            <Menu.Item>
+			                                <buttonData text="Copy" icon="@edit-copy.png"/>
+			                            </Menu.Item>
+			                            <Menu.Item>
+			                                <buttonData text="Paste" icon="@edit-paste.png"/>
+			                            </Menu.Item>
+			                        </Menu.Section>
+			                        <Menu.Section>
+			                            <Menu.Item>
+			                                <buttonData text="Delete" icon="@edit-delete.png"/>
+			                            </Menu.Item>
+			                            <Menu.Item>
+			                                <buttonData text="Select All" icon="@edit-select-all.png"/>
+			                            </Menu.Item>
+			                        </Menu.Section>
+			                    </sections>
+			                </Menu>
+			            </menu>
+			        </MenuButton>
+
+			        <MenuButton tooltipText="Help" styles="{spacing:2}">
+			            <buttonData icon="@help.png"/>
+			            <menu>
+			                <Menu>
+			                    <sections>
+			                        <Menu.Section>
+			                            <Menu.Item>
+			                                <buttonData text="Contents" icon="@book_open.png"/>
+			                            </Menu.Item>
+			                            <Menu.Item>
+			                                <buttonData text="Search" icon="@magnifier.png"/>
+			                            </Menu.Item>
+			                            <Menu.Item>
+			                                <buttonData text="About" icon="@application.png"/>
+			                            </Menu.Item>
+			                        </Menu.Section>
+			                    </sections>
+			                </Menu>
+			            </menu>
+			        </MenuButton>
+				</FlowPane>
+			</FlowPane>
+		</FlowPane>
+	</content>
+</Border>

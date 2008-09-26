@@ -680,12 +680,9 @@ public class ListButtonSkin extends ButtonSkin
 
         // Close the popup if focus was transferred to a component whose
         // window is not the popup
-        if (!component.isFocused()) {
-            Component focusedComponent = Component.getFocusedComponent();
-            if (focusedComponent != null
-                && focusedComponent.getWindow() != listViewPopup) {
-                listViewPopup.close();
-            }
+        if (!component.isFocused()
+            && !listViewPopup.containsFocus()) {
+            listViewPopup.close();
         }
 
         pressed = false;

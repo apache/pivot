@@ -25,6 +25,23 @@ limitations under the License.
              <wtkx:include wtkx:id="menuBar" src="menu_bar.wtkx"/>
         </TablePane.Row>
         <TablePane.Row height="-1">
+            <FlowPane>
+                 <MenuButton buttonData="Menu Button">
+                    <menu>
+                        <Menu>
+                            <sections>
+                                <Menu.Section>
+                                    <Menu.Item buttonData="Menu Item 1" action="testAction"/>
+                                    <Menu.Item buttonData="Menu Item 2"/>
+                                    <Menu.Item buttonData="Menu Item 3"/>
+                                </Menu.Section>
+                            </sections>
+                        </Menu>
+                    </menu>
+                 </MenuButton>
+            </FlowPane>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
              <Separator styles="{color:'#999999', padding:0}"/>
         </TablePane.Row>
         <TablePane.Row height="1*">

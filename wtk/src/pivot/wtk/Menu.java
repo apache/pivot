@@ -124,7 +124,7 @@ public class Menu extends Container {
                 while (item != null
                     && item.section != null
                     && item.section.menu != null) {
-                    item.section.menu.menuItemListeners.itemSelected(this);
+                    item.section.menu.menuItemSelectionListeners.itemSelected(this);
                     item = item.section.menu.item;
                 }
             }
@@ -339,7 +339,7 @@ public class Menu extends Container {
         }
     }
 
-    private static class MenuItemListenerList extends ListenerList<MenuItemSelectionListener>
+    private static class MenuItemSelectionListenerList extends ListenerList<MenuItemSelectionListener>
         implements MenuItemSelectionListener {
         public void itemSelected(Menu.Item menuItem) {
             for (MenuItemSelectionListener listener : this) {
@@ -353,7 +353,7 @@ public class Menu extends Container {
     private SectionSequence sectionSequence = new SectionSequence();
 
     private MenuListenerList menuListeners = new MenuListenerList();
-    private MenuItemListenerList menuItemListeners = new MenuItemListenerList();
+    private MenuItemSelectionListenerList menuItemSelectionListeners = new MenuItemSelectionListenerList();
 
     public Menu() {
         installSkin(Menu.class);
@@ -389,7 +389,7 @@ public class Menu extends Container {
         return menuListeners;
     }
 
-    public ListenerList<MenuItemSelectionListener> getMenuItemPressListeners() {
-        return menuItemListeners;
+    public ListenerList<MenuItemSelectionListener> getMenuItemSelectionListeners() {
+        return menuItemSelectionListeners;
     }
 }

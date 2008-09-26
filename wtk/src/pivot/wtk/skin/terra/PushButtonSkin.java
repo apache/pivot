@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Line2D;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Button;
@@ -175,9 +174,8 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
 
         // Paint the bevel
         if (bevelColor != null) {
-            Line2D bevelLine = new Line2D.Double(1, 1, width - 2, 1);
             graphics.setPaint(bevelColor);
-            graphics.draw(bevelLine);
+            graphics.drawLine(1, 1, width - 2, 1);
         }
 
         // Paint the content

@@ -29,6 +29,8 @@ import pivot.wtk.MenuPopupListener;
 import pivot.wtk.Panorama;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
+import pivot.wtk.effects.Transition;
+import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.PopupSkin;
 
 /**
@@ -42,10 +44,21 @@ public class MenuPopupSkin extends PopupSkin
     private Border border;
 
     private DropShadowDecorator dropShadowDecorator = null;
+    private Transition closeTransition = null;
+
+    private static final int CLOSE_TRANSITION_DURATION = 150;
+    private static final int CLOSE_TRANSITION_RATE = 30;
 
     private MenuItemSelectionListener menuItemPressListener = new MenuItemSelectionListener() {
         public void itemSelected(Menu.Item item) {
-            MenuPopup menuPopup = (MenuPopup)getComponent();
+            final MenuPopup menuPopup = (MenuPopup)getComponent();
+            closeTransition = new FadeTransition(menuPopup,
+                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE);
+            closeTransition.start(new TransitionListener() {
+                public void transitionCompleted(Transition transition) {
+                    menuPopup.close();
+                }
+            });
             menuPopup.close();
         }
     };
@@ -76,14 +89,14 @@ public class MenuPopupSkin extends PopupSkin
 
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
-            menu.getMenuItemPressListeners().add(menuItemPressListener);
+            menu.getMenuItemSelectionListeners().add(menuItemPressListener);
         }
 
         border.setContent(menu);
         menuPopup.setContent(border);
 
         // Attach the drop-shadow decorator
-        dropShadowDecorator = new DropShadowDecorator();
+        dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
         menuPopup.getDecorators().add(dropShadowDecorator);
     }
 
@@ -98,7 +111,7 @@ public class MenuPopupSkin extends PopupSkin
 
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
-            menu.getMenuItemPressListeners().remove(menuItemPressListener);
+            menu.getMenuItemSelectionListeners().remove(menuItemPressListener);
         }
 
         border.setContent(null);
@@ -151,6 +164,12 @@ public class MenuPopupSkin extends PopupSkin
     }
 
     @Override
+    public boolean previewWindowClose(Window window) {
+        return (closeTransition == null
+            || !closeTransition.isRunning());
+    }
+
+    @Override
     public void windowClosed(Window window, Display display) {
         super.windowClosed(window, display);
         Component.getComponentClassListeners().remove(this);
@@ -158,12 +177,12 @@ public class MenuPopupSkin extends PopupSkin
 
     public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
         if (previousMenu != null) {
-            previousMenu.getMenuItemPressListeners().remove(menuItemPressListener);
+            previousMenu.getMenuItemSelectionListeners().remove(menuItemPressListener);
         }
 
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
-            menu.getMenuItemPressListeners().add(menuItemPressListener);
+            menu.getMenuItemSelectionListeners().add(menuItemPressListener);
         }
 
         border.setContent(menu);

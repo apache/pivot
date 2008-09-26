@@ -57,7 +57,7 @@ public abstract class ComponentSkin implements Skin, Component.Skin {
     private ShowTooltipCallback showTooltipCallback = new ShowTooltipCallback();
     private int showTooltipTimeoutID = -1;
 
-    public static final int SHOW_TOOLTIP_TIMEOUT = 500;
+    public static final int SHOW_TOOLTIP_TIMEOUT = 750;
 
     public int getWidth() {
         return width;
