@@ -30,6 +30,7 @@ import pivot.wtk.MenuButton;
 import pivot.wtk.MenuPopup;
 import pivot.wtk.Menu;
 import pivot.wtk.Meter;
+import pivot.wtk.Palette;
 import pivot.wtk.Panorama;
 import pivot.wtk.Prompt;
 import pivot.wtk.PushButton;
@@ -73,6 +74,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(MenuButton.class, MenuButtonSkin.class);
         componentSkinMap.put(MenuPopup.class, MenuPopupSkin.class);
         componentSkinMap.put(Meter.class, MeterSkin.class);
+        componentSkinMap.put(Palette.class, PaletteSkin.class);
         componentSkinMap.put(Panorama.class, PanoramaSkin.class);
         componentSkinMap.put(Prompt.class, PromptSkin.class);
         componentSkinMap.put(PushButton.class, PushButtonSkin.class);

@@ -77,8 +77,7 @@ public class ReflectionDecorator implements Decorator {
     }
 
     public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
-        return new Bounds(x + component.getX(),
-            (component.getHeight() * 2) - (y + height) + component.getY(),
+        return new Bounds(x, (component.getHeight() * 2) - (y + height),
             width, height);
     }
 }

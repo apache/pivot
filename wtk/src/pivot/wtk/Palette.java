@@ -18,13 +18,28 @@ package pivot.wtk;
 /**
  * <p>Window representing a "tool palette".</p>
  *
- * <p>TODO Complete this class and associated skin class.</p>
- *
- * <p>TODO Hide this window when the owner becomes inactive.</p>
- *
  * @author gbrown
  */
 public class Palette extends Window {
+    /**
+     * Creates a new palette.
+     */
+    public Palette() {
+        this(null);
+    }
+
+    /**
+     * Creates a new palette with an initial content component.
+     *
+     * @param content
+     * The sheet's content component.
+     */
+    public Palette(Component content) {
+        super(content);
+
+        installSkin(Palette.class);
+    }
+
     /**
      * @return
      * <tt>true</tt>; by default, palettes are auxilliary windows.
@@ -32,5 +47,14 @@ public class Palette extends Window {
     @Override
     public boolean isAuxilliary() {
         return true;
+    }
+
+    @Override
+    public final void setOwner(Window owner) {
+        if (owner == null) {
+            throw new UnsupportedOperationException("A palette must have an owner.");
+        }
+
+        super.setOwner(owner);
     }
 }

@@ -20,6 +20,7 @@ import pivot.wtk.Application;
 import pivot.wtk.Dialog;
 import pivot.wtk.Display;
 import pivot.wtk.Frame;
+import pivot.wtk.Palette;
 
 public class WindowTest implements Application {
     Frame window1 = new Frame();
@@ -60,6 +61,16 @@ public class WindowTest implements Application {
         window1bii.setTitle("Window 1 B II");
         window1bii.setPreferredSize(160, 60);
         window1bii.open(window1b);
+
+        Palette palette1 = new Palette();
+        palette1.setTitle("Palette 1bii 1");
+        palette1.setPreferredSize(160, 60);
+        palette1.open(window1bii);
+
+        Palette palette2 = new Palette();
+        palette2.setTitle("Palette 1bii 2");
+        palette2.setPreferredSize(160, 60);
+        palette2.open(window1bii);
 
         Frame dialogOwner = new Frame();
         dialogOwner.setTitle("Dialog Owner");

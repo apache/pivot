@@ -84,7 +84,7 @@ public class Sheet extends Window {
 
     /**
      * @return
-     * <tt>true</tt>; by default, popups are auxilliary windows.
+     * <tt>true</tt>; by default, sheets are auxilliary windows.
      */
     @Override
     public boolean isAuxilliary() {
