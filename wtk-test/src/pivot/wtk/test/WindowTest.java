@@ -42,7 +42,6 @@ public class WindowTest implements Application {
         window1ai.open(display); // window1a);
         window1ai.getDecorators().update(0, new ReflectionDecorator());
 
-        /*
         Frame window1aii = new Frame();
         window1aii.setTitle("Window 1 A II");
         window1aii.setPreferredSize(160, 60);
@@ -88,7 +87,6 @@ public class WindowTest implements Application {
         dialog2.setTitle("Dialog 2");
         dialog2.setPreferredSize(160, 60);
         dialog2.open(dialog, true);
-        */
     }
 
     public boolean shutdown(boolean optional) {

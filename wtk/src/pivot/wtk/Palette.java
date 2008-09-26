@@ -55,6 +55,10 @@ public class Palette extends Window {
             throw new UnsupportedOperationException("A palette must have an owner.");
         }
 
+        if (owner.isAuxilliary()) {
+            throw new UnsupportedOperationException("A palette window must have a primary owner.");
+        }
+
         super.setOwner(owner);
     }
 }
