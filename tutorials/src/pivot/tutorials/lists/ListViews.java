@@ -60,7 +60,7 @@ public class ListViews implements Application {
                             selectionText += ", ";
                         }
 
-                        selectionText += dictionary.get("label");
+                        selectionText += dictionary.get("text");
                     }
                 }
 
