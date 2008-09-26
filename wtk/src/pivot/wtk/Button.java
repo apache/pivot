@@ -299,11 +299,12 @@ public abstract class Button extends Component {
                 previousAction.getActionListeners().remove(actionListener);
             }
 
+            this.action = action;
+
             if (action != null) {
                 action.getActionListeners().add(actionListener);
+                setEnabled(action.isEnabled());
             }
-
-            this.action = action;
 
             buttonListeners.actionChanged(this, previousAction);
         }
