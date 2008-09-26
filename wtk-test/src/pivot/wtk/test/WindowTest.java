@@ -21,10 +21,10 @@ import pivot.wtk.Dialog;
 import pivot.wtk.Display;
 import pivot.wtk.Frame;
 import pivot.wtk.Palette;
+import pivot.wtk.effects.ReflectionDecorator;
 
 public class WindowTest implements Application {
-    Frame window1 = new Frame();
-    Frame window2 = new Frame();
+    private Frame window1 = new Frame();
 
     public void startup(Display display, Dictionary<String, String> properties) {
         window1.setTitle("Window 1");
@@ -34,13 +34,15 @@ public class WindowTest implements Application {
         Frame window1a = new Frame();
         window1a.setTitle("Window 1 A");
         window1a.setPreferredSize(160, 120);
-        window1a.open(window1);
+        window1a.open(display); // window1);
 
         Frame window1ai = new Frame();
         window1ai.setTitle("Window 1 A I");
         window1ai.setPreferredSize(160, 60);
-        window1ai.open(window1a);
+        window1ai.open(display); // window1a);
+        window1ai.getDecorators().update(0, new ReflectionDecorator());
 
+        /*
         Frame window1aii = new Frame();
         window1aii.setTitle("Window 1 A II");
         window1aii.setPreferredSize(160, 60);
@@ -86,11 +88,11 @@ public class WindowTest implements Application {
         dialog2.setTitle("Dialog 2");
         dialog2.setPreferredSize(160, 60);
         dialog2.open(dialog, true);
+        */
     }
 
     public boolean shutdown(boolean optional) {
         window1.close();
-        window2.close();
         return true;
     }
 

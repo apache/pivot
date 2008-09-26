@@ -165,6 +165,7 @@ public class PanoramaSkin extends ContainerSkin
             return false;
         }
     }
+
     private class ScrollCallback implements Runnable {
         public void run() {
             Panorama panorama = (Panorama)getComponent();
@@ -187,6 +188,7 @@ public class PanoramaSkin extends ContainerSkin
 
                 panorama.setScrollTop(scrollTop);
             } else if (eastButton.isMouseOver()) {
+                System.out.println(eastButton.isVisible());
                 int maxScrollLeft = getMaxScrollLeft();
                 int scrollLeft = Math.min(panorama.getScrollLeft()
                     + (int)scrollDistance, maxScrollLeft);
@@ -194,6 +196,7 @@ public class PanoramaSkin extends ContainerSkin
                     ApplicationContext.clearInterval(scrollIntervalID);
                 }
 
+                System.out.println(scrollLeft + ", " + maxScrollLeft);
                 panorama.setScrollLeft(scrollLeft);
             } else if (westButton.isMouseOver()) {
                 int scrollLeft = Math.max(panorama.getScrollLeft()
@@ -202,6 +205,7 @@ public class PanoramaSkin extends ContainerSkin
                     ApplicationContext.clearInterval(scrollIntervalID);
                 }
 
+                System.out.println(scrollLeft);
                 panorama.setScrollLeft(scrollLeft);
             }
 

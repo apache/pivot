@@ -46,6 +46,7 @@ import pivot.wtk.MessageType;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.Popup;
+import pivot.wtk.Prompt;
 import pivot.wtk.PushButton;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
@@ -283,11 +284,8 @@ public class Demo implements Application {
     private TreeView editableTreeView = null;
     private ScrollPane editableTreeViewScrollPane = null;
 
-    private PushButton errorAlertButton = null;
-    private PushButton warningAlertButton = null;
-    private PushButton questionAlertButton = null;
-    private PushButton infoAlertButton = null;
-    private PushButton customAlertButton = null;
+    private PushButton alertButton = null;
+    private PushButton promptButton = null;
 
     private Window window = null;
 
@@ -371,11 +369,8 @@ public class Demo implements Application {
         imageView3.setDropHandler(imageDropHandler);
         imageView3.getComponentMouseListeners().add(imageMouseHandler);
 
-        errorAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.errorAlertButton");
-        warningAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.warningAlertButton");
-        questionAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.questionAlertButton");
-        infoAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.infoAlertButton");
-        customAlertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.customAlertButton");
+        alertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.alertButton");
+        promptButton = (PushButton)wtkxSerializer.getObjectByName("alerts.promptButton");
         initializeAlertButtons();
 
         menuPopup = new MenuPopup((Menu)wtkxSerializer.readObject("pivot/tutorials/menu_popup.wtkx"));
@@ -440,52 +435,70 @@ public class Demo implements Application {
         dateSpinner.setSelectedValue(today);
     }
 
+    @SuppressWarnings("unchecked")
     private void initializeAlertButtons() {
-        errorAlertButton.getButtonPressListeners().add(new ButtonPressListener() {
+        alertButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                Alert.alert(MessageType.ERROR, "This is an error alert.", window);
-            }
-        });
+                Button.Group messageTypeGroup = Button.getGroup("messageType");
+                Button selection = messageTypeGroup.getSelection();
+                String messageType = ((Dictionary<String, String>)selection.getButtonData()).get("type");
+                if (messageType.equals("custom")) {
+                    ArrayList<String> options = new ArrayList<String>();
+                    options.add("OK");
+                    options.add("Cancel");
 
-        warningAlertButton.getButtonPressListeners().add(new ButtonPressListener() {
-            public void buttonPressed(Button button) {
-                Alert.alert(MessageType.WARNING, "This is a warning alert.", window);
-            }
-        });
+                    Component body = null;
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    try {
+                        body = (Component)wtkxSerializer.readObject("pivot/tutorials/alert.wtkx");
+                    } catch(Exception exception) {
+                        System.out.println(exception);
+                    }
 
-        questionAlertButton.getButtonPressListeners().add(new ButtonPressListener() {
-            public void buttonPressed(Button button) {
-                Alert.alert(MessageType.QUESTION, "This is a question alert.", window);
-            }
-        });
+                    Alert alert = new Alert(MessageType.QUESTION, "Please select your favorite icon:",
+                        options, body);
+                    alert.setTitle("Select Icon");
+                    alert.setSelectedOption(0);
+                    alert.getDecorators().update(0, new ReflectionDecorator());
 
-        infoAlertButton.getButtonPressListeners().add(new ButtonPressListener() {
-            public void buttonPressed(Button button) {
-                Alert.alert(MessageType.INFO, "This is an info alert.", window);
-            }
-        });
-
-        customAlertButton.getButtonPressListeners().add(new ButtonPressListener() {
-            public void buttonPressed(Button button) {
-                ArrayList<String> options = new ArrayList<String>();
-                options.add("OK");
-                options.add("Cancel");
-
-                Component body = null;
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                try {
-                    body = (Component)wtkxSerializer.readObject("pivot/tutorials/alert.wtkx");
-                } catch(Exception exception) {
-                    System.out.println(exception);
+                    alert.open(window);
+                } else {
+                    String message = ((Dictionary<String, String>)selection.getButtonData()).get("message");
+                    Alert.alert(MessageType.decode(messageType), message, window);
                 }
+            }
+        });
 
-                Alert alert = new Alert(MessageType.QUESTION, "Please select your favorite icon:",
-                    options, body);
-                alert.setTitle("Select Icon");
-                alert.setSelectedOption(0);
-                alert.getDecorators().update(0, new ReflectionDecorator());
+        promptButton.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                Button.Group messageTypeGroup = Button.getGroup("messageType");
+                Button selection = messageTypeGroup.getSelection();
+                String messageType = ((Dictionary<String, String>)selection.getButtonData()).get("type");
 
-                alert.open(window);
+                if (messageType.equals("custom")) {
+                    ArrayList<String> options = new ArrayList<String>();
+                    options.add("OK");
+                    options.add("Cancel");
+
+                    Component body = null;
+                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    try {
+                        body = (Component)wtkxSerializer.readObject("pivot/tutorials/alert.wtkx");
+                    } catch(Exception exception) {
+                        System.out.println(exception);
+                    }
+
+                    Prompt prompt = new Prompt(MessageType.QUESTION, "Please select your favorite icon:",
+                        options, body);
+                    prompt.setTitle("Select Icon");
+                    prompt.setSelectedOption(0);
+                    prompt.getDecorators().update(0, new ReflectionDecorator());
+
+                    prompt.open(window);
+                } else {
+                    String message = ((Dictionary<String, String>)selection.getButtonData()).get("message");
+                    Prompt.prompt(MessageType.decode(messageType), message, window);
+                }
             }
         });
     }

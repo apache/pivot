@@ -1155,9 +1155,15 @@ public abstract class Component implements ConstrainedVisual {
         if (this.visible != visible) {
             // If this component is being hidden and has the focus, clear
             // the focus
-            if (!visible
-                && isFocused()) {
-                clearFocus();
+            if (!visible) {
+                if (isFocused()) {
+                    clearFocus();
+                }
+
+                // Ensure that the mouse out event is processed
+                if (mouseOver) {
+                    mouseOut();
+                }
             }
 
             // Redraw the region formerly occupied by this component

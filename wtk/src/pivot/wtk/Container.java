@@ -302,26 +302,32 @@ public abstract class Container extends Component
         super.paint(containerGraphics);
         containerGraphics.dispose();
 
-        java.awt.Rectangle awtClipBounds = graphics.getClipBounds();
-        Bounds clipBounds = (awtClipBounds == null) ? getBounds() : new Bounds(awtClipBounds);
+        java.awt.Rectangle clipBounds = graphics.getClipBounds();
+        Bounds paintBounds = (clipBounds == null) ?
+            new Bounds(0, 0, getWidth(), getHeight()) : new Bounds(clipBounds);
 
         for (Component component : this) {
+            Bounds componentBounds = component.getBounds();
+
             // Calculate the decorated bounds
-            Bounds decoratedBounds = component.getBounds();
+            Bounds affectedArea = new Bounds(0, 0, componentBounds.width, componentBounds.height);
             for (Decorator decorator : component.getDecorators()) {
-                decoratedBounds.union(decorator.getAffectedArea(component, 0, 0,
-                    decoratedBounds.width, decoratedBounds.height));
+                affectedArea.union(decorator.getAffectedArea(component, 0, 0,
+                    componentBounds.width, componentBounds.height));
             }
+
+            affectedArea.x += componentBounds.x;
+            affectedArea.y += componentBounds.y;
 
             // Only paint components that are visible and intersect the
             // current clip rectangle
             if (component.isVisible()
-                && decoratedBounds.intersects(clipBounds)) {
+                && affectedArea.intersects(paintBounds)) {
                 // Create a copy of the current graphics context and
                 // translate to the component's coordinate system
                 Graphics2D componentGraphics = (Graphics2D)graphics.create();
-                componentGraphics.translate(component.getX(), component.getY());
-                componentGraphics.clipRect(0, 0, component.getWidth(), component.getHeight());
+                componentGraphics.translate(componentBounds.x, componentBounds.y);
+                componentGraphics.clipRect(0, 0, componentBounds.width, componentBounds.height);
 
                 // Prepare the decorators
                 Graphics2D decoratedGraphics = componentGraphics;

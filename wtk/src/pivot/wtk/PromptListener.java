@@ -27,5 +27,5 @@ public interface PromptListener {
      * @param prompt
      * @param previousSelectedOption
      */
-    public void selectedOptionChanged(Prompt alert, int previousSelectedOption);
+    public void selectedOptionChanged(Prompt prompt, int previousSelectedOption);
 }

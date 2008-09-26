@@ -68,7 +68,7 @@ limitations under the License.
                                 <wtkx:include namespace="dragdrop" src="dragdrop.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Alerts" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
+                                <Label text="Alerts &amp; Prompts" styles="{font:'Verdana bold 12', color:'#2c5680'}"/>
                                 <wtkx:include namespace="alerts" src="alerts.wtkx"/>
                             </Rollup>
                         </FlowPane>

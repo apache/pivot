@@ -46,7 +46,7 @@ public class MenuPopupSkin extends PopupSkin
     private DropShadowDecorator dropShadowDecorator = null;
     private Transition closeTransition = null;
 
-    private static final int CLOSE_TRANSITION_DURATION = 150;
+    private static final int CLOSE_TRANSITION_DURATION = 100;
     private static final int CLOSE_TRANSITION_RATE = 30;
 
     private MenuItemSelectionListener menuItemPressListener = new MenuItemSelectionListener() {
@@ -67,6 +67,8 @@ public class MenuPopupSkin extends PopupSkin
         setBackgroundColor((Color)null);
 
         panorama = new Panorama();
+        panorama.getStyles().put("buttonBackgroundColor", Color.WHITE);
+
         border = new Border(panorama);
 
         border.getStyles().put("color", new Color(0x99, 0x99, 0x99));
@@ -92,7 +94,7 @@ public class MenuPopupSkin extends PopupSkin
             menu.getMenuItemSelectionListeners().add(menuItemPressListener);
         }
 
-        border.setContent(menu);
+        panorama.setView(menu);
         menuPopup.setContent(border);
 
         // Attach the drop-shadow decorator
@@ -114,7 +116,7 @@ public class MenuPopupSkin extends PopupSkin
             menu.getMenuItemSelectionListeners().remove(menuItemPressListener);
         }
 
-        border.setContent(null);
+        panorama.setView(null);
         menuPopup.setContent(null);
 
         // Detach the drop shadow decorator
@@ -185,7 +187,7 @@ public class MenuPopupSkin extends PopupSkin
             menu.getMenuItemSelectionListeners().add(menuItemPressListener);
         }
 
-        border.setContent(menu);
+        panorama.setView(menu);
     }
 
     public void focusedComponentChanged(Component previousFocusedComponent) {

@@ -18,15 +18,29 @@ limitations under the License.
 <FlowPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <Border styles="{color:'#999999'}">
         <content>
-            <FlowPane styles="{padding:8}">
-                <FlowPane styles="{padding:{right:8}}">
-                    <PushButton wtkx:id="errorAlertButton" buttonData="Error"/>
-                    <PushButton wtkx:id="warningAlertButton" buttonData="Warning"/>
-                    <PushButton wtkx:id="questionAlertButton" buttonData="Question"/>
-                    <PushButton wtkx:id="infoAlertButton" buttonData="Info"/>
-                </FlowPane>
+            <FlowPane orientation="vertical" styles="{spacing: 12}">
+                <FlowPane orientation="vertical" styles="{padding: 6, spacing: 6}">
+                    <RadioButton group="messageType" selected="true">
+                       <buttonData text="Error" type="error" message="This is an error message."/>
+                    </RadioButton>
+                    <RadioButton group="messageType">
+                       <buttonData text="Warning" type="warning" message="This is a warning message."/>
+                    </RadioButton>
+                    <RadioButton group="messageType">
+                       <buttonData text="Question" type="question" message="This is a question."/>
+                    </RadioButton>
+                    <RadioButton group="messageType">
+                       <buttonData text="Info" type="info" message="This is an info message."/>
+                    </RadioButton>
+                    <RadioButton group="messageType">
+                       <buttonData text="Custom" type="custom"/>
+                    </RadioButton>
 
-                <PushButton wtkx:id="customAlertButton" buttonData="Custom"/>
+                    <FlowPane>
+                        <PushButton wtkx:id="alertButton" buttonData="Show Alert"/>
+                        <PushButton wtkx:id="promptButton" buttonData="Show Prompt"/>
+                    </FlowPane>
+                </FlowPane>
             </FlowPane>
         </content>
     </Border>

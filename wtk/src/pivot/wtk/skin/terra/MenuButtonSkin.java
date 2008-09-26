@@ -607,39 +607,37 @@ public class MenuButtonSkin extends ButtonSkin
             menuPopup.close();
         } else {
             MenuButton menuButton = (MenuButton)getComponent();
-            Menu menu = menuButton.getMenu();
+            Component content = menuPopup.getContent();
 
-            if (menu != null) {
-                // Determine the popup's location and preferred size, relative
-                // to the button
-                Window window = menuButton.getWindow();
+            // Determine the popup's location and preferred size, relative
+            // to the button
+            Window window = menuButton.getWindow();
 
-                if (window != null) {
-                    Display display = menuButton.getWindow().getDisplay();
-                    Point buttonLocation = menuButton.mapPointToAncestor(display, 0, 0);
+            if (window != null) {
+                Display display = menuButton.getWindow().getDisplay();
+                Point buttonLocation = menuButton.mapPointToAncestor(display, 0, 0);
 
-                    // Ensure that the popup remains within the bounds of the display
-                    int displayHeight = display.getHeight();
+                // Ensure that the popup remains within the bounds of the display
+                int displayHeight = display.getHeight();
 
-                    int y = buttonLocation.y + getHeight() - 1;
-                    int preferredPopupHeight = menu.getPreferredHeight();
+                int y = buttonLocation.y + getHeight() - 1;
+                int preferredPopupHeight = content.getPreferredHeight();
 
-                    if (y + preferredPopupHeight > displayHeight) {
-                        if (buttonLocation.y - preferredPopupHeight > 0) {
-                            y = buttonLocation.y - preferredPopupHeight + 1;
-                        } else {
-                            preferredPopupHeight = displayHeight - y;
-                        }
+                if (y + preferredPopupHeight > displayHeight) {
+                    if (buttonLocation.y - preferredPopupHeight > 0) {
+                        y = buttonLocation.y - preferredPopupHeight + 1;
                     } else {
-                        preferredPopupHeight = -1;
+                        preferredPopupHeight = displayHeight - y;
                     }
-
-                    menuPopup.setLocation(buttonLocation.x, y);
-                    menuPopup.setPreferredHeight(preferredPopupHeight);
-                    menuPopup.open(menuButton);
-
-                    menuPopup.requestFocus();
+                } else {
+                    preferredPopupHeight = -1;
                 }
+
+                menuPopup.setLocation(buttonLocation.x, y);
+                menuPopup.setPreferredHeight(preferredPopupHeight);
+                menuPopup.open(menuButton);
+
+                menuPopup.requestFocus();
             }
         }
     }

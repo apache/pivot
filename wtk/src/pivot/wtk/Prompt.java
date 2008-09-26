@@ -15,8 +15,11 @@
  */
 package pivot.wtk;
 
+import pivot.collections.ArrayList;
+import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
+import pivot.util.Resources;
 
 /**
  * Class representing an "prompt", a sheet commonly used to perform simple
@@ -46,6 +49,16 @@ public class Prompt extends Sheet {
     private int selectedOption = -1;
 
     private PromptListenerList promptListeners = new PromptListenerList();
+
+    private static Resources resources = null;
+
+    static {
+        try {
+            resources = new Resources(Prompt.class.getName());
+        } catch(Exception exception) {
+            throw new RuntimeException(exception);
+        }
+    }
 
     public Prompt(MessageType type, String message, Sequence<?> options) {
         this(type, message, options, null);
@@ -108,5 +121,35 @@ public class Prompt extends Sheet {
 
     public ListenerList<PromptListener> getPromptListeners() {
         return promptListeners;
+    }
+
+    public static void prompt(String message, Window owner) {
+        prompt(MessageType.INFO, message, owner, null);
+    }
+
+    public static void prompt(String message, Window owner,
+        SheetStateListener sheetStateListener) {
+        prompt(MessageType.INFO, message, owner, sheetStateListener);
+    }
+
+    public static void prompt(MessageType type, String message, Window owner) {
+        prompt(type, message, owner, null);
+    }
+
+    public static void prompt(MessageType type, String message, Window owner,
+        SheetStateListener sheetStateListener) {
+        Prompt prompt = createPrompt(type, message);
+        prompt.open(owner, sheetStateListener);
+    }
+
+    private static Prompt createPrompt(MessageType type, String message) {
+        List<Object> options = new ArrayList<Object>();
+        options.add(resources.get("defaultOption"));
+
+        Prompt prompt = new Prompt(type, message, options, null);
+        prompt.setTitle((String)resources.get("defaultTitle"));
+        prompt.setSelectedOption(0);
+
+        return prompt;
     }
 }
