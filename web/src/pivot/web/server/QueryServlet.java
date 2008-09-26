@@ -15,7 +15,11 @@
  */
 package pivot.web.server;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -187,6 +191,49 @@ public abstract class QueryServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Output stream that writes to a file until the stream is closed, at which
+     * point it determines the size of the file, sets that size as the
+     * <tt>Content-Length</tt> HTTP response header on the associated servlet
+     * response, and writes the file contents out to the servlet's output
+     * stream.
+     *
+     * @author tvolkert
+     */
+    private class ProxyOutputStream extends FileOutputStream {
+        private HttpServletResponse response;
+        private File file;
+
+        public ProxyOutputStream(HttpServletResponse response, File file) throws IOException {
+            super(file);
+
+            this.response = response;
+            this.file = file;
+        }
+
+        @Override
+        public void close() throws IOException {
+            super.close();
+
+            response.setHeader("Content-Length", String.valueOf(file.length()));
+
+            OutputStream outputStream = response.getOutputStream();
+            FileInputStream inputStream = new FileInputStream(file);
+            try {
+                byte[] buffer = new byte[1024];
+                int nBytes;
+                do {
+                    nBytes = inputStream.read(buffer);
+                    if (nBytes > 0) {
+                        outputStream.write(buffer, 0, nBytes);
+                    }
+                } while (nBytes != -1);
+            } finally {
+                inputStream.close();
+            }
+        }
+    }
+
     private boolean authenticationRequired = false;
     private Credentials credentials = null;
 
@@ -196,6 +243,8 @@ public abstract class QueryServlet extends HttpServlet {
     private int port;
     private boolean secure;
     private Method method;
+
+    private boolean forceContentLength = false;
 
     private HashMap<String, String> arguments = new HashMap<String, String>();
     private HashMap<String, String> requestProperties = new HashMap<String, String>();
@@ -266,6 +315,30 @@ public abstract class QueryServlet extends HttpServlet {
      */
     public Method getMethod() {
         return method;
+    }
+
+    /**
+     * Tells whether this servlet is configured to always determine the content
+     * length of outgoing responses and set the <tt>Content-Length</tt> HTTP
+     * response header accordingly. If this flag is <tt>false</tt>, it is up to
+     * the servlet's discretion as to when to set the <tt>Content-Length</tt>
+     * header (it will do so if it is trivially easy). If this is set to
+     * <tt>true</tt>, it will force the servlet to always set the header, but
+     * doing so will incur a performance penalty, as the servlet will be unable
+     * to stream the response directly to the HTTP output stream as it gets
+     * serialized.
+     */
+    public boolean isForceContentLength() {
+        return forceContentLength;
+    }
+
+    /**
+     * Sets the value of the <tt>forceContentLength</tt> flag.
+     *
+     * @see #isForceContentLength()
+     */
+    public void setForceContentLength(boolean forceContentLength) {
+        this.forceContentLength = forceContentLength;
     }
 
     /**
@@ -501,7 +574,18 @@ public abstract class QueryServlet extends HttpServlet {
             response.setStatus(200);
             setResponseHeaders(response);
             response.setContentType(serializer.getMIMEType());
-            serializer.writeObject(result, response.getOutputStream());
+
+            if (forceContentLength) {
+                File tmpFile = File.createTempFile("pivot", null);
+                OutputStream outputStream = new ProxyOutputStream(response, tmpFile);
+                try {
+                    serializer.writeObject(result, outputStream);
+                } finally {
+                    outputStream.close();
+                }
+            } else {
+                serializer.writeObject(result, response.getOutputStream());
+            }
         } catch (UnsupportedOperationException ex) {
             doMethodNotAllowed(response);
         } catch (SerializationException ex) {
@@ -518,6 +602,7 @@ public abstract class QueryServlet extends HttpServlet {
             URL url = doPost(value);
 
             response.setStatus(201);
+            setResponseHeaders(response);
             response.setHeader("Location", url.toString());
             response.setContentLength(0);
             response.flushBuffer();
@@ -537,6 +622,7 @@ public abstract class QueryServlet extends HttpServlet {
             doPut(value);
 
             response.setStatus(204);
+            setResponseHeaders(response);
             response.setContentLength(0);
             response.flushBuffer();
         } catch (UnsupportedOperationException ex) {
@@ -553,6 +639,7 @@ public abstract class QueryServlet extends HttpServlet {
             doDelete();
 
             response.setStatus(204);
+            setResponseHeaders(response);
             response.setContentLength(0);
             response.flushBuffer();
         } catch (UnsupportedOperationException ex) {
