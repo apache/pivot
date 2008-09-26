@@ -204,6 +204,8 @@ public abstract class QueryServlet extends HttpServlet {
         private HttpServletResponse response;
         private File file;
 
+        private boolean closed = false;
+
         public ProxyOutputStream(HttpServletResponse response, File file) throws IOException {
             super(file);
 
@@ -215,21 +217,25 @@ public abstract class QueryServlet extends HttpServlet {
         public void close() throws IOException {
             super.close();
 
-            response.setHeader("Content-Length", String.valueOf(file.length()));
+            if (!closed) {
+                closed = true;
 
-            OutputStream outputStream = response.getOutputStream();
-            FileInputStream inputStream = new FileInputStream(file);
-            try {
-                byte[] buffer = new byte[1024];
-                int nBytes;
-                do {
-                    nBytes = inputStream.read(buffer);
-                    if (nBytes > 0) {
-                        outputStream.write(buffer, 0, nBytes);
-                    }
-                } while (nBytes != -1);
-            } finally {
-                inputStream.close();
+                response.setHeader("Content-Length", String.valueOf(file.length()));
+
+                OutputStream outputStream = response.getOutputStream();
+                FileInputStream inputStream = new FileInputStream(file);
+                try {
+                    byte[] buffer = new byte[1024];
+                    int nBytes;
+                    do {
+                        nBytes = inputStream.read(buffer);
+                        if (nBytes > 0) {
+                            outputStream.write(buffer, 0, nBytes);
+                        }
+                    } while (nBytes != -1);
+                } finally {
+                    inputStream.close();
+                }
             }
         }
     }
