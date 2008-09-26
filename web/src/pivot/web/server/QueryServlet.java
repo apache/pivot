@@ -191,55 +191,6 @@ public abstract class QueryServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Output stream that writes to a file until the stream is closed, at which
-     * point it determines the size of the file, sets that size as the
-     * <tt>Content-Length</tt> HTTP response header on the associated servlet
-     * response, and writes the file contents out to the servlet's output
-     * stream.
-     *
-     * @author tvolkert
-     */
-    private class ProxyOutputStream extends FileOutputStream {
-        private HttpServletResponse response;
-        private File file;
-
-        private boolean closed = false;
-
-        public ProxyOutputStream(HttpServletResponse response, File file) throws IOException {
-            super(file);
-
-            this.response = response;
-            this.file = file;
-        }
-
-        @Override
-        public void close() throws IOException {
-            super.close();
-
-            if (!closed) {
-                closed = true;
-
-                response.setHeader("Content-Length", String.valueOf(file.length()));
-
-                OutputStream outputStream = response.getOutputStream();
-                FileInputStream inputStream = new FileInputStream(file);
-                try {
-                    byte[] buffer = new byte[1024];
-                    int nBytes;
-                    do {
-                        nBytes = inputStream.read(buffer);
-                        if (nBytes > 0) {
-                            outputStream.write(buffer, 0, nBytes);
-                        }
-                    } while (nBytes != -1);
-                } finally {
-                    inputStream.close();
-                }
-            }
-        }
-    }
-
     private boolean authenticationRequired = false;
     private Credentials credentials = null;
 
@@ -250,7 +201,7 @@ public abstract class QueryServlet extends HttpServlet {
     private boolean secure;
     private Method method;
 
-    private boolean forceContentLength = false;
+    private boolean determineContentLength = false;
 
     private HashMap<String, String> arguments = new HashMap<String, String>();
     private HashMap<String, String> requestProperties = new HashMap<String, String>();
@@ -334,17 +285,17 @@ public abstract class QueryServlet extends HttpServlet {
      * to stream the response directly to the HTTP output stream as it gets
      * serialized.
      */
-    public boolean isForceContentLength() {
-        return forceContentLength;
+    public boolean isDetermineContentLength() {
+        return determineContentLength;
     }
 
     /**
-     * Sets the value of the <tt>forceContentLength</tt> flag.
+     * Sets the value of the <tt>determineContentLength</tt> flag.
      *
-     * @see #isForceContentLength()
+     * @see #isDetermineContentLength()
      */
-    public void setForceContentLength(boolean forceContentLength) {
-        this.forceContentLength = forceContentLength;
+    public void setDetermineContentLength(boolean determineContentLength) {
+        this.determineContentLength = determineContentLength;
     }
 
     /**
@@ -581,16 +532,38 @@ public abstract class QueryServlet extends HttpServlet {
             setResponseHeaders(response);
             response.setContentType(serializer.getMIMEType());
 
-            if (forceContentLength) {
-                File tmpFile = File.createTempFile("pivot", null);
-                OutputStream outputStream = new ProxyOutputStream(response, tmpFile);
+            OutputStream responseOutputStream = response.getOutputStream();
+
+            if (determineContentLength) {
+                File tempFile = File.createTempFile("pivot", null);
+
+                // Serialize our result to an intermediary file
+                FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
                 try {
-                    serializer.writeObject(result, outputStream);
+                    serializer.writeObject(result, fileOutputStream);
                 } finally {
-                    outputStream.close();
+                    fileOutputStream.close();
+                }
+
+                // Our content length is the length of the file in bytes
+                response.setHeader("Content-Length", String.valueOf(tempFile.length()));
+
+                // Now write the contents of the file out to our response
+                FileInputStream fileInputStream = new FileInputStream(tempFile);
+                try {
+                    byte[] buffer = new byte[1024];
+                    int nBytes;
+                    do {
+                        nBytes = fileInputStream.read(buffer);
+                        if (nBytes > 0) {
+                            responseOutputStream.write(buffer, 0, nBytes);
+                        }
+                    } while (nBytes != -1);
+                } finally {
+                    fileInputStream.close();
                 }
             } else {
-                serializer.writeObject(result, response.getOutputStream());
+                serializer.writeObject(result, responseOutputStream);
             }
         } catch (UnsupportedOperationException ex) {
             doMethodNotAllowed(response);
