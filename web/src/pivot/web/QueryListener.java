@@ -51,4 +51,11 @@ public interface QueryListener<V> {
      * @param query
      */
     public void responseReceived(Query<V> query);
+
+    /**
+     * Called when an error has occurred
+     *
+     * @param query
+     */
+    public void failed(Query<V> query);
 }

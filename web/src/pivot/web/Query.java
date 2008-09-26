@@ -28,11 +28,11 @@ import java.util.Iterator;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.serialization.JSONSerializer;
-import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
 import pivot.util.ListenerList;
 import pivot.util.concurrent.AbortException;
 import pivot.util.concurrent.Dispatcher;
+import pivot.util.concurrent.SynchronizedListenerList;
 import pivot.util.concurrent.Task;
 
 /**
@@ -317,23 +317,29 @@ public abstract class Query<V> extends Task<V> {
      *
      * @author tvolkert
      */
-    private static class QueryListenerList<V> extends ListenerList<QueryListener<V>>
+    private static class QueryListenerList<V> extends SynchronizedListenerList<QueryListener<V>>
         implements QueryListener<V> {
-        public void connected(Query<V> query) {
+        public synchronized void connected(Query<V> query) {
             for (QueryListener<V> listener : this) {
                 listener.connected(query);
             }
         }
 
-        public void requestSent(Query<V> query) {
+        public synchronized void requestSent(Query<V> query) {
             for (QueryListener<V> listener : this) {
                 listener.requestSent(query);
             }
         }
 
-        public void responseReceived(Query<V> query) {
+        public synchronized void responseReceived(Query<V> query) {
             for (QueryListener<V> listener : this) {
                 listener.responseReceived(query);
+            }
+        }
+
+        public synchronized void failed(Query<V> query) {
+            for (QueryListener<V> listener : this) {
+                listener.failed(query);
             }
         }
     }
@@ -613,9 +619,8 @@ public abstract class Query<V> extends Task<V> {
 
             // Notify listeners that the response has been received
             queryListeners.responseReceived(this);
-        } catch (IOException exception) {
-            throw new QueryException(exception);
-        } catch (SerializationException exception) {
+        } catch (Exception exception) {
+            queryListeners.failed(this);
             throw new QueryException(exception);
         }
 
