@@ -22,6 +22,7 @@ import pivot.util.ListenerList;
  *
  * @author gbrown
  */
+@ComponentInfo(icon="MenuPopup.png")
 public class MenuPopup extends Popup {
     private class MenuPopupListenerList extends ListenerList<MenuPopupListener>
         implements MenuPopupListener {

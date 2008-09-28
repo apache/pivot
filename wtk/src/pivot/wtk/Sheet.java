@@ -21,6 +21,7 @@ package pivot.wtk;
  *
  * @author gbrown
  */
+@ComponentInfo(icon="Sheet.png")
 public class Sheet extends Window {
     /**
      * <p>Sheet skin interface.</p>

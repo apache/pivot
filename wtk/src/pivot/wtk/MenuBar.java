@@ -28,6 +28,7 @@ import pivot.wtk.content.MenuBarItemDataRenderer;
  *
  * @author gbrown
  */
+@ComponentInfo(icon="MenuBar.png")
 public class MenuBar extends Container {
     /**
      * <p>Component representing a menu bar item.</p>

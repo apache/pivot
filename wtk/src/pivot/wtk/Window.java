@@ -31,6 +31,7 @@ import pivot.wtk.media.Image;
  *
  * @author gbrown
  */
+@ComponentInfo(icon="Window.png")
 public class Window extends Container {
     /**
      * <p>Window skin interface.</p>
