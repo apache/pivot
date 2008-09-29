@@ -193,7 +193,10 @@ public abstract class Component implements ConstrainedVisual {
     private class ComponentListenerList extends ListenerList<ComponentListener>
         implements ComponentListener {
         public void parentChanged(Component component, Container previousParent) {
-            getComponentSkin().parentChanged(component, previousParent);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.parentChanged(component, previousParent);
+            }
 
             for (ComponentListener listener : this) {
                 listener.parentChanged(component, previousParent);
@@ -201,7 +204,10 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            getComponentSkin().sizeChanged(component, previousWidth, previousHeight);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.sizeChanged(component, previousWidth, previousHeight);
+            }
 
             for (ComponentListener listener : this) {
                 listener.sizeChanged(component, previousWidth, previousHeight);
@@ -209,7 +215,10 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         public void locationChanged(Component component, int previousX, int previousY) {
-            getComponentSkin().locationChanged(component, previousX, previousY);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.locationChanged(component, previousX, previousY);
+            }
 
             for (ComponentListener listener : this) {
                 listener.locationChanged(component, previousX, previousY);
@@ -217,7 +226,10 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         public void visibleChanged(Component component) {
-            getComponentSkin().visibleChanged(component);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.visibleChanged(component);
+            }
 
             for (ComponentListener listener : this) {
                 listener.visibleChanged(component);
@@ -225,7 +237,10 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
-            getComponentSkin().styleUpdated(component, styleKey, previousValue);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.styleUpdated(component, styleKey, previousValue);
+            }
 
             for (ComponentListener listener : this) {
                 listener.styleUpdated(component, styleKey, previousValue);
@@ -233,7 +248,10 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         public void cursorChanged(Component component, Cursor previousCursor) {
-            getComponentSkin().cursorChanged(component, previousCursor);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.cursorChanged(component, previousCursor);
+            }
 
             for (ComponentListener listener : this) {
                 listener.cursorChanged(component, previousCursor);
@@ -241,7 +259,10 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         public void tooltipTextChanged(Component component, String previousTooltipText) {
-            getComponentSkin().tooltipTextChanged(component, previousTooltipText);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.tooltipTextChanged(component, previousTooltipText);
+            }
 
             for (ComponentListener listener : this) {
                 listener.tooltipTextChanged(component, previousTooltipText);
@@ -253,8 +274,11 @@ public abstract class Component implements ConstrainedVisual {
         ListenerList<ComponentLayoutListener> implements ComponentLayoutListener {
         public void preferredSizeChanged(Component component,
             int previousPreferredWidth, int previousPreferredHeight) {
-            getComponentSkin().preferredSizeChanged(component,
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.preferredSizeChanged(component,
                 previousPreferredWidth, previousPreferredHeight);
+            }
 
             for (ComponentLayoutListener listener : this) {
                 listener.preferredSizeChanged(component,
@@ -263,7 +287,10 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         public void displayableChanged(Component component) {
-            getComponentSkin().displayableChanged(component);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.displayableChanged(component);
+            }
 
             for (ComponentLayoutListener listener : this) {
                 listener.displayableChanged(component);
@@ -282,14 +309,20 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             if (!consumed) {
-                consumed = getComponentSkin().previewEnabledChange(component);
+                ComponentSkin componentSkin = (ComponentSkin)getSkin();
+                if (componentSkin != null) {
+                    consumed = componentSkin.previewEnabledChange(component);
+                }
             }
 
             return consumed;
         }
 
         public void enabledChanged(Component component) {
-            getComponentSkin().enabledChanged(component);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.enabledChanged(component);
+            }
 
             for (ComponentStateListener listener : this) {
                 listener.enabledChanged(component);
@@ -305,14 +338,20 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             if (!consumed) {
-                consumed = getComponentSkin().previewFocusedChange(component, temporary);
+                ComponentSkin componentSkin = (ComponentSkin)getSkin();
+                if (componentSkin != null) {
+                    consumed = componentSkin.previewFocusedChange(component, temporary);
+                }
             }
 
             return consumed;
         }
 
         public void focusedChanged(Component component, boolean temporary) {
-            getComponentSkin().focusedChanged(component, temporary);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.focusedChanged(component, temporary);
+            }
 
             for (ComponentStateListener listener : this) {
                 listener.focusedChanged(component, temporary);
@@ -353,21 +392,31 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             if (!consumed) {
-                consumed = getComponentSkin().mouseMove(component, x, y);
+                ComponentSkin componentSkin = (ComponentSkin)getSkin();
+                if (componentSkin != null) {
+                    consumed = componentSkin.mouseMove(component, x, y);
+                }
             }
 
             return consumed;
         }
 
         public void mouseOver(Component component) {
-            getComponentSkin().mouseOver(component);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.mouseOver(component);
+            }
+
             for (ComponentMouseListener listener : this) {
                 listener.mouseOver(component);
             }
         }
 
         public void mouseOut(Component component) {
-            getComponentSkin().mouseOut(component);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.mouseOut(component);
+            }
 
             for (ComponentMouseListener listener : this) {
                 listener.mouseOut(component);
@@ -386,7 +435,10 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             if (!consumed) {
-                consumed = getComponentSkin().mouseDown(component, button, x, y);
+                ComponentSkin componentSkin = (ComponentSkin)getSkin();
+                if (componentSkin != null) {
+                    consumed = componentSkin.mouseDown(component, button, x, y);
+                }
             }
 
             return consumed;
@@ -401,14 +453,20 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             if (!consumed) {
-                consumed = getComponentSkin().mouseUp(component, button, x, y);
+                ComponentSkin componentSkin = (ComponentSkin)getSkin();
+                if (componentSkin != null) {
+                    consumed = componentSkin.mouseUp(component, button, x, y);
+                }
             }
 
             return consumed;
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            getComponentSkin().mouseClick(component, button, x, y, count);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.mouseClick(component, button, x, y, count);
+            }
 
             for (ComponentMouseButtonListener listener : this) {
                 listener.mouseClick(component, button, x, y, count);
@@ -429,8 +487,11 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             if (!consumed) {
-                consumed = getComponentSkin().mouseWheel(component, scrollType, scrollAmount,
-                    wheelRotation, x, y);
+                ComponentSkin componentSkin = (ComponentSkin)getSkin();
+                if (componentSkin != null) {
+                    consumed = componentSkin.mouseWheel(component, scrollType, scrollAmount,
+                        wheelRotation, x, y);
+                }
             }
 
             return consumed;
@@ -440,7 +501,10 @@ public abstract class Component implements ConstrainedVisual {
     private class ComponentKeyListenerList extends ListenerList<ComponentKeyListener>
         implements ComponentKeyListener {
         public void keyTyped(Component component, char character) {
-            getComponentSkin().keyTyped(component, character);
+            ComponentSkin componentSkin = (ComponentSkin)getSkin();
+            if (componentSkin != null) {
+                componentSkin.keyTyped(component, character);
+            }
 
             for (ComponentKeyListener listener : this) {
                 listener.keyTyped(component, character);
@@ -456,7 +520,10 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             if (!consumed) {
-                consumed = getComponentSkin().keyPressed(component, keyCode, keyLocation);
+                ComponentSkin componentSkin = (ComponentSkin)getSkin();
+                if (componentSkin != null) {
+                    consumed = componentSkin.keyPressed(component, keyCode, keyLocation);
+                }
             }
 
             return consumed;
@@ -471,7 +538,10 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             if (!consumed) {
-                consumed = getComponentSkin().keyReleased(component, keyCode, keyLocation);
+                ComponentSkin componentSkin = (ComponentSkin)getSkin();
+                if (componentSkin != null) {
+                    consumed = componentSkin.keyReleased(component, keyCode, keyLocation);
+                }
             }
 
             return consumed;
@@ -669,13 +739,6 @@ public abstract class Component implements ConstrainedVisual {
 
         invalidate();
         repaint();
-    }
-
-    /**
-     * Returns the skin as an instance of {@link pivot.wtk.skin.ComponentSkin}.
-     */
-    protected ComponentSkin getComponentSkin() {
-        return (ComponentSkin)skin;
     }
 
     /**

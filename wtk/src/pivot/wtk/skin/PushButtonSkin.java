@@ -11,17 +11,14 @@ import pivot.wtk.PushButton;
  *
  * @author gbrown
  */
-public abstract class AbstractPushButtonSkin extends ButtonSkin {
-    protected boolean highlighted = false;
+public abstract class PushButtonSkin extends ButtonSkin {
     protected boolean pressed = false;
 
     @Override
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        highlighted = false;
         pressed = false;
-        repaintComponent();
     }
 
     @Override
@@ -29,24 +26,13 @@ public abstract class AbstractPushButtonSkin extends ButtonSkin {
         super.focusedChanged(component, temporary);
 
         pressed = false;
-        repaintComponent();
-    }
-
-    @Override
-    public void mouseOver(Component component) {
-        super.mouseOver(component);
-
-        highlighted = true;
-        repaintComponent();
     }
 
     @Override
     public void mouseOut(Component component) {
         super.mouseOut(component);
 
-        highlighted = false;
         pressed = false;
-        repaintComponent();
     }
 
     @Override

@@ -27,14 +27,14 @@ import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.PushButton;
-import pivot.wtk.skin.AbstractPushButtonSkin;
+import pivot.wtk.skin.PushButtonSkin;
 
 /**
  * <p>Push button skin.</p>
  *
  * @author gbrown
  */
-public class PushButtonSkin extends AbstractPushButtonSkin {
+public class ObsidianPushButtonSkin extends PushButtonSkin {
     // Style properties
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = Color.WHITE;

@@ -306,10 +306,7 @@ public class TabPaneSkin extends ContainerSkin
         public void mouseOut(Component component) {
             super.mouseOut(component);
 
-            if (pressed) {
-                pressed = false;
-                repaintComponent();
-            }
+            pressed = false;
         }
 
         @Override
@@ -336,11 +333,6 @@ public class TabPaneSkin extends ContainerSkin
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             TabButton tabButton = (TabButton)getComponent();
             tabButton.press();
-        }
-
-        @Override
-        public void enabledChanged(Component component) {
-            repaintComponent();
         }
     }
 

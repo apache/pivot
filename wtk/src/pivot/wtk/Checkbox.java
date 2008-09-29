@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.wtk.content.ButtonDataRenderer;
 
 /**
- * <p>Component representing a checkbox.</p>
+ * Component representing a checkbox.
  *
  * @author gbrown
  */
@@ -30,7 +30,6 @@ public class Checkbox extends Button {
 
     public Checkbox(Object buttonData) {
         super(buttonData);
-
         super.setToggleButton(true);
 
         Button.DataRenderer dataRenderer = new ButtonDataRenderer();

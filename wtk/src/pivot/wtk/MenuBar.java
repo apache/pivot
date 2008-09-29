@@ -22,6 +22,7 @@ import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 import pivot.wtk.content.MenuBarItemDataRenderer;
+import pivot.wtk.skin.MenuBarItemSkin;
 
 /**
  * <p>Component representing a horizontal menu bar.</p>
@@ -36,9 +37,14 @@ public class MenuBar extends Container {
      * @author gbrown
      */
     public static class Item extends Button {
-        private static class ItemListenerList extends ListenerList<ItemListener>
+        private class ItemListenerList extends ListenerList<ItemListener>
             implements ItemListener {
             public void menuChanged(Item item, Menu previousMenu) {
+                MenuBarItemSkin menuBarItemSkin = (MenuBarItemSkin)getSkin();
+                if (menuBarItemSkin != null) {
+                    menuBarItemSkin.menuChanged(item, previousMenu);
+                }
+
                 for (ItemListener listener : this) {
                     listener.menuChanged(item, previousMenu);
                 }
@@ -59,6 +65,16 @@ public class MenuBar extends Container {
 
             setDataRenderer(new MenuBarItemDataRenderer());
             installSkin(Item.class);
+        }
+
+        @Override
+        protected void setSkin(Skin skin) {
+            if (!(skin instanceof MenuBarItemSkin)) {
+                throw new IllegalArgumentException("Skin class must extend "
+                    + MenuBarItemSkin.class.getName());
+            }
+
+            super.setSkin(skin);
         }
 
         @Override

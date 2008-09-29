@@ -20,121 +20,76 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.GeneralPath;
 
 import pivot.collections.Dictionary;
+import pivot.wtk.Bounds;
 import pivot.wtk.Button;
-import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
-import pivot.wtk.PushButton;
-import pivot.wtk.skin.AbstractPushButtonSkin;
+import pivot.wtk.MenuButton;
+import pivot.wtk.skin.MenuButtonSkin;
 
 /**
- * Push button skin.
+ * Terra menu button skin.
  *
  * @author gbrown
  */
-public class PushButtonSkin extends AbstractPushButtonSkin {
+public class TerraMenuButtonSkin extends MenuButtonSkin {
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = Color.BLACK;
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
     private Color backgroundColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color disabledBackgroundColor = new Color(0xE6, 0xE3, 0xDA);
+    private Color disabledBackgroundColor = new Color(0xF7, 0xF5, 0xEB);
     private Color borderColor = new Color(0x99, 0x99, 0x99);
-    private Color disabledBorderColor = new Color(0xB2, 0xB2, 0xB2);
+    private Color disabledBorderColor = new Color(0xCC, 0xCC, 0xCC);
     private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
     private Color pressedBevelColor = new Color(0xCC, 0xCA, 0xC2);
-    private Color disabledBevelColor = new Color(0xE6, 0xE3, 0xDA);
+    private Color disabledBevelColor = Color.WHITE;
     private Insets padding = new Insets(3);
-    private float preferredAspectRatio = Float.NaN;
-    private boolean toolbar = false;
+    private int spacing = 0;
+
+    private static final int TRIGGER_WIDTH = 10;
 
     public int getPreferredWidth(int height) {
-        PushButton pushButton = (PushButton)getComponent();
-        Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
+        MenuButton menuButton = (MenuButton)getComponent();
+        Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
 
-        dataRenderer.render(pushButton.getButtonData(), pushButton, false);
-
-        // Include padding in constraint
-        int contentHeight = height;
-        if (contentHeight != -1) {
-            contentHeight = Math.max(contentHeight - (padding.top + padding.bottom + 2), 0);
+        if (height != -1) {
+            height = Math.max(height - (padding.top + padding.bottom + 2), 0);
         }
 
-        int preferredWidth = dataRenderer.getPreferredWidth(contentHeight)
-            + padding.left + padding.right + 2;
+        dataRenderer.render(menuButton.getButtonData(), menuButton, false);
 
-        // Adjust for preferred aspect ratio
-        if (!Float.isNaN(preferredAspectRatio)
-            && preferredAspectRatio >= 1) {
-            if (height != -1
-                && (float)preferredWidth / (float)height < preferredAspectRatio) {
-                preferredWidth = (int)((float)height * preferredAspectRatio);
-            }
-        }
+        int preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH
+            + padding.left + padding.right + spacing + 2;
 
         return preferredWidth;
     }
 
     public int getPreferredHeight(int width) {
-        PushButton pushButton = (PushButton)getComponent();
-        Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
+        MenuButton menuButton = (MenuButton)getComponent();
+        Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
 
-        dataRenderer.render(pushButton.getButtonData(), pushButton, false);
+        dataRenderer.render(menuButton.getButtonData(), menuButton, false);
 
-        // Include padding in constraint
-        int contentWidth = width;
-        if (contentWidth != -1) {
-            contentWidth = Math.max(contentWidth - (padding.left + padding.right + 2), 0);
-        }
-
-        int preferredHeight = dataRenderer.getPreferredHeight(contentWidth)
+        int preferredHeight = dataRenderer.getPreferredHeight(-1)
             + padding.top + padding.bottom + 2;
-
-        // Adjust for preferred aspect ratio
-        if (!Float.isNaN(preferredAspectRatio)
-            && preferredAspectRatio >= 1) {
-            if (width != -1
-                && (float)width / (float)preferredHeight < preferredAspectRatio) {
-                preferredHeight = (int)((float)width / preferredAspectRatio);
-            }
-        }
 
         return preferredHeight;
     }
 
     public Dimensions getPreferredSize() {
-        PushButton pushButton = (PushButton)getComponent();
-        Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
+        // TODO Optimize by performing calcuations locally
+        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+    }
 
-        dataRenderer.render(pushButton.getButtonData(), pushButton, false);
-
-        Dimensions preferredContentSize = dataRenderer.getPreferredSize();
-
-        int preferredWidth = preferredContentSize.width
-            + padding.left + padding.right + 2;
-
-        int preferredHeight = preferredContentSize.height
-            + padding.top + padding.bottom + 2;
-
-        // Adjust for preferred aspect ratio
-        if (!Float.isNaN(preferredAspectRatio)) {
-            if (preferredAspectRatio >= 1) {
-                if ((float)preferredWidth / (float)preferredHeight < preferredAspectRatio) {
-                    preferredWidth = (int)((float)preferredHeight * preferredAspectRatio);
-                }
-            } else {
-                if ((float)preferredWidth / (float)preferredHeight > preferredAspectRatio) {
-                    preferredHeight = (int)((float)preferredWidth / preferredAspectRatio);
-                }
-            }
-        }
-
-        return new Dimensions(preferredWidth, preferredHeight);
+    public void layout() {
+        // No-op
     }
 
     public void paint(Graphics2D graphics) {
-        PushButton pushButton = (PushButton)getComponent();
+        MenuButton menuButton = (MenuButton)getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -143,72 +98,86 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
         Color bevelColor = null;
         Color borderColor = null;
 
-        if (!toolbar
-            || highlighted) {
-            if (pushButton.isEnabled()) {
-                backgroundColor = this.backgroundColor;
-                bevelColor = (pressed
-                    || pushButton.isSelected()) ? pressedBevelColor : this.bevelColor;
-                borderColor = this.borderColor;
-            } else {
-                backgroundColor = disabledBackgroundColor;
-                bevelColor = disabledBevelColor;
-                borderColor = disabledBorderColor;
-            }
+        if (menuButton.isEnabled()) {
+            backgroundColor = this.backgroundColor;
+            bevelColor = (pressed) ? pressedBevelColor : this.bevelColor;
+            borderColor = this.borderColor;
+        } else {
+            backgroundColor = disabledBackgroundColor;
+            bevelColor = disabledBevelColor;
+            borderColor = disabledBorderColor;
         }
 
         // Paint the background
-        if (backgroundColor != null) {
-            graphics.setPaint(backgroundColor);
-            graphics.fillRect(0, 0, width, height);
-        }
+        graphics.setPaint(backgroundColor);
+        graphics.fillRect(0, 0, width, height);
 
         // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
 
-        // Paint the border
-        if (borderColor != null) {
-            graphics.setPaint(borderColor);
-            graphics.drawRect(0, 0, width - 1, height - 1);
-        }
-
         // Paint the bevel
-        if (bevelColor != null) {
-            graphics.setPaint(bevelColor);
-            graphics.drawLine(1, 1, width - 2, 1);
-        }
+        graphics.setPaint(bevelColor);
+        graphics.drawLine(1, 1, width - 2, 1);
+
+        // Paint the border
+        graphics.setPaint(borderColor);
+        graphics.drawRect(0, 0, width - 1, height - 1);
+
+        Bounds contentBounds = new Bounds(padding.left + 1, padding.top + 1,
+            Math.max(width - (padding.left + padding.right + spacing + TRIGGER_WIDTH + 2), 0),
+            Math.max(height - (padding.top + padding.bottom + 2), 0));
 
         // Paint the content
-        Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
-        dataRenderer.render(pushButton.getButtonData(), pushButton, highlighted);
-        dataRenderer.setSize(Math.max(width - (padding.left + padding.right + 2), 0),
-            Math.max(getHeight() - (padding.top + padding.bottom + 2), 0));
+        Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
+        dataRenderer.render(menuButton.getButtonData(), menuButton, false);
+        dataRenderer.setSize(contentBounds.width, contentBounds.height);
 
         Graphics2D contentGraphics = (Graphics2D)graphics.create();
-        contentGraphics.translate(padding.left + 1, padding.top + 1);
-        contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
+        contentGraphics.translate(contentBounds.x, contentBounds.y);
+        contentGraphics.clipRect(0, 0, contentBounds.width, contentBounds.height);
         dataRenderer.paint(contentGraphics);
         contentGraphics.dispose();
 
+        // Paint the trigger
+        Bounds triggerBounds = new Bounds(Math.max(width - (padding.right + TRIGGER_WIDTH), 0),
+            0, TRIGGER_WIDTH, Math.max(height - (padding.top - padding.bottom), 0));
+
+        GeneralPath triggerIconShape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+        triggerIconShape.moveTo(0, 0);
+        triggerIconShape.lineTo(3, 3);
+        triggerIconShape.lineTo(6, 0);
+        triggerIconShape.closePath();
+
+        Graphics2D triggerGraphics = (Graphics2D)graphics.create();
+        triggerGraphics.setStroke(new BasicStroke(0));
+        triggerGraphics.setPaint(color);
+
+        int tx = triggerBounds.x + Math.round((triggerBounds.width - triggerIconShape.getBounds().width) / 2);
+        int ty = triggerBounds.y + Math.round((triggerBounds.height - triggerIconShape.getBounds().height) / 2f);
+        triggerGraphics.translate(tx, ty);
+
+        triggerGraphics.draw(triggerIconShape);
+        triggerGraphics.fill(triggerIconShape);
+
+        triggerGraphics.dispose();
+
         // Paint the focus state
-        if (pushButton.isFocused()) {
+        if (menuButton.isFocused()) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
             graphics.setStroke(dashStroke);
-            graphics.setColor(this.borderColor);
+            graphics.setColor(borderColor);
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
             graphics.drawRect(2, 2, Math.max(width - 5, 0),
                 Math.max(height - 5, 0));
-        }
-    }
 
-    @Override
-    public boolean isFocusable() {
-        return !toolbar;
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_OFF);
+        }
     }
 
     public Font getFont() {
@@ -326,6 +295,7 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
         }
 
         this.borderColor = borderColor;
+        menuPopup.getStyles().put("borderColor", borderColor);
         repaintComponent();
     }
 
@@ -454,35 +424,20 @@ public class PushButtonSkin extends AbstractPushButtonSkin {
         setPadding(padding.intValue());
     }
 
-    public float getPreferredAspectRatio() {
-        return preferredAspectRatio;
+    public int getSpacing() {
+        return spacing;
     }
 
-    public void setPreferredAspectRatio(float preferredAspectRatio) {
-        this.preferredAspectRatio = preferredAspectRatio;
+    public void setSpacing(int spacing) {
+        this.spacing = spacing;
         invalidateComponent();
     }
 
-    public final void setPreferredAspectRatio(Number preferredAspectRatio) {
-        if (preferredAspectRatio == null) {
-            throw new IllegalArgumentException("preferredAspectRatio is null.");
+    public final void setSpacing(Number spacing) {
+        if (spacing == null) {
+            throw new IllegalArgumentException("spacing is null.");
         }
 
-        setPreferredAspectRatio(preferredAspectRatio.floatValue());
-    }
-
-    public boolean isToolbar() {
-        return toolbar;
-    }
-
-    public void setToolbar(boolean toolbar) {
-        this.toolbar = toolbar;
-
-        if (toolbar &&
-            getComponent().isFocused()) {
-            Component.clearFocus();
-        }
-
-        repaintComponent();
+        setSpacing(spacing.intValue());
     }
 }

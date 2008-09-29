@@ -27,113 +27,23 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.wtk.Border;
 import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
-import pivot.wtk.Component;
-import pivot.wtk.ComponentKeyListener;
-import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Direction;
-import pivot.wtk.Display;
 import pivot.wtk.Insets;
-import pivot.wtk.Keyboard;
 import pivot.wtk.ListButton;
-import pivot.wtk.ListButtonListener;
-import pivot.wtk.ListButtonSelectionListener;
 import pivot.wtk.ListView;
-import pivot.wtk.Mouse;
 import pivot.wtk.Panorama;
-import pivot.wtk.Point;
-import pivot.wtk.Popup;
 import pivot.wtk.Bounds;
-import pivot.wtk.Window;
-import pivot.wtk.skin.ButtonSkin;
+import pivot.wtk.skin.ListButtonSkin;
 
 /**
- * List button skin.
- * <p>
- * TODO Rather than blindly closing when a mouse down is received, we could
- * instead cache the selection state in container mouse down and compare it
- * to the current state in component mouse down. If different, we close the
- * popup.
- * <p>
- * TODO Extend Popup instead of adding event listeners? May slightly simplify
- * implementation.
+ * Terra list button skin.
  *
  * @author gbrown
  */
-public class ListButtonSkin extends ButtonSkin
-    implements ListButton.Skin, ButtonPressListener,
-        ListButtonListener, ListButtonSelectionListener {
-    private class ListViewPopupKeyHandler implements ComponentKeyListener {
-        public void keyTyped(Component component, char character) {
-            // No-op
-        }
-
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            switch (keyCode) {
-                case Keyboard.KeyCode.ESCAPE: {
-                    listViewPopup.close();
-                    getComponent().requestFocus();
-                    break;
-                }
-
-                case Keyboard.KeyCode.TAB:
-                case Keyboard.KeyCode.ENTER: {
-                    ListButton listButton = (ListButton)getComponent();
-
-                    int index = listView.getSelectedIndex();
-
-                    listView.clearSelection();
-                    listButton.setSelectedIndex(index);
-
-                    listViewPopup.close();
-
-                    if (keyCode == Keyboard.KeyCode.TAB) {
-                        Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                            Direction.BACKWARD : Direction.FORWARD;
-                        listButton.transferFocus(direction);
-                    } else {
-                        listButton.requestFocus();
-                    }
-
-                    break;
-                }
-            }
-
-            return false;
-        }
-
-        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            return false;
-        }
-    }
-
-    private class ListViewPopupMouseListener implements ComponentMouseButtonListener {
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            ListButton listButton = (ListButton)getComponent();
-
-            int index = listView.getSelectedIndex();
-
-            listView.clearSelection();
-            listButton.setSelectedIndex(index);
-
-            listViewPopup.close();
-            getComponent().requestFocus();
-        }
-    }
-
-    private ListView listView = null;
+public class TerraListButtonSkin extends ListButtonSkin {
+    protected ListView listView = null;
     private Panorama listViewPanorama = null;
     private Border listViewBorder = null;
-    private Popup listViewPopup = null;
 
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = Color.BLACK;
@@ -147,11 +57,9 @@ public class ListButtonSkin extends ButtonSkin
     private Color disabledBevelColor = Color.WHITE;
     private Insets padding = new Insets(3);
 
-    private boolean pressed = false;
-
     private static final int TRIGGER_WIDTH = 14;
 
-    public ListButtonSkin() {
+    public TerraListButtonSkin() {
         // Create the list view, panorama, and border
         listView = new ListView();
         listViewPanorama = new Panorama(listView);
@@ -162,34 +70,8 @@ public class ListButtonSkin extends ButtonSkin
         listViewBorder.getStyles().put("padding", 0);
         listViewBorder.getStyles().put("color", borderColor);
 
-        // Create the popup
-        listViewPopup = new Popup(listViewBorder);
-        listViewPopup.getComponentKeyListeners().add(new ListViewPopupKeyHandler());
-        listViewPopup.getComponentMouseButtonListeners().add(new ListViewPopupMouseListener());
-    }
-
-    @Override
-    public void install(Component component) {
-        super.install(component);
-
-        ListButton listButton = (ListButton)component;
-
-        listButton.getButtonPressListeners().add(this);
-        listButton.getListButtonSelectionListeners().add(this);
-
-        listView.setListData(listButton.getListData());
-    }
-
-    @Override
-    public void uninstall() {
-        ListButton listButton = (ListButton)getComponent();
-
-        listViewPopup.close();
-
-        listButton.getButtonPressListeners().remove(this);
-        listButton.getListButtonSelectionListeners().remove(this);
-
-        super.uninstall();
+        // Set the popup content
+        listViewPopup.setContent(listViewBorder);
     }
 
     @SuppressWarnings("unchecked")
@@ -663,192 +545,5 @@ public class ListButtonSkin extends ButtonSkin
 
     public void setListHighlightBackgroundColor(Object listHighlightBackgroundColor) {
         listView.getStyles().put("highlightBackgroundColor", listHighlightBackgroundColor);
-    }
-
-    // Component state events
-    @Override
-    public void enabledChanged(Component component) {
-        super.enabledChanged(component);
-
-        listViewPopup.close();
-
-        pressed = false;
-        repaintComponent();
-    }
-
-    @Override
-    public void focusedChanged(Component component, boolean temporary) {
-        super.focusedChanged(component, temporary);
-
-        // Close the popup if focus was transferred to a component whose
-        // window is not the popup
-        if (!component.isFocused()
-            && !listViewPopup.containsFocus()) {
-            listViewPopup.close();
-        }
-
-        pressed = false;
-        repaintComponent();
-    }
-
-    // Component mouse events
-    @Override
-    public void mouseOut(Component component) {
-        super.mouseOut(component);
-
-        if (pressed) {
-            pressed = false;
-            repaintComponent();
-        }
-    }
-
-    @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(component, button, x, y);
-
-        pressed = true;
-        repaintComponent();
-
-        return consumed;
-    }
-
-    @Override
-    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseUp(component, button, x, y);
-
-        pressed = false;
-        repaintComponent();
-
-        return consumed;
-    }
-
-    @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        ListButton listButton = (ListButton)getComponent();
-
-        listButton.requestFocus();
-        listButton.press();
-
-        if (listView.isShowing()) {
-            listView.requestFocus();
-        }
-    }
-
-    @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
-
-        if (keyCode == Keyboard.KeyCode.SPACE) {
-            pressed = true;
-            repaintComponent();
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.UP) {
-            ListButton listButton = (ListButton)getComponent();
-            int selectedIndex = listButton.getSelectedIndex();
-
-            if (selectedIndex > 0) {
-                listButton.setSelectedIndex(selectedIndex - 1);
-                consumed = true;
-            }
-        } else if (keyCode == Keyboard.KeyCode.DOWN) {
-            ListButton listButton = (ListButton)getComponent();
-            int selectedIndex = listButton.getSelectedIndex();
-
-            if (selectedIndex < listButton.getListData().getLength() - 1) {
-                listButton.setSelectedIndex(selectedIndex + 1);
-                consumed = true;
-            }
-        } else {
-            consumed = super.keyPressed(component, keyCode, keyLocation);
-        }
-
-        return consumed;
-    }
-
-    @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
-
-        ListButton listButton = (ListButton)getComponent();
-
-        if (keyCode == Keyboard.KeyCode.SPACE) {
-            pressed = false;
-            repaintComponent();
-
-            listButton.press();
-        } else {
-            consumed = super.keyReleased(component, keyCode, keyLocation);
-        }
-
-        return consumed;
-    }
-
-    // Button events
-    public void buttonPressed(Button button) {
-        if (listViewPopup.isOpen()) {
-            listViewPopup.close();
-        } else {
-            ListButton listButton = (ListButton)button;
-
-            if (listButton.getListData().getLength() > 0) {
-                // Determine the popup's location and preferred size, relative
-                // to the button
-                Window window = listButton.getWindow();
-
-                if (window != null) {
-                    Display display = listButton.getWindow().getDisplay();
-                    Point buttonLocation = listButton.mapPointToAncestor(display, 0, 0);
-
-                    // Ensure that the popup remains within the bounds of the display
-                    int displayHeight = display.getHeight();
-
-                    int y = buttonLocation.y + getHeight() - 1;
-                    int preferredPopupHeight = listViewBorder.getPreferredHeight();
-
-                    if (y + preferredPopupHeight > displayHeight) {
-                        if (buttonLocation.y - preferredPopupHeight > 0) {
-                            y = buttonLocation.y - preferredPopupHeight + 1;
-                        } else {
-                            preferredPopupHeight = displayHeight - y;
-                        }
-                    } else {
-                        preferredPopupHeight = -1;
-                    }
-
-                    listViewPopup.setLocation(buttonLocation.x, y);
-                    listViewPopup.setPreferredHeight(preferredPopupHeight);
-                    listViewPopup.open(listButton);
-
-                    if (listView.getFirstSelectedIndex() == -1
-                        && listView.getListData().getLength() > 0) {
-                        listView.setSelectedIndex(0);
-                    }
-
-                    listView.requestFocus();
-                }
-            }
-        }
-    }
-
-    // List button events
-    public void listDataChanged(ListButton listButton, List<?> previousListData) {
-        listView.setListData(listButton.getListData());
-    }
-
-    public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer) {
-        listView.setItemRenderer(listButton.getItemRenderer());
-    }
-
-    public void selectedValueKeyChanged(ListButton listButton, String previousSelectedValueKey) {
-        // No-op
-    }
-
-    // List button selection events
-    public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
-        // Set the selected item as the button data
-        int selectedIndex = listButton.getSelectedIndex();
-
-        Object buttonData = (selectedIndex == -1) ? null : listButton.getListData().get(selectedIndex);
-        listButton.setButtonData(buttonData);
     }
 }

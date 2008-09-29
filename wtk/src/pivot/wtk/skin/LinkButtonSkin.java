@@ -13,19 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk;
+package pivot.wtk.skin;
+
+import pivot.wtk.Component;
+import pivot.wtk.LinkButton;
+import pivot.wtk.Mouse;
 
 /**
- * <p>List button selection listener interface.</p>
+ * Abstract base class for link button skins.
  *
  * @author gbrown
  */
-public interface ListButtonSelectionListener {
-    /**
-     * Called when a list button's selected index has changed.
-     *
-     * @param listButton
-     * @param previousSelectedIndex
-     */
-    public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex);
+public abstract class LinkButtonSkin extends ButtonSkin {
+    @Override
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        LinkButton linkButton = (LinkButton)getComponent();
+        linkButton.press();
+    }
 }

@@ -30,8 +30,8 @@ public class LinkButton extends Button {
 
     public LinkButton(Object buttonData) {
         super(buttonData);
-
         setDataRenderer(new LinkButtonDataRenderer());
+
         installSkin(LinkButton.class);
     }
 

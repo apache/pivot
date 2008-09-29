@@ -18,6 +18,8 @@ package pivot.wtk.skin;
 import pivot.wtk.Action;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonListener;
+import pivot.wtk.ButtonPressListener;
+import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
 import pivot.wtk.Cursor;
 
@@ -27,23 +29,20 @@ import pivot.wtk.Cursor;
  * @author gbrown
  */
 public abstract class ButtonSkin extends ComponentSkin
-    implements Button.Skin, ButtonListener {
+    implements ButtonListener, ButtonStateListener, ButtonPressListener {
+    protected boolean highlighted = false;
+
     @Override
     public void install(Component component) {
         super.install(component);
 
-        Button button = (Button)component;
-        button.getButtonListeners().add(this);
-
-        button.setCursor(Cursor.HAND);
+        component.setCursor(Cursor.HAND);
     }
 
     @Override
     public void uninstall() {
-        Button button = (Button)getComponent();
-        button.getButtonListeners().remove(this);
-
-        button.setCursor(Cursor.DEFAULT);
+        Component component = getComponent();
+        component.setCursor(Cursor.DEFAULT);
 
         super.uninstall();
     }
@@ -52,14 +51,40 @@ public abstract class ButtonSkin extends ComponentSkin
         // No-op
     }
 
-    public boolean previewStateChange(Button button, Button.State state) {
-        return true;
+    // Component state events
+    @Override
+    public void enabledChanged(Component component) {
+        super.enabledChanged(component);
+
+        highlighted = false;
+        repaintComponent();
     }
 
-    public void stateChanged(Button toggleButton, Button.State previousState) {
-        // No-op
+    @Override
+    public void focusedChanged(Component component, boolean temporary) {
+        super.focusedChanged(component, temporary);
+
+        repaintComponent();
     }
 
+    // Component mouse events
+    @Override
+    public void mouseOver(Component component) {
+        super.mouseOver(component);
+
+        highlighted = true;
+        repaintComponent();
+    }
+
+    @Override
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
+
+        highlighted = false;
+        repaintComponent();
+    }
+
+    // Button events
     public void buttonDataChanged(Button button, Object previousButtonData) {
         invalidateComponent();
     }
@@ -89,6 +114,20 @@ public abstract class ButtonSkin extends ComponentSkin
     }
 
     public void stateKeyChanged(Button button, String previousStateKey) {
+        // No-op
+    }
+
+    // Button state events
+    public boolean previewStateChange(Button button, Button.State state) {
+        return true;
+    }
+
+    public void stateChanged(Button button, Button.State previousState) {
+        repaintComponent();
+    }
+
+    // Button press events
+    public void buttonPressed(Button button) {
         // No-op
     }
 }

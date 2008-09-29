@@ -22,22 +22,19 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 
-import pivot.wtk.Component;
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Keyboard;
-import pivot.wtk.Mouse;
 import pivot.wtk.RadioButton;
-import pivot.wtk.skin.ButtonSkin;
+import pivot.wtk.skin.RadioButtonSkin;
 
 /**
- * Radio button skin.
+ * Terra radio button skin.
  * <p>
  * TODO Button alignment style (vertical only).
  *
  * @author gbrown
  */
-public class RadioButtonSkin extends ButtonSkin {
+public class TerraRadioButtonSkin extends RadioButtonSkin {
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = Color.BLACK;
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
@@ -260,47 +257,5 @@ public class RadioButtonSkin extends ButtonSkin {
         }
 
         setSpacing(spacing.intValue());
-    }
-
-    @Override
-    public void enabledChanged(Component component) {
-        super.enabledChanged(component);
-
-        repaintComponent();
-    }
-
-    @Override
-    public void focusedChanged(Component component, boolean temporary) {
-        super.focusedChanged(component, temporary);
-
-        repaintComponent();
-    }
-
-    @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        RadioButton radioButton = (RadioButton)getComponent();
-
-        radioButton.requestFocus();
-        radioButton.press();
-    }
-
-    @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
-
-        RadioButton radioButton = (RadioButton)getComponent();
-
-        if (keyCode == Keyboard.KeyCode.SPACE) {
-            radioButton.press();
-        } else {
-            consumed = super.keyReleased(component, keyCode, keyLocation);
-        }
-
-        return consumed;
-    }
-
-    @Override
-    public void stateChanged(Button button, Button.State previousState) {
-        repaintComponent();
     }
 }

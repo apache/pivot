@@ -11,8 +11,8 @@ import pivot.wtk.Theme;
  */
 public final class ObsidianTheme extends Theme {
     public ObsidianTheme() {
-        componentSkinMap.put(PushButton.class, PushButtonSkin.class);
-        componentSkinMap.put(RadioButton.class, pivot.wtk.skin.terra.RadioButtonSkin.class);
+        componentSkinMap.put(PushButton.class, ObsidianPushButtonSkin.class);
+        componentSkinMap.put(RadioButton.class, pivot.wtk.skin.terra.TerraRadioButtonSkin.class);
     }
 
     public void install() {

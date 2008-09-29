@@ -20,23 +20,19 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import pivot.wtk.Button;
-import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.LinkButton;
-import pivot.wtk.Mouse;
-import pivot.wtk.skin.ButtonSkin;
+import pivot.wtk.skin.LinkButtonSkin;
 
 /**
- * Link button skin.
+ * Terra link button skin.
  *
  * @author gbrown
  */
-public class LinkButtonSkin extends ButtonSkin {
+public class TerraLinkButtonSkin extends LinkButtonSkin {
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = new Color(0x2c, 0x56, 0x80);
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
-
-    private boolean highlighted = false;
 
     public int getPreferredWidth(int height) {
         LinkButton linkButton = (LinkButton)getComponent();
@@ -147,37 +143,5 @@ public class LinkButtonSkin extends ButtonSkin {
         }
 
         setDisabledColor(Color.decode(disabledColor));
-    }
-
-    @Override
-    public void enabledChanged(Component component) {
-        super.enabledChanged(component);
-
-        highlighted = false;
-        repaintComponent();
-    }
-
-    @Override
-    public void mouseOver(Component component) {
-        super.mouseOver(component);
-
-        highlighted = true;
-
-        repaintComponent();
-    }
-
-    @Override
-    public void mouseOut(Component component) {
-        super.mouseOut(component);
-
-        highlighted = false;
-
-        repaintComponent();
-    }
-
-    @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        LinkButton linkButton = (LinkButton)getComponent();
-        linkButton.press();
     }
 }

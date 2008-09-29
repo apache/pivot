@@ -20,22 +20,22 @@ import pivot.collections.List;
 import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
 import pivot.wtk.content.ListButtonDataRenderer;
+import pivot.wtk.skin.ListButtonSkin;
 
 /**
- * <p>Component that allows a user to select one of several list options. The
- * options are hidden until the user pushes the button.</p>
+ * Component that allows a user to select one of several list options. The
+ * options are hidden until the user pushes the button.
  *
  * @author gbrown
  */
 @ComponentInfo(icon="ListButton.png")
 public class ListButton extends Button {
     /**
-     * <p>List button skin interface. List button skins are required implement
-     * this.</p>
+     * List button skin interface.
      *
      * @author gbrown
      */
-    public interface Skin extends pivot.wtk.Skin {
+    public interface Skin {
         public ListView getListView();
     }
 
@@ -44,21 +44,36 @@ public class ListButton extends Button {
      *
      * @author gbrown
      */
-    private static class ListButtonListenerList extends ListenerList<ListButtonListener>
+    private class ListButtonListenerList extends ListenerList<ListButtonListener>
         implements ListButtonListener {
         public void listDataChanged(ListButton listButton, List<?> previousListData) {
+            ListButtonSkin listButtonSkin = (ListButtonSkin)getSkin();
+            if (listButtonSkin != null) {
+                listButtonSkin.listDataChanged(listButton, previousListData);
+            }
+
             for (ListButtonListener listener : this) {
                 listener.listDataChanged(listButton, previousListData);
             }
         }
 
         public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer) {
+            ListButtonSkin listButtonSkin = (ListButtonSkin)getSkin();
+            if (listButtonSkin != null) {
+                listButtonSkin.itemRendererChanged(listButton, previousItemRenderer);
+            }
+
             for (ListButtonListener listener : this) {
                 listener.itemRendererChanged(listButton, previousItemRenderer);
             }
         }
 
         public void selectedValueKeyChanged(ListButton listButton, String previousSelectedValueKey) {
+            ListButtonSkin listButtonSkin = (ListButtonSkin)getSkin();
+            if (listButtonSkin != null) {
+                listButtonSkin.selectedValueKeyChanged(listButton, previousSelectedValueKey);
+            }
+
             for (ListButtonListener listener : this) {
                 listener.selectedValueKeyChanged(listButton, previousSelectedValueKey);
             }
@@ -70,11 +85,16 @@ public class ListButton extends Button {
      *
      * @author gbrown
      */
-    private static class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
+    private class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
         implements ListButtonSelectionListener {
-        public void selectedIndexChanged(ListButton listButton, int previousIndex) {
+        public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
+            ListButtonSkin listButtonSkin = (ListButtonSkin)getSkin();
+            if (listButtonSkin != null) {
+                listButtonSkin.selectedIndexChanged(listButton, previousSelectedIndex);
+            }
+
             for (ListButtonSelectionListener listener : this) {
-                listener.selectedIndexChanged(listButton, previousIndex);
+                listener.selectedIndexChanged(listButton, previousSelectedIndex);
             }
         }
     }
@@ -123,9 +143,9 @@ public class ListButton extends Button {
 
     @Override
     protected void setSkin(pivot.wtk.Skin skin) {
-        if (!(skin instanceof ListButton.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + ListButton.Skin.class.getName());
+        if (!(skin instanceof ListButtonSkin)) {
+            throw new IllegalArgumentException("Skin class must extend "
+                + ListButtonSkin.class.getName());
         }
 
         super.setSkin(skin);

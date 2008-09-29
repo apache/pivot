@@ -73,7 +73,7 @@ public class FrameSkin extends WindowSkin {
      *
      * @author gbrown
      */
-    public static class FrameButtonSkin extends PushButtonSkin {
+    public static class FrameButtonSkin extends TerraPushButtonSkin {
         @Override
         public boolean isFocusable() {
             return false;

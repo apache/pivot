@@ -1,14 +1,23 @@
-package pivot.wtk.skin.terra;
-
-import java.awt.Color;
-import java.awt.Graphics2D;
+/*
+ * Copyright (c) 2008 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package pivot.wtk.skin;
 
 import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
-import pivot.wtk.Cursor;
-import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
@@ -19,16 +28,14 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.Window;
 import pivot.wtk.WindowStateListener;
-import pivot.wtk.skin.ButtonSkin;
 
 /**
- * Menu bar item skin.
+ * Abstract base class for menu bar item skins.
  *
  * @author gbrown
  */
-public class MenuBarItemSkin extends ButtonSkin
-    implements ButtonPressListener, MenuBar.ItemListener {
-    private MenuPopup menuPopup = new MenuPopup();
+public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.ItemListener {
+    protected MenuPopup menuPopup = new MenuPopup();
 
     public MenuBarItemSkin() {
         menuPopup.getWindowStateListeners().add(new WindowStateListener() {
@@ -61,94 +68,10 @@ public class MenuBarItemSkin extends ButtonSkin
     }
 
     @Override
-    public void install(Component component) {
-        super.install(component);
-
-        MenuBar.Item menuBarItem = (MenuBar.Item)component;
-        menuBarItem.getButtonPressListeners().add(this);
-        menuBarItem.getItemListeners().add(this);
-
-        menuBarItem.setCursor(Cursor.DEFAULT);
-    }
-
-    @Override
     public void uninstall() {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        menuBarItem.getButtonPressListeners().remove(this);
-        menuBarItem.getItemListeners().remove(this);
+        menuPopup.close();
 
         super.uninstall();
-    }
-
-    public int getPreferredWidth(int height) {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-
-        Button.DataRenderer dataRenderer = menuBarItem.getDataRenderer();
-        dataRenderer.render(menuBarItem.getButtonData(), menuBarItem, false);
-
-        return dataRenderer.getPreferredWidth(height);
-    }
-
-    public int getPreferredHeight(int width) {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-
-        Button.DataRenderer dataRenderer = menuBarItem.getDataRenderer();
-        dataRenderer.render(menuBarItem.getButtonData(), menuBarItem, false);
-
-        return dataRenderer.getPreferredHeight(width);
-    }
-
-    public Dimensions getPreferredSize() {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-
-        Button.DataRenderer dataRenderer = menuBarItem.getDataRenderer();
-        dataRenderer.render(menuBarItem.getButtonData(), menuBarItem, false);
-
-        return dataRenderer.getPreferredSize();
-    }
-
-    public void layout() {
-        // No-op
-    }
-
-    public void paint(Graphics2D graphics) {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        MenuBar menuBar = menuBarItem.getMenuBar();
-
-        int width = getWidth();
-        int height = getHeight();
-
-        boolean highlight = menuPopup.isOpen();
-
-        // Paint highlight state
-        if (highlight) {
-            Color highlightBackgroundColor = (Color)menuBar.getStyles().get("highlightBackgroundColor");
-            graphics.setColor(highlightBackgroundColor);
-            graphics.fillRect(0, 0, width, height);
-        }
-
-        // Paint the content
-        Button.DataRenderer dataRenderer = menuBarItem.getDataRenderer();
-        dataRenderer.render(menuBarItem.getButtonData(), menuBarItem, highlight);
-        dataRenderer.setSize(width, height);
-
-        dataRenderer.paint(graphics);
-    }
-
-    public Color getPopupBorderColor() {
-        return (Color)menuPopup.getStyles().get("borderColor");
-    }
-
-    public void setPopupBorderColor(Color popupBorderColor) {
-        menuPopup.getStyles().put("borderColor", popupBorderColor);
-    }
-
-    public void setPopupBorderColor(String popupBorderColor) {
-        if (popupBorderColor == null) {
-            throw new IllegalArgumentException("popupBorderColor is null.");
-        }
-
-        menuPopup.getStyles().put("borderColor", popupBorderColor);
     }
 
     @Override
@@ -238,7 +161,6 @@ public class MenuBarItemSkin extends ButtonSkin
         super.enabledChanged(component);
 
         menuPopup.close();
-        repaintComponent();
     }
 
     @Override
@@ -290,8 +212,6 @@ public class MenuBarItemSkin extends ButtonSkin
                 menuPopup.close();
             }
         }
-
-        repaintComponent();
     }
 
     public void buttonPressed(Button button) {
@@ -305,11 +225,6 @@ public class MenuBarItemSkin extends ButtonSkin
                 menuBar.setActive(true);
             }
         }
-    }
-
-    @Override
-    public void stateChanged(Button button, Button.State previousState) {
-        repaintComponent();
     }
 
     public void menuChanged(MenuBar.Item item, Menu previousMenu) {

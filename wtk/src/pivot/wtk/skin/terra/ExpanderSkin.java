@@ -68,7 +68,7 @@ public class ExpanderSkin extends ContainerSkin
         }
     }
 
-    public static class ShadeButtonSkin extends PushButtonSkin {
+    public static class ShadeButtonSkin extends TerraPushButtonSkin {
         public ShadeButtonSkin() {
             super();
 

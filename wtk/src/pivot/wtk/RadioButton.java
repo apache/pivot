@@ -38,8 +38,8 @@ public class RadioButton extends Button {
 
     public RadioButton(Group group, Object buttonData) {
         super(buttonData);
-
         super.setToggleButton(true);
+
         setGroup(group);
 
         Button.DataRenderer dataRenderer = new ButtonDataRenderer();
