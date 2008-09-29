@@ -7,20 +7,13 @@ import pivot.wtk.Mouse;
 import pivot.wtk.PushButton;
 
 /**
- * <p>Abstract base class for push button skins.</p>
+ * Abstract base class for push button skins.
  *
  * @author gbrown
  */
 public abstract class AbstractPushButtonSkin extends ButtonSkin {
     protected boolean highlighted = false;
     protected boolean pressed = false;
-
-    @Override
-    public void install(Component component) {
-        validateComponentType(component, PushButton.class);
-
-        super.install(component);
-    }
 
     @Override
     public void enabledChanged(Component component) {
@@ -40,16 +33,16 @@ public abstract class AbstractPushButtonSkin extends ButtonSkin {
     }
 
     @Override
-    public void mouseOver() {
-        super.mouseOver();
+    public void mouseOver(Component component) {
+        super.mouseOver(component);
 
         highlighted = true;
         repaintComponent();
     }
 
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
 
         highlighted = false;
         pressed = false;
@@ -57,8 +50,8 @@ public abstract class AbstractPushButtonSkin extends ButtonSkin {
     }
 
     @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         pressed = true;
         repaintComponent();
@@ -67,8 +60,8 @@ public abstract class AbstractPushButtonSkin extends ButtonSkin {
     }
 
     @Override
-    public boolean mouseUp(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseUp(button, x, y);
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
 
         pressed = false;
         repaintComponent();
@@ -77,7 +70,7 @@ public abstract class AbstractPushButtonSkin extends ButtonSkin {
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         PushButton pushButton = (PushButton)getComponent();
 
         if (pushButton.isFocusable()) {
@@ -88,21 +81,21 @@ public abstract class AbstractPushButtonSkin extends ButtonSkin {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = true;
             repaintComponent();
         } else {
-            consumed = super.keyPressed(keyCode, keyLocation);
+            consumed = super.keyPressed(component, keyCode, keyLocation);
         }
 
         return consumed;
     }
 
     @Override
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         PushButton pushButton = (PushButton)getComponent();
@@ -113,7 +106,7 @@ public abstract class AbstractPushButtonSkin extends ButtonSkin {
 
             pushButton.press();
         } else {
-            consumed = super.keyReleased(keyCode, keyLocation);
+            consumed = super.keyReleased(component, keyCode, keyLocation);
         }
 
         return consumed;

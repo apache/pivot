@@ -23,7 +23,7 @@ import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * <p>Menu item skin.</p>
+ * Menu item skin.
  *
  * @author gbrown
  */
@@ -77,8 +77,6 @@ public class MenuItemSkin extends ButtonSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Menu.Item.class);
-
         super.install(component);
 
         Menu.Item menuItem = (Menu.Item)component;
@@ -200,8 +198,8 @@ public class MenuItemSkin extends ButtonSkin
     }
 
     @Override
-    public void mouseOver() {
-        super.mouseOver();
+    public void mouseOver(Component component) {
+        super.mouseOver(component);
 
         ApplicationContext.clearInterval(buttonPressTimeoutID);
 
@@ -218,30 +216,30 @@ public class MenuItemSkin extends ButtonSkin
     }
 
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
         ApplicationContext.clearInterval(buttonPressTimeoutID);
     }
 
     @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
         ApplicationContext.clearInterval(buttonPressTimeoutID);
 
         return consumed;
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
-        super.mouseClick(button, x, y, count);
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        super.mouseClick(component, button, x, y, count);
 
         Menu.Item menuItem = (Menu.Item)getComponent();
         menuItem.press();
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyPressed(keyCode, keyLocation);
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = false;
 
         ApplicationContext.clearInterval(buttonPressTimeoutID);
 
@@ -278,15 +276,15 @@ public class MenuItemSkin extends ButtonSkin
         } else if (keyCode == Keyboard.KeyCode.TAB) {
             // No-op
         } else {
-            consumed = super.keyPressed(keyCode, keyLocation);
+            consumed = super.keyPressed(component, keyCode, keyLocation);
         }
 
         return consumed;
     }
 
     @Override
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyReleased(keyCode, keyLocation);
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = false;
 
         Menu.Item menuItem = (Menu.Item)getComponent();
 
@@ -294,7 +292,7 @@ public class MenuItemSkin extends ButtonSkin
             menuItem.press();
             consumed = true;
         } else {
-            consumed = super.keyReleased(keyCode, keyLocation);
+            consumed = super.keyReleased(component, keyCode, keyLocation);
         }
 
         return consumed;

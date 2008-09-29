@@ -91,10 +91,11 @@ public class Demo implements Application {
             return nodeLabelOffset;
         }
 
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             path = editableTreeView.getNodeAt(y);
 
             armed = (popup == null
@@ -102,6 +103,8 @@ public class Demo implements Application {
                 && Keyboard.getModifiers() == 0
                 && editableTreeView.isPathSelected(path)
                 && x >= getNodeLabelOffset());
+
+            return false;
         }
 
         @SuppressWarnings("unchecked")
@@ -163,7 +166,7 @@ public class Demo implements Application {
         }
 
         @SuppressWarnings("unchecked")
-        public void keyPressed(Component component, int keyCode,
+        public boolean keyPressed(Component component, int keyCode,
             Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
                 List<Object> treeData = (List<Object>)editableTreeView.getTreeData();
@@ -182,10 +185,13 @@ public class Demo implements Application {
                 popup.close();
                 editableTreeView.requestFocus();
             }
+
+            return false;
         }
 
-        public void keyReleased(Component component, int keyCode,
+        public boolean keyReleased(Component component, int keyCode,
             Keyboard.KeyLocation keyLocation) {
+            return false;
         }
     }
 
@@ -252,8 +258,8 @@ public class Demo implements Application {
     private static class ImageMouseHandler implements ComponentMouseListener {
         public static final Color DROP_HIGHLIGHT_COLOR = new Color(0xf0, 0xe6, 0x8c);
 
-        public void mouseMove(Component component, int x, int y) {
-            // No-op
+        public boolean mouseMove(Component component, int x, int y) {
+            return false;
         }
 
         public void mouseOver(Component component) {
@@ -323,13 +329,16 @@ public class Demo implements Application {
 
         menuImageView = (ImageView)wtkxSerializer.getObjectByName("menus.imageView");
         menuImageView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
-            public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
                 if (button == Mouse.Button.RIGHT) {
                     menuPopup.open(display, component.mapPointToAncestor(display, x, y));
                 }
+
+                return false;
             }
 
-            public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+                return false;
             }
 
             public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {

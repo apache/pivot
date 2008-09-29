@@ -26,7 +26,6 @@ import org.jfree.data.category.CategoryDataset;
 import pivot.charts.ChartView;
 import pivot.charts.LineChartView;
 import pivot.collections.List;
-import pivot.wtk.Component;
 
 /**
  * <p>Line chart view skin.</p>
@@ -35,12 +34,6 @@ import pivot.wtk.Component;
  */
 public class LineChartViewSkin extends ChartViewSkin {
     private boolean threeDimensional = false;
-
-    @Override
-    public void install(Component component) {
-        validateComponentType(component, LineChartView.class);
-        super.install(component);
-    }
 
     public ChartView.Element getElementAt(int x, int y) {
         ChartView.Element element = null;

@@ -27,7 +27,7 @@ import pivot.wtk.Direction;
 import pivot.wtk.FocusTraversalPolicy;
 
 /**
- * <p>Abstract base class for container skins.</p>
+ * Abstract base class for container skins.
  *
  * @author gbrown
  */
@@ -124,8 +124,6 @@ public abstract class ContainerSkin extends ComponentSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Container.class);
-
         super.install(component);
 
         Container container = (Container)component;

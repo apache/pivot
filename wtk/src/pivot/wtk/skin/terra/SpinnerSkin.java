@@ -37,13 +37,12 @@ import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * <p>Spinner skin.</p>
+ * Spinner skin.
  *
  * @author tvolkert
  */
 public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
     SpinnerListener, SpinnerSelectionListener {
-
     /**
      * Encapsulates the code needed to perform timer-controlled spinning.
      */
@@ -230,7 +229,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         @Override
-        public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 
             Spinner spinner = (Spinner)SpinnerSkin.this.getComponent();
@@ -254,7 +253,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
                     newSelectedIndex = count - 1;
                 }
             } else {
-                consumed = super.keyPressed(keyCode, keyLocation);
+                consumed = super.keyPressed(component, keyCode, keyLocation);
             }
 
             if (newSelectedIndex != selectedIndex) {
@@ -375,16 +374,16 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         @Override
-        public void mouseOver() {
-            super.mouseOver();
+        public void mouseOver(Component component) {
+            super.mouseOver(component);
 
             highlighted = true;
             repaintComponent();
         }
 
         @Override
-        public void mouseOut() {
-            super.mouseOut();
+        public void mouseOut(Component component) {
+            super.mouseOut(component);
 
             automaticSpinner.stop();
 
@@ -394,8 +393,8 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         @Override
-        public boolean mouseDown(Mouse.Button button, int x, int y) {
-            boolean consumed = super.mouseDown(button, x, y);
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseDown(component, button, x, y);
 
             if (button == Mouse.Button.LEFT) {
                 SpinButton spinButton = (SpinButton)getComponent();
@@ -415,8 +414,8 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         @Override
-        public boolean mouseUp(Mouse.Button button, int x, int y) {
-            boolean consumed = super.mouseUp(button, x, y);
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseUp(component, button, x, y);
 
             if (button == Mouse.Button.LEFT) {
                 automaticSpinner.stop();
@@ -524,8 +523,6 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Spinner.class);
-
         super.install(component);
 
         Spinner spinner = (Spinner)component;
@@ -643,7 +640,7 @@ public class SpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         spinnerContent.requestFocus();
     }
 

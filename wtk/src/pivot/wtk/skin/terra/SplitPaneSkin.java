@@ -36,9 +36,9 @@ import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * <p>Split pane skin.</p>
+ * Split pane skin.
  *
- * @author gbrown
+ * @author tvolkert
  */
 public class SplitPaneSkin extends ContainerSkin
     implements SplitPaneListener {
@@ -82,7 +82,7 @@ public class SplitPaneSkin extends ContainerSkin
     public static class SplitterSkin extends ComponentSkin {
         private class DragHandler
             implements ComponentMouseListener, ComponentMouseButtonListener {
-            public void mouseMove(Component component, int x, int y) {
+            public boolean mouseMove(Component component, int x, int y) {
                 Splitter splitter = (Splitter)getComponent();
                 SplitPane splitPane = splitter.getSplitPane();
 
@@ -107,6 +107,8 @@ public class SplitPaneSkin extends ContainerSkin
                         shadow.setLocation(0, splitLocation);
                     }
                 }
+
+                return false;
             }
 
             public void mouseOver(Component component) {
@@ -116,10 +118,11 @@ public class SplitPaneSkin extends ContainerSkin
             }
 
 
-            public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+                return false;
             }
 
-            public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
                 if (shadow != null) {
                     Splitter splitter = (Splitter)getComponent();
                     SplitPane splitPane = splitter.getSplitPane();
@@ -141,6 +144,8 @@ public class SplitPaneSkin extends ContainerSkin
                 assert (component instanceof Display);
                 component.getComponentMouseListeners().remove(this);
                 component.getComponentMouseButtonListeners().remove(this);
+
+                return false;
             }
 
             public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
@@ -150,13 +155,6 @@ public class SplitPaneSkin extends ContainerSkin
         private int dragOffset;
         private SplitterShadow shadow = null;
         private DragHandler dragHandler = new DragHandler();
-
-        @Override
-        public void install(Component component) {
-            validateComponentType(component, Splitter.class);
-
-            super.install(component);
-        }
 
         @Override
         public boolean isFocusable() {
@@ -241,7 +239,7 @@ public class SplitPaneSkin extends ContainerSkin
         }
 
         @Override
-        public boolean mouseDown(Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             Splitter splitter = (Splitter)getComponent();
             SplitPane splitPane = splitter.getSplitPane();
 
@@ -361,8 +359,6 @@ public class SplitPaneSkin extends ContainerSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, SplitPane.class);
-
         super.install(component);
 
         SplitPane splitPane = (SplitPane)component;

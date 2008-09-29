@@ -41,6 +41,10 @@ public abstract class ListenerList<T> implements Iterable<T> {
         list.remove(listener);
     }
 
+    public T get(int index) {
+        return list.get(index);
+    }
+
     public int getCount() {
         return list.size();
     }

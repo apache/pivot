@@ -35,21 +35,73 @@ import pivot.wtk.Window;
 import pivot.wtk.skin.WindowSkin;
 
 /**
- * <p>Tooltip skin.</p>
+ * Tooltip skin.
  *
  * @author gbrown
  */
-public class TooltipSkin extends WindowSkin
-    implements ComponentMouseListener, ComponentMouseButtonListener, ComponentMouseWheelListener,
-        ComponentKeyListener, TooltipListener {
+public class TooltipSkin extends WindowSkin implements TooltipListener {
+    private class CloseHandler implements ComponentMouseListener,
+        ComponentMouseButtonListener, ComponentMouseWheelListener,
+        ComponentKeyListener {
+        // Component mouse events
+        public boolean mouseMove(Component component, int x, int y) {
+            Tooltip tooltip = (Tooltip)getComponent();
+            tooltip.close();
+            return false;
+        }
+
+        public void mouseOver(Component component) {
+        }
+
+        public void mouseOut(Component component) {
+        }
+
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            Tooltip tooltip = (Tooltip)getComponent();
+            tooltip.close();
+            return false;
+        }
+
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            return false;
+        }
+
+        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        }
+
+        public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            Tooltip tooltip = (Tooltip)getComponent();
+            tooltip.close();
+            return false;
+        }
+
+        // Component key events
+        public void keyTyped(Component component, char character) {
+        }
+
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            Tooltip tooltip = (Tooltip)getComponent();
+            tooltip.close();
+            return false;
+        }
+
+        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            return false;
+        }
+    }
+
     private Label label = new Label();
     private Border border = new Border();
+
+    private CloseHandler closeHandler = new CloseHandler();
 
     private static final Font FONT = new Font("Verdana", Font.PLAIN, 11);
     private static final Color COLOR = Color.BLACK;
     private static final Color BACKGROUND_COLOR = new Color(0xff, 0xff, 0xe0);
     private static final Color BORDER_COLOR = Color.BLACK;
     private static final Insets PADDING = new Insets(2);
+
 
     public TooltipSkin() {
         // Add the label to the border
@@ -68,8 +120,6 @@ public class TooltipSkin extends WindowSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Tooltip.class);
-
         super.install(component);
 
         Tooltip tooltip = (Tooltip)component;
@@ -86,67 +136,25 @@ public class TooltipSkin extends WindowSkin
         tooltip.getTooltipListeners().remove(this);
     }
 
-    // Component mouse events
-    public void mouseMove(Component component, int x, int y) {
-        Tooltip tooltip = (Tooltip)getComponent();
-        tooltip.close();
-    }
-
-    public void mouseOver(Component component) {
-    }
-
-    public void mouseOut(Component component) {
-    }
-
-    public void mouseDown(Component component, Mouse.Button button, int x, int y) {
-        Tooltip tooltip = (Tooltip)getComponent();
-        tooltip.close();
-    }
-
-    public void mouseUp(Component component, Mouse.Button button, int x, int y) {
-    }
-
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-    }
-
-    public void mouseWheel(Component component, Mouse.ScrollType scrollType,
-        int scrollAmount, int wheelRotation, int x, int y) {
-        Tooltip tooltip = (Tooltip)getComponent();
-        tooltip.close();
-    }
-
-    // Component key events
-    public void keyTyped(Component component, char character) {
-    }
-
-    public void keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        Tooltip tooltip = (Tooltip)getComponent();
-        tooltip.close();
-    }
-
-    public void keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-    }
-
-    // Window events
+    @Override
     public void windowOpened(Window window) {
         // Add this as a display mouse and key listener
         Display display = window.getDisplay();
-        display.getComponentMouseListeners().add(this);
-        display.getComponentMouseButtonListeners().add(this);
-        display.getComponentMouseWheelListeners().add(this);
-        display.getComponentKeyListeners().add(this);
+        display.getComponentMouseListeners().add(closeHandler);
+        display.getComponentMouseButtonListeners().add(closeHandler);
+        display.getComponentMouseWheelListeners().add(closeHandler);
+        display.getComponentKeyListeners().add(closeHandler);
     }
 
-    public void windowClosed(Window window) {
+    @Override
+    public void windowClosed(Window window, Display display) {
         // Remove this as a display mouse and key listener
-        Display display = window.getDisplay();
-        display.getComponentMouseListeners().remove(this);
-        display.getComponentMouseButtonListeners().remove(this);
-        display.getComponentMouseWheelListeners().remove(this);
-        display.getComponentKeyListeners().remove(this);
+        display.getComponentMouseListeners().remove(closeHandler);
+        display.getComponentMouseButtonListeners().remove(closeHandler);
+        display.getComponentMouseWheelListeners().remove(closeHandler);
+        display.getComponentKeyListeners().remove(closeHandler);
     }
 
-    // Tooltip events
     public void tooltipTextChanged(Tooltip tooltip, String previousTooltipText) {
         label.setText(tooltip.getTooltipText());
     }

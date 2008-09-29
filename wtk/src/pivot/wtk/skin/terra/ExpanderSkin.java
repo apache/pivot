@@ -42,7 +42,7 @@ import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * <p>Expander skin.</p>
+ * Expander skin.
  *
  * @author gbrown
  */
@@ -77,8 +77,6 @@ public class ExpanderSkin extends ContainerSkin
 
         @Override
         public void install(Component component) {
-            validateComponentType(component, ShadeButton.class);
-
             super.install(component);
 
             ShadeButton shadeButton = (ShadeButton)component;
@@ -128,10 +126,12 @@ public class ExpanderSkin extends ContainerSkin
 
     private class TitleBarMouseHandler
         implements ComponentMouseButtonListener {
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
@@ -191,8 +191,6 @@ public class ExpanderSkin extends ContainerSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Expander.class);
-
         super.install(component);
 
         Expander expander = (Expander)component;

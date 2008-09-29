@@ -28,7 +28,6 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentLayoutListener;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Cursor;
@@ -50,14 +49,14 @@ import pivot.wtk.media.Image;
 import pivot.wtk.skin.WindowSkin;
 
 /**
- * <p>Abstract base class for Frame and Dialog skins.</p>
+ * Frame skin.
  *
  * @author gbrown
  * @author tvolkert
  */
-public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
+public class FrameSkin extends WindowSkin {
     /**
-     * <p>Frame button.</p>
+     * Frame button.
      *
      * @author gbrown
      */
@@ -70,37 +69,19 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
     }
 
     /**
-     * <p>Frame button skin.</p>
+     * Frame button skin.
      *
      * @author gbrown
      */
     public static class FrameButtonSkin extends PushButtonSkin {
-        public void install(Component component) {
-            validateComponentType(component, FrameButton.class);
-
-            super.install(component);
-        }
-
         @Override
         public boolean isFocusable() {
             return false;
         }
-
-        @Override
-        public boolean mouseDown(Mouse.Button button, int x, int y) {
-            super.mouseDown(button, x, y);
-            return true;
-        }
-
-        @Override
-        public boolean mouseUp(Mouse.Button button, int x, int y) {
-            super.mouseUp(button, x, y);
-            return true;
-        }
     }
 
     /**
-     * <p>Abstract base class for frame button images.</p>
+     * Abstract base class for frame button images.
      *
      * @author gbrown
      */
@@ -115,7 +96,7 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
     }
 
     /**
-     * <p>Minimize button image.</p>
+     * Minimize button image.
      *
      * @author gbrown
      */
@@ -128,7 +109,7 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
     }
 
     /**
-     * <p>Maximize button image.</p>
+     * Maximize button image.
      *
      * @author gbrown
      */
@@ -144,7 +125,7 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
     }
 
     /**
-     * <p>Restore button image.</p>
+     * Restore button image.
      *
      * @author gbrown
      */
@@ -162,7 +143,7 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
     }
 
     /**
-     * <p>Close button image.</p>
+     * Close button image.
      *
      * @author gbrown
      */
@@ -182,7 +163,7 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
     }
 
     /**
-     * <p>Resize button image.</p>
+     * Resize button image.
      *
      * @author gbrown
      */
@@ -211,7 +192,7 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
     }
 
     private class MoveMouseHandler implements ComponentMouseListener, ComponentMouseButtonListener {
-        public void mouseMove(Component component, int x, int y) {
+        public boolean mouseMove(Component component, int x, int y) {
             Display display = (Display)component;
 
             // Pretend that the mouse can't move off screen (off the display)
@@ -224,6 +205,8 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
 
             Window window = (Window)getComponent();
             window.setLocation(windowX, windowY);
+
+            return false;
         }
 
         public void mouseOver(Component component) {
@@ -232,13 +215,16 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
         public void mouseOut(Component component) {
         }
 
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             assert (component instanceof Display);
             component.getComponentMouseListeners().remove(this);
             component.getComponentMouseButtonListeners().remove(this);
+
+            return false;
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y,
@@ -247,7 +233,7 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
     }
 
     private class ResizeMouseHandler implements ComponentMouseListener, ComponentMouseButtonListener {
-        public void mouseMove(Component component, int x, int y) {
+        public boolean mouseMove(Component component, int x, int y) {
             Display display = (Display)component;
 
             // Pretend that the mouse can't move off screen (off the display)
@@ -271,6 +257,8 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
             }
 
             window.setPreferredSize(preferredWidth, preferredHeight);
+
+            return false;
         }
 
         public void mouseOver(Component component) {
@@ -279,13 +267,16 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
         public void mouseOut(Component component) {
         }
 
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             assert (component instanceof Display);
             component.getComponentMouseListeners().remove(this);
             component.getComponentMouseButtonListeners().remove(this);
+
+            return false;
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y,
@@ -364,14 +355,9 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Window.class);
-
         super.install(component);
 
         Window window = (Window)component;
-
-        // Attach listeners
-        window.getComponentLayoutListeners().add(this);
 
         // Attach the drop-shadow decorator
         dropShadowDecorator = new DropShadowDecorator();
@@ -419,9 +405,6 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
     @Override
     public void uninstall() {
         Window window = (Window)getComponent();
-
-        // Detach listeners
-        window.getComponentLayoutListeners().remove(this);
 
         // Detach the drop shadow decorator
         window.getDecorators().remove(dropShadowDecorator);
@@ -687,8 +670,8 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
     }
 
     @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         Window window = (Window)getComponent();
         boolean maximized = window.isMaximized();
@@ -787,13 +770,13 @@ public class FrameSkin extends WindowSkin implements ComponentLayoutListener {
         updateMaximizedState();
     }
 
-    // ComponentLayoutListener methods
-
+    @Override
     public void preferredSizeChanged(Component component,
         int previousPreferredWidth, int previousPreferredHeight) {
         updateResizeHandleCursor();
     }
 
+    @Override
     public void displayableChanged(Component component) {
         // No-op
     }

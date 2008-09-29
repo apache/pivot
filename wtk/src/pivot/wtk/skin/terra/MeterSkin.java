@@ -28,9 +28,9 @@ import pivot.wtk.MeterListener;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * <p>Meter skin.</p>
+ * Meter skin.
  *
- * @author gbrown
+ * @author tvolkert
  */
 public class MeterSkin extends ComponentSkin
     implements MeterListener {
@@ -44,8 +44,6 @@ public class MeterSkin extends ComponentSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Meter.class);
-
         super.install(component);
 
         Meter meter = (Meter)component;

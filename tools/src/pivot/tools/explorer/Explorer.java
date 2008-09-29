@@ -131,17 +131,18 @@ public class Explorer implements Application, TreeViewSelectionListener {
         dialog.setPreferredSize( new Dimensions( 600, 400 ));
 
         display.getComponentKeyListeners().add(new ComponentKeyListener() {
-
-			public void keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
-
+			public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
 				if (keyCode == KeyCode.E &&
 					Keyboard.isPressed(Keyboard.Modifier.CTRL) &&
 					Keyboard.isPressed(Keyboard.Modifier.ALT)) {
 					dialog.moveToFront();
 				}
+
+				return false;
 			}
 
-			public void keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
+			public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
+			    return false;
 			}
 
 			public void keyTyped(Component component, char character) {

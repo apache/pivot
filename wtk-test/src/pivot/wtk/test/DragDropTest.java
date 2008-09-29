@@ -97,8 +97,8 @@ public class DragDropTest implements Application {
     }
 
     private static class ImageMouseHandler implements ComponentMouseListener {
-        public void mouseMove(Component component, int x, int y) {
-            // No-op
+        public boolean mouseMove(Component component, int x, int y) {
+            return false;
         }
 
         public void mouseOver(Component component) {

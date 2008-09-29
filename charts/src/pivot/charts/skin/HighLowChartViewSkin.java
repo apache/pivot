@@ -23,7 +23,6 @@ import org.jfree.chart.entity.XYItemEntity;
 import pivot.charts.ChartView;
 import pivot.charts.HighLowChartView;
 import pivot.collections.List;
-import pivot.wtk.Component;
 
 /**
  * <p>High/low chart view skin.</p>
@@ -32,12 +31,6 @@ import pivot.wtk.Component;
  */
 public class HighLowChartViewSkin extends ChartViewSkin {
     private boolean candlestick = false;
-
-    @Override
-    public void install(Component component) {
-        validateComponentType(component, HighLowChartView.class);
-        super.install(component);
-    }
 
     public ChartView.Element getElementAt(int x, int y) {
         ChartView.Element element = null;

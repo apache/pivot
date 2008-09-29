@@ -54,7 +54,6 @@ public abstract class ChartViewSkin extends ComponentSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, ChartView.class);
         super.install(component);
 
         // Add listeners

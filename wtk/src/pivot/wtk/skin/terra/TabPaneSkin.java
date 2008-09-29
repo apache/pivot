@@ -46,17 +46,17 @@ import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * <p>Tab pane skin.</p>
- *
- * <p>TODO Make tab buttons focusable?</p>
- *
+ * Tab pane skin.
+ * <p>
+ * TODO Make tab buttons focusable?
+ * <p>
  * TODO Disable the tab button when the component is disabled? We'd need
  * style properties to present a disabled tab button state. We'd also need
- * to manage button enabled state independently of tab pane enabled state.</p>
- *
- * <p>TODO Support the displayable flag to show/hide tabs.</p>
- *
- * <p>TODO Add showCloseButton style.</p>
+ * to manage button enabled state independently of tab pane enabled state.
+ * <p>
+ * TODO Support the displayable flag to show/hide tabs.
+ * <p>
+ * TODO Add showCloseButton style.
  *
  * @author gbrown
  */
@@ -303,8 +303,8 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         @Override
-        public void mouseOut() {
-            super.mouseOut();
+        public void mouseOut(Component component) {
+            super.mouseOut(component);
 
             if (pressed) {
                 pressed = false;
@@ -313,8 +313,8 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         @Override
-        public boolean mouseDown(Mouse.Button button, int x, int y) {
-            boolean consumed = super.mouseDown(button, x, y);
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseDown(component, button, x, y);
 
             pressed = true;
             repaintComponent();
@@ -323,8 +323,8 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         @Override
-        public boolean mouseUp(Mouse.Button button, int x, int y) {
-            boolean consumed = super.mouseUp(button, x, y);
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseUp(component, button, x, y);
 
             pressed = false;
             repaintComponent();
@@ -333,7 +333,7 @@ public class TabPaneSkin extends ContainerSkin
         }
 
         @Override
-        public void mouseClick(Mouse.Button button, int x, int y, int count) {
+        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             TabButton tabButton = (TabButton)getComponent();
             tabButton.press();
         }
@@ -365,8 +365,6 @@ public class TabPaneSkin extends ContainerSkin
     }
 
     public void install(Component component) {
-        validateComponentType(component, TabPane.class);
-
         super.install(component);
 
         TabPane tabPane = (TabPane)component;

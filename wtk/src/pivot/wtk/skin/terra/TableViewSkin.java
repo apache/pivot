@@ -40,13 +40,13 @@ import pivot.wtk.TableViewSelectionDetailListener;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * <p>Table view skin.</p>
- *
- * <p>NOTE This skin assumes a fixed renderer height.</p>
- *
- * <p>TODO Add disableMouseSelection style to support the case where selection
+ * Table view skin.
+ * <p>
+ * NOTE This skin assumes a fixed renderer height.
+ * <p>
+ * TODO Add disableMouseSelection style to support the case where selection
  * should be enabled but the caller wants to implement the management of it;
- * e.g. changing a message's flag state in an email client.</p>
+ * e.g. changing a message's flag state in an email client.
  *
  * @author gbrown
  */
@@ -73,8 +73,6 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     private int highlightedIndex = -1;
 
     public void install(Component component) {
-        validateComponentType(component, TableView.class);
-
         super.install(component);
 
         TableView tableView = (TableView)component;
@@ -729,8 +727,8 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    public boolean mouseMove(int x, int y) {
-        boolean consumed = super.mouseMove(x, y);
+    public boolean mouseMove(Component component, int x, int y) {
+        boolean consumed = super.mouseMove(component, x, y);
 
         int previousHighlightedIndex = this.highlightedIndex;
         highlightedIndex = getRowAt(y);
@@ -749,8 +747,8 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
 
         if (highlightedIndex != -1) {
             Bounds rowBounds = getRowBounds(highlightedIndex);
@@ -761,7 +759,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         TableView tableView = (TableView)getComponent();
 
         if (isFocusable()) {
@@ -813,7 +811,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
+    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
         if (highlightedIndex != -1) {
             Bounds rowBounds = getRowBounds(highlightedIndex);
@@ -822,12 +820,12 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
 
         highlightedIndex = -1;
 
-        return super.mouseWheel(scrollType, scrollAmount, wheelRotation, x, y);
+        return super.mouseWheel(component, scrollType, scrollAmount, wheelRotation, x, y);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyPressed(keyCode, keyLocation);
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         TableView tableView = (TableView)getComponent();
 

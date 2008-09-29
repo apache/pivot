@@ -37,11 +37,11 @@ import pivot.wtk.Span;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * <p>List view skin.</p>
- *
- * <p>NOTE This skin assumes a fixed renderer height.</p>
- *
- * <p>TODO Support a "showToggleButtons" style.</p>
+ * List view skin.
+ * <p>
+ * NOTE This skin assumes a fixed renderer height.
+ * <p>
+ * TODO Support a "showToggleButtons" style.
  *
  * @author gbrown
  */
@@ -62,8 +62,6 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
     private int highlightedIndex = -1;
 
     public void install(Component component) {
-        validateComponentType(component, ListView.class);
-
         super.install(component);
 
         ListView listView = (ListView)component;
@@ -437,8 +435,8 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    public boolean mouseMove(int x, int y) {
-        boolean consumed = super.mouseMove(x, y);
+    public boolean mouseMove(Component component, int x, int y) {
+        boolean consumed = super.mouseMove(component, x, y);
 
         int previousHighlightedIndex = this.highlightedIndex;
         highlightedIndex = getItemAt(y);
@@ -457,8 +455,8 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
 
         if (highlightedIndex != -1) {
             Bounds itemBounds = getItemBounds(highlightedIndex);
@@ -470,7 +468,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     @SuppressWarnings("unchecked")
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         ListView listView = (ListView)getComponent();
 
         if (isFocusable()) {
@@ -525,7 +523,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
+    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
         if (highlightedIndex != -1) {
             Bounds itemBounds = getItemBounds(highlightedIndex);
@@ -534,12 +532,12 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
 
         highlightedIndex = -1;
 
-        return super.mouseWheel(scrollType, scrollAmount, wheelRotation, x, y);
+        return super.mouseWheel(component, scrollType, scrollAmount, wheelRotation, x, y);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyPressed(keyCode, keyLocation);
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         ListView listView = (ListView)getComponent();
 

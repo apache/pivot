@@ -57,13 +57,6 @@ public class RollupSkin extends ContainerSkin
 
     protected class RollupButtonSkin extends ButtonSkin {
         @Override
-        public void install(Component component) {
-            validateComponentType(component, RollupButton.class);
-
-            super.install(component);
-        }
-
-        @Override
         public boolean isFocusable() {
             return false;
         }
@@ -103,7 +96,7 @@ public class RollupSkin extends ContainerSkin
         }
 
         @Override
-        public void mouseClick(Mouse.Button button, int x, int y, int count) {
+        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             PushButton pushButton = (PushButton)getComponent();
             pushButton.press();
         }
@@ -174,10 +167,12 @@ public class RollupSkin extends ContainerSkin
 
     private class ToggleComponentMouseHandler
         implements ComponentMouseButtonListener {
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
@@ -202,8 +197,6 @@ public class RollupSkin extends ContainerSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Rollup.class);
-
         super.install(component);
 
         Rollup rollup = (Rollup)component;

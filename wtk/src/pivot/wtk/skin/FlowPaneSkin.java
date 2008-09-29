@@ -26,7 +26,7 @@ import pivot.wtk.Orientation;
 import pivot.wtk.VerticalAlignment;
 
 /**
- * <p>Flow pane skin.</p>
+ * Flow pane skin.
  *
  * @author gbrown
  */
@@ -36,13 +36,6 @@ public class FlowPaneSkin extends ContainerSkin
     private VerticalAlignment verticalAlignment = VerticalAlignment.TOP;
     private Insets padding = new Insets(0);
     private int spacing = 4;
-
-    @Override
-    public void install(Component component) {
-        validateComponentType(component, FlowPane.class);
-
-        super.install(component);
-    }
 
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;

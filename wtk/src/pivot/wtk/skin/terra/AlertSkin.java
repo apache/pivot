@@ -32,7 +32,7 @@ import pivot.wtk.media.Image;
 import pivot.wtkx.WTKXSerializer;
 
 /**
- * <p>Alert skin.</p>
+ * Alert skin.
  *
  * @author tvolkert
  * @author gbrown
@@ -63,8 +63,6 @@ public class AlertSkin extends DialogSkin
     @Override
     @SuppressWarnings("unchecked")
     public void install(Component component) {
-        validateComponentType(component, Alert.class);
-
         super.install(component);
 
         Alert alert = (Alert)component;

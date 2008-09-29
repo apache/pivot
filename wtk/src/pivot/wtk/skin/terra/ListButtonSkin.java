@@ -49,13 +49,13 @@ import pivot.wtk.Window;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * <p>List button skin.</p>
- *
+ * List button skin.
+ * <p>
  * TODO Rather than blindly closing when a mouse down is received, we could
  * instead cache the selection state in container mouse down and compare it
  * to the current state in component mouse down. If different, we close the
  * popup.
- *
+ * <p>
  * TODO Extend Popup instead of adding event listeners? May slightly simplify
  * implementation.
  *
@@ -69,7 +69,7 @@ public class ListButtonSkin extends ButtonSkin
             // No-op
         }
 
-        public void keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
                     listViewPopup.close();
@@ -99,18 +99,22 @@ public class ListButtonSkin extends ButtonSkin
                     break;
                 }
             }
+
+            return false;
         }
 
-        public void keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            // No-op
+        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            return false;
         }
     }
 
     private class ListViewPopupMouseListener implements ComponentMouseButtonListener {
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
@@ -166,8 +170,6 @@ public class ListButtonSkin extends ButtonSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, ListButton.class);
-
         super.install(component);
 
         ListButton listButton = (ListButton)component;
@@ -691,8 +693,8 @@ public class ListButtonSkin extends ButtonSkin
 
     // Component mouse events
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
 
         if (pressed) {
             pressed = false;
@@ -701,8 +703,8 @@ public class ListButtonSkin extends ButtonSkin
     }
 
     @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         pressed = true;
         repaintComponent();
@@ -711,8 +713,8 @@ public class ListButtonSkin extends ButtonSkin
     }
 
     @Override
-    public boolean mouseUp(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseUp(button, x, y);
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
 
         pressed = false;
         repaintComponent();
@@ -721,7 +723,7 @@ public class ListButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         ListButton listButton = (ListButton)getComponent();
 
         listButton.requestFocus();
@@ -733,7 +735,7 @@ public class ListButtonSkin extends ButtonSkin
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
@@ -757,14 +759,14 @@ public class ListButtonSkin extends ButtonSkin
                 consumed = true;
             }
         } else {
-            consumed = super.keyPressed(keyCode, keyLocation);
+            consumed = super.keyPressed(component, keyCode, keyLocation);
         }
 
         return consumed;
     }
 
     @Override
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         ListButton listButton = (ListButton)getComponent();
@@ -775,7 +777,7 @@ public class ListButtonSkin extends ButtonSkin
 
             listButton.press();
         } else {
-            consumed = super.keyReleased(keyCode, keyLocation);
+            consumed = super.keyReleased(component, keyCode, keyLocation);
         }
 
         return consumed;

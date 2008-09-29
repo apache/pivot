@@ -30,7 +30,11 @@ public interface ComponentMouseWheelListener {
      * @param wheelRotation
      * @param x
      * @param y
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void mouseWheel(Component component, Mouse.ScrollType scrollType,
+    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
         int scrollAmount, int wheelRotation, int x, int y);
 }

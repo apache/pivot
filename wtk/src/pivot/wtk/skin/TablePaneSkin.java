@@ -32,7 +32,7 @@ import pivot.wtk.TablePaneListener;
 import pivot.wtk.TablePaneAttributeListener;
 
 /**
- * <p>Table pane skin.</p>
+ * Table pane skin.
  *
  * @author tvolkert
  */
@@ -55,8 +55,6 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, TablePane.class);
-
         super.install(component);
 
         TablePane tablePane = (TablePane)component;

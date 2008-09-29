@@ -20,15 +20,13 @@ import pivot.wtk.Dialog;
 import pivot.wtk.Keyboard;
 
 /**
- * <p>Dialog skin.</p>
+ * Dialog skin.
  *
  * @author gbrown
  */
 public class DialogSkin extends FrameSkin implements Dialog.Skin {
     @Override
     public void install(Component component) {
-        validateComponentType(component, Dialog.class);
-
         super.install(component);
 
         setShowMaximizeButton(false);
@@ -36,7 +34,7 @@ public class DialogSkin extends FrameSkin implements Dialog.Skin {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         Dialog dialog = (Dialog)getComponent();
@@ -48,7 +46,7 @@ public class DialogSkin extends FrameSkin implements Dialog.Skin {
             dialog.close(false);
             consumed = true;
         } else {
-            consumed = super.keyPressed(keyCode, keyLocation);
+            consumed = super.keyPressed(component, keyCode, keyLocation);
         }
 
         return consumed;

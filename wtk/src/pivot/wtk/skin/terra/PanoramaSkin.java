@@ -21,13 +21,11 @@ import pivot.wtk.skin.ContainerSkin;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Panorama skin.</p>
+ * Panorama skin.
  *
  * @author gbrown
-
  */
-public class PanoramaSkin extends ContainerSkin
-    implements Viewport.Skin, ViewportListener, ComponentMouseListener {
+public class PanoramaSkin extends ContainerSkin implements Viewport.Skin, ViewportListener {
     /**
      * Abstract base class for button images.
      */
@@ -120,12 +118,6 @@ public class PanoramaSkin extends ContainerSkin
     }
 
     public class ScrollButtonSkin extends ButtonSkin {
-        public void install(Component component) {
-            validateComponentType(component, ScrollButton.class);
-
-            super.install(component);
-        }
-
         public int getPreferredWidth(int height) {
             return BUTTON_SIZE + buttonPadding;
         }
@@ -223,6 +215,23 @@ public class PanoramaSkin extends ContainerSkin
     private ScrollButton eastButton = new ScrollButton(new EastButtonImage());
     private ScrollButton westButton = new ScrollButton(new WestButtonImage());
 
+    private ComponentMouseListener buttonMouseListener = new ComponentMouseListener() {
+        public boolean mouseMove(Component component, int x, int y) {
+            return false;
+        }
+
+        public void mouseOver(Component component) {
+            // Start scroll timer
+            scrollDistance = INITIAL_SCROLL_DISTANCE;
+            scrollIntervalID = ApplicationContext.setInterval(scrollCallback, SCROLL_RATE);
+        }
+
+        public void mouseOut(Component component) {
+            // Stop scroll timer
+            ApplicationContext.clearInterval(scrollIntervalID);
+        }
+    };
+
     private float scrollDistance = 0;
     private ScrollCallback scrollCallback = new ScrollCallback();
     private int scrollIntervalID = -1;
@@ -236,8 +245,6 @@ public class PanoramaSkin extends ContainerSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Panorama.class);
-
         super.install(component);
 
         Panorama panorama = (Panorama)component;
@@ -247,16 +254,16 @@ public class PanoramaSkin extends ContainerSkin
         // to them; the mouse handlers should call setScrollTop() and
         // setScrollLeft() on the panorama as appropriate
         panorama.add(northButton);
-        northButton.getComponentMouseListeners().add(this);
+        northButton.getComponentMouseListeners().add(buttonMouseListener);
 
         panorama.add(southButton);
-        southButton.getComponentMouseListeners().add(this);
+        southButton.getComponentMouseListeners().add(buttonMouseListener);
 
         panorama.add(eastButton);
-        eastButton.getComponentMouseListeners().add(this);
+        eastButton.getComponentMouseListeners().add(buttonMouseListener);
 
         panorama.add(westButton);
-        westButton.getComponentMouseListeners().add(this);
+        westButton.getComponentMouseListeners().add(buttonMouseListener);
 
         updateScrollButtonVisibility();
     }
@@ -368,7 +375,7 @@ public class PanoramaSkin extends ContainerSkin
     }
 
     @Override
-    public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
+    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
         boolean consumed = false;
 
@@ -532,14 +539,14 @@ public class PanoramaSkin extends ContainerSkin
 
     // User input
     @Override
-    public void mouseOver() {
-        super.mouseOver();
+    public void mouseOver(Component component) {
+        super.mouseOver(component);
         updateScrollButtonVisibility();
     }
 
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
         updateScrollButtonVisibility();
     }
 
@@ -566,21 +573,5 @@ public class PanoramaSkin extends ContainerSkin
 
     public void viewChanged(Viewport panorama, Component previousView) {
         invalidateComponent();
-    }
-
-    // Component mouse events
-    public void mouseMove(Component component, int x, int y) {
-        // No-op
-    }
-
-    public void mouseOver(Component component) {
-        // Start scroll timer
-        scrollDistance = INITIAL_SCROLL_DISTANCE;
-        scrollIntervalID = ApplicationContext.setInterval(scrollCallback, SCROLL_RATE);
-    }
-
-    public void mouseOut(Component component) {
-        // Stop scroll timer
-        ApplicationContext.clearInterval(scrollIntervalID);
     }
 }

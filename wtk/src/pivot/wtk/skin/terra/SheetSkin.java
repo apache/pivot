@@ -52,7 +52,7 @@ public class SheetSkin extends WindowSkin implements Sheet.Skin {
 
     private ComponentMouseButtonListener ownerMouseButtonListener =
         new ComponentMouseButtonListener() {
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             Window owner = (Window)component;
             Component ownerContent = owner.getContent();
 
@@ -61,12 +61,16 @@ public class SheetSkin extends WindowSkin implements Sheet.Skin {
                 && owner.getComponentAt(x, y) == ownerContent) {
                 ApplicationContext.beep();
             }
+
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            // No-op
         }
     };
 
@@ -81,8 +85,6 @@ public class SheetSkin extends WindowSkin implements Sheet.Skin {
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Sheet.class);
-
         super.install(component);
 
         Sheet sheet = (Sheet)component;
@@ -206,7 +208,7 @@ public class SheetSkin extends WindowSkin implements Sheet.Skin {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         Sheet sheet = (Sheet)getComponent();
@@ -218,7 +220,7 @@ public class SheetSkin extends WindowSkin implements Sheet.Skin {
             sheet.close(false);
             consumed = true;
         } else {
-            consumed = super.keyPressed(keyCode, keyLocation);
+            consumed = super.keyPressed(component, keyCode, keyLocation);
         }
 
         return consumed;

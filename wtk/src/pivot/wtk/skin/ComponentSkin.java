@@ -17,6 +17,15 @@ package pivot.wtk.skin;
 
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
+import pivot.wtk.ComponentKeyListener;
+import pivot.wtk.ComponentLayoutListener;
+import pivot.wtk.ComponentListener;
+import pivot.wtk.ComponentMouseButtonListener;
+import pivot.wtk.ComponentMouseListener;
+import pivot.wtk.ComponentMouseWheelListener;
+import pivot.wtk.ComponentStateListener;
+import pivot.wtk.Container;
+import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.Keyboard;
@@ -26,11 +35,14 @@ import pivot.wtk.Skin;
 import pivot.wtk.Tooltip;
 
 /**
- * <p>Abstract base class for component skins.</p>
+ * Abstract base class for component skins.
  *
  * @author gbrown
  */
-public abstract class ComponentSkin implements Skin, Component.Skin {
+public abstract class ComponentSkin implements Skin, ComponentListener,
+    ComponentLayoutListener, ComponentStateListener, ComponentMouseListener,
+    ComponentMouseButtonListener, ComponentMouseWheelListener,
+    ComponentKeyListener {
     private class ShowTooltipCallback implements Runnable {
         public void run() {
             Component component = getComponent();
@@ -72,6 +84,10 @@ public abstract class ComponentSkin implements Skin, Component.Skin {
         this.height = height;
     }
 
+    public Dimensions getPreferredSize() {
+        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+    }
+
     public void install(Component component) {
         assert(this.component == null) : "Skin is already installed on a component.";
 
@@ -82,11 +98,78 @@ public abstract class ComponentSkin implements Skin, Component.Skin {
         component = null;
     }
 
-    public Dimensions getPreferredSize() {
-        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+    public Component getComponent() {
+        return component;
     }
 
-    public boolean mouseMove(int x, int y) {
+    /**
+     * By default, components are focusable.
+     */
+    public boolean isFocusable() {
+        return true;
+    }
+
+    // Component events
+    public void parentChanged(Component component, Container previousParent) {
+        // No-op
+    }
+
+    public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+        // No-op
+    }
+
+    public void locationChanged(Component component, int previousX, int previousY) {
+        // No-op
+    }
+
+    public void visibleChanged(Component component) {
+        // No-op
+    }
+
+    public void styleUpdated(Component component, String styleKey, Object previousValue) {
+        // No-op
+    }
+
+    public void cursorChanged(Component component, Cursor previousCursor) {
+        // No-op
+    }
+
+    public void tooltipTextChanged(Component component, String previousTooltipText) {
+        // TODO Handle change here instead of in ShowTooltipCallback?
+    }
+
+    // Component layout events
+    public void preferredSizeChanged(Component component,
+        int previousPreferredWidth, int previousPreferredHeight) {
+        // No-op
+    }
+
+    public void displayableChanged(Component component) {
+        // No-op
+    }
+
+    // Component state events
+    public boolean previewEnabledChange(Component component) {
+        return true;
+    }
+
+    public void enabledChanged(Component component) {
+    }
+
+    public boolean previewFocusedChange(Component component, boolean temporary) {
+        return true;
+    }
+
+    public void focusedChanged(Component component, boolean temporary) {
+        // Ensure that the component is visible if it is in a viewport
+        if (component.isFocused()
+            && !temporary) {
+            component.scrollAreaToVisible(0, 0, getWidth(), getHeight());
+        }
+    }
+
+    // Component mouse events
+    public boolean mouseMove(Component component, int x, int y) {
         ApplicationContext.clearTimeout(showTooltipTimeoutID);
 
         if (getComponent().getTooltipText() != null) {
@@ -97,40 +180,36 @@ public abstract class ComponentSkin implements Skin, Component.Skin {
         return false;
     }
 
-    public void mouseOver() {
+    public void mouseOver(Component component) {
     }
 
-    public void mouseOut() {
+    public void mouseOut(Component component) {
         ApplicationContext.clearTimeout(showTooltipTimeoutID);
     }
 
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
+    // Component mouse button events
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         return false;
     }
 
-    public boolean mouseUp(Mouse.Button button, int x, int y) {
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
         return false;
     }
 
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
     }
 
-    public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
+    // Component mouse wheel events
+    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
         return false;
     }
 
-    /**
-     * By default, components are focusable.
-     */
-    public boolean isFocusable() {
-        return true;
+    // Component key events
+    public void keyTyped(Component component, char character) {
     }
 
-    public void keyTyped(char character) {
-    }
-
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         if (keyCode == Keyboard.KeyCode.TAB
@@ -149,14 +228,11 @@ public abstract class ComponentSkin implements Skin, Component.Skin {
         return consumed;
     }
 
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         return false;
     }
 
-    public Component getComponent() {
-        return component;
-    }
-
+    // Utility methods
     protected void invalidateComponent() {
         if (component != null) {
             component.invalidate();
@@ -181,66 +257,6 @@ public abstract class ComponentSkin implements Skin, Component.Skin {
     protected void repaintComponent(int x, int y, int width, int height) {
         if (component != null) {
             component.repaint(x, y, width, height);
-        }
-    }
-
-    /**
-     * Verifies that a component is of the correct type.
-     *
-     * @param component
-     * @param type
-     */
-    protected static final void validateComponentType(Component component,
-        Class<?> type) {
-        if (!type.isInstance(component)) {
-            throw new IllegalArgumentException("Component must be an instance of "
-                + type);
-        }
-    }
-
-    /**
-     * Verifies that a style property is of the correct type.
-     *
-     * @param key
-     * @param value
-     * @param type
-     * @param nullable
-     *
-     * @throws IllegalArgumentException
-     * If the type of <tt>value</tt> does not match the given type.
-     */
-    protected static final void validatePropertyType(String key, Object value,
-        Class<?> type, boolean nullable) {
-        if (value == null) {
-            if (!nullable) {
-                throw new IllegalArgumentException(key + " must not be null.");
-            }
-        }
-        else {
-            if (!type.isInstance(value)) {
-                throw new IllegalArgumentException(key + " must be an instance of " + type);
-            }
-        }
-    }
-
-    // ComponentStateListener methods
-
-    public boolean previewEnabledChange(Component component) {
-        return true;
-    }
-
-    public void enabledChanged(Component component) {
-    }
-
-    public boolean previewFocusedChange(Component component, boolean temporary) {
-        return true;
-    }
-
-    public void focusedChanged(Component component, boolean temporary) {
-        // Ensure that the component is visible if it is in a viewport
-        if (component.isFocused()
-            && !temporary) {
-            component.scrollAreaToVisible(0, 0, getWidth(), getHeight());
         }
     }
 }

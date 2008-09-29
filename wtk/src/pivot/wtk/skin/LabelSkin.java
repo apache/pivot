@@ -41,9 +41,9 @@ import pivot.wtk.TextDecoration;
 import pivot.wtk.VerticalAlignment;
 
 /**
- * <p>Label skin.</p>
- *
- * <p>TODO showEllipsis style</p>
+ * Label skin.
+ * <p>
+ * TODO showEllipsis style
  *
  * @author gbrown
  */
@@ -61,8 +61,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Label.class);
-
         super.install(component);
 
         Label label = (Label)getComponent();

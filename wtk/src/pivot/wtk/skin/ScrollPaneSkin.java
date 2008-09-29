@@ -31,7 +31,7 @@ import pivot.wtk.Viewport;
 import pivot.wtk.ViewportListener;
 
 /**
- * <p>Scroll pane skin.</p>
+ * Scroll pane skin.
  *
  * @author tvolkert
  */
@@ -68,8 +68,6 @@ public class ScrollPaneSkin extends ContainerSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, ScrollPane.class);
-
         super.install(component);
 
         ScrollPane scrollPane = (ScrollPane)component;
@@ -325,7 +323,7 @@ public class ScrollPaneSkin extends ContainerSkin
     }
 
     @Override
-    public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
+    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
         boolean consumed = false;
 
@@ -386,8 +384,8 @@ public class ScrollPaneSkin extends ContainerSkin
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyPressed(keyCode, keyLocation);
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         if (!consumed) {
             ScrollPane scrollPane = (ScrollPane)getComponent();

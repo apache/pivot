@@ -38,13 +38,12 @@ import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * <p>Scroll bar skin.</p>
+ * Scroll bar skin.
  *
  * @author tvolkert
  */
 public class ScrollBarSkin extends ContainerSkin
     implements ScrollBarListener, ScrollBarValueListener {
-
     /**
      * Encapsulates the code needed to perform timer-controlled scrolling. This
      * class is used by <tt>ScrollPaneSkin</tt> (automatic block increment
@@ -234,13 +233,6 @@ public class ScrollBarSkin extends ContainerSkin
         private boolean pressed = false;
 
         @Override
-        public void install(Component component) {
-            validateComponentType(component, ScrollButton.class);
-
-            super.install(component);
-        }
-
-        @Override
         public boolean isFocusable() {
             return false;
         }
@@ -331,16 +323,16 @@ public class ScrollBarSkin extends ContainerSkin
         }
 
         @Override
-        public void mouseOver() {
-            super.mouseOver();
+        public void mouseOver(Component component) {
+            super.mouseOver(component);
 
             highlighted = true;
             repaintComponent();
         }
 
         @Override
-        public void mouseOut() {
-            super.mouseOut();
+        public void mouseOut(Component component) {
+            super.mouseOut(component);
 
             automaticScroller.stop();
 
@@ -350,8 +342,8 @@ public class ScrollBarSkin extends ContainerSkin
         }
 
         @Override
-        public boolean mouseDown(Mouse.Button button, int x, int y) {
-            boolean consumed = super.mouseDown(button, x, y);
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseDown(component, button, x, y);
 
             if (button == Mouse.Button.LEFT) {
                 ScrollButton scrollButton = (ScrollButton)getComponent();
@@ -372,8 +364,8 @@ public class ScrollBarSkin extends ContainerSkin
         }
 
         @Override
-        public boolean mouseUp(Mouse.Button button, int x, int y) {
-            boolean consumed = super.mouseUp(button, x, y);
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseUp(component, button, x, y);
 
             if (button == Mouse.Button.LEFT) {
                 automaticScroller.stop();
@@ -479,12 +471,12 @@ public class ScrollBarSkin extends ContainerSkin
     public static class ScrollHandleSkin extends ComponentSkin {
         private class DisplayMouseHandler
             implements ComponentMouseButtonListener {
-            public void mouseDown(Component component, Mouse.Button button,
+            public boolean mouseDown(Component component, Mouse.Button button,
                 int x, int y) {
-                // No-op
+                return false;
             }
 
-            public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
                 if (button == Mouse.Button.LEFT) {
                     assert (component instanceof Display);
                     component.getComponentMouseButtonListeners().remove(this);
@@ -492,6 +484,8 @@ public class ScrollBarSkin extends ContainerSkin
                     highlighted = false;
                     repaintComponent();
                 }
+
+                return false;
             }
 
             public void mouseClick(Component component, Mouse.Button button,
@@ -503,13 +497,6 @@ public class ScrollBarSkin extends ContainerSkin
         private DisplayMouseHandler displayMouseHandler = new DisplayMouseHandler();
 
         private boolean highlighted = false;
-
-        @Override
-        public void install(Component component) {
-            validateComponentType(component, ScrollHandle.class);
-
-            super.install(component);
-        }
 
         @Override
         public boolean isFocusable() {
@@ -584,8 +571,8 @@ public class ScrollBarSkin extends ContainerSkin
         }
 
         @Override
-        public void mouseOver() {
-            super.mouseOver();
+        public void mouseOver(Component component) {
+            super.mouseOver(component);
 
             if (highlighted) {
                 // If the handle is already highlighted when the mouse enters
@@ -593,7 +580,6 @@ public class ScrollBarSkin extends ContainerSkin
                 // have registered our display mouse handler.  Unregister it
                 // here so as to not register multiple times as we move our
                 // mouse in and out of the handle
-                Component component = getComponent();
                 Display display = component.getWindow().getDisplay();
                 display.getComponentMouseButtonListeners().remove(displayMouseHandler);
             } else {
@@ -605,8 +591,8 @@ public class ScrollBarSkin extends ContainerSkin
         }
 
         @Override
-        public void mouseOut() {
-            super.mouseOut();
+        public void mouseOut(Component component) {
+            super.mouseOut(component);
 
             if (Mouse.isPressed(Mouse.Button.LEFT)) {
                 // The user is currently dragging the handle.  We don't
@@ -614,7 +600,6 @@ public class ScrollBarSkin extends ContainerSkin
                 // button.  NOTE the code that actually sets the scroll bar's
                 // value during the drag operation is handled by ScrollBarSkin
                 // since it needs access to scroll bar layout information
-                Component component = getComponent();
                 Display display = component.getWindow().getDisplay();
                 display.getComponentMouseButtonListeners().add(displayMouseHandler);
             } else {
@@ -628,7 +613,7 @@ public class ScrollBarSkin extends ContainerSkin
 
     private class DisplayMouseHandler
         implements ComponentMouseListener, ComponentMouseButtonListener {
-        public void mouseMove(Component component, int x, int y) {
+        public boolean mouseMove(Component component, int x, int y) {
             ScrollBar scrollBar = (ScrollBar)getComponent();
 
             int pixelValue;
@@ -645,6 +630,8 @@ public class ScrollBarSkin extends ContainerSkin
             int extent = scrollBar.getExtent();
 
             scrollBar.setValue(Math.min(Math.max(realValue, 0), rangeEnd - extent));
+
+            return false;
         }
 
         public void mouseOver(Component component) {
@@ -653,14 +640,17 @@ public class ScrollBarSkin extends ContainerSkin
         public void mouseOut(Component component) {
         }
 
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             if (button == Mouse.Button.LEFT) {
                 assert (component instanceof Display);
                 component.getComponentMouseListeners().remove(this);
             }
+
+            return false;
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y,
@@ -696,8 +686,6 @@ public class ScrollBarSkin extends ContainerSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, ScrollBar.class);
-
         super.install(component);
 
         ScrollBar scrollBar = (ScrollBar)component;
@@ -1014,8 +1002,8 @@ public class ScrollBarSkin extends ContainerSkin
     }
 
     @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         if (scrollHandle.isVisible()
             && button == Mouse.Button.LEFT) {
@@ -1082,15 +1070,15 @@ public class ScrollBarSkin extends ContainerSkin
     }
 
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
 
         automaticScroller.stop();
     }
 
     @Override
-    public boolean mouseUp(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseUp(button, x, y);
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
 
         if (button == Mouse.Button.LEFT) {
             automaticScroller.stop();
@@ -1100,7 +1088,7 @@ public class ScrollBarSkin extends ContainerSkin
     }
 
     @Override
-    public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
+    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
         boolean consumed = false;
 

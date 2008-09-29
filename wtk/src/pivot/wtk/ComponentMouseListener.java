@@ -28,8 +28,12 @@ public interface ComponentMouseListener {
      * @param component
      * @param x
      * @param y
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void mouseMove(Component component, int x, int y);
+    public boolean mouseMove(Component component, int x, int y);
 
     /**
      * Called when the mouse enters a component.

@@ -5,12 +5,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
-import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Separator;
 
 /**
- * <p>Spacer skin.</p>
+ * Separator skin.
  *
  * @author gbrown
  */
@@ -18,12 +16,6 @@ public class SeparatorSkin extends ComponentSkin {
     private Color color = Color.BLACK;
     private int thickness = 1;
     private int padding = 4;
-
-    public void install(Component component) {
-        validateComponentType(component, Separator.class);
-
-        super.install(component);
-    }
 
     public int getPreferredWidth(int height) {
         return 0;

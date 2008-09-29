@@ -25,7 +25,7 @@ import pivot.wtk.MenuBarListener;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * <p>Menu bar skin.</p>
+ * Menu bar skin.
  *
  * @author gbrown
  */
@@ -42,8 +42,6 @@ public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public void install(Component component) {
-        validateComponentType(component, MenuBar.class);
-
         super.install(component);
 
         MenuBar menuBar = (MenuBar)component;

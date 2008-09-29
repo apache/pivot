@@ -34,7 +34,7 @@ import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.PopupSkin;
 
 /**
- * <p>Menu popup skin.</p>
+ * Menu popup skin.
  *
  * @author gbrown
  */
@@ -78,8 +78,6 @@ public class MenuPopupSkin extends PopupSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, MenuPopup.class);
-
         super.install(component);
 
         MenuPopup menuPopup = (MenuPopup)component;
@@ -143,8 +141,8 @@ public class MenuPopupSkin extends PopupSkin
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyPressed(keyCode, keyLocation);
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         if (keyCode == Keyboard.KeyCode.ESCAPE) {
             MenuPopup menuPopup = (MenuPopup)getComponent();

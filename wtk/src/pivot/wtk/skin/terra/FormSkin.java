@@ -31,7 +31,7 @@ import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * <p>Form skin.</p>
+ * Form skin.
  *
  * @author gbrown
  */
@@ -55,8 +55,6 @@ public class FormSkin extends ContainerSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Form.class);
-
         super.install(component);
 
         Form form = (Form)component;

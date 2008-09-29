@@ -28,7 +28,7 @@ import pivot.wtk.WindowListener;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Window skin.</p>
+ * Window skin.
  *
  * @author gbrown
  */
@@ -64,8 +64,6 @@ public class WindowSkin extends ContainerSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Window.class);
-
         super.install(component);
 
         Window window = (Window)component;

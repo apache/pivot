@@ -42,7 +42,7 @@ import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * <p>Table view header skin.</p>
+ * Table view header skin.
  *
  * @author gbrown
  */
@@ -115,9 +115,11 @@ public class TableViewHeaderSkin extends ComponentSkin
             this.offset = offset;
         }
 
-        public void mouseMove(Component component, int x, int y) {
+        public boolean mouseMove(Component component, int x, int y) {
             int columnWidth = Math.max(x - headerX + offset, MINIMUM_COLUMN_WIDTH);
             column.setWidth(columnWidth, false);
+
+            return false;
         }
 
         public void mouseOver(Component component) {
@@ -126,10 +128,11 @@ public class TableViewHeaderSkin extends ComponentSkin
         public void mouseOut(Component component) {
         }
 
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             Mouse.setCursor(component.getCursor());
 
             assert (component instanceof Display);
@@ -138,6 +141,8 @@ public class TableViewHeaderSkin extends ComponentSkin
 
             resizing = false;
             Mouse.setCursor(getComponent().getCursor());
+
+            return false;
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
@@ -171,8 +176,6 @@ public class TableViewHeaderSkin extends ComponentSkin
     }
 
     public void install(Component component) {
-        validateComponentType(component, TableViewHeader.class);
-
         super.install(component);
 
         TableViewHeader tableViewHeader = (TableViewHeader)component;
@@ -678,8 +681,8 @@ public class TableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public boolean mouseMove(int x, int y) {
-        boolean consumed = super.mouseMove(x, y);
+    public boolean mouseMove(Component component, int x, int y) {
+        boolean consumed = super.mouseMove(component, x, y);
 
         if (!resizing) {
             TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
@@ -708,8 +711,8 @@ public class TableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
 
         if (pressedHeaderIndex != -1) {
             repaintComponent(getHeaderBounds(pressedHeaderIndex));
@@ -718,8 +721,8 @@ public class TableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
         TableView tableView = tableViewHeader.getTableView();
@@ -757,8 +760,8 @@ public class TableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public boolean mouseUp(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseUp(button, x, y);
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
 
         if (pressedHeaderIndex != -1) {
             repaintComponent(getHeaderBounds(pressedHeaderIndex));
@@ -768,7 +771,7 @@ public class TableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
 
         if (pressedHeaderIndex != -1

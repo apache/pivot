@@ -20,10 +20,12 @@ import pivot.wtkx.WTKXSerializer;
 
 public class ChartsTest implements Application {
     private class ChartViewMouseButtonHandler implements ComponentMouseButtonListener {
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
         @SuppressWarnings("unchecked")

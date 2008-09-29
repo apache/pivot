@@ -49,8 +49,8 @@ public class DecoratorDemo implements Application {
         fadeFrame.getDecorators().update(0, fadeDecorator);
 
         fadeFrame.getComponentMouseListeners().add(new ComponentMouseListener() {
-            public void mouseMove(Component component, int x, int y) {
-                // No-op
+            public boolean mouseMove(Component component, int x, int y) {
+                return false;
             }
 
             public void mouseOver(Component component) {

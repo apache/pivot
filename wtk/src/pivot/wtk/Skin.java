@@ -37,8 +37,9 @@ package pivot.wtk;
  * <p>Skins will often change their appearance in response to events fired by
  * the component; most commonly, this will be in response to data changes within
  * the component but may also be in response to input events (e.g. keyboard,
- * mouse). Skins should register for event notification in <tt>install()</tt>
- * and unregister in <tt>uninstall()</tt>.</p>
+ * mouse). Skins are not required to register for such events - skin base
+ * classes implement all relevant listener interfaces and the component calls
+ * them as appropriate.</p>
  *
  * <p>Skins may (but are not required to) expose internal properties that
  * affect the appearance of the component as "style properties", similar to CSS
@@ -51,24 +52,15 @@ package pivot.wtk;
  */
 public interface Skin extends ConstrainedVisual {
     /**
-     * Associates a skin with a component. The skin should register any event
-     * listeners necessary to respond to changes in the component's state, and
-     * should install any required subcomponents if the component is a
-     * container.
+     * Associates a skin with a component.
      *
      * @param component
-     * The component to which the skin is being attached. In general, skins
-     * are specific to a particular component type and will throw an exception
-     * when installed on the wrong component.
-     *
-     * @throws IllegalArgumentException
-     * If the skin can't be installed on this component.
+     * The component to which the skin is being attached.
      */
     public void install(Component component);
 
     /**
-     * Dissociates a skin from a component. The skin should unregister any
-     * event listeners and subcomponents added in install().
+     * Dissociates a skin from a component.
      */
     public void uninstall();
 
@@ -83,21 +75,11 @@ public interface Skin extends ConstrainedVisual {
      */
     public void layout();
 
-    public boolean mouseMove(int x, int y);
-    public void mouseOver();
-    public void mouseOut();
-
-    public boolean mouseDown(Mouse.Button button, int x, int y);
-    public boolean mouseUp(Mouse.Button button, int x, int y);
-    public void mouseClick(Mouse.Button button, int x, int y, int count);
-
-    public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
-        int wheelRotation, int x, int y);
-
+    /**
+     * Returns the skin's focusable state.
+     *
+     * @return
+     * <tt>true</tt> if this skin is focusable; </tt>false</tt>, otherwise.
+     */
     public boolean isFocusable();
-
-    public void keyTyped(char character);
-
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation);
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation);
 }

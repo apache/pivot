@@ -42,7 +42,7 @@ import pivot.wtk.WindowStateListener;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * <p>Menu button skin.</p>
+ * Menu button skin.
  *
  * @author gbrown
  */
@@ -88,8 +88,6 @@ public class MenuButtonSkin extends ButtonSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, MenuButton.class);
-
         super.install(component);
 
         MenuButton menuButton = (MenuButton)component;
@@ -524,8 +522,8 @@ public class MenuButtonSkin extends ButtonSkin
 
     // Component mouse events
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
 
         if (pressed) {
             pressed = false;
@@ -534,8 +532,8 @@ public class MenuButtonSkin extends ButtonSkin
     }
 
     @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         // TODO Consume the event if the menu button is repeatable and the event
         // occurs over the trigger
@@ -547,8 +545,8 @@ public class MenuButtonSkin extends ButtonSkin
     }
 
     @Override
-    public boolean mouseUp(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseUp(button, x, y);
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
 
         pressed = false;
         repaintComponent();
@@ -557,7 +555,7 @@ public class MenuButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         MenuButton menuButton = (MenuButton)getComponent();
 
         menuButton.requestFocus();
@@ -569,7 +567,7 @@ public class MenuButtonSkin extends ButtonSkin
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
@@ -577,14 +575,14 @@ public class MenuButtonSkin extends ButtonSkin
             repaintComponent();
             consumed = true;
         } else {
-            consumed = super.keyPressed(keyCode, keyLocation);
+            consumed = super.keyPressed(component, keyCode, keyLocation);
         }
 
         return consumed;
     }
 
     @Override
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         MenuButton menuButton = (MenuButton)getComponent();
@@ -595,7 +593,7 @@ public class MenuButtonSkin extends ButtonSkin
 
             menuButton.press();
         } else {
-            consumed = super.keyReleased(keyCode, keyLocation);
+            consumed = super.keyReleased(component, keyCode, keyLocation);
         }
 
         return consumed;

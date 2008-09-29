@@ -22,7 +22,7 @@ import pivot.wtk.Display;
 import pivot.wtk.Window;
 
 /**
- * <p>Display skin.</p>
+ * Display skin.
  *
  * @author gbrown
  */
@@ -84,8 +84,8 @@ public class DisplaySkin extends ContainerSkin {
     }
 
     @Override
-    public boolean mouseMove(int x, int y) {
-        boolean consumed = super.mouseMove(x, y);
+    public boolean mouseMove(Component component, int x, int y) {
+        boolean consumed = super.mouseMove(component, x, y);
 
         if (activeWindowFollowsMouse) {
             Display display = (Display)getComponent();

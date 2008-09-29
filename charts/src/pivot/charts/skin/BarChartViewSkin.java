@@ -26,7 +26,6 @@ import org.jfree.data.category.CategoryDataset;
 import pivot.charts.BarChartView;
 import pivot.charts.ChartView;
 import pivot.collections.List;
-import pivot.wtk.Component;
 
 /**
  * <p>Bar chart view skin.</p>
@@ -36,12 +35,6 @@ import pivot.wtk.Component;
 public class BarChartViewSkin extends ChartViewSkin {
     private boolean stacked = false;
     private boolean threeDimensional = false;
-
-    @Override
-    public void install(Component component) {
-        validateComponentType(component, BarChartView.class);
-        super.install(component);
-    }
 
     public ChartView.Element getElementAt(int x, int y) {
         ChartView.Element element = null;

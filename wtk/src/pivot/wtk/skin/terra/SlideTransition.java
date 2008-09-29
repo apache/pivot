@@ -22,6 +22,11 @@ import pivot.wtk.effects.TranslationDecorator;
 import pivot.wtk.effects.easing.Easing;
 import pivot.wtk.effects.easing.Quadratic;
 
+/**
+ * Slide transition class.
+ *
+ * @author gbrown
+ */
 public class SlideTransition extends Transition {
     private Component component;
     private int x0;

@@ -37,7 +37,7 @@ import pivot.wtk.skin.WindowSkin;
  */
 public class PaletteSkin extends WindowSkin {
     /**
-     * <p>Close button image.</p>
+     * Close button image.
      *
      * @author gbrown
      */
@@ -63,7 +63,7 @@ public class PaletteSkin extends WindowSkin {
     }
 
     private class MoveMouseHandler implements ComponentMouseListener, ComponentMouseButtonListener {
-        public void mouseMove(Component component, int x, int y) {
+        public boolean mouseMove(Component component, int x, int y) {
             Display display = (Display)component;
 
             // Pretend that the mouse can't move off screen (off the display)
@@ -76,21 +76,28 @@ public class PaletteSkin extends WindowSkin {
 
             Window window = (Window)getComponent();
             window.setLocation(windowX, windowY);
+
+            return false;
         }
 
         public void mouseOver(Component component) {
+            // No-op
         }
 
         public void mouseOut(Component component) {
+            // No-op
         }
 
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             assert (component instanceof Display);
             component.getComponentMouseListeners().remove(this);
             component.getComponentMouseButtonListeners().remove(this);
+
+            return false;
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y,
@@ -116,15 +123,19 @@ public class PaletteSkin extends WindowSkin {
 
     private WindowListener ownerListener = new WindowListener() {
         public void titleChanged(Window window, String previousTitle) {
+            // No-op
         }
 
         public void iconChanged(Window window, Image previousIcon) {
+            // No-op
         }
 
         public void contentChanged(Window window, Component previousContent) {
+            // No-op
         }
 
         public void ownerChanged(Window window, Window previousOwner) {
+            // No-op
         }
 
         public void activeChanged(Window window) {
@@ -132,6 +143,7 @@ public class PaletteSkin extends WindowSkin {
         }
 
         public void maximizedChanged(Window window) {
+            // No-op
         }
     };
 
@@ -176,8 +188,6 @@ public class PaletteSkin extends WindowSkin {
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, Palette.class);
-
         super.install(component);
 
         Palette palette = (Palette)component;
@@ -384,8 +394,8 @@ public class PaletteSkin extends WindowSkin {
     }
 
     @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         Window window = (Window)getComponent();
         boolean maximized = window.isMaximized();

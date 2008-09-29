@@ -57,13 +57,16 @@ public class MenuTest implements Application {
         menuPopup.getStyles().put("borderColor", "#00ff00");
 
         label.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
-            public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
                 if (button == Mouse.Button.RIGHT) {
                     menuPopup.open(display, component.mapPointToAncestor(display, x, y));
                 }
+
+                return false;
             }
 
-            public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+                return false;
             }
 
             public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {

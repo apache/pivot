@@ -20,17 +20,11 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 
 /**
- * <p>Stack pane skin.</<p>
+ * Stack pane skin.
  *
  * @author gbrown
  */
 public class StackPaneSkin extends ContainerSkin {
-    public void install(Component component) {
-        validateComponentType(component, StackPane.class);
-
-        super.install(component);
-    }
-
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
         StackPane stackPane = (StackPane)getComponent();

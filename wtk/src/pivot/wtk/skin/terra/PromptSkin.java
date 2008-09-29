@@ -63,8 +63,6 @@ public class PromptSkin extends SheetSkin
     @Override
     @SuppressWarnings("unchecked")
     public void install(Component component) {
-        validateComponentType(component, Prompt.class);
-
         super.install(component);
 
         Prompt prompt = (Prompt)component;

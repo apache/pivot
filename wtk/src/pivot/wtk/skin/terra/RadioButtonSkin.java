@@ -31,9 +31,9 @@ import pivot.wtk.RadioButton;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * <p>Radio button skin.</p>
- *
- * <p>TODO Button alignment style (vertical only).</p>
+ * Radio button skin.
+ * <p>
+ * TODO Button alignment style (vertical only).
  *
  * @author gbrown
  */
@@ -52,12 +52,6 @@ public class RadioButtonSkin extends ButtonSkin {
 
     private static final int BUTTON_DIAMETER = 14;
     private static final int BUTTON_SELECTION_DIAMETER = 6;
-
-    public void install(Component component) {
-        validateComponentType(component, RadioButton.class);
-
-        super.install(component);
-    }
 
     public int getPreferredWidth(int height) {
         RadioButton radioButton = (RadioButton)getComponent();
@@ -283,7 +277,7 @@ public class RadioButtonSkin extends ButtonSkin {
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         RadioButton radioButton = (RadioButton)getComponent();
 
         radioButton.requestFocus();
@@ -291,7 +285,7 @@ public class RadioButtonSkin extends ButtonSkin {
     }
 
     @Override
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         RadioButton radioButton = (RadioButton)getComponent();
@@ -299,7 +293,7 @@ public class RadioButtonSkin extends ButtonSkin {
         if (keyCode == Keyboard.KeyCode.SPACE) {
             radioButton.press();
         } else {
-            consumed = super.keyReleased(keyCode, keyLocation);
+            consumed = super.keyReleased(component, keyCode, keyLocation);
         }
 
         return consumed;

@@ -49,7 +49,7 @@ import pivot.wtk.TextInputSelectionListener;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * <p>Text input skin.</p>
+ * Text input skin.
  *
  * @author gbrown
  */
@@ -87,7 +87,7 @@ public class TextInputSkin extends ComponentSkin
 
         private static final int SCROLL_RATE = 50;
 
-        public void mouseMove(Component component, int x, int y) {
+        public boolean mouseMove(Component component, int x, int y) {
             String text = getText();
 
             if (text.length() > 0) {
@@ -133,6 +133,8 @@ public class TextInputSkin extends ComponentSkin
                     }
                 }
             }
+
+            return false;
         }
 
         public void mouseOver(Component component) {
@@ -141,10 +143,11 @@ public class TextInputSkin extends ComponentSkin
         public void mouseOut(Component component) {
         }
 
-        public void mouseDown(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseUp(Component component, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             // Stop the scroll selection timer
             if (scrollSelectionIntervalID != -1) {
                 ApplicationContext.clearInterval(scrollSelectionIntervalID);
@@ -155,6 +158,8 @@ public class TextInputSkin extends ComponentSkin
             assert (component instanceof Display);
             component.getComponentMouseListeners().remove(this);
             component.getComponentMouseButtonListeners().remove(this);
+
+            return false;
         }
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
@@ -322,8 +327,6 @@ public class TextInputSkin extends ComponentSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, TextInput.class);
-
         super.install(component);
 
         TextInput textInput = (TextInput)component;
@@ -823,7 +826,7 @@ public class TextInputSkin extends ComponentSkin
     }
 
     @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         if (button == Mouse.Button.LEFT) {
             // Move the caret to the insertion point
             TextInput textInput = (TextInput)getComponent();
@@ -845,22 +848,22 @@ public class TextInputSkin extends ComponentSkin
             textInput.requestFocus();
         }
 
-        return super.mouseDown(button, x, y);
+        return super.mouseDown(component, button, x, y);
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         if (button == Mouse.Button.LEFT
             && count > 1) {
             TextInput textInput = (TextInput)getComponent();
             textInput.setSelection(0, textInput.getCharacterCount());
         }
 
-        super.mouseClick(button, x, y, count);
+        super.mouseClick(component, button, x, y, count);
     }
 
     @Override
-    public void keyTyped(char character) {
+    public void keyTyped(Component component, char character) {
         // Ignore characters in the control range and the ASCII delete
         // character
         if (character > 0x1F
@@ -883,7 +886,7 @@ public class TextInputSkin extends ComponentSkin
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         TextInput textInput = (TextInput)getComponent();
@@ -1036,7 +1039,7 @@ public class TextInputSkin extends ComponentSkin
                 }
             }
         } else {
-            consumed = super.keyPressed(keyCode, keyLocation);
+            consumed = super.keyPressed(component, keyCode, keyLocation);
         }
 
         return consumed;

@@ -30,7 +30,7 @@ import pivot.wtk.PushButton;
 import pivot.wtk.skin.AbstractPushButtonSkin;
 
 /**
- * <p>Push button skin.</p>
+ * Push button skin.
  *
  * @author gbrown
  */

@@ -43,7 +43,7 @@ import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * <p>Date picker skin.</p>
+ * Date picker skin.
  *
  * @author tvolkert
  */
@@ -77,13 +77,6 @@ public class DatePickerSkin extends ContainerSkin
                 daysOfWeek.add(dateFormat.format(date));
                 calendar.add(Calendar.DAY_OF_WEEK, 1);
             }
-        }
-
-        @Override
-        public void install(Component component) {
-            validateComponentType(component, CalendarView.class);
-
-            super.install(component);
         }
 
         public int getPreferredWidth(int height) {
@@ -206,8 +199,6 @@ public class DatePickerSkin extends ContainerSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, DatePicker.class);
-
         super.install(component);
 
         DatePicker datePicker = (DatePicker)component;

@@ -35,8 +35,12 @@ public interface ComponentKeyListener {
      * @param component
      * @param keyCode
      * @param keyLocation
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation);
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation);
 
     /**
      * Called when a key has been released.
@@ -44,6 +48,10 @@ public interface ComponentKeyListener {
      * @param component
      * @param keyCode
      * @param keyLocation
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation);
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation);
 }

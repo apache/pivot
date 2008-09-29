@@ -40,7 +40,7 @@ import pivot.wtk.TreeViewSelectionDetailListener;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * <p>Tree view skin.</p>
+ * Tree view skin.
  *
  * @author tvolkert
  */
@@ -154,8 +154,6 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
     private boolean showGridLines = false;
 
     public void install(Component component) {
-        validateComponentType(component, TreeView.class);
-
         super.install(component);
 
         TreeView treeView = (TreeView)component;
@@ -982,8 +980,8 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    public boolean mouseMove(int x, int y) {
-        boolean consumed = super.mouseMove(x, y);
+    public boolean mouseMove(Component component, int x, int y) {
+        boolean consumed = super.mouseMove(component, x, y);
 
         TreeView treeView = (TreeView)getComponent();
 
@@ -1009,15 +1007,15 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
 
         clearHighlightedNode();
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
-        super.mouseClick(button, x, y, count);
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        super.mouseClick(component, button, x, y, count);
 
         if (button == Mouse.Button.LEFT) {
             TreeView treeView = (TreeView)getComponent();
@@ -1083,9 +1081,9 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    public boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
+    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
-        boolean consumed = super.mouseWheel(scrollType, scrollAmount,
+        boolean consumed = super.mouseWheel(component, scrollType, scrollAmount,
             wheelRotation, x, y);
 
         clearHighlightedNode();
@@ -1094,8 +1092,8 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyPressed(keyCode, keyLocation);
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         TreeView treeView = (TreeView)getComponent();
         TreeView.SelectMode selectMode = treeView.getSelectMode();

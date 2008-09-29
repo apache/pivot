@@ -26,8 +26,9 @@ import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Base class for containers.</p>
- * <p>NOTES:</p>
+ * Base class for containers.
+ * <p>
+ * NOTES:
  * <ul>
  * <li>Child components that have special meaning to a container should be
  * installed via a dedicated method (for example,

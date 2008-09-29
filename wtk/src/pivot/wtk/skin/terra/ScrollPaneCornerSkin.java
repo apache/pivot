@@ -19,26 +19,17 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
-import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
-import pivot.wtk.ScrollPane;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * <p>Scroll pane corner skin.</p>
+ * Scroll pane corner skin.
  *
  * @author tvolkert
  */
 public class ScrollPaneCornerSkin extends ComponentSkin {
     private Color backgroundColor = new Color(0xF0, 0xEC, 0xE7);
     private Color color = new Color(0x81, 0x76, 0x67);
-
-    @Override
-    public void install(Component component) {
-        validateComponentType(component, ScrollPane.Corner.class);
-
-        super.install(component);
-    }
 
     @Override
     public boolean isFocusable() {

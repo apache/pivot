@@ -28,9 +28,9 @@ import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Image view skin.</p>
- *
- * <p>TODO Add rotation style</p>
+ * Image view skin.
+ * <p>
+ * TODO Add rotation style
  *
  * @author gbrown
  */
@@ -41,8 +41,6 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     private VerticalAlignment verticalAlignment = VerticalAlignment.CENTER;
 
     public void install(Component component) {
-        validateComponentType(component, ImageView.class);
-
         super.install(component);
 
         ImageView imageView = (ImageView)component;

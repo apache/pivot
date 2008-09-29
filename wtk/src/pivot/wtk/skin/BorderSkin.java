@@ -30,9 +30,9 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 
 /**
- * <p>Border skin.</p>
- *
- * <p>TODO Draw title.</p>
+ * Border skin.
+ * <p>
+ * TODO Draw title.
  *
  * @author gbrown
  */
@@ -45,13 +45,6 @@ public class BorderSkin extends ContainerSkin
 
     public BorderSkin() {
         setBackgroundColor(Color.WHITE);
-    }
-
-    @Override
-    public void install(Component component) {
-        validateComponentType(component, Border.class);
-
-        super.install(component);
     }
 
     @Override

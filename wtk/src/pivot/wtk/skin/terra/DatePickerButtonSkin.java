@@ -42,9 +42,9 @@ import pivot.wtk.Popup;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * <p>Date picker button skin.</p>
+ * Date picker button skin.
  *
- * @author gbrown
+ * @author tvolkert
  */
 public class DatePickerButtonSkin extends ButtonSkin
     implements DatePickerButton.Skin, ButtonPressListener,
@@ -55,7 +55,7 @@ public class DatePickerButtonSkin extends ButtonSkin
             // No-op
         }
 
-        public void keyPressed(Component component, int keyCode,
+        public boolean keyPressed(Component component, int keyCode,
             Keyboard.KeyLocation keyLocation) {
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
@@ -64,11 +64,13 @@ public class DatePickerButtonSkin extends ButtonSkin
                     break;
                 }
             }
+
+            return false;
         }
 
-        public void keyReleased(Component component, int keyCode,
+        public boolean keyReleased(Component component, int keyCode,
             Keyboard.KeyLocation keyLocation) {
-            // No-op
+            return false;
         }
     }
 
@@ -128,8 +130,6 @@ public class DatePickerButtonSkin extends ButtonSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, DatePickerButton.class);
-
         super.install(component);
 
         DatePickerButton datePickerButton = (DatePickerButton)component;
@@ -289,8 +289,8 @@ public class DatePickerButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
 
         if (pressed) {
             pressed = false;
@@ -299,8 +299,8 @@ public class DatePickerButtonSkin extends ButtonSkin
     }
 
     @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         pressed = true;
         repaintComponent();
@@ -311,8 +311,8 @@ public class DatePickerButtonSkin extends ButtonSkin
     }
 
     @Override
-    public boolean mouseUp(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseUp(button, x, y);
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
 
         pressed = false;
         repaintComponent();
@@ -321,7 +321,7 @@ public class DatePickerButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         DatePickerButton datePickerButton = (DatePickerButton)getComponent();
 
         datePickerButton.requestFocus();
@@ -329,7 +329,7 @@ public class DatePickerButtonSkin extends ButtonSkin
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
@@ -337,14 +337,14 @@ public class DatePickerButtonSkin extends ButtonSkin
             repaintComponent();
             consumed = true;
         } else {
-            consumed = super.keyPressed(keyCode, keyLocation);
+            consumed = super.keyPressed(component, keyCode, keyLocation);
         }
 
         return consumed;
     }
 
     @Override
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         DatePickerButton datePickerButton = (DatePickerButton)getComponent();
@@ -355,7 +355,7 @@ public class DatePickerButtonSkin extends ButtonSkin
 
             datePickerButton.press();
         } else {
-            consumed = super.keyReleased(keyCode, keyLocation);
+            consumed = super.keyReleased(component, keyCode, keyLocation);
         }
 
         return consumed;

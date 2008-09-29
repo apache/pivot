@@ -22,7 +22,7 @@ import pivot.wtk.WindowStateListener;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * <p>Menu bar item skin.</p>
+ * Menu bar item skin.
  *
  * @author gbrown
  */
@@ -62,8 +62,6 @@ public class MenuBarItemSkin extends ButtonSkin
 
     @Override
     public void install(Component component) {
-        validateComponentType(component, MenuBar.Item.class);
-
         super.install(component);
 
         MenuBar.Item menuBarItem = (MenuBar.Item)component;
@@ -154,8 +152,8 @@ public class MenuBarItemSkin extends ButtonSkin
     }
 
     @Override
-    public void mouseOver() {
-        super.mouseOver();
+    public void mouseOver(Component component) {
+        super.mouseOver(component);
 
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
         MenuBar menuBar = menuBarItem.getMenuBar();
@@ -166,8 +164,8 @@ public class MenuBarItemSkin extends ButtonSkin
     }
 
     @Override
-    public boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
         menuBarItem.requestFocus();
@@ -176,16 +174,16 @@ public class MenuBarItemSkin extends ButtonSkin
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
-        super.mouseClick(button, x, y, count);
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        super.mouseClick(component, button, x, y, count);
 
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
         menuBarItem.press();
     }
 
     @Override
-    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyPressed(keyCode, keyLocation);
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = false;
 
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
 
@@ -213,15 +211,15 @@ public class MenuBarItemSkin extends ButtonSkin
             Component.clearFocus();
             consumed = true;
         } else {
-            consumed = super.keyPressed(keyCode, keyLocation);
+            consumed = super.keyPressed(component, keyCode, keyLocation);
         }
 
         return consumed;
     }
 
     @Override
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyReleased(keyCode, keyLocation);
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = false;
 
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
 
@@ -229,7 +227,7 @@ public class MenuBarItemSkin extends ButtonSkin
             menuBarItem.press();
             consumed = true;
         } else {
-            consumed = super.keyReleased(keyCode, keyLocation);
+            consumed = super.keyReleased(component, keyCode, keyLocation);
         }
 
         return consumed;
@@ -266,7 +264,7 @@ public class MenuBarItemSkin extends ButtonSkin
                         // No-op
                     }
 
-                    public void keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+                    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                         if (keyCode == Keyboard.KeyCode.LEFT
                             || (keyCode == Keyboard.KeyCode.TAB
                                 && Keyboard.isPressed(Keyboard.Modifier.SHIFT))) {
@@ -277,10 +275,12 @@ public class MenuBarItemSkin extends ButtonSkin
                         } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
                             Component.clearFocus();
                         }
+
+                        return false;
                     }
 
-                    public void keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-                        // No-op
+                    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+                        return false;
                     }
                 });
             }

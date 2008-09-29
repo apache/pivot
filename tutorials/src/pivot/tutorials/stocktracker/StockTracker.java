@@ -115,13 +115,16 @@ public class StockTracker implements Application {
             public void keyTyped(Component component, char character) {
             }
 
-            public void keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.DELETE) {
                     removeSelectedSymbols();
                 }
+
+                return false;
             }
 
-            public void keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+                return false;
             }
         });
 
@@ -136,13 +139,16 @@ public class StockTracker implements Application {
             public void keyTyped(Component component, char character) {
             }
 
-            public void keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.ENTER) {
                     addSymbol();
                 }
+
+                return false;
             }
 
-            public void keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+                return false;
             }
         });
 

@@ -22,7 +22,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Cursor;
 
 /**
- * <p>Abstract base class for button skins.</p>
+ * Abstract base class for button skins.
  *
  * @author gbrown
  */
@@ -30,8 +30,6 @@ public abstract class ButtonSkin extends ComponentSkin
     implements Button.Skin, ButtonListener {
     @Override
     public void install(Component component) {
-        validateComponentType(component, Button.class);
-
         super.install(component);
 
         Button button = (Button)component;

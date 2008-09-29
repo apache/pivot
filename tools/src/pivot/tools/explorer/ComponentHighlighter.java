@@ -31,8 +31,7 @@ final class ComponentHighlighter implements ComponentMouseListener {
 		this.tree = tree;
 	}
 
-	public void mouseMove(Component component, int x, int y) {
-
+	public boolean mouseMove(Component component, int x, int y) {
 		if (component == tree) {
 			Sequence<Integer> nodeAt = tree.getNodeAt(y);
 			if (nodeAt.getLength() != 0) {
@@ -40,11 +39,11 @@ final class ComponentHighlighter implements ComponentMouseListener {
 				ComponentAdapter node = nodePath.get(nodePath.getLength() - 1);
 
 				highlightComponent(node.getComponent());
-				return;
+				return false;
 			}
 		}
 		highlightComponent(null);
-
+		return false;
 	}
 
 	public void mouseOut(Component component) {

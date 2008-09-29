@@ -27,7 +27,7 @@ import pivot.wtk.Mouse;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * <p>Link button skin.</p>
+ * Link button skin.
  *
  * @author gbrown
  */
@@ -37,12 +37,6 @@ public class LinkButtonSkin extends ButtonSkin {
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
 
     private boolean highlighted = false;
-
-    public void install(Component component) {
-        validateComponentType(component, LinkButton.class);
-
-        super.install(component);
-    }
 
     public int getPreferredWidth(int height) {
         LinkButton linkButton = (LinkButton)getComponent();
@@ -164,8 +158,8 @@ public class LinkButtonSkin extends ButtonSkin {
     }
 
     @Override
-    public void mouseOver() {
-        super.mouseOver();
+    public void mouseOver(Component component) {
+        super.mouseOver(component);
 
         highlighted = true;
 
@@ -173,8 +167,8 @@ public class LinkButtonSkin extends ButtonSkin {
     }
 
     @Override
-    public void mouseOut() {
-        super.mouseOut();
+    public void mouseOut(Component component) {
+        super.mouseOut(component);
 
         highlighted = false;
 
@@ -182,7 +176,7 @@ public class LinkButtonSkin extends ButtonSkin {
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         LinkButton linkButton = (LinkButton)getComponent();
         linkButton.press();
     }

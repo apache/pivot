@@ -28,8 +28,12 @@ public interface ComponentMouseButtonListener {
      * @param button
      * @param x
      * @param y
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void mouseDown(Component component, Mouse.Button button, int x, int y);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y);
 
     /**
      * Called when a mouse button is released over a component.
@@ -38,8 +42,12 @@ public interface ComponentMouseButtonListener {
      * @param button
      * @param x
      * @param y
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void mouseUp(Component component, Mouse.Button button, int x, int y);
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y);
 
     /**
      * Called when a mouse button is clicked over a component.

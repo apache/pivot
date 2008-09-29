@@ -28,7 +28,6 @@ import pivot.charts.ChartView;
 import pivot.collections.HashMap;
 import pivot.collections.List;
 import pivot.collections.Map;
-import pivot.wtk.Component;
 
 /**
  * <p>Pie chart view skin.</p>
@@ -41,12 +40,6 @@ public class PieChartViewSkin extends ChartViewSkin {
     private boolean threeDimensional = false;
     private boolean darkerSides = false;
     private double depthFactor = 0.10d;
-
-    @Override
-    public void install(Component component) {
-        validateComponentType(component, PieChartView.class);
-        super.install(component);
-    }
 
     public ChartView.Element getElementAt(int x, int y) {
         ChartView.Element element = null;

@@ -32,9 +32,9 @@ import pivot.wtk.Bounds;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * <p>Checkbox skin.</p>
- *
- * <p>TODO Button alignment style (vertical only).</p>
+ * Checkbox skin.
+ * <p>
+ * TODO Button alignment style (vertical only).
  *
  * @author gbrown
  */
@@ -55,15 +55,6 @@ public class CheckboxSkin extends ButtonSkin {
 
     private static final int CHECKBOX_SIZE = 14;
     private static final int CHECKMARK_SIZE = 10;
-
-    public CheckboxSkin() {
-    }
-
-    public void install(Component component) {
-        validateComponentType(component, Checkbox.class);
-
-        super.install(component);
-    }
 
     public int getPreferredWidth(int height) {
         Checkbox checkbox = (Checkbox)getComponent();
@@ -338,7 +329,7 @@ public class CheckboxSkin extends ButtonSkin {
     }
 
     @Override
-    public void mouseClick(Mouse.Button button, int x, int y, int count) {
+    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         Checkbox checkbox = (Checkbox)getComponent();
 
         checkbox.requestFocus();
@@ -346,7 +337,7 @@ public class CheckboxSkin extends ButtonSkin {
     }
 
     @Override
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         Checkbox checkbox = (Checkbox)getComponent();
@@ -354,7 +345,7 @@ public class CheckboxSkin extends ButtonSkin {
         if (keyCode == Keyboard.KeyCode.SPACE) {
             checkbox.press();
         } else {
-            consumed = super.keyReleased(keyCode, keyLocation);
+            consumed = super.keyReleased(component, keyCode, keyLocation);
         }
 
         return consumed;

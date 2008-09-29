@@ -17,6 +17,8 @@ package pivot.wtk.test;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.Component;
+import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.LinkButton;
@@ -32,6 +34,18 @@ public class LinkButtonTest implements Application {
         FlowPane flowPane = new FlowPane();
         flowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         flowPane.getStyles().put("spacing", 8);
+        flowPane.getComponentMouseListeners().add(new ComponentMouseListener() {
+            public boolean mouseMove(Component component, int x, int y) {
+                System.out.println("FLOW PANE " + x + ", " + y);
+                return false;
+            }
+
+            public void mouseOver(Component component) {
+            }
+
+            public void mouseOut(Component component) {
+            }
+        });
 
         Image image = Image.load(getClass().getResource("go-home.png"));
 
@@ -39,6 +53,17 @@ public class LinkButtonTest implements Application {
 
         linkButton = new LinkButton("ABCDE");
         flowPane.add(linkButton);
+        linkButton.getComponentMouseListeners().add(new ComponentMouseListener() {
+            public boolean mouseMove(Component component, int x, int y) {
+                return true;
+            }
+
+            public void mouseOver(Component component) {
+            }
+
+            public void mouseOut(Component component) {
+            }
+        });
 
         linkButton = new LinkButton(image);
         flowPane.add(linkButton);
