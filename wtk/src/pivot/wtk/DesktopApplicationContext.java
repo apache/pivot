@@ -18,8 +18,11 @@ package pivot.wtk;
 import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
+
 import pivot.collections.HashMap;
 import pivot.collections.immutable.ImmutableMap;
+import pivot.wtk.media.Image;
+import pivot.wtk.media.Picture;
 
 /**
  * <p>Application context used to execute applications in a native frame
@@ -195,6 +198,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         } else {
                             Window rootOwner = activeWindow.getRootOwner();
                             hostFrame.setTitle(rootOwner.getTitle());
+
+                            Image rootIcon = rootOwner.getIcon();
+                            if (rootIcon instanceof Picture) {
+                                Picture rootPicture = (Picture)rootIcon;
+                                hostFrame.setIconImage(rootPicture.getBufferedImage());
+                            }
                         }
                     }
                 });
