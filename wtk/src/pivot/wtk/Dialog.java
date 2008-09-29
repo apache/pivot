@@ -22,7 +22,7 @@ package pivot.wtk;
  * @author gbrown
  */
 @ComponentInfo(icon="Dialog.png")
-public class Dialog extends Window {
+public class Dialog extends Frame {
     public interface Skin extends pivot.wtk.Skin, DialogStateListener {
     }
 

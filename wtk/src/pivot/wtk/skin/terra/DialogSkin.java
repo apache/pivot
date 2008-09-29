@@ -24,7 +24,7 @@ import pivot.wtk.Keyboard;
  *
  * @author gbrown
  */
-public class DialogSkin extends AbstractFrameSkin implements Dialog.Skin {
+public class DialogSkin extends FrameSkin implements Dialog.Skin {
     @Override
     public void install(Component component) {
         validateComponentType(component, Dialog.class);
