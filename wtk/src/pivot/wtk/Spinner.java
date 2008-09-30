@@ -57,7 +57,7 @@ public class Spinner extends Container {
      *
      * @author tvolkert
      */
-    public interface Skin extends pivot.wtk.Skin {
+    public interface Skin {
         public Bounds getContentBounds();
     }
 

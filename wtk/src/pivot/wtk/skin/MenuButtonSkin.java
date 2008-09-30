@@ -44,17 +44,42 @@ public abstract class MenuButtonSkin extends ButtonSkin
                 return true;
             }
 
+            public void windowOpenVetoed(Window window) {
+                // No-op
+            }
+
             public void windowOpened(Window window) {
+                // No-op
             }
 
             public boolean previewWindowClose(Window window) {
                 return true;
             }
 
+            public void windowCloseVetoed(Window window) {
+                // No-op
+            }
+
             public void windowClosed(Window window, Display display) {
                 getComponent().requestFocus();
             }
         });
+    }
+
+    @Override
+    public void install(Component component) {
+        super.install(component);
+
+        MenuButton menuButton = (MenuButton)getComponent();
+        menuButton.getMenuButtonListeners().add(this);
+    }
+
+    @Override
+    public void uninstall() {
+        MenuButton menuButton = (MenuButton)getComponent();
+        menuButton.getMenuButtonListeners().remove(this);
+
+        super.uninstall();
     }
 
     // Component state events

@@ -33,7 +33,7 @@ public class DatePickerButton extends Button {
      *
      * @author tvolkert
      */
-    public interface Skin extends pivot.wtk.Skin {
+    public interface Skin {
         public DatePicker getDatePicker();
     }
 

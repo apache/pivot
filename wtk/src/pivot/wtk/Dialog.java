@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.util.ListenerList;
+
 /**
  * <p>Window class whose primary purpose is to facilitate interaction between
  * an application and a user.</p>
@@ -23,7 +25,29 @@ package pivot.wtk;
  */
 @ComponentInfo(icon="Dialog.png")
 public class Dialog extends Frame {
-    public interface Skin extends pivot.wtk.Skin, DialogStateListener {
+    private static class DialogStateListenerList extends ListenerList<DialogStateListener>
+        implements DialogStateListener {
+        public boolean previewDialogClose(Dialog dialog, boolean result) {
+            boolean approved = true;
+
+            for (DialogStateListener listener : this) {
+                approved &= listener.previewDialogClose(dialog, result);
+            }
+
+            return approved;
+        }
+
+        public void dialogCloseVetoed(Dialog dialog) {
+            for (DialogStateListener listener : this) {
+                listener.dialogCloseVetoed(dialog);
+            }
+        }
+
+        public void dialogClosed(Dialog dialog) {
+            for (DialogStateListener listener : this) {
+                listener.dialogClosed(dialog);
+            }
+        }
     }
 
     private class RepositionCallback implements Runnable {
@@ -47,9 +71,11 @@ public class Dialog extends Frame {
     }
 
     private boolean modal = false;
-    private DialogStateListener dialogStateListener = null;
+    private DialogCloseListener dialogCloseListener = null;
     private Window disabledOwner = null;
     private boolean result = false;
+
+    private DialogStateListenerList dialogStateListeners = new DialogStateListenerList();
 
     public Dialog() {
         this(null, null);
@@ -68,16 +94,6 @@ public class Dialog extends Frame {
         installSkin(Dialog.class);
     }
 
-    @Override
-    protected void setSkin(pivot.wtk.Skin skin) {
-        if (!(skin instanceof Dialog.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + Dialog.Skin.class.getName());
-        }
-
-        super.setSkin(skin);
-    }
-
     /**
      * Opens the dialog.
      *
@@ -93,11 +109,11 @@ public class Dialog extends Frame {
      * @param display
      * @param dialogStateListener
      */
-    public void open(Display display, DialogStateListener dialogStateListener) {
+    public void open(Display display, DialogCloseListener dialogCloseListener) {
         super.open(display);
 
         if (isOpen()) {
-            this.dialogStateListener = dialogStateListener;
+            this.dialogCloseListener = dialogCloseListener;
             this.modal = false;
         }
     }
@@ -130,8 +146,8 @@ public class Dialog extends Frame {
      * @param dialogStateListener
      * Optional dialog state listener to be called when the dialog is closed.
      */
-    public final void open(Window owner, DialogStateListener dialogStateListener) {
-        open(owner, true, dialogStateListener);
+    public final void open(Window owner, DialogCloseListener dialogCloseListener) {
+        open(owner, true, dialogCloseListener);
     }
 
     /**
@@ -147,11 +163,11 @@ public class Dialog extends Frame {
      * @param dialogStateListener
      * Optional dialog state listener to be called when the dialog is closed.
      */
-    public void open(Window owner, boolean modal, DialogStateListener dialogStateListener) {
+    public void open(Window owner, boolean modal, DialogCloseListener dialogCloseListener) {
         super.open(owner);
 
         if (isOpen()) {
-            this.dialogStateListener = dialogStateListener;
+            this.dialogCloseListener = dialogCloseListener;
             this.modal = modal;
 
             if (modal) {
@@ -190,38 +206,37 @@ public class Dialog extends Frame {
     }
 
     public void close(boolean result) {
-        Dialog.Skin dialogSkin = (Dialog.Skin)getSkin();
+        if (!isClosed()) {
+            if (dialogStateListeners.previewDialogClose(this, result)) {
+                super.close();
 
-        if (!isClosed()
-            && (dialogStateListener == null
-                || (dialogStateListener.previewDialogClose(this, result))
-                    && dialogSkin.previewDialogClose(this, result))) {
-            super.close();
+                if (isClosed()) {
+                    this.result = result;
 
-            if (isClosed()) {
-                this.result = result;
+                    // Enable the ancestor that was disabled when this dialog
+                    // was opened
+                    if (disabledOwner != null) {
+                        disabledOwner.setEnabled(true);
 
-                // Enable the ancestor that was disabled when this dialog
-                // was opened
-                if (disabledOwner != null) {
-                    disabledOwner.setEnabled(true);
-
-                    // Move the owner to the front
-                    if (modal) {
-                        disabledOwner.moveToFront();
+                        // Move the owner to the front
+                        if (modal) {
+                            disabledOwner.moveToFront();
+                        }
                     }
+
+                    modal = false;
+                    disabledOwner = null;
+
+                    // Notify listeners
+                    if (dialogCloseListener != null) {
+                        dialogCloseListener.dialogClosed(this);
+                        dialogCloseListener = null;
+                    }
+
+                    dialogStateListeners.dialogClosed(this);
                 }
-
-                modal = false;
-                disabledOwner = null;
-
-                // Notify listener
-                if (dialogStateListener != null) {
-                    dialogSkin.dialogClosed(this);
-                    dialogStateListener.dialogClosed(this);
-                }
-
-                dialogStateListener = null;
+            } else {
+                dialogStateListeners.dialogCloseVetoed(this);
             }
         }
     }
@@ -230,8 +245,8 @@ public class Dialog extends Frame {
         return modal;
     }
 
-    public DialogStateListener getDialogStateListener() {
-        return dialogStateListener;
+    public DialogCloseListener getDialogCloseListener() {
+        return dialogCloseListener;
     }
 
     public Window getDisabledOwner() {
@@ -240,5 +255,9 @@ public class Dialog extends Frame {
 
     public boolean getResult() {
         return result;
+    }
+
+    public ListenerList<DialogStateListener> getDialogStateListeners() {
+        return dialogStateListeners;
     }
 }

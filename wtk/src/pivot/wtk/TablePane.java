@@ -484,7 +484,7 @@ public class TablePane extends Container {
      *
      * @author tvolkert
      */
-    public interface Skin extends pivot.wtk.Skin {
+    public interface Skin {
         public int getRowAt(int y);
         public Bounds getRowBounds(int row);
         public int getColumnAt(int x);

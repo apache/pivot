@@ -29,9 +29,17 @@ public interface WindowStateListener {
      * @param display
      *
      * @return
-     * <tt>true</tt> to allow the window to open; <tt>false</tt> to disallow it
+     * <tt>true</tt> to consume the event and prevent the change; <tt>false</tt>
+     * to allow it.
      */
     public boolean previewWindowOpen(Window window, Display display);
+
+    /**
+     * Called when a window open event has been vetoed.
+     *
+     * @param window
+     */
+    public void windowOpenVetoed(Window window);
 
     /**
      * Called when a window has opened.
@@ -46,9 +54,17 @@ public interface WindowStateListener {
      * @param window
      *
      * @return
-     * <tt>true</tt> to allow the window to close; <tt>false</tt> to disallow it
+     * <tt>true</tt> to consume the event and prevent the change; <tt>false</tt>
+     * to allow it.
      */
     public boolean previewWindowClose(Window window);
+
+    /**
+     * Called when a window close event has been vetoed.
+     *
+     * @param window
+     */
+    public void windowCloseVetoed(Window window);
 
     /**
      * Called when a window has closed.

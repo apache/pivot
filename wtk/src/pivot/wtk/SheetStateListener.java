@@ -20,7 +20,7 @@ package pivot.wtk;
  *
  * @author gbrown
  */
-public interface SheetStateListener {
+public interface SheetStateListener extends SheetCloseListener {
     /**
      * Called to preview a sheet close event.
      *
@@ -28,15 +28,15 @@ public interface SheetStateListener {
      * @param result
      *
      * @return
-     * <tt>true</tt> to allow the sheet to close; <tt>false</tt> to
-     * disallow it.
+     * <tt>true</tt> to consume the event and prevent the change; <tt>false</tt>
+     * to allow it.
      */
     public boolean previewSheetClose(Sheet sheet, boolean result);
 
     /**
-     * Called when a sheet has closed.
+     * Called when a sheet close event has been vetoed.
      *
-     * @param sheet
+     * @param dialog
      */
-    public void sheetClosed(Sheet sheet);
+    public void sheetCloseVetoed(Sheet sheet);
 }

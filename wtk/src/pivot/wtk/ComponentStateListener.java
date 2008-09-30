@@ -28,10 +28,17 @@ public interface ComponentStateListener {
      * @param component
      *
      * @return
-     * <tt>true</tt> to allow the enabled state to change; <tt>false</tt> to
-     * disallow it
+     * <tt>true</tt> to allow the event to fire; <tt>false</tt> to veto the
+     * event and prevent the change.
      */
     public boolean previewEnabledChange(Component component);
+
+    /**
+     * Called when a enabled change event has been vetoed.
+     *
+     * @param component
+     */
+    public void enabledChangeVetoed(Component component);
 
     /**
      * Called when a component's enabled state has changed.
@@ -47,10 +54,17 @@ public interface ComponentStateListener {
      * @param temporary
      *
      * @return
-     * <tt>true</tt> to allow the focus state to change; <tt>false</tt> to
-     * disallow it
+     * <tt>true</tt> to allow the event to fire; <tt>false</tt> to veto the
+     * event and prevent the change.
      */
     public boolean previewFocusedChange(Component component, boolean temporary);
+
+    /**
+     * Called when a focused change event has been vetoed.
+     *
+     * @param component
+     */
+    public void focusedChangeVetoed(Component component);
 
     /**
      * Called when a component's focused state has changed.

@@ -37,7 +37,7 @@ import pivot.wtkx.WTKXSerializer;
  * @author tvolkert
  * @author gbrown
  */
-public class AlertSkin extends DialogSkin
+public class TerraAlertSkin extends TerraDialogSkin
     implements AlertListener {
     private ArrayList<Button> optionButtons = new ArrayList<Button>();
 
@@ -50,13 +50,13 @@ public class AlertSkin extends DialogSkin
 
     static {
         try {
-            resources = new Resources(AlertSkin.class.getName());
+            resources = new Resources(TerraAlertSkin.class.getName());
         } catch(Exception exception) {
             throw new RuntimeException(exception);
         }
     }
 
-    public AlertSkin() {
+    public TerraAlertSkin() {
         setResizable(false);
     }
 

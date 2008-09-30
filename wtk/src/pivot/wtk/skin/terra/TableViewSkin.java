@@ -36,6 +36,7 @@ import pivot.wtk.TableView;
 import pivot.wtk.TableViewListener;
 import pivot.wtk.TableViewColumnListener;
 import pivot.wtk.TableViewRowListener;
+import pivot.wtk.TableViewRowStateListener;
 import pivot.wtk.TableViewSelectionDetailListener;
 import pivot.wtk.skin.ComponentSkin;
 
@@ -52,7 +53,7 @@ import pivot.wtk.skin.ComponentSkin;
  */
 public class TableViewSkin extends ComponentSkin implements TableView.Skin,
     TableViewListener, TableViewColumnListener, TableViewRowListener,
-    TableViewSelectionDetailListener {
+    TableViewRowStateListener, TableViewSelectionDetailListener {
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = Color.BLACK;
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
@@ -79,6 +80,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         tableView.getTableViewListeners().add(this);
         tableView.getTableViewColumnListeners().add(this);
         tableView.getTableViewRowListeners().add(this);
+        tableView.getTableViewRowStateListeners().add(this);
         tableView.getTableViewSelectionDetailListeners().add(this);
     }
 
@@ -87,6 +89,7 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         tableView.getTableViewListeners().remove(this);
         tableView.getTableViewColumnListeners().remove(this);
         tableView.getTableViewRowListeners().remove(this);
+        tableView.getTableViewRowStateListeners().remove(this);
         tableView.getTableViewSelectionDetailListeners().remove(this);
 
         super.uninstall();

@@ -142,11 +142,17 @@ public class Demo implements Application {
                         return true;
                     }
 
+                    public void windowOpenVetoed(Window window) {
+                    }
+
                     public void windowOpened(Window window) {
                     }
 
                     public boolean previewWindowClose(Window window) {
                         return true;
+                    }
+
+                    public void windowCloseVetoed(Window window) {
                     }
 
                     public void windowClosed(Window window, Display display) {

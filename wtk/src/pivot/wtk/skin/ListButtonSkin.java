@@ -130,12 +130,19 @@ public abstract class ListButtonSkin extends ButtonSkin
         super.install(component);
 
         ListButton listButton = (ListButton)component;
+        listButton.getListButtonListeners().add(this);
+        listButton.getListButtonSelectionListeners().add(this);
+
         ListView listView = getListView();
         listView.setListData(listButton.getListData());
     }
 
     @Override
     public void uninstall() {
+        ListButton listButton = (ListButton)getComponent();
+        listButton.getListButtonListeners().add(this);
+        listButton.getListButtonSelectionListeners().add(this);
+
         listViewPopup.close();
 
         super.uninstall();

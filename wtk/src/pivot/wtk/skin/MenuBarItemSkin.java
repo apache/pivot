@@ -43,12 +43,20 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
                 return true;
             }
 
+            public void windowOpenVetoed(Window window) {
+                // No-op
+            }
+
             public void windowOpened(Window window) {
                 // No-op
             }
 
             public boolean previewWindowClose(Window window) {
                 return true;
+            }
+
+            public void windowCloseVetoed(Window window) {
+                // No-op
             }
 
             public void windowClosed(Window window, Display display) {
@@ -68,7 +76,18 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     }
 
     @Override
+    public void install(Component component) {
+        super.install(component);
+
+        MenuBar.Item menuBarItem = (MenuBar.Item)component;
+        menuBarItem.getItemListeners().add(this);
+    }
+
+    @Override
     public void uninstall() {
+        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        menuBarItem.getItemListeners().remove(this);
+
         menuPopup.close();
 
         super.uninstall();

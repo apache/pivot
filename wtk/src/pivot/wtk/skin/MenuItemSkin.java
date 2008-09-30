@@ -39,7 +39,18 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     protected int buttonPressInterval = 200;
 
     @Override
+    public void install(Component component) {
+        super.install(component);
+
+        Menu.Item menuItem = (Menu.Item)component;
+        menuItem.getItemListeners().add(this);
+    }
+
+    @Override
     public void uninstall() {
+        Menu.Item menuItem = (Menu.Item)getComponent();
+        menuItem.getItemListeners().remove(this);
+
         menuPopup.close();
 
         super.uninstall();

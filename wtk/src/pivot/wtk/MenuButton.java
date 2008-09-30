@@ -17,7 +17,6 @@ package pivot.wtk;
 
 import pivot.util.ListenerList;
 import pivot.wtk.content.ButtonDataRenderer;
-import pivot.wtk.skin.MenuButtonSkin;
 
 /**
  * <p>Component that allows a user to select one of several menu options. The
@@ -36,22 +35,12 @@ public class MenuButton extends Button {
     private class MenuButtonListenerList extends ListenerList<MenuButtonListener>
         implements MenuButtonListener {
         public void menuChanged(MenuButton menuButton, Menu previousMenu) {
-            MenuButtonSkin menuButtonSkin = (MenuButtonSkin)getSkin();
-            if (menuButtonSkin != null) {
-                menuButtonSkin.menuChanged(menuButton, previousMenu);
-            }
-
             for (MenuButtonListener listener : this) {
                 listener.menuChanged(menuButton, previousMenu);
             }
         }
 
         public void repeatableChanged(MenuButton menuButton) {
-            MenuButtonSkin menuButtonSkin = (MenuButtonSkin)getSkin();
-            if (menuButtonSkin != null) {
-                menuButtonSkin.repeatableChanged(menuButton);
-            }
-
             for (MenuButtonListener listener : this) {
                 listener.repeatableChanged(menuButton);
             }
@@ -66,16 +55,6 @@ public class MenuButton extends Button {
     public MenuButton() {
         setDataRenderer(new ButtonDataRenderer());
         installSkin(MenuButton.class);
-    }
-
-    @Override
-    protected void setSkin(pivot.wtk.Skin skin) {
-        if (!(skin instanceof MenuButtonSkin)) {
-            throw new IllegalArgumentException("Skin class must extend "
-                + MenuButtonSkin.class.getName());
-        }
-
-        super.setSkin(skin);
     }
 
     @Override

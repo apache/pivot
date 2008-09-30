@@ -1,6 +1,5 @@
 package pivot.wtk.skin;
 
-import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
@@ -96,10 +95,5 @@ public abstract class PushButtonSkin extends ButtonSkin {
         }
 
         return consumed;
-    }
-
-    @Override
-    public void stateChanged(Button toggleButton, Button.State previousState) {
-        repaintComponent();
     }
 }

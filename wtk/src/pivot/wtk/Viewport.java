@@ -19,7 +19,7 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 public abstract class Viewport extends Container {
-    public interface Skin extends pivot.wtk.Skin {
+    public interface Skin {
         public Bounds getViewportBounds();
     }
 

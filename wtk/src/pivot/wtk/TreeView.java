@@ -105,7 +105,7 @@ public class TreeView extends Component {
             boolean selected, boolean highlighted, boolean disabled);
     }
 
-    public interface Skin extends pivot.wtk.Skin, TreeViewNodeStateListener {
+    public interface Skin {
         public Sequence<Integer> getNodeAt(int y);
         public Bounds getNodeBounds(Sequence<Integer> path);
         public int getNodeOffset(Sequence<Integer> path);
@@ -726,21 +726,17 @@ public class TreeView extends Component {
      * <tt>true</tt> to disable the node; <tt>false</tt>, otherwise
      */
     public void setNodeDisabled(Sequence<Integer> path, boolean disabled) {
-        TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
-
         int index = disabledPaths.indexOf(path);
 
         if (((index < 0 && disabled)
             || (index >= 0 && !disabled))
-            && treeViewNodeStateListeners.previewNodeDisabledChange(this, path)
-            && treeViewSkin.previewNodeDisabledChange(this, path)) {
+            && treeViewNodeStateListeners.previewNodeDisabledChange(this, path)) {
             if (disabled) {
                 disabledPaths.add(path);
             } else {
                 disabledPaths.remove(index, 1);
             }
 
-            treeViewSkin.nodeDisabledChanged(this, path);
             treeViewNodeStateListeners.nodeDisabledChanged(this, path);
         }
     }

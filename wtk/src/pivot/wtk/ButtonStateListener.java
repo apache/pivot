@@ -29,9 +29,17 @@ public interface ButtonStateListener {
      * @param state
      *
      * @return
-     * <tt>true</tt> to allow the state change; <tt>false</tt> to disallow it.
+     * <tt>true</tt> to allow the event to fire; <tt>false</tt> to veto the
+     * event and prevent the change.
      */
     public boolean previewStateChange(Button button, Button.State state);
+
+    /**
+     * Called when a state change event has been vetoed.
+     *
+     * @param button
+     */
+    public void stateChangeVetoed(Button button);
 
     /**
      * Called when a button's state has changed.

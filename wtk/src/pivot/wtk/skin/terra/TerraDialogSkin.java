@@ -17,6 +17,7 @@ package pivot.wtk.skin.terra;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dialog;
+import pivot.wtk.DialogStateListener;
 import pivot.wtk.Keyboard;
 
 /**
@@ -24,13 +25,24 @@ import pivot.wtk.Keyboard;
  *
  * @author gbrown
  */
-public class DialogSkin extends FrameSkin implements Dialog.Skin {
+public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListener {
     @Override
     public void install(Component component) {
         super.install(component);
 
+        Dialog dialog = (Dialog)component;
+        dialog.getDialogStateListeners().add(this);
+
         setShowMaximizeButton(false);
         setShowMinimizeButton(false);
+    }
+
+    @Override
+    public void uninstall() {
+        Dialog dialog = (Dialog)getComponent();
+        dialog.getDialogStateListeners().remove(this);
+
+        super.uninstall();
     }
 
     @Override
@@ -54,6 +66,10 @@ public class DialogSkin extends FrameSkin implements Dialog.Skin {
 
     public boolean previewDialogClose(Dialog dialog, boolean result) {
         return true;
+    }
+
+    public void dialogCloseVetoed(Dialog dialog) {
+        // No-op
     }
 
     public void dialogClosed(Dialog dialog) {

@@ -22,7 +22,6 @@ import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 import pivot.wtk.content.MenuItemDataRenderer;
-import pivot.wtk.skin.MenuItemSkin;
 
 /**
  * <p>Component that presents a cascading menu.</p>
@@ -40,11 +39,6 @@ public class Menu extends Container {
         private class ItemListenerList extends ListenerList<ItemListener>
             implements ItemListener {
             public void menuChanged(Item item, Menu previousMenu) {
-                MenuItemSkin menuItemSkin = (MenuItemSkin)getSkin();
-                if (menuItemSkin != null) {
-                    menuItemSkin.menuChanged(item, previousMenu);
-                }
-
                 for (ItemListener listener : this) {
                     listener.menuChanged(item, previousMenu);
                 }
@@ -65,16 +59,6 @@ public class Menu extends Container {
 
             setDataRenderer(new MenuItemDataRenderer());
             installSkin(Item.class);
-        }
-
-        @Override
-        protected void setSkin(Skin skin) {
-            if (!(skin instanceof MenuItemSkin)) {
-                throw new IllegalArgumentException("Skin class must extend "
-                    + MenuItemSkin.class.getName());
-            }
-
-            super.setSkin(skin);
         }
 
         @Override

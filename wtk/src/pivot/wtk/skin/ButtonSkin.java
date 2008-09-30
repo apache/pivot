@@ -36,13 +36,22 @@ public abstract class ButtonSkin extends ComponentSkin
     public void install(Component component) {
         super.install(component);
 
-        component.setCursor(Cursor.HAND);
+        Button button = (Button)component;
+        button.getButtonListeners().add(this);
+        button.getButtonStateListeners().add(this);
+        button.getButtonPressListeners().add(this);
+
+        button.setCursor(Cursor.HAND);
     }
 
     @Override
     public void uninstall() {
-        Component component = getComponent();
-        component.setCursor(Cursor.DEFAULT);
+        Button button = (Button)getComponent();
+        button.getButtonListeners().add(this);
+        button.getButtonStateListeners().add(this);
+        button.getButtonPressListeners().add(this);
+
+        button.setCursor(Cursor.DEFAULT);
 
         super.uninstall();
     }
@@ -120,6 +129,10 @@ public abstract class ButtonSkin extends ComponentSkin
     // Button state events
     public boolean previewStateChange(Button button, Button.State state) {
         return true;
+    }
+
+    public void stateChangeVetoed(Button button) {
+        // No-op
     }
 
     public void stateChanged(Button button, Button.State previousState) {

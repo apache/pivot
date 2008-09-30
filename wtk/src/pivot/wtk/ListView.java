@@ -100,7 +100,7 @@ public class ListView extends Component {
      *
      * @author gbrown
      */
-    public interface Skin extends pivot.wtk.Skin, ListViewItemStateListener {
+    public interface Skin {
         public int getItemAt(int y);
         public Bounds getItemBounds(int index);
     }
@@ -861,21 +861,17 @@ public class ListView extends Component {
      * <tt>true</tt> to disable the item; <tt>false</tt>, otherwise.
      */
     public void setItemDisabled(int index, boolean disabled) {
-        ListView.Skin listViewSkin = (ListView.Skin)getSkin();
-
         int i = Sequence.Search.binarySearch(disabledIndexes, index);
 
         if (((i < 0 && disabled)
             || (i >= 0 && !disabled))
-            && listViewItemStateListeners.previewItemDisabledChange(this, index)
-            && listViewSkin.previewItemDisabledChange(this, index)) {
+            && listViewItemStateListeners.previewItemDisabledChange(this, index)) {
             if (disabled) {
                 disabledIndexes.insert(index, -(i + 1));
             } else {
                 disabledIndexes.remove(i, 1);
             }
 
-            listViewSkin.itemDisabledChanged(this, index);
             listViewItemStateListeners.itemDisabledChanged(this, index);
         }
     }

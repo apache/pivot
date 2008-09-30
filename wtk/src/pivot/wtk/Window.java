@@ -26,21 +26,13 @@ import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Top-level container representing the entry point into a user
- * interface. Windows are direct descendants of the display.</p>
+ * Top-level container representing the entry point into a user
+ * interface. Windows are direct descendants of the display.
  *
  * @author gbrown
  */
 @ComponentInfo(icon="Window.png")
 public class Window extends Container {
-    /**
-     * <p>Window skin interface.</p>
-     *
-     * @author gbrown
-     */
-    public interface Skin extends pivot.wtk.Skin, WindowStateListener {
-    }
-
     /**
      * <p>Action dictionary implementation.</p>
      *
@@ -77,21 +69,6 @@ public class Window extends Container {
     }
 
     /**
-     * Window class listener list.
-     *
-     * @author tvolkert
-     */
-    private static class WindowClassListenerList
-        extends ListenerList<WindowClassListener>
-        implements WindowClassListener {
-        public void activeWindowChanged(Window previousActiveWindow) {
-            for (WindowClassListener listener : this) {
-                listener.activeWindowChanged(previousActiveWindow);
-            }
-        }
-    }
-
-    /**
      * Window listener list.
      *
      * @author gbrown
@@ -110,9 +87,9 @@ public class Window extends Container {
             }
         }
 
-        public void contentChanged(Window window, Component previousContentComponent) {
+        public void contentChanged(Window window, Component previousContent) {
             for (WindowListener listener : this) {
-                listener.contentChanged(window, previousContentComponent);
+                listener.contentChanged(window, previousContent);
             }
         }
 
@@ -136,24 +113,26 @@ public class Window extends Container {
     }
 
     /**
-     * Window listener list.
+     * Window state listener list.
      *
      * @author gbrown
      */
     private static class WindowStateListenerList extends ListenerList<WindowStateListener>
         implements WindowStateListener {
         public boolean previewWindowOpen(Window window, Display display) {
-            boolean allowed = true;
+            boolean approved = true;
 
             for (WindowStateListener listener : this) {
-                allowed = listener.previewWindowOpen(window, display);
-
-                if (!allowed) {
-                    break;
-                }
+                approved &= listener.previewWindowOpen(window, display);
             }
 
-            return allowed;
+            return approved;
+        }
+
+        public void windowOpenVetoed(Window window) {
+            for (WindowStateListener listener : this) {
+                listener.windowOpenVetoed(window);
+            }
         }
 
         public void windowOpened(Window window) {
@@ -163,22 +142,39 @@ public class Window extends Container {
         }
 
         public boolean previewWindowClose(Window window) {
-            boolean allowed = true;
+            boolean approved = true;
 
             for (WindowStateListener listener : this) {
-                allowed = listener.previewWindowClose(window);
-
-                if (!allowed) {
-                    break;
-                }
+                approved &= listener.previewWindowClose(window);
             }
 
-            return allowed;
+            return approved;
+        }
+
+        public void windowCloseVetoed(Window window) {
+            for (WindowStateListener listener : this) {
+                listener.windowCloseVetoed(window);
+            }
         }
 
         public void windowClosed(Window window, Display display) {
             for (WindowStateListener listener : this) {
                 listener.windowClosed(window, display);
+            }
+        }
+    }
+
+    /**
+     * Window class listener list.
+     *
+     * @author tvolkert
+     */
+    private static class WindowClassListenerList
+        extends ListenerList<WindowClassListener>
+        implements WindowClassListener {
+        public void activeWindowChanged(Window previousActiveWindow) {
+            for (WindowClassListener listener : this) {
+                listener.activeWindowChanged(previousActiveWindow);
             }
         }
     }
@@ -240,16 +236,6 @@ public class Window extends Container {
         }
 
         super.setParent(parent);
-    }
-
-    @Override
-    protected void setSkin(pivot.wtk.Skin skin) {
-        if (!(skin instanceof Window.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + Window.Skin.class.getName());
-        }
-
-        super.setSkin(skin);
     }
 
     @Override
@@ -415,27 +401,26 @@ public class Window extends Container {
             throw new IllegalArgumentException("Owner is opened on a different display.");
         }
 
-        Window.Skin windowSkin = (Window.Skin)getSkin();
-
         if (!isOpen()
-            && !opening
-            && windowStateListeners.previewWindowOpen(this, display)
-            && windowSkin.previewWindowOpen(this, display)) {
-            opening = true;
+            && !opening) {
+            if (windowStateListeners.previewWindowOpen(this, display)) {
+                opening = true;
 
-            // Add this as child of display
-            display.add(this);
+                // Add this as child of display
+                display.add(this);
 
-            // Notify listeners
-            windowSkin.windowOpened(this);
-            windowStateListeners.windowOpened(this);
+                // Notify listeners
+                windowStateListeners.windowOpened(this);
 
-            // Move this window to the front (which, unless this window is
-            // disabled or incapable of becoming active, will activate the
-            // window)
-            moveToFront();
+                // Move this window to the front (which, unless this window is
+                // disabled or incapable of becoming active, will activate the
+                // window)
+                moveToFront();
 
-            opening = false;
+                opening = false;
+            } else {
+                windowStateListeners.windowOpenVetoed(this);
+            }
         }
     }
 
@@ -486,34 +471,33 @@ public class Window extends Container {
      * was the focus host, the focused component will be cleared.
      */
     public void close() {
-        Window.Skin windowSkin = (Window.Skin)getSkin();
-
         if (!isClosed()
-            && !closing
-            && windowStateListeners.previewWindowClose(this)
-            && windowSkin.previewWindowClose(this)) {
-            closing = true;
+            && !closing) {
+            if (windowStateListeners.previewWindowClose(this)) {
+                closing = true;
 
-            if (isActive()) {
-                setActiveWindow(null);
+                if (isActive()) {
+                    setActiveWindow(null);
+                }
+
+                // Close all owned windows (create a copy of the owned window
+                // list so owned windows can remove themselves from the list
+                // without interrupting the iteration)
+                for (Window ownedWindow : new ArrayList<Window>(this.ownedWindows)) {
+                    ownedWindow.close();
+                }
+
+                // Detach from display
+                Display display = getDisplay();
+                display.remove(this);
+
+                // Notify listeners
+                windowStateListeners.windowClosed(this, display);
+
+                closing = false;
+            } else {
+                windowStateListeners.windowCloseVetoed(this);
             }
-
-            // Close all owned windows (create a copy of the owned window
-            // list so owned windows can remove themselves from the list
-            // without interrupting the iteration)
-            for (Window ownedWindow : new ArrayList<Window>(this.ownedWindows)) {
-                ownedWindow.close();
-            }
-
-            // Detach from display
-            Display display = getDisplay();
-            display.remove(this);
-
-            // Notify listeners
-            windowSkin.windowClosed(this, display);
-            windowStateListeners.windowClosed(this, display);
-
-            closing = false;
         }
     }
 

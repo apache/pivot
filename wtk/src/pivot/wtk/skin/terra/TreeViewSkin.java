@@ -36,6 +36,7 @@ import pivot.wtk.TreeView;
 import pivot.wtk.TreeViewListener;
 import pivot.wtk.TreeViewBranchListener;
 import pivot.wtk.TreeViewNodeListener;
+import pivot.wtk.TreeViewNodeStateListener;
 import pivot.wtk.TreeViewSelectionDetailListener;
 import pivot.wtk.skin.ComponentSkin;
 
@@ -46,7 +47,7 @@ import pivot.wtk.skin.ComponentSkin;
  */
 public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
     TreeViewListener, TreeViewBranchListener, TreeViewNodeListener,
-    TreeViewSelectionDetailListener{
+    TreeViewNodeStateListener, TreeViewSelectionDetailListener{
 
     /**
      * An internal data structure that keeps track of skin-related metadata
@@ -160,6 +161,7 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
         treeView.getTreeViewListeners().add(this);
         treeView.getTreeViewBranchListeners().add(this);
         treeView.getTreeViewNodeListeners().add(this);
+        treeView.getTreeViewNodeStateListeners().add(this);
         treeView.getTreeViewSelectionDetailListeners().add(this);
 
         treeDataChanged(treeView, null);
@@ -170,6 +172,7 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
         treeView.getTreeViewListeners().remove(this);
         treeView.getTreeViewBranchListeners().remove(this);
         treeView.getTreeViewNodeListeners().remove(this);
+        treeView.getTreeViewNodeStateListeners().remove(this);
         treeView.getTreeViewSelectionDetailListeners().remove(this);
 
         super.uninstall();

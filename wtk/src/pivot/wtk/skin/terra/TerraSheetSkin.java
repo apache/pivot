@@ -27,6 +27,7 @@ import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Sheet;
+import pivot.wtk.SheetStateListener;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.effects.Transition;
@@ -41,7 +42,7 @@ import pivot.wtk.skin.WindowSkin;
  * @author gbrown
  * @author tvolkert
  */
-public class SheetSkin extends WindowSkin implements Sheet.Skin {
+public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private Color borderColor = new Color(0x99, 0x99, 0x99);
     private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
     private Insets padding = new Insets(8);
@@ -79,7 +80,7 @@ public class SheetSkin extends WindowSkin implements Sheet.Skin {
     private static final int SLIDE_DURATION = 250;
     private static final int SLIDE_RATE = 30;
 
-    public SheetSkin() {
+    public TerraSheetSkin() {
         setBackgroundColor(new Color(0xF7, 0xF5, 0xEB));
     }
 
@@ -88,6 +89,7 @@ public class SheetSkin extends WindowSkin implements Sheet.Skin {
         super.install(component);
 
         Sheet sheet = (Sheet)component;
+        sheet.getSheetStateListeners().add(this);
 
         // Attach the drop-shadow decorator
         dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
@@ -97,6 +99,7 @@ public class SheetSkin extends WindowSkin implements Sheet.Skin {
     @Override
     public void uninstall() {
         Sheet sheet = (Sheet)getComponent();
+        sheet.getSheetStateListeners().remove(this);
 
         // Detach the drop shadow decorator
         sheet.getDecorators().remove(dropShadowDecorator);
@@ -333,7 +336,7 @@ public class SheetSkin extends WindowSkin implements Sheet.Skin {
     public boolean previewSheetClose(final Sheet sheet, final boolean result) {
         // Start a close transition, return false, and close the window
         // when the transition is complete
-        boolean close = true;
+        boolean approve = true;
 
         if (closeTransition == null) {
             int duration = SLIDE_DURATION;
@@ -362,13 +365,22 @@ public class SheetSkin extends WindowSkin implements Sheet.Skin {
                     }
                 });
 
-                close = false;
+                approve = false;
             }
         } else {
-            close = !closeTransition.isRunning();
+            approve = !closeTransition.isRunning();
         }
 
-        return close;
+        return approve;
+    }
+
+    public void sheetCloseVetoed(Sheet sheet) {
+        /*
+        if (closeTransition != null) {
+            closeTransition.stop();
+            closeTransition = null;
+        }
+        */
     }
 
     public void sheetClosed(Sheet sheet) {

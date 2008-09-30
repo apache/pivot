@@ -39,7 +39,7 @@ public class TableViewHeader extends Component {
      *
      * @author gbrown
      */
-    public interface Skin extends pivot.wtk.Skin {
+    public interface Skin {
         public int getHeaderAt(int x);
         public Bounds getHeaderBounds(int index);
     }

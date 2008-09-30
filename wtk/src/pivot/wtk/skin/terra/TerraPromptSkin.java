@@ -37,7 +37,7 @@ import pivot.wtkx.WTKXSerializer;
  * @author tvolkert
  * @author gbrown
  */
-public class PromptSkin extends SheetSkin
+public class TerraPromptSkin extends TerraSheetSkin
     implements PromptListener {
     private ArrayList<Button> optionButtons = new ArrayList<Button>();
 
@@ -50,13 +50,13 @@ public class PromptSkin extends SheetSkin
 
     static {
         try {
-            resources = new Resources(PromptSkin.class.getName());
+            resources = new Resources(TerraPromptSkin.class.getName());
         } catch(Exception exception) {
             throw new RuntimeException(exception);
         }
     }
 
-    public PromptSkin() {
+    public TerraPromptSkin() {
         setResizable(false);
     }
 

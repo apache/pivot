@@ -54,7 +54,7 @@ import pivot.wtk.skin.WindowSkin;
  * @author gbrown
  * @author tvolkert
  */
-public class FrameSkin extends WindowSkin {
+public class TerraFrameSkin extends WindowSkin {
     /**
      * Frame button.
      *
@@ -328,7 +328,7 @@ public class FrameSkin extends WindowSkin {
     private static final Color CONTENT_BEVEL_COLOR = new Color(0xe6, 0xe3, 0xda);
     private static final float INACTIVE_ICON_OPACITY = 0.5f;
 
-    public FrameSkin() {
+    public TerraFrameSkin() {
         setBackgroundColor(new Color(0xcc, 0xca, 0xc2));
 
         // The title bar flow pane contains two nested flow panes: one for

@@ -18,15 +18,17 @@ package pivot.util;
 import java.util.Iterator;
 
 /**
- * <p>Abstract base class for listener lists.</p>
- *
- * <p>NOTE This class is not thread-safe.</p>
- *
- * <p>TODO Should this class implement Sequence&lt;T&gt;?</p>
- *
- * <p>TODO Eliminate dependency on java.util.ArrayList and use an internal
+ * Abstract base class for listener lists.
+ * <p>
+ * NOTE This class is not thread-safe.
+ * <p>
+ * NOTE This class does not and should not implement Sequence. We intentionally
+ * prevent access to listeners via index to prevent concurrent modification
+ * exceptions when removing listeners during iteration.
+ * <p>
+ * TODO Eliminate dependency on java.util.ArrayList and use an internal
  * linked list (not an instance of pivot.collections.LinkedList, since
- * that will create a circular dependency).</p>
+ * that will create a circular dependency).
  *
  * @author gbrown
  */
@@ -34,15 +36,23 @@ public abstract class ListenerList<T> implements Iterable<T> {
     private java.util.ArrayList<T> list = new java.util.ArrayList<T>();
 
     public void add(T listener) {
+        // TODO Remove this debug code
+        if (list.indexOf(listener) != -1) {
+            System.out.println("Duplicate listener " + listener + " added to "
+                + this);
+        }
+
         list.add(listener);
     }
 
     public void remove(T listener) {
-        list.remove(listener);
-    }
+        // TODO Remove this debug code
+        if (list.indexOf(listener) == -1) {
+            System.out.println("Nonexistent listener " + listener + " removed from "
+                + this);
+        }
 
-    public T get(int index) {
-        return list.get(index);
+        list.remove(listener);
     }
 
     public int getCount() {

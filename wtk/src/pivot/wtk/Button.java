@@ -18,7 +18,6 @@ package pivot.wtk;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.util.ListenerList;
-import pivot.wtk.skin.ButtonSkin;
 
 /**
  * Abstract base class for button components.
@@ -103,91 +102,51 @@ public abstract class Button extends Component {
      *
      * @author gbrown
      */
-    private class ButtonListenerList extends ListenerList<ButtonListener>
+    private static class ButtonListenerList extends ListenerList<ButtonListener>
         implements ButtonListener {
         public void buttonDataChanged(Button button, Object previousButtonData) {
-            ButtonSkin buttonSkin = (ButtonSkin)getSkin();
-            if (buttonSkin != null) {
-                buttonSkin.buttonDataChanged(button, previousButtonData);
-            }
-
             for (ButtonListener listener : this) {
                 listener.buttonDataChanged(button, previousButtonData);
             }
         }
 
         public void dataRendererChanged(Button button, DataRenderer previousDataRenderer) {
-            ButtonSkin buttonSkin = (ButtonSkin)getSkin();
-            if (buttonSkin != null) {
-                buttonSkin.dataRendererChanged(button, previousDataRenderer);
-            }
-
             for (ButtonListener listener : this) {
                 listener.dataRendererChanged(button, previousDataRenderer);
             }
         }
 
         public void actionChanged(Button button, Action previousAction) {
-            ButtonSkin buttonSkin = (ButtonSkin)getSkin();
-            if (buttonSkin != null) {
-                buttonSkin.actionChanged(button, previousAction);
-            }
-
             for (ButtonListener listener : this) {
                 listener.actionChanged(button, previousAction);
             }
         }
 
         public void toggleButtonChanged(Button button) {
-            ButtonSkin buttonSkin = (ButtonSkin)getSkin();
-            if (buttonSkin != null) {
-                buttonSkin.toggleButtonChanged(button);
-            }
-
             for (ButtonListener listener : this) {
                 listener.toggleButtonChanged(button);
             }
         }
 
         public void triStateChanged(Button button) {
-            ButtonSkin buttonSkin = (ButtonSkin)getSkin();
-            if (buttonSkin != null) {
-                buttonSkin.triStateChanged(button);
-            }
-
             for (ButtonListener listener : this) {
                 listener.triStateChanged(button);
             }
         }
 
         public void groupChanged(Button button, Button.Group previousGroup) {
-            ButtonSkin buttonSkin = (ButtonSkin)getSkin();
-            if (buttonSkin != null) {
-                buttonSkin.groupChanged(button, previousGroup);
-            }
-
             for (ButtonListener listener : this) {
                 listener.groupChanged(button, previousGroup);
             }
         }
 
         public void selectedKeyChanged(Button button, String previousSelectedKey) {
-            ButtonSkin buttonSkin = (ButtonSkin)getSkin();
-            if (buttonSkin != null) {
-                buttonSkin.selectedKeyChanged(button, previousSelectedKey);
-            }
-
             for (ButtonListener listener : this) {
                 listener.selectedKeyChanged(button, previousSelectedKey);
             }
         }
 
         public void stateKeyChanged(Button button, String previousStateKey) {
-            ButtonSkin buttonSkin = (ButtonSkin)getSkin();
-            if (buttonSkin != null) {
-                buttonSkin.stateKeyChanged(button, previousStateKey);
-            }
-
             for (ButtonListener listener : this) {
                 listener.stateKeyChanged(button, previousStateKey);
             }
@@ -199,32 +158,25 @@ public abstract class Button extends Component {
      *
      * @author gbrown
      */
-    private class ButtonStateListenerList extends ListenerList<ButtonStateListener>
+    private static class ButtonStateListenerList extends ListenerList<ButtonStateListener>
         implements ButtonStateListener {
         public boolean previewStateChange(Button button, Button.State state) {
-            boolean consumed = true;
+            boolean approved = true;
 
-            for (int i = 0, n = getCount(); i < n && !consumed; i++) {
-                ButtonStateListener listener = (ButtonStateListener)get(i);
-                consumed = listener.previewStateChange(button, state);
+            for (ButtonStateListener listener : this) {
+                approved &= listener.previewStateChange(button, state);
             }
 
-            if (!consumed) {
-                ButtonSkin buttonSkin = (ButtonSkin)getSkin();
-                if (buttonSkin != null) {
-                    consumed = buttonSkin.previewStateChange(button, state);
-                }
-            }
+            return approved;
+        }
 
-            return consumed;
+        public void stateChangeVetoed(Button button) {
+            for (ButtonStateListener listener : this) {
+                listener.stateChangeVetoed(button);
+            }
         }
 
         public void stateChanged(Button button, Button.State previousState) {
-            ButtonSkin buttonSkin = (ButtonSkin)getSkin();
-            if (buttonSkin != null) {
-                buttonSkin.stateChanged(button, previousState);
-            }
-
             for (ButtonStateListener listener : this) {
                 listener.stateChanged(button, previousState);
             }
@@ -236,14 +188,9 @@ public abstract class Button extends Component {
      *
      * @author gbrown
      */
-    private class ButtonPressListenerList extends ListenerList<ButtonPressListener>
+    private static class ButtonPressListenerList extends ListenerList<ButtonPressListener>
         implements ButtonPressListener {
         public void buttonPressed(Button button) {
-            ButtonSkin buttonSkin = (ButtonSkin)getSkin();
-            if (buttonSkin != null) {
-                buttonSkin.buttonPressed(button);
-            }
-
             for (ButtonPressListener listener : this) {
                 listener.buttonPressed(button);
             }
@@ -279,16 +226,6 @@ public abstract class Button extends Component {
 
     public Button(Object buttonData) {
         this.buttonData = buttonData;
-    }
-
-    @Override
-    protected void setSkin(pivot.wtk.Skin skin) {
-        if (!(skin instanceof ButtonSkin)) {
-            throw new IllegalArgumentException("Skin class must extend "
-                + ButtonSkin.class.getName());
-        }
-
-        super.setSkin(skin);
     }
 
     public Object getButtonData() {
@@ -446,35 +383,38 @@ public abstract class Button extends Component {
 
         State previousState = this.state;
 
-        if (previousState != state
-            && buttonStateListeners.previewStateChange(this, state)) {
-            this.state = state;
+        if (previousState != state) {
+            if (buttonStateListeners.previewStateChange(this, state)) {
+                this.state = state;
 
-            if (group != null) {
-                // Update the group's selection
-                Button selection = group.getSelection();
+                if (group != null) {
+                    // Update the group's selection
+                    Button selection = group.getSelection();
 
-                if (state == State.SELECTED) {
-                    // Set this as the new selection (do this before
-                    // de-selecting any currently selected button so the
-                    // group's change event isn't fired twice)
-                    group.setSelection(this);
+                    if (state == State.SELECTED) {
+                        // Set this as the new selection (do this before
+                        // de-selecting any currently selected button so the
+                        // group's change event isn't fired twice)
+                        group.setSelection(this);
 
-                    // De-select any previously selected button
-                    if (selection != null) {
-                        selection.setSelected(false);
+                        // De-select any previously selected button
+                        if (selection != null) {
+                            selection.setSelected(false);
+                        }
+                    }
+                    else {
+                        // If this button is currently selected, clear the
+                        // selection
+                        if (selection == this) {
+                            group.setSelection(null);
+                        }
                     }
                 }
-                else {
-                    // If this button is currently selected, clear the
-                    // selection
-                    if (selection == this) {
-                        group.setSelection(null);
-                    }
-                }
+
+                buttonStateListeners.stateChanged(this, previousState);
+            } else {
+                buttonStateListeners.stateChangeVetoed(this);
             }
-
-            buttonStateListeners.stateChanged(this, previousState);
         }
     }
 

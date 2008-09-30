@@ -57,13 +57,13 @@ import pivot.wtk.TreeView;
  */
 public final class TerraTheme extends Theme {
     public TerraTheme() {
-        componentSkinMap.put(Alert.class, AlertSkin.class);
+        componentSkinMap.put(Alert.class, TerraAlertSkin.class);
         componentSkinMap.put(Checkbox.class, TerraCheckboxSkin.class);
         componentSkinMap.put(DatePicker.class, DatePickerSkin.class);
-        componentSkinMap.put(Dialog.class, DialogSkin.class);
+        componentSkinMap.put(Dialog.class, TerraDialogSkin.class);
         componentSkinMap.put(Expander.class, ExpanderSkin.class);
         componentSkinMap.put(Form.class, FormSkin.class);
-        componentSkinMap.put(Frame.class, FrameSkin.class);
+        componentSkinMap.put(Frame.class, TerraFrameSkin.class);
         componentSkinMap.put(LinkButton.class, TerraLinkButtonSkin.class);
         componentSkinMap.put(ListButton.class, TerraListButtonSkin.class);
         componentSkinMap.put(ListView.class, ListViewSkin.class);
@@ -76,13 +76,13 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Meter.class, MeterSkin.class);
         componentSkinMap.put(Palette.class, PaletteSkin.class);
         componentSkinMap.put(Panorama.class, PanoramaSkin.class);
-        componentSkinMap.put(Prompt.class, PromptSkin.class);
+        componentSkinMap.put(Prompt.class, TerraPromptSkin.class);
         componentSkinMap.put(PushButton.class, TerraPushButtonSkin.class);
         componentSkinMap.put(RadioButton.class, TerraRadioButtonSkin.class);
         componentSkinMap.put(Rollup.class, RollupSkin.class);
         componentSkinMap.put(ScrollBar.class, ScrollBarSkin.class);
         componentSkinMap.put(ScrollPane.Corner.class, ScrollPaneCornerSkin.class);
-        componentSkinMap.put(Sheet.class, SheetSkin.class);
+        componentSkinMap.put(Sheet.class, TerraSheetSkin.class);
         componentSkinMap.put(Spinner.class, SpinnerSkin.class);
         componentSkinMap.put(SplitPane.class, SplitPaneSkin.class);
         componentSkinMap.put(TableViewHeader.class, TableViewHeaderSkin.class);
@@ -92,7 +92,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Tooltip.class, TooltipSkin.class);
         componentSkinMap.put(TreeView.class, TreeViewSkin.class);
 
-        componentSkinMap.put(FrameSkin.FrameButton.class, FrameSkin.FrameButtonSkin.class);
+        componentSkinMap.put(TerraFrameSkin.FrameButton.class, TerraFrameSkin.FrameButtonSkin.class);
         componentSkinMap.put(ExpanderSkin.ShadeButton.class, ExpanderSkin.ShadeButtonSkin.class);
         componentSkinMap.put(RollupSkin.RollupButton.class, RollupSkin.RollupButtonSkin.class);
         componentSkinMap.put(ScrollBarSkin.ScrollButton.class, ScrollBarSkin.ScrollButtonSkin.class);

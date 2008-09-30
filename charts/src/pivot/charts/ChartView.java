@@ -148,7 +148,7 @@ public abstract class ChartView extends Component {
     /**
      * Chart view skin interface.
      */
-    public interface Skin extends pivot.wtk.Skin {
+    public interface Skin {
         public Element getElementAt(int x, int y);
     }
 

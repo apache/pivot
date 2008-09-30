@@ -127,6 +127,7 @@ public class PopupSkin extends WindowSkin {
     };
 
     // Window events
+    @Override
     public void windowOpened(Window window) {
         // Add this as a component and container mouse listener on display
         Display display = window.getDisplay();
@@ -142,6 +143,7 @@ public class PopupSkin extends WindowSkin {
         }
     }
 
+    @Override
     public void windowClosed(Window window, Display display) {
         // Remove this as a component and container mouse listener on display
         display.getContainerMouseListeners().remove(displayMouseListener);

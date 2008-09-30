@@ -91,10 +91,26 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     public void install(Component component) {
         assert(this.component == null) : "Skin is already installed on a component.";
 
+        component.getComponentListeners().add(this);
+        component.getComponentLayoutListeners().add(this);
+        component.getComponentStateListeners().add(this);
+        component.getComponentMouseListeners().add(this);
+        component.getComponentMouseButtonListeners().add(this);
+        component.getComponentMouseWheelListeners().add(this);
+        component.getComponentKeyListeners().add(this);
+
         this.component = component;
     }
 
     public void uninstall() {
+        component.getComponentListeners().remove(this);
+        component.getComponentLayoutListeners().remove(this);
+        component.getComponentStateListeners().remove(this);
+        component.getComponentMouseListeners().remove(this);
+        component.getComponentMouseButtonListeners().remove(this);
+        component.getComponentMouseWheelListeners().remove(this);
+        component.getComponentKeyListeners().remove(this);
+
         component = null;
     }
 
@@ -153,11 +169,20 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         return true;
     }
 
+    public void enabledChangeVetoed(Component component) {
+        // No-op
+    }
+
     public void enabledChanged(Component component) {
+        // No-op
     }
 
     public boolean previewFocusedChange(Component component, boolean temporary) {
         return true;
+    }
+
+    public void focusedChangeVetoed(Component component) {
+        // No-op
     }
 
     public void focusedChanged(Component component, boolean temporary) {

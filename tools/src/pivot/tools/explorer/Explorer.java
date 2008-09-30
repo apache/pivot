@@ -56,6 +56,20 @@ public class Explorer implements Application, TreeViewSelectionListener {
 
         String resourceName = String.format("%s.wtkx", className.replace('.', '/'));
         dialog = createMainWindow( application, (Component) wtkxSerializer.readObject(resourceName));
+        dialog.getDialogStateListeners().add(new DialogStateListener() {
+            public boolean previewDialogClose(Dialog dialog, boolean result) {
+                dialog.moveToBack();
+                return false;
+            }
+
+            public void dialogCloseVetoed(Dialog dialog) {
+                // No-op
+            }
+
+            public void dialogClosed(Dialog dialog) {
+                // No-op
+            }
+        });
 
         statusLabel = (Label) wtkxSerializer.getObjectByName("lbStatus");
         componentTree = (TreeView) wtkxSerializer.getObjectByName("trComponents");
@@ -66,16 +80,7 @@ public class Explorer implements Application, TreeViewSelectionListener {
 
         initComponentTree(componentTree, display);
 
-        dialog.open(display, new DialogStateListener() {
-            public boolean previewDialogClose(Dialog dialog, boolean result) {
-                dialog.moveToBack();
-                return false;
-            }
-
-            public void dialogClosed(Dialog dialog) {
-                // No-op
-            }
-        });
+        dialog.open(display);
 
         componentTree.requestFocus();
     }

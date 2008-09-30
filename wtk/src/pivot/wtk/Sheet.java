@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.util.ListenerList;
+
 /**
  * <p>Window class representing a "sheet". A sheet behaves like a dialog that is
  * modal only over a window's content component.</p>
@@ -23,16 +25,33 @@ package pivot.wtk;
  */
 @ComponentInfo(icon="Sheet.png")
 public class Sheet extends Window {
-    /**
-     * <p>Sheet skin interface.</p>
-     *
-     * @author gbrown
-     */
-    public interface Skin extends pivot.wtk.Skin, SheetStateListener {
+    private static class SheetStateListenerList extends ListenerList<SheetStateListener>
+        implements SheetStateListener {
+        public boolean previewSheetClose(Sheet sheet, boolean result) {
+            boolean approved = true;
+
+            for (SheetStateListener listener : this) {
+                approved &= listener.previewSheetClose(sheet, result);
+            }
+
+            return approved;
+        }
+
+        public void sheetCloseVetoed(Sheet sheet) {
+            for (SheetStateListener listener : this) {
+                listener.sheetCloseVetoed(sheet);
+            }
+        }
+
+        public void sheetClosed(Sheet sheet) {
+            for (SheetStateListener listener : this) {
+                listener.sheetClosed(sheet);
+            }
+        }
     }
 
     private boolean result = false;
-    private SheetStateListener sheetStateListener = null;
+    private SheetCloseListener sheetCloseListener = null;
 
     private ComponentListener ownerListener = new ComponentListener() {
         public void parentChanged(Component component, Container previousParent) {
@@ -64,6 +83,8 @@ public class Sheet extends Window {
         }
     };
 
+    private SheetStateListenerList sheetStateListeners = new SheetStateListenerList();
+
     /**
      * Creates a new sheet.
      */
@@ -90,16 +111,6 @@ public class Sheet extends Window {
     @Override
     public boolean isAuxilliary() {
         return true;
-    }
-
-    @Override
-    protected void setSkin(pivot.wtk.Skin skin) {
-        if (!(skin instanceof Sheet.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + Sheet.Skin.class.getName());
-        }
-
-        super.setSkin(skin);
     }
 
     @Override
@@ -138,11 +149,11 @@ public class Sheet extends Window {
         open(owner, null);
     }
 
-    public void open(Window owner, SheetStateListener sheetStateListener) {
+    public void open(Window owner, SheetCloseListener sheetCloseListener) {
         super.open(owner);
 
         if (isOpen()) {
-            this.sheetStateListener = sheetStateListener;
+            this.sheetCloseListener = sheetCloseListener;
         }
     }
 
@@ -152,37 +163,36 @@ public class Sheet extends Window {
     }
 
     public void close(boolean result) {
-        Sheet.Skin sheetSkin = (Sheet.Skin)getSkin();
+        if (!isClosed()) {
+            if (sheetStateListeners.previewSheetClose(this, result)) {
+                super.close();
 
-        if (!isClosed()
-            && (sheetStateListener == null
-                || sheetStateListener.previewSheetClose(this, result))
-            && sheetSkin.previewSheetClose(this, result)) {
-            super.close();
+                if (isClosed()) {
+                    this.result = result;
 
-            if (isClosed()) {
-                this.result = result;
+                    Window owner = getOwner();
+                    owner.getComponentListeners().remove(ownerListener);
 
-                Window owner = getOwner();
-                owner.getComponentListeners().remove(ownerListener);
+                    Component content = owner.getContent();
+                    content.setEnabled(true);
 
-                Component content = owner.getContent();
-                content.setEnabled(true);
+                    owner.moveToFront();
 
-                owner.moveToFront();
+                    if (sheetCloseListener != null) {
+                        sheetCloseListener.sheetClosed(this);
+                        sheetCloseListener = null;
+                    }
 
-                if (sheetStateListener != null) {
-                    sheetSkin.sheetClosed(this);
-                    sheetStateListener.sheetClosed(this);
+                    sheetStateListeners.sheetClosed(this);
                 }
-
-                sheetStateListener = null;
+            } else {
+                sheetStateListeners.sheetCloseVetoed(this);
             }
         }
     }
 
-    public SheetStateListener getSheetStateListener() {
-        return sheetStateListener;
+    public SheetCloseListener getSheetCloseListener() {
+        return sheetCloseListener;
     }
 
     public boolean getResult() {
@@ -195,5 +205,9 @@ public class Sheet extends Window {
         Point contentLocation = content.mapPointToAncestor(owner.getDisplay(), 0, 0);
         setLocation(contentLocation.x + (content.getWidth() - getWidth()) / 2,
             contentLocation.y);
+    }
+
+    public ListenerList<SheetStateListener> getSheetStateListeners() {
+        return sheetStateListeners;
     }
 }

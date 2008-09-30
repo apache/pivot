@@ -28,6 +28,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.ListView;
+import pivot.wtk.ListViewItemStateListener;
 import pivot.wtk.ListViewListener;
 import pivot.wtk.ListViewItemListener;
 import pivot.wtk.ListViewSelectionDetailListener;
@@ -46,7 +47,8 @@ import pivot.wtk.skin.ComponentSkin;
  * @author gbrown
  */
 public class ListViewSkin extends ComponentSkin implements ListView.Skin,
-    ListViewListener, ListViewItemListener, ListViewSelectionDetailListener {
+    ListViewListener, ListViewItemListener, ListViewItemStateListener,
+    ListViewSelectionDetailListener {
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = Color.BLACK;
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
@@ -67,6 +69,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         ListView listView = (ListView)component;
         listView.getListViewListeners().add(this);
         listView.getListViewItemListeners().add(this);
+        listView.getListViewItemStateListeners().add(this);
         listView.getListViewSelectionDetailListeners().add(this);
     }
 
@@ -74,6 +77,7 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         ListView listView = (ListView)getComponent();
         listView.getListViewListeners().remove(this);
         listView.getListViewItemListeners().remove(this);
+        listView.getListViewItemStateListeners().remove(this);
         listView.getListViewSelectionDetailListeners().remove(this);
 
         super.uninstall();

@@ -133,8 +133,6 @@ public class DatePickerButtonSkin extends ButtonSkin
         super.install(component);
 
         DatePickerButton datePickerButton = (DatePickerButton)component;
-
-        datePickerButton.getButtonPressListeners().add(this);
         datePickerButton.getDatePickerButtonSelectionListeners().add(this);
 
         datePicker.setYear(datePickerButton.getYear());
@@ -148,8 +146,6 @@ public class DatePickerButtonSkin extends ButtonSkin
         DatePickerButton datePickerButton = (DatePickerButton)getComponent();
 
         datePickerPopup.close();
-
-        datePickerButton.getButtonPressListeners().remove(this);
         datePickerButton.getDatePickerButtonSelectionListeners().remove(this);
 
         super.uninstall();
