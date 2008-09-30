@@ -40,6 +40,7 @@ import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.serialization.Serializer;
 import pivot.serialization.SerializationException;
+import pivot.util.Resources;
 
 /**
  * <p>Loads an object hierarchy from an XML document.</p>
@@ -90,6 +91,7 @@ public class WTKXSerializer implements Serializer {
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
 
     public static final char URL_PREFIX = '@';
+    public static final char ABSOLUTE_URL_PREFIX = '/';
     public static final char RESOURCE_KEY_PREFIX = '%';
     public static final char OBJECT_REFERENCE_PREFIX = '$';
 
@@ -99,6 +101,7 @@ public class WTKXSerializer implements Serializer {
     public static final String INCLUDE_TAG = "include";
     public static final String INCLUDE_SRC_ATTRIBUTE = "src";
     public static final String INCLUDE_NAMESPACE_ATTRIBUTE = "namespace";
+    public static final String INCLUDE_RESOURCES_ATTRIBUTE = "resources";
 
     public static final String NULL_TAG = "null";
 
@@ -110,6 +113,10 @@ public class WTKXSerializer implements Serializer {
 
     public WTKXSerializer(Dictionary<String, Object> resources) {
         this.resources = resources;
+    }
+
+    public Dictionary<String, Object> getResources() {
+        return resources;
     }
 
     public Object readObject(String resourceName) throws IOException,
@@ -176,6 +183,7 @@ public class WTKXSerializer implements Serializer {
                                 // The element represents an include
                                 String src = null;
                                 String namespace = null;
+                                String resourcesAttribute = null;
 
                                 // Walk the attribute list and extract src and namespace;
                                 // append all other attributes to the attributes list
@@ -189,6 +197,8 @@ public class WTKXSerializer implements Serializer {
                                         src = attribute.value;
                                     } else if (attribute.localName.equals(INCLUDE_NAMESPACE_ATTRIBUTE)) {
                                         namespace = attribute.value;
+                                    } else if (attribute.localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
+                                        resourcesAttribute = attribute.value;
                                     } else if (attribute.localName.equals(ID_ATTRIBUTE)) {
                                         id = attribute.value;
                                     } else {
@@ -204,7 +214,9 @@ public class WTKXSerializer implements Serializer {
 
                                 // Process the include
                                 Dictionary<String, Object> includeResources = resources;
-                                if (includeResources != null
+                                if (resourcesAttribute != null) {
+                                    includeResources = new Resources(resourcesAttribute);
+                                } else if (includeResources != null
                                     && includeResources.containsKey(namespace)) {
                                     includeResources = (Dictionary<String, Object>)includeResources.get(namespace);
                                 }
@@ -214,7 +226,11 @@ public class WTKXSerializer implements Serializer {
                                     includeSerializers.put(namespace, serializer);
                                 }
 
-                                nodeValue = serializer.readObject(new URL(location, src));
+                                if (src.charAt(0) == ABSOLUTE_URL_PREFIX) {
+                                    nodeValue = serializer.readObject(src.substring(1));
+                                } else {
+                                    nodeValue = serializer.readObject(new URL(location, src));
+                                }
                             } else if (localName.equals(NULL_TAG)) {
                                 // The element represents a null value
                                 if (nodeAttributes.getLength() > 0) {
