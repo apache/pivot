@@ -26,12 +26,12 @@ import pivot.util.CalendarDate;
 import pivot.wtk.Border;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
+import pivot.wtk.Calendar;
+import pivot.wtk.CalendarButton;
+import pivot.wtk.CalendarButtonListener;
+import pivot.wtk.CalendarButtonSelectionListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
-import pivot.wtk.DatePicker;
-import pivot.wtk.DatePickerButton;
-import pivot.wtk.DatePickerButtonListener;
-import pivot.wtk.DatePickerButtonSelectionListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.Insets;
@@ -46,11 +46,11 @@ import pivot.wtk.skin.ButtonSkin;
  *
  * @author tvolkert
  */
-public class TerraDatePickerButtonSkin extends ButtonSkin
-    implements DatePickerButton.Skin, ButtonPressListener,
-               DatePickerButtonListener, DatePickerButtonSelectionListener {
+public class TerraCalendarButtonSkin extends ButtonSkin
+    implements CalendarButton.Skin, ButtonPressListener,
+               CalendarButtonListener, CalendarButtonSelectionListener {
 
-    private class DatePickerPopupKeyHandler implements ComponentKeyListener {
+    private class CalendarPopupKeyHandler implements ComponentKeyListener {
         public void keyTyped(Component component, char character) {
             // No-op
         }
@@ -59,7 +59,7 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
             Keyboard.KeyLocation keyLocation) {
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
-                    datePickerPopup.close();
+                    calendarPopup.close();
                     getComponent().requestFocus();
                     break;
                 }
@@ -74,9 +74,9 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
         }
     }
 
-    private DatePicker datePicker = null;
-    private Border datePickerBorder = null;
-    private Popup datePickerPopup = null;
+    private Calendar calendar = null;
+    private Border calendarBorder = null;
+    private Popup calendarPopup = null;
 
     private boolean pressed = false;
 
@@ -117,48 +117,48 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
     protected static final String LIST_HIGHLIGHT_COLOR_KEY = "listHighlightColor";
     protected static final String LIST_HIGHLIGHT_BACKGROUND_COLOR_KEY = "listHighlightBackgroundColor";
 
-    public TerraDatePickerButtonSkin() {
+    public TerraCalendarButtonSkin() {
         // Create the date picker and border
-        datePicker = new DatePicker();
-        datePickerBorder = new Border(datePicker);
-        datePickerBorder.getStyles().put("padding", new Insets(0));
+        calendar = new Calendar();
+        calendarBorder = new Border(calendar);
+        calendarBorder.getStyles().put("padding", new Insets(0));
 
         // Create the popup
-        datePickerPopup = new Popup(datePickerBorder);
-        datePickerPopup.getComponentKeyListeners().add(new DatePickerPopupKeyHandler());
+        calendarPopup = new Popup(calendarBorder);
+        calendarPopup.getComponentKeyListeners().add(new CalendarPopupKeyHandler());
     }
 
     @Override
     public void install(Component component) {
         super.install(component);
 
-        DatePickerButton datePickerButton = (DatePickerButton)component;
-        datePickerButton.getDatePickerButtonSelectionListeners().add(this);
+        CalendarButton calendarButton = (CalendarButton)component;
+        calendarButton.getCalendarButtonSelectionListeners().add(this);
 
-        datePicker.setYear(datePickerButton.getYear());
-        datePicker.setMonth(datePickerButton.getMonth());
+        calendar.setYear(calendarButton.getYear());
+        calendar.setMonth(calendarButton.getMonth());
 
-        datePickerBorder.getStyles().put("borderColor", borderColor);
+        calendarBorder.getStyles().put("borderColor", borderColor);
     }
 
     @Override
     public void uninstall() {
-        DatePickerButton datePickerButton = (DatePickerButton)getComponent();
+        CalendarButton calendarButton = (CalendarButton)getComponent();
 
-        datePickerPopup.close();
-        datePickerButton.getDatePickerButtonSelectionListeners().remove(this);
+        calendarPopup.close();
+        calendarButton.getCalendarButtonSelectionListeners().remove(this);
 
         super.uninstall();
     }
 
     @SuppressWarnings("unchecked")
     public int getPreferredWidth(int height) {
-        DatePickerButton datePickerButton = (DatePickerButton)getComponent();
+        CalendarButton calendarButton = (CalendarButton)getComponent();
 
-        Button.DataRenderer dataRenderer = datePickerButton.getDataRenderer();
+        Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
 
         // Determine the preferred width of the current button data
-        dataRenderer.render(datePickerButton.getButtonData(), datePickerButton, false);
+        dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
         int preferredWidth = dataRenderer.getPreferredWidth(-1);
 
         preferredWidth += TRIGGER_WIDTH + padding.left + padding.right + 2;
@@ -167,10 +167,10 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
     }
 
     public int getPreferredHeight(int width) {
-        DatePickerButton datePickerButton = (DatePickerButton)getComponent();
-        Button.DataRenderer dataRenderer = datePickerButton.getDataRenderer();
+        CalendarButton calendarButton = (CalendarButton)getComponent();
+        Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
 
-        dataRenderer.render(datePickerButton.getButtonData(), datePickerButton, false);
+        dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
 
         int preferredHeight = dataRenderer.getPreferredHeight(-1)
             + padding.top + padding.bottom + 2;
@@ -188,7 +188,7 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
     }
 
     public void paint(Graphics2D graphics) {
-        DatePickerButton datePickerButton = (DatePickerButton)getComponent();
+        CalendarButton calendarButton = (CalendarButton)getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -197,7 +197,7 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
         Color bevelColor = null;
         Color borderColor = null;
 
-        if (datePickerButton.isEnabled()) {
+        if (calendarButton.isEnabled()) {
             backgroundColor = this.backgroundColor;
             bevelColor = (pressed) ? pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
@@ -235,8 +235,8 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
         graphics.drawRect(triggerX, triggerY, TRIGGER_WIDTH, triggerHeight);
 
         // Paint the content
-        Button.DataRenderer dataRenderer = datePickerButton.getDataRenderer();
-        dataRenderer.render(datePickerButton.getButtonData(), datePickerButton, false);
+        Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
+        dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
         dataRenderer.setSize(Math.max(contentWidth - (padding.left + padding.right + 2) + 1, 0),
             Math.max(contentHeight - (padding.top + padding.bottom + 2) + 1, 0));
 
@@ -246,7 +246,7 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
         dataRenderer.paint(contentGraphics);
 
         // Paint the focus state
-        if (datePickerButton.isFocused()) {
+        if (calendarButton.isFocused()) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
@@ -301,7 +301,7 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
         pressed = true;
         repaintComponent();
 
-        consumed |= datePickerPopup.isOpen();
+        consumed |= calendarPopup.isOpen();
 
         return consumed;
     }
@@ -318,10 +318,10 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
 
     @Override
     public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        DatePickerButton datePickerButton = (DatePickerButton)getComponent();
+        CalendarButton calendarButton = (CalendarButton)getComponent();
 
-        datePickerButton.requestFocus();
-        datePickerButton.press();
+        calendarButton.requestFocus();
+        calendarButton.press();
     }
 
     @Override
@@ -343,13 +343,13 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        DatePickerButton datePickerButton = (DatePickerButton)getComponent();
+        CalendarButton calendarButton = (CalendarButton)getComponent();
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = false;
             repaintComponent();
 
-            datePickerButton.press();
+            calendarButton.press();
         } else {
             consumed = super.keyReleased(component, keyCode, keyLocation);
         }
@@ -357,10 +357,10 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
         return consumed;
     }
 
-    // DatePickerButton.Skin methods
+    // CalendarButton.Skin methods
 
-    public DatePicker getDatePicker() {
-        return datePicker;
+    public Calendar getCalendar() {
+        return calendar;
     }
 
     // ComponentStateListener methods
@@ -369,7 +369,7 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        datePickerPopup.close();
+        calendarPopup.close();
 
         pressed = false;
         repaintComponent();
@@ -384,8 +384,8 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
         if (!component.isFocused()) {
             Component focusedComponent = Component.getFocusedComponent();
             if (focusedComponent != null
-                && focusedComponent.getWindow() != datePickerPopup) {
-                datePickerPopup.close();
+                && focusedComponent.getWindow() != calendarPopup) {
+                calendarPopup.close();
             }
         }
 
@@ -396,47 +396,47 @@ public class TerraDatePickerButtonSkin extends ButtonSkin
     // ButtonPressListener methods
 
     public void buttonPressed(Button button) {
-        if (datePickerPopup.isOpen()) {
-            datePickerPopup.close();
+        if (calendarPopup.isOpen()) {
+            calendarPopup.close();
         } else {
-            DatePickerButton datePickerButton = (DatePickerButton)button;
+            CalendarButton calendarButton = (CalendarButton)button;
 
             // Determine the popup's location and preferred size, relative
             // to the button
-            Display display = datePickerButton.getWindow().getDisplay();
-            Point displayCoordinates = datePickerButton.mapPointToAncestor(display, 0, 0);
+            Display display = calendarButton.getWindow().getDisplay();
+            Point displayCoordinates = calendarButton.mapPointToAncestor(display, 0, 0);
             displayCoordinates.y += getHeight() - 1;
 
             // TODO Ensure that the popup remains within the bounds of the display
-            datePickerPopup.setLocation(displayCoordinates);
-            datePickerPopup.open(datePickerButton);
+            calendarPopup.setLocation(displayCoordinates);
+            calendarPopup.open(calendarButton);
         }
     }
 
-    // DatePickerButtonListener methods
+    // CalendarButtonListener methods
 
-    public void yearChanged(DatePickerButton datePickerButton, int previousYear) {
+    public void yearChanged(CalendarButton calendarButton, int previousYear) {
         // No-op
     }
 
-    public void monthChanged(DatePickerButton datePickerButton, int previousMonth) {
+    public void monthChanged(CalendarButton calendarButton, int previousMonth) {
         // No-op
     }
 
-    public void selectedDateKeyChanged(DatePickerButton datePickerButton,
+    public void selectedDateKeyChanged(CalendarButton calendarButton,
         String previousSelectedDateKey) {
         // No-op
     }
 
-    // DatePickerButtonSelectionListener methods
+    // CalendarButtonSelectionListener methods
 
-    public void selectedDateChanged(DatePickerButton datePickerButton,
+    public void selectedDateChanged(CalendarButton calendarButton,
         CalendarDate previousSelectedDate) {
-        CalendarDate selectedDate = datePickerButton.getSelectedDate();
-        datePicker.setSelectedDate((CalendarDate)null);
-        datePickerButton.setButtonData(selectedDate);
+        CalendarDate selectedDate = calendarButton.getSelectedDate();
+        calendar.setSelectedDate((CalendarDate)null);
+        calendarButton.setButtonData(selectedDate);
 
-        datePickerPopup.close();
+        calendarPopup.close();
         getComponent().requestFocus();
     }
 }

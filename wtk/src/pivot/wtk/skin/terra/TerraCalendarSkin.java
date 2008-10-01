@@ -19,7 +19,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -27,11 +26,11 @@ import pivot.collections.ArrayList;
 import pivot.util.CalendarDate;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
+import pivot.wtk.Calendar;
+import pivot.wtk.CalendarListener;
+import pivot.wtk.CalendarSelectionListener;
 import pivot.wtk.CardPane;
 import pivot.wtk.Component;
-import pivot.wtk.DatePicker;
-import pivot.wtk.DatePickerListener;
-import pivot.wtk.DatePickerSelectionListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
@@ -47,8 +46,8 @@ import pivot.wtk.skin.ContainerSkin;
  *
  * @author tvolkert
  */
-public class TerraDatePickerSkin extends ContainerSkin
-    implements DatePickerListener, DatePickerSelectionListener {
+public class TerraCalendarSkin extends ContainerSkin
+    implements CalendarListener, CalendarSelectionListener {
 
     /**
      * Date picker calendar view component.
@@ -56,16 +55,16 @@ public class TerraDatePickerSkin extends ContainerSkin
      * @author tvolkert
      */
     public static class CalendarView extends Component {
-        private DatePicker datePicker;
+        private Calendar calendar;
 
-        public CalendarView(DatePicker datePicker) {
-            this.datePicker = datePicker;
+        public CalendarView(Calendar calendar) {
+            this.calendar = calendar;
 
             installSkin(CalendarView.class);
         }
 
-        public DatePicker getDatePicker() {
-            return datePicker;
+        public Calendar getCalendar() {
+            return calendar;
         }
     }
 
@@ -79,13 +78,13 @@ public class TerraDatePickerSkin extends ContainerSkin
 
         public CalendarViewSkin() {
             GregorianCalendar calendar = new GregorianCalendar(0, 0, 1);
-            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+            calendar.set(java.util.Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE");
 
             for (int i = 0; i < 7; i++) {
                 Date date = calendar.getTime();
                 daysOfWeek.add(dateFormat.format(date));
-                calendar.add(Calendar.DAY_OF_WEEK, 1);
+                calendar.add(java.util.Calendar.DAY_OF_WEEK, 1);
             }
         }
 
@@ -124,9 +123,9 @@ public class TerraDatePickerSkin extends ContainerSkin
     private PushButton monthNextButton = new PushButton(">");
     private CardPane monthCardPane = new CardPane();
     private Label yearLabel = new Label();
-    private CalendarView calendar;
+    private CalendarView calendarView;
 
-    public TerraDatePickerSkin() {
+    public TerraCalendarSkin() {
         tablePane.getRows().add(new TablePane.Row(-1));
         tablePane.getRows().add(new TablePane.Row(-1));
         tablePane.getColumns().add(new TablePane.Column(-1));
@@ -141,7 +140,7 @@ public class TerraDatePickerSkin extends ContainerSkin
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM");
 
         for (int i = 0; i < 12; i++) {
-            calendar.set(Calendar.MONTH, i);
+            calendar.set(java.util.Calendar.MONTH, i);
             Date date = calendar.getTime();
             Label label = new Label(dateFormat.format(date));
             label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
@@ -166,43 +165,43 @@ public class TerraDatePickerSkin extends ContainerSkin
 
         monthPrevButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                DatePicker datePicker = (DatePicker)getComponent();
-                int month = datePicker.getMonth();
+                Calendar calendar = (Calendar)getComponent();
+                int month = calendar.getMonth();
 
                 if (month == 0) {
-                    datePicker.setMonth(11);
-                    datePicker.setYear(datePicker.getYear() - 1);
+                    calendar.setMonth(11);
+                    calendar.setYear(calendar.getYear() - 1);
                 } else {
-                    datePicker.setMonth(month - 1);
+                    calendar.setMonth(month - 1);
                 }
             }
         });
 
         monthNextButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                DatePicker datePicker = (DatePicker)getComponent();
-                int month = datePicker.getMonth();
+                Calendar calendar = (Calendar)getComponent();
+                int month = calendar.getMonth();
 
                 if (month == 11) {
-                    datePicker.setMonth(0);
-                    datePicker.setYear(datePicker.getYear() + 1);
+                    calendar.setMonth(0);
+                    calendar.setYear(calendar.getYear() + 1);
                 } else {
-                    datePicker.setMonth(month + 1);
+                    calendar.setMonth(month + 1);
                 }
             }
         });
 
         yearPrevButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                DatePicker datePicker = (DatePicker)getComponent();
-                datePicker.setYear(datePicker.getYear() - 1);
+                Calendar calendar = (Calendar)getComponent();
+                calendar.setYear(calendar.getYear() - 1);
             }
         });
 
         yearNextButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                DatePicker datePicker = (DatePicker)getComponent();
-                datePicker.setYear(datePicker.getYear() + 1);
+                Calendar calendar = (Calendar)getComponent();
+                calendar.setYear(calendar.getYear() + 1);
             }
         });
     }
@@ -211,15 +210,15 @@ public class TerraDatePickerSkin extends ContainerSkin
     public void install(Component component) {
         super.install(component);
 
-        DatePicker datePicker = (DatePicker)component;
-        datePicker.getDatePickerListeners().add(this);
-        datePicker.getDatePickerSelectionListeners().add(this);
+        Calendar calendar = (Calendar)component;
+        calendar.getCalendarListeners().add(this);
+        calendar.getCalendarSelectionListeners().add(this);
 
-        datePicker.add(tablePane);
+        calendar.add(tablePane);
 
-        calendar = new CalendarView(datePicker);
-        tablePane.setCellComponent(1, 0, calendar);
-        TablePane.setColumnSpan(calendar, 3);
+        calendarView = new CalendarView(calendar);
+        tablePane.setCellComponent(1, 0, calendarView);
+        TablePane.setColumnSpan(calendarView, 3);
 
         updateYear();
         updateMonth();
@@ -227,12 +226,12 @@ public class TerraDatePickerSkin extends ContainerSkin
 
     @Override
     public void uninstall() {
-        DatePicker datePicker = (DatePicker)getComponent();
-        datePicker.getDatePickerListeners().remove(this);
-        datePicker.getDatePickerSelectionListeners().remove(this);
+        Calendar calendar = (Calendar)getComponent();
+        calendar.getCalendarListeners().remove(this);
+        calendar.getCalendarSelectionListeners().remove(this);
 
-        datePicker.remove(tablePane);
-        datePicker.remove(calendar);
+        calendar.remove(tablePane);
+        calendar.remove(calendar);
 
         super.uninstall();
     }
@@ -258,33 +257,33 @@ public class TerraDatePickerSkin extends ContainerSkin
     }
 
     private void updateYear() {
-        DatePicker datePicker = (DatePicker)getComponent();
-        yearLabel.setText(String.valueOf(datePicker.getYear()));
+        Calendar calendar = (Calendar)getComponent();
+        yearLabel.setText(String.valueOf(calendar.getYear()));
     }
 
     private void updateMonth() {
-        DatePicker datePicker = (DatePicker)getComponent();
-        monthCardPane.setSelectedIndex(datePicker.getMonth());
+        Calendar calendar = (Calendar)getComponent();
+        monthCardPane.setSelectedIndex(calendar.getMonth());
     }
 
-    // DatePickerListener methods
+    // CalendarListener methods
 
-    public void yearChanged(DatePicker datePicker, int previousYear) {
+    public void yearChanged(Calendar calendar, int previousYear) {
         updateYear();
     }
 
-    public void monthChanged(DatePicker datePicker, int previousMonth) {
+    public void monthChanged(Calendar calendar, int previousMonth) {
         updateMonth();
     }
 
-    public void selectedDateKeyChanged(DatePicker datePicker,
+    public void selectedDateKeyChanged(Calendar calendar,
         String previousSelectedDateKey) {
         // TODO
     }
 
-    // DatePickerSelectionListener methods
+    // CalendarSelectionListener methods
 
-    public void selectedDateChanged(DatePicker datePicker,
+    public void selectedDateChanged(Calendar calendar,
         CalendarDate previousSelectedDate) {
         // TODO
     }

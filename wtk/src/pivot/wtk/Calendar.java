@@ -15,9 +15,6 @@
  */
 package pivot.wtk;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import pivot.collections.Dictionary;
 import pivot.util.CalendarDate;
 import pivot.util.ListenerList;
@@ -27,31 +24,31 @@ import pivot.util.ListenerList;
  *
  * @author tvolkert
  */
-public class DatePicker extends Container {
+public class Calendar extends Container {
     /**
      * Date picker listener list.
      *
      * @author tvolkert
      */
-    private static class DatePickerListenerList extends ListenerList<DatePickerListener>
-        implements DatePickerListener {
+    private static class CalendarListenerList extends ListenerList<CalendarListener>
+        implements CalendarListener {
 
-        public void yearChanged(DatePicker datePicker, int previousYear) {
-            for (DatePickerListener listener : this) {
-                listener.yearChanged(datePicker, previousYear);
+        public void yearChanged(Calendar calendar, int previousYear) {
+            for (CalendarListener listener : this) {
+                listener.yearChanged(calendar, previousYear);
             }
         }
 
-        public void monthChanged(DatePicker datePicker, int previousMonth) {
-            for (DatePickerListener listener : this) {
-                listener.monthChanged(datePicker, previousMonth);
+        public void monthChanged(Calendar calendar, int previousMonth) {
+            for (CalendarListener listener : this) {
+                listener.monthChanged(calendar, previousMonth);
             }
         }
 
-        public void selectedDateKeyChanged(DatePicker datePicker,
+        public void selectedDateKeyChanged(Calendar calendar,
             String previousSelectedDateKey) {
-            for (DatePickerListener listener : this) {
-                listener.selectedDateKeyChanged(datePicker, previousSelectedDateKey);
+            for (CalendarListener listener : this) {
+                listener.selectedDateKeyChanged(calendar, previousSelectedDateKey);
             }
         }
     }
@@ -61,14 +58,14 @@ public class DatePicker extends Container {
      *
      * @author tvolkert
      */
-    private static class DatePickerSelectionListenerList
-        extends ListenerList<DatePickerSelectionListener>
-        implements DatePickerSelectionListener {
+    private static class CalendarSelectionListenerList
+        extends ListenerList<CalendarSelectionListener>
+        implements CalendarSelectionListener {
 
-        public void selectedDateChanged(DatePicker datePicker,
+        public void selectedDateChanged(Calendar calendar,
             CalendarDate previousSelectedDate) {
-            for (DatePickerSelectionListener listener : this) {
-                listener.selectedDateChanged(datePicker, previousSelectedDate);
+            for (CalendarSelectionListener listener : this) {
+                listener.selectedDateChanged(calendar, previousSelectedDate);
             }
         }
     }
@@ -80,24 +77,24 @@ public class DatePicker extends Container {
 
     private String selectedDateKey = null;
 
-    private DatePickerListenerList datePickerListeners = new DatePickerListenerList();
-    private DatePickerSelectionListenerList datePickerSelectionListeners =
-        new DatePickerSelectionListenerList();
+    private CalendarListenerList calendarListeners = new CalendarListenerList();
+    private CalendarSelectionListenerList calendarSelectionListeners =
+        new CalendarSelectionListenerList();
 
     /**
      * Creates a date picker set to the current month and year in the default
      * timezone in the default locale.
      */
-    public DatePicker() {
-        this(new GregorianCalendar());
+    public Calendar() {
+        this(new CalendarDate());
     }
 
     /**
      * Creates a new date picker set to the specified calendar's year and
      * month.
      */
-    private DatePicker(Calendar calendar) {
-        this(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH));
+    private Calendar(CalendarDate calendarDate) {
+        this(calendarDate.getYear(), calendarDate.getMonth());
     }
 
     /**
@@ -108,11 +105,11 @@ public class DatePicker extends Container {
      * @param month
      * The month, 0-based (e.g. 2 for March)
      */
-    public DatePicker(int year, int month) {
+    public Calendar(int year, int month) {
         this.year = year;
         this.month = month;
 
-        installSkin(DatePicker.class);
+        installSkin(Calendar.class);
     }
 
     /**
@@ -130,7 +127,7 @@ public class DatePicker extends Container {
 
         if (previousYear != year) {
             this.year = year;
-            datePickerListeners.yearChanged(this, previousYear);
+            calendarListeners.yearChanged(this, previousYear);
         }
     }
 
@@ -149,7 +146,7 @@ public class DatePicker extends Container {
 
         if (previousMonth != month) {
             this.month = month;
-            datePickerListeners.monthChanged(this, previousMonth);
+            calendarListeners.monthChanged(this, previousMonth);
         }
     }
 
@@ -173,7 +170,7 @@ public class DatePicker extends Container {
         if ((selectedDate == null ^ previousSelectedDate == null)
             || (selectedDate != null && !selectedDate.equals(previousSelectedDate))) {
             this.selectedDate = selectedDate;
-            datePickerSelectionListeners.selectedDateChanged(this, previousSelectedDate);
+            calendarSelectionListeners.selectedDateChanged(this, previousSelectedDate);
         }
     }
 
@@ -209,7 +206,7 @@ public class DatePicker extends Container {
         if ((selectedDateKey == null ^ previousSelectedDateKey == null)
             || (selectedDateKey != null && !selectedDateKey.equals(previousSelectedDateKey))) {
             this.selectedDateKey = selectedDateKey;
-            datePickerListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
+            calendarListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
         }
     }
 
@@ -246,16 +243,16 @@ public class DatePicker extends Container {
     }
 
     /**
-     * Gets this date picker's <tt>DatePickerListener</tt> collection.
+     * Gets this date picker's <tt>CalendarListener</tt> collection.
      */
-    public ListenerList<DatePickerListener> getDatePickerListeners() {
-        return datePickerListeners;
+    public ListenerList<CalendarListener> getCalendarListeners() {
+        return calendarListeners;
     }
 
     /**
-     * Gets this date picker's <tt>DatePickerSelectionListener</tt> collection.
+     * Gets this date picker's <tt>CalendarSelectionListener</tt> collection.
      */
-    public ListenerList<DatePickerSelectionListener> getDatePickerSelectionListeners() {
-        return datePickerSelectionListeners;
+    public ListenerList<CalendarSelectionListener> getCalendarSelectionListeners() {
+        return calendarSelectionListeners;
     }
 }

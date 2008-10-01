@@ -26,7 +26,7 @@ import pivot.wtk.content.ButtonDataRenderer;
  *
  * @author tvolkert
  */
-public class DatePickerButton extends Button {
+public class CalendarButton extends Button {
     /**
      * Date picker button skin interface. Date picker button skins are required
      * to implement this.
@@ -34,7 +34,7 @@ public class DatePickerButton extends Button {
      * @author tvolkert
      */
     public interface Skin {
-        public DatePicker getDatePicker();
+        public Calendar getCalendar();
     }
 
     /**
@@ -42,26 +42,26 @@ public class DatePickerButton extends Button {
      *
      * @author tvolkert
      */
-    private static class DatePickerButtonListenerList
-        extends ListenerList<DatePickerButtonListener>
-        implements DatePickerButtonListener {
+    private static class CalendarButtonListenerList
+        extends ListenerList<CalendarButtonListener>
+        implements CalendarButtonListener {
 
-        public void yearChanged(DatePickerButton datePickerButton, int previousYear) {
-            for (DatePickerButtonListener listener : this) {
-                listener.yearChanged(datePickerButton, previousYear);
+        public void yearChanged(CalendarButton calendarButton, int previousYear) {
+            for (CalendarButtonListener listener : this) {
+                listener.yearChanged(calendarButton, previousYear);
             }
         }
 
-        public void monthChanged(DatePickerButton datePickerButton, int previousMonth) {
-            for (DatePickerButtonListener listener : this) {
-                listener.monthChanged(datePickerButton, previousMonth);
+        public void monthChanged(CalendarButton calendarButton, int previousMonth) {
+            for (CalendarButtonListener listener : this) {
+                listener.monthChanged(calendarButton, previousMonth);
             }
         }
 
-        public void selectedDateKeyChanged(DatePickerButton datePickerButton,
+        public void selectedDateKeyChanged(CalendarButton calendarButton,
             String previousSelectedDateKey) {
-            for (DatePickerButtonListener listener : this) {
-                listener.selectedDateKeyChanged(datePickerButton, previousSelectedDateKey);
+            for (CalendarButtonListener listener : this) {
+                listener.selectedDateKeyChanged(calendarButton, previousSelectedDateKey);
             }
         }
     }
@@ -71,28 +71,28 @@ public class DatePickerButton extends Button {
      *
      * @author tvolkert
      */
-    private static class DatePickerButtonSelectionListenerList
-        extends ListenerList<DatePickerButtonSelectionListener>
-        implements DatePickerButtonSelectionListener {
+    private static class CalendarButtonSelectionListenerList
+        extends ListenerList<CalendarButtonSelectionListener>
+        implements CalendarButtonSelectionListener {
 
-        public void selectedDateChanged(DatePickerButton datePickerButton,
+        public void selectedDateChanged(CalendarButton calendarButton,
             CalendarDate previousSelectedDate) {
-            for (DatePickerButtonSelectionListener listener : this) {
-                listener.selectedDateChanged(datePickerButton, previousSelectedDate);
+            for (CalendarButtonSelectionListener listener : this) {
+                listener.selectedDateChanged(calendarButton, previousSelectedDate);
             }
         }
     }
 
-    private DatePickerButtonListenerList datePickerButtonListeners =
-        new DatePickerButtonListenerList();
-    private DatePickerButtonSelectionListenerList datePickerButtonSelectionListeners =
-        new DatePickerButtonSelectionListenerList();
+    private CalendarButtonListenerList calendarButtonListeners =
+        new CalendarButtonListenerList();
+    private CalendarButtonSelectionListenerList calendarButtonSelectionListeners =
+        new CalendarButtonSelectionListenerList();
 
     /**
      * Creates a blank date picker button whose date picker is set to the
      * current month and year in the default timezone in the default locale.
      */
-    public DatePickerButton() {
+    public CalendarButton() {
         this(null);
     }
 
@@ -104,19 +104,19 @@ public class DatePickerButton extends Button {
      * @param buttonData
      * The button's button data
      */
-    public DatePickerButton(Object buttonData) {
+    public CalendarButton(Object buttonData) {
         super(buttonData);
 
         setDataRenderer(new ButtonDataRenderer());
 
-        installSkin(DatePickerButton.class);
+        installSkin(CalendarButton.class);
     }
 
     @Override
     protected void setSkin(pivot.wtk.Skin skin) {
-        if (!(skin instanceof DatePickerButton.Skin)) {
+        if (!(skin instanceof CalendarButton.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
-                + DatePickerButton.Skin.class.getName());
+                + CalendarButton.Skin.class.getName());
         }
 
         super.setSkin(skin);
@@ -124,7 +124,7 @@ public class DatePickerButton extends Button {
 
     /**
      * @throws UnsupportedOperationException
-     * This method is not supported by DatePickerButton.
+     * This method is not supported by CalendarButton.
      */
     @Override
     public void setToggleButton(boolean toggleButton) {
@@ -138,28 +138,28 @@ public class DatePickerButton extends Button {
      * The date picker year.
      */
     public int getYear() {
-        DatePickerButton.Skin datePickerButtonSkin = (DatePickerButton.Skin)getSkin();
-        DatePicker datePicker = datePickerButtonSkin.getDatePicker();
+        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
+        Calendar calendar = calendarButtonSkin.getCalendar();
 
-        return datePicker.getYear();
+        return calendar.getYear();
     }
 
     /**
      * Sets the year associated with this date picker button.
      * <p>
-     * Fires {@link DatePickerButtonListener#yearChanged(DatePickerButton, int)}.
+     * Fires {@link CalendarButtonListener#yearChanged(CalendarButton, int)}.
      *
      * @param year
      * The year
      */
     public void setYear(int year) {
-        DatePickerButton.Skin datePickerButtonSkin = (DatePickerButton.Skin)getSkin();
-        DatePicker datePicker = datePickerButtonSkin.getDatePicker();
-        int previousYear = datePicker.getYear();
+        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
+        Calendar calendar = calendarButtonSkin.getCalendar();
+        int previousYear = calendar.getYear();
 
         if (previousYear != year) {
-            datePicker.setYear(year);
-            datePickerButtonListeners.yearChanged(this, previousYear);
+            calendar.setYear(year);
+            calendarButtonListeners.yearChanged(this, previousYear);
         }
     }
 
@@ -170,28 +170,28 @@ public class DatePickerButton extends Button {
      * The date picker month.
      */
     public int getMonth() {
-        DatePickerButton.Skin datePickerButtonSkin = (DatePickerButton.Skin)getSkin();
-        DatePicker datePicker = datePickerButtonSkin.getDatePicker();
+        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
+        Calendar calendar = calendarButtonSkin.getCalendar();
 
-        return datePicker.getMonth();
+        return calendar.getMonth();
     }
 
     /**
      * Sets the month associated with this date picker button.
      * <p>
-     * Fires {@link DatePickerButtonListener#monthChanged(DatePickerButton, int)}.
+     * Fires {@link CalendarButtonListener#monthChanged(CalendarButton, int)}.
      *
      * @param month
      * The month
      */
     public void setMonth(int month) {
-        DatePickerButton.Skin datePickerButtonSkin = (DatePickerButton.Skin)getSkin();
-        DatePicker datePicker = datePickerButtonSkin.getDatePicker();
-        int previousMonth = datePicker.getMonth();
+        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
+        Calendar calendar = calendarButtonSkin.getCalendar();
+        int previousMonth = calendar.getMonth();
 
         if (previousMonth != month) {
-            datePicker.setMonth(month);
-            datePickerButtonListeners.monthChanged(this, previousMonth);
+            calendar.setMonth(month);
+            calendarButtonListeners.monthChanged(this, previousMonth);
         }
     }
 
@@ -202,10 +202,10 @@ public class DatePickerButton extends Button {
      * The currently selected date, or <tt>null</tt> if nothing is selected
      */
     public CalendarDate getSelectedDate() {
-        DatePickerButton.Skin datePickerButtonSkin = (DatePickerButton.Skin)getSkin();
-        DatePicker datePicker = datePickerButtonSkin.getDatePicker();
+        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
+        Calendar calendar = calendarButtonSkin.getCalendar();
 
-        return datePicker.getSelectedDate();
+        return calendar.getSelectedDate();
     }
 
     /**
@@ -215,14 +215,14 @@ public class DatePickerButton extends Button {
      * The date to select, or <tt>null</tt> to clear the selection
      */
     public void setSelectedDate(CalendarDate selectedDate) {
-        DatePickerButton.Skin datePickerButtonSkin = (DatePickerButton.Skin)getSkin();
-        DatePicker datePicker = datePickerButtonSkin.getDatePicker();
-        CalendarDate previousSelectedDate = datePicker.getSelectedDate();
+        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
+        Calendar calendar = calendarButtonSkin.getCalendar();
+        CalendarDate previousSelectedDate = calendar.getSelectedDate();
 
         if ((selectedDate == null ^ previousSelectedDate == null)
             || (selectedDate != null && !selectedDate.equals(previousSelectedDate))) {
-            datePicker.setSelectedDate(selectedDate);
-            datePickerButtonSelectionListeners.selectedDateChanged(this,
+            calendar.setSelectedDate(selectedDate);
+            calendarButtonSelectionListeners.selectedDateChanged(this,
                 previousSelectedDate);
         }
     }
@@ -247,25 +247,25 @@ public class DatePickerButton extends Button {
      * Gets the data binding key that is set on this date picker button.
      */
     public String getSelectedDateKey() {
-        DatePickerButton.Skin datePickerButtonSkin = (DatePickerButton.Skin)getSkin();
-        DatePicker datePicker = datePickerButtonSkin.getDatePicker();
+        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
+        Calendar calendar = calendarButtonSkin.getCalendar();
 
-        return datePicker.getSelectedDateKey();
+        return calendar.getSelectedDateKey();
     }
 
     /**
      * Sets this date picker button's data binding key.
      */
     public void setSelectedDateKey(String selectedDateKey) {
-        DatePickerButton.Skin datePickerButtonSkin = (DatePickerButton.Skin)getSkin();
-        DatePicker datePicker = datePickerButtonSkin.getDatePicker();
+        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
+        Calendar calendar = calendarButtonSkin.getCalendar();
 
-        String previousSelectedDateKey = datePicker.getSelectedDateKey();
+        String previousSelectedDateKey = calendar.getSelectedDateKey();
 
         if ((selectedDateKey == null ^ previousSelectedDateKey == null)
             || (selectedDateKey != null && !selectedDateKey.equals(previousSelectedDateKey))) {
-            datePicker.setSelectedDateKey(selectedDateKey);
-            datePickerButtonListeners.selectedDateKeyChanged(this,
+            calendar.setSelectedDateKey(selectedDateKey);
+            calendarButtonListeners.selectedDateKeyChanged(this,
                 previousSelectedDateKey);
         }
     }
@@ -307,16 +307,16 @@ public class DatePickerButton extends Button {
     }
 
     /**
-     * Gets this date picker's <tt>DatePickerButtonListener</tt> collection.
+     * Gets this date picker's <tt>CalendarButtonListener</tt> collection.
      */
-    public ListenerList<DatePickerButtonListener> getDatePickerButtonListeners() {
-        return datePickerButtonListeners;
+    public ListenerList<CalendarButtonListener> getCalendarButtonListeners() {
+        return calendarButtonListeners;
     }
 
     /**
-     * Gets this date picker's <tt>DatePickerButtonSelectionListener</tt> collection.
+     * Gets this date picker's <tt>CalendarButtonSelectionListener</tt> collection.
      */
-    public ListenerList<DatePickerButtonSelectionListener> getDatePickerButtonSelectionListeners() {
-        return datePickerButtonSelectionListeners;
+    public ListenerList<CalendarButtonSelectionListener> getCalendarButtonSelectionListeners() {
+        return calendarButtonSelectionListeners;
     }
 }

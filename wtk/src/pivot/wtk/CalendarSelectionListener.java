@@ -22,13 +22,13 @@ import pivot.util.CalendarDate;
  *
  * @author tvolkert
  */
-public interface DatePickerSelectionListener {
+public interface CalendarSelectionListener {
     /**
      * Called when a date picker's selected date has changed.
      *
-     * @param datePicker
+     * @param calendar
      * @param previousSelectedDate
      */
-    public void selectedDateChanged(DatePicker datePicker,
+    public void selectedDateChanged(Calendar calendar,
         CalendarDate previousSelectedDate);
 }
