@@ -39,7 +39,7 @@ import pivot.wtk.skin.PopupSkin;
  *
  * @author gbrown
  */
-public class MenuPopupSkin extends PopupSkin
+public class TerraMenuPopupSkin extends PopupSkin
     implements MenuPopupListener, ComponentClassListener {
     private Panorama panorama;
     private Border border;
@@ -64,7 +64,7 @@ public class MenuPopupSkin extends PopupSkin
         }
     };
 
-    public MenuPopupSkin() {
+    public TerraMenuPopupSkin() {
         setBackgroundColor((Color)null);
 
         panorama = new Panorama();

@@ -40,7 +40,7 @@ import pivot.wtk.skin.ContainerSkin;
  *
  * @author tvolkert
  */
-public class SplitPaneSkin extends ContainerSkin
+public class TerraSplitPaneSkin extends ContainerSkin
     implements SplitPaneListener {
 
     public static class Splitter extends Component {
@@ -353,7 +353,7 @@ public class SplitPaneSkin extends ContainerSkin
     private int splitterThickness = 6;
     private boolean useShadow = false;
 
-    public SplitPaneSkin() {
+    public TerraSplitPaneSkin() {
         super();
     }
 

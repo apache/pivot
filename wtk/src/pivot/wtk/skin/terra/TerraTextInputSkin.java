@@ -53,7 +53,7 @@ import pivot.wtk.skin.ComponentSkin;
  *
  * @author gbrown
  */
-public class TextInputSkin extends ComponentSkin
+public class TerraTextInputSkin extends ComponentSkin
     implements TextInputListener, TextInputCharacterListener, TextInputSelectionListener {
     private class MouseSelectionHandler
         implements ComponentMouseListener, ComponentMouseButtonListener {

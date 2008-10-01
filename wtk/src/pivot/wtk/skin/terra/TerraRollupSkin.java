@@ -46,7 +46,7 @@ import pivot.wtk.skin.ContainerSkin;
  *
  * @author tvolkert
  */
-public class RollupSkin extends ContainerSkin
+public class TerraRollupSkin extends ContainerSkin
     implements RollupListener, ButtonPressListener {
     protected class RollupButton extends PushButton {
         public RollupButton() {

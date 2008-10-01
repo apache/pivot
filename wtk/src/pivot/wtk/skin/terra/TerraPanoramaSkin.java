@@ -25,7 +25,7 @@ import pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-public class PanoramaSkin extends ContainerSkin implements Viewport.Skin, ViewportListener {
+public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, ViewportListener {
     /**
      * Abstract base class for button images.
      */

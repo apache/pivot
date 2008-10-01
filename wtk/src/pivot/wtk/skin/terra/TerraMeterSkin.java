@@ -32,7 +32,7 @@ import pivot.wtk.skin.ComponentSkin;
  *
  * @author tvolkert
  */
-public class MeterSkin extends ComponentSkin
+public class TerraMeterSkin extends ComponentSkin
     implements MeterListener {
 
     private Color color = new Color(0x6C, 0x9C, 0xCD);

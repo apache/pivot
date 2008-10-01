@@ -30,7 +30,7 @@ import pivot.wtk.skin.ContainerSkin;
  *
  * @author gbrown
  */
-public class MenuSkin extends ContainerSkin implements MenuListener {
+public class TerraMenuSkin extends ContainerSkin implements MenuListener {
     private Font font = new Font("Verdana", Font.PLAIN, 11);
     private Color color = Color.BLACK;
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
@@ -42,7 +42,7 @@ public class MenuSkin extends ContainerSkin implements MenuListener {
     private int sectionSpacing = 7;
     private boolean showKeyboardShortcuts = true;
 
-    public MenuSkin() {
+    public TerraMenuSkin() {
         setBackgroundColor(Color.WHITE);
     }
 

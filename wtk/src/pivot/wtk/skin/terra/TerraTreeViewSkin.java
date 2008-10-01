@@ -46,7 +46,7 @@ import pivot.wtk.skin.ComponentSkin;
  *
  * @author tvolkert
  */
-public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
+public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     TreeViewListener, TreeViewBranchListener, TreeViewNodeListener,
     TreeViewNodeStateListener, TreeViewSelectionDetailListener{
 

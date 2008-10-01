@@ -52,7 +52,7 @@ import pivot.wtk.skin.ComponentSkin;
  *
  * @author gbrown
  */
-public class TableViewSkin extends ComponentSkin implements TableView.Skin,
+public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     TableViewListener, TableViewColumnListener, TableViewRowListener,
     TableViewRowStateListener, TableViewSelectionDetailListener {
     private Font font = new Font("Verdana", Font.PLAIN, 11);

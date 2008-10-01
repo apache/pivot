@@ -35,7 +35,7 @@ import pivot.wtk.skin.WindowSkin;
  *
  * @author gbrown
  */
-public class PaletteSkin extends WindowSkin {
+public class TerraPaletteSkin extends WindowSkin {
     /**
      * Close button image.
      *
@@ -155,7 +155,7 @@ public class PaletteSkin extends WindowSkin {
     private static final Color CONTENT_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
     private static final Color CONTENT_BEVEL_COLOR = new Color(0xe6, 0xe3, 0xda);
 
-    public PaletteSkin() {
+    public TerraPaletteSkin() {
         setBackgroundColor(new Color(0xcc, 0xca, 0xc2));
 
         // The title bar flow pane contains two nested flow panes: one for

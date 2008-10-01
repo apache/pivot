@@ -46,7 +46,7 @@ import pivot.wtk.skin.ButtonSkin;
  *
  * @author tvolkert
  */
-public class DatePickerButtonSkin extends ButtonSkin
+public class TerraDatePickerButtonSkin extends ButtonSkin
     implements DatePickerButton.Skin, ButtonPressListener,
                DatePickerButtonListener, DatePickerButtonSelectionListener {
 
@@ -117,7 +117,7 @@ public class DatePickerButtonSkin extends ButtonSkin
     protected static final String LIST_HIGHLIGHT_COLOR_KEY = "listHighlightColor";
     protected static final String LIST_HIGHLIGHT_BACKGROUND_COLOR_KEY = "listHighlightBackgroundColor";
 
-    public DatePickerButtonSkin() {
+    public TerraDatePickerButtonSkin() {
         // Create the date picker and border
         datePicker = new DatePicker();
         datePickerBorder = new Border(datePicker);

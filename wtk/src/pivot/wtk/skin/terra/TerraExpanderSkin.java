@@ -46,7 +46,7 @@ import pivot.wtk.skin.ContainerSkin;
  *
  * @author gbrown
  */
-public class ExpanderSkin extends ContainerSkin
+public class TerraExpanderSkin extends ContainerSkin
     implements ButtonPressListener, ExpanderListener {
     public static class ShadeButton extends PushButton {
         private Expander expander = null;
@@ -163,7 +163,7 @@ public class ExpanderSkin extends ContainerSkin
     private Color borderColor = new Color(0xCC, 0xCC, 0xCC);
     private Insets padding = new Insets(4);
 
-    public ExpanderSkin() {
+    public TerraExpanderSkin() {
         setBackgroundColor(Color.WHITE);
 
         titleBarFlowPane = new FlowPane(Orientation.HORIZONTAL);

@@ -35,7 +35,7 @@ import pivot.wtk.skin.ContainerSkin;
  *
  * @author gbrown
  */
-public class FormSkin extends ContainerSkin
+public class TerraFormSkin extends ContainerSkin
     implements FormListener, FormAttributeListener {
     private ArrayList<Label> labels = new ArrayList<Label>();
     private ArrayList<ImageView> flagImageViews = new ArrayList<ImageView>();

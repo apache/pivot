@@ -29,7 +29,7 @@ import pivot.wtk.skin.ContainerSkin;
  *
  * @author gbrown
  */
-public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
+public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     private Font font = new Font("Verdana", Font.BOLD, 11);
     private Color color = Color.BLACK;
     private Color disabledColor = new Color(0x99, 0x99, 0x99);
@@ -37,7 +37,7 @@ public class MenuBarSkin extends ContainerSkin implements MenuBarListener {
     private Color highlightBackgroundColor = new Color(0x14, 0x53, 0x8B);
     private int spacing = 2;
 
-    public MenuBarSkin() {
+    public TerraMenuBarSkin() {
         setBackgroundColor(Color.WHITE);
     }
 

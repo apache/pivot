@@ -60,7 +60,7 @@ import pivot.wtk.skin.ContainerSkin;
  *
  * @author gbrown
  */
-public class TabPaneSkin extends ContainerSkin
+public class TerraTabPaneSkin extends ContainerSkin
     implements TabPaneListener, TabPaneSelectionListener, TabPaneAttributeListener,
         Button.GroupListener {
     protected class TabButton extends Button {
@@ -79,7 +79,7 @@ public class TabPaneSkin extends ContainerSkin
 
         @Override
         public boolean isEnabled() {
-            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
+            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
             return tabPane.isEnabled();
         }
 
@@ -102,7 +102,7 @@ public class TabPaneSkin extends ContainerSkin
         public void press() {
             // If the tab pane is collapsible, toggle the button selection;
             // otherwise, select it
-            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
+            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
             setSelected(tabPane.isCollapsible() ? !isSelected() : true);
 
             super.press();
@@ -114,7 +114,7 @@ public class TabPaneSkin extends ContainerSkin
 
         public int getPreferredWidth(int height) {
             TabButton tabButton = (TabButton)getComponent();
-            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
+            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
@@ -144,7 +144,7 @@ public class TabPaneSkin extends ContainerSkin
 
         public int getPreferredHeight(int width) {
             TabButton tabButton = (TabButton)getComponent();
-            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
+            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
@@ -174,7 +174,7 @@ public class TabPaneSkin extends ContainerSkin
 
         public Dimensions getPreferredSize() {
             TabButton tabButton = (TabButton)getComponent();
-            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
+            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
@@ -210,7 +210,7 @@ public class TabPaneSkin extends ContainerSkin
 
         public void paint(Graphics2D graphics) {
             TabButton tabButton = (TabButton)getComponent();
-            TabPane tabPane = (TabPane)TabPaneSkin.this.getComponent();
+            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
             Orientation tabOrientation = tabPane.getTabOrientation();
 
             Color backgroundColor = (tabButton.isSelected()) ?
@@ -350,7 +350,7 @@ public class TabPaneSkin extends ContainerSkin
     private Color pressedButtonBevelColor = new Color(0xE6, 0xE3, 0xDA);
     private Insets buttonPadding = new Insets(3, 4, 3, 4);
 
-    public TabPaneSkin() {
+    public TerraTabPaneSkin() {
         tabButtonGroup.getGroupListeners().add(this);
 
         buttonFlowPane.getStyles().put("spacing", 2);

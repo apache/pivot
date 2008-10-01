@@ -39,7 +39,7 @@ import pivot.wtk.skin.WindowSkin;
  *
  * @author gbrown
  */
-public class TooltipSkin extends WindowSkin implements TooltipListener {
+public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     private class CloseHandler implements ComponentMouseListener,
         ComponentMouseButtonListener, ComponentMouseWheelListener,
         ComponentKeyListener {
@@ -103,7 +103,7 @@ public class TooltipSkin extends WindowSkin implements TooltipListener {
     private static final Insets PADDING = new Insets(2);
 
 
-    public TooltipSkin() {
+    public TerraTooltipSkin() {
         // Add the label to the border
         border.setContent(label);
 

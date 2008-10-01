@@ -47,7 +47,7 @@ import pivot.wtk.skin.ComponentSkin;
  *
  * @author gbrown
  */
-public class ListViewSkin extends ComponentSkin implements ListView.Skin,
+public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     ListViewListener, ListViewItemListener, ListViewItemStateListener,
     ListViewSelectionDetailListener {
     private Font font = new Font("Verdana", Font.PLAIN, 11);

@@ -46,7 +46,7 @@ import pivot.wtk.skin.ComponentSkin;
  *
  * @author gbrown
  */
-public class TableViewHeaderSkin extends ComponentSkin
+public class TerraTableViewHeaderSkin extends ComponentSkin
     implements TableViewHeader.Skin, TableViewHeaderListener, TableViewColumnListener {
     private class SortIndicatorImage extends Image {
         private SortDirection sortDirection = null;
@@ -172,7 +172,7 @@ public class TableViewHeaderSkin extends ComponentSkin
     protected SortIndicatorImage sortAscendingImage = new SortIndicatorImage(SortDirection.ASCENDING);
     protected SortIndicatorImage sortDescendingImage = new SortIndicatorImage(SortDirection.DESCENDING);
 
-    public TableViewHeaderSkin() {
+    public TerraTableViewHeaderSkin() {
     }
 
     public void install(Component component) {
@@ -302,7 +302,7 @@ public class TableViewHeaderSkin extends ComponentSkin
         if (tableView != null) {
             TableView.ColumnSequence columns = tableView.getColumns();
             Sequence<Integer> columnWidths =
-                TableViewSkin.getColumnWidths(columns, getWidth());
+                TerraTableViewSkin.getColumnWidths(columns, getWidth());
 
             TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
 
@@ -384,7 +384,7 @@ public class TableViewHeaderSkin extends ComponentSkin
 
         if (tableView != null) {
             Sequence<Integer> columnWidths =
-                TableViewSkin.getColumnWidths(tableView.getColumns(), getWidth());
+                TerraTableViewSkin.getColumnWidths(tableView.getColumns(), getWidth());
 
             int i = 0;
             int n = columnWidths.getLength();
@@ -411,7 +411,7 @@ public class TableViewHeaderSkin extends ComponentSkin
 
         if (tableView != null) {
             Sequence<Integer> columnWidths =
-                TableViewSkin.getColumnWidths(tableView.getColumns(), getWidth());
+                TerraTableViewSkin.getColumnWidths(tableView.getColumns(), getWidth());
 
             if (index < 0
                 || index >= columnWidths.getLength()) {

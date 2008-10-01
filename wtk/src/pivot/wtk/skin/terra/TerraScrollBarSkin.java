@@ -42,7 +42,7 @@ import pivot.wtk.skin.ContainerSkin;
  *
  * @author tvolkert
  */
-public class ScrollBarSkin extends ContainerSkin
+public class TerraScrollBarSkin extends ContainerSkin
     implements ScrollBarListener, ScrollBarValueListener {
     /**
      * Encapsulates the code needed to perform timer-controlled scrolling. This
@@ -678,7 +678,7 @@ public class ScrollBarSkin extends ContainerSkin
     private Color scrollButtonPressedBackgroundColor = new Color(0xDF, 0xD7, 0xCD);
     private Color scrollButtonHighlightedBackgroundColor = new Color(0xFB, 0xFA, 0xF8);
 
-    public ScrollBarSkin() {
+    public TerraScrollBarSkin() {
         super();
 
         setBackgroundColor(new Color(0xD9, 0xD2, 0xC7));

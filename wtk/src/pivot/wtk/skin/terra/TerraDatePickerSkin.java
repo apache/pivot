@@ -47,7 +47,7 @@ import pivot.wtk.skin.ContainerSkin;
  *
  * @author tvolkert
  */
-public class DatePickerSkin extends ContainerSkin
+public class TerraDatePickerSkin extends ContainerSkin
     implements DatePickerListener, DatePickerSelectionListener {
 
     public static class CalendarView extends Component {
@@ -116,7 +116,7 @@ public class DatePickerSkin extends ContainerSkin
     private Label yearLabel = new Label();
     private CalendarView calendar;
 
-    public DatePickerSkin() {
+    public TerraDatePickerSkin() {
         tablePane.getRows().add(new TablePane.Row(-1));
         tablePane.getRows().add(new TablePane.Row(-1));
         tablePane.getColumns().add(new TablePane.Column(-1));
