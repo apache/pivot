@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Text input text listener.</p>
+ * Text input text listener.
  *
  * @author gbrown
  */

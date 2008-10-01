@@ -23,7 +23,7 @@ import pivot.wtk.Decorator;
 import pivot.wtk.Point;
 
 /**
- * <p>Decorator that translates the paint origin of its component.</p>
+ * Decorator that translates the paint origin of its component.
  *
  * @author gbrown
  */

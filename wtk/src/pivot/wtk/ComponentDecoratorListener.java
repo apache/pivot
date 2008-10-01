@@ -3,7 +3,7 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 
 /**
- * <p>Component decorator listener interface.</p>
+ * Component decorator listener interface.
  *
  * @author gbrown
  */

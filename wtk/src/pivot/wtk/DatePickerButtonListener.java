@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Date picker button listener interface.</p>
+ * Date picker button listener interface.
  *
  * @author tvolkert
  */

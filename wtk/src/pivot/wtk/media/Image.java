@@ -28,14 +28,14 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Visual;
 
 /**
- * <p>Abstract base class for images. An image is either a bitmapped "picture"
- * or a vector "drawing".</p>
+ * Abstract base class for images. An image is either a bitmapped "picture"
+ * or a vector "drawing".
  *
  * @author gbrown
  */
 public abstract class Image implements Visual {
     /**
-     * <p>Task that executes an image load operation.</p>
+     * Task that executes an image load operation.
      *
      * @author gbrown
      */

@@ -17,9 +17,40 @@ package pivot.wtk;
 
 import pivot.collections.List;
 
+/**
+ * Spinner listener interface.
+ *
+ * @author tvolkert
+ */
 public interface SpinnerListener {
+    /**
+     * Called when a spinner's data has changed.
+     *
+     * @param spinner
+     * @param previousSpinnerData
+     */
     public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData);
+
+    /**
+     * Called when a spinner's item renderer has changed.
+     *
+     * @param spinner
+     * @param previousItemRenderer
+     */
     public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer);
+
+    /**
+     * Called when a spinner's circular property has changed.
+     *
+     * @param spinner
+     */
     public void circularChanged(Spinner spinner);
+
+    /**
+     * Called when a spinner's selected value key has changed.
+     *
+     * @param spinner
+     * @param previousSelectedValueKey
+     */
     public void selectedValueKeyChanged(Spinner spinner, String previousSelectedValueKey);
 }

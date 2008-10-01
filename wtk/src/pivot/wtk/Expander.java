@@ -19,8 +19,8 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
- * <p>Navigation container that allows a user to expand and collapse a content
- * component.</p>
+ * Navigation container that allows a user to expand and collapse a content
+ * component.
  *
  * @author tvolkert
  */

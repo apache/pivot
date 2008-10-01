@@ -33,7 +33,7 @@ import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Default table view header data renderer.</p>
+ * Default table view header data renderer.
  *
  * @author gbrown
  */

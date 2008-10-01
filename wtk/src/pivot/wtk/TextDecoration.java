@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Enumeration representing text decoration styles.</p>
+ * Enumeration representing text decoration styles.
  *
  * @author gbrown
  */

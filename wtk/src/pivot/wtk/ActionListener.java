@@ -1,7 +1,7 @@
 package pivot.wtk;
 
 /**
- * <p>Action listener interface.</p>
+ * Action listener interface.
  *
  * @author gbrown
  */

@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Viewport reprensenting a scrollable panorama.</p>
+ * Container that provides a scrollable view of a component.
  *
  * @author gbrown
  */

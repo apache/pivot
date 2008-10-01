@@ -1,7 +1,7 @@
 package pivot.wtk;
 
 /**
- * <p>Interface representing a visual that is used in layout.</p>
+ * Interface representing a visual that is used in layout.
  *
  * @author gbrown
  */

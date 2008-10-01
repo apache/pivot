@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Component mouse wheel listener interface.</p>
+ * Component mouse wheel listener interface.
  *
  * @author gbrown
  */

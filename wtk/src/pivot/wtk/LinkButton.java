@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.wtk.content.LinkButtonDataRenderer;
 
 /**
- * <p>Button component that resembles an HTML hyperlink.</p>
+ * Button component that resembles an HTML hyperlink.
  *
  * @author gbrown
  */

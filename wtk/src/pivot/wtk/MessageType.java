@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Enumeration defining a message's type.</p>
+ * Enumeration defining a message's type.
  *
  * @author gbrown
  */

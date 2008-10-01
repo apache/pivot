@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.util.ListenerList;
 
 /**
- * <p>Popup class that displays a cascading menu.</p>
+ * Popup class that displays a cascading menu.
  *
  * @author gbrown
  */

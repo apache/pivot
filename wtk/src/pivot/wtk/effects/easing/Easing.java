@@ -21,7 +21,7 @@
 package pivot.wtk.effects.easing;
 
 /**
- * <p>Base interface for easing operations.</p>
+ * Base interface for easing operations.
  *
  * @author Robert Penner
  * @author gbrown

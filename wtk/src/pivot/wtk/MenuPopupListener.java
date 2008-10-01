@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Menu popup listener interface.</p>
+ * Menu popup listener interface.
  *
  * @author gbrown
  */

@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Menu item selection listener interface.</p>
+ * Menu item selection listener interface.
  *
  * @author gbrown
  */

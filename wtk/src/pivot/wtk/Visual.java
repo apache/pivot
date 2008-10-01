@@ -18,8 +18,8 @@ package pivot.wtk;
 import java.awt.Graphics2D;
 
 /**
- * <p>Interface representing a "visual". A visual is an object that can be drawn
- * to the screen or other output device.</p>
+ * Interface representing a "visual". A visual is an object that can be drawn
+ * to the screen or other output device.
  *
  * @author gbrown
  */

@@ -24,14 +24,14 @@ import pivot.util.ListenerList;
 import pivot.wtk.content.MenuBarItemDataRenderer;
 
 /**
- * <p>Component representing a horizontal menu bar.</p>
+ * Component representing a horizontal menu bar.
  *
  * @author gbrown
  */
 @ComponentInfo(icon="MenuBar.png")
 public class MenuBar extends Container {
     /**
-     * <p>Component representing a menu bar item.</p>
+     * Component representing a menu bar item.
      *
      * @author gbrown
      */
@@ -108,7 +108,7 @@ public class MenuBar extends Container {
     }
 
     /**
-     * <p>Item listener interface.</p>
+     * Item listener interface.
      *
      * @author gbrown
      */
@@ -117,7 +117,7 @@ public class MenuBar extends Container {
     }
 
     /**
-     * <p>Item sequence implementation.</p>
+     * Item sequence implementation.
      *
      * @author gbrown
      */

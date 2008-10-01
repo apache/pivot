@@ -16,9 +16,8 @@
 package pivot.wtk;
 
 /**
- * <p>Container mouse listener interface. Container mouse events are
- * "tunneling" events and are fired as the event propagates down the component
- * hierarchy.</p>
+ * Container mouse listener interface. Container mouse events are "tunneling"
+ * events that are fired as the event propagates down the component hierarchy.
  *
  * @author gbrown
  */

@@ -23,7 +23,7 @@ import pivot.util.CalendarDate;
 import pivot.util.ListenerList;
 
 /**
- * <p>Component that allows the user to select a date.</p>
+ * Component that allows the user to select a date.
  *
  * @author tvolkert
  */

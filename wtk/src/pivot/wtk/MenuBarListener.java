@@ -16,12 +16,32 @@
 package pivot.wtk;
 
 /**
- * <p>Menu bar listener interface.</p>
+ * Menu bar listener interface.
  *
  * @author gbrown
  */
 public interface MenuBarListener {
+    /**
+     * Called when a menu bar item has been inserted.
+     *
+     * @param menuBar
+     * @param index
+     */
     public void itemInserted(MenuBar menuBar, int index);
+
+    /**
+     * Called when menu bar items have been removed.
+     *
+     * @param menuBar
+     * @param index
+     * @param count
+     */
     public void itemsRemoved(MenuBar menuBar, int index, int count);
+
+    /**
+     * Called when the menu bar's active state has changed.
+     *
+     * @param menuBar
+     */
     public void activeChanged(MenuBar menuBar);
 }

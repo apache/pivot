@@ -20,7 +20,7 @@ import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Component that displays an image.</p>
+ * Component that displays an image.
  *
  * @author gbrown
  */

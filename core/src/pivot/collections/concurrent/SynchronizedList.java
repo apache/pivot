@@ -30,8 +30,8 @@ import pivot.util.concurrent.SynchronizedListenerList;
 public class SynchronizedList<T> extends SynchronizedCollection<T>
     implements List<T> {
     /**
-     * <p>Synchronized list listener list implementation. Proxies events fired
-     * by inner list to listeners of synchronized list.</p>
+     * Synchronized list listener list implementation. Proxies events fired
+     * by inner list to listeners of synchronized list.
      *
      * @author gbrown
      */

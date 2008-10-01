@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.util.Vote;
 
 /**
- * <p>Component state listener interface.</p>
+ * Component state listener interface.
  *
  * @author gbrown
  * @author tvolkert

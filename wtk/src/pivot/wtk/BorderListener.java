@@ -1,7 +1,7 @@
 package pivot.wtk;
 
 /**
- * <p>Border listener interface.</p>
+ * Border listener interface.
  *
  * @author gbrown
  *

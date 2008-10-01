@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.collections.List;
 
 /**
- * <p>List view listener interface.</p>
+ * List view listener interface.
  *
  * @author gbrown
  */

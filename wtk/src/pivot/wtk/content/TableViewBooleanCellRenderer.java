@@ -23,8 +23,8 @@ import pivot.wtk.TableView;
 import pivot.wtk.VerticalAlignment;
 
 /**
- * <p>Default renderer for table view cells that contain boolean data. Renders
- * cell contents as a checkbox.</p>
+ * Default renderer for table view cells that contain boolean data. Renders
+ * cell contents as a checkbox.
  *
  * @author gbrown
  */

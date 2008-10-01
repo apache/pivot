@@ -19,8 +19,8 @@ import pivot.util.ListenerList;
 import pivot.util.Vote;
 
 /**
- * <p>Window class whose primary purpose is to facilitate interaction between
- * an application and a user.</p>
+ * Window class whose primary purpose is to facilitate interaction between
+ * an application and a user.
  *
  * @author gbrown
  */

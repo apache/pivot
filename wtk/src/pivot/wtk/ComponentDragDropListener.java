@@ -1,7 +1,7 @@
 package pivot.wtk;
 
 /**
- * <p>Component drag/drop listener interface.</p>
+ * Component drag/drop listener interface.
  *
  * @author gbrown
  */

@@ -25,8 +25,8 @@ import pivot.wtk.Spinner;
 import pivot.wtk.VerticalAlignment;
 
 /**
- * <p>Default spinner item renderer, which renders all items as strings by
- * calling <tt>toString()</tt> on them.</p>
+ * Default spinner item renderer, which renders all items as strings by
+ * calling <tt>toString()</tt> on them.
  *
  * @author tvolkert
  */

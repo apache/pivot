@@ -23,14 +23,14 @@ import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Abstract base class for "actions". Actions are common application
- * behaviors generally triggered by buttons and keyboard shortcuts.</p>
+ * Abstract base class for "actions". Actions are common application
+ * behaviors generally triggered by buttons and keyboard shortcuts.
  *
  * @author gbrown
  */
 public abstract class Action {
     /**
-     * <p>Action dictionary implementation.</p>
+     * Action dictionary implementation.
      *
      * @author gbrown
      */

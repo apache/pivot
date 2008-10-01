@@ -34,7 +34,7 @@ import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Default menu item data renderer.</p>
+ * Default menu item data renderer.
  *
  * @author gbrown
  */

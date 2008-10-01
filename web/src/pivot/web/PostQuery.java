@@ -19,7 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * <p>Executes an HTTP POST operation.</p>
+ * Executes an HTTP POST operation.
  *
  * @author gbrown
  */

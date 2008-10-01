@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Enumeration defining a two-dimensional orientation.</p>
+ * Enumeration defining a two-dimensional orientation.
  *
  * @author gbrown
  */

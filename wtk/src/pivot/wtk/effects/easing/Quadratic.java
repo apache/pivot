@@ -21,7 +21,7 @@
 package pivot.wtk.effects.easing;
 
 /**
- * <p>Quadratic easing operation.</p>
+ * Quadratic easing operation.
  *
  * @author Robert Penner
  * @author gbrown

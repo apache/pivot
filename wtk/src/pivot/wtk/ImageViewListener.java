@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Image view listener interface.</p>
+ * Image view listener interface.
  *
  * @author gbrown
  */

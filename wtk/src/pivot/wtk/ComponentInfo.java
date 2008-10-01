@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * <p>Annotation that provides additional information about a component.</p>
+ * Annotation that provides additional information about a component.
  *
  * @author eryzhikov
  */

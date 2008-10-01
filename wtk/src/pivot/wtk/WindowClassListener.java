@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Window class listener interface.</p>
+ * Window class listener interface.
  *
  * @author tvolkert
  */

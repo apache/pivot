@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Table view header listener interface.</p>
+ * Table view header listener interface.
  *
  * @author gbrown
  */

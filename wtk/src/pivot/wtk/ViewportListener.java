@@ -15,8 +15,33 @@
  */
 package pivot.wtk;
 
+/**
+ * Viewport listener interface.
+ *
+ * @author tvolkert
+ */
 public interface ViewportListener {
+    /**
+     * Called when a viewport's scroll top has changed.
+     *
+     * @param scrollPane
+     * @param previousScrollTop
+     */
     public void scrollTopChanged(Viewport scrollPane, int previousScrollTop);
+
+    /**
+     * Called when a viewport's scroll left has changed.
+     *
+     * @param scrollPane
+     * @param previousScrollLeft
+     */
     public void scrollLeftChanged(Viewport scrollPane, int previousScrollLeft);
+
+    /**
+     * Called when a viewport's view component has changed.
+     *
+     * @param scrollPane
+     * @param previousView
+     */
     public void viewChanged(Viewport scrollPane, Component previousView);
 }

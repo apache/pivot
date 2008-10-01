@@ -24,7 +24,7 @@ import pivot.wtk.TableView.CellRenderer;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Default renderer for table view cells that contain image data.</p>
+ * Default renderer for table view cells that contain image data.
  *
  * @author gbrown
  */

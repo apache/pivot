@@ -16,9 +16,10 @@
 package pivot.wtk;
 
 /**
- * <p>Window class representing a "popup" window. A popup is a non-activatable
- * window that is optionally associated with an "affiliate" component. A popup
- * closes automatically when:</p>
+ * Window class representing a "popup" window. A popup is an auxiliary window
+ * that is optionally associated with an "affiliate" component. A popup closes
+ * automatically when:
+ *
  * <ul>
  * <li>A component mouse down event or a container mouse wheel event occurs
  * outside the bounds of its affiliate, itself, or any of its owned

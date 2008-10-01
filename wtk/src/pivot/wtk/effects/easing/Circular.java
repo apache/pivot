@@ -21,7 +21,7 @@
 package pivot.wtk.effects.easing;
 
 /**
- * <p>Circular easing operation.</p>
+ * Circular easing operation.
  *
  * @author Robert Penner
  * @author gbrown

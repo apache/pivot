@@ -16,7 +16,8 @@
 package pivot.wtk;
 
 /**
- * <p>Window representing a "tool palette".</p>
+ * Window representing a "tool palette". A tool palette is an auxiliary window
+ * whose visibility is tied to its owner's active state.
  *
  * @author gbrown
  */

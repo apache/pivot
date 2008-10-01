@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Expander listener list.</p>
+ * Expander listener list.
  *
  * @author tvolkert
  */

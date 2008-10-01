@@ -16,16 +16,15 @@
 package pivot.wtk;
 
 /**
- * <p>Interface defining a "skin". A skin is the graphical representation
+ * Interface defining a "skin". A skin is the graphical representation
  * of a component. In MVC terminology, a skin represents the "view" of the
  * "model" data provided by a component. Components delegate a number of methods
  * to the skin, including all methods defined by the <tt>Visual</tt> interface
  * as well as style properties and layout. In conjunction with renderers
  * (implementations of the <tt>Renderer</tt> interface), skins define the
- * overall look and feel of an application.</p>
- *
- * <p>Skins are primarily responsible for the following:</p>
- *
+ * overall look and feel of an application.
+ * <p>
+ * Skins are primarily responsible for the following:
  * <ul>
  * <li>Painting the component; if a container, this is effectively the
  * background of the container - the Container class itself will paint the
@@ -33,22 +32,21 @@ package pivot.wtk;
  * <li>Layout of subcomponents; if not a container, <tt>layout()</tt> is
  * a no-op (it exists solely to avoid type checking during layout).</li>
  * </ul>
- *
- * <p>Skins will often change their appearance in response to events fired by
+ * Skins will often change their appearance in response to events fired by
  * the component; most commonly, this will be in response to data changes within
  * the component but may also be in response to input events (e.g. keyboard,
  * mouse). Skins are not required to register for such events - skin base
  * classes implement all relevant listener interfaces and the component calls
- * them as appropriate.</p>
- *
- * <p>Skins may (but are not required to) expose internal properties that
+ * them as appropriate.
+ * <p>
+ * Skins may (but are not required to) expose internal properties that
  * affect the appearance of the component as "style properties", similar to CSS
  * styles. For example, a component might provide styles to let a caller
  * set the foreground color and font. Since callers are not allowed to interact
  * with a component's skin directly, access to styles is via the component's
  * styles collection, which delegates to the dictionary methods in the installed
  * skin. Skins are responsible for invalidating or repainting the component as
- * appropriate in response to events and style changes.</p>
+ * appropriate in response to events and style changes.
  */
 public interface Skin extends ConstrainedVisual {
     /**

@@ -27,15 +27,15 @@ import pivot.util.Vote;
 import pivot.wtk.media.Image;
 
 /**
- * Top-level container representing the entry point into a user
- * interface. Windows are direct descendants of the display.
+ * Top-level container representing the entry point into a user interface.
+ * Windows are direct descendants of the display.
  *
  * @author gbrown
  */
 @ComponentInfo(icon="Window.png")
 public class Window extends Container {
     /**
-     * <p>Action dictionary implementation.</p>
+     * Action dictionary implementation.
      *
      * @author gbrown
      */

@@ -16,8 +16,8 @@
 package pivot.wtk;
 
 /**
- * <p>Defines the order in which components will receive focus during focus
- * traversal.</p>
+ * Defines the order in which components will receive focus during focus
+ * traversal.
  *
  * @author gbrown
  */

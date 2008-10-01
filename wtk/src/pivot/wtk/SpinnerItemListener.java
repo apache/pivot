@@ -16,10 +16,7 @@
 package pivot.wtk;
 
 /**
- * Defines event listener methods that pertain to spinner data items.
- * Developers register for such events by adding themselves to a spinner's
- * list of "spinner item listeners" (see
- * {@link Spinner#getSpinnerItemListeners()}).
+ * Spinner item listener interface.
  *
  * @author tvolkert
  */

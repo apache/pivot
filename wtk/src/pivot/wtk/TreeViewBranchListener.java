@@ -17,6 +17,11 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 
+/**
+ * Tree view branch listener interface.
+ *
+ * @author gbrown
+ */
 public interface TreeViewBranchListener {
     /**
      * Called when a tree node is expanded. This event can be used to perform

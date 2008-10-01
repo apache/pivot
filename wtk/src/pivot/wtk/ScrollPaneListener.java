@@ -16,10 +16,7 @@
 package pivot.wtk;
 
 /**
- * Defines event listener methods that pertain to scroll panes.
- * Developers register for such events by adding themselves to a scroll pane's
- * list of "scroll pane listeners" (see
- * {@link ScrollPane#getScrollPaneListeners()}).
+ * Scroll pane listener interface.
  *
  * @author tvolkert
  */

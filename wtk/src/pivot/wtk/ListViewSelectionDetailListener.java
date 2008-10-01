@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 
 /**
- * <p>List view selection detail listener interface.</p>
+ * List view selection detail listener interface.
  *
  * @author gbrown
  */

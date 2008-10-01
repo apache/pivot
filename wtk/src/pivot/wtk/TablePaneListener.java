@@ -17,27 +17,107 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 
+/**
+ * Table pane listener interface.
+ *
+ * @author gbrown
+ */
 public interface TablePaneListener {
-    // Row methods
+    /**
+     * Called when a row has been inserted into a table pane.
+     *
+     * @param tablePane
+     * @param index
+     */
     public void rowInserted(TablePane tablePane, int index);
+
+    /**
+     * Called when rows have been removed from a table pane.
+     *
+     * @param tablePane
+     * @param index
+     * @param rows
+     */
     public void rowsRemoved(TablePane tablePane, int index,
         Sequence<TablePane.Row> rows);
+
+    /**
+     * Called when a row's height has changed.
+     *
+     * @param row
+     * @param previousHeight
+     * @param previousRelative
+     */
     public void rowHeightChanged(TablePane.Row row, int previousHeight,
         boolean previousRelative);
+
+    /**
+     * Called when a row's selected state has changed.
+     *
+     * @param row
+     */
     public void rowSelectedChanged(TablePane.Row row);
 
-    // Column methods
+    /**
+     * Called when a column has been inserted into a table pane.
+     *
+     * @param tablePane
+     * @param index
+     */
     public void columnInserted(TablePane tablePane, int index);
+
+    /**
+     * Called when column's have been removed from a table pane.
+     *
+     * @param tablePane
+     * @param index
+     * @param columns
+     */
     public void columnsRemoved(TablePane tablePane, int index,
         Sequence<TablePane.Column> columns);
+
+    /**
+     * Called when a column's width has changed.
+     *
+     * @param column
+     * @param previousWidth
+     * @param previousRelative
+     */
     public void columnWidthChanged(TablePane.Column column, int previousWidth,
         boolean previousRelative);
+
+    /**
+     * Called when a column's selected state has changed.
+     *
+     * @param column
+     */
     public void columnSelectedChanged(TablePane.Column column);
 
-    // Cell methods
+    /**
+     * Called when a cell has been inserted into a table pane.
+     *
+     * @param row
+     * @param column
+     */
     public void cellInserted(TablePane.Row row, int column);
+
+    /**
+     * Called when cell's have been removed from a table pane.
+     *
+     * @param row
+     * @param column
+     * @param removed
+     */
     public void cellsRemoved(TablePane.Row row, int column,
         Sequence<Component> removed);
+
+    /**
+     * Called when a cell has been updated in a table pane.
+     *
+     * @param row
+     * @param column
+     * @param previousComponent
+     */
     public void cellUpdated(TablePane.Row row, int column,
         Component previousComponent);
 }

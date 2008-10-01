@@ -36,8 +36,8 @@ import pivot.util.concurrent.SynchronizedListenerList;
 import pivot.util.concurrent.Task;
 
 /**
- * <p>Abstract base class for web queries. A web query is an asynchronous
- * operation that executes one of the following HTTP methods:</p>
+ * Abstract base class for web queries. A web query is an asynchronous
+ * operation that executes one of the following HTTP methods:
  *
  * <ul>
  * <li>GET</li>

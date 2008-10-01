@@ -32,7 +32,7 @@ import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Default tree node renderer.</p>
+ * Default tree node renderer.
  *
  * @author gbrown
  */

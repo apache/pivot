@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>List button selection listener interface.</p>
+ * List button selection listener interface.
  *
  * @author gbrown
  */

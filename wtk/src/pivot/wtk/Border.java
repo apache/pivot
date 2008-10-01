@@ -19,10 +19,10 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
- * <p>Container that displays a border.</p>
- *
- * <p>TODO Create subclasses that install inset and outset skins, which will
- * probably have different style properties than BorderSkin?</p>
+ * Container that displays a border.
+ * <p>
+ * TODO Add styles to support different border styles (e.g. inset, outset) or
+ * create subclasses for these border types.
  *
  * @author gbrown
  */

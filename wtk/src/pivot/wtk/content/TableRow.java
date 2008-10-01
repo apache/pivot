@@ -19,7 +19,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
 /**
- * <p>Default table row implementation.</p>
+ * Default table row implementation.
  *
  * @author gbrown
  */

@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.collections.Dictionary;
 
 /**
- * <p>Class representing the insets of an object.</p>
+ * Class representing the insets of an object.
  *
  * @author gbrown
  */

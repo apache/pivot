@@ -8,7 +8,7 @@ import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**
- * <p>Decorator that applies an opacity to a component.</p>
+ * Decorator that applies an opacity to a component.
  *
  * @author gbrown
  */

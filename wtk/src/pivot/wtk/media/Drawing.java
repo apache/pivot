@@ -20,7 +20,7 @@ import pivot.wtk.Bounds;
 import pivot.wtk.media.drawing.Group;
 
 /**
- * <p>Image representing a vector drawing.</p>
+ * Image representing a vector drawing.
  *
  * @author gbrown
  */

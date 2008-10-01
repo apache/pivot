@@ -18,9 +18,9 @@ package pivot.wtk;
 import pivot.util.ListenerList;
 
 /**
- * <p>Window representing a "tooltip". Tooltips are used to provide additional
+ * Window representing a "tooltip". Tooltips are used to provide additional
  * context information to a user. A tooltip generally appears after a certain
- * amount of time has passed and closes when the user moves the mouse.</p>
+ * amount of time has passed and closes when the user moves the mouse.
  *
  * @author gbrown
  */

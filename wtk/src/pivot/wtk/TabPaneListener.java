@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 
 /**
- * <p>Tab pane listener interface.</p>
+ * Tab pane listener interface.
  *
  * @author gbrown
  */

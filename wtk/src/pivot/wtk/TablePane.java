@@ -20,10 +20,17 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
+ * Container that arranges components in a two-dimensional grid, optionally
+ * spanning multiple rows and columns.
  *
  * @author tvolkert
  */
 public class TablePane extends Container {
+    /**
+     * Represents a table pane row.
+     *
+     * @author tvolkert
+     */
     public static final class Row implements Sequence<Component> {
         private int height = 0;
         private boolean relative = false;
@@ -289,6 +296,11 @@ public class TablePane extends Container {
         }
     }
 
+    /**
+     * Represents a table pane column.
+     *
+     * @author tvolkert
+     */
     public static class Column {
         private TablePane tablePane = null;
 
@@ -440,6 +452,11 @@ public class TablePane extends Container {
         }
     }
 
+    /**
+     * Defines table pane component attributes.
+     *
+     * @author gbrown
+     */
     protected static class TablePaneAttributes extends Attributes {
         private int rowSpan = 1;
         private int columnSpan = 1;

@@ -43,6 +43,11 @@ import pivot.wtk.skin.ContainerSkin;
 public class TerraSplitPaneSkin extends ContainerSkin
     implements SplitPaneListener {
 
+    /**
+     * Split pane splitter component.
+     *
+     * @author tvolkert
+     */
     public static class Splitter extends Component {
         private SplitPane splitPane;
 
@@ -79,6 +84,11 @@ public class TerraSplitPaneSkin extends ContainerSkin
         }
     }
 
+    /**
+     * Split pane splitter component skin.
+     *
+     * @author tvolkert
+     */
     public static class SplitterSkin extends ComponentSkin {
         private class DragHandler
             implements ComponentMouseListener, ComponentMouseButtonListener {
@@ -305,6 +315,11 @@ public class TerraSplitPaneSkin extends ContainerSkin
         }
     }
 
+    /**
+     * Split pane splitter shadow component.
+     *
+     * @author tvolkert
+     */
     public static class SplitterShadow extends Component {
         public SplitterShadow() {
             super();
@@ -313,6 +328,11 @@ public class TerraSplitPaneSkin extends ContainerSkin
         }
     }
 
+    /**
+     * Split pane splitter shadow component skin.
+     *
+     * @author tvolkert
+     */
     public static class SplitterShadowSkin extends ComponentSkin {
         public int getPreferredWidth(int height) {
             // This will never get called since the splitter will always just

@@ -29,12 +29,11 @@ import pivot.util.CalendarDate;
 import pivot.util.ListenerList;
 
 /**
- * <p>Spinner data model that presents a bounded list of calendar dates.</p>
+ * Spinner data model that presents a bounded list of calendar dates.
  * <p>
- * This is a lightweight class that spoofs the actual list data  by using an
- * internal calendar instance from which we create <tt>CalendarDate</tt>
- * instances on demand.
- * </p>
+ * This is a lightweight class that spoofs the actual list data by using an
+ * internal calendar instance from which <tt>CalendarDate</tt> instances are
+ * created on demand.
  *
  * @author tvolkert
  */

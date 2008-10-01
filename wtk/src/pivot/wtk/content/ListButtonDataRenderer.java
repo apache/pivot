@@ -19,10 +19,10 @@ import pivot.wtk.Button;
 import pivot.wtk.HorizontalAlignment;
 
 /**
- * <p>Default list button data renderer.</p>
- *
- * <p>TODO Add showIcon property to this class so the size of the button doesn't
- * change when changing selection between items with and without icons.</p>
+ * Default list button data renderer.
+ * <p>
+ * TODO Add showIcon property to this class so the size of the button doesn't
+ * change when changing selection between items with and without icons.
  *
  * @author gbrown
  */

@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Tab pane attribute listener interface.</p>
+ * Tab pane attribute listener interface.
  *
  * @author gbrown
  */

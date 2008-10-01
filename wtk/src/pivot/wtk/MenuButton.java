@@ -19,14 +19,14 @@ import pivot.util.ListenerList;
 import pivot.wtk.content.ButtonDataRenderer;
 
 /**
- * <p>Component that allows a user to select one of several menu options. The
- * options are hidden until the user pushes the button.</p>
- *
- * <p>The repeatable flag is used to trigger "split button" behavior.
+ * Component that allows a user to select one of several menu options. The
+ * options are hidden until the user pushes the button.
+ * <p>
+ * The repeatable flag is used to trigger "split button" behavior.
  * When true, the button reflects the selected value and allows a user to
  * repeatedly press the left half of the button, firing additional menu
  * selection events for the selected item. Pressing the right half of the
- * button continues to fire button press events and display the menu.</p>
+ * button continues to fire button press events and display the menu.
  *
  * @author gbrown
  */

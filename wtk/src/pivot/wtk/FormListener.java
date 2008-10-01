@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 
 /**
- * <p>Form listener interface.</p>
+ * Form listener interface.
  *
  * @author gbrown
  */

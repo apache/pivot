@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Enumeration representing horizontal alignment values.</p>
+ * Enumeration representing horizontal alignment values.
  *
  * @author gbrown
  */

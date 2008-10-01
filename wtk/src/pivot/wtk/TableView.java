@@ -29,15 +29,15 @@ import pivot.wtk.content.TableViewCellRenderer;
 import pivot.wtk.content.TableViewHeaderData;
 
 /**
- * <p>Component that displays a sequence of items partitioned into columns,
- * optionally allowing a user to select one or more rows.</p>
+ * Component that displays a sequence of items partitioned into columns,
+ * optionally allowing a user to select one or more rows.
  *
  * @author gbrown
  */
 @ComponentInfo(icon="TableView.png")
 public class TableView extends Component {
     /**
-     * <p>Contains information about a table column.</p>
+     * Contains information about a table column.
      *
      * @author gbrown
      */
@@ -399,7 +399,7 @@ public class TableView extends Component {
     }
 
     /**
-     * <p>Enumeration defining supported selection modes.</p>
+     * Enumeration defining supported selection modes.
      */
     public enum SelectMode {
         /**
@@ -423,7 +423,7 @@ public class TableView extends Component {
     }
 
     /**
-     * <p>Table cell renderer interface.</p>
+     * Table cell renderer interface.
      *
      * @author gbrown
      */
@@ -433,8 +433,7 @@ public class TableView extends Component {
     }
 
     /**
-     * <p>Table view skin interface. Table view skins must implement
-     * this.</p>
+     * Table view skin interface. Table view skins must implement this.
      *
      * @author gbrown
      */
@@ -447,10 +446,10 @@ public class TableView extends Component {
     }
 
     /**
-     * <p>Compares two rows. The dictionary values must implement
-     * {@link Comparable}.</p>
-     *
-     * <p>TODO Allow a caller to sort on multiple columns.</p>
+     * Compares two rows. The dictionary values must implement
+     * {@link Comparable}.
+     * <p>
+     * TODO Allow a caller to sort on multiple columns.
      */
     public static class RowComparator implements Comparator<Dictionary<String, ?>> {
         private String columnName = null;
@@ -471,8 +470,7 @@ public class TableView extends Component {
     }
 
     /**
-     * <p>Default sort handler class. Sorts rows using
-     * {@link RowComparator}.</p>
+     * Default sort handler class. Sorts rows using {@link RowComparator}.
      */
     public static class SortHandler implements TableViewHeaderPressListener {
         @SuppressWarnings("unchecked")
@@ -508,7 +506,7 @@ public class TableView extends Component {
     }
 
     /**
-     * <p>Column sequence implementation.</p>
+     * Column sequence implementation.
      *
      * @author gbrown
      */

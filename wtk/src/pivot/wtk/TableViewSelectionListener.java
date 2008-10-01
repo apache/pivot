@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Table view selection listener.</p>
+ * Table view selection listener.
  *
  * @author gbrown
  */

@@ -21,7 +21,7 @@
 package pivot.wtk.effects.easing;
 
 /**
- * <p>Exponential easing operation.</p>
+ * Exponential easing operation.
  *
  * @author Robert Penner
  * @author gbrown

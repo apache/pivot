@@ -43,9 +43,9 @@ import pivot.serialization.SerializationException;
 import pivot.util.Resources;
 
 /**
- * <p>Loads an object hierarchy from an XML document.</p>
- *
- * <p>TODO Use a linked stack to process nodes instead of an array stack.</p>
+ * Loads an object hierarchy from an XML document.
+ * <p>
+ * TODO Use a linked stack to process nodes instead of an array stack.
  *
  * @author gbrown
  */

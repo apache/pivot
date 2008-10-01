@@ -16,10 +16,7 @@
 package pivot.wtk;
 
 /**
- * Defines event listener methods that pertain to scroll bar structure.
- * Developers register for such events by adding themselves to a scroll bar's
- * list of "scroll bar listeners" (see
- * {@link ScrollBar#getScrollBarListeners()}).
+ * Scroll bar listener interface.
  *
  * @author tvolkert
  */

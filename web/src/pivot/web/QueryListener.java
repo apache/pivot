@@ -20,11 +20,9 @@ package pivot.web;
  * for such events by adding themselves to a query's list of "query
  * listeners" (see {@link Query#getQueryListeners()}).
  * <p>
- * <b>Important Note</b>: Query listeners will be notified on the query's
- * worker thread (just as the query's
- * {@link pivot.util.concurrent.TaskListener task listeners} are). It is the
- * listener's responsibility to post back to the thread of their choosing if
- * needed.
+ * Note that, like {@link pivot.util.concurrent.TaskListener task listeners},
+ * query listeners will be notified on the query's worker thread, not the thread
+ * that executed the query.
  *
  * @author tvolkert
  */

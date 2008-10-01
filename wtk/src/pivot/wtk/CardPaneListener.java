@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Card pane listener interface.</p>
+ * Card pane listener interface.
  *
  * @author gbrown
  */

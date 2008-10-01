@@ -19,7 +19,7 @@ import pivot.wtk.Keyboard;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Default menu item data implementation.</p>
+ * Default menu item data implementation.
  *
  * @author gbrown
  */

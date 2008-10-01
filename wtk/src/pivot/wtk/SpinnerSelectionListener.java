@@ -15,6 +15,17 @@
  */
 package pivot.wtk;
 
+/**
+ * Spinner selection listener interface.
+ *
+ * @author tvolkert
+ */
 public interface SpinnerSelectionListener {
+    /**
+     * Called when a spinner's selected index has changed.
+     *
+     * @param spinner
+     * @param previousSelectedIndex
+     */
     public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex);
 }

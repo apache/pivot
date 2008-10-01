@@ -17,15 +17,40 @@ package pivot.wtk;
 
 import pivot.collections.List;
 
+/**
+ * Tree view listener interface.
+ *
+ * @author gbrown
+ */
 public interface TreeViewListener {
     /**
-     * Called when the tree view's data changes.
+     * Called when a tree view's data has changed.
      *
      * @param treeView
      * @param previousTreeData
      */
     public void treeDataChanged(TreeView treeView, List<?> previousTreeData);
+
+    /**
+     * Called when a tree view's node renderer has changed.
+     *
+     * @param treeView
+     * @param previousNodeRenderer
+     */
     public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer);
+
+    /**
+     * Called when a tree view's select mode has changed.
+     *
+     * @param treeView
+     * @param previousSelectMode
+     */
     public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode);
+
+    /**
+     * Called when a tree view's check enabled flag has changed.
+     *
+     * @param treeView
+     */
     public void checkEnabledChanged(TreeView treeView);
 }

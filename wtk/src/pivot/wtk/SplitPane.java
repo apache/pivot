@@ -38,6 +38,11 @@ import pivot.util.ListenerList;
  */
 @ComponentInfo(icon="SplitPane.png")
 public class SplitPane extends Container {
+    /**
+     * Enumeration defining split pane regions.
+     *
+     * @author gbrown
+     */
     public enum Region {
         TOP_LEFT,
         BOTTOM_RIGHT;

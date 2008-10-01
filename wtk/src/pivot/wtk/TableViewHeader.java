@@ -19,7 +19,7 @@ import pivot.util.ListenerList;
 import pivot.wtk.content.TableViewHeaderDataRenderer;
 
 /**
- * <p>Component representing a table view header.</p>
+ * Component representing a table view header.
  *
  * @author gbrown
  */
@@ -34,8 +34,8 @@ public class TableViewHeader extends Component {
     }
 
     /**
-     * <p>Table view header skin interface. Table view header skins must
-     * implement this.</p>
+     * Table view header skin interface. Table view header skins must
+     * implement this.
      *
      * @author gbrown
      */

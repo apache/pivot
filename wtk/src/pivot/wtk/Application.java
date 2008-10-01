@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.collections.Dictionary;
 
 /**
- * <p>Represents the entry point into a WTK application.</p>
+ * Represents the entry point into a WTK application.
  *
  * @author gbrown
  */

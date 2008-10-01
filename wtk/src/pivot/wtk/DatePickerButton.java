@@ -21,8 +21,8 @@ import pivot.util.ListenerList;
 import pivot.wtk.content.ButtonDataRenderer;
 
 /**
- * <p>A component that allows a user to select a calendar date. The date picker
- * is hidden until the user pushes the button.</p>
+ * A component that allows a user to select a calendar date. The date picker
+ * is hidden until the user pushes the button.
  *
  * @author tvolkert
  */

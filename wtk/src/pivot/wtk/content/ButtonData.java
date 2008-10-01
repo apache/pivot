@@ -18,7 +18,7 @@ package pivot.wtk.content;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Default button data implementation.</p>
+ * Default button data implementation.
  *
  * @author gbrown
  */

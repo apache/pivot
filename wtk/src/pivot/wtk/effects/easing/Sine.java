@@ -21,7 +21,7 @@
 package pivot.wtk.effects.easing;
 
 /**
- * <p>Easing operation based on a sine curve.</p>
+ * Easing operation based on a sine curve.
  *
  * @author Robert Penner
  * @author gbrown

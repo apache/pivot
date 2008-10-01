@@ -24,13 +24,13 @@ import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
 /**
- * <p>Application context used to execute applications in a web browser.</p>
+ * Application context used to execute applications in a web browser.
  *
  * @author gbrown
  */
 public final class BrowserApplicationContext extends ApplicationContext {
     /**
-     * <p>Applet used to host applications in a web browser.</p>
+     * Applet used to host applications in a web browser.
      *
      * @author gbrown
      */

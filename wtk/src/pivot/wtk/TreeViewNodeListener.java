@@ -17,6 +17,11 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 
+/**
+ * Tree view node listener interface.
+ *
+ * @author gbrown
+ */
 public interface TreeViewNodeListener {
     /**
      * Called when a node has been inserted into the tree view.

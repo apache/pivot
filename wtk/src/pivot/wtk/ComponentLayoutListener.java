@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Component layout listener interface.</p>
+ * Component layout listener interface.
  *
  * @author gbrown
  */

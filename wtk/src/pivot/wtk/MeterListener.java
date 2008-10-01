@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Meter listener interface.</p>
+ * Meter listener interface.
  *
  * @author tvolkert
  */

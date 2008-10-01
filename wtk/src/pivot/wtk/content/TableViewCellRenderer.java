@@ -26,7 +26,7 @@ import pivot.wtk.TableView;
 import pivot.wtk.VerticalAlignment;
 
 /**
- * <p>Default table cell renderer. Renders cell contents as a string.</p>
+ * Default table cell renderer. Renders cell contents as a string.
  *
  * @author gbrown
  */

@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Alert listener interface.</p>
+ * Alert listener interface.
  *
  * @author gbrown
  */

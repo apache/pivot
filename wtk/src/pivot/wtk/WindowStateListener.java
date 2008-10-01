@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.util.Vote;
 
 /**
- * <p>Window state listener interface.</p>
+ * Window state listener interface.
  *
  * @author gbrown
  * @author tvolkert

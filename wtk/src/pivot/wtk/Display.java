@@ -19,7 +19,7 @@ import java.awt.Graphics2D;
 import pivot.wtk.skin.DisplaySkin;
 
 /**
- * <p>Container representing the root of a component hierarchy.</p>
+ * Container that serves as the root of a component hierarchy.
  *
  * @author gbrown
  */

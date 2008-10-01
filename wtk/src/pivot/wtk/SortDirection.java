@@ -16,8 +16,8 @@
 package pivot.wtk;
 
 /**
- * <p>Enumeration representing a sort direction. A value of <tt>null</tt> is
- * assumed to mean "no sort".</p>
+ * Enumeration representing a sort direction. A value of <tt>null</tt> is
+ * assumed to mean "no sort".
  *
  * @author gbrown
  */

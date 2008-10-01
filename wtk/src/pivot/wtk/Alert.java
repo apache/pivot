@@ -22,8 +22,8 @@ import pivot.util.ListenerList;
 import pivot.util.Resources;
 
 /**
- * <p>Class representing an "alert", a dialog commonly used to perform simple
- * user interaction.</p>
+ * Class representing an "alert", a dialog commonly used to perform simple
+ * user interaction.
  *
  * @author tvolkert
  * @author gbrown

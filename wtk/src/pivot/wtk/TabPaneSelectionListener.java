@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Tab pane selection listener interface.</p>
+ * Tab pane selection listener interface.
  *
  * @author gbrown
  */

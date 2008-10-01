@@ -18,7 +18,7 @@ package pivot.util;
 import java.io.Serializable;
 
 /**
- * Represents a version number defined as:
+ * Represents a version number. Version numbers are defined as:
  * <p>
  * <i>major</i>.<i>minor</i>.<i>maintenance</i>_<i>update</i>
  * <p>

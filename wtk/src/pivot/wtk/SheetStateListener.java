@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.util.Vote;
 
 /**
- * <p>Sheet state listener interface.</p>
+ * Sheet state listener interface.
  *
  * @author gbrown
  */

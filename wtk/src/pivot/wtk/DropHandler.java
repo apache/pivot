@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Interface representing the destination of a drag/drop operation.</p>
+ * Interface representing the destination of a drag/drop operation.
  *
  * @author gbrown
  */

@@ -30,7 +30,7 @@ import pivot.wtk.PushButton;
 import pivot.wtk.skin.PushButtonSkin;
 
 /**
- * <p>Push button skin.</p>
+ * Obsidian push button skin.
  *
  * @author gbrown
  */

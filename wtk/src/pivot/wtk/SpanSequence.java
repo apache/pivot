@@ -21,13 +21,13 @@ import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 
 /**
- * <p>Class representing a sequence of sorted, consolidated spans.</p>
+ * Class representing a sequence of sorted, consolidated spans.
  *
  * @author gbrown
  */
 public class SpanSequence implements Sequence<Span> {
     /**
-     * <p>Determines the relative order of two spans.</p>
+     * Determines the relative order of two spans.
      *
      * @author gbrown
      */

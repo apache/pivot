@@ -18,9 +18,10 @@ package pivot.wtk;
 import pivot.util.Vote;
 
 /**
- * <p>Dialog state listener interface.</p>
+ * Dialog state listener interface.
  *
  * @author tvolkert
+ * @author gbrown
  */
 public interface DialogStateListener extends DialogCloseListener {
     /**

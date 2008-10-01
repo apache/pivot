@@ -18,10 +18,11 @@ package pivot.wtk.effects;
 import pivot.wtk.ApplicationContext;
 
 /**
- * <p>Abstract base class for "transitions", which are animated application
- * effects.</p>
+ * Abstract base class for "transitions", which are animated application
+ * effects.
  *
  * @author gbrown
+ * @author tvolkert
  */
 public abstract class Transition {
     private int duration;

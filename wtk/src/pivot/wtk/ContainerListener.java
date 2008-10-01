@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 
 /**
- * <p>Container listener interface.</p>
+ * Container listener interface.
  *
  * @author gbrown
  */

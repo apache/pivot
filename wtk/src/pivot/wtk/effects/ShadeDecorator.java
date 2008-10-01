@@ -24,9 +24,9 @@ import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**
- * <p>Decorator that applies a "shade" to a component. The shade is a rectangle
+ * Decorator that applies a "shade" to a component. The shade is a rectangle
  * of the same size as the component that is painted over the component using a
- * given color and opacity value.</p>
+ * given color and opacity value.
  *
  * @author tvolkert
  */

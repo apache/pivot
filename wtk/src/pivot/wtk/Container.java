@@ -26,7 +26,7 @@ import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
- * Base class for containers.
+ * Abstract base class for containers.
  * <p>
  * NOTES:
  * <ul>

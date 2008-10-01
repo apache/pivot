@@ -16,8 +16,8 @@
 package pivot.wtk;
 
 /**
- * <p>Component mouse listener interface. Component mouse events are "bubbling"
- * and are fired as the event propagates up the component hierarchy.</p>
+ * Component mouse listener interface. Component mouse events are "bubbling"
+ * and are fired as the event propagates up the component hierarchy.
  *
  * @author gbrown
  */

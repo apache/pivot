@@ -19,12 +19,18 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
+ * Container that provides a scrollable view of a component, with optional
+ * fixed row and column headers.
  *
- * @author gbrown
  * @author tvolkert
  */
 @ComponentInfo(icon="ScrollPane.png")
 public class ScrollPane extends Viewport {
+    /**
+     * Enumeration defining scroll pane scroll bar policies.
+     *
+     * @author gbrown
+     */
     public enum ScrollBarPolicy {
         AUTO,
         NEVER,
@@ -106,6 +112,11 @@ public class ScrollPane extends Viewport {
      * @author tvolkert
      */
     public static class Corner extends Component {
+        /**
+         * Enumeration defining placement values for scroll pane corners.
+         *
+         * @author tvolkert
+         */
         public static enum Placement {
             TOP_LEFT,
             BOTTOM_LEFT,

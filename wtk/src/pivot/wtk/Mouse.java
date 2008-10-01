@@ -16,13 +16,13 @@
 package pivot.wtk;
 
 /**
- * <p>Class representing the system mouse.</p>
+ * Class representing the system mouse.
  *
  * @author gbrown
  */
 public final class Mouse {
     /**
-     * <p>Enumeration representing mouse buttons.</p>
+     * Enumeration representing mouse buttons.
      *
      * @author gbrown
      */
@@ -37,7 +37,7 @@ public final class Mouse {
     }
 
     /**
-     * <p>Enumeration defining supported scroll types.</p>
+     * Enumeration defining supported scroll types.
      *
      * @author gbrown
      */

@@ -18,7 +18,7 @@ package pivot.wtk.content;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Default table header data implementation.</p>
+ * Default table header data implementation.
  *
  * @author gbrown
  */

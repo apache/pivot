@@ -21,7 +21,7 @@
 package pivot.wtk.effects.easing;
 
 /**
- * <p>Quintic easing operation.</p>
+ * Quintic easing operation.
  *
  * @author Robert Penner
  * @author gbrown

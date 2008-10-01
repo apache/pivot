@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.collections.Dictionary;
 
 /**
- * <p>Class representing the corner radii of a rectangular object.</p>
+ * Class representing the corner radii of a rectangular object.
  *
  * @author gbrown
  */

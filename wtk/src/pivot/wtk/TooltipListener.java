@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Tooltip listener interface.</p>
+ * Tooltip listener interface.
  *
  * @author gbrown
  */

@@ -15,6 +15,16 @@
  */
 package pivot.wtk;
 
+/**
+ * Tree view selection listener interface.
+ *
+ * @author gbrown
+ */
 public interface TreeViewSelectionListener {
+    /**
+     * Called when a tree view's selection has changed.
+     *
+     * @param treeView
+     */
     public void selectionChanged(TreeView treeView);
 }

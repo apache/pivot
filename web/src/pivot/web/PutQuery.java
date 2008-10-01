@@ -16,7 +16,7 @@
 package pivot.web;
 
 /**
- * <p>Executes an HTTP PUT operation.</p>
+ * Executes an HTTP PUT operation.
  *
  * @author gbrown
  */

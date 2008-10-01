@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Component key listener interface.</p>
+ * Component key listener interface.
  *
  * @author gbrown
  */

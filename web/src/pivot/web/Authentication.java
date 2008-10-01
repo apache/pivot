@@ -16,7 +16,7 @@
 package pivot.web;
 
 /**
- * <p>Interface for attaching authentication information to a web query.</p>
+ * Interface for attaching authentication information to a web query.
  *
  * @author gbrown
  */

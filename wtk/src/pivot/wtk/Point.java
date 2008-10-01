@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.collections.Dictionary;
 
 /**
- * <p>Class representing the location of an object.</p>
+ * Class representing the location of an object.
  *
  * @author gbrown
  */

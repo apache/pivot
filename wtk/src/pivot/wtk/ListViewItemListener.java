@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>List view item listener interface.</p>
+ * List view item listener interface.
  *
  * @author gbrown
  */

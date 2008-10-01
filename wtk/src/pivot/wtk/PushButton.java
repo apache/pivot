@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.wtk.content.ButtonDataRenderer;
 
 /**
- * <p>Component representing a push button.</p>
+ * Component representing a push button.
  *
  * @author gbrown
  */

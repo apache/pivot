@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Container class representing a decorated frame window.</p>
+ * Container class representing a decorated frame window.
  *
  * @author gbrown
  */

@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 
 /**
- * <p>Table view column listener interface.</p>
+ * Table view column listener interface.
  *
  * @author gbrown
  */

@@ -202,6 +202,11 @@ public class TerraScrollBarSkin extends ContainerSkin
         }
     }
 
+    /**
+     * Scroll bar scroll button component.
+     *
+     * @author tvolkert
+     */
     public static class ScrollButton extends Component {
         private ScrollBar scrollBar;
         private int direction;
@@ -228,6 +233,11 @@ public class TerraScrollBarSkin extends ContainerSkin
         }
     }
 
+    /**
+     * Scroll bar scroll button component skin.
+     *
+     * @author tvolkert
+     */
     public static class ScrollButtonSkin extends ComponentSkin {
         private boolean highlighted = false;
         private boolean pressed = false;
@@ -454,6 +464,11 @@ public class TerraScrollBarSkin extends ContainerSkin
         }
     }
 
+    /**
+     * Scroll bar scroll handle component.
+     *
+     * @author tvolkert
+     */
     public static class ScrollHandle extends Component {
         private ScrollBar scrollBar;
 
@@ -468,6 +483,11 @@ public class TerraScrollBarSkin extends ContainerSkin
         }
     }
 
+    /**
+     * Scroll bar scroll handle component skin.
+     *
+     * @author tvolkert
+     */
     public static class ScrollHandleSkin extends ComponentSkin {
         private class DisplayMouseHandler
             implements ComponentMouseButtonListener {

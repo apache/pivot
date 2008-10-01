@@ -50,6 +50,11 @@ import pivot.wtk.skin.ContainerSkin;
 public class TerraDatePickerSkin extends ContainerSkin
     implements DatePickerListener, DatePickerSelectionListener {
 
+    /**
+     * Date picker calendar view component.
+     *
+     * @author tvolkert
+     */
     public static class CalendarView extends Component {
         private DatePicker datePicker;
 
@@ -64,6 +69,11 @@ public class TerraDatePickerSkin extends ContainerSkin
         }
     }
 
+    /**
+     * Date picker calendar view component skin.
+     *
+     * @author tvolkert
+     */
     public static class CalendarViewSkin extends ComponentSkin {
         private ArrayList<String> daysOfWeek = new ArrayList<String>();
 

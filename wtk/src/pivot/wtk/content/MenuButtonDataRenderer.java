@@ -19,7 +19,7 @@ import pivot.wtk.Button;
 import pivot.wtk.HorizontalAlignment;
 
 /**
- * <p>Default menu button data renderer.</p>
+ * Default menu button data renderer.
  *
  * @author gbrown
  */

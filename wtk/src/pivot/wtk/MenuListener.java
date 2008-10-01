@@ -16,13 +16,42 @@
 package pivot.wtk;
 
 /**
- * <p>Menu listener interface.</p>
+ * Menu listener interface.
  *
  * @author gbrown
  */
 public interface MenuListener {
+    /**
+     * Called when a menu section has been inserted.
+     *
+     * @param menu
+     * @param index
+     */
     public void sectionInserted(Menu menu, int index);
+
+    /**
+     * Called when menu sections have been removed.
+     *
+     * @param menu
+     * @param index
+     * @param count
+     */
     public void sectionsRemoved(Menu menu, int index, int count);
+
+    /**
+     * Called when a menu item has been inserted.
+     *
+     * @param section
+     * @param index
+     */
     public void itemInserted(Menu.Section section, int index);
+
+    /**
+     * Called when menu items have been removed.
+     *
+     * @param section
+     * @param index
+     * @param count
+     */
     public void itemsRemoved(Menu.Section section, int index, int count);
 }

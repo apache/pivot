@@ -16,11 +16,23 @@
 package pivot.wtk;
 
 /**
- * <p>Menu button listener interface.</p>
+ * Menu button listener interface.
  *
  * @author gbrown
  */
 public interface MenuButtonListener {
+    /**
+     * Called when a menu button's menu has changed.
+     *
+     * @param menuButton
+     * @param previousMenu
+     */
     public void menuChanged(MenuButton menuButton, Menu previousMenu);
+
+    /**
+     * Called when a menu button's repeatable flag has changed.
+     *
+     * @param menuButton
+     */
     public void repeatableChanged(MenuButton menuButton);
 }

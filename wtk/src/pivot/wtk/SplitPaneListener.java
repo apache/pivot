@@ -15,12 +15,62 @@
  */
 package pivot.wtk;
 
+/**
+ * Split pane listener interface.
+ *
+ * @author tvolkert
+ */
 public interface SplitPaneListener {
+    /**
+     * Called when a split pane's top left component has changed.
+     *
+     * @param splitPane
+     * @param previousTopLeftComponent
+     */
     public void topLeftComponentChanged(SplitPane splitPane, Component previousTopLeftComponent);
+
+    /**
+     * Called when a split pane's bottom right component has changed.
+     *
+     * @param splitPane
+     * @param previousBottomRightComponent
+     */
     public void bottomRightComponentChanged(SplitPane splitPane, Component previousBottomRightComponent);
+
+    /**
+     * Called when a split pane's orientation has changed.
+     *
+     * @param splitPane
+     */
     public void orientationChanged(SplitPane splitPane);
+
+    /**
+     * Called when a split pane's primary region has changed.
+     *
+     * @param splitPane
+     */
     public void primaryRegionChanged(SplitPane splitPane);
+
+    /**
+     * Called when a split pane's split location has changed.
+     *
+     * @param splitPane
+     * @param previousSplitLocation
+     */
     public void splitLocationChanged(SplitPane splitPane, int previousSplitLocation);
+
+    /**
+     * Called when a split pane's split bounds have changed.
+     *
+     * @param splitPane
+     * @param previousSplitBounds
+     */
     public void splitBoundsChanged(SplitPane splitPane, Span previousSplitBounds);
+
+    /**
+     * Called when a split pane's locked flag has changed.
+     *
+     * @param splitPane
+     */
     public void lockedChanged(SplitPane splitPane);
 }

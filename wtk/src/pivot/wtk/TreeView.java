@@ -28,22 +28,9 @@ import pivot.wtk.content.TreeViewNodeRenderer;
 /**
  * Class that displays a hierarchical data structure, allowing a user to select
  * one or more paths.
- *
+ * <p>
  * TODO Add is/setNodeChecked(); is/setNodeDisabled() methods; add events to
  * TreeViewNodeListener
- *
- * This class will listen for list events fired by its branch node. It will
- * notify the tree by calling insertNode(), removeNodes(), and invalidateNode()
- * (when the node is updated; the tree view itself will call invalidateNode()
- * when the node is selected - should this class provide a method to add/remove
- * selected indexes? If so, it may also call invalidateNode() in this case).
- *
- * It will also update the index values in its nested branch state and selected
- * index lists (incrementing when sub-nodes are added, and removing/decrementing
- * when nodes are removed).
- *
- * This structure must be constructed when tree data is set, and modified as
- * tree data is updated.
  *
  * @author gbrown
  * @author tvolkert
@@ -101,11 +88,21 @@ public class TreeView extends Component {
         }
     }
 
+    /**
+     * Tree view node renderer interface.
+     *
+     * @author tvolkert
+     */
     public interface NodeRenderer extends Renderer {
         public void render(Object node, TreeView treeView, boolean expanded,
             boolean selected, boolean highlighted, boolean disabled);
     }
 
+    /**
+     * Tree view skin interface. Tree view skins must implement this.
+     *
+     * @author tvolkert
+     */
     public interface Skin {
         public Sequence<Integer> getNodeAt(int y);
         public Bounds getNodeBounds(Sequence<Integer> path);

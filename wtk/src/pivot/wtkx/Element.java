@@ -12,7 +12,7 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
- * <p>Class representing an untyped node in a WTKX document.</p>
+ * Class representing an untyped node in a WTKX document.
  *
  * @author gbrown
  */

@@ -27,7 +27,7 @@ package pivot.util.concurrent;
  */
 public abstract class Task<V> {
     /**
-     * <p>Task execution callback that is posted to the dispatcher queue.</p>
+     * Task execution callback that is posted to the dispatcher queue.
      */
     private class ExecuteCallback implements Runnable {
         public void run() {
@@ -97,7 +97,9 @@ public abstract class Task<V> {
 
     /**
      * Asynchronously executes the task. The caller is notified of the task's
-     * completion via the listener argument.
+     * completion via the listener argument. Note that the listener will be
+     * notified on the task's worker thread, not on the thread that executed
+     * the task.
      *
      * @param taskListener
      * The listener to be notified when the task completes.

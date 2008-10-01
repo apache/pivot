@@ -26,8 +26,7 @@ import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.VerticalAlignment;
 
 /**
- * <p>Decorator that scales the painting of a component along the X and/or Y
- * axes.</p>
+ * Decorator that scales the painting of a component along the X and/or Y axes.
  *
  * @author tvolkert
  */

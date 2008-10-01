@@ -19,8 +19,8 @@ import pivot.util.ListenerList;
 import pivot.util.Vote;
 
 /**
- * <p>Window class representing a "sheet". A sheet behaves like a dialog that is
- * modal only over a window's content component.</p>
+ * Window class representing a "sheet". A sheet behaves like a dialog that is
+ * modal only over a window's content component.
  *
  * @author gbrown
  */

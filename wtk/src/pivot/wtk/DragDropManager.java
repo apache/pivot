@@ -18,14 +18,14 @@ package pivot.wtk;
 import java.awt.Graphics2D;
 
 /**
- * <p>Provides framework support for drag/drop operations.</p>
- *
- * <p>TODO If Escape is pressed, cancel drag (call endDrag(null))</p>
- *
- * <p>TODO Paint an appropriate overlay icon if drop action is copy or link</p>
- *
- * <p>TODO ApplicationContext.DisplayHost should marshall/unmarshall native
- * drag/drop content when a drag out/over occurs, respectively?</p>
+ * Provides framework support for drag/drop operations.
+ * <p>
+ * TODO If Escape is pressed, cancel drag (call endDrag(null)).
+ * <p>
+ * TODO Paint an appropriate overlay icon if drop action is copy or link.
+ * <p>
+ * TODO ApplicationContext.DisplayHost should marshall/unmarshall native
+ * drag/drop content when a drag out/over occurs, respectively?
  *
  * @author gbrown
  */

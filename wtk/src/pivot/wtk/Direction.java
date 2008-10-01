@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Enumeration representing a two-dimensional direction.</p>
+ * Enumeration representing a two-dimensional direction.
  *
  * @author gbrown
  */

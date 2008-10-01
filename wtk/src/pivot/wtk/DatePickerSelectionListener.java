@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.util.CalendarDate;
 
 /**
- * <p>Date picker selection listener interface.</p>
+ * Date picker selection listener interface.
  *
  * @author tvolkert
  */

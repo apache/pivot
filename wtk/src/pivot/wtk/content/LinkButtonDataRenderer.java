@@ -19,7 +19,7 @@ import pivot.wtk.Button;
 import pivot.wtk.TextDecoration;
 
 /**
- * <p>Default link button data renderer.</p>
+ * Default link button data renderer.
  *
  * @author gbrown
  */

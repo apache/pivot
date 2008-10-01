@@ -28,24 +28,24 @@ import pivot.util.Vote;
 import pivot.wtk.content.ListViewItemRenderer;
 
 /**
- * <p>Component that displays a sequence of items, optionally allowing a user
- * to select or check one or more items.</p>
- *
- * <p>TODO Add is/setItemChecked(); add events to ListViewItemListener.</p>
- *
- * <p>TODO Add getCheckMode() method to allow a caller to set NONE, SINGLE, or
+ * Component that displays a sequence of items, optionally allowing a user
+ * to select or check one or more items.
+ * <p>
+ * TODO Add is/setItemChecked(); add events to ListViewItemListener.
+ * <p>
+ * TODO Add getCheckMode() method to allow a caller to set NONE, SINGLE, or
  * MULTI; none disables checkboxes, single displays them as radio buttons, and
  * multi displays them as checkboxes (we can already disable selection by
- * setting the select mode to NONE).</p>
- *
- * <p>TODO Add a showCheckmarks style to ListViewSkin.</p>
+ * setting the select mode to NONE).
+ * <p>
+ * TODO Add a showCheckmarks style to ListViewSkin.
  *
  * @author gbrown
  */
 @ComponentInfo(icon="ListView.png")
 public class ListView extends Component {
     /**
-     * <p>Enumeration defining supported selection modes.</p>
+     * Enumeration defining supported selection modes.
      */
     public enum SelectMode {
         /**
@@ -69,7 +69,7 @@ public class ListView extends Component {
     }
 
     /**
-     * <p>List item renderer interface.</p>
+     * List item renderer interface.
      *
      * @author gbrown
      */
@@ -96,8 +96,8 @@ public class ListView extends Component {
     }
 
     /**
-     * <p>List view skin interface. List view skins are required to implement
-     * this.</p>
+     * List view skin interface. List view skins are required to implement
+     * this.
      *
      * @author gbrown
      */

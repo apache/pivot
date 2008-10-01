@@ -25,9 +25,9 @@ import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**
- * <p>Decorator that applies a blur to a component.</p>
- *
- * <p>Blurs are given an integer magnitude, which represents the intensity of
+ * Decorator that applies a blur to a component.
+ * <p>
+ * Blurs are given an integer magnitude, which represents the intensity of
  * the blur. This value translates to a grid of pixels (<tt>blurMagnitude^2</tt>),
  * where each pixel value is calculated by consulting its neighboring pixels
  * according to the grid. Because of this, note that you will get "prettier"
@@ -35,13 +35,13 @@ import pivot.wtk.Bounds;
  * pixel in question to reside at the center of the grid, thus preventing any
  * arbitrary shifting of pixels. Also note that the greater the intensity of
  * the blur, the greater the intensity of the calculations necessary to
- * accomplish the blur (and the longer it will take to perform the blur).</p>
- *
- * <p>TODO Increase size of buffered image to account for edge conditions of the
- * blur.</p>
- *
- * <p>TODO Use unequal values in the blur kernel to make pixels that are farther
- * away count less towards the blur.</p>
+ * accomplish the blur (and the longer it will take to perform the blur).
+ * <p>
+ * TODO Increase size of buffered image to account for edge conditions of the
+ * blur.
+ * <p>
+ * TODO Use unequal values in the blur kernel to make pixels that are farther
+ * away count less towards the blur.
  *
  * @author tvolkert
  */

@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Flow pane listener interface.</p>
+ * Flow pane listener interface.
  *
  * @author gbrown
  */

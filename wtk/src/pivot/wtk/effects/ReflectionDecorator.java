@@ -11,9 +11,9 @@ import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**
- * <p>Decorator that paints a reflection of a component.</p>
- *
- * <p>TODO Make gradient properties configurable.</p>
+ * Decorator that paints a reflection of a component.
+ * <p>
+ * TODO Make gradient properties configurable.
  *
  * @author gbrown
  */

@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Form attribute listener interface.</p>
+ * Form attribute listener interface.
  *
  * @author gbrown
  */

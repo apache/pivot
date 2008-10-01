@@ -30,6 +30,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * HTTP proxy that allows an unsigned applet to issue web queries to services
+ * outside of its origin server.
+ *
+ * @author gbrown
+ */
 public class ProxyServlet extends HttpServlet {
     private String hostname = null;
     private int port = -1;

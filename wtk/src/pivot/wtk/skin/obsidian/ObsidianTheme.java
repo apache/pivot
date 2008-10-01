@@ -5,7 +5,7 @@ import pivot.wtk.RadioButton;
 import pivot.wtk.Theme;
 
 /**
- * <p>Obsidian theme.</p>
+ * Obsidian theme.
  *
  * @author gbrown
  */

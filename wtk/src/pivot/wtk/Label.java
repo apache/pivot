@@ -19,7 +19,7 @@ import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
 
 /**
- * <p>Component that displays a string of text.</p>
+ * Component that displays a string of text.
  *
  * @author gbrown
  */

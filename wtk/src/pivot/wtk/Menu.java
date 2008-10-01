@@ -24,14 +24,14 @@ import pivot.util.ListenerList;
 import pivot.wtk.content.MenuItemDataRenderer;
 
 /**
- * <p>Component that presents a cascading menu.</p>
+ * Component that presents a cascading menu.
  *
  * @author gbrown
  */
 @ComponentInfo(icon="Menu.png")
 public class Menu extends Container {
     /**
-     * <p>Component representing a menu item.</p>
+     * Component representing a menu item.
      *
      * @author gbrown
      */
@@ -137,7 +137,7 @@ public class Menu extends Container {
     }
 
     /**
-     * <p>Item listener interface.</p>
+     * Item listener interface.
      *
      * @author gbrown
      */
@@ -146,8 +146,8 @@ public class Menu extends Container {
     }
 
     /**
-     * <p>Class representing a menu section. A section is a grouping of menu
-     * items within a menu.</p>
+     * Class representing a menu section. A section is a grouping of menu
+     * items within a menu.
      *
      * @author gbrown
      */
@@ -235,7 +235,7 @@ public class Menu extends Container {
     }
 
     /**
-     * <p>Section sequence implementation.</p>
+     * Section sequence implementation.
      *
      * @author gbrown
      */

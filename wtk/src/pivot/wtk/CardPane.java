@@ -19,8 +19,11 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
- * <p>Container that behaves like a deck of cards, only one of which may be
- * visible at a time.</p>
+ * Container that behaves like a deck of cards, only one of which may be
+ * visible at a time.
+ * <p>
+ * TODO Add a "transition" property to support transitions such as CROSS_FADE,
+ * SLIDE, etc.
  *
  * @author gbrown
  */

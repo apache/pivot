@@ -24,10 +24,10 @@ import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
- * <p>A container that arranges field components in a form layout. Each field has
+ * A container that arranges field components in a form layout. Each field has
  * an optional text label associated with it and may be flagged as requiring
  * attention using one of several flag types and an optional flag message (for
- * use during form validation, for example).</p>
+ * use during form validation, for example).
  *
  * @author gbrown
  */

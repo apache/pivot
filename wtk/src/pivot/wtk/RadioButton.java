@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.wtk.content.ButtonDataRenderer;
 
 /**
- * <p>Component representing a "radio button".</p>
+ * Component representing a "radio button".
  *
  * @author gbrown
  */

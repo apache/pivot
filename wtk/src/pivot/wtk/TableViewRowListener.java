@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Table view row listener interface.</p>
+ * Table view row listener interface.
  *
  * @author gbrown
  */

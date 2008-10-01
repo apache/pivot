@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Table view header press listener.</p>
+ * Table view header press listener.
  *
  * @author gbrown
  */

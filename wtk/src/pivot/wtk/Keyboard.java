@@ -19,19 +19,13 @@ import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 
 /**
- * <p>Class representing the system keyboard.</p>
- *
- * <p>TODO Provide access to java.awt.event.KeyEvent#getKeyText() method.</p>
- *
- * <p>TODO Provide a means to decode enums as well as key codes. We can handle
- * key codes via reflection - look for a field with the given name and obtain
- * its value. We can handle this in a decode() method of KeyStroke.</p>
+ * Class representing the system keyboard.
  *
  * @author gbrown
  */
 public final class Keyboard {
     /**
-     * <p>Enumeration representing keyboard modifiers.</p>
+     * Enumeration representing keyboard modifiers.
      *
      * @author gbrown
      */
@@ -51,7 +45,7 @@ public final class Keyboard {
     }
 
     /**
-     * <p>Enumeration representing key locations.</p>
+     * Enumeration representing key locations.
      *
      * @author gbrown
      */
@@ -67,8 +61,7 @@ public final class Keyboard {
     }
 
     /**
-     * <p>Represents a keystroke, a combination of a keycode and modifier
-     * flags.</p>
+     * Represents a keystroke, a combination of a keycode and modifier flags.
      *
      * @author gbrown
      */
@@ -166,8 +159,7 @@ public final class Keyboard {
     }
 
     /**
-     * <p>Contains a set of key code constants that are common to all
-     * locales.</p>
+     * Contains a set of key code constants that are common to all locales.
      *
      * @author gbrown
      */

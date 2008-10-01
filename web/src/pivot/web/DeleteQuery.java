@@ -16,7 +16,7 @@
 package pivot.web;
 
 /**
- * <p>Executes an HTTP DELETE operation.</p>
+ * Executes an HTTP DELETE operation.
  *
  * @author gbrown
  */

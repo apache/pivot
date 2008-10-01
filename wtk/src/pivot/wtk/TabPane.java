@@ -24,15 +24,14 @@ import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Container that provides access to a set of components via selectable
- * tabs.</p>
+ * Container that provides access to a set of components via selectable tabs.
  *
  * @author gbrown
  */
 @ComponentInfo(icon="TabPane.png")
 public class TabPane extends Container {
     /**
-     * <p>Defines tab attributes.</p>
+     * Defines tab attributes.
      *
      * @author gbrown
      */
@@ -72,7 +71,7 @@ public class TabPane extends Container {
     }
 
     /**
-     * <p>Tab sequence implementation.</p>
+     * Tab sequence implementation.
      *
      * @author gbrown
      */

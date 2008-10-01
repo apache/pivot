@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.util.Vote;
 
 /**
- * <p>Button state listener interface.</p>
+ * Button state listener interface.
  *
  * @author gbrown
  * @author tvolkert

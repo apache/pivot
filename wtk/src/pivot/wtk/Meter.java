@@ -18,7 +18,7 @@ package pivot.wtk;
 import pivot.util.ListenerList;
 
 /**
- * <p>Component that displays progress information.</p>
+ * Component that displays progress information.
  *
  * @author tvolkert
  */

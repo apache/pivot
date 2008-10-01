@@ -21,8 +21,8 @@ import pivot.collections.Dictionary;
 import pivot.wtk.TableView;
 
 /**
- * <p>Default renderer for table view cells that contain numeric data. Renders
- * cell contents as a formatted number.</p>
+ * Default renderer for table view cells that contain numeric data. Renders
+ * cell contents as a formatted number.
  *
  * @author gbrown
  */

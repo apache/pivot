@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Button press listener interface.</p>
+ * Button press listener interface.
  *
  * @author gbrown
  */

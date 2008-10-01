@@ -18,9 +18,10 @@ package pivot.wtk;
 import pivot.util.ListenerList;
 
 /**
- * TODO Documentation
+ * Component that allows a user to select one of a range of values. Most often
+ * used by scroll panes.
  *
- * @author tvolkert
+ * @author gbrown
  */
 @ComponentInfo(icon="ScrollBar.png")
 public class ScrollBar extends Container {

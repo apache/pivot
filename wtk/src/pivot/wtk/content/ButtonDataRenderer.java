@@ -32,7 +32,7 @@ import pivot.wtk.Label;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Default button data renderer.</p>
+ * Default button data renderer.
  *
  * @author gbrown
  */

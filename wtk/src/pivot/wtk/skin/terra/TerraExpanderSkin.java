@@ -48,6 +48,11 @@ import pivot.wtk.skin.ContainerSkin;
  */
 public class TerraExpanderSkin extends ContainerSkin
     implements ButtonPressListener, ExpanderListener {
+    /**
+     * Expander shade button component.
+     *
+     * @author tvolkert
+     */
     public static class ShadeButton extends PushButton {
         private Expander expander = null;
 
@@ -68,6 +73,11 @@ public class TerraExpanderSkin extends ContainerSkin
         }
     }
 
+    /**
+     * Expander shade button component skin.
+     *
+     * @author tvolkert
+     */
     public static class ShadeButtonSkin extends TerraPushButtonSkin {
         public ShadeButtonSkin() {
             super();

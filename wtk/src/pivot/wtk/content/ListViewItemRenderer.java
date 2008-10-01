@@ -33,7 +33,7 @@ import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Default list view item renderer.</p>
+ * Default list view item renderer.
  *
  * @author gbrown
  */

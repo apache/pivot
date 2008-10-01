@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * <p>Label listener interface.</p>
+ * Label listener interface.
  *
  * @author gbrown
  */

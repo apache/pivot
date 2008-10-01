@@ -25,8 +25,8 @@ import pivot.wtk.media.Image;
 import pivot.wtk.media.Picture;
 
 /**
- * <p>Application context used to execute applications in a native frame
- * window.</p>
+ * Application context used to execute applications in a native frame
+ * window.
  *
  * @author gbrown
  */

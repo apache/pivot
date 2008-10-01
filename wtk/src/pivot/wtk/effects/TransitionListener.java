@@ -16,7 +16,7 @@
 package pivot.wtk.effects;
 
 /**
- * <p>Transition listener interface.</p>
+ * Transition listener interface.
  *
  * @author tvolkert
  */

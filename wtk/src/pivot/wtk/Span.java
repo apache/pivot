@@ -18,10 +18,10 @@ package pivot.wtk;
 import pivot.collections.Dictionary;
 
 /**
- * <p>Class representing a range of integer values. The range includes all
+ * Class representing a range of integer values. The range includes all
  * values in the interval <i>[start, end]</i>. Values may be negative, but the
  * value of <tt>start</tt> must be less than or equal to the value of
- * <tt>end</tt>.</p>
+ * <tt>end</tt>.
  *
  * @author gbrown
  */

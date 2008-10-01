@@ -18,7 +18,7 @@ package pivot.wtk.content;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Default list item implementation.</p>
+ * Default list item implementation.
  *
  * @author gbrown
  */

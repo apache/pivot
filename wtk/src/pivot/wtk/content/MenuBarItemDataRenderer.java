@@ -32,7 +32,7 @@ import pivot.wtk.Label;
 import pivot.wtk.media.Image;
 
 /**
- * <p>Default menu bar item data renderer.</p>
+ * Default menu bar item data renderer.
  *
  * @author gbrown
  */

@@ -22,8 +22,8 @@ import pivot.collections.Dictionary;
 import pivot.wtk.TableView;
 
 /**
- * <p>Default renderer for table view cells that contain date data. Renders
- * cell contents as a formatted date.</p>
+ * Default renderer for table view cells that contain date data. Renders
+ * cell contents as a formatted date.
  *
  * @author gbrown
  */

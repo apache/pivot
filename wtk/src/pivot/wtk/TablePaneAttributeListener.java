@@ -15,9 +15,29 @@
  */
 package pivot.wtk;
 
+/**
+ * Table pane attribute listener interface.
+ *
+ * @author gbrown
+ */
 public interface TablePaneAttributeListener {
+    /**
+     * Called when a component's row span attribute has changed.
+     *
+     * @param tablePane
+     * @param component
+     * @param previousRowSpan
+     */
     public void rowSpanChanged(TablePane tablePane, Component component,
         int previousRowSpan);
+
+    /**
+     * Called when a component's column span attribute has changed.
+     *
+     * @param tablePane
+     * @param component
+     * @param previousColumnSpan
+     */
     public void columnSpanChanged(TablePane tablePane, Component component,
         int previousColumnSpan);
 }
