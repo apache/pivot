@@ -16,13 +16,13 @@
 package pivot.wtk;
 
 /**
- * Date picker listener interface.
+ * calendar listener interface.
  *
  * @author tvolkert
  */
 public interface CalendarListener {
     /**
-     * Called when a date picker's year value has changed.
+     * Called when a calendar's year value has changed.
      *
      * @param calendar
      * @param previousYear
@@ -30,7 +30,7 @@ public interface CalendarListener {
     public void yearChanged(Calendar calendar, int previousYear);
 
     /**
-     * Called when a date picker's month value has changed.
+     * Called when a calendar's month value has changed.
      *
      * @param calendar
      * @param previousMonth
@@ -38,7 +38,7 @@ public interface CalendarListener {
     public void monthChanged(Calendar calendar, int previousMonth);
 
     /**
-     * Called when a date picker's selected date key has changed.
+     * Called when a calendar's selected date key has changed.
      *
      * @param calendar
      * @param previousSelectedDateKey

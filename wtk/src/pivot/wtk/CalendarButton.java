@@ -21,14 +21,14 @@ import pivot.util.ListenerList;
 import pivot.wtk.content.ButtonDataRenderer;
 
 /**
- * A component that allows a user to select a calendar date. The date picker
+ * A component that allows a user to select a calendar date. The calendar
  * is hidden until the user pushes the button.
  *
  * @author tvolkert
  */
 public class CalendarButton extends Button {
     /**
-     * Date picker button skin interface. Date picker button skins are required
+     * calendar button skin interface. calendar button skins are required
      * to implement this.
      *
      * @author tvolkert
@@ -38,7 +38,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Date picker button listener list.
+     * calendar button listener list.
      *
      * @author tvolkert
      */
@@ -67,7 +67,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Date picker button selection listener list.
+     * calendar button selection listener list.
      *
      * @author tvolkert
      */
@@ -89,7 +89,7 @@ public class CalendarButton extends Button {
         new CalendarButtonSelectionListenerList();
 
     /**
-     * Creates a blank date picker button whose date picker is set to the
+     * Creates a blank calendar button whose calendar is set to the
      * current month and year in the default timezone in the default locale.
      */
     public CalendarButton() {
@@ -97,7 +97,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Creates a date picker button with the given button data and whose date
+     * Creates a calendar button with the given button data and whose date
      * picker is set to the current month and year in the default timezone in
      * the default locale.
      *
@@ -128,14 +128,14 @@ public class CalendarButton extends Button {
      */
     @Override
     public void setToggleButton(boolean toggleButton) {
-        throw new UnsupportedOperationException("Date picker buttons cannot be toggle buttons.");
+        throw new UnsupportedOperationException("calendar buttons cannot be toggle buttons.");
     }
 
     /**
-     * Returns the year associated with this date picker button.
+     * Returns the year associated with this calendar button.
      *
      * @return
-     * The date picker year.
+     * The calendar year.
      */
     public int getYear() {
         CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
@@ -145,7 +145,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Sets the year associated with this date picker button.
+     * Sets the year associated with this calendar button.
      * <p>
      * Fires {@link CalendarButtonListener#yearChanged(CalendarButton, int)}.
      *
@@ -164,10 +164,10 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Returns the month associated with this date picker button.
+     * Returns the month associated with this calendar button.
      *
      * @return
-     * The date picker month.
+     * The calendar month.
      */
     public int getMonth() {
         CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
@@ -177,7 +177,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Sets the month associated with this date picker button.
+     * Sets the month associated with this calendar button.
      * <p>
      * Fires {@link CalendarButtonListener#monthChanged(CalendarButton, int)}.
      *
@@ -244,7 +244,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Gets the data binding key that is set on this date picker button.
+     * Gets the data binding key that is set on this calendar button.
      */
     public String getSelectedDateKey() {
         CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
@@ -254,7 +254,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Sets this date picker button's data binding key.
+     * Sets this calendar button's data binding key.
      */
     public void setSelectedDateKey(String selectedDateKey) {
         CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
@@ -307,14 +307,14 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Gets this date picker's <tt>CalendarButtonListener</tt> collection.
+     * Gets this calendar's <tt>CalendarButtonListener</tt> collection.
      */
     public ListenerList<CalendarButtonListener> getCalendarButtonListeners() {
         return calendarButtonListeners;
     }
 
     /**
-     * Gets this date picker's <tt>CalendarButtonSelectionListener</tt> collection.
+     * Gets this calendar's <tt>CalendarButtonSelectionListener</tt> collection.
      */
     public ListenerList<CalendarButtonSelectionListener> getCalendarButtonSelectionListeners() {
         return calendarButtonSelectionListeners;

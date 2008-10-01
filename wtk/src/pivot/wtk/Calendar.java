@@ -26,7 +26,7 @@ import pivot.util.ListenerList;
  */
 public class Calendar extends Container {
     /**
-     * Date picker listener list.
+     * calendar listener list.
      *
      * @author tvolkert
      */
@@ -54,7 +54,7 @@ public class Calendar extends Container {
     }
 
     /**
-     * Date picker selection listener list.
+     * calendar selection listener list.
      *
      * @author tvolkert
      */
@@ -82,7 +82,7 @@ public class Calendar extends Container {
         new CalendarSelectionListenerList();
 
     /**
-     * Creates a date picker set to the current month and year in the default
+     * Creates a calendar set to the current month and year in the default
      * timezone in the default locale.
      */
     public Calendar() {
@@ -90,7 +90,7 @@ public class Calendar extends Container {
     }
 
     /**
-     * Creates a new date picker set to the specified calendar's year and
+     * Creates a new calendar set to the specified calendar's year and
      * month.
      */
     private Calendar(CalendarDate calendarDate) {
@@ -98,7 +98,7 @@ public class Calendar extends Container {
     }
 
     /**
-     * Creates a new date picker set to the specified year and month.
+     * Creates a new calendar set to the specified year and month.
      *
      * @param year
      * The year (e.g. 2008)
@@ -113,14 +113,14 @@ public class Calendar extends Container {
     }
 
     /**
-     * Gets the year to which this date picker is currently set.
+     * Gets the year to which this calendar is currently set.
      */
     public int getYear() {
         return year;
     }
 
     /**
-     * Sets this date picker's year.
+     * Sets this calendar's year.
      */
     public void setYear(int year) {
         int previousYear = this.year;
@@ -132,14 +132,14 @@ public class Calendar extends Container {
     }
 
     /**
-     * Gets the month to which this date picker is currently set.
+     * Gets the month to which this calendar is currently set.
      */
     public int getMonth() {
         return month;
     }
 
     /**
-     * Sets this date picker's month.
+     * Sets this calendar's month.
      */
     public void setMonth(int month) {
         int previousMonth = this.month;
@@ -191,14 +191,14 @@ public class Calendar extends Container {
     }
 
     /**
-     * Gets the data binding key that is set on this date picker.
+     * Gets the data binding key that is set on this calendar.
      */
     public String getSelectedDateKey() {
         return selectedDateKey;
     }
 
     /**
-     * Sets this date picker's data binding key.
+     * Sets this calendar's data binding key.
      */
     public void setSelectedDateKey(String selectedDateKey) {
         String previousSelectedDateKey = this.selectedDateKey;
@@ -243,14 +243,14 @@ public class Calendar extends Container {
     }
 
     /**
-     * Gets this date picker's <tt>CalendarListener</tt> collection.
+     * Gets this calendar's <tt>CalendarListener</tt> collection.
      */
     public ListenerList<CalendarListener> getCalendarListeners() {
         return calendarListeners;
     }
 
     /**
-     * Gets this date picker's <tt>CalendarSelectionListener</tt> collection.
+     * Gets this calendar's <tt>CalendarSelectionListener</tt> collection.
      */
     public ListenerList<CalendarSelectionListener> getCalendarSelectionListeners() {
         return calendarSelectionListeners;

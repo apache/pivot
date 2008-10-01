@@ -18,13 +18,13 @@ package pivot.wtk;
 import pivot.util.CalendarDate;
 
 /**
- * Date picker selection listener interface.
+ * calendar selection listener interface.
  *
  * @author tvolkert
  */
 public interface CalendarSelectionListener {
     /**
-     * Called when a date picker's selected date has changed.
+     * Called when a calendar's selected date has changed.
      *
      * @param calendar
      * @param previousSelectedDate

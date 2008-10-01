@@ -42,7 +42,7 @@ import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
- * Date picker skin.
+ * calendar skin.
  *
  * @author tvolkert
  */
@@ -50,7 +50,7 @@ public class TerraCalendarSkin extends ContainerSkin
     implements CalendarListener, CalendarSelectionListener {
 
     /**
-     * Date picker calendar view component.
+     * calendar calendar view component.
      *
      * @author tvolkert
      */
@@ -69,7 +69,7 @@ public class TerraCalendarSkin extends ContainerSkin
     }
 
     /**
-     * Date picker calendar view component skin.
+     * calendar calendar view component skin.
      *
      * @author tvolkert
      */

@@ -42,7 +42,7 @@ import pivot.wtk.Popup;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
- * Date picker button skin.
+ * calendar button skin.
  *
  * @author tvolkert
  */
@@ -118,7 +118,7 @@ public class TerraCalendarButtonSkin extends ButtonSkin
     protected static final String LIST_HIGHLIGHT_BACKGROUND_COLOR_KEY = "listHighlightBackgroundColor";
 
     public TerraCalendarButtonSkin() {
-        // Create the date picker and border
+        // Create the calendar and border
         calendar = new Calendar();
         calendarBorder = new Border(calendar);
         calendarBorder.getStyles().put("padding", new Insets(0));
