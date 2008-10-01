@@ -23,11 +23,11 @@ import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Implementation of the {@link Map} interface that is backed by a
- * hashtable.</p>
- *
- * <p>TODO We're temporarily using a java.util.HashMap to back this map.
- * Eventually, we'll replace this with an internal map representation.</p>
+ * Implementation of the {@link Map} interface that is backed by a
+ * hashtable.
+ * <p>
+ * TODO We're temporarily using a java.util.HashMap to back this map.
+ * Eventually, we'll replace this with an internal map representation.
  */
 public class HashMap<K, V> implements Map<K, V>, Serializable {
     public static final long serialVersionUID = 0;

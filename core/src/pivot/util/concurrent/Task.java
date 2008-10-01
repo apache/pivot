@@ -16,8 +16,8 @@
 package pivot.util.concurrent;
 
 /**
- * <p>Abstract base class for "tasks". A task is an asynchronous operation that
- * may optionally return a value.</p>
+ * Abstract base class for "tasks". A task is an asynchronous operation that
+ * may optionally return a value.
  *
  * @param V
  * The type of the value returned by the operation. May be {@link Void} to

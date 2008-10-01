@@ -15,18 +15,22 @@
  */
 package pivot.util.concurrent;
 
+import java.util.Iterator;
+
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
+import pivot.util.ImmutableIterator;
 
 /**
- * <p>Class that runs a sequence of tasks in series and notifies listeners
+ * Class that runs a sequence of tasks in series and notifies listeners
  * when all tasks are complete. Callers can retrieve task results or faults by
  * calling {@link Task#getResult()} and {@link Task#getFault()},
- * respectively.</p>
+ * respectively.
  *
  * @author gbrown
  */
-public class TaskSequence<V> extends Task<Void> implements Sequence<Task<V>> {
+public class TaskSequence<V> extends Task<Void>
+    implements Sequence<Task<V>>, Iterable<Task<V>> {
     private ArrayList<Task<V>> tasks = new ArrayList<Task<V>>();
     private int activeTaskIndex = -1;
 
@@ -125,5 +129,9 @@ public class TaskSequence<V> extends Task<Void> implements Sequence<Task<V>> {
 
     public int getLength() {
         return tasks.getLength();
+    }
+
+    public Iterator<Task<V>> iterator() {
+        return new ImmutableIterator<Task<V>>(tasks.iterator());
     }
 }

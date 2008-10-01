@@ -18,7 +18,7 @@ package pivot.collections.concurrent;
 import pivot.collections.Queue;
 
 /**
- * <p>Synchronized implementation of the {@link Queue} interface.</p>
+ * Synchronized implementation of the {@link Queue} interface.
  *
  * @author gbrown
  */

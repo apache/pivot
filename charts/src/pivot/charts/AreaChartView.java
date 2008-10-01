@@ -18,7 +18,7 @@ package pivot.charts;
 import pivot.charts.skin.AreaChartViewSkin;
 
 /**
- * <p>Presents chart data using an area plot.</p>
+ * Presents chart data using an area plot.
  *
  * @author gbrown
  */

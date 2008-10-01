@@ -23,7 +23,7 @@ import pivot.util.ListenerList;
 import pivot.util.concurrent.SynchronizedListenerList;
 
 /**
- * <p>Synchronized implementation of the {@link Set} interface.</p>
+ * Synchronized implementation of the {@link Set} interface.
  *
  * @author gbrown
  */

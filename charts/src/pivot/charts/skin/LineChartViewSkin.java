@@ -28,7 +28,7 @@ import pivot.charts.LineChartView;
 import pivot.collections.List;
 
 /**
- * <p>Line chart view skin.</p>
+ * Line chart view skin.
  *
  * @author gbrown
  */

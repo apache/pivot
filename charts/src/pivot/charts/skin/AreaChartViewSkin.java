@@ -28,7 +28,7 @@ import pivot.charts.ChartView;
 import pivot.collections.List;
 
 /**
- * <p>Area chart view skin.</p>
+ * Area chart view skin.
  *
  * @author gbrown
  */

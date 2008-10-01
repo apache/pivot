@@ -18,7 +18,7 @@ package pivot.collections;
 import java.util.Comparator;
 
 /**
- * <p>List listener interface.</p>
+ * List listener interface.
  *
  * @author gbrown
  */

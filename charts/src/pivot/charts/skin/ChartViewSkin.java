@@ -35,7 +35,7 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
- * <p>Abstract base class for chart view skins.</p>
+ * Abstract base class for chart view skins.
  *
  * @author gbrown
  */

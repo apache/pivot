@@ -16,7 +16,7 @@
 package pivot.util.concurrent;
 
 /**
- * <p>Thrown when a task is aborted.</p>
+ * Thrown when a task is aborted.
  *
  * @author gbrown
  */

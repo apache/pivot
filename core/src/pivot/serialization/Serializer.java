@@ -20,8 +20,8 @@ import java.io.OutputStream;
 import java.io.IOException;
 
 /**
- * <p>Defines an interface for writing objects to and reading objects from a data
- * stream.</p>
+ * Defines an interface for writing objects to and reading objects from a data
+ * stream.
  *
  * @author gbrown
  */

@@ -18,7 +18,7 @@ package pivot.charts;
 import pivot.charts.skin.LineChartViewSkin;
 
 /**
- * <p>Presents chart data using a line plot.</p>
+ * Presents chart data using a line plot.
  *
  * @author gbrown
  */

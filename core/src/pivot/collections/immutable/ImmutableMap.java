@@ -24,7 +24,7 @@ import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Unmodifiable implementation of the {@link Map} interface.</p>
+ * Unmodifiable implementation of the {@link Map} interface.
  *
  * @author gbrown
  */

@@ -33,10 +33,10 @@ import pivot.collections.Map;
 import pivot.collections.Sequence;
 
 /**
- * <p>Implementation of the {@link Serializer} interface that reads data from
- * and writes data to a JavaScript Object Notation (JSON) file.</p>
- *
- * <p>TODO Wrap reader in a CountingReader that tracks line/character index.</p>
+ * Implementation of the {@link Serializer} interface that reads data from
+ * and writes data to a JavaScript Object Notation (JSON) file.
+ * <p>
+ * TODO Wrap reader in a CountingReader that tracks line/character index.
  *
  * @author gbrown
  */

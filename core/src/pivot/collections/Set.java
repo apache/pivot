@@ -19,7 +19,7 @@ import java.util.Comparator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Collection interface representing a group of unique elements.</p>
+ * Collection interface representing a group of unique elements.
  *
  * @author gbrown
  */

@@ -18,7 +18,7 @@ package pivot.charts;
 import pivot.collections.Sequence;
 
 /**
- * <p>Chart view category listener interface.</p>
+ * Chart view category listener interface.
  *
  * @author gbrown
  */

@@ -24,8 +24,8 @@ import pivot.collections.Map;
 import pivot.collections.adapter.MapAdapter;
 
 /**
- * <p>Implementation of the {@link Serializer} interface that reads data from
- * and writes data to the Java properties file format.</p>
+ * Implementation of the {@link Serializer} interface that reads data from
+ * and writes data to the Java properties file format.
  *
  * @author smartini
  * @author gbrown

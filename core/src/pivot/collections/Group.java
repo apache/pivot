@@ -16,7 +16,7 @@
 package pivot.collections;
 
 /**
- * <p>Interface representing a group of unique elements.</p>
+ * Interface representing a group of unique elements.
  *
  * @author gbrown
  */

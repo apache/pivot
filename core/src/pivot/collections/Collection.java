@@ -18,8 +18,8 @@ package pivot.collections;
 import java.util.Comparator;
 
 /**
- * <p>Root interface in collection hierarchy. Defines operations common to all
- * collections.</p>
+ * Root interface in collection hierarchy. Defines operations common to all
+ * collections.
  *
  * @author gbrown
  */

@@ -21,10 +21,10 @@ import java.util.Iterator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Implementation of the {@link List} interface that is backed by a linked
- * list.</p>
- *
- * <p>TODO This class is currently incomplete.</p>
+ * Implementation of the {@link List} interface that is backed by a linked
+ * list.
+ * <p>
+ * TODO This class is currently incomplete.
  */
 public class LinkedList<T> implements List<T> {
     public int add(T item) {

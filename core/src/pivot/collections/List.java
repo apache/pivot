@@ -19,13 +19,13 @@ import java.util.Comparator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Collection interface representing an ordered sequence of items.</p>
+ * Collection interface representing an ordered sequence of items.
  *
  * @author gbrown
  */
 public interface List<T> extends Sequence<T>, Collection<T> {
     /**
-     * <p>List listener list implementation.</p>
+     * List listener list implementation.
      *
      * @author gbrown
      */

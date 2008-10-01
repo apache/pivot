@@ -20,7 +20,7 @@ import java.util.Comparator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Collection interface representing set of key/value pairs.</p>
+ * Collection interface representing set of key/value pairs.
  *
  * @author gbrown
  */

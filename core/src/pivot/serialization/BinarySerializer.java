@@ -23,9 +23,9 @@ import java.io.OutputStream;
 import java.io.Serializable;
 
 /**
- * <p>Implementation of the {@link Serializer} interface that uses Java's
+ * Implementation of the {@link Serializer} interface that uses Java's
  * internal serialization mechanism to read and write values. All values in the
- * object hierarchy are required to implement {@link Serializable}.</p>
+ * object hierarchy are required to implement {@link Serializable}.
  *
  * @author gbrown
  */

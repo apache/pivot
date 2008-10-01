@@ -18,7 +18,7 @@ package pivot.collections.concurrent;
 import pivot.collections.Stack;
 
 /**
- * <p>Synchronized implementation of the {@link Stack} interface.</p>
+ * Synchronized implementation of the {@link Stack} interface.
  *
  * @author gbrown
  */

@@ -18,7 +18,7 @@ package pivot.charts;
 import pivot.charts.skin.PieChartViewSkin;
 
 /**
- * <p>Presents chart data using a pie plot.</p>
+ * Presents chart data using a pie plot.
  *
  * @author gbrown
  */

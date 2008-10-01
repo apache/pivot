@@ -3,7 +3,7 @@ package pivot.charts.content;
 import pivot.collections.Sequence;
 
 /**
- * <p>Base interface for a value series.</p>
+ * Base interface for a value series.
  *
  * @param <T>
  * The value type.

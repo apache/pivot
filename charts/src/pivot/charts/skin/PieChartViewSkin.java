@@ -30,7 +30,7 @@ import pivot.collections.List;
 import pivot.collections.Map;
 
 /**
- * <p>Pie chart view skin.</p>
+ * Pie chart view skin.
  *
  * @author gbrown
  */

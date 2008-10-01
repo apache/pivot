@@ -16,8 +16,8 @@
 package pivot.beans;
 
 /**
- * <p>Thrown when a caller attempts to set the value of a non-existent bean
- * property.</p>
+ * Thrown when a caller attempts to set the value of a non-existent bean
+ * property.
  *
  * @author gbrown
  */

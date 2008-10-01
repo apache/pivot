@@ -25,7 +25,7 @@ import pivot.charts.HighLowChartView;
 import pivot.collections.List;
 
 /**
- * <p>High/low chart view skin.</p>
+ * High/low chart view skin.
  *
  * @author gbrown
  */

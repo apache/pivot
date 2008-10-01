@@ -18,7 +18,7 @@ package pivot.charts;
 import pivot.charts.skin.HighLowChartViewSkin;
 
 /**
- * <p>Presents chart data using "open/high/low/close" plot.</p>
+ * Presents chart data using "open/high/low/close" plot.
  *
  * @author gbrown
  */

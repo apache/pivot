@@ -8,7 +8,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 
 /**
- * <p>Implementation of JFreeChart OHLCDataset.</p>
+ * Implementation of JFreeChart OHLCDataset.
  *
  * @author gbrown
  */

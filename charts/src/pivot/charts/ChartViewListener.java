@@ -18,7 +18,7 @@ package pivot.charts;
 import pivot.collections.List;
 
 /**
- * <p>Chart view listener interface.</p>
+ * Chart view listener interface.
  *
  * @author gbrown
  */

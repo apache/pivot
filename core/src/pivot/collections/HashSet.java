@@ -23,11 +23,11 @@ import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Implementation of the {@link Set} interface that is backed by a
- * hashtable.</p>
- *
- * <p>TODO We're temporarily using a java.util.HashSet to back this set.
- * Eventually, we'll replace this with an internal set representation.</p>
+ * Implementation of the {@link Set} interface that is backed by a
+ * hashtable.
+ * <p>
+ * TODO We're temporarily using a java.util.HashSet to back this set.
+ * Eventually, we'll replace this with an internal set representation.
  */
 public class HashSet<E> implements Set<E>, Serializable {
     public static final long serialVersionUID = 0;

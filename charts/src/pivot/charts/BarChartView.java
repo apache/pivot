@@ -18,7 +18,7 @@ package pivot.charts;
 import pivot.charts.skin.BarChartViewSkin;
 
 /**
- * <p>Presents chart data using a bar plot.</p>
+ * Presents chart data using a bar plot.
  *
  * @author gbrown
  */

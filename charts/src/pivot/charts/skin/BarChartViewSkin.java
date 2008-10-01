@@ -28,7 +28,7 @@ import pivot.charts.ChartView;
 import pivot.collections.List;
 
 /**
- * <p>Bar chart view skin.</p>
+ * Bar chart view skin.
  *
  * @author gbrown
  */

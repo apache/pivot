@@ -26,7 +26,7 @@ import pivot.charts.ChartView;
 import pivot.collections.Dictionary;
 
 /**
- * <p>Implementation of JFreeChart PieDataset.</p>
+ * Implementation of JFreeChart PieDataset.
  *
  * @author gbrown
  */

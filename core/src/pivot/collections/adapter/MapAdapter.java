@@ -24,8 +24,8 @@ import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Implementation of the {@link Map} interface that is backed by an
- * instance of <tt>java.util.Map</tt>.</p>
+ * Implementation of the {@link Map} interface that is backed by an
+ * instance of <tt>java.util.Map</tt>.
  */
 public class MapAdapter<K, V> implements Map<K, V> {
     private java.util.Map<K, V> map = null;

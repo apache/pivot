@@ -16,16 +16,16 @@
 package pivot.collections;
 
 /**
- * <p>Implementation of the {@link Queue} interface that is backed by an
- * array.</p>
- *
- * <p>TODO The current implementation is not optimal, since it requires shifting
+ * Implementation of the {@link Queue} interface that is backed by an
+ * array.
+ * <p>
+ * TODO The current implementation is not optimal, since it requires shifting
  * all elements on every call to enqueue(). Use an approach that maintains
  * rotating headIndex and tailIndex values and override List methods to use
  * these as offsets from the current capacity value. When the capacity needs
  * to increase, we'll copy the elements in a contiguous block to the new array
  * (we may want to make this operation a protected method so ArrayList can call
- * it polymorphically).</p>
+ * it polymorphically).
  *
  * @author gbrown
  */

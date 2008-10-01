@@ -16,8 +16,8 @@
 package pivot.collections;
 
 /**
- * <p>Implementation of the {@link Stack} interface that is backed by an
- * array.</p>
+ * Implementation of the {@link Stack} interface that is backed by an
+ * array.
  *
  * @author gbrown
  */

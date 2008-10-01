@@ -15,19 +15,23 @@
  */
 package pivot.util.concurrent;
 
+import java.util.Iterator;
+
 import pivot.collections.Group;
 import pivot.collections.HashMap;
+import pivot.util.ImmutableIterator;
 
 /**
- * <p>Class that runs a group of tasks in parallel and notifies listeners
+ * Class that runs a group of tasks in parallel and notifies listeners
  * when all tasks are complete. Callers can retrieve task results or faults by
  * calling {@link Task#getResult()} and {@link Task#getFault()},
- * respectively.</p>
+ * respectively.
  *
  * @author tvolkert
  * @author gbrown
  */
-public class TaskGroup<V> extends Task<Void> implements Group<Task<V>> {
+public class TaskGroup<V> extends Task<Void>
+    implements Group<Task<V>>, Iterable<Task<V>> {
     private class TaskHandler implements TaskListener<V> {
         public void taskExecuted(Task<V> task) {
             synchronized (TaskGroup.this) {
@@ -113,5 +117,9 @@ public class TaskGroup<V> extends Task<Void> implements Group<Task<V>> {
 
     public boolean isEmpty() {
         return tasks.isEmpty();
+    }
+
+    public Iterator<Task<V>> iterator() {
+        return new ImmutableIterator<Task<V>>(tasks.iterator());
     }
 }

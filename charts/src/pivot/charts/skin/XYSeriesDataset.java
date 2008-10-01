@@ -25,7 +25,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 
 /**
- * <p>Implementation of JFreeChart XYDataset.</p>
+ * Implementation of JFreeChart XYDataset.
  *
  * @author gbrown
  */

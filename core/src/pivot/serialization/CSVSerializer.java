@@ -31,16 +31,16 @@ import pivot.collections.List;
 import pivot.collections.Sequence;
 
 /**
- * <p>Implementation of the {@link Serializer} interface that reads data from
- * and writes data to a comma-separated value (CSV) file.</p>
- *
- * <p>TODO Allow caller to specify a class that does not implement Dictionary.
+ * Implementation of the {@link Serializer} interface that reads data from
+ * and writes data to a comma-separated value (CSV) file.
+ * <p>
+ * TODO Allow caller to specify a class that does not implement Dictionary.
  * We can use BeanDictionary to allow the caller to instantiate and populate
- * arbitrary types.</p>
- *
- * <p>TODO Add "firstLineContainsKeys" flag.</p>
- *
- * <p>TODO Add support for variable delimiters.</p>
+ * arbitrary types.
+ * <p>
+ * TODO Add "firstLineContainsKeys" flag.
+ * <p>
+ * TODO Add support for variable delimiters.
  *
  * @author gbrown
  */
@@ -48,7 +48,7 @@ public class CSVSerializer implements Serializer {
     public static final String MIME_TYPE = "text/csv";
 
     /**
-     * <p>Class representing the serializers key sequence.</p>
+     * Class representing the serializers key sequence.
      */
     public class KeySequence implements Sequence<String> {
         public int add(String item) {

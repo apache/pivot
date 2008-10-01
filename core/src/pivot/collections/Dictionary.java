@@ -16,7 +16,7 @@
 package pivot.collections;
 
 /**
- * <p>Interface representing a set of key/value pairs.</p>
+ * Interface representing a set of key/value pairs.
  *
  * @author gbrown
  */

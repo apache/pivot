@@ -20,7 +20,7 @@ import java.util.Iterator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Abstract base class for synchronized listener lists.</p>
+ * Abstract base class for synchronized listener lists.
  *
  * @see pivot.util.ListenerList
  *

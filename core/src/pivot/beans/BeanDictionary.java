@@ -25,21 +25,21 @@ import java.util.NoSuchElementException;
 import pivot.collections.Dictionary;
 
 /**
- * <p>Exposes Java bean properties of an object via the {@link Dictionary}
+ * Exposes Java bean properties of an object via the {@link Dictionary}
  * interface. A call to {@link Dictionary#get(Object)} invokes the getter for
  * the corresponding property, and a call to
- * {@link Dictionary#put(Object, Object)} invokes the property's setter.</p>
- *
- * <p>Properties may provide multiple setters; the appropriate setter to invoke
+ * {@link Dictionary#put(Object, Object)} invokes the property's setter.
+ * <p>
+ * Properties may provide multiple setters; the appropriate setter to invoke
  * is determined by the type of the value being set. If the value is
- * <tt>null</tt>, the return type of the getter method is used.</p>
+ * <tt>null</tt>, the return type of the getter method is used.
  *
  * @author gbrown
  */
 public class BeanDictionary implements Dictionary<String, Object>, Iterable<String> {
     /**
-     * <p>Property iterator. Walks the list of methods defined by the bean and
-     * returns a value for each getter method.</p>
+     * Property iterator. Walks the list of methods defined by the bean and
+     * returns a value for each getter method.
      */
     private class PropertyIterator implements Iterator<String> {
         private Method[] methods = null;

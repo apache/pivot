@@ -21,7 +21,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 
 /**
- * <p>Implementation of JFreeChart IntervalXYDataset.</p>
+ * Implementation of JFreeChart IntervalXYDataset.
  *
  * @author gbrown
  */

@@ -16,8 +16,8 @@
 package pivot.collections;
 
 /**
- * <p>Interface representing a last-in, first-out (LIFO) stack when unsorted, and
- * a priority stack when sorted.</p>
+ * Interface representing a last-in, first-out (LIFO) stack when unsorted, and
+ * a priority stack when sorted.
  *
  * @author gbrown
  */

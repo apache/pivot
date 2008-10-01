@@ -22,11 +22,11 @@ import java.util.Iterator;
 import pivot.util.ListenerList;
 
 /**
- * <p>Implementation of the {@link List} interface that is backed by an
- * array.</p>
- *
- * <p>TODO We're temporarily using a java.util.ArrayList to back this list.
- * Eventually, we'll replace this with an internal array representation.</p>
+ * Implementation of the {@link List} interface that is backed by an
+ * array.
+ * <p>
+ * TODO We're temporarily using a java.util.ArrayList to back this list.
+ * Eventually, we'll replace this with an internal array representation.
  *
  * @author gbrown
  */
