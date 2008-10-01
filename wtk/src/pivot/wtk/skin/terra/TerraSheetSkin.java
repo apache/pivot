@@ -82,7 +82,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private static final int SLIDE_RATE = 30;
 
     public TerraSheetSkin() {
-        setBackgroundColor(new Color(0xF7, 0xF5, 0xEB));
+        setBackgroundColor(new Color(0xf7, 0xf5, 0xeb, 0xf0));
     }
 
     @Override
