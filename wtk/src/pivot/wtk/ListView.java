@@ -24,6 +24,7 @@ import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
+import pivot.util.Vote;
 import pivot.wtk.content.ListViewItemRenderer;
 
 /**
@@ -246,18 +247,20 @@ public class ListView extends Component {
      */
     private static class ListViewItemStateListenerList extends ListenerList<ListViewItemStateListener>
         implements ListViewItemStateListener {
-        public boolean previewItemDisabledChange(ListView listView, int index) {
-            boolean allowed = true;
+        public Vote previewItemDisabledChange(ListView listView, int index) {
+            Vote vote = Vote.APPROVE;
 
             for (ListViewItemStateListener listener : this) {
-                allowed = listener.previewItemDisabledChange(listView, index);
-
-                if (!allowed) {
-                    break;
-                }
+                vote = vote.tally(listener.previewItemDisabledChange(listView, index));
             }
 
-            return allowed;
+            return vote;
+        }
+
+        public void itemDisabledChangeVetoed(ListView listView, int index, Vote reason) {
+            for (ListViewItemStateListener listener : this) {
+                listener.itemDisabledChangeVetoed(listView, index, reason);
+            }
         }
 
         public void itemDisabledChanged(ListView listView, int index) {
@@ -863,16 +866,21 @@ public class ListView extends Component {
     public void setItemDisabled(int index, boolean disabled) {
         int i = Sequence.Search.binarySearch(disabledIndexes, index);
 
-        if (((i < 0 && disabled)
-            || (i >= 0 && !disabled))
-            && listViewItemStateListeners.previewItemDisabledChange(this, index)) {
-            if (disabled) {
-                disabledIndexes.insert(index, -(i + 1));
-            } else {
-                disabledIndexes.remove(i, 1);
-            }
+        if ((i < 0 && disabled)
+            || (i >= 0 && !disabled)) {
+            Vote vote = listViewItemStateListeners.previewItemDisabledChange(this, index);
 
-            listViewItemStateListeners.itemDisabledChanged(this, index);
+            if (vote.isApproved()) {
+                if (disabled) {
+                    disabledIndexes.insert(index, -(i + 1));
+                } else {
+                    disabledIndexes.remove(i, 1);
+                }
+
+                listViewItemStateListeners.itemDisabledChanged(this, index);
+            } else {
+                listViewItemStateListeners.itemDisabledChangeVetoed(this, index, vote);
+            }
         }
     }
 

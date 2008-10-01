@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import pivot.util.ListenerList;
+import pivot.util.Vote;
 
 /**
  * <p>Window class whose primary purpose is to facilitate interaction between
@@ -27,19 +28,19 @@ import pivot.util.ListenerList;
 public class Dialog extends Frame {
     private static class DialogStateListenerList extends ListenerList<DialogStateListener>
         implements DialogStateListener {
-        public boolean previewDialogClose(Dialog dialog, boolean result) {
-            boolean approved = true;
+        public Vote previewDialogClose(Dialog dialog, boolean result) {
+            Vote vote = Vote.APPROVE;
 
             for (DialogStateListener listener : this) {
-                approved &= listener.previewDialogClose(dialog, result);
+                vote = vote.tally(listener.previewDialogClose(dialog, result));
             }
 
-            return approved;
+            return vote;
         }
 
-        public void dialogCloseVetoed(Dialog dialog) {
+        public void dialogCloseVetoed(Dialog dialog, Vote reason) {
             for (DialogStateListener listener : this) {
-                listener.dialogCloseVetoed(dialog);
+                listener.dialogCloseVetoed(dialog, reason);
             }
         }
 
@@ -107,7 +108,7 @@ public class Dialog extends Frame {
      * Opens the dialog.
      *
      * @param display
-     * @param dialogStateListener
+     * @param dialogCloseListener
      */
     public void open(Display display, DialogCloseListener dialogCloseListener) {
         super.open(display);
@@ -143,8 +144,8 @@ public class Dialog extends Frame {
      * @param owner
      * The dialog's owner.
      *
-     * @param dialogStateListener
-     * Optional dialog state listener to be called when the dialog is closed.
+     * @param dialogCloseListener
+     * Optional dialog close listener to be called when the dialog is closed.
      */
     public final void open(Window owner, DialogCloseListener dialogCloseListener) {
         open(owner, true, dialogCloseListener);
@@ -160,8 +161,8 @@ public class Dialog extends Frame {
      * If <tt>true</tt>, the dialog is opened as modal, disabling its owner
      * tree.
      *
-     * @param dialogStateListener
-     * Optional dialog state listener to be called when the dialog is closed.
+     * @param dialogCloseListener
+     * Optional dialog close listener to be called when the dialog is closed.
      */
     public void open(Window owner, boolean modal, DialogCloseListener dialogCloseListener) {
         super.open(owner);
@@ -207,7 +208,9 @@ public class Dialog extends Frame {
 
     public void close(boolean result) {
         if (!isClosed()) {
-            if (dialogStateListeners.previewDialogClose(this, result)) {
+            Vote vote = dialogStateListeners.previewDialogClose(this, result);
+
+            if (vote == Vote.APPROVE) {
                 super.close();
 
                 if (isClosed()) {
@@ -236,7 +239,7 @@ public class Dialog extends Frame {
                     dialogStateListeners.dialogClosed(this);
                 }
             } else {
-                dialogStateListeners.dialogCloseVetoed(this);
+                dialogStateListeners.dialogCloseVetoed(this, vote);
             }
         }
     }

@@ -15,6 +15,7 @@
  */
 package pivot.wtk.skin.terra;
 
+import pivot.util.Vote;
 import pivot.wtk.Component;
 import pivot.wtk.Dialog;
 import pivot.wtk.DialogStateListener;
@@ -64,11 +65,11 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogStateListen
         return consumed;
     }
 
-    public boolean previewDialogClose(Dialog dialog, boolean result) {
-        return true;
+    public Vote previewDialogClose(Dialog dialog, boolean result) {
+        return Vote.APPROVE;
     }
 
-    public void dialogCloseVetoed(Dialog dialog) {
+    public void dialogCloseVetoed(Dialog dialog, Vote reason) {
         // No-op
     }
 

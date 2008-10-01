@@ -15,6 +15,7 @@
  */
 package pivot.wtk.skin;
 
+import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
@@ -39,11 +40,11 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
 
     public MenuBarItemSkin() {
         menuPopup.getWindowStateListeners().add(new WindowStateListener() {
-            public boolean previewWindowOpen(Window window, Display display) {
-                return true;
+            public Vote previewWindowOpen(Window window, Display display) {
+                return Vote.APPROVE;
             }
 
-            public void windowOpenVetoed(Window window) {
+            public void windowOpenVetoed(Window window, Vote reason) {
                 // No-op
             }
 
@@ -51,11 +52,11 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
                 // No-op
             }
 
-            public boolean previewWindowClose(Window window) {
-                return true;
+            public Vote previewWindowClose(Window window) {
+                return Vote.APPROVE;
             }
 
-            public void windowCloseVetoed(Window window) {
+            public void windowCloseVetoed(Window window, Vote reason) {
                 // No-op
             }
 

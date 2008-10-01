@@ -22,6 +22,7 @@ import pivot.collections.List;
 import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
+import pivot.util.Vote;
 import pivot.wtk.content.TreeViewNodeRenderer;
 
 /**
@@ -206,18 +207,20 @@ public class TreeView extends Component {
     private static class TreeViewNodeStateListenerList
         extends ListenerList<TreeViewNodeStateListener>
         implements TreeViewNodeStateListener {
-        public boolean previewNodeDisabledChange(TreeView treeView, Sequence<Integer> path) {
-            boolean allowed = true;
+        public Vote previewNodeDisabledChange(TreeView treeView, Sequence<Integer> path) {
+            Vote vote = Vote.APPROVE;
 
             for (TreeViewNodeStateListener listener : this) {
-                allowed = listener.previewNodeDisabledChange(treeView, path);
-
-                if (!allowed) {
-                    break;
-                }
+                vote = vote.tally(listener.previewNodeDisabledChange(treeView, path));
             }
 
-            return allowed;
+            return vote;
+        }
+
+        public void nodeDisabledChangeVetoed(TreeView treeView, Sequence<Integer> path, Vote reason) {
+            for (TreeViewNodeStateListener listener : this) {
+                listener.nodeDisabledChangeVetoed(treeView, path, reason);
+            }
         }
 
         public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {
@@ -728,16 +731,20 @@ public class TreeView extends Component {
     public void setNodeDisabled(Sequence<Integer> path, boolean disabled) {
         int index = disabledPaths.indexOf(path);
 
-        if (((index < 0 && disabled)
-            || (index >= 0 && !disabled))
-            && treeViewNodeStateListeners.previewNodeDisabledChange(this, path)) {
-            if (disabled) {
-                disabledPaths.add(path);
-            } else {
-                disabledPaths.remove(index, 1);
-            }
+        if ((index < 0 && disabled)
+            || (index >= 0 && !disabled)) {
+            Vote vote = treeViewNodeStateListeners.previewNodeDisabledChange(this, path);
+            if (vote.isApproved()) {
+                if (disabled) {
+                    disabledPaths.add(path);
+                } else {
+                    disabledPaths.remove(index, 1);
+                }
 
-            treeViewNodeStateListeners.nodeDisabledChanged(this, path);
+                treeViewNodeStateListeners.nodeDisabledChanged(this, path);
+            } else {
+                treeViewNodeStateListeners.nodeDisabledChangeVetoed(this, path, vote);
+            }
         }
     }
 

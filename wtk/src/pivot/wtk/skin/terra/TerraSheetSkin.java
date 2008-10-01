@@ -379,12 +379,13 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         if (reason == Vote.DENY
             && closeTransition != null) {
             closeTransition.stop();
-            closeTransition = null;
         }
     }
 
     public void sheetClosed(Sheet sheet) {
         Window owner = sheet.getOwner();
         owner.getComponentMouseButtonListeners().remove(ownerMouseButtonListener);
+
+        closeTransition = null;
     }
 }

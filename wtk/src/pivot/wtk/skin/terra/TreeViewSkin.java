@@ -27,6 +27,7 @@ import java.awt.geom.Rectangle2D;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.util.Vote;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
@@ -1382,10 +1383,14 @@ public class TreeViewSkin extends ComponentSkin implements TreeView.Skin,
         // TODO
     }
 
-    // TreeViewNodeStateListener methods
+    // Tree view node state events
 
-    public boolean previewNodeDisabledChange(TreeView treeView, Sequence<Integer> path) {
-        return true;
+    public Vote previewNodeDisabledChange(TreeView treeView, Sequence<Integer> path) {
+        return Vote.APPROVE;
+    }
+
+    public void nodeDisabledChangeVetoed(TreeView treeView, Sequence<Integer> path, Vote reason) {
+        // No-op
     }
 
     public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {

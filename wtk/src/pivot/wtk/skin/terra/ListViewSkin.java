@@ -24,6 +24,7 @@ import java.awt.geom.Rectangle2D;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.util.Vote;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
@@ -656,10 +657,14 @@ public class ListViewSkin extends ComponentSkin implements ListView.Skin,
         repaintComponent();
     }
 
-    // ListViewItemStateListener methods
+    // List view item state events
 
-    public boolean previewItemDisabledChange(ListView listView, int index) {
-        return true;
+    public Vote previewItemDisabledChange(ListView listView, int index) {
+        return Vote.APPROVE;
+    }
+
+    public void itemDisabledChangeVetoed(ListView listView, int index, Vote reason) {
+        // No-op
     }
 
     public void itemDisabledChanged(ListView listView, int index) {

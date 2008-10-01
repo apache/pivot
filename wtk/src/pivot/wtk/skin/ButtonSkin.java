@@ -15,6 +15,7 @@
  */
 package pivot.wtk.skin;
 
+import pivot.util.Vote;
 import pivot.wtk.Action;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonListener;
@@ -127,8 +128,12 @@ public abstract class ButtonSkin extends ComponentSkin
     }
 
     // Button state events
-    public boolean previewStateChange(Button button, Button.State state) {
-        return true;
+    public Vote previewStateChange(Button button, Button.State state) {
+        return Vote.APPROVE;
+    }
+
+    public void stateChangeVetoed(Button button, Vote reason) {
+        // No-op
     }
 
     public void stateChangeVetoed(Button button) {

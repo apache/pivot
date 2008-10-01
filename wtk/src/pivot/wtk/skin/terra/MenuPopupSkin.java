@@ -17,6 +17,7 @@ package pivot.wtk.skin.terra;
 
 import java.awt.Color;
 
+import pivot.util.Vote;
 import pivot.wtk.Border;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentClassListener;
@@ -164,15 +165,25 @@ public class MenuPopupSkin extends PopupSkin
     }
 
     @Override
-    public boolean previewWindowClose(Window window) {
-        return (closeTransition == null
-            || !closeTransition.isRunning());
+    public Vote previewWindowClose(Window window) {
+        return (closeTransition != null
+            && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+    }
+
+    @Override
+    public void windowCloseVetoed(Window window, Vote reason) {
+        if (reason == Vote.DENY
+            && closeTransition != null) {
+            closeTransition.stop();
+        }
     }
 
     @Override
     public void windowClosed(Window window, Display display) {
         super.windowClosed(window, display);
         Component.getComponentClassListeners().remove(this);
+
+        closeTransition = null;
     }
 
     public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {

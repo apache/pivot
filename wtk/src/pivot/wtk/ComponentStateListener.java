@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.util.Vote;
+
 /**
  * <p>Component state listener interface.</p>
  *
@@ -26,19 +28,16 @@ public interface ComponentStateListener {
      * Called to preview an enabled change event.
      *
      * @param component
-     *
-     * @return
-     * <tt>true</tt> to allow the event to fire; <tt>false</tt> to veto the
-     * event and prevent the change.
      */
-    public boolean previewEnabledChange(Component component);
+    public Vote previewEnabledChange(Component component);
 
     /**
      * Called when a enabled change event has been vetoed.
      *
      * @param component
+     * @param reason
      */
-    public void enabledChangeVetoed(Component component);
+    public void enabledChangeVetoed(Component component, Vote reason);
 
     /**
      * Called when a component's enabled state has changed.
@@ -52,19 +51,16 @@ public interface ComponentStateListener {
      *
      * @param component
      * @param temporary
-     *
-     * @return
-     * <tt>true</tt> to allow the event to fire; <tt>false</tt> to veto the
-     * event and prevent the change.
      */
-    public boolean previewFocusedChange(Component component, boolean temporary);
+    public Vote previewFocusedChange(Component component, boolean temporary);
 
     /**
      * Called when a focused change event has been vetoed.
      *
      * @param component
+     * @param reason
      */
-    public void focusedChangeVetoed(Component component);
+    public void focusedChangeVetoed(Component component, Vote reason);
 
     /**
      * Called when a component's focused state has changed.

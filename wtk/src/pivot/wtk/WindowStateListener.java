@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.util.Vote;
+
 /**
  * <p>Window state listener interface.</p>
  *
@@ -27,19 +29,16 @@ public interface WindowStateListener {
      *
      * @param window
      * @param display
-     *
-     * @return
-     * <tt>true</tt> to consume the event and prevent the change; <tt>false</tt>
-     * to allow it.
      */
-    public boolean previewWindowOpen(Window window, Display display);
+    public Vote previewWindowOpen(Window window, Display display);
 
     /**
      * Called when a window open event has been vetoed.
      *
      * @param window
+     * @param reason
      */
-    public void windowOpenVetoed(Window window);
+    public void windowOpenVetoed(Window window, Vote reason);
 
     /**
      * Called when a window has opened.
@@ -52,19 +51,16 @@ public interface WindowStateListener {
      * Called to preview a window close event.
      *
      * @param window
-     *
-     * @return
-     * <tt>true</tt> to consume the event and prevent the change; <tt>false</tt>
-     * to allow it.
      */
-    public boolean previewWindowClose(Window window);
+    public Vote previewWindowClose(Window window);
 
     /**
      * Called when a window close event has been vetoed.
      *
      * @param window
+     * @param reason
      */
-    public void windowCloseVetoed(Window window);
+    public void windowCloseVetoed(Window window, Vote reason);
 
     /**
      * Called when a window has closed.

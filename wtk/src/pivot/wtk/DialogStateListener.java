@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.util.Vote;
+
 /**
  * <p>Dialog state listener interface.</p>
  *
@@ -26,17 +28,14 @@ public interface DialogStateListener extends DialogCloseListener {
      *
      * @param dialog
      * @param result
-     *
-     * @return
-     * <tt>true</tt> to consume the event and prevent the change; <tt>false</tt>
-     * to allow it.
      */
-    public boolean previewDialogClose(Dialog dialog, boolean result);
+    public Vote previewDialogClose(Dialog dialog, boolean result);
 
     /**
      * Called when a dialog close event has been vetoed.
      *
      * @param dialog
+     * @param reason
      */
-    public void dialogCloseVetoed(Dialog dialog);
+    public void dialogCloseVetoed(Dialog dialog, Vote reason);
 }

@@ -23,6 +23,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
+import pivot.util.Vote;
 import pivot.wtk.media.Image;
 
 /**
@@ -119,19 +120,19 @@ public class Window extends Container {
      */
     private static class WindowStateListenerList extends ListenerList<WindowStateListener>
         implements WindowStateListener {
-        public boolean previewWindowOpen(Window window, Display display) {
-            boolean approved = true;
+        public Vote previewWindowOpen(Window window, Display display) {
+            Vote vote = Vote.APPROVE;
 
             for (WindowStateListener listener : this) {
-                approved &= listener.previewWindowOpen(window, display);
+                vote = vote.tally(listener.previewWindowOpen(window, display));
             }
 
-            return approved;
+            return vote;
         }
 
-        public void windowOpenVetoed(Window window) {
+        public void windowOpenVetoed(Window window, Vote reason) {
             for (WindowStateListener listener : this) {
-                listener.windowOpenVetoed(window);
+                listener.windowOpenVetoed(window, reason);
             }
         }
 
@@ -141,19 +142,19 @@ public class Window extends Container {
             }
         }
 
-        public boolean previewWindowClose(Window window) {
-            boolean approved = true;
+        public Vote previewWindowClose(Window window) {
+            Vote vote = Vote.APPROVE;
 
             for (WindowStateListener listener : this) {
-                approved &= listener.previewWindowClose(window);
+                vote = vote.tally(listener.previewWindowClose(window));
             }
 
-            return approved;
+            return vote;
         }
 
-        public void windowCloseVetoed(Window window) {
+        public void windowCloseVetoed(Window window, Vote reason) {
             for (WindowStateListener listener : this) {
-                listener.windowCloseVetoed(window);
+                listener.windowCloseVetoed(window, reason);
             }
         }
 
@@ -403,7 +404,9 @@ public class Window extends Container {
 
         if (!isOpen()
             && !opening) {
-            if (windowStateListeners.previewWindowOpen(this, display)) {
+            Vote vote = windowStateListeners.previewWindowOpen(this, display);
+
+            if (vote == Vote.APPROVE) {
                 opening = true;
 
                 // Add this as child of display
@@ -419,7 +422,7 @@ public class Window extends Container {
 
                 opening = false;
             } else {
-                windowStateListeners.windowOpenVetoed(this);
+                windowStateListeners.windowOpenVetoed(this, vote);
             }
         }
     }
@@ -473,7 +476,9 @@ public class Window extends Container {
     public void close() {
         if (!isClosed()
             && !closing) {
-            if (windowStateListeners.previewWindowClose(this)) {
+            Vote vote = windowStateListeners.previewWindowClose(this);
+
+            if (vote.isApproved()) {
                 closing = true;
 
                 if (isActive()) {
@@ -496,7 +501,7 @@ public class Window extends Container {
 
                 closing = false;
             } else {
-                windowStateListeners.windowCloseVetoed(this);
+                windowStateListeners.windowCloseVetoed(this, vote);
             }
         }
     }

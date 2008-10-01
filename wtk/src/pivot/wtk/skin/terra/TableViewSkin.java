@@ -25,6 +25,7 @@ import java.awt.geom.Rectangle2D;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.util.Vote;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
@@ -965,10 +966,14 @@ public class TableViewSkin extends ComponentSkin implements TableView.Skin,
         repaintComponent();
     }
 
-    // TableViewRowStateListener methods
+    // Table view row state events
 
-    public boolean previewRowDisabledChange(TableView tableView, int index) {
-        return true;
+    public Vote previewRowDisabledChange(TableView tableView, int index) {
+        return Vote.APPROVE;
+    }
+
+    public void rowDisabledChangeVetoed(TableView tableView, int index, Vote reason) {
+        // No-op
     }
 
     public void rowDisabledChanged(TableView tableView, int index) {

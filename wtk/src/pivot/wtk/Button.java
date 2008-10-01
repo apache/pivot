@@ -18,6 +18,7 @@ package pivot.wtk;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.util.ListenerList;
+import pivot.util.Vote;
 
 /**
  * Abstract base class for button components.
@@ -160,19 +161,19 @@ public abstract class Button extends Component {
      */
     private static class ButtonStateListenerList extends ListenerList<ButtonStateListener>
         implements ButtonStateListener {
-        public boolean previewStateChange(Button button, Button.State state) {
-            boolean approved = true;
+        public Vote previewStateChange(Button button, Button.State state) {
+            Vote vote = Vote.APPROVE;
 
             for (ButtonStateListener listener : this) {
-                approved &= listener.previewStateChange(button, state);
+                vote = vote.tally(listener.previewStateChange(button, state));
             }
 
-            return approved;
+            return vote;
         }
 
-        public void stateChangeVetoed(Button button) {
+        public void stateChangeVetoed(Button button, Vote reason) {
             for (ButtonStateListener listener : this) {
-                listener.stateChangeVetoed(button);
+                listener.stateChangeVetoed(button, reason);
             }
         }
 
@@ -384,7 +385,9 @@ public abstract class Button extends Component {
         State previousState = this.state;
 
         if (previousState != state) {
-            if (buttonStateListeners.previewStateChange(this, state)) {
+            Vote vote = buttonStateListeners.previewStateChange(this, state);
+
+            if (vote == Vote.APPROVE) {
                 this.state = state;
 
                 if (group != null) {
@@ -413,7 +416,7 @@ public abstract class Button extends Component {
 
                 buttonStateListeners.stateChanged(this, previousState);
             } else {
-                buttonStateListeners.stateChangeVetoed(this);
+                buttonStateListeners.stateChangeVetoed(this, vote);
             }
         }
     }

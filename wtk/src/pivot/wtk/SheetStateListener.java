@@ -34,7 +34,8 @@ public interface SheetStateListener extends SheetCloseListener {
     /**
      * Called when a sheet close event has been vetoed.
      *
-     * @param dialog
+     * @param sheet
+     * @param reason
      */
     public void sheetCloseVetoed(Sheet sheet, Vote reason);
 }

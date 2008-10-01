@@ -16,6 +16,7 @@
 package pivot.wtk.test;
 
 import pivot.collections.Dictionary;
+import pivot.util.Vote;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
@@ -81,22 +82,22 @@ public class SheetTest implements Application {
         });
 
         sheet.getWindowStateListeners().add(new WindowStateListener() {
-            public boolean previewWindowOpen(Window window, Display display) {
-                return true;
+            public Vote previewWindowOpen(Window window, Display display) {
+                return Vote.APPROVE;
             }
 
-            public void windowOpenVetoed(Window window) {
+            public void windowOpenVetoed(Window window, Vote reason) {
             }
 
             public void windowOpened(Window window) {
                 closeButton.requestFocus();
             }
 
-            public boolean previewWindowClose(Window window) {
-                return true;
+            public Vote previewWindowClose(Window window) {
+                return Vote.APPROVE;
             }
 
-            public void windowCloseVetoed(Window window) {
+            public void windowCloseVetoed(Window window, Vote reason) {
             }
 
             public void windowClosed(Window window, Display display) {

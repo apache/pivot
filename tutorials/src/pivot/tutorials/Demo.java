@@ -23,6 +23,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.util.CalendarDate;
+import pivot.util.Vote;
 import pivot.wtk.Action;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
@@ -138,21 +139,21 @@ public class Demo implements Application {
 
                 // Ensure that we clear the popup reference
                 popup.getWindowStateListeners().add(new WindowStateListener() {
-                    public boolean previewWindowOpen(Window window, Display display) {
-                        return true;
+                    public Vote previewWindowOpen(Window window, Display display) {
+                        return Vote.APPROVE;
                     }
 
-                    public void windowOpenVetoed(Window window) {
+                    public void windowOpenVetoed(Window window, Vote reason) {
                     }
 
                     public void windowOpened(Window window) {
                     }
 
-                    public boolean previewWindowClose(Window window) {
-                        return true;
+                    public Vote previewWindowClose(Window window) {
+                        return Vote.APPROVE;
                     }
 
-                    public void windowCloseVetoed(Window window) {
+                    public void windowCloseVetoed(Window window, Vote reason) {
                     }
 
                     public void windowClosed(Window window, Display display) {

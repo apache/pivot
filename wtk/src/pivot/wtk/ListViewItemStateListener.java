@@ -15,8 +15,10 @@
  */
 package pivot.wtk;
 
+import pivot.util.Vote;
+
 /**
- * <p>List view item state listener interface.</p>
+ * List view item state listener interface.
  *
  * @author gbrown
  * @author tvolkert
@@ -27,12 +29,17 @@ public interface ListViewItemStateListener {
      *
      * @param listView
      * @param index
-     *
-     * @return
-     * <tt>true</tt> to allow the item's disabled state to change;
-     * <tt>false</tt> to disallow it
      */
-    public boolean previewItemDisabledChange(ListView listView, int index);
+    public Vote previewItemDisabledChange(ListView listView, int index);
+
+    /**
+     * Called when an item disabled change event has been cancelled.
+     *
+     * @param listView
+     * @param index
+     * @param reason
+     */
+    public void itemDisabledChangeVetoed(ListView listView, int index, Vote reason);
 
     /**
      * Called when an item's disabled state has changed.

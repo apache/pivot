@@ -11,6 +11,7 @@ import pivot.tools.explorer.tree.TreeNodeList;
 import pivot.tools.explorer.tree.renderer.ComponentNodeRenderer;
 import pivot.tools.explorer.utils.Collections;
 import pivot.util.Resources;
+import pivot.util.Vote;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
@@ -57,12 +58,12 @@ public class Explorer implements Application, TreeViewSelectionListener {
         String resourceName = String.format("%s.wtkx", className.replace('.', '/'));
         dialog = createMainWindow( application, (Component) wtkxSerializer.readObject(resourceName));
         dialog.getDialogStateListeners().add(new DialogStateListener() {
-            public boolean previewDialogClose(Dialog dialog, boolean result) {
+            public Vote previewDialogClose(Dialog dialog, boolean result) {
                 dialog.moveToBack();
-                return false;
+                return Vote.DENY;
             }
 
-            public void dialogCloseVetoed(Dialog dialog) {
+            public void dialogCloseVetoed(Dialog dialog, Vote reason) {
                 // No-op
             }
 
