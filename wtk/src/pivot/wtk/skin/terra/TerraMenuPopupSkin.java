@@ -53,13 +53,16 @@ public class TerraMenuPopupSkin extends PopupSkin
     private MenuItemSelectionListener menuItemPressListener = new MenuItemSelectionListener() {
         public void itemSelected(Menu.Item item) {
             final MenuPopup menuPopup = (MenuPopup)getComponent();
+
             closeTransition = new FadeTransition(menuPopup,
                 CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE);
+
             closeTransition.start(new TransitionListener() {
                 public void transitionCompleted(Transition transition) {
                     menuPopup.close();
                 }
             });
+
             menuPopup.close();
         }
     };
@@ -172,6 +175,8 @@ public class TerraMenuPopupSkin extends PopupSkin
 
     @Override
     public void windowCloseVetoed(Window window, Vote reason) {
+        super.windowCloseVetoed(window, reason);
+
         if (reason == Vote.DENY
             && closeTransition != null) {
             closeTransition.stop();

@@ -18,6 +18,7 @@ package pivot.wtk.skin.terra;
 import java.awt.Color;
 import java.awt.Font;
 
+import pivot.util.Vote;
 import pivot.wtk.Border;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
@@ -32,6 +33,8 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Tooltip;
 import pivot.wtk.TooltipListener;
 import pivot.wtk.Window;
+import pivot.wtk.effects.Transition;
+import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.WindowSkin;
 
 /**
@@ -95,27 +98,26 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     private Border border = new Border();
 
     private CloseHandler closeHandler = new CloseHandler();
+    private Transition closeTransition = null;
 
-    private static final Font FONT = new Font("Verdana", Font.PLAIN, 11);
-    private static final Color COLOR = Color.BLACK;
-    private static final Color BACKGROUND_COLOR = new Color(0xff, 0xff, 0xe0);
-    private static final Color BORDER_COLOR = Color.BLACK;
-    private static final Insets PADDING = new Insets(2);
-
+    private static final int CLOSE_TRANSITION_DURATION = 750;
+    private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraTooltipSkin() {
+        setBackgroundColor((Color)null);
+
         // Add the label to the border
         border.setContent(label);
 
         // Apply the default styles
         Component.StyleDictionary labelStyles = label.getStyles();
-        labelStyles.put("font", FONT);
-        labelStyles.put("color", COLOR);
+        labelStyles.put("font", new Font("Verdana", Font.PLAIN, 11));
+        labelStyles.put("color", Color.BLACK);
 
         Component.StyleDictionary borderStyles = border.getStyles();
-        borderStyles.put("backgroundColor", BACKGROUND_COLOR);
-        borderStyles.put("color", BORDER_COLOR);
-        borderStyles.put("padding", PADDING);
+        borderStyles.put("backgroundColor", new Color(0xff, 0xff, 0xe0, 0xc0));
+        borderStyles.put("color", Color.BLACK);
+        borderStyles.put("padding", new Insets(2));
     }
 
     @Override
@@ -138,6 +140,8 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
 
     @Override
     public void windowOpened(Window window) {
+        super.windowOpened(window);
+
         // Add this as a display mouse and key listener
         Display display = window.getDisplay();
         display.getComponentMouseListeners().add(closeHandler);
@@ -147,12 +151,50 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     }
 
     @Override
+    public Vote previewWindowClose(Window window) {
+        Vote vote = Vote.APPROVE;
+
+        if (closeTransition == null) {
+            final Tooltip tooltip = (Tooltip)getComponent();
+
+            closeTransition = new FadeTransition(tooltip,
+                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE);
+
+            closeTransition.start(new TransitionListener() {
+                public void transitionCompleted(Transition transition) {
+                    tooltip.close();
+                }
+            });
+
+            vote = Vote.DEFER;
+        } else {
+            vote = (closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+        }
+
+        return vote;
+    }
+
+    @Override
+    public void windowCloseVetoed(Window window, Vote reason) {
+        super.windowCloseVetoed(window, reason);
+
+        if (reason == Vote.DENY
+            && closeTransition != null) {
+            closeTransition.stop();
+        }
+    }
+
+    @Override
     public void windowClosed(Window window, Display display) {
+        super.windowClosed(window, display);
+
         // Remove this as a display mouse and key listener
         display.getComponentMouseListeners().remove(closeHandler);
         display.getComponentMouseButtonListeners().remove(closeHandler);
         display.getComponentMouseWheelListeners().remove(closeHandler);
         display.getComponentKeyListeners().remove(closeHandler);
+
+        closeTransition = null;
     }
 
     public void textChanged(Tooltip tooltip, String previousText) {
