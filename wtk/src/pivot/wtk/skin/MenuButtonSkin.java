@@ -18,6 +18,7 @@ package pivot.wtk.skin;
 import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
+import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Menu;
@@ -195,27 +196,36 @@ public abstract class MenuButtonSkin extends ButtonSkin
             Window window = menuButton.getWindow();
 
             if (window != null) {
+                int width = getWidth();
+                int height = getHeight();
+
                 Display display = menuButton.getWindow().getDisplay();
-                Point buttonLocation = menuButton.mapPointToAncestor(display, 0, 0);
 
                 // Ensure that the popup remains within the bounds of the display
-                int displayHeight = display.getHeight();
+                Point buttonLocation = menuButton.mapPointToAncestor(display, 0, 0);
 
-                int y = buttonLocation.y + getHeight() - 1;
-                int preferredPopupHeight = content.getPreferredHeight();
+                Dimensions displaySize = display.getSize();
+                Dimensions popupSize = content.getPreferredSize();
 
-                if (y + preferredPopupHeight > displayHeight) {
-                    if (buttonLocation.y - preferredPopupHeight > 0) {
-                        y = buttonLocation.y - preferredPopupHeight + 1;
-                    } else {
-                        preferredPopupHeight = displayHeight - y;
-                    }
-                } else {
-                    preferredPopupHeight = -1;
+                int x = buttonLocation.x;
+                if (popupSize.width > width
+                    && x + popupSize.width > displaySize.width) {
+                    x = buttonLocation.x + width - popupSize.width;
                 }
 
-                menuPopup.setLocation(buttonLocation.x, y);
-                menuPopup.setPreferredHeight(preferredPopupHeight);
+                int y = buttonLocation.y + height - 1;
+                if (y + popupSize.height > displaySize.height) {
+                    if (buttonLocation.y - popupSize.height > 0) {
+                        y = buttonLocation.y - popupSize.height + 1;
+                    } else {
+                        popupSize.height = displaySize.height - y;
+                    }
+                } else {
+                    popupSize.height = -1;
+                }
+
+                menuPopup.setLocation(x, y);
+                menuPopup.setPreferredSize(popupSize);
                 menuPopup.open(menuButton);
 
                 menuPopup.requestFocus();

@@ -442,7 +442,6 @@ public abstract class ApplicationContext {
 
             // Process the event
             Component focusedComponent = Component.getFocusedComponent();
-            Window activeWindow = Window.getActiveWindow();
 
             switch (event.getID()) {
                 case KeyEvent.KEY_TYPED: {
@@ -478,17 +477,6 @@ public abstract class ApplicationContext {
 
                     if (!consumed) {
                         dragDropManager.keyReleased(keyCode, keyLocation);
-
-                        if (activeWindow != null) {
-                            // Perform any action defined for this keystroke
-                            // in the active window's action dictionary
-                            Keyboard.KeyStroke keyStroke = new Keyboard.KeyStroke(keyCode,
-                                modifiers);
-                            Action action = activeWindow.getActions().get(keyStroke);
-                            if (action != null) {
-                                action.perform();
-                            }
-                        }
                     }
 
                     break;

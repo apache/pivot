@@ -18,12 +18,14 @@ package pivot.wtk.skin;
 import java.awt.Color;
 
 import pivot.util.Vote;
+import pivot.wtk.Action;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.Display;
 import pivot.wtk.FocusTraversalPolicy;
+import pivot.wtk.Keyboard;
 import pivot.wtk.Window;
 import pivot.wtk.WindowListener;
 import pivot.wtk.WindowStateListener;
@@ -127,6 +129,25 @@ public class WindowSkin extends ContainerSkin
         }
     }
 
+    // Component key events
+    @Override
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyReleased(component, keyCode, keyLocation);
+        
+        // Perform any action defined for this keystroke
+        // in the active window's action dictionary
+        Window window = (Window)getComponent();
+        Keyboard.KeyStroke keyStroke = new Keyboard.KeyStroke(keyCode,
+            Keyboard.getModifiers());
+        
+        Action action = window.getActions().get(keyStroke);
+        if (action != null) {
+            action.perform();
+        }
+        
+        return consumed;
+    }
+    
     // Window events
     public void titleChanged(Window window, String previousTitle) {
         // No-op

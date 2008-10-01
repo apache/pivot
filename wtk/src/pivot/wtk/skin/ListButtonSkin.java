@@ -20,6 +20,7 @@ import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
+import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
@@ -35,14 +36,14 @@ import pivot.wtk.Window;
 /**
  * Abstract base class for list button skins.
  * <p>
- * TODO Rather than blindly closing when a mouse down is received, we could
- * instead cache the selection state in container mouse down and compare it
- * to the current state in component mouse down. If different, we close the
- * popup. This would also tie this base class less tightly to its concrete
- * subclasses.
- * <p>
  * TODO Extend Popup instead of adding event listeners? May slightly simplify
  * implementation.
+ * <p>
+ * TODO Rather than blindly closing when a mouse down is received, we could
+ * instead cache the selection state in the popup's container mouse down event
+ * and compare it to the current state in component mouse down. If different, 
+ * we close the popup. This would also tie this base class less tightly to its 
+ * concrete subclasses.
  *
  * @author gbrown
  */
@@ -278,27 +279,36 @@ public abstract class ListButtonSkin extends ButtonSkin
                 Window window = listButton.getWindow();
 
                 if (window != null) {
+                    int width = getWidth();
+                    int height = getHeight();
+                    
                     Display display = listButton.getWindow().getDisplay();
+                    
+                    // Ensure that the popup remains within the bounds of the display
                     Point buttonLocation = listButton.mapPointToAncestor(display, 0, 0);
 
-                    // Ensure that the popup remains within the bounds of the display
-                    int displayHeight = display.getHeight();
+                    Dimensions displaySize = display.getSize();
+                    Dimensions popupSize = content.getPreferredSize();
 
-                    int y = buttonLocation.y + getHeight() - 1;
-                    int preferredPopupHeight = content.getPreferredHeight();
-
-                    if (y + preferredPopupHeight > displayHeight) {
-                        if (buttonLocation.y - preferredPopupHeight > 0) {
-                            y = buttonLocation.y - preferredPopupHeight + 1;
+                    int x = buttonLocation.x;
+                    if (popupSize.width > width
+                        && x + popupSize.width > displaySize.width) {
+                        x = buttonLocation.x + width - popupSize.width;
+                    }
+                    
+                    int y = buttonLocation.y + height - 1;
+                    if (y + popupSize.height > displaySize.height) {
+                        if (buttonLocation.y - popupSize.height > 0) {
+                            y = buttonLocation.y - popupSize.height + 1;
                         } else {
-                            preferredPopupHeight = displayHeight - y;
+                            popupSize.height = displaySize.height - y;
                         }
                     } else {
-                        preferredPopupHeight = -1;
+                        popupSize.height = -1;
                     }
 
-                    listViewPopup.setLocation(buttonLocation.x, y);
-                    listViewPopup.setPreferredHeight(preferredPopupHeight);
+                    listViewPopup.setLocation(x, y);
+                    listViewPopup.setPreferredSize(popupSize);
                     listViewPopup.open(listButton);
 
                     if (listView.getFirstSelectedIndex() == -1
