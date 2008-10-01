@@ -16,8 +16,8 @@
 package pivot.util;
 
 /**
- * <p>Implements the "base64" binary encoding scheme as defined by
- * <a href="http://tools.ietf.org/html/rfc2045">RFC 2045</a>.</p>
+ * Implements the "base64" binary encoding scheme as defined by
+ * <a href="http://tools.ietf.org/html/rfc2045">RFC 2045</a>.
  *
  * @author tvolkert
  */

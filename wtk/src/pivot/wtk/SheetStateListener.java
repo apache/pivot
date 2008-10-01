@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.util.Vote;
+
 /**
  * <p>Sheet state listener interface.</p>
  *
@@ -26,17 +28,13 @@ public interface SheetStateListener extends SheetCloseListener {
      *
      * @param sheet
      * @param result
-     *
-     * @return
-     * <tt>true</tt> to consume the event and prevent the change; <tt>false</tt>
-     * to allow it.
      */
-    public boolean previewSheetClose(Sheet sheet, boolean result);
+    public Vote previewSheetClose(Sheet sheet, boolean result);
 
     /**
      * Called when a sheet close event has been vetoed.
      *
      * @param dialog
      */
-    public void sheetCloseVetoed(Sheet sheet);
+    public void sheetCloseVetoed(Sheet sheet, Vote reason);
 }

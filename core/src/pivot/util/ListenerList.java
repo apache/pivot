@@ -22,9 +22,9 @@ import java.util.Iterator;
  * <p>
  * NOTE This class is not thread-safe.
  * <p>
- * NOTE This class does not and should not implement Sequence. We intentionally
- * prevent access to listeners via index to prevent concurrent modification
- * exceptions when removing listeners during iteration.
+ * IMPORTANT This class does not implement Sequence, since this would
+ * provide direct access to listeners via index, enabling concurrent
+ * modification by removing listeners during iteration.
  * <p>
  * TODO Eliminate dependency on java.util.ArrayList and use an internal
  * linked list (not an instance of pivot.collections.LinkedList, since

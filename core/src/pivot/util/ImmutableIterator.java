@@ -18,7 +18,7 @@ package pivot.util;
 import java.util.Iterator;
 
 /**
- * <p>Immutable implementation of the {@link Iterator} interface.</p>
+ * Immutable implementation of the {@link Iterator} interface.
  *
  * @author gbrown
  */

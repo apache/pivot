@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import pivot.collections.Dictionary;
+import pivot.util.Vote;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
@@ -333,10 +334,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         });
     }
 
-    public boolean previewSheetClose(final Sheet sheet, final boolean result) {
+    public Vote previewSheetClose(final Sheet sheet, final boolean result) {
         // Start a close transition, return false, and close the window
         // when the transition is complete
-        boolean approve = true;
+        Vote vote = Vote.APPROVE;
 
         if (closeTransition == null) {
             int duration = SLIDE_DURATION;
@@ -365,22 +366,21 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                     }
                 });
 
-                approve = false;
+                vote = Vote.DEFER;
             }
         } else {
-            approve = !closeTransition.isRunning();
+            vote = (closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
         }
 
-        return approve;
+        return vote;
     }
 
-    public void sheetCloseVetoed(Sheet sheet) {
-        /*
-        if (closeTransition != null) {
+    public void sheetCloseVetoed(Sheet sheet, Vote reason) {
+        if (reason == Vote.DENY
+            && closeTransition != null) {
             closeTransition.stop();
             closeTransition = null;
         }
-        */
     }
 
     public void sheetClosed(Sheet sheet) {

@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import pivot.util.ListenerList;
+import pivot.util.Vote;
 
 /**
  * <p>Window class representing a "sheet". A sheet behaves like a dialog that is
@@ -27,19 +28,19 @@ import pivot.util.ListenerList;
 public class Sheet extends Window {
     private static class SheetStateListenerList extends ListenerList<SheetStateListener>
         implements SheetStateListener {
-        public boolean previewSheetClose(Sheet sheet, boolean result) {
-            boolean approved = true;
+        public Vote previewSheetClose(Sheet sheet, boolean result) {
+            Vote vote = Vote.APPROVE;
 
             for (SheetStateListener listener : this) {
-                approved &= listener.previewSheetClose(sheet, result);
+                vote = vote.tally(listener.previewSheetClose(sheet, result));
             }
 
-            return approved;
+            return vote;
         }
 
-        public void sheetCloseVetoed(Sheet sheet) {
+        public void sheetCloseVetoed(Sheet sheet, Vote reason) {
             for (SheetStateListener listener : this) {
-                listener.sheetCloseVetoed(sheet);
+                listener.sheetCloseVetoed(sheet, reason);
             }
         }
 
@@ -164,7 +165,9 @@ public class Sheet extends Window {
 
     public void close(boolean result) {
         if (!isClosed()) {
-            if (sheetStateListeners.previewSheetClose(this, result)) {
+            Vote vote = sheetStateListeners.previewSheetClose(this, result);
+
+            if (vote.isApproved()) {
                 super.close();
 
                 if (isClosed()) {
@@ -186,7 +189,7 @@ public class Sheet extends Window {
                     sheetStateListeners.sheetClosed(this);
                 }
             } else {
-                sheetStateListeners.sheetCloseVetoed(this);
+                sheetStateListeners.sheetCloseVetoed(this, vote);
             }
         }
     }
