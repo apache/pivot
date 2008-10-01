@@ -27,32 +27,32 @@ import pivot.util.ListenerList;
 public class Tooltip extends Window {
     private static class TooltipListenerList extends ListenerList<TooltipListener>
         implements TooltipListener {
-        public void tooltipTextChanged(Tooltip tooltip, String previousTooltipText) {
+        public void textChanged(Tooltip tooltip, String previousText) {
             for (TooltipListener listener : this) {
-                listener.tooltipTextChanged(tooltip, previousTooltipText);
+                listener.textChanged(tooltip, previousText);
             }
         }
     }
 
-    private String tooltipText = null;
+    private String text = null;
 
     private TooltipListenerList tooltipListeners = new TooltipListenerList();
 
-    public Tooltip(String tooltipText) {
-        setTooltipText(tooltipText);
+    public Tooltip(String text) {
+        setText(text);
         installSkin(Tooltip.class);
     }
 
-    public String getTooltipText() {
-        return tooltipText;
+    public String getText() {
+        return text;
     }
 
-    public void setTooltipText(String tooltipText) {
-        String previousTooltipText = this.tooltipText;
+    public void setText(String text) {
+        String previousText = this.text;
 
-        if (previousTooltipText != tooltipText) {
-            this.tooltipText = tooltipText;
-            tooltipListeners.tooltipTextChanged(this, previousTooltipText);
+        if (previousText != text) {
+            this.text = text;
+            tooltipListeners.textChanged(this, previousText);
         }
     }
 

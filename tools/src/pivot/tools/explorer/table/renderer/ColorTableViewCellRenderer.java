@@ -41,24 +41,24 @@ public class ColorTableViewCellRenderer extends AbstractFlowPaneTableViewCellRen
     }
 
     private ColorBadge colorBadge = new ColorBadge();
-    private Label text = new Label();
+    private Label label = new Label();
 
     public ColorTableViewCellRenderer() {
         super();
         add(new ImageView(colorBadge));
-        add(text);
+        add(label);
     }
 
     @Override
     protected Component getStyleComponent() {
-        return text;
+        return label;
     }
 
     public void render(Object cellData) {
         if (cellData instanceof Color) {
             Color color = (Color)cellData;
             colorBadge.setColor(color);
-            text.setText(colorToHex(color));
+            label.setText(colorToHex(color));
         }
     }
 

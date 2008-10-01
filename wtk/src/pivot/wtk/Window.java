@@ -286,17 +286,20 @@ public class Window extends Container {
      */
     @Override
     public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
+        if (isEnabled() != enabled) {
+            super.setEnabled(enabled);
 
-        if (!enabled) {
-            if (isActive()) {
-                setActiveWindow(null);
+            if (isEnabled() == enabled) {
+                if (!enabled
+                    && isActive()) {
+                    setActiveWindow(null);
+                }
+
+                // Enable/disable owned windows
+                for (Window ownedWindow : ownedWindows) {
+                    ownedWindow.setEnabled(enabled);
+                }
             }
-        }
-
-        // Enable/disable owned windows
-        for (Window ownedWindow : ownedWindows) {
-            ownedWindow.setEnabled(enabled);
         }
     }
 

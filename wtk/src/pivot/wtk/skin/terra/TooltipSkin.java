@@ -126,7 +126,7 @@ public class TooltipSkin extends WindowSkin implements TooltipListener {
         tooltip.setContent(border);
         tooltip.getTooltipListeners().add(this);
 
-        label.setText(tooltip.getTooltipText());
+        label.setText(tooltip.getText());
     }
 
     @Override
@@ -155,7 +155,7 @@ public class TooltipSkin extends WindowSkin implements TooltipListener {
         display.getComponentKeyListeners().remove(closeHandler);
     }
 
-    public void tooltipTextChanged(Tooltip tooltip, String previousTooltipText) {
-        label.setText(tooltip.getTooltipText());
+    public void textChanged(Tooltip tooltip, String previousText) {
+        label.setText(tooltip.getText());
     }
 }

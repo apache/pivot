@@ -22,10 +22,10 @@ package pivot.wtk;
  */
 public interface TooltipListener {
     /**
-     * Called when a tooltip's tooltip text property has changed.
+     * Called when a tooltip's text property has changed.
      *
      * @param tooltip
-     * @param previousTooltipText
+     * @param previousText
      */
-    public void tooltipTextChanged(Tooltip tooltip, String previousTooltipText);
+    public void textChanged(Tooltip tooltip, String previousText);
 }
