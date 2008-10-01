@@ -23,6 +23,7 @@ import pivot.wtk.Cursor;
 import pivot.wtk.Display;
 import pivot.wtk.Mouse;
 import pivot.wtk.Popup;
+import pivot.wtk.PopupListener;
 import pivot.wtk.Window;
 
 /**
@@ -30,7 +31,7 @@ import pivot.wtk.Window;
  *
  * @author gbrown
  */
-public class PopupSkin extends WindowSkin {
+public class PopupSkin extends WindowSkin implements PopupListener {
     private ComponentListener affiliateComponentListener = new ComponentListener() {
         public void parentChanged(Component component, Container previousParent) {
             // Ignore this event if it came from the affiliate's window.
@@ -41,6 +42,8 @@ public class PopupSkin extends WindowSkin {
             // of the affiliate's window being closed.
 
             if (!(component instanceof Window)) {
+                System.out.println("parentChanged() " + component);
+
                 // Remove this as a component listener on the previous parent's
                 // ancestry
                 Component ancestor = previousParent;
@@ -126,6 +129,22 @@ public class PopupSkin extends WindowSkin {
         }
     };
 
+    @Override
+    public void install(Component component) {
+        super.install(component);
+
+        Popup popup = (Popup)component;
+        popup.getPopupListeners().add(this);
+    }
+
+    @Override
+    public void uninstall() {
+        Popup popup = (Popup)getComponent();
+        popup.getPopupListeners().add(this);
+
+        super.uninstall();
+    }
+
     // Window events
     @Override
     public void windowOpened(Window window) {
@@ -156,5 +175,12 @@ public class PopupSkin extends WindowSkin {
             ancestor.getComponentListeners().remove(affiliateComponentListener);
             ancestor = ancestor.getParent();
         }
+    }
+
+    // Popup events
+    public void affiliateChanged(Popup popup, Component previousAffiliate) {
+        // No-op; the popup won't let the affiliate change while it is
+        // open, and we add/remove affiliate listeners in the open/close
+        // handlers
     }
 }

@@ -49,7 +49,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
         // TODO Remove this debug code
         if (list.indexOf(listener) == -1) {
             System.out.println("Nonexistent listener " + listener + " removed from "
-                + this);
+                + this.getClass().getName());
         }
 
         list.remove(listener);

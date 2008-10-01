@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.util.ListenerList;
+
 /**
  * Window class representing a "popup" window. A popup is an auxiliary window
  * that is optionally associated with an "affiliate" component. A popup closes
@@ -33,7 +35,18 @@ package pivot.wtk;
  * @author gbrown
  */
 public class Popup extends Window {
+    private static class PopupListenerList extends ListenerList<PopupListener>
+        implements PopupListener {
+        public void affiliateChanged(Popup popup, Component previousAffiliate) {
+            for (PopupListener listener : this) {
+                listener.affiliateChanged(popup, previousAffiliate);
+            }
+        }
+    }
+
     private Component affiliate = null;
+
+    private PopupListenerList popupListeners = new PopupListenerList();
 
     /**
      * Creates a new popup.
@@ -66,6 +79,20 @@ public class Popup extends Window {
     }
 
     /**
+     * Sets the popup's affiliate component.
+     *
+     * @param affiliate
+     */
+    public void setAffiliate(Component affiliate) {
+        Component previousAffiliate = this.affiliate;
+
+        if (previousAffiliate != affiliate) {
+            this.affiliate = affiliate;
+            popupListeners.affiliateChanged(this, previousAffiliate);
+        }
+    }
+
+    /**
      * @return
      * <tt>true</tt>; by default, popups are auxilliary windows.
      */
@@ -85,9 +112,13 @@ public class Popup extends Window {
             throw new IllegalArgumentException("affiliate is null.");
         }
 
-        super.open(affiliate.getWindow());
+        if (isOpen()
+            && getAffiliate() != affiliate) {
+            throw new IllegalStateException("Popup is already open with a different affiliate.");
+        }
 
-        this.affiliate = affiliate;
+        setAffiliate(affiliate);
+        open(affiliate.getWindow());
     }
 
     @Override
@@ -96,5 +127,9 @@ public class Popup extends Window {
             super.close();
             affiliate = null;
         }
+    }
+
+    public ListenerList<PopupListener> getPopupListeners() {
+        return popupListeners;
     }
 }

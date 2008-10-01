@@ -133,21 +133,21 @@ public class WindowSkin extends ContainerSkin
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);
-        
+
         // Perform any action defined for this keystroke
         // in the active window's action dictionary
         Window window = (Window)getComponent();
         Keyboard.KeyStroke keyStroke = new Keyboard.KeyStroke(keyCode,
             Keyboard.getModifiers());
-        
+
         Action action = window.getActions().get(keyStroke);
         if (action != null) {
             action.perform();
         }
-        
+
         return consumed;
     }
-    
+
     // Window events
     public void titleChanged(Window window, String previousTitle) {
         // No-op
