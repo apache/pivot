@@ -183,7 +183,7 @@ public interface Sequence<T> {
                 sequence = (Sequence<T>)sequence.get(path.get(i++));
             }
 
-            return sequence.get(i);
+            return sequence.get(path.get(i));
         }
 
         /**
