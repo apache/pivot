@@ -46,6 +46,7 @@ import pivot.wtk.TextInput;
 import pivot.wtk.TextInputListener;
 import pivot.wtk.TextInputCharacterListener;
 import pivot.wtk.TextInputSelectionListener;
+import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -309,21 +310,40 @@ public class TerraTextInputSkin extends ComponentSkin
     private BlinkCursorCallback blinkCursorCallback = new BlinkCursorCallback();
     private int blinkCursorIntervalID = -1;
 
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
-    private Color color = new Color(0x00, 0x00, 0x00);
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private Color backgroundColor = new Color(0xF7, 0xF5, 0xEB);
-    private Color disabledBackgroundColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color borderColor = new Color(0x99, 0x99, 0x99);
-    private Color disabledBorderColor = new Color(0x99, 0x99, 0x99);
-    private Color bevelColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color disabledBevelColor = new Color(0xE6, 0xE3, 0xDA);
-    private Insets padding = new Insets(2);
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private Color backgroundColor;
+    private Color disabledBackgroundColor;
+    private Color borderColor;
+    private Color disabledBorderColor;
+    private Color bevelColor;
+    private Color disabledBevelColor;
+    private Insets padding;
 
-    private Color selectionColor = new Color(0xFF, 0xFF, 0xFF);
-    private Color selectionBackgroundColor = new Color(0x14, 0x53, 0x8B);
-    private Color inactiveSelectionColor = new Color(0x00, 0x00, 0x00);
-    private Color inactiveSelectionBackgroundColor = new Color(0xCC, 0xCA, 0xC2);
+    private Color selectionColor;
+    private Color selectionBackgroundColor;
+    private Color inactiveSelectionColor;
+    private Color inactiveSelectionBackgroundColor;
+
+    public TerraTextInputSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        font = theme.getFont();
+        color = theme.getColor(0);
+        disabledColor = theme.getColor(3);
+        backgroundColor = theme.getColor(5);
+        disabledBackgroundColor = theme.getColor(2);
+        borderColor = theme.getColor(3);
+        disabledBorderColor = theme.getColor(3);
+        bevelColor = theme.getColor(2);
+        disabledBevelColor = theme.getColor(2);
+        padding = new Insets(2);
+
+        selectionColor = theme.getColor(1);
+        selectionBackgroundColor = theme.getColor(11);
+        inactiveSelectionColor = theme.getColor(0);
+        inactiveSelectionBackgroundColor = theme.getColor(10);
+    }
 
     @Override
     public void install(Component component) {

@@ -38,6 +38,7 @@ import pivot.wtk.TableView;
 import pivot.wtk.TableViewColumnListener;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TableViewHeaderListener;
+import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
 
@@ -149,19 +150,19 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
     }
 
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
-    private Color color = Color.BLACK;
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private Color backgroundColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color disabledBackgroundColor = new Color(0xF7, 0xF5, 0xEB);
-    private Color borderColor = new Color(0x99, 0x99, 0x99);
-    private Color disabledBorderColor = new Color(0xCC, 0xCC, 0xCC);
-    private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
-    private Color pressedBevelColor = new Color(0xCC, 0xCA, 0xC2);
-    private Color disabledBevelColor = Color.WHITE;
-    private boolean headersPressable = true;
-    private boolean columnsResizable = true;
-    private boolean includeTrailingVerticalGridLine = false;
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private Color backgroundColor;
+    private Color disabledBackgroundColor;
+    private Color borderColor;
+    private Color disabledBorderColor;
+    private Color bevelColor;
+    private Color pressedBevelColor;
+    private Color disabledBevelColor;
+    private boolean headersPressable;
+    private boolean columnsResizable;
+    private boolean includeTrailingVerticalGridLine;
 
     private int pressedHeaderIndex = -1;
     private boolean resizing = false;
@@ -173,6 +174,20 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     protected SortIndicatorImage sortDescendingImage = new SortIndicatorImage(SortDirection.DESCENDING);
 
     public TerraTableViewHeaderSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        font = theme.getFont();
+        color = theme.getColor(0);
+        disabledColor = theme.getColor(3);
+        backgroundColor = theme.getColor(2);
+        disabledBackgroundColor = theme.getColor(2);
+        borderColor = theme.getColor(3);
+        disabledBorderColor = theme.getColor(4);
+        bevelColor = theme.getColor(5);
+        pressedBevelColor = theme.getColor(10);
+        disabledBevelColor = theme.getColor(2);
+        headersPressable = true;
+        columnsResizable = true;
+        includeTrailingVerticalGridLine = false;
     }
 
     public void install(Component component) {

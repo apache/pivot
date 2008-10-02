@@ -34,6 +34,7 @@ import pivot.wtk.Mouse;
 import pivot.wtk.PushButton;
 import pivot.wtk.Rollup;
 import pivot.wtk.RollupListener;
+import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
@@ -189,11 +190,20 @@ public class TerraRollupSkin extends ContainerSkin
     private CollapseImage collapseImage = new CollapseImage();
     private BulletImage bulletImage = new BulletImage();
 
-    private Color buttonColor = new Color(0xcc, 0xca, 0xc2);
-    private int spacing = 4;
-    private int buffer = 4;
-    private boolean justify = false;
-    private boolean firstChildToggles = true;
+    private Color buttonColor;
+    private int spacing;
+    private int buffer;
+    private boolean justify;
+    private boolean firstChildToggles;
+
+    public TerraRollupSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        buttonColor = theme.getColor(10);
+        spacing = 4;
+        buffer = 4;
+        justify = false;
+        firstChildToggles = true;
+    }
 
     @Override
     public void install(Component component) {

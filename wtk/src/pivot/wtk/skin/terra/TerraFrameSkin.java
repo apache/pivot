@@ -42,6 +42,7 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.PushButton;
 import pivot.wtk.Bounds;
+import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
@@ -103,7 +104,7 @@ public class TerraFrameSkin extends WindowSkin {
     protected class MinimizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
-            graphics.setPaint(window.isActive() ? TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
+            graphics.setPaint(window.isActive() ? titleBarColor : inactiveTitleBarColor);
             graphics.fill(new Rectangle2D.Double(0, 6, 8, 2));
         }
     }
@@ -116,10 +117,10 @@ public class TerraFrameSkin extends WindowSkin {
     protected class MaximizeImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
-            graphics.setPaint(window.isActive() ? TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
+            graphics.setPaint(window.isActive() ? titleBarColor : inactiveTitleBarColor);
             graphics.fill(new Rectangle2D.Double(0, 0, 8, 8));
 
-            graphics.setPaint(window.isActive() ? TITLE_BAR_BACKGROUND_COLOR : INACTIVE_TITLE_BAR_BACKGROUND_COLOR);
+            graphics.setPaint(window.isActive() ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
             graphics.fill(new Rectangle2D.Double(2, 2, 4, 4));
         }
     }
@@ -133,11 +134,11 @@ public class TerraFrameSkin extends WindowSkin {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
             graphics.setPaint(window.isActive() ?
-                TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
+                titleBarColor : inactiveTitleBarColor);
             graphics.fill(new Rectangle2D.Double(1, 1, 6, 6));
 
             graphics.setPaint(window.isActive() ?
-                TITLE_BAR_BACKGROUND_COLOR : INACTIVE_TITLE_BAR_BACKGROUND_COLOR);
+                titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
             graphics.fill(new Rectangle2D.Double(3, 3, 2, 2));
         }
     }
@@ -151,7 +152,7 @@ public class TerraFrameSkin extends WindowSkin {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
             graphics.setPaint(window.isActive() ?
-                TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
+                titleBarColor : inactiveTitleBarColor);
             graphics.setStroke(new BasicStroke(2));
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -184,7 +185,7 @@ public class TerraFrameSkin extends WindowSkin {
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
-            graphics.setPaint(CONTENT_BORDER_COLOR);
+            graphics.setPaint(contentBorderColor);
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);
@@ -310,26 +311,41 @@ public class TerraFrameSkin extends WindowSkin {
 
     private Point restoreLocation = null;
 
-    private Insets padding = new Insets(8);
-    private boolean resizable = true;
+    private Color titleBarColor;
+    private Color titleBarBackgroundColor;
+    private Color titleBarBevelColor;
+    private Color titleBarPressedBevelColor;
+    private Color titleBarBorderColor;
+    private Color inactiveTitleBarColor;
+    private Color inactiveTitleBarBackgroundColor;
+    private Color inactiveTitleBarBevelColor;
+    private Color inactiveTitleBarPressedBevelColor;
+    private Color inactiveTitleBarBorderColor;
+    private Color contentBorderColor;
+    private Color contentBevelColor;
+    private Insets padding;
+    private boolean resizable;
 
-    private static final Font TITLE_BAR_FONT = new Font("Verdana", Font.BOLD, 11);
-    private static final Color TITLE_BAR_COLOR = Color.WHITE;
-    private static final Color TITLE_BAR_BACKGROUND_COLOR = new Color(0x3c, 0x77, 0xb2);
-    private static final Color TITLE_BAR_BEVEL_COLOR = new Color(0x45, 0x89, 0xcc);
-    private static final Color TITLE_BAR_PRESSED_BEVEL_COLOR = new Color(0x34, 0x66, 0x99);
-    private static final Color TITLE_BAR_BORDER_COLOR = new Color(0x2c, 0x56, 0x80);
-    private static final Color INACTIVE_TITLE_BAR_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color INACTIVE_TITLE_BAR_BACKGROUND_COLOR = new Color(0xcc, 0xca, 0xc2);
-    private static final Color INACTIVE_TITLE_BAR_BEVEL_COLOR = new Color(0xe6, 0xe3, 0xda);
-    private static final Color INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR = new Color(0xCC, 0xCA, 0xC2);
-    private static final Color INACTIVE_TITLE_BAR_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color CONTENT_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color CONTENT_BEVEL_COLOR = new Color(0xe6, 0xe3, 0xda);
     private static final float INACTIVE_ICON_OPACITY = 0.5f;
 
     public TerraFrameSkin() {
-        setBackgroundColor(new Color(0xcc, 0xca, 0xc2));
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(10));
+
+        titleBarColor = theme.getColor(1);
+        titleBarBackgroundColor = theme.getColor(6);
+        titleBarBevelColor = theme.getColor(8);
+        titleBarPressedBevelColor = theme.getColor(9);
+        titleBarBorderColor = theme.getColor(7);
+        inactiveTitleBarColor = theme.getColor(3);
+        inactiveTitleBarBackgroundColor = theme.getColor(10);
+        inactiveTitleBarBevelColor = theme.getColor(2);
+        inactiveTitleBarPressedBevelColor = theme.getColor(10);
+        inactiveTitleBarBorderColor = theme.getColor(3);
+        contentBorderColor = theme.getColor(3);
+        contentBevelColor = theme.getColor(2);
+        padding = new Insets(8);
+        resizable = true;
 
         // The title bar flow pane contains two nested flow panes: one for
         // the title contents and the other for the buttons
@@ -345,7 +361,7 @@ public class TerraFrameSkin extends WindowSkin {
         titleFlowPane.add(titleLabel);
         titleFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
-        titleLabel.getStyles().put("font", TITLE_BAR_FONT);
+        titleLabel.getStyles().put("font", theme.getFont().deriveFont(Font.BOLD));
         iconImageView.getStyles().put("backgroundColor", null);
 
         // Initialize the button flow pane
@@ -560,30 +576,30 @@ public class TerraFrameSkin extends WindowSkin {
         // Draw the title area
         Bounds titleBarRectangle = new Bounds(0, 0, width - 1, titleBarSize.height + 1);
         graphics.setPaint(window.isActive() ?
-            TITLE_BAR_BACKGROUND_COLOR : INACTIVE_TITLE_BAR_BACKGROUND_COLOR);
+            titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
         graphics.fillRect(titleBarRectangle.x, titleBarRectangle.y,
             titleBarRectangle.width, titleBarRectangle.height);
 
         graphics.setPaint(window.isActive() ?
-            TITLE_BAR_BORDER_COLOR : INACTIVE_TITLE_BAR_BORDER_COLOR);
+            titleBarBorderColor : inactiveTitleBarBorderColor);
         graphics.drawRect(titleBarRectangle.x, titleBarRectangle.y,
             titleBarRectangle.width, titleBarRectangle.height);
 
         graphics.setPaint(window.isActive() ?
-            TITLE_BAR_BEVEL_COLOR : INACTIVE_TITLE_BAR_BEVEL_COLOR);
+            titleBarBevelColor : inactiveTitleBarBevelColor);
         graphics.drawLine(titleBarRectangle.x + 1, titleBarRectangle.y + 1,
             titleBarRectangle.width - 1, titleBarRectangle.y + 1);
 
         // Draw the content area
         Bounds contentAreaRectangle = new Bounds(0, titleBarSize.height + 2,
             width - 1, height - (titleBarSize.height + 3));
-        graphics.setPaint(CONTENT_BORDER_COLOR);
+        graphics.setPaint(contentBorderColor);
         graphics.drawRect(contentAreaRectangle.x, contentAreaRectangle.y,
             contentAreaRectangle.width, contentAreaRectangle.height);
 
         Line2D contentAreaBevelLine = new Line2D.Double(contentAreaRectangle.x + 1, contentAreaRectangle.y + 1,
             contentAreaRectangle.width - 1, contentAreaRectangle.y + 1);
-        graphics.setPaint(CONTENT_BEVEL_COLOR);
+        graphics.setPaint(contentBevelColor);
         graphics.draw(contentAreaBevelLine);
     }
 
@@ -721,7 +737,7 @@ public class TerraFrameSkin extends WindowSkin {
         boolean active = window.isActive();
 
         titleLabel.getStyles().put("color", active ?
-            TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
+            titleBarColor : inactiveTitleBarColor);
         iconImageView.getStyles().put("opacity", active ?
             1.0f : INACTIVE_ICON_OPACITY);
 
@@ -734,15 +750,15 @@ public class TerraFrameSkin extends WindowSkin {
 
     private void updateButtonStyles(FrameButton frameButton, boolean active) {
         frameButton.getStyles().put("color", active ?
-            TITLE_BAR_COLOR : INACTIVE_TITLE_BAR_COLOR);
+            titleBarColor : inactiveTitleBarColor);
         frameButton.getStyles().put("backgroundColor", active ?
-            TITLE_BAR_BACKGROUND_COLOR : INACTIVE_TITLE_BAR_BACKGROUND_COLOR);
+            titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
         frameButton.getStyles().put("bevelColor", active ?
-            TITLE_BAR_BEVEL_COLOR : INACTIVE_TITLE_BAR_BEVEL_COLOR);
+            titleBarBevelColor : inactiveTitleBarBevelColor);
         frameButton.getStyles().put("pressedBevelColor", active ?
-            TITLE_BAR_PRESSED_BEVEL_COLOR : INACTIVE_TITLE_BAR_PRESSED_BEVEL_COLOR);
+            titleBarPressedBevelColor : inactiveTitleBarPressedBevelColor);
         frameButton.getStyles().put("borderColor", active ?
-            TITLE_BAR_BORDER_COLOR : INACTIVE_TITLE_BAR_BORDER_COLOR);
+            titleBarBorderColor : inactiveTitleBarBorderColor);
     }
 
     private void updateResizeHandleCursor() {

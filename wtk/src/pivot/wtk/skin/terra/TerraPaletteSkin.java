@@ -23,6 +23,7 @@ import pivot.wtk.LinkButton;
 import pivot.wtk.Mouse;
 import pivot.wtk.Palette;
 import pivot.wtk.Point;
+import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
 import pivot.wtk.WindowListener;
@@ -51,7 +52,7 @@ public class TerraPaletteSkin extends WindowSkin {
         }
 
         public void paint(Graphics2D graphics) {
-            graphics.setPaint(TITLE_BAR_COLOR);
+            graphics.setPaint(titleBarColor);
             graphics.setStroke(new BasicStroke(2));
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -147,16 +148,23 @@ public class TerraPaletteSkin extends WindowSkin {
         }
     };
 
-    private static final Font TITLE_BAR_FONT = new Font("Verdana", Font.BOLD, 9);
-    private static final Color TITLE_BAR_COLOR = Color.WHITE;
-    private static final Color TITLE_BAR_BACKGROUND_COLOR = new Color(0x3c, 0x77, 0xb2);
-    private static final Color TITLE_BAR_BEVEL_COLOR = new Color(0x45, 0x89, 0xcc);
-    private static final Color TITLE_BAR_BORDER_COLOR = new Color(0x2c, 0x56, 0x80);
-    private static final Color CONTENT_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color CONTENT_BEVEL_COLOR = new Color(0xe6, 0xe3, 0xda);
+    private Color titleBarColor;
+    private Color titleBarBackgroundColor;
+    private Color titleBarBevelColor;
+    private Color titleBarBorderColor;
+    private Color contentBorderColor;
+    private Color contentBevelColor;
 
     public TerraPaletteSkin() {
-        setBackgroundColor(new Color(0xcc, 0xca, 0xc2));
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(10));
+
+        titleBarColor = theme.getColor(1);
+        titleBarBackgroundColor = theme.getColor(6);
+        titleBarBevelColor = theme.getColor(8);
+        titleBarBorderColor = theme.getColor(7);
+        contentBorderColor = theme.getColor(3);
+        contentBevelColor = theme.getColor(2);
 
         // The title bar flow pane contains two nested flow panes: one for
         // the title contents and the other for the buttons
@@ -170,8 +178,8 @@ public class TerraPaletteSkin extends WindowSkin {
         // Initialize the title flow pane
         titleFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         titleFlowPane.add(titleLabel);
-        titleLabel.getStyles().put("font", TITLE_BAR_FONT);
-        titleLabel.getStyles().put("color", TITLE_BAR_COLOR);
+        titleLabel.getStyles().put("font", theme.getSmallFont().deriveFont(Font.BOLD));
+        titleLabel.getStyles().put("color", titleBarColor);
 
         // Initialize the button flow pane
         buttonFlowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
@@ -336,26 +344,26 @@ public class TerraPaletteSkin extends WindowSkin {
 
         // Draw the title area
         Bounds titleBarRectangle = new Bounds(0, 0, width - 1, titleBarSize.height + 1);
-        graphics.setPaint(TITLE_BAR_BACKGROUND_COLOR);
+        graphics.setPaint(titleBarBackgroundColor);
         graphics.fillRect(titleBarRectangle.x, titleBarRectangle.y,
             titleBarRectangle.width, titleBarRectangle.height);
 
-        graphics.setPaint(TITLE_BAR_BORDER_COLOR);
+        graphics.setPaint(titleBarBorderColor);
         graphics.drawRect(titleBarRectangle.x, titleBarRectangle.y,
             titleBarRectangle.width, titleBarRectangle.height);
 
-        graphics.setPaint(TITLE_BAR_BEVEL_COLOR);
+        graphics.setPaint(titleBarBevelColor);
         graphics.drawLine(titleBarRectangle.x + 1, titleBarRectangle.y + 1,
             titleBarRectangle.width - 1, titleBarRectangle.y + 1);
 
         // Draw the content area
         Bounds contentAreaRectangle = new Bounds(0, titleBarSize.height + 2,
             width - 1, height - (titleBarSize.height + 3));
-        graphics.setPaint(CONTENT_BORDER_COLOR);
+        graphics.setPaint(contentBorderColor);
         graphics.drawRect(contentAreaRectangle.x, contentAreaRectangle.y,
             contentAreaRectangle.width, contentAreaRectangle.height);
 
-        graphics.setPaint(CONTENT_BEVEL_COLOR);
+        graphics.setPaint(contentBevelColor);
         graphics.drawLine(contentAreaRectangle.x + 1, contentAreaRectangle.y + 1,
             contentAreaRectangle.width - 1, contentAreaRectangle.y + 1);
     }

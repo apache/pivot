@@ -29,6 +29,7 @@ import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Sheet;
 import pivot.wtk.SheetStateListener;
+import pivot.wtk.Theme;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.effects.Transition;
@@ -44,10 +45,10 @@ import pivot.wtk.skin.WindowSkin;
  * @author tvolkert
  */
 public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
-    private Color borderColor = new Color(0x99, 0x99, 0x99);
-    private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
-    private Insets padding = new Insets(8);
-    private boolean resizable = false;
+    private Color borderColor;
+    private Color bevelColor;
+    private Insets padding;
+    private boolean resizable;
 
     private SlideTransition openTransition = null;
     private SlideTransition closeTransition = null;
@@ -82,7 +83,17 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private static final int SLIDE_RATE = 30;
 
     public TerraSheetSkin() {
-        setBackgroundColor(new Color(0xf7, 0xf5, 0xeb, 0xf0));
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+
+        Color backgroundColor = theme.getColor(5);
+        backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
+            backgroundColor.getBlue(), 0xf0);
+        setBackgroundColor(backgroundColor);
+
+        borderColor = theme.getColor(3);
+        bevelColor = theme.getColor(2);
+        padding = new Insets(8);
+        resizable = false;
     }
 
     @Override

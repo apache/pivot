@@ -23,6 +23,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Menu;
 import pivot.wtk.MenuListener;
+import pivot.wtk.Theme;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
@@ -31,19 +32,31 @@ import pivot.wtk.skin.ContainerSkin;
  * @author gbrown
  */
 public class TerraMenuSkin extends ContainerSkin implements MenuListener {
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
-    private Color color = Color.BLACK;
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private Color highlightColor = Color.WHITE;
-    private Color highlightBackgroundColor = new Color(0x14, 0x53, 0x8B);
-    private Color marginColor = new Color(0xF7, 0xF5, 0xEB);
-    private int margin = 20;
-    private Color separatorColor = new Color(0x99, 0x99, 0x99);
-    private int sectionSpacing = 7;
-    private boolean showKeyboardShortcuts = true;
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private Color highlightColor;
+    private Color highlightBackgroundColor;
+    private Color marginColor;
+    private int margin;
+    private Color separatorColor;
+    private int sectionSpacing;
+    private boolean showKeyboardShortcuts;
 
     public TerraMenuSkin() {
-        setBackgroundColor(Color.WHITE);
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(1));
+
+        font = theme.getFont();
+        color = theme.getColor(0);
+        disabledColor = theme.getColor(3);
+        highlightColor = theme.getColor(1);
+        highlightBackgroundColor = theme.getColor(11);
+        marginColor = theme.getColor(5);
+        margin = 20;
+        separatorColor = theme.getColor(3);
+        sectionSpacing = 7;
+        showKeyboardShortcuts = true;
     }
 
     public void install(Component component) {

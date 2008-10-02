@@ -25,6 +25,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Meter;
 import pivot.wtk.MeterListener;
+import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -34,13 +35,19 @@ import pivot.wtk.skin.ComponentSkin;
  */
 public class TerraMeterSkin extends ComponentSkin
     implements MeterListener {
-
-    private Color color = new Color(0x6C, 0x9C, 0xCD);
-    private Color gridColor = new Color(0xD9, 0xD9, 0xD9);
-    private float gridFrequency = 0.25f;
+    private Color color;
+    private Color gridColor;
+    private float gridFrequency;
 
     private static final int DEFAULT_WIDTH = 100;
     private static final int DEFAULT_HEIGHT = 12;
+
+    public TerraMeterSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        color = theme.getColor(8);
+        gridColor = theme.getColor(2);
+        gridFrequency = 0.25f;
+    }
 
     @Override
     public void install(Component component) {

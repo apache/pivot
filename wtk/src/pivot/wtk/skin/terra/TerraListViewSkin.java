@@ -36,6 +36,7 @@ import pivot.wtk.ListViewSelectionDetailListener;
 import pivot.wtk.Mouse;
 import pivot.wtk.Bounds;
 import pivot.wtk.Span;
+import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -50,19 +51,34 @@ import pivot.wtk.skin.ComponentSkin;
 public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     ListViewListener, ListViewItemListener, ListViewItemStateListener,
     ListViewSelectionDetailListener {
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
-    private Color color = Color.BLACK;
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private Color backgroundColor = Color.WHITE;
-    private Color selectionColor = Color.WHITE;
-    private Color selectionBackgroundColor = new Color(0x14, 0x53, 0x8B);
-    private Color inactiveSelectionColor = Color.BLACK;
-    private Color inactiveSelectionBackgroundColor = new Color(0xcc, 0xca, 0xc2);
-    private Color highlightColor = Color.BLACK;
-    private Color highlightBackgroundColor = new Color(0xe6, 0xe3, 0xda);
-    private boolean showHighlight = true;
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private Color backgroundColor;
+    private Color selectionColor;
+    private Color selectionBackgroundColor;
+    private Color inactiveSelectionColor;
+    private Color inactiveSelectionBackgroundColor;
+    private Color highlightColor;
+    private Color highlightBackgroundColor;
+    private boolean showHighlight;
 
     private int highlightedIndex = -1;
+
+    public TerraListViewSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        font = theme.getFont();
+        color = theme.getColor(0);
+        disabledColor = theme.getColor(3);
+        backgroundColor = theme.getColor(1);
+        selectionColor = theme.getColor(1);
+        selectionBackgroundColor = theme.getColor(11);
+        inactiveSelectionColor = theme.getColor(0);
+        inactiveSelectionBackgroundColor = theme.getColor(10);
+        highlightColor = theme.getColor(0);
+        highlightBackgroundColor = theme.getColor(2);
+        showHighlight = true;
+    }
 
     public void install(Component component) {
         super.install(component);

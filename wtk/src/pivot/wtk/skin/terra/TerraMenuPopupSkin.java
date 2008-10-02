@@ -28,6 +28,7 @@ import pivot.wtk.MenuItemSelectionListener;
 import pivot.wtk.MenuPopup;
 import pivot.wtk.MenuPopupListener;
 import pivot.wtk.Panorama;
+import pivot.wtk.Theme;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.effects.Transition;
@@ -68,6 +69,7 @@ public class TerraMenuPopupSkin extends PopupSkin
     };
 
     public TerraMenuPopupSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBackgroundColor((Color)null);
 
         panorama = new Panorama();
@@ -75,7 +77,7 @@ public class TerraMenuPopupSkin extends PopupSkin
 
         border = new Border(panorama);
 
-        border.getStyles().put("color", new Color(0x99, 0x99, 0x99));
+        border.getStyles().put("color", theme.getColor(3));
         border.getStyles().put("backgroundColor", null);
         border.getStyles().put("padding", 0);
     }

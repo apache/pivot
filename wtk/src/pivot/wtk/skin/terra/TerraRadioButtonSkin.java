@@ -25,6 +25,7 @@ import java.awt.geom.Ellipse2D;
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
 import pivot.wtk.RadioButton;
+import pivot.wtk.Theme;
 import pivot.wtk.skin.RadioButtonSkin;
 
 /**
@@ -35,20 +36,35 @@ import pivot.wtk.skin.RadioButtonSkin;
  * @author gbrown
  */
 public class TerraRadioButtonSkin extends RadioButtonSkin {
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
-    private Color color = Color.BLACK;
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private int spacing = 3;
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private int spacing;
 
-    private static final Color BUTTON_COLOR = Color.WHITE;
-    private static final Color BUTTON_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color BUTTON_SELECTION_COLOR = new Color(0x2c, 0x56, 0x80);
-    private static final Color DISABLED_BUTTON_COLOR = Color.WHITE;
-    private static final Color DISABLED_BUTTON_BORDER_COLOR = new Color(0xcc, 0xcc, 0xcc);
-    private static final Color DISABLED_BUTTON_SELECTION_COLOR = new Color(0x99, 0x99, 0x99);
+    private Color buttonColor;
+    private Color buttonBorderColor;
+    private Color buttonSelectionColor;
+    private Color disabledButtonColor;
+    private Color disabledButtonBorderColor;
+    private Color disabledButtonSelectionColor;
 
     private static final int BUTTON_DIAMETER = 14;
     private static final int BUTTON_SELECTION_DIAMETER = 6;
+
+    public TerraRadioButtonSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        font = theme.getFont();
+        color = theme.getColor(0);
+        disabledColor = theme.getColor(3);
+        spacing = 3;
+
+        buttonColor = theme.getColor(1);
+        buttonBorderColor = theme.getColor(3);
+        buttonSelectionColor = theme.getColor(7);
+        disabledButtonColor = theme.getColor(1);
+        disabledButtonBorderColor = theme.getColor(10);
+        disabledButtonSelectionColor = theme.getColor(3);
+    }
 
     public int getPreferredWidth(int height) {
         RadioButton radioButton = (RadioButton)getComponent();
@@ -122,7 +138,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
             graphics.setStroke(dashStroke);
-            graphics.setColor(BUTTON_BORDER_COLOR);
+            graphics.setColor(buttonBorderColor);
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -139,14 +155,14 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         Color buttonSelectionColor = null;
 
         if (radioButton.isEnabled()) {
-            buttonColor = BUTTON_COLOR;
-            buttonBorderColor = BUTTON_BORDER_COLOR;
-            buttonSelectionColor = BUTTON_SELECTION_COLOR;
+            buttonColor = this.buttonColor;
+            buttonBorderColor = this.buttonBorderColor;
+            buttonSelectionColor = this.buttonSelectionColor;
         }
         else {
-            buttonColor = DISABLED_BUTTON_COLOR;
-            buttonBorderColor = DISABLED_BUTTON_BORDER_COLOR;
-            buttonSelectionColor = DISABLED_BUTTON_SELECTION_COLOR;
+            buttonColor = disabledButtonColor;
+            buttonBorderColor = disabledButtonBorderColor;
+            buttonSelectionColor = disabledButtonSelectionColor;
         }
 
         // Center the button vertically

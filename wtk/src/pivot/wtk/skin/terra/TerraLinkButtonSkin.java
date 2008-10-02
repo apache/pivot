@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
 import pivot.wtk.LinkButton;
+import pivot.wtk.Theme;
 import pivot.wtk.skin.LinkButtonSkin;
 
 /**
@@ -30,9 +31,16 @@ import pivot.wtk.skin.LinkButtonSkin;
  * @author gbrown
  */
 public class TerraLinkButtonSkin extends LinkButtonSkin {
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
-    private Color color = new Color(0x2c, 0x56, 0x80);
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+
+    public TerraLinkButtonSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        font = theme.getFont();
+        color = theme.getColor(7);
+        disabledColor = theme.getColor(3);
+    }
 
     public int getPreferredWidth(int height) {
         LinkButton linkButton = (LinkButton)getComponent();

@@ -28,6 +28,7 @@ import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.MenuButton;
+import pivot.wtk.Theme;
 import pivot.wtk.skin.MenuButtonSkin;
 
 /**
@@ -36,20 +37,36 @@ import pivot.wtk.skin.MenuButtonSkin;
  * @author gbrown
  */
 public class TerraMenuButtonSkin extends MenuButtonSkin {
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
-    private Color color = Color.BLACK;
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private Color backgroundColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color disabledBackgroundColor = new Color(0xF7, 0xF5, 0xEB);
-    private Color borderColor = new Color(0x99, 0x99, 0x99);
-    private Color disabledBorderColor = new Color(0xCC, 0xCC, 0xCC);
-    private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
-    private Color pressedBevelColor = new Color(0xCC, 0xCA, 0xC2);
-    private Color disabledBevelColor = Color.WHITE;
-    private Insets padding = new Insets(3);
-    private int spacing = 0;
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private Color backgroundColor;
+    private Color disabledBackgroundColor;
+    private Color borderColor;
+    private Color disabledBorderColor;
+    private Color bevelColor;
+    private Color pressedBevelColor;
+    private Color disabledBevelColor;
+    private Insets padding;
+    private int spacing;
 
     private static final int TRIGGER_WIDTH = 10;
+
+    public TerraMenuButtonSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        font = theme.getFont();
+        color = theme.getColor(0);
+        disabledColor = theme.getColor(3);
+        backgroundColor = theme.getColor(2);
+        disabledBackgroundColor = theme.getColor(5);
+        borderColor = theme.getColor(3);
+        disabledBorderColor = theme.getColor(10);
+        bevelColor = theme.getColor(5);
+        pressedBevelColor = theme.getColor(10);
+        disabledBevelColor = theme.getColor(1);
+        padding = new Insets(3);
+        spacing = 0;
+    }
 
     public int getPreferredWidth(int height) {
         MenuButton menuButton = (MenuButton)getComponent();

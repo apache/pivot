@@ -32,6 +32,7 @@ import pivot.wtk.Bounds;
 import pivot.wtk.Spinner;
 import pivot.wtk.SpinnerListener;
 import pivot.wtk.SpinnerSelectionListener;
+import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
@@ -490,22 +491,31 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     private SpinButton upButton = new SpinButton(1, new SpinUpImage());
     private SpinButton downButton = new SpinButton(-1, new SpinDownImage());
 
-    private Color color = Color.BLACK;
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private Color borderColor = DEFAULT_BORDER_COLOR;
-    private Color buttonImageColor = Color.BLACK;
-    private Color buttonBackgroundColor = new Color(0xF0, 0xEC, 0xE7);
-    private Color buttonDisabledBackgroundColor = new Color(0xF0, 0xEC, 0xE7);
-    private Color buttonPressedBackgroundColor = new Color(0xDF, 0xD7, 0xCD);
-    private Color buttonHighlightedBackgroundColor = new Color(0xFB, 0xFA, 0xF8);
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private Color borderColor;
+    private Color buttonImageColor;
+    private Color buttonBackgroundColor;
+    private Color buttonDisabledBackgroundColor;
+    private Color buttonPressedBackgroundColor;
+    private Color buttonHighlightedBackgroundColor;
 
     private static AutomaticSpinner automaticSpinner = new AutomaticSpinner();
 
-    private static final Color DEFAULT_BORDER_COLOR = new Color(0x99, 0x99, 0x99);
-
     public TerraSpinnerSkin() {
-        setBackgroundColor(Color.WHITE);
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(1));
+
+        font = theme.getFont();
+        color = theme.getColor(0);
+        disabledColor = theme.getColor(3);
+        borderColor = theme.getColor(3);
+        buttonImageColor = theme.getColor(0);
+        buttonBackgroundColor = theme.getColor(2);
+        buttonDisabledBackgroundColor = theme.getColor(2);
+        buttonPressedBackgroundColor = theme.getColor(2);
+        buttonHighlightedBackgroundColor = theme.getColor(5);
     }
 
     @Override

@@ -37,6 +37,7 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
 import pivot.wtk.PushButton;
 import pivot.wtk.FlowPane;
+import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
@@ -164,17 +165,27 @@ public class TerraExpanderSkin extends ContainerSkin
 
     private TitleBarMouseHandler titleBarMouseHandler = new TitleBarMouseHandler();
 
-    private Font titleBarFont = new Font("Verdana", Font.BOLD, 11);
-    private Color titleBarColor = Color.BLACK;
-    private Color titleBarBackgroundColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color titleBarBorderColor = new Color(0xBD, 0xBD, 0xBD);
-    private Color shadeButtonColor = new Color(0x66, 0x99, 0xCC);
-    private Color shadeButtonBackgroundColor = Color.WHITE;
-    private Color borderColor = new Color(0xCC, 0xCC, 0xCC);
-    private Insets padding = new Insets(4);
+    private Font titleBarFont;
+    private Color titleBarColor;
+    private Color titleBarBackgroundColor;
+    private Color titleBarBorderColor;
+    private Color shadeButtonColor;
+    private Color shadeButtonBackgroundColor;
+    private Color borderColor;
+    private Insets padding;
 
     public TerraExpanderSkin() {
-        setBackgroundColor(Color.WHITE);
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(1));
+
+        titleBarFont = theme.getFont();
+        titleBarColor = theme.getColor(0);
+        titleBarBackgroundColor = theme.getColor(2);
+        titleBarBorderColor = theme.getColor(4);
+        shadeButtonColor = theme.getColor(8);
+        shadeButtonBackgroundColor = theme.getColor(1);
+        borderColor = theme.getColor(10);
+        padding = new Insets(4);
 
         titleBarFlowPane = new FlowPane(Orientation.HORIZONTAL);
         titleBarFlowPane.getComponentMouseButtonListeners().add(titleBarMouseHandler);

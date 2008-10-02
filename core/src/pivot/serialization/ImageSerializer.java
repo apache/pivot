@@ -23,8 +23,8 @@ import java.io.OutputStream;
 import javax.imageio.ImageIO;
 
 /**
- * Implementation of the {@link Serializer} interface that uses Java's
- * image I/O routines (see {@link javax.imageio}) to read and write values.
+ * Implementation of the {@link Serializer} interface that reads and writes
+ * instances of {@link java.awt.image.BufferedImage}.
  *
  * @author tvolkert
  */

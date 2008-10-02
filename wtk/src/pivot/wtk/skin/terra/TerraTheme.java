@@ -61,6 +61,8 @@ import pivot.wtk.TreeView;
  */
 public final class TerraTheme extends Theme {
     private Font font = new Font("Verdana", Font.PLAIN, 11);
+    private Font smallFont = new Font("Verdana", Font.PLAIN, 9);
+
     private String[] colors = {"#000000", "#ffffff", "#e6e3da", "#999999",
         "#b2b2b2", "#f7f5eb", "#3c77b2", "#2c5680",
         "#4589cc", "#346699", "#cccac2", "#14538b"};
@@ -125,6 +127,10 @@ public final class TerraTheme extends Theme {
 
     public Font getFont() {
         return font;
+    }
+
+    public Font getSmallFont() {
+        return smallFont;
     }
 
     public Color getColor(int index) {

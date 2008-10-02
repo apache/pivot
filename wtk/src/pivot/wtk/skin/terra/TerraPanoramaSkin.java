@@ -13,6 +13,7 @@ import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Panorama;
 import pivot.wtk.Bounds;
+import pivot.wtk.Theme;
 import pivot.wtk.Viewport;
 import pivot.wtk.ViewportListener;
 import pivot.wtk.content.ButtonDataRenderer;
@@ -206,14 +207,21 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         }
     }
 
-    private Color buttonColor = Color.BLACK;
-    private Color buttonBackgroundColor = null;
-    private int buttonPadding = 4;
+    private Color buttonColor;
+    private Color buttonBackgroundColor;
+    private int buttonPadding;
 
     private ScrollButton northButton = new ScrollButton(new NorthButtonImage());
     private ScrollButton southButton = new ScrollButton(new SouthButtonImage());
     private ScrollButton eastButton = new ScrollButton(new EastButtonImage());
     private ScrollButton westButton = new ScrollButton(new WestButtonImage());
+
+    public TerraPanoramaSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        buttonColor = theme.getColor(0);
+        buttonBackgroundColor = null;
+        buttonPadding = 4;
+    }
 
     private ComponentMouseListener buttonMouseListener = new ComponentMouseListener() {
         public boolean mouseMove(Component component, int x, int y) {

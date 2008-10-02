@@ -22,6 +22,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.MenuBar;
 import pivot.wtk.MenuBarListener;
+import pivot.wtk.Theme;
 import pivot.wtk.skin.ContainerSkin;
 
 /**
@@ -30,15 +31,23 @@ import pivot.wtk.skin.ContainerSkin;
  * @author gbrown
  */
 public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
-    private Font font = new Font("Verdana", Font.BOLD, 11);
-    private Color color = Color.BLACK;
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private Color highlightColor = Color.WHITE;
-    private Color highlightBackgroundColor = new Color(0x14, 0x53, 0x8B);
-    private int spacing = 2;
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private Color highlightColor;
+    private Color highlightBackgroundColor;
+    private int spacing;
 
     public TerraMenuBarSkin() {
-        setBackgroundColor(Color.WHITE);
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(1));
+
+        font = theme.getFont();
+        color = theme.getColor(0);
+        disabledColor = theme.getColor(3);
+        highlightColor = theme.getColor(1);
+        highlightBackgroundColor = theme.getColor(11);
+        spacing = 2;
     }
 
     public void install(Component component) {

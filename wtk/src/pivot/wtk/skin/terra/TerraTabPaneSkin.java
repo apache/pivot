@@ -37,6 +37,7 @@ import pivot.wtk.TabPane;
 import pivot.wtk.TabPaneListener;
 import pivot.wtk.TabPaneSelectionListener;
 import pivot.wtk.TabPaneAttributeListener;
+import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Button.Group;
 import pivot.wtk.content.ButtonData;
@@ -340,17 +341,28 @@ public class TerraTabPaneSkin extends ContainerSkin
     protected FlowPane buttonFlowPane = new FlowPane();
     private Button.Group tabButtonGroup = new Button.Group();
 
-    private Color activeTabColor = new Color(0xF7, 0xF5, 0xEB);
-    private Color inactiveTabColor = new Color(0xCC, 0xCA, 0xC2);
-    private Color borderColor = new Color(0x99, 0x99, 0x99);
-    private Insets padding = new Insets(6);
-    private Font buttonFont = new Font("Verdana", Font.PLAIN, 11);
-    private Color buttonColor = Color.BLACK;
-    private Color buttonBevelColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color pressedButtonBevelColor = new Color(0xE6, 0xE3, 0xDA);
-    private Insets buttonPadding = new Insets(3, 4, 3, 4);
+    private Color activeTabColor;
+    private Color inactiveTabColor;
+    private Color borderColor;
+    private Insets padding;
+    private Font buttonFont;
+    private Color buttonColor;
+    private Color buttonBevelColor;
+    private Color pressedButtonBevelColor;
+    private Insets buttonPadding;
 
     public TerraTabPaneSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        activeTabColor = theme.getColor(5);
+        inactiveTabColor = theme.getColor(10);
+        borderColor = theme.getColor(3);
+        padding = new Insets(6);
+        buttonFont = theme.getFont();
+        buttonColor = theme.getColor(0);
+        buttonBevelColor = theme.getColor(2);
+        pressedButtonBevelColor = theme.getColor(2);
+        buttonPadding = new Insets(3, 4, 3, 4);
+
         tabButtonGroup.getGroupListeners().add(this);
 
         buttonFlowPane.getStyles().put("spacing", 2);

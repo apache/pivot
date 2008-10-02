@@ -33,6 +33,7 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Bounds;
+import pivot.wtk.Theme;
 import pivot.wtk.TreeView;
 import pivot.wtk.TreeViewListener;
 import pivot.wtk.TreeViewBranchListener;
@@ -134,26 +135,50 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     private NodeInfo highlightedNode = null;
 
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
-    private Color color = Color.BLACK;
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private Color backgroundColor = Color.WHITE;
-    private Color selectionColor = Color.WHITE;
-    private Color selectionBackgroundColor = new Color(0x3C, 0x77, 0xB2);
-    private Color inactiveSelectionColor = Color.BLACK;
-    private Color inactiveSelectionBackgroundColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color highlightColor = Color.BLACK;
-    private Color highlightBackgroundColor = new Color(0xE6, 0xE3, 0xDA);
-    private int spacing = 6;
-    private int indent = 16;
-    private boolean showHighlight = true;
-    private boolean showBranchControls = true;
-    private Color branchControlColor = new Color(0x33, 0x66, 0x99);
-    private Color branchControlDisabledColor = new Color(0x3C, 0x77, 0xB2);
-    private Color branchControlSelectionColor = Color.WHITE;
-    private Color branchControlInactiveSelectionColor = new Color(0x33, 0x66, 0x99);
-    private Color gridColor = new Color(0xF7, 0xF5, 0xEB);
-    private boolean showGridLines = false;
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private Color backgroundColor;
+    private Color selectionColor;
+    private Color selectionBackgroundColor;
+    private Color inactiveSelectionColor;
+    private Color inactiveSelectionBackgroundColor;
+    private Color highlightColor;
+    private Color highlightBackgroundColor;
+    private int spacing;
+    private int indent;
+    private boolean showHighlight;
+    private boolean showBranchControls;
+    private Color branchControlColor;
+    private Color branchControlDisabledColor;
+    private Color branchControlSelectionColor;
+    private Color branchControlInactiveSelectionColor;
+    private Color gridColor;
+    private boolean showGridLines;
+
+    public TerraTreeViewSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        font = theme.getFont();
+        color = theme.getColor(0);
+        disabledColor = theme.getColor(3);
+        backgroundColor = theme.getColor(1);
+        selectionColor = theme.getColor(1);
+        selectionBackgroundColor = theme.getColor(6);
+        inactiveSelectionColor = theme.getColor(0);
+        inactiveSelectionBackgroundColor = theme.getColor(2);
+        highlightColor = theme.getColor(0);
+        highlightBackgroundColor = theme.getColor(2);
+        spacing = 6;
+        indent = 16;
+        showHighlight = true;
+        showBranchControls = true;
+        branchControlColor = theme.getColor(9);
+        branchControlDisabledColor = theme.getColor(6);
+        branchControlSelectionColor = theme.getColor(1);
+        branchControlInactiveSelectionColor = theme.getColor(9);
+        gridColor = theme.getColor(5);
+        showGridLines = false;
+    }
 
     public void install(Component component) {
         super.install(component);
