@@ -15,6 +15,10 @@
  */
 package pivot.wtk.skin.terra;
 
+import java.awt.Color;
+import java.awt.Font;
+
+import pivot.util.Resources;
 import pivot.wtk.Alert;
 import pivot.wtk.Calendar;
 import pivot.wtk.Checkbox;
@@ -56,6 +60,11 @@ import pivot.wtk.TreeView;
  * @author tvolkert
  */
 public final class TerraTheme extends Theme {
+    private Font font = new Font("Verdana", Font.PLAIN, 11);
+    private String[] colors = {"#000000", "#ffffff", "#e6e3da", "#999999",
+        "#b2b2b2", "#f7f5eb", "#3c77b2", "#2c5680",
+        "#4589cc", "#346699", "#cccac2", "#14538b"};
+
     public TerraTheme() {
         componentSkinMap.put(Alert.class, TerraAlertSkin.class);
         componentSkinMap.put(Checkbox.class, TerraCheckboxSkin.class);
@@ -102,6 +111,8 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TerraSplitPaneSkin.Splitter.class, TerraSplitPaneSkin.SplitterSkin.class);
         componentSkinMap.put(TerraSplitPaneSkin.SplitterShadow.class, TerraSplitPaneSkin.SplitterShadowSkin.class);
         componentSkinMap.put(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
+
+        // TODO Load theme resources
     }
 
     public void install() {
@@ -110,5 +121,18 @@ public final class TerraTheme extends Theme {
 
     public void uninstall() {
         // No-op
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public Color getColor(int index) {
+        return Color.decode(colors[index]);
+    }
+
+    public Resources getResources() {
+        // TODO
+        return null;
     }
 }

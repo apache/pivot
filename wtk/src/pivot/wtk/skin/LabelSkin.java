@@ -38,6 +38,7 @@ import pivot.wtk.Insets;
 import pivot.wtk.Label;
 import pivot.wtk.LabelListener;
 import pivot.wtk.TextDecoration;
+import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
 
 /**
@@ -50,14 +51,23 @@ import pivot.wtk.VerticalAlignment;
 public class LabelSkin extends ComponentSkin implements LabelListener {
     protected FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
 
-    // Style properties
-    protected Color color = Color.BLACK;
-    protected Font font = new Font("Verdana", Font.PLAIN, 11);
-    protected TextDecoration textDecoration = null;
-    protected HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
-    protected VerticalAlignment verticalAlignment = VerticalAlignment.TOP;
-    protected Insets padding = new Insets(0);
-    protected boolean wrapText = false;
+    protected Color color;
+    protected Font font;
+    protected TextDecoration textDecoration;
+    protected HorizontalAlignment horizontalAlignment;
+    protected VerticalAlignment verticalAlignment;
+    protected Insets padding;
+    protected boolean wrapText;
+
+    public LabelSkin() {
+        color = Color.BLACK;
+        font = Theme.getTheme().getFont();
+        textDecoration = null;
+        horizontalAlignment = HorizontalAlignment.LEFT;
+        verticalAlignment = VerticalAlignment.TOP;
+        padding = new Insets(0);
+        wrapText = false;
+    }
 
     @Override
     public void install(Component component) {

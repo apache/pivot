@@ -27,6 +27,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.PushButton;
+import pivot.wtk.Theme;
 import pivot.wtk.skin.PushButtonSkin;
 
 /**
@@ -35,19 +36,36 @@ import pivot.wtk.skin.PushButtonSkin;
  * @author gbrown
  */
 public class TerraPushButtonSkin extends PushButtonSkin {
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
-    private Color color = Color.BLACK;
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private Color backgroundColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color disabledBackgroundColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color borderColor = new Color(0x99, 0x99, 0x99);
-    private Color disabledBorderColor = new Color(0xB2, 0xB2, 0xB2);
-    private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
-    private Color pressedBevelColor = new Color(0xCC, 0xCA, 0xC2);
-    private Color disabledBevelColor = new Color(0xE6, 0xE3, 0xDA);
-    private Insets padding = new Insets(3);
-    private float preferredAspectRatio = Float.NaN;
-    private boolean toolbar = false;
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private Color backgroundColor;
+    private Color disabledBackgroundColor;
+    private Color borderColor;
+    private Color disabledBorderColor;
+    private Color bevelColor;
+    private Color pressedBevelColor;
+    private Color disabledBevelColor;
+    private Insets padding;
+    private float preferredAspectRatio;
+    private boolean toolbar;
+
+    public TerraPushButtonSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        font = theme.getFont();
+        color = theme.getColor(0);
+        disabledColor = theme.getColor(3);
+        backgroundColor = theme.getColor(2);
+        disabledBackgroundColor = theme.getColor(2);
+        borderColor = theme.getColor(3);
+        disabledBorderColor = theme.getColor(4);
+        bevelColor = theme.getColor(5);
+        pressedBevelColor = theme.getColor(10);
+        disabledBevelColor = theme.getColor(2);
+        padding = new Insets(3);
+        preferredAspectRatio = Float.NaN;
+        toolbar = false;
+    }
 
     public int getPreferredWidth(int height) {
         PushButton pushButton = (PushButton)getComponent();

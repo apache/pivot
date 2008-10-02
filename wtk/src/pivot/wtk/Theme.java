@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import java.awt.Font;
+
 import pivot.collections.HashMap;
 import pivot.wtk.skin.BorderSkin;
 import pivot.wtk.skin.CardPaneSkin;
@@ -62,6 +64,8 @@ public abstract class Theme {
 
     public abstract void install();
     public abstract void uninstall();
+
+    public abstract Font getFont();
 
     public static Theme getTheme() {
         if (theme == null) {

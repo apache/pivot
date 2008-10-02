@@ -32,16 +32,16 @@ public class TablePane extends Container {
      * @author tvolkert
      */
     public static final class Row implements Sequence<Component> {
-        private int height = 0;
-        private boolean relative = false;
-        private boolean selected = false;
+        private int height;
+        private boolean relative;
+        private boolean selected;
 
         private ArrayList<Component> cells = new ArrayList<Component>();
 
         private TablePane tablePane = null;
 
         public Row() {
-            this(0, false, false);
+            this(-1, false, false);
         }
 
         public Row(int height) {
@@ -304,12 +304,12 @@ public class TablePane extends Container {
     public static class Column {
         private TablePane tablePane = null;
 
-        private int width = 0;
-        private boolean relative = false;
-        private boolean selected = false;
+        private int width;
+        private boolean relative;
+        private boolean selected;
 
         public Column() {
-            this(0, false, false);
+            this(-1, false, false);
         }
 
         public Column(int width) {
