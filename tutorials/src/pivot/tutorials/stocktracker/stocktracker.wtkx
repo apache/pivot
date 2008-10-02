@@ -77,7 +77,7 @@
                 styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
                 <Label text="%symbol" styles="{font:'Verdana bold 11'}" />
                 <TextInput wtkx:id="symbolTextInput" textSize="10"
-                    maximumLength="5" />
+                    maximumLength="8" />
                 <LinkButton wtkx:id="addSymbolButton" enabled="false"
                     tooltipText="%addSymbol">
                     <buttonData icon="@add.png" />
