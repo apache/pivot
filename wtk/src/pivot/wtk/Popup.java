@@ -121,14 +121,6 @@ public class Popup extends Window {
         open(affiliate.getWindow());
     }
 
-    @Override
-    public void close() {
-        if (!isClosed()) {
-            super.close();
-            affiliate = null;
-        }
-    }
-
     public ListenerList<PopupListener> getPopupListeners() {
         return popupListeners;
     }

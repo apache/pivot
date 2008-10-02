@@ -42,8 +42,6 @@ public class PopupSkin extends WindowSkin implements PopupListener {
             // of the affiliate's window being closed.
 
             if (!(component instanceof Window)) {
-                System.out.println("parentChanged() " + component);
-
                 // Remove this as a component listener on the previous parent's
                 // ancestry
                 Component ancestor = previousParent;
