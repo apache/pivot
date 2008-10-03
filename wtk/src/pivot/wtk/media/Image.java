@@ -18,7 +18,6 @@ package pivot.wtk.media;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
-import javax.imageio.ImageIO;
 import java.net.URL;
 import pivot.util.concurrent.Dispatcher;
 import pivot.util.concurrent.Task;
@@ -71,9 +70,11 @@ public abstract class Image implements Visual {
                     // determine the type from the file extension in the URL, or
                     // by looking at the first few bytes of the input stream.
 
-                    // TODO Use an instance of ImageReader here instead of read().
-                    // This will allow us to abort and time out image load operations.
-                    BufferedImage bufferedImage = ImageIO.read(inputStream);
+                    // TODO Use a monitored input stream here, similar to
+                    // the one used in web queries. This will allow us to abort
+                    // and time out image load operations.
+                    BufferedImageSerializer serializer = new BufferedImageSerializer();
+                    BufferedImage bufferedImage = (BufferedImage)serializer.readObject(inputStream);
                     image = new Picture(bufferedImage);
                 } finally {
                     if (inputStream != null) {
