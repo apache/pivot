@@ -31,7 +31,7 @@ import pivot.serialization.Serializer;
  *
  * @author tvolkert
  */
-public class ImageSerializer implements Serializer {
+public class BufferedImageSerializer implements Serializer {
     /**
      * Supported image formats.
      *
@@ -63,11 +63,11 @@ public class ImageSerializer implements Serializer {
 
     private Format outputFormat;
 
-    public ImageSerializer() {
+    public BufferedImageSerializer() {
         this(Format.PNG);
     }
 
-    public ImageSerializer(Format outputFormat) {
+    public BufferedImageSerializer(Format outputFormat) {
         setOutputFormat(outputFormat);
     }
 
