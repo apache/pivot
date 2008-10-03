@@ -4,7 +4,7 @@
 		<FlowPane orientation="vertical"
 			styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
 			<FlowPane orientation="vertical">
-				<Label text="Menu Buttons" styles="{font:'Verdana bold 11'}" />
+				<Label text="Menu Buttons" styles="{fontBold:true}" />
 				<FlowPane orientation="vertical">
 			        <MenuButton>
 			            <buttonData text="File"/>

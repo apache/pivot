@@ -28,7 +28,7 @@
     <rows>
         <TablePane.Row height="-1">
             <Label text="%stockTracker"
-                styles="{font:'Verdana bold 14', verticalAlignment:'center'}" />
+                styles="{fontBold:true, fontSize:14, verticalAlignment:'center'}" />
         </TablePane.Row>
 
         <TablePane.Row height="1*">
@@ -75,7 +75,7 @@
         <TablePane.Row height="-1">
             <FlowPane
                 styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
-                <Label text="%symbol" styles="{font:'Verdana bold 11'}" />
+                <Label text="%symbol" styles="{fontBold:true}" />
                 <TextInput wtkx:id="symbolTextInput" textSize="10"
                     maximumLength="8" />
                 <LinkButton wtkx:id="addSymbolButton" enabled="false"
@@ -91,7 +91,7 @@
 
         <TablePane.Row height="-1">
             <Label wtkx:id="lastUpdateLabel"
-                styles="{font:'Verdana italic 10'}" />
+                styles="{fontItalic:true, fontSize:10}" />
             <FlowPane styles="{horizontalAlignment:'right'}">
                 <Label text="%dataProvidedBy" />
                 <LinkButton wtkx:id="yahooFinanceButton"

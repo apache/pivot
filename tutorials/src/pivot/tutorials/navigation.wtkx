@@ -25,8 +25,8 @@ limitations under the License.
                 </columns>
                 <rows>
                     <TablePane.Row height="-1">
-                        <Label text="Horizontal Tabs" styles="{font:'Verdana bold 11'}"/>
-                        <Label text="Vertical Tabs" styles="{font:'Verdana bold 11'}"/>
+                        <Label text="Horizontal Tabs" styles="{fontBold:true}"/>
+                        <Label text="Vertical Tabs" styles="{fontBold:true}"/>
                     </TablePane.Row>
 
                     <TablePane.Row height="-1">
@@ -106,26 +106,26 @@ limitations under the License.
     <Border styles="{color:'#999999'}">
         <content>
             <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
-                <Label text="Expanders" styles="{font:'Verdana bold 11'}"/>
+                <Label text="Expanders" styles="{fontBold:true}"/>
                 <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
                     <Expander title="One" expanded="false">
                         <content>
                             <Label preferredWidth="100" preferredHeight="20" text="Un"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center', font:'Verdana italic 11'}"/>
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center', fontItalic:true}"/>
                         </content>
                     </Expander>
 
                     <Expander title="Two" expanded="false">
                         <content>
                             <Label preferredWidth="100" preferredHeight="80" text="Deux"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center', font:'Verdana italic 11'}"/>
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center', fontItalic:true}"/>
                         </content>
                     </Expander>
 
                     <Expander title="Three">
                         <content>
                             <Label preferredWidth="100" preferredHeight="50" text="Trois"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center', font:'Verdana italic 11'}"/>
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center', fontItalic:true}"/>
                         </content>
                     </Expander>
                 </FlowPane>
@@ -136,7 +136,7 @@ limitations under the License.
     <Border styles="{color:'#999999'}">
         <content>
             <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
-                <Label text="Rollups" styles="{font:'Verdana bold 11'}"/>
+                <Label text="Rollups" styles="{fontBold:true}"/>
                 <Rollup>
                     <Label text="Colors"/>
                     <Label text="Red" styles="{color:'#ff0000'}"/>

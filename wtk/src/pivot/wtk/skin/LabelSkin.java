@@ -315,19 +315,19 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
         setFont(Font.decode(font));
     }
-    
+
     public int getFontSize() {
         return font.getSize();
     }
-    
+
     public void setFontSize(int fontSize) {
-        font = font.deriveFont(fontSize);
+        font = font.deriveFont((float)fontSize);
     }
-    
+
     public boolean isFontBold() {
-        return ((font.getStyle() & Font.BOLD) == Font.BOLD); 
+        return ((font.getStyle() & Font.BOLD) == Font.BOLD);
     }
-    
+
     public void setFontBold(boolean fontBold) {
         if (isFontBold() != fontBold) {
             if (fontBold) {
@@ -339,9 +339,9 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     public boolean isFontItalic() {
-        return ((font.getStyle() & Font.ITALIC) == Font.ITALIC); 
+        return ((font.getStyle() & Font.ITALIC) == Font.ITALIC);
     }
-    
+
     public void setFontItalic(boolean fontItalic) {
         if (isFontItalic() != fontItalic) {
             if (fontItalic) {

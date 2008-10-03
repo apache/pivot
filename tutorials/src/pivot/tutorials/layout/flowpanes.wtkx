@@ -29,17 +29,17 @@ limitations under the License.
                 <PushButton buttonData="Three"/>
             </FlowPane>
             <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
-                <Label text="Orientation" styles="{font:'Verdana bold 11'}"/>
+                <Label text="Orientation" styles="{fontBold:true}"/>
                 <RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" group="orientation" selected="true"/>
                 <RadioButton wtkx:id="verticalOrientationButton" buttonData="Vertical" group="orientation"/>
 
-                <Label text="Horizontal Alignment" styles="{font:'Verdana bold 11'}"/>
+                <Label text="Horizontal Alignment" styles="{fontBold:true}"/>
                 <RadioButton wtkx:id="horizontalAlignmentLeftButton" buttonData="Left" group="horizontalAlignment" selected="true"/>
                 <RadioButton wtkx:id="horizontalAlignmentRightButton" buttonData="Right" group="horizontalAlignment"/>
                 <RadioButton wtkx:id="horizontalAlignmentCenterButton" buttonData="Center" group="horizontalAlignment"/>
                 <RadioButton wtkx:id="horizontalAlignmentJustifyButton" buttonData="Justify" group="horizontalAlignment"/>
 
-                <Label text="Vertical Alignment" styles="{font:'Verdana bold 11'}"/>
+                <Label text="Vertical Alignment" styles="{fontBold:true}"/>
                 <RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top" group="verticalAlignment" selected="true"/>
                 <RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" group="verticalAlignment"/>
                 <RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" group="verticalAlignment"/>

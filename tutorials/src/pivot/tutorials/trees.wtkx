@@ -21,7 +21,7 @@ limitations under the License.
     <content>
         <FlowPane styles="{padding:4, spacing:10}">
             <FlowPane orientation="vertical">
-                <Label text="Simple" styles="{font:'Verdana bold 11'}"/>
+                <Label text="Simple" styles="{fontBold:true}"/>
                 <Border styles="{color:'#999999', padding:0}">
                     <content>
                         <ScrollPane preferredWidth="160" preferredHeight="240"
@@ -81,7 +81,7 @@ limitations under the License.
             </FlowPane>
 
             <FlowPane orientation="vertical">
-                <Label text="Editable" styles="{font:'Verdana bold 11'}"/>
+                <Label text="Editable" styles="{fontBold:true}"/>
                 <Border styles="{color:'#999999', padding:0}">
                     <content>
                         <ScrollPane wtkx:id="editableTreeViewScrollPane" preferredWidth="160" preferredHeight="240"
@@ -145,7 +145,7 @@ limitations under the License.
             </FlowPane>
 
             <FlowPane orientation="vertical">
-                <Label text="Multi-Select" styles="{font:'Verdana bold 11'}"/>
+                <Label text="Multi-Select" styles="{fontBold:true}"/>
                 <Border styles="{color:'#999999', padding:0}">
                     <content>
                         <ScrollPane preferredWidth="160" preferredHeight="240"

@@ -21,7 +21,7 @@ limitations under the License.
     <content>
         <FlowPane styles="{padding:4, spacing:8}">
             <FlowPane orientation="vertical">
-                <Label text="Sortable" styles="{font:'Verdana bold 11'}"/>
+                <Label text="Sortable" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:'#cccac2'}">
                     <content>
                         <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="276" preferredHeight="160">
@@ -47,7 +47,7 @@ limitations under the License.
             </FlowPane>
 
             <FlowPane orientation="vertical">
-                <Label text="Custom Content" styles="{font:'Verdana bold 11'}"/>
+                <Label text="Custom Content" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:'#cccac2'}">
                     <content>
                         <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="160">
