@@ -95,7 +95,7 @@ public class CornerRadii {
     }
 
     public String toString() {
-        return getClass() + " [" + topLeft + ", " + topRight
+        return getClass().getName() + " [" + topLeft + ", " + topRight
             + bottomLeft + ", " + bottomRight + "]";
     }
 }

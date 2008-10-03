@@ -98,7 +98,7 @@ public class Insets {
     }
 
     public String toString() {
-        return getClass() + " [" + top + ", " + left + ", "
+        return getClass().getName() + " [" + top + ", " + left + ", "
             + bottom + ", " + right + "]";
     }
 }

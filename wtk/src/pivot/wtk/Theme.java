@@ -48,6 +48,12 @@ public abstract class Theme {
         new HashMap<Class<? extends Component>, Class<? extends Skin>>();
 
     private static Theme theme = null;
+    private static final Package DEFAULT_SKIN_PACKAGE;
+
+    static {
+        DEFAULT_SKIN_PACKAGE = Package.getPackage("pivot.wtk.skin");
+        assert (DEFAULT_SKIN_PACKAGE != null) : "Default skin package not found.";
+    }
 
     public Theme() {
         componentSkinMap.put(Border.class, BorderSkin.class);
@@ -112,7 +118,23 @@ public abstract class Theme {
         if (theme.componentSkinMap.containsKey(componentClass)
             && (componentClass.getEnclosingClass() == null
                 || (componentClass.getModifiers() & Modifier.STATIC) == Modifier.STATIC)) {
+            HashMap<String, Object> styles = new HashMap<String, Object>();
+
+            Skin skin = component.getSkin();
+            Class<?> skinClass = skin.getClass();
+            if (skinClass.getPackage() == DEFAULT_SKIN_PACKAGE) {
+                Component.StyleDictionary componentStyles = component.getStyles();
+
+                for (String key : componentStyles) {
+                    styles.put(key, componentStyles.get(key));
+                }
+            }
+
+            // Re-install the skin
             component.installSkin(componentClass);
+
+            // Re-apply the styles
+            component.setStyles(styles);
         }
     }
 }

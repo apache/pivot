@@ -140,7 +140,21 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static HashMap<String, String> properties = null;
     private static Application application = null;
 
+    private static int x = 0;
+    private static int y = 0;
+    private static int width = 800;
+    private static int height = 600;
+    private static boolean center = false;
+    private static boolean resizable = true;
+
     private static final String DEFAULT_HOST_FRAME_TITLE = "Pivot"; // TODO i18n
+
+    private static final String X_ARGUMENT = "x";
+    private static final String Y_ARGUMENT = "y";
+    private static final String WIDTH_ARGUMENT = "width";
+    private static final String HEIGHT_ARGUMENT = "height";
+    private static final String CENTER_ARGUMENT = "center";
+    private static final String RESIZABLE_ARGUMENT = "resizable";
 
     public static void main(String[] args) throws Exception {
         // Get the application class name and startup properties
@@ -158,7 +172,22 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 if (property.length == 2) {
                     String key = property[0];
                     String value = property[1];
-                    properties.put(key, value);
+
+                    if (key.equals(X_ARGUMENT)) {
+                        x = Integer.parseInt(value);
+                    } else if (key.equals(Y_ARGUMENT)) {
+                        y = Integer.parseInt(value);
+                    } else if (key.equals(WIDTH_ARGUMENT)) {
+                        width = Integer.parseInt(value);
+                    } else if (key.equals(HEIGHT_ARGUMENT)) {
+                        height = Integer.parseInt(value);
+                    } else if (key.equals(CENTER_ARGUMENT)) {
+                        center = Boolean.parseBoolean(value);
+                    } else if (key.equals(RESIZABLE_ARGUMENT)) {
+                        resizable = Boolean.parseBoolean(value);
+                    } else {
+                        properties.put(key, value);
+                    }
                 } else {
                     System.out.println(arg + " is not a valid startup property.");
                 }
@@ -181,8 +210,15 @@ public final class DesktopApplicationContext extends ApplicationContext {
         final HostFrame hostFrame = new HostFrame();
         hostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
 
-        // TODO Preserve most recent size
-        hostFrame.setSize(800, 600);
+        hostFrame.setSize(width, height);
+        hostFrame.setResizable(resizable);
+
+        if (center) {
+            java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+            hostFrame.setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
+        } else {
+            hostFrame.setLocation(x, y);
+        }
 
         // Open the window and focus the display host
         hostFrame.setVisible(true);
