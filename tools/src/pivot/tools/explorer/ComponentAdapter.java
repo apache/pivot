@@ -49,17 +49,14 @@ public class ComponentAdapter
 	public List<TableEntryAdapter> getProperties() {
 		if (properties == null) {
 
-			BeanDictionary beanDictionary = new BeanDictionary(component);
+			BeanDictionary beanDictionary = new BeanDictionary(component, true);
 			properties = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
 
 			for ( String s: beanDictionary ) {
-			    if (!beanDictionary.isReadOnly(s)) {
-			        properties.add( new TableEntryAdapter( beanDictionary, s ));
-			    }
+		        properties.add( new TableEntryAdapter( beanDictionary, s ));
 			}
-
-
 		}
+
 		return properties;
 	}
 

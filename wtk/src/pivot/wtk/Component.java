@@ -71,7 +71,7 @@ public abstract class Component implements ConstrainedVisual {
      */
     public class StyleDictionary extends BeanDictionary {
         public StyleDictionary(pivot.wtk.Skin skin) {
-            super(skin);
+            super(skin, true);
         }
 
         public Object put(String key, Object value) {

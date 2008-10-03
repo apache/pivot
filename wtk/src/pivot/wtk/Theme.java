@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import java.awt.Font;
+import java.lang.reflect.Modifier;
 
 import pivot.collections.HashMap;
 import pivot.wtk.skin.BorderSkin;
@@ -37,6 +38,10 @@ import pivot.wtk.skin.WindowSkin;
  * Note that concrete Theme implementations should be declared as final. If
  * multiple third-party libraries attempted to extend a theme, it would cause a
  * conflict, as only one could be used in any given application.
+ * <p>
+ * IMPORTANT All skin mappings must be added to the map, even non-static inner
+ * classes. Otherwise, the component's base class will attempt to install its
+ * own skin, which will result in the addition of duplicate listeners.
  */
 public abstract class Theme {
     protected HashMap<Class<? extends Component>, Class<? extends Skin>> componentSkinMap =
@@ -80,15 +85,34 @@ public abstract class Theme {
             throw new IllegalArgumentException("theme is null.");
         }
 
-        if (Theme.theme != null) {
-            Theme.theme.uninstall();
+        Theme previousTheme = Theme.theme;
+        if (previousTheme != null) {
+            previousTheme.uninstall();
         }
 
         theme.install();
         Theme.theme = theme;
 
-        // TODO Walk existing component tree from display down and install new
-        // skins by calling installSkin() on each component (except for display,
-        // which is not skinnable)
+        if (previousTheme != null) {
+            reskin(ApplicationContext.active.getDisplay());
+        }
+    }
+
+    private static void reskin(Component component) {
+        if (component instanceof Container) {
+            Container container = (Container)component;
+            for (Component childComponent : container) {
+                reskin(childComponent);
+            }
+        }
+
+        Class<? extends Component> componentClass =
+            (Class<? extends Component>)component.getClass();
+
+        if (theme.componentSkinMap.containsKey(componentClass)
+            && (componentClass.getEnclosingClass() == null
+                || (componentClass.getModifiers() & Modifier.STATIC) == Modifier.STATIC)) {
+            component.installSkin(componentClass);
+        }
     }
 }

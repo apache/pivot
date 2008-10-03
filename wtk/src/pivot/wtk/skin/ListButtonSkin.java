@@ -141,8 +141,8 @@ public abstract class ListButtonSkin extends ButtonSkin
     @Override
     public void uninstall() {
         ListButton listButton = (ListButton)getComponent();
-        listButton.getListButtonListeners().add(this);
-        listButton.getListButtonSelectionListeners().add(this);
+        listButton.getListButtonListeners().remove(this);
+        listButton.getListButtonSelectionListeners().remove(this);
 
         listViewPopup.close();
 

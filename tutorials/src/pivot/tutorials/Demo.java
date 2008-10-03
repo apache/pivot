@@ -57,6 +57,7 @@ import pivot.wtk.Spinner;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TextInput;
+import pivot.wtk.Theme;
 import pivot.wtk.TreeView;
 import pivot.wtk.Visual;
 import pivot.wtk.Window;
@@ -68,6 +69,7 @@ import pivot.wtk.content.TableViewHeaderData;
 import pivot.wtk.content.TreeViewNodeRenderer;
 import pivot.wtk.effects.ReflectionDecorator;
 import pivot.wtk.media.Image;
+import pivot.wtk.skin.terra.TerraTheme;
 import pivot.wtkx.WTKXSerializer;
 
 public class Demo implements Application {
@@ -397,6 +399,8 @@ public class Demo implements Application {
         window.setContent(content);
 
         window.open(display);
+
+        Theme.setTheme(new TerraTheme("test"));
     }
 
     @SuppressWarnings("unchecked")

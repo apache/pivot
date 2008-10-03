@@ -48,9 +48,9 @@ public abstract class ButtonSkin extends ComponentSkin
     @Override
     public void uninstall() {
         Button button = (Button)getComponent();
-        button.getButtonListeners().add(this);
-        button.getButtonStateListeners().add(this);
-        button.getButtonPressListeners().add(this);
+        button.getButtonListeners().remove(this);
+        button.getButtonStateListeners().remove(this);
+        button.getButtonPressListeners().remove(this);
 
         button.setCursor(Cursor.DEFAULT);
 

@@ -93,6 +93,12 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                         nextProperty = Character.toLowerCase(methodName.charAt(propertyOffset))
                             + methodName.substring(propertyOffset + 1);
                     }
+
+                    if (nextProperty != null
+                        && ignoreReadOnlyProperties
+                        && isReadOnly(nextProperty)) {
+                        nextProperty = null;
+                    }
                 }
             }
         }
@@ -102,7 +108,8 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
         }
     }
 
-    private Object bean = null;
+    private Object bean;
+    private boolean ignoreReadOnlyProperties;
 
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";
@@ -116,11 +123,22 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * The bean object to wrap.
      */
     public BeanDictionary(Object bean) {
+        this(bean, false);
+    }
+
+    /**
+     * Creates a new bean dictionary.
+     *
+     * @param bean
+     * The bean object to wrap.
+     */
+    public BeanDictionary(Object bean, boolean ignoreReadOnlyProperties) {
         if (bean == null) {
             throw new IllegalArgumentException("bean is null.");
         }
 
         this.bean = bean;
+        this.ignoreReadOnlyProperties = ignoreReadOnlyProperties;
     }
 
     /**

@@ -58,8 +58,15 @@ public class TerraFormSkin extends ContainerSkin
         form.getFormAttributeListeners().add(this);
 
         // Initialize for existing fields
-        for (int i = 0, n = form.getLength(); i < n; i++) {
+        for (int i = 0, n = form.getFields().getLength(); i < n; i++) {
+            Label label = new Label();
+            labels.add(new Label());
+            form.add(label);
             updateName(i);
+
+            ImageView flagImageView = new ImageView();
+            flagImageViews.add(flagImageView);
+            form.add(flagImageView);
             updateFlag(i);
         }
     }
@@ -71,10 +78,13 @@ public class TerraFormSkin extends ContainerSkin
         form.getFormAttributeListeners().remove(this);
 
         // Remove all added labels and flag image views
-        for (int i = 0, n = form.getLength(); i < n; i++) {
+        for (int i = 0, n = form.getFields().getLength(); i < n; i++) {
             form.remove(labels.get(i));
             form.remove(flagImageViews.get(i));
         }
+
+        labels.clear();
+        flagImageViews.clear();
 
         super.uninstall();
     }
