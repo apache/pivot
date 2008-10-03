@@ -19,8 +19,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
+import java.awt.Rectangle;
 
 import pivot.collections.ArrayList;
 import pivot.collections.List;
@@ -183,12 +182,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         int rowEnd = tableData.getLength() - 1;
 
         // Ensure that we only paint items that are visible
-        Shape clip = graphics.getClip();
-        if (clip != null) {
-            Rectangle2D clipBounds = clip.getBounds();
-            rowStart = (int)Math.floor(clipBounds.getY() / (double)rowHeight);
-            rowEnd = Math.min(rowEnd, (int)Math.ceil((clipBounds.getY()
-                + clipBounds.getHeight()) / (double)rowHeight) - 1);
+        Rectangle clipBounds = graphics.getClipBounds();
+        if (clipBounds != null) {
+            rowStart = Math.max(rowStart, (int)Math.floor(clipBounds.y
+                / (double)rowHeight));
+            rowEnd = Math.min(rowEnd, (int)Math.ceil((clipBounds.y
+                + clipBounds.height) / (double)rowHeight) - 1);
         }
 
         int rowY = rowStart * rowHeight;

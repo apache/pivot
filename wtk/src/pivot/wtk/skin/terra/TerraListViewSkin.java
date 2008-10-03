@@ -18,8 +18,7 @@ package pivot.wtk.skin.terra;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
+import java.awt.Rectangle;
 
 import pivot.collections.ArrayList;
 import pivot.collections.List;
@@ -157,12 +156,12 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         int itemEnd = listData.getLength() - 1;
 
         // Ensure that we only paint items that are visible
-        Shape clip = graphics.getClip();
-        if (clip != null) {
-            Rectangle2D clipBounds = clip.getBounds();
-            itemStart = (int)Math.floor(clipBounds.getY() / (double)itemHeight);
-            itemEnd = Math.min(itemEnd, (int)Math.ceil((clipBounds.getY()
-                + clipBounds.getHeight()) / (double)itemHeight) - 1);
+        Rectangle clipBounds = graphics.getClipBounds();
+        if (clipBounds != null) {
+            itemStart = Math.max(itemStart, (int)Math.floor(clipBounds.y
+                / (double)itemHeight));
+            itemEnd = Math.min(itemEnd, (int)Math.ceil((clipBounds.y
+                + clipBounds.height) / (double)itemHeight) - 1);
         }
 
         for (int itemIndex = itemStart; itemIndex <= itemEnd; itemIndex++) {

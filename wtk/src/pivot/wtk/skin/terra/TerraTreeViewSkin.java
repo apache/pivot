@@ -19,10 +19,9 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Rectangle2D;
 
 import pivot.collections.ArrayList;
 import pivot.collections.List;
@@ -265,8 +264,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         int width = getWidth();
         int height = getHeight();
 
-        Shape clip = graphics.getClip();
-
         int nodeHeight = getNodeHeight();
 
         // Paint the background
@@ -277,13 +274,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         int nodeEnd = visibleNodes.getLength() - 1;
 
         // Ensure that we only paint items that are visible
-        if (clip != null) {
-            Rectangle2D clipBounds = clip.getBounds();
-
-            nodeStart = Math.max(0,
-                (int)(clipBounds.getY() / (double)(nodeHeight + VERTICAL_SPACING)));
-            nodeEnd = Math.min(nodeEnd, (int)((clipBounds.getY() +
-                clipBounds.getHeight()) / (double)(nodeHeight + VERTICAL_SPACING)));
+        Rectangle clipBounds = graphics.getClipBounds();
+        if (clipBounds != null) {
+            nodeStart = Math.max(nodeStart, (int)(clipBounds.y
+                / (double)(nodeHeight + VERTICAL_SPACING)));
+            nodeEnd = Math.min(nodeEnd, (int)((clipBounds.y +
+                clipBounds.height) / (double)(nodeHeight + VERTICAL_SPACING)));
         }
 
         BasicStroke gridStroke = new BasicStroke();
