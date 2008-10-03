@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.serialization;
+package pivot.wtk.media;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -21,6 +21,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
+
+import pivot.serialization.SerializationException;
+import pivot.serialization.Serializer;
 
 /**
  * Implementation of the {@link Serializer} interface that reads and writes
