@@ -668,6 +668,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             if (button == Mouse.Button.LEFT) {
                 assert (component instanceof Display);
                 component.getComponentMouseListeners().remove(this);
+                component.getComponentMouseButtonListeners().remove(this);
             }
 
             return false;
