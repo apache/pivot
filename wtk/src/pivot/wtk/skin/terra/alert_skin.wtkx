@@ -17,8 +17,13 @@ limitations under the License.
 
 <FlowPane orientation="vertical" styles="{spacing:8, horizontalAlignment:'justify'}"
     preferredWidth="300"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
-    <Border styles="{backgroundColor:'#e6e3da', color:'#999999', padding:12}">
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:collections="pivot.collections"
+    xmlns="pivot.wtk">
+    <Border styles="{padding:12}">
+        <styles>
+            <collections:HashMap backgroundColor="%colors[2]" color="%colors[3]"/>
+        </styles>
         <content>
             <TablePane styles="{horizontalSpacing:12, verticalSpacing:12}">
                 <columns>

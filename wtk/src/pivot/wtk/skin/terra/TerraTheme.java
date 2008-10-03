@@ -18,6 +18,7 @@ package pivot.wtk.skin.terra;
 import java.awt.Color;
 import java.awt.Font;
 
+import pivot.serialization.JSONSerializer;
 import pivot.util.Resources;
 import pivot.wtk.Alert;
 import pivot.wtk.Calendar;
@@ -60,14 +61,21 @@ import pivot.wtk.TreeView;
  * @author tvolkert
  */
 public final class TerraTheme extends Theme {
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
-    private Font smallFont = new Font("Verdana", Font.PLAIN, 9);
+    private String scheme;
 
-    private String[] colors = {"#000000", "#ffffff", "#e6e3da", "#999999",
-        "#b2b2b2", "#f7f5eb", "#3c77b2", "#2c5680",
-        "#4589cc", "#346699", "#cccac2", "#14538b"};
+    private Resources resources = null;
 
     public TerraTheme() {
+        this("default");
+    }
+
+    public TerraTheme(String scheme) {
+        if (scheme == null) {
+            throw new IllegalArgumentException("scheme is null.");
+        }
+
+        this.scheme = scheme;
+
         componentSkinMap.put(Alert.class, TerraAlertSkin.class);
         componentSkinMap.put(Checkbox.class, TerraCheckboxSkin.class);
         componentSkinMap.put(Calendar.class, TerraCalendarSkin.class);
@@ -113,32 +121,37 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TerraSplitPaneSkin.Splitter.class, TerraSplitPaneSkin.SplitterSkin.class);
         componentSkinMap.put(TerraSplitPaneSkin.SplitterShadow.class, TerraSplitPaneSkin.SplitterShadowSkin.class);
         componentSkinMap.put(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
-
-        // TODO Load theme resources
     }
 
     public void install() {
-        // No-op
+        try {
+            String baseName = getClass().getName() + "_" + scheme;
+            resources = new Resources(baseName);
+        } catch(Exception exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     public void uninstall() {
-        // No-op
+        resources = null;
     }
 
     public Font getFont() {
-        return font;
+        // TODO Cache the decoded font?
+        return Font.decode(JSONSerializer.getString(resources, "font"));
     }
 
     public Font getSmallFont() {
-        return smallFont;
+        // TODO Cache the decoded font?
+        return Font.decode(JSONSerializer.getString(resources, "smallFont"));
     }
 
     public Color getColor(int index) {
-        return Color.decode(colors[index]);
+        // TODO Cache the decoded colors?
+        return Color.decode(JSONSerializer.getString(resources, "colors[" + index + "]"));
     }
 
     public Resources getResources() {
-        // TODO
-        return null;
+        return resources;
     }
 }

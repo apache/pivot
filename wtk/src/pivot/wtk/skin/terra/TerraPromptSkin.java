@@ -16,7 +16,7 @@
 package pivot.wtk.skin.terra;
 
 import pivot.collections.ArrayList;
-import pivot.collections.Map;
+import pivot.collections.HashMap;
 import pivot.util.Resources;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
@@ -27,6 +27,7 @@ import pivot.wtk.Label;
 import pivot.wtk.Prompt;
 import pivot.wtk.PromptListener;
 import pivot.wtk.PushButton;
+import pivot.wtk.Theme;
 import pivot.wtk.Window;
 import pivot.wtk.media.Image;
 import pivot.wtkx.WTKXSerializer;
@@ -46,16 +47,6 @@ public class TerraPromptSkin extends TerraSheetSkin
     private static Image errorImage = null;
     private static Image questionImage = null;
 
-    private static Resources resources = null;
-
-    static {
-        try {
-            resources = new Resources(TerraPromptSkin.class.getName());
-        } catch(Exception exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-
     public TerraPromptSkin() {
         setResizable(false);
     }
@@ -69,7 +60,10 @@ public class TerraPromptSkin extends TerraSheetSkin
         prompt.getPromptListeners().add(this);
 
         // Load the prompt content
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        Resources resources = theme.getResources();
+
+        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
         Component content = null;
 
         try {
@@ -147,7 +141,14 @@ public class TerraPromptSkin extends TerraSheetSkin
             Object option = prompt.getOption(i);
 
             PushButton optionButton = new PushButton(option);
-            optionButton.setStyles((Map<String, Object>)resources.get("optionButtonStyles"));
+            HashMap<String, Object> optionButtonStyles = new HashMap<String, Object>();
+            optionButtonStyles.put("color", theme.getColor(1));
+            optionButtonStyles.put("backgroundColor", theme.getColor(6));
+            optionButtonStyles.put("borderColor", theme.getColor(7));
+            optionButtonStyles.put("bevelColor", theme.getColor(8));
+            optionButtonStyles.put("pressedBevelColor", theme.getColor(9));
+
+            optionButton.setStyles(optionButtonStyles);
             optionButton.getStyles().put("preferredAspectRatio", 3);
 
             optionButton.getButtonPressListeners().add(new ButtonPressListener() {

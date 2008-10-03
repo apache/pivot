@@ -16,7 +16,6 @@
 package pivot.wtk.skin.terra;
 
 import java.awt.Color;
-import java.awt.Font;
 
 import pivot.util.Vote;
 import pivot.wtk.Border;
@@ -30,6 +29,7 @@ import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Label;
 import pivot.wtk.Mouse;
+import pivot.wtk.Theme;
 import pivot.wtk.Tooltip;
 import pivot.wtk.TooltipListener;
 import pivot.wtk.Window;
@@ -110,8 +110,9 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
         border.setContent(label);
 
         // Apply the default styles
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
         Component.StyleDictionary labelStyles = label.getStyles();
-        labelStyles.put("font", new Font("Verdana", Font.PLAIN, 11));
+        labelStyles.put("font", theme.getFont());
         labelStyles.put("color", Color.BLACK);
 
         Component.StyleDictionary borderStyles = border.getStyles();

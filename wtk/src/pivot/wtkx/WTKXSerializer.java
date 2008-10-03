@@ -38,6 +38,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.serialization.JSONSerializer;
 import pivot.serialization.Serializer;
 import pivot.serialization.SerializationException;
 import pivot.util.Resources;
@@ -617,7 +618,7 @@ public class WTKXSerializer implements Serializer {
                     if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
                         resolvedValue = attributeValue.substring(1);
                     } else {
-                        resolvedValue = resources.get(attributeValue.substring(1));
+                        resolvedValue = JSONSerializer.getValue(resources, attributeValue.substring(1));
                     }
                 }
             } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {

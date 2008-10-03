@@ -1,0 +1,20 @@
+{   font: "Verdana 11",
+    smallFont: "Verdana 9",
+    colors: [ "#000000",
+        "#ffffff",
+        "#e6e3da",
+        "#999999",
+        "#b2b2b2",
+        "#f7f5eb",
+        "#3c77b2",
+        "#2c5680",
+        "#4589cc",
+        "#346699",
+        "#cccac2",
+        "#14538b"
+    ],
+    informationImageName: "message_type-information.png",
+    warningImageName: "message_type-warning.png",
+    errorImageName: "message_type-error.png",
+    questionImageName: "message_type-question.png"
+}
