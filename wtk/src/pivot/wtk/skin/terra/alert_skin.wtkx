@@ -37,7 +37,7 @@ limitations under the License.
                         </FlowPane>
                         <FlowPane wtkx:id="messageFlowPane" orientation="vertical"
                             styles="{spacing:10, horizontalAlignment:'justify'}">
-                            <Label wtkx:id="messageLabel" styles="{font:'Verdana bold 11', wrapText:true}"/>
+                            <Label wtkx:id="messageLabel" styles="{fontBold:true, wrapText:true}"/>
                         </FlowPane>
                     </TablePane.Row>
                 </rows>

@@ -18,7 +18,6 @@ package pivot.wtk.skin.terra;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
@@ -361,7 +360,7 @@ public class TerraFrameSkin extends WindowSkin {
         titleFlowPane.add(titleLabel);
         titleFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
-        titleLabel.getStyles().put("font", theme.getFont().deriveFont(Font.BOLD));
+        titleLabel.getStyles().put("fontBold", true);
         iconImageView.getStyles().put("backgroundColor", null);
 
         // Initialize the button flow pane

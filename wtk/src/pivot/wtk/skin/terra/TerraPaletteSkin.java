@@ -2,7 +2,6 @@ package pivot.wtk.skin.terra;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
@@ -178,7 +177,7 @@ public class TerraPaletteSkin extends WindowSkin {
         // Initialize the title flow pane
         titleFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         titleFlowPane.add(titleLabel);
-        titleLabel.getStyles().put("font", theme.getSmallFont().deriveFont(Font.BOLD));
+        titleLabel.getStyles().put("fontBold", true);
         titleLabel.getStyles().put("color", titleBarColor);
 
         // Initialize the button flow pane

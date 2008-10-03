@@ -51,8 +51,8 @@ import pivot.wtk.VerticalAlignment;
 public class LabelSkin extends ComponentSkin implements LabelListener {
     protected FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
 
-    protected Color color;
     protected Font font;
+    protected Color color;
     protected TextDecoration textDecoration;
     protected HorizontalAlignment horizontalAlignment;
     protected VerticalAlignment verticalAlignment;
@@ -295,27 +295,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         return false;
     }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
-        this.color = color;
-        repaintComponent();
-    }
-
-    public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
-        setColor(Color.decode(color));
-    }
-
     public Font getFont() {
         return font;
     }
@@ -335,6 +314,63 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         }
 
         setFont(Font.decode(font));
+    }
+    
+    public int getFontSize() {
+        return font.getSize();
+    }
+    
+    public void setFontSize(int fontSize) {
+        font = font.deriveFont(fontSize);
+    }
+    
+    public boolean isFontBold() {
+        return ((font.getStyle() & Font.BOLD) == Font.BOLD); 
+    }
+    
+    public void setFontBold(boolean fontBold) {
+        if (isFontBold() != fontBold) {
+            if (fontBold) {
+                font = font.deriveFont(Font.BOLD);
+            } else {
+                font = font.deriveFont(font.getStyle() & (~Font.BOLD));
+            }
+        }
+    }
+
+    public boolean isFontItalic() {
+        return ((font.getStyle() & Font.ITALIC) == Font.ITALIC); 
+    }
+    
+    public void setFontItalic(boolean fontItalic) {
+        if (isFontItalic() != fontItalic) {
+            if (fontItalic) {
+                font = font.deriveFont(Font.ITALIC);
+            } else {
+                font = font.deriveFont(font.getStyle() & (~Font.ITALIC));
+            }
+        }
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.color = color;
+        repaintComponent();
+    }
+
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(Color.decode(color));
     }
 
     public TextDecoration getTextDecoration() {
