@@ -1,5 +1,6 @@
 {   font: "Verdana 11",
     smallFont: "Verdana 9",
+
     colors: [ "#000000",
         "#ffffff",
         "#e6e3da",
@@ -13,8 +14,14 @@
         "#cccac2",
         "#14538b"
     ],
-    informationImageName: "message_type-information.png",
-    warningImageName: "message_type-warning.png",
-    errorImageName: "message_type-error.png",
-    questionImageName: "message_type-question.png"
+
+    errorIcon: "message_type-error-32x32.png",
+    warningIcon: "message_type-warning-32x32.png",
+    questionIcon: "message_type-question-32x32.png",
+    infoIcon: "message_type-info-32x32.png",
+
+    smallErrorIcon: "message_type-error-16x16.png",
+    smallWarningIcon: "message_type-warning-16x16.png",
+    smallQuestionIcon: "message_type-question-16x16.png",
+    smallInfoIcon: "message_type-info-16x16.png"
 }

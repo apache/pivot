@@ -27,6 +27,7 @@ import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
 import pivot.wtk.Label;
 import pivot.wtk.MessageType;
+import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
 
@@ -39,11 +40,6 @@ public class TerraFormSkin extends ContainerSkin
     implements FormListener, FormAttributeListener {
     private ArrayList<Label> labels = new ArrayList<Label>();
     private ArrayList<ImageView> flagImageViews = new ArrayList<ImageView>();
-
-    private static Image informationImage = null;
-    private static Image warningImage = null;
-    private static Image errorImage = null;
-    private static Image questionImage = null;
 
     private boolean rightAlignLabels = false;
     private HorizontalAlignment fieldAlignment = HorizontalAlignment.LEFT;
@@ -405,53 +401,10 @@ public class TerraFormSkin extends ContainerSkin
         String flagMessage = null;
 
         if (flag != null) {
+            TerraTheme theme = (TerraTheme)Theme.getTheme();
             MessageType flagMessageType = flag.getMessageType();
-
-            if (flagMessageType != null) {
-                switch (flagMessageType) {
-                    case INFO: {
-                        if (informationImage == null) {
-                            informationImage =
-                                Image.load(getClass().getResource("FormSkin-Information-16x16.png"));
-                        }
-
-                        flagImage = informationImage;
-                        break;
-                    }
-
-                    case WARNING: {
-                        if (warningImage == null) {
-                            warningImage =
-                                Image.load(getClass().getResource("FormSkin-Warning-16x16.png"));
-                        }
-
-                        flagImage = warningImage;
-                        break;
-                    }
-
-                    case ERROR: {
-                        if (errorImage == null) {
-                            errorImage =
-                                Image.load(getClass().getResource("FormSkin-Error-16x16.png"));
-                        }
-
-                        flagImage = errorImage;
-                        break;
-                    }
-
-                    case QUESTION: {
-                        if (questionImage == null) {
-                            questionImage =
-                                Image.load(getClass().getResource("FormSkin-Question-16x16.png"));
-                        }
-
-                        flagImage = questionImage;
-                        break;
-                    }
-                }
-
-                flagMessage = flag.getMessage();
-            }
+            flagImage = theme.getSmallMessageIcon(flagMessageType);
+            flagMessage = flag.getMessage();
         }
 
         flagImageView.setImage(flagImage);

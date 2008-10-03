@@ -29,7 +29,6 @@ import pivot.wtk.Label;
 import pivot.wtk.PushButton;
 import pivot.wtk.Theme;
 import pivot.wtk.Window;
-import pivot.wtk.media.Image;
 import pivot.wtkx.WTKXSerializer;
 
 /**
@@ -41,11 +40,6 @@ import pivot.wtkx.WTKXSerializer;
 public class TerraAlertSkin extends TerraDialogSkin
     implements AlertListener {
     private ArrayList<Button> optionButtons = new ArrayList<Button>();
-
-    private static Image informationImage = null;
-    private static Image warningImage = null;
-    private static Image errorImage = null;
-    private static Image questionImage = null;
 
     public TerraAlertSkin() {
         setResizable(false);
@@ -76,51 +70,7 @@ public class TerraAlertSkin extends TerraDialogSkin
 
         // Set the type image
         ImageView typeImageView = (ImageView)wtkxSerializer.getObjectByName("typeImageView");
-        Image typeImage = null;
-
-        switch (alert.getMessageType()) {
-            case INFO: {
-                if (informationImage == null) {
-                    String informationImageName = (String)resources.get("informationImageName");
-                    informationImage = Image.load(getClass().getResource(informationImageName));
-                }
-
-                typeImage = informationImage;
-                break;
-            }
-
-            case WARNING: {
-                if (warningImage == null) {
-                    String warningImageName = (String)resources.get("warningImageName");
-                    warningImage = Image.load(getClass().getResource(warningImageName));
-                }
-
-                typeImage = warningImage;
-                break;
-            }
-
-            case ERROR: {
-                if (errorImage == null) {
-                    String errorImageName = (String)resources.get("errorImageName");
-                    errorImage = Image.load(getClass().getResource(errorImageName));
-                }
-
-                typeImage = errorImage;
-                break;
-            }
-
-            case QUESTION: {
-                if (questionImage == null) {
-                    String questionImageName = (String)resources.get("questionImageName");
-                    questionImage = Image.load(getClass().getResource(questionImageName));
-                }
-
-                typeImage = questionImage;
-                break;
-            }
-        }
-
-        typeImageView.setImage(typeImage);
+        typeImageView.setImage(theme.getMessageIcon(alert.getMessageType()));
 
         // Set the message
         Label messageLabel = (Label)wtkxSerializer.getObjectByName("messageLabel");

@@ -17,10 +17,12 @@ package pivot.wtk.skin.terra;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.net.URL;
 
 import pivot.serialization.JSONSerializer;
 import pivot.util.Resources;
 import pivot.wtk.Alert;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Calendar;
 import pivot.wtk.Checkbox;
 import pivot.wtk.Dialog;
@@ -34,6 +36,7 @@ import pivot.wtk.MenuBar;
 import pivot.wtk.MenuButton;
 import pivot.wtk.MenuPopup;
 import pivot.wtk.Menu;
+import pivot.wtk.MessageType;
 import pivot.wtk.Meter;
 import pivot.wtk.Palette;
 import pivot.wtk.Panorama;
@@ -53,6 +56,7 @@ import pivot.wtk.TextInput;
 import pivot.wtk.Theme;
 import pivot.wtk.Tooltip;
 import pivot.wtk.TreeView;
+import pivot.wtk.media.Image;
 
 /**
  * Terra theme.
@@ -149,6 +153,104 @@ public final class TerraTheme extends Theme {
     public Color getColor(int index) {
         // TODO Cache the decoded colors?
         return Color.decode(JSONSerializer.getString(resources, "colors[" + index + "]"));
+    }
+
+    public Image getMessageIcon(MessageType messageType) {
+        String messageIconName;
+
+        switch (messageType) {
+            case ERROR: {
+                messageIconName = JSONSerializer.getString(resources, "errorIcon");
+                break;
+            }
+
+            case WARNING: {
+                messageIconName = JSONSerializer.getString(resources, "warningIcon");
+                break;
+            }
+
+            case QUESTION: {
+                messageIconName = JSONSerializer.getString(resources, "questionIcon");
+                break;
+            }
+
+            case INFO: {
+                messageIconName = JSONSerializer.getString(resources, "infoIcon");
+                break;
+            }
+
+            case APPLICATION: {
+                messageIconName = null;
+                break;
+            }
+
+            default: {
+                throw new IllegalArgumentException();
+            }
+        }
+
+        Image messageIcon = null;
+
+        if (messageIconName != null) {
+            URL location = getClass().getResource(messageIconName);
+            messageIcon = (Image)ApplicationContext.getResourceCache().get(location);
+
+            if (messageIcon == null) {
+                messageIcon = Image.load(location);
+                ApplicationContext.getResourceCache().put(location, messageIcon);
+            }
+        }
+
+        return messageIcon;
+    }
+
+    public Image getSmallMessageIcon(MessageType messageType) {
+        String smallMessageIconName;
+
+        switch (messageType) {
+            case ERROR: {
+                smallMessageIconName = JSONSerializer.getString(resources, "smallErrorIcon");
+                break;
+            }
+
+            case WARNING: {
+                smallMessageIconName = JSONSerializer.getString(resources, "smallWarningIcon");
+                break;
+            }
+
+            case QUESTION: {
+                smallMessageIconName = JSONSerializer.getString(resources, "smallQuestionIcon");
+                break;
+            }
+
+            case INFO: {
+                smallMessageIconName = JSONSerializer.getString(resources, "smallInfoIcon");
+                break;
+            }
+
+            case APPLICATION: {
+                smallMessageIconName = null;
+                break;
+            }
+
+            default: {
+                throw new IllegalArgumentException();
+            }
+        }
+
+        Image smallMessageIcon = null;
+
+        if (smallMessageIconName != null) {
+            URL location = getClass().getResource(smallMessageIconName);
+            smallMessageIcon = (Image)ApplicationContext.getResourceCache().get(location);
+
+            if (smallMessageIcon == null) {
+                smallMessageIcon = Image.load(location);
+                ApplicationContext.getResourceCache().put(location, smallMessageIcon);
+            }
+        }
+
+        return smallMessageIcon;
     }
 
     public Resources getResources() {
