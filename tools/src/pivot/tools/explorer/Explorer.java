@@ -7,7 +7,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.tools.explorer.table.renderer.PropertyValueTableViewCellRenderer;
-import pivot.tools.explorer.tree.TreeNodeList;
+import pivot.tools.explorer.tree.TreeNodePath;
 import pivot.tools.explorer.tree.renderer.ComponentNodeRenderer;
 import pivot.tools.explorer.utils.Collections;
 import pivot.util.Resources;
@@ -15,10 +15,13 @@ import pivot.util.Vote;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
+import pivot.wtk.Container;
+import pivot.wtk.ContainerListener;
 import pivot.wtk.Dialog;
 import pivot.wtk.DialogStateListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
+import pivot.wtk.FocusTraversalPolicy;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Label;
 import pivot.wtk.TableView;
@@ -46,7 +49,7 @@ public class Explorer implements Application, TreeViewSelectionListener {
 
     	this.display = display;
     	this.properties = properties;
-
+    	
     	Application application = getSubjectApplication();
     	application.startup(display, properties);
 
@@ -80,6 +83,24 @@ public class Explorer implements Application, TreeViewSelectionListener {
         attributesTab = (Component)wtkxSerializer.getObjectByName("tabAttributes");
 
         initComponentTree(componentTree, display);
+        
+        display.getContainerListeners().add( new ContainerListener(){
+
+			public void componentInserted(Container container, int index) {
+				refreshComponentTree( Explorer.this.componentTree, Explorer.this.display );
+			}
+
+			public void componentsRemoved(Container container, int index, Sequence<Component> components) {
+				refreshComponentTree( Explorer.this.componentTree, Explorer.this.display );
+			}
+
+			public void contextKeyChanged(Container container, String previousContextKey) {
+			}
+
+			public void focusTraversalPolicyChanged(Container container,
+					FocusTraversalPolicy previousFocusTraversalPolicy) {
+			}});
+        
 
         dialog.open(display);
 
@@ -163,11 +184,17 @@ public class Explorer implements Application, TreeViewSelectionListener {
     private void initComponentTree(final TreeView tree, Iterable<Component> components) {
 
     	tree.getTreeViewSelectionListeners().add(this);
-
     	//TODO: use preferences to toggle highlighting
     	tree.getComponentMouseListeners().add(new ComponentHighlighter(tree));
+        tree.setNodeRenderer( new ComponentNodeRenderer() );
 
-        // build tree data
+    }
+
+	private void refreshComponentTree(final TreeView tree, Iterable<Component> components) {
+		
+		TreeNodePath<ComponentAdapter> selectionPath = TreeNodePath.createFromSelection(tree);
+		
+		// build tree data
         List<ComponentAdapter> componentList = new ArrayList<ComponentAdapter>();
         for (Component c : components) {
         	if ( c != dialog ) {
@@ -175,15 +202,22 @@ public class Explorer implements Application, TreeViewSelectionListener {
         	}
         }
         tree.setTreeData(componentList);
-        Sequence<Integer> rootPath = Collections.list(0);
-        tree.setSelectedPath(rootPath);
-        tree.expandBranch(rootPath);
-        tree.setNodeRenderer( new ComponentNodeRenderer() );
 
-    }
+        // select and expand first node if there was no selection previosely
+        if ( selectionPath == null || selectionPath.getLength() == 0 ) {
+          Sequence<Integer> rootPath = Collections.list(0);
+          tree.setSelectedPath(rootPath);
+          tree.expandBranch(rootPath);
+        } else {
+        	selectionPath.applyAsSelection(tree);
+        }
+        
+	}
+    
+   
 
     public void selectionChanged(TreeView treeView) {
-        Sequence<ComponentAdapter> nodePath = TreeNodeList.create(treeView,	treeView.getSelectedPath());
+        Sequence<ComponentAdapter> nodePath = TreeNodePath.createFromSelection(treeView);
         statusLabel.setText(nodePath.toString());
 
         if (nodePath.getLength() > 0) {

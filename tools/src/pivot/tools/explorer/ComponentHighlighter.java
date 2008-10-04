@@ -6,7 +6,7 @@ package pivot.tools.explorer;
 import java.awt.Color;
 
 import pivot.collections.Sequence;
-import pivot.tools.explorer.tree.TreeNodeList;
+import pivot.tools.explorer.tree.TreeNodePath;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Decorator;
@@ -35,7 +35,7 @@ final class ComponentHighlighter implements ComponentMouseListener {
 		if (component == tree) {
 			Sequence<Integer> nodeAt = tree.getNodeAt(y);
 			if (nodeAt.getLength() != 0) {
-				Sequence<ComponentAdapter> nodePath = TreeNodeList.create(tree, nodeAt);
+				Sequence<ComponentAdapter> nodePath = TreeNodePath.create(tree, nodeAt);
 				ComponentAdapter node = nodePath.get(nodePath.getLength() - 1);
 
 				highlightComponent(node.getComponent());
