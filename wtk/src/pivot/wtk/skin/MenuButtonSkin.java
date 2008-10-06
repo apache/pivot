@@ -63,7 +63,13 @@ public abstract class MenuButtonSkin extends ButtonSkin
             }
 
             public void windowClosed(Window window, Display display) {
-                getComponent().requestFocus();
+                MenuButton menuButton = (MenuButton)getComponent();
+
+                if (menuButton.isFocusable()) {
+                    menuButton.requestFocus();
+                }
+
+                repaintComponent();
             }
         });
     }
@@ -142,7 +148,10 @@ public abstract class MenuButtonSkin extends ButtonSkin
     public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         MenuButton menuButton = (MenuButton)getComponent();
 
-        menuButton.requestFocus();
+        if (menuButton.isFocusable()) {
+            menuButton.requestFocus();
+        }
+
         menuButton.press();
 
         if (menuPopup.isShowing()) {

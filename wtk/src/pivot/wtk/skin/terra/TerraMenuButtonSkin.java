@@ -25,6 +25,7 @@ import java.awt.geom.GeneralPath;
 import pivot.collections.Dictionary;
 import pivot.wtk.Bounds;
 import pivot.wtk.Button;
+import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.MenuButton;
@@ -49,6 +50,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     private Color disabledBevelColor;
     private Insets padding;
     private int spacing;
+    private boolean toolbar;
 
     private static final int TRIGGER_WIDTH = 10;
 
@@ -66,6 +68,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         disabledBevelColor = theme.getColor(1);
         padding = new Insets(3);
         spacing = 0;
+        toolbar = false;
     }
 
     public int getPreferredWidth(int height) {
@@ -115,30 +118,40 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         Color bevelColor = null;
         Color borderColor = null;
 
-        if (menuButton.isEnabled()) {
-            backgroundColor = this.backgroundColor;
-            bevelColor = (pressed) ? pressedBevelColor : this.bevelColor;
-            borderColor = this.borderColor;
-        } else {
-            backgroundColor = disabledBackgroundColor;
-            bevelColor = disabledBevelColor;
-            borderColor = disabledBorderColor;
+        if (!toolbar
+            || highlighted
+            || menuPopup.isOpen()) {
+            if (menuButton.isEnabled()) {
+                backgroundColor = this.backgroundColor;
+                bevelColor = (pressed) ? pressedBevelColor : this.bevelColor;
+                borderColor = this.borderColor;
+            } else {
+                backgroundColor = disabledBackgroundColor;
+                bevelColor = disabledBevelColor;
+                borderColor = disabledBorderColor;
+            }
         }
 
         // Paint the background
-        graphics.setPaint(backgroundColor);
-        graphics.fillRect(0, 0, width, height);
+        if (backgroundColor != null) {
+            graphics.setPaint(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+        }
 
         // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
 
         // Paint the bevel
-        graphics.setPaint(bevelColor);
-        graphics.drawLine(1, 1, width - 2, 1);
+        if (bevelColor != null) {
+            graphics.setPaint(bevelColor);
+            graphics.drawLine(1, 1, width - 2, 1);
+        }
 
         // Paint the border
-        graphics.setPaint(borderColor);
-        graphics.drawRect(0, 0, width - 1, height - 1);
+        if (borderColor != null) {
+            graphics.setPaint(borderColor);
+            graphics.drawRect(0, 0, width - 1, height - 1);
+        }
 
         Bounds contentBounds = new Bounds(padding.left + 1, padding.top + 1,
             Math.max(width - (padding.left + padding.right + spacing + TRIGGER_WIDTH + 2), 0),
@@ -146,7 +159,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
         // Paint the content
         Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
-        dataRenderer.render(menuButton.getButtonData(), menuButton, false);
+        dataRenderer.render(menuButton.getButtonData(), menuButton, highlighted);
         dataRenderer.setSize(contentBounds.width, contentBounds.height);
 
         Graphics2D contentGraphics = (Graphics2D)graphics.create();
@@ -195,6 +208,11 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_OFF);
         }
+    }
+
+    @Override
+    public boolean isFocusable() {
+        return !toolbar;
     }
 
     public Font getFont() {
@@ -456,5 +474,20 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         setSpacing(spacing.intValue());
+    }
+
+    public boolean isToolbar() {
+        return toolbar;
+    }
+
+    public void setToolbar(boolean toolbar) {
+        this.toolbar = toolbar;
+
+        if (toolbar &&
+            getComponent().isFocused()) {
+            Component.clearFocus();
+        }
+
+        repaintComponent();
     }
 }
