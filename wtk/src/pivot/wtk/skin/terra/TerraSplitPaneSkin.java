@@ -98,7 +98,6 @@ public class TerraSplitPaneSkin extends ContainerSkin
         private class DragHandler
             implements ComponentMouseListener, ComponentMouseButtonListener {
             public boolean mouseMove(Component component, int x, int y) {
-                Splitter splitter = (Splitter)getComponent();
                 SplitPane splitPane = (SplitPane)TerraSplitPaneSkin.this.getComponent();
 
                 Orientation orientation = splitPane.getOrientation();
@@ -140,7 +139,6 @@ public class TerraSplitPaneSkin extends ContainerSkin
 
             public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
                 if (shadow != null) {
-                    Splitter splitter = (Splitter)getComponent();
                     SplitPane splitPane = (SplitPane)TerraSplitPaneSkin.this.getComponent();
 
                     // Update the split location and remove the shadow
@@ -196,7 +194,6 @@ public class TerraSplitPaneSkin extends ContainerSkin
         }
 
         public void paint(Graphics2D graphics) {
-            Splitter splitter = (Splitter)getComponent();
             SplitPane splitPane = (SplitPane)TerraSplitPaneSkin.this.getComponent();
 
             Orientation orientation = splitPane.getOrientation();
