@@ -225,11 +225,14 @@ public class TerraRollupSkin extends ContainerSkin
         Rollup rollup = (Rollup)getComponent();
         rollup.getRollupListeners().remove(this);
 
-        toggleComponent = null;
-
         rollupButton.getButtonPressListeners().remove(this);
         rollup.remove(rollupButton);
         rollupButton = null;
+
+        if (toggleComponent != null) {
+            toggleComponent.getComponentMouseButtonListeners().remove(toggleComponentMouseHandler);
+            toggleComponent = null;
+        }
 
         super.uninstall();
     }
