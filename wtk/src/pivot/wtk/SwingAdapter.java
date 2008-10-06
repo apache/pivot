@@ -51,6 +51,7 @@ public class SwingAdapter extends Component {
 
     public SwingAdapter(JComponent swingComponent) {
         this.swingComponent = swingComponent;
+        installSkin(SwingAdapter.class);
     }
 
     public JComponent getSwingComponent() {
