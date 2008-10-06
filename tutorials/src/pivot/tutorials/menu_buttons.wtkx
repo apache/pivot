@@ -89,7 +89,7 @@
 			            </menu>
 			        </MenuButton>
 
-			        <MenuButton tooltipText="Help" styles="{spacing:2}">
+			        <MenuButton tooltipText="Help" styles="{spacing:2, toolbar:true}">
 			            <buttonData icon="@help.png"/>
 			            <menu>
 			                <Menu>

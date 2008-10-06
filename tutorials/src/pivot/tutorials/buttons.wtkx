@@ -17,7 +17,7 @@ limitations under the License.
 
 <FlowPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
-    <Border styles="{color:'#999999'}">
+    <Border>
         <content>
             <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <FlowPane orientation="vertical">
@@ -83,7 +83,7 @@ limitations under the License.
         </content>
     </Border>
 
-    <Border styles="{color:'#999999'}">
+    <Border>
         <content>
             <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <FlowPane orientation="vertical">
@@ -113,7 +113,7 @@ limitations under the License.
         </content>
     </Border>
 
-    <Border styles="{color:'#999999'}">
+    <Border>
         <content>
             <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <FlowPane orientation="vertical">
@@ -152,7 +152,7 @@ limitations under the License.
         </content>
     </Border>
 
-    <Border styles="{color:'#999999'}">
+    <Border>
         <content>
             <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
                 <FlowPane orientation="vertical">
