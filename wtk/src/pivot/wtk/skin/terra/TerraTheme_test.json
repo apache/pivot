@@ -1,18 +1,19 @@
 {   font: "Verdana 11",
     smallFont: "Verdana 9",
 
-    colors: [ "#440000",
-        "#33ff66",
-        "#ff0000",
-        "#999999",
-        "#b2b2b2",
-        "#f7f5eb",
-        "#3c77b2",
-        "#2c5680",
-        "#4589cc",
-        "#346699",
-        "#cccac2",
-        "#14538b"
+    colors: [
+        "#404039",
+        "#ffffff",
+        "#66665c",
+        "#808073",
+        "#ccccb8",
+        "#e6e6cf",
+        "#ffffe6",
+        "#992600",
+        "#b35900",
+        "#cc6600",
+        "#e67300",
+        "#802000"
     ],
 
     errorIcon: "message_type-error-32x32.png",
