@@ -27,6 +27,7 @@ import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
 import pivot.wtk.Label;
 import pivot.wtk.MessageType;
+import pivot.wtk.Separator;
 import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
@@ -38,14 +39,16 @@ import pivot.wtk.skin.ContainerSkin;
  */
 public class TerraFormSkin extends ContainerSkin
     implements FormListener, FormAttributeListener {
-    private ArrayList<Label> labels = new ArrayList<Label>();
-    private ArrayList<ImageView> flagImageViews = new ArrayList<ImageView>();
+    private ArrayList<Separator> separators = new ArrayList<Separator>();
+    private ArrayList<ArrayList<Label>> labels = new ArrayList<ArrayList<Label>>();
+    private ArrayList<ArrayList<ImageView>> flagImageViews = new ArrayList<ArrayList<ImageView>>();
 
     private boolean rightAlignLabels = false;
     private HorizontalAlignment fieldAlignment = HorizontalAlignment.LEFT;
     private int horizontalSpacing = 12;
     private int verticalSpacing = 6;
     private int flagImageOffset = 4;
+    private boolean showFirstSectionHeading = false;
 
     private static final int FLAG_IMAGE_SIZE = 16;
 
@@ -57,17 +60,9 @@ public class TerraFormSkin extends ContainerSkin
         form.getFormListeners().add(this);
         form.getFormAttributeListeners().add(this);
 
-        // Initialize for existing fields
-        for (int i = 0, n = form.getFields().getLength(); i < n; i++) {
-            Label label = new Label();
-            labels.add(new Label());
-            form.add(label);
-            updateName(i);
-
-            ImageView flagImageView = new ImageView();
-            flagImageViews.add(flagImageView);
-            form.add(flagImageView);
-            updateFlag(i);
+        Form.SectionSequence sections = form.getSections();
+        for (int i = 0, n = sections.getLength(); i < n; i++) {
+            insertSection(sections.get(i), i);
         }
     }
 
@@ -77,14 +72,7 @@ public class TerraFormSkin extends ContainerSkin
         form.getFormListeners().remove(this);
         form.getFormAttributeListeners().remove(this);
 
-        // Remove all added labels and flag image views
-        for (int i = 0, n = form.getFields().getLength(); i < n; i++) {
-            form.remove(labels.get(i));
-            form.remove(flagImageViews.get(i));
-        }
-
-        labels.clear();
-        flagImageViews.clear();
+        removeSections(0, form.getSections());
 
         super.uninstall();
     }
@@ -92,29 +80,43 @@ public class TerraFormSkin extends ContainerSkin
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        // Preferred width is the sum of the maximum label width, maximum field
-        // width, horizontal spacing, flag image offset, and flag image size
-        // values
-        Form form = (Form)getComponent();
-        Form.FieldSequence fields = form.getFields();
-
+        // Preferred width is maximum of either the sum of the maximum label
+        // width, maximum field width, horizontal spacing, flag image offset,
+        // and flag image size values or the maximum separator width
         int maximumLabelWidth = 0;
         int maximumFieldWidth = 0;
+        int maximumSeparatorWidth = 0;
 
-        for (int i = 0, n = fields.getLength(); i < n; i++) {
-            Component field = fields.get(i);
+        Form form = (Form)getComponent();
+        Form.SectionSequence sections = form.getSections();
 
-            if (field.isDisplayable()) {
-                Label label = labels.get(i);
-                maximumLabelWidth = Math.max(maximumLabelWidth,
-                    label.getPreferredWidth(-1));
-                maximumFieldWidth = Math.max(maximumFieldWidth,
-                    field.getPreferredWidth(-1));
+        for (int sectionIndex = 0, sectionCount = sections.getLength();
+            sectionIndex < sectionCount; sectionIndex++) {
+            Form.Section section = sections.get(sectionIndex);
+
+            if (showFirstSectionHeading
+                || sectionIndex > 0) {
+                Separator separator = separators.get(sectionIndex);
+                maximumSeparatorWidth = Math.max(maximumSeparatorWidth,
+                    separator.getPreferredWidth());
+            }
+
+            for (int fieldIndex = 0, fieldCount = section.getLength();
+                fieldIndex < fieldCount; fieldIndex++) {
+                Component field = section.get(fieldIndex);
+
+                if (field.isDisplayable()) {
+                    Label label = labels.get(sectionIndex).get(fieldIndex);
+                    maximumLabelWidth = Math.max(maximumLabelWidth,
+                        label.getPreferredWidth(-1));
+                    maximumFieldWidth = Math.max(maximumFieldWidth,
+                        field.getPreferredWidth(-1));
+                }
             }
         }
 
-        preferredWidth = maximumLabelWidth + horizontalSpacing + maximumFieldWidth
-            + flagImageOffset + FLAG_IMAGE_SIZE;
+        preferredWidth = Math.max(maximumLabelWidth + horizontalSpacing + maximumFieldWidth
+            + flagImageOffset + FLAG_IMAGE_SIZE, maximumSeparatorWidth);
 
         return preferredWidth;
     }
@@ -123,22 +125,28 @@ public class TerraFormSkin extends ContainerSkin
         int preferredHeight = 0;
 
         Form form = (Form)getComponent();
-        Form.FieldSequence fields = form.getFields();
-
-        int fieldWidth = -1;
+        Form.SectionSequence sections = form.getSections();
 
         // If justified and constrained, determine field width constraint
+        int fieldWidth = -1;
+
         if (fieldAlignment == HorizontalAlignment.JUSTIFY
             && width != -1) {
             int maximumLabelWidth = 0;
 
-            for (int i = 0, n = fields.getLength(); i < n; i++) {
-                Component field = fields.get(i);
+            for (int sectionIndex = 0, sectionCount = sections.getLength();
+                sectionIndex < sectionCount; sectionIndex++) {
+                Form.Section section = sections.get(sectionIndex);
 
-                if (field.isDisplayable()) {
-                    Label label = labels.get(i);
-                    maximumLabelWidth = Math.max(maximumLabelWidth,
-                        label.getPreferredWidth(-1));
+                for (int fieldIndex = 0, fieldCount = section.getLength();
+                    fieldIndex < fieldCount; fieldIndex++) {
+                    Component field = section.get(fieldIndex);
+
+                    if (field.isDisplayable()) {
+                        Label label = labels.get(sectionIndex).get(fieldIndex);
+                        maximumLabelWidth = Math.max(maximumLabelWidth,
+                            label.getPreferredWidth(-1));
+                    }
                 }
             }
 
@@ -147,19 +155,32 @@ public class TerraFormSkin extends ContainerSkin
         }
 
         // Preferred height is the sum of the maximum value of the label,
-        // field, and flag image for each row, plus vertical spacing
-        for (int i = 0, n = fields.getLength(); i < n; i++) {
-            Component field = fields.get(i);
+        // field, and flag image for each row, plus vertical spacing and
+        // preferred separator heights
+        for (int sectionIndex = 0, sectionCount = sections.getLength();
+            sectionIndex < sectionCount; sectionIndex++) {
+            Form.Section section = sections.get(sectionIndex);
 
-            if (field.isDisplayable()) {
-                Label label = labels.get(i);
+            if (showFirstSectionHeading
+                || sectionIndex > 0) {
+                Separator separator = separators.get(sectionIndex);
+                preferredHeight += separator.getPreferredHeight(width);
+            }
 
-                int preferredRowHeight = Math.max(label.getPreferredHeight(-1),
-                    Math.max(field.getPreferredHeight(fieldWidth), FLAG_IMAGE_SIZE));
-                preferredHeight += preferredRowHeight;
+            for (int fieldIndex = 0, fieldCount = section.getLength();
+                fieldIndex < fieldCount; fieldIndex++) {
+                Component field = section.get(fieldIndex);
 
-                if (i > 0) {
-                    preferredHeight += verticalSpacing;
+                if (field.isDisplayable()) {
+                    Label label = labels.get(sectionIndex).get(fieldIndex);
+
+                    int preferredRowHeight = Math.max(label.getPreferredHeight(-1),
+                        Math.max(field.getPreferredHeight(fieldWidth), FLAG_IMAGE_SIZE));
+                    preferredHeight += preferredRowHeight;
+
+                    if (fieldIndex > 0) {
+                        preferredHeight += verticalSpacing;
+                    }
                 }
             }
         }
@@ -174,23 +195,27 @@ public class TerraFormSkin extends ContainerSkin
 
     public void layout() {
         Form form = (Form)getComponent();
-        Form.FieldSequence fields = form.getFields();
-
-        int n = fields.getLength();
+        Form.SectionSequence sections = form.getSections();
 
         // Determine the maximum label and field widths
         int maximumLabelWidth = 0;
         int maximumFieldWidth = 0;
 
-        for (int i = 0; i < n; i++) {
-            Component field = fields.get(i);
+        for (int sectionIndex = 0, sectionCount = sections.getLength();
+            sectionIndex < sectionCount; sectionIndex++) {
+            Form.Section section = sections.get(sectionIndex);
 
-            if (field.isDisplayable()) {
-                Label label = labels.get(i);
-                maximumLabelWidth = Math.max(maximumLabelWidth,
-                    label.getPreferredWidth(-1));
-                maximumFieldWidth = Math.max(maximumFieldWidth,
-                    field.getPreferredWidth(-1));
+            for (int fieldIndex = 0, fieldCount = section.getLength();
+                fieldIndex < fieldCount; fieldIndex++) {
+                Component field = section.get(fieldIndex);
+
+                if (field.isDisplayable()) {
+                    Label label = labels.get(sectionIndex).get(fieldIndex);
+                    maximumLabelWidth = Math.max(maximumLabelWidth,
+                        label.getPreferredWidth(-1));
+                    maximumFieldWidth = Math.max(maximumFieldWidth,
+                        field.getPreferredWidth(-1));
+                }
             }
         }
 
@@ -202,73 +227,91 @@ public class TerraFormSkin extends ContainerSkin
         // Lay out the components
         int rowY = 0;
 
-        for (int i = 0; i < n; i++) {
-            Label label = labels.get(i);
-            Component field = fields.get(i);
-            ImageView flagImageView = flagImageViews.get(i);
+        for (int sectionIndex = 0, sectionCount = sections.getLength();
+            sectionIndex < sectionCount; sectionIndex++) {
+            Form.Section section = sections.get(sectionIndex);
 
-            if (field.isDisplayable()) {
-                // Show the row components
-                label.setVisible(true);
-                field.setVisible(true);
-                flagImageView.setVisible(true);
-
-                // Set the row component sizes
-                label.setSize(label.getPreferredSize());
-
-                Dimensions fieldSize = null;
-                if (fieldAlignment == HorizontalAlignment.JUSTIFY) {
-                    fieldSize = new Dimensions(availableFieldWidth,
-                        field.getPreferredHeight(availableFieldWidth));
-                } else {
-                    fieldSize = field.getPreferredSize();
-                }
-
-                field.setSize(fieldSize);
-                flagImageView.setSize(flagImageView.getPreferredSize());
-
-                int rowHeight = Math.max(label.getHeight(),
-                    Math.max(field.getHeight(), FLAG_IMAGE_SIZE));
-
-                // Set the row component locations
-                int labelX = rightAlignLabels ? maximumLabelWidth - label.getWidth() : 0;
-                label.setLocation(labelX, rowY);
-
-                int fieldX = 0;
-                switch(fieldAlignment) {
-                    case LEFT:
-                    case JUSTIFY: {
-                        fieldX = maximumLabelWidth + horizontalSpacing;
-                        break;
-                    }
-
-                    case RIGHT: {
-                        fieldX = maximumLabelWidth + horizontalSpacing
-                            + Math.max(0, Math.max(availableFieldWidth, maximumFieldWidth)
-                                - field.getWidth());
-                        break;
-                    }
-
-                    case CENTER: {
-                        fieldX = maximumLabelWidth + horizontalSpacing
-                            + Math.max(0, (Math.max(availableFieldWidth, maximumFieldWidth)
-                                - field.getWidth()) / 2);
-                        break;
-                    }
-                }
-
-                field.setLocation(fieldX, rowY);
-
-                flagImageView.setLocation(fieldX + field.getWidth() + flagImageOffset,
-                    rowY + (rowHeight - flagImageView.getHeight()) / 2);
-
-                // Update the row y-coordinate
-                rowY += rowHeight + verticalSpacing;
+            Separator separator = separators.get(sectionIndex);
+            if (sectionIndex == 0
+                && !showFirstSectionHeading) {
+                separator.setVisible(false);
             } else {
-                // Hide the row components
-                label.setVisible(false);
-                field.setVisible(false);
-                flagImageView.setVisible(false);
+                separator.setVisible(true);
+                separator.setSize(width, separator.getPreferredHeight(width));
+                separator.setLocation(0, rowY);
+                rowY += separator.getHeight();
+            }
+
+            for (int fieldIndex = 0, fieldCount = section.getLength();
+                fieldIndex < fieldCount; fieldIndex++) {
+                Component field = section.get(fieldIndex);
+
+                Label label = labels.get(sectionIndex).get(fieldIndex);
+                ImageView flagImageView = flagImageViews.get(sectionIndex).get(fieldIndex);
+
+                if (field.isDisplayable()) {
+                    // Show the row components
+                    label.setVisible(true);
+                    field.setVisible(true);
+                    flagImageView.setVisible(true);
+
+                    // Set the row component sizes
+                    label.setSize(label.getPreferredSize());
+
+                    Dimensions fieldSize = null;
+                    if (fieldAlignment == HorizontalAlignment.JUSTIFY) {
+                        fieldSize = new Dimensions(availableFieldWidth,
+                            field.getPreferredHeight(availableFieldWidth));
+                    } else {
+                        fieldSize = field.getPreferredSize();
+                    }
+
+                    field.setSize(fieldSize);
+                    flagImageView.setSize(flagImageView.getPreferredSize());
+
+                    int rowHeight = Math.max(label.getHeight(),
+                        Math.max(field.getHeight(), FLAG_IMAGE_SIZE));
+
+                    // Set the row component locations
+                    int labelX = rightAlignLabels ? maximumLabelWidth - label.getWidth() : 0;
+                    label.setLocation(labelX, rowY);
+
+                    int fieldX = 0;
+                    switch(fieldAlignment) {
+                        case LEFT:
+                        case JUSTIFY: {
+                            fieldX = maximumLabelWidth + horizontalSpacing;
+                            break;
+                        }
+
+                        case RIGHT: {
+                            fieldX = maximumLabelWidth + horizontalSpacing
+                                + Math.max(0, Math.max(availableFieldWidth, maximumFieldWidth)
+                                    - field.getWidth());
+                            break;
+                        }
+
+                        case CENTER: {
+                            fieldX = maximumLabelWidth + horizontalSpacing
+                                + Math.max(0, (Math.max(availableFieldWidth, maximumFieldWidth)
+                                    - field.getWidth()) / 2);
+                            break;
+                        }
+                    }
+
+                    field.setLocation(fieldX, rowY);
+
+                    flagImageView.setLocation(fieldX + field.getWidth() + flagImageOffset,
+                        rowY + (rowHeight - flagImageView.getHeight()) / 2);
+
+                    // Update the row y-coordinate
+                    rowY += rowHeight + verticalSpacing;
+                } else {
+                    // Hide the row components
+                    label.setVisible(false);
+                    field.setVisible(false);
+                    flagImageView.setVisible(false);
+                }
             }
         }
     }
@@ -349,62 +392,157 @@ public class TerraFormSkin extends ContainerSkin
         setFlagImageOffset(flagImageOffset.intValue());
     }
 
-    // Form events
-    public void fieldInserted(Form form, int index) {
-        // Create the label
-        Label label = new Label();
-        labels.insert(label, index);
-        form.add(label);
-        updateName(index);
+    public boolean isShowFirstSectionHeading() {
+        return showFirstSectionHeading;
+    }
 
-        // Create the image view
-        ImageView flagImageView = new ImageView();
-        flagImageViews.insert(flagImageView, index);
-        form.add(flagImageView);
-        updateFlag(index);
-
+    public void setShowFirstSectionHeading(boolean showFirstSectionHeading) {
+        this.showFirstSectionHeading = showFirstSectionHeading;
         invalidateComponent();
     }
 
-    public void fieldsRemoved(Form form, int index, Sequence<Component> fields) {
-        int count = fields.getLength();
+    // Form events
+    public void sectionInserted(Form form, int index) {
+        insertSection(form.getSections().get(index), index);
+    }
 
-        Sequence<Label> removedLabels = labels.remove(index, count);
-        for (int i = 0, n = removedLabels.getLength(); i < n; i++) {
-            form.remove(removedLabels.get(i));
-        }
+    public void sectionsRemoved(Form form, int index, Sequence<Form.Section> removed) {
+        removeSections(index, removed);
+    }
 
-        Sequence<ImageView> removedImageViews = flagImageViews.remove(index, count);
-        for (int i = 0, n = removedImageViews.getLength(); i < n; i++) {
-            form.remove(removedImageViews.get(i));
-        }
+    public void sectionHeadingChanged(Form.Section section) {
+        updateSectionHeading(section);
+    }
 
-        invalidateComponent();
+    public void fieldInserted(Form.Section section, int index) {
+        insertField(section, section.get(index), index);
+    }
+
+    public void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields) {
+        removeFields(section, index, fields.getLength());
     }
 
     // Form attribute events
-    public void nameChanged(Form form, Component component, String previousName) {
-        updateName(form.getFields().indexOf(component));
+    public void nameChanged(Form form, Component field, String previousName) {
+        Form.Section section = Form.getSection(field);
+        updateFieldName(section, section.indexOf(field));
     }
 
-    public void flagChanged(Form form, Component component, Form.Flag previousFlag) {
-        updateFlag(form.getFields().indexOf(component));
+    public void flagChanged(Form form, Component field, Form.Flag previousFlag) {
+        Form.Section section = Form.getSection(field);
+        updateFieldFlag(section, section.indexOf(field));
     }
 
-    private void updateName(int index) {
+    // Implementation methods
+    private void insertSection(Form.Section section, int index) {
         Form form = (Form)getComponent();
-        Component field = form.getFields().get(index);
 
-        Label label = labels.get(index);
+        // Insert separator
+        Separator separator = new Separator(section.getHeading());
+        separators.insert(separator, index);
+        form.add(separator);
+
+        // Insert field label and flag image view lists
+        ArrayList<Label> sectionLabels = new ArrayList<Label>();
+        labels.insert(sectionLabels, index);
+
+        ArrayList<ImageView> sectionFlagImageViews = new ArrayList<ImageView>();
+        flagImageViews.insert(sectionFlagImageViews, index);
+
+        // Insert fields
+        for (int i = 0, n = section.getLength(); i < n; i++) {
+            insertField(section, section.get(i), i);
+        }
+
+        invalidateComponent();
+    }
+
+    private void removeSections(int index, Sequence<Form.Section> removed) {
+        Form form = (Form)getComponent();
+
+        for (int i = 0, n = removed.getLength(); i < n; i++) {
+            // Remove fields
+            Form.Section section = removed.get(i);
+            for (int j = 0; j < n; j++) {
+                removeFields(section, 0, section.getLength());
+            }
+
+            // Remove field label and flag image view lists
+            labels.remove(index, n);
+            flagImageViews.remove(index, n);
+
+            // Remove separators
+            Sequence<Separator> removedSeparators = separators.remove(index, n);
+            for (int j = 0; j < n; j++) {
+                form.remove(removedSeparators.get(j));
+            }
+        }
+
+        invalidateComponent();
+    }
+
+    private void insertField(Form.Section section, Component field, int index) {
+        Form form = (Form)getComponent();
+        int sectionIndex = form.getSections().indexOf(section);
+
+        // Create the label
+        Label label = new Label();
+        labels.get(sectionIndex).insert(label, index);
+        form.add(label);
+        updateFieldName(section, index);
+
+        // Create the flag image view
+        ImageView flagImageView = new ImageView();
+        flagImageViews.get(sectionIndex).insert(flagImageView, index);
+        form.add(flagImageView);
+        updateFieldFlag(section, index);
+
+        invalidateComponent();
+    }
+
+    private void removeFields(Form.Section section, int index, int count) {
+        Form form = (Form)getComponent();
+        int sectionIndex = form.getSections().indexOf(section);
+
+        // Remove the labels
+        Sequence<Label> removedLabels = labels.get(sectionIndex).remove(index, count);
+        for (int i = 0; i < count; i++) {
+            form.remove(removedLabels.get(i));
+        }
+
+        // Remove the flag image views
+        Sequence<ImageView> removedFlagImageViews = flagImageViews.get(sectionIndex).remove(index, count);
+        for (int i = 0; i < count; i++) {
+            form.remove(removedFlagImageViews.get(i));
+        }
+
+        invalidateComponent();
+    }
+
+    private void updateSectionHeading(Form.Section section) {
+        Form form = (Form)getComponent();
+        int sectionIndex = form.getSections().indexOf(section);
+
+        Separator separator = separators.get(sectionIndex);
+        separator.setHeading(section.getHeading());
+    }
+
+    private void updateFieldName(Form.Section section, int fieldIndex) {
+        Form form = (Form)getComponent();
+        Component field = section.get(fieldIndex);
+
+        int sectionIndex = form.getSections().indexOf(section);
+        Label label = labels.get(sectionIndex).get(fieldIndex);
         String name = Form.getName(field);
         label.setText((name == null) ? "" : name + ":");
     }
 
-    private void updateFlag(int index) {
+    private void updateFieldFlag(Form.Section section, int fieldIndex) {
         Form form = (Form)getComponent();
-        Component field = form.getFields().get(index);
+        Component field = section.get(fieldIndex);
 
-        ImageView flagImageView = flagImageViews.get(index);
+        int sectionIndex = form.getSections().indexOf(section);
+        ImageView flagImageView = flagImageViews.get(sectionIndex).get(fieldIndex);
         Form.Flag flag = Form.getFlag(field);
 
         Image flagImage = null;

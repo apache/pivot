@@ -49,7 +49,7 @@ public class Explorer implements Application, TreeViewSelectionListener {
 
     	this.display = display;
     	this.properties = properties;
-    	
+
     	Application application = getSubjectApplication();
     	application.startup(display, properties);
 
@@ -83,7 +83,7 @@ public class Explorer implements Application, TreeViewSelectionListener {
         attributesTab = (Component)wtkxSerializer.getObjectByName("tabAttributes");
 
         initComponentTree(componentTree, display);
-        
+
         display.getContainerListeners().add( new ContainerListener(){
 
 			public void componentInserted(Container container, int index) {
@@ -100,7 +100,7 @@ public class Explorer implements Application, TreeViewSelectionListener {
 			public void focusTraversalPolicyChanged(Container container,
 					FocusTraversalPolicy previousFocusTraversalPolicy) {
 			}});
-        
+
 
         dialog.open(display);
 
@@ -191,9 +191,9 @@ public class Explorer implements Application, TreeViewSelectionListener {
     }
 
 	private void refreshComponentTree(final TreeView tree, Iterable<Component> components) {
-		
+
 		TreeNodePath<ComponentAdapter> selectionPath = TreeNodePath.createFromSelection(tree);
-		
+
 		// build tree data
         List<ComponentAdapter> componentList = new ArrayList<ComponentAdapter>();
         for (Component c : components) {
@@ -211,10 +211,10 @@ public class Explorer implements Application, TreeViewSelectionListener {
         } else {
         	selectionPath.applyAsSelection(tree);
         }
-        
+
 	}
-    
-   
+
+
 
     public void selectionChanged(TreeView treeView) {
         Sequence<ComponentAdapter> nodePath = TreeNodePath.createFromSelection(treeView);

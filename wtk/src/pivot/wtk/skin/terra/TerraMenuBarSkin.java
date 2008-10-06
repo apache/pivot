@@ -18,6 +18,7 @@ package pivot.wtk.skin.terra;
 import java.awt.Color;
 import java.awt.Font;
 
+import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.MenuBar;
@@ -270,7 +271,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         invalidateComponent();
     }
 
-    public void itemsRemoved(MenuBar menuBar, int index, int count) {
+    public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
         invalidateComponent();
     }
 

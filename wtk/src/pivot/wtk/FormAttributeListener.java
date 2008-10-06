@@ -25,17 +25,17 @@ public interface FormAttributeListener {
      * Called when a fields's name attribute has changed.
      *
      * @param form
-     * @param component
+     * @param field
      * @param previousName
      */
-    public void nameChanged(Form form, Component component, String previousName);
+    public void nameChanged(Form form, Component field, String previousName);
 
     /**
      * Called when a field's flag attribute has changed.
      *
      * @param form
-     * @param component
+     * @param field
      * @param previousFlag
      */
-    public void flagChanged(Form form, Component component, Form.Flag previousFlag);
+    public void flagChanged(Form form, Component field, Form.Flag previousFlag);
 }

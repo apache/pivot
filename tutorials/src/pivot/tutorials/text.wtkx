@@ -21,12 +21,14 @@ limitations under the License.
             <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:12, right:4}}">
                 <Label text="Text Input" styles="{fontBold:true}"/>
                 <Form>
-                    <fields>
-                        <TextInput Form.name="Basic" text="Pivot" textSize="12"/>
-                        <TextInput Form.name="Password"
-                            Form.flag="{messageType:'info', message:'This field has a maximum length of 12 characters.'}"
-                            password="true" text="pivot" textSize="12" maximumLength="12" />
-                    </fields>
+                    <sections>
+                        <Form.Section>
+	                        <TextInput Form.name="Basic" text="Pivot" textSize="12"/>
+	                        <TextInput Form.name="Password"
+	                            Form.flag="{messageType:'info', message:'This field has a maximum length of 12 characters.'}"
+	                            password="true" text="pivot" textSize="12" maximumLength="12" />
+                        </Form.Section>
+                    </sections>
                 </Form>
             </FlowPane>
         </content>

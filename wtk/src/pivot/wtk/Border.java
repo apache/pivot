@@ -76,7 +76,7 @@ public class Border extends Container {
     public void setTitle(String title) {
         String previousTitle = this.title;
 
-        if (previousTitle == null ^ title == null) {
+        if (previousTitle != title) {
             this.title = title;
             borderListeners.titleChanged(this, previousTitle);
         }

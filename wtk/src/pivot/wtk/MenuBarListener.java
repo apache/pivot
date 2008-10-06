@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Sequence;
+
 /**
  * Menu bar listener interface.
  *
@@ -34,9 +36,9 @@ public interface MenuBarListener {
      *
      * @param menuBar
      * @param index
-     * @param count
+     * @param removed
      */
-    public void itemsRemoved(MenuBar menuBar, int index, int count);
+    public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed);
 
     /**
      * Called when the menu bar's active state has changed.

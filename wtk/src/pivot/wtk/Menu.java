@@ -211,7 +211,7 @@ public class Menu extends Container {
             }
 
             if (menu != null) {
-                menu.menuListeners.itemsRemoved(this, index, count);
+                menu.menuListeners.itemsRemoved(this, index, removed);
             }
 
             return removed;
@@ -291,7 +291,7 @@ public class Menu extends Container {
                 }
             }
 
-            menuListeners.sectionsRemoved(Menu.this, index, count);
+            menuListeners.sectionsRemoved(Menu.this, index, removed);
 
             return removed;
         }
@@ -321,9 +321,9 @@ public class Menu extends Container {
             }
         }
 
-        public void sectionsRemoved(Menu menu, int index, int count) {
+        public void sectionsRemoved(Menu menu, int index, Sequence<Section> removed) {
             for (MenuListener listener : this) {
-                listener.sectionsRemoved(menu, index, count);
+                listener.sectionsRemoved(menu, index, removed);
             }
         }
 
@@ -333,9 +333,9 @@ public class Menu extends Container {
             }
         }
 
-        public void itemsRemoved(Menu.Section section, int index, int count) {
+        public void itemsRemoved(Menu.Section section, int index, Sequence<Item> removed) {
             for (MenuListener listener : this) {
-                listener.itemsRemoved(section, index, count);
+                listener.itemsRemoved(section, index, removed);
             }
         }
     }

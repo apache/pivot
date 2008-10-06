@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Sequence;
+
 /**
  * Menu listener interface.
  *
@@ -34,9 +36,9 @@ public interface MenuListener {
      *
      * @param menu
      * @param index
-     * @param count
+     * @param removed
      */
-    public void sectionsRemoved(Menu menu, int index, int count);
+    public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed);
 
     /**
      * Called when a menu item has been inserted.
@@ -51,7 +53,7 @@ public interface MenuListener {
      *
      * @param section
      * @param index
-     * @param count
+     * @param removed
      */
-    public void itemsRemoved(Menu.Section section, int index, int count);
+    public void itemsRemoved(Menu.Section section, int index, Sequence<Menu.Item> removed);
 }

@@ -163,7 +163,7 @@ public class MenuBar extends Container {
                 MenuBar.this.remove(item);
             }
 
-            menuBarListeners.itemsRemoved(MenuBar.this, index, count);
+            menuBarListeners.itemsRemoved(MenuBar.this, index, removed);
 
             return removed;
         }
@@ -193,9 +193,9 @@ public class MenuBar extends Container {
             }
         }
 
-        public void itemsRemoved(MenuBar menuBar, int index, int count) {
+        public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
             for (MenuBarListener listener : this) {
-                listener.itemsRemoved(menuBar, index, count);
+                listener.itemsRemoved(menuBar, index, removed);
             }
         }
 

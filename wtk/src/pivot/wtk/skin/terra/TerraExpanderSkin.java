@@ -19,8 +19,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Button;
@@ -124,14 +122,14 @@ public class TerraExpanderSkin extends ContainerSkin
     protected class CollapseImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
             graphics.setPaint(shadeButtonColor);
-            graphics.fill(new Rectangle2D.Double(0, 0, 6, 2));
+            graphics.fillRect(0, 0, 6, 2);
         }
     }
 
     protected class ExpandImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
             graphics.setPaint(shadeButtonColor);
-            graphics.draw(new Rectangle2D.Double(0, 0, 5, 5));
+            graphics.drawRect(0, 0, 5, 5);
         }
     }
 
@@ -165,10 +163,9 @@ public class TerraExpanderSkin extends ContainerSkin
 
     private TitleBarMouseHandler titleBarMouseHandler = new TitleBarMouseHandler();
 
-    private Font titleBarFont;
-    private Color titleBarColor;
     private Color titleBarBackgroundColor;
     private Color titleBarBorderColor;
+    private Color titleBarBevelColor;
     private Color shadeButtonColor;
     private Color shadeButtonBackgroundColor;
     private Color borderColor;
@@ -178,10 +175,9 @@ public class TerraExpanderSkin extends ContainerSkin
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBackgroundColor(theme.getColor(1));
 
-        titleBarFont = theme.getFont();
-        titleBarColor = theme.getColor(0);
         titleBarBackgroundColor = theme.getColor(2);
         titleBarBorderColor = theme.getColor(4);
+        titleBarBevelColor = theme.getColor(5);
         shadeButtonColor = theme.getColor(8);
         shadeButtonBackgroundColor = theme.getColor(1);
         borderColor = theme.getColor(10);
@@ -194,7 +190,6 @@ public class TerraExpanderSkin extends ContainerSkin
         titleBarFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         titleBarFlowPane.getStyles().put("padding", new Insets(3));
         titleBarFlowPane.getStyles().put("spacing", 3);
-        titleBarFlowPane.getStyles().put("backgroundColor", titleBarBackgroundColor);
 
         titleFlowPane = new FlowPane(Orientation.HORIZONTAL);
         titleFlowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
@@ -205,8 +200,8 @@ public class TerraExpanderSkin extends ContainerSkin
         titleBarFlowPane.add(titleFlowPane);
         titleBarFlowPane.add(buttonFlowPane);
 
-        // TODO Apply default styles to components
-
+        titleLabel.getStyles().put("color", theme.getColor(7));
+        titleLabel.getStyles().put("fontBold", true);
         titleFlowPane.add(titleLabel);
     }
 
@@ -299,8 +294,7 @@ public class TerraExpanderSkin extends ContainerSkin
     }
 
     public Dimensions getPreferredSize() {
-        // TODO Optimize this by performing the calculations in a single loop here
-
+        // TODO Optimize
         return new Dimensions(this.getPreferredWidth(-1),
             this.getPreferredHeight(-1));
     }
@@ -342,6 +336,9 @@ public class TerraExpanderSkin extends ContainerSkin
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
 
+        int width = getWidth();
+        int height = getHeight();
+
         graphics.setStroke(new BasicStroke());
 
         Expander expander = (Expander)getComponent();
@@ -349,20 +346,27 @@ public class TerraExpanderSkin extends ContainerSkin
             int titleBarHeight = titleBarFlowPane.getPreferredHeight(-1);
 
             graphics.setPaint(titleBarBorderColor);
-            graphics.draw(new Line2D.Double(0, 1 + titleBarHeight, getWidth() - 1, 1 + titleBarHeight));
+            graphics.drawLine(0, 1 + titleBarHeight, width - 1, 1 + titleBarHeight);
         }
 
+        graphics.setPaint(titleBarBackgroundColor);
+        graphics.fillRect(titleBarFlowPane.getX(), titleBarFlowPane.getY(),
+            titleBarFlowPane.getWidth(), titleBarFlowPane.getHeight());
+
         graphics.setPaint(borderColor);
-        graphics.draw(new Rectangle2D.Double(0, 0, getWidth() - 1, getHeight() - 1));
+        graphics.drawRect(0, 0, width - 1, height - 1);
+
+        graphics.setPaint(titleBarBevelColor);
+        graphics.drawLine(titleBarFlowPane.getX(), titleBarFlowPane.getY(),
+            titleBarFlowPane.getWidth(), titleBarFlowPane.getY());
     }
 
     public Font getTitleBarFont() {
-        return titleBarFont;
+        return (Font)titleLabel.getStyles().get("font");
     }
 
     public void setTitleBarFont(Font titleBarFont) {
-        this.titleBarFont = titleBarFont;
-        invalidateComponent();
+        titleLabel.getStyles().put("font", titleBarFont);
     }
 
     public final void setTitleBarFont(String titleBarFont) {
@@ -374,12 +378,11 @@ public class TerraExpanderSkin extends ContainerSkin
     }
 
     public Color getTitleBarColor() {
-        return titleBarColor;
+        return (Color)titleLabel.getStyles().get("color");
     }
 
     public void setTitleBarColor(Color titleBarColor) {
-        this.titleBarColor = titleBarColor;
-        repaintComponent();
+        titleLabel.getStyles().put("color", titleBarColor);
     }
 
     public final void setTitleBarColor(String titleBarColor) {
@@ -396,7 +399,6 @@ public class TerraExpanderSkin extends ContainerSkin
 
     public void setTitleBarBackgroundColor(Color titleBarBackgroundColor) {
         this.titleBarBackgroundColor = titleBarBackgroundColor;
-        titleBarFlowPane.getStyles().put("backgroundColor", titleBarBackgroundColor);
     }
 
     public final void setTitleBarBackgroundColor(String titleBarBackgroundColor) {

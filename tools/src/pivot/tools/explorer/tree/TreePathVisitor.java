@@ -25,9 +25,9 @@ public abstract class TreePathVisitor<T extends Sequence<T>> {
 	 */
 	@SuppressWarnings("unchecked")
 	public final void start( TreeView treeView, Sequence<Integer> path ) {
-		
+
 		if (path==null) return;
-		
+
 		Sequence<T> nodes = (Sequence<T>) treeView.getTreeData();
 
 		for ( int i=0, s=path.getLength(); i< s; i++ ) {

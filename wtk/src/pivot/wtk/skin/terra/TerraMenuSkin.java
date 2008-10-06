@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
+import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Menu;
@@ -364,7 +365,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
         invalidateComponent();
     }
 
-    public void sectionsRemoved(Menu menu, int index, int count) {
+    public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed) {
         invalidateComponent();
     }
 
@@ -372,7 +373,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
         invalidateComponent();
     }
 
-    public void itemsRemoved(Menu.Section section, int index, int count) {
+    public void itemsRemoved(Menu.Section section, int index, Sequence<Menu.Item> removed) {
         invalidateComponent();
     }
 }

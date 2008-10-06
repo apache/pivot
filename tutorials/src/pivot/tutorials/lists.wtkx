@@ -93,33 +93,35 @@ limitations under the License.
             <FlowPane orientation="vertical" styles="{spacing:6}">
                 <Label text="List Buttons" styles="{fontBold:true}"/>
                 <Form>
-                    <fields>
-                        <ListButton Form.name="Basic" selectedIndex="0">
-                            <listData>
-                                <item text="Red"/>
-                                <item text="Orange"/>
-                                <item text="Yellow"/>
-                                <item text="Green"/>
-                                <item text="Blue"/>
-                                <item text="Purple"/>
-                            </listData>
-                        </ListButton>
+                    <sections>
+                        <Form.Section>
+	                        <ListButton Form.name="Basic" selectedIndex="0">
+	                            <listData>
+	                                <item text="Red"/>
+	                                <item text="Orange"/>
+	                                <item text="Yellow"/>
+	                                <item text="Green"/>
+	                                <item text="Blue"/>
+	                                <item text="Purple"/>
+	                            </listData>
+	                        </ListButton>
 
-                        <ListButton Form.name="Image" selectedIndex="2">
-                            <listData>
-                                <item icon="@anchor.png" text="Anchor"/>
-                                <item icon="@bell.png" text="Bell"/>
-                                <item icon="@clock.png" text="Clock"/>
-                                <item icon="@cup.png" text="Cup"/>
-                                <item icon="@house.png" text="House"/>
-                                <item icon="@star.png" text="Star"/>
-                            </listData>
-                            <itemRenderer>
-                                <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
-                                    showIcon="true"/>
-                            </itemRenderer>
-                        </ListButton>
-                    </fields>
+	                        <ListButton Form.name="Image" selectedIndex="2">
+	                            <listData>
+	                                <item icon="@anchor.png" text="Anchor"/>
+	                                <item icon="@bell.png" text="Bell"/>
+	                                <item icon="@clock.png" text="Clock"/>
+	                                <item icon="@cup.png" text="Cup"/>
+	                                <item icon="@house.png" text="House"/>
+	                                <item icon="@star.png" text="Star"/>
+	                            </listData>
+	                            <itemRenderer>
+	                                <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
+	                                    showIcon="true"/>
+	                            </itemRenderer>
+	                        </ListButton>
+                        </Form.Section>
+                    </sections>
                 </Form>
             </FlowPane>
         </FlowPane>
