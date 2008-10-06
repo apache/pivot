@@ -44,7 +44,6 @@ public interface FormListener {
      * Called when a form section's heading has changed.
      *
      * @param section
-     * @param index
      */
     public void sectionHeadingChanged(Form.Section section);
 

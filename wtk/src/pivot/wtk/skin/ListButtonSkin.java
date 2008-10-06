@@ -48,7 +48,9 @@ import pivot.wtk.Window;
  * @author gbrown
  */
 public abstract class ListButtonSkin extends ButtonSkin
-    implements ListButton.Skin, ListButtonListener, ListButtonSelectionListener {
+    implements ListButtonListener, ListButtonSelectionListener {
+    public abstract ListView getListView();
+
     private class ListViewPopupKeyHandler implements ComponentKeyListener {
         public void keyTyped(Component component, char character) {
             // No-op
@@ -344,5 +346,8 @@ public abstract class ListButtonSkin extends ButtonSkin
 
         Object buttonData = (selectedIndex == -1) ? null : listButton.getListData().get(selectedIndex);
         listButton.setButtonData(buttonData);
+
+        ListView listView = getListView();
+        listView.setSelectedIndex(listButton.getSelectedIndex());
     }
 }

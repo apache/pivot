@@ -44,6 +44,8 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
 
         Menu.Item menuItem = (Menu.Item)component;
         menuItem.getItemListeners().add(this);
+
+        menuPopup.setMenu(menuItem.getMenu());
     }
 
     @Override
@@ -52,6 +54,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
         menuItem.getItemListeners().remove(this);
 
         menuPopup.close();
+        menuPopup.setMenu(null);
 
         super.uninstall();
     }
@@ -187,8 +190,8 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
         }
     }
 
-    public void menuChanged(Menu.Item item, Menu previousMenu) {
-        menuPopup.setMenu(item.getMenu());
+    public void menuChanged(Menu.Item menuItem, Menu previousMenu) {
+        menuPopup.setMenu(menuItem.getMenu());
         repaintComponent();
     }
 }

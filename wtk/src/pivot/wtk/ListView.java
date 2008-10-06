@@ -362,7 +362,7 @@ public class ListView extends Component {
     }
 
     /**
-     * Sets the list data. Clears any existing selection state.
+     * Sets the list data.
      *
      * @param listData
      * The data to be presented by the list view.
@@ -392,11 +392,10 @@ public class ListView extends Component {
     }
 
     /**
-     * Sets the list data. Clears any existing selection state.
+     * Sets the list data.
      *
      * @param listData
-     * A JSON string (must begin with <tt>[</tt> and end with <tt>]</tt>)
-     * denoting the list that will be presented by this list view.
+     * The data to be presented by the list view as a JSON array.
      */
     public void setListData(String listData) {
         if (listData == null) {

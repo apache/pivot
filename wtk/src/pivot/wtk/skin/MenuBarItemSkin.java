@@ -82,6 +82,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
 
         MenuBar.Item menuBarItem = (MenuBar.Item)component;
         menuBarItem.getItemListeners().add(this);
+
+        menuPopup.setMenu(menuBarItem.getMenu());
     }
 
     @Override
@@ -90,6 +92,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         menuBarItem.getItemListeners().remove(this);
 
         menuPopup.close();
+        menuPopup.setMenu(null);
 
         super.uninstall();
     }
@@ -247,8 +250,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         }
     }
 
-    public void menuChanged(MenuBar.Item item, Menu previousMenu) {
-        menuPopup.setMenu(item.getMenu());
+    public void menuChanged(MenuBar.Item menuBarItem, Menu previousMenu) {
+        menuPopup.setMenu(menuBarItem.getMenu());
         repaintComponent();
     }
 }

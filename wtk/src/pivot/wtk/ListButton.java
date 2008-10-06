@@ -18,8 +18,10 @@ package pivot.wtk;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Dictionary;
+import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
 import pivot.wtk.content.ListButtonDataRenderer;
+import pivot.wtk.content.ListViewItemRenderer;
 
 /**
  * Component that allows a user to select one of several list options. The
@@ -30,20 +32,11 @@ import pivot.wtk.content.ListButtonDataRenderer;
 @ComponentInfo(icon="ListButton.png")
 public class ListButton extends Button {
     /**
-     * List button skin interface.
-     *
-     * @author gbrown
-     */
-    public interface Skin {
-        public ListView getListView();
-    }
-
-    /**
      * List button listener list.
      *
      * @author gbrown
      */
-    private class ListButtonListenerList extends ListenerList<ListButtonListener>
+    private static class ListButtonListenerList extends ListenerList<ListButtonListener>
         implements ListButtonListener {
         public void listDataChanged(ListButton listButton, List<?> previousListData) {
             for (ListButtonListener listener : this) {
@@ -69,7 +62,7 @@ public class ListButton extends Button {
      *
      * @author gbrown
      */
-    private class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
+    private static class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
         implements ListButtonSelectionListener {
         public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
             for (ListButtonSelectionListener listener : this) {
@@ -77,6 +70,11 @@ public class ListButton extends Button {
             }
         }
     }
+
+    private List<?> listData;
+    private ListView.ItemRenderer itemRenderer = null;
+    private int selectedIndex = -1;
+    private String selectedValueKey = null;
 
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
     private ListButtonSelectionListenerList listButtonSelectionListeners = new ListButtonSelectionListenerList();
@@ -115,19 +113,10 @@ public class ListButton extends Button {
         super(buttonData);
 
         setDataRenderer(new ListButtonDataRenderer());
-        installSkin(ListButton.class);
-
+        setItemRenderer(new ListViewItemRenderer());
         setListData(listData);
-    }
 
-    @Override
-    protected void setSkin(pivot.wtk.Skin skin) {
-        if (!(skin instanceof ListButton.Skin)) {
-            throw new IllegalArgumentException("Skin class must extend "
-                + ListButton.Skin.class.getName());
-        }
-
-        super.setSkin(skin);
+        installSkin(ListButton.class);
     }
 
     /**
@@ -146,29 +135,46 @@ public class ListButton extends Button {
      * The list data.
      */
     public List<?> getListData() {
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
-
-        return listView.getListData();
+        return listData;
     }
 
     /**
-     * Sets the list data associated with this list button.
-     * <p>
-     * Fires {@link ListButtonListener#listDataChanged(ListButton, List)}.
+     * Sets the list button's list data.
      *
      * @param listData
-     * The list data.
+     * The list data to be presented by the list button.
      */
+    @SuppressWarnings("unchecked")
     public void setListData(List<?> listData) {
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
-        List<?> previousListData = listView.getListData();
+        if (listData == null) {
+            throw new IllegalArgumentException("listData is null.");
+        }
+
+        List<?> previousListData = this.listData;
 
         if (previousListData != listData) {
-            listView.setListData(listData);
+            if (previousListData != null) {
+                setSelectedIndex(-1);
+            }
+
+            // Update the list data and fire change event
+            this.listData = listData;
             listButtonListeners.listDataChanged(this, previousListData);
         }
+    }
+
+    /**
+     * Sets the list button's list data.
+     *
+     * @param listData
+     * The list data to be presented by the list button as a JSON array.
+     */
+    public void setListData(String listData) {
+        if (listData == null) {
+            throw new IllegalArgumentException("listData is null.");
+        }
+
+        setListData(JSONSerializer.parseList(listData));
     }
 
     /**
@@ -178,17 +184,11 @@ public class ListButton extends Button {
      * The item renderer instance.
      */
     public ListView.ItemRenderer getItemRenderer() {
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
-
-        return listView.getItemRenderer();
+        return itemRenderer;
     }
 
     /**
      * Sets the renderer used to display items in the list.
-     * <p>
-     * Fires {@link ListButtonListener#itemRendererChanged(ListButton,
-     * pivot.wtk.ListView.ItemRenderer)}.
      * <p>
      * Use {@link #setDataRenderer(pivot.wtk.Button.DataRenderer)} to define
      * the renderer used to draw the button data.
@@ -197,12 +197,10 @@ public class ListButton extends Button {
      * The item renderer instance.
      */
     public void setItemRenderer(ListView.ItemRenderer itemRenderer) {
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
-        ListView.ItemRenderer previousItemRenderer = listView.getItemRenderer();
+        ListView.ItemRenderer previousItemRenderer = this.itemRenderer;
 
         if (previousItemRenderer != itemRenderer) {
-            listView.setItemRenderer(itemRenderer);
+            this.itemRenderer = itemRenderer;
             listButtonListeners.itemRendererChanged(this, previousItemRenderer);
         }
     }
@@ -215,10 +213,7 @@ public class ListButton extends Button {
      * nothing is selected.
      */
     public int getSelectedIndex() {
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
-
-        return listView.getSelectedIndex();
+        return selectedIndex;
     }
 
     /**
@@ -229,58 +224,51 @@ public class ListButton extends Button {
      * selection.
      */
     public void setSelectedIndex(int selectedIndex) {
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
-        int previousSelectedIndex = listView.getSelectedIndex();
+        int previousSelectedIndex = this.selectedIndex;
 
         if (previousSelectedIndex != selectedIndex) {
-            listView.setSelectedIndex(selectedIndex);
+            this.selectedIndex = selectedIndex;
             listButtonSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
         }
     }
 
     public Object getSelectedValue() {
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
+        int index = getSelectedIndex();
+        Object value = null;
 
-        return listView.getSelectedValue();
+        if (index >= 0) {
+            value = listData.get(index);
+        }
+
+        return value;
     }
 
+    @SuppressWarnings("unchecked")
     public void setSelectedValue(Object value) {
         if (value == null) {
             throw new IllegalArgumentException("value is null");
         }
 
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
-
-        int previousSelectedIndex = listView.getSelectedIndex();
-        listView.setSelectedValue(value);
-
-        if (listView.getSelectedIndex() != previousSelectedIndex) {
-            listButtonSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
+        int index = ((List<Object>)listData).indexOf(value);
+        if (index == -1) {
+            throw new IllegalArgumentException("\"" + value + "\" is not a valid selection.");
         }
+
+        setSelectedIndex(index);
     }
 
     public String getSelectedValueKey() {
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
-
-        return listView.getSelectedValueKey();
+        return selectedValueKey;
     }
 
     public void setSelectedValueKey(String selectedValueKey) {
-        ListButton.Skin listButtonSkin = (ListButton.Skin)getSkin();
-        ListView listView = listButtonSkin.getListView();
-
-        String previousSelectedValueKey = listView.getSelectedValueKey();
-        listView.setSelectedValueKey(selectedValueKey);
+        String previousSelectedValueKey = this.selectedValueKey;
+        this.selectedValueKey = selectedValueKey;
         listButtonListeners.selectedValueKeyChanged(this, previousSelectedValueKey);
     }
 
     @Override
     public void load(Dictionary<String, Object> context) {
-        String selectedValueKey = getSelectedValueKey();
         if (selectedValueKey != null
             && context.containsKey(selectedValueKey)) {
             Object value = context.get(selectedValueKey);
@@ -290,7 +278,6 @@ public class ListButton extends Button {
 
     @Override
     public void store(Dictionary<String, Object> context) {
-        String selectedValueKey = getSelectedValueKey();
         if (selectedValueKey != null) {
             Object value = getSelectedValue();
             context.put(selectedValueKey, value);
