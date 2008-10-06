@@ -33,6 +33,7 @@ import pivot.wtk.Point;
 import pivot.wtk.ScrollBar;
 import pivot.wtk.ScrollBarListener;
 import pivot.wtk.ScrollBarValueListener;
+import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
@@ -532,7 +533,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             // Paint the hash marks
             if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
                 int middle = width / 2;
-                graphics.setPaint(new Color(0xB1, 0xA5, 0x94));
+                graphics.setPaint(backgroundColor.darker());
                 graphics.drawLine(middle - 3, 4, middle - 3, height - 5);
                 graphics.drawLine(middle, 4, middle, height - 5);
                 graphics.drawLine(middle + 3, 4, middle + 3, height - 5);
@@ -542,7 +543,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                 graphics.drawLine(middle + 4, 4, middle + 4, height - 5);
             } else {
                 int middle = height / 2;
-                graphics.setPaint(new Color(0xB1, 0xA5, 0x94));
+                graphics.setPaint(backgroundColor.darker());
                 graphics.drawLine(4, middle - 3, width - 5, middle - 3);
                 graphics.drawLine(4, middle, width - 5, middle);
                 graphics.drawLine(4, middle + 3, width - 5, middle + 3);
@@ -654,18 +655,25 @@ public class TerraScrollBarSkin extends ContainerSkin
     private ScrollButton scrollDownButton = new ScrollButton(1, new ScrollDownImage());
     private ScrollHandle scrollHandle = new ScrollHandle();
 
-    private int minimumHandleLength = 31;
-    private Color borderColor = new Color(0x81, 0x76, 0x67);
-    private Color scrollButtonImageColor = Color.BLACK;
-    private Color scrollButtonBackgroundColor = new Color(0xF0, 0xEC, 0xE7);
-    private Color scrollButtonDisabledBackgroundColor = new Color(0xF0, 0xEC, 0xE7);
-    private Color scrollButtonPressedBackgroundColor = new Color(0xDF, 0xD7, 0xCD);
-    private Color scrollButtonHighlightedBackgroundColor = new Color(0xFB, 0xFA, 0xF8);
+    private int minimumHandleLength;
+    private Color borderColor;
+    private Color scrollButtonImageColor;
+    private Color scrollButtonBackgroundColor;
+    private Color scrollButtonDisabledBackgroundColor;
+    private Color scrollButtonPressedBackgroundColor;
+    private Color scrollButtonHighlightedBackgroundColor;
 
     public TerraScrollBarSkin() {
-        super();
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        minimumHandleLength = 31;
+        borderColor = theme.getColor(3);
+        scrollButtonImageColor = theme.getColor(0);
+        scrollButtonBackgroundColor = theme.getColor(2);
+        scrollButtonDisabledBackgroundColor = theme.getColor(2);
+        scrollButtonPressedBackgroundColor = theme.getColor(10);
+        scrollButtonHighlightedBackgroundColor = theme.getColor(5);
 
-        setBackgroundColor(new Color(0xD9, 0xD2, 0xC7));
+        setBackgroundColor(theme.getColor(10));
     }
 
     @Override
