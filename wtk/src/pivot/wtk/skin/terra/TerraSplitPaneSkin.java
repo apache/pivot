@@ -366,8 +366,8 @@ public class TerraSplitPaneSkin extends ContainerSkin
 
     public TerraSplitPaneSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        splitterHandlePrimaryColor = theme.getColor(10);
-        splitterHandleSecondaryColor = theme.getColor(2);
+        splitterHandlePrimaryColor = theme.getColor(4);
+        splitterHandleSecondaryColor = theme.getColor(5);
         splitterThickness = 6;
         useShadow = false;
     }

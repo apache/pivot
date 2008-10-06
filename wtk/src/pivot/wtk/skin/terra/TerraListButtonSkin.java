@@ -64,13 +64,13 @@ public class TerraListButtonSkin extends ListButtonSkin {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         font = theme.getFont();
         color = theme.getColor(0);
-        disabledColor = theme.getColor(3);
-        backgroundColor = theme.getColor(2);
-        disabledBackgroundColor = theme.getColor(5);
-        borderColor = theme.getColor(3);
-        disabledBorderColor = theme.getColor(10);
-        bevelColor = theme.getColor(5);
-        pressedBevelColor = theme.getColor(10);
+        disabledColor = theme.getColor(2);
+        backgroundColor = theme.getColor(5);
+        disabledBackgroundColor = theme.getColor(6);
+        borderColor = theme.getColor(2);
+        disabledBorderColor = theme.getColor(4);
+        bevelColor = theme.getColor(6);
+        pressedBevelColor = theme.getColor(4);
         disabledBevelColor = theme.getColor(1);
         padding = new Insets(3);
 

@@ -50,12 +50,12 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
 
         font = theme.getFont();
         color = theme.getColor(0);
-        disabledColor = theme.getColor(3);
+        disabledColor = theme.getColor(2);
         highlightColor = theme.getColor(1);
         highlightBackgroundColor = theme.getColor(11);
-        marginColor = theme.getColor(5);
+        marginColor = theme.getColor(6);
         margin = 20;
-        separatorColor = theme.getColor(3);
+        separatorColor = theme.getColor(2);
         sectionSpacing = 7;
         showKeyboardShortcuts = true;
     }

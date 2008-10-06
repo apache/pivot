@@ -44,8 +44,8 @@ public class TerraMeterSkin extends ComponentSkin
 
     public TerraMeterSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        color = theme.getColor(8);
-        gridColor = theme.getColor(2);
+        color = theme.getColor(10);
+        gridColor = theme.getColor(5);
         gridFrequency = 0.25f;
     }
 

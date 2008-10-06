@@ -156,14 +156,14 @@ public class TerraPaletteSkin extends WindowSkin {
 
     public TerraPaletteSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setBackgroundColor(theme.getColor(10));
+        setBackgroundColor(theme.getColor(4));
 
         titleBarColor = theme.getColor(1);
-        titleBarBackgroundColor = theme.getColor(6);
-        titleBarBevelColor = theme.getColor(8);
+        titleBarBackgroundColor = theme.getColor(9);
+        titleBarBevelColor = theme.getColor(10);
         titleBarBorderColor = theme.getColor(7);
-        contentBorderColor = theme.getColor(3);
-        contentBevelColor = theme.getColor(2);
+        contentBorderColor = theme.getColor(2);
+        contentBevelColor = theme.getColor(5);
 
         // The title bar flow pane contains two nested flow panes: one for
         // the title contents and the other for the buttons

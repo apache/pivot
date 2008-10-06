@@ -175,12 +175,12 @@ public class TerraExpanderSkin extends ContainerSkin
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBackgroundColor(theme.getColor(1));
 
-        titleBarBackgroundColor = theme.getColor(2);
-        titleBarBorderColor = theme.getColor(4);
-        titleBarBevelColor = theme.getColor(5);
-        shadeButtonColor = theme.getColor(8);
+        titleBarBackgroundColor = theme.getColor(5);
+        titleBarBorderColor = theme.getColor(3);
+        titleBarBevelColor = theme.getColor(6);
+        shadeButtonColor = theme.getColor(10);
         shadeButtonBackgroundColor = theme.getColor(1);
-        borderColor = theme.getColor(10);
+        borderColor = theme.getColor(4);
         padding = new Insets(4);
 
         titleBarFlowPane = new FlowPane(Orientation.HORIZONTAL);

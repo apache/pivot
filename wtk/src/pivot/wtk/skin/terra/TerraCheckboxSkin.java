@@ -58,17 +58,17 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         font = theme.getFont();
         color = theme.getColor(0);
-        disabledColor = theme.getColor(3);
+        disabledColor = theme.getColor(2);
         spacing = 3;
 
         buttonColor = theme.getColor(1);
-        buttonBevelColor = theme.getColor(5);
-        buttonBorderColor = theme.getColor(3);
+        buttonBevelColor = theme.getColor(6);
+        buttonBorderColor = theme.getColor(2);
         buttonSelectionColor = theme.getColor(7);
         disabledButtonColor = theme.getColor(1);
-        disabledButtonBevelColor = theme.getColor(5);
-        disabledButtonBorderColor = theme.getColor(10);
-        disabledButtonSelectionColor = theme.getColor(3);
+        disabledButtonBevelColor = theme.getColor(6);
+        disabledButtonBorderColor = theme.getColor(4);
+        disabledButtonSelectionColor = theme.getColor(2);
     }
 
     public int getPreferredWidth(int height) {

@@ -22,7 +22,7 @@ limitations under the License.
     xmlns="pivot.wtk">
     <Border styles="{padding:12}">
         <styles>
-            <collections:HashMap backgroundColor="%colors[1]" color="%colors[3]"/>
+            <collections:HashMap backgroundColor="%colors[1]" color="%colors[2]"/>
         </styles>
         <content>
             <TablePane styles="{horizontalSpacing:12, verticalSpacing:12}">
