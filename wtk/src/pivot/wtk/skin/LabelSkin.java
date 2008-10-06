@@ -49,19 +49,20 @@ import pivot.wtk.VerticalAlignment;
  * @author gbrown
  */
 public class LabelSkin extends ComponentSkin implements LabelListener {
-    protected FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
+    private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
 
-    protected Font font;
-    protected Color color;
-    protected TextDecoration textDecoration;
-    protected HorizontalAlignment horizontalAlignment;
-    protected VerticalAlignment verticalAlignment;
-    protected Insets padding;
-    protected boolean wrapText;
+    private Font font;
+    private Color color;
+    private TextDecoration textDecoration;
+    private HorizontalAlignment horizontalAlignment;
+    private VerticalAlignment verticalAlignment;
+    private Insets padding;
+    private boolean wrapText;
 
     public LabelSkin() {
+        Theme theme = Theme.getTheme();
         color = Color.BLACK;
-        font = Theme.getTheme().getFont();
+        font = theme.getFont();
         textDecoration = null;
         horizontalAlignment = HorizontalAlignment.LEFT;
         verticalAlignment = VerticalAlignment.TOP;
