@@ -44,21 +44,26 @@ import pivot.wtk.skin.ContainerSkin;
  */
 public class TerraScrollBarSkin extends ContainerSkin
     implements ScrollBarListener, ScrollBarValueListener {
+
+    /**
+     * The types of scroll that are supported.
+     *
+     * @author tvolkert
+     */
+    protected enum IncrementType {
+        UNIT,
+        BLOCK;
+    }
+
     /**
      * Encapsulates the code needed to perform timer-controlled scrolling. This
-     * class is used by <tt>ScrollPaneSkin</tt> (automatic block increment
+     * class is used by <tt>TerraScrollBarSkin</tt> (automatic block increment
      * scrolling) and <tt>ScrollButtonSkin</tt> (automatic unit increment
-     * scrolling). <tt>ScrollPaneSkin</tt> keeps a static instance of this
-     * class to be used by all scroll bars, which is ok since only one scroll
-     * bar is ever being automatically scrolled at any given time.
+     * scrolling).
+     *
+     * @author tvolkert
      */
-    private static class AutomaticScroller {
-        public enum IncrementType {
-            UNIT,
-            BLOCK
-        }
-
-        public ScrollBar scrollBar;
+    protected class AutomaticScroller {
         public int direction;
         public IncrementType incrementType;
         public int stopValue;
@@ -68,9 +73,6 @@ public class TerraScrollBarSkin extends ContainerSkin
 
         /**
          * Starts scrolling the specified scroll bar with no stop value.
-         *
-         * @param scrollBar
-         * The scroll bar to scroll
          *
          * @param direction
          * <tt>1</tt> to adjust the scroll bar's value larger; <tt>-1</tt> to
@@ -84,17 +86,13 @@ public class TerraScrollBarSkin extends ContainerSkin
          * If automatic scrolling of any scroll bar is already in progress.
          * Only one scroll bar may be automatically scrolled at one time
          */
-        public void start(ScrollBar scrollBar, int direction,
-            IncrementType incrementType) {
-            start(scrollBar, direction, incrementType, -1);
+        public void start(int direction, IncrementType incrementType) {
+            start(direction, incrementType, -1);
         }
 
         /**
          * Starts scrolling the specified scroll bar, stopping the scroll when
          * the specified value has been reached.
-         *
-         * @param scrollBar
-         * The scroll bar to scroll
          *
          * @param direction
          * <tt>1</tt> to adjust the scroll bar's value larger; <tt>-1</tt> to
@@ -112,14 +110,12 @@ public class TerraScrollBarSkin extends ContainerSkin
          * If automatic scrolling of any scroll bar is already in progress.
          * Only one scroll bar may be automatically scrolled at one time
          */
-        public void start(ScrollBar scrollBar, int direction,
-            IncrementType incrementType, int stopValue) {
+        public void start(int direction, IncrementType incrementType, int stopValue) {
             if (timeoutID != -1
                 || intervalID != -1) {
                 throw new IllegalStateException("Already running");
             }
 
-            this.scrollBar = scrollBar;
             this.direction = direction;
             this.incrementType = incrementType;
             this.stopValue = stopValue;
@@ -141,7 +137,24 @@ public class TerraScrollBarSkin extends ContainerSkin
             scroll();
         }
 
+        /**
+         * Stops any automatic scrolling in progress.
+         */
+        public void stop() {
+            if (timeoutID != -1) {
+                ApplicationContext.clearTimeout(timeoutID);
+                timeoutID = -1;
+            }
+
+            if (intervalID != -1) {
+                ApplicationContext.clearInterval(intervalID);
+                intervalID = -1;
+            }
+        }
+
         private void scroll() {
+            ScrollBar scrollBar = (ScrollBar)TerraScrollBarSkin.this.getComponent();
+
             int rangeStart = scrollBar.getRangeStart();
             int rangeEnd = scrollBar.getRangeEnd();
             int extent = scrollBar.getExtent();
@@ -185,21 +198,6 @@ public class TerraScrollBarSkin extends ContainerSkin
                 }
             }
         }
-
-        /**
-         * Stops any automatic scrolling in progress.
-         */
-        public void stop() {
-            if (timeoutID != -1) {
-                ApplicationContext.clearTimeout(timeoutID);
-                timeoutID = -1;
-            }
-
-            if (intervalID != -1) {
-                ApplicationContext.clearInterval(intervalID);
-                intervalID = -1;
-            }
-        }
     }
 
     /**
@@ -207,28 +205,21 @@ public class TerraScrollBarSkin extends ContainerSkin
      *
      * @author tvolkert
      */
-    public static class ScrollButton extends Component {
-        private ScrollBar scrollBar;
+    protected class ScrollButton extends Component {
         private int direction;
-        private Image buttonImage;
+        private ScrollButtonImage buttonImage;
 
-        public ScrollButton(ScrollBar scrollBar, int direction, Image buttonImage) {
-            this.scrollBar = scrollBar;
+        public ScrollButton(int direction, ScrollButtonImage buttonImage) {
             this.direction = direction;
             this.buttonImage = buttonImage;
-
-            installSkin(ScrollButton.class);
-        }
-
-        public ScrollBar getScrollBar() {
-            return scrollBar;
+            setSkin(new ScrollButtonSkin());
         }
 
         public int getDirection() {
             return direction;
         }
 
-        public Image getButtonImage() {
+        public ScrollButtonImage getButtonImage() {
             return buttonImage;
         }
     }
@@ -238,7 +229,7 @@ public class TerraScrollBarSkin extends ContainerSkin
      *
      * @author tvolkert
      */
-    public static class ScrollButtonSkin extends ComponentSkin {
+    protected class ScrollButtonSkin extends ComponentSkin {
         private boolean highlighted = false;
         private boolean pressed = false;
 
@@ -255,10 +246,6 @@ public class TerraScrollBarSkin extends ContainerSkin
             return 15;
         }
 
-        public Dimensions getPreferredSize() {
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
-        }
-
         public void layout() {
             // No-op
         }
@@ -266,36 +253,30 @@ public class TerraScrollBarSkin extends ContainerSkin
         public void paint(Graphics2D graphics) {
             // Apply scroll bar styles to the button
             ScrollButton scrollButton = (ScrollButton)getComponent();
-            ScrollBar scrollBar = scrollButton.getScrollBar();
-            Component.StyleDictionary scrollBarStyles = scrollBar.getStyles();
-
-            Color backgroundColor = null;
-
-            if (scrollButton.isEnabled()) {
-                if (pressed) {
-                    backgroundColor = (Color)scrollBarStyles.get
-                        ("scrollButtonPressedBackgroundColor");
-                } else if (highlighted) {
-                    backgroundColor = (Color)scrollBarStyles.get
-                        ("scrollButtonHighlightedBackgroundColor");
-                } else {
-                    backgroundColor = (Color)scrollBarStyles.get
-                        ("scrollButtonBackgroundColor");
-                }
-            } else {
-                backgroundColor = (Color)scrollBarStyles.get
-                    ("scrollButtonDisabledBackgroundColor");
-            }
+            ScrollBar scrollBar = (ScrollBar)TerraScrollBarSkin.this.getComponent();
 
             int width = getWidth();
             int height = getHeight();
+
+            Color backgroundColor;
+            if (scrollButton.isEnabled()) {
+                if (pressed) {
+                    backgroundColor = scrollButtonPressedBackgroundColor;
+                } else if (highlighted) {
+                    backgroundColor = scrollButtonHighlightedBackgroundColor;
+                } else {
+                    backgroundColor = scrollButtonBackgroundColor;
+                }
+            } else {
+                backgroundColor = scrollButtonDisabledBackgroundColor;
+            }
 
             // Paint the background
             graphics.setPaint(backgroundColor);
             graphics.fillRect(1, 1, width - 2, height - 2);
 
             // Paint the border
-            graphics.setPaint((Color)scrollBarStyles.get("borderColor"));
+            graphics.setPaint(borderColor);
             graphics.setStroke(new BasicStroke());
             graphics.drawRect(0, 0, width - 1, height - 1);
 
@@ -308,7 +289,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                 buttonImageWidth = (int)Math.floor((float)width / 2.0f);
                 buttonImageHeight = (int)((float)height / 3.0f);
             }
-            ScrollButtonImage buttonImage = (ScrollButtonImage)scrollButton.getButtonImage();
+            ScrollButtonImage buttonImage = scrollButton.getButtonImage();
             buttonImage.setSize(buttonImageWidth, buttonImageHeight);
 
             // Paint the image
@@ -357,12 +338,11 @@ public class TerraScrollBarSkin extends ContainerSkin
 
             if (button == Mouse.Button.LEFT) {
                 ScrollButton scrollButton = (ScrollButton)getComponent();
-                ScrollBar scrollBar = scrollButton.getScrollBar();
 
                 // Start the automatic scroller. It'll be stopped when we
                 // mouse up or mouse out
-                automaticScroller.start(scrollBar, scrollButton.getDirection(),
-                    AutomaticScroller.IncrementType.UNIT);
+                automaticScroller.start(scrollButton.getDirection(),
+                    IncrementType.UNIT);
 
                 pressed = true;
                 repaintComponent();
@@ -469,17 +449,9 @@ public class TerraScrollBarSkin extends ContainerSkin
      *
      * @author tvolkert
      */
-    public static class ScrollHandle extends Component {
-        private ScrollBar scrollBar;
-
-        public ScrollHandle(ScrollBar scrollBar) {
-            this.scrollBar = scrollBar;
-
-            installSkin(ScrollHandle.class);
-        }
-
-        public ScrollBar getScrollBar() {
-            return scrollBar;
+    protected class ScrollHandle extends Component {
+        public ScrollHandle() {
+            setSkin(new ScrollHandleSkin());
         }
     }
 
@@ -488,7 +460,7 @@ public class TerraScrollBarSkin extends ContainerSkin
      *
      * @author tvolkert
      */
-    public static class ScrollHandleSkin extends ComponentSkin {
+    protected class ScrollHandleSkin extends ComponentSkin {
         private class DisplayMouseHandler
             implements ComponentMouseButtonListener {
             public boolean mouseDown(Component component, Mouse.Button button,
@@ -540,29 +512,20 @@ public class TerraScrollBarSkin extends ContainerSkin
         }
 
         public void paint(Graphics2D graphics) {
-            ScrollHandle scrollHandle = (ScrollHandle)getComponent();
-            ScrollBar scrollBar = scrollHandle.getScrollBar();
-            Component.StyleDictionary scrollBarStyles = scrollBar.getStyles();
-
-            Color backgroundColor = null;
-
-            if (highlighted) {
-                backgroundColor = (Color)scrollBarStyles.get
-                    ("scrollButtonHighlightedBackgroundColor");
-            } else {
-                backgroundColor = (Color)scrollBarStyles.get
-                    ("scrollButtonBackgroundColor");
-            }
+            ScrollBar scrollBar = (ScrollBar)TerraScrollBarSkin.this.getComponent();
 
             int width = getWidth();
             int height = getHeight();
 
             // Paint the background
+            Color backgroundColor = highlighted ?
+                scrollButtonHighlightedBackgroundColor :
+                scrollButtonBackgroundColor;
             graphics.setPaint(backgroundColor);
             graphics.fillRect(1, 1, width - 2, height - 2);
 
             // Paint the border
-            graphics.setPaint((Color)scrollBarStyles.get("borderColor"));
+            graphics.setPaint(borderColor);
             graphics.setStroke(new BasicStroke());
             graphics.drawRect(0, 0, width - 1, height - 1);
 
@@ -682,14 +645,14 @@ public class TerraScrollBarSkin extends ContainerSkin
     private static final int DEFAULT_THICKNESS = 15;
     private static final int DEFAULT_LENGTH = 100;
 
-    private static AutomaticScroller automaticScroller = new AutomaticScroller();
+    private AutomaticScroller automaticScroller = new AutomaticScroller();
 
     private DisplayMouseHandler displayMouseHandler = new DisplayMouseHandler();
     private Point dragOffset = null;
 
-    private ScrollButton scrollUpButton = null;
-    private ScrollButton scrollDownButton = null;
-    private ScrollHandle scrollHandle = null;
+    private ScrollButton scrollUpButton = new ScrollButton(-1, new ScrollUpImage());
+    private ScrollButton scrollDownButton = new ScrollButton(1, new ScrollDownImage());
+    private ScrollHandle scrollHandle = new ScrollHandle();
 
     private int minimumHandleLength = 31;
     private Color borderColor = new Color(0x81, 0x76, 0x67);
@@ -713,13 +676,8 @@ public class TerraScrollBarSkin extends ContainerSkin
         scrollBar.getScrollBarListeners().add(this);
         scrollBar.getScrollBarValueListeners().add(this);
 
-        scrollUpButton = new ScrollButton(scrollBar, -1, new ScrollUpImage());
         scrollBar.add(scrollUpButton);
-
-        scrollDownButton = new ScrollButton(scrollBar, 1, new ScrollDownImage());
         scrollBar.add(scrollDownButton);
-
-        scrollHandle = new ScrollHandle(scrollBar);
         scrollBar.add(scrollHandle);
 
         enabledChanged(scrollBar);
@@ -734,10 +692,6 @@ public class TerraScrollBarSkin extends ContainerSkin
         scrollBar.remove(scrollUpButton);
         scrollBar.remove(scrollDownButton);
         scrollBar.remove(scrollHandle);
-
-        scrollUpButton = null;
-        scrollDownButton = null;
-        scrollHandle = null;
 
         super.uninstall();
     }
@@ -1080,8 +1034,8 @@ public class TerraScrollBarSkin extends ContainerSkin
 
                 // Start the automatic scroller; we'll stop it upon mouse out or
                 // mouse up
-                automaticScroller.start(scrollBar, direction,
-                    AutomaticScroller.IncrementType.BLOCK, realStopValue);
+                automaticScroller.start(direction,
+                    IncrementType.BLOCK, realStopValue);
             }
 
             consumed = true;
