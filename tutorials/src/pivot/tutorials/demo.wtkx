@@ -24,51 +24,51 @@ limitations under the License.
                     <view>
                         <FlowPane orientation="vertical" styles="{padding:6}">
                             <Rollup expanded="true">
-                                <Label text="Buttons" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Buttons"/>
                                 <wtkx:include namespace="buttons" src="buttons.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Lists" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Lists"/>
                                 <wtkx:include namespace="lists" src="lists.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Text" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Text"/>
                                 <wtkx:include namespace="text" src="text.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Navigation" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Navigation"/>
                                 <wtkx:include namespace="navigation" src="navigation.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Splitters" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Splitters"/>
                                 <wtkx:include namespace="splitters" src="splitters.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Menus" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Menus"/>
                                 <wtkx:include namespace="menus" src="menus.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Meters" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Meters"/>
                                 <wtkx:include namespace="meters" src="meters.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Spinners" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Spinners"/>
                                 <wtkx:include namespace="spinners" src="spinners.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Tables" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Tables"/>
                                 <wtkx:include namespace="tables" src="tables.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Trees" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Trees"/>
                                 <wtkx:include namespace="trees" src="trees.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Drag &amp; Drop" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Drag &amp; Drop"/>
                                 <wtkx:include namespace="dragdrop" src="dragdrop.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Alerts &amp; Prompts" styles="{fontBold:true, fontSize:12, color:'#2c5680'}"/>
+                                <Heading text="Alerts &amp; Prompts"/>
                                 <wtkx:include namespace="alerts" src="alerts.wtkx"/>
                             </Rollup>
                         </FlowPane>

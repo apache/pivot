@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk.skin.terra;
-
-import pivot.wtk.Theme;
-import pivot.wtk.skin.SeparatorSkin;
+package pivot.wtk;
 
 /**
- * Terra sheet skin.
+ * Heading listener interface.
  *
  * @author gbrown
  */
-public class TerraSeparatorSkin extends SeparatorSkin {
-    public TerraSeparatorSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setColor(theme.getColor(2));
-        setHeadingColor(theme.getColor(7));
-    }
+public interface HeadingListener {
+    /**
+     * Called when a heading's level has changed.
+     *
+     * @param heading
+     * @param previousLevel
+     */
+    public void levelChanged(Heading heading, int previousLevel);
 }

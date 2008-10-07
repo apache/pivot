@@ -398,7 +398,7 @@ public class Demo implements Application {
 
         window.open(display);
 
-        pivot.wtk.Theme.setTheme(new pivot.wtk.skin.terra.TerraTheme("test"));
+        // pivot.wtk.Theme.setTheme(new pivot.wtk.skin.terra.TerraTheme("test"));
     }
 
     @SuppressWarnings("unchecked")

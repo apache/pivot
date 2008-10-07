@@ -59,9 +59,6 @@ public class Label extends Component {
     }
 
     public void setText(String text) {
-        // TODO We may not want to pass the previous value here, since we
-        // don't actually compare values to determine a change
-
         String previousText = this.text;
         this.text = text;
         labelListeners.textChanged(this, previousText);
