@@ -22,17 +22,22 @@ import pivot.wtk.Frame;
 import pivot.wtkx.WTKXSerializer;
 
 public class SwingAdapterTest implements Application {
-    private Frame frame = null;
-
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        WTKXSerializer wtkxSerializer;
+        Frame frame;
+
+        wtkxSerializer = new WTKXSerializer();
         frame = (Frame)wtkxSerializer.readObject(getClass().getResource("swing_adapter_test.wtkx"));
         frame.open(display);
+
+        wtkxSerializer = new WTKXSerializer();
+        frame = (Frame)wtkxSerializer.readObject(getClass().getResource("swing_adapter_test.wtkx"));
+        frame.open(display);
+        frame.setLocation(20, 20);
     }
 
     public boolean shutdown(boolean optional) {
-        frame.close();
         return true;
     }
 

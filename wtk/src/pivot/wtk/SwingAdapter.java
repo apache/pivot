@@ -196,6 +196,14 @@ public class SwingAdapter extends Component {
             return false;
         }
 
+        @Override
+        public void enabledChanged(Component component) {
+            SwingAdapter swingAdapter = (SwingAdapter)getComponent();
+            JComponent swingComponent = swingAdapter.getSwingComponent();
+
+            swingComponent.setEnabled(component.isEnabled());
+        }
+
         // SwingAdapterListener methods
 
         public void swingComponentChanged(SwingAdapter swingAdapter,
