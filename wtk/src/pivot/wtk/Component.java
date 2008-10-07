@@ -777,6 +777,17 @@ public abstract class Component implements ConstrainedVisual {
         return (Window)component;
     }
 
+    public Display getDisplay() {
+        Component component = this;
+
+        while (component != null
+            && !(component instanceof Display)) {
+            component = component.getParent();
+        }
+
+        return (Display)component;
+    }
+
     public int getWidth() {
         return skin.getWidth();
     }

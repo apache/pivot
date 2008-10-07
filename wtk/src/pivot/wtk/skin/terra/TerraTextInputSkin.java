@@ -860,7 +860,7 @@ public class TerraTextInputSkin extends ComponentSkin
             // Begin selecting text
             MouseSelectionHandler mouseSelectionHandler = new MouseSelectionHandler();
 
-            Display display = textInput.getWindow().getDisplay();
+            Display display = textInput.getDisplay();
             display.getComponentMouseListeners().add(mouseSelectionHandler);
             display.getComponentMouseButtonListeners().add(mouseSelectionHandler);
 

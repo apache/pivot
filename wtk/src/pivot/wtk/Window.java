@@ -220,10 +220,6 @@ public class Window extends Container {
         installSkin(Window.class);
     }
 
-    public Display getDisplay() {
-        return (Display)getParent();
-    }
-
     @Override
     protected void setParent(Container parent) {
         if (parent != null

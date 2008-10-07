@@ -564,7 +564,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                 // have registered our display mouse handler.  Unregister it
                 // here so as to not register multiple times as we move our
                 // mouse in and out of the handle
-                Display display = component.getWindow().getDisplay();
+                Display display = component.getDisplay();
                 display.getComponentMouseButtonListeners().remove(displayMouseHandler);
             } else {
                 // The handle is highlighted as long as the mouse is over it or
@@ -584,7 +584,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                 // button.  NOTE the code that actually sets the scroll bar's
                 // value during the drag operation is handled by ScrollBarSkin
                 // since it needs access to scroll bar layout information
-                Display display = component.getWindow().getDisplay();
+                Display display = component.getDisplay();
                 display.getComponentMouseButtonListeners().add(displayMouseHandler);
             } else {
                 // If we're not dragging the handle, then we un-highlight it
@@ -997,7 +997,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             if (mouseDownComponent == scrollHandle) {
                 // Begin dragging the scroll handle. Register our display
                 // mouse handler to do the actual work
-                Display display = scrollBar.getWindow().getDisplay();
+                Display display = scrollBar.getDisplay();
 
                 dragOffset = scrollBar.mapPointToAncestor(display, x, y);
                 dragOffset.translate(-scrollHandle.getX(), -scrollHandle.getY());

@@ -194,8 +194,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
 
         if (component.isFocused()) {
             if (!menuPopup.isOpen()) {
-                Window window = menuBarItem.getWindow();
-                Display display = window.getDisplay();
+                Display display = menuBarItem.getDisplay();
                 Point menuBarItemLocation = menuBarItem.mapPointToAncestor(display, 0, getHeight());
 
                 // TODO Ensure that the popup remains within the bounds of the display

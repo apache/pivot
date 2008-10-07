@@ -176,17 +176,13 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
             && !menuPopup.isOpen()) {
             // Determine the popup's location and preferred size, relative
             // to the menu item
-            Window window = menuItem.getWindow();
+            Display display = menuItem.getDisplay();
+            Point menuItemLocation = menuItem.mapPointToAncestor(display, getWidth(), 0);
 
-            if (window != null) {
-                Display display = window.getDisplay();
-                Point menuItemLocation = menuItem.mapPointToAncestor(display, getWidth(), 0);
+            // TODO Ensure that the popup remains within the bounds of the display
 
-                // TODO Ensure that the popup remains within the bounds of the display
-
-                menuPopup.setLocation(menuItemLocation.x, menuItemLocation.y);
-                menuPopup.open(menuItem);
-            }
+            menuPopup.setLocation(menuItemLocation.x, menuItemLocation.y);
+            menuPopup.open(menuItem);
         }
     }
 

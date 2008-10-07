@@ -753,7 +753,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                     && !column.isRelative()
                     && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
                     // Begin drag
-                    Display display = tableViewHeader.getWindow().getDisplay();
+                    Display display = tableViewHeader.getDisplay();
                     Point headerCoordinates = tableViewHeader.mapPointToAncestor(display,
                         headerBounds.x, 0);
                     ResizeHandler dragHandler = new ResizeHandler(column, headerCoordinates.x,

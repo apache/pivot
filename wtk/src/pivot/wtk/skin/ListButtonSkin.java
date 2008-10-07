@@ -289,7 +289,7 @@ public abstract class ListButtonSkin extends ButtonSkin
                     int width = getWidth();
                     int height = getHeight();
 
-                    Display display = listButton.getWindow().getDisplay();
+                    Display display = listButton.getDisplay();
 
                     // Ensure that the popup remains within the bounds of the display
                     Point buttonLocation = listButton.mapPointToAncestor(display, 0, 0);

@@ -212,7 +212,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
                 int width = getWidth();
                 int height = getHeight();
 
-                Display display = menuButton.getWindow().getDisplay();
+                Display display = menuButton.getDisplay();
 
                 // Ensure that the popup remains within the bounds of the display
                 Point buttonLocation = menuButton.mapPointToAncestor(display, 0, 0);

@@ -403,7 +403,7 @@ public class TerraCalendarButtonSkin extends ButtonSkin
 
             // Determine the popup's location and preferred size, relative
             // to the button
-            Display display = calendarButton.getWindow().getDisplay();
+            Display display = calendarButton.getDisplay();
             Point displayCoordinates = calendarButton.mapPointToAncestor(display, 0, 0);
             displayCoordinates.y += getHeight() - 1;
 

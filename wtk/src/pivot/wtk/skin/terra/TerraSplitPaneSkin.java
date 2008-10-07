@@ -256,7 +256,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
             if (!splitPane.isLocked()) {
                 int splitLocation = splitPane.getSplitLocation();
 
-                Display display = splitPane.getWindow().getDisplay();
+                Display display = splitPane.getDisplay();
                 Point displayCoordinates = splitter.mapPointToAncestor(display, x, y);
 
                 if (orientation == Orientation.HORIZONTAL) {
