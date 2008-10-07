@@ -15,11 +15,15 @@
  */
 package pivot.wtk.skin;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineMetrics;
 import java.awt.geom.Area;
-import java.awt.geom.RoundRectangle2D;
+import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Border;
@@ -28,6 +32,7 @@ import pivot.wtk.Component;
 import pivot.wtk.CornerRadii;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
+import pivot.wtk.Theme;
 
 /**
  * Border skin.
@@ -38,13 +43,41 @@ import pivot.wtk.Insets;
  */
 public class BorderSkin extends ContainerSkin
     implements BorderListener {
-    private Color color = Color.BLACK;
-    private int thickness = 1;
-    private Insets padding = new Insets(2);
-    private CornerRadii cornerRadii = new CornerRadii(0);
+    private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
+
+    private Font font;
+    private Color color;
+    private Color titleColor;
+    private int thickness;
+    private Insets padding;
+    private CornerRadii cornerRadii;
 
     public BorderSkin() {
+        Theme theme = Theme.getTheme();
         setBackgroundColor(Color.WHITE);
+
+        font = theme.getFont().deriveFont(Font.BOLD);
+        color = Color.BLACK;
+        titleColor = Color.BLACK;
+        thickness = 1;
+        padding = new Insets(2);
+        cornerRadii = new CornerRadii(0);
+    }
+
+    @Override
+    public void install(Component component) {
+        super.install(component);
+
+        Border border = (Border)component;
+        border.getBorderListeners().add(this);
+    }
+
+    @Override
+    public void uninstall() {
+        Border border = (Border)getComponent();
+        border.getBorderListeners().remove(this);
+
+        super.uninstall();
     }
 
     @Override
@@ -52,12 +85,24 @@ public class BorderSkin extends ContainerSkin
         int preferredWidth = 0;
 
         Border border = (Border)getComponent();
-        Component content = border.getContent();
+        int topThickness = thickness;
 
+        String title = border.getTitle();
+        if (title != null
+            && title.length() > 0) {
+            Rectangle2D headingBounds = font.getStringBounds(title, fontRenderContext);
+            preferredWidth = (int)Math.ceil(headingBounds.getWidth());
+
+            LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
+            topThickness = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
+                + lm.getLeading()), topThickness);
+        }
+
+        Component content = border.getContent();
         if (content != null
             && content.isDisplayable()) {
             if (height != -1) {
-                height = Math.max(height - (thickness * 2) -
+                height = Math.max(height - (topThickness + thickness) -
                     padding.top - padding.bottom, 0);
             }
 
@@ -74,8 +119,17 @@ public class BorderSkin extends ContainerSkin
         int preferredHeight = 0;
 
         Border border = (Border)getComponent();
-        Component content = border.getContent();
+        int topThickness = thickness;
 
+        String title = border.getTitle();
+        if (title != null
+            && title.length() > 0) {
+            LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
+            topThickness = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
+                + lm.getLeading()), topThickness);
+        }
+
+        Component content = border.getContent();
         if (content != null
             && content.isDisplayable()) {
             if (width != -1) {
@@ -86,32 +140,15 @@ public class BorderSkin extends ContainerSkin
             preferredHeight = content.getPreferredHeight(width);
         }
 
-        preferredHeight += (padding.top + padding.bottom) + (thickness * 2);
+        preferredHeight += (padding.top + padding.bottom) + (topThickness + thickness);
 
         return preferredHeight;
     }
 
     @Override
     public Dimensions getPreferredSize() {
-        int preferredWidth = 0;
-        int preferredHeight = 0;
-
-        Border border = (Border)getComponent();
-        Component content = border.getContent();
-
-        if (content != null
-            && content.isDisplayable()) {
-            Dimensions preferredContentSize = content.getPreferredSize();
-            preferredWidth = preferredContentSize.width;
-            preferredHeight = preferredContentSize.height;
-        }
-
-        preferredWidth += (padding.left + padding.right) + (thickness * 2);
-        preferredHeight += (padding.top + padding.bottom) + (thickness * 2);
-
-        Dimensions preferredSize = new Dimensions(preferredWidth, preferredHeight);
-
-        return preferredSize;
+        // TODO Optimize
+        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
     }
 
     public void layout() {
@@ -119,19 +156,28 @@ public class BorderSkin extends ContainerSkin
         int height = getHeight();
 
         Border border = (Border)getComponent();
-        Component content = border.getContent();
+        int topThickness = thickness;
 
+        String title = border.getTitle();
+        if (title != null
+            && title.length() > 0) {
+            LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
+            topThickness = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
+                + lm.getLeading()), topThickness);
+        }
+
+        Component content = border.getContent();
         if (content != null) {
             if (content.isDisplayable()) {
                 content.setVisible(true);
 
                 content.setLocation(padding.left + thickness,
-                    padding.top + thickness);
+                    padding.top + topThickness);
 
                 int contentWidth = Math.max(width - (padding.left + padding.right
                     + (thickness * 2)), 0);
                 int contentHeight = Math.max(height - (padding.top + padding.bottom
-                    + (thickness * 2)), 0);
+                    + (topThickness + thickness)), 0);
 
                 content.setSize(contentWidth, contentHeight);
             } else {
@@ -142,47 +188,90 @@ public class BorderSkin extends ContainerSkin
 
     @Override
     public void paint(Graphics2D graphics) {
-        int width = getWidth();
-        int height = getHeight();
+        Border border = (Border)getComponent();
+        int topThickness = thickness;
+        float titleAscent = 0;
+
+        String title = border.getTitle();
+        if (title != null
+            && title.length() > 0) {
+            LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
+            titleAscent = lm.getAscent();
+            topThickness = Math.max((int)Math.ceil(titleAscent
+                + lm.getDescent() + lm.getLeading()), topThickness);
+        }
 
         // TODO Java2D doesn't support variable corner radii; we'll need to
-        // "fake" this by drawing multiple rounded rectangles and clipping
+        // "fake" this by drawing multiple arcs
         int cornerRadius = cornerRadii.topLeft;
 
-        // Clip the background to a rectangle that is effectively the middle
-        // of the border thickness, so we don't anti-alias the background
-        // with the outer edge of the border
-        RoundRectangle2D clipRectangle = new RoundRectangle2D.Double(thickness / 2,
-            thickness / 2,
-            width - thickness, height - thickness,
-            cornerRadius - thickness / 2, cornerRadius - thickness / 2);
-
-        // Paint the background
-        Graphics2D baseGraphics = (Graphics2D)graphics.create();
-        baseGraphics.clip(clipRectangle);
-        super.paint(baseGraphics);
-        baseGraphics.dispose();
-
-        // Create a shape representing the border
-        RoundRectangle2D outerRectangle = new RoundRectangle2D.Double(0, 0,
-            width, height,
-            cornerRadius, cornerRadius);
-
-        RoundRectangle2D innerRectangle = new RoundRectangle2D.Double(thickness,
-            thickness,
-            width - thickness * 2, height - thickness * 2,
-            Math.max(cornerRadius - thickness, 0),
-            Math.max(cornerRadius - thickness, 0));
-
-        Area borderArea = new Area(outerRectangle);
-        borderArea.subtract(new Area(innerRectangle));
-
-        graphics.setPaint(color);
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // TODO Optimize by using Graphics#fillRoundRect()?
-        graphics.fill(borderArea);
+        int x = thickness / 2;
+        int y = topThickness / 2;
+        int width = Math.max(getWidth() - thickness, 0);
+        int height = Math.max(getHeight() - (topThickness + thickness) / 2, 0);
+
+        // Draw the background
+        graphics.setPaint(getBackgroundColor());
+        graphics.fillRoundRect(x, y, width, height, cornerRadius, cornerRadius);
+
+        // Draw the title
+        if (title != null) {
+            if (fontRenderContext.isAntiAliased()) {
+                // TODO Use VALUE_TEXT_ANTIALIAS_LCD_HRGB when JDK 1.6 is
+                // available on OSX?
+                graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            }
+
+            if (fontRenderContext.usesFractionalMetrics()) {
+                graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+                    RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+            }
+
+            // Note that we add one pixel to the string bounds for spacing
+            Rectangle2D titleBounds = font.getStringBounds(title, fontRenderContext);
+            titleBounds = new Rectangle2D.Double((double)(padding.left + thickness),
+                (topThickness - titleBounds.getHeight()) / 2,
+                    titleBounds.getWidth() + 1, titleBounds.getHeight());
+
+            graphics.setFont(font);
+            graphics.setPaint(titleColor);
+            graphics.drawString(title, (int)titleBounds.getX(),
+                (int)(titleBounds.getY() + titleAscent));
+
+            Area titleClip = new Area(graphics.getClip());
+            titleClip.subtract(new Area(titleBounds));
+            graphics.clip(titleClip);
+        }
+
+        // Draw the border
+        graphics.setPaint(color);
+        graphics.setStroke(new BasicStroke(thickness));
+        graphics.drawRoundRect(x, y, width, height, cornerRadius, cornerRadius);
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        this.font = font;
+        invalidateComponent();
+    }
+
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(Font.decode(font));
     }
 
     public Color getColor() {
@@ -204,6 +293,27 @@ public class BorderSkin extends ContainerSkin
         }
 
         setColor(Color.decode(color));
+    }
+
+    public Color getTitleColor() {
+        return titleColor;
+    }
+
+    public void setTitleColor(Color titleColor) {
+        if (titleColor == null) {
+            throw new IllegalArgumentException("titleColor is null.");
+        }
+
+        this.titleColor = titleColor;
+        repaintComponent();
+    }
+
+    public final void setTitleColor(String titleColor) {
+        if (titleColor == null) {
+            throw new IllegalArgumentException("titleColor is null.");
+        }
+
+        setTitleColor(Color.decode(titleColor));
     }
 
     public int getThickness() {

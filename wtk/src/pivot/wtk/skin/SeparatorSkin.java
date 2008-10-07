@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
@@ -109,6 +110,8 @@ public class SeparatorSkin extends ComponentSkin
 
         if (heading != null
             && heading.length() > 0) {
+            LineMetrics lm = font.getLineMetrics(heading, fontRenderContext);
+
             if (fontRenderContext.isAntiAliased()) {
                 // TODO Use VALUE_TEXT_ANTIALIAS_LCD_HRGB when JDK 1.6 is
                 // available on OSX?
@@ -123,14 +126,14 @@ public class SeparatorSkin extends ComponentSkin
 
             graphics.setFont(font);
             graphics.setPaint(headingColor);
-
-            LineMetrics lm = font.getLineMetrics(heading, fontRenderContext);
             graphics.drawString(heading, padding.left, lm.getAscent() + padding.top);
 
             Rectangle2D headingBounds = font.getStringBounds(heading, fontRenderContext);
-            int headingWidth = (int)Math.ceil(headingBounds.getWidth())
-                + (padding.left + padding.right);
-            graphics.clipRect(headingWidth, 0, width - headingWidth, height);
+
+            Area titleClip = new Area(graphics.getClip());
+            titleClip.subtract(new Area(new Rectangle2D.Double(padding.left, 0,
+                headingBounds.getWidth(), headingBounds.getHeight())));
+            graphics.clip(titleClip);
         }
 
         graphics.setStroke(new BasicStroke(thickness));

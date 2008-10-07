@@ -6,7 +6,8 @@ import pivot.wtk.skin.BorderSkin;
 public class TerraBorderSkin extends BorderSkin {
     public TerraBorderSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setColor(theme.getColor(2));
         setBackgroundColor(theme.getColor(1));
+        setColor(theme.getColor(2));
+        setTitleColor(theme.getColor(7));
     }
 }
