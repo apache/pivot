@@ -24,13 +24,15 @@ import pivot.wtk.content.LinkButtonDataRenderer;
  */
 @ComponentInfo(icon="LinkButton.png")
 public class LinkButton extends Button {
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new LinkButtonDataRenderer();
+
     public LinkButton() {
         this(null);
     }
 
     public LinkButton(Object buttonData) {
         super(buttonData);
-        setDataRenderer(new LinkButtonDataRenderer());
+        setDataRenderer(DEFAULT_DATA_RENDERER);
 
         installSkin(LinkButton.class);
     }

@@ -15,6 +15,7 @@
  */
 package pivot.wtk.skin;
 
+import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
@@ -138,15 +139,19 @@ public abstract class ListButtonSkin extends ButtonSkin
 
         ListView listView = getListView();
         listView.setListData(listButton.getListData());
+        listView.setItemRenderer(listButton.getItemRenderer());
     }
 
     @Override
     public void uninstall() {
+        listViewPopup.close();
+
         ListButton listButton = (ListButton)getComponent();
         listButton.getListButtonListeners().remove(this);
         listButton.getListButtonSelectionListeners().remove(this);
 
-        listViewPopup.close();
+        ListView listView = getListView();
+        listView.setListData(new ArrayList<Object>());
 
         super.uninstall();
     }

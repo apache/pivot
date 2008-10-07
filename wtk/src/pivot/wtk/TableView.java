@@ -49,8 +49,10 @@ public class TableView extends Component {
         private int width = 0;
         private boolean relative = false;
         private SortDirection sortDirection = null;
-        Object filter = null;
-        private CellRenderer cellRenderer = new TableViewCellRenderer();
+        private Object filter = null;
+        private CellRenderer cellRenderer = DEFAULT_CELL_RENDERER;
+
+        private static final CellRenderer DEFAULT_CELL_RENDERER = new TableViewCellRenderer();
 
         /**
          * Default column width.

@@ -24,6 +24,12 @@ import pivot.wtk.content.ButtonDataRenderer;
  */
 @ComponentInfo(icon="RadioButton.png")
 public class RadioButton extends Button {
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
+
+    static {
+        DEFAULT_DATA_RENDERER.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+    }
+
     public RadioButton() {
         this(null, null);
     }
@@ -41,10 +47,7 @@ public class RadioButton extends Button {
         super.setToggleButton(true);
 
         setGroup(group);
-
-        Button.DataRenderer dataRenderer = new ButtonDataRenderer();
-        dataRenderer.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-        setDataRenderer(dataRenderer);
+        setDataRenderer(DEFAULT_DATA_RENDERER);
 
         installSkin(RadioButton.class);
     }

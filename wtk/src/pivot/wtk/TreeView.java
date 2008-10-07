@@ -430,7 +430,7 @@ public class TreeView extends Component {
 
     private BranchInfo rootBranchInfo;
 
-    private NodeRenderer nodeRenderer = new TreeViewNodeRenderer();
+    private NodeRenderer nodeRenderer = DEFAULT_NODE_RENDERER;
 
     private TreeViewListenerList treeViewListeners = new TreeViewListenerList();
     private TreeViewBranchListenerList treeViewBranchListeners =
@@ -443,6 +443,8 @@ public class TreeView extends Component {
         new TreeViewSelectionListenerList();
     private TreeViewSelectionDetailListenerList treeViewSelectionDetailListeners =
         new TreeViewSelectionDetailListenerList();
+
+    private static final NodeRenderer DEFAULT_NODE_RENDERER = new TreeViewNodeRenderer();
 
     public TreeView() {
         this(new ArrayList<Object>());

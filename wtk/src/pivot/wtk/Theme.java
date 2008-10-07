@@ -18,6 +18,7 @@ package pivot.wtk;
 import java.awt.Font;
 import java.lang.reflect.Modifier;
 
+import pivot.collections.ArrayList;
 import pivot.collections.HashMap;
 import pivot.wtk.skin.BorderSkin;
 import pivot.wtk.skin.CardPaneSkin;
@@ -102,41 +103,24 @@ public abstract class Theme {
         Theme.theme = theme;
 
         if (previousTheme != null) {
-            reskin(ApplicationContext.active.getDisplay());
-        }
-    }
+            Component.ComponentDictionary components = Component.getComponents();
+            ArrayList<Integer> componentHandles = new ArrayList<Integer>();
 
-    private static void reskin(Component component) {
-        if (component instanceof Container) {
-            Container container = (Container)component;
-            for (Component childComponent : container) {
-                reskin(childComponent);
+            for (Integer handle : components) {
+                componentHandles.add(handle);
             }
-        }
 
-        Class<? extends Component> componentClass =
-            (Class<? extends Component>)component.getClass();
+            for (Integer handle : componentHandles) {
+                Component component = components.get(handle);
+                Class<? extends Component> componentClass =
+                    (Class<? extends Component>)component.getClass();
 
-        if (theme.componentSkinMap.containsKey(componentClass)
-            && (componentClass.getEnclosingClass() == null
-                || (componentClass.getModifiers() & Modifier.STATIC) == Modifier.STATIC)) {
-            HashMap<String, Object> styles = new HashMap<String, Object>();
-
-            Skin skin = component.getSkin();
-            Class<?> skinClass = skin.getClass();
-            if (skinClass.getPackage() == DEFAULT_SKIN_PACKAGE) {
-                Component.StyleDictionary componentStyles = component.getStyles();
-
-                for (String key : componentStyles) {
-                    styles.put(key, componentStyles.get(key));
+                if (theme.componentSkinMap.containsKey(componentClass)
+                    && (componentClass.getEnclosingClass() == null
+                        || (componentClass.getModifiers() & Modifier.STATIC) == Modifier.STATIC)) {
+                    component.installSkin(componentClass);
                 }
             }
-
-            // Re-install the skin
-            component.installSkin(componentClass);
-
-            // Re-apply the styles
-            component.setStyles(styles);
         }
     }
 }

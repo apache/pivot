@@ -108,7 +108,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         public ScrollButton(Object buttonData) {
             super(buttonData);
 
-            setDataRenderer(new ButtonDataRenderer());
+            setDataRenderer(DEFAULT_DATA_RENDERER);
             setSkin(new ScrollButtonSkin());
         }
 
@@ -215,6 +215,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     private ScrollButton southButton = new ScrollButton(new SouthButtonImage());
     private ScrollButton eastButton = new ScrollButton(new EastButtonImage());
     private ScrollButton westButton = new ScrollButton(new WestButtonImage());
+
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
     public TerraPanoramaSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();

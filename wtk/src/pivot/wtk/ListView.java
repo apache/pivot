@@ -332,6 +332,8 @@ public class ListView extends Component {
     private ListViewSelectionDetailListenerList listViewSelectionDetailListeners =
         new ListViewSelectionDetailListenerList();
 
+    private static final ItemRenderer DEFAULT_ITEM_RENDERER = new ListViewItemRenderer();
+
     /**
      * Creates a list view populated with an empty array list.
      */
@@ -345,7 +347,7 @@ public class ListView extends Component {
      * @param listData
      */
     public ListView(List<?> listData) {
-        setItemRenderer(new ListViewItemRenderer());
+        setItemRenderer(DEFAULT_ITEM_RENDERER);
         setListData(listData);
 
         installSkin(ListView.class);

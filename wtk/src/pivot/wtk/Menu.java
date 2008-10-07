@@ -50,6 +50,8 @@ public class Menu extends Container {
 
         private ItemListenerList itemListeners = new ItemListenerList();
 
+        private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new MenuItemDataRenderer();
+
         public Item() {
             this(null);
         }
@@ -57,7 +59,7 @@ public class Menu extends Container {
         public Item(Object buttonData) {
             super(buttonData);
 
-            setDataRenderer(new MenuItemDataRenderer());
+            setDataRenderer(DEFAULT_DATA_RENDERER);
             installSkin(Item.class);
         }
 

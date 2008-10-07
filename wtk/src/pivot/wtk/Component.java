@@ -24,6 +24,8 @@ import pivot.beans.BeanDictionary;
 import pivot.beans.PropertyNotFoundException;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
+import pivot.collections.HashMap;
+import pivot.collections.HashSet;
 import pivot.collections.Map;
 import pivot.collections.Sequence;
 import pivot.serialization.JSONSerializer;
@@ -44,32 +46,11 @@ import pivot.util.Vote;
  */
 public abstract class Component implements ConstrainedVisual {
     /**
-     * Abstract base class for component "attributes". Attributes are attached
-     * properties that are specific to a particular component type.
-     *
-     * @author gbrown
-     */
-    public static abstract class Attributes {
-        private Component component = null;
-
-        protected Attributes() {
-        }
-
-        public Component getComponent() {
-            return component;
-        }
-
-        private void setComponent(Component component) {
-            this.component = component;
-        }
-    }
-
-    /**
      * Style dictionary implementation.
      *
      * @author gbrown
      */
-    public class StyleDictionary extends BeanDictionary {
+    public final class StyleDictionary extends BeanDictionary {
         public StyleDictionary(pivot.wtk.Skin skin) {
             super(skin, true);
         }
@@ -79,6 +60,7 @@ public abstract class Component implements ConstrainedVisual {
 
             try {
                 previousValue = super.put(key, value);
+                customStyles.add(key);
                 componentListeners.styleUpdated(Component.this, key, previousValue);
             } catch(PropertyNotFoundException exception) {
                 System.out.println("\"" + key + "\" is not a valid style for "
@@ -182,6 +164,59 @@ public abstract class Component implements ConstrainedVisual {
         public PreferredSizeCache(int constraint, int value) {
             this.constraint = constraint;
             this.value = value;
+        }
+    }
+
+    /**
+     * Abstract base class for component "attributes". Attributes are attached
+     * properties that are specific to a particular component type.
+     *
+     * @author gbrown
+     */
+    public static abstract class Attributes {
+        private Component component = null;
+
+        protected Attributes() {
+        }
+
+        public Component getComponent() {
+            return component;
+        }
+
+        private void setComponent(Component component) {
+            this.component = component;
+        }
+    }
+
+    /**
+     * Provides dictionary access to all components by handle.
+     *
+     * @author gbrown
+     */
+    public static class ComponentDictionary implements
+        Dictionary<Integer, Component>, Iterable<Integer> {
+        public Component get(Integer key) {
+            return components.get(key);
+        }
+
+        public Component put(Integer key, Component value) {
+            throw new UnsupportedOperationException();
+        }
+
+        public Component remove(Integer key) {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean containsKey(Integer key) {
+            return components.containsKey(key);
+        }
+
+        public boolean isEmpty() {
+            return components.isEmpty();
+        }
+
+        public Iterator<Integer> iterator() {
+            return new ImmutableIterator<Integer>(components.iterator());
         }
     }
 
@@ -457,7 +492,10 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private final int handle = nextHandle++;
+    /**
+     * The component's handle.
+     */
+    private final Integer handle;
 
     /**
      * The currently installed skin, or null if no skin is installed.
@@ -543,12 +581,17 @@ public abstract class Component implements ConstrainedVisual {
     private StyleDictionary styleDictionary = null;
 
     /**
+     * Custom style keys.
+     */
+    private HashSet<String> customStyles = new HashSet<String>();
+
+    /**
      * Attached properties.
      */
     private Attributes attributes = null;
 
     /**
-     * Event listener lists.
+     * Instance event listener lists.
      */
     private ComponentListenerList componentListeners = new ComponentListenerList();
     private ComponentLayoutListenerList componentLayoutListeners = new ComponentLayoutListenerList();
@@ -561,16 +604,49 @@ public abstract class Component implements ConstrainedVisual {
     private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
     private ComponentDragDropListenerList componentDragDropListeners = new ComponentDragDropListenerList();
 
-    private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
-
     /**
      * The component that currently has the focus.
      */
     private static Component focusedComponent = null;
 
+    /**
+     * The next available component handle.
+     */
     private static int nextHandle = 0;
 
-    public int getHandle() {
+    /**
+     * Static map of all components by handle.
+     */
+    private static HashMap<Integer, Component> components = new HashMap<Integer, Component>(true);
+    private static ComponentDictionary componentDictionary = new ComponentDictionary();
+
+    /**
+     * Class event listener list.
+     */
+    private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
+
+    /**
+     * Creates a new component.
+     */
+    public Component() {
+        handle = nextHandle++;
+        components.put(handle, this);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            System.out.println("Finalizing " + this);
+            components.remove(handle);
+        } finally {
+            super.finalize();
+        }
+    }
+
+    /**
+     * Return's the component's handle.
+     */
+    public Integer getHandle() {
         return handle;
     }
 
@@ -646,6 +722,12 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         if (type == componentClass) {
+            // Cache the values of custom styles
+            HashMap<String, Object> styles = new HashMap<String, Object>();
+            for (String key : customStyles) {
+                styles.put(key, styleDictionary.get(key));
+            }
+
             try {
                 setSkin(skinClass.newInstance());
             } catch(InstantiationException exception) {
@@ -653,6 +735,9 @@ public abstract class Component implements ConstrainedVisual {
             } catch(IllegalAccessException exception) {
                 throw new IllegalArgumentException(exception);
             }
+
+            // Re-apply custom styles
+            setStyles(styles);
         }
     }
 
@@ -2041,6 +2126,13 @@ public abstract class Component implements ConstrainedVisual {
      */
     public static void clearFocus() {
         clearFocus(false);
+    }
+
+    /**
+     * Returns the component dictionary.
+     */
+    public static ComponentDictionary getComponents() {
+        return componentDictionary;
     }
 
     /**

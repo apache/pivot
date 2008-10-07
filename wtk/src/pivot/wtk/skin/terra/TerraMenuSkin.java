@@ -69,7 +69,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
 
     public void uninstall() {
         Menu menu = (Menu)getComponent();
-        menu.getMenuListeners().add(this);
+        menu.getMenuListeners().remove(this);
 
         super.uninstall();
     }

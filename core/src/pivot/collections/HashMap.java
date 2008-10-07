@@ -32,20 +32,30 @@ import pivot.util.ListenerList;
 public class HashMap<K, V> implements Map<K, V>, Serializable {
     public static final long serialVersionUID = 0;
 
-    protected java.util.HashMap<K, V> hashMap = null;
+    protected java.util.Map<K, V> hashMap = null;
 
     private Comparator<K> comparator = null;
     private transient MapListenerList<K, V> mapListeners = new MapListenerList<K, V>();
 
     public HashMap() {
-        hashMap = new java.util.HashMap<K, V>();
+        this(false, null);
+    }
+
+    public HashMap(boolean weak) {
+        this(weak, null);
     }
 
     public HashMap(Map<K, V> map) {
-        hashMap = new java.util.HashMap<K, V>();
+        this(false, map);
+    }
 
-        for (K key : map) {
-            put(key, map.get(key));
+    public HashMap(boolean weak, Map<K, V> map) {
+        hashMap = (weak) ? new java.util.WeakHashMap<K, V>() : new java.util.HashMap<K, V>();
+
+        if (map != null) {
+            for (K key : map) {
+                put(key, map.get(key));
+            }
         }
     }
 

@@ -24,6 +24,12 @@ import pivot.wtk.content.ButtonDataRenderer;
  */
 @ComponentInfo(icon="Checkbox.png")
 public class Checkbox extends Button {
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
+
+    static {
+        DEFAULT_DATA_RENDERER.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+    }
+
     public Checkbox() {
         this(null);
     }
@@ -32,9 +38,7 @@ public class Checkbox extends Button {
         super(buttonData);
         super.setToggleButton(true);
 
-        Button.DataRenderer dataRenderer = new ButtonDataRenderer();
-        dataRenderer.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-        setDataRenderer(dataRenderer);
+        setDataRenderer(DEFAULT_DATA_RENDERER);
 
         installSkin(Checkbox.class);
     }

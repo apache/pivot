@@ -88,6 +88,8 @@ public class CalendarButton extends Button {
     private CalendarButtonSelectionListenerList calendarButtonSelectionListeners =
         new CalendarButtonSelectionListenerList();
 
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
+
     /**
      * Creates a blank calendar button whose calendar is set to the
      * current month and year in the default timezone in the default locale.
@@ -107,7 +109,7 @@ public class CalendarButton extends Button {
     public CalendarButton(Object buttonData) {
         super(buttonData);
 
-        setDataRenderer(new ButtonDataRenderer());
+        setDataRenderer(DEFAULT_DATA_RENDERER);
 
         installSkin(CalendarButton.class);
     }

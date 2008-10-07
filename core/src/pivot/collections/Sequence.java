@@ -415,6 +415,20 @@ public interface Sequence<T> {
      */
     public static class Sort {
         /**
+         * Performs a quicksort on the sequence for the given comparable type.
+         * See {@link #quickSort(Sequence, Comparator)}.
+         */
+        public static <T extends Comparable<? super T>> void quickSort(Sequence<T> sequence) {
+            Comparator<T> comparator = new Comparator<T>() {
+                public int compare(T t1, T t2) {
+                    return t1.compareTo(t2);
+                }
+            };
+
+            quickSort(sequence, comparator);
+        }
+
+        /**
          * Performs a quicksort on the sequence.
          *
          * @param sequence

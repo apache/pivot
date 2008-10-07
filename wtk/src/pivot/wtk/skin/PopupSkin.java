@@ -138,7 +138,7 @@ public class PopupSkin extends WindowSkin implements PopupListener {
     @Override
     public void uninstall() {
         Popup popup = (Popup)getComponent();
-        popup.getPopupListeners().add(this);
+        popup.getPopupListeners().remove(this);
 
         super.uninstall();
     }

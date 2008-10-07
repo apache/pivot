@@ -79,6 +79,9 @@ public class ListButton extends Button {
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
     private ListButtonSelectionListenerList listButtonSelectionListeners = new ListButtonSelectionListenerList();
 
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ListButtonDataRenderer();
+    private static final ListView.ItemRenderer DEFAULT_ITEM_RENDERER = new ListViewItemRenderer();
+
     /**
      * Creates an empty list button.
      */
@@ -112,8 +115,8 @@ public class ListButton extends Button {
     public ListButton(Object buttonData, List<?> listData) {
         super(buttonData);
 
-        setDataRenderer(new ListButtonDataRenderer());
-        setItemRenderer(new ListViewItemRenderer());
+        setDataRenderer(DEFAULT_DATA_RENDERER);
+        setItemRenderer(DEFAULT_ITEM_RENDERER);
         setListData(listData);
 
         installSkin(ListButton.class);

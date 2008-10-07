@@ -50,6 +50,8 @@ public class MenuBar extends Container {
 
         private ItemListenerList itemListeners = new ItemListenerList();
 
+        private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new MenuBarItemDataRenderer();
+
         public Item() {
             this(null);
         }
@@ -57,7 +59,7 @@ public class MenuBar extends Container {
         public Item(Object buttonData) {
             super(buttonData);
 
-            setDataRenderer(new MenuBarItemDataRenderer());
+            setDataRenderer(DEFAULT_DATA_RENDERER);
             installSkin(Item.class);
         }
 

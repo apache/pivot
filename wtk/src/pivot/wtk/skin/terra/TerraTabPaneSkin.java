@@ -73,7 +73,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             super(buttonData);
 
             super.setToggleButton(true);
-            setDataRenderer(new ButtonDataRenderer());
+            setDataRenderer(DEFAULT_DATA_RENDERER);
 
             setSkin(new TabButtonSkin());
         }
@@ -350,6 +350,8 @@ public class TerraTabPaneSkin extends ContainerSkin
     private Color buttonBevelColor;
     private Color pressedButtonBevelColor;
     private Insets buttonPadding;
+
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
     public TerraTabPaneSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();

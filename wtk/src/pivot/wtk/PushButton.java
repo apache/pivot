@@ -24,6 +24,8 @@ import pivot.wtk.content.ButtonDataRenderer;
  */
 @ComponentInfo(icon="PushButton.png")
 public class PushButton extends Button {
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
+
     public PushButton() {
         this(false, null);
     }
@@ -40,7 +42,7 @@ public class PushButton extends Button {
         super(buttonData);
 
         setToggleButton(toggleButton);
-        setDataRenderer(new ButtonDataRenderer());
+        setDataRenderer(DEFAULT_DATA_RENDERER);
 
         installSkin(PushButton.class);
     }

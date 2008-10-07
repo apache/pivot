@@ -52,8 +52,10 @@ public class MenuButton extends Button {
 
     private MenuButtonListenerList menuButtonListeners = new MenuButtonListenerList();
 
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
+
     public MenuButton() {
-        setDataRenderer(new ButtonDataRenderer());
+        setDataRenderer(DEFAULT_DATA_RENDERER);
         installSkin(MenuButton.class);
     }
 
