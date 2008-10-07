@@ -29,7 +29,6 @@ import pivot.wtk.skin.PopupSkin;
 import pivot.wtk.skin.ScrollPaneSkin;
 import pivot.wtk.skin.SeparatorSkin;
 import pivot.wtk.skin.StackPaneSkin;
-import pivot.wtk.skin.SwingAdapterSkin;
 import pivot.wtk.skin.TablePaneSkin;
 import pivot.wtk.skin.WindowSkin;
 
@@ -67,7 +66,6 @@ public abstract class Theme {
         componentSkinMap.put(ScrollPane.class, ScrollPaneSkin.class);
         componentSkinMap.put(Separator.class, SeparatorSkin.class);
         componentSkinMap.put(StackPane.class, StackPaneSkin.class);
-        componentSkinMap.put(SwingAdapter.class, SwingAdapterSkin.class);
         componentSkinMap.put(TablePane.class, TablePaneSkin.class);
         componentSkinMap.put(Window.class, WindowSkin.class);
     }
