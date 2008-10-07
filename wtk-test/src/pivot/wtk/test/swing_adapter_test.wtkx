@@ -22,16 +22,23 @@ limitations under the License.
     xmlns:swing="javax.swing"
     xmlns="pivot.wtk">
     <content>
-        <Form>
-            <sections>
-                <Form.Section>
-                    <SwingAdapter Form.name="Greeting">
-                        <swingComponent>
-                            <swing:JTextArea rows="5" columns="80" text="Enter your greeting here..." />
-                        </swingComponent>
-                    </SwingAdapter>
-                </Form.Section>
-            </sections>
-        </Form>
+        <TabPane selectedIndex="0">
+            <tabs>
+                <SwingAdapter TabPane.name="JTextArea">
+                    <swingComponent>
+                        <swing:JScrollPane doubleBuffered="true">
+                            <viewport>
+                                <swing:JViewport>
+                                    <view>
+                                        <swing:JTextArea lineWrap="true" text="Enter your greeting here..." />
+                                    </view>
+                                </swing:JViewport>
+                            </viewport>
+                        </swing:JScrollPane>
+                    </swingComponent>
+                </SwingAdapter>
+                <FlowPane TabPane.name="Empty" />
+            </tabs>
+        </TabPane>
     </content>
 </Frame>
