@@ -82,7 +82,7 @@ public abstract class ApplicationContext {
      *
      * @author gbrown
      */
-    protected class DisplayHost extends java.awt.Component {
+    protected class DisplayHost extends java.awt.Container {
         public static final long serialVersionUID = 0;
 
         private Component focusedComponent = null;
