@@ -22,23 +22,28 @@ limitations under the License.
     xmlns:swing="javax.swing"
     xmlns="pivot.wtk">
     <content>
-        <TabPane selectedIndex="0">
-            <tabs>
-                <SwingAdapter TabPane.name="JTextArea">
-                    <swingComponent>
-                        <swing:JScrollPane doubleBuffered="true">
-                            <viewport>
-                                <swing:JViewport>
-                                    <view>
-                                        <swing:JTextArea lineWrap="true" text="Enter your greeting here..." />
-                                    </view>
-                                </swing:JViewport>
-                            </viewport>
-                        </swing:JScrollPane>
-                    </swingComponent>
-                </SwingAdapter>
-                <FlowPane TabPane.name="Empty" />
-            </tabs>
-        </TabPane>
+        <FlowPane orientation="vertical"
+            styles="{horizontalAlignment:'justify', verticalAlignment:'justify'}">
+            <TabPane selectedIndex="0">
+                <tabs>
+                    <SwingAdapter TabPane.name="JTextArea">
+                        <swingComponent>
+                            <swing:JScrollPane doubleBuffered="true">
+                                <viewport>
+                                    <swing:JViewport>
+                                        <view>
+                                            <swing:JTextArea lineWrap="true"
+                                                text="Enter your greeting here..." />
+                                        </view>
+                                    </swing:JViewport>
+                                </viewport>
+                            </swing:JScrollPane>
+                        </swingComponent>
+                    </SwingAdapter>
+                    <FlowPane TabPane.name="Empty" />
+                </tabs>
+            </TabPane>
+            <TextInput text="Does this compete for focus?" />
+        </FlowPane>
     </content>
 </Frame>

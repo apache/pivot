@@ -32,21 +32,25 @@ public final class Display extends Container {
 
     private ApplicationContext applicationContext = null;
 
-	protected Display(ApplicationContext applicationContext) {
-	    this.applicationContext = applicationContext;
+    protected Display(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
 
-		super.setSkin(new DisplaySkin());
-	}
+        super.setSkin(new DisplaySkin());
+    }
 
-	@Override
-	protected void setSkin(Skin skin) {
-	    throw new UnsupportedOperationException("Can't replace Display skin.");
-	}
+    protected ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
 
-	@Override
-	public void setLocation(int x, int y) {
-	    throw new UnsupportedOperationException("Can't change the location of the display.");
-	}
+    @Override
+    protected void setSkin(Skin skin) {
+        throw new UnsupportedOperationException("Can't replace Display skin.");
+    }
+
+    @Override
+    public void setLocation(int x, int y) {
+        throw new UnsupportedOperationException("Can't change the location of the display.");
+    }
 
     @Override
     public void invalidate() {
@@ -72,7 +76,7 @@ public final class Display extends Container {
     public void insert(Component component, int index) {
         if (!(component instanceof Window)) {
             throw new IllegalArgumentException("component must be an instance "
-                + "of " + Window.class);
+                                               + "of " + Window.class);
         }
 
         super.insert(component, index);
