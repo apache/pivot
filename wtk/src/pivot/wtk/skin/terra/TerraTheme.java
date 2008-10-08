@@ -30,7 +30,6 @@ import pivot.wtk.Dialog;
 import pivot.wtk.Expander;
 import pivot.wtk.Form;
 import pivot.wtk.Frame;
-import pivot.wtk.Heading;
 import pivot.wtk.Label;
 import pivot.wtk.LinkButton;
 import pivot.wtk.ListButton;
@@ -92,7 +91,6 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Expander.class, TerraExpanderSkin.class);
         componentSkinMap.put(Form.class, TerraFormSkin.class);
         componentSkinMap.put(Frame.class, TerraFrameSkin.class);
-        componentSkinMap.put(Heading.class, TerraHeadingSkin.class);
         componentSkinMap.put(Label.class, TerraLabelSkin.class);
         componentSkinMap.put(LinkButton.class, TerraLinkButtonSkin.class);
         componentSkinMap.put(ListButton.class, TerraListButtonSkin.class);
@@ -152,16 +150,6 @@ public final class TerraTheme extends Theme {
     public Font getFont() {
         // TODO Cache the decoded font?
         return Font.decode(JSONSerializer.getString(resources, "font"));
-    }
-
-    public Font getLargeFont() {
-        // TODO Cache the decoded font?
-        return Font.decode(JSONSerializer.getString(resources, "largeFont"));
-    }
-
-    public Font getSmallFont() {
-        // TODO Cache the decoded font?
-        return Font.decode(JSONSerializer.getString(resources, "smallFont"));
     }
 
     public Color getColor(int index) {

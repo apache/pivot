@@ -30,4 +30,19 @@ public class TerraBorderSkin extends BorderSkin {
         setColor(theme.getColor(2));
         setTitleColor(theme.getColor(7));
     }
+
+    public void setColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColor(theme.getColor(color));
+    }
+
+    public void setTitleColor(int titleColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setTitleColor(theme.getColor(titleColor));
+    }
+
+    public void setBackgroundColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(color));
+    }
 }

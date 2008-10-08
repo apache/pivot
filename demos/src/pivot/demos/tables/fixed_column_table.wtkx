@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{color:'#cccac2', padding:0}"
+<Border styles="{color:4, padding:0}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <content>
         <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
             <view>
                 <TableView wtkx:id="primaryTableView" selectMode="single"
                     styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
-                        selectionBackgroundColor:'#14538B', inactiveSelectionBackgroundColor:'#14538B',
+                        selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
                         showHighlight:false}">
                     <columns>
                         <TableView.Column name="colA" headerData="Column A"/>
@@ -47,7 +47,7 @@ limitations under the License.
             <rowHeader>
                 <TableView wtkx:id="fixedTableView" tableData="$tableData" selectMode="single"
                     styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
-                        selectionBackgroundColor:'#14538B', inactiveSelectionBackgroundColor:'#14538B',
+                        selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
                         showHighlight:false, includeTrailingVerticalGridLine:true}">
                     <columns>
                         <TableView.Column name="name" headerData="Name"/>

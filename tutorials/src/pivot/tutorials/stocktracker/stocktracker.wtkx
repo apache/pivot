@@ -32,7 +32,7 @@
         </TablePane.Row>
 
         <TablePane.Row height="1*">
-            <Border styles="{padding:0, color:'#cccac2'}">
+            <Border styles="{padding:0, color:4}">
                 <content>
                     <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
                         verticalScrollBarPolicy="fillToCapacity">
@@ -65,7 +65,7 @@
                 </content>
             </Border>
 
-            <Border styles="{padding:6, color:'#cccac2'}">
+            <Border styles="{padding:6, color:4}">
                 <content>
                     <wtkx:include namespace="detail" src="stocktracker.detail.wtkx" />
                 </content>

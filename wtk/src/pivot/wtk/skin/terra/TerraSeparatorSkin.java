@@ -29,4 +29,14 @@ public class TerraSeparatorSkin extends SeparatorSkin {
         setColor(theme.getColor(2));
         setHeadingColor(theme.getColor(7));
     }
+
+    public void setColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColor(theme.getColor(color));
+    }
+
+    public void setHeadingColor(int headingColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setHeadingColor(theme.getColor(headingColor));
+    }
 }

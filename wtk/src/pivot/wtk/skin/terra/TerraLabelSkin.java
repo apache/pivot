@@ -28,4 +28,9 @@ public class TerraLabelSkin extends LabelSkin {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setColor(theme.getColor(0));
     }
+
+    public void setColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColor(theme.getColor(color));
+    }
 }

@@ -1,6 +1,4 @@
 {   font: "Verdana 11",
-    largeFont: "Verdana 12",
-    smallFont: "Verdana 9",
 
     colors: [
         "#000000",

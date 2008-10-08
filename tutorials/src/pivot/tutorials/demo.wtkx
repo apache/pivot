@@ -15,62 +15,66 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{padding:0}"
+<Border styles="{backgroundColor:4, thickness:0, padding:8}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
-	<content>
-	    <ScrollPane>
-	        <view>
-	            <FlowPane orientation="vertical" styles="{padding:6}">
-	                <Rollup expanded="true">
-	                    <Heading text="Buttons"/>
-	                    <wtkx:include namespace="buttons" src="buttons.wtkx"/>
-	                </Rollup>
-	                <Rollup>
-	                    <Heading text="Lists"/>
-	                    <wtkx:include namespace="lists" src="lists.wtkx"/>
-	                </Rollup>
-	                <Rollup>
-	                    <Heading text="Text"/>
-	                    <wtkx:include namespace="text" src="text.wtkx"/>
-	                </Rollup>
-	                <Rollup>
-	                    <Heading text="Navigation"/>
-	                    <wtkx:include namespace="navigation" src="navigation.wtkx"/>
-	                </Rollup>
-	                <Rollup>
-	                    <Heading text="Splitters"/>
-	                    <wtkx:include namespace="splitters" src="splitters.wtkx"/>
-	                </Rollup>
-	                <Rollup>
-	                    <Heading text="Menus"/>
-	                    <wtkx:include namespace="menus" src="menus.wtkx"/>
-	                </Rollup>
-	                <Rollup>
-	                    <Heading text="Meters"/>
-	                    <wtkx:include namespace="meters" src="meters.wtkx"/>
-	                </Rollup>
-	                <Rollup>
-	                    <Heading text="Spinners"/>
-	                    <wtkx:include namespace="spinners" src="spinners.wtkx"/>
-	                </Rollup>
-	                <Rollup>
-	                    <Heading text="Tables"/>
-	                    <wtkx:include namespace="tables" src="tables.wtkx"/>
-	                </Rollup>
-	                <Rollup>
-	                    <Heading text="Trees"/>
-	                    <wtkx:include namespace="trees" src="trees.wtkx"/>
-	                </Rollup>
-	                <Rollup>
-	                    <Heading text="Drag &amp; Drop"/>
-	                    <wtkx:include namespace="dragdrop" src="dragdrop.wtkx"/>
-	                </Rollup>
-	                <Rollup>
-	                    <Heading text="Alerts &amp; Prompts"/>
-	                    <wtkx:include namespace="alerts" src="alerts.wtkx"/>
-	                </Rollup>
-	            </FlowPane>
-	        </view>
-	    </ScrollPane>
-	</content>
+    <content>
+        <Border styles="{padding:0}">
+            <content>
+                <ScrollPane styles="{backgroundColor:6}">
+                    <view>
+                        <FlowPane orientation="vertical" styles="{padding:6}">
+                            <Rollup expanded="true">
+                                <Label text="Buttons" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="buttons" src="buttons.wtkx"/>
+                            </Rollup>
+                            <Rollup>
+                                <Label text="Lists" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="lists" src="lists.wtkx"/>
+                            </Rollup>
+                            <Rollup>
+                                <Label text="Text" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="text" src="text.wtkx"/>
+                            </Rollup>
+                            <Rollup>
+                                <Label text="Navigation" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="navigation" src="navigation.wtkx"/>
+                            </Rollup>
+                            <Rollup>
+                                <Label text="Splitters" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="splitters" src="splitters.wtkx"/>
+                            </Rollup>
+                            <Rollup>
+                                <Label text="Menus" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="menus" src="menus.wtkx"/>
+                            </Rollup>
+                            <Rollup>
+                                <Label text="Meters" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="meters" src="meters.wtkx"/>
+                            </Rollup>
+                            <Rollup>
+                                <Label text="Spinners" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="spinners" src="spinners.wtkx"/>
+                            </Rollup>
+                            <Rollup>
+                                <Label text="Tables" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="tables" src="tables.wtkx"/>
+                            </Rollup>
+                            <Rollup>
+                                <Label text="Trees" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="trees" src="trees.wtkx"/>
+                            </Rollup>
+                            <Rollup>
+                                <Label text="Drag &amp; Drop" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="dragdrop" src="dragdrop.wtkx"/>
+                            </Rollup>
+                            <Rollup>
+                                <Label text="Alerts &amp; Prompts" styles="{fontBold:true, fontSize:12, color:7}"/>
+                                <wtkx:include namespace="alerts" src="alerts.wtkx"/>
+                            </Rollup>
+                        </FlowPane>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
+    </content>
 </Border>
