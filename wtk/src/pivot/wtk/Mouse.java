@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.wtk.ApplicationContext.DisplayHost;
+
 /**
  * Class representing the system mouse.
  *
@@ -104,7 +106,9 @@ public final class Mouse {
         }
 
         if (Mouse.cursor != cursor) {
-            if (ApplicationContext.active != null) {
+            DisplayHost activeDisplayHost = ApplicationContext.getActiveDisplayHost();
+
+            if (activeDisplayHost != null) {
                 int cursorID = -1;
 
                 switch (cursor) {
@@ -185,10 +189,9 @@ public final class Mouse {
                     }
                 }
 
-                ApplicationContext.DisplayHost displayHost = ApplicationContext.active.getDisplayHost();
-                displayHost.setCursor(new java.awt.Cursor(cursorID));
+                activeDisplayHost.setCursor(new java.awt.Cursor(cursorID));
             } else {
-                System.out.println("No active application context.");
+                System.out.println("No active display host.");
             }
 
             Mouse.cursor = cursor;

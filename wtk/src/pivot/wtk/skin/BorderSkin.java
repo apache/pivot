@@ -15,7 +15,6 @@
  */
 package pivot.wtk.skin;
 
-import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -216,15 +215,7 @@ public class BorderSkin extends ContainerSkin
 
         // Draw the background
         Color backgroundColor = getBackgroundColor();
-        float backgroundOpacity = getBackgroundOpacity();
-
-        if (backgroundColor != null
-            && backgroundOpacity > 0.0f) {
-            if (backgroundOpacity < 1.0f) {
-                graphics.setComposite(AlphaComposite.getInstance
-                    (AlphaComposite.SRC_OVER, backgroundOpacity));
-            }
-
+        if (backgroundColor != null) {
             graphics.setPaint(backgroundColor);
             graphics.fillRoundRect(x, y, width, height, cornerRadius, cornerRadius);
         }

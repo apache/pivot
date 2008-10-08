@@ -152,9 +152,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         private class DestroyCallback implements Runnable {
             public void run() {
-                if (ApplicationContext.active == applicationContext) {
-                    ApplicationContext.active = null;
-                }
+                // No-op
             }
         }
 

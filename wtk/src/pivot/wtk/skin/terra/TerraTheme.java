@@ -124,8 +124,8 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Tooltip.class, TerraTooltipSkin.class);
         componentSkinMap.put(TreeView.class, TerraTreeViewSkin.class);
 
-        componentSkinMap.put(TerraFrameSkin.FrameButton.class, TerraFrameSkin.FrameButtonSkin.class);
         componentSkinMap.put(TerraExpanderSkin.ShadeButton.class, TerraExpanderSkin.ShadeButtonSkin.class);
+        componentSkinMap.put(TerraFrameSkin.FrameButton.class, TerraFrameSkin.FrameButtonSkin.class);
         componentSkinMap.put(TerraRollupSkin.RollupButton.class, TerraRollupSkin.RollupButtonSkin.class);
         componentSkinMap.put(TerraScrollBarSkin.ScrollButton.class, TerraScrollBarSkin.ScrollButtonSkin.class);
         componentSkinMap.put(TerraScrollBarSkin.ScrollHandle.class, TerraScrollBarSkin.ScrollHandleSkin.class);

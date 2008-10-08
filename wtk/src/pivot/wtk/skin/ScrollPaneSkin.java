@@ -52,18 +52,12 @@ public class ScrollPaneSkin extends ContainerSkin
 
     private static final int DEFAULT_HORIZONTAL_INCREMENT = 10;
     private static final int DEFAULT_VERTICAL_INCREMENT = 10;
-    private static final float DEFAULT_SCROLL_BAR_OPACITY = 0.75f;
 
     public ScrollPaneSkin() {
         super();
 
         horizontalScrollBar.setUnitIncrement(DEFAULT_HORIZONTAL_INCREMENT);
         verticalScrollBar.setUnitIncrement(DEFAULT_VERTICAL_INCREMENT);
-
-        horizontalScrollBar.getStyles().put("backgroundOpacity",
-            DEFAULT_SCROLL_BAR_OPACITY);
-        verticalScrollBar.getStyles().put("backgroundOpacity",
-            DEFAULT_SCROLL_BAR_OPACITY);
     }
 
     @Override
@@ -826,23 +820,6 @@ public class ScrollPaneSkin extends ContainerSkin
 
     public void setVerticalReveal(int verticalReveal) {
         this.verticalReveal = verticalReveal;
-    }
-
-    public float getScrollBarOpacity() {
-        return (Float)horizontalScrollBar.getStyles().get("backgroundOpacity");
-    }
-
-    public void setScrollBarOpacity(float scrollBarOpacity) {
-        horizontalScrollBar.getStyles().put("backgroundOpacity", scrollBarOpacity);
-        verticalScrollBar.getStyles().put("backgroundOpacity", scrollBarOpacity);
-    }
-
-    public void setScrollBarOpacity(Number scrollBarOpacity) {
-        if (scrollBarOpacity == null) {
-            throw new IllegalArgumentException("scrollBarOpacity is null.");
-        }
-
-        setScrollBarOpacity(scrollBarOpacity.floatValue());
     }
 
     // Viewport.Skin methods

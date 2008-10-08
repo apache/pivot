@@ -15,7 +15,6 @@
  */
 package pivot.wtk.skin;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -118,9 +117,7 @@ public abstract class ContainerSkin extends ComponentSkin
         }
     }
 
-    // Style properties
     private Color backgroundColor = null;
-    private float backgroundOpacity = 1.0f;
 
     @Override
     public void install(Component component) {
@@ -156,13 +153,7 @@ public abstract class ContainerSkin extends ComponentSkin
     }
 
     public void paint(Graphics2D graphics) {
-        if (backgroundColor != null
-            && backgroundOpacity > 0.0f) {
-            if (backgroundOpacity < 1.0f) {
-                graphics.setComposite(AlphaComposite.getInstance
-                    (AlphaComposite.SRC_OVER, backgroundOpacity));
-            }
-
+        if (backgroundColor != null) {
             graphics.setPaint(backgroundColor);
             graphics.fillRect(0, 0, getWidth(), getHeight());
         }
@@ -192,23 +183,6 @@ public abstract class ContainerSkin extends ComponentSkin
         }
 
         setBackgroundColor(Color.decode(backgroundColor));
-    }
-
-    public float getBackgroundOpacity() {
-        return backgroundOpacity;
-    }
-
-    public void setBackgroundOpacity(float backgroundOpacity) {
-        this.backgroundOpacity = backgroundOpacity;
-        repaintComponent();
-    }
-
-    public final void setBackgroundOpacity(Number backgroundOpacity) {
-        if (backgroundOpacity == null) {
-            throw new IllegalArgumentException("backgroundOpacity is null");
-        }
-
-        setBackgroundOpacity(backgroundOpacity.floatValue());
     }
 
     // Container events

@@ -77,11 +77,6 @@ public final class DragDropManager {
         return dragHandler.getSupportedDropActions();
     }
 
-    public static DragDropManager getCurrent() {
-        return (ApplicationContext.active == null) ?
-            null : ApplicationContext.active.getDragDropManager();
-    }
-
     public void paint(Graphics2D graphics) {
         if (isActive()) {
             Visual representation = getRepresentation();

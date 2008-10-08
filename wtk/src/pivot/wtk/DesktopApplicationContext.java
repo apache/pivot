@@ -196,7 +196,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Create the application context
         applicationContext = new DesktopApplicationContext();
-        ApplicationContext.active = applicationContext;
 
         // Load the application
         if (applicationClassName == null) {

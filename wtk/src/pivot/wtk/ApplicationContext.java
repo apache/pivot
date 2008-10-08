@@ -324,13 +324,13 @@ public abstract class ApplicationContext {
 
                 case MouseEvent.MOUSE_ENTERED: {
                     display.mouseOver();
-                    active = ApplicationContext.this;
+                    activeDisplayHost = this;
                     break;
                 }
 
                 case MouseEvent.MOUSE_EXITED: {
                     display.mouseOut();
-                    active = ApplicationContext.this;
+                    activeDisplayHost = null;
                     break;
                 }
             }
@@ -519,7 +519,7 @@ public abstract class ApplicationContext {
     private DisplayHost displayHost = null;
     private DragDropManager dragDropManager = null;
 
-    protected static ApplicationContext active = null;
+    private static DisplayHost activeDisplayHost = null;
 
     private static HashMap<URL, Object> resourceCache = new HashMap<URL, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
@@ -781,5 +781,9 @@ public abstract class ApplicationContext {
         }
 
         return cursorBlinkRate;
+    }
+
+    protected static DisplayHost getActiveDisplayHost() {
+        return activeDisplayHost;
     }
 }
