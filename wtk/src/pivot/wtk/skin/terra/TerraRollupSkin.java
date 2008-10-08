@@ -24,7 +24,6 @@ import java.awt.geom.RoundRectangle2D;
 
 import pivot.collections.Sequence;
 import pivot.util.Vote;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
@@ -40,7 +39,7 @@ import pivot.wtk.Theme;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.effects.easing.Easing;
-import pivot.wtk.effects.easing.Quartic;
+import pivot.wtk.effects.easing.Quadratic;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
@@ -63,7 +62,7 @@ public class TerraRollupSkin extends ContainerSkin
         private int originalPreferredHeight;
         private int height;
 
-        private Easing easing = new Quartic();
+        private Easing easing = new Quadratic();
 
         public ExpansionTransition(int height1, int height2, boolean reverse, int duration, int rate) {
             super(duration, rate, false);
