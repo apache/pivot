@@ -25,15 +25,20 @@ import java.awt.geom.Line2D;
 
 import pivot.collections.Dictionary;
 import pivot.collections.List;
+import pivot.util.Vote;
 import pivot.wtk.Border;
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Display;
 import pivot.wtk.Insets;
 import pivot.wtk.ListButton;
-import pivot.wtk.ListView;
 import pivot.wtk.Panorama;
 import pivot.wtk.Bounds;
 import pivot.wtk.Theme;
+import pivot.wtk.Window;
+import pivot.wtk.WindowStateListener;
+import pivot.wtk.effects.Transition;
+import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.ListButtonSkin;
 
 /**
@@ -42,9 +47,54 @@ import pivot.wtk.skin.ListButtonSkin;
  * @author gbrown
  */
 public class TerraListButtonSkin extends ListButtonSkin {
-    protected ListView listView = null;
-    private Panorama listViewPanorama = null;
-    private Border listViewBorder = null;
+    private Panorama listViewPanorama;
+    private Border listViewBorder;
+
+    private WindowStateListener listViewPopupStateListener = new WindowStateListener() {
+        public Vote previewWindowOpen(Window window, Display display) {
+            return Vote.APPROVE;
+        }
+
+        public void windowOpenVetoed(Window window, Vote reason) {
+            // No-op
+        }
+
+        public void windowOpened(Window window) {
+            // No-op
+        }
+
+        public Vote previewWindowClose(final Window window) {
+            Vote vote = Vote.APPROVE;
+
+            if (closeTransition == null) {
+                closeTransition = new FadeTransition(window,
+                    CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE);
+
+                closeTransition.start(new TransitionListener() {
+                    public void transitionCompleted(Transition transition) {
+                        window.close();
+                    }
+                });
+
+                vote = Vote.DEFER;
+            } else {
+                vote = (closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+            }
+
+            return vote;
+        }
+
+        public void windowCloseVetoed(Window window, Vote reason) {
+            if (reason == Vote.DENY
+                && closeTransition != null) {
+                closeTransition.stop();
+            }
+        }
+
+        public void windowClosed(Window window, Display display) {
+            closeTransition = null;
+        }
+    };
 
     private Font font;
     private Color color;
@@ -58,7 +108,12 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private Color disabledBevelColor;
     private Insets padding;
 
+    private Transition closeTransition = null;
+
     private static final int TRIGGER_WIDTH = 14;
+
+    private static final int CLOSE_TRANSITION_DURATION = 150;
+    private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraListButtonSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -74,8 +129,9 @@ public class TerraListButtonSkin extends ListButtonSkin {
         disabledBevelColor = theme.getColor(1);
         padding = new Insets(3);
 
-        // Create the list view, panorama, and border
-        listView = new ListView();
+        listViewPopup.getWindowStateListeners().add(listViewPopupStateListener);
+
+        // Create the panorama and border
         listViewPanorama = new Panorama(listView);
         listViewPanorama.getStyles().put("buttonBackgroundColor",
             listView.getStyles().get("backgroundColor"));
@@ -230,10 +286,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
         triggerGraphics.fill(triggerIconShape);
 
         triggerGraphics.dispose();
-    }
-
-    public ListView getListView() {
-        return listView;
     }
 
     public Font getFont() {

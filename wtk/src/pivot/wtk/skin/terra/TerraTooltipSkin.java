@@ -152,18 +152,16 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     }
 
     @Override
-    public Vote previewWindowClose(Window window) {
+    public Vote previewWindowClose(final Window window) {
         Vote vote = Vote.APPROVE;
 
         if (closeTransition == null) {
-            final Tooltip tooltip = (Tooltip)getComponent();
-
-            closeTransition = new FadeTransition(tooltip,
+            closeTransition = new FadeTransition(window,
                 CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE);
 
             closeTransition.start(new TransitionListener() {
                 public void transitionCompleted(Transition transition) {
-                    tooltip.close();
+                    window.close();
                 }
             });
 

@@ -50,9 +50,10 @@ import pivot.wtk.Window;
  */
 public abstract class ListButtonSkin extends ButtonSkin
     implements ListButtonListener, ListButtonSelectionListener {
-    public abstract ListView getListView();
+    protected ListView listView;
+    protected Popup listViewPopup;
 
-    private class ListViewPopupKeyHandler implements ComponentKeyListener {
+    private ComponentKeyListener listViewPopupKeyListener = new ComponentKeyListener() {
         public void keyTyped(Component component, char character) {
             // No-op
         }
@@ -68,7 +69,6 @@ public abstract class ListButtonSkin extends ButtonSkin
                 case Keyboard.KeyCode.TAB:
                 case Keyboard.KeyCode.ENTER: {
                     ListButton listButton = (ListButton)getComponent();
-                    ListView listView = getListView();
 
                     int index = listView.getSelectedIndex();
 
@@ -95,9 +95,9 @@ public abstract class ListButtonSkin extends ButtonSkin
         public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             return false;
         }
-    }
+    };
 
-    private class ListViewPopupMouseListener implements ComponentMouseButtonListener {
+    private ComponentMouseButtonListener listViewPopupMouseListener = new ComponentMouseButtonListener() {
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             return false;
         }
@@ -108,7 +108,6 @@ public abstract class ListButtonSkin extends ButtonSkin
 
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             ListButton listButton = (ListButton)getComponent();
-            ListView listView = getListView();
 
             int index = listView.getSelectedIndex();
 
@@ -118,15 +117,16 @@ public abstract class ListButtonSkin extends ButtonSkin
             listViewPopup.close();
             getComponent().requestFocus();
         }
-    }
+    };
 
-    protected Popup listViewPopup = null;
     protected boolean pressed = false;
 
     public ListButtonSkin() {
+        listView = new ListView();
+
         listViewPopup = new Popup();
-        listViewPopup.getComponentKeyListeners().add(new ListViewPopupKeyHandler());
-        listViewPopup.getComponentMouseButtonListeners().add(new ListViewPopupMouseListener());
+        listViewPopup.getComponentMouseButtonListeners().add(listViewPopupMouseListener);
+        listViewPopup.getComponentKeyListeners().add(listViewPopupKeyListener);
     }
 
     @Override
@@ -137,7 +137,6 @@ public abstract class ListButtonSkin extends ButtonSkin
         listButton.getListButtonListeners().add(this);
         listButton.getListButtonSelectionListeners().add(this);
 
-        ListView listView = getListView();
         listView.setListData(listButton.getListData());
         listView.setItemRenderer(listButton.getItemRenderer());
     }
@@ -150,7 +149,6 @@ public abstract class ListButtonSkin extends ButtonSkin
         listButton.getListButtonListeners().remove(this);
         listButton.getListButtonSelectionListeners().remove(this);
 
-        ListView listView = getListView();
         listView.setListData(new ArrayList<Object>());
 
         super.uninstall();
@@ -210,7 +208,6 @@ public abstract class ListButtonSkin extends ButtonSkin
     @Override
     public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         ListButton listButton = (ListButton)getComponent();
-        ListView listView = getListView();
 
         listButton.requestFocus();
         listButton.press();
@@ -276,7 +273,6 @@ public abstract class ListButtonSkin extends ButtonSkin
             listViewPopup.close();
         } else {
             ListButton listButton = (ListButton)button;
-            ListView listView = getListView();
 
             Component content = listViewPopup.getContent();
 
@@ -331,12 +327,10 @@ public abstract class ListButtonSkin extends ButtonSkin
 
     // List button events
     public void listDataChanged(ListButton listButton, List<?> previousListData) {
-        ListView listView = getListView();
         listView.setListData(listButton.getListData());
     }
 
     public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer) {
-        ListView listView = getListView();
         listView.setItemRenderer(listButton.getItemRenderer());
     }
 
@@ -352,7 +346,6 @@ public abstract class ListButtonSkin extends ButtonSkin
         Object buttonData = (selectedIndex == -1) ? null : listButton.getListData().get(selectedIndex);
         listButton.setButtonData(buttonData);
 
-        ListView listView = getListView();
         listView.setSelectedIndex(listButton.getSelectedIndex());
     }
 }

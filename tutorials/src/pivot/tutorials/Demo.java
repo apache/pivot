@@ -304,6 +304,8 @@ public class Demo implements Application {
     private Window window = null;
 
     public void startup(final Display display, Dictionary<String, String> properties) throws Exception {
+        // pivot.wtk.Theme.setTheme(new pivot.wtk.skin.terra.TerraTheme("test"));
+
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
 
@@ -398,8 +400,6 @@ public class Demo implements Application {
         window.setContent(content);
 
         window.open(display);
-
-        // pivot.wtk.Theme.setTheme(new pivot.wtk.skin.terra.TerraTheme("test"));
     }
 
     @SuppressWarnings("unchecked")

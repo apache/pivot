@@ -48,7 +48,7 @@ public class TerraMenuPopupSkin extends PopupSkin
     private DropShadowDecorator dropShadowDecorator = null;
     private Transition closeTransition = null;
 
-    private static final int CLOSE_TRANSITION_DURATION = 100;
+    private static final int CLOSE_TRANSITION_DURATION = 150;
     private static final int CLOSE_TRANSITION_RATE = 30;
 
     private MenuItemSelectionListener menuItemPressListener = new MenuItemSelectionListener() {
