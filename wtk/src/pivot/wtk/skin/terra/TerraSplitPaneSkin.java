@@ -15,7 +15,6 @@
  */
 package pivot.wtk.skin.terra;
 
-import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -347,12 +346,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
 
         public void paint(Graphics2D graphics) {
             graphics.setStroke(new BasicStroke());
-            graphics.setPaint(Color.BLACK);
-
-            float opacity = 0.25f;
-            graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                opacity));
-
+            graphics.setPaint(new Color(0, 0, 0, 64));
             graphics.fillRect(0, 0, getWidth(), getHeight());
         }
     }

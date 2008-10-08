@@ -17,6 +17,7 @@ package pivot.wtk.skin;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Graphics2D;
 
 import pivot.wtk.Component;
@@ -131,7 +132,21 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
             Graphics2D imageGraphics = (Graphics2D)graphics.create();
             imageGraphics.translate(imageX, imageY);
             imageGraphics.scale(scaleX, scaleY);
-            imageGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+
+            // Apply an alpha composite if the opacity value is less than
+            // the current alpha
+            float alpha = 1.0f;
+
+            Composite composite = imageGraphics.getComposite();
+            if (composite instanceof AlphaComposite) {
+                AlphaComposite alphaComposite = (AlphaComposite)composite;
+                alpha = alphaComposite.getAlpha();
+            }
+
+            if (opacity < alpha) {
+                imageGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+            }
+
             image.paint(imageGraphics);
             imageGraphics.dispose();
         }

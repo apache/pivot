@@ -25,7 +25,6 @@ import pivot.wtk.Menu;
 import pivot.wtk.MenuPopup;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
-import pivot.wtk.Window;
 
 /**
  * Abstract base class for menu item skins.

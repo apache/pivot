@@ -15,7 +15,6 @@
  */
 package pivot.wtk.skin.terra;
 
-import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -168,6 +167,8 @@ public class TerraFrameSkin extends WindowSkin {
      * @author gbrown
      */
     protected class ResizeImage extends Image {
+        public static final int ALPHA = 64;
+
         public int getWidth() {
             return 5;
         }
@@ -177,14 +178,14 @@ public class TerraFrameSkin extends WindowSkin {
         }
 
         public void paint(Graphics2D graphics) {
-            graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
-
-            graphics.setPaint(Color.BLACK);
+            graphics.setPaint(new Color(0, 0, 0, ALPHA));
             graphics.fillRect(3, 0, 2, 1);
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
-            graphics.setPaint(contentBorderColor);
+            graphics.setPaint(new Color(contentBorderColor.getRed(),
+                contentBorderColor.getGreen(), contentBorderColor.getBlue(),
+                ALPHA));
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);
