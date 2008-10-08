@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <FlowPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
-    <Border styles="{color:'#999999'}">
+    <Border>
         <content>
             <FlowPane orientation="vertical" styles="{spacing: 12}">
                 <FlowPane orientation="vertical" styles="{padding: 6, spacing: 6}">

@@ -15,17 +15,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{color:'#999999'}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+<Border xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <content>
         <FlowPane styles="{padding:4, spacing:10}">
             <FlowPane orientation="vertical">
                 <Label text="Simple" styles="{fontBold:true}"/>
-                <Border styles="{color:'#999999', padding:0}">
+                <Border styles="{padding:0}">
                     <content>
                         <ScrollPane preferredWidth="160" preferredHeight="240"
-                            horizontalScrollBarPolicy="fillToCapacity">
+                            horizontalScrollBarPolicy="fillToCapacity"
+                            styles="{backgroundColor:null}">
                             <view>
                                 <TreeView>
                                     <treeData>
@@ -82,10 +82,11 @@ limitations under the License.
 
             <FlowPane orientation="vertical">
                 <Label text="Editable" styles="{fontBold:true}"/>
-                <Border styles="{color:'#999999', padding:0}">
+                <Border styles="{padding:0}">
                     <content>
                         <ScrollPane wtkx:id="editableTreeViewScrollPane" preferredWidth="160" preferredHeight="240"
-                            horizontalScrollBarPolicy="fillToCapacity">
+                            horizontalScrollBarPolicy="fillToCapacity"
+                            styles="{backgroundColor:null}">
                             <view>
                                 <TreeView wtkx:id="editableTreeView">
                                     <treeData>
@@ -146,10 +147,11 @@ limitations under the License.
 
             <FlowPane orientation="vertical">
                 <Label text="Multi-Select" styles="{fontBold:true}"/>
-                <Border styles="{color:'#999999', padding:0}">
+                <Border styles="{padding:0}">
                     <content>
                         <ScrollPane preferredWidth="160" preferredHeight="240"
-                            horizontalScrollBarPolicy="fillToCapacity">
+                            horizontalScrollBarPolicy="fillToCapacity"
+                            styles="{backgroundColor:null}">
                             <view>
                                 <TreeView selectMode="multi">
                                     <treeData>

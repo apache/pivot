@@ -15,66 +15,62 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{color:'#cccac2', backgroundColor:'#cccac2', padding:8}"
+<Border styles="{padding:0}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
-    <content>
-        <Border styles="{color:'#999999', backgroundColor:'#f7f5eb', padding:0}">
-            <content>
-                <ScrollPane>
-                    <view>
-                        <FlowPane orientation="vertical" styles="{padding:6}">
-                            <Rollup expanded="true">
-                                <Heading text="Buttons"/>
-                                <wtkx:include namespace="buttons" src="buttons.wtkx"/>
-                            </Rollup>
-                            <Rollup>
-                                <Heading text="Lists"/>
-                                <wtkx:include namespace="lists" src="lists.wtkx"/>
-                            </Rollup>
-                            <Rollup>
-                                <Heading text="Text"/>
-                                <wtkx:include namespace="text" src="text.wtkx"/>
-                            </Rollup>
-                            <Rollup>
-                                <Heading text="Navigation"/>
-                                <wtkx:include namespace="navigation" src="navigation.wtkx"/>
-                            </Rollup>
-                            <Rollup>
-                                <Heading text="Splitters"/>
-                                <wtkx:include namespace="splitters" src="splitters.wtkx"/>
-                            </Rollup>
-                            <Rollup>
-                                <Heading text="Menus"/>
-                                <wtkx:include namespace="menus" src="menus.wtkx"/>
-                            </Rollup>
-                            <Rollup>
-                                <Heading text="Meters"/>
-                                <wtkx:include namespace="meters" src="meters.wtkx"/>
-                            </Rollup>
-                            <Rollup>
-                                <Heading text="Spinners"/>
-                                <wtkx:include namespace="spinners" src="spinners.wtkx"/>
-                            </Rollup>
-                            <Rollup>
-                                <Heading text="Tables"/>
-                                <wtkx:include namespace="tables" src="tables.wtkx"/>
-                            </Rollup>
-                            <Rollup>
-                                <Heading text="Trees"/>
-                                <wtkx:include namespace="trees" src="trees.wtkx"/>
-                            </Rollup>
-                            <Rollup>
-                                <Heading text="Drag &amp; Drop"/>
-                                <wtkx:include namespace="dragdrop" src="dragdrop.wtkx"/>
-                            </Rollup>
-                            <Rollup>
-                                <Heading text="Alerts &amp; Prompts"/>
-                                <wtkx:include namespace="alerts" src="alerts.wtkx"/>
-                            </Rollup>
-                        </FlowPane>
-                    </view>
-                </ScrollPane>
-            </content>
-        </Border>
-    </content>
+	<content>
+	    <ScrollPane>
+	        <view>
+	            <FlowPane orientation="vertical" styles="{padding:6}">
+	                <Rollup expanded="true">
+	                    <Heading text="Buttons"/>
+	                    <wtkx:include namespace="buttons" src="buttons.wtkx"/>
+	                </Rollup>
+	                <Rollup>
+	                    <Heading text="Lists"/>
+	                    <wtkx:include namespace="lists" src="lists.wtkx"/>
+	                </Rollup>
+	                <Rollup>
+	                    <Heading text="Text"/>
+	                    <wtkx:include namespace="text" src="text.wtkx"/>
+	                </Rollup>
+	                <Rollup>
+	                    <Heading text="Navigation"/>
+	                    <wtkx:include namespace="navigation" src="navigation.wtkx"/>
+	                </Rollup>
+	                <Rollup>
+	                    <Heading text="Splitters"/>
+	                    <wtkx:include namespace="splitters" src="splitters.wtkx"/>
+	                </Rollup>
+	                <Rollup>
+	                    <Heading text="Menus"/>
+	                    <wtkx:include namespace="menus" src="menus.wtkx"/>
+	                </Rollup>
+	                <Rollup>
+	                    <Heading text="Meters"/>
+	                    <wtkx:include namespace="meters" src="meters.wtkx"/>
+	                </Rollup>
+	                <Rollup>
+	                    <Heading text="Spinners"/>
+	                    <wtkx:include namespace="spinners" src="spinners.wtkx"/>
+	                </Rollup>
+	                <Rollup>
+	                    <Heading text="Tables"/>
+	                    <wtkx:include namespace="tables" src="tables.wtkx"/>
+	                </Rollup>
+	                <Rollup>
+	                    <Heading text="Trees"/>
+	                    <wtkx:include namespace="trees" src="trees.wtkx"/>
+	                </Rollup>
+	                <Rollup>
+	                    <Heading text="Drag &amp; Drop"/>
+	                    <wtkx:include namespace="dragdrop" src="dragdrop.wtkx"/>
+	                </Rollup>
+	                <Rollup>
+	                    <Heading text="Alerts &amp; Prompts"/>
+	                    <wtkx:include namespace="alerts" src="alerts.wtkx"/>
+	                </Rollup>
+	            </FlowPane>
+	        </view>
+	    </ScrollPane>
+	</content>
 </Border>

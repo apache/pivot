@@ -15,8 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{color:'#999999'}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+<Border xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <content>
         <FlowPane styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">

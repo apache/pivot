@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{color:'#999999', padding:4}"
+<Border styles="{padding:4}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <content>
         <SplitPane orientation="vertical" splitLocation="175"

@@ -17,8 +17,7 @@ limitations under the License.
 
 <FlowPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
-    <Border styles="{color:'#999999'}"
-        xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    <Border>
         <content>
             <TablePane styles="{backgroundColor:'#404040'}">
                 <columns>
@@ -29,7 +28,7 @@ limitations under the License.
                         <wtkx:include wtkx:id="menuBar" src="menu_bar.wtkx" />
                     </TablePane.Row>
                     <TablePane.Row height="-1">
-                        <Separator styles="{color:'#999999', padding:0}" />
+                        <Separator styles="{padding:0}" />
                     </TablePane.Row>
                     <TablePane.Row height="1*">
                         <ImageView wtkx:id="imageView"

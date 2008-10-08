@@ -397,6 +397,8 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             buttonFlowPane.add(tabButton);
         }
+
+        selectedIndexChanged(tabPane, -1);
     }
 
     public void uninstall() {

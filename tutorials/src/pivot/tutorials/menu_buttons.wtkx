@@ -1,5 +1,4 @@
-<Border styles="{color:'#999999'}"
-	xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+<Border xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
 	<content>
 		<FlowPane orientation="vertical"
 			styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">

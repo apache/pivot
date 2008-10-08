@@ -186,7 +186,6 @@ public class SwingAdapter extends Component {
             swingContainer.validate();
         }
 
-        @Override
         public void paint(Graphics2D graphics) {
             swingContainer.paint(graphics);
         }

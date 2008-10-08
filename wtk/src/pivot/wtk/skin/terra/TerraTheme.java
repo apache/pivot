@@ -111,6 +111,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(RadioButton.class, TerraRadioButtonSkin.class);
         componentSkinMap.put(Rollup.class, TerraRollupSkin.class);
         componentSkinMap.put(ScrollBar.class, TerraScrollBarSkin.class);
+        componentSkinMap.put(ScrollPane.class, TerraScrollPaneSkin.class);
         componentSkinMap.put(ScrollPane.Corner.class, TerraScrollPaneCornerSkin.class);
         componentSkinMap.put(Separator.class, TerraSeparatorSkin.class);
         componentSkinMap.put(Sheet.class, TerraSheetSkin.class);
