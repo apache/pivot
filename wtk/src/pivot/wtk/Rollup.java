@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import pivot.util.ListenerList;
+import pivot.util.Vote;
 
 /**
  * Container that can be expanded or collapsed to respectively show or hide its
@@ -29,6 +30,22 @@ import pivot.util.ListenerList;
 public class Rollup extends pivot.wtk.Container {
     private static class RollupListenerList extends ListenerList<RollupListener>
         implements RollupListener {
+        public Vote previewExpandedChange(Rollup rollup) {
+            Vote vote = Vote.APPROVE;
+
+            for (RollupListener listener : this) {
+                vote = vote.tally(listener.previewExpandedChange(rollup));
+            }
+
+            return vote;
+        }
+
+        public void expandedChangeVetoed(Rollup rollup, Vote reason) {
+            for (RollupListener listener : this) {
+                listener.expandedChangeVetoed(rollup, reason);
+            }
+        }
+
         public void expandedChanged(Rollup rollup) {
             for (RollupListener listener : this) {
                 listener.expandedChanged(rollup);
@@ -67,8 +84,14 @@ public class Rollup extends pivot.wtk.Container {
 
     public void setExpanded(boolean expanded) {
         if (expanded != this.expanded) {
-            this.expanded = expanded;
-            rollupListeners.expandedChanged(this);
+            Vote vote = rollupListeners.previewExpandedChange(this);
+
+            if (vote == Vote.APPROVE) {
+                this.expanded = expanded;
+                rollupListeners.expandedChanged(this);
+            } else {
+                rollupListeners.expandedChangeVetoed(this, vote);
+            }
         }
     }
 

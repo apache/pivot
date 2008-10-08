@@ -23,6 +23,8 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.RoundRectangle2D;
 
 import pivot.collections.Sequence;
+import pivot.util.Vote;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
@@ -35,6 +37,10 @@ import pivot.wtk.PushButton;
 import pivot.wtk.Rollup;
 import pivot.wtk.RollupListener;
 import pivot.wtk.Theme;
+import pivot.wtk.effects.Transition;
+import pivot.wtk.effects.TransitionListener;
+import pivot.wtk.effects.easing.Easing;
+import pivot.wtk.effects.easing.Quartic;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
@@ -49,6 +55,66 @@ import pivot.wtk.skin.ContainerSkin;
  */
 public class TerraRollupSkin extends ContainerSkin
     implements RollupListener, ButtonPressListener {
+    private class ExpansionTransition extends Transition {
+        private int height1;
+        private int height2;
+        private boolean reverse;
+
+        private int originalPreferredHeight;
+        private int height;
+
+        private Easing easing = new Quartic();
+
+        public ExpansionTransition(int height1, int height2, boolean reverse, int duration, int rate) {
+            super(duration, rate, false);
+
+            this.height1 = height1;
+            this.height2 = height2;
+            this.reverse = reverse;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        @Override
+        public void start(TransitionListener transitionListener) {
+            Rollup rollup = (Rollup)getComponent();
+            originalPreferredHeight = rollup.isPreferredHeightSet() ?
+                rollup.getPreferredHeight() : -1;
+
+            super.start(transitionListener);
+        }
+
+        @Override
+        public void stop() {
+            Rollup rollup = (Rollup)getComponent();
+            rollup.setPreferredHeight(originalPreferredHeight);
+
+            super.stop();
+        }
+
+        @Override
+        protected void update() {
+            float percentComplete = getPercentComplete();
+
+            if (percentComplete < 1f) {
+                int elapsedTime = getElapsedTime();
+                int duration = getDuration();
+
+                height = (int)(height1 + (height2 - height1) * percentComplete);
+                if (reverse) {
+                    height = (int)easing.easeIn(elapsedTime, height1, height - height1, duration);
+                } else {
+                    height = (int)easing.easeOut(elapsedTime, height1, height - height1, duration);
+                }
+
+                Rollup rollup = (Rollup)getComponent();
+                rollup.setPreferredHeight(height);
+            }
+        }
+    }
+
     protected class RollupButton extends PushButton {
         public RollupButton() {
             super(null);
@@ -190,11 +256,17 @@ public class TerraRollupSkin extends ContainerSkin
     private CollapseImage collapseImage = new CollapseImage();
     private BulletImage bulletImage = new BulletImage();
 
+    private ExpansionTransition expandTransition = null;
+    private ExpansionTransition collapseTransition = null;
+
     private Color buttonColor;
     private int spacing;
     private int buffer;
     private boolean justify;
     private boolean firstChildToggles;
+
+    private static final int EXPANSION_DURATION = 200;
+    private static final int EXPANSION_RATE = 30;
 
     public TerraRollupSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -273,6 +345,11 @@ public class TerraRollupSkin extends ContainerSkin
     @Override
     public int getPreferredHeight(int width) {
         Rollup rollup = (Rollup)getComponent();
+        return getPreferredHeight(width, rollup.isExpanded());
+    }
+
+    private int getPreferredHeight(int width, boolean expanded) {
+        Rollup rollup = (Rollup)getComponent();
 
         // Preferred height is the sum of our childrens' preferred heights,
         // plus spacing and padding.
@@ -301,7 +378,7 @@ public class TerraRollupSkin extends ContainerSkin
                 displayableComponentCount++;
             }
 
-            if (!rollup.isExpanded()) {
+            if (!expanded) {
                 // If we're collapsed, we only look at the first child.
                 break;
             }
@@ -498,14 +575,79 @@ public class TerraRollupSkin extends ContainerSkin
         updateToggleComponent();
     }
 
-    // Rollup events
-    public void expandedChanged(Rollup rollup) {
-        updateRollupButton();
+    // RollupListener methods
 
-        invalidateComponent();
+    public Vote previewExpandedChange(final Rollup rollup) {
+        Vote vote = Vote.APPROVE;
+
+        if (rollup.isExpanded()) {
+            // Start a collapse transition, return false, and set the
+            // expanded state when the transition is complete
+            if (collapseTransition == null) {
+                int duration = EXPANSION_DURATION;
+                int height1 = getHeight();
+
+                if (expandTransition != null) {
+                    // Stop the expand transition
+                    expandTransition.stop();
+
+                    // Record its progress so we can reverse it at the right point
+                    duration = expandTransition.getElapsedTime();
+                    height1 = expandTransition.getHeight();
+
+                    expandTransition = null;
+                }
+
+                if (duration > 0) {
+                    int height2 = getPreferredHeight(-1, false);
+
+                    collapseTransition = new ExpansionTransition(height1, height2,
+                        true, duration, EXPANSION_RATE);
+                    collapseTransition.start(new TransitionListener() {
+                        public void transitionCompleted(Transition transition) {
+                            rollup.setExpanded(false);
+                            collapseTransition = null;
+                        }
+                    });
+
+                    vote = Vote.DEFER;
+                }
+            } else {
+                vote = collapseTransition.isRunning() ? Vote.DEFER : Vote.APPROVE;
+            }
+        }
+
+        return vote;
     }
 
-    // Button press event
+    public void expandedChangeVetoed(Rollup rollup, Vote reason) {
+        if (reason == Vote.DENY
+            && collapseTransition != null) {
+            collapseTransition.stop();
+        }
+    }
+
+    public void expandedChanged(Rollup rollup) {
+        updateRollupButton();
+        invalidateComponent();
+
+        if (rollup.isExpanded()) {
+            // Start an expansion transition
+            int height1 = getHeight();
+            int height2 = getPreferredHeight(-1, true);
+
+            expandTransition = new ExpansionTransition(height1, height2,
+                false, EXPANSION_DURATION, EXPANSION_RATE);
+            expandTransition.start(new TransitionListener() {
+                public void transitionCompleted(Transition transition) {
+                    expandTransition = null;
+                }
+            });
+        }
+    }
+
+    // ButtonPressListener methods
+
     public void buttonPressed(Button button) {
         Rollup rollup = (Rollup)getComponent();
         rollup.setExpanded(!rollup.isExpanded());

@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.util.Vote;
+
 /**
  * Defines event listener methods that pertain to rollups. Developers register
  * for such events by adding themselves to a rollup's list of "rollup
@@ -23,6 +25,21 @@ package pivot.wtk;
  * @author tvolkert
  */
 public interface RollupListener {
+    /**
+     * Called to preview a rollup expansion event.
+     *
+     * @param rollup
+     */
+    public Vote previewExpandedChange(Rollup rollup);
+
+    /**
+     * Called when a rollup expansion event has been vetoed.
+     *
+     * @param rollup
+     * @param reason
+     */
+    public void expandedChangeVetoed(Rollup rollup, Vote reason);
+
     /**
      * Called when a rollup's expanded state changed.
      *
