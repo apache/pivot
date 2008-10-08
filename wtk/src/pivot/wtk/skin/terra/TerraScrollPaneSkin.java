@@ -23,7 +23,11 @@ import pivot.wtk.skin.ScrollPaneSkin;
  */
 public class TerraScrollPaneSkin extends ScrollPaneSkin {
     public TerraScrollPaneSkin() {
+        setBackgroundColor(1);
+    }
+
+    public final void setBackgroundColor(int backgroundColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setBackgroundColor(theme.getColor(1));
+        setBackgroundColor(theme.getColor(backgroundColor));
     }
 }
