@@ -181,7 +181,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
         Font font = theme.getFont();
         titleLabel.getStyles().put("fontBold", true);
-        titleLabel.getStyles().put("fontSize", (int)Math.round(font.getSize2D() * 0.8f));
+        titleLabel.getStyles().put("fontSize", Math.round(font.getSize2D() * 0.8f));
         titleLabel.getStyles().put("color", titleBarColor);
 
         // Initialize the button flow pane
