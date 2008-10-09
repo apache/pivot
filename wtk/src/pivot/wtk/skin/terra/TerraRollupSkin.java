@@ -579,40 +579,42 @@ public class TerraRollupSkin extends ContainerSkin
     public Vote previewExpandedChange(final Rollup rollup) {
         Vote vote = Vote.APPROVE;
 
-        if (rollup.isExpanded()) {
-            // Start a collapse transition, return false, and set the
-            // expanded state when the transition is complete
-            if (collapseTransition == null) {
-                int duration = EXPANSION_DURATION;
-                int height1 = getHeight();
+        if (rollup.getDisplay() != null) {
+            if (rollup.isExpanded()) {
+                // Start a collapse transition, return false, and set the
+                // expanded state when the transition is complete
+                if (collapseTransition == null) {
+                    int duration = EXPANSION_DURATION;
+                    int height1 = getHeight();
 
-                if (expandTransition != null) {
-                    // Stop the expand transition
-                    expandTransition.stop();
+                    if (expandTransition != null) {
+                        // Stop the expand transition
+                        expandTransition.stop();
 
-                    // Record its progress so we can reverse it at the right point
-                    duration = expandTransition.getElapsedTime();
-                    height1 = expandTransition.getHeight();
+                        // Record its progress so we can reverse it at the right point
+                        duration = expandTransition.getElapsedTime();
+                        height1 = expandTransition.getHeight();
 
-                    expandTransition = null;
+                        expandTransition = null;
+                    }
+
+                    if (duration > 0) {
+                        int height2 = getPreferredHeight(-1, false);
+
+                        collapseTransition = new ExpansionTransition(height1, height2,
+                            true, duration, EXPANSION_RATE);
+                        collapseTransition.start(new TransitionListener() {
+                            public void transitionCompleted(Transition transition) {
+                                rollup.setExpanded(false);
+                                collapseTransition = null;
+                            }
+                        });
+
+                        vote = Vote.DEFER;
+                    }
+                } else {
+                    vote = collapseTransition.isRunning() ? Vote.DEFER : Vote.APPROVE;
                 }
-
-                if (duration > 0) {
-                    int height2 = getPreferredHeight(-1, false);
-
-                    collapseTransition = new ExpansionTransition(height1, height2,
-                        true, duration, EXPANSION_RATE);
-                    collapseTransition.start(new TransitionListener() {
-                        public void transitionCompleted(Transition transition) {
-                            rollup.setExpanded(false);
-                            collapseTransition = null;
-                        }
-                    });
-
-                    vote = Vote.DEFER;
-                }
-            } else {
-                vote = collapseTransition.isRunning() ? Vote.DEFER : Vote.APPROVE;
             }
         }
 
@@ -623,6 +625,7 @@ public class TerraRollupSkin extends ContainerSkin
         if (reason == Vote.DENY
             && collapseTransition != null) {
             collapseTransition.stop();
+            collapseTransition = null;
         }
     }
 
@@ -630,18 +633,20 @@ public class TerraRollupSkin extends ContainerSkin
         updateRollupButton();
         invalidateComponent();
 
-        if (rollup.isExpanded()) {
-            // Start an expansion transition
-            int height1 = getHeight();
-            int height2 = getPreferredHeight(-1, true);
+        if (rollup.getDisplay() != null) {
+            if (rollup.isExpanded()) {
+                // Start an expansion transition
+                int height1 = getHeight();
+                int height2 = getPreferredHeight(-1, true);
 
-            expandTransition = new ExpansionTransition(height1, height2,
-                false, EXPANSION_DURATION, EXPANSION_RATE);
-            expandTransition.start(new TransitionListener() {
-                public void transitionCompleted(Transition transition) {
-                    expandTransition = null;
-                }
-            });
+                expandTransition = new ExpansionTransition(height1, height2,
+                    false, EXPANSION_DURATION, EXPANSION_RATE);
+                expandTransition.start(new TransitionListener() {
+                    public void transitionCompleted(Transition transition) {
+                        expandTransition = null;
+                    }
+                });
+            }
         }
     }
 
