@@ -22,10 +22,6 @@ import pivot.wtk.skin.ScrollPaneSkin;
  * Scroll pane skin that applies terra-specific colors.
  */
 public class TerraScrollPaneSkin extends ScrollPaneSkin {
-    public TerraScrollPaneSkin() {
-        setBackgroundColor(1);
-    }
-
     public final void setBackgroundColor(int backgroundColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
