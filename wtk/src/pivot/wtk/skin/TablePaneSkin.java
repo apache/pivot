@@ -1249,7 +1249,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     public int getRowAt(int y) {
         if (rowHeights == null) {
-            throw new IllegalStateException("Table pane has not yet been laid out.");
+            return -1;
         }
 
         int rowIndex = -1;
@@ -1270,7 +1270,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     public Bounds getRowBounds(int row) {
         if (rowHeights == null) {
-            throw new IllegalStateException("Table pane has not yet been laid out.");
+            return new Bounds(0, 0, 0, 0);
         }
 
         int rowY = padding.top;
@@ -1284,7 +1284,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     public int getColumnAt(int x) {
         if (columnWidths == null) {
-            throw new IllegalStateException("Table pane has not yet been laid out.");
+            return -1;
         }
 
         int columnIndex = -1;
@@ -1305,7 +1305,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     public Bounds getColumnBounds(int column) {
         if (columnWidths == null) {
-            throw new IllegalStateException("Table pane has not yet been laid out.");
+            return new Bounds(0, 0, 0, 0);
         }
 
         int columnX = padding.left;
