@@ -441,14 +441,8 @@ public abstract class QueryServlet extends HttpServlet {
                 String decodedCredentials = new String(Base64.decode(encodedCredentials));
                 String[] credentialsPair = decodedCredentials.split(":");
 
-                String username = credentialsPair[0];
-                String password;
-
-                if (credentialsPair.length > 1) {
-                    password = credentialsPair[1];
-                } else {
-                    password = "";
-                }
+                String username = credentialsPair.length > 0 ? credentialsPair[0] : "";
+                String password = credentialsPair.length > 1 ? credentialsPair[1] : "";
 
                 if (credentials == null) {
                     credentials = new Credentials(username, password);
