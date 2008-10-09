@@ -463,7 +463,7 @@ public class TerraRollupSkin extends ContainerSkin
             throw new IllegalArgumentException("buttonColor is null.");
         }
 
-        setButtonColor(Color.decode(buttonColor));
+        setButtonColor(decodeColor(buttonColor));
     }
 
     public int getSpacing() {

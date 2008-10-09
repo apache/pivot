@@ -440,7 +440,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("titleBarColor is null.");
         }
 
-        setTitleBarColor(Color.decode(titleBarColor));
+        setTitleBarColor(decodeColor(titleBarColor));
     }
 
     public Color getTitleBarBackgroundColor() {
@@ -456,7 +456,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("titleBarBackgroundColor is null.");
         }
 
-        setTitleBarBackgroundColor(Color.decode(titleBarBackgroundColor));
+        setTitleBarBackgroundColor(decodeColor(titleBarBackgroundColor));
     }
 
     public Color getTitleBarBorderColor() {
@@ -473,7 +473,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("titleBarBorderColor is null.");
         }
 
-        setTitleBarBorderColor(Color.decode(titleBarBorderColor));
+        setTitleBarBorderColor(decodeColor(titleBarBorderColor));
     }
 
     public Color getShadeButtonColor() {
@@ -490,7 +490,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("shadeButtonColor is null.");
         }
 
-        setShadeButtonColor(Color.decode(shadeButtonColor));
+        setShadeButtonColor(decodeColor(shadeButtonColor));
     }
 
     public Color getShadeButtonBackgroundColor() {
@@ -508,7 +508,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("shadeButtonBackgroundColor is null.");
         }
 
-        setShadeButtonBackgroundColor(Color.decode(shadeButtonBackgroundColor));
+        setShadeButtonBackgroundColor(decodeColor(shadeButtonBackgroundColor));
     }
 
     public Color getBorderColor() {
@@ -525,7 +525,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(Color.decode(borderColor));
+        setBorderColor(decodeColor(borderColor));
     }
 
     public Insets getPadding() {

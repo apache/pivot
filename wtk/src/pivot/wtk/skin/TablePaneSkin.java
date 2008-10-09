@@ -763,7 +763,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             throw new IllegalArgumentException("gridColor is null.");
         }
 
-        setGridColor(Color.decode(gridColor));
+        setGridColor(decodeColor(gridColor));
     }
 
     /**
@@ -793,7 +793,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             throw new IllegalArgumentException("selectionBackgroundColor is null.");
         }
 
-        setSelectionBackgroundColor(Color.decode(selectionBackgroundColor));
+        setSelectionBackgroundColor(decodeColor(selectionBackgroundColor));
     }
 
     /**

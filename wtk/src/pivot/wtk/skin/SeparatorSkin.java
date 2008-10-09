@@ -189,7 +189,7 @@ public class SeparatorSkin extends ComponentSkin
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(decodeColor(color));
     }
 
     public Color getHeadingColor() {
@@ -210,7 +210,7 @@ public class SeparatorSkin extends ComponentSkin
             throw new IllegalArgumentException("headingColor is null.");
         }
 
-        setHeadingColor(Color.decode(headingColor));
+        setHeadingColor(decodeColor(headingColor));
     }
 
     public int getThickness() {

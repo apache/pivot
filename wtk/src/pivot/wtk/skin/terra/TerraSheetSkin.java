@@ -259,7 +259,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(Color.decode(borderColor));
+        setBorderColor(decodeColor(borderColor));
     }
 
     public Color getBevelColor() {
@@ -280,7 +280,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             throw new IllegalArgumentException("bevelColor is null.");
         }
 
-        setBevelColor(Color.decode(bevelColor));
+        setBevelColor(decodeColor(bevelColor));
     }
 
     public Insets getPadding() {

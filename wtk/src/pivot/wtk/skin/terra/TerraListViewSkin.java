@@ -273,7 +273,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -294,7 +294,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(Color.decode(disabledColor));
+        setDisabledColor(decodeColor(disabledColor));
     }
 
     public Color getBackgroundColor() {
@@ -315,7 +315,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(Color.decode(backgroundColor));
+        setBackgroundColor(decodeColor(backgroundColor));
     }
 
 
@@ -337,7 +337,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("selectionColor is null.");
         }
 
-        setSelectionColor(Color.decode(selectionColor));
+        setSelectionColor(decodeColor(selectionColor));
     }
 
     public Color getSelectionBackgroundColor() {
@@ -358,7 +358,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("selectionBackgroundColor is null.");
         }
 
-        setSelectionBackgroundColor(Color.decode(selectionBackgroundColor));
+        setSelectionBackgroundColor(decodeColor(selectionBackgroundColor));
     }
 
     public Color getInactiveSelectionColor() {
@@ -379,7 +379,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("inactiveSelectionColor is null.");
         }
 
-        setInactiveSelectionColor(Color.decode(inactiveSelectionColor));
+        setInactiveSelectionColor(decodeColor(inactiveSelectionColor));
     }
 
     public Color getInactiveSelectionBackgroundColor() {
@@ -400,7 +400,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
         }
 
-        setInactiveSelectionBackgroundColor(Color.decode(inactiveSelectionBackgroundColor));
+        setInactiveSelectionBackgroundColor(decodeColor(inactiveSelectionBackgroundColor));
     }
 
     public Color getHighlightColor() {
@@ -421,7 +421,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("highlightColor is null.");
         }
 
-        setHighlightColor(Color.decode(highlightColor));
+        setHighlightColor(decodeColor(highlightColor));
     }
 
     public Color getHighlightBackgroundColor() {
@@ -442,7 +442,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("highlightBackgroundColor is null.");
         }
 
-        setHighlightBackgroundColor(Color.decode(highlightBackgroundColor));
+        setHighlightBackgroundColor(decodeColor(highlightBackgroundColor));
     }
 
     public boolean getShowHighlight() {

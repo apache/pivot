@@ -175,7 +175,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(Color.decode(backgroundColor));
+        setBackgroundColor(decodeColor(backgroundColor));
     }
 
     public float getOpacity() {

@@ -371,7 +371,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(decodeColor(color));
     }
 
     public TextDecoration getTextDecoration() {

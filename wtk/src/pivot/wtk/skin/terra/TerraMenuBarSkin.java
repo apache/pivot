@@ -188,7 +188,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -209,7 +209,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(Color.decode(disabledColor));
+        setDisabledColor(decodeColor(disabledColor));
     }
 
     public Color getHighlightColor() {
@@ -230,7 +230,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
             throw new IllegalArgumentException("highlightColor is null.");
         }
 
-        setHighlightColor(Color.decode(highlightColor));
+        setHighlightColor(decodeColor(highlightColor));
     }
 
     public Color getHighlightBackgroundColor() {
@@ -251,7 +251,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
             throw new IllegalArgumentException("highlightBackgroundColor is null.");
         }
 
-        setHighlightBackgroundColor(Color.decode(highlightBackgroundColor));
+        setHighlightBackgroundColor(decodeColor(highlightBackgroundColor));
     }
 
     public int getSpacing() {

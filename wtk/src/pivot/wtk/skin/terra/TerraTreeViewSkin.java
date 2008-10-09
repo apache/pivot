@@ -432,7 +432,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -453,7 +453,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(Color.decode(disabledColor));
+        setDisabledColor(decodeColor(disabledColor));
     }
 
     public Color getBackgroundColor() {
@@ -474,7 +474,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(Color.decode(backgroundColor));
+        setBackgroundColor(decodeColor(backgroundColor));
     }
 
     public Color getSelectionColor() {
@@ -495,7 +495,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("selectionColor is null.");
         }
 
-        setSelectionColor(Color.decode(selectionColor));
+        setSelectionColor(decodeColor(selectionColor));
     }
 
     public Color getSelectionBackgroundColor() {
@@ -516,7 +516,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("selectionBackgroundColor is null.");
         }
 
-        setSelectionBackgroundColor(Color.decode(selectionBackgroundColor));
+        setSelectionBackgroundColor(decodeColor(selectionBackgroundColor));
     }
 
     public Color getInactiveSelectionColor() {
@@ -537,7 +537,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("inactiveSelectionColor is null.");
         }
 
-        setInactiveSelectionColor(Color.decode(inactiveSelectionColor));
+        setInactiveSelectionColor(decodeColor(inactiveSelectionColor));
     }
 
     public Color getInactiveSelectionBackgroundColor() {
@@ -558,7 +558,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
         }
 
-        setInactiveSelectionBackgroundColor(Color.decode(inactiveSelectionBackgroundColor));
+        setInactiveSelectionBackgroundColor(decodeColor(inactiveSelectionBackgroundColor));
     }
 
     public Color getHighlightColor() {
@@ -579,7 +579,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("highlightColor is null.");
         }
 
-        setHighlightColor(Color.decode(highlightColor));
+        setHighlightColor(decodeColor(highlightColor));
     }
 
     public Color getHighlightBackgroundColor() {
@@ -600,7 +600,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("highlightBackgroundColor is null.");
         }
 
-        setHighlightBackgroundColor(Color.decode(highlightBackgroundColor));
+        setHighlightBackgroundColor(decodeColor(highlightBackgroundColor));
     }
 
     public int getSpacing() {
@@ -673,7 +673,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("branchControlColor is null.");
         }
 
-        setBranchControlColor(Color.decode(branchControlColor));
+        setBranchControlColor(decodeColor(branchControlColor));
     }
 
     public Color getBranchControlDisabledColor() {
@@ -694,7 +694,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("branchControlDisabledColor is null.");
         }
 
-        setBranchControlDisabledColor(Color.decode(branchControlDisabledColor));
+        setBranchControlDisabledColor(decodeColor(branchControlDisabledColor));
     }
 
     public Color getBranchControlSelectionColor() {
@@ -715,7 +715,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("branchControlSelectionColor is null.");
         }
 
-        setBranchControlSelectionColor(Color.decode(branchControlSelectionColor));
+        setBranchControlSelectionColor(decodeColor(branchControlSelectionColor));
     }
 
     public Color getBranchControlInactiveSelectionColor() {
@@ -736,7 +736,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("branchControlInactiveSelectionColor is null.");
         }
 
-        setBranchControlInactiveSelectionColor(Color.decode(branchControlInactiveSelectionColor));
+        setBranchControlInactiveSelectionColor(decodeColor(branchControlInactiveSelectionColor));
     }
 
     public Color getGridColor() {
@@ -757,7 +757,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             throw new IllegalArgumentException("gridColor is null.");
         }
 
-        setGridColor(Color.decode(gridColor));
+        setGridColor(decodeColor(gridColor));
     }
 
     public boolean getShowGridLines() {

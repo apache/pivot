@@ -77,7 +77,7 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(Color.decode(backgroundColor));
+        setBackgroundColor(decodeColor(backgroundColor));
     }
 
     public Color getColor() {
@@ -94,6 +94,6 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(decodeColor(color));
     }
 }

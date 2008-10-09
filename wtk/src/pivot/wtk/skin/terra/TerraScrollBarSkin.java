@@ -896,7 +896,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("borderColor is null");
         }
 
-        setBorderColor(Color.decode(borderColor));
+        setBorderColor(decodeColor(borderColor));
     }
 
     public Color getScrollButtonImageColor() {
@@ -913,7 +913,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("scrollButtonImageColor is null");
         }
 
-        setScrollButtonImageColor(Color.decode(scrollButtonImageColor));
+        setScrollButtonImageColor(decodeColor(scrollButtonImageColor));
     }
 
     public Color getScrollButtonBackgroundColor() {
@@ -930,7 +930,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("scrollButtonBackgroundColor is null");
         }
 
-        setScrollButtonBackgroundColor(Color.decode(scrollButtonBackgroundColor));
+        setScrollButtonBackgroundColor(decodeColor(scrollButtonBackgroundColor));
     }
 
     public Color getScrollButtonDisabledBackgroundColor() {
@@ -947,7 +947,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("scrollButtonDisabledBackgroundColor is null");
         }
 
-        setScrollButtonDisabledBackgroundColor(Color.decode(scrollButtonDisabledBackgroundColor));
+        setScrollButtonDisabledBackgroundColor(decodeColor(scrollButtonDisabledBackgroundColor));
     }
 
     public Color getScrollButtonPressedBackgroundColor() {
@@ -964,7 +964,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("scrollButtonPressedBackgroundColor is null");
         }
 
-        setScrollButtonPressedBackgroundColor(Color.decode(scrollButtonPressedBackgroundColor));
+        setScrollButtonPressedBackgroundColor(decodeColor(scrollButtonPressedBackgroundColor));
     }
 
     public Color getScrollButtonHighlightedBackgroundColor() {
@@ -981,7 +981,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("scrollButtonHighlightedBackgroundColor is null");
         }
 
-        setScrollButtonHighlightedBackgroundColor(Color.decode(scrollButtonHighlightedBackgroundColor));
+        setScrollButtonHighlightedBackgroundColor(decodeColor(scrollButtonHighlightedBackgroundColor));
     }
 
     @Override

@@ -129,7 +129,7 @@ public class TerraMeterSkin extends ComponentSkin
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(decodeColor(color));
     }
 
     public Color getGridColor() {
@@ -146,7 +146,7 @@ public class TerraMeterSkin extends ComponentSkin
             throw new IllegalArgumentException("gridColor is null.");
         }
 
-        setGridColor(Color.decode(gridColor));
+        setGridColor(decodeColor(gridColor));
     }
 
     public float getGridFrequency() {

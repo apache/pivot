@@ -129,7 +129,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -150,6 +150,6 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(Color.decode(disabledColor));
+        setDisabledColor(decodeColor(disabledColor));
     }
 }

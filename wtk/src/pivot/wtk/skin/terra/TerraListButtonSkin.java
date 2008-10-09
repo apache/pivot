@@ -328,7 +328,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -349,7 +349,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(Color.decode(disabledColor));
+        setDisabledColor(decodeColor(disabledColor));
     }
 
     public Color getBackgroundColor() {
@@ -370,7 +370,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(Color.decode(backgroundColor));
+        setBackgroundColor(decodeColor(backgroundColor));
     }
 
     public Color getDisabledBackgroundColor() {
@@ -391,7 +391,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("disabledBackgroundColor is null.");
         }
 
-        setDisabledBackgroundColor(Color.decode(disabledBackgroundColor));
+        setDisabledBackgroundColor(decodeColor(disabledBackgroundColor));
     }
 
     public Color getBorderColor() {
@@ -413,7 +413,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(Color.decode(borderColor));
+        setBorderColor(decodeColor(borderColor));
     }
 
     public Color getDisabledBorderColor() {
@@ -434,7 +434,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("disabledBorderColor is null.");
         }
 
-        setDisabledBorderColor(Color.decode(disabledBorderColor));
+        setDisabledBorderColor(decodeColor(disabledBorderColor));
     }
 
     public Color getBevelColor() {
@@ -455,7 +455,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("bevelColor is null.");
         }
 
-        setBevelColor(Color.decode(bevelColor));
+        setBevelColor(decodeColor(bevelColor));
     }
 
     public Color getPressedBevelColor() {
@@ -476,7 +476,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("pressedBevelColor is null.");
         }
 
-        setPressedBevelColor(Color.decode(pressedBevelColor));
+        setPressedBevelColor(decodeColor(pressedBevelColor));
     }
 
     public Color getDisabledBevelColor() {
@@ -497,7 +497,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("disabledBevelColor is null.");
         }
 
-        setDisabledBackgroundColor(Color.decode(disabledBevelColor));
+        setDisabledBackgroundColor(decodeColor(disabledBevelColor));
     }
 
     public Insets getPadding() {

@@ -463,7 +463,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
             throw new IllegalArgumentException("buttonColor is null.");
         }
 
-        setButtonColor(Color.decode(buttonColor));
+        setButtonColor(decodeColor(buttonColor));
     }
 
     public Color getButtonBackgroundColor() {
@@ -484,7 +484,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
             throw new IllegalArgumentException("buttonBackgroundColor is null.");
         }
 
-        setButtonBackgroundColor(Color.decode(buttonBackgroundColor));
+        setButtonBackgroundColor(decodeColor(buttonBackgroundColor));
     }
 
     public int getButtonPadding() {

@@ -759,7 +759,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("activeTabColor is null.");
         }
 
-        setActiveTabColor(Color.decode(activeTabColor));
+        setActiveTabColor(decodeColor(activeTabColor));
     }
 
     public Color getInactiveTabColor() {
@@ -780,7 +780,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("inactiveTabColor is null.");
         }
 
-        setInactiveTabColor(Color.decode(inactiveTabColor));
+        setInactiveTabColor(decodeColor(inactiveTabColor));
     }
 
     public Color getBorderColor() {
@@ -802,7 +802,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(Color.decode(borderColor));
+        setBorderColor(decodeColor(borderColor));
     }
 
     public Insets getPadding() {
@@ -877,7 +877,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("buttonColor is null.");
         }
 
-        setButtonColor(Color.decode(buttonColor));
+        setButtonColor(decodeColor(buttonColor));
     }
 
     public Color getButtonBevelColor() {
@@ -898,7 +898,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("buttonBevelColor is null.");
         }
 
-        setButtonBevelColor(Color.decode(buttonBevelColor));
+        setButtonBevelColor(decodeColor(buttonBevelColor));
     }
 
     public Color getPressedButtonBevelColor() {
@@ -919,7 +919,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("pressedButtonBevelColor is null.");
         }
 
-        setPressedButtonBevelColor(Color.decode(pressedButtonBevelColor));
+        setPressedButtonBevelColor(decodeColor(pressedButtonBevelColor));
     }
 
     public Insets getButtonPadding() {

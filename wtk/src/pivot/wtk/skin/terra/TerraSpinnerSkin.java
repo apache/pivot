@@ -678,7 +678,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -700,7 +700,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(Color.decode(disabledColor));
+        setDisabledColor(decodeColor(disabledColor));
     }
 
     public Color getBorderColor() {
@@ -722,7 +722,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(Color.decode(borderColor));
+        setBorderColor(decodeColor(borderColor));
     }
 
     public Color getButtonImageColor() {
@@ -739,7 +739,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("buttonImageColor is null");
         }
 
-        setButtonImageColor(Color.decode(buttonImageColor));
+        setButtonImageColor(decodeColor(buttonImageColor));
     }
 
     public Color getButtonBackgroundColor() {
@@ -756,7 +756,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("buttonBackgroundColor is null");
         }
 
-        setButtonBackgroundColor(Color.decode(buttonBackgroundColor));
+        setButtonBackgroundColor(decodeColor(buttonBackgroundColor));
     }
 
     public Color getButtonDisabledBackgroundColor() {
@@ -773,7 +773,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("buttonDisabledBackgroundColor is null");
         }
 
-        setButtonDisabledBackgroundColor(Color.decode(buttonDisabledBackgroundColor));
+        setButtonDisabledBackgroundColor(decodeColor(buttonDisabledBackgroundColor));
     }
 
     public Color getButtonPressedBackgroundColor() {
@@ -790,7 +790,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("buttonPressedBackgroundColor is null");
         }
 
-        setButtonPressedBackgroundColor(Color.decode(buttonPressedBackgroundColor));
+        setButtonPressedBackgroundColor(decodeColor(buttonPressedBackgroundColor));
     }
 
     public Color getButtonHighlightedBackgroundColor() {
@@ -807,7 +807,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("buttonHighlightedBackgroundColor is null");
         }
 
-        setButtonHighlightedBackgroundColor(Color.decode(buttonHighlightedBackgroundColor));
+        setButtonHighlightedBackgroundColor(decodeColor(buttonHighlightedBackgroundColor));
     }
 
     public Font getFont() {

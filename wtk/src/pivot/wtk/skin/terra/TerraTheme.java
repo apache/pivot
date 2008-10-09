@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.net.URL;
 
+import pivot.collections.List;
 import pivot.serialization.JSONSerializer;
 import pivot.util.Resources;
 import pivot.wtk.Alert;
@@ -71,6 +72,9 @@ public final class TerraTheme extends Theme {
     private String scheme;
 
     private Resources resources = null;
+
+    private Font font;
+    private Color[] colors;
 
     public TerraTheme() {
         this("default");
@@ -134,12 +138,22 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
     }
 
+    @SuppressWarnings("unchecked")
     public void install() {
         try {
             String baseName = getClass().getName() + "_" + scheme;
             resources = new Resources(baseName);
         } catch(Exception exception) {
             throw new RuntimeException(exception);
+        }
+
+        font = Font.decode(JSONSerializer.getString(resources, "font"));
+
+        List<String> colorCodes = (List<String>)JSONSerializer.getList(resources, "colors");
+        colors = new Color[colorCodes.getLength()];
+
+        for (int i = 0, n = colors.length; i < n; i++) {
+            colors[i] = Color.decode(colorCodes.get(i));
         }
     }
 
@@ -148,13 +162,11 @@ public final class TerraTheme extends Theme {
     }
 
     public Font getFont() {
-        // TODO Cache the decoded font?
-        return Font.decode(JSONSerializer.getString(resources, "font"));
+        return font;
     }
 
     public Color getColor(int index) {
-        // TODO Cache the decoded colors?
-        return Color.decode(JSONSerializer.getString(resources, "colors[" + index + "]"));
+        return colors[index];
     }
 
     public Image getMessageIcon(MessageType messageType) {

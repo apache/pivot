@@ -297,7 +297,7 @@ public class BorderSkin extends ContainerSkin
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(Color.decode(color));
+        setColor(decodeColor(color));
     }
 
     public Color getTitleColor() {
@@ -318,7 +318,7 @@ public class BorderSkin extends ContainerSkin
             throw new IllegalArgumentException("titleColor is null.");
         }
 
-        setTitleColor(Color.decode(titleColor));
+        setTitleColor(decodeColor(titleColor));
     }
 
     public int getThickness() {

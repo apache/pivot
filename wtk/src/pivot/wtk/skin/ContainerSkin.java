@@ -182,7 +182,7 @@ public abstract class ContainerSkin extends ComponentSkin
             throw new IllegalArgumentException("backgroundColor is null");
         }
 
-        setBackgroundColor(Color.decode(backgroundColor));
+        setBackgroundColor(decodeColor(backgroundColor));
     }
 
     // Container events

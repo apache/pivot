@@ -460,7 +460,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("splitterHandlePrimaryColor is null.");
         }
 
-        setSplitterHandlePrimaryColor(Color.decode(splitterHandlePrimaryColor));
+        setSplitterHandlePrimaryColor(decodeColor(splitterHandlePrimaryColor));
     }
 
     public Color getSplitterHandleSecondaryColor() {
@@ -481,7 +481,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("splitterHandleSecondaryColor is null.");
         }
 
-        setSplitterHandleSecondaryColor(Color.decode(splitterHandleSecondaryColor));
+        setSplitterHandleSecondaryColor(decodeColor(splitterHandleSecondaryColor));
     }
 
     public int getSplitterThickness() {
