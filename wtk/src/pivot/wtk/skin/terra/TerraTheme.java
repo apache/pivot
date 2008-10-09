@@ -53,6 +53,7 @@ import pivot.wtk.Separator;
 import pivot.wtk.Sheet;
 import pivot.wtk.Spinner;
 import pivot.wtk.SplitPane;
+import pivot.wtk.TablePane;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TableView;
 import pivot.wtk.TabPane;
@@ -119,6 +120,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Sheet.class, TerraSheetSkin.class);
         componentSkinMap.put(Spinner.class, TerraSpinnerSkin.class);
         componentSkinMap.put(SplitPane.class, TerraSplitPaneSkin.class);
+        componentSkinMap.put(TablePane.class, TerraTablePaneSkin.class);
         componentSkinMap.put(TableViewHeader.class, TerraTableViewHeaderSkin.class);
         componentSkinMap.put(TableView.class, TerraTableViewSkin.class);
         componentSkinMap.put(TabPane.class, TerraTabPaneSkin.class);

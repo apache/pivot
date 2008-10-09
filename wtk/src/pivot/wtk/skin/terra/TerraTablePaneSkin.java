@@ -16,20 +16,26 @@
 package pivot.wtk.skin.terra;
 
 import pivot.wtk.Theme;
-import pivot.wtk.skin.LabelSkin;
+import pivot.wtk.skin.TablePaneSkin;
 
 /**
- * Terra label skin.
+ * Terra table pane skin.
  *
- * @author gbrown
+ * @author tvolkert
  */
-public class TerraLabelSkin extends LabelSkin {
-    public TerraLabelSkin() {
-        setColor(0);
+public class TerraTablePaneSkin extends TablePaneSkin {
+    public TerraTablePaneSkin() {
+        setGridColor(2);
+        setSelectionBackgroundColor(4);
     }
 
-    public final void setColor(int color) {
+    public final void setGridColor(int gridColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setColor(theme.getColor(color));
+        setGridColor(theme.getColor(gridColor));
+    }
+
+    public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
     }
 }

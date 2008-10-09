@@ -25,23 +25,22 @@ import pivot.wtk.skin.BorderSkin;
  */
 public class TerraBorderSkin extends BorderSkin {
     public TerraBorderSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setBackgroundColor(theme.getColor(1));
-        setColor(theme.getColor(2));
-        setTitleColor(theme.getColor(7));
+        setBackgroundColor(1);
+        setColor(2);
+        setTitleColor(7);
     }
 
-    public void setColor(int color) {
+    public final void setColor(int color) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
-    public void setTitleColor(int titleColor) {
+    public final void setTitleColor(int titleColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setTitleColor(theme.getColor(titleColor));
     }
 
-    public void setBackgroundColor(int color) {
+    public final void setBackgroundColor(int color) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBackgroundColor(theme.getColor(color));
     }

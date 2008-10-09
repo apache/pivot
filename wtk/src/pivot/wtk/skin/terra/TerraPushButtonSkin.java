@@ -250,6 +250,20 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         setFont(Font.decode(font));
     }
 
+    public boolean isFontBold() {
+        return ((font.getStyle() & Font.BOLD) == Font.BOLD);
+    }
+
+    public void setFontBold(boolean fontBold) {
+        if (isFontBold() != fontBold) {
+            if (fontBold) {
+                font = font.deriveFont(Font.BOLD);
+            } else {
+                font = font.deriveFont(font.getStyle() & (~Font.BOLD));
+            }
+        }
+    }
+
     public Color getColor() {
         return color;
     }
@@ -269,6 +283,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         setColor(decodeColor(color));
+    }
+
+    public final void setColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColor(theme.getColor(color));
     }
 
     public Color getDisabledColor() {
@@ -292,6 +311,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         setDisabledColor(decodeColor(disabledColor));
     }
 
+    public final void setDisabledColor(int disabledColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledColor(theme.getColor(disabledColor));
+    }
+
     public Color getBackgroundColor() {
         return backgroundColor;
     }
@@ -311,6 +335,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         setBackgroundColor(decodeColor(backgroundColor));
+    }
+
+    public final void setBackgroundColor(int backgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(backgroundColor));
     }
 
     public Color getDisabledBackgroundColor() {
@@ -334,6 +363,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         setDisabledBackgroundColor(decodeColor(disabledBackgroundColor));
     }
 
+    public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
+    }
+
     public Color getBorderColor() {
         return borderColor;
     }
@@ -353,6 +387,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         setBorderColor(decodeColor(borderColor));
+    }
+
+    public final void setBorderColor(int borderColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBorderColor(theme.getColor(borderColor));
     }
 
     public Color getDisabledBorderColor() {
@@ -376,6 +415,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         setDisabledBorderColor(decodeColor(disabledBorderColor));
     }
 
+    public final void setDisabledBorderColor(int disabledBorderColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledBorderColor(theme.getColor(disabledBorderColor));
+    }
+
     public Color getBevelColor() {
         return bevelColor;
     }
@@ -395,6 +439,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         setBevelColor(decodeColor(bevelColor));
+    }
+
+    public final void setBevelColor(int bevelColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBevelColor(theme.getColor(bevelColor));
     }
 
     public Color getPressedBevelColor() {
@@ -418,6 +467,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         setPressedBevelColor(decodeColor(pressedBevelColor));
     }
 
+    public final void setPressedBevelColor(int pressedBevelColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setPressedBevelColor(theme.getColor(pressedBevelColor));
+    }
+
     public Color getDisabledBevelColor() {
         return disabledBevelColor;
     }
@@ -436,7 +490,12 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             throw new IllegalArgumentException("disabledBevelColor is null.");
         }
 
-        setDisabledBackgroundColor(decodeColor(disabledBevelColor));
+        setDisabledBevelColor(decodeColor(disabledBevelColor));
+    }
+
+    public final void setDisabledBevelColor(int disabledBevelColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledBevelColor(theme.getColor(disabledBevelColor));
     }
 
     public Insets getPadding() {

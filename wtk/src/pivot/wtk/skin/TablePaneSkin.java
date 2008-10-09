@@ -43,12 +43,10 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     private int verticalSpacing = 0;
     private boolean showHorizontalGridLines = false;
     private boolean showVerticalGridLines = false;
-    private Color gridColor = DEFAULT_GRID_COLOR;
-    private Color selectionBackgroundColor = DEFAULT_SELECTION_BACKGROUND_COLOR;
+    private Color gridColor = Color.BLACK;
+    private Color selectionBackgroundColor = Color.GRAY;
 
     private static final Insets DEFAULT_PADDING = new Insets(0);
-    private static final Color DEFAULT_GRID_COLOR = new Color(0x99, 0x99, 0x99);
-    private static final Color DEFAULT_SELECTION_BACKGROUND_COLOR = new Color(0xCC, 0xCA, 0xC2);
 
     private int[] columnWidths = null;
     private int[] rowHeights = null;
