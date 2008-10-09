@@ -30,10 +30,12 @@ import pivot.wtk.VerticalAlignment;
  */
 public class TableViewBooleanCellRenderer extends FlowPane
     implements TableView.CellRenderer {
-    private Checkbox checkbox = null;
+    private Checkbox checkbox = new Checkbox();
 
     public TableViewBooleanCellRenderer() {
         super();
+
+        add(checkbox);
 
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
@@ -51,15 +53,6 @@ public class TableViewBooleanCellRenderer extends FlowPane
     @SuppressWarnings("unchecked")
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        // We re-instantiate the checkbox every time we render to ensure that
-        // it stays in sync with our currently installed Theme
-        if (checkbox != null) {
-            remove(checkbox);
-        }
-
-        checkbox = new Checkbox();
-        add(checkbox);
-
         boolean checkboxSelected = false;
 
         // Get the row and cell data
