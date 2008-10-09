@@ -78,13 +78,11 @@ public class SlideTransition extends Transition {
         int duration = getDuration();
         float percentComplete = getPercentComplete();
 
-        float deltaX = (float)(x1 - x0) * percentComplete;
-        x = (int)(reverse ? easing.easeIn(elapsedTime, x0, deltaX, duration)
-            : easing.easeOut(elapsedTime, x0, deltaX, duration));
+        x = (int)(reverse ? easing.easeIn(elapsedTime, x0, x1 - x0, duration)
+            : easing.easeOut(elapsedTime, x0, x1 - x0, duration));
 
-        float deltaY = (float)(y1 - y0) * percentComplete;
-        y = (int)(reverse ? easing.easeOut(elapsedTime, y0, deltaY, duration)
-            : easing.easeOut(elapsedTime, y0, deltaY, duration));
+        y = (int)(reverse ? easing.easeOut(elapsedTime, y0, y1 - y0, duration)
+            : easing.easeOut(elapsedTime, y0, y1 - y0, duration));
 
         translationDecorator.setOffset(x, y);
         component.repaint();

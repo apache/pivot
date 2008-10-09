@@ -103,9 +103,9 @@ public class TerraRollupSkin extends ContainerSkin
 
                 height = (int)(height1 + (height2 - height1) * percentComplete);
                 if (reverse) {
-                    height = (int)easing.easeIn(elapsedTime, height1, height - height1, duration);
+                    height = (int)easing.easeIn(elapsedTime, height1, height2 - height1, duration);
                 } else {
-                    height = (int)easing.easeOut(elapsedTime, height1, height - height1, duration);
+                    height = (int)easing.easeOut(elapsedTime, height1, height2 - height1, duration);
                 }
 
                 Rollup rollup = (Rollup)getComponent();
