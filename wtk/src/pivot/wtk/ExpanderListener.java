@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.util.Vote;
+
 /**
  * Expander listener list.
  *
@@ -28,6 +30,21 @@ public interface ExpanderListener {
      * @param previousTitle
      */
     public void titleChanged(Expander expander, String previousTitle);
+
+    /**
+     * Called to preview an expanded change event.
+     *
+     * @param expander
+     */
+    public Vote previewExpandedChange(Expander expander);
+
+    /**
+     * Called when an expanded change event has been vetoed.
+     *
+     * @param expander
+     * @param reason
+     */
+    public void expandedChangeVetoed(Expander expander, Vote reason);
 
     /**
      * Called when an expander's expanded state has changed.

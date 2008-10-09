@@ -182,6 +182,7 @@ public class TerraMenuPopupSkin extends PopupSkin
         if (reason == Vote.DENY
             && closeTransition != null) {
             closeTransition.stop();
+            closeTransition = null;
         }
     }
 

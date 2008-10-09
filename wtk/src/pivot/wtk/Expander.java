@@ -17,6 +17,7 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
+import pivot.util.Vote;
 
 /**
  * Navigation container that allows a user to expand and collapse a content
@@ -30,6 +31,22 @@ public class Expander extends Container {
         public void titleChanged(Expander expander, String previousTitle) {
             for (ExpanderListener listener : this) {
                 listener.titleChanged(expander, previousTitle);
+            }
+        }
+
+        public Vote previewExpandedChange(Expander expander) {
+            Vote vote = Vote.APPROVE;
+
+            for (ExpanderListener listener : this) {
+                vote = vote.tally(listener.previewExpandedChange(expander));
+            }
+
+            return vote;
+        }
+
+        public void expandedChangeVetoed(Expander expander, Vote reason) {
+            for (ExpanderListener listener : this) {
+                listener.expandedChangeVetoed(expander, reason);
             }
         }
 
@@ -87,8 +104,14 @@ public class Expander extends Container {
 
     public void setExpanded(boolean expanded) {
         if (expanded != this.expanded) {
-            this.expanded = expanded;
-            expanderListeners.expandedChanged(this);
+            Vote vote = expanderListeners.previewExpandedChange(this);
+
+            if (vote == Vote.APPROVE) {
+                this.expanded = expanded;
+                expanderListeners.expandedChanged(this);
+            } else {
+                expanderListeners.expandedChangeVetoed(this, vote);
+            }
         }
     }
 

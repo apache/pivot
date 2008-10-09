@@ -88,6 +88,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             if (reason == Vote.DENY
                 && closeTransition != null) {
                 closeTransition.stop();
+                closeTransition = null;
             }
         }
 

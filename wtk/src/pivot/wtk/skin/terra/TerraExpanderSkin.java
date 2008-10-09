@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import pivot.collections.Dictionary;
+import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
@@ -37,6 +38,10 @@ import pivot.wtk.PushButton;
 import pivot.wtk.FlowPane;
 import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
+import pivot.wtk.effects.Transition;
+import pivot.wtk.effects.TransitionListener;
+import pivot.wtk.effects.easing.Easing;
+import pivot.wtk.effects.easing.Quadratic;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
 
@@ -47,6 +52,45 @@ import pivot.wtk.skin.ContainerSkin;
  */
 public class TerraExpanderSkin extends ContainerSkin
     implements ButtonPressListener, ExpanderListener {
+    public class ExpandTransition extends Transition {
+        private boolean collapse;
+        private Easing easing = new Quadratic();
+
+        public ExpandTransition(boolean collapse, int duration, int rate) {
+            super(duration, rate, false);
+            this.collapse = collapse;
+        }
+
+        public float getScale() {
+            int elapsedTime = getElapsedTime();
+            int duration = getDuration();
+
+            float scale;
+            if (collapse) {
+                scale = easing.easeIn(elapsedTime, 1, -1, duration);
+            } else {
+                scale = easing.easeOut(elapsedTime, 0, 1, duration);
+            }
+
+            return scale;
+        }
+
+        @Override
+        public void start(TransitionListener transitionListener) {
+            super.start(transitionListener);
+        }
+
+        @Override
+        public void stop() {
+            super.stop();
+        }
+
+        @Override
+        protected void update() {
+            invalidateComponent();
+        }
+    }
+
     /**
      * Expander shade button component.
      *
@@ -171,6 +215,11 @@ public class TerraExpanderSkin extends ContainerSkin
     private Color borderColor;
     private Insets padding;
 
+    private ExpandTransition expandTransition = null;
+
+    private static final int EXPAND_DURATION = 250;
+    private static final int EXPAND_RATE = 30;
+
     public TerraExpanderSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBackgroundColor(theme.getColor(1));
@@ -285,8 +334,9 @@ public class TerraExpanderSkin extends ContainerSkin
                     contentWidthConstraint = Math.max(width - reservedWidth, 0);
                 }
 
-                preferredHeight += padding.top + padding.bottom
-                    + contentComponent.getPreferredHeight(contentWidthConstraint);
+                float scale = (expandTransition == null) ? 1.0f : expandTransition.getScale();
+                preferredHeight += (int)(scale * (float)(padding.top + padding.bottom
+                    + contentComponent.getPreferredHeight(contentWidthConstraint)));
             }
         }
 
@@ -526,11 +576,52 @@ public class TerraExpanderSkin extends ContainerSkin
         titleLabel.setText(title);
     }
 
+    public Vote previewExpandedChange(final Expander expander) {
+        Vote vote = Vote.APPROVE;
+
+        if (expander.getDisplay() != null) {
+            if (expandTransition == null) {
+                if (expander.isExpanded()) {
+                    expandTransition = new ExpandTransition(true, EXPAND_DURATION, EXPAND_RATE);
+                    vote = Vote.DEFER;
+
+                    expandTransition.start(new TransitionListener() {
+                        public void transitionCompleted(Transition transition) {
+                            expander.setExpanded(!expander.isExpanded());
+                            expandTransition = null;
+                        }
+                    });
+                }
+            } else {
+                vote = expandTransition.isRunning() ? Vote.DEFER : Vote.APPROVE;
+            }
+        }
+
+        return vote;
+    }
+
+    public void expandedChangeVetoed(Expander expander, Vote reason) {
+        if (reason == Vote.DENY
+            && expandTransition != null) {
+            expandTransition.stop();
+            expandTransition = null;
+        }
+    }
+
     public void expandedChanged(Expander expander) {
+        if (expander.getDisplay() != null) {
+            if (expander.isExpanded()) {
+                expandTransition = new ExpandTransition(false, EXPAND_DURATION, EXPAND_RATE);
+                expandTransition.start(new TransitionListener() {
+                    public void transitionCompleted(Transition transition) {
+                        expandTransition = null;
+                    }
+                });
+            }
+        }
+
         Image buttonData = expander.isExpanded() ? collapseImage : expandImage;
         shadeButton.setButtonData(buttonData);
-
-        invalidateComponent();
     }
 
     public void contentChanged(Expander expander, Component previousContent) {
