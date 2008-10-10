@@ -20,55 +20,55 @@ limitations under the License.
     <content>
         <Border styles="{padding:0}">
             <content>
-                <ScrollPane styles="{backgroundColor:5}">
+                <ScrollPane styles="{backgroundColor:4}">
                     <view>
                         <FlowPane orientation="vertical" styles="{padding:6}">
                             <Rollup expanded="true">
-                                <Label text="Buttons" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Buttons" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="buttons" src="buttons.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Lists" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Lists" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="lists" src="lists.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Text" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Text" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="text" src="text.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Navigation" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Navigation" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="navigation" src="navigation.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Splitters" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Splitters" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="splitters" src="splitters.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Menus" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Menus" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="menus" src="menus.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Meters" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Meters" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="meters" src="meters.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Spinners" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Spinners" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="spinners" src="spinners.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Tables" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Tables" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="tables" src="tables.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Trees" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Trees" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="trees" src="trees.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Drag &amp; Drop" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Drag &amp; Drop" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="dragdrop" src="dragdrop.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Alerts &amp; Prompts" styles="{fontBold:true, fontSize:12, color:6}"/>
+                                <Label text="Alerts &amp; Prompts" styles="{fontBold:true, fontSize:12, color:5}"/>
                                 <wtkx:include namespace="alerts" src="alerts.wtkx"/>
                             </Rollup>
                         </FlowPane>

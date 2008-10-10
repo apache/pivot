@@ -333,16 +333,16 @@ public class TerraTextInputSkin extends ComponentSkin
         font = theme.getFont();
         color = theme.getColor(0);
         disabledColor = theme.getColor(2);
-        backgroundColor = theme.getColor(5);
-        disabledBackgroundColor = theme.getColor(4);
+        backgroundColor = theme.getColor(4);
+        disabledBackgroundColor = theme.getColor(3);
         borderColor = theme.getColor(2);
         disabledBorderColor = theme.getColor(2);
         padding = new Insets(2);
 
         selectionColor = theme.getColor(1);
-        selectionBackgroundColor = theme.getColor(8);
+        selectionBackgroundColor = theme.getColor(7);
         inactiveSelectionColor = theme.getColor(0);
-        inactiveSelectionBackgroundColor = theme.getColor(3);
+        inactiveSelectionBackgroundColor = TerraTheme.adjustBrightness(theme.getColor(3), -0.1f);
 
         // Set the derived colors
         bevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);

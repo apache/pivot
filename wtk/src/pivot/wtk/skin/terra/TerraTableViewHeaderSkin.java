@@ -181,8 +181,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         font = theme.getFont();
         color = theme.getColor(0);
         disabledColor = theme.getColor(2);
-        backgroundColor = theme.getColor(4);
-        disabledBackgroundColor = theme.getColor(4);
+        backgroundColor = theme.getColor(3);
+        disabledBackgroundColor = theme.getColor(3);
         borderColor = theme.getColor(2);
         disabledBorderColor = theme.getColor(2);
         headersPressable = true;

@@ -63,7 +63,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private Color selectionBackgroundColor;
     private Color inactiveSelectionColor;
     private Color inactiveSelectionBackgroundColor;
-    private Color highlightColor;
     private Color highlightBackgroundColor;
     private Color alternateRowColor;
     private Color gridColor;
@@ -81,13 +80,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         disabledColor = theme.getColor(2);
         backgroundColor = theme.getColor(1);
         selectionColor = theme.getColor(1);
-        selectionBackgroundColor = theme.getColor(8);
+        selectionBackgroundColor = theme.getColor(7);
         inactiveSelectionColor = theme.getColor(0);
-        inactiveSelectionBackgroundColor = theme.getColor(3);
-        highlightColor = theme.getColor(3);
-        highlightBackgroundColor = theme.getColor(4);
-        alternateRowColor = theme.getColor(5);
-        gridColor = theme.getColor(5);
+        inactiveSelectionBackgroundColor = TerraTheme.adjustBrightness(theme.getColor(3), -0.1f);
+        highlightBackgroundColor = theme.getColor(3);
+        alternateRowColor = TerraTheme.adjustBrightness(theme.getColor(3), 0.1f);
+        gridColor = TerraTheme.adjustBrightness(theme.getColor(3), 0.1f);
         showHorizontalGridLines = true;
         showVerticalGridLines = true;
         showHighlight = true;
@@ -632,27 +630,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         setInactiveSelectionBackgroundColor(decodeColor(inactiveSelectionBackgroundColor));
-    }
-
-    public Color getHighlightColor() {
-        return highlightColor;
-    }
-
-    public void setHighlightColor(Color highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
-        }
-
-        this.highlightColor = highlightColor;
-        repaintComponent();
-    }
-
-    public final void setHighlightColor(String highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
-        }
-
-        setHighlightColor(decodeColor(highlightColor));
     }
 
     public Color getHighlightBackgroundColor() {

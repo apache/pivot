@@ -269,7 +269,7 @@ public class TerraRollupSkin extends ContainerSkin
 
     public TerraRollupSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        buttonColor = theme.getColor(3);
+        buttonColor = TerraTheme.adjustBrightness(theme.getColor(3), -0.1f);
         spacing = 4;
         buffer = 4;
         justify = false;

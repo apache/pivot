@@ -162,8 +162,8 @@ public class TerraPaletteSkin extends WindowSkin {
         setBackgroundColor(theme.getColor(3));
 
         titleBarColor = theme.getColor(1);
-        titleBarBackgroundColor = theme.getColor(7);
-        titleBarBorderColor = theme.getColor(6);
+        titleBarBackgroundColor = theme.getColor(6);
+        titleBarBorderColor = theme.getColor(5);
         contentBorderColor = theme.getColor(2);
 
         // Set the derived colors

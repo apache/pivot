@@ -47,7 +47,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         color = theme.getColor(0);
         disabledColor = theme.getColor(2);
         highlightColor = theme.getColor(1);
-        highlightBackgroundColor = theme.getColor(8);
+        highlightBackgroundColor = theme.getColor(7);
         spacing = 2;
     }
 

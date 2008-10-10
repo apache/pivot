@@ -533,7 +533,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             // Paint the hash marks
             if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
                 int middle = width / 2;
-                graphics.setPaint(backgroundColor.darker());
+                graphics.setPaint(TerraTheme.adjustBrightness(backgroundColor, -0.1f));
                 graphics.drawLine(middle - 3, 4, middle - 3, height - 5);
                 graphics.drawLine(middle, 4, middle, height - 5);
                 graphics.drawLine(middle + 3, 4, middle + 3, height - 5);
@@ -543,7 +543,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                 graphics.drawLine(middle + 4, 4, middle + 4, height - 5);
             } else {
                 int middle = height / 2;
-                graphics.setPaint(backgroundColor.darker());
+                graphics.setPaint(TerraTheme.adjustBrightness(backgroundColor, -0.1f));
                 graphics.drawLine(4, middle - 3, width - 5, middle - 3);
                 graphics.drawLine(4, middle, width - 5, middle);
                 graphics.drawLine(4, middle + 3, width - 5, middle + 3);
@@ -668,12 +668,12 @@ public class TerraScrollBarSkin extends ContainerSkin
         minimumHandleLength = 31;
         borderColor = theme.getColor(2);
         scrollButtonImageColor = theme.getColor(0);
-        scrollButtonBackgroundColor = theme.getColor(4);
-        scrollButtonDisabledBackgroundColor = theme.getColor(4);
-        scrollButtonPressedBackgroundColor = theme.getColor(3);
-        scrollButtonHighlightedBackgroundColor = theme.getColor(5);
+        scrollButtonBackgroundColor = theme.getColor(3);
+        scrollButtonDisabledBackgroundColor = theme.getColor(3);
+        scrollButtonPressedBackgroundColor = TerraTheme.adjustBrightness(theme.getColor(3), -0.1f);
+        scrollButtonHighlightedBackgroundColor = theme.getColor(4);
 
-        setBackgroundColor(theme.getColor(3));
+        setBackgroundColor(TerraTheme.adjustBrightness(theme.getColor(3), -0.1f));
     }
 
     @Override

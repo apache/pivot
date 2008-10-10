@@ -333,10 +333,10 @@ public class TerraFrameSkin extends WindowSkin {
         setBackgroundColor(theme.getColor(3));
 
         titleBarColor = theme.getColor(1);
-        titleBarBackgroundColor = theme.getColor(7);
-        titleBarBorderColor = theme.getColor(6);
+        titleBarBackgroundColor = theme.getColor(6);
+        titleBarBorderColor = theme.getColor(5);
         inactiveTitleBarColor = theme.getColor(2);
-        inactiveTitleBarBackgroundColor = theme.getColor(3);
+        inactiveTitleBarBackgroundColor = TerraTheme.adjustBrightness(theme.getColor(3), -0.1f);
         inactiveTitleBarBorderColor = theme.getColor(2);
         contentBorderColor = theme.getColor(2);
         padding = new Insets(8);

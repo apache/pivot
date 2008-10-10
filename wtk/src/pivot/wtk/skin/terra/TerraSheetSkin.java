@@ -87,7 +87,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public TerraSheetSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
 
-        Color backgroundColor = theme.getColor(5);
+        Color backgroundColor = theme.getColor(4);
         backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
             backgroundColor.getBlue(), 0x80);
         setBackgroundColor(backgroundColor);

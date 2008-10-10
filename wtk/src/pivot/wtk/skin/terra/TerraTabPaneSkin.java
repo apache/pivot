@@ -357,8 +357,8 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     public TerraTabPaneSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        activeTabColor = theme.getColor(5);
-        inactiveTabColor = theme.getColor(3);
+        activeTabColor = theme.getColor(4);
+        inactiveTabColor = TerraTheme.adjustBrightness(theme.getColor(3), -0.1f);
         borderColor = theme.getColor(2);
         padding = new Insets(6);
         buttonFont = theme.getFont();
