@@ -38,7 +38,7 @@ public class ListButtons implements Application {
             if (index != -1) {
                 String item = (String)listButton.getListData().get(index);
 
-                // Get the image URL for the selected item                
+                // Get the image URL for the selected item
                 ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
                 URL imageURL = classLoader.getResource("pivot/tutorials/" + item);
 
