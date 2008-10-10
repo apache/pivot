@@ -17,7 +17,7 @@ limitations under the License.
 
 <Border styles="{color:3, padding:0}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
-    xmlns:collections="pivot.collections" 
+    xmlns:collections="pivot.collections"
     xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <content>
         <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
