@@ -27,7 +27,7 @@ public class TerraSeparatorSkin extends SeparatorSkin {
     public TerraSeparatorSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setColor(theme.getColor(2));
-        setHeadingColor(theme.getColor(7));
+        setHeadingColor(theme.getColor(6));
     }
 
     public void setColor(int color) {

@@ -4,15 +4,12 @@
         "#000000",
         "#ffffff",
         "#999999",
-        "#b2b2b2",
         "#cccac2",
         "#e6e4da",
         "#f7f5eb",
-        "#2c5680",
-        "#346799",
+        "#2b5580",
         "#3c77b2",
-        "#4589cc",
-        "#144f8b"
+        "#2f5e8c"
     ],
 
     errorIcon: "message_type-error-32x32.png",

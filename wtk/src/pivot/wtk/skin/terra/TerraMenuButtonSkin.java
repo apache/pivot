@@ -62,10 +62,10 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         font = theme.getFont();
         color = theme.getColor(0);
         disabledColor = theme.getColor(2);
-        backgroundColor = theme.getColor(5);
-        disabledBackgroundColor = theme.getColor(6);
+        backgroundColor = theme.getColor(4);
+        disabledBackgroundColor = theme.getColor(5);
         borderColor = theme.getColor(2);
-        disabledBorderColor = theme.getColor(4);
+        disabledBorderColor = theme.getColor(3);
         padding = new Insets(3);
         spacing = 0;
         toolbar = false;

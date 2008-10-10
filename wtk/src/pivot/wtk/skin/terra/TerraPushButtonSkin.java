@@ -58,10 +58,10 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         font = theme.getFont();
         color = theme.getColor(0);
         disabledColor = theme.getColor(2);
-        backgroundColor = theme.getColor(5);
-        disabledBackgroundColor = theme.getColor(5);
+        backgroundColor = theme.getColor(4);
+        disabledBackgroundColor = theme.getColor(4);
         borderColor = theme.getColor(2);
-        disabledBorderColor = theme.getColor(3);
+        disabledBorderColor = theme.getColor(2);
         padding = new Insets(3);
         preferredAspectRatio = Float.NaN;
         toolbar = false;

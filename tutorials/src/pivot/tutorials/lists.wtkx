@@ -21,7 +21,7 @@ limitations under the License.
         <FlowPane styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
             <FlowPane orientation="vertical" styles="{spacing:6}">
                 <Label text="Basic" styles="{fontBold:true}"/>
-                <Border styles="{padding:0, color:4}">
+                <Border styles="{padding:0, color:3}">
                     <content>
                         <ScrollPane preferredHeight="80">
                             <view>
@@ -43,7 +43,7 @@ limitations under the License.
 
             <FlowPane orientation="vertical" styles="{spacing:6}">
                 <Label text="Multi-Select" styles="{fontBold:true}"/>
-                <Border styles="{padding:0, color:4}">
+                <Border styles="{padding:0, color:3}">
                     <content>
                         <ScrollPane preferredHeight="80">
                             <view>
@@ -65,7 +65,7 @@ limitations under the License.
 
             <FlowPane orientation="vertical" styles="{spacing:6}">
                 <Label text="Image" styles="{fontBold:true}"/>
-                <Border styles="{padding:0, color:4}">
+                <Border styles="{padding:0, color:3}">
                     <content>
                         <ScrollPane preferredHeight="80">
                             <view>
