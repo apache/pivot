@@ -264,7 +264,7 @@ public class TerraRollupSkin extends ContainerSkin
     private boolean justify;
     private boolean firstChildToggles;
 
-    private static final int EXPANSION_DURATION = 200;
+    private static final int EXPANSION_DURATION = 250;
     private static final int EXPANSION_RATE = 30;
 
     public TerraRollupSkin() {
