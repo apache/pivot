@@ -25,6 +25,14 @@ import pivot.wtk.media.Image;
  */
 public class MenuItemData extends ButtonData {
     private Keyboard.KeyStroke keyboardShortcut = null;
+
+    /**
+     * Constructor.
+     */
+    public MenuItemData() {
+        this(null, null, null);
+    }
+
     /**
      * Constructor.
      *
@@ -78,5 +86,13 @@ public class MenuItemData extends ButtonData {
 
     public Keyboard.KeyStroke getKeyboardShortcut() {
         return keyboardShortcut;
+    }
+
+    public void setKeyboardShortcut(Keyboard.KeyStroke keyboardShortcut) {
+        this.keyboardShortcut = keyboardShortcut;
+    }
+
+    public void setKeyboardShortcut(String keyboardShortcut) {
+        setKeyboardShortcut(Keyboard.KeyStroke.decode((String)keyboardShortcut));
     }
 }

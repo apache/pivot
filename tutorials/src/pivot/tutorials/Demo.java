@@ -21,7 +21,9 @@ import java.net.URL;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
+import pivot.collections.Map;
 import pivot.collections.Sequence;
+import pivot.serialization.JSONSerializer;
 import pivot.util.CalendarDate;
 import pivot.util.Vote;
 import pivot.wtk.Action;
@@ -460,7 +462,10 @@ public class Demo implements Application {
             public void buttonPressed(Button button) {
                 Button.Group messageTypeGroup = Button.getGroup("messageType");
                 Button selection = messageTypeGroup.getSelection();
-                String messageType = ((Dictionary<String, String>)selection.getButtonData()).get("type");
+
+                Map<String, ?> userData = JSONSerializer.parseMap((String)selection.getUserData());
+                String messageType = (String)userData.get("type");
+
                 if (messageType.equals("custom")) {
                     ArrayList<String> options = new ArrayList<String>();
                     options.add("OK");
@@ -482,7 +487,7 @@ public class Demo implements Application {
 
                     alert.open(window);
                 } else {
-                    String message = ((Dictionary<String, String>)selection.getButtonData()).get("message");
+                    String message = (String)userData.get("message");
                     Alert.alert(MessageType.decode(messageType), message, window);
                 }
             }
@@ -492,7 +497,9 @@ public class Demo implements Application {
             public void buttonPressed(Button button) {
                 Button.Group messageTypeGroup = Button.getGroup("messageType");
                 Button selection = messageTypeGroup.getSelection();
-                String messageType = ((Dictionary<String, String>)selection.getButtonData()).get("type");
+
+                Map<String, ?> userData = JSONSerializer.parseMap((String)selection.getUserData());
+                String messageType = (String)userData.get("type");
 
                 if (messageType.equals("custom")) {
                     ArrayList<String> options = new ArrayList<String>();
@@ -515,7 +522,7 @@ public class Demo implements Application {
 
                     prompt.open(window);
                 } else {
-                    String message = ((Dictionary<String, String>)selection.getButtonData()).get("message");
+                    String message = (String)userData.get("message");
                     Prompt.prompt(MessageType.decode(messageType), message, window);
                 }
             }

@@ -17,11 +17,7 @@ package pivot.wtk.content;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.net.URL;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.Dictionary;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
@@ -42,9 +38,6 @@ public class TableViewHeaderDataRenderer extends FlowPane
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();
 
-    public static final String ICON_KEY = "icon";
-    public static final String TEXT_KEY = "text";
-
     public TableViewHeaderDataRenderer() {
         getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
@@ -63,41 +56,19 @@ public class TableViewHeaderDataRenderer extends FlowPane
         validate();
     }
 
-    @SuppressWarnings("unchecked")
     public void render(Object data, TableViewHeader tableViewHeader, boolean highlighted) {
         Image icon = null;
         String text = null;
 
-        if (data != null) {
-            if (data instanceof Image) {
-                icon = (Image)data;
-            } else if (data instanceof String) {
-                text = (String)data;
-            } else {
-                Dictionary<String, Object> dictionary = (data instanceof Dictionary<?, ?>) ?
-                    (Dictionary<String, Object>)data : new BeanDictionary(data);
-
-                Object iconValue = dictionary.get(ICON_KEY);
-                if (iconValue instanceof Image) {
-                    icon = (Image)iconValue;
-                } else {
-                    if (iconValue instanceof String) {
-                        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                        iconValue = classLoader.getResource((String)iconValue);
-                    }
-
-                    if (iconValue instanceof URL) {
-                        URL iconURL = (URL)iconValue;
-                        icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
-
-                        if (icon == null) {
-                            icon = Image.load(iconURL);
-                            ApplicationContext.getResourceCache().put(iconURL, icon);
-                        }
-                    }
-                }
-
-                text = (String)dictionary.get(TEXT_KEY);
+        if (data instanceof TableViewHeaderData) {
+            TableViewHeaderData tableViewHeaderData = (TableViewHeaderData)data;
+            icon = tableViewHeaderData.getIcon();
+            text = tableViewHeaderData.getText();
+        } else if (data instanceof Image) {
+            icon = (Image)data;
+        } else {
+            if (data != null) {
+                text = data.toString();
             }
         }
 

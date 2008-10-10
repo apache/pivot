@@ -15,26 +15,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+<FlowPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:content="pivot.wtk.content"
+    xmlns="pivot.wtk">
     <Border>
         <content>
             <FlowPane orientation="vertical" styles="{spacing: 12}">
                 <FlowPane orientation="vertical" styles="{padding: 6, spacing: 6}">
-                    <RadioButton group="messageType" selected="true">
-                       <buttonData text="Error" type="error" message="This is an error message."/>
-                    </RadioButton>
-                    <RadioButton group="messageType">
-                       <buttonData text="Warning" type="warning" message="This is a warning message."/>
-                    </RadioButton>
-                    <RadioButton group="messageType">
-                       <buttonData text="Question" type="question" message="This is a question."/>
-                    </RadioButton>
-                    <RadioButton group="messageType">
-                       <buttonData text="Info" type="info" message="This is an info message."/>
-                    </RadioButton>
-                    <RadioButton group="messageType">
-                       <buttonData text="Custom" type="custom"/>
-                    </RadioButton>
+                    <RadioButton buttonData="Error" group="messageType" selected="true"
+                        userData="{type:'error', message:'This is an error message.'}"/>
+                    <RadioButton buttonData="Warning" group="messageType"
+                        userData="{type:'warning', message:'This is a warning message.'}"/>
+                    <RadioButton buttonData="Question" group="messageType"
+                        userData="{type:'question', message:'This is a question message.'}"/>
+                    <RadioButton buttonData="Info" group="messageType"
+                        userData="{type:'info', message:'This is an info message.'}"/>
+                    <RadioButton buttonData="Custom" group="messageType"
+                        userData="{type:'custom', message:'This is a custom message.'}"/>
 
                     <FlowPane>
                         <PushButton wtkx:id="alertButton" buttonData="Show Alert"/>

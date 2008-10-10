@@ -17,11 +17,7 @@ package pivot.wtk.content;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.net.URL;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.Dictionary;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
@@ -40,9 +36,6 @@ import pivot.wtk.media.Image;
 public class ListViewItemRenderer extends FlowPane implements ListView.ItemRenderer {
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();
-
-    public static final String ICON_KEY = "icon";
-    public static final String TEXT_KEY = "text";
 
     public static final int DEFAULT_ICON_WIDTH = 16;
     public static final int DEFAULT_ICON_HEIGHT = 16;
@@ -71,42 +64,20 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
         validate();
     }
 
-    @SuppressWarnings("unchecked")
     public void render(Object item, ListView listView, boolean selected,
         boolean highlighted, boolean disabled) {
         Image icon = null;
         String text = null;
 
-        if (item != null) {
-            if (item instanceof Image) {
-                icon = (Image)item;
-            } else if (item instanceof String) {
+        if (item instanceof ListItem) {
+            ListItem listItem = (ListItem)item;
+            icon = listItem.getIcon();
+            text = listItem.getText();
+        } else if (item instanceof Image) {
+            icon = (Image)item;
+        } else {
+            if (item != null) {
                 text = (String)item;
-            } else {
-                Dictionary<String, Object> dictionary = (item instanceof Dictionary<?, ?>) ?
-                    (Dictionary<String, Object>)item : new BeanDictionary(item);
-
-                    Object iconValue = dictionary.get(ICON_KEY);
-                    if (iconValue instanceof Image) {
-                        icon = (Image)iconValue;
-                    } else {
-                        if (iconValue instanceof String) {
-                            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                            iconValue = classLoader.getResource((String)iconValue);
-                        }
-
-                        if (iconValue instanceof URL) {
-                            URL iconURL = (URL)iconValue;
-                            icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
-
-                            if (icon == null) {
-                                icon = Image.load(iconURL);
-                                ApplicationContext.getResourceCache().put(iconURL, icon);
-                            }
-                        }
-                    }
-
-                text = (String)dictionary.get(TEXT_KEY);
             }
         }
 

@@ -17,11 +17,7 @@ package pivot.wtk.content;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.net.URL;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.Dictionary;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
@@ -43,10 +39,6 @@ public class MenuItemDataRenderer extends FlowPane implements Button.DataRendere
     protected Label textLabel = new Label();
     protected Label keyboardShortcutLabel = new Label();
 
-    public static final String ICON_KEY = "icon";
-    public static final String TEXT_KEY = "text";
-    public static final String KEYBOARD_SHORTCUT_KEY = "keyboardShortcut";
-
     public MenuItemDataRenderer() {
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         getStyles().put("padding", new Insets(2));
@@ -61,7 +53,6 @@ public class MenuItemDataRenderer extends FlowPane implements Button.DataRendere
             HorizontalAlignment.RIGHT);
     }
 
-    @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
 
@@ -76,45 +67,20 @@ public class MenuItemDataRenderer extends FlowPane implements Button.DataRendere
         String text = null;
         Keyboard.KeyStroke keyboardShortcut = null;
 
-        if (data != null) {
-            if (data instanceof Image) {
-                icon = (Image)data;
-            } else if (data instanceof String) {
-                text = (String)data;
-            } else {
-                Dictionary<String, Object> dictionary = (data instanceof Dictionary<?, ?>) ?
-                    (Dictionary<String, Object>)data : new BeanDictionary(data);
+        if (data instanceof ButtonData) {
+            ButtonData buttonData = (ButtonData)data;
+            icon = buttonData.getIcon();
+            text = buttonData.getText();
 
-                Object iconValue = dictionary.get(ICON_KEY);
-                if (iconValue instanceof Image) {
-                    icon = (Image)iconValue;
-                } else {
-                    if (iconValue instanceof String) {
-                        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                        iconValue = classLoader.getResource((String)iconValue);
-                    }
-
-                    if (iconValue instanceof URL) {
-                        URL iconURL = (URL)iconValue;
-                        icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
-
-                        if (icon == null) {
-                            icon = Image.load(iconURL);
-                            ApplicationContext.getResourceCache().put(iconURL, icon);
-                        }
-                    }
-                }
-
-                text = (String)dictionary.get(TEXT_KEY);
-
-                Object keyboardShortcutValue = dictionary.get(KEYBOARD_SHORTCUT_KEY);
-                if (keyboardShortcutValue instanceof Keyboard.KeyStroke) {
-                    keyboardShortcut = (Keyboard.KeyStroke)keyboardShortcutValue;
-                } else {
-                    if (keyboardShortcutValue instanceof String) {
-                        keyboardShortcut = Keyboard.KeyStroke.decode((String)keyboardShortcutValue);
-                    }
-                }
+            if (buttonData instanceof MenuItemData) {
+                MenuItemData menuItemData = (MenuItemData)buttonData;
+                keyboardShortcut = menuItemData.getKeyboardShortcut();
+            }
+        } else if (data instanceof Image) {
+            icon = (Image)data;
+        } else {
+            if (data != null) {
+                text = data.toString();
             }
         }
 

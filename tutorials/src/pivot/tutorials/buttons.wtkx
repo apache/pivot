@@ -51,16 +51,22 @@ limitations under the License.
                     <Label text="Image Buttons" styles="{fontBold:true}"/>
                     <FlowPane>
                         <PushButton>
-                            <buttonData icon="@bell.png" text="Bell"/>
+                            <buttonData>
+                                <content:ButtonData icon="@bell.png" text="Bell"/>
+                            </buttonData>
                         </PushButton>
                         <PushButton>
-                            <buttonData icon="@clock.png" text="Clock"/>
+                            <buttonData>
+                                <content:ButtonData icon="@clock.png" text="Clock"/>
+                            </buttonData>
                             <dataRenderer>
                                 <content:ButtonDataRenderer orientation="vertical"/>
                             </dataRenderer>
                         </PushButton>
                         <PushButton enabled="false">
-                            <buttonData icon="@house.png" text="House"/>
+                            <buttonData>
+                                <content:ButtonData icon="@house.png" text="House"/>
+                            </buttonData>
                         </PushButton>
                     </FlowPane>
                 </FlowPane>
@@ -69,13 +75,19 @@ limitations under the License.
                     <Label text="Toolbar Buttons" styles="{fontBold:true}"/>
                     <FlowPane>
                         <PushButton styles="{toolbar:true}">
-                            <buttonData icon="@bell.png"/>
+                            <buttonData>
+                                <content:ButtonData icon="@bell.png"/>
+                            </buttonData>
                         </PushButton>
                         <PushButton styles="{toolbar:true}">
-                            <buttonData icon="@clock.png"/>
+                            <buttonData>
+                                <content:ButtonData icon="@clock.png"/>
+                            </buttonData>
                         </PushButton>
                         <PushButton enabled="false" styles="{toolbar:true}">
-                            <buttonData icon="@house.png"/>
+                            <buttonData>
+                                <content:ButtonData icon="@house.png"/>
+                            </buttonData>
                         </PushButton>
                     </FlowPane>
                 </FlowPane>
@@ -99,13 +111,19 @@ limitations under the License.
                     <Label text="Image Radio Buttons" styles="{fontBold:true}"/>
                     <FlowPane orientation="vertical">
                         <RadioButton group="imageRadioButtons">
-                            <buttonData icon="@bell.png" text="Bell"/>
+                            <buttonData>
+                                <content:ButtonData icon="@bell.png" text="Bell"/>
+                            </buttonData>
                         </RadioButton>
                         <RadioButton group="imageRadioButtons">
-                            <buttonData icon="@clock.png" text="Clock"/>
+                            <buttonData>
+                                <content:ButtonData icon="@clock.png" text="Clock"/>
+                            </buttonData>
                         </RadioButton>
                         <RadioButton group="imageRadioButtons" selected="true" enabled="false">
-                            <buttonData icon="@house.png" text="House"/>
+                            <buttonData>
+                                <content:ButtonData icon="@house.png" text="House"/>
+                            </buttonData>
                         </RadioButton>
                     </FlowPane>
                 </FlowPane>
@@ -129,13 +147,19 @@ limitations under the License.
                     <Label text="Image Checkboxes" styles="{fontBold:true}"/>
                     <FlowPane orientation="vertical">
                         <Checkbox>
-                            <buttonData icon="@clock.png" text="Clock"/>
+                            <buttonData>
+                                <content:ButtonData icon="@clock.png" text="Clock"/>
+                            </buttonData>
                         </Checkbox>
                         <Checkbox>
-                            <buttonData icon="@bell.png" text="Bell"/>
+                            <buttonData>
+                                <content:ButtonData icon="@bell.png" text="Bell"/>
+                            </buttonData>
                         </Checkbox>
                         <Checkbox selected="true" enabled="false">
-                            <buttonData icon="@house.png" text="House"/>
+                            <buttonData>
+                                <content:ButtonData icon="@house.png" text="House"/>
+                            </buttonData>
                         </Checkbox>
                     </FlowPane>
                 </FlowPane>
@@ -168,13 +192,19 @@ limitations under the License.
                     <Label text="Image Link Buttons" styles="{fontBold:true}"/>
                     <FlowPane orientation="vertical">
                         <LinkButton>
-                            <buttonData icon="@bell.png" text="Bell"/>
+                            <buttonData>
+                                <content:ButtonData icon="@bell.png" text="Bell"/>
+                            </buttonData>
                         </LinkButton>
                         <LinkButton>
-                            <buttonData icon="@clock.png" text="Clock"/>
+                            <buttonData>
+                                <content:ButtonData icon="@clock.png" text="Clock"/>
+                            </buttonData>
                         </LinkButton>
                         <LinkButton enabled="false">
-                            <buttonData icon="@house.png" text="House"/>
+                            <buttonData>
+                                <content:ButtonData icon="@house.png" text="House"/>
+                            </buttonData>
                         </LinkButton>
                     </FlowPane>
                 </FlowPane>

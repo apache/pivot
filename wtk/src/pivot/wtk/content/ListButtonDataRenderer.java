@@ -35,6 +35,11 @@ public class ListButtonDataRenderer extends ButtonDataRenderer {
     public void render(Object data, Button button, boolean highlight) {
         if (data == null) {
             data = "";
+        } else {
+            if (data instanceof ListItem) {
+                ListItem listItem = (ListItem)data;
+                data = new ButtonData(listItem.getIcon(), listItem.getText());
+            }
         }
 
         super.render(data, button, highlight);

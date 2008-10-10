@@ -80,11 +80,15 @@
                     maximumLength="8" />
                 <LinkButton wtkx:id="addSymbolButton" enabled="false"
                     tooltipText="%addSymbol">
-                    <buttonData icon="@add.png" />
+                    <buttonData>
+                        <content:ButtonData icon="@add.png" />
+                    </buttonData>
                 </LinkButton>
                 <LinkButton wtkx:id="removeSymbolsButton" enabled="false"
                     tooltipText="%removeSymbol">
-                    <buttonData icon="@delete.png" />
+                    <buttonData>
+                        <content:ButtonData icon="@delete.png" />
+                    </buttonData>
                 </LinkButton>
             </FlowPane>
         </TablePane.Row>

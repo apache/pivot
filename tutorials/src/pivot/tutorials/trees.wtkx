@@ -29,46 +29,48 @@ limitations under the License.
                             <view>
                                 <TreeView>
                                     <treeData>
-                                        <node text="Numbers">
-                                            <node text="0"/>
-                                            <node text="1"/>
-                                            <node text="2"/>
-                                            <node text="3"/>
-                                            <node text="4"/>
-                                            <node text="5"/>
-                                            <node text="6"/>
-                                            <node text="7"/>
-                                            <node text="8"/>
-                                            <node text="9"/>
-                                        </node>
-                                        <node text="Letters">
-                                            <node text="A"/>
-                                            <node text="B"/>
-                                            <node text="C"/>
-                                            <node text="D"/>
-                                            <node text="E"/>
-                                            <node text="F"/>
-                                            <node text="G"/>
-                                            <node text="H"/>
-                                            <node text="I"/>
-                                            <node text="J"/>
-                                            <node text="K"/>
-                                            <node text="L"/>
-                                            <node text="M"/>
-                                            <node text="N"/>
-                                            <node text="O"/>
-                                            <node text="P"/>
-                                            <node text="Q"/>
-                                            <node text="R"/>
-                                            <node text="S"/>
-                                            <node text="T"/>
-                                            <node text="U"/>
-                                            <node text="V"/>
-                                            <node text="W"/>
-                                            <node text="X"/>
-                                            <node text="Y"/>
-                                            <node text="Z"/>
-                                        </node>
+                                        <content:TreeBranch>
+                                            <content:TreeBranch text="Numbers">
+                                                <content:TreeNode text="0"/>
+                                                <content:TreeNode text="1"/>
+                                                <content:TreeNode text="2"/>
+                                                <content:TreeNode text="3"/>
+                                                <content:TreeNode text="4"/>
+                                                <content:TreeNode text="5"/>
+                                                <content:TreeNode text="6"/>
+                                                <content:TreeNode text="7"/>
+                                                <content:TreeNode text="8"/>
+                                                <content:TreeNode text="9"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Letters">
+                                                <content:TreeNode text="A"/>
+                                                <content:TreeNode text="B"/>
+                                                <content:TreeNode text="C"/>
+                                                <content:TreeNode text="D"/>
+                                                <content:TreeNode text="E"/>
+                                                <content:TreeNode text="F"/>
+                                                <content:TreeNode text="G"/>
+                                                <content:TreeNode text="H"/>
+                                                <content:TreeNode text="I"/>
+                                                <content:TreeNode text="J"/>
+                                                <content:TreeNode text="K"/>
+                                                <content:TreeNode text="L"/>
+                                                <content:TreeNode text="M"/>
+                                                <content:TreeNode text="N"/>
+                                                <content:TreeNode text="O"/>
+                                                <content:TreeNode text="P"/>
+                                                <content:TreeNode text="Q"/>
+                                                <content:TreeNode text="R"/>
+                                                <content:TreeNode text="S"/>
+                                                <content:TreeNode text="T"/>
+                                                <content:TreeNode text="U"/>
+                                                <content:TreeNode text="V"/>
+                                                <content:TreeNode text="W"/>
+                                                <content:TreeNode text="X"/>
+                                                <content:TreeNode text="Y"/>
+                                                <content:TreeNode text="Z"/>
+                                            </content:TreeBranch>
+                                        </content:TreeBranch>
                                     </treeData>
                                     <nodeRenderer>
                                         <content:TreeViewNodeRenderer showIcon="false"/>
@@ -90,50 +92,52 @@ limitations under the License.
                             <view>
                                 <TreeView wtkx:id="editableTreeView">
                                     <treeData>
-                                        <node text="Activity" icon="@folder.png">
-                                            <node text="Games" icon="@folder.png">
-                                                <node text="A very long game name that just serves to show how a wide tree node behaves" icon="@page_white.png"/>
-                                                <node text="Air Hockey" icon="@page_white.png"/>
-                                                <node text="Foosball" icon="@page_white.png"/>
-                                                <node text="Ping Pong" icon="@page_white.png"/>
-                                            </node>
-                                            <node text="Sports" icon="@folder.png">
-                                                <node text="Baseball" icon="@page_white.png"/>
-                                                <node text="Basketball" icon="@page_white.png"/>
-                                                <node text="Football" icon="@page_white.png"/>
-                                                <node text="Ice Hockey" icon="@page_white.png"/>
-                                                <node text="Soccer" icon="@page_white.png"/>
-                                                <node text="Softball" icon="@page_white.png"/>
-                                            </node>
-                                            <node text="Camping" icon="@page_white.png"/>
-                                            <node text="Skiing" icon="@page_white.png"/>
-                                        </node>
-                                        <node text="Occasion" icon="@folder.png">
-                                            <node text="Holidays" icon="@folder.png">
-                                                <node text="Christmas" icon="@page_white.png"/>
-                                                <node text="Independence Day" icon="@page_white.png"/>
-                                                <node text="Labor Day" icon="@page_white.png"/>
-                                                <node text="New Year's Day" icon="@page_white.png"/>
-                                                <node text="President's Day" icon="@page_white.png"/>
-                                                <node text="Thanksgiving" icon="@page_white.png"/>
-                                                <node text="Valentine's Day" icon="@page_white.png"/>
-                                                <node text="Veteran's Day" icon="@page_white.png"/>
-                                            </node>
-                                            <node text="Anniversary" icon="@page_white.png"/>
-                                            <node text="Birthday" icon="@page_white.png"/>
-                                            <node text="Wedding" icon="@page_white.png"/>
-                                        </node>
-                                        <node text="Location" icon="@folder.png">
-                                            <node text="Africa" icon="@folder.png"/>
-                                            <node text="Antarctica" icon="@folder.png"/>
-                                            <node text="Asia" icon="@folder.png"/>
-                                            <node text="Australia" icon="@folder.png"/>
-                                            <node text="Europe" icon="@folder.png"/>
-                                            <node text="North America" icon="@folder.png"/>
-                                            <node text="South America" icon="@folder.png">
-                                                <node text="Peru" icon="@folder.png"/>
-                                            </node>
-                                        </node>
+                                        <content:TreeBranch>
+                                            <content:TreeBranch text="Activity" icon="@folder.png">
+                                                <content:TreeBranch text="Games" icon="@folder.png">
+                                                    <content:TreeNode text="A very long game name that just serves to show how a wide tree node behaves" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Air Hockey" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Foosball" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Ping Pong" icon="@page_white.png"/>
+                                                </content:TreeBranch>
+                                                <content:TreeBranch text="Sports" icon="@folder.png">
+                                                    <content:TreeNode text="Baseball" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Basketball" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Football" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Ice Hockey" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Soccer" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Softball" icon="@page_white.png"/>
+                                                </content:TreeBranch>
+                                                <content:TreeNode text="Camping" icon="@page_white.png"/>
+                                                <content:TreeNode text="Skiing" icon="@page_white.png"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Occasion" icon="@folder.png">
+                                                <content:TreeBranch text="Holidays" icon="@folder.png">
+                                                    <content:TreeNode text="Christmas" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Independence Day" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Labor Day" icon="@page_white.png"/>
+                                                    <content:TreeNode text="New Year's Day" icon="@page_white.png"/>
+                                                    <content:TreeNode text="President's Day" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Thanksgiving" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Valentine's Day" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Veteran's Day" icon="@page_white.png"/>
+                                                </content:TreeBranch>
+                                                <content:TreeNode text="Anniversary" icon="@page_white.png"/>
+                                                <content:TreeNode text="Birthday" icon="@page_white.png"/>
+                                                <content:TreeNode text="Wedding" icon="@page_white.png"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Location" icon="@folder.png">
+                                                <content:TreeNode text="Africa" icon="@folder.png"/>
+                                                <content:TreeNode text="Antarctica" icon="@folder.png"/>
+                                                <content:TreeNode text="Asia" icon="@folder.png"/>
+                                                <content:TreeNode text="Australia" icon="@folder.png"/>
+                                                <content:TreeNode text="Europe" icon="@folder.png"/>
+                                                <content:TreeNode text="North America" icon="@folder.png"/>
+                                                <content:TreeBranch text="South America" icon="@folder.png">
+                                                    <content:TreeNode text="Peru" icon="@page_white.png"/>
+                                                </content:TreeBranch>
+                                            </content:TreeBranch>
+                                        </content:TreeBranch>
                                     </treeData>
                                     <nodeRenderer>
                                         <content:TreeViewNodeRenderer showIcon="true"/>
@@ -155,115 +159,117 @@ limitations under the License.
                             <view>
                                 <TreeView selectMode="multi">
                                     <treeData>
-                                        <node text="Africa" icon="@folder.png"/>
-                                        <node text="Antarctica" icon="@folder.png"/>
-                                        <node text="Asia" icon="@folder.png"/>
-                                        <node text="Australia" icon="@folder.png"/>
-                                        <node text="Europe" icon="@folder.png">
-                                            <node text="Albania" icon="@page_white.png"/>
-                                            <node text="Andorra" icon="@page_white.png"/>
-                                            <node text="Armenia" icon="@page_white.png"/>
-                                            <node text="Austria" icon="@page_white.png"/>
-                                            <node text="Azerbaijan" icon="@page_white.png"/>
-                                            <node text="Belarus" icon="@page_white.png"/>
-                                            <node text="Belgium" icon="@page_white.png"/>
-                                            <node text="Bosnia and Herzegovina" icon="@page_white.png"/>
-                                            <node text="Bulgaria" icon="@page_white.png"/>
-                                            <node text="Croatia" icon="@page_white.png"/>
-                                            <node text="Cyprus" icon="@page_white.png"/>
-                                            <node text="Czech Republic" icon="@page_white.png"/>
-                                            <node text="Denmark" icon="@page_white.png"/>
-                                            <node text="Estonia" icon="@page_white.png"/>
-                                            <node text="Finland" icon="@page_white.png"/>
-                                            <node text="Former Yugoslav Republic of Macedonia" icon="@page_white.png"/>
-                                            <node text="France" icon="@page_white.png"/>
-                                            <node text="Georgia" icon="@page_white.png"/>
-                                            <node text="Germany" icon="@page_white.png"/>
-                                            <node text="Greece" icon="@page_white.png"/>
-                                            <node text="Hungary" icon="@page_white.png"/>
-                                            <node text="Iceland" icon="@page_white.png"/>
-                                            <node text="Ireland" icon="@page_white.png"/>
-                                            <node text="Italy" icon="@page_white.png"/>
-                                            <node text="Latvia" icon="@page_white.png"/>
-                                            <node text="Liechtenstein" icon="@page_white.png"/>
-                                            <node text="Lithuania" icon="@page_white.png"/>
-                                            <node text="Luxembourg" icon="@page_white.png"/>
-                                            <node text="Malta" icon="@page_white.png"/>
-                                            <node text="Moldova" icon="@page_white.png"/>
-                                            <node text="Monaco" icon="@page_white.png"/>
-                                            <node text="Montenegro" icon="@page_white.png"/>
-                                            <node text="Netherlands" icon="@page_white.png"/>
-                                            <node text="Norway" icon="@page_white.png"/>
-                                            <node text="Poland" icon="@page_white.png"/>
-                                            <node text="Portugal" icon="@page_white.png"/>
-                                            <node text="Romania" icon="@page_white.png"/>
-                                            <node text="Russia" icon="@page_white.png"/>
-                                            <node text="San Marino" icon="@page_white.png"/>
-                                            <node text="Serbia" icon="@page_white.png"/>
-                                            <node text="Slovakia" icon="@page_white.png"/>
-                                            <node text="Slovenia" icon="@page_white.png"/>
-                                            <node text="Spain" icon="@page_white.png"/>
-                                            <node text="Sweden" icon="@page_white.png"/>
-                                            <node text="Switzerland" icon="@page_white.png"/>
-                                            <node text="Turkey" icon="@page_white.png"/>
-                                            <node text="Ukraine" icon="@page_white.png"/>
-                                            <node text="United Kingdom" icon="@page_white.png"/>
-                                            <node text="Vatican City State" icon="@page_white.png"/>
-                                        </node>
-                                        <node text="North America" icon="@folder.png">
-                                            <node text="Alabama" icon="@page_white.png"/>
-                                            <node text="Alaska" icon="@page_white.png"/>
-                                            <node text="Arizona" icon="@page_white.png"/>
-                                            <node text="Arkansas" icon="@page_white.png"/>
-                                            <node text="California" icon="@page_white.png"/>
-                                            <node text="Colorado" icon="@page_white.png"/>
-                                            <node text="Connecticut" icon="@page_white.png"/>
-                                            <node text="Delaware" icon="@page_white.png"/>
-                                            <node text="District of Columbia" icon="@page_white.png"/>
-                                            <node text="Florida" icon="@page_white.png"/>
-                                            <node text="Georgia" icon="@page_white.png"/>
-                                            <node text="Hawaii" icon="@page_white.png"/>
-                                            <node text="Idaho" icon="@page_white.png"/>
-                                            <node text="Illinois" icon="@page_white.png"/>
-                                            <node text="Indiana" icon="@page_white.png"/>
-                                            <node text="Iowa" icon="@page_white.png"/>
-                                            <node text="Kansas" icon="@page_white.png"/>
-                                            <node text="Kentucky" icon="@page_white.png"/>
-                                            <node text="Louisiana" icon="@page_white.png"/>
-                                            <node text="Maine" icon="@page_white.png"/>
-                                            <node text="Maryland" icon="@page_white.png"/>
-                                            <node text="Massachusetts" icon="@page_white.png"/>
-                                            <node text="Michigan" icon="@page_white.png"/>
-                                            <node text="Minnesota" icon="@page_white.png"/>
-                                            <node text="Mississippi" icon="@page_white.png"/>
-                                            <node text="Missouri" icon="@page_white.png"/>
-                                            <node text="Montana" icon="@page_white.png"/>
-                                            <node text="Nebraska" icon="@page_white.png"/>
-                                            <node text="Nevada" icon="@page_white.png"/>
-                                            <node text="New Hampshire" icon="@page_white.png"/>
-                                            <node text="New Jersey" icon="@page_white.png"/>
-                                            <node text="New Mexico" icon="@page_white.png"/>
-                                            <node text="New York" icon="@page_white.png"/>
-                                            <node text="North Carolina" icon="@page_white.png"/>
-                                            <node text="North Dakota" icon="@page_white.png"/>
-                                            <node text="Ohio" icon="@page_white.png"/>
-                                            <node text="Oklahoma" icon="@page_white.png"/>
-                                            <node text="Oregon" icon="@page_white.png"/>
-                                            <node text="Pennsylvania" icon="@page_white.png"/>
-                                            <node text="Rhode Island" icon="@page_white.png"/>
-                                            <node text="South Carolina" icon="@page_white.png"/>
-                                            <node text="South Dakota" icon="@page_white.png"/>
-                                            <node text="Tennessee" icon="@page_white.png"/>
-                                            <node text="Texas" icon="@page_white.png"/>
-                                            <node text="Utah" icon="@page_white.png"/>
-                                            <node text="Vermont" icon="@page_white.png"/>
-                                            <node text="Virginia" icon="@page_white.png"/>
-                                            <node text="Washington" icon="@page_white.png"/>
-                                            <node text="West Virginia" icon="@page_white.png"/>
-                                            <node text="Wisconsin" icon="@page_white.png"/>
-                                            <node text="Wyoming" icon="@page_white.png"/>
-                                        </node>
-                                        <node text="South America" icon="@folder.png"/>
+                                        <content:TreeBranch>
+                                            <content:TreeBranch text="Africa" icon="@folder.png"/>
+                                            <content:TreeBranch text="Antarctica" icon="@folder.png"/>
+                                            <content:TreeBranch text="Asia" icon="@folder.png"/>
+                                            <content:TreeBranch text="Australia" icon="@folder.png"/>
+                                            <content:TreeBranch text="Europe" icon="@folder.png">
+                                                <content:TreeNode text="Albania" icon="@page_white.png"/>
+                                                <content:TreeNode text="Andorra" icon="@page_white.png"/>
+                                                <content:TreeNode text="Armenia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Austria" icon="@page_white.png"/>
+                                                <content:TreeNode text="Azerbaijan" icon="@page_white.png"/>
+                                                <content:TreeNode text="Belarus" icon="@page_white.png"/>
+                                                <content:TreeNode text="Belgium" icon="@page_white.png"/>
+                                                <content:TreeNode text="Bosnia and Herzegovina" icon="@page_white.png"/>
+                                                <content:TreeNode text="Bulgaria" icon="@page_white.png"/>
+                                                <content:TreeNode text="Croatia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Cyprus" icon="@page_white.png"/>
+                                                <content:TreeNode text="Czech Republic" icon="@page_white.png"/>
+                                                <content:TreeNode text="Denmark" icon="@page_white.png"/>
+                                                <content:TreeNode text="Estonia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Finland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Former Yugoslav Republic of Macedonia" icon="@page_white.png"/>
+                                                <content:TreeNode text="France" icon="@page_white.png"/>
+                                                <content:TreeNode text="Georgia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Germany" icon="@page_white.png"/>
+                                                <content:TreeNode text="Greece" icon="@page_white.png"/>
+                                                <content:TreeNode text="Hungary" icon="@page_white.png"/>
+                                                <content:TreeNode text="Iceland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Ireland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Italy" icon="@page_white.png"/>
+                                                <content:TreeNode text="Latvia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Liechtenstein" icon="@page_white.png"/>
+                                                <content:TreeNode text="Lithuania" icon="@page_white.png"/>
+                                                <content:TreeNode text="Luxembourg" icon="@page_white.png"/>
+                                                <content:TreeNode text="Malta" icon="@page_white.png"/>
+                                                <content:TreeNode text="Moldova" icon="@page_white.png"/>
+                                                <content:TreeNode text="Monaco" icon="@page_white.png"/>
+                                                <content:TreeNode text="Montenegro" icon="@page_white.png"/>
+                                                <content:TreeNode text="Netherlands" icon="@page_white.png"/>
+                                                <content:TreeNode text="Norway" icon="@page_white.png"/>
+                                                <content:TreeNode text="Poland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Portugal" icon="@page_white.png"/>
+                                                <content:TreeNode text="Romania" icon="@page_white.png"/>
+                                                <content:TreeNode text="Russia" icon="@page_white.png"/>
+                                                <content:TreeNode text="San Marino" icon="@page_white.png"/>
+                                                <content:TreeNode text="Serbia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Slovakia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Slovenia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Spain" icon="@page_white.png"/>
+                                                <content:TreeNode text="Sweden" icon="@page_white.png"/>
+                                                <content:TreeNode text="Switzerland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Turkey" icon="@page_white.png"/>
+                                                <content:TreeNode text="Ukraine" icon="@page_white.png"/>
+                                                <content:TreeNode text="United Kingdom" icon="@page_white.png"/>
+                                                <content:TreeNode text="Vatican City State" icon="@page_white.png"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="North America" icon="@folder.png">
+                                                <content:TreeNode text="Alabama" icon="@page_white.png"/>
+                                                <content:TreeNode text="Alaska" icon="@page_white.png"/>
+                                                <content:TreeNode text="Arizona" icon="@page_white.png"/>
+                                                <content:TreeNode text="Arkansas" icon="@page_white.png"/>
+                                                <content:TreeNode text="California" icon="@page_white.png"/>
+                                                <content:TreeNode text="Colorado" icon="@page_white.png"/>
+                                                <content:TreeNode text="Connecticut" icon="@page_white.png"/>
+                                                <content:TreeNode text="Delaware" icon="@page_white.png"/>
+                                                <content:TreeNode text="District of Columbia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Florida" icon="@page_white.png"/>
+                                                <content:TreeNode text="Georgia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Hawaii" icon="@page_white.png"/>
+                                                <content:TreeNode text="Idaho" icon="@page_white.png"/>
+                                                <content:TreeNode text="Illinois" icon="@page_white.png"/>
+                                                <content:TreeNode text="Indiana" icon="@page_white.png"/>
+                                                <content:TreeNode text="Iowa" icon="@page_white.png"/>
+                                                <content:TreeNode text="Kansas" icon="@page_white.png"/>
+                                                <content:TreeNode text="Kentucky" icon="@page_white.png"/>
+                                                <content:TreeNode text="Louisiana" icon="@page_white.png"/>
+                                                <content:TreeNode text="Maine" icon="@page_white.png"/>
+                                                <content:TreeNode text="Maryland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Massachusetts" icon="@page_white.png"/>
+                                                <content:TreeNode text="Michigan" icon="@page_white.png"/>
+                                                <content:TreeNode text="Minnesota" icon="@page_white.png"/>
+                                                <content:TreeNode text="Mississippi" icon="@page_white.png"/>
+                                                <content:TreeNode text="Missouri" icon="@page_white.png"/>
+                                                <content:TreeNode text="Montana" icon="@page_white.png"/>
+                                                <content:TreeNode text="Nebraska" icon="@page_white.png"/>
+                                                <content:TreeNode text="Nevada" icon="@page_white.png"/>
+                                                <content:TreeNode text="New Hampshire" icon="@page_white.png"/>
+                                                <content:TreeNode text="New Jersey" icon="@page_white.png"/>
+                                                <content:TreeNode text="New Mexico" icon="@page_white.png"/>
+                                                <content:TreeNode text="New York" icon="@page_white.png"/>
+                                                <content:TreeNode text="North Carolina" icon="@page_white.png"/>
+                                                <content:TreeNode text="North Dakota" icon="@page_white.png"/>
+                                                <content:TreeNode text="Ohio" icon="@page_white.png"/>
+                                                <content:TreeNode text="Oklahoma" icon="@page_white.png"/>
+                                                <content:TreeNode text="Oregon" icon="@page_white.png"/>
+                                                <content:TreeNode text="Pennsylvania" icon="@page_white.png"/>
+                                                <content:TreeNode text="Rhode Island" icon="@page_white.png"/>
+                                                <content:TreeNode text="South Carolina" icon="@page_white.png"/>
+                                                <content:TreeNode text="South Dakota" icon="@page_white.png"/>
+                                                <content:TreeNode text="Tennessee" icon="@page_white.png"/>
+                                                <content:TreeNode text="Texas" icon="@page_white.png"/>
+                                                <content:TreeNode text="Utah" icon="@page_white.png"/>
+                                                <content:TreeNode text="Vermont" icon="@page_white.png"/>
+                                                <content:TreeNode text="Virginia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Washington" icon="@page_white.png"/>
+                                                <content:TreeNode text="West Virginia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Wisconsin" icon="@page_white.png"/>
+                                                <content:TreeNode text="Wyoming" icon="@page_white.png"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="South America" icon="@folder.png"/>
+                                        </content:TreeBranch>
                                     </treeData>
                                 </TreeView>
                             </view>

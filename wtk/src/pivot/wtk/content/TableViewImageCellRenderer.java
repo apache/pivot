@@ -15,9 +15,7 @@
  */
 package pivot.wtk.content;
 
-import java.net.URL;
 import pivot.collections.Dictionary;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.ImageView;
 import pivot.wtk.TableView;
 import pivot.wtk.TableView.CellRenderer;
@@ -65,16 +63,6 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
         if (columnName != null) {
             Dictionary<String, Object> rowData = (Dictionary<String, Object>)value;
             Object cellData = rowData.get(columnName);
-
-            if (cellData instanceof URL) {
-                URL imageURL = (URL)cellData;
-                image = (Image)ApplicationContext.getResourceCache().get(imageURL);
-
-                if (image == null) {
-                    image = Image.load(imageURL);
-                    ApplicationContext.getResourceCache().put(imageURL, image);
-                }
-            }
 
             if (cellData instanceof Image) {
                 image = (Image)cellData;

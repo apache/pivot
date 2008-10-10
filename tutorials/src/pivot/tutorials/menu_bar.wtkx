@@ -15,7 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<MenuBar xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+<MenuBar xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <items>
         <MenuBar.Item buttonData="File">
             <menu>
@@ -23,26 +24,39 @@ limitations under the License.
                     <sections>
                         <Menu.Section>
                             <Menu.Item>
-                                <buttonData text="New" icon="@document-new.png"/>
+                                <buttonData>
+                                    <content:ButtonData text="New" icon="@document-new.png"/>
+                                </buttonData>
                             </Menu.Item>
                             <Menu.Item>
-                                <buttonData text="Open" icon="@document-open.png"/>
+                                <buttonData>
+                                    <content:ButtonData text="Open" icon="@document-open.png"/>
+                                </buttonData>
                             </Menu.Item>
                         </Menu.Section>
                         <Menu.Section>
                             <Menu.Item>
-                                <buttonData text="Close"/>
+                                <buttonData>
+                                    <content:ButtonData text="Close"/>
+                                </buttonData>
                             </Menu.Item>
                             <Menu.Item>
-                                <buttonData text="Close All"/>
+                                <buttonData>
+                                    <content:ButtonData text="Close All"/>
+                                </buttonData>
                             </Menu.Item>
                         </Menu.Section>
                         <Menu.Section>
                             <Menu.Item enabled="false">
-                                <buttonData text="Save" icon="@document-save.png"/>
+                                <buttonData>
+                                    <content:ButtonData text="Save" icon="@document-save.png"/>
+                                </buttonData>
                             </Menu.Item>
                             <Menu.Item>
-                                <buttonData text="Save As" icon="@document-save-as.png"/>
+                                <buttonData>
+                                    <content:ButtonData text="Save As" icon="@document-save-as.png"/>
+                                </buttonData>
+
                                 <menu>
                                     <Menu>
                                         <sections>
@@ -68,29 +82,43 @@ limitations under the License.
                     <sections>
                         <Menu.Section>
                             <Menu.Item>
-                                <buttonData text="Undo" icon="@edit-undo.png"/>
+                                <buttonData>
+                                    <content:ButtonData text="Undo" icon="@edit-undo.png"/>
+                                </buttonData>
                             </Menu.Item>
                             <Menu.Item>
-                                <buttonData text="Redo" icon="@edit-redo.png"/>
-                            </Menu.Item>
-                        </Menu.Section>
-                        <Menu.Section>
-                            <Menu.Item>
-                                <buttonData text="Cut" icon="@edit-cut.png"/>
-                            </Menu.Item>
-                            <Menu.Item>
-                                <buttonData text="Copy" icon="@edit-copy.png"/>
-                            </Menu.Item>
-                            <Menu.Item>
-                                <buttonData text="Paste" icon="@edit-paste.png"/>
+                                <buttonData>
+                                    <content:ButtonData text="Redo" icon="@edit-redo.png"/>
+                                </buttonData>
                             </Menu.Item>
                         </Menu.Section>
                         <Menu.Section>
                             <Menu.Item>
-                                <buttonData text="Delete" icon="@edit-delete.png"/>
+                                <buttonData>
+                                    <content:ButtonData text="Cut" icon="@edit-cut.png"/>
+                                </buttonData>
                             </Menu.Item>
                             <Menu.Item>
-                                <buttonData text="Select All" icon="@edit-select-all.png"/>
+                                <buttonData>
+                                    <content:ButtonData text="Copy" icon="@edit-copy.png"/>
+                                </buttonData>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:ButtonData text="Paste" icon="@edit-paste.png"/>
+                                </buttonData>
+                            </Menu.Item>
+                        </Menu.Section>
+                        <Menu.Section>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:ButtonData text="Delete" icon="@edit-delete.png"/>
+                                </buttonData>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:ButtonData text="Select All" icon="@edit-select-all.png"/>
+                                </buttonData>
                             </Menu.Item>
                         </Menu.Section>
                     </sections>
@@ -103,12 +131,8 @@ limitations under the License.
                 <Menu>
                     <sections>
                         <Menu.Section>
-                            <Menu.Item>
-                                <buttonData text="Minimize"/>
-                            </Menu.Item>
-                            <Menu.Item>
-                                <buttonData text="Maximize"/>
-                            </Menu.Item>
+                            <Menu.Item buttonData="Minimize"/>
+                            <Menu.Item buttonData="Maximize"/>
                         </Menu.Section>
                     </sections>
                 </Menu>
@@ -122,13 +146,19 @@ limitations under the License.
                     <sections>
                         <Menu.Section>
                             <Menu.Item>
-                                <buttonData text="Contents" icon="@book_open.png"/>
+                                <buttonData>
+                                    <content:ButtonData text="Contents" icon="@book_open.png"/>
+                                </buttonData>
                             </Menu.Item>
                             <Menu.Item>
-                                <buttonData text="Search" icon="@magnifier.png"/>
+                                <buttonData>
+                                    <content:ButtonData text="Search" icon="@magnifier.png"/>
+                                </buttonData>
                             </Menu.Item>
                             <Menu.Item>
-                                <buttonData text="About" icon="@application.png"/>
+                                <buttonData>
+                                    <content:ButtonData text="About" icon="@application.png"/>
+                                </buttonData>
                             </Menu.Item>
                         </Menu.Section>
                     </sections>

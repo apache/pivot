@@ -17,11 +17,7 @@ package pivot.wtk.content;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.net.URL;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.Dictionary;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
@@ -39,9 +35,6 @@ import pivot.wtk.media.Image;
 public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRenderer {
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();
-
-    public static final String ICON_KEY = "icon";
-    public static final String TEXT_KEY = "text";
 
     public static final int DEFAULT_ICON_WIDTH = 16;
     public static final int DEFAULT_ICON_HEIGHT = 16;
@@ -62,7 +55,6 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
         setPreferredHeight(DEFAULT_ICON_HEIGHT);
     }
 
-    @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
 
@@ -77,36 +69,27 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
         Image icon = null;
         String text = null;
 
-        if (node != null) {
-            if (node instanceof Image) {
-                icon = (Image)node;
-            } else if (node instanceof String) {
-                text = (String)node;
-            } else {
-                Dictionary<String, Object> dictionary = (node instanceof Dictionary<?, ?>) ?
-                    (Dictionary<String, Object>)node : new BeanDictionary(node);
+        if (node instanceof TreeNode) {
+            TreeNode treeNode = (TreeNode)node;
 
-                Object iconValue = dictionary.get(ICON_KEY);
-                if (iconValue instanceof Image) {
-                    icon = (Image)iconValue;
-                } else {
-                    if (iconValue instanceof String) {
-                        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                        iconValue = classLoader.getResource((String)iconValue);
-                    }
+            if (expanded
+                && treeNode instanceof TreeBranch) {
+                TreeBranch treeBranch = (TreeBranch)treeNode;
+                icon = treeBranch.getExpandedIcon();
 
-                    if (iconValue instanceof URL) {
-                        URL iconURL = (URL)iconValue;
-                        icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
-
-                        if (icon == null) {
-                            icon = Image.load(iconURL);
-                            ApplicationContext.getResourceCache().put(iconURL, icon);
-                        }
-                    }
+                if (icon == null) {
+                    icon = treeBranch.getIcon();
                 }
+            } else {
+                icon = treeNode.getIcon();
+            }
 
-                text = (String)dictionary.get(TEXT_KEY);
+            text = treeNode.getText();
+        } else if (node instanceof Image) {
+            icon = (Image)node;
+        } else {
+            if (node != null) {
+                text = node.toString();
             }
         }
 

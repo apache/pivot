@@ -27,62 +27,44 @@ import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
 /**
- * Default tree node implementation.
+ * Default tree branch implementation.
  *
  * @author gbrown
  */
-public class TreeNode implements List<TreeNode> {
-    private Image icon = null;
+public class TreeBranch extends TreeNode implements List<TreeNode> {
     private Image expandedIcon = null;
-    private String text = null;
 
     private ArrayList<TreeNode> nodes = new ArrayList<TreeNode>();
     private ListListenerList<TreeNode> listListeners = new ListListenerList<TreeNode>();
 
-    public TreeNode() {
+    public TreeBranch() {
         this(null, null, null);
     }
 
-    public TreeNode(Image icon) {
+    public TreeBranch(Image icon) {
         this(icon, null, null);
     }
 
-    public TreeNode(String text) {
+    public TreeBranch(String text) {
         this(null, null, text);
     }
 
-    public TreeNode(Image icon, String text) {
+    public TreeBranch(Image icon, String text) {
         this(icon, null, text);
     }
 
-    public TreeNode(Image icon, Image expandedIcon, String text) {
-        this.icon = icon;
+    public TreeBranch(Image icon, Image expandedIcon, String text) {
+        super(icon, text);
+
         this.expandedIcon = expandedIcon;
-        this.text = text;
-    }
-
-    public Image getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Image icon) {
-        this.icon = icon;
     }
 
     public Image getExpandedIcon() {
-        return (expandedIcon == null) ? icon : expandedIcon;
+        return expandedIcon;
     }
 
     public void setExpandedIcon(Image expandedIcon) {
         this.expandedIcon = expandedIcon;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public int add(TreeNode treeNode) {

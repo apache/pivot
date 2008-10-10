@@ -16,6 +16,7 @@ limitations under the License.
 -->
 
 <Border xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:collections="pivot.collections"
     xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <content>
         <FlowPane styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
@@ -27,12 +28,14 @@ limitations under the License.
                             <view>
                                 <ListView selectMode="single" selectedIndex="0">
                                     <listData>
-                                        <item text="Red"/>
-                                        <item text="Orange"/>
-                                        <item text="Yellow"/>
-                                        <item text="Green"/>
-                                        <item text="Blue"/>
-                                        <item text="Purple"/>
+                                        <collections:ArrayList>
+                                            <content:ListItem text="Red"/>
+                                            <content:ListItem text="Orange"/>
+                                            <content:ListItem text="Yellow"/>
+                                            <content:ListItem text="Green"/>
+                                            <content:ListItem text="Blue"/>
+                                            <content:ListItem text="Purple"/>
+                                        </collections:ArrayList>
                                     </listData>
                                 </ListView>
                             </view>
@@ -49,12 +52,14 @@ limitations under the License.
                             <view>
                                 <ListView wtkx:id="shapeListView" selectMode="multi">
                                     <listData>
-                                        <item text="Circle"/>
-                                        <item text="Ellipse"/>
-                                        <item text="Square"/>
-                                        <item text="Rectangle"/>
-                                        <item text="Hexagon"/>
-                                        <item text="Octagon"/>
+                                        <collections:ArrayList>
+                                            <content:ListItem text="Circle"/>
+                                            <content:ListItem text="Ellipse"/>
+                                            <content:ListItem text="Square"/>
+                                            <content:ListItem text="Rectangle"/>
+                                            <content:ListItem text="Hexagon"/>
+                                            <content:ListItem text="Octagon"/>
+                                        </collections:ArrayList>
                                     </listData>
                                 </ListView>
                             </view>
@@ -71,12 +76,14 @@ limitations under the License.
                             <view>
                                 <ListView wtkx:id="iconListView" selectMode="multi" selectedIndex="2">
                                     <listData>
-                                        <item icon="@anchor.png" text="Anchor"/>
-                                        <item icon="@bell.png" text="Bell"/>
-                                        <item icon="@clock.png" text="Clock"/>
-                                        <item icon="@cup.png" text="Cup"/>
-                                        <item icon="@house.png" text="House"/>
-                                        <item icon="@star.png" text="Star"/>
+                                        <collections:ArrayList>
+                                            <content:ListItem icon="@anchor.png" text="Anchor"/>
+                                            <content:ListItem icon="@bell.png" text="Bell"/>
+                                            <content:ListItem icon="@clock.png" text="Clock"/>
+                                            <content:ListItem icon="@cup.png" text="Cup"/>
+                                            <content:ListItem icon="@house.png" text="House"/>
+                                            <content:ListItem icon="@star.png" text="Star"/>
+                                        </collections:ArrayList>
                                     </listData>
                                     <itemRenderer>
                                         <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
@@ -96,23 +103,27 @@ limitations under the License.
                         <Form.Section>
 	                        <ListButton Form.name="Basic" selectedIndex="0">
 	                            <listData>
-	                                <item text="Red"/>
-	                                <item text="Orange"/>
-	                                <item text="Yellow"/>
-	                                <item text="Green"/>
-	                                <item text="Blue"/>
-	                                <item text="Purple"/>
+	                                <collections:ArrayList>
+                                        <content:ListItem text="Red"/>
+                                        <content:ListItem text="Orange"/>
+                                        <content:ListItem text="Yellow"/>
+                                        <content:ListItem text="Green"/>
+                                        <content:ListItem text="Blue"/>
+                                        <content:ListItem text="Purple"/>
+	                                </collections:ArrayList>
 	                            </listData>
 	                        </ListButton>
 
 	                        <ListButton Form.name="Image" selectedIndex="2">
 	                            <listData>
-	                                <item icon="@anchor.png" text="Anchor"/>
-	                                <item icon="@bell.png" text="Bell"/>
-	                                <item icon="@clock.png" text="Clock"/>
-	                                <item icon="@cup.png" text="Cup"/>
-	                                <item icon="@house.png" text="House"/>
-	                                <item icon="@star.png" text="Star"/>
+	                                <collections:ArrayList>
+                                        <content:ListItem icon="@anchor.png" text="Anchor"/>
+                                        <content:ListItem icon="@bell.png" text="Bell"/>
+                                        <content:ListItem icon="@clock.png" text="Clock"/>
+                                        <content:ListItem icon="@cup.png" text="Cup"/>
+                                        <content:ListItem icon="@house.png" text="House"/>
+                                        <content:ListItem icon="@star.png" text="Star"/>
+	                                </collections:ArrayList>
 	                            </listData>
 	                            <itemRenderer>
 	                                <content:ListViewItemRenderer iconWidth="16" iconHeight="16"

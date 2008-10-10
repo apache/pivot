@@ -314,50 +314,47 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             if (showBranchControls) {
                 if (nodeInfo instanceof BranchInfo) {
                     BranchInfo branchInfo = (BranchInfo)nodeInfo;
-
                     expanded = branchInfo.expanded;
 
-                    if (branchInfo.children.getLength() > 0) {
-                        Color branchControlColor;
+                    Color branchControlColor;
 
-                        if (treeView.isEnabled()
-                            && !disabled) {
-                            if (selected) {
-                                if (treeView.isFocused()) {
-                                    branchControlColor = branchControlSelectionColor;
-                                } else {
-                                    branchControlColor = branchControlInactiveSelectionColor;
-                                }
+                    if (treeView.isEnabled()
+                        && !disabled) {
+                        if (selected) {
+                            if (treeView.isFocused()) {
+                                branchControlColor = branchControlSelectionColor;
                             } else {
-                                branchControlColor = this.branchControlColor;
+                                branchControlColor = branchControlInactiveSelectionColor;
                             }
                         } else {
-                            branchControlColor = branchControlDisabledColor;
+                            branchControlColor = this.branchControlColor;
                         }
-
-                        GeneralPath shape = new GeneralPath();
-
-                        int imageX = nodeX + (indent - BRANCH_CONTROL_IMAGE_WIDTH) / 2;
-                        int imageY = nodeY + (nodeHeight - BRANCH_CONTROL_IMAGE_HEIGHT) / 2;
-
-                        if (expanded) {
-                            shape.moveTo(imageX, imageY + 1);
-                            shape.lineTo(imageX + 8, imageY + 1);
-                            shape.lineTo(imageX + 4, imageY + 7);
-                        } else {
-                            shape.moveTo(imageX + 1, imageY);
-                            shape.lineTo(imageX + 7, imageY + 4);
-                            shape.lineTo(imageX + 1, imageY + 8);
-                        }
-
-                        shape.closePath();
-
-                        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                            RenderingHints.VALUE_ANTIALIAS_ON);
-                        graphics.setPaint(branchControlColor);
-
-                        graphics.fill(shape);
+                    } else {
+                        branchControlColor = branchControlDisabledColor;
                     }
+
+                    GeneralPath shape = new GeneralPath();
+
+                    int imageX = nodeX + (indent - BRANCH_CONTROL_IMAGE_WIDTH) / 2;
+                    int imageY = nodeY + (nodeHeight - BRANCH_CONTROL_IMAGE_HEIGHT) / 2;
+
+                    if (expanded) {
+                        shape.moveTo(imageX, imageY + 1);
+                        shape.lineTo(imageX + 8, imageY + 1);
+                        shape.lineTo(imageX + 4, imageY + 7);
+                    } else {
+                        shape.moveTo(imageX + 1, imageY);
+                        shape.lineTo(imageX + 7, imageY + 4);
+                        shape.lineTo(imageX + 1, imageY + 8);
+                    }
+
+                    shape.closePath();
+
+                    graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+                    graphics.setPaint(branchControlColor);
+
+                    graphics.fill(shape);
                 }
 
                 nodeX += indent + spacing;
@@ -888,9 +885,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     }
                 }
             }
-
-            invalidateComponent();
         }
+
+        invalidateComponent();
     }
 
     /**
@@ -928,9 +925,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             }
 
             visibleNodes.insert(nodeInfo, insertIndex);
-
-            invalidateComponent();
         }
+
+        invalidateComponent();
     }
 
     /**
@@ -976,10 +973,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     rangeEnd++);
 
                 visibleNodes.remove(rangeStart, rangeEnd - rangeStart);
-
-                invalidateComponent();
             }
         }
+
+        invalidateComponent();
     }
 
     /**
@@ -1060,15 +1057,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     && nodeInfo instanceof BranchInfo) {
                     BranchInfo branchInfo = (BranchInfo)nodeInfo;
 
-                    if (branchInfo.children.getLength() > 0) {
-                        int nodeX = (branchInfo.depth - 1) * (indent + spacing);
+                    int nodeX = (branchInfo.depth - 1) * (indent + spacing);
 
-                        if (x >= nodeX
-                            && x < nodeX + indent) {
-                            treeView.setBranchExpanded(path, !branchInfo.expanded);
-
-                            handled = true;
-                        }
+                    if (x >= nodeX
+                        && x < nodeX + indent) {
+                        treeView.setBranchExpanded(path, !branchInfo.expanded);
+                        handled = true;
                     }
                 }
 

@@ -16,6 +16,7 @@ limitations under the License.
 -->
 
 <Border xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:collections="pivot.collections"
     xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <content>
         <FlowPane styles="{padding:4, spacing:8}">
@@ -55,7 +56,10 @@ limitations under the License.
                                     styles="{showHorizontalGridLines:false}">
                                     <columns>
                                         <TableView.Column name="a" width="20">
-                                            <headerData icon="@flag_red.png"/>
+                                            <headerData>
+                                                <content:TableViewHeaderData icon="@flag_red.png"/>
+                                            </headerData>
+
                                             <cellRenderer>
                                                 <content:TableViewBooleanCellRenderer/>
                                             </cellRenderer>
@@ -68,12 +72,14 @@ limitations under the License.
                                         <TableView.Column name="c" width="1*" headerData="Name"/>
                                     </columns>
                                     <tableData>
-                                        <row a="true" b="@anchor.png" c="Anchor"/>
-                                        <row a="false" b="@bell.png" c="Bell"/>
-                                        <row a="false" b="@clock.png" c="Clock"/>
-                                        <row a="true" b="@cup.png" c="Cup"/>
-                                        <row a="false" b="@house.png" c="House"/>
-                                        <row a="true" b="@star.png" c="Star"/>
+                                        <collections:ArrayList>
+                                            <content:TableRow a="true" b="@anchor.png" c="Anchor"/>
+                                            <content:TableRow a="false" b="@bell.png" c="Bell"/>
+                                            <content:TableRow a="false" b="@clock.png" c="Clock"/>
+                                            <content:TableRow a="true" b="@cup.png" c="Cup"/>
+                                            <content:TableRow a="false" b="@house.png" c="House"/>
+                                            <content:TableRow a="true" b="@star.png" c="Star"/>
+                                        </collections:ArrayList>
                                     </tableData>
                                 </TableView>
                             </view>

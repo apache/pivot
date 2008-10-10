@@ -15,6 +15,9 @@
  */
 package pivot.wtk.content;
 
+import java.net.URL;
+
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.media.Image;
 
 /**
@@ -23,8 +26,8 @@ import pivot.wtk.media.Image;
  * @author gbrown
  */
 public class ListItem {
-    private Image icon = null;
-    private String text = null;
+    private Image icon;
+    private String text;
 
     public ListItem() {
         this(null, null);
@@ -49,6 +52,22 @@ public class ListItem {
 
     public void setIcon(Image icon) {
         this.icon = icon;
+    }
+
+    public void setIcon(URL iconURL) {
+        Image icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
+
+        if (icon == null) {
+            icon = Image.load(iconURL);
+            ApplicationContext.getResourceCache().put(iconURL, icon);
+        }
+
+        setIcon(icon);
+    }
+
+    public void setIcon(String iconName) {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        setIcon(classLoader.getResource((String)iconName));
     }
 
     public String getText() {
