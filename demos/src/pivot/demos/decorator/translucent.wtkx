@@ -20,15 +20,7 @@ limitations under the License.
     <Label text="A Translucent Window"/>
     <Border styles="{color:5, padding:0}">
         <content>
-            <ListView>
-                <listData>
-                    <item text="Item 1"/>
-                    <item text="Item 2"/>
-                    <item text="Item 3"/>
-                    <item text="Item 4"/>
-                    <item text="Item 5"/>
-                </listData>
-            </ListView>
+            <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
         </content>
     </Border>
 </FlowPane>

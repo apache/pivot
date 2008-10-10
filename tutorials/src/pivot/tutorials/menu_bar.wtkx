@@ -140,7 +140,9 @@ limitations under the License.
         </MenuBar.Item>
 
         <MenuBar.Item>
-            <buttonData icon="@help.png"/>
+            <buttonData>
+                <content:ButtonData icon="@help.png"/>
+            </buttonData>
             <menu>
                 <Menu>
                     <sections>

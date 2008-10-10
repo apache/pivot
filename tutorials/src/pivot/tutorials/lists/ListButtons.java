@@ -36,14 +36,11 @@ public class ListButtons implements Application {
             int index = listButton.getSelectedIndex();
 
             if (index != -1) {
-                Object item = listButton.getListData().get(index);
-                Dictionary<String, Object> dictionary =
-                    (Dictionary<String, Object>)item;
+                String item = (String)listButton.getListData().get(index);
 
-                // Get the image URL for the selected item
-                String imageName = (String)dictionary.get("imageName");
+                // Get the image URL for the selected item                
                 ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                URL imageURL = classLoader.getResource(imageName);
+                URL imageURL = classLoader.getResource("pivot/tutorials/" + item);
 
                 // If the image has not been added to the resource cache yet,
                 // add it

@@ -16,18 +16,23 @@ limitations under the License.
 -->
 
 <CardPane wtkx:id="cardPane" selectedIndex="0"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" 
+    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
         <ImageView image="pivot/tutorials/IMG_0735_2.jpg"/>
         <LinkButton wtkx:id="nextButton">
-            <buttonData text="Next" icon="@resultset_next.png"/>
+            <buttonData>
+                <content:ButtonData text="Next" icon="@resultset_next.png"/>
+            </buttonData>
         </LinkButton>
     </FlowPane>
 
     <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
         <ImageView image="pivot/tutorials/IMG_0767_2.jpg"/>
         <LinkButton wtkx:id="previousButton">
-            <buttonData text="Previous" icon="@resultset_previous.png"/>
+            <buttonData>
+                <content:ButtonData text="Previous" icon="@resultset_previous.png"/>
+            </buttonData>
         </LinkButton>
     </FlowPane>
 </CardPane>

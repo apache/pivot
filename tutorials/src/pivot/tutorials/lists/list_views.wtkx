@@ -23,20 +23,9 @@ limitations under the License.
                 horizontalScrollBarPolicy="fill"
                 verticalScrollBarPolicy="fillToCapacity">
                 <view>
-                    <ListView wtkx:id="listView" selectMode="multi">
-                        <listData>
-                            <item text="One"/>
-                            <item text="Two"/>
-                            <item text="Three"/>
-                            <item text="Four"/>
-                            <item text="Five"/>
-                            <item text="Six"/>
-                            <item text="Seven"/>
-                            <item text="Eight"/>
-                            <item text="Nine"/>
-                            <item text="Ten"/>
-                        </listData>
-                    </ListView>
+                    <ListView wtkx:id="listView" selectMode="multi"
+                        listData="['One', 'Two', 'Three', 'Four', 'Five',
+                            'Six', 'Seven', 'Eight', 'Nine', 'Ten']"/>
                 </view>
             </ScrollPane>
         </content>

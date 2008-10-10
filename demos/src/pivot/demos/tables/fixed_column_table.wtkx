@@ -16,7 +16,9 @@ limitations under the License.
 -->
 
 <Border styles="{color:3, padding:0}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:collections="pivot.collections" 
+    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <content>
         <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
             <view>
@@ -30,14 +32,16 @@ limitations under the License.
                         <TableView.Column name="colC" headerData="Column C"/>
                     </columns>
                     <tableData wtkx:id="tableData">
-                        <row name="User 1" colA="1.A" colB="1.B" colC="1.C" />
-                        <row name="User 2" colA="2.A" colB="2.B" colC="2.C" />
-                        <row name="User 3" colA="3.A" colB="3.B" colC="3.C" />
-                        <row name="User 4" colA="4.A" colB="4.B" colC="4.C" />
-                        <row name="User 5" colA="5.A" colB="5.B" colC="5.C" />
-                        <row name="User 6" colA="6.A" colB="6.B" colC="6.C" />
-                        <row name="User 7" colA="7.A" colB="7.B" colC="7.C" />
-                        <row name="User 8" colA="8.A" colB="8.B" colC="8.C" />
+                        <collections:ArrayList>
+	                        <content:TableRow name="User 1" colA="1.A" colB="1.B" colC="1.C" />
+	                        <content:TableRow name="User 2" colA="2.A" colB="2.B" colC="2.C" />
+	                        <content:TableRow name="User 3" colA="3.A" colB="3.B" colC="3.C" />
+	                        <content:TableRow name="User 4" colA="4.A" colB="4.B" colC="4.C" />
+	                        <content:TableRow name="User 5" colA="5.A" colB="5.B" colC="5.C" />
+	                        <content:TableRow name="User 6" colA="6.A" colB="6.B" colC="6.C" />
+	                        <content:TableRow name="User 7" colA="7.A" colB="7.B" colC="7.C" />
+	                        <content:TableRow name="User 8" colA="8.A" colB="8.B" colC="8.C" />
+                        </collections:ArrayList>
                     </tableData>
                 </TableView>
             </view>

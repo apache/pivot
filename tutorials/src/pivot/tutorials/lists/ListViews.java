@@ -52,15 +52,12 @@ public class ListViews implements Application {
                     for (int j = selectedRange.getStart();
                         j <= selectedRange.getEnd();
                         j++) {
-                        Object item = listView.getListData().get(j);
-                        Dictionary<String, Object> dictionary =
-                            (Dictionary<String, Object>)item;
-
                         if (selectionText.length() > 0) {
                             selectionText += ", ";
                         }
 
-                        selectionText += dictionary.get("text");
+                        String text = (String)listView.getListData().get(j);
+                        selectionText += text;
                     }
                 }
 
