@@ -139,10 +139,6 @@ public class TerraExpanderSkin extends ContainerSkin
             setBackgroundColor(shadeButtonBackgroundColor);
             setDisabledBackgroundColor(shadeButtonBackgroundColor);
 
-            setBevelColor(shadeButtonBackgroundColor);
-            setPressedBevelColor(shadeButtonBackgroundColor);
-            setDisabledBevelColor(shadeButtonBackgroundColor);
-
             Color borderColor = (Color)expander.getStyles().get("borderColor");
             setBorderColor(borderColor);
         }
@@ -209,11 +205,13 @@ public class TerraExpanderSkin extends ContainerSkin
 
     private Color titleBarBackgroundColor;
     private Color titleBarBorderColor;
-    private Color titleBarBevelColor;
     private Color shadeButtonColor;
     private Color shadeButtonBackgroundColor;
     private Color borderColor;
     private Insets padding;
+
+    // Derived colors
+    private Color titleBarBevelColor;
 
     private ExpandTransition expandTransition = null;
 
@@ -226,11 +224,13 @@ public class TerraExpanderSkin extends ContainerSkin
 
         titleBarBackgroundColor = theme.getColor(5);
         titleBarBorderColor = theme.getColor(3);
-        titleBarBevelColor = theme.getColor(6);
         shadeButtonColor = theme.getColor(10);
         shadeButtonBackgroundColor = theme.getColor(1);
         borderColor = theme.getColor(4);
         padding = new Insets(4);
+
+        // Set the derived colors
+        titleBarBevelColor = TerraTheme.adjustBrightness(titleBarBackgroundColor, 0.1f);;
 
         titleBarFlowPane = new FlowPane(Orientation.HORIZONTAL);
         titleBarFlowPane.getComponentMouseButtonListeners().add(titleBarMouseHandler);
@@ -449,6 +449,8 @@ public class TerraExpanderSkin extends ContainerSkin
 
     public void setTitleBarBackgroundColor(Color titleBarBackgroundColor) {
         this.titleBarBackgroundColor = titleBarBackgroundColor;
+        titleBarBevelColor = TerraTheme.adjustBrightness(titleBarBackgroundColor, 0.1f);;
+        repaintComponent();
     }
 
     public final void setTitleBarBackgroundColor(String titleBarBackgroundColor) {

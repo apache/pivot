@@ -313,18 +313,18 @@ public class TerraFrameSkin extends WindowSkin {
 
     private Color titleBarColor;
     private Color titleBarBackgroundColor;
-    private Color titleBarBevelColor;
-    private Color titleBarPressedBevelColor;
     private Color titleBarBorderColor;
     private Color inactiveTitleBarColor;
     private Color inactiveTitleBarBackgroundColor;
-    private Color inactiveTitleBarBevelColor;
-    private Color inactiveTitleBarPressedBevelColor;
     private Color inactiveTitleBarBorderColor;
     private Color contentBorderColor;
-    private Color contentBevelColor;
     private Insets padding;
     private boolean resizable;
+
+    // Derived colors
+    private Color titleBarBevelColor;
+    private Color inactiveTitleBarBevelColor;
+    private Color contentBevelColor;
 
     private static final float INACTIVE_ICON_OPACITY = 0.5f;
 
@@ -334,18 +334,17 @@ public class TerraFrameSkin extends WindowSkin {
 
         titleBarColor = theme.getColor(1);
         titleBarBackgroundColor = theme.getColor(9);
-        titleBarBevelColor = theme.getColor(10);
-        titleBarPressedBevelColor = theme.getColor(8);
         titleBarBorderColor = theme.getColor(7);
         inactiveTitleBarColor = theme.getColor(2);
         inactiveTitleBarBackgroundColor = theme.getColor(4);
-        inactiveTitleBarBevelColor = theme.getColor(5);
-        inactiveTitleBarPressedBevelColor = theme.getColor(4);
         inactiveTitleBarBorderColor = theme.getColor(2);
         contentBorderColor = theme.getColor(2);
-        contentBevelColor = theme.getColor(5);
         padding = new Insets(8);
         resizable = true;
+
+        // Set the derived colors
+        titleBarBevelColor = TerraTheme.adjustBrightness(titleBarBackgroundColor, 0.1f);
+        inactiveTitleBarBevelColor = TerraTheme.adjustBrightness(inactiveTitleBarBackgroundColor, 0.1f);
 
         // The title bar flow pane contains two nested flow panes: one for
         // the title contents and the other for the buttons
@@ -603,6 +602,12 @@ public class TerraFrameSkin extends WindowSkin {
         graphics.draw(contentAreaBevelLine);
     }
 
+    @Override
+    public void setBackgroundColor(Color backgroundColor) {
+        super.setBackgroundColor(backgroundColor);
+        contentBevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+    }
+
     public boolean getShowMinimizeButton() {
         return minimizeButton.isDisplayable();
     }
@@ -753,10 +758,6 @@ public class TerraFrameSkin extends WindowSkin {
             titleBarColor : inactiveTitleBarColor);
         frameButton.getStyles().put("backgroundColor", active ?
             titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
-        frameButton.getStyles().put("bevelColor", active ?
-            titleBarBevelColor : inactiveTitleBarBevelColor);
-        frameButton.getStyles().put("pressedBevelColor", active ?
-            titleBarPressedBevelColor : inactiveTitleBarPressedBevelColor);
         frameButton.getStyles().put("borderColor", active ?
             titleBarBorderColor : inactiveTitleBarBorderColor);
     }

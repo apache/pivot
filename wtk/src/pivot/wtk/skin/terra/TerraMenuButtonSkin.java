@@ -45,17 +45,20 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     private Color disabledBackgroundColor;
     private Color borderColor;
     private Color disabledBorderColor;
-    private Color bevelColor;
-    private Color pressedBevelColor;
-    private Color disabledBevelColor;
     private Insets padding;
     private int spacing;
     private boolean toolbar;
+
+    // Derived colors
+    private Color bevelColor;
+    private Color pressedBevelColor;
+    private Color disabledBevelColor;
 
     private static final int TRIGGER_WIDTH = 10;
 
     public TerraMenuButtonSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
+
         font = theme.getFont();
         color = theme.getColor(0);
         disabledColor = theme.getColor(2);
@@ -63,12 +66,14 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         disabledBackgroundColor = theme.getColor(6);
         borderColor = theme.getColor(2);
         disabledBorderColor = theme.getColor(4);
-        bevelColor = theme.getColor(6);
-        pressedBevelColor = theme.getColor(4);
-        disabledBevelColor = theme.getColor(1);
         padding = new Insets(3);
         spacing = 0;
         toolbar = false;
+
+        // Set the derived colors
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        disabledBevelColor = disabledBackgroundColor;
     }
 
     public int getPreferredWidth(int height) {
@@ -288,6 +293,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         this.backgroundColor = backgroundColor;
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
         repaintComponent();
     }
 
@@ -309,6 +316,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         this.disabledBackgroundColor = disabledBackgroundColor;
+        disabledBevelColor = disabledBackgroundColor;
         repaintComponent();
     }
 
@@ -361,69 +369,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         setDisabledBorderColor(decodeColor(disabledBorderColor));
-    }
-
-    public Color getBevelColor() {
-        return bevelColor;
-    }
-
-    public void setBevelColor(Color bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        this.bevelColor = bevelColor;
-        repaintComponent();
-    }
-
-    public final void setBevelColor(String bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        setBevelColor(decodeColor(bevelColor));
-    }
-
-    public Color getPressedBevelColor() {
-        return pressedBevelColor;
-    }
-
-    public void setPressedBevelColor(Color pressedBevelColor) {
-        if (pressedBevelColor == null) {
-            throw new IllegalArgumentException("pressedBevelColor is null.");
-        }
-
-        this.pressedBevelColor = pressedBevelColor;
-        repaintComponent();
-    }
-
-    public final void setPressedBevelColor(String pressedBevelColor) {
-        if (pressedBevelColor == null) {
-            throw new IllegalArgumentException("pressedBevelColor is null.");
-        }
-
-        setPressedBevelColor(decodeColor(pressedBevelColor));
-    }
-
-    public Color getDisabledBevelColor() {
-        return disabledBevelColor;
-    }
-
-    public void setDisabledBevelColor(Color disabledBevelColor) {
-        if (disabledBevelColor == null) {
-            throw new IllegalArgumentException("disabledBevelColor is null.");
-        }
-
-        this.disabledBevelColor = disabledBevelColor;
-        repaintComponent();
-    }
-
-    public final void setDisabledBevelColor(String disabledBevelColor) {
-        if (disabledBevelColor == null) {
-            throw new IllegalArgumentException("disabledBevelColor is null.");
-        }
-
-        setDisabledBackgroundColor(decodeColor(disabledBevelColor));
     }
 
     public Insets getPadding() {

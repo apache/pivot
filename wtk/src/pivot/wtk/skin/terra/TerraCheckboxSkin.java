@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Line2D;
 
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
@@ -43,13 +42,15 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     private int spacing;
 
     private Color buttonColor;
-    private Color buttonBevelColor;
     private Color buttonBorderColor;
     private Color buttonSelectionColor;
     private Color disabledButtonColor;
-    private Color disabledButtonBevelColor;
     private Color disabledButtonBorderColor;
     private Color disabledButtonSelectionColor;
+
+    // Derived colors
+    private Color buttonBevelColor;
+    private Color disabledButtonBevelColor;
 
     private static final int CHECKBOX_SIZE = 14;
     private static final int CHECKMARK_SIZE = 10;
@@ -62,13 +63,15 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         spacing = 3;
 
         buttonColor = theme.getColor(1);
-        buttonBevelColor = theme.getColor(6);
         buttonBorderColor = theme.getColor(2);
         buttonSelectionColor = theme.getColor(7);
         disabledButtonColor = theme.getColor(1);
-        disabledButtonBevelColor = theme.getColor(6);
         disabledButtonBorderColor = theme.getColor(4);
         disabledButtonSelectionColor = theme.getColor(2);
+
+        // Set the derived colors
+        buttonBevelColor = TerraTheme.adjustBrightness(buttonColor, -0.1f);
+        disabledButtonBevelColor = disabledButtonColor;
     }
 
     public int getPreferredWidth(int height) {
@@ -179,8 +182,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
             buttonBevelColor = this.buttonBevelColor;
             buttonBorderColor = this.buttonBorderColor;
             buttonSelectionColor = this.buttonSelectionColor;
-        }
-        else {
+        } else {
             buttonColor = disabledButtonColor;
             buttonBevelColor = disabledButtonBevelColor;
             buttonBorderColor = disabledButtonBorderColor;
@@ -199,9 +201,8 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         graphics.drawRect(buttonRectangle.x, buttonRectangle.y, buttonRectangle.width, buttonRectangle.height);
 
         // Paint the bevel
-        Line2D bevelLine = new Line2D.Double(1, 1, CHECKBOX_SIZE - 2, 1);
         graphics.setPaint(buttonBevelColor);
-        graphics.draw(bevelLine);
+        graphics.drawLine(1, 1, CHECKBOX_SIZE - 2, 1);
 
         // Paint the checkmark
         Button.State state = checkbox.getState();

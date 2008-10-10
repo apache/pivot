@@ -39,16 +39,18 @@ import pivot.wtk.skin.WindowSkin;
 /**
  * Sheet skin class.
  * <p>
- * TODO Add support for the "resizable" flag. It current exists but does nothing.
+ * TODO Wire up the "resizable" flag. It current exists but does nothing.
  *
  * @author gbrown
  * @author tvolkert
  */
 public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private Color borderColor;
-    private Color bevelColor;
     private Insets padding;
     private boolean resizable;
+
+    // Derived colors
+    private Color bevelColor;
 
     private SlideTransition openTransition = null;
     private SlideTransition closeTransition = null;
@@ -87,13 +89,15 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         Color backgroundColor = theme.getColor(6);
         backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
-            backgroundColor.getBlue(), 0xf0);
+            backgroundColor.getBlue(), 0x80);
         setBackgroundColor(backgroundColor);
 
         borderColor = theme.getColor(2);
-        bevelColor = theme.getColor(5);
         padding = new Insets(8);
         resizable = false;
+
+        // Set the derived colors
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
     }
 
     @Override
@@ -241,6 +245,12 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         return consumed;
     }
 
+    @Override
+    public void setBackgroundColor(Color backgroundColor) {
+        super.setBackgroundColor(backgroundColor);
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+    }
+
     public Color getBorderColor() {
         return borderColor;
     }
@@ -260,27 +270,6 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         }
 
         setBorderColor(decodeColor(borderColor));
-    }
-
-    public Color getBevelColor() {
-        return bevelColor;
-    }
-
-    public void setBevelColor(Color bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        this.bevelColor = bevelColor;
-        repaintComponent();
-    }
-
-    public final void setBevelColor(String bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        setBevelColor(decodeColor(bevelColor));
     }
 
     public Insets getPadding() {

@@ -43,15 +43,18 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     private Color disabledBackgroundColor;
     private Color borderColor;
     private Color disabledBorderColor;
-    private Color bevelColor;
-    private Color pressedBevelColor;
-    private Color disabledBevelColor;
     private Insets padding;
     private float preferredAspectRatio;
     private boolean toolbar;
 
+    // Derived colors
+    private Color bevelColor;
+    private Color pressedBevelColor;
+    private Color disabledBevelColor;
+
     public TerraPushButtonSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
+
         font = theme.getFont();
         color = theme.getColor(0);
         disabledColor = theme.getColor(2);
@@ -59,12 +62,14 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         disabledBackgroundColor = theme.getColor(5);
         borderColor = theme.getColor(2);
         disabledBorderColor = theme.getColor(3);
-        bevelColor = theme.getColor(6);
-        pressedBevelColor = theme.getColor(4);
-        disabledBevelColor = theme.getColor(5);
         padding = new Insets(3);
         preferredAspectRatio = Float.NaN;
         toolbar = false;
+
+        // Set the derived colors
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        disabledBevelColor = disabledBackgroundColor;
     }
 
     public int getPreferredWidth(int height) {
@@ -326,6 +331,8 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         this.backgroundColor = backgroundColor;
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
         repaintComponent();
     }
 
@@ -352,6 +359,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         this.disabledBackgroundColor = disabledBackgroundColor;
+        disabledBevelColor = disabledBackgroundColor;
         repaintComponent();
     }
 
@@ -418,84 +426,6 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     public final void setDisabledBorderColor(int disabledBorderColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setDisabledBorderColor(theme.getColor(disabledBorderColor));
-    }
-
-    public Color getBevelColor() {
-        return bevelColor;
-    }
-
-    public void setBevelColor(Color bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        this.bevelColor = bevelColor;
-        repaintComponent();
-    }
-
-    public final void setBevelColor(String bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        setBevelColor(decodeColor(bevelColor));
-    }
-
-    public final void setBevelColor(int bevelColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setBevelColor(theme.getColor(bevelColor));
-    }
-
-    public Color getPressedBevelColor() {
-        return pressedBevelColor;
-    }
-
-    public void setPressedBevelColor(Color pressedBevelColor) {
-        if (pressedBevelColor == null) {
-            throw new IllegalArgumentException("pressedBevelColor is null.");
-        }
-
-        this.pressedBevelColor = pressedBevelColor;
-        repaintComponent();
-    }
-
-    public final void setPressedBevelColor(String pressedBevelColor) {
-        if (pressedBevelColor == null) {
-            throw new IllegalArgumentException("pressedBevelColor is null.");
-        }
-
-        setPressedBevelColor(decodeColor(pressedBevelColor));
-    }
-
-    public final void setPressedBevelColor(int pressedBevelColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setPressedBevelColor(theme.getColor(pressedBevelColor));
-    }
-
-    public Color getDisabledBevelColor() {
-        return disabledBevelColor;
-    }
-
-    public void setDisabledBevelColor(Color disabledBevelColor) {
-        if (disabledBevelColor == null) {
-            throw new IllegalArgumentException("disabledBevelColor is null.");
-        }
-
-        this.disabledBevelColor = disabledBevelColor;
-        repaintComponent();
-    }
-
-    public final void setDisabledBevelColor(String disabledBevelColor) {
-        if (disabledBevelColor == null) {
-            throw new IllegalArgumentException("disabledBevelColor is null.");
-        }
-
-        setDisabledBevelColor(decodeColor(disabledBevelColor));
-    }
-
-    public final void setDisabledBevelColor(int disabledBevelColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setDisabledBevelColor(theme.getColor(disabledBevelColor));
     }
 
     public Insets getPadding() {

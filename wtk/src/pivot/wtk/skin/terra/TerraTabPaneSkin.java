@@ -347,9 +347,11 @@ public class TerraTabPaneSkin extends ContainerSkin
     private Insets padding;
     private Font buttonFont;
     private Color buttonColor;
+    private Insets buttonPadding;
+
+    // Derived colors
     private Color buttonBevelColor;
     private Color pressedButtonBevelColor;
-    private Insets buttonPadding;
 
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
@@ -361,9 +363,11 @@ public class TerraTabPaneSkin extends ContainerSkin
         padding = new Insets(6);
         buttonFont = theme.getFont();
         buttonColor = theme.getColor(0);
-        buttonBevelColor = theme.getColor(5);
-        pressedButtonBevelColor = theme.getColor(5);
         buttonPadding = new Insets(3, 4, 3, 4);
+
+        // Set the derived colors
+        buttonBevelColor = TerraTheme.adjustBrightness(inactiveTabColor, 0.1f);
+        pressedButtonBevelColor = TerraTheme.adjustBrightness(activeTabColor, -0.1f);
 
         tabButtonGroup.getGroupListeners().add(this);
 
@@ -750,7 +754,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         this.activeTabColor = activeTabColor;
-
+        pressedButtonBevelColor = TerraTheme.adjustBrightness(activeTabColor, -0.1f);
         repaintComponent();
     }
 
@@ -772,6 +776,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         this.inactiveTabColor = inactiveTabColor;
+        buttonBevelColor = TerraTheme.adjustBrightness(inactiveTabColor, 0.1f);
         repaintComponent();
     }
 
@@ -878,48 +883,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         setButtonColor(decodeColor(buttonColor));
-    }
-
-    public Color getButtonBevelColor() {
-        return buttonBevelColor;
-    }
-
-    public void setButtonBevelColor(Color buttonBevelColor) {
-        if (buttonBevelColor == null) {
-            throw new IllegalArgumentException("buttonBevelColor is null.");
-        }
-
-        this.buttonBevelColor = buttonBevelColor;
-        repaintComponent();
-    }
-
-    public final void setButtonBevelColor(String buttonBevelColor) {
-        if (buttonBevelColor == null) {
-            throw new IllegalArgumentException("buttonBevelColor is null.");
-        }
-
-        setButtonBevelColor(decodeColor(buttonBevelColor));
-    }
-
-    public Color getPressedButtonBevelColor() {
-        return pressedButtonBevelColor;
-    }
-
-    public void setPressedButtonBevelColor(Color pressedButtonBevelColor) {
-        if (pressedButtonBevelColor == null) {
-            throw new IllegalArgumentException("pressedButtonBevelColor is null.");
-        }
-
-        this.pressedButtonBevelColor = pressedButtonBevelColor;
-        repaintComponent();
-    }
-
-    public final void setPressedButtonBevelColor(String pressedButtonBevelColor) {
-        if (pressedButtonBevelColor == null) {
-            throw new IllegalArgumentException("pressedButtonBevelColor is null.");
-        }
-
-        setPressedButtonBevelColor(decodeColor(pressedButtonBevelColor));
     }
 
     public Insets getButtonPadding() {

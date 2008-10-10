@@ -39,6 +39,7 @@ import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.Popup;
+import pivot.wtk.Theme;
 import pivot.wtk.skin.ButtonSkin;
 
 /**
@@ -74,6 +75,20 @@ public class TerraCalendarButtonSkin extends ButtonSkin
         }
     }
 
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private Color backgroundColor;
+    private Color disabledBackgroundColor;
+    private Color borderColor;
+    private Color disabledBorderColor;
+    private Insets padding;
+
+    // Derived colors
+    private Color bevelColor;
+    private Color pressedBevelColor;
+    private Color disabledBevelColor;
+
     private Calendar calendar = null;
     private Border calendarBorder = null;
     private Popup calendarPopup = null;
@@ -82,42 +97,23 @@ public class TerraCalendarButtonSkin extends ButtonSkin
 
     private static final int TRIGGER_WIDTH = 14;
 
-    private Font font = new Font("Verdana", Font.PLAIN, 11);
-    private Color color = new Color(0x00, 0x00, 0x00);
-    private Color disabledColor = new Color(0x99, 0x99, 0x99);
-    private Color backgroundColor = new Color(0xE6, 0xE3, 0xDA);
-    private Color disabledBackgroundColor = new Color(0xF7, 0xF5, 0xEB);
-    private Color borderColor = new Color(0x99, 0x99, 0x99);
-    private Color disabledBorderColor = new Color(0xCC, 0xCC, 0xCC);
-    private Color bevelColor = new Color(0xF7, 0xF5, 0xEB);
-    private Color pressedBevelColor = new Color(0xCC, 0xCA, 0xC2);
-    private Color disabledBevelColor = new Color(0xFF, 0xFF, 0xFF);
-    private Insets padding = new Insets(2);
-
-    // Style keys
-    protected static final String FONT_KEY = "font";
-    protected static final String COLOR_KEY = "color";
-    protected static final String DISABLED_COLOR_KEY = "disabledColor";
-    protected static final String BACKGROUND_COLOR_KEY = "backgroundColor";
-    protected static final String DISABLED_BACKGROUND_COLOR_KEY = "disabledBackgroundColor";
-    protected static final String BORDER_COLOR_KEY = "borderColor";
-    protected static final String BEVEL_COLOR_KEY = "bevelColor";
-    protected static final String PRESSED_BEVEL_COLOR_KEY = "pressedBevelColor";
-    protected static final String DISABLED_BEVEL_COLOR_KEY = "disabledBevelColor";
-    protected static final String PADDING_KEY = "padding";
-
-    protected static final String LIST_FONT_KEY = "listFont";
-    protected static final String LIST_COLOR_KEY = "listColor";
-    protected static final String LIST_DISABLED_COLOR_KEY = "listDisabledColor";
-    protected static final String LIST_BACKGROUND_COLOR_KEY = "listBackgroundColor";
-    protected static final String LIST_SELECTION_COLOR_KEY = "listSelectionColor";
-    protected static final String LIST_SELECTION_BACKGROUND_COLOR_KEY = "listSelectionBackgroundColor";
-    protected static final String LIST_INACTIVE_SELECTION_COLOR_KEY = "listInactiveSelectionColor";
-    protected static final String LIST_INACTIVE_SELECTION_BACKGROUND_COLOR_KEY = "listInactiveSelectionBackgroundColor";
-    protected static final String LIST_HIGHLIGHT_COLOR_KEY = "listHighlightColor";
-    protected static final String LIST_HIGHLIGHT_BACKGROUND_COLOR_KEY = "listHighlightBackgroundColor";
-
     public TerraCalendarButtonSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+
+        font = theme.getFont();
+        color = theme.getColor(0);
+        disabledColor = theme.getColor(2);
+        backgroundColor = theme.getColor(5);
+        disabledBackgroundColor = theme.getColor(6);
+        borderColor = theme.getColor(2);
+        disabledBorderColor = theme.getColor(4);
+        padding = new Insets(3);
+
+        // Set the derived colors
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        disabledBevelColor = disabledBackgroundColor;
+
         // Create the calendar and border
         calendar = new Calendar();
         calendarBorder = new Border(calendar);

@@ -157,12 +157,14 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     private Color disabledBackgroundColor;
     private Color borderColor;
     private Color disabledBorderColor;
-    private Color bevelColor;
-    private Color pressedBevelColor;
-    private Color disabledBevelColor;
     private boolean headersPressable;
     private boolean columnsResizable;
     private boolean includeTrailingVerticalGridLine;
+
+    // Derived colors
+    private Color bevelColor;
+    private Color pressedBevelColor;
+    private Color disabledBevelColor;
 
     private int pressedHeaderIndex = -1;
     private boolean resizing = false;
@@ -175,6 +177,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
     public TerraTableViewHeaderSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
+
         font = theme.getFont();
         color = theme.getColor(0);
         disabledColor = theme.getColor(2);
@@ -182,12 +185,14 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         disabledBackgroundColor = theme.getColor(5);
         borderColor = theme.getColor(2);
         disabledBorderColor = theme.getColor(3);
-        bevelColor = theme.getColor(6);
-        pressedBevelColor = theme.getColor(4);
-        disabledBevelColor = theme.getColor(5);
         headersPressable = true;
         columnsResizable = true;
         includeTrailingVerticalGridLine = false;
+
+        // Set the derived colors
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        disabledBevelColor = disabledBackgroundColor;
     }
 
     public void install(Component component) {
@@ -522,6 +527,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
 
         this.backgroundColor = backgroundColor;
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
         repaintComponent();
     }
 
@@ -543,6 +550,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
 
         this.disabledBackgroundColor = disabledBackgroundColor;
+        disabledBevelColor = disabledBackgroundColor;
         repaintComponent();
     }
 
@@ -594,69 +602,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
 
         setDisabledBorderColor(decodeColor(disabledBorderColor));
-    }
-
-    public Color getBevelColor() {
-        return bevelColor;
-    }
-
-    public void setBevelColor(Color bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        this.bevelColor = bevelColor;
-        repaintComponent();
-    }
-
-    public final void setBevelColor(String bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        setBevelColor(decodeColor(bevelColor));
-    }
-
-    public Color getPressedBevelColor() {
-        return pressedBevelColor;
-    }
-
-    public void setPressedBevelColor(Color pressedBevelColor) {
-        if (pressedBevelColor == null) {
-            throw new IllegalArgumentException("pressedBevelColor is null.");
-        }
-
-        this.pressedBevelColor = pressedBevelColor;
-        repaintComponent();
-    }
-
-    public final void setPressedBevelColor(String pressedBevelColor) {
-        if (pressedBevelColor == null) {
-            throw new IllegalArgumentException("pressedBevelColor is null.");
-        }
-
-        setPressedBevelColor(decodeColor(pressedBevelColor));
-    }
-
-    public Color getDisabledBevelColor() {
-        return disabledBevelColor;
-    }
-
-    public void setDisabledBevelColor(Color disabledBevelColor) {
-        if (disabledBevelColor == null) {
-            throw new IllegalArgumentException("disabledBevelColor is null.");
-        }
-
-        this.disabledBevelColor = disabledBevelColor;
-        repaintComponent();
-    }
-
-    public final void setDisabledBevelColor(String disabledBevelColor) {
-        if (disabledBevelColor == null) {
-            throw new IllegalArgumentException("disabledBevelColor is null.");
-        }
-
-        setDisabledBackgroundColor(decodeColor(disabledBevelColor));
     }
 
     public boolean getHeadersPressable() {

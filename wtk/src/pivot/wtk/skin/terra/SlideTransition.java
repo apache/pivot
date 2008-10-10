@@ -76,7 +76,6 @@ public class SlideTransition extends Transition {
     protected void update() {
         int elapsedTime = getElapsedTime();
         int duration = getDuration();
-        float percentComplete = getPercentComplete();
 
         x = (int)(reverse ? easing.easeIn(elapsedTime, x0, x1 - x0, duration)
             : easing.easeOut(elapsedTime, x0, x1 - x0, duration));

@@ -317,14 +317,16 @@ public class TerraTextInputSkin extends ComponentSkin
     private Color disabledBackgroundColor;
     private Color borderColor;
     private Color disabledBorderColor;
-    private Color bevelColor;
-    private Color disabledBevelColor;
     private Insets padding;
 
     private Color selectionColor;
     private Color selectionBackgroundColor;
     private Color inactiveSelectionColor;
     private Color inactiveSelectionBackgroundColor;
+
+    // Derived colors
+    private Color bevelColor;
+    private Color disabledBevelColor;
 
     public TerraTextInputSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -335,14 +337,16 @@ public class TerraTextInputSkin extends ComponentSkin
         disabledBackgroundColor = theme.getColor(5);
         borderColor = theme.getColor(2);
         disabledBorderColor = theme.getColor(2);
-        bevelColor = theme.getColor(5);
-        disabledBevelColor = theme.getColor(5);
         padding = new Insets(2);
 
         selectionColor = theme.getColor(1);
         selectionBackgroundColor = theme.getColor(11);
         inactiveSelectionColor = theme.getColor(0);
         inactiveSelectionBackgroundColor = theme.getColor(4);
+
+        // Set the derived colors
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        disabledBevelColor = disabledBackgroundColor;
     }
 
     @Override
@@ -612,6 +616,7 @@ public class TerraTextInputSkin extends ComponentSkin
         }
 
         this.backgroundColor = backgroundColor;
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
         repaintComponent();
     }
 
@@ -633,6 +638,7 @@ public class TerraTextInputSkin extends ComponentSkin
         }
 
         this.disabledBackgroundColor = disabledBackgroundColor;
+        disabledBevelColor = disabledBackgroundColor;
         repaintComponent();
     }
 
@@ -684,48 +690,6 @@ public class TerraTextInputSkin extends ComponentSkin
         }
 
         setDisabledBorderColor(decodeColor(disabledBorderColor));
-    }
-
-    public Color getBevelColor() {
-        return bevelColor;
-    }
-
-    public void setBevelColor(Color bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        this.bevelColor = bevelColor;
-        repaintComponent();
-    }
-
-    public final void setBevelColor(String bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        setBevelColor(decodeColor(bevelColor));
-    }
-
-    public Color getDisabledBevelColor() {
-        return disabledBevelColor;
-    }
-
-    public void setDisabledBevelColor(Color disabledBevelColor) {
-        if (disabledBevelColor == null) {
-            throw new IllegalArgumentException("disabledBevelColor is null.");
-        }
-
-        this.disabledBevelColor = disabledBevelColor;
-        repaintComponent();
-    }
-
-    public final void setDisabledBevelColor(String disabledBevelColor) {
-        if (disabledBevelColor == null) {
-            throw new IllegalArgumentException("disabledBevelColor is null.");
-        }
-
-        setDisabledBackgroundColor(decodeColor(disabledBevelColor));
     }
 
     public Color getSelectionColor() {

@@ -104,10 +104,12 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private Color disabledBackgroundColor;
     private Color borderColor;
     private Color disabledBorderColor;
+    private Insets padding;
+
+    // Derived colors
     private Color bevelColor;
     private Color pressedBevelColor;
     private Color disabledBevelColor;
-    private Insets padding;
 
     private Transition closeTransition = null;
 
@@ -118,6 +120,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
     public TerraListButtonSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
+
         font = theme.getFont();
         color = theme.getColor(0);
         disabledColor = theme.getColor(2);
@@ -125,10 +128,12 @@ public class TerraListButtonSkin extends ListButtonSkin {
         disabledBackgroundColor = theme.getColor(6);
         borderColor = theme.getColor(2);
         disabledBorderColor = theme.getColor(4);
-        bevelColor = theme.getColor(6);
-        pressedBevelColor = theme.getColor(4);
-        disabledBevelColor = theme.getColor(1);
         padding = new Insets(3);
+
+        // Set the derived colors
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        disabledBevelColor = disabledBackgroundColor;
 
         listViewPopup.getWindowStateListeners().add(listViewPopupStateListener);
 
@@ -362,6 +367,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
 
         this.backgroundColor = backgroundColor;
+        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
         repaintComponent();
     }
 
@@ -383,6 +390,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
 
         this.disabledBackgroundColor = disabledBackgroundColor;
+        disabledBevelColor = disabledBackgroundColor;
         repaintComponent();
     }
 
@@ -435,69 +443,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
 
         setDisabledBorderColor(decodeColor(disabledBorderColor));
-    }
-
-    public Color getBevelColor() {
-        return bevelColor;
-    }
-
-    public void setBevelColor(Color bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        this.bevelColor = bevelColor;
-        repaintComponent();
-    }
-
-    public final void setBevelColor(String bevelColor) {
-        if (bevelColor == null) {
-            throw new IllegalArgumentException("bevelColor is null.");
-        }
-
-        setBevelColor(decodeColor(bevelColor));
-    }
-
-    public Color getPressedBevelColor() {
-        return pressedBevelColor;
-    }
-
-    public void setPressedBevelColor(Color pressedBevelColor) {
-        if (pressedBevelColor == null) {
-            throw new IllegalArgumentException("pressedBevelColor is null.");
-        }
-
-        this.pressedBevelColor = pressedBevelColor;
-        repaintComponent();
-    }
-
-    public final void setPressedBevelColor(String pressedBevelColor) {
-        if (pressedBevelColor == null) {
-            throw new IllegalArgumentException("pressedBevelColor is null.");
-        }
-
-        setPressedBevelColor(decodeColor(pressedBevelColor));
-    }
-
-    public Color getDisabledBevelColor() {
-        return disabledBevelColor;
-    }
-
-    public void setDisabledBevelColor(Color disabledBevelColor) {
-        if (disabledBevelColor == null) {
-            throw new IllegalArgumentException("disabledBevelColor is null.");
-        }
-
-        this.disabledBevelColor = disabledBevelColor;
-        repaintComponent();
-    }
-
-    public final void setDisabledBevelColor(String disabledBevelColor) {
-        if (disabledBevelColor == null) {
-            throw new IllegalArgumentException("disabledBevelColor is null.");
-        }
-
-        setDisabledBackgroundColor(decodeColor(disabledBevelColor));
     }
 
     public Insets getPadding() {

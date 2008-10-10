@@ -150,9 +150,11 @@ public class TerraPaletteSkin extends WindowSkin {
 
     private Color titleBarColor;
     private Color titleBarBackgroundColor;
-    private Color titleBarBevelColor;
     private Color titleBarBorderColor;
     private Color contentBorderColor;
+
+    // Derived colors
+    private Color titleBarBevelColor;
     private Color contentBevelColor;
 
     public TerraPaletteSkin() {
@@ -161,10 +163,11 @@ public class TerraPaletteSkin extends WindowSkin {
 
         titleBarColor = theme.getColor(1);
         titleBarBackgroundColor = theme.getColor(9);
-        titleBarBevelColor = theme.getColor(10);
         titleBarBorderColor = theme.getColor(7);
         contentBorderColor = theme.getColor(2);
-        contentBevelColor = theme.getColor(5);
+
+        // Set the derived colors
+        titleBarBevelColor = TerraTheme.adjustBrightness(titleBarBackgroundColor, 0.1f);
 
         // The title bar flow pane contains two nested flow panes: one for
         // the title contents and the other for the buttons
@@ -369,6 +372,12 @@ public class TerraPaletteSkin extends WindowSkin {
         graphics.setPaint(contentBevelColor);
         graphics.drawLine(contentAreaRectangle.x + 1, contentAreaRectangle.y + 1,
             contentAreaRectangle.width - 1, contentAreaRectangle.y + 1);
+    }
+
+    @Override
+    public void setBackgroundColor(Color backgroundColor) {
+        super.setBackgroundColor(backgroundColor);
+        contentBevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
     }
 
     public Insets getPadding() {

@@ -272,4 +272,11 @@ public final class TerraTheme extends Theme {
     public Resources getResources() {
         return resources;
     }
+
+    public static Color adjustBrightness(Color color, float adjustment) {
+        float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+        hsb[2] = Math.min(Math.max(hsb[2] + adjustment, 0f), 1f);
+        int rgb = Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
+        return new Color((color.getAlpha() << 24) | (rgb & 0xffffff));
+    }
 }
