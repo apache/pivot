@@ -86,6 +86,7 @@ public class WTKXSerializer implements Serializer {
     private static class Property implements Sequence<Object> {
         private String name;
         private BeanDictionary beanDictionary;
+        private Object item = null;
 
         public Property(String name, Object object) {
             this.name = name;
@@ -104,8 +105,7 @@ public class WTKXSerializer implements Serializer {
 
                 sequence.add(item);
             } else {
-                // Set the property
-                beanDictionary.put(name, item);
+                this.item = item;
             }
 
             return -1;
@@ -141,6 +141,13 @@ public class WTKXSerializer implements Serializer {
 
         public int getLength() {
             return 0;
+        }
+
+        public void process() {
+            if (item != null) {
+                // Set the property
+                beanDictionary.put(name, item);
+            }
         }
     }
 
@@ -374,6 +381,11 @@ public class WTKXSerializer implements Serializer {
 
                         // Apply the attributes
                         if (node.value != null) {
+                            if (node.value instanceof Property) {
+                                Property property = (Property)node.value;
+                                property.process();
+                            }
+
                             if (node.value instanceof Dictionary) {
                                 Dictionary<String, Object> nodeDictionary = (Dictionary<String, Object>)node.value;
 

@@ -1178,11 +1178,11 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         }
 
         case Keyboard.KeyCode.LEFT: {
-            if (treeView.getSelectMode() == TreeView.SelectMode.SINGLE
-                && showBranchControls) {
-                Sequence<Integer> path = treeView.getSelectedPath();
+            if (showBranchControls) {
+                Sequence<Sequence<Integer>> paths = treeView.getSelectedPaths();
 
-                if (path != null) {
+                if (paths != null) {
+                    Sequence<Integer> path = paths.get(paths.getLength() - 1);
                     NodeInfo nodeInfo = getNodeInfoAt(path);
 
                     if (nodeInfo instanceof BranchInfo) {
@@ -1201,11 +1201,11 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         }
 
         case Keyboard.KeyCode.RIGHT: {
-            if (treeView.getSelectMode() == TreeView.SelectMode.SINGLE
-                && showBranchControls) {
-                Sequence<Integer> path = treeView.getSelectedPath();
+            if (showBranchControls) {
+                Sequence<Sequence<Integer>> paths = treeView.getSelectedPaths();
 
-                if (path != null) {
+                if (paths != null) {
+                    Sequence<Integer> path = paths.get(paths.getLength() - 1);
                     NodeInfo nodeInfo = getNodeInfoAt(path);
 
                     if (nodeInfo instanceof BranchInfo) {
