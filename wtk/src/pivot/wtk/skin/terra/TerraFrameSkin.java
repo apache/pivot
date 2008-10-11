@@ -333,18 +333,18 @@ public class TerraFrameSkin extends WindowSkin {
         setBackgroundColor(theme.getColor(3));
 
         titleBarColor = theme.getColor(1);
-        titleBarBackgroundColor = theme.getColor(6);
-        titleBarBorderColor = theme.getColor(5);
+        titleBarBackgroundColor = theme.getColor(5);
+        titleBarBorderColor = theme.getColor(4);
         inactiveTitleBarColor = theme.getColor(2);
-        inactiveTitleBarBackgroundColor = TerraTheme.adjustBrightness(theme.getColor(3), -0.1f);
+        inactiveTitleBarBackgroundColor = theme.getDarkColor(3);
         inactiveTitleBarBorderColor = theme.getColor(2);
         contentBorderColor = theme.getColor(2);
         padding = new Insets(8);
         resizable = true;
 
         // Set the derived colors
-        titleBarBevelColor = TerraTheme.adjustBrightness(titleBarBackgroundColor, 0.1f);
-        inactiveTitleBarBevelColor = TerraTheme.adjustBrightness(inactiveTitleBarBackgroundColor, 0.1f);
+        titleBarBevelColor = TerraTheme.brighten(titleBarBackgroundColor);
+        inactiveTitleBarBevelColor = TerraTheme.brighten(inactiveTitleBarBackgroundColor);
 
         // The title bar flow pane contains two nested flow panes: one for
         // the title contents and the other for the buttons
@@ -605,7 +605,7 @@ public class TerraFrameSkin extends WindowSkin {
     @Override
     public void setBackgroundColor(Color backgroundColor) {
         super.setBackgroundColor(backgroundColor);
-        contentBevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+        contentBevelColor = TerraTheme.brighten(backgroundColor);
     }
 
     public boolean getShowMinimizeButton() {

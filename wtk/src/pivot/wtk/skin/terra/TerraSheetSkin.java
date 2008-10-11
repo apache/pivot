@@ -87,7 +87,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public TerraSheetSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
 
-        Color backgroundColor = theme.getColor(4);
+        Color backgroundColor = theme.getBrightColor(3);
         backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
             backgroundColor.getBlue(), 0xF0);
         setBackgroundColor(backgroundColor);
@@ -97,7 +97,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         resizable = false;
 
         // Set the derived colors
-        bevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        bevelColor = TerraTheme.darken(backgroundColor);
     }
 
     @Override
@@ -248,7 +248,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     @Override
     public void setBackgroundColor(Color backgroundColor) {
         super.setBackgroundColor(backgroundColor);
-        bevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        bevelColor = TerraTheme.darken(backgroundColor);
     }
 
     public Color getBorderColor() {

@@ -93,8 +93,8 @@ public class TerraPromptSkin extends TerraSheetSkin
             PushButton optionButton = new PushButton(option);
             HashMap<String, Object> optionButtonStyles = new HashMap<String, Object>();
             optionButtonStyles.put("color", theme.getColor(1));
-            optionButtonStyles.put("backgroundColor", theme.getColor(6));
-            optionButtonStyles.put("borderColor", theme.getColor(5));
+            optionButtonStyles.put("backgroundColor", theme.getColor(5));
+            optionButtonStyles.put("borderColor", theme.getColor(4));
 
             optionButton.setStyles(optionButtonStyles);
             optionButton.getStyles().put("preferredAspectRatio", 3);

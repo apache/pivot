@@ -3,12 +3,12 @@
     colors: [
         "#404039",
         "#ffffff",
-        "#66665c",
-        "#ccccb8",
-        "#e6e6cf",
-        "#ffffe6",
+        "#998e8a",
+        "#e6e2dc",
         "#cc6600",
-        "#802000"
+        "#ff7300",
+        "#851506",
+        "#a32900"
     ],
 
     errorIcon: "message_type-error-32x32.png",

@@ -224,13 +224,13 @@ public class TerraExpanderSkin extends ContainerSkin
 
         titleBarBackgroundColor = theme.getColor(3);
         titleBarBorderColor = theme.getColor(2);
-        shadeButtonColor = theme.getColor(6);
+        shadeButtonColor = theme.getColor(5);
         shadeButtonBackgroundColor = theme.getColor(1);
         borderColor = theme.getColor(2);
         padding = new Insets(4);
 
         // Set the derived colors
-        titleBarBevelColor = TerraTheme.adjustBrightness(titleBarBackgroundColor, 0.1f);;
+        titleBarBevelColor = TerraTheme.brighten(titleBarBackgroundColor);
 
         titleBarFlowPane = new FlowPane(Orientation.HORIZONTAL);
         titleBarFlowPane.getComponentMouseButtonListeners().add(titleBarMouseHandler);
@@ -249,7 +249,7 @@ public class TerraExpanderSkin extends ContainerSkin
         titleBarFlowPane.add(titleFlowPane);
         titleBarFlowPane.add(buttonFlowPane);
 
-        titleLabel.getStyles().put("color", TerraTheme.adjustBrightness(theme.getColor(6), -0.1f));
+        titleLabel.getStyles().put("color", theme.getDarkColor(5));
         titleLabel.getStyles().put("fontBold", true);
         titleFlowPane.add(titleLabel);
     }
@@ -449,7 +449,7 @@ public class TerraExpanderSkin extends ContainerSkin
 
     public void setTitleBarBackgroundColor(Color titleBarBackgroundColor) {
         this.titleBarBackgroundColor = titleBarBackgroundColor;
-        titleBarBevelColor = TerraTheme.adjustBrightness(titleBarBackgroundColor, 0.1f);;
+        titleBarBevelColor = TerraTheme.brighten(titleBarBackgroundColor);
         repaintComponent();
     }
 

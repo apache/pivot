@@ -26,7 +26,7 @@ import pivot.wtk.skin.TablePaneSkin;
 public class TerraTablePaneSkin extends TablePaneSkin {
     public TerraTablePaneSkin() {
         setGridColor(2);
-        setSelectionBackgroundColor(4);
+        setSelectionBackgroundColor(3);
     }
 
     public final void setGridColor(int gridColor) {

@@ -357,8 +357,8 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     public TerraTabPaneSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        activeTabColor = theme.getColor(4);
-        inactiveTabColor = TerraTheme.adjustBrightness(theme.getColor(3), -0.1f);
+        activeTabColor = theme.getBrightColor(3);
+        inactiveTabColor = theme.getDarkColor(3);
         borderColor = theme.getColor(2);
         padding = new Insets(6);
         buttonFont = theme.getFont();
@@ -366,8 +366,8 @@ public class TerraTabPaneSkin extends ContainerSkin
         buttonPadding = new Insets(3, 4, 3, 4);
 
         // Set the derived colors
-        buttonBevelColor = TerraTheme.adjustBrightness(inactiveTabColor, 0.1f);
-        pressedButtonBevelColor = TerraTheme.adjustBrightness(activeTabColor, -0.1f);
+        buttonBevelColor = TerraTheme.brighten(inactiveTabColor);
+        pressedButtonBevelColor = TerraTheme.darken(activeTabColor);
 
         tabButtonGroup.getGroupListeners().add(this);
 
@@ -754,7 +754,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         this.activeTabColor = activeTabColor;
-        pressedButtonBevelColor = TerraTheme.adjustBrightness(activeTabColor, -0.1f);
+        pressedButtonBevelColor = TerraTheme.darken(activeTabColor);
         repaintComponent();
     }
 
@@ -776,7 +776,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         this.inactiveTabColor = inactiveTabColor;
-        buttonBevelColor = TerraTheme.adjustBrightness(inactiveTabColor, 0.1f);
+        buttonBevelColor = TerraTheme.brighten(inactiveTabColor);
         repaintComponent();
     }
 

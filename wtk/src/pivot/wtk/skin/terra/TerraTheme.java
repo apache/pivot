@@ -173,6 +173,18 @@ public final class TerraTheme extends Theme {
         return colors[index];
     }
 
+    public Color getBrightColor(int index) {
+        // TODO Reserve space in our color cache for brighter/darker versions
+        // of the theme colors?
+        return brighten(colors[index]);
+    }
+
+    public Color getDarkColor(int index) {
+        // TODO Reserve space in our color cache for brighter/darker versions
+        // of the theme colors?
+        return darken(colors[index]);
+    }
+
     public Image getMessageIcon(MessageType messageType) {
         String messageIconName;
 
@@ -275,7 +287,15 @@ public final class TerraTheme extends Theme {
         return resources;
     }
 
-    public static Color adjustBrightness(Color color, float adjustment) {
+    public static Color brighten(Color color) {
+        return adjustBrightness(color, 0.1f);
+    }
+
+    public static Color darken(Color color) {
+        return adjustBrightness(color, -0.1f);
+    }
+
+    private static Color adjustBrightness(Color color, float adjustment) {
         float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
         hsb[2] = Math.min(Math.max(hsb[2] + adjustment, 0f), 1f);
         int rgb = Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);

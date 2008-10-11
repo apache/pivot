@@ -38,7 +38,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     public TerraLinkButtonSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         font = theme.getFont();
-        color = theme.getColor(6);
+        color = theme.getColor(5);
         disabledColor = theme.getColor(2);
     }
 

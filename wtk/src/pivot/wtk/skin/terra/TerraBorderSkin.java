@@ -27,7 +27,7 @@ public class TerraBorderSkin extends BorderSkin {
     public TerraBorderSkin() {
         setBackgroundColor(1);
         setColor(2);
-        setTitleColor(7);
+        setTitleColor(5);
     }
 
     public final void setColor(int color) {

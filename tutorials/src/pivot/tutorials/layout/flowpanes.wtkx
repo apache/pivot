@@ -23,7 +23,7 @@ limitations under the License.
 
     <rows>
         <TablePane.Row height="-1">
-            <FlowPane wtkx:id="flowPane" styles="{padding:6, backgroundColor:4}">
+            <FlowPane wtkx:id="flowPane" styles="{padding:6, backgroundColor:3}">
                 <PushButton buttonData="One"/>
                 <PushButton buttonData="Two"/>
                 <PushButton buttonData="Three"/>

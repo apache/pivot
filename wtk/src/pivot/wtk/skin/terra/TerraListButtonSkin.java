@@ -125,14 +125,14 @@ public class TerraListButtonSkin extends ListButtonSkin {
         color = theme.getColor(0);
         disabledColor = theme.getColor(2);
         backgroundColor = theme.getColor(3);
-        disabledBackgroundColor = theme.getColor(4);
+        disabledBackgroundColor = theme.getColor(3);
         borderColor = theme.getColor(2);
         disabledBorderColor = theme.getColor(2);
         padding = new Insets(3);
 
         // Set the derived colors
-        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
-        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        bevelColor = TerraTheme.brighten(backgroundColor);
+        pressedBevelColor = TerraTheme.darken(backgroundColor);
         disabledBevelColor = disabledBackgroundColor;
 
         listViewPopup.getWindowStateListeners().add(listViewPopupStateListener);
@@ -367,8 +367,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
 
         this.backgroundColor = backgroundColor;
-        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
-        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        bevelColor = TerraTheme.brighten(backgroundColor);
+        pressedBevelColor = TerraTheme.darken(backgroundColor);
         repaintComponent();
     }
 

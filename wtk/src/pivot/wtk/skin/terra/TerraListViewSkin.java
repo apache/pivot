@@ -71,9 +71,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         disabledColor = theme.getColor(2);
         backgroundColor = theme.getColor(1);
         selectionColor = theme.getColor(1);
-        selectionBackgroundColor = theme.getColor(7);
+        selectionBackgroundColor = theme.getColor(6);
         inactiveSelectionColor = theme.getColor(0);
-        inactiveSelectionBackgroundColor = TerraTheme.adjustBrightness(theme.getColor(3), -0.1f);
+        inactiveSelectionBackgroundColor = TerraTheme.darken(theme.getColor(3));
         highlightColor = theme.getColor(0);
         highlightBackgroundColor = theme.getColor(3);
         showHighlight = true;

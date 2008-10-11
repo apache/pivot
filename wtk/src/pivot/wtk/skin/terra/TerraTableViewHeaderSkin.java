@@ -190,8 +190,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         includeTrailingVerticalGridLine = false;
 
         // Set the derived colors
-        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
-        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        bevelColor = TerraTheme.brighten(backgroundColor);
+        pressedBevelColor = TerraTheme.darken(backgroundColor);
         disabledBevelColor = disabledBackgroundColor;
     }
 
@@ -527,8 +527,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
 
         this.backgroundColor = backgroundColor;
-        bevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
-        pressedBevelColor = TerraTheme.adjustBrightness(backgroundColor, -0.1f);
+        bevelColor = TerraTheme.brighten(backgroundColor);
+        pressedBevelColor = TerraTheme.darken(backgroundColor);
         repaintComponent();
     }
 

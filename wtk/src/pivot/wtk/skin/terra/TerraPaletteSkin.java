@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2008 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pivot.wtk.skin.terra;
 
 import java.awt.BasicStroke;
@@ -162,12 +177,12 @@ public class TerraPaletteSkin extends WindowSkin {
         setBackgroundColor(theme.getColor(3));
 
         titleBarColor = theme.getColor(1);
-        titleBarBackgroundColor = theme.getColor(6);
-        titleBarBorderColor = theme.getColor(5);
+        titleBarBackgroundColor = theme.getColor(5);
+        titleBarBorderColor = theme.getColor(4);
         contentBorderColor = theme.getColor(2);
 
         // Set the derived colors
-        titleBarBevelColor = TerraTheme.adjustBrightness(titleBarBackgroundColor, 0.1f);
+        titleBarBevelColor = TerraTheme.brighten(titleBarBackgroundColor);
 
         // The title bar flow pane contains two nested flow panes: one for
         // the title contents and the other for the buttons
@@ -377,7 +392,7 @@ public class TerraPaletteSkin extends WindowSkin {
     @Override
     public void setBackgroundColor(Color backgroundColor) {
         super.setBackgroundColor(backgroundColor);
-        contentBevelColor = TerraTheme.adjustBrightness(backgroundColor, 0.1f);
+        contentBevelColor = TerraTheme.brighten(backgroundColor);
     }
 
     public Insets getPadding() {
