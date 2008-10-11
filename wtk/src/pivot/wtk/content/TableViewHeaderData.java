@@ -67,7 +67,7 @@ public class TableViewHeaderData {
 
     public void setIcon(String iconName) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setIcon(classLoader.getResource((String)iconName));
+        setIcon(classLoader.getResource(iconName));
     }
 
     public String getText() {

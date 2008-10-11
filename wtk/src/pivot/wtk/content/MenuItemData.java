@@ -93,6 +93,6 @@ public class MenuItemData extends ButtonData {
     }
 
     public void setKeyboardShortcut(String keyboardShortcut) {
-        setKeyboardShortcut(Keyboard.KeyStroke.decode((String)keyboardShortcut));
+        setKeyboardShortcut(Keyboard.KeyStroke.decode(keyboardShortcut));
     }
 }
