@@ -17,7 +17,9 @@ limitations under the License.
 
 <TabPane tabOrientation="vertical" selectedIndex="0"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
-    xmlns="pivot.wtk" xmlns:charts="pivot.charts">
+    xmlns:collections="pivot.collections"
+    xmlns:content="pivot.charts.content" xmlns:charts="pivot.charts"
+    xmlns="pivot.wtk">
     <tabs>
         <charts:AreaChartView wtkx:id="categoryAreaChartView" TabPane.name="Category"
             seriesNameKey="name" title="Category Area Chart Example"
@@ -32,9 +34,11 @@ limitations under the License.
             </categories>
 
             <chartData>
-                <series name="Example Series 1" a="43.2" b="27.9" c="79.5" d="10.0" e="20.2"/>
-                <series name="Example Series 2" a="27.9" b="43.2" c="79.5" d="19.0" e="31.6"/>
-                <series name="Example Series 3" a="79.5" b="27.9" c="43.2" d="50.3" e="81.9"/>
+                <collections:ArrayList>
+                    <content:CategorySeries name="Example Series 1" a="43.2" b="27.9" c="79.5" d="10.0" e="20.2"/>
+                    <content:CategorySeries name="Example Series 2" a="27.9" b="43.2" c="79.5" d="19.0" e="31.6"/>
+                    <content:CategorySeries name="Example Series 3" a="79.5" b="27.9" c="43.2" d="50.3" e="81.9"/>
+                </collections:ArrayList>
             </chartData>
         </charts:AreaChartView>
 
@@ -42,24 +46,26 @@ limitations under the License.
             seriesNameKey="name" title="XY Area Chart Example"
             horizontalAxisLabel="X" verticalAxisLabel="Y">
             <chartData>
-                <series name="Example Series 1">
-                    <point x="1.0" y="1.0"/>
-                    <point x="2.0" y="4.0"/>
-                    <point x="3.0" y="3.0"/>
-                    <point x="4.0" y="5.0"/>
-                </series>
-                <series name="Example Series 2">
-                    <point x="1.0" y="5.0"/>
-                    <point x="2.0" y="7.0"/>
-                    <point x="3.0" y="6.0"/>
-                    <point x="4.0" y="8.0"/>
-                </series>
-                <series name="Example Series 3">
-                    <point x="3.0" y="4.0"/>
-                    <point x="4.0" y="3.0"/>
-                    <point x="5.0" y="2.0"/>
-                    <point x="6.0" y="3.0"/>
-                </series>
+                <collections:ArrayList>
+	                <content:ValueSeries name="Example Series 1">
+	                    <content:Point x="1.0" y="1.0"/>
+	                    <content:Point x="2.0" y="4.0"/>
+	                    <content:Point x="3.0" y="3.0"/>
+	                    <content:Point x="4.0" y="5.0"/>
+	                </content:ValueSeries>
+	                <content:ValueSeries name="Example Series 2">
+	                    <content:Point x="1.0" y="5.0"/>
+	                    <content:Point x="2.0" y="7.0"/>
+	                    <content:Point x="3.0" y="6.0"/>
+	                    <content:Point x="4.0" y="8.0"/>
+	                </content:ValueSeries>
+	                <content:ValueSeries name="Example Series 3">
+	                    <content:Point x="3.0" y="4.0"/>
+	                    <content:Point x="4.0" y="3.0"/>
+	                    <content:Point x="5.0" y="2.0"/>
+	                    <content:Point x="6.0" y="3.0"/>
+	                </content:ValueSeries>
+                </collections:ArrayList>
             </chartData>
         </charts:AreaChartView>
     </tabs>

@@ -17,7 +17,9 @@ limitations under the License.
 
 <TabPane tabOrientation="vertical" selectedIndex="0"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
-    xmlns="pivot.wtk" xmlns:charts="pivot.charts">
+    xmlns:collections="pivot.collections"
+    xmlns:content="pivot.charts.content" xmlns:charts="pivot.charts"
+    xmlns="pivot.wtk">
     <tabs>
         <charts:BarChartView wtkx:id="categoryBarChartView" TabPane.name="Category"
             seriesNameKey="name" title="Category Bar Chart Example"
@@ -31,9 +33,11 @@ limitations under the License.
             </categories>
 
             <chartData>
-                <series name="Example Series 1" a="43.2" b="27.9" c="79.5"/>
-                <series name="Example Series 2" a="27.9" b="43.2" c="79.5"/>
-                <series name="Example Series 3" a="79.5" b="27.9" c="43.2"/>
+                <collections:ArrayList>
+	                <content:CategorySeries name="Example Series 1" a="43.2" b="27.9" c="79.5"/>
+	                <content:CategorySeries name="Example Series 2" a="27.9" b="43.2" c="79.5"/>
+	                <content:CategorySeries name="Example Series 3" a="79.5" b="27.9" c="43.2"/>
+                </collections:ArrayList>
             </chartData>
         </charts:BarChartView>
 
@@ -41,24 +45,26 @@ limitations under the License.
             seriesNameKey="name" title="XY Bar Chart Example"
             horizontalAxisLabel="X" verticalAxisLabel="Y">
             <chartData>
-                <series name="Example Series 1">
-                    <point x="1.0" y="1.0" width="2"/>
-                    <point x="2.0" y="4.0" width="1"/>
-                    <point x="3.0" y="3.0" width="3"/>
-                    <point x="4.0" y="5.0" width="1"/>
-                </series>
-                <series name="Example Series 2">
-                    <point x="1.0" y="5.0" width="2"/>
-                    <point x="2.0" y="7.0" width="2"/>
-                    <point x="3.0" y="6.0" width="2"/>
-                    <point x="4.0" y="8.0" width="1"/>
-                </series>
-                <series name="Example Series 3">
-                    <point x="3.0" y="4.0" width="1"/>
-                    <point x="4.0" y="3.0" width="2"/>
-                    <point x="5.0" y="2.0" width="1"/>
-                    <point x="6.0" y="3.0" width="1"/>
-                </series>
+                <collections:ArrayList>
+                    <content:ValueSeries name="Example Series 1">
+                        <content:Interval x="1.0" y="1.0" width="2"/>
+                        <content:Interval x="2.0" y="4.0" width="1"/>
+                        <content:Interval x="3.0" y="3.0" width="3"/>
+                        <content:Interval x="4.0" y="5.0" width="1"/>
+                    </content:ValueSeries>
+                    <content:ValueSeries name="Example Series 2">
+                        <content:Interval x="1.0" y="5.0" width="2"/>
+                        <content:Interval x="2.0" y="7.0" width="2"/>
+                        <content:Interval x="3.0" y="6.0" width="2"/>
+                        <content:Interval x="4.0" y="8.0" width="1"/>
+                    </content:ValueSeries>
+                    <content:ValueSeries name="Example Series 3">
+                        <content:Interval x="3.0" y="4.0" width="1"/>
+                        <content:Interval x="4.0" y="3.0" width="2"/>
+                        <content:Interval x="5.0" y="2.0" width="1"/>
+                        <content:Interval x="6.0" y="3.0" width="1"/>
+                    </content:ValueSeries>
+                </collections:ArrayList>
             </chartData>
         </charts:BarChartView>
     </tabs>

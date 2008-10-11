@@ -19,14 +19,18 @@ limitations under the License.
     seriesNameKey="name" title="Pie Chart Example"
     styles="{explodePercentages:{a:0.30}}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
-    xmlns="pivot.wtk" xmlns:charts="pivot.charts">
+    xmlns:collections="pivot.collections"
+    xmlns:content="pivot.charts.content" xmlns:charts="pivot.charts"
+    xmlns="pivot.wtk">
     <categories>
-        <charts:ChartView.Category key="a" label="A"/>
-        <charts:ChartView.Category key="b" label="B"/>
-        <charts:ChartView.Category key="c" label="C"/>
+	    <charts:ChartView.Category key="a" label="A"/>
+	    <charts:ChartView.Category key="b" label="B"/>
+	    <charts:ChartView.Category key="c" label="C"/>
     </categories>
 
     <chartData>
-        <series name="Example Series 1" a="43.2" b="27.9" c="79.5"/>
+        <collections:ArrayList>
+            <content:CategorySeries name="Example Series 1" a="43.2" b="27.9" c="79.5"/>
+        </collections:ArrayList>
     </chartData>
 </charts:PieChartView>

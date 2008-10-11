@@ -20,15 +20,19 @@ limitations under the License.
     horizontalAxisLabel="Date" verticalAxisLabel="Value"
     styles="{candlestick:true}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
-    xmlns="pivot.wtk" xmlns:charts="pivot.charts">
+    xmlns:collections="pivot.collections"
+    xmlns:content="pivot.charts.content" xmlns:charts="pivot.charts"
+    xmlns="pivot.wtk">
     <chartData>
-        <series name="Example Series 1">
-            <point date="8/26/2008" open="155.84" high="178.50" low="155.84" close="165.00"/>
-            <point date="8/27/2008" open="172.84" high="173.50" low="169.04" close="174.00"/>
-            <point date="8/28/2008" open="170.44" high="176.50" low="162.04" close="173.00"/>
-            <point date="8/29/2008" open="155.84" high="178.50" low="155.84" close="165.00"/>
-            <point date="8/30/2008" open="172.33" high="175.50" low="166.04" close="172.00"/>
-            <point date="8/31/2008" open="155.84" high="178.50" low="155.84" close="165.00"/>
-        </series>
+        <collections:ArrayList>
+            <content:ValueSeries name="Example Series 1">
+                <content:Candlestick date="8/26/2008" open="155.84" high="178.50" low="155.84" close="165.00"/>
+                <content:Candlestick date="8/27/2008" open="172.84" high="173.50" low="169.04" close="174.00"/>
+                <content:Candlestick date="8/28/2008" open="170.44" high="176.50" low="162.04" close="173.00"/>
+                <content:Candlestick date="8/29/2008" open="155.84" high="178.50" low="155.84" close="165.00"/>
+                <content:Candlestick date="8/30/2008" open="172.33" high="175.50" low="166.04" close="172.00"/>
+                <content:Candlestick date="8/31/2008" open="155.84" high="178.50" low="155.84" close="165.00"/>
+            </content:ValueSeries>
+        </collections:ArrayList>
     </chartData>
 </charts:HighLowChartView>

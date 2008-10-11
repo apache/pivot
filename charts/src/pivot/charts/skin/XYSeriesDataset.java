@@ -170,7 +170,7 @@ public class XYSeriesDataset implements XYDataset {
         if (item instanceof Dictionary<?, ?>) {
             itemDictionary = (Dictionary<String, ?>)item;
         } else {
-            itemDictionary = new BeanDictionary(series);
+            itemDictionary = new BeanDictionary(item);
         }
 
         return itemDictionary;

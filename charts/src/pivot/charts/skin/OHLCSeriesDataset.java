@@ -25,17 +25,12 @@ public class OHLCSeriesDataset extends XYSeriesDataset implements OHLCDataset {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public Number getX(int seriesIndex, int itemIndex) {
         Dictionary<String, ?> itemDictionary = getItemDictionary(seriesIndex, itemIndex);
 
         Object value = itemDictionary.get(X_KEY);
         if (value == null) {
             value = itemDictionary.get(DATE_KEY);
-
-            if (value instanceof String) {
-                value = Date.parse((String)value);
-            }
 
             if (value instanceof Date) {
                 value = ((Date)value).getTime();
