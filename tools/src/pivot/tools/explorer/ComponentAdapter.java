@@ -5,131 +5,99 @@ import java.util.Iterator;
 
 import pivot.beans.BeanDictionary;
 import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentInfo;
-import pivot.wtk.Container;
 import pivot.wtk.Component.Attributes;
 import pivot.wtk.Component.StyleDictionary;
-import pivot.wtk.content.TreeViewNodeRenderer;
 
-public class ComponentAdapter
-    extends ArrayList<ComponentAdapter>
-    implements Dictionary<String,Object> {
+import pivot.wtk.ApplicationContext;
+import pivot.wtk.media.Image;
 
-	private static final long serialVersionUID = 1L;
+public class ComponentAdapter {
+    private Component component;
+    private List<TableEntryAdapter> properties, styles, attributes;
 
-	private Component component;
-	private List<TableEntryAdapter> properties, styles, attributes;
+    public ComponentAdapter(Component component) {
+        if (component == null) {
+            throw new IllegalArgumentException( "Component cannot be null");
+        }
 
+        this.component = component;
+    }
 
-	public ComponentAdapter( Component component, boolean buildHierarchy ) {
-		super();
+    public Component getComponent() {
+        return component;
+    }
 
-		if ( component == null ) {
-			throw new IllegalArgumentException( "Component cannot be null");
-		}
+    public List<TableEntryAdapter> getProperties() {
+        if (properties == null) {
 
-		this.component = component;
+            BeanDictionary beanDictionary = new BeanDictionary(component, true);
+            properties = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
 
+            for ( String s: beanDictionary ) {
+                properties.add( new TableEntryAdapter( beanDictionary, s ));
+            }
+        }
 
-		if ( buildHierarchy && component instanceof Container ) {
-			for ( Component c: ((Container)component) ) {
-				add( new ComponentAdapter( c, true ));
-			}
-		}
+        return properties;
+    }
 
-	}
+    public List<TableEntryAdapter> getStyles() {
+        if (styles == null) {
+            styles = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
+            StyleDictionary sd = component.getStyles();
+            Iterator<String> i = sd.iterator();
+            while( i.hasNext() ) {
+                styles.add( new TableEntryAdapter( component.getStyles(), i.next() ));
+            }
+        }
+        return styles;
+    }
 
-	public Component getComponent() {
-		return component;
-	}
+    public List<TableEntryAdapter> getAttributes() {
+        if (attributes == null) {
 
-	public List<TableEntryAdapter> getProperties() {
-		if (properties == null) {
-
-			BeanDictionary beanDictionary = new BeanDictionary(component, true);
-			properties = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
-
-			for ( String s: beanDictionary ) {
-		        properties.add( new TableEntryAdapter( beanDictionary, s ));
-			}
-		}
-
-		return properties;
-	}
-
-	public List<TableEntryAdapter> getStyles() {
-		if (styles == null) {
-			styles = new ArrayList<TableEntryAdapter>( TableEntryAdapter.COMPARATOR );
-			StyleDictionary sd = component.getStyles();
-			Iterator<String> i = sd.iterator();
-			while( i.hasNext() ) {
-				styles.add( new TableEntryAdapter( component.getStyles(), i.next() ));
-			}
-		}
-		return styles;
-	}
-
-	public List<TableEntryAdapter> getAttributes() {
-		if (attributes == null) {
-
-			attributes = new ArrayList<TableEntryAdapter>(TableEntryAdapter.COMPARATOR);
-			Attributes attrs = component.getAttributes();
-			if (attrs != null) {
-				BeanDictionary beanDictionary = new BeanDictionary(attrs);
-				for ( String s: beanDictionary ) {
-					attributes.add( new TableEntryAdapter(beanDictionary, s));
-				}
-			}
+            attributes = new ArrayList<TableEntryAdapter>(TableEntryAdapter.COMPARATOR);
+            Attributes attrs = component.getAttributes();
+            if (attrs != null) {
+                BeanDictionary beanDictionary = new BeanDictionary(attrs);
+                for ( String s: beanDictionary ) {
+                    attributes.add( new TableEntryAdapter(beanDictionary, s));
+                }
+            }
 
 
-		}
-		return attributes;
-	}
+        }
+        return attributes;
+    }
 
 
-	@Override
-	public String toString() {
-		return component.getClass().getSimpleName();
-	}
+    @Override
+    public String toString() {
+        return component.getClass().getSimpleName();
+    }
 
-	public boolean containsKey(String key) {
-		return TreeViewNodeRenderer.ICON_KEY.equals(key) ||
-		       TreeViewNodeRenderer.TEXT_KEY.equals(key);
-	}
+    public Image getIcon() {
+        ComponentInfo componentInfo = component.getClass().getAnnotation(ComponentInfo.class);
+        URL iconURL = component.getClass().getResource(componentInfo != null ?
+            componentInfo.icon() : "component.png");
 
-	private URL url;
+        Image icon = null;
 
-	public Object get(String key) {
+        if (iconURL != null) {
+            icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
+            if (icon == null) {
+                icon = Image.load(iconURL);
+                ApplicationContext.getResourceCache().put(iconURL, icon);
+            }
+        }
 
-		if ( TreeViewNodeRenderer.TEXT_KEY.equals(key) ) {
-			return toString() + (component.isDisplayable()? "": " (hidden)");
-		} else if ( TreeViewNodeRenderer.ICON_KEY.equals(key) ){
-			if ( url == null ) {
-			    ComponentInfo componentInfo = component.getClass().getAnnotation( ComponentInfo.class );
-				url = component.getClass().getResource(
-					componentInfo != null? componentInfo.icon():"component.png");
-			}
-			return url;
-		} else {
-			return null;
-		}
+        return icon;
+    }
 
-	}
-
-	public boolean isEmpty() {
-		return false;
-	}
-
-	public Object put(String key, Object value) {
-		return null;
-	}
-
-	public Object remove(String key) {
-		return null;
-	}
-
-
+    public String getText() {
+        return toString() + (component.isDisplayable()? "": " (hidden)");
+    }
 }

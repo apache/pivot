@@ -6,6 +6,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.serialization.JSONSerializer;
 import pivot.tools.explorer.table.renderer.PropertyValueTableViewCellRenderer;
 import pivot.tools.explorer.tree.TreeNodePath;
 import pivot.tools.explorer.tree.renderer.ComponentNodeRenderer;
@@ -190,39 +191,36 @@ public class Explorer implements Application, TreeViewSelectionListener {
 
     }
 
-	private void refreshComponentTree(final TreeView tree, Iterable<Component> components) {
-
-		TreeNodePath<ComponentAdapter> selectionPath = TreeNodePath.createFromSelection(tree);
+	private void refreshComponentTree(TreeView treeView, Iterable<Component> components) {
+	    Sequence<Integer> selectedPath = treeView.getSelectedPath();
 
 		// build tree data
         List<ComponentAdapter> componentList = new ArrayList<ComponentAdapter>();
         for (Component c : components) {
         	if ( c != dialog ) {
-        		componentList.add(new ComponentAdapter(c, true));
+        		componentList.add(c instanceof Container ?
+        		    new ContainerAdapter((Container)c) : new ComponentAdapter(c));
         	}
         }
-        tree.setTreeData(componentList);
+
+        treeView.setTreeData(componentList);
 
         // select and expand first node if there was no selection previosely
-        if ( selectionPath == null || selectionPath.getLength() == 0 ) {
-          Sequence<Integer> rootPath = Collections.list(0);
-          tree.setSelectedPath(rootPath);
-          tree.expandBranch(rootPath);
-        } else {
-        	selectionPath.applyAsSelection(tree);
+        if (selectedPath == null
+            || selectedPath.getLength() == 0) {
+            selectedPath = new ArrayList<Integer>();
+            selectedPath.add(0);
         }
 
+        treeView.setSelectedPath(selectedPath);
 	}
 
-
-
     public void selectionChanged(TreeView treeView) {
-        Sequence<ComponentAdapter> nodePath = TreeNodePath.createFromSelection(treeView);
-        statusLabel.setText(nodePath.toString());
+        Sequence<Integer> selectedPath = treeView.getSelectedPath();
+        statusLabel.setText(selectedPath.toString()); // TODO
 
-        if (nodePath.getLength() > 0) {
-
-            ComponentAdapter node = nodePath.get(nodePath.getLength() - 1);
+        if (selectedPath.getLength() > 0) {
+            ComponentAdapter node = (ComponentAdapter)Sequence.Tree.get(treeView.getTreeData(), selectedPath);
 
             propertiesTable.setTableData(node.getProperties());
             stylesTable.setTableData(node.getStyles());
@@ -241,7 +239,6 @@ public class Explorer implements Application, TreeViewSelectionListener {
 		propertiesTable.getColumns().get(1).setCellRenderer( cellRenderer );
         stylesTable.getColumns().get(1).setCellRenderer( cellRenderer );
         attributesTable.getColumns().get(1).setCellRenderer( cellRenderer );
-
     }
 
 }
