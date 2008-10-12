@@ -67,15 +67,15 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public TerraListViewSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         font = theme.getFont();
-        color = theme.getColor(0);
-        disabledColor = theme.getColor(2);
-        backgroundColor = theme.getColor(1);
-        selectionColor = theme.getColor(1);
-        selectionBackgroundColor = theme.getColor(6);
-        inactiveSelectionColor = theme.getColor(0);
-        inactiveSelectionBackgroundColor = TerraTheme.darken(theme.getColor(3));
-        highlightColor = theme.getColor(0);
-        highlightBackgroundColor = theme.getColor(3);
+        color = theme.getColor(1);
+        disabledColor = theme.getColor(7);
+        backgroundColor = theme.getColor(4);
+        selectionColor = theme.getColor(4);
+        selectionBackgroundColor = theme.getColor(19);
+        inactiveSelectionColor = theme.getColor(1);
+        inactiveSelectionBackgroundColor = theme.getColor(9);
+        highlightColor = theme.getColor(1);
+        highlightBackgroundColor = theme.getColor(10);
         showHighlight = true;
     }
 

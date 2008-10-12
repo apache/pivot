@@ -26,8 +26,8 @@ import pivot.wtk.skin.SeparatorSkin;
 public class TerraSeparatorSkin extends SeparatorSkin {
     public TerraSeparatorSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setColor(theme.getColor(2));
-        setHeadingColor(theme.getColor(4));
+        setColor(theme.getColor(7));
+        setHeadingColor(theme.getColor(13));
     }
 
     public void setColor(int color) {

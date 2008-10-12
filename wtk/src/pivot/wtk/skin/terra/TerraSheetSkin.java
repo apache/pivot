@@ -87,12 +87,12 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public TerraSheetSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
 
-        Color backgroundColor = theme.getBrightColor(3);
+        Color backgroundColor = theme.getColor(11);
         backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
             backgroundColor.getBlue(), 0xF0);
         setBackgroundColor(backgroundColor);
 
-        borderColor = theme.getColor(2);
+        borderColor = theme.getColor(7);
         padding = new Insets(8);
         resizable = false;
 

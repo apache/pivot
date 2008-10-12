@@ -41,13 +41,13 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
 
     public TerraMenuBarSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setBackgroundColor(theme.getColor(1));
+        setBackgroundColor(theme.getColor(4));
 
         font = theme.getFont().deriveFont(Font.BOLD);
-        color = theme.getColor(0);
-        disabledColor = theme.getColor(2);
-        highlightColor = theme.getColor(1);
-        highlightBackgroundColor = theme.getColor(6);
+        color = theme.getColor(1);
+        disabledColor = theme.getColor(7);
+        highlightColor = theme.getColor(4);
+        highlightBackgroundColor = theme.getColor(19);
         spacing = 2;
     }
 

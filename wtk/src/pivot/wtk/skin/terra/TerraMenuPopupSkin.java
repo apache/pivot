@@ -77,7 +77,7 @@ public class TerraMenuPopupSkin extends PopupSkin
 
         border = new Border(panorama);
 
-        border.getStyles().put("color", theme.getColor(2));
+        border.getStyles().put("color", theme.getColor(7));
         border.getStyles().put("backgroundColor", null);
         border.getStyles().put("padding", 0);
     }

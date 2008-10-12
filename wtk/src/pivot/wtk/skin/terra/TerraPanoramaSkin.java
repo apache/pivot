@@ -220,7 +220,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
 
     public TerraPanoramaSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        buttonColor = theme.getColor(0);
+        buttonColor = theme.getColor(1);
         buttonBackgroundColor = null;
         buttonPadding = 4;
     }

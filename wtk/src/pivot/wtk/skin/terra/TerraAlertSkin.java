@@ -92,9 +92,9 @@ public class TerraAlertSkin extends TerraDialogSkin
 
             PushButton optionButton = new PushButton(option);
             HashMap<String, Object> optionButtonStyles = new HashMap<String, Object>();
-            optionButtonStyles.put("color", theme.getColor(1));
-            optionButtonStyles.put("backgroundColor", theme.getColor(5));
-            optionButtonStyles.put("borderColor", theme.getColor(4));
+            optionButtonStyles.put("color", theme.getColor(4));
+            optionButtonStyles.put("backgroundColor", theme.getColor(16));
+            optionButtonStyles.put("borderColor", theme.getColor(13));
 
             optionButton.setStyles(optionButtonStyles);
             optionButton.getStyles().put("preferredAspectRatio", 3);

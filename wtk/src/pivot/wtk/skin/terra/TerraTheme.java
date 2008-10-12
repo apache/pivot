@@ -154,10 +154,15 @@ public final class TerraTheme extends Theme {
         font = Font.decode(JSONSerializer.getString(resources, "font"));
 
         List<String> colorCodes = (List<String>)JSONSerializer.getList(resources, "colors");
-        colors = new Color[colorCodes.getLength()];
+        colors = new Color[colorCodes.getLength() * 3];
 
-        for (int i = 0, n = colors.length; i < n; i++) {
-            colors[i] = Color.decode(colorCodes.get(i));
+        for (int i = 0, n = colorCodes.getLength(); i < n; i++) {
+            int baseIndex = i * 3 + 1;
+            Color baseColor = Color.decode(colorCodes.get(i));
+
+            colors[baseIndex] = baseColor;
+            colors[baseIndex - 1] = darken(baseColor);
+            colors[baseIndex + 1] = brighten(baseColor);
         }
     }
 
@@ -171,18 +176,6 @@ public final class TerraTheme extends Theme {
 
     public Color getColor(int index) {
         return colors[index];
-    }
-
-    public Color getBrightColor(int index) {
-        // TODO Reserve space in our color cache for brighter/darker versions
-        // of the theme colors?
-        return brighten(colors[index]);
-    }
-
-    public Color getDarkColor(int index) {
-        // TODO Reserve space in our color cache for brighter/darker versions
-        // of the theme colors?
-        return darken(colors[index]);
     }
 
     public Image getMessageIcon(MessageType messageType) {

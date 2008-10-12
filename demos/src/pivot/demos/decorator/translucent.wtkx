@@ -18,7 +18,7 @@ limitations under the License.
 <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
     <Label text="A Translucent Window"/>
-    <Border styles="{color:4, padding:0}">
+    <Border styles="{color:13, padding:0}">
         <content>
             <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
         </content>

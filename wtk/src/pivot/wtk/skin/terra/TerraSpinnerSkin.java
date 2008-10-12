@@ -505,17 +505,17 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
     public TerraSpinnerSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setBackgroundColor(theme.getColor(1));
+        setBackgroundColor(theme.getColor(4));
 
         font = theme.getFont();
-        color = theme.getColor(0);
-        disabledColor = theme.getColor(2);
-        borderColor = theme.getColor(2);
-        buttonImageColor = theme.getColor(0);
-        buttonBackgroundColor = theme.getColor(3);
-        buttonDisabledBackgroundColor = theme.getColor(3);
-        buttonPressedBackgroundColor = theme.getColor(3);
-        buttonHighlightedBackgroundColor = theme.getBrightColor(3);
+        color = theme.getColor(1);
+        disabledColor = theme.getColor(7);
+        borderColor = theme.getColor(7);
+        buttonImageColor = theme.getColor(1);
+        buttonBackgroundColor = theme.getColor(10);
+        buttonDisabledBackgroundColor = theme.getColor(10);
+        buttonPressedBackgroundColor = theme.getColor(10);
+        buttonHighlightedBackgroundColor = theme.getColor(11);
     }
 
     @Override

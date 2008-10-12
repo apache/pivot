@@ -19,7 +19,7 @@ public class Candlestick {
 
     @SuppressWarnings("deprecation")
     public final void setDate(String date) {
-        setDate(new Date(Date.parse((String)date)));
+        setDate(new Date(Date.parse(date)));
     }
 
     public float getOpen() {

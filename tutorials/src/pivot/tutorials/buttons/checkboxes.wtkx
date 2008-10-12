@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true, padding:4, horizontalSpacing:1, verticalSpacing:1, gridColor:3}"
+<TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true, padding:4, horizontalSpacing:1, verticalSpacing:1, gridColor:10}"
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">>
     <columns>
         <TablePane.Column width="-1"/>

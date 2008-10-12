@@ -666,14 +666,14 @@ public class TerraScrollBarSkin extends ContainerSkin
     public TerraScrollBarSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         minimumHandleLength = 31;
-        borderColor = theme.getColor(2);
-        scrollButtonImageColor = theme.getColor(0);
-        scrollButtonBackgroundColor = theme.getColor(3);
-        scrollButtonDisabledBackgroundColor = theme.getColor(3);
-        scrollButtonPressedBackgroundColor = theme.getDarkColor(3);
-        scrollButtonHighlightedBackgroundColor = theme.getBrightColor(3);
+        borderColor = theme.getColor(7);
+        scrollButtonImageColor = theme.getColor(1);
+        scrollButtonBackgroundColor = theme.getColor(10);
+        scrollButtonDisabledBackgroundColor = theme.getColor(10);
+        scrollButtonPressedBackgroundColor = theme.getColor(9);
+        scrollButtonHighlightedBackgroundColor = theme.getColor(11);
 
-        setBackgroundColor(theme.getDarkColor(3));
+        setBackgroundColor(theme.getColor(9));
     }
 
     @Override

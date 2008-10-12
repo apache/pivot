@@ -122,12 +122,12 @@ public class TerraListButtonSkin extends ListButtonSkin {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
 
         font = theme.getFont();
-        color = theme.getColor(0);
-        disabledColor = theme.getColor(2);
-        backgroundColor = theme.getColor(3);
-        disabledBackgroundColor = theme.getColor(3);
-        borderColor = theme.getColor(2);
-        disabledBorderColor = theme.getColor(2);
+        color = theme.getColor(1);
+        disabledColor = theme.getColor(7);
+        backgroundColor = theme.getColor(10);
+        disabledBackgroundColor = theme.getColor(10);
+        borderColor = theme.getColor(7);
+        disabledBorderColor = theme.getColor(7);
         padding = new Insets(3);
 
         // Set the derived colors
