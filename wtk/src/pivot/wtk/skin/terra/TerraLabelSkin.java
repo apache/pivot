@@ -25,7 +25,7 @@ import pivot.wtk.skin.LabelSkin;
  */
 public class TerraLabelSkin extends LabelSkin {
     public TerraLabelSkin() {
-        setColor(0);
+        setColor(1);
     }
 
     public final void setColor(int color) {

@@ -25,9 +25,9 @@ import pivot.wtk.skin.BorderSkin;
  */
 public class TerraBorderSkin extends BorderSkin {
     public TerraBorderSkin() {
-        setBackgroundColor(1);
-        setColor(2);
-        setTitleColor(5);
+        setBackgroundColor(4);
+        setColor(7);
+        setTitleColor(16);
     }
 
     public final void setColor(int color) {
