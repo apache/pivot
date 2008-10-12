@@ -43,6 +43,9 @@ public class TerraAlertSkin extends TerraDialogSkin
 
     public TerraAlertSkin() {
         setResizable(false);
+
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(9));
     }
 
     @Override
