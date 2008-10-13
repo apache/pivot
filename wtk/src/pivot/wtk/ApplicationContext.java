@@ -50,7 +50,7 @@ public abstract class ApplicationContext {
      *
      * @author gbrown
      */
-    public static class ResourceCacheDictionary
+    public static final class ResourceCacheDictionary
         implements Dictionary<URL, Object>, Iterable<URL> {
         public Object get(URL key) {
             return resourceCache.get(key);
@@ -783,7 +783,14 @@ public abstract class ApplicationContext {
         return cursorBlinkRate;
     }
 
-    protected static DisplayHost getActiveDisplayHost() {
+    /**
+     * Gets the active display host.
+     *
+     * @deprecated
+     * This method will likely be made <tt>protected</tt> in a future release
+     */
+    @Deprecated
+    public static java.awt.Container getActiveDisplayHost() {
         return activeDisplayHost;
     }
 }
