@@ -17,10 +17,10 @@ package pivot.wtk.test;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.Component;
 import pivot.wtk.Display;
-import pivot.wtk.PushButton;
-import pivot.wtk.TablePane;
 import pivot.wtk.Window;
+import pivot.wtkx.WTKXSerializer;
 
 /**
  * Demonstrates a layout issue with TablePane. A one-row, two-column table is
@@ -34,19 +34,11 @@ import pivot.wtk.Window;
 public class TablePaneTest implements Application {
     private Window window = null;
 
-    public void startup(Display display, Dictionary<String, String> properties) {
-        TablePane tablePane = new TablePane();
-        tablePane.getColumns().add(new TablePane.Column(-1));
-        tablePane.getColumns().add(new TablePane.Column(1, true));
-
-        TablePane.Row row = new TablePane.Row(1, true);
-        row.add(new PushButton("Hello"));
-        row.add(new PushButton("World"));
-        tablePane.getRows().add(row);
-
-        window = new Window();
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("table_pane_test.wtkx")));
         window.setTitle("TableView Test");
-        window.setContent(tablePane);
         window.setMaximized(true);
         window.open(display);
     }

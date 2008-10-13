@@ -972,14 +972,6 @@ public class TablePane extends Container {
         tablePaneAttributes.setRowSpan(rowSpan);
     }
 
-    public static final void setRowSpan(Component component, String rowSpan) {
-        if (rowSpan == null) {
-            throw new IllegalArgumentException("rowSpan is null.");
-        }
-
-        setRowSpan(component, Integer.parseInt(rowSpan));
-    }
-
     public static int getColumnSpan(Component component) {
         TablePaneAttributes tablePaneAttributes = (TablePaneAttributes)component.getAttributes();
         return (tablePaneAttributes == null) ? -1 : tablePaneAttributes.getColumnSpan();
@@ -992,13 +984,5 @@ public class TablePane extends Container {
         }
 
         tablePaneAttributes.setColumnSpan(columnSpan);
-    }
-
-    public static final void setColumnSpan(Component component, String columnSpan) {
-        if (columnSpan == null) {
-            throw new IllegalArgumentException("columnSpan is null.");
-        }
-
-        setColumnSpan(component, Integer.parseInt(columnSpan));
     }
 }

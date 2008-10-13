@@ -189,7 +189,7 @@ public abstract class ContainerSkin extends ComponentSkin
     public void componentInserted(Container container, int index) {
     }
 
-    public void componentsRemoved(Container container, int index, Sequence<Component> components) {
+    public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
     }
 
     public void contextKeyChanged(Container container, String previousContextKey) {

@@ -38,9 +38,9 @@ public interface ContainerListener  {
      *
      * @param container
      * @param index
-     * @param components
+     * @param removed
      */
-    public void componentsRemoved(Container container, int index, Sequence<Component> components);
+    public void componentsRemoved(Container container, int index, Sequence<Component> removed);
 
     /**
      * Called when a container's context key has changed.

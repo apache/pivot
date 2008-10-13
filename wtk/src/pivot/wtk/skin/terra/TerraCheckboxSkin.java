@@ -64,7 +64,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
         buttonColor = theme.getColor(4);
         buttonBorderColor = theme.getColor(7);
-        buttonSelectionColor = theme.getColor(15);
+        buttonSelectionColor = theme.getColor(13);
         disabledButtonColor = theme.getColor(4);
         disabledButtonBorderColor = theme.getColor(7);
         disabledButtonSelectionColor = theme.getColor(7);
