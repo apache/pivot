@@ -23,6 +23,11 @@ import pivot.util.Vote;
 /**
  * Abstract base class for button components.
  *
+ * TODO Ensure that button group names are unique across applications?
+ *
+ * TODO Allow callers to remove a button group (possibly by exposing group
+ * dictionary interface).
+ *
  * @author gbrown
  */
 public abstract class Button extends Component {

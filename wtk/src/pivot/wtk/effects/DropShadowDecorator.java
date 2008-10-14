@@ -31,6 +31,10 @@ import pivot.wtk.Bounds;
 /**
  * Decorator that adds a drop shadows to a component.
  *
+ * TODO Drop shadows do not work with any background opacity?
+ *
+ * TODO Optimize so we only repaint on resize?
+ *
  * @author gbrown
  * @author tvolkert
  * @author eryzhikov

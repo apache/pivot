@@ -295,6 +295,7 @@ public class Demo implements Application {
     private ImageView menuImageView = null;
 
     private TableView sortableTableView = null;
+    private TableView customTableView = null;
     private TableViewHeader sortableTableViewHeader = null;
 
     private TreeView editableTreeView = null;
@@ -359,7 +360,8 @@ public class Demo implements Application {
 
         sortableTableView = (TableView)wtkxSerializer.getObjectByName("tables.sortableTableView");
         sortableTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("tables.sortableTableViewHeader");
-        initializeSortableTableView();
+        customTableView = (TableView)wtkxSerializer.getObjectByName("tables.customTableView");
+        initializeTableViews();
 
         editableTreeView = (TreeView)wtkxSerializer.getObjectByName("trees.editableTreeView");
         editableTreeViewScrollPane = (ScrollPane)wtkxSerializer.getObjectByName("trees.editableTreeViewScrollPane");
@@ -405,7 +407,7 @@ public class Demo implements Application {
     }
 
     @SuppressWarnings("unchecked")
-    private void initializeSortableTableView() {
+    private void initializeTableViews() {
         // Set table header data
         TableView.ColumnSequence columns = sortableTableView.getColumns();
         columns.get(0).setHeaderData(new TableViewHeaderData("#"));
@@ -433,6 +435,13 @@ public class Demo implements Application {
 
         // Install header press listener
         sortableTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler());
+
+        // Load images for custom table
+        List<?> customTableData = customTableView.getTableData();
+        for (int i = 0, n = customTableData.getLength(); i < n; i++) {
+            TableRow tableRow = (TableRow)customTableData.get(i);
+            tableRow.put("b", Image.load((URL)tableRow.get("b")));
+        }
     }
 
     private void initializeEditableTreeView() {
