@@ -17,7 +17,7 @@ package pivot.wtk.media.drawing;
 
 /**
  * Transform representing a scale.
- * 
+ *
  * @author gbrown
  */
 public class Scale extends Transform {

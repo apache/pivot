@@ -17,7 +17,7 @@ package pivot.charts.content;
 
 /**
  * Represents value data for x/y chart views.
- * 
+ *
  * @author gbrown
  */
 public class Point {

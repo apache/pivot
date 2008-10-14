@@ -17,7 +17,7 @@ package pivot.charts.content;
 
 /**
  * Represents value data for interval chart views.
- * 
+ *
  * @author gbrown
  */
 public class Interval extends Point {

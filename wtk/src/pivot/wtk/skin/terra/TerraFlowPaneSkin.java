@@ -20,7 +20,7 @@ import pivot.wtk.skin.FlowPaneSkin;
 
 /**
  * Terra flow pane skin.
- * 
+ *
  * @author gbrown
  */
 public class TerraFlowPaneSkin extends FlowPaneSkin {

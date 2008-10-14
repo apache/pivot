@@ -17,7 +17,7 @@ package pivot.wtk.media.drawing;
 
 /**
  * Transform representing a translation.
- * 
+ *
  * @author gbrown
  */
 public class Translation extends Transform {

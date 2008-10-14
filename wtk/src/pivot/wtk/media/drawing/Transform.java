@@ -19,7 +19,7 @@ import pivot.wtk.Point;
 
 /**
  * Abstract base class for transforms.
- * 
+ *
  * @author gbrown
  */
 public abstract class Transform {

@@ -19,7 +19,7 @@ import pivot.collections.HashMap;
 
 /**
  * Represents series data for category chart views.
- * 
+ *
  * @author gbrown
  */
 public class CategorySeries extends HashMap<String, Object> {

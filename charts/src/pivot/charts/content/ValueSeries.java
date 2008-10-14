@@ -18,8 +18,8 @@ package pivot.charts.content;
 import pivot.collections.ArrayList;
 
 /**
- * Represents series data for value chart views. 
- * 
+ * Represents series data for value chart views.
+ *
  * @author gbrown
  */
 public class ValueSeries<T> extends ArrayList<T> {

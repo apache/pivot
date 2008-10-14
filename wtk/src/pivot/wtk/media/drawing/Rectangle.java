@@ -22,7 +22,7 @@ import pivot.wtk.Dimensions;
 
 /**
  * Shape representing a rectangle.
- * 
+ *
  * @author gbrown
  */
 public class Rectangle extends Shape {

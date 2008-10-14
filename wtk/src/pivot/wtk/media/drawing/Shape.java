@@ -27,7 +27,7 @@ import pivot.wtk.Point;
 
 /**
  * Abstract base class for shapes.
- * 
+ *
  * @author gbrown
  */
 public abstract class Shape {

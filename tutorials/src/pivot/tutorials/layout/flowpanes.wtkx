@@ -23,11 +23,15 @@ limitations under the License.
 
     <rows>
         <TablePane.Row height="-1">
-            <FlowPane wtkx:id="flowPane" styles="{padding:6, backgroundColor:10}">
-                <PushButton buttonData="One"/>
-                <PushButton buttonData="Two"/>
-                <PushButton buttonData="Three"/>
-            </FlowPane>
+            <Border styles="{padding:6, color:'#999999'}">
+                <content>
+                    <FlowPane wtkx:id="flowPane">
+                        <PushButton buttonData="One"/>
+                        <PushButton buttonData="Two"/>
+                        <PushButton buttonData="Three"/>
+                    </FlowPane>
+                </content>
+            </Border>
             <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
                 <Label text="Orientation" styles="{fontBold:true}"/>
                 <RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" group="orientation" selected="true"/>
