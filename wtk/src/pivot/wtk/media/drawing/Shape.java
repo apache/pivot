@@ -25,6 +25,11 @@ import pivot.collections.Sequence;
 import pivot.wtk.Bounds;
 import pivot.wtk.Point;
 
+/**
+ * Abstract base class for shapes.
+ * 
+ * @author gbrown
+ */
 public abstract class Shape {
     public static final class TransformSequence extends Transform
         implements Sequence<Transform>, Iterable<Transform> {

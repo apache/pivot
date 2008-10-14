@@ -41,14 +41,7 @@ import pivot.util.Base64;
 
 /**
  * Abstract base class for web query servlets. It is the server counterpart to
- * {@link pivot.web.Query pivot.web.Query}. Subclasses will generally only have
- * to override one or more of the following methods:
- * <ul>
- *   <li>{@link #doGet()}</li>
- *   <li>{@link #doPost(Object)}</li>
- *   <li>{@link #doPut(Object)}</li>
- *   <li>{@link #doDelete()}</li>
- * </ul>
+ * {@link pivot.web.Query pivot.web.Query}.
  *
  * @author tvolkert
  */
