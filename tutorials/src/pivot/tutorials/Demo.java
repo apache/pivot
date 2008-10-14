@@ -67,6 +67,7 @@ import pivot.wtk.content.CalendarDateSpinnerData;
 import pivot.wtk.content.NumericSpinnerData;
 import pivot.wtk.content.TableRow;
 import pivot.wtk.content.TableViewHeaderData;
+import pivot.wtk.content.TreeNode;
 import pivot.wtk.content.TreeViewNodeRenderer;
 import pivot.wtk.effects.ReflectionDecorator;
 import pivot.wtk.media.Image;
@@ -116,7 +117,7 @@ public class Demo implements Application {
             if (armed
                 && count == 1) {
                 List<Object> treeData = (List<Object>)editableTreeView.getTreeData();
-                Dictionary<String, Object> nodeData = (Dictionary<String, Object>)Sequence.Tree.get(treeData, path);
+                TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
 
                 Bounds nodeLabelBounds = editableTreeView.getNodeBounds(path);
                 int nodeLabelOffset = getNodeLabelOffset();
@@ -126,7 +127,7 @@ public class Demo implements Application {
                 Bounds viewportBounds = editableTreeViewScrollPane.getViewportBounds();
 
                 TextInput textInput = new TextInput();
-                textInput.setText((String)nodeData.get("label"));
+                textInput.setText(nodeData.getText());
                 textInput.setPreferredWidth(Math.min(nodeLabelBounds.width,
                     viewportBounds.width - nodeLabelBounds.x));
                 textInput.getComponentKeyListeners().add(this);
@@ -179,12 +180,12 @@ public class Demo implements Application {
             Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
                 List<Object> treeData = (List<Object>)editableTreeView.getTreeData();
-                Dictionary<String, Object> nodeData = (Dictionary<String, Object>)Sequence.Tree.get(treeData, path);
+                TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
 
                 TextInput textInput = (TextInput)component;
                 String text = textInput.getText();
 
-                nodeData.put("label", text);
+                nodeData.setText(text);
 
                 popup.close();
                 editableTreeView.requestFocus();
