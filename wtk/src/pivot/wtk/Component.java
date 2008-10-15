@@ -636,7 +636,6 @@ public abstract class Component implements ConstrainedVisual {
     @Override
     protected void finalize() throws Throwable {
         try {
-            System.out.println("Finalizing " + this);
             components.remove(handle);
         } finally {
             super.finalize();

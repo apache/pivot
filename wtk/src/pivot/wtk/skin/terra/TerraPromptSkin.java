@@ -17,7 +17,6 @@ package pivot.wtk.skin.terra;
 
 import pivot.collections.ArrayList;
 import pivot.collections.HashMap;
-import pivot.util.Resources;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
@@ -54,10 +53,7 @@ public class TerraPromptSkin extends TerraSheetSkin
         prompt.getPromptListeners().add(this);
 
         // Load the prompt content
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        Resources resources = theme.getResources();
-
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content = null;
 
         try {
@@ -69,6 +65,8 @@ public class TerraPromptSkin extends TerraSheetSkin
         prompt.setContent(content);
 
         // Set the type image
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+
         ImageView typeImageView = (ImageView)wtkxSerializer.getObjectByName("typeImageView");
         typeImageView.setImage(theme.getMessageIcon(prompt.getMessageType()));
 

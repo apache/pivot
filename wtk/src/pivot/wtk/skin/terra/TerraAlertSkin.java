@@ -17,7 +17,6 @@ package pivot.wtk.skin.terra;
 
 import pivot.collections.ArrayList;
 import pivot.collections.HashMap;
-import pivot.util.Resources;
 import pivot.wtk.Alert;
 import pivot.wtk.AlertListener;
 import pivot.wtk.Button;
@@ -57,10 +56,7 @@ public class TerraAlertSkin extends TerraDialogSkin
         alert.getAlertListeners().add(this);
 
         // Load the alert content
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        Resources resources = theme.getResources();
-
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content = null;
 
         try {
@@ -72,6 +68,8 @@ public class TerraAlertSkin extends TerraDialogSkin
         alert.setContent(content);
 
         // Set the type image
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+
         ImageView typeImageView = (ImageView)wtkxSerializer.getObjectByName("typeImageView");
         typeImageView.setImage(theme.getMessageIcon(alert.getMessageType()));
 

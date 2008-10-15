@@ -20,8 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
     xmlns:collections="pivot.collections"
     xmlns="pivot.wtk">
-    <Border styles="{padding:12}">
-        <styles backgroundColor="%colors[1]" color="%colors[2]"/>
+    <Border styles="{padding:12, backgroundColor:4, color:7}">
         <content>
             <TablePane styles="{horizontalSpacing:12, verticalSpacing:12}">
                 <columns>
