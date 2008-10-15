@@ -211,7 +211,7 @@ public class BorderSkin extends ContainerSkin
         int x = thickness / 2;
         int y = topThickness / 2;
         int width = Math.max(getWidth() - thickness, 0);
-        int height = Math.max(getHeight() - (topThickness + thickness) / 2, 0);
+        int height = Math.max(getHeight() - (int)Math.ceil((topThickness + thickness) * 0.5), 0);
 
         // Draw the background
         Color backgroundColor = getBackgroundColor();
