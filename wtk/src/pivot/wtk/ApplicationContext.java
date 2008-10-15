@@ -245,7 +245,9 @@ public abstract class ApplicationContext {
 
             switch(event.getID()) {
                 case FocusEvent.FOCUS_GAINED: {
-                    if (focusedComponent != null) {
+                    if (focusedComponent != null
+                        && focusedComponent.isShowing()
+                        && !focusedComponent.isBlocked()) {
                         focusedComponent.requestFocus(true);
                     }
 
