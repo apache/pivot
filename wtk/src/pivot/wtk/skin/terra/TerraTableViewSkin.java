@@ -505,6 +505,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         setColor(decodeColor(color));
     }
 
+    public final void setColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColor(theme.getColor(color));
+    }
+
     public Color getDisabledColor() {
         return disabledColor;
     }
@@ -524,6 +529,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         setDisabledColor(decodeColor(disabledColor));
+    }
+
+    public final void setDisabledColor(int disabledColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledColor(theme.getColor(disabledColor));
     }
 
     public Color getBackgroundColor() {
@@ -547,6 +557,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         setBackgroundColor(decodeColor(backgroundColor));
     }
 
+    public final void setBackgroundColor(int backgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(backgroundColor));
+    }
 
     public Color getSelectionColor() {
         return selectionColor;
@@ -567,6 +581,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         setSelectionColor(decodeColor(selectionColor));
+    }
+
+    public final void setSelectionColor(int selectionColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setSelectionColor(theme.getColor(selectionColor));
     }
 
     public Color getSelectionBackgroundColor() {
@@ -590,6 +609,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         setSelectionBackgroundColor(decodeColor(selectionBackgroundColor));
     }
 
+    public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
+    }
+
     public Color getInactiveSelectionColor() {
         return inactiveSelectionColor;
     }
@@ -609,6 +633,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         setInactiveSelectionColor(decodeColor(inactiveSelectionColor));
+    }
+
+    public final void setInactiveSelectionColor(int inactiveSelectionColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInactiveSelectionColor(theme.getColor(inactiveSelectionColor));
     }
 
     public Color getInactiveSelectionBackgroundColor() {
@@ -632,6 +661,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         setInactiveSelectionBackgroundColor(decodeColor(inactiveSelectionBackgroundColor));
     }
 
+    public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInactiveSelectionBackgroundColor(theme.getColor(inactiveSelectionBackgroundColor));
+    }
+
     public Color getHighlightBackgroundColor() {
         return highlightBackgroundColor;
     }
@@ -653,6 +687,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         setHighlightBackgroundColor(decodeColor(highlightBackgroundColor));
     }
 
+    public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
+    }
+
     public Color getAlternateRowColor() {
         return alternateRowColor;
     }
@@ -668,6 +707,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         setAlternateRowColor(decodeColor(alternateRowColor));
+    }
+
+    public final void setAlternateRowColor(int alternateRowColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setAlternateRowColor(theme.getColor(alternateRowColor));
     }
 
     public Color getGridColor() {
@@ -689,6 +733,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         setGridColor(decodeColor(gridColor));
+    }
+
+    public final void setGridColor(int gridColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setGridColor(theme.getColor(gridColor));
     }
 
     public boolean getShowHorizontalGridLines() {

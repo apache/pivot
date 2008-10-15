@@ -496,6 +496,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         setColor(decodeColor(color));
     }
 
+    public final void setColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColor(theme.getColor(color));
+    }
+
     public Color getDisabledColor() {
         return disabledColor;
     }
@@ -515,6 +520,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
 
         setDisabledColor(decodeColor(disabledColor));
+    }
+
+    public final void setDisabledColor(int disabledColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledColor(theme.getColor(disabledColor));
     }
 
     public Color getBackgroundColor() {
@@ -540,6 +550,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         setBackgroundColor(decodeColor(backgroundColor));
     }
 
+    public final void setBackgroundColor(int backgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(backgroundColor));
+    }
+
     public Color getDisabledBackgroundColor() {
         return disabledBackgroundColor;
     }
@@ -560,6 +575,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
 
         setDisabledBackgroundColor(decodeColor(disabledBackgroundColor));
+    }
+
+    public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
     public Color getBorderColor() {
@@ -583,6 +603,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         setBorderColor(decodeColor(borderColor));
     }
 
+    public final void setBorderColor(int borderColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBorderColor(theme.getColor(borderColor));
+    }
+
     public Color getDisabledBorderColor() {
         return disabledBorderColor;
     }
@@ -602,6 +627,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
 
         setDisabledBorderColor(decodeColor(disabledBorderColor));
+    }
+
+    public final void setDisabledBorderColor(int disabledBorderColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 
     public boolean getHeadersPressable() {
