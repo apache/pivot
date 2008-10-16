@@ -18,9 +18,9 @@ package pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.GeneralPath;
 
 import pivot.collections.List;
 import pivot.wtk.ApplicationContext;
@@ -267,7 +267,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     /**
-     *
+     * Spinner button.
      *
      * @author tvolkert
      */
@@ -292,7 +292,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     /**
-     *
+     * Spinner button skin.
      *
      * @author tvolkert
      */
@@ -306,11 +306,11 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         public int getPreferredWidth(int height) {
-            return 13;
+            return BUTTON_IMAGE_SIZE + 6;
         }
 
         public int getPreferredHeight(int width) {
-            return 6;
+            return BUTTON_IMAGE_SIZE + 2;
         }
 
         public Dimensions getPreferredSize() {
@@ -344,23 +344,21 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             int height = getHeight();
 
             // Paint the background
-            graphics.setPaint(backgroundColor);
+            TerraTheme theme = (TerraTheme)Theme.getTheme();
+            if (theme.useGradients()) {
+            	float alpha = pressed ? 0.5f : highlighted ? 0.25f : 0.0f;
+            	graphics.setPaint(new Color(0, 0, 0, alpha));
+            } else {
+	            graphics.setPaint(backgroundColor);
+            }
+
             graphics.fillRect(0, 0, width, height);
 
-            // Size the image to be proportional to our size
-            int buttonImageWidth = (int)Math.floor((float)width / 2f);
-            int buttonImageHeight = (int)((float)height / 3f);
-            SpinButtonImage buttonImage = (SpinButtonImage)spinButton.getButtonImage();
-            buttonImage.setSize(buttonImageWidth, buttonImageHeight);
-
             // Paint the image
-            Graphics2D imageGraphics = (Graphics2D)graphics.create();
-            int buttonImageX = (width - buttonImageWidth) / 2;
-            int buttonImageY = (height - buttonImageHeight) / 2;
-            imageGraphics.translate(buttonImageX, buttonImageY);
-            imageGraphics.clipRect(0, 0, buttonImageWidth, buttonImageHeight);
-            buttonImage.paint(imageGraphics);
-            imageGraphics.dispose();
+            SpinButtonImage buttonImage = (SpinButtonImage)spinButton.getButtonImage();
+            graphics.translate((width - BUTTON_IMAGE_SIZE) / 2,
+        		(height - BUTTON_IMAGE_SIZE) / 2);
+            buttonImage.paint(graphics);
         }
 
         @Override
@@ -429,61 +427,43 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
     }
 
+    /**
+     * Abstract base class for button images.
+     */
     protected abstract class SpinButtonImage extends Image {
-        private int width = 0;
-        private int height = 0;
-
         public int getWidth() {
-            return width;
+            return BUTTON_IMAGE_SIZE;
         }
 
         public int getHeight() {
-            return height;
+            return BUTTON_IMAGE_SIZE;
         }
 
-        public void setSize(int width, int height) {
-            this.width = width;
-            this.height = height;
+        public void paint(Graphics2D graphics) {
+            graphics.setStroke(new BasicStroke(0));
+            graphics.setPaint(buttonImageColor);
         }
     }
 
     protected class SpinUpImage extends SpinButtonImage {
         public void paint(Graphics2D graphics) {
-            int width = getWidth();
-            int height = getHeight();
+            super.paint(graphics);
 
-            graphics.setPaint(buttonImageColor);
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-            GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-
-            arrow.moveTo(0, (float)height + 0.5f);
-            arrow.lineTo((float)width / 2.0f, 0);
-            arrow.lineTo(width, (float)height + 0.5f);
-
-            arrow.closePath();
-            graphics.fill(arrow);
+            int[] xPoints = {0, 2, 4};
+            int[] yPoints = {3, 1, 3};
+            graphics.fillPolygon(xPoints, yPoints, 3);
+            graphics.drawPolygon(xPoints, yPoints, 3);
         }
     }
 
     protected class SpinDownImage extends SpinButtonImage {
         public void paint(Graphics2D graphics) {
-            int width = getWidth();
-            int height = getHeight();
+            super.paint(graphics);
 
-            graphics.setPaint(buttonImageColor);
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-            GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-
-            arrow.moveTo(0, 0);
-            arrow.lineTo((float)width / 2.0f, (float)height + 0.5f);
-            arrow.lineTo(width, 0);
-
-            arrow.closePath();
-            graphics.fill(arrow);
+            int[] xPoints = {0, 2, 4};
+            int[] yPoints = {1, 3, 1};
+            graphics.fillPolygon(xPoints, yPoints, 3);
+            graphics.drawPolygon(xPoints, yPoints, 3);
         }
     }
 
@@ -502,6 +482,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     private Color buttonHighlightedBackgroundColor;
 
     private static AutomaticSpinner automaticSpinner = new AutomaticSpinner();
+
+    public static final int BUTTON_IMAGE_SIZE = 5;
 
     public TerraSpinnerSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -601,7 +583,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         preferredHeight = Math.max(preferredHeight,
-            spinnerContent.getPreferredHeight(width));
+            spinnerContent.getPreferredHeight(width)) + 1;
 
         return preferredHeight;
     }
@@ -637,8 +619,16 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         int width = getWidth();
         int height = getHeight();
 
+        int buttonX = upButton.getX();
         int buttonWidth = upButton.getWidth();
         int buttonHeight = upButton.getHeight();
+
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        if (theme.useGradients()) {
+            graphics.setPaint(new GradientPaint(buttonX + buttonWidth / 2, 0, buttonHighlightedBackgroundColor,
+        		buttonX + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
+            graphics.fillRect(buttonX, 0, buttonWidth, height);
+        }
 
         graphics.setStroke(new BasicStroke(0));
         graphics.setPaint(borderColor);
