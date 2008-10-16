@@ -25,7 +25,6 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.font.TextHitInfo;
 import java.awt.font.TextLayout;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 
@@ -41,7 +40,6 @@ import pivot.wtk.Display;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
-import pivot.wtk.Bounds;
 import pivot.wtk.TextInput;
 import pivot.wtk.TextInputListener;
 import pivot.wtk.TextInputCharacterListener;
@@ -406,6 +404,9 @@ public class TerraTextInputSkin extends ComponentSkin
     public void paint(Graphics2D graphics) {
         TextInput textInput = (TextInput)getComponent();
 
+        int width = getWidth();
+        int height = getHeight();
+
         Color backgroundColor = null;
         Color borderColor = null;
         Color bevelColor = null;
@@ -421,22 +422,19 @@ public class TerraTextInputSkin extends ComponentSkin
             bevelColor = disabledBevelColor;
         }
 
+        graphics.setStroke(new BasicStroke());
+
         // Paint the background
         graphics.setPaint(backgroundColor);
-        Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
-        graphics.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+        graphics.fillRect(0, 0, width, height);
 
-        // Draw all lines with a 1px solid stroke
-        graphics.setStroke(new BasicStroke());
+        // Paint the bevel
+        graphics.setPaint(bevelColor);
+        graphics.drawLine(1, 1, width - 2, 1);
 
         // Paint the border
         graphics.setPaint(borderColor);
-        graphics.drawRect(0, 0, bounds.width - 1, bounds.height - 1);
-
-        // Paint the bevel
-        Line2D bevelLine = new Line2D.Double(1, 1, bounds.width - 2, 1);
-        graphics.setPaint(bevelColor);
-        graphics.draw(bevelLine);
+        graphics.drawRect(0, 0, width - 1, height - 1);
 
         // Paint the content
         String text = getText();

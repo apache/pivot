@@ -18,10 +18,10 @@ package pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
 
 import pivot.collections.Dictionary;
 import pivot.collections.List;
@@ -203,6 +203,9 @@ public class TerraListButtonSkin extends ListButtonSkin {
     public void paint(Graphics2D graphics) {
         ListButton listButton = (ListButton)getComponent();
 
+        int width = getWidth();
+        int height = getHeight();
+
         Color backgroundColor = null;
         Color bevelColor = null;
         Color borderColor = null;
@@ -217,28 +220,33 @@ public class TerraListButtonSkin extends ListButtonSkin {
             borderColor = disabledBorderColor;
         }
 
-        // Paint the background
-        graphics.setPaint(backgroundColor);
-        Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
-        graphics.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-
-        // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
 
-        // Paint the bevel
-        Line2D bevelLine = new Line2D.Double(1, 1, bounds.width - 2, 1);
-        graphics.setPaint(bevelColor);
-        graphics.draw(bevelLine);
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        if (theme.useGradients()) {
+            // Paint the background
+            graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
+                width / 2, height / 2, backgroundColor));
+            graphics.fillRect(0, 0, width, height);
+        } else {
+            // Paint the background
+            graphics.setPaint(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+
+            // Paint the bevel
+            graphics.setPaint(bevelColor);
+            graphics.drawLine(1, 1, width - 2, 1);
+        }
 
         // Paint the border
         graphics.setPaint(borderColor);
 
         Bounds contentBounds = new Bounds(0, 0,
-            Math.max(bounds.width - TRIGGER_WIDTH - 1, 0), Math.max(bounds.height - 1, 0));
+            Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(height - 1, 0));
         graphics.drawRect(contentBounds.x, contentBounds.y, contentBounds.width, contentBounds.height);
 
-        Bounds triggerBounds = new Bounds(Math.max(bounds.width - TRIGGER_WIDTH - 1, 0), 0,
-            TRIGGER_WIDTH, Math.max(bounds.height - 1, 0));
+        Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
+            TRIGGER_WIDTH, Math.max(height - 1, 0));
         graphics.drawRect(triggerBounds.x, triggerBounds.y, triggerBounds.width, triggerBounds.height);
 
         // Paint the content

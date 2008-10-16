@@ -18,6 +18,7 @@ package pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
@@ -137,19 +138,29 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             }
         }
 
-        // Paint the background
-        if (backgroundColor != null) {
-            graphics.setPaint(backgroundColor);
-            graphics.fillRect(0, 0, width, height);
-        }
-
-        // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
 
-        // Paint the bevel
-        if (bevelColor != null) {
-            graphics.setPaint(bevelColor);
-            graphics.drawLine(1, 1, width - 2, 1);
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        if (theme.useGradients()) {
+            // Paint the background
+        	if (backgroundColor != null
+    			&& bevelColor != null) {
+	            graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
+	                width / 2, height / 2, backgroundColor));
+	            graphics.fillRect(0, 0, width, height);
+        	}
+        } else {
+            // Paint the background
+            if (backgroundColor != null) {
+                graphics.setPaint(backgroundColor);
+                graphics.fillRect(0, 0, width, height);
+            }
+
+            // Paint the bevel
+            if (bevelColor != null) {
+                graphics.setPaint(bevelColor);
+                graphics.drawLine(1, 1, width - 2, 1);
+            }
         }
 
         // Paint the border

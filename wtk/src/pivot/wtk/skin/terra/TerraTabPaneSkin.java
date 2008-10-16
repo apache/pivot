@@ -222,7 +222,6 @@ public class TerraTabPaneSkin extends ContainerSkin
             int width = getWidth();
             int height = getHeight();
 
-            // Draw all lines with a 1px solid stroke
             graphics.setStroke(new BasicStroke());
 
             // Paint the background
@@ -230,13 +229,23 @@ public class TerraTabPaneSkin extends ContainerSkin
             graphics.setPaint(backgroundColor);
             graphics.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
+            // Create the bevel line
+            Line2D.Double bevelLine = new Line2D.Double(1, 1, width - 2, 1);
+            if (tabOrientation == Orientation.VERTICAL
+        		&& tabButton.isSelected()) {
+                // Extend the bevel line so it reaches the edge of
+                // the button
+                bevelLine.x2 += 1;
+            }
+
+            graphics.setPaint(bevelColor);
+            graphics.draw(bevelLine);
+
             // Draw the border
             graphics.setPaint(borderColor);
             graphics.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
             // Draw the divider for the selected tab
-            Line2D.Double bevelLine = new Line2D.Double(1, 1, width - 2, 1);
-
             if (tabButton.isSelected()) {
                 Line2D dividerLine = null;
 
@@ -248,12 +257,8 @@ public class TerraTabPaneSkin extends ContainerSkin
                     }
 
                     case VERTICAL: {
-                        dividerLine = new Line2D.Double(width - 1, 1,
+                        dividerLine = new Line2D.Double(width - 1, 2,
                             width - 1, height - 2);
-
-                        // Extend the bevel line so it reaches the edge of
-                        // the button
-                        bevelLine.x2 += 1;
                         break;
                     }
                 }
@@ -261,10 +266,6 @@ public class TerraTabPaneSkin extends ContainerSkin
                 graphics.setPaint(backgroundColor);
                 graphics.draw(dividerLine);
             }
-
-            // Draw the bevel
-            graphics.setPaint(bevelColor);
-            graphics.draw(bevelLine);
 
             // Paint the content
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
@@ -738,7 +739,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             if (tabOrientation == Orientation.VERTICAL) {
                 graphics.setPaint(buttonBevelColor);
                 graphics.drawLine(contentBounds.x + 1, contentBounds.y + 1,
-                    contentBounds.x + contentBounds.width - 1,
+                    contentBounds.x + contentBounds.width - 2,
                     contentBounds.y + 1);
             }
         }

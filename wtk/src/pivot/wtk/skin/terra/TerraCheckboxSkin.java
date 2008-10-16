@@ -18,13 +18,13 @@ package pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Checkbox;
-import pivot.wtk.Bounds;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.CheckboxSkin;
 
@@ -192,17 +192,27 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         // Center the button vertically
         graphics.translate(0, (height - CHECKBOX_SIZE) / 2);
 
-        // Paint the border
-        Bounds buttonRectangle = new Bounds(0, 0,
-            CHECKBOX_SIZE - 1, CHECKBOX_SIZE - 1);
-        graphics.setPaint(buttonColor);
-        graphics.fillRect(buttonRectangle.x, buttonRectangle.y, buttonRectangle.width, buttonRectangle.height);
-        graphics.setPaint(buttonBorderColor);
-        graphics.drawRect(buttonRectangle.x, buttonRectangle.y, buttonRectangle.width, buttonRectangle.height);
+        int buttonWidth = CHECKBOX_SIZE - 1;
+        int buttonHeight = CHECKBOX_SIZE - 1;
 
-        // Paint the bevel
-        graphics.setPaint(buttonBevelColor);
-        graphics.drawLine(1, 1, CHECKBOX_SIZE - 2, 1);
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        if (theme.useGradients()) {
+            graphics.setPaint(new GradientPaint(buttonWidth / 2, 0, buttonBevelColor,
+        		buttonWidth / 2, buttonHeight, buttonColor));
+            graphics.fillRect(0, 0, buttonWidth, buttonHeight);
+        } else {
+            // Paint the background
+            graphics.setPaint(buttonColor);
+            graphics.fillRect(0, 0, buttonWidth, buttonHeight);
+
+            // Paint the bevel
+            graphics.setPaint(buttonBevelColor);
+            graphics.drawLine(1, 1, CHECKBOX_SIZE - 2, 1);
+        }
+
+        // Paint the border
+        graphics.setPaint(buttonBorderColor);
+        graphics.drawRect(0, 0, buttonWidth, buttonHeight);
 
         // Paint the checkmark
         Button.State state = checkbox.getState();

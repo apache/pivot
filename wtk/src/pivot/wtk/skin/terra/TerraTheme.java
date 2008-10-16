@@ -75,8 +75,9 @@ public final class TerraTheme extends Theme {
 
     private Resources resources = null;
 
-    private Font font;
-    private Color[] colors;
+    private Font font = null;
+    private Color[] colors = null;
+    private boolean useGradients = false;
 
     public TerraTheme() {
         this("default");
@@ -164,6 +165,8 @@ public final class TerraTheme extends Theme {
             colors[baseIndex - 1] = darken(baseColor);
             colors[baseIndex + 1] = brighten(baseColor);
         }
+
+        useGradients = JSONSerializer.getBoolean(resources, "useGradients");
     }
 
     public void uninstall() {
@@ -274,6 +277,10 @@ public final class TerraTheme extends Theme {
         }
 
         return smallMessageIcon;
+    }
+
+    public boolean useGradients() {
+    	return useGradients;
     }
 
     public Resources getResources() {
