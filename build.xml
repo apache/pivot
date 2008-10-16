@@ -445,6 +445,7 @@
             </fileset>
             <fileset dir="${wtk}">
                 <include name="${ant.project.name}-wtk.jar"/>
+                <include name="${ant.project.name}-wtk.terra.jar"/>
             </fileset>
         </zip>
 
