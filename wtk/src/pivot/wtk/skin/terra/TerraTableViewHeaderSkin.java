@@ -31,6 +31,7 @@ import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
+import pivot.wtk.DragDropManager;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.Bounds;
@@ -684,7 +685,9 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
 
-        if (!resizing) {
+        DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
+        if (!resizing
+    		&& !dragDropManager.isActive()) {
             TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
             TableView tableView = tableViewHeader.getTableView();
 

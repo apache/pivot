@@ -17,6 +17,7 @@ package pivot.wtk.skin.terra;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
@@ -25,6 +26,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Menu;
+import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.MenuItemSkin;
 
@@ -132,7 +134,15 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         // Paint highlight state
         if (highlight) {
             Color highlightBackgroundColor = (Color)menu.getStyles().get("highlightBackgroundColor");
-            graphics.setColor(highlightBackgroundColor);
+
+            TerraTheme theme = (TerraTheme)Theme.getTheme();
+            if (theme.useGradients()) {
+	            graphics.setPaint(new GradientPaint(width / 2, 0, TerraTheme.brighten(highlightBackgroundColor),
+	                width / 2, height, highlightBackgroundColor));
+            } else {
+                graphics.setColor(highlightBackgroundColor);
+            }
+
             graphics.fillRect(0, 0, width, height);
         }
 

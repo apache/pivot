@@ -163,7 +163,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         disabledColor = theme.getColor(7);
         backgroundColor = theme.getColor(4);
         selectionColor = theme.getColor(4);
-        selectionBackgroundColor = theme.getColor(16);
+        selectionBackgroundColor = theme.getColor(19);
         inactiveSelectionColor = theme.getColor(1);
         inactiveSelectionBackgroundColor = theme.getColor(10);
         highlightColor = theme.getColor(1);
@@ -172,10 +172,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         indent = 16;
         showHighlight = true;
         showBranchControls = true;
-        branchControlColor = theme.getColor(16);
-        branchControlDisabledColor = theme.getColor(16);
+        branchControlColor = theme.getColor(18);
+        branchControlDisabledColor = theme.getColor(19);
         branchControlSelectionColor = theme.getColor(4);
-        branchControlInactiveSelectionColor = theme.getColor(16);
+        branchControlInactiveSelectionColor = theme.getColor(19);
         gridColor = theme.getColor(11);
         showGridLines = false;
     }
