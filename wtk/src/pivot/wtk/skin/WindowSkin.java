@@ -141,7 +141,8 @@ public class WindowSkin extends ContainerSkin
             Keyboard.getModifiers());
 
         Action action = window.getActions().get(keyStroke);
-        if (action != null) {
+        if (action != null
+            && action.isEnabled()) {
             action.perform();
         }
 
