@@ -17,6 +17,7 @@ package pivot.wtk.skin.terra;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
@@ -567,31 +568,40 @@ public class TerraFrameSkin extends WindowSkin {
 
         int width = getWidth();
         int height = getHeight();
-        Dimensions titleBarSize = titleBarFlowPane.getSize();
+        int titleBarHeight = titleBarFlowPane.getHeight();
 
-        // Draw the borders with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
 
         // Draw the title area
-        Bounds titleBarRectangle = new Bounds(0, 0, width - 1, titleBarSize.height + 1);
-        graphics.setPaint(window.isActive() ?
-            titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
-        graphics.fillRect(titleBarRectangle.x, titleBarRectangle.y,
-            titleBarRectangle.width, titleBarRectangle.height);
+        Color titleBarBackgroundColor = window.isActive() ?
+            this.titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
+        Color titleBarBorderColor = window.isActive() ?
+            this.titleBarBorderColor : inactiveTitleBarBorderColor;
+        Color titleBarBevelColor = window.isActive() ?
+            this.titleBarBevelColor : inactiveTitleBarBevelColor;
 
-        graphics.setPaint(window.isActive() ?
-            titleBarBorderColor : inactiveTitleBarBorderColor);
-        graphics.drawRect(titleBarRectangle.x, titleBarRectangle.y,
-            titleBarRectangle.width, titleBarRectangle.height);
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        if (theme.useGradients()) {
+            graphics.setPaint(new GradientPaint(width / 2, 0, titleBarBevelColor,
+                width / 2, titleBarHeight + 1, titleBarBackgroundColor));
+            graphics.fillRect(0, 0, width, titleBarHeight + 1);
+        } else {
+            // Draw the background
+            graphics.setPaint(titleBarBackgroundColor);
+            graphics.fillRect(0, 0, width, titleBarHeight + 1);
 
-        graphics.setPaint(window.isActive() ?
-            titleBarBevelColor : inactiveTitleBarBevelColor);
-        graphics.drawLine(titleBarRectangle.x + 1, titleBarRectangle.y + 1,
-            titleBarRectangle.width - 1, titleBarRectangle.y + 1);
+            // Draw the bevel
+            graphics.setPaint(titleBarBevelColor);
+            graphics.drawLine(1, 1, width - 2, 1);
+        }
+
+        // Draw the border
+        graphics.setPaint(titleBarBorderColor);
+        graphics.drawRect(0, 0, width - 1, titleBarHeight + 1);
 
         // Draw the content area
-        Bounds contentAreaRectangle = new Bounds(0, titleBarSize.height + 2,
-            width - 1, height - (titleBarSize.height + 3));
+        Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2,
+            width - 1, height - (titleBarHeight + 3));
         graphics.setPaint(contentBorderColor);
         graphics.drawRect(contentAreaRectangle.x, contentAreaRectangle.y,
             contentAreaRectangle.width, contentAreaRectangle.height);

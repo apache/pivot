@@ -18,6 +18,7 @@ package pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
@@ -299,22 +300,26 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             borderColor = disabledBorderColor;
         }
 
-        // Paint the background
-        graphics.setPaint(backgroundColor);
-        graphics.fillRect(0, 0, width, height);
-
-        // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
 
-        // Paint the bevel
-        Line2D bevelLine = new Line2D.Double(0, 0, width, 0);
-        graphics.setPaint(bevelColor);
-        graphics.draw(bevelLine);
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        if (theme.useGradients()) {
+            graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
+                width / 2, height, backgroundColor));
+            graphics.fillRect(0, 0, width, height);
+        } else {
+            // Paint the background
+            graphics.setPaint(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+
+            // Paint the bevel
+            graphics.setPaint(bevelColor);
+            graphics.drawLine(0, 0, width, 0);
+        }
 
         // Paint the border
-        Line2D borderLine = new Line2D.Double(0, height - 1, width, height - 1);
         graphics.setPaint(borderColor);
-        graphics.draw(borderLine);
+        graphics.drawLine(0, height - 1, width, height - 1);
 
         // Paint the content
         TableView tableView = tableViewHeader.getTableView();
@@ -334,9 +339,14 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                 // Paint the pressed bevel
                 if (columnIndex == pressedHeaderIndex) {
-                    bevelLine = new Line2D.Double(cellX, 0, cellX + columnWidth, 0);
-                    graphics.setPaint(pressedBevelColor);
-                    graphics.draw(bevelLine);
+                    if (theme.useGradients()) {
+                        graphics.setPaint(new GradientPaint(width / 2, 0, pressedBevelColor,
+                            width / 2, height, backgroundColor));
+                        graphics.fillRect(0, 0, width, height);
+                    } else {
+                        graphics.setPaint(pressedBevelColor);
+                        graphics.drawLine(cellX, 0, cellX + columnWidth, 0);
+                    }
                 }
 
                 // Paint the header data

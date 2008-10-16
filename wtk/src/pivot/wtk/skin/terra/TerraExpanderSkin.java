@@ -18,6 +18,7 @@ package pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 
 import pivot.collections.Dictionary;
@@ -399,16 +400,26 @@ public class TerraExpanderSkin extends ContainerSkin
             graphics.drawLine(0, 1 + titleBarHeight, width - 1, 1 + titleBarHeight);
         }
 
-        graphics.setPaint(titleBarBackgroundColor);
-        graphics.fillRect(titleBarFlowPane.getX(), titleBarFlowPane.getY(),
-            titleBarFlowPane.getWidth(), titleBarFlowPane.getHeight());
+        int titleBarX = titleBarFlowPane.getX();
+        int titleBarY = titleBarFlowPane.getY();
+        int titleBarWidth = titleBarFlowPane.getWidth();
+        int titleBarHeight = titleBarFlowPane.getHeight();
+
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        if (theme.useGradients()) {
+            graphics.setPaint(new GradientPaint(titleBarX + titleBarWidth / 2, titleBarY, titleBarBevelColor,
+        		titleBarX + titleBarWidth / 2, titleBarY + titleBarHeight, titleBarBackgroundColor));
+            graphics.fillRect(titleBarX, titleBarY, titleBarWidth, titleBarHeight);
+        } else {
+            graphics.setPaint(titleBarBackgroundColor);
+            graphics.fillRect(titleBarX, titleBarY, titleBarWidth, titleBarHeight);
+
+            graphics.setPaint(titleBarBevelColor);
+            graphics.drawLine(titleBarX, titleBarY, titleBarWidth, titleBarY);
+        }
 
         graphics.setPaint(borderColor);
         graphics.drawRect(0, 0, width - 1, height - 1);
-
-        graphics.setPaint(titleBarBevelColor);
-        graphics.drawLine(titleBarFlowPane.getX(), titleBarFlowPane.getY(),
-            titleBarFlowPane.getWidth(), titleBarFlowPane.getY());
     }
 
     public Font getTitleBarFont() {
