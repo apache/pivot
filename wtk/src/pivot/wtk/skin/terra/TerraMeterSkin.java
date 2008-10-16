@@ -17,9 +17,8 @@ package pivot.wtk.skin.terra;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
@@ -96,22 +95,30 @@ public class TerraMeterSkin extends ComponentSkin
 
         // TODO Paint text
 
-        double width = (double)getWidth();
-        double height = (double)getHeight();
-        double meterStop = meter.getPercentage() * width;
+        int width = getWidth();
+        int height = getHeight();
+        int meterStop = (int)(meter.getPercentage() * width);
 
         graphics.setStroke(new BasicStroke());
-        graphics.setPaint(color);
-        graphics.fill(new Rectangle2D.Double(0, 0, meterStop - 1.0, height - 1.0));
+
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        if (theme.useGradients()) {
+            graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(color),
+                0, height, TerraTheme.darken(color)));
+        } else {
+            graphics.setPaint(color);
+        }
+
+        graphics.fillRect(0, 0, meterStop - 1, height - 1);
 
         graphics.setPaint(gridColor);
-        graphics.draw(new Rectangle2D.Double(0, 0, width - 1.0, height - 1.0));
+        graphics.drawRect(0, 0, width - 1, height - 1);
 
-        int nLines = (int)Math.ceil(1.0 / gridFrequency) - 1;
-        double gridSeparation = width * gridFrequency;
+        int nLines = (int)Math.ceil(1 / gridFrequency) - 1;
+        float gridSeparation = width * gridFrequency;
         for (int i = 0; i < nLines; i++) {
-           double gridX = (double)(i + 1) * gridSeparation;
-            graphics.draw(new Line2D.Double(gridX, 0.0, gridX, height - 1.0));
+            int gridX = (int)((i + 1) * gridSeparation);
+            graphics.drawLine(gridX, 0, gridX, height - 1);
         }
     }
 
