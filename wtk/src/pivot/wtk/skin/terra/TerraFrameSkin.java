@@ -78,6 +78,12 @@ public class TerraFrameSkin extends WindowSkin {
         public boolean isFocusable() {
             return false;
         }
+
+        @Override
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        	super.mouseDown(component, button, x, y);
+        	return true;
+        }
     }
 
     /**

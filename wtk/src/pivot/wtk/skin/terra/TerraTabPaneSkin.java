@@ -18,8 +18,8 @@ package pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
 
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
@@ -111,8 +111,6 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     protected class TabButtonSkin extends ButtonSkin {
-        private boolean pressed = false;
-
         public int getPreferredWidth(int height) {
             TabButton tabButton = (TabButton)getComponent();
             TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
@@ -216,55 +214,70 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             Color backgroundColor = (tabButton.isSelected()) ?
                 activeTabColor : inactiveTabColor;
-            Color bevelColor = (pressed
-                || tabButton.isSelected()) ? pressedButtonBevelColor : buttonBevelColor;
 
             int width = getWidth();
             int height = getHeight();
 
             graphics.setStroke(new BasicStroke());
 
-            // Paint the background
-            Bounds bounds = new Bounds(0, 0, width - 1, height - 1);
+            // Draw the background
             graphics.setPaint(backgroundColor);
-            graphics.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+            graphics.fillRect(0, 0, width, height);
 
-            // Create the bevel line
-            Line2D.Double bevelLine = new Line2D.Double(1, 1, width - 2, 1);
-            if (tabOrientation == Orientation.VERTICAL
-        		&& tabButton.isSelected()) {
-                // Extend the bevel line so it reaches the edge of
-                // the button
-                bevelLine.x2 += 1;
+            // Draw the bevel
+            TerraTheme theme = (TerraTheme)Theme.getTheme();
+            if (theme.useGradients()) {
+	            graphics.setPaint(new GradientPaint(width / 2, 1, buttonBevelColor,
+	                width / 2, GRADIENT_BEVEL_THICKNESS, backgroundColor));
+
+	            switch(tabOrientation) {
+		            case HORIZONTAL: {
+		                graphics.fillRect(1, 1, width - 2, GRADIENT_BEVEL_THICKNESS);
+		                break;
+		            }
+
+		            case VERTICAL: {
+		            	graphics.fillRect(1, 1, width - 1, GRADIENT_BEVEL_THICKNESS);
+		                break;
+		            }
+		        }
+            } else {
+                graphics.setPaint(buttonBevelColor);
+
+                switch(tabOrientation) {
+    	            case HORIZONTAL: {
+    	                graphics.drawLine(1, 1, width - 2, 1);
+    	                break;
+    	            }
+
+    	            case VERTICAL: {
+    	                graphics.drawLine(1, 1, width - 1, 1);
+    	                break;
+    	            }
+    	        }
             }
-
-            graphics.setPaint(bevelColor);
-            graphics.draw(bevelLine);
 
             // Draw the border
             graphics.setPaint(borderColor);
-            graphics.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
-            // Draw the divider for the selected tab
             if (tabButton.isSelected()) {
-                Line2D dividerLine = null;
+                switch(tabOrientation) {
+		            case HORIZONTAL: {
+		                graphics.drawLine(0, height - 1, 0, 0);
+		                graphics.drawLine(0, 0, width - 1, 0);
+		                graphics.drawLine(width - 1, 0, width - 1, height - 1);
+		                break;
+		            }
 
-                switch (tabOrientation) {
-                    case HORIZONTAL: {
-                        dividerLine = new Line2D.Double(1, height - 1,
-                            width - 2, height - 1);
-                        break;
-                    }
-
-                    case VERTICAL: {
-                        dividerLine = new Line2D.Double(width - 1, 2,
-                            width - 1, height - 2);
-                        break;
-                    }
-                }
-
-                graphics.setPaint(backgroundColor);
-                graphics.draw(dividerLine);
+		            case VERTICAL: {
+		                graphics.drawLine(width, 0, 0, 0);
+		                graphics.drawLine(0, 0, 0, height - 1);
+		                graphics.drawLine(0, height - 1, width - 1, height - 1);
+		                break;
+		            }
+	            }
+            } else {
+            	graphics.drawRect(0, 0, width - 1, height - 1);
             }
 
             // Paint the content
@@ -305,33 +318,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         @Override
-        public void mouseOut(Component component) {
-            super.mouseOut(component);
-
-            pressed = false;
-        }
-
-        @Override
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            boolean consumed = super.mouseDown(component, button, x, y);
-
-            pressed = true;
-            repaintComponent();
-
-            return consumed;
-        }
-
-        @Override
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            boolean consumed = super.mouseUp(component, button, x, y);
-
-            pressed = false;
-            repaintComponent();
-
-            return consumed;
-        }
-
-        @Override
         public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             TabButton tabButton = (TabButton)getComponent();
             tabButton.press();
@@ -352,9 +338,9 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     // Derived colors
     private Color buttonBevelColor;
-    private Color pressedButtonBevelColor;
 
-    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
+	public static final int GRADIENT_BEVEL_THICKNESS = 4;
+	private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
     public TerraTabPaneSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -368,7 +354,6 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         // Set the derived colors
         buttonBevelColor = TerraTheme.brighten(inactiveTabColor);
-        pressedButtonBevelColor = TerraTheme.darken(activeTabColor);
 
         tabButtonGroup.getGroupListeners().add(this);
 
@@ -688,7 +673,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         // Call the base class to paint the background
         super.paint(graphics);
 
-        // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
 
         // Paint the content background and border
@@ -737,10 +721,18 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             // Draw the bevel for vertical tabs
             if (tabOrientation == Orientation.VERTICAL) {
-                graphics.setPaint(buttonBevelColor);
-                graphics.drawLine(contentBounds.x + 1, contentBounds.y + 1,
-                    contentBounds.x + contentBounds.width - 2,
-                    contentBounds.y + 1);
+                TerraTheme theme = (TerraTheme)Theme.getTheme();
+                if (theme.useGradients()) {
+    	            graphics.setPaint(new GradientPaint(width / 2, contentBounds.y + 1, buttonBevelColor,
+    	                width / 2, contentBounds.y + 1 + GRADIENT_BEVEL_THICKNESS, activeTabColor));
+    	            graphics.fillRect(contentBounds.x + 1, contentBounds.y + 1,
+                        contentBounds.width - 2, GRADIENT_BEVEL_THICKNESS);
+                } else {
+                	graphics.setPaint(buttonBevelColor);
+                    graphics.drawLine(contentBounds.x + 1, contentBounds.y + 1,
+                        contentBounds.x + contentBounds.width - 2,
+                        contentBounds.y + 1);
+                }
             }
         }
     }
@@ -755,7 +747,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         this.activeTabColor = activeTabColor;
-        pressedButtonBevelColor = TerraTheme.darken(activeTabColor);
         repaintComponent();
     }
 
