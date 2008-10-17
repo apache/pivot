@@ -172,6 +172,10 @@ public class Dialog extends Frame {
             this.modal = modal;
 
             if (modal) {
+            	if (!owner.isEnabled()) {
+            		throw new IllegalStateException("Owner is already disabled.");
+            	}
+
                 // Walk owner tree to find the nearest enabled owning ancestor
                 // and disable it
                 Window disabledOwner = null;

@@ -84,7 +84,7 @@ limitations under the License.
                                 </TableView>
                             </view>
                             <columnHeader>
-                                <TableViewHeader tableView="$customTableView"/>
+                                <TableViewHeader tableView="$customTableView" styles="{headersPressable:false}"/>
                             </columnHeader>
                         </ScrollPane>
                     </content>

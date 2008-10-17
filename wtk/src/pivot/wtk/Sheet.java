@@ -136,6 +136,10 @@ public class Sheet extends Window {
             owner.getComponentListeners().add(ownerListener);
 
             Component content = owner.getContent();
+            if (content.isBlocked()) {
+            	throw new IllegalStateException("Owner content is already blocked.");
+            }
+
             content.setEnabled(false);
 
             ApplicationContext.queueCallback(new Runnable() {
