@@ -24,7 +24,8 @@ import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
 /**
- * Container that provides access to a set of components via selectable tabs.
+ * Container that provides access to a set of components via selectable tabs,
+ * only one of which is visible at a time.
  *
  * @author gbrown
  */
