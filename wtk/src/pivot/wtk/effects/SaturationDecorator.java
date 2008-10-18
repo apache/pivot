@@ -66,20 +66,26 @@ public class SaturationDecorator implements Decorator {
     }
 
     public Graphics2D prepare(Component component, Graphics2D graphics) {
+        int x = 0;
+        int y = 0;
         int width = component.getWidth();
         int height = component.getHeight();
 
-        if (this.component != component
-            || componentImage == null
-            || componentImage.getWidth() != width
-            || componentImage.getHeight() != height) {
-            componentImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        java.awt.Rectangle clipBounds = graphics.getClipBounds();
+        if (clipBounds != null) {
+            x = clipBounds.x;
+            y = clipBounds.y;
+            width = clipBounds.width;
+            height = clipBounds.height;
         }
+
+        componentImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
         this.component = component;
         this.graphics = graphics;
 
         componentGraphics = componentImage.createGraphics();
+        componentGraphics.translate(-x, -y);
         componentGraphics.setClip(graphics.getClip());
 
         return componentGraphics;
@@ -90,31 +96,13 @@ public class SaturationDecorator implements Decorator {
      * image using the component's graphics.
      */
     public void update() {
-        java.awt.Rectangle clipBounds = componentGraphics.getClipBounds();
-        componentGraphics.dispose();
-
-        int x = 0;
-        int y = 0;
         int width = componentImage.getWidth();
         int height = componentImage.getHeight();
-
-        if (clipBounds != null) {
-            // We only bother to adjust the saturation of pixels that
-            // are within the clip bounds
-            // TODO Debug this. It should work, but there are areas whose
-            // saturation is unaffected
-            /*
-            x = Math.min(Math.max(clipBounds.x, 0), x);
-            y = Math.min(Math.max(clipBounds.y, 0), y);
-            width = Math.min(Math.max(clipBounds.width, 0), width - x);
-            height = Math.min(Math.max(clipBounds.height, 0), height - y);
-            */
-        }
 
         int[] buffer = new int[width * height];
 
         WritableRaster raster = componentImage.getRaster();
-        raster.getDataElements(x, y, width, height, buffer);
+        raster.getDataElements(0, 0, width, height, buffer);
 
         float[] hsb = new float[3];
 
@@ -135,9 +123,19 @@ public class SaturationDecorator implements Decorator {
             }
         }
 
-        raster.setDataElements(x, y, width, height, buffer);
+        raster.setDataElements(0, 0, width, height, buffer);
 
-        graphics.drawImage(componentImage, 0, 0, null);
+        int x = 0;
+        int y = 0;
+
+        java.awt.Rectangle clipBounds = componentGraphics.getClipBounds();
+        if (clipBounds != null) {
+            x = clipBounds.x;
+            y = clipBounds.y;
+        }
+
+        componentGraphics.dispose();
+        graphics.drawImage(componentImage, x, y, null);
     }
 
     public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
