@@ -17,6 +17,7 @@ package pivot.wtk.skin;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
@@ -117,7 +118,7 @@ public abstract class ContainerSkin extends ComponentSkin
         }
     }
 
-    private Color backgroundColor = null;
+    private Paint backgroundPaint = null;
 
     @Override
     public void install(Component component) {
@@ -153,8 +154,8 @@ public abstract class ContainerSkin extends ComponentSkin
     }
 
     public void paint(Graphics2D graphics) {
-        if (backgroundColor != null) {
-            graphics.setPaint(backgroundColor);
+        if (backgroundPaint != null) {
+            graphics.setPaint(backgroundPaint);
             graphics.fillRect(0, 0, getWidth(), getHeight());
         }
     }
@@ -168,13 +169,25 @@ public abstract class ContainerSkin extends ComponentSkin
         return false;
     }
 
+    public Paint getBackgroundPaint() {
+        return backgroundPaint;
+    }
+
+    public void setBackgroundPaint(Paint backgroundPaint) {
+        this.backgroundPaint = backgroundPaint;
+        repaintComponent();
+    }
+
     public Color getBackgroundColor() {
-        return backgroundColor;
+        if (backgroundPaint != null
+            && !(backgroundPaint instanceof Color)) {
+            throw new IllegalStateException("Background paint is not a Color.");
+        }
+        return (Color)backgroundPaint;
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        this.backgroundColor = backgroundColor;
-        repaintComponent();
+        setBackgroundPaint(backgroundColor);
     }
 
     public final void setBackgroundColor(String backgroundColor) {

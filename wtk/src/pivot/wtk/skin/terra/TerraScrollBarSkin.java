@@ -698,8 +698,6 @@ public class TerraScrollBarSkin extends ContainerSkin
         scrollButtonDisabledBackgroundColor = theme.getColor(10);
         scrollButtonPressedBackgroundColor = theme.getColor(9);
         scrollButtonHighlightedBackgroundColor = theme.getColor(11);
-
-        setBackgroundColor(theme.getColor(9));
     }
 
     @Override
@@ -713,6 +711,9 @@ public class TerraScrollBarSkin extends ContainerSkin
         scrollBar.add(scrollUpButton);
         scrollBar.add(scrollDownButton);
         scrollBar.add(scrollHandle);
+
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(9));
 
         enabledChanged(scrollBar);
     }
@@ -894,6 +895,29 @@ public class TerraScrollBarSkin extends ContainerSkin
                 height - scrollDownButtonHeight - 1);
             graphics.drawLine(width - 1, scrollUpButtonHeight, width - 1,
                 height - scrollDownButtonHeight - 1);
+        }
+    }
+
+    @Override
+    public void setBackgroundColor(Color backgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        if (theme.useGradients()) {
+            ScrollBar scrollBar = (ScrollBar)getComponent();
+
+            Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
+            GradientPaint gradientPaint;
+
+            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
+                gradientPaint = new GradientPaint(0, 1, backgroundColor,
+                    0, DEFAULT_THICKNESS - 2, brightBackgroundColor);
+            } else {
+                gradientPaint = new GradientPaint(1, 0, backgroundColor,
+                    DEFAULT_THICKNESS - 2, 0, brightBackgroundColor);
+            }
+
+            setBackgroundPaint(gradientPaint);
+        } else {
+            super.setBackgroundColor(backgroundColor);
         }
     }
 
