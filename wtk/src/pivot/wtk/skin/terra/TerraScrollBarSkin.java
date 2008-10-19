@@ -17,6 +17,7 @@ package pivot.wtk.skin.terra;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
@@ -255,6 +256,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             // Apply scroll bar styles to the button
             ScrollButton scrollButton = (ScrollButton)getComponent();
             ScrollBar scrollBar = (ScrollBar)TerraScrollBarSkin.this.getComponent();
+            Orientation orientation = scrollBar.getOrientation();
 
             int width = getWidth();
             int height = getHeight();
@@ -272,8 +274,26 @@ public class TerraScrollBarSkin extends ContainerSkin
                 backgroundColor = scrollButtonDisabledBackgroundColor;
             }
 
+            Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
+            Color darkBackgroundColor = TerraTheme.darken(backgroundColor);
+
             // Paint the background
-            graphics.setPaint(backgroundColor);
+            TerraTheme theme = (TerraTheme)Theme.getTheme();
+            if (theme.useGradients()) {
+                Color gradientStartColor = pressed ? backgroundColor : brightBackgroundColor;
+                Color gradientEndColor = pressed ? brightBackgroundColor : backgroundColor;
+
+                if (orientation == Orientation.HORIZONTAL) {
+                    graphics.setPaint(new GradientPaint(0, 1, gradientStartColor,
+                        0, height - 2, gradientEndColor));
+                } else {
+                    graphics.setPaint(new GradientPaint(1, 0, gradientStartColor,
+                        width - 2, 0, gradientEndColor));
+                }
+            } else {
+                graphics.setPaint(backgroundColor);
+            }
+
             graphics.fillRect(1, 1, width - 2, height - 2);
 
             // Paint the border
@@ -281,17 +301,10 @@ public class TerraScrollBarSkin extends ContainerSkin
             graphics.setStroke(new BasicStroke());
             graphics.drawRect(0, 0, width - 1, height - 1);
 
-            // Size the image to be proportional to our size
-            int buttonImageWidth, buttonImageHeight;
-            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-                buttonImageWidth = (int)((float)width / 3.0f);
-                buttonImageHeight = (int)Math.floor((float)height / 2.0f);
-            } else {
-                buttonImageWidth = (int)Math.floor((float)width / 2.0f);
-                buttonImageHeight = (int)((float)height / 3.0f);
-            }
+            // Determine the button image size
             ScrollButtonImage buttonImage = scrollButton.getButtonImage();
-            buttonImage.setSize(buttonImageWidth, buttonImageHeight);
+            int buttonImageWidth = buttonImage.getWidth();
+            int buttonImageHeight = buttonImage.getHeight();
 
             // Paint the image
             Graphics2D imageGraphics = (Graphics2D)graphics.create();
@@ -370,20 +383,16 @@ public class TerraScrollBarSkin extends ContainerSkin
     }
 
     protected abstract class ScrollButtonImage extends Image {
-        private int width = 0;
-        private int height = 0;
-
         public int getWidth() {
-            return width;
+            ScrollBar scrollBar = (ScrollBar)getComponent();
+            Orientation orientation = scrollBar.getOrientation();
+            return (orientation == Orientation.HORIZONTAL ? 5 : 7);
         }
 
         public int getHeight() {
-            return height;
-        }
-
-        public void setSize(int width, int height) {
-            this.width = width;
-            this.height = height;
+            ScrollBar scrollBar = (ScrollBar)getComponent();
+            Orientation orientation = scrollBar.getOrientation();
+            return (orientation == Orientation.HORIZONTAL ? 7 : 5);
         }
     }
 
@@ -514,6 +523,7 @@ public class TerraScrollBarSkin extends ContainerSkin
 
         public void paint(Graphics2D graphics) {
             ScrollBar scrollBar = (ScrollBar)TerraScrollBarSkin.this.getComponent();
+            Orientation orientation = scrollBar.getOrientation();
 
             int width = getWidth();
             int height = getHeight();
@@ -522,7 +532,23 @@ public class TerraScrollBarSkin extends ContainerSkin
             Color backgroundColor = highlighted ?
                 scrollButtonHighlightedBackgroundColor :
                 scrollButtonBackgroundColor;
-            graphics.setPaint(backgroundColor);
+
+            Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
+            Color darkBackgroundColor = TerraTheme.darken(backgroundColor);
+
+            TerraTheme theme = (TerraTheme)Theme.getTheme();
+            if (theme.useGradients()) {
+                if (orientation == Orientation.HORIZONTAL) {
+                    graphics.setPaint(new GradientPaint(0, 1, brightBackgroundColor,
+                        0, height - 2, backgroundColor));
+                } else {
+                    graphics.setPaint(new GradientPaint(1, 0, brightBackgroundColor,
+                        width - 2, 0, backgroundColor));
+                }
+            } else {
+                graphics.setPaint(backgroundColor);
+            }
+
             graphics.fillRect(1, 1, width - 2, height - 2);
 
             // Paint the border
@@ -531,23 +557,23 @@ public class TerraScrollBarSkin extends ContainerSkin
             graphics.drawRect(0, 0, width - 1, height - 1);
 
             // Paint the hash marks
-            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
+            if (orientation == Orientation.HORIZONTAL) {
                 int middle = width / 2;
-                graphics.setPaint(TerraTheme.darken(backgroundColor));
+                graphics.setPaint(darkBackgroundColor);
                 graphics.drawLine(middle - 3, 4, middle - 3, height - 5);
                 graphics.drawLine(middle, 4, middle, height - 5);
                 graphics.drawLine(middle + 3, 4, middle + 3, height - 5);
-                graphics.setPaint(Color.WHITE);
+                graphics.setPaint(brightBackgroundColor);
                 graphics.drawLine(middle - 2, 4, middle - 2, height - 5);
                 graphics.drawLine(middle + 1, 4, middle + 1, height - 5);
                 graphics.drawLine(middle + 4, 4, middle + 4, height - 5);
             } else {
                 int middle = height / 2;
-                graphics.setPaint(TerraTheme.darken(backgroundColor));
+                graphics.setPaint(darkBackgroundColor);
                 graphics.drawLine(4, middle - 3, width - 5, middle - 3);
                 graphics.drawLine(4, middle, width - 5, middle);
                 graphics.drawLine(4, middle + 3, width - 5, middle + 3);
-                graphics.setPaint(Color.WHITE);
+                graphics.setPaint(brightBackgroundColor);
                 graphics.drawLine(4, middle - 2, width - 5, middle - 2);
                 graphics.drawLine(4, middle + 1, width - 5, middle + 1);
                 graphics.drawLine(4, middle + 4, width - 5, middle + 4);
