@@ -24,13 +24,6 @@ import pivot.collections.Sequence;
  */
 public interface AccordionListener {
     /**
-     * Called when an accordions's collapsible flag has changed.
-     *
-     * @param accordion
-     */
-    public void collapsibleChanged(Accordion accordion);
-
-    /**
      * Called when a panel has been inserted into a accordion's panel sequence.
      *
      * @param accordion

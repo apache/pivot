@@ -181,12 +181,6 @@ public class Accordion extends Container {
                 listener.panelsRemoved(accordion, index, panels);
             }
         }
-
-        public void collapsibleChanged(Accordion accordion) {
-            for (AccordionListener listener : this) {
-                listener.collapsibleChanged(accordion);
-            }
-        }
     }
 
     private static class AccordionSelectionListenerList extends ListenerList<AccordionSelectionListener>
@@ -213,7 +207,6 @@ public class Accordion extends Container {
         }
     }
 
-    private boolean collapsible = false;
     private int selectedIndex = -1;
 
     private ArrayList<Component> panels = new ArrayList<Component>();
@@ -224,26 +217,7 @@ public class Accordion extends Container {
     private AccordionAttributeListenerList accordionAttributeListeners = new AccordionAttributeListenerList();
 
     public Accordion() {
-        this(false);
-    }
-
-    public Accordion(boolean collapsible) {
-        super();
-
-        this.collapsible = collapsible;
-
         installSkin(Accordion.class);
-    }
-
-    public boolean isCollapsible() {
-        return collapsible;
-    }
-
-    public void setCollapsible(boolean collapsible) {
-        if (collapsible != this.collapsible) {
-            this.collapsible = collapsible;
-            accordionListeners.collapsibleChanged(this);
-        }
     }
 
     public int getSelectedIndex() {
