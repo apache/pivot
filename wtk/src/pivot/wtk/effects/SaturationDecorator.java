@@ -35,7 +35,6 @@ import pivot.wtk.Bounds;
 public class SaturationDecorator implements Decorator {
     private float multiplier;
 
-    private Component component = null;
     private Graphics2D graphics = null;
 
     private BufferedImage componentImage = null;
@@ -81,7 +80,6 @@ public class SaturationDecorator implements Decorator {
 
         componentImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-        this.component = component;
         this.graphics = graphics;
 
         componentGraphics = componentImage.createGraphics();

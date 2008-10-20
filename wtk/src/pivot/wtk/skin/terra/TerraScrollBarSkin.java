@@ -275,7 +275,6 @@ public class TerraScrollBarSkin extends ContainerSkin
             }
 
             Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
-            Color darkBackgroundColor = TerraTheme.darken(backgroundColor);
 
             // Paint the background
             TerraTheme theme = (TerraTheme)Theme.getTheme();
