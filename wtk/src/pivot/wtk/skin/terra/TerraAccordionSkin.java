@@ -343,7 +343,7 @@ public class TerraAccordionSkin extends ContainerSkin
         int height = getHeight();
 
         // Determine the area available to the content
-        int panelWidth = width - 2;
+        int panelWidth = Math.max(width - 2, 0);
         int contentHeight = height - 1;
         for (PanelHeader panelHeader : panelHeaders) {
         	panelHeader.setSize(panelWidth, panelHeader.getPreferredHeight(panelWidth));

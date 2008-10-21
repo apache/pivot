@@ -101,14 +101,8 @@ public class TerraMeterSkin extends ComponentSkin
 
         graphics.setStroke(new BasicStroke());
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        if (theme.useGradients()) {
-            graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(color),
-                0, height, TerraTheme.darken(color)));
-        } else {
-            graphics.setPaint(color);
-        }
-
+        graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(color),
+            0, height, TerraTheme.darken(color)));
         graphics.fillRect(0, 0, meterStop - 1, height - 1);
 
         graphics.setPaint(gridColor);

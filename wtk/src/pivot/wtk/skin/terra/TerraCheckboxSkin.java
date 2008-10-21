@@ -195,20 +195,9 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         int buttonWidth = CHECKBOX_SIZE - 1;
         int buttonHeight = CHECKBOX_SIZE - 1;
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        if (theme.useGradients()) {
-            graphics.setPaint(new GradientPaint(buttonWidth / 2, 0, buttonBevelColor,
-        		buttonWidth / 2, buttonHeight, buttonColor));
-            graphics.fillRect(0, 0, buttonWidth, buttonHeight);
-        } else {
-            // Paint the background
-            graphics.setPaint(buttonColor);
-            graphics.fillRect(0, 0, buttonWidth, buttonHeight);
-
-            // Paint the bevel
-            graphics.setPaint(buttonBevelColor);
-            graphics.drawLine(1, 1, CHECKBOX_SIZE - 2, 1);
-        }
+        graphics.setPaint(new GradientPaint(buttonWidth / 2, 0, buttonBevelColor,
+    		buttonWidth / 2, buttonHeight, buttonColor));
+        graphics.fillRect(0, 0, buttonWidth, buttonHeight);
 
         // Paint the border
         graphics.setPaint(buttonBorderColor);

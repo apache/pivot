@@ -137,6 +137,24 @@ limitations under the License.
     <Border>
         <content>
             <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
+                <Label text="Accordion" styles="{fontBold:true}"/>
+                <Accordion selectedIndex="1" preferredWidth="110" preferredHeight="180">
+                    <panels>
+                        <Label Accordion.name="One" text="Un"
+                          styles="{horizontalAlignment:'center', verticalAlignment:'center', fontItalic:true}"/>
+                        <Label Accordion.name="Two" text="Deux"
+                          styles="{horizontalAlignment:'center', verticalAlignment:'center', fontItalic:true}"/>
+                        <Label Accordion.name="Three" text="Trois"
+                          styles="{horizontalAlignment:'center', verticalAlignment:'center', fontItalic:true}"/>
+                    </panels>
+                </Accordion>
+            </FlowPane>
+        </content>
+    </Border>
+
+    <Border>
+        <content>
+            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
                 <Label text="Rollups" styles="{fontBold:true}"/>
                 <Rollup>
                     <Label text="Colors"/>

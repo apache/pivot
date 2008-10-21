@@ -134,15 +134,8 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         // Paint highlight state
         if (highlight) {
             Color highlightBackgroundColor = (Color)menu.getStyles().get("highlightBackgroundColor");
-
-            TerraTheme theme = (TerraTheme)Theme.getTheme();
-            if (theme.useGradients()) {
-	            graphics.setPaint(new GradientPaint(width / 2, 0, TerraTheme.brighten(highlightBackgroundColor),
-	                width / 2, height, highlightBackgroundColor));
-            } else {
-                graphics.setColor(highlightBackgroundColor);
-            }
-
+            graphics.setPaint(new GradientPaint(width / 2, 0, TerraTheme.brighten(highlightBackgroundColor),
+                width / 2, height, highlightBackgroundColor));
             graphics.fillRect(0, 0, width, height);
         }
 

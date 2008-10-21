@@ -19,7 +19,5 @@
     smallErrorIcon: "message_type-error-16x16.png",
     smallWarningIcon: "message_type-warning-16x16.png",
     smallQuestionIcon: "message_type-question-16x16.png",
-    smallInfoIcon: "message_type-info-16x16.png",
-
-    useGradients: true
+    smallInfoIcon: "message_type-info-16x16.png"
 }

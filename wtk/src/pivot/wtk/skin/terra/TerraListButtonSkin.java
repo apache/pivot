@@ -222,21 +222,10 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         graphics.setStroke(new BasicStroke());
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        if (theme.useGradients()) {
-            // Paint the background
-            graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
-                width / 2, height / 2, backgroundColor));
-            graphics.fillRect(0, 0, width, height);
-        } else {
-            // Paint the background
-            graphics.setPaint(backgroundColor);
-            graphics.fillRect(0, 0, width, height);
-
-            // Paint the bevel
-            graphics.setPaint(bevelColor);
-            graphics.drawLine(1, 1, width - 2, 1);
-        }
+        // Paint the background
+        graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
+            width / 2, height / 2, backgroundColor));
+        graphics.fillRect(0, 0, width, height);
 
         // Paint the border
         graphics.setPaint(borderColor);

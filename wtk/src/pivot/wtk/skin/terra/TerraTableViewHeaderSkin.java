@@ -303,20 +303,9 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
         graphics.setStroke(new BasicStroke());
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        if (theme.useGradients()) {
-            graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
-                width / 2, height, backgroundColor));
-            graphics.fillRect(0, 0, width, height);
-        } else {
-            // Paint the background
-            graphics.setPaint(backgroundColor);
-            graphics.fillRect(0, 0, width, height);
-
-            // Paint the bevel
-            graphics.setPaint(bevelColor);
-            graphics.drawLine(0, 0, width, 0);
-        }
+        graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
+            width / 2, height, backgroundColor));
+        graphics.fillRect(0, 0, width, height);
 
         // Paint the border
         graphics.setPaint(borderColor);
@@ -340,14 +329,9 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                 // Paint the pressed bevel
                 if (columnIndex == pressedHeaderIndex) {
-                    if (theme.useGradients()) {
-                        graphics.setPaint(new GradientPaint(width / 2, 0, pressedBevelColor,
-                            width / 2, height, backgroundColor));
-                        graphics.fillRect(0, 0, width, height);
-                    } else {
-                        graphics.setPaint(pressedBevelColor);
-                        graphics.drawLine(cellX, 0, cellX + columnWidth, 0);
-                    }
+                    graphics.setPaint(new GradientPaint(width / 2, 0, pressedBevelColor,
+                        width / 2, height, backgroundColor));
+                    graphics.fillRect(0, 0, width, height);
                 }
 
                 // Paint the header data

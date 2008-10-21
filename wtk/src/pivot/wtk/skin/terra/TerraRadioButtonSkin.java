@@ -176,14 +176,8 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         graphics.setColor(buttonBorderColor);
         graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        if (theme.useGradients()) {
-            graphics.setPaint(new GradientPaint(BUTTON_DIAMETER / 2, 0, TerraTheme.darken(buttonColor),
-        		BUTTON_DIAMETER / 2, BUTTON_DIAMETER / 2, buttonColor));
-        } else {
-        	graphics.setColor(buttonColor);
-        }
-
+        graphics.setPaint(new GradientPaint(BUTTON_DIAMETER / 2, 0, TerraTheme.darken(buttonColor),
+    		BUTTON_DIAMETER / 2, BUTTON_DIAMETER / 2, buttonColor));
         graphics.fillOval(1, 1, BUTTON_DIAMETER - 3, BUTTON_DIAMETER - 3);
 
         if (radioButton.isSelected()) {

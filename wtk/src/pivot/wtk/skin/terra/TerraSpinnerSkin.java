@@ -324,34 +324,13 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         public void paint(Graphics2D graphics) {
             // Apply spinner styles to the button
             SpinButton spinButton = (SpinButton)getComponent();
-            Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
-
-            Color backgroundColor = null;
-
-            if (spinner.isEnabled()) {
-                if (pressed) {
-                    backgroundColor = buttonPressedBackgroundColor;
-                } else if (highlighted) {
-                    backgroundColor = buttonHighlightedBackgroundColor;
-                } else {
-                    backgroundColor = buttonBackgroundColor;
-                }
-            } else {
-                backgroundColor = buttonDisabledBackgroundColor;
-            }
 
             int width = getWidth();
             int height = getHeight();
 
             // Paint the background
-            TerraTheme theme = (TerraTheme)Theme.getTheme();
-            if (theme.useGradients()) {
-            	float alpha = pressed ? 0.5f : highlighted ? 0.25f : 0.0f;
-            	graphics.setPaint(new Color(0, 0, 0, alpha));
-            } else {
-	            graphics.setPaint(backgroundColor);
-            }
-
+        	float alpha = pressed ? 0.5f : highlighted ? 0.25f : 0.0f;
+        	graphics.setPaint(new Color(0, 0, 0, alpha));
             graphics.fillRect(0, 0, width, height);
 
             // Paint the image
@@ -478,7 +457,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     private Color buttonImageColor;
     private Color buttonBackgroundColor;
     private Color buttonDisabledBackgroundColor;
-    private Color buttonPressedBackgroundColor;
     private Color buttonHighlightedBackgroundColor;
 
     private static AutomaticSpinner automaticSpinner = new AutomaticSpinner();
@@ -496,7 +474,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         buttonImageColor = theme.getColor(1);
         buttonBackgroundColor = theme.getColor(10);
         buttonDisabledBackgroundColor = theme.getColor(10);
-        buttonPressedBackgroundColor = theme.getColor(10);
         buttonHighlightedBackgroundColor = theme.getColor(11);
     }
 
@@ -623,12 +600,9 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         int buttonWidth = upButton.getWidth();
         int buttonHeight = upButton.getHeight();
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        if (theme.useGradients()) {
-            graphics.setPaint(new GradientPaint(buttonX + buttonWidth / 2, 0, buttonHighlightedBackgroundColor,
-        		buttonX + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
-            graphics.fillRect(buttonX, 0, buttonWidth, height);
-        }
+        graphics.setPaint(new GradientPaint(buttonX + buttonWidth / 2, 0, buttonHighlightedBackgroundColor,
+    		buttonX + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
+        graphics.fillRect(buttonX, 0, buttonWidth, height);
 
         graphics.setStroke(new BasicStroke(0));
         graphics.setPaint(borderColor);
@@ -764,23 +738,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         setButtonDisabledBackgroundColor(decodeColor(buttonDisabledBackgroundColor));
-    }
-
-    public Color getButtonPressedBackgroundColor() {
-        return buttonPressedBackgroundColor;
-    }
-
-    public void setButtonPressedBackgroundColor(Color buttonPressedBackgroundColor) {
-        this.buttonPressedBackgroundColor = buttonPressedBackgroundColor;
-        repaintComponent();
-    }
-
-    public final void setButtonPressedBackgroundColor(String buttonPressedBackgroundColor) {
-        if (buttonPressedBackgroundColor == null) {
-            throw new IllegalArgumentException("buttonPressedBackgroundColor is null");
-        }
-
-        setButtonPressedBackgroundColor(decodeColor(buttonPressedBackgroundColor));
     }
 
     public Color getButtonHighlightedBackgroundColor() {

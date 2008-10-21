@@ -225,37 +225,20 @@ public class TerraTabPaneSkin extends ContainerSkin
             graphics.fillRect(0, 0, width, height);
 
             // Draw the bevel
-            TerraTheme theme = (TerraTheme)Theme.getTheme();
-            if (theme.useGradients()) {
-	            graphics.setPaint(new GradientPaint(width / 2, 1, buttonBevelColor,
-	                width / 2, GRADIENT_BEVEL_THICKNESS, backgroundColor));
+            graphics.setPaint(new GradientPaint(width / 2, 1, buttonBevelColor,
+                width / 2, GRADIENT_BEVEL_THICKNESS, backgroundColor));
 
-	            switch(tabOrientation) {
-		            case HORIZONTAL: {
-		                graphics.fillRect(1, 1, width - 2, GRADIENT_BEVEL_THICKNESS);
-		                break;
-		            }
+            switch(tabOrientation) {
+	            case HORIZONTAL: {
+	                graphics.fillRect(1, 1, width - 2, GRADIENT_BEVEL_THICKNESS);
+	                break;
+	            }
 
-		            case VERTICAL: {
-		            	graphics.fillRect(1, 1, width - 1, GRADIENT_BEVEL_THICKNESS);
-		                break;
-		            }
-		        }
-            } else {
-                graphics.setPaint(buttonBevelColor);
-
-                switch(tabOrientation) {
-    	            case HORIZONTAL: {
-    	                graphics.drawLine(1, 1, width - 2, 1);
-    	                break;
-    	            }
-
-    	            case VERTICAL: {
-    	                graphics.drawLine(1, 1, width - 1, 1);
-    	                break;
-    	            }
-    	        }
-            }
+	            case VERTICAL: {
+	            	graphics.fillRect(1, 1, width - 1, GRADIENT_BEVEL_THICKNESS);
+	                break;
+	            }
+	        }
 
             // Draw the border
             graphics.setPaint(borderColor);
@@ -733,18 +716,10 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             // Draw the bevel for vertical tabs
             if (tabOrientation == Orientation.VERTICAL) {
-                TerraTheme theme = (TerraTheme)Theme.getTheme();
-                if (theme.useGradients()) {
-    	            graphics.setPaint(new GradientPaint(width / 2, contentBounds.y + 1, buttonBevelColor,
-    	                width / 2, contentBounds.y + 1 + GRADIENT_BEVEL_THICKNESS, activeTabColor));
-    	            graphics.fillRect(contentBounds.x + 1, contentBounds.y + 1,
-                        contentBounds.width - 2, GRADIENT_BEVEL_THICKNESS);
-                } else {
-                	graphics.setPaint(buttonBevelColor);
-                    graphics.drawLine(contentBounds.x + 1, contentBounds.y + 1,
-                        contentBounds.x + contentBounds.width - 2,
-                        contentBounds.y + 1);
-                }
+	            graphics.setPaint(new GradientPaint(width / 2, contentBounds.y + 1, buttonBevelColor,
+	                width / 2, contentBounds.y + 1 + GRADIENT_BEVEL_THICKNESS, activeTabColor));
+	            graphics.fillRect(contentBounds.x + 1, contentBounds.y + 1,
+                    contentBounds.width - 2, GRADIENT_BEVEL_THICKNESS);
             }
         }
     }

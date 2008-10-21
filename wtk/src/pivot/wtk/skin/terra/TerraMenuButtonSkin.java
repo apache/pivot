@@ -140,28 +140,13 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
         graphics.setStroke(new BasicStroke());
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        if (theme.useGradients()) {
-            // Paint the background
-        	if (backgroundColor != null
-    			&& bevelColor != null) {
-	            graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
-	                width / 2, height / 2, backgroundColor));
-	            graphics.fillRect(0, 0, width, height);
-        	}
-        } else {
-            // Paint the background
-            if (backgroundColor != null) {
-                graphics.setPaint(backgroundColor);
-                graphics.fillRect(0, 0, width, height);
-            }
-
-            // Paint the bevel
-            if (bevelColor != null) {
-                graphics.setPaint(bevelColor);
-                graphics.drawLine(1, 1, width - 2, 1);
-            }
-        }
+        // Paint the background
+    	if (backgroundColor != null
+			&& bevelColor != null) {
+            graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
+                width / 2, height / 2, backgroundColor));
+            graphics.fillRect(0, 0, width, height);
+    	}
 
         // Paint the border
         if (borderColor != null) {

@@ -405,18 +405,9 @@ public class TerraExpanderSkin extends ContainerSkin
         int titleBarWidth = titleBarFlowPane.getWidth();
         int titleBarHeight = titleBarFlowPane.getHeight();
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        if (theme.useGradients()) {
-            graphics.setPaint(new GradientPaint(titleBarX + titleBarWidth / 2, titleBarY, titleBarBevelColor,
-        		titleBarX + titleBarWidth / 2, titleBarY + titleBarHeight, titleBarBackgroundColor));
-            graphics.fillRect(titleBarX, titleBarY, titleBarWidth, titleBarHeight);
-        } else {
-            graphics.setPaint(titleBarBackgroundColor);
-            graphics.fillRect(titleBarX, titleBarY, titleBarWidth, titleBarHeight);
-
-            graphics.setPaint(titleBarBevelColor);
-            graphics.drawLine(titleBarX, titleBarY, titleBarWidth, titleBarY);
-        }
+        graphics.setPaint(new GradientPaint(titleBarX + titleBarWidth / 2, titleBarY, titleBarBevelColor,
+    		titleBarX + titleBarWidth / 2, titleBarY + titleBarHeight, titleBarBackgroundColor));
+        graphics.fillRect(titleBarX, titleBarY, titleBarWidth, titleBarHeight);
 
         graphics.setPaint(borderColor);
         graphics.drawRect(0, 0, width - 1, height - 1);

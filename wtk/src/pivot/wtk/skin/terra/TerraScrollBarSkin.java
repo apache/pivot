@@ -277,20 +277,15 @@ public class TerraScrollBarSkin extends ContainerSkin
             Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
 
             // Paint the background
-            TerraTheme theme = (TerraTheme)Theme.getTheme();
-            if (theme.useGradients()) {
-                Color gradientStartColor = pressed ? backgroundColor : brightBackgroundColor;
-                Color gradientEndColor = pressed ? brightBackgroundColor : backgroundColor;
+            Color gradientStartColor = pressed ? backgroundColor : brightBackgroundColor;
+            Color gradientEndColor = pressed ? brightBackgroundColor : backgroundColor;
 
-                if (orientation == Orientation.HORIZONTAL) {
-                    graphics.setPaint(new GradientPaint(0, 1, gradientStartColor,
-                        0, height - 2, gradientEndColor));
-                } else {
-                    graphics.setPaint(new GradientPaint(1, 0, gradientStartColor,
-                        width - 2, 0, gradientEndColor));
-                }
+            if (orientation == Orientation.HORIZONTAL) {
+                graphics.setPaint(new GradientPaint(0, 1, gradientStartColor,
+                    0, height - 2, gradientEndColor));
             } else {
-                graphics.setPaint(backgroundColor);
+                graphics.setPaint(new GradientPaint(1, 0, gradientStartColor,
+                    width - 2, 0, gradientEndColor));
             }
 
             graphics.fillRect(1, 1, width - 2, height - 2);
@@ -535,17 +530,12 @@ public class TerraScrollBarSkin extends ContainerSkin
             Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
             Color darkBackgroundColor = TerraTheme.darken(backgroundColor);
 
-            TerraTheme theme = (TerraTheme)Theme.getTheme();
-            if (theme.useGradients()) {
-                if (orientation == Orientation.HORIZONTAL) {
-                    graphics.setPaint(new GradientPaint(0, 1, brightBackgroundColor,
-                        0, height - 2, backgroundColor));
-                } else {
-                    graphics.setPaint(new GradientPaint(1, 0, brightBackgroundColor,
-                        width - 2, 0, backgroundColor));
-                }
+            if (orientation == Orientation.HORIZONTAL) {
+                graphics.setPaint(new GradientPaint(0, 1, brightBackgroundColor,
+                    0, height - 2, backgroundColor));
             } else {
-                graphics.setPaint(backgroundColor);
+                graphics.setPaint(new GradientPaint(1, 0, brightBackgroundColor,
+                    width - 2, 0, backgroundColor));
             }
 
             graphics.fillRect(1, 1, width - 2, height - 2);
@@ -899,25 +889,20 @@ public class TerraScrollBarSkin extends ContainerSkin
 
     @Override
     public void setBackgroundColor(Color backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        if (theme.useGradients()) {
-            ScrollBar scrollBar = (ScrollBar)getComponent();
+        ScrollBar scrollBar = (ScrollBar)getComponent();
 
-            Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
-            GradientPaint gradientPaint;
+        Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
+        GradientPaint gradientPaint;
 
-            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-                gradientPaint = new GradientPaint(0, 1, backgroundColor,
-                    0, DEFAULT_THICKNESS - 2, brightBackgroundColor);
-            } else {
-                gradientPaint = new GradientPaint(1, 0, backgroundColor,
-                    DEFAULT_THICKNESS - 2, 0, brightBackgroundColor);
-            }
-
-            setBackgroundPaint(gradientPaint);
+        if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
+            gradientPaint = new GradientPaint(0, 1, backgroundColor,
+                0, DEFAULT_THICKNESS - 2, brightBackgroundColor);
         } else {
-            super.setBackgroundColor(backgroundColor);
+            gradientPaint = new GradientPaint(1, 0, backgroundColor,
+                DEFAULT_THICKNESS - 2, 0, brightBackgroundColor);
         }
+
+        setBackgroundPaint(gradientPaint);
     }
 
     public int getMinimumHandleLength() {

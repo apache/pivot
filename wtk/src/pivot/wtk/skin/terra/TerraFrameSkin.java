@@ -586,20 +586,9 @@ public class TerraFrameSkin extends WindowSkin {
         Color titleBarBevelColor = window.isActive() ?
             this.titleBarBevelColor : inactiveTitleBarBevelColor;
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        if (theme.useGradients()) {
-            graphics.setPaint(new GradientPaint(width / 2, 0, titleBarBevelColor,
-                width / 2, titleBarHeight + 1, titleBarBackgroundColor));
-            graphics.fillRect(0, 0, width, titleBarHeight + 1);
-        } else {
-            // Draw the background
-            graphics.setPaint(titleBarBackgroundColor);
-            graphics.fillRect(0, 0, width, titleBarHeight + 1);
-
-            // Draw the bevel
-            graphics.setPaint(titleBarBevelColor);
-            graphics.drawLine(1, 1, width - 2, 1);
-        }
+        graphics.setPaint(new GradientPaint(width / 2, 0, titleBarBevelColor,
+            width / 2, titleBarHeight + 1, titleBarBackgroundColor));
+        graphics.fillRect(0, 0, width, titleBarHeight + 1);
 
         // Draw the border
         graphics.setPaint(titleBarBorderColor);
