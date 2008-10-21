@@ -322,6 +322,18 @@ public class TerraTabPaneSkin extends ContainerSkin
             TabButton tabButton = (TabButton)getComponent();
             tabButton.press();
         }
+
+        public Font getFont() {
+        	return buttonFont;
+        }
+
+        public Color getColor() {
+        	return buttonColor;
+        }
+
+        public Color getDisabledColor() {
+        	return buttonColor;
+        }
     }
 
     protected Panorama buttonPanorama = new Panorama();

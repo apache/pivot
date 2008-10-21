@@ -22,6 +22,7 @@ import java.net.URL;
 import pivot.collections.List;
 import pivot.serialization.JSONSerializer;
 import pivot.util.Resources;
+import pivot.wtk.Accordion;
 import pivot.wtk.Alert;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Border;
@@ -90,6 +91,7 @@ public final class TerraTheme extends Theme {
 
         this.scheme = scheme;
 
+        componentSkinMap.put(Accordion.class, TerraAccordionSkin.class);
         componentSkinMap.put(Alert.class, TerraAlertSkin.class);
         componentSkinMap.put(Border.class, TerraBorderSkin.class);
         componentSkinMap.put(Checkbox.class, TerraCheckboxSkin.class);
