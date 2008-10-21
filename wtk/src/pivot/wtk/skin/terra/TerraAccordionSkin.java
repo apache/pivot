@@ -368,9 +368,9 @@ public class TerraAccordionSkin extends ContainerSkin
                 panel.setVisible(true);
 
                 // Set the panel's size and location
-                panel.setSize(Math.max(width - (padding.left + padding.right), 0),
-            		Math.max(contentHeight - (padding.top + padding.bottom), 0));
-                panel.setLocation(padding.left, panelY + padding.top);
+                panel.setSize(Math.max(width - (padding.left + padding.right + 2), 0),
+            		Math.max(contentHeight - (padding.top + padding.bottom + 1), 0));
+                panel.setLocation(padding.left + 1, panelY + padding.top + 1);
 
                 panelY += contentHeight;
             } else {

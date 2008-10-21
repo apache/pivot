@@ -43,9 +43,9 @@ public class TerraFormSkin extends ContainerSkin
     private ArrayList<ArrayList<Label>> labels = new ArrayList<ArrayList<Label>>();
     private ArrayList<ArrayList<ImageView>> flagImageViews = new ArrayList<ArrayList<ImageView>>();
 
-    private boolean rightAlignLabels = false;
+    private boolean rightAlignLabels = true;
     private HorizontalAlignment fieldAlignment = HorizontalAlignment.LEFT;
-    private int horizontalSpacing = 12;
+    private int horizontalSpacing = 6;
     private int verticalSpacing = 6;
     private int flagImageOffset = 4;
     private boolean showFirstSectionHeading = false;
@@ -165,6 +165,7 @@ public class TerraFormSkin extends ContainerSkin
                 || sectionIndex > 0) {
                 Separator separator = separators.get(sectionIndex);
                 preferredHeight += separator.getPreferredHeight(width);
+                preferredHeight += verticalSpacing;
             }
 
             for (int fieldIndex = 0, fieldCount = section.getLength();
@@ -300,7 +301,6 @@ public class TerraFormSkin extends ContainerSkin
                     }
 
                     field.setLocation(fieldX, rowY);
-
                     flagImageView.setLocation(fieldX + field.getWidth() + flagImageOffset,
                         rowY + (rowHeight - flagImageView.getHeight()) / 2);
 
