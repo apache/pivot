@@ -74,55 +74,65 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public int getPreferredWidth(int height) {
-        PushButton pushButton = (PushButton)getComponent();
-        Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
+    	int preferredWidth = 0;
 
-        dataRenderer.render(pushButton.getButtonData(), pushButton, false);
+    	if (height == -1
+			&& !Float.isNaN(preferredAspectRatio)) {
+    		preferredWidth = getPreferredSize().width;
+    	} else {
+            PushButton pushButton = (PushButton)getComponent();
+            Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
 
-        // Include padding in constraint
-        int contentHeight = height;
-        if (contentHeight != -1) {
-            contentHeight = Math.max(contentHeight - (padding.top + padding.bottom + 2), 0);
-        }
+            dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
-        int preferredWidth = dataRenderer.getPreferredWidth(contentHeight)
-            + padding.left + padding.right + 2;
+            // Include padding in constraint
+            int contentHeight = height;
+            if (contentHeight != -1) {
+                contentHeight = Math.max(contentHeight - (padding.top + padding.bottom + 2), 0);
+            }
 
-        // Adjust for preferred aspect ratio
-        if (!Float.isNaN(preferredAspectRatio)
-            && preferredAspectRatio >= 1) {
-            if (height != -1
+            preferredWidth = dataRenderer.getPreferredWidth(contentHeight)
+                + padding.left + padding.right + 2;
+
+            // Adjust for preferred aspect ratio
+            if (!Float.isNaN(preferredAspectRatio)
+                && preferredAspectRatio >= 1
                 && (float)preferredWidth / (float)height < preferredAspectRatio) {
                 preferredWidth = (int)((float)height * preferredAspectRatio);
             }
-        }
+    	}
 
         return preferredWidth;
     }
 
     public int getPreferredHeight(int width) {
-        PushButton pushButton = (PushButton)getComponent();
-        Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
+    	int preferredHeight = 0;
 
-        dataRenderer.render(pushButton.getButtonData(), pushButton, false);
+    	if (width== -1
+			&& !Float.isNaN(preferredAspectRatio)) {
+    		preferredHeight = getPreferredSize().height;
+    	} else {
+            PushButton pushButton = (PushButton)getComponent();
+            Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
 
-        // Include padding in constraint
-        int contentWidth = width;
-        if (contentWidth != -1) {
-            contentWidth = Math.max(contentWidth - (padding.left + padding.right + 2), 0);
-        }
+            dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
-        int preferredHeight = dataRenderer.getPreferredHeight(contentWidth)
-            + padding.top + padding.bottom + 2;
+            // Include padding in constraint
+            int contentWidth = width;
+            if (contentWidth != -1) {
+                contentWidth = Math.max(contentWidth - (padding.left + padding.right + 2), 0);
+            }
 
-        // Adjust for preferred aspect ratio
-        if (!Float.isNaN(preferredAspectRatio)
-            && preferredAspectRatio >= 1) {
-            if (width != -1
+            preferredHeight = dataRenderer.getPreferredHeight(contentWidth)
+                + padding.top + padding.bottom + 2;
+
+            // Adjust for preferred aspect ratio
+            if (!Float.isNaN(preferredAspectRatio)
+                && preferredAspectRatio >= 1
                 && (float)width / (float)preferredHeight < preferredAspectRatio) {
                 preferredHeight = (int)((float)width / preferredAspectRatio);
             }
-        }
+    	}
 
         return preferredHeight;
     }
