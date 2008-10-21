@@ -26,6 +26,8 @@ import pivot.wtk.media.Image;
 /**
  * Container that provides access to a set of components via selectable tabs,
  * only one of which is visible at a time.
+ * <p>
+ * TODO Add a getTabAt() method that delegates to the skin.
  *
  * @author gbrown
  */

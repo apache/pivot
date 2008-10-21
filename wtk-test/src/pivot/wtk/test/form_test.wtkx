@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <Form styles="{rightAlignLabels:true, fieldAlignment:'justify'}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
     <sections>
         <Form.Section heading="Test Section">
 	        <Label Form.name="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."

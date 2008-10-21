@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <Border styles="{backgroundColor:10, thickness:0, padding:8}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
     <content>
         <Border styles="{padding:0}">
             <content>

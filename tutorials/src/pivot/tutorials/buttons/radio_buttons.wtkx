@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <FlowPane orientation="vertical" styles="{padding:4}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
     <RadioButton wtkx:id="oneButton" buttonData="One" group="numbers" selected="true"/>
     <RadioButton wtkx:id="twoButton" buttonData="Two" group="numbers"/>
     <RadioButton wtkx:id="threeButton" buttonData="Three" group="numbers"/>

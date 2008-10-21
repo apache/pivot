@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <TabPane selectedIndex="0"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
     xmlns="pivot.wtk" xmlns:charts="pivot.charts">
     <tabs>
         <wtkx:include src="pie_charts.wtkx" namespace="pieCharts" TabPane.name="Pie Chart"/>

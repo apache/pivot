@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <TablePane styles="{backgroundColor:'#cccac2'}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
     <columns>
         <TablePane.Column width="1*"/>
     </columns>

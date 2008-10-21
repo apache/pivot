@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true, horizontalSpacing:1, verticalSpacing:1}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
     <columns>
         <TablePane.Column width="-1"/>
         <TablePane.Column width="1*"/>

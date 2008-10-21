@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
     <Label text="A Translucent Window"/>
     <Border styles="{color:13, padding:0}">
         <content>

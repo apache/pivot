@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <Border styles="{padding:4}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
     <content>
         <SplitPane orientation="vertical" splitLocation="175"
             preferredWidth="480" preferredHeight="360">

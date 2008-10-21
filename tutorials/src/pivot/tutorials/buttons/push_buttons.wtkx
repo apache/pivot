@@ -16,6 +16,6 @@ limitations under the License.
 -->
 
 <FlowPane styles="{padding:4, horizontalAlignment:'center', verticalAlignment:'center'}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
     <PushButton wtkx:id="pushButton" buttonData="Click Me!"/>
 </FlowPane>

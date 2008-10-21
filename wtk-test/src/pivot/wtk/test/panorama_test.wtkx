@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <TabPane selectedIndex="0"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
     <tabs>
         <Label TabPane.name="Tab 1" preferredWidth="320" preferredHeight="240" text="Tab 1"/>
         <Label TabPane.name="Tab 2" preferredWidth="320" preferredHeight="240" text="Tab 2"/>

@@ -533,9 +533,7 @@ public class TerraAccordionSkin extends ContainerSkin
         int panelIndex = accordion.getPanels().indexOf(panel);
 
         if (panelIndex != -1) {
-            PanelHeader panelHeader =
-                (PanelHeader)panelHeaders.get(panelIndex);
-
+            PanelHeader panelHeader = panelHeaders.get(panelIndex);
             panelHeader.setButtonData(new ButtonData(Accordion.getIcon(panel),
                 Accordion.getName(panel)));
         }
@@ -559,7 +557,7 @@ public class TerraAccordionSkin extends ContainerSkin
         Sequence<PanelHeader> removed = panelHeaders.remove(index, panels.getLength());
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
-            PanelHeader panelHeader = (PanelHeader)removed.get(i);
+            PanelHeader panelHeader = removed.get(i);
             panelHeader.setGroup((Group)null);
             accordion.remove(panelHeader);
         }

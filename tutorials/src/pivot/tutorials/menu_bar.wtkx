@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<MenuBar xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+<MenuBar xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
     xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
     <items>
         <MenuBar.Item buttonData="File">

@@ -18,7 +18,7 @@ limitations under the License.
 <Frame title="Swing Adapter Test"
     preferredWidth="480"
     preferredHeight="360"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
     xmlns:swing="javax.swing"
     xmlns="pivot.wtk">
     <content>

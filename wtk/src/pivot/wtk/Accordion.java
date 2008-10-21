@@ -27,6 +27,8 @@ import pivot.wtk.media.Image;
 /**
  * Component that provides access to a set of components via selectable headers.
  * Only one component is visible at a time.
+ * <p>
+ * TODO Add a getPanelAt() method that delegates to the skin.
  *
  * @author gbrown
  */

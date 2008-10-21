@@ -19,7 +19,7 @@ limitations under the License.
     seriesNameKey="name" title="High Low Chart Example"
     horizontalAxisLabel="Date" verticalAxisLabel="Value"
     styles="{candlestick:true}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
     xmlns:collections="pivot.collections"
     xmlns:content="pivot.charts.content" xmlns:charts="pivot.charts"
     xmlns="pivot.wtk">

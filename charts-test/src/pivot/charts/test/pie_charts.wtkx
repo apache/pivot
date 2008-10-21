@@ -18,7 +18,7 @@ limitations under the License.
 <charts:PieChartView wtkx:id="pieChartView"
     seriesNameKey="name" title="Pie Chart Example"
     styles="{explodePercentages:{a:0.30}}"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
     xmlns:collections="pivot.collections"
     xmlns:content="pivot.charts.content" xmlns:charts="pivot.charts"
     xmlns="pivot.wtk">
