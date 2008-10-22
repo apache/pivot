@@ -46,7 +46,7 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
 
         getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        getStyles().put("padding", new Insets(2));
+        getStyles().put("padding", new Insets(2, 3, 2, 3));
 
         add(imageView);
         add(label);

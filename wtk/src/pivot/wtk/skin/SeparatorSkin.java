@@ -131,7 +131,7 @@ public class SeparatorSkin extends ComponentSkin
             Rectangle2D headingBounds = font.getStringBounds(heading, fontRenderContext);
 
             Area titleClip = new Area(graphics.getClip());
-            titleClip.subtract(new Area(new Rectangle2D.Double(padding.left, 0,
+            titleClip.subtract(new Area(new Rectangle2D.Double(padding.left, padding.top,
                 headingBounds.getWidth() + padding.right, headingBounds.getHeight())));
             graphics.clip(titleClip);
 

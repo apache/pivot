@@ -100,7 +100,7 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     private CloseHandler closeHandler = new CloseHandler();
     private Transition closeTransition = null;
 
-    private static final int CLOSE_TRANSITION_DURATION = 750;
+    private static final int CLOSE_TRANSITION_DURATION = 500;
     private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraTooltipSkin() {
