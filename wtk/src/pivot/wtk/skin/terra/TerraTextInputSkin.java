@@ -388,7 +388,7 @@ public class TerraTextInputSkin extends ComponentSkin
     public int getPreferredHeight(int width) {
         // TODO Recalculate only when font changes
         Rectangle2D maxCharBounds = font.getMaxCharBounds(fontRenderContext);
-        int maxCharHeight = (int)Math.round(maxCharBounds.getHeight());
+        int maxCharHeight = (int)Math.ceil(maxCharBounds.getHeight());
 
         return maxCharHeight + (padding.top + padding.bottom) + 2;
     }

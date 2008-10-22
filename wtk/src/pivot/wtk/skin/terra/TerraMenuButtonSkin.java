@@ -129,7 +129,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             || menuPopup.isOpen()) {
             if (menuButton.isEnabled()) {
                 backgroundColor = this.backgroundColor;
-                bevelColor = (pressed) ? pressedBevelColor : this.bevelColor;
+                bevelColor = (pressed || menuPopup.isOpen()) ? pressedBevelColor : this.bevelColor;
                 borderColor = this.borderColor;
             } else {
                 backgroundColor = disabledBackgroundColor;

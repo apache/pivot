@@ -104,7 +104,7 @@ public class SeparatorSkin extends ComponentSkin
     public void paint(Graphics2D graphics) {
         Separator separator = (Separator)getComponent();
         int width = getWidth();
-        int height = getHeight();
+        int separatorY = padding.top;
 
         String heading = separator.getHeading();
 
@@ -134,11 +134,13 @@ public class SeparatorSkin extends ComponentSkin
             titleClip.subtract(new Area(new Rectangle2D.Double(padding.left, 0,
                 headingBounds.getWidth() + padding.right, headingBounds.getHeight())));
             graphics.clip(titleClip);
+
+            separatorY += (lm.getAscent() + lm.getDescent()) / 2 + 1;
         }
 
         graphics.setStroke(new BasicStroke(thickness));
         graphics.setColor(color);
-        graphics.drawLine(0, height / 2, width, height / 2);
+        graphics.drawLine(0, separatorY, width, separatorY);
     }
 
     /**

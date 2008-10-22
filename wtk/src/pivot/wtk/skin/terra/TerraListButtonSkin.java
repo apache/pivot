@@ -94,6 +94,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         public void windowClosed(Window window, Display display) {
             closeTransition = null;
+            getComponent().requestFocus();
         }
     };
 
@@ -128,7 +129,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         disabledBackgroundColor = theme.getColor(10);
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
-        padding = new Insets(3);
+        padding = new Insets(2, 3, 2, 3);
 
         // Set the derived colors
         bevelColor = TerraTheme.brighten(backgroundColor);
@@ -212,7 +213,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         if (listButton.isEnabled()) {
             backgroundColor = this.backgroundColor;
-            bevelColor = (pressed) ? pressedBevelColor : this.bevelColor;
+            bevelColor = (pressed
+        		|| (listViewPopup.isOpen() && closeTransition == null)) ? pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
         } else {
             backgroundColor = disabledBackgroundColor;

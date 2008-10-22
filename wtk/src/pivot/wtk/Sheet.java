@@ -105,6 +105,17 @@ public class Sheet extends Window {
         installSkin(Sheet.class);
     }
 
+    @Override
+    public void setSize(int width, int height) {
+    	super.setSize(width, height);
+
+        ApplicationContext.queueCallback(new Runnable() {
+            public void run() {
+                alignToOwnerContent();
+            }
+        });
+    }
+
     /**
      * @return
      * <tt>true</tt>; by default, sheets are auxilliary windows.
