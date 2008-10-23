@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="pivot" default="build">
+    <property name="src" value="src"/>
+    <property name="bin" value="bin"/>
+    <property name="starter" value="starter"/>
+
+    <!-- Build starter library -->
+    <target name="build">
+        <mkdir dir="${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${src}"
+            destDir="${bin}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="lib/pivot-core.jar"/>
+                <pathelement location="lib/pivot-web.jar"/>
+                <pathelement location="lib/pivot-wtk.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${ant.project.name}-starter.jar"/>
+        <jar jarfile="${ant.project.name}-starter.jar">
+            <fileset dir="${bin}"/>
+            <fileset dir="${src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Clean the starter classes -->
+    <target name="clean">
+        <delete dir="${bin}"/>
+        <delete file="${ant.project.name}-starter.jar"/>
+    </target>
+</project>

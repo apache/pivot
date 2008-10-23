@@ -456,6 +456,18 @@
             <fileset dir="${web}/${src}"/>
             <fileset dir="${wtk}/${src}"/>
         </zip>
+
+        <delete file="starter.zip"/>
+        <delete dir="starter/${lib}"/>
+        <mkdir dir="starter/${lib}"/>
+        <copy file="${core}/${ant.project.name}-core.jar" todir="starter/${lib}"/>
+        <copy file="${web}/${ant.project.name}-web.jar" todir="starter/${lib}"/>
+        <copy file="${wtk}/${ant.project.name}-wtk.jar" todir="starter/${lib}"/>
+        <copy file="${wtk}/${ant.project.name}-wtk.terra.jar" todir="starter/${lib}"/>
+        <copy file="${wtk}/${lib}/stax-1.2.0.jar" todir="starter/${lib}"/>
+        <copy file="${wtk}/${lib}/stax-api-1.0.jar" todir="starter/${lib}"/>
+        <zip destfile="starter.zip" basedir="."
+            includes="starter/**" excludes="starter/**/.*"/>
     </target>
 
     <!-- Remove trailing white space in all source files -->
