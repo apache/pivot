@@ -2,9 +2,11 @@ package pivot.wtk.skin.obsidian;
 
 import java.awt.Font;
 
+import pivot.wtk.MessageType;
 import pivot.wtk.PushButton;
 import pivot.wtk.RadioButton;
 import pivot.wtk.Theme;
+import pivot.wtk.media.Image;
 
 /**
  * Obsidian theme.
@@ -27,5 +29,13 @@ public final class ObsidianTheme extends Theme {
 
     public Font getFont() {
         return font;
+    }
+
+    public Image getMessageIcon(MessageType messageType) {
+    	return null;
+    }
+
+    public Image getSmallMessageIcon(MessageType messageType) {
+    	return null;
     }
 }

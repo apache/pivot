@@ -32,12 +32,6 @@ public class TextInput extends Component {
      */
     private static class TextInputListenerList extends ListenerList<TextInputListener>
         implements TextInputListener {
-        public void textKeyChanged(TextInput textInput, String previousTextKey) {
-            for (TextInputListener listener : this) {
-                listener.textKeyChanged(textInput, previousTextKey);
-            }
-        }
-
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
             for (TextInputListener listener : this) {
                 listener.textSizeChanged(textInput, previousTextSize);
@@ -53,6 +47,18 @@ public class TextInput extends Component {
         public void passwordChanged(TextInput textInput) {
             for (TextInputListener listener : this) {
                 listener.passwordChanged(textInput);
+            }
+        }
+
+        public void promptChanged(TextInput textInput, String previousPrompt) {
+        	for (TextInputListener listener : this) {
+        		listener.promptChanged(textInput, previousPrompt);
+        	}
+        }
+
+        public void textKeyChanged(TextInput textInput, String previousTextKey) {
+            for (TextInputListener listener : this) {
+                listener.textKeyChanged(textInput, previousTextKey);
             }
         }
     }
@@ -119,6 +125,7 @@ public class TextInput extends Component {
     private int textSize = DEFAULT_TEXT_SIZE;
     private int maximumLength = Integer.MAX_VALUE;
     private boolean password = false;
+    private String prompt = null;
     private String textKey = null;
 
     private TextInputListenerList textInputListeners = new TextInputListenerList();
@@ -490,6 +497,28 @@ public class TextInput extends Component {
             this.password = password;
             textInputListeners.passwordChanged(this);
         }
+    }
+
+    /**
+     * Returns the text input's prompt.
+     */
+    public String getPrompt() {
+    	return prompt;
+    }
+
+    /**
+     * Sets the text input's prompt.
+     *
+     * @param prompt
+     * The prompt text, or <tt>null</tt> for no prompt.
+     */
+    public void setPrompt(String prompt) {
+    	String previousPrompt = this.prompt;
+
+    	if (previousPrompt != prompt) {
+    		this.prompt = prompt;
+    		textInputListeners.promptChanged(this, previousPrompt);
+    	}
     }
 
     /**

@@ -185,22 +185,22 @@ public final class TerraTheme extends Theme {
 
         switch (messageType) {
             case ERROR: {
-                messageIconName = JSONSerializer.getString(resources, "errorIcon");
+                messageIconName = "message_type-error-32x32.png";
                 break;
             }
 
             case WARNING: {
-                messageIconName = JSONSerializer.getString(resources, "warningIcon");
+                messageIconName = "message_type-warning-32x32.png";
                 break;
             }
 
             case QUESTION: {
-                messageIconName = JSONSerializer.getString(resources, "questionIcon");
+                messageIconName = "message_type-question-32x32.png";
                 break;
             }
 
             case INFO: {
-                messageIconName = JSONSerializer.getString(resources, "infoIcon");
+                messageIconName = "message_type-info-32x32.png";
                 break;
             }
 
@@ -234,22 +234,22 @@ public final class TerraTheme extends Theme {
 
         switch (messageType) {
             case ERROR: {
-                smallMessageIconName = JSONSerializer.getString(resources, "smallErrorIcon");
+                smallMessageIconName = "message_type-error-16x16.png";
                 break;
             }
 
             case WARNING: {
-                smallMessageIconName = JSONSerializer.getString(resources, "smallWarningIcon");
+                smallMessageIconName = "message_type-warning-16x16.png";
                 break;
             }
 
             case QUESTION: {
-                smallMessageIconName = JSONSerializer.getString(resources, "smallQuestionIcon");
+                smallMessageIconName = "message_type-question-16x16.png";
                 break;
             }
 
             case INFO: {
-                smallMessageIconName = JSONSerializer.getString(resources, "smallInfoIcon");
+                smallMessageIconName = "message_type-info-16x16.png";
                 break;
             }
 

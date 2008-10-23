@@ -311,6 +311,7 @@ public class TerraTextInputSkin extends ComponentSkin
     private Font font;
     private Color color;
     private Color disabledColor;
+    private Color promptColor;
     private Color backgroundColor;
     private Color disabledBackgroundColor;
     private Color borderColor;
@@ -330,6 +331,7 @@ public class TerraTextInputSkin extends ComponentSkin
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         font = theme.getFont();
         color = theme.getColor(1);
+        promptColor = theme.getColor(7);
         disabledColor = theme.getColor(7);
         backgroundColor = theme.getColor(11);
         disabledBackgroundColor = theme.getColor(10);
@@ -439,12 +441,24 @@ public class TerraTextInputSkin extends ComponentSkin
         // Paint the content
         String text = getText();
 
+        boolean prompt = false;
+        if (text.length() == 0
+    		&& !textInput.isFocused()) {
+        	text = textInput.getPrompt();
+
+        	if (text == null) {
+        		text = "";
+        	} else {
+        		prompt = true;
+        	}
+        }
+
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         int ascent = Math.round(lm.getAscent());
 
         graphics.translate(padding.left - scrollLeft + 1, padding.top + ascent + 1);
 
-        if (textInput.getCharacterCount() > 0) {
+        if (text.length() > 0) {
             // Paint the text
             if (fontRenderContext.isAntiAliased()) {
                 // TODO Use VALUE_TEXT_ANTIALIAS_LCD_HRGB when JDK 1.6 is
@@ -459,7 +473,7 @@ public class TerraTextInputSkin extends ComponentSkin
             }
 
             graphics.setFont(font);
-            graphics.setPaint(color);
+            graphics.setPaint(prompt ? promptColor : color);
             graphics.drawString(text, 0, 0);
 
             if (textInput.getSelectionLength() > 0) {
@@ -588,6 +602,32 @@ public class TerraTextInputSkin extends ComponentSkin
         setColor(theme.getColor(color));
     }
 
+    public Color getPromptColor() {
+        return promptColor;
+    }
+
+    public void setPromptColor(Color promptColor) {
+        if (promptColor == null) {
+            throw new IllegalArgumentException("promptColor is null.");
+        }
+
+        this.promptColor = promptColor;
+        repaintComponent();
+    }
+
+    public final void setPromptColor(String promptColor) {
+        if (promptColor == null) {
+            throw new IllegalArgumentException("promptColor is null.");
+        }
+
+        setPromptColor(decodeColor(promptColor));
+    }
+
+    public final void setPromptColor(int promptColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setPromptColor(theme.getColor(promptColor));
+    }
+
     public Color getDisabledColor() {
         return disabledColor;
     }
@@ -607,6 +647,11 @@ public class TerraTextInputSkin extends ComponentSkin
         }
 
         setDisabledColor(decodeColor(disabledColor));
+    }
+
+    public final void setDisabledColor(int disabledColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledColor(theme.getColor(disabledColor));
     }
 
     public Color getBackgroundColor() {
@@ -631,6 +676,11 @@ public class TerraTextInputSkin extends ComponentSkin
         setBackgroundColor(decodeColor(backgroundColor));
     }
 
+    public final void setBackgroundColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(color));
+    }
+
     public Color getDisabledBackgroundColor() {
         return disabledBackgroundColor;
     }
@@ -651,6 +701,11 @@ public class TerraTextInputSkin extends ComponentSkin
         }
 
         setDisabledBackgroundColor(decodeColor(disabledBackgroundColor));
+    }
+
+    public final void setDisabledBackgroundColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledBackgroundColor(theme.getColor(color));
     }
 
     public Color getBorderColor() {
@@ -674,6 +729,11 @@ public class TerraTextInputSkin extends ComponentSkin
         setBorderColor(decodeColor(borderColor));
     }
 
+    public final void setBorderColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBorderColor(theme.getColor(color));
+    }
+
     public Color getDisabledBorderColor() {
         return disabledBorderColor;
     }
@@ -693,6 +753,11 @@ public class TerraTextInputSkin extends ComponentSkin
         }
 
         setDisabledBorderColor(decodeColor(disabledBorderColor));
+    }
+
+    public final void setDisabledBorderColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledBorderColor(theme.getColor(color));
     }
 
     public Color getSelectionColor() {
@@ -716,6 +781,11 @@ public class TerraTextInputSkin extends ComponentSkin
         setSelectionColor(decodeColor(selectionColor));
     }
 
+    public final void setSelectionColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setSelectionColor(theme.getColor(color));
+    }
+
     public Color getSelectionBackgroundColor() {
         return selectionBackgroundColor;
     }
@@ -735,6 +805,11 @@ public class TerraTextInputSkin extends ComponentSkin
         }
 
         setSelectionBackgroundColor(decodeColor(selectionBackgroundColor));
+    }
+
+    public final void setSelectionBackgroundColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setSelectionBackgroundColor(theme.getColor(color));
     }
 
     public Color getInactiveSelectionColor() {
@@ -758,6 +833,11 @@ public class TerraTextInputSkin extends ComponentSkin
         setInactiveSelectionColor(decodeColor(inactiveSelectionColor));
     }
 
+    public final void setInactiveSelectionColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInactiveSelectionColor(theme.getColor(color));
+    }
+
     public Color getInactiveSelectionBackgroundColor() {
         return inactiveSelectionBackgroundColor;
     }
@@ -777,6 +857,11 @@ public class TerraTextInputSkin extends ComponentSkin
         }
 
         setInactiveSelectionBackgroundColor(decodeColor(inactiveSelectionBackgroundColor));
+    }
+
+    public final void setInactiveSelectionBackgroundColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInactiveSelectionBackgroundColor(theme.getColor(color));
     }
 
     public Insets getPadding() {
@@ -1066,10 +1151,6 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
     // Text input events
-    public void textKeyChanged(TextInput textInput, String previousTextKey) {
-        // No-op
-    }
-
     public void textSizeChanged(TextInput textInput, int previousTextSize) {
         invalidateComponent();
     }
@@ -1080,6 +1161,14 @@ public class TerraTextInputSkin extends ComponentSkin
 
     public void passwordChanged(TextInput textInput) {
         repaintComponent();
+    }
+
+    public void promptChanged(TextInput textInput, String previousPrompt) {
+    	repaintComponent();
+    }
+
+    public void textKeyChanged(TextInput textInput, String previousTextKey) {
+        // No-op
     }
 
     // Text input character events

@@ -20,6 +20,7 @@ import java.lang.reflect.Modifier;
 
 import pivot.collections.ArrayList;
 import pivot.collections.HashMap;
+import pivot.wtk.media.Image;
 import pivot.wtk.skin.BorderSkin;
 import pivot.wtk.skin.CardPaneSkin;
 import pivot.wtk.skin.FlowPaneSkin;
@@ -78,6 +79,8 @@ public abstract class Theme {
     public abstract void uninstall();
 
     public abstract Font getFont();
+    public abstract Image getMessageIcon(MessageType messageType);
+    public abstract Image getSmallMessageIcon(MessageType messageType);
 
     public static Theme getTheme() {
         if (theme == null) {

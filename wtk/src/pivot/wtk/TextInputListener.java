@@ -22,14 +22,6 @@ package pivot.wtk;
  */
 public interface TextInputListener {
     /**
-     * Called when a text input's text key has changed.
-     *
-     * @param textInput
-     * @param previousTextKey
-     */
-    public void textKeyChanged(TextInput textInput, String previousTextKey);
-
-    /**
      * Called when a text input's text size has changed.
      *
      * @param textInput
@@ -51,4 +43,20 @@ public interface TextInputListener {
      * @param textInput
      */
     public void passwordChanged(TextInput textInput);
+
+    /**
+     * Called when a text input's prompt has changed.
+     *
+     * @param textInput
+     * @param previousPrompt
+     */
+    public void promptChanged(TextInput textInput, String previousPrompt);
+
+    /**
+     * Called when a text input's text key has changed.
+     *
+     * @param textInput
+     * @param previousTextKey
+     */
+    public void textKeyChanged(TextInput textInput, String previousTextKey);
 }

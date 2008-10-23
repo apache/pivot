@@ -59,7 +59,7 @@
                         </view>
 
                         <columnHeader>
-                            <TableViewHeader tableView="$stocksTableView" />
+                            <TableViewHeader tableView="$stocksTableView" styles="{headersPressable:false}"/>
                         </columnHeader>
                     </ScrollPane>
                 </content>
