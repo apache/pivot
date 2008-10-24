@@ -29,6 +29,11 @@ public class TerraTablePaneSkin extends TablePaneSkin {
         setSelectionBackgroundColor(10);
     }
 
+    public final void setBackgroundColor(int backgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(backgroundColor));
+    }
+
     public final void setGridColor(int gridColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setGridColor(theme.getColor(gridColor));

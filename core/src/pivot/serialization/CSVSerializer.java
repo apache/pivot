@@ -45,8 +45,6 @@ import pivot.collections.Sequence;
  * @author gbrown
  */
 public class CSVSerializer implements Serializer {
-    public static final String MIME_TYPE = "text/csv";
-
     /**
      * Class representing the serializers key sequence.
      */
@@ -84,13 +82,22 @@ public class CSVSerializer implements Serializer {
         }
     }
 
+	private int initialListCapacity;
+
     private ArrayList<String> keys = new ArrayList<String>();
     private KeySequence keySequence = new KeySequence();
+
+    public static final String MIME_TYPE = "text/csv";
 
     int c = -1;
     private Class<?> itemClass = HashMap.class;
 
     public CSVSerializer() {
+    	this(100);
+    }
+
+    public CSVSerializer(int initialListCapacity) {
+    	this.initialListCapacity = initialListCapacity;
     }
 
     /**
@@ -152,7 +159,7 @@ public class CSVSerializer implements Serializer {
      */
     public Object readObject(Reader reader)
         throws IOException, SerializationException {
-        ArrayList<Dictionary<String, Object>> items = new ArrayList<Dictionary<String, Object>>();
+        ArrayList<Dictionary<String, Object>> items = new ArrayList<Dictionary<String, Object>>(initialListCapacity);
 
         // Move to the first character
         c = reader.read();
