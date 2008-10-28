@@ -11,5 +11,7 @@
 	<classpathentry kind="lib" path="lib/gdata-contacts-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/gdata-contacts-meta-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/gdata-core-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/smack.jar"/>
+	<classpathentry kind="lib" path="lib/smackx.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

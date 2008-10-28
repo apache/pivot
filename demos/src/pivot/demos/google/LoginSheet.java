@@ -2,6 +2,9 @@ package pivot.demos.google;
 
 import java.io.IOException;
 
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
+
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.util.AuthenticationException;
 
@@ -46,7 +49,12 @@ public class LoginSheet extends Sheet {
 		public Void execute() throws TaskExecutionException {
 			try {
 				contactsService.setUserCredentials(username, password);
+
+				xmppConnection.connect();
+				xmppConnection.login(username, password);
 			} catch(AuthenticationException exception) {
+				throw new TaskExecutionException(exception);
+			} catch(XMPPException exception) {
 				throw new TaskExecutionException(exception);
 			}
 
@@ -54,7 +62,9 @@ public class LoginSheet extends Sheet {
 		}
 	}
 
-	private ContactsService contactsService = null;
+	private ContactsService contactsService;
+	private XMPPConnection xmppConnection;
+
 	private boolean authenticated = false;
 
 	private Form userCredentialsForm;
@@ -64,9 +74,10 @@ public class LoginSheet extends Sheet {
 	private PushButton okButton;
 	private PushButton cancelButton;
 
-	public LoginSheet(ContactsService contactsService)
+	public LoginSheet(ContactsService contactsService, XMPPConnection xmppConnection)
 		throws IOException, SerializationException {
 		this.contactsService = contactsService;
+		this.xmppConnection = xmppConnection;
 
 		WTKXSerializer wtkxSerializer = new WTKXSerializer();
 		Component content = (Component)wtkxSerializer.readObject(getClass().getResource("login.wtkx"));
