@@ -15,6 +15,8 @@
  */
 package pivot.serialization;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,6 +25,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
@@ -82,22 +85,31 @@ public class CSVSerializer implements Serializer {
         }
     }
 
-	private int initialListCapacity;
+	private Charset charset;
 
     private ArrayList<String> keys = new ArrayList<String>();
     private KeySequence keySequence = new KeySequence();
 
     public static final String MIME_TYPE = "text/csv";
+    public static final int BUFFER_SIZE = 2048;
 
     int c = -1;
     private Class<?> itemClass = HashMap.class;
 
     public CSVSerializer() {
-    	this(100);
+        this(Charset.defaultCharset());
     }
 
-    public CSVSerializer(int initialListCapacity) {
-    	this.initialListCapacity = initialListCapacity;
+    public CSVSerializer(String charsetName) {
+        this(Charset.forName(charsetName));
+    }
+
+    public CSVSerializer(Charset charset) {
+        if (charset == null) {
+            throw new IllegalArgumentException("charset is null.");
+        }
+
+    	this.charset = charset;
     }
 
     /**
@@ -140,7 +152,7 @@ public class CSVSerializer implements Serializer {
     @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
-        Reader reader = new InputStreamReader(inputStream);
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
         Object object = readObject(reader);
 
         return object;
@@ -159,7 +171,7 @@ public class CSVSerializer implements Serializer {
      */
     public Object readObject(Reader reader)
         throws IOException, SerializationException {
-        ArrayList<Dictionary<String, Object>> items = new ArrayList<Dictionary<String, Object>>(initialListCapacity);
+        ArrayList<Dictionary<String, Object>> items = new ArrayList<Dictionary<String, Object>>();
 
         // Move to the first character
         c = reader.read();
@@ -274,7 +286,7 @@ public class CSVSerializer implements Serializer {
         Writer writer = null;
 
         try {
-            writer = new OutputStreamWriter(outputStream);
+            writer = new BufferedWriter(new OutputStreamWriter(outputStream), BUFFER_SIZE);
             writeObject(object, writer);
         } finally {
             if (writer != null) {

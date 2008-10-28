@@ -124,8 +124,8 @@ public class Alert extends Dialog {
     }
 
     public static void alert(String message, Display display,
-        DialogStateListener dialogStateListener) {
-        alert(MessageType.INFO, message, display, dialogStateListener);
+        DialogCloseListener dialogCloseListener) {
+        alert(MessageType.INFO, message, display, dialogCloseListener);
     }
 
     public static void alert(MessageType type, String message, Display display) {
@@ -133,9 +133,9 @@ public class Alert extends Dialog {
     }
 
     public static void alert(MessageType type, String message, Display display,
-        DialogStateListener dialogStateListener) {
+        DialogCloseListener dialogCloseListener) {
         Alert alert = createAlert(type, message);
-        alert.open(display, dialogStateListener);
+        alert.open(display, dialogCloseListener);
     }
 
     public static void alert(String message, Window owner) {
@@ -143,8 +143,8 @@ public class Alert extends Dialog {
     }
 
     public static void alert(String message, Window owner,
-        DialogStateListener dialogStateListener) {
-        alert(MessageType.INFO, message, owner, dialogStateListener);
+		DialogCloseListener dialogCloseListener) {
+        alert(MessageType.INFO, message, owner, dialogCloseListener);
     }
 
     public static void alert(MessageType type, String message, Window owner) {
@@ -152,9 +152,9 @@ public class Alert extends Dialog {
     }
 
     public static void alert(MessageType type, String message, Window owner,
-        DialogStateListener dialogStateListener) {
+		DialogCloseListener dialogCloseListener) {
         Alert alert = createAlert(type, message);
-        alert.open(owner, dialogStateListener);
+        alert.open(owner, dialogCloseListener);
     }
 
     private static Alert createAlert(MessageType type, String message) {

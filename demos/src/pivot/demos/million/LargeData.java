@@ -35,7 +35,7 @@ import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
 public class LargeData implements Application {
-    private Window window = null;
+	private Window window = null;
 
     private ListButton fileListButton = null;
     private PushButton loadDataButton = null;
@@ -48,10 +48,10 @@ public class LargeData implements Application {
 
     public static final String SERVICE_HOSTNAME = "localhost";
     public static final int SERVICE_PORT = -1;
-    public static final String SERVICE_PATH_PREFIX = "/~greg/portfolio/million/assets/";
+    public static final String SERVICE_PATH_PREFIX = "/~greg/assets/";
 
     public LargeData() {
-    	csvSerializer = new CSVSerializer(10000);
+    	csvSerializer = new CSVSerializer("ISO-8859-1");
     	csvSerializer.getKeys().add("c0");
     	csvSerializer.getKeys().add("c1");
     	csvSerializer.getKeys().add("c2");
@@ -118,10 +118,11 @@ public class LargeData implements Application {
         getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
             public void taskExecuted(Task<Object> task) {
                 if (task == getQuery) {
-                    tableView.setTableData((List<?>)task.getResult());
-
                     long endTime = System.currentTimeMillis();
                     statusLabel.setText("Data loaded in " + (endTime - startTime) + " ms.");
+
+                    tableView.setTableData((List<?>)task.getResult());
+
                     getQuery = null;
                     loadDataButton.setEnabled(true);
                 }

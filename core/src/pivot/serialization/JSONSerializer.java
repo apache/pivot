@@ -15,6 +15,8 @@
  */
 package pivot.serialization;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,6 +49,7 @@ public class JSONSerializer implements Serializer {
     private boolean alwaysDelimitMapKeys = false;
 
     public static final String MIME_TYPE = "application/json";
+    public static final int BUFFER_SIZE = 2048;
 
     public JSONSerializer() {
         this(Charset.defaultCharset());
@@ -74,7 +77,7 @@ public class JSONSerializer implements Serializer {
      */
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
-        Reader reader = new InputStreamReader(inputStream, charset);
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
         Object object = readObject(reader);
 
         return object;
@@ -378,7 +381,7 @@ public class JSONSerializer implements Serializer {
         Writer writer = null;
 
         try {
-            writer = new OutputStreamWriter(outputStream, charset);
+            writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset), BUFFER_SIZE);
             writeObject(object, writer);
         } finally {
             if (writer != null) {

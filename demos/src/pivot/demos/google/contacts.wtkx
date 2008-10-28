@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Border styles="{thickness:0, padding:6, backgroundColor:11}"
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+    xmlns:google="pivot.demos.google" xmlns="pivot.wtk">
+    <content>
+        <SplitPane splitLocation="220">
+            <left>
+                <Border styles="{padding:0}">
+                    <content>
+                        <ListView wtkx:id="contactListView" selectMode="single">
+                            <itemRenderer>
+                                <google:ContactListViewItemRenderer/>
+                            </itemRenderer>
+                        </ListView>
+                    </content>
+                </Border>
+            </left>
+            <right>
+                <Border styles="{padding:6}">
+                    <content>
+                        <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
+                            <Label wtkx:id="nameLabel" styles="{fontSize:14, fontBold:true}"/>
+                            <Form styles="{showFirstSectionHeading:true}">
+                                <sections>
+                                    <Form.Section heading="Address" wtkx:id="addressSection"/>
+                                    <Form.Section heading="Phone Number" wtkx:id="phoneNumberSection"/>
+                                    <Form.Section heading="Email Address" wtkx:id="emailAddressSection"/>
+                                    <Form.Section heading="IM Account" wtkx:id="imAccountSection"/>
+                                </sections>
+                            </Form>
+                        </FlowPane>
+                    </content>
+                </Border>
+            </right>
+        </SplitPane>
+    </content>
+</Border>

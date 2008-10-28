@@ -142,6 +142,13 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
     }
 
     /**
+     * Returns the bean object this dictionary wraps.
+     */
+    public Object getBean() {
+    	return bean;
+    }
+
+    /**
      * Invokes the getter method for the given property.
      *
      * @param key

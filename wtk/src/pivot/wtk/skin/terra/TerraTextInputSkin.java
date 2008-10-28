@@ -409,9 +409,9 @@ public class TerraTextInputSkin extends ComponentSkin
         int width = getWidth();
         int height = getHeight();
 
-        Color backgroundColor = null;
-        Color borderColor = null;
-        Color bevelColor = null;
+        Color backgroundColor;
+        Color borderColor;
+        Color bevelColor;
 
         if (textInput.isEnabled()) {
             backgroundColor = this.backgroundColor;
@@ -472,8 +472,15 @@ public class TerraTextInputSkin extends ComponentSkin
                     RenderingHints.VALUE_FRACTIONALMETRICS_ON);
             }
 
+            Color color;
+            if (textInput.isEnabled()) {
+            	color = prompt ? promptColor : this.color;
+            } else {
+            	color = disabledColor;
+            }
+
             graphics.setFont(font);
-            graphics.setPaint(prompt ? promptColor : color);
+            graphics.setPaint(color);
             graphics.drawString(text, 0, 0);
 
             if (textInput.getSelectionLength() > 0) {
