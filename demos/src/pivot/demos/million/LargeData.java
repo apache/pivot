@@ -15,6 +15,8 @@
  */
 package pivot.demos.million;
 
+import java.net.URL;
+
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.serialization.CSVSerializer;
@@ -22,6 +24,7 @@ import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskListener;
 import pivot.web.GetQuery;
 import pivot.wtk.Application;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Display;
@@ -45,10 +48,6 @@ public class LargeData implements Application {
 
     private GetQuery getQuery = null;
     private CSVSerializer csvSerializer;
-
-    public static final String SERVICE_HOSTNAME = "localhost";
-    public static final int SERVICE_PORT = -1;
-    public static final String SERVICE_PATH_PREFIX = "/~greg/assets/";
 
     public LargeData() {
     	csvSerializer = new CSVSerializer("ISO-8859-1");
@@ -106,7 +105,9 @@ public class LargeData implements Application {
     private void loadData() {
     	String fileName = (String)fileListButton.getSelectedValue();
 
-    	getQuery = new GetQuery(SERVICE_HOSTNAME, SERVICE_PORT, SERVICE_PATH_PREFIX + fileName, false);
+    	URL origin = ApplicationContext.getOrigin();
+    	System.out.println(origin);
+    	getQuery = new GetQuery(origin.getHost(), origin.getPort(), "/demos/assets/" + fileName, false);
     	String location = getQuery.getLocation().toString();
     	statusLabel.setText("Loading data from " + location);
     	System.out.println(location);

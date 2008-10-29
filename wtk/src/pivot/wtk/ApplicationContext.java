@@ -517,6 +517,8 @@ public abstract class ApplicationContext {
         }
     }
 
+    protected static URL origin = null;
+
     private Display display = null;
     private DisplayHost displayHost = null;
     private DragDropManager dragDropManager = null;
@@ -628,6 +630,13 @@ public abstract class ApplicationContext {
      */
     public static ResourceCacheDictionary getResourceCache() {
         return resourceCacheDictionary;
+    }
+    
+    /**
+     * Returns this application's origin (the URL of it's originating server).
+     */
+    public static URL getOrigin() {
+    	return origin;
     }
 
     /**

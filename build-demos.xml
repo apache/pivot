@@ -26,6 +26,14 @@
                 <pathelement location="core/pivot-core.jar"/>
                 <pathelement location="web/pivot-web.jar"/>
                 <pathelement location="wtk/pivot-wtk.jar"/>
+                <pathelement location="demos/lib/gdata-base-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-client-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-client-meta-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-contacts-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-contacts-meta-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-core-1.0.jar"/>
+                <pathelement location="demos/lib/smack.jar"/>
+                <pathelement location="demos/lib/smackx.jar"/>
             </classpath>
         </javac>
 

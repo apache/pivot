@@ -29,7 +29,7 @@ limitations under the License.
                     <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
                         <FlowPane>
                             <ListButton wtkx:id="fileListButton"
-                                listData="['10_thousand.csv', '100_thousand.csv', '1_million.csv']" selectedIndex="0"/>
+                                listData="['10_thousand.csv', '100_thousand.csv']" selectedIndex="0"/>
                             <PushButton wtkx:id="loadDataButton" buttonData="Load Data" styles="{preferredAspectRatio:2.5}"/>
                         </FlowPane>
                         <Label wtkx:id="statusLabel"/>
