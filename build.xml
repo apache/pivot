@@ -458,8 +458,7 @@
         </zip>
 
         <delete file="starter.zip"/>
-        <delete dir="starter/${lib}"/>
-        <mkdir dir="starter/${lib}"/>
+        <delete dir="starter/${lib}" includes="*.jar"/>
         <copy file="${core}/${ant.project.name}-core.jar" todir="starter/${lib}"/>
         <copy file="${web}/${ant.project.name}-web.jar" todir="starter/${lib}"/>
         <copy file="${wtk}/${ant.project.name}-wtk.jar" todir="starter/${lib}"/>

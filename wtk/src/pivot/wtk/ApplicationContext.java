@@ -448,7 +448,9 @@ public abstract class ApplicationContext {
             switch (event.getID()) {
                 case KeyEvent.KEY_TYPED: {
                     if (focusedComponent != null) {
-                        focusedComponent.keyTyped(event.getKeyChar());
+                    	char keyChar = event.getKeyChar();
+                    	System.out.println(keyChar);
+                        focusedComponent.keyTyped(keyChar);
                     }
 
                     break;
@@ -462,7 +464,9 @@ public abstract class ApplicationContext {
                         consumed = focusedComponent.keyPressed(keyCode, keyLocation);
                     }
 
-                    if (!consumed) {
+                    if (consumed) {
+                    	event.consume();
+                    } else {
                         dragDropManager.keyPressed(keyCode, keyLocation);
                     }
 
@@ -477,16 +481,15 @@ public abstract class ApplicationContext {
                         consumed = focusedComponent.keyReleased(keyCode, keyLocation);
                     }
 
-                    if (!consumed) {
+                    if (consumed) {
+                    	event.consume();
+                    } else {
                         dragDropManager.keyReleased(keyCode, keyLocation);
                     }
 
                     break;
                 }
             }
-
-            // Consume the event
-            event.consume();
         }
     }
 
