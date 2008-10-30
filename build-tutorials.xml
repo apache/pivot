@@ -7,7 +7,7 @@
     <!-- Compiler properties -->
     <property name="compiler.optimize" value="true"/>
     <property name="compiler.deprecation" value="true"/>
-    <property name="compiler.debug" value="true"/>
+    <property name="compiler.debug" value="false"/>
 
     <!-- Build tutorials library -->
     <target name="build">

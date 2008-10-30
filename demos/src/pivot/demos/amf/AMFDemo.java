@@ -11,6 +11,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Display;
 import pivot.wtk.PushButton;
 import pivot.wtk.TableView;
+import pivot.wtk.TableViewHeader;
 import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
@@ -18,6 +19,7 @@ public class AMFDemo implements Application {
 	private Window window = null;
 
 	private TableView productTableView = null;
+	private TableViewHeader productTableViewHeader = null;
 	private PushButton getDataButton = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
@@ -26,6 +28,10 @@ public class AMFDemo implements Application {
         window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("amf_demo.wtkx")));
 
         productTableView = (TableView)wtkxSerializer.getObjectByName("productTableView");
+
+        productTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("productTableViewHeader");
+        productTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler());
+
         getDataButton = (PushButton)wtkxSerializer.getObjectByName("getDataButton");
 
         getDataButton.getButtonPressListeners().add(new ButtonPressListener() {

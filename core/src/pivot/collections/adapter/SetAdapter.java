@@ -70,10 +70,6 @@ public class SetAdapter<E> implements Set<E> {
         return null;
     }
 
-    /**
-     * NOTE This method is not supported because it cannot be efficiently
-     * implemented for all set types.
-     */
     public void setComparator(Comparator<E> comparator) {
         throw new UnsupportedOperationException();
     }

@@ -86,10 +86,6 @@ public class MapAdapter<K, V> implements Map<K, V> {
         return null;
     }
 
-    /**
-     * NOTE This method is not supported because it cannot be efficiently
-     * implemented for all map types.
-     */
     public void setComparator(Comparator<K> comparator) {
         throw new UnsupportedOperationException();
     }

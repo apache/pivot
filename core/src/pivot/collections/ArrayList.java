@@ -16,6 +16,7 @@
 package pivot.collections;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -34,8 +35,6 @@ public class ArrayList<T> implements List<T>, Serializable {
     public static final long serialVersionUID = 0;
 
     protected java.util.ArrayList<T> arrayList = null;
-
-    private transient boolean sorting = false;
 
     private Comparator<T> comparator = null;
     private transient ListListenerList<T> listListeners = new ListListenerList<T>();
@@ -109,9 +108,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         T previousItem = arrayList.get(index);
         arrayList.set(index, item);
 
-        if (!sorting) {
-            listListeners.itemUpdated(this, index, previousItem);
-        }
+        listListeners.itemUpdated(this, index, previousItem);
 
         return previousItem;
     }
@@ -183,13 +180,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         if (previousComparator != comparator) {
             if (comparator != null) {
-                // Temporarily clear the comparator so it doesn't interfere
-                // with the sort
-                this.comparator = null;
-
-                sorting = true;
-                Sort.quickSort(this, comparator);
-                sorting = false;
+            	Collections.sort(arrayList, comparator);
             }
 
             this.comparator = comparator;
@@ -204,6 +195,8 @@ public class ArrayList<T> implements List<T>, Serializable {
         // increment the count - the iterator will retain a copy of the modifier count
         // when it is created. We can potentially reset the modifier count when all
         // outstanding iterators are finalized.
+
+    	// TODO Alternatively, we could just return an immutable iterator
 
         return arrayList.iterator();
     }

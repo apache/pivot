@@ -15,6 +15,7 @@
  */
 package pivot.wtk.content;
 
+import pivot.beans.BeanDictionary;
 import pivot.collections.Dictionary;
 import pivot.wtk.ImageView;
 import pivot.wtk.TableView;
@@ -61,7 +62,13 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
         // Get the row and cell data
         String columnName = column.getName();
         if (columnName != null) {
-            Dictionary<String, Object> rowData = (Dictionary<String, Object>)value;
+            Dictionary<String, Object> rowData;
+            if (value instanceof Dictionary<?, ?>) {
+            	rowData = (Dictionary<String, Object>)value;
+            } else {
+            	rowData = new BeanDictionary(value);
+            }
+
             Object cellData = rowData.get(columnName);
 
             if (cellData instanceof Image) {

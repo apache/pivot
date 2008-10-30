@@ -17,6 +17,7 @@ package pivot.wtk;
 
 import java.util.Comparator;
 
+import pivot.beans.BeanDictionary;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
@@ -453,7 +454,7 @@ public class TableView extends Component {
      * <p>
      * TODO Allow a caller to sort on multiple columns.
      */
-    public static class RowComparator implements Comparator<Dictionary<String, ?>> {
+    public static class RowComparator implements Comparator<Object> {
         private String columnName = null;
         private SortDirection sortDirection = null;
 
@@ -463,7 +464,21 @@ public class TableView extends Component {
         }
 
         @SuppressWarnings("unchecked")
-        public int compare(Dictionary<String, ?> row1, Dictionary<String, ?> row2) {
+        public int compare(Object o1, Object o2) {
+        	Dictionary<String, ?> row1;
+        	if (o1 instanceof Dictionary<?, ?>) {
+        		row1 = (Dictionary<String, ?>)o1;
+        	} else {
+        		row1 = new BeanDictionary(o1);
+        	}
+
+        	Dictionary<String, ?> row2;
+        	if (o2 instanceof Dictionary<?, ?>) {
+        		row2 = (Dictionary<String, ?>)o2;
+        	} else {
+        		row2 = new BeanDictionary(o2);
+        	}
+
             Comparable<Object> comparable = (Comparable<Object>)row1.get(columnName);
             Object value = row2.get(columnName);
 
@@ -496,8 +511,7 @@ public class TableView extends Component {
                 sortDirection = SortDirection.DESCENDING;
             }
 
-            List<Dictionary<String, ?>> tableData =
-                (List<Dictionary<String, ?>>)tableView.getTableData();
+            List<Object> tableData = (List<Object>)tableView.getTableData();
             tableData.setComparator(new TableView.RowComparator(column.getName(), sortDirection));
 
             for (int i = 0, n = columns.getLength(); i < n; i++) {

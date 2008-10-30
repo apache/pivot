@@ -15,6 +15,7 @@
  */
 package pivot.collections.adapter;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import pivot.collections.List;
@@ -29,6 +30,8 @@ import pivot.util.ListenerList;
  */
 public final class ListAdapter<T> implements List<T> {
     private java.util.List<T> list = null;
+    private Comparator<T> comparator = null;
+
     private ListListenerList<T> listListeners = new ListListenerList<T>();
 
     public ListAdapter(java.util.List<T> list) {
@@ -40,7 +43,19 @@ public final class ListAdapter<T> implements List<T> {
     }
 
     public int add(T item) {
-        int index = list.size();
+        int index = -1;
+
+        if (comparator == null) {
+            index = getLength();
+        }
+        else {
+            // Perform a binary search to find the insertion point
+            index = Search.binarySearch(this, item, comparator);
+            if (index < 0) {
+                index = -(index + 1);
+            }
+        }
+
         list.add(index, item);
         listListeners.itemInserted(this, index);
 
@@ -48,23 +63,39 @@ public final class ListAdapter<T> implements List<T> {
     }
 
     public void insert(T item, int index) {
+        if (comparator != null
+            && Search.binarySearch(this, item, comparator) != -(index + 1)) {
+            throw new IllegalArgumentException("Illegal insertion point.");
+        }
+
         list.add(index, item);
+
         listListeners.itemInserted(this, index);
     }
 
     public T update(int index, T item) {
-        T previousItem = list.set(index, item);
+        if (comparator != null
+            && Search.binarySearch(this, item, comparator) != index) {
+            throw new IllegalArgumentException("Illegal item modification.");
+        }
+
+        T previousItem = list.get(index);
+        list.set(index, item);
         listListeners.itemUpdated(this, index, previousItem);
 
         return previousItem;
     }
 
-    /**
-     * NOTE This method is not supported because it cannot be efficiently
-     * implemented for all list types.
-     */
     public int remove(T item) {
-        throw new UnsupportedOperationException();
+        int index = indexOf(item);
+
+        if (index == -1) {
+            throw new IllegalArgumentException("item is not an element of this list.");
+        }
+
+        remove(index, 1);
+
+        return index;
     }
 
     @SuppressWarnings("unchecked")
@@ -105,15 +136,21 @@ public final class ListAdapter<T> implements List<T> {
     }
 
     public Comparator<T> getComparator() {
-        return null;
+        return comparator;
     }
 
-    /**
-     * NOTE This method is not supported because it cannot be efficiently
-     * implemented for all list types.
-     */
     public void setComparator(Comparator<T> comparator) {
-        throw new UnsupportedOperationException();
+        Comparator<T> previousComparator = this.comparator;
+
+        if (previousComparator != comparator) {
+            if (comparator != null) {
+            	Collections.sort(list, comparator);
+            }
+
+            this.comparator = comparator;
+
+            listListeners.comparatorChanged(this, previousComparator);
+        }
     }
 
     public Iterator<T> iterator() {

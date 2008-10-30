@@ -18,6 +18,7 @@ package pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Font;
 
+import pivot.beans.BeanDictionary;
 import pivot.collections.Dictionary;
 import pivot.wtk.Component;
 import pivot.wtk.Insets;
@@ -45,7 +46,13 @@ public class TableViewCellRenderer extends Label
         // Get the row and cell data
         String columnName = column.getName();
         if (columnName != null) {
-            Dictionary<String, Object> rowData = (Dictionary<String, Object>)value;
+            Dictionary<String, Object> rowData;
+            if (value instanceof Dictionary<?, ?>) {
+            	rowData = (Dictionary<String, Object>)value;
+            } else {
+            	rowData = new BeanDictionary(value);
+            }
+
             cellData = rowData.get(columnName);
         }
 

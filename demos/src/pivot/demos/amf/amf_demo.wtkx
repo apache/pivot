@@ -16,46 +16,18 @@
                             <TableView wtkx:id="productTableView" selectMode="single"
                                 styles="{showHorizontalGridLines:false}">
                                 <columns>
-                                    <TableView.Column name="category" headerData="Category" width="120">
-                                        <cellRenderer>
-                                            <amf:ProductTableViewCellRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                    <TableView.Column name="description" headerData="Description" width="120">
-                                        <cellRenderer>
-                                            <amf:ProductTableViewCellRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                    <TableView.Column name="image" headerData="Image" width="120">
-                                        <cellRenderer>
-                                            <amf:ProductTableViewCellRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                    <TableView.Column name="name" headerData="Name" width="120">
-                                        <cellRenderer>
-                                            <amf:ProductTableViewCellRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                    <TableView.Column name="price" headerData="Price" width="120">
-                                        <cellRenderer>
-                                            <amf:ProductTableViewCellRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                    <TableView.Column name="productId" headerData="ID" width="120">
-                                        <cellRenderer>
-                                            <amf:ProductTableViewCellRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                    <TableView.Column name="qtyInStock" headerData="Available" width="120">
-                                        <cellRenderer>
-                                            <amf:ProductTableViewCellRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
+                                    <TableView.Column name="category" headerData="Category" width="120"/>
+                                    <TableView.Column name="description" headerData="Description" width="120"/>
+                                    <TableView.Column name="image" headerData="Image" width="120"/>
+                                    <TableView.Column name="name" headerData="Name" width="120"/>
+                                    <TableView.Column name="price" headerData="Price" width="120"/>
+                                    <TableView.Column name="productId" headerData="ID" width="120"/>
+                                    <TableView.Column name="qtyInStock" headerData="Available" width="120"/>
                                 </columns>
                             </TableView>
                         </view>
                         <columnHeader>
-                            <TableViewHeader tableView="$productTableView" styles="{headersPressable:false}"/>
+                            <TableViewHeader wtkx:id="productTableViewHeader" tableView="$productTableView"/>
                         </columnHeader>
                     </ScrollPane>
                 </content>

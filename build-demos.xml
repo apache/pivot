@@ -7,7 +7,7 @@
     <!-- Compiler properties -->
     <property name="compiler.optimize" value="true"/>
     <property name="compiler.deprecation" value="true"/>
-    <property name="compiler.debug" value="true"/>
+    <property name="compiler.debug" value="false"/>
 
     <!-- Build demos library -->
     <target name="build">
@@ -26,6 +26,8 @@
                 <pathelement location="core/pivot-core.jar"/>
                 <pathelement location="web/pivot-web.jar"/>
                 <pathelement location="wtk/pivot-wtk.jar"/>
+                <pathelement location="demos/lib/flex-messaging-common.jar"/>
+                <pathelement location="demos/lib/flex-messaging-core.jar"/>
                 <pathelement location="demos/lib/gdata-base-1.0.jar"/>
                 <pathelement location="demos/lib/gdata-client-1.0.jar"/>
                 <pathelement location="demos/lib/gdata-client-meta-1.0.jar"/>
