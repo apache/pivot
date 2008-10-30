@@ -70,11 +70,11 @@ public final class BrowserApplicationContext extends ApplicationContext {
 	            			codeBase.getPort(), "");
     	            	System.out.println("Origin: " + origin);
                 	} catch(Exception exception) {
-                		System.out.print("Unable to determine application origin: " 
+                		System.out.print("Unable to determine application origin: "
             				+ exception);
                 	}
             	}
-            	
+
                 // Create the application context
                 applicationContext = new BrowserApplicationContext();
 
@@ -86,11 +86,11 @@ public final class BrowserApplicationContext extends ApplicationContext {
 	                String queryString = documentBase.getQuery();
 	                if (queryString != null) {
 	                    String[] arguments = queryString.split("&");
-	
+
 	                    for (int i = 0, n = arguments.length; i < n; i++) {
 	                        String argument = arguments[i];
 	                        String[] property = argument.split("=");
-	
+
 	                        if (property.length == 2) {
 	                            String key, value;
 	                            try {
@@ -106,7 +106,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
 	                    }
 	                }
                 }
-                
+
                 // Create the display host and add it to the applet
                 DisplayHost displayHost = applicationContext.getDisplayHost();
                 setLayout(new java.awt.BorderLayout());

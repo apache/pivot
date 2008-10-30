@@ -631,7 +631,7 @@ public abstract class ApplicationContext {
     public static ResourceCacheDictionary getResourceCache() {
         return resourceCacheDictionary;
     }
-    
+
     /**
      * Returns this application's origin (the URL of it's originating server).
      */

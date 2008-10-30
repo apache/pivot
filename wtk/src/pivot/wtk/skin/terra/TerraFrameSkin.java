@@ -74,6 +74,10 @@ public class TerraFrameSkin extends WindowSkin {
      * @author gbrown
      */
     public static class FrameButtonSkin extends TerraPushButtonSkin {
+    	public FrameButtonSkin() {
+    		setPadding(3);
+    	}
+
         @Override
         public boolean isFocusable() {
             return false;
