@@ -25,6 +25,9 @@ import pivot.serialization.JSONSerializer;
 
 public class JSONSerializerTest {
     public static String[] testStrings = {
+    	"'hey\there'",
+    	"'hey\\there'",
+    	"'hey\\\\there'",
         "  null",
         "\"Hello\\\" World\"",
         "'Hello\\\' \"World'",
@@ -53,7 +56,7 @@ public class JSONSerializerTest {
     };
 
     public static void main(String[] args) {
-        test0();
+        // test0();
         test1();
         // test2();
     }
@@ -84,7 +87,7 @@ public class JSONSerializerTest {
             try {
                 System.out.println("Input: " + testStrings[i]);
                 Object object = jsonSerializer.readObject(new StringReader(testStrings[i]));
-
+                System.out.println("Object: " + object);
                 StringWriter writer = new StringWriter();
                 jsonSerializer.writeObject(object, writer);
 

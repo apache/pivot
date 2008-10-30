@@ -183,8 +183,18 @@ public class JSONSerializer implements Serializer {
         while (c != -1 && c != t) {
             if (c == '\\') {
                 c = reader.read();
-                if (!(c == '\'' || c == t)) {
-                    throw new SerializationException("Unsupported escape sequence in input stream.");
+
+                if (c == 't') {
+                	c = '\t';
+                } else if (c == 'n') {
+                	c = '\n';
+                } else {
+                	if (!(c == '\\'
+                		|| c == '\"'
+            			|| c == '\''
+            			|| c == t)) {
+                        throw new SerializationException("Unsupported escape sequence in input stream.");
+                	}
                 }
             }
 
@@ -413,7 +423,37 @@ public class JSONSerializer implements Serializer {
         if (object == null) {
             writer.append("null");
         } else if (object instanceof String) {
-            writer.append("\"" + ((String)object).replace("\"", "\\\"") + "\"");
+        	String string = (String)object;
+        	StringBuilder stringBuilder = new StringBuilder();
+
+        	for (int i = 0, n = string.length(); i < n; i++) {
+        		char c = string.charAt(i);
+        		switch(c) {
+        			case '\t': {
+        				stringBuilder.append("\\t");
+        				break;
+        			}
+
+        			case '\n': {
+        				stringBuilder.append("\\n");
+        				break;
+        			}
+
+        			case '\\':
+        			case '\"':
+        			case '\'': {
+        				stringBuilder.append("\\" + c);
+        				break;
+        			}
+
+        			default: {
+        				stringBuilder.append(c);
+        			}
+        		}
+
+        	}
+
+            writer.append("\"" + stringBuilder.toString() + "\"");
         } else if (object instanceof Number) {
             writer.append(object.toString());
         } else if (object instanceof Boolean) {
