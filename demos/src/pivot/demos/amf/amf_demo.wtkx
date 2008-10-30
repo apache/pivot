@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<TablePane styles="{padding:8, backgroundColor:10, verticalSpacing:8}"
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+    xmlns:collections="pivot.collections"
+    xmlns:amf="pivot.demos.amf" xmlns="pivot.wtk">
+    <columns>
+        <TablePane.Column width="1*"/>
+    </columns>
+    <rows>
+        <TablePane.Row height="1*">
+            <Border styles="{padding:0}">
+                <content>
+                    <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+                        <view>
+                            <TableView wtkx:id="productTableView" selectMode="single"
+                                styles="{showHorizontalGridLines:false}">
+                                <columns>
+                                    <TableView.Column name="category" headerData="Category" width="120">
+                                        <cellRenderer>
+                                            <amf:ProductTableViewCellRenderer/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                    <TableView.Column name="description" headerData="Description" width="120">
+                                        <cellRenderer>
+                                            <amf:ProductTableViewCellRenderer/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                    <TableView.Column name="image" headerData="Image" width="120">
+                                        <cellRenderer>
+                                            <amf:ProductTableViewCellRenderer/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                    <TableView.Column name="name" headerData="Name" width="120">
+                                        <cellRenderer>
+                                            <amf:ProductTableViewCellRenderer/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                    <TableView.Column name="price" headerData="Price" width="120">
+                                        <cellRenderer>
+                                            <amf:ProductTableViewCellRenderer/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                    <TableView.Column name="productId" headerData="ID" width="120">
+                                        <cellRenderer>
+                                            <amf:ProductTableViewCellRenderer/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                    <TableView.Column name="qtyInStock" headerData="Available" width="120">
+                                        <cellRenderer>
+                                            <amf:ProductTableViewCellRenderer/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                </columns>
+                            </TableView>
+                        </view>
+                        <columnHeader>
+                            <TableViewHeader tableView="$productTableView" styles="{headersPressable:false}"/>
+                        </columnHeader>
+                    </ScrollPane>
+                </content>
+            </Border>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
+            <FlowPane styles="{horizontalAlignment:'center'}">
+                <PushButton wtkx:id="getDataButton" buttonData="Get Data" styles="{padding:4}"/>
+            </FlowPane>
+        </TablePane.Row>
+    </rows>
+</TablePane>
