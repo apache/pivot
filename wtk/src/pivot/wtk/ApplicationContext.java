@@ -449,7 +449,6 @@ public abstract class ApplicationContext {
                 case KeyEvent.KEY_TYPED: {
                     if (focusedComponent != null) {
                     	char keyChar = event.getKeyChar();
-                    	System.out.println(keyChar);
                         focusedComponent.keyTyped(keyChar);
                     }
 
