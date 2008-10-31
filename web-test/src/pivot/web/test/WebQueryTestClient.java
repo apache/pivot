@@ -27,23 +27,25 @@ import pivot.web.GetQuery;
 import pivot.web.DeleteQuery;
 import pivot.web.PostQuery;
 import pivot.web.PutQuery;
+import pivot.wtk.Application;
+import pivot.wtk.Display;
 
-public class WebQueryTestClient {
-    public static void main(String[] args) {
-        final boolean useProxy = true;
+public class WebQueryTestClient implements Application {
+    final static boolean useProxy = true;
 
-        final String HOSTNAME = "localhost";
-        final String PATH = (useProxy ? "/pivot_web_test/proxy" : "/pivot_web_test/webquery") + "/bar/quux";
-        final int PORT = 8080;
-        final boolean SECURE = false;
+    final static String HOSTNAME = "localhost";
+    final static String PATH = (useProxy ? "/pivot_web_test/proxy" : "/pivot_web_test/webquery") + "/bar/quux";
+    final static int PORT = 8080;
+    final static boolean SECURE = false;
 
-        BasicAuthentication authentication = new BasicAuthentication("foo", "bar");
+    public void startup(Display display, Dictionary<String, String> properties)
+    	throws Exception {
+        final BasicAuthentication authentication = new BasicAuthentication("foo", "bar");
 
         // GET
-        GetQuery getQuery = new GetQuery(HOSTNAME, PORT, PATH, SECURE);
+        final GetQuery getQuery = new GetQuery(HOSTNAME, PORT, PATH, SECURE);
         getQuery.getArguments().put("a", "b");
         getQuery.setSerializer(new BinarySerializer());
-        authentication.authenticate(getQuery);
 
         getQuery.execute(new TaskListener<Object>() {
             @SuppressWarnings("unchecked")
@@ -58,6 +60,8 @@ public class WebQueryTestClient {
 
             public void executeFailed(Task<Object> task) {
                 System.out.println("GET fault: " + task.getFault());
+                authentication.authenticate(getQuery);
+                getQuery.execute(this);
             }
         });
 
@@ -104,11 +108,15 @@ public class WebQueryTestClient {
                 System.out.println("DELETE fault: " + task.getFault());
             }
         });
+    }
 
-        // Wait for the async. calls to complete
-        try {
-            Thread.sleep(10000);
-        } catch(InterruptedException exception) {
-        }
+    public boolean shutdown(boolean optional) {
+    	return true;
+    }
+
+    public void suspend() {
+    }
+
+    public void resume() {
     }
 }

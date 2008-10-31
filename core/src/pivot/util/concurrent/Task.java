@@ -41,21 +41,23 @@ public abstract class Task<V> {
                 fault = exception;
             }
 
+            TaskListener<V> taskListener;
             synchronized(Task.this) {
                 Task.this.result = result;
                 Task.this.fault = fault;
 
-                if (fault == null) {
-                    taskListener.taskExecuted(Task.this);
-                }
-                else {
-                    taskListener.executeFailed(Task.this);
-                }
-
                 abort = false;
-                taskListener = null;
+
+                taskListener = Task.this.taskListener;
+                Task.this.taskListener = null;
             }
 
+            if (fault == null) {
+                taskListener.taskExecuted(Task.this);
+            }
+            else {
+                taskListener.executeFailed(Task.this);
+            }
         }
     }
 
