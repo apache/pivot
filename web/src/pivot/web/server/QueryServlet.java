@@ -499,7 +499,7 @@ public abstract class QueryServlet extends HttpServlet {
                     authorize();
                 } catch (LoginException ex) {
                     proceed = false;
-                    doUnauthorized(request, response);
+                    doForbidden(request, response);
                 }
             }
         }
@@ -639,6 +639,16 @@ public abstract class QueryServlet extends HttpServlet {
         response.setHeader("WWW-Authenticate", "BASIC realm=\""
             + request.getServletPath() +"\"");
         response.setStatus(401);
+        response.setContentLength(0);
+        response.flushBuffer();
+    }
+
+    /**
+     *
+     */
+    private void doForbidden(HttpServletRequest request, HttpServletResponse response)
+        throws IOException {
+        response.setStatus(403);
         response.setContentLength(0);
         response.flushBuffer();
     }
