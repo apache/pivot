@@ -46,6 +46,7 @@ public class WebQueryTestClient implements Application {
         final GetQuery getQuery = new GetQuery(HOSTNAME, PORT, PATH, SECURE);
         getQuery.getArguments().put("a", "b");
         getQuery.setSerializer(new BinarySerializer());
+        authentication.authenticate(getQuery);
 
         getQuery.execute(new TaskListener<Object>() {
             @SuppressWarnings("unchecked")
@@ -60,8 +61,6 @@ public class WebQueryTestClient implements Application {
 
             public void executeFailed(Task<Object> task) {
                 System.out.println("GET fault: " + task.getFault());
-                authentication.authenticate(getQuery);
-                getQuery.execute(this);
             }
         });
 
