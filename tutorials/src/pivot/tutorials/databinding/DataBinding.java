@@ -21,6 +21,7 @@ public class DataBinding implements Application {
 	private Form form = null;
 	private PushButton loadJavaButton = null;
 	private PushButton loadJSONButton = null;
+	private PushButton clearButton = null;
 	private Label sourceLabel = null;
 
 	private static final Contact CONTACT = new Contact("101", "Joe Smith",
@@ -36,6 +37,7 @@ public class DataBinding implements Application {
         form = (Form)wtkxSerializer.getObjectByName("form");
         loadJavaButton = (PushButton)wtkxSerializer.getObjectByName("loadJavaButton");
         loadJSONButton = (PushButton)wtkxSerializer.getObjectByName("loadJSONButton");
+        clearButton = (PushButton)wtkxSerializer.getObjectByName("clearButton");
         sourceLabel = (Label)wtkxSerializer.getObjectByName("sourceLabel");
 
         // Open the window
@@ -63,6 +65,13 @@ public class DataBinding implements Application {
         		}
 
         		button.setEnabled(true);
+        	}
+        });
+
+        clearButton.getButtonPressListeners().add(new ButtonPressListener() {
+        	public void buttonPressed(Button button) {
+        		form.load(new Contact());
+        		sourceLabel.setText(null);
         	}
         });
 	}

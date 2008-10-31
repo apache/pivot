@@ -31,10 +31,13 @@
                     </Form.Section>
                 </sections>
             </Form>
+            
+            <Separator/>
 
             <FlowPane styles="{horizontalAlignment:'right'}">
                 <PushButton wtkx:id="loadJavaButton" buttonData="Load Java"/>
                 <PushButton wtkx:id="loadJSONButton" buttonData="Load JSON"/>
+                <PushButton wtkx:id="clearButton" buttonData="Clear"/>
             </FlowPane>
 	    </FlowPane>
     </content>

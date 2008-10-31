@@ -96,10 +96,12 @@ public class Label extends Component {
     public void load(Dictionary<String, Object> context) {
         if (textKey != null
             && context.containsKey(textKey)) {
-            Object value = context.get(textKey);
+            Object value = context.get(textKey);            
             if (value != null) {
-                setText(value.toString());
+            	value = value.toString();
             }
+
+        	setText((String)value);
         }
     }
 

@@ -555,8 +555,10 @@ public class TextInput extends Component {
             && context.containsKey(textKey)) {
             Object value = context.get(textKey);
             if (value != null) {
-                setText(value.toString());
+            	value = value.toString();
             }
+
+        	setText((String)value);
         }
     }
 

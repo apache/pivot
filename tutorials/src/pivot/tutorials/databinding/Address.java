@@ -6,6 +6,10 @@ public class Address {
 	private String state;
 	private String zip;
 
+	public Address() {
+		this(null, null, null, null);
+	}
+	
 	public Address(String street, String city, String state, String zip) {
 		this.street = street;
 		this.city = city;
