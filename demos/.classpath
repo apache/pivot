@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="lib/flex-messaging-core.jar"/>
 	<classpathentry kind="lib" path="lib/flex-messaging-common.jar"/>
 	<classpathentry kind="lib" path="classes"/>
+	<classpathentry kind="lib" path="lib/gdata-media-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

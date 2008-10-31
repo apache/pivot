@@ -316,6 +316,7 @@
         </war>
     </target>
     <target name="web-test-clean">
+        <delete dir="${webtest}/www/${lib}" includes="*.jar"/>
         <delete dir="${webtest}/${bin}"/>
         <delete dir="${webtest}/${lib}"/>
         <delete file="${webtest}/${ant.project.name}-web.test.jar"/>
@@ -479,6 +480,7 @@
         <copy file="${wtk}/${lib}/stax-api-1.0.jar" todir="starter/${lib}"/>
         <zip destfile="starter.zip" basedir="."
             includes="starter/**" excludes="starter/**/.*"/>
+        <delete dir="starter/${lib}" includes="*.jar"/>
     </target>
 
     <!-- Remove trailing white space in all source files -->

@@ -18,6 +18,7 @@ package pivot.wtk;
 import java.awt.Graphics2D;
 import java.util.Iterator;
 
+import pivot.beans.BeanDictionary;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.Map;
@@ -495,12 +496,27 @@ public abstract class Container extends Component
     public void load(Dictionary<String, Object> context) {
         if (contextKey != null
             && context.containsKey(contextKey)) {
-            context = (Map<String, Object>)context.get(contextKey);
+        	Object value = context.get(contextKey);
+        	if (value instanceof Dictionary<?, ?>) {
+                context = (Map<String, Object>)value;
+        	} else {
+                context = new BeanDictionary(value);
+        	}
         }
 
         for (Component component : components) {
             component.load(context);
         }
+    }
+
+    /**
+     * Propagates binding to subcomponents by converting the given context
+     * to a bean dictionary.
+     *
+     * @param context
+     */
+    public void load(Object context) {
+    	load(new BeanDictionary(context));
     }
 
     /**
@@ -513,12 +529,27 @@ public abstract class Container extends Component
     public void store(Dictionary<String, Object> context) {
         if (contextKey != null) {
             // Bound value is expected to be a sub-context
-            context = (Map<String, Object>)context.get(contextKey);
+        	Object value = context.get(contextKey);
+        	if (value instanceof Dictionary<?, ?>) {
+                context = (Map<String, Object>)value;
+        	} else {
+                context = new BeanDictionary(value);
+        	}
         }
 
         for (Component component : components) {
             component.store(context);
         }
+    }
+
+    /**
+     * Propagates binding to subcomponents by converting the given context
+     * to a bean dictionary.
+     *
+     * @param context
+     */
+    public void store(Object context) {
+    	store(new BeanDictionary(context));
     }
 
     @Override
