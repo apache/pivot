@@ -207,11 +207,13 @@ public class ProxyServlet extends HttpServlet {
                     inputStream = connection.getErrorStream();
                 }
 
-                inputStream = new BufferedInputStream(inputStream, BUFFER_SIZE);
+                if (inputStream != null) {
+                    inputStream = new BufferedInputStream(inputStream, BUFFER_SIZE);
 
-                OutputStream outputStream = response.getOutputStream();
-                for (int data = inputStream.read(); data != -1; data = inputStream.read()) {
-                    outputStream.write((byte)data);
+                    OutputStream outputStream = response.getOutputStream();
+                    for (int data = inputStream.read(); data != -1; data = inputStream.read()) {
+                        outputStream.write((byte)data);
+                    }
                 }
 
                 response.flushBuffer();

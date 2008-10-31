@@ -50,9 +50,9 @@ public class WebQueryTestServlet extends HttpServlet {
         String authorization = request.getHeader("Authorization");
 
         if (authorization == null) {
+            response.setStatus(401);
             response.setHeader("WWW-Authenticate", "BASIC realm=\""
                 + request.getServletPath() +"\"");
-            response.setStatus(401);
             response.setContentLength(0);
             response.flushBuffer();
         } else {
