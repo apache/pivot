@@ -1,0 +1,19 @@
+{   id: 101,
+    name: "Joe Smith",
+
+    address: {
+        street: "123 Main St.",
+        city: "Cambridge",
+        state: "MA",
+        zip: "02142"
+    },
+
+    phoneNumber: "(617) 555-1234",
+    emailAddress: "joe_smith@foo.com",
+
+    imAccount: {
+        id: "jsmith1234",
+        type: "AIM"
+    }
+}
+

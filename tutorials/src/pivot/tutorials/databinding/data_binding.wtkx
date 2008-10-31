@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Border styles="{thickness:0, padding:8}"
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
+    <content>
+	    <FlowPane orientation="vertical" styles="{spacing:10, horizontalAlignment:'justify'}">
+            <Form wtkx:id="form">
+                <sections>
+                    <Form.Section>
+                        <Label Form.name="ID" textKey="id"/>
+                        <Label Form.name="Name" textKey="name"/>
+
+                        <FlowPane Form.name="Address" orientation="vertical" contextKey="address">
+                            <Label textKey="street"/>
+                            <FlowPane>
+                                <Label textKey="city"/>
+                                <Label textKey="state"/>
+                                <Label textKey="zip"/>
+                            </FlowPane>
+                        </FlowPane>
+
+                        <Label Form.name="Phone" textKey="phoneNumber"/>
+                        <Label Form.name="Email" textKey="emailAddress"/>
+
+                        <FlowPane Form.name="IM" contextKey="imAccount">
+                            <Label textKey="id"/>
+                            <Label textKey="type"/>
+                        </FlowPane>
+
+                        <Label wtkx:id="sourceLabel" Form.name="Source" styles="{fontItalic:true}"/>
+                    </Form.Section>
+                </sections>
+            </Form>
+
+            <FlowPane styles="{horizontalAlignment:'right'}">
+                <PushButton wtkx:id="loadJavaButton" buttonData="Load Java"/>
+                <PushButton wtkx:id="loadJSONButton" buttonData="Load JSON"/>
+            </FlowPane>
+	    </FlowPane>
+    </content>
+</Border>
+
