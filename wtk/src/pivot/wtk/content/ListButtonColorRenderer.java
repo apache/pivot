@@ -20,9 +20,9 @@ import java.awt.Color;
 import pivot.wtk.Button;
 import pivot.wtk.ImageView;
 
-public class ListButtonColorRenderer extends ImageView 
+public class ListButtonColorRenderer extends ImageView
 	implements Button.DataRenderer {
-    private ListViewColorRenderer.ColorBadge colorBadge = 
+    private ListViewColorRenderer.ColorBadge colorBadge =
     	new ListViewColorRenderer.ColorBadge();
 
     public ListButtonColorRenderer() {
@@ -41,7 +41,7 @@ public class ListButtonColorRenderer extends ImageView
         		color = Color.decode(data.toString());
         	}
     	}
-    	
+
     	colorBadge.setColor(color);
     }
 }

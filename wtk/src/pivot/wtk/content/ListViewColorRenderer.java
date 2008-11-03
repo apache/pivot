@@ -54,16 +54,16 @@ public class ListViewColorRenderer extends ListViewItemRenderer {
 
     private ColorBadge colorBadge = new ColorBadge();
     private ListItem listItem = new ListItem(colorBadge);
-    
+
     public ListViewColorRenderer() {
     	setShowIcon(true);
     }
-    
+
     public void render(Object item, ListView listView, boolean selected,
         boolean highlighted, boolean disabled) {
     	ColorItem colorItem;
     	if (item instanceof ColorItem) {
-    		colorItem = (ColorItem)item; 
+    		colorItem = (ColorItem)item;
     	} else {
     		Color color;
         	if (item instanceof Color) {
@@ -71,13 +71,13 @@ public class ListViewColorRenderer extends ListViewItemRenderer {
         	} else {
         		color = Color.decode(item.toString());
         	}
-        	
+
         	colorItem = new ColorItem(color);
     	}
-    	
-    	colorBadge.setColor(colorItem.getColor());    	
+
+    	colorBadge.setColor(colorItem.getColor());
         listItem.setText(colorItem.getName());
-    	
+
         super.render(listItem, listView, selected, highlighted, disabled);
     }
 }

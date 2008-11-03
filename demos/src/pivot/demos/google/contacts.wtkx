@@ -19,17 +19,31 @@
             <right>
                 <Border styles="{padding:6}">
                     <content>
-                        <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
-                            <Label wtkx:id="nameLabel" styles="{fontSize:14, fontBold:true}"/>
-                            <Form styles="{showFirstSectionHeading:true}">
-                                <sections>
-                                    <Form.Section heading="Address" wtkx:id="addressSection"/>
-                                    <Form.Section heading="Phone Number" wtkx:id="phoneNumberSection"/>
-                                    <Form.Section heading="Email Address" wtkx:id="emailAddressSection"/>
-                                    <Form.Section heading="IM Account" wtkx:id="imAccountSection"/>
-                                </sections>
-                            </Form>
-                        </FlowPane>
+                        <TablePane>
+                            <columns>
+                                <TablePane.Column width="1*"/>
+                            </columns>
+                            <rows>
+                                <TablePane.Row height="1*">
+                                    <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
+                                        <Label wtkx:id="nameLabel" styles="{fontSize:14, fontBold:true}"/>
+                                        <Form styles="{showFirstSectionHeading:true}">
+                                            <sections>
+                                                <Form.Section heading="Address" wtkx:id="addressSection"/>
+                                                <Form.Section heading="Phone Number" wtkx:id="phoneNumberSection"/>
+                                                <Form.Section heading="Email Address" wtkx:id="emailAddressSection"/>
+                                                <Form.Section heading="IM Account" wtkx:id="imAccountSection"/>
+                                            </sections>
+                                        </Form>
+                                    </FlowPane>
+                                </TablePane.Row>
+                                <TablePane.Row height="-1">
+                                    <FlowPane styles="{horizontalAlignment:'right'}">
+                                        <ImageView image="@Logo_25wht.gif"/>
+                                    </FlowPane>
+                                </TablePane.Row>
+                            </rows>
+                        </TablePane>
                     </content>
                 </Border>
             </right>

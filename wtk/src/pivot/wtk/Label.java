@@ -96,7 +96,7 @@ public class Label extends Component {
     public void load(Dictionary<String, Object> context) {
         if (textKey != null
             && context.containsKey(textKey)) {
-            Object value = context.get(textKey);            
+            Object value = context.get(textKey);
             if (value != null) {
             	value = value.toString();
             }

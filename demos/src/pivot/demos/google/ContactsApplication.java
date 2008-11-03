@@ -1,5 +1,6 @@
 package pivot.demos.google;
 
+import java.awt.Color;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
@@ -38,6 +39,7 @@ import pivot.wtk.Orientation;
 import pivot.wtk.Sheet;
 import pivot.wtk.SheetCloseListener;
 import pivot.wtk.Window;
+import pivot.wtk.effects.ShadeDecorator;
 import pivot.wtk.media.Image;
 import pivot.wtkx.WTKXSerializer;
 
@@ -76,6 +78,8 @@ public class ContactsApplication implements Application {
 	Form.Section phoneNumberSection = null;
 	Form.Section emailAddressSection = null;
 	Form.Section imAccountSection = null;
+
+	private ShadeDecorator windowDecorator = new ShadeDecorator(0.1f, Color.BLACK);
 
 	private LoginSheet loginSheet = null;
 
@@ -138,6 +142,7 @@ public class ContactsApplication implements Application {
 		// Open the window
 		window.setTitle("Google Contacts");
 		window.setMaximized(true);
+		window.getDecorators().add(windowDecorator);
 		window.open(display);
 
 		// Open the login prompt
@@ -145,6 +150,8 @@ public class ContactsApplication implements Application {
 		loginSheet.open(window, new SheetCloseListener() {
 			public void sheetClosed(Sheet sheet) {
 				if (sheet.getResult()) {
+					window.getDecorators().remove(windowDecorator);
+
 					try {
 						loadContacts();
 					} catch (Exception exception) {

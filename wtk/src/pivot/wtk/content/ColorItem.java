@@ -20,51 +20,51 @@ import java.awt.Color;
 public class ColorItem {
 	private Color color;
 	private String name;
-	
+
 	public ColorItem() {
 		this(Color.BLACK, null);
 	}
-	
+
 	public ColorItem(Color color) {
 		this(color, null);
 	}
-	
+
 	public ColorItem(Color color, String name) {
 		this.color = color;
 		this.name = name;
 	}
-	
+
 	public Color getColor() {
 		return color;
 	}
-	
+
 	public void setColor(Color color) {
 		if (color == null) {
 			throw new IllegalArgumentException("color is null.");
 		}
-		
+
 		this.color = color;
 	}
-	
+
 	public void setColor(String color) {
 		if (color == null) {
 			throw new IllegalArgumentException("color is null.");
 		}
-		
+
 		setColor(Color.decode(color));
 	}
-	
+
 	public String getName() {
 		String name = this.name;
-		
+
 		if (name == null) {
 	        name = String.format("#%02X%02X%02X", color.getRed(), color.getGreen(),
 	            color.getBlue());
 		}
-		
+
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}

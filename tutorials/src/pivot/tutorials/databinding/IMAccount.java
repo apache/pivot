@@ -7,7 +7,7 @@ public class IMAccount {
 	public IMAccount() {
 		this(null, null);
 	}
-	
+
 	public IMAccount(String id, String type) {
 		this.id = id;
 		this.type = type;

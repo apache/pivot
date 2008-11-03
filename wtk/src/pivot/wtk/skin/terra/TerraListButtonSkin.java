@@ -479,18 +479,18 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         setPadding(padding.intValue());
     }
-    
+
     public int getListSize() {
     	return listSize;
     }
-    
+
     public void setListSize(int listSize) {
     	if (listSize < -1) {
     		throw new IllegalArgumentException("Invalid list size.");
     	}
-    	    	
+
     	this.listSize = listSize;
-    }    
+    }
 
     public Object getListFont() {
         return listView.getStyles().get("font");
@@ -572,7 +572,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
     public void setListHighlightBackgroundColor(Object listHighlightBackgroundColor) {
         listView.getStyles().put("highlightBackgroundColor", listHighlightBackgroundColor);
     }
-    
+
     @Override
     public void buttonPressed(Button button) {
     	if (!listViewPopup.isOpen()) {

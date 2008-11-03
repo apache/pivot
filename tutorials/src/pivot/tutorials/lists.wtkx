@@ -132,7 +132,7 @@ limitations under the License.
 	                        </ListButton>
 
 						    <ListButton Form.name="Color" selectedIndex="0"
-						        styles="{listSize:6}"> 
+						        styles="{listSize:6}">
 						        <listData>
 						            <collections:ArrayList>
 						                <content:ColorItem color="#000000" name="Black"/>
