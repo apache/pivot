@@ -56,7 +56,7 @@ public class BufferedImageSerializer implements Serializer {
             return name;
         }
 
-        public String getMimeType() {
+        public String getMIMEType() {
             return mimeType;
         }
     }
@@ -124,6 +124,6 @@ public class BufferedImageSerializer implements Serializer {
     }
 
     public String getMIMEType() {
-        return outputFormat.getMimeType();
+        return outputFormat.getMIMEType();
     }
 }
