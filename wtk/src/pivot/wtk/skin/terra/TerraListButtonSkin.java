@@ -32,6 +32,7 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.Insets;
 import pivot.wtk.ListButton;
+import pivot.wtk.ListView;
 import pivot.wtk.Panorama;
 import pivot.wtk.Bounds;
 import pivot.wtk.Theme;
@@ -106,6 +107,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private Color borderColor;
     private Color disabledBorderColor;
     private Insets padding;
+    private int listSize = -1;
 
     // Derived colors
     private Color bevelColor;
@@ -142,6 +144,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         listViewPanorama = new Panorama(listView);
         listViewPanorama.getStyles().put("buttonBackgroundColor",
             listView.getStyles().get("backgroundColor"));
+        listViewPanorama.getStyles().put("alwaysShowScrollButtons", true);
 
         listViewBorder = new Border(listViewPanorama);
         listViewBorder.getStyles().put("padding", 0);
@@ -476,6 +479,18 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         setPadding(padding.intValue());
     }
+    
+    public int getListSize() {
+    	return listSize;
+    }
+    
+    public void setListSize(int listSize) {
+    	if (listSize < -1) {
+    		throw new IllegalArgumentException("Invalid list size.");
+    	}
+    	    	
+    	this.listSize = listSize;
+    }    
 
     public Object getListFont() {
         return listView.getStyles().get("font");
@@ -556,5 +571,27 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
     public void setListHighlightBackgroundColor(Object listHighlightBackgroundColor) {
         listView.getStyles().put("highlightBackgroundColor", listHighlightBackgroundColor);
+    }
+    
+    @Override
+    public void buttonPressed(Button button) {
+    	if (!listViewPopup.isOpen()) {
+        	if (listSize == -1) {
+        		listViewBorder.setPreferredHeight(-1);
+        	} else {
+        		if (!listViewBorder.isPreferredHeightSet()) {
+            		ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
+            		int height = itemRenderer.getPreferredHeight(-1) * listSize + 2;
+
+            		if (listViewBorder.getPreferredHeight() > height) {
+            			listViewBorder.setPreferredHeight(height);
+            		} else {
+            			listViewBorder.setPreferredHeight(-1);
+            		}
+        		}
+        	}
+    	}
+
+    	super.buttonPressed(button);
     }
 }

@@ -210,6 +210,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     private Color buttonColor;
     private Color buttonBackgroundColor;
     private int buttonPadding;
+    private boolean alwaysShowScrollButtons = false;
 
     private ScrollButton northButton = new ScrollButton(new NorthButtonImage());
     private ScrollButton southButton = new ScrollButton(new SouthButtonImage());
@@ -377,6 +378,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
                 southButton.setLocation(0, height - southButton.getHeight());
             }
         }
+        
+        updateScrollButtonVisibility();
     }
 
     public Bounds getViewportBounds() {
@@ -499,6 +502,15 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         this.buttonPadding = buttonPadding;
         invalidateComponent();
     }
+    
+    public boolean getAlwaysShowScrollButtons() {
+    	return alwaysShowScrollButtons;
+    }
+    
+    public void setAlwaysShowScrollButtons(boolean alwaysShowScrollButtons) {
+    	this.alwaysShowScrollButtons = alwaysShowScrollButtons;
+    	updateScrollButtonVisibility();
+    }
 
     protected int getMaxScrollTop() {
         int maxScrollTop = 0;
@@ -534,17 +546,17 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
 
         int scrollTop = panorama.getScrollTop();
         int maxScrollTop = getMaxScrollTop();
-        northButton.setVisible(mouseOver
-            && scrollTop > 0);
-        southButton.setVisible(mouseOver
-            && scrollTop < maxScrollTop);
+        northButton.setVisible((alwaysShowScrollButtons 
+    		|| mouseOver) && scrollTop > 0);
+        southButton.setVisible((alwaysShowScrollButtons 
+    		|| mouseOver) && scrollTop < maxScrollTop);
 
         int scrollLeft = panorama.getScrollLeft();
         int maxScrollLeft = getMaxScrollLeft();
-        westButton.setVisible(mouseOver
-            && scrollLeft > 0);
-        eastButton.setVisible(mouseOver
-            && scrollLeft < maxScrollLeft);
+        westButton.setVisible((alwaysShowScrollButtons 
+    		|| mouseOver) && scrollLeft > 0);
+        eastButton.setVisible((alwaysShowScrollButtons 
+    		|| mouseOver) && scrollLeft < maxScrollLeft);
     }
 
     // User input

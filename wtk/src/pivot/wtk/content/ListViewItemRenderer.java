@@ -42,8 +42,6 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
     public static boolean DEFAULT_SHOW_ICON = false;
 
     public ListViewItemRenderer() {
-        super();
-
         getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         getStyles().put("padding", new Insets(2, 3, 2, 3));
