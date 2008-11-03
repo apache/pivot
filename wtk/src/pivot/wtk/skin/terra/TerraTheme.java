@@ -53,6 +53,7 @@ import pivot.wtk.ScrollBar;
 import pivot.wtk.ScrollPane;
 import pivot.wtk.Separator;
 import pivot.wtk.Sheet;
+import pivot.wtk.Slider;
 import pivot.wtk.Spinner;
 import pivot.wtk.SplitPane;
 import pivot.wtk.TablePane;
@@ -122,6 +123,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(ScrollPane.Corner.class, TerraScrollPaneCornerSkin.class);
         componentSkinMap.put(Separator.class, TerraSeparatorSkin.class);
         componentSkinMap.put(Sheet.class, TerraSheetSkin.class);
+        componentSkinMap.put(Slider.class, TerraSliderSkin.class);
         componentSkinMap.put(Spinner.class, TerraSpinnerSkin.class);
         componentSkinMap.put(SplitPane.class, TerraSplitPaneSkin.class);
         componentSkinMap.put(TablePane.class, TerraTablePaneSkin.class);
@@ -137,6 +139,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TerraRollupSkin.RollupButton.class, TerraRollupSkin.RollupButtonSkin.class);
         componentSkinMap.put(TerraScrollBarSkin.ScrollButton.class, TerraScrollBarSkin.ScrollButtonSkin.class);
         componentSkinMap.put(TerraScrollBarSkin.ScrollHandle.class, TerraScrollBarSkin.ScrollHandleSkin.class);
+        componentSkinMap.put(TerraSliderSkin.Thumb.class, TerraSliderSkin.ThumbSkin.class);
         componentSkinMap.put(TerraSpinnerSkin.SpinButton.class, TerraSpinnerSkin.SpinButtonSkin.class);
         componentSkinMap.put(TerraSpinnerSkin.SpinnerContent.class, TerraSpinnerSkin.SpinnerContentSkin.class);
         componentSkinMap.put(TerraSplitPaneSkin.Splitter.class, TerraSplitPaneSkin.SplitterSkin.class);
