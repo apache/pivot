@@ -313,10 +313,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             return BUTTON_IMAGE_SIZE + 2;
         }
 
-        public Dimensions getPreferredSize() {
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
-        }
-
         public void layout() {
             // No-op
         }
@@ -420,7 +416,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
         public void paint(Graphics2D graphics) {
             graphics.setStroke(new BasicStroke(0));
-            graphics.setPaint(buttonImageColor);
+            graphics.setPaint(buttonColor);
         }
     }
 
@@ -454,10 +450,11 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     private Color color;
     private Color disabledColor;
     private Color borderColor;
-    private Color buttonImageColor;
+    private Color buttonColor;
     private Color buttonBackgroundColor;
-    private Color buttonDisabledBackgroundColor;
-    private Color buttonHighlightedBackgroundColor;
+
+    // Derived colors
+    private Color buttonBevelColor;
 
     private static AutomaticSpinner automaticSpinner = new AutomaticSpinner();
 
@@ -471,10 +468,10 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
         borderColor = theme.getColor(7);
-        buttonImageColor = theme.getColor(1);
+        buttonColor = theme.getColor(1);
         buttonBackgroundColor = theme.getColor(10);
-        buttonDisabledBackgroundColor = theme.getColor(10);
-        buttonHighlightedBackgroundColor = theme.getColor(11);
+
+        buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
     }
 
     @Override
@@ -600,7 +597,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         int buttonWidth = upButton.getWidth();
         int buttonHeight = upButton.getHeight();
 
-        graphics.setPaint(new GradientPaint(buttonX + buttonWidth / 2, 0, buttonHighlightedBackgroundColor,
+        graphics.setPaint(new GradientPaint(buttonX + buttonWidth / 2, 0, buttonBevelColor,
     		buttonX + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
         graphics.fillRect(buttonX, 0, buttonWidth, height);
 
@@ -689,21 +686,21 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         setBorderColor(decodeColor(borderColor));
     }
 
-    public Color getButtonImageColor() {
-        return buttonImageColor;
+    public Color getButtonColor() {
+        return buttonColor;
     }
 
-    public void setButtonImageColor(Color buttonImageColor) {
-        this.buttonImageColor = buttonImageColor;
+    public void setButtonImageColor(Color buttonColor) {
+        this.buttonColor = buttonColor;
         repaintComponent();
     }
 
-    public final void setButtonImageColor(String buttonImageColor) {
-        if (buttonImageColor == null) {
-            throw new IllegalArgumentException("buttonImageColor is null");
+    public final void setButtonColor(String buttonColor) {
+        if (buttonColor == null) {
+            throw new IllegalArgumentException("buttonColor is null");
         }
 
-        setButtonImageColor(decodeColor(buttonImageColor));
+        setButtonImageColor(decodeColor(buttonColor));
     }
 
     public Color getButtonBackgroundColor() {
@@ -721,40 +718,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         setButtonBackgroundColor(decodeColor(buttonBackgroundColor));
-    }
-
-    public Color getButtonDisabledBackgroundColor() {
-        return buttonDisabledBackgroundColor;
-    }
-
-    public void setButtonDisabledBackgroundColor(Color buttonDisabledBackgroundColor) {
-        this.buttonDisabledBackgroundColor = buttonDisabledBackgroundColor;
-        repaintComponent();
-    }
-
-    public final void setButtonDisabledBackgroundColor(String buttonDisabledBackgroundColor) {
-        if (buttonDisabledBackgroundColor == null) {
-            throw new IllegalArgumentException("buttonDisabledBackgroundColor is null");
-        }
-
-        setButtonDisabledBackgroundColor(decodeColor(buttonDisabledBackgroundColor));
-    }
-
-    public Color getButtonHighlightedBackgroundColor() {
-        return buttonHighlightedBackgroundColor;
-    }
-
-    public void setButtonHighlightedBackgroundColor(Color buttonHighlightedBackgroundColor) {
-        this.buttonHighlightedBackgroundColor = buttonHighlightedBackgroundColor;
-        repaintComponent();
-    }
-
-    public final void setButtonHighlightedBackgroundColor(String buttonHighlightedBackgroundColor) {
-        if (buttonHighlightedBackgroundColor == null) {
-            throw new IllegalArgumentException("buttonHighlightedBackgroundColor is null");
-        }
-
-        setButtonHighlightedBackgroundColor(decodeColor(buttonHighlightedBackgroundColor));
     }
 
     public Font getFont() {

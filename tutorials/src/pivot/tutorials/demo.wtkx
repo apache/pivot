@@ -52,7 +52,7 @@ limitations under the License.
                                 <wtkx:include namespace="meters" src="meters.wtkx"/>
                             </Rollup>
                             <Rollup>
-                                <Label text="Spinners" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                <Label text="Spinners &amp; Sliders" styles="{fontBold:true, fontSize:12, color:13}"/>
                                 <wtkx:include namespace="spinners" src="spinners.wtkx"/>
                             </Rollup>
                             <Rollup>

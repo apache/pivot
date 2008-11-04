@@ -15,22 +15,44 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
-    <content>
-        <FlowPane orientation="horizontal" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
-            <FlowPane orientation="vertical">
-                <Label text="Basic Spinner" styles="{fontBold:true}"/>
-                <Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']" circular="true" selectedIndex="0"
-                    preferredWidth="60"/>
+<FlowPane xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
+    <Border>
+        <content>
+            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
+                <Label text="Spinners" styles="{fontBold:true}"/>
+	            <Form>
+	                <sections>
+	                    <Form.Section>
+	                        <Spinner Form.name="Basic" preferredWidth="60"
+	                            spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
+	                            circular="true" selectedIndex="0"/>
+                            <Spinner wtkx:id="numericSpinner" Form.name="Numeric"
+                                preferredWidth="60"/>
+                            <Spinner wtkx:id="dateSpinner" Form.name="Date"/>
+	                    </Form.Section>
+	                </sections>
+	            </Form>
             </FlowPane>
-            <FlowPane orientation="vertical">
-                <Label text="Numeric Spinner" styles="{fontBold:true}"/>
-                <Spinner wtkx:id="numericSpinner" preferredWidth="60"/>
+        </content>
+    </Border>
+
+    <Border>
+        <content>
+            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
+                <Label text="Sliders" styles="{fontBold:true}"/>
+                <Form>
+                    <sections>
+                        <Form.Section>
+                            <Slider wtkx:id="redSlider" Form.name="Red" bounds="{minimum:0, maximum:255}" value="0"/>
+                            <Slider wtkx:id="greenSlider" Form.name="Green" bounds="{minimum:0, maximum:255}" value="0"/>
+                            <Slider wtkx:id="blueSlider" Form.name="Blue" bounds="{minimum:0, maximum:255}" value="0"/>
+                            <Border wtkx:id="colorBorder" Form.name="Color" preferredWidth="120" preferredHeight="30"/>
+                        </Form.Section>
+                    </sections>
+                </Form>
             </FlowPane>
-            <FlowPane orientation="vertical">
-                <Label text="Date Spinner" styles="{fontBold:true}"/>
-                <Spinner wtkx:id="dateSpinner" />
-            </FlowPane>
-        </FlowPane>
-    </content>
-</Border>
+        </content>
+    </Border>
+</FlowPane>
+

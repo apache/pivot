@@ -30,6 +30,7 @@ import pivot.wtk.Action;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
+import pivot.wtk.Border;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ComponentKeyListener;
@@ -55,6 +56,8 @@ import pivot.wtk.Component;
 import pivot.wtk.Display;
 import pivot.wtk.Bounds;
 import pivot.wtk.ScrollPane;
+import pivot.wtk.Slider;
+import pivot.wtk.SliderValueListener;
 import pivot.wtk.Spinner;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
@@ -295,6 +298,11 @@ public class Demo implements Application {
     private MenuPopup menuPopup = null;
     private ImageView menuImageView = null;
 
+    private Slider redSlider = null;
+    private Slider greenSlider = null;
+    private Slider blueSlider = null;
+    private Border colorBorder = null;
+
     private TableView sortableTableView = null;
     private TableView customTableView = null;
     private TableViewHeader sortableTableViewHeader = null;
@@ -359,6 +367,33 @@ public class Demo implements Application {
             }
         });
 
+        // Spinners
+        Spinner numericSpinner = (Spinner)wtkxSerializer.getObjectByName("spinners.numericSpinner");
+        initializeNumericSpinner(numericSpinner);
+
+        Spinner dateSpinner = (Spinner)wtkxSerializer.getObjectByName("spinners.dateSpinner");
+        initializeDateSpinner(dateSpinner);
+
+        // Sliders
+        SliderValueListener sliderValueListener = new SliderValueListener() {
+        	public void valueChanged(Slider slider, int previousValue) {
+        		Color color = new Color(redSlider.getValue(), greenSlider.getValue(),
+    				blueSlider.getValue());
+        		colorBorder.getStyles().put("backgroundColor", color);
+        	}
+        };
+
+        redSlider = (Slider)wtkxSerializer.getObjectByName("spinners.redSlider");
+        redSlider.getSliderValueListeners().add(sliderValueListener);
+
+        greenSlider = (Slider)wtkxSerializer.getObjectByName("spinners.greenSlider");
+        greenSlider.getSliderValueListeners().add(sliderValueListener);
+
+        blueSlider = (Slider)wtkxSerializer.getObjectByName("spinners.blueSlider");
+        blueSlider.getSliderValueListeners().add(sliderValueListener);
+
+        colorBorder = (Border)wtkxSerializer.getObjectByName("spinners.colorBorder");
+
         sortableTableView = (TableView)wtkxSerializer.getObjectByName("tables.sortableTableView");
         sortableTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("tables.sortableTableViewHeader");
         customTableView = (TableView)wtkxSerializer.getObjectByName("tables.customTableView");
@@ -367,12 +402,6 @@ public class Demo implements Application {
         editableTreeView = (TreeView)wtkxSerializer.getObjectByName("trees.editableTreeView");
         editableTreeViewScrollPane = (ScrollPane)wtkxSerializer.getObjectByName("trees.editableTreeViewScrollPane");
         initializeEditableTreeView();
-
-        Spinner numericSpinner = (Spinner)wtkxSerializer.getObjectByName("spinners.numericSpinner");
-        initializeNumericSpinner(numericSpinner);
-
-        Spinner dateSpinner = (Spinner)wtkxSerializer.getObjectByName("spinners.dateSpinner");
-        initializeDateSpinner(dateSpinner);
 
         ImageDragHandler imageDragHandler = new ImageDragHandler();
         ImageDropHandler imageDropHandler = new ImageDropHandler();
