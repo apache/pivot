@@ -392,7 +392,10 @@ public class Demo implements Application {
         blueSlider = (Slider)wtkxSerializer.getObjectByName("spinners.blueSlider");
         blueSlider.getSliderValueListeners().add(sliderValueListener);
 
+    	Color color = new Color(redSlider.getValue(), greenSlider.getValue(),
+			blueSlider.getValue());
         colorBorder = (Border)wtkxSerializer.getObjectByName("spinners.colorBorder");
+		colorBorder.getStyles().put("backgroundColor", color);
 
         sortableTableView = (TableView)wtkxSerializer.getObjectByName("tables.sortableTableView");
         sortableTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("tables.sortableTableViewHeader");
