@@ -97,6 +97,21 @@ limitations under the License.
             </FlowPane>
 
             <FlowPane orientation="vertical" styles="{spacing:6}">
+                <Label text="Checked" styles="{fontBold:true}"/>
+                <Border styles="{padding:0, color:10}">
+                    <content>
+                        <ScrollPane preferredHeight="80">
+                            <view>
+                                <ListView wtkx:id="checkedListView" selectMode="multi"
+                                    listData="['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']" 
+                                    checkmarksEnabled="true" selectedIndex="0"/>
+                            </view>
+                        </ScrollPane>
+                    </content>
+                </Border>
+            </FlowPane>
+
+            <FlowPane orientation="vertical" styles="{spacing:6}">
                 <Label text="List Buttons" styles="{fontBold:true}"/>
                 <Form>
                     <sections>

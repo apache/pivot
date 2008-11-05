@@ -44,8 +44,6 @@ import pivot.wtk.skin.ComponentSkin;
  * List view skin.
  * <p>
  * NOTE This skin assumes a fixed renderer height.
- * <p>
- * TODO Support a "showToggleButtons" style.
  *
  * @author gbrown
  */
@@ -63,7 +61,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     private Color highlightColor;
     private Color highlightBackgroundColor;
     private boolean showHighlight;
-    private Insets checkboxPadding = new Insets(2);
+    private Insets checkboxPadding = new Insets(2, 2, 2, 0);
 
     private int highlightedIndex = -1;
 
@@ -536,42 +534,52 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         if (itemIndex < listData.getLength()
             && !listView.isItemDisabled(itemIndex)) {
-            ListView.SelectMode selectMode = listView.getSelectMode();
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                && selectMode == ListView.SelectMode.MULTI) {
-                // Select the range
-                int startIndex = listView.getFirstSelectedIndex();
-                int endIndex = listView.getLastSelectedIndex();
-                Span selectedRange = (itemIndex > startIndex) ?
-                    new Span(startIndex, itemIndex) : new Span(itemIndex, endIndex);
+        	int itemY = itemIndex * itemHeight;
+        	
+        	if (listView.getCheckmarksEnabled()
+        		&& x > checkboxPadding.left
+				&& x < checkboxPadding.left + CHECKBOX.getWidth()
+				&& y > itemY + checkboxPadding.top
+				&& y < itemY + checkboxPadding.top + CHECKBOX.getHeight()) {
+        		listView.setItemChecked(itemIndex, !listView.isItemChecked(itemIndex));
+        	} else {
+                ListView.SelectMode selectMode = listView.getSelectMode();
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                    && selectMode == ListView.SelectMode.MULTI) {
+                    // Select the range
+                    int startIndex = listView.getFirstSelectedIndex();
+                    int endIndex = listView.getLastSelectedIndex();
+                    Span selectedRange = (itemIndex > startIndex) ?
+                        new Span(startIndex, itemIndex) : new Span(itemIndex, endIndex);
 
-                ArrayList<Span> selectedRanges = new ArrayList<Span>();
-                Sequence<Integer> disabledIndexes = listView.getDisabledIndexes();
-                if (disabledIndexes.getLength() == 0) {
-                    selectedRanges.add(selectedRange);
-                } else {
-                    // TODO Split the range by the disabled indexes; for now,
-                    // just return
-                    return;
-                }
+                    ArrayList<Span> selectedRanges = new ArrayList<Span>();
+                    Sequence<Integer> disabledIndexes = listView.getDisabledIndexes();
+                    if (disabledIndexes.getLength() == 0) {
+                        selectedRanges.add(selectedRange);
+                    } else {
+                        // TODO Split the range by the disabled indexes; for now,
+                        // just return
+                        return;
+                    }
 
-                listView.setSelectedRanges(selectedRanges);
-            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
-                && selectMode == ListView.SelectMode.MULTI) {
-                // Toggle the item's selection state
-                if (listView.isIndexSelected(itemIndex)) {
-                    listView.removeSelectedIndex(itemIndex);
+                    listView.setSelectedRanges(selectedRanges);
+                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
+                    && selectMode == ListView.SelectMode.MULTI) {
+                    // Toggle the item's selection state
+                    if (listView.isIndexSelected(itemIndex)) {
+                        listView.removeSelectedIndex(itemIndex);
+                    } else {
+                        listView.addSelectedIndex(itemIndex);
+                    }
                 } else {
-                    listView.addSelectedIndex(itemIndex);
+                    // Select the item
+                    if ((selectMode == ListView.SelectMode.SINGLE
+                            && listView.getSelectedIndex() != itemIndex)
+                        || selectMode == ListView.SelectMode.MULTI) {
+                        listView.setSelectedIndex(itemIndex);
+                    }
                 }
-            } else {
-                // Select the item
-                if ((selectMode == ListView.SelectMode.SINGLE
-                        && listView.getSelectedIndex() != itemIndex)
-                    || selectMode == ListView.SelectMode.MULTI) {
-                    listView.setSelectedIndex(itemIndex);
-                }
-            }
+        	}
         }
     }
 

@@ -44,6 +44,7 @@ import pivot.wtk.DropHandler;
 import pivot.wtk.ImageView;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
+import pivot.wtk.ListView;
 import pivot.wtk.Menu;
 import pivot.wtk.MenuPopup;
 import pivot.wtk.MessageType;
@@ -294,6 +295,8 @@ public class Demo implements Application {
             component.getStyles().put("backgroundColor", null);
         }
     }
+    
+    private ListView checkedListView = null;
 
     private MenuPopup menuPopup = null;
     private ImageView menuImageView = null;
@@ -349,6 +352,11 @@ public class Demo implements Application {
             }
         };
 
+        checkedListView = (ListView)wtkxSerializer.getObjectByName("lists.checkedListView");
+        checkedListView.setItemChecked(0, true);
+        checkedListView.setItemChecked(2, true);
+        checkedListView.setItemChecked(3, true);
+        
         menuImageView = (ImageView)wtkxSerializer.getObjectByName("menus.imageView");
         menuImageView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
             public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
