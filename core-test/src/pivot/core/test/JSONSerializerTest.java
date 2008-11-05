@@ -15,6 +15,8 @@
  */
 package pivot.core.test;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -56,9 +58,10 @@ public class JSONSerializerTest {
     };
 
     public static void main(String[] args) {
-        // test0();
-        test1();
+        test0();
+        // test1();
         // test2();
+    	test3();
     }
 
     public static void test0() {
@@ -130,6 +133,29 @@ public class JSONSerializerTest {
         testList("[[0, 1, 2], [3, 4, 5]]", "[1][0].c");
         testList("[[0, 1, 2], [3, 4, 5]]", "[1][]");
         testList("[[0, 1, 2], [3, 4, 5]]", "[1][0][0]");
+    }
+
+    public static void test3() {
+    	JSONSerializer serializer = new JSONSerializer("ISO-8859-1");
+    	InputStream inputStream = JSONSerializerTest.class.getResourceAsStream("json_serializer_test.json");
+
+    	Object root = null;
+    	try {
+    		root = serializer.readObject(inputStream);
+    	} catch(Exception exception) {
+    		System.out.println(exception);
+    	}
+
+    	if (root != null) {
+	    	System.out.println(JSONSerializer.getString(root, "foo"));
+	    	System.out.println(JSONSerializer.getString(root, "bar"));
+    	}
+
+    	try {
+        	serializer.writeObject(root, System.out);
+    	} catch(Exception exception) {
+    		System.out.println(exception);
+    	}
     }
 
     private static void testList(String list, String path) {
