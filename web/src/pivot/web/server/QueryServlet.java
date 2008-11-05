@@ -412,7 +412,7 @@ public abstract class QueryServlet extends HttpServlet {
      * @throws LoginException
      * Thrown if the request is not authorized
      */
-    protected void authorize() throws LoginException {
+    protected void authorize() throws ServletException, LoginException {
         // No-op
     }
 
