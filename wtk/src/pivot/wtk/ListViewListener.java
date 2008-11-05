@@ -48,6 +48,13 @@ public interface ListViewListener {
     public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode);
 
     /**
+     * Called when a list view's checkmarks enabled flag has changed.
+     *
+     * @param listView
+     */
+    public void checkmarksEnabledChanged(ListView listView);
+
+    /**
      * Called when a list view's selected value key has changed.
      *
      * @param listView

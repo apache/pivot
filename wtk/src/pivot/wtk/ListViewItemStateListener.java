@@ -33,7 +33,7 @@ public interface ListViewItemStateListener {
     public Vote previewItemDisabledChange(ListView listView, int index);
 
     /**
-     * Called when an item disabled change event has been cancelled.
+     * Called when an item disabled change event has been canceled.
      *
      * @param listView
      * @param index
@@ -48,4 +48,29 @@ public interface ListViewItemStateListener {
      * @param index
      */
     public void itemDisabledChanged(ListView listView, int index);
+
+    /**
+     * Called to preview an item checked state change.
+     *
+     * @param listView
+     * @param index
+     */
+    public Vote previewItemCheckedChange(ListView listView, int index);
+
+    /**
+     * Called when an item checked change event has been canceled.
+     *
+     * @param listView
+     * @param index
+     * @param reason
+     */
+    public void itemCheckedChangeVetoed(ListView listView, int index, Vote reason);
+
+    /**
+     * Called when an item's disabled state has changed.
+     *
+     * @param listView
+     * @param index
+     */
+    public void itemCheckedChanged(ListView listView, int index);
 }

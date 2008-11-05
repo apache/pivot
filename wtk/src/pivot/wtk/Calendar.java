@@ -26,7 +26,7 @@ import pivot.util.ListenerList;
  */
 public class Calendar extends Container {
     /**
-     * calendar listener list.
+     * Calendar listener list.
      *
      * @author tvolkert
      */
@@ -54,7 +54,7 @@ public class Calendar extends Container {
     }
 
     /**
-     * calendar selection listener list.
+     * Calendar selection listener list.
      *
      * @author tvolkert
      */

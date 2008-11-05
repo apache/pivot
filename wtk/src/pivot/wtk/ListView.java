@@ -30,15 +30,6 @@ import pivot.wtk.content.ListViewItemRenderer;
 /**
  * Component that displays a sequence of items, optionally allowing a user
  * to select or check one or more items.
- * <p>
- * TODO Add is/setItemChecked(); add events to ListViewItemListener.
- * <p>
- * TODO Add getCheckMode() method to allow a caller to set NONE, SINGLE, or
- * MULTI; none disables checkboxes, single displays them as radio buttons, and
- * multi displays them as checkboxes (we can already disable selection by
- * setting the select mode to NONE).
- * <p>
- * TODO Add a showCheckmarks style to ListViewSkin.
  *
  * @author gbrown
  */
@@ -195,6 +186,12 @@ public class ListView extends Component {
             }
         }
 
+        public void checkmarksEnabledChanged(ListView listView) {
+            for (ListViewListener listener : this) {
+                listener.checkmarksEnabledChanged(listView);
+            }
+        }
+
         public void selectedValueKeyChanged(ListView listView, String previousSelectedValueKey) {
             for (ListViewListener listener : this) {
                 listener.selectedValueKeyChanged(listView, previousSelectedValueKey);
@@ -268,6 +265,28 @@ public class ListView extends Component {
                 listener.itemDisabledChanged(listView, index);
             }
         }
+
+        public Vote previewItemCheckedChange(ListView listView, int index) {
+            Vote vote = Vote.APPROVE;
+
+            for (ListViewItemStateListener listener : this) {
+                vote = vote.tally(listener.previewItemCheckedChange(listView, index));
+            }
+
+            return vote;
+        }
+
+        public void itemCheckedChangeVetoed(ListView listView, int index, Vote reason) {
+            for (ListViewItemStateListener listener : this) {
+                listener.itemCheckedChangeVetoed(listView, index, reason);
+            }
+        }
+
+        public void itemCheckedChanged(ListView listView, int index) {
+            for (ListViewItemStateListener listener : this) {
+                listener.itemCheckedChanged(listView, index);
+            }
+        }
     }
 
     /**
@@ -317,6 +336,9 @@ public class ListView extends Component {
 
     private SpanSequence selectedRanges = new SpanSequence();
     private SelectMode selectMode = SelectMode.SINGLE;
+
+    private boolean checkmarksEnabled = false;
+    private ArrayList<Integer> checkedIndexes = new ArrayList<Integer>();
 
     private ArrayList<Integer> disabledIndexes = new ArrayList<Integer>();
 
@@ -809,7 +831,8 @@ public class ListView extends Component {
     }
 
     /**
-     * Sets the selection mode. Clears the selection if the mode has changed.
+     * Sets the selection mode. Clears the selection if the mode has changed
+     * (but does not fire a selection change event).
      *
      * @param selectMode
      * The new selection mode.
@@ -823,7 +846,7 @@ public class ListView extends Component {
 
         if (previousSelectMode != selectMode) {
             // Clear any current selection
-            clearSelection();
+        	selectedRanges = new SpanSequence();
 
             // Update the selection mode
             this.selectMode = selectMode;
@@ -833,6 +856,13 @@ public class ListView extends Component {
         }
     }
 
+    /**
+     * Sets the selection mode.
+     *
+     * @param selectMode
+     *
+     * @see #setSelectMode(pivot.wtk.ListView.SelectMode)
+     */
     public void setSelectMode(String selectMode) {
         if (selectMode == null) {
             throw new IllegalArgumentException("selectMode is null.");
@@ -842,7 +872,86 @@ public class ListView extends Component {
     }
 
     /**
-     * Returns the disabled state of a given item.
+     * Returns the current check mode.
+     */
+    public boolean getCheckmarksEnabled() {
+    	return checkmarksEnabled;
+    }
+
+    /**
+     * Enables or disabled checkmarks. Clears the check state if the check
+     * mode has changed (but does not fire any check state change events).
+     *
+     * @param checkmarksEnabled
+     */
+    public void setCheckmarksEnabled(boolean checkmarksEnabled) {
+        if (this.checkmarksEnabled != checkmarksEnabled) {
+            // Clear any current check state
+        	checkedIndexes.clear();
+
+            // Update the check mode
+            this.checkmarksEnabled = checkmarksEnabled;
+
+            // Fire select mode change event
+            listViewListeners.checkmarksEnabledChanged(this);
+        }
+    }
+
+    /**
+     * Returns an item's checked state.
+     *
+     * @param index
+     */
+    public boolean isItemChecked(int index) {
+        return (Sequence.Search.binarySearch(checkedIndexes, index) >= 0);
+    }
+
+    /**
+     * Sets an item's checked state.
+     *
+     * @param index
+     * @param checked
+     */
+    public void setItemChecked(int index, boolean checked) {
+    	if (!checkmarksEnabled) {
+    		throw new IllegalStateException("Checkmarks are not enabled.");
+    	}
+
+        int i = Sequence.Search.binarySearch(checkedIndexes, index);
+
+        if ((i < 0 && checked)
+            || (i >= 0 && !checked)) {
+            Vote vote = listViewItemStateListeners.previewItemCheckedChange(this, index);
+
+            if (vote.isApproved()) {
+                if (checked) {
+                	checkedIndexes.insert(index, -(i + 1));
+                } else {
+                	checkedIndexes.remove(i, 1);
+                }
+
+                listViewItemStateListeners.itemCheckedChanged(this, index);
+            } else {
+                listViewItemStateListeners.itemCheckedChangeVetoed(this, index, vote);
+            }
+        }
+    }
+
+    /**
+     * Returns the indexes of currently checked items.
+     */
+    public Sequence<Integer> getCheckedIndexes() {
+        ArrayList<Integer> checkedIndexes = new ArrayList<Integer>();
+
+        for (int i = 0, n = this.checkedIndexes.getLength(); i < n; i++) {
+        	checkedIndexes.add(this.checkedIndexes.get(i));
+        }
+
+        return checkedIndexes;
+    }
+
+    /**
+     * Returns an item's disabled state.
      *
      * @param index
      * The index of the item whose disabled state is to be tested.
@@ -856,7 +965,7 @@ public class ListView extends Component {
     }
 
     /**
-     * Sets the disabled state of an item.
+     * Sets an item's disabled state.
      *
      * @param index
      * The index of the item whose disabled state is to be set.
@@ -885,6 +994,9 @@ public class ListView extends Component {
         }
     }
 
+    /**
+     * Returns the indexes of currently disabled items.
+     */
     public Sequence<Integer> getDisabledIndexes() {
         ArrayList<Integer> disabledIndexes = new ArrayList<Integer>();
 

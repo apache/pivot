@@ -28,7 +28,7 @@ import pivot.wtk.content.ButtonDataRenderer;
  */
 public class CalendarButton extends Button {
     /**
-     * calendar button skin interface. calendar button skins are required
+     * Calendar button skin interface. calendar button skins are required
      * to implement this.
      *
      * @author tvolkert
@@ -38,7 +38,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * calendar button listener list.
+     * Calendar button listener list.
      *
      * @author tvolkert
      */

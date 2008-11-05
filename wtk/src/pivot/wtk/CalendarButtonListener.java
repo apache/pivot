@@ -16,7 +16,7 @@
 package pivot.wtk;
 
 /**
- * calendar button listener interface.
+ * Calendar button listener interface.
  *
  * @author tvolkert
  */
