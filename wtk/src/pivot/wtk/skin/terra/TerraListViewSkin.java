@@ -535,7 +535,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         if (itemIndex < listData.getLength()
             && !listView.isItemDisabled(itemIndex)) {
         	int itemY = itemIndex * itemHeight;
-        	
+
         	if (listView.getCheckmarksEnabled()
         		&& x > checkboxPadding.left
 				&& x < checkboxPadding.left + CHECKBOX.getWidth()
@@ -649,6 +649,17 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 consumed = true;
                 break;
             }
+
+            case Keyboard.KeyCode.SPACE: {
+        		if (listView.getCheckmarksEnabled()
+    				&& listView.getSelectMode() == ListView.SelectMode.SINGLE) {
+        			int selectedIndex = listView.getSelectedIndex();
+        			listView.setItemChecked(selectedIndex, !listView.isItemChecked(selectedIndex));
+            		consumed = true;
+        		}
+
+        		break;
+        	}
         }
 
         // Clear the highlight

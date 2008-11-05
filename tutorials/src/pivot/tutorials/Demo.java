@@ -295,7 +295,7 @@ public class Demo implements Application {
             component.getStyles().put("backgroundColor", null);
         }
     }
-    
+
     private ListView checkedListView = null;
 
     private MenuPopup menuPopup = null;
@@ -356,7 +356,7 @@ public class Demo implements Application {
         checkedListView.setItemChecked(0, true);
         checkedListView.setItemChecked(2, true);
         checkedListView.setItemChecked(3, true);
-        
+
         menuImageView = (ImageView)wtkxSerializer.getObjectByName("menus.imageView");
         menuImageView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
             public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
@@ -478,11 +478,39 @@ public class Demo implements Application {
         sortableTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler());
 
         // Load images for custom table
-        List<?> customTableData = customTableView.getTableData();
+        final List<TableRow> customTableData = (List<TableRow>)customTableView.getTableData();
         for (int i = 0, n = customTableData.getLength(); i < n; i++) {
             TableRow tableRow = (TableRow)customTableData.get(i);
             tableRow.put("b", Image.load((URL)tableRow.get("b")));
         }
+
+        customTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
+            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            	return false;
+            }
+
+            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            	return false;
+            }
+
+            public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            	if (button == Mouse.Button.LEFT) {
+            		int columnIndex = customTableView.getColumnAt(x);
+            		if (columnIndex == 0) {
+            			int rowIndex = customTableView.getRowAt(y);
+            			TableRow row = (TableRow)customTableData.get(rowIndex);
+
+            			Object a = row.get("a");
+            			if (a instanceof String) {
+            				a = Boolean.parseBoolean((String)a);
+            			}
+
+            			row.put("a", !(Boolean)a);
+            			customTableData.update(rowIndex, row);
+            		}
+            	}
+            }
+        });
     }
 
     private void initializeEditableTreeView() {

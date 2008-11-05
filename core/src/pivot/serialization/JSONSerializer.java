@@ -188,8 +188,7 @@ public class JSONSerializer implements Serializer {
                 	c = '\t';
                 } else if (c == 'n') {
                 	c = '\n';
-                } else if (c == 'u'
-                	&& !charset.name().startsWith("UTF")) {
+                } else if (c == 'u') {
                 	StringBuilder unicodeBuilder = new StringBuilder();
                 	while (unicodeBuilder.length() < 4) {
                 		c = reader.read();

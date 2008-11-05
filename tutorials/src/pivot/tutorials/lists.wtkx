@@ -102,8 +102,8 @@ limitations under the License.
                     <content>
                         <ScrollPane preferredHeight="80">
                             <view>
-                                <ListView wtkx:id="checkedListView" selectMode="multi"
-                                    listData="['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']" 
+                                <ListView wtkx:id="checkedListView" selectMode="single"
+                                    listData="['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']"
                                     checkmarksEnabled="true" selectedIndex="0"/>
                             </view>
                         </ScrollPane>
