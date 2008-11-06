@@ -17,7 +17,6 @@ package pivot.wtk.skin;
 
 import java.awt.Color;
 
-import pivot.util.Vote;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
@@ -168,31 +167,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     // Component state events
-    public Vote previewEnabledChange(Component component) {
-        return Vote.APPROVE;
-    }
-
-    public void enabledChangeVetoed(Component component, Vote reason) {
-        // No-op
-    }
-
-    public void enabledChangeVetoed(Component component) {
-        // No-op
-    }
-
     public void enabledChanged(Component component) {
-        // No-op
-    }
-
-    public Vote previewFocusedChange(Component component, boolean temporary) {
-        return Vote.APPROVE;
-    }
-
-    public void focusedChangeVetoed(Component component, Vote reason) {
-        // No-op
-    }
-
-    public void focusedChangeVetoed(Component component) {
         // No-op
     }
 

@@ -1012,15 +1012,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     // Table view row state events
-
-    public Vote previewRowDisabledChange(TableView tableView, int index) {
-        return Vote.APPROVE;
-    }
-
-    public void rowDisabledChangeVetoed(TableView tableView, int index, Vote reason) {
-        // No-op
-    }
-
     public void rowDisabledChanged(TableView tableView, int index) {
         repaintComponent(getRowBounds(index));
     }

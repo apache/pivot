@@ -1400,15 +1400,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     // Tree view node state events
-
-    public Vote previewNodeDisabledChange(TreeView treeView, Sequence<Integer> path) {
-        return Vote.APPROVE;
-    }
-
-    public void nodeDisabledChangeVetoed(TreeView treeView, Sequence<Integer> path, Vote reason) {
-        // No-op
-    }
-
     public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {
         NodeInfo nodeInfo = getNodeInfoAt(path);
 

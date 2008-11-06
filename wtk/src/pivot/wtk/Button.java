@@ -18,7 +18,6 @@ package pivot.wtk;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.util.ListenerList;
-import pivot.util.Vote;
 
 /**
  * Abstract base class for button components.
@@ -169,22 +168,6 @@ public abstract class Button extends Component {
      */
     private static class ButtonStateListenerList extends ListenerList<ButtonStateListener>
         implements ButtonStateListener {
-        public Vote previewStateChange(Button button, Button.State state) {
-            Vote vote = Vote.APPROVE;
-
-            for (ButtonStateListener listener : this) {
-                vote = vote.tally(listener.previewStateChange(button, state));
-            }
-
-            return vote;
-        }
-
-        public void stateChangeVetoed(Button button, Vote reason) {
-            for (ButtonStateListener listener : this) {
-                listener.stateChangeVetoed(button, reason);
-            }
-        }
-
         public void stateChanged(Button button, Button.State previousState) {
             for (ButtonStateListener listener : this) {
                 listener.stateChanged(button, previousState);
@@ -393,39 +376,33 @@ public abstract class Button extends Component {
         State previousState = this.state;
 
         if (previousState != state) {
-            Vote vote = buttonStateListeners.previewStateChange(this, state);
+            this.state = state;
 
-            if (vote == Vote.APPROVE) {
-                this.state = state;
+            if (group != null) {
+                // Update the group's selection
+                Button selection = group.getSelection();
 
-                if (group != null) {
-                    // Update the group's selection
-                    Button selection = group.getSelection();
+                if (state == State.SELECTED) {
+                    // Set this as the new selection (do this before
+                    // de-selecting any currently selected button so the
+                    // group's change event isn't fired twice)
+                    group.setSelection(this);
 
-                    if (state == State.SELECTED) {
-                        // Set this as the new selection (do this before
-                        // de-selecting any currently selected button so the
-                        // group's change event isn't fired twice)
-                        group.setSelection(this);
-
-                        // De-select any previously selected button
-                        if (selection != null) {
-                            selection.setSelected(false);
-                        }
-                    }
-                    else {
-                        // If this button is currently selected, clear the
-                        // selection
-                        if (selection == this) {
-                            group.setSelection(null);
-                        }
+                    // De-select any previously selected button
+                    if (selection != null) {
+                        selection.setSelected(false);
                     }
                 }
-
-                buttonStateListeners.stateChanged(this, previousState);
-            } else {
-                buttonStateListeners.stateChangeVetoed(this, vote);
+                else {
+                    // If this button is currently selected, clear the
+                    // selection
+                    if (selection == this) {
+                        group.setSelection(null);
+                    }
+                }
             }
+
+            buttonStateListeners.stateChanged(this, previousState);
         }
     }
 

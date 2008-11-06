@@ -22,7 +22,6 @@ import pivot.collections.List;
 import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
-import pivot.util.Vote;
 import pivot.wtk.content.TreeViewNodeRenderer;
 
 /**
@@ -204,22 +203,6 @@ public class TreeView extends Component {
     private static class TreeViewNodeStateListenerList
         extends ListenerList<TreeViewNodeStateListener>
         implements TreeViewNodeStateListener {
-        public Vote previewNodeDisabledChange(TreeView treeView, Sequence<Integer> path) {
-            Vote vote = Vote.APPROVE;
-
-            for (TreeViewNodeStateListener listener : this) {
-                vote = vote.tally(listener.previewNodeDisabledChange(treeView, path));
-            }
-
-            return vote;
-        }
-
-        public void nodeDisabledChangeVetoed(TreeView treeView, Sequence<Integer> path, Vote reason) {
-            for (TreeViewNodeStateListener listener : this) {
-                listener.nodeDisabledChangeVetoed(treeView, path, reason);
-            }
-        }
-
         public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {
             for (TreeViewNodeStateListener listener : this) {
                 listener.nodeDisabledChanged(treeView, path);
@@ -732,18 +715,13 @@ public class TreeView extends Component {
 
         if ((index < 0 && disabled)
             || (index >= 0 && !disabled)) {
-            Vote vote = treeViewNodeStateListeners.previewNodeDisabledChange(this, path);
-            if (vote.isApproved()) {
-                if (disabled) {
-                    disabledPaths.add(path);
-                } else {
-                    disabledPaths.remove(index, 1);
-                }
-
-                treeViewNodeStateListeners.nodeDisabledChanged(this, path);
+            if (disabled) {
+                disabledPaths.add(path);
             } else {
-                treeViewNodeStateListeners.nodeDisabledChangeVetoed(this, path, vote);
+                disabledPaths.remove(index, 1);
             }
+
+            treeViewNodeStateListeners.nodeDisabledChanged(this, path);
         }
     }
 

@@ -16,7 +16,6 @@
 package pivot.tutorials.layout;
 
 import pivot.collections.Dictionary;
-import pivot.util.Vote;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonStateListener;
@@ -120,13 +119,6 @@ public class FlowPanes implements Application, ButtonStateListener {
     }
 
     public void resume() {
-    }
-
-    public Vote previewStateChange(Button button, Button.State state) {
-        return Vote.APPROVE;
-    }
-
-    public void stateChangeVetoed(Button button, Vote reason) {
     }
 
     public void stateChanged(Button button, Button.State previousState) {

@@ -26,23 +26,6 @@ import pivot.util.Vote;
  */
 public interface TreeViewNodeStateListener {
     /**
-     * Called to preview a node disabled change event.
-     *
-     * @param treeView
-     * @param path
-     */
-    public Vote previewNodeDisabledChange(TreeView treeView, Sequence<Integer> path);
-
-    /**
-     * Called when a node disabled change event has been vetoed.
-     *
-     * @param treeView
-     * @param path
-     * @param reason
-     */
-    public void nodeDisabledChangeVetoed(TreeView treeView, Sequence<Integer> path, Vote reason);
-
-    /**
      * Called when a node's disabled state has changed.
      *
      * @param treeView

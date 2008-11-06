@@ -15,13 +15,31 @@
  */
 package pivot.wtk;
 
+import pivot.util.Vote;
+
 /**
  * Tab pane selection listener interface.
  *
  * @author gbrown
  */
 public interface TabPaneSelectionListener {
-    /**
+	/**
+	 * Called to preview a selected index change.
+	 *
+	 * @param tabPane
+	 * @param selectedIndex
+	 */
+	public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex);
+
+	/**
+	 * Called when a selected index change has been vetoed.
+	 *
+	 * @param tabPane
+	 * @param reason
+	 */
+	public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason);
+
+	/**
      * Called when a tab pane's selected index has changed.
      *
      * @param tabPane

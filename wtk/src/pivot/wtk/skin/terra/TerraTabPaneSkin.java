@@ -23,6 +23,7 @@ import java.awt.Graphics2D;
 
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
+import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
@@ -954,7 +955,17 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     // Tab pane selection events
-    public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
+	public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
+		// TODO Animate transition when collapsing
+
+		return Vote.APPROVE;
+	}
+
+	public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
+		// No-op
+	}
+
+	public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
         int selectedIndex = tabPane.getSelectedIndex();
 
         if (selectedIndex == -1) {

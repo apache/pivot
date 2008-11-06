@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.util.Vote;
-
 /**
  * Table view row state listener interface.
  *
@@ -24,23 +22,6 @@ import pivot.util.Vote;
  * @author tvolkert
  */
 public interface TableViewRowStateListener {
-    /**
-     * Called to preview a row disabled change event.
-     *
-     * @param tableView
-     * @param index
-     */
-    public Vote previewRowDisabledChange(TableView tableView, int index);
-
-    /**
-     * Called when a row disabled change event has been vetoed.
-     *
-     * @param tableView
-     * @param index
-     * @param reason
-     */
-    public void rowDisabledChangeVetoed(TableView tableView, int index, Vote reason);
-
     /**
      * Called when a row's disabled state has changed.
      *

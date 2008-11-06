@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.util.Vote;
-
 /**
  * Button state listener interface.
  *
@@ -24,22 +22,6 @@ import pivot.util.Vote;
  * @author tvolkert
  */
 public interface ButtonStateListener {
-    /**
-     * Called to preview a button state change event.
-     *
-     * @param button
-     * @param state
-     */
-    public Vote previewStateChange(Button button, Button.State state);
-
-    /**
-     * Called when a state change event has been vetoed.
-     *
-     * @param button
-     * @param reason
-     */
-    public void stateChangeVetoed(Button button, Vote reason);
-
     /**
      * Called when a button's state has changed.
      *

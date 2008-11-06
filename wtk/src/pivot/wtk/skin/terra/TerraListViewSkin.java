@@ -728,24 +728,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     // List view item state events
-    public Vote previewItemDisabledChange(ListView listView, int index) {
-        return Vote.APPROVE;
-    }
-
-    public void itemDisabledChangeVetoed(ListView listView, int index, Vote reason) {
-        // No-op
-    }
-
     public void itemDisabledChanged(ListView listView, int index) {
         repaintComponent(getItemBounds(index));
-    }
-
-    public Vote previewItemCheckedChange(ListView listView, int index) {
-        return Vote.APPROVE;
-    }
-
-    public void itemCheckedChangeVetoed(ListView listView, int index, Vote reason) {
-        // No-op
     }
 
     public void itemCheckedChanged(ListView listView, int index) {

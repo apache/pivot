@@ -25,7 +25,6 @@ import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
-import pivot.util.Vote;
 import pivot.wtk.content.TableViewCellRenderer;
 import pivot.wtk.content.TableViewHeaderData;
 
@@ -767,22 +766,6 @@ public class TableView extends Component {
      */
     private static class TableViewRowStateListenerList extends ListenerList<TableViewRowStateListener>
         implements TableViewRowStateListener {
-        public Vote previewRowDisabledChange(TableView tableView, int index) {
-            Vote vote = Vote.APPROVE;
-
-            for (TableViewRowStateListener listener : this) {
-                vote = vote.tally(listener.previewRowDisabledChange(tableView, index));
-            }
-
-            return vote;
-        }
-
-        public void rowDisabledChangeVetoed(TableView tableView, int index, Vote reason) {
-            for (TableViewRowStateListener listener : this) {
-                listener.rowDisabledChangeVetoed(tableView, index, reason);
-            }
-        }
-
         public void rowDisabledChanged(TableView tableView, int index) {
             for (TableViewRowStateListener listener : this) {
                 listener.rowDisabledChanged(tableView, index);
@@ -1310,18 +1293,13 @@ public class TableView extends Component {
 
         if ((i < 0 && disabled)
             || (i >= 0 && !disabled)) {
-            Vote vote = tableViewRowStateListeners.previewRowDisabledChange(this, index);
-            if (vote.isApproved()) {
-                if (disabled) {
-                    disabledIndexes.insert(index, -(i + 1));
-                } else {
-                    disabledIndexes.remove(i, 1);
-                }
-
-                tableViewRowStateListeners.rowDisabledChanged(this, index);
+            if (disabled) {
+                disabledIndexes.insert(index, -(i + 1));
             } else {
-                tableViewRowStateListeners.rowDisabledChangeVetoed(this, index, vote);
+                disabledIndexes.remove(i, 1);
             }
+
+            tableViewRowStateListeners.rowDisabledChanged(this, index);
         }
     }
 

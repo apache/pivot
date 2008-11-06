@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
+import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
@@ -568,7 +569,16 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     // Tab pane selection events
-    public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
+	public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
+		// TODO
+		return Vote.APPROVE;
+	}
+
+	public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
+		// TODO
+	}
+
+	public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
         int selectedIndex = accordion.getSelectedIndex();
 
         if (selectedIndex == -1) {

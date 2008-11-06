@@ -24,7 +24,6 @@ import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.serialization.JSONSerializer;
 import pivot.util.ListenerList;
-import pivot.util.Vote;
 import pivot.wtk.content.ListViewItemRenderer;
 
 /**
@@ -244,41 +243,9 @@ public class ListView extends Component {
      */
     private static class ListViewItemStateListenerList extends ListenerList<ListViewItemStateListener>
         implements ListViewItemStateListener {
-        public Vote previewItemDisabledChange(ListView listView, int index) {
-            Vote vote = Vote.APPROVE;
-
-            for (ListViewItemStateListener listener : this) {
-                vote = vote.tally(listener.previewItemDisabledChange(listView, index));
-            }
-
-            return vote;
-        }
-
-        public void itemDisabledChangeVetoed(ListView listView, int index, Vote reason) {
-            for (ListViewItemStateListener listener : this) {
-                listener.itemDisabledChangeVetoed(listView, index, reason);
-            }
-        }
-
         public void itemDisabledChanged(ListView listView, int index) {
             for (ListViewItemStateListener listener : this) {
                 listener.itemDisabledChanged(listView, index);
-            }
-        }
-
-        public Vote previewItemCheckedChange(ListView listView, int index) {
-            Vote vote = Vote.APPROVE;
-
-            for (ListViewItemStateListener listener : this) {
-                vote = vote.tally(listener.previewItemCheckedChange(listView, index));
-            }
-
-            return vote;
-        }
-
-        public void itemCheckedChangeVetoed(ListView listView, int index, Vote reason) {
-            for (ListViewItemStateListener listener : this) {
-                listener.itemCheckedChangeVetoed(listView, index, reason);
             }
         }
 
@@ -921,19 +888,13 @@ public class ListView extends Component {
 
         if ((i < 0 && checked)
             || (i >= 0 && !checked)) {
-            Vote vote = listViewItemStateListeners.previewItemCheckedChange(this, index);
-
-            if (vote.isApproved()) {
-                if (checked) {
-                	checkedIndexes.insert(index, -(i + 1));
-                } else {
-                	checkedIndexes.remove(i, 1);
-                }
-
-                listViewItemStateListeners.itemCheckedChanged(this, index);
+            if (checked) {
+            	checkedIndexes.insert(index, -(i + 1));
             } else {
-                listViewItemStateListeners.itemCheckedChangeVetoed(this, index, vote);
+            	checkedIndexes.remove(i, 1);
             }
+
+            listViewItemStateListeners.itemCheckedChanged(this, index);
         }
     }
 
@@ -978,19 +939,13 @@ public class ListView extends Component {
 
         if ((i < 0 && disabled)
             || (i >= 0 && !disabled)) {
-            Vote vote = listViewItemStateListeners.previewItemDisabledChange(this, index);
-
-            if (vote.isApproved()) {
-                if (disabled) {
-                    disabledIndexes.insert(index, -(i + 1));
-                } else {
-                    disabledIndexes.remove(i, 1);
-                }
-
-                listViewItemStateListeners.itemDisabledChanged(this, index);
+            if (disabled) {
+                disabledIndexes.insert(index, -(i + 1));
             } else {
-                listViewItemStateListeners.itemDisabledChangeVetoed(this, index, vote);
+                disabledIndexes.remove(i, 1);
             }
+
+            listViewItemStateListeners.itemDisabledChanged(this, index);
         }
     }
 

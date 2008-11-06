@@ -22,6 +22,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
+import pivot.util.Vote;
 import pivot.wtk.media.Image;
 
 /**
@@ -187,7 +188,23 @@ public class Accordion extends Container {
 
     private static class AccordionSelectionListenerList extends ListenerList<AccordionSelectionListener>
         implements AccordionSelectionListener {
-        public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
+    	public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
+            Vote vote = Vote.APPROVE;
+
+            for (AccordionSelectionListener listener : this) {
+                vote = vote.tally(listener.previewSelectedIndexChange(accordion, selectedIndex));
+            }
+
+            return vote;
+    	}
+
+    	public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
+            for (AccordionSelectionListener listener : this) {
+                listener.selectedIndexChangeVetoed(accordion, reason);
+            }
+    	}
+
+    	public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
             for (AccordionSelectionListener listener : this) {
                 listener.selectedIndexChanged(accordion, previousSelectedIndex);
             }
@@ -230,8 +247,14 @@ public class Accordion extends Container {
         int previousSelectedIndex = this.selectedIndex;
 
         if (previousSelectedIndex != selectedIndex) {
-            this.selectedIndex = selectedIndex;
-            accordionSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
+        	Vote vote = accordionSelectionListeners.previewSelectedIndexChange(this, selectedIndex);
+
+        	if (vote == Vote.APPROVE) {
+	            this.selectedIndex = selectedIndex;
+	            accordionSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
+        	} else {
+        		accordionSelectionListeners.selectedIndexChangeVetoed(this, vote);
+        	}
         }
     }
 

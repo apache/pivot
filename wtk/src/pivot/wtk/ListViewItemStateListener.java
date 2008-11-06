@@ -25,46 +25,12 @@ import pivot.util.Vote;
  */
 public interface ListViewItemStateListener {
     /**
-     * Called to preview an item disabled state change.
-     *
-     * @param listView
-     * @param index
-     */
-    public Vote previewItemDisabledChange(ListView listView, int index);
-
-    /**
-     * Called when an item disabled change event has been canceled.
-     *
-     * @param listView
-     * @param index
-     * @param reason
-     */
-    public void itemDisabledChangeVetoed(ListView listView, int index, Vote reason);
-
-    /**
      * Called when an item's disabled state has changed.
      *
      * @param listView
      * @param index
      */
     public void itemDisabledChanged(ListView listView, int index);
-
-    /**
-     * Called to preview an item checked state change.
-     *
-     * @param listView
-     * @param index
-     */
-    public Vote previewItemCheckedChange(ListView listView, int index);
-
-    /**
-     * Called when an item checked change event has been canceled.
-     *
-     * @param listView
-     * @param index
-     * @param reason
-     */
-    public void itemCheckedChangeVetoed(ListView listView, int index, Vote reason);
 
     /**
      * Called when an item's disabled state has changed.

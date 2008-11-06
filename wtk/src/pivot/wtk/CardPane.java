@@ -17,19 +17,33 @@ package pivot.wtk;
 
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
+import pivot.util.Vote;
 
 /**
  * Container that behaves like a deck of cards, only one of which may be
  * visible at a time.
- * <p>
- * TODO Add a "transition" property to support transitions such as CROSS_FADE,
- * SLIDE, etc.
  *
  * @author gbrown
  */
 public class CardPane extends Container {
     private static class CardPaneListenerList extends ListenerList<CardPaneListener>
         implements CardPaneListener {
+    	public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
+            Vote vote = Vote.APPROVE;
+
+            for (CardPaneListener listener : this) {
+                vote = vote.tally(listener.previewSelectedIndexChange(cardPane, selectedIndex));
+            }
+
+            return vote;
+    	}
+
+    	public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
+            for (CardPaneListener listener : this) {
+                listener.selectedIndexChangeVetoed(cardPane, reason);
+            }
+    	}
+
         public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
             for (CardPaneListener listener : this) {
                 listener.selectedIndexChanged(cardPane, previousSelectedIndex);
@@ -54,6 +68,12 @@ public class CardPane extends Container {
         return selectedIndex;
     }
 
+    /**
+     * Sets the selected card index.
+     *
+     * @param selectedIndex
+     * The selected card index, or <tt>-1</tt> for no selection.
+     */
     public void setSelectedIndex(int selectedIndex) {
         if (selectedIndex < -1
             || selectedIndex > getLength() - 1) {
@@ -63,8 +83,14 @@ public class CardPane extends Container {
         int previousSelectedIndex = this.selectedIndex;
 
         if (previousSelectedIndex != selectedIndex) {
-            this.selectedIndex = selectedIndex;
-            cardPaneListeners.selectedIndexChanged(this, previousSelectedIndex);
+        	Vote vote = cardPaneListeners.previewSelectedIndexChange(this, selectedIndex);
+
+        	if (vote == Vote.APPROVE) {
+                this.selectedIndex = selectedIndex;
+                cardPaneListeners.selectedIndexChanged(this, previousSelectedIndex);
+        	} else {
+        		cardPaneListeners.selectedIndexChangeVetoed(this, vote);
+        	}
         }
     }
 

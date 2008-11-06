@@ -15,13 +15,31 @@
  */
 package pivot.wtk;
 
+import pivot.util.Vote;
+
 /**
  * Accordion selection listener interface.
  *
  * @author gbrown
  */
 public interface AccordionSelectionListener {
-    /**
+	/**
+	 * Called to preview a selected index change.
+	 *
+	 * @param accordion
+	 * @param selectedIndex
+	 */
+	public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex);
+
+	/**
+	 * Called when a selected index change has been vetoed.
+	 *
+	 * @param accordion
+	 * @param reason
+	 */
+	public void selectedIndexChangeVetoed(Accordion accordion, Vote reason);
+
+	/**
      * Called when an accordion's selected index has changed.
      *
      * @param accordion

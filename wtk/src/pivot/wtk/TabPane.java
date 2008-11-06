@@ -21,6 +21,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
+import pivot.util.Vote;
 import pivot.wtk.media.Image;
 
 /**
@@ -205,7 +206,23 @@ public class TabPane extends Container {
 
     private static class TabPaneSelectionListenerList extends ListenerList<TabPaneSelectionListener>
         implements TabPaneSelectionListener {
-        public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
+    	public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
+            Vote vote = Vote.APPROVE;
+
+            for (TabPaneSelectionListener listener : this) {
+                vote = vote.tally(listener.previewSelectedIndexChange(tabPane, selectedIndex));
+            }
+
+            return vote;
+    	}
+
+    	public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
+            for (TabPaneSelectionListener listener : this) {
+                listener.selectedIndexChangeVetoed(tabPane, reason);
+            }
+    	}
+
+    	public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
             for (TabPaneSelectionListener listener : this) {
                 listener.selectedIndexChanged(tabPane, previousSelectedIndex);
             }
@@ -294,8 +311,14 @@ public class TabPane extends Container {
         int previousSelectedIndex = this.selectedIndex;
 
         if (previousSelectedIndex != selectedIndex) {
-            this.selectedIndex = selectedIndex;
-            tabPaneSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
+        	Vote vote = tabPaneSelectionListeners.previewSelectedIndexChange(this, selectedIndex);
+
+        	if (vote == Vote.APPROVE) {
+        		this.selectedIndex = selectedIndex;
+        		tabPaneSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
+        	} else {
+        		tabPaneSelectionListeners.selectedIndexChangeVetoed(this, vote);
+        	}
         }
     }
 

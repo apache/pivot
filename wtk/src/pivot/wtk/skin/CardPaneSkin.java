@@ -15,6 +15,7 @@
  */
 package pivot.wtk.skin;
 
+import pivot.util.Vote;
 import pivot.wtk.CardPane;
 import pivot.wtk.CardPaneListener;
 import pivot.wtk.Component;
@@ -22,6 +23,8 @@ import pivot.wtk.Dimensions;
 
 /**
  * Card pane skin.
+ * <p>
+ * TODO Add a matchSelectedCardSize style.
  *
  * @author gbrown
  */
@@ -100,7 +103,17 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         }
     }
 
+    public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
+    	// TODO
+    	return Vote.APPROVE;
+    }
+
+    public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
+    	// TODO
+    }
+
     public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+    	// TODO
         invalidateComponent();
     }
 }

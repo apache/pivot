@@ -32,7 +32,6 @@ import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
-import pivot.util.Vote;
 
 /**
  * Top level abstract base class for all components. In MVC terminology, a
@@ -289,41 +288,9 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentStateListenerList extends
         ListenerList<ComponentStateListener> implements ComponentStateListener {
-        public Vote previewEnabledChange(Component component) {
-            Vote vote = Vote.APPROVE;
-
-            for (ComponentStateListener listener : this) {
-                vote = vote.tally(listener.previewEnabledChange(component));
-            }
-
-            return vote;
-        }
-
-        public void enabledChangeVetoed(Component component, Vote reason) {
-            for (ComponentStateListener listener : this) {
-                listener.enabledChangeVetoed(component, reason);
-            }
-        }
-
         public void enabledChanged(Component component) {
             for (ComponentStateListener listener : this) {
                 listener.enabledChanged(component);
-            }
-        }
-
-        public Vote previewFocusedChange(Component component, boolean temporary) {
-            Vote vote = Vote.APPROVE;
-
-            for (ComponentStateListener listener : this) {
-                vote = vote.tally(listener.previewFocusedChange(component, temporary));
-            }
-
-            return vote;
-        }
-
-        public void focusedChangeVetoed(Component component, Vote reason) {
-            for (ComponentStateListener listener : this) {
-                listener.focusedChangeVetoed(component, reason);
             }
         }
 
@@ -1776,27 +1743,21 @@ public abstract class Component implements ConstrainedVisual {
      */
     public void setEnabled(boolean enabled) {
         if (this.enabled != enabled) {
-            Vote vote = componentStateListeners.previewEnabledChange(this);
-
-            if (vote == Vote.APPROVE) {
-                if (!enabled) {
-                    // If this component has the focus, clear it
-                    if (isFocused()) {
-                        clearFocus();
-                    }
-
-                    // Ensure that the mouse out event is processed
-                    if (mouseOver) {
-                        mouseOut();
-                    }
+            if (!enabled) {
+                // If this component has the focus, clear it
+                if (isFocused()) {
+                    clearFocus();
                 }
 
-                this.enabled = enabled;
-
-                componentStateListeners.enabledChanged(this);
-            } else {
-                componentStateListeners.enabledChangeVetoed(this, vote);
+                // Ensure that the mouse out event is processed
+                if (mouseOver) {
+                    mouseOut();
+                }
             }
+
+            this.enabled = enabled;
+
+            componentStateListeners.enabledChanged(this);
         }
     }
 
@@ -2089,26 +2050,6 @@ public abstract class Component implements ConstrainedVisual {
         Component previousFocusedComponent = Component.focusedComponent;
 
         if (previousFocusedComponent != focusedComponent) {
-            if (previousFocusedComponent != null) {
-                ComponentStateListener listeners = previousFocusedComponent.componentStateListeners;
-                Vote vote = listeners.previewFocusedChange(previousFocusedComponent, temporary);
-
-                if (!vote.isApproved()) {
-                    listeners.focusedChangeVetoed(previousFocusedComponent, vote);
-                    return;
-                }
-            }
-
-            if (focusedComponent != null) {
-                ComponentStateListener listeners = focusedComponent.componentStateListeners;
-                Vote vote = listeners.previewFocusedChange(focusedComponent, temporary);
-
-                if (!vote.isApproved()) {
-                    listeners.focusedChangeVetoed(focusedComponent, vote);
-                    return;
-                }
-            }
-
             // Set the focused component
             Component.focusedComponent = focusedComponent;
 
