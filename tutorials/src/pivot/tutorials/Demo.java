@@ -480,7 +480,7 @@ public class Demo implements Application {
         // Load images for custom table
         final List<TableRow> customTableData = (List<TableRow>)customTableView.getTableData();
         for (int i = 0, n = customTableData.getLength(); i < n; i++) {
-            TableRow tableRow = (TableRow)customTableData.get(i);
+            TableRow tableRow = customTableData.get(i);
             tableRow.put("b", Image.load((URL)tableRow.get("b")));
         }
 

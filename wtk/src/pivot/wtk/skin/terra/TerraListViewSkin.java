@@ -527,9 +527,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         List<Object> listData = (List<Object>)listView.getListData();
-        ListView.ItemRenderer renderer = listView.getItemRenderer();
 
-        int itemHeight = renderer.getPreferredHeight(-1);
+        int itemHeight = getItemHeight();
         int itemIndex = y / itemHeight;
 
         if (itemIndex < listData.getLength()
@@ -756,18 +755,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     // List view selection detail events
     public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the added selection
-        ListView.ItemRenderer renderer = listView.getItemRenderer();
-
-        int itemHeight = renderer.getPreferredHeight(-1);
+        int itemHeight = getItemHeight();
         repaintComponent(0, rangeStart * itemHeight,
             getWidth(), (rangeEnd - rangeStart + 1) * itemHeight);
     }
 
     public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
         // Repaint the area containing the removed selection
-        ListView.ItemRenderer renderer = listView.getItemRenderer();
-
-        int itemHeight = renderer.getPreferredHeight(-1);
+        int itemHeight = getItemHeight();
         repaintComponent(0, rangeStart * itemHeight,
             getWidth(), (rangeEnd - rangeStart + 1) * itemHeight);
     }
