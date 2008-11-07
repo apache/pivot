@@ -39,6 +39,7 @@ import pivot.wtk.PushButton;
 import pivot.wtk.FlowPane;
 import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
+import pivot.wtk.effects.ClipDecorator;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.effects.easing.Easing;
@@ -56,6 +57,7 @@ public class TerraExpanderSkin extends ContainerSkin
     public class ExpandTransition extends Transition {
         private boolean collapse;
         private Easing easing = new Quadratic();
+        private ClipDecorator clipDecorator = new ClipDecorator();
 
         public ExpandTransition(boolean collapse, int duration, int rate) {
             super(duration, rate, false);
@@ -78,12 +80,20 @@ public class TerraExpanderSkin extends ContainerSkin
 
         @Override
         public void start(TransitionListener transitionListener) {
+        	Expander expander = (Expander)getComponent();
+        	Component content = expander.getContent();
+        	content.getDecorators().add(clipDecorator);
+
             super.start(transitionListener);
         }
 
         @Override
         public void stop() {
-            super.stop();
+        	Expander expander = (Expander)getComponent();
+        	Component content = expander.getContent();
+        	content.getDecorators().remove(clipDecorator);
+
+        	super.stop();
         }
 
         @Override
@@ -288,12 +298,12 @@ public class TerraExpanderSkin extends ContainerSkin
         int preferredWidth = 2;
 
         Expander expander = (Expander)getComponent();
-        Component contentComponent = expander.getContent();
+        Component content = expander.getContent();
 
         int titleBarPreferredWidth = titleBarFlowPane.getPreferredWidth(-1);
         int contentPreferredWidth = 0;
 
-        if (contentComponent != null) {
+        if (content != null) {
             int contentHeightConstraint = -1;
 
             if (height >= 0) {
@@ -309,7 +319,7 @@ public class TerraExpanderSkin extends ContainerSkin
             }
 
             contentPreferredWidth = padding.left + padding.right
-                + contentComponent.getPreferredWidth(contentHeightConstraint);
+                + content.getPreferredWidth(contentHeightConstraint);
         }
 
         preferredWidth += Math.max(titleBarPreferredWidth, contentPreferredWidth);
@@ -326,8 +336,8 @@ public class TerraExpanderSkin extends ContainerSkin
             // Title bar border is only drawn when expander is expanded
             preferredHeight += 1;
 
-            Component contentComponent = expander.getContent();
-            if (contentComponent != null) {
+            Component content = expander.getContent();
+            if (content != null) {
                 int contentWidthConstraint = -1;
 
                 if (width >= 0) {
@@ -337,7 +347,7 @@ public class TerraExpanderSkin extends ContainerSkin
 
                 float scale = (expandTransition == null) ? 1.0f : expandTransition.getScale();
                 preferredHeight += (int)(scale * (float)(padding.top + padding.bottom
-                    + contentComponent.getPreferredHeight(contentWidthConstraint)));
+                    + content.getPreferredHeight(contentWidthConstraint)));
             }
         }
 
@@ -352,7 +362,7 @@ public class TerraExpanderSkin extends ContainerSkin
 
     public void layout() {
         Expander expander = (Expander)getComponent();
-        Component contentComponent = expander.getContent();
+        Component content = expander.getContent();
 
         int width = getWidth();
         int height = getHeight();
@@ -361,9 +371,9 @@ public class TerraExpanderSkin extends ContainerSkin
         titleBarFlowPane.setSize(Math.max(width - 2, 0), titleBarHeight);
         titleBarFlowPane.setLocation(1, 1);
 
-        if (contentComponent != null) {
+        if (content != null) {
             if (expander.isExpanded()) {
-                contentComponent.setVisible(true);
+                content.setVisible(true);
 
                 int reservedWidth = 2 + padding.left + padding.right;
                 int contentWidth = Math.max(width - reservedWidth, 0);
@@ -371,14 +381,20 @@ public class TerraExpanderSkin extends ContainerSkin
                 int reservedHeight = 3 + padding.top + padding.bottom + titleBarHeight;
                 int contentHeight = Math.max(height - reservedHeight, 0);
 
-                contentComponent.setSize(contentWidth, contentHeight);
+                if (expandTransition == null) {
+                	content.setSize(contentWidth, contentHeight);
+                } else {
+                	expandTransition.clipDecorator.setWidth(contentWidth);
+                	expandTransition.clipDecorator.setHeight(contentHeight);
+                	content.setSize(contentWidth, content.getPreferredHeight(contentWidth));
+                }
 
                 int contentX = 1 + padding.left;
                 int contentY = 2 + padding.top + titleBarHeight;
 
-                contentComponent.setLocation(contentX, contentY);
+                content.setLocation(contentX, contentY);
             } else {
-                contentComponent.setVisible(false);
+                content.setVisible(false);
             }
         }
     }

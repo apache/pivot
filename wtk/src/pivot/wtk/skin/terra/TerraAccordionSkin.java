@@ -25,10 +25,8 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.util.Vote;
-import pivot.wtk.Bounds;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
-import pivot.wtk.Decorator;
 import pivot.wtk.Dimensions;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
@@ -41,6 +39,7 @@ import pivot.wtk.Theme;
 import pivot.wtk.Button.Group;
 import pivot.wtk.content.ButtonData;
 import pivot.wtk.content.ButtonDataRenderer;
+import pivot.wtk.effects.ClipDecorator;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.effects.easing.Easing;
@@ -64,31 +63,6 @@ import pivot.wtk.skin.ContainerSkin;
 public class TerraAccordionSkin extends ContainerSkin
     implements AccordionListener, AccordionSelectionListener, AccordionAttributeListener,
         Button.GroupListener {
-    public static class ClipDecorator implements Decorator {
-    	private int height = 0;
-
-		public Graphics2D prepare(Component component, Graphics2D graphics) {
-			graphics.clipRect(0, 0, component.getWidth(), height);
-			return graphics;
-		}
-
-		public void update() {
-			// No-op
-		}
-
-		public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
-			return new Bounds(x, y, width, height);
-		}
-
-		public int getHeight() {
-			return height;
-		}
-
-		public void setHeight(int height) {
-			this.height = height;
-		}
-	}
-
 	protected class PanelHeader extends Button {
         public PanelHeader() {
             this(null);
@@ -464,6 +438,7 @@ public class TerraAccordionSkin extends ContainerSkin
                     panel.setLocation(padding.left + 1, panelY + padding.top);
 
         			int oldPanelHeight = Math.round((float)panelHeight * (1.0f - scale));
+        			selectionChangeTransition.oldPanelClipDecorator.setWidth(contentWidth);
                     selectionChangeTransition.oldPanelClipDecorator.setHeight(oldPanelHeight);
 
                     panelY += oldPanelHeight;
@@ -472,6 +447,7 @@ public class TerraAccordionSkin extends ContainerSkin
                     panel.setLocation(padding.left + 1, panelY + padding.top);
 
         			int newPanelHeight = Math.round((float)panelHeight * scale);
+        			selectionChangeTransition.newPanelClipDecorator.setWidth(contentWidth);
                     selectionChangeTransition.newPanelClipDecorator.setHeight(newPanelHeight);
 
         			panelY += newPanelHeight;
