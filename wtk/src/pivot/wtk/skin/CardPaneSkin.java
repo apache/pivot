@@ -47,11 +47,25 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
 	    @Override
 	    public void start(TransitionListener transitionListener) {
-	        oldCard.getDecorators().add(fadeOutDecorator);
-	        oldCard.setSize(oldCard.getPreferredSize());
+	    	CardPane cardPane = (CardPane)getComponent();
 
+
+	        if (cardPane.isPreferredWidthSet()) {
+	        	int width = cardPane.getPreferredWidth();
+		        oldCard.setSize(width, oldCard.getPreferredHeight(width));
+		        newCard.setSize(width, newCard.getPreferredHeight(width));
+	        } else if (cardPane.isPreferredHeightSet()) {
+	        	int height = cardPane.getPreferredHeight();
+		        oldCard.setSize(oldCard.getPreferredWidth(height), height);
+		        newCard.setSize(newCard.getPreferredWidth(height), height);
+	        } else {
+		        oldCard.setSize(oldCard.getPreferredSize());
+		        newCard.setSize(newCard.getPreferredSize());
+	        }
+
+	        oldCard.getDecorators().add(fadeOutDecorator);
 	        newCard.getDecorators().add(fadeInDecorator);
-	        newCard.setSize(newCard.getPreferredSize());
+
 	        newCard.setVisible(true);
 
 	        super.start(transitionListener);
@@ -239,7 +253,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public Vote previewSelectedIndexChange(final CardPane cardPane, final int selectedIndex) {
     	Vote vote = Vote.APPROVE;
     	if (matchSelectedCardSize) {
-			if (selectionChangeTransition == null) {
+			if (!cardPane.isPreferredSizeSet()
+				&& selectionChangeTransition == null) {
 	    		int previousSelectedIndex = cardPane.getSelectedIndex();
 	    		if (selectedIndex != -1
     				&& previousSelectedIndex != -1) {

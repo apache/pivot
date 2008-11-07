@@ -40,6 +40,7 @@ public class CardPaneTest implements Application {
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         sheet = new Sheet((Component)wtkxSerializer.readObject(getClass().getResource("card_pane_test.wtkx")));
+        // sheet.getDecorators().removeAll();
 
         cardPane = (CardPane)wtkxSerializer.getObjectByName("cardPane");
 
