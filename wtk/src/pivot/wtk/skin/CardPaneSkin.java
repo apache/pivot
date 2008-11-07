@@ -21,6 +21,7 @@ import pivot.wtk.CardPaneListener;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Orientation;
 import pivot.wtk.effects.FadeDecorator;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
@@ -104,6 +105,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 	}
 
 	private boolean matchSelectedCardSize = false;
+	private Orientation orientation = null;
 
 	private SelectionChangeTransition selectionChangeTransition = null;
 	private static final int SELECTION_CHANGE_DURATION = 200;
@@ -226,11 +228,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 }
             } else {
             	// Center old and new cards and ensure they are visible
-            	if (card == selectionChangeTransition.oldCard) {
-                	card.setLocation((width - card.getWidth()) / 2, (height - card.getHeight()) / 2);
-                	card.setVisible(true);
-            	} else if (card == selectionChangeTransition.newCard) {
-                	card.setLocation((width - card.getWidth()) / 2, (height - card.getHeight()) / 2);
+            	if (card == selectionChangeTransition.oldCard
+        			|| card == selectionChangeTransition.newCard) {
+            		int x = (orientation == Orientation.VERTICAL) ? 0 : (width - card.getWidth()) / 2;
+            		int y = (orientation == Orientation.HORIZONTAL) ? 0 : (height - card.getHeight()) / 2;
+                	card.setLocation(x, y);
                 	card.setVisible(true);
             	} else {
             		card.setVisible(false);
@@ -246,6 +248,22 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 	public void setMatchSelectedCardSize(boolean matchSelectedCardSize) {
 		this.matchSelectedCardSize = matchSelectedCardSize;
 		invalidateComponent();
+	}
+
+	public Orientation getOrientation() {
+		return orientation;
+	}
+
+	public void setOrientation(Orientation orientation) {
+		this.orientation = orientation;
+	}
+
+	public final void setOrientation(String orientation) {
+		if (orientation == null) {
+			throw new IllegalArgumentException("orientation is null.");
+		}
+
+		setOrientation(Orientation.decode(orientation));
 	}
 
 	@Override
