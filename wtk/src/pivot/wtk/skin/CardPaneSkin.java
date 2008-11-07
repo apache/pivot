@@ -23,12 +23,12 @@ import pivot.wtk.Dimensions;
 
 /**
  * Card pane skin.
- * <p>
- * TODO Add a matchSelectedCardSize style.
  *
  * @author gbrown
  */
 public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
+	private boolean matchSelectedCardSize = false;
+
     public void install(Component component) {
         super.install(component);
 
@@ -47,9 +47,17 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         int preferredWidth = 0;
         CardPane cardPane = (CardPane)getComponent();
 
-        for (Component component : cardPane) {
-            preferredWidth = Math.max(preferredWidth,
-                component.getPreferredWidth(height));
+        if (matchSelectedCardSize) {
+        	int selectedIndex = cardPane.getSelectedIndex();
+        	if (selectedIndex != -1) {
+        		Component selectedCard = cardPane.get(selectedIndex);
+        		preferredWidth = selectedCard.getPreferredWidth(height);
+        	}
+        } else {
+            for (Component component : cardPane) {
+                preferredWidth = Math.max(preferredWidth,
+                    component.getPreferredWidth(height));
+            }
         }
 
         return preferredWidth;
@@ -59,9 +67,17 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         int preferredHeight = 0;
         CardPane cardPane = (CardPane)getComponent();
 
-        for (Component component : cardPane) {
-            preferredHeight = Math.max(preferredHeight,
-                component.getPreferredHeight(width));
+        if (matchSelectedCardSize) {
+        	int selectedIndex = cardPane.getSelectedIndex();
+        	if (selectedIndex != -1) {
+        		Component selectedCard = cardPane.get(selectedIndex);
+        		preferredHeight = selectedCard.getPreferredHeight(width);
+        	}
+        } else {
+            for (Component component : cardPane) {
+                preferredHeight = Math.max(preferredHeight,
+                    component.getPreferredHeight(width));
+            }
         }
 
         return preferredHeight;
@@ -72,15 +88,24 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         int preferredHeight = 0;
 
         CardPane cardPane = (CardPane)getComponent();
+        if (matchSelectedCardSize) {
+        	int selectedIndex = cardPane.getSelectedIndex();
+        	if (selectedIndex != -1) {
+        		Component selectedCard = cardPane.get(selectedIndex);
+        		Dimensions preferredSize = selectedCard.getPreferredSize();
+        		preferredWidth = preferredSize.width;
+        		preferredHeight = preferredSize.height;
+        	}
+        } else {
+            for (Component component : cardPane) {
+                Dimensions preferredCardSize = component.getPreferredSize();
 
-        for (Component component : cardPane) {
-            Dimensions preferredCardSize = component.getPreferredSize();
+                preferredWidth = Math.max(preferredWidth,
+                    preferredCardSize.width);
 
-            preferredWidth = Math.max(preferredWidth,
-                preferredCardSize.width);
-
-            preferredHeight = Math.max(preferredHeight,
-                preferredCardSize.height);
+                preferredHeight = Math.max(preferredHeight,
+                    preferredCardSize.height);
+            }
         }
 
         return new Dimensions(preferredWidth, preferredHeight);
@@ -102,6 +127,15 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             }
         }
     }
+
+	public boolean getMatchSelectedCardSize() {
+		return matchSelectedCardSize;
+	}
+
+	public void setMatchSelectedCardSize(boolean matchSelectedCardSize) {
+		this.matchSelectedCardSize = matchSelectedCardSize;
+		invalidateComponent();
+	}
 
     public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
     	// TODO
