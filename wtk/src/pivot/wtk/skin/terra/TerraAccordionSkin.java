@@ -25,8 +25,10 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.util.Vote;
+import pivot.wtk.Bounds;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
+import pivot.wtk.Decorator;
 import pivot.wtk.Dimensions;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
@@ -60,7 +62,32 @@ import pivot.wtk.skin.ContainerSkin;
 public class TerraAccordionSkin extends ContainerSkin
     implements AccordionListener, AccordionSelectionListener, AccordionAttributeListener,
         Button.GroupListener {
-    protected class PanelHeader extends Button {
+    public static class ClipDecorator implements Decorator {
+    	private int height = 0;
+
+		public Graphics2D prepare(Component component, Graphics2D graphics) {
+			graphics.clipRect(0, 0, component.getWidth(), height);
+			return graphics;
+		}
+
+		public void update() {
+			// No-op
+		}
+
+		public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
+			return new Bounds(x, y, width, height);
+		}
+
+		public int getHeight() {
+			return height;
+		}
+
+		public void setHeight(int height) {
+			this.height = height;
+		}
+	}
+
+	protected class PanelHeader extends Button {
         public PanelHeader() {
             this(null);
         }
@@ -215,6 +242,9 @@ public class TerraAccordionSkin extends ContainerSkin
 	    public final Component oldPanel;
 	    public final Component newPanel;
 
+	    public final ClipDecorator oldPanelClipDecorator = new ClipDecorator();
+	    public final ClipDecorator newPanelClipDecorator = new ClipDecorator();
+
 	    public SelectionChangeTransition(Component oldPanel, Component newPanel,
     		int duration, int rate) {
 	        super(duration, rate, false);
@@ -224,13 +254,21 @@ public class TerraAccordionSkin extends ContainerSkin
 
 	    @Override
 	    public void start(TransitionListener transitionListener) {
+	    	oldPanel.getDecorators().add(oldPanelClipDecorator);
+
 	        newPanel.setVisible(true);
+	        newPanel.getDecorators().add(newPanelClipDecorator);
+
 	        super.start(transitionListener);
 	    }
 
 	    @Override
 	    public void stop() {
+	    	oldPanel.getDecorators().remove(oldPanelClipDecorator);
 	    	oldPanel.setVisible(false);
+
+	    	newPanel.getDecorators().remove(newPanelClipDecorator);
+
 	        super.stop();
 	    }
 
@@ -385,6 +423,7 @@ public class TerraAccordionSkin extends ContainerSkin
         }
 
         panelHeight = Math.max(panelHeight - 1, 0);
+        int contentHeight = Math.max(panelHeight - (padding.top + padding.bottom), 0);
 
         // Lay out the components
         Accordion.PanelSequence panels = accordion.getPanels();
@@ -402,9 +441,6 @@ public class TerraAccordionSkin extends ContainerSkin
                 if (panel == selectedPanel) {
                     panel.setVisible(true);
 
-                    // Set the panel's size and location
-            		int contentHeight = Math.max(panelHeight - (padding.top + padding.bottom), 0);
-
             		panel.setSize(contentWidth, contentHeight);
                     panel.setLocation(padding.left + 1, panelY + padding.top);
 
@@ -416,21 +452,21 @@ public class TerraAccordionSkin extends ContainerSkin
         		float percentComplete = selectionChangeTransition.getPercentComplete();
 
         		if (panel == selectionChangeTransition.oldPanel) {
-        			int oldPanelHeight = Math.round((float)panelHeight * (1.0f - percentComplete));
-        			int contentHeight = Math.max(oldPanelHeight - (padding.top + padding.bottom + 1), 0);
-
         			panel.setSize(contentWidth, contentHeight);
                     panel.setLocation(padding.left + 1, panelY + padding.top);
+
+        			int oldPanelHeight = Math.round((float)panelHeight * (1.0f - percentComplete));
+                    selectionChangeTransition.oldPanelClipDecorator.setHeight(oldPanelHeight);
 
                     panelY += oldPanelHeight;
         		} else if (panel == selectionChangeTransition.newPanel) {
-        			int newPanelHeight = Math.round((float)panelHeight * (percentComplete));
-        			int contentHeight = Math.max(newPanelHeight - (padding.top + padding.bottom + 1), 0);
-
         			panel.setSize(contentWidth, contentHeight);
                     panel.setLocation(padding.left + 1, panelY + padding.top);
 
-                    panelY += newPanelHeight;
+        			int newPanelHeight = Math.round((float)panelHeight * (percentComplete));
+                    selectionChangeTransition.newPanelClipDecorator.setHeight(newPanelHeight);
+
+        			panelY += newPanelHeight;
         		} else {
                     panel.setVisible(false);
         		}
