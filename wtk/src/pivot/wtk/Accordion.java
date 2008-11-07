@@ -239,6 +239,10 @@ public class Accordion extends Container {
         installSkin(Accordion.class);
     }
 
+    public PanelSequence getPanels() {
+        return panelSequence;
+    }
+
     public int getSelectedIndex() {
         return selectedIndex;
     }
@@ -258,8 +262,8 @@ public class Accordion extends Container {
         }
     }
 
-    public PanelSequence getPanels() {
-        return panelSequence;
+    public Component getSelectedPanel() {
+    	return (selectedIndex == -1) ? null : panels.get(selectedIndex);
     }
 
     @Override

@@ -597,7 +597,9 @@ public class TerraExpanderSkin extends ContainerSkin
                     });
                 }
             } else {
-                vote = expandTransition.isRunning() ? Vote.DEFER : Vote.APPROVE;
+            	if (expandTransition.isRunning()) {
+                	vote = Vote.DEFER;
+            	}
             }
         }
 
@@ -609,6 +611,7 @@ public class TerraExpanderSkin extends ContainerSkin
             && expandTransition != null) {
             expandTransition.stop();
             expandTransition = null;
+            invalidateComponent();
         }
     }
 
@@ -626,6 +629,8 @@ public class TerraExpanderSkin extends ContainerSkin
 
         Image buttonData = expander.isExpanded() ? collapseImage : expandImage;
         shadeButton.setButtonData(buttonData);
+
+        invalidateComponent();
     }
 
     public void contentChanged(Expander expander, Component previousContent) {

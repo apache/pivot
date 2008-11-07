@@ -38,17 +38,16 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 	    private FadeDecorator fadeOutDecorator = new FadeDecorator();
 	    private FadeDecorator fadeInDecorator = new FadeDecorator();
 
-	    public SelectionChangeTransition(Component oldComponent, Component newComponent,
+	    public SelectionChangeTransition(Component oldCard, Component newCard,
     		int duration, int rate) {
 	        super(duration, rate, false);
-	        this.oldCard = oldComponent;
-	        this.newCard = newComponent;
+	        this.oldCard = oldCard;
+	        this.newCard = newCard;
 	    }
 
 	    @Override
 	    public void start(TransitionListener transitionListener) {
 	    	CardPane cardPane = (CardPane)getComponent();
-
 
 	        if (cardPane.isPreferredWidthSet()) {
 	        	int width = cardPane.getPreferredWidth();
@@ -212,21 +211,31 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         int width = getWidth();
         int height = getHeight();
 
-        if (selectionChangeTransition == null) {
-        	// Set the size of the selected component to the container's size
-            int selectedIndex = cardPane.getSelectedIndex();
-            if (selectedIndex != -1) {
-            	Component selectedCard = cardPane.get(selectedIndex);
-            	selectedCard.setLocation(0, 0);
-            	selectedCard.setSize(width, height);
-            }
-        } else {
-        	// Center old card and new card
-        	Component oldCard = selectionChangeTransition.oldCard;
-        	oldCard.setLocation((width - oldCard.getWidth()) / 2, (height - oldCard.getHeight()) / 2);
+        Component selectedCard = cardPane.getSelectedCard();
 
-        	Component newCard = selectionChangeTransition.newCard;
-        	newCard.setLocation((width - newCard.getWidth()) / 2, (height - newCard.getHeight()) / 2);
+        for (Component card : cardPane) {
+            if (selectionChangeTransition == null) {
+            	// Set the size of the selected component to the container's size
+            	// and show the card
+                if (card == selectedCard) {
+                	card.setLocation(0, 0);
+                	card.setSize(width, height);
+                	card.setVisible(true);
+                } else {
+                	card.setVisible(false);
+                }
+            } else {
+            	// Center old and new cards and ensure they are visible
+            	if (card == selectionChangeTransition.oldCard) {
+                	card.setLocation((width - card.getWidth()) / 2, (height - card.getHeight()) / 2);
+                	card.setVisible(true);
+            	} else if (card == selectionChangeTransition.newCard) {
+                	card.setLocation((width - card.getWidth()) / 2, (height - card.getHeight()) / 2);
+                	card.setVisible(true);
+            	} else {
+            		card.setVisible(false);
+            	}
+            }
         }
     }
 
@@ -242,13 +251,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 	@Override
     public void componentInserted(Container container, int index) {
 		super.componentInserted(container, index);
-
-		CardPane cardPane = (CardPane)container;
-		int selectedIndex = cardPane.getSelectedIndex();
-
-		Component component = container.get(index);
-		component.setVisible(index == selectedIndex);
-    }
+		invalidateComponent();
+	}
 
     public Vote previewSelectedIndexChange(final CardPane cardPane, final int selectedIndex) {
     	Vote vote = Vote.APPROVE;
@@ -278,7 +282,9 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 		    		vote = Vote.DEFER;
 	    		}
 	    	} else {
-	    		vote = selectionChangeTransition.isRunning() ? Vote.DENY : Vote.APPROVE;
+	    		if (selectionChangeTransition.isRunning()) {
+	    			vote = Vote.DEFER;
+	    		}
 	    	}
     	}
 
@@ -290,19 +296,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 			&& selectionChangeTransition != null) {
     		selectionChangeTransition.stop();
     		selectionChangeTransition = null;
+    		invalidateComponent();
     	}
     }
 
     public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
-        if (previousSelectedIndex != -1) {
-        	Component oldCard = cardPane.get(previousSelectedIndex);
-        	oldCard.setVisible(false);
-        }
-
-        int selectedIndex = cardPane.getSelectedIndex();
-        if (selectedIndex != -1) {
-        	Component newCard = cardPane.get(selectedIndex);
-        	newCard.setVisible(true);
-        }
+    	invalidateComponent();
     }
 }

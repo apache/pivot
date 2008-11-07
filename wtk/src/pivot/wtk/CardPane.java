@@ -94,6 +94,10 @@ public class CardPane extends Container {
         }
     }
 
+    public Component getSelectedCard() {
+    	return (selectedIndex == -1) ? null : get(selectedIndex);
+    }
+
     @Override
     public void insert(Component component, int index) {
         super.insert(component, index);

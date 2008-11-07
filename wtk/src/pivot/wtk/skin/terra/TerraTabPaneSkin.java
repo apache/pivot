@@ -56,8 +56,6 @@ import pivot.wtk.skin.ContainerSkin;
  * style properties to present a disabled tab button state. We'd also need
  * to manage button enabled state independently of tab pane enabled state.
  * <p>
- * TODO Support the displayable flag to show/hide tabs.
- * <p>
  * TODO Add showCloseButton style.
  *
  * @author gbrown

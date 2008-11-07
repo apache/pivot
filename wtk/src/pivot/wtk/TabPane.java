@@ -322,6 +322,10 @@ public class TabPane extends Container {
         }
     }
 
+    public Component getSelectedTab() {
+    	return (selectedIndex == -1) ? null : tabs.get(selectedIndex);
+    }
+
     public TabSequence getTabs() {
         return tabSequence;
     }
