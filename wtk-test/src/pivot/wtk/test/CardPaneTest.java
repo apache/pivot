@@ -21,18 +21,25 @@ import pivot.wtk.Button;
 import pivot.wtk.CardPane;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
+import pivot.wtk.FlowPane;
 import pivot.wtk.Frame;
+import pivot.wtk.Sheet;
 import pivot.wtkx.WTKXSerializer;
 
 public class CardPaneTest implements Application {
     private Frame frame = null;
+    private Sheet sheet = null;
     private CardPane cardPane = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
+    	Frame frame = new Frame(new FlowPane());
+    	frame.getStyles().put("padding", 0);
+    	frame.setTitle("Card Pane Test");
+    	frame.setMaximized(true);
+
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("card_pane_test.wtkx")));
-        frame.setTitle("Card Pane Test");
+        sheet = new Sheet((Component)wtkxSerializer.readObject(getClass().getResource("card_pane_test.wtkx")));
 
         cardPane = (CardPane)wtkxSerializer.getObjectByName("cardPane");
 
@@ -46,6 +53,7 @@ public class CardPaneTest implements Application {
         });
 
         frame.open(display);
+        sheet.open(frame);
     }
 
     public boolean shutdown(boolean optional) {
