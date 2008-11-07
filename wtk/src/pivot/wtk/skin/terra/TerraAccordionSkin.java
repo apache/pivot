@@ -43,6 +43,8 @@ import pivot.wtk.content.ButtonData;
 import pivot.wtk.content.ButtonDataRenderer;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
+import pivot.wtk.effects.easing.Easing;
+import pivot.wtk.effects.easing.Quartic;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
@@ -245,6 +247,8 @@ public class TerraAccordionSkin extends ContainerSkin
 	    public final ClipDecorator oldPanelClipDecorator = new ClipDecorator();
 	    public final ClipDecorator newPanelClipDecorator = new ClipDecorator();
 
+	    private Easing easing = new Quartic();
+
 	    public SelectionChangeTransition(Component oldPanel, Component newPanel,
     		int duration, int rate) {
 	        super(duration, rate, false);
@@ -252,7 +256,11 @@ public class TerraAccordionSkin extends ContainerSkin
 	        this.newPanel = newPanel;
 	    }
 
-	    @Override
+        public float getScale() {
+            return easing.easeOut(getElapsedTime(), 0, 1, getDuration());
+        }
+
+        @Override
 	    public void start(TransitionListener transitionListener) {
 	    	oldPanel.getDecorators().add(oldPanelClipDecorator);
 
@@ -296,7 +304,7 @@ public class TerraAccordionSkin extends ContainerSkin
 	public static final int GRADIENT_BEVEL_THICKNESS = 4;
 	private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
-	private static final int SELECTION_CHANGE_DURATION = 200;
+	private static final int SELECTION_CHANGE_DURATION = 250;
 	private static final int SELECTION_CHANGE_RATE = 30;
 
 	static {
@@ -449,13 +457,13 @@ public class TerraAccordionSkin extends ContainerSkin
                     panel.setVisible(false);
                 }
         	} else {
-        		float percentComplete = selectionChangeTransition.getPercentComplete();
+        		float scale = selectionChangeTransition.getScale();
 
         		if (panel == selectionChangeTransition.oldPanel) {
         			panel.setSize(contentWidth, contentHeight);
                     panel.setLocation(padding.left + 1, panelY + padding.top);
 
-        			int oldPanelHeight = Math.round((float)panelHeight * (1.0f - percentComplete));
+        			int oldPanelHeight = Math.round((float)panelHeight * (1.0f - scale));
                     selectionChangeTransition.oldPanelClipDecorator.setHeight(oldPanelHeight);
 
                     panelY += oldPanelHeight;
@@ -463,7 +471,7 @@ public class TerraAccordionSkin extends ContainerSkin
         			panel.setSize(contentWidth, contentHeight);
                     panel.setLocation(padding.left + 1, panelY + padding.top);
 
-        			int newPanelHeight = Math.round((float)panelHeight * (percentComplete));
+        			int newPanelHeight = Math.round((float)panelHeight * scale);
                     selectionChangeTransition.newPanelClipDecorator.setHeight(newPanelHeight);
 
         			panelY += newPanelHeight;
