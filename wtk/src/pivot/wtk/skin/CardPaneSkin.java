@@ -252,10 +252,12 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     public Vote previewSelectedIndexChange(final CardPane cardPane, final int selectedIndex) {
     	Vote vote = Vote.APPROVE;
-    	if (matchSelectedCardSize) {
-			if (!cardPane.isPreferredSizeSet()
-				&& selectionChangeTransition == null) {
+
+    	if (matchSelectedCardSize
+			&& !cardPane.isPreferredSizeSet()) {
+    		if (selectionChangeTransition == null) {
 	    		int previousSelectedIndex = cardPane.getSelectedIndex();
+
 	    		if (selectedIndex != -1
     				&& previousSelectedIndex != -1) {
 		    		Component oldCard = cardPane.get(previousSelectedIndex);
