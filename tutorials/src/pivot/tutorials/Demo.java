@@ -498,7 +498,7 @@ public class Demo implements Application {
             		int columnIndex = customTableView.getColumnAt(x);
             		if (columnIndex == 0) {
             			int rowIndex = customTableView.getRowAt(y);
-            			TableRow row = (TableRow)customTableData.get(rowIndex);
+            			TableRow row = customTableData.get(rowIndex);
 
             			Object a = row.get("a");
             			if (a instanceof String) {
