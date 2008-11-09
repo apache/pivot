@@ -38,8 +38,7 @@ public class TablePaneTest implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("table_pane_test.wtkx")));
-        window.setTitle("TableView Test");
-        window.setMaximized(true);
+        window.setTitle("TablePane Test");
         window.open(display);
     }
 

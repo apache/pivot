@@ -15,15 +15,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TablePane xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
+<TablePane styles="{padding:6, verticalSpacing:8}"
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
     <columns>
         <TablePane.Column width="-1"/>
-        <TablePane.Column width="1*"/>
     </columns>
-
     <rows>
-        <TablePane.Row height="1*">
-            <PushButton buttonData="Hello World" TablePane.columnSpan="2"/>
+        <TablePane.Row height="-1">
+            <PushButton buttonData="One"/>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
+            <PushButton buttonData="Two"/>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
+            <PushButton buttonData="Three" displayable="false"/>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
+            <PushButton buttonData="Four"/>
         </TablePane.Row>
     </rows>
 </TablePane>
