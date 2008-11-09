@@ -49,23 +49,16 @@ public class PushButton extends Button {
 
     public void press() {
         if (isToggleButton()) {
-            // If the button is not part of a group, cycle through the
-            // available states; otherwise, select the button
-            if (getGroup() == null) {
-                State state = getState();
+            State state = getState();
 
-                if (state == State.SELECTED) {
-                    setState(State.UNSELECTED);
-                }
-                else if (state == State.UNSELECTED) {
-                    setState(isTriState() ? State.MIXED : State.SELECTED);
-                }
-                else {
-                    setState(State.SELECTED);
-                }
+            if (state == State.SELECTED) {
+                setState(State.UNSELECTED);
+            }
+            else if (state == State.UNSELECTED) {
+                setState(isTriState() ? State.MIXED : State.SELECTED);
             }
             else {
-                setSelected(true);
+                setState(State.SELECTED);
             }
         }
 

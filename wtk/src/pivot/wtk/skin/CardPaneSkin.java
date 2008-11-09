@@ -15,6 +15,7 @@
  */
 package pivot.wtk.skin;
 
+import pivot.collections.Sequence;
 import pivot.util.Vote;
 import pivot.wtk.CardPane;
 import pivot.wtk.CardPaneListener;
@@ -33,74 +34,110 @@ import pivot.wtk.effects.TransitionListener;
  */
 public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 	public class SelectionChangeTransition extends Transition {
-	    public final Component oldCard;
-	    public final Component newCard;
+    	private int previousSelectedIndex = -1;
+    	private int selectedIndex = -1;
 
-	    private FadeDecorator fadeOutDecorator = new FadeDecorator();
+    	private FadeDecorator fadeOutDecorator = new FadeDecorator();
 	    private FadeDecorator fadeInDecorator = new FadeDecorator();
 
-	    public SelectionChangeTransition(Component oldCard, Component newCard,
+	    public SelectionChangeTransition(int previousSelectedIndex, int selectedIndex,
     		int duration, int rate) {
 	        super(duration, rate, false);
-	        this.oldCard = oldCard;
-	        this.newCard = newCard;
+
+	        this.previousSelectedIndex = previousSelectedIndex;
+	        this.selectedIndex = selectedIndex;
 	    }
 
 	    @Override
 	    public void start(TransitionListener transitionListener) {
-	    	CardPane cardPane = (CardPane)getComponent();
+	    	Component previousSelectedCard = getPreviousSelectedCard();
+	    	Component selectedCard = getSelectedCard();
 
-	        if (cardPane.isPreferredWidthSet()) {
-	        	int width = cardPane.getPreferredWidth();
-		        oldCard.setSize(width, oldCard.getPreferredHeight(width));
-		        newCard.setSize(width, newCard.getPreferredHeight(width));
-	        } else if (cardPane.isPreferredHeightSet()) {
-	        	int height = cardPane.getPreferredHeight();
-		        oldCard.setSize(oldCard.getPreferredWidth(height), height);
-		        newCard.setSize(newCard.getPreferredWidth(height), height);
-	        } else {
-		        oldCard.setSize(oldCard.getPreferredSize());
-		        newCard.setSize(newCard.getPreferredSize());
-	        }
+	    	if (matchSelectedCardSize) {
+		    	if (previousSelectedCard != null) {
+			    	previousSelectedCard.setSize(previousSelectedCard.getPreferredSize());
+			    	previousSelectedCard.getDecorators().add(fadeOutDecorator);
+		    	}
 
-	        oldCard.getDecorators().add(fadeOutDecorator);
-	        newCard.getDecorators().add(fadeInDecorator);
+		    	if (selectedCard != null) {
+			    	selectedCard.setSize(selectedCard.getPreferredSize());
+			    	selectedCard.getDecorators().add(fadeInDecorator);
+			    	selectedCard.setVisible(true);
+		    	}
+	    	} else {
+	    		CardPane cardPane = (CardPane)getComponent();
 
-	        newCard.setVisible(true);
+	    		int width = 0;
+	    		int height = 0;
+	    		if (orientation == Orientation.HORIZONTAL) {
+	    			width = getWidth();
+                    for (Component card : cardPane) {
+                    	height = Math.max(height, card.getPreferredHeight(width));
+                    }
+	    		} else {
+    				height = getHeight();
+                    for (Component card : cardPane) {
+                    	width = Math.max(height, card.getPreferredWidth(height));
+                    }
+    			}
+
+	    		if (previousSelectedCard != null) {
+	    			previousSelectedCard.setSize(width, height);
+	    		}
+
+	    		if (selectedCard != null) {
+	    			selectedCard.setSize(width, height);
+	    			selectedCard.setVisible(true);
+	    		}
+	    	}
 
 	        super.start(transitionListener);
 	    }
 
 	    @Override
 	    public void stop() {
-	        oldCard.getDecorators().remove(fadeOutDecorator);
-	        oldCard.setVisible(false);
+	    	Component previousSelectedCard = getPreviousSelectedCard();
+	    	Component selectedCard = getSelectedCard();
 
-	        newCard.getDecorators().remove(fadeInDecorator);
+	    	if (matchSelectedCardSize) {
+	    		if (previousSelectedCard != null) {
+			    	previousSelectedCard.getDecorators().remove(fadeOutDecorator);
+			    	previousSelectedCard.setVisible(false);
+	    		}
+
+	    		if (selectedCard != null) {
+	    			selectedCard.getDecorators().remove(fadeInDecorator);
+	    		}
+	    	} else {
+	    		if (previousSelectedCard != null) {
+	    			previousSelectedCard.setVisible(false);
+	    		}
+	    	}
+
+	    	invalidateComponent();
 
 	        super.stop();
 	    }
 
 	    @Override
 	    protected void update() {
-	    	fadeOutDecorator.setOpacity(1.0f - getPercentComplete());
-	        fadeInDecorator.setOpacity(getPercentComplete());
+	    	if (matchSelectedCardSize) {
+		    	float percentComplete = getPercentComplete();
+	    		fadeOutDecorator.setOpacity(1.0f - percentComplete);
+	    		fadeInDecorator.setOpacity(percentComplete);
+	    	}
 
-	        invalidateComponent();
+    		invalidateComponent();
 	    }
 
-	    public Dimensions getPreferredSize() {
-	    	float percentComplete = getPercentComplete();
+	    public Component getPreviousSelectedCard() {
+	    	CardPane cardPane = (CardPane)getComponent();
+	    	return previousSelectedIndex == -1 ? null : cardPane.get(previousSelectedIndex);
+	    }
 
-	    	int oldWidth = oldCard.getWidth();
-	    	int newWidth = newCard.getWidth();
-	    	int preferredWidth = oldWidth + (int)((float)(newWidth - oldWidth) * percentComplete);
-
-	    	int oldHeight = oldCard.getHeight();
-	    	int newHeight = newCard.getHeight();
-	    	int preferredHeight = oldHeight + (int)((float)(newHeight - oldHeight) * percentComplete);
-
-	    	return new Dimensions(preferredWidth, preferredHeight);
+	    public Component getSelectedCard() {
+	    	CardPane cardPane = (CardPane)getComponent();
+	    	return selectedIndex == -1 ? null : cardPane.get(selectedIndex);
 	    }
 	}
 
@@ -108,8 +145,23 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 	private Orientation orientation = null;
 
 	private SelectionChangeTransition selectionChangeTransition = null;
-	private static final int SELECTION_CHANGE_DURATION = 200;
+	private static final int SELECTION_CHANGE_DURATION = 250;
 	private static final int SELECTION_CHANGE_RATE = 30;
+
+	@Override
+	public void setSize(int width, int height) {
+		if (selectionChangeTransition != null) {
+			if (!matchSelectedCardSize) {
+				if ((orientation == Orientation.HORIZONTAL && width != getWidth())
+					|| (orientation == Orientation.VERTICAL && height != getHeight())) {
+					selectionChangeTransition.stop();
+					selectionChangeTransition = null;
+				}
+			}
+		}
+
+		super.setSize(width, height);
+	}
 
     public void install(Component component) {
         super.install(component);
@@ -128,23 +180,39 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        if (selectionChangeTransition == null) {
-            CardPane cardPane = (CardPane)getComponent();
+        CardPane cardPane = (CardPane)getComponent();
 
-            if (matchSelectedCardSize) {
-            	int selectedIndex = cardPane.getSelectedIndex();
-            	if (selectedIndex != -1) {
-            		Component selectedCard = cardPane.get(selectedIndex);
+        if (selectionChangeTransition == null) {
+        	if (matchSelectedCardSize) {
+            	Component selectedCard = cardPane.getSelectedCard();
+            	if (selectedCard != null) {
             		preferredWidth = selectedCard.getPreferredWidth(height);
             	}
-            } else {
-                for (Component component : cardPane) {
-                    preferredWidth = Math.max(preferredWidth,
-                        component.getPreferredWidth(height));
-                }
-            }
+        	} else {
+            	int selectedIndex = cardPane.getSelectedIndex();
+            	if (selectedIndex != -1
+        			|| orientation == Orientation.HORIZONTAL) {
+                    for (Component card : cardPane) {
+                        preferredWidth = Math.max(preferredWidth, card.getPreferredWidth(height));
+                    }
+            	}
+        	}
         } else {
-        	preferredWidth = selectionChangeTransition.getPreferredSize().width;
+    		float percentComplete = selectionChangeTransition.getPercentComplete();
+
+    		Component previousSelectedCard = selectionChangeTransition.getPreviousSelectedCard();
+	    	int previousWidth = (previousSelectedCard == null) ? 0 : previousSelectedCard.getWidth();
+
+	    	Component selectedCard = selectionChangeTransition.getSelectedCard();
+	    	int width = (selectedCard == null) ? 0 : selectedCard.getWidth();
+
+	    	if (!matchSelectedCardSize
+    			&& orientation == Orientation.HORIZONTAL) {
+	    		preferredWidth = Math.max(previousWidth, width);
+	    	} else {
+		    	preferredWidth = previousWidth + (int)((float)(width - previousWidth)
+	    			* percentComplete);
+	    	}
         }
 
         return preferredWidth;
@@ -153,23 +221,39 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        if (selectionChangeTransition == null) {
-            CardPane cardPane = (CardPane)getComponent();
+        CardPane cardPane = (CardPane)getComponent();
 
-            if (matchSelectedCardSize) {
-            	int selectedIndex = cardPane.getSelectedIndex();
-            	if (selectedIndex != -1) {
-            		Component selectedCard = cardPane.get(selectedIndex);
+        if (selectionChangeTransition == null) {
+        	if (matchSelectedCardSize) {
+            	Component selectedCard = cardPane.getSelectedCard();
+            	if (selectedCard != null) {
             		preferredHeight = selectedCard.getPreferredHeight(width);
             	}
-            } else {
-                for (Component component : cardPane) {
-                    preferredHeight = Math.max(preferredHeight,
-                        component.getPreferredHeight(width));
-                }
-            }
+        	} else {
+            	int selectedIndex = cardPane.getSelectedIndex();
+            	if (selectedIndex != -1
+        			|| orientation == Orientation.VERTICAL) {
+                    for (Component card : cardPane) {
+                    	preferredHeight = Math.max(preferredHeight, card.getPreferredHeight(width));
+                    }
+            	}
+        	}
         } else {
-        	preferredHeight = selectionChangeTransition.getPreferredSize().height;
+    		float percentComplete = selectionChangeTransition.getPercentComplete();
+
+    		Component previousSelectedCard = selectionChangeTransition.getPreviousSelectedCard();
+    		int previousHeight = (previousSelectedCard == null) ? 0 : previousSelectedCard.getHeight();
+
+	    	Component selectedCard = selectionChangeTransition.getSelectedCard();
+	    	int height = (selectedCard == null) ? 0 : selectedCard.getHeight();
+
+	    	if (!matchSelectedCardSize
+    			&& orientation == Orientation.VERTICAL) {
+	    		preferredHeight = Math.max(previousHeight, height);
+	    	} else {
+		    	preferredHeight = previousHeight + (int)((float)(height - previousHeight)
+	    			* percentComplete);
+	    	}
         }
 
         return preferredHeight;
@@ -178,31 +262,81 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public Dimensions getPreferredSize() {
         Dimensions preferredSize;
 
-        if (selectionChangeTransition == null) {
-            CardPane cardPane = (CardPane)getComponent();
-            if (matchSelectedCardSize) {
-            	int selectedIndex = cardPane.getSelectedIndex();
+        CardPane cardPane = (CardPane)getComponent();
 
-            	if (selectedIndex == -1) {
+        if (selectionChangeTransition == null) {
+        	if (matchSelectedCardSize) {
+            	Component selectedCard = cardPane.getSelectedCard();
+            	if (selectedCard == null) {
             		preferredSize = new Dimensions(0, 0);
             	} else {
-            		Component selectedCard = cardPane.get(selectedIndex);
             		preferredSize = selectedCard.getPreferredSize();
             	}
-            } else {
+        	} else {
             	preferredSize = new Dimensions(0, 0);
 
-                for (Component component : cardPane) {
-                    Dimensions preferredCardSize = component.getPreferredSize();
+            	int selectedIndex = cardPane.getSelectedIndex();
+                for (Component card : cardPane) {
+                    Dimensions cardSize = card.getPreferredSize();
 
-                    preferredSize.width = Math.max(preferredCardSize.width,
-                		preferredSize.width);
-                    preferredSize.height = Math.max(preferredCardSize.height,
-                		preferredSize.height);
+                	if (selectedIndex != -1
+            			|| orientation == Orientation.HORIZONTAL) {
+                		preferredSize.width = Math.max(cardSize.width, preferredSize.width);
+                	}
+
+                	if (selectedIndex != -1
+            			|| orientation == Orientation.VERTICAL) {
+                		preferredSize.height = Math.max(cardSize.height, preferredSize.height);
+                	}
                 }
-            }
+        	}
         } else {
-        	preferredSize = selectionChangeTransition.getPreferredSize();
+    		float percentComplete = selectionChangeTransition.getPercentComplete();
+
+	    	int previousWidth;
+	    	int previousHeight;
+    		Component previousSelectedCard = selectionChangeTransition.getPreviousSelectedCard();
+
+    		if (previousSelectedCard == null) {
+	    		previousWidth = 0;
+	    		previousHeight = 0;
+	    	} else {
+	    		previousWidth = previousSelectedCard.getWidth();
+	    		previousHeight = previousSelectedCard.getHeight();
+	    	}
+
+    		int width;
+    		int height;
+	    	Component selectedCard = selectionChangeTransition.getSelectedCard();
+
+	    	if (selectedCard == null) {
+	    		width = 0;
+	    		height = 0;
+	    	} else {
+    	    	width = selectedCard.getWidth();
+    	    	height = selectedCard.getHeight();
+	    	}
+
+	    	int preferredWidth = 0;
+	    	int preferredHeight = 0;
+
+	    	if (!matchSelectedCardSize
+    			&& orientation == Orientation.HORIZONTAL) {
+	    		preferredWidth = Math.max(previousWidth, width);
+	    	} else {
+		    	preferredWidth = previousWidth + (int)((float)(width - previousWidth)
+	    			* percentComplete);
+	    	}
+
+	    	if (!matchSelectedCardSize
+    			&& orientation == Orientation.VERTICAL) {
+	    		preferredHeight = Math.max(previousHeight, height);
+	    	} else {
+		    	preferredHeight = previousHeight + (int)((float)(height - previousHeight)
+	    			* percentComplete);
+	    	}
+
+    		preferredSize = new Dimensions(preferredWidth, preferredHeight);
         }
 
         return preferredSize;
@@ -213,10 +347,10 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         int width = getWidth();
         int height = getHeight();
 
-        Component selectedCard = cardPane.getSelectedCard();
+        if (selectionChangeTransition == null) {
+        	Component selectedCard = cardPane.getSelectedCard();
 
-        for (Component card : cardPane) {
-            if (selectionChangeTransition == null) {
+            for (Component card : cardPane) {
             	// Set the size of the selected component to the container's size
             	// and show the card
                 if (card == selectedCard) {
@@ -226,16 +360,63 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 } else {
                 	card.setVisible(false);
                 }
+            }
+        } else {
+        	if (matchSelectedCardSize) {
+            	Component previousSelectedCard = selectionChangeTransition.getPreviousSelectedCard();
+            	Component selectedCard = selectionChangeTransition.getSelectedCard();
+
+            	for (Component card : cardPane) {
+                	// Center old and new cards and ensure they are visible
+                	if (card == previousSelectedCard
+            			|| card == selectedCard) {
+                		int x = (orientation == Orientation.VERTICAL) ?
+        					0 : Math.round((float)(width - card.getWidth()) / 2);
+                		int y = (orientation == Orientation.HORIZONTAL) ?
+            				0 : Math.round((float)(height - card.getHeight()) / 2);
+
+                		card.setLocation(x, y);
+                    	card.setVisible(true);
+                	} else {
+                		card.setVisible(false);
+                	}
+            	}
             } else {
-            	// Center old and new cards and ensure they are visible
-            	if (card == selectionChangeTransition.oldCard
-        			|| card == selectionChangeTransition.newCard) {
-            		int x = (orientation == Orientation.VERTICAL) ? 0 : (width - card.getWidth()) / 2;
-            		int y = (orientation == Orientation.HORIZONTAL) ? 0 : (height - card.getHeight()) / 2;
-                	card.setLocation(x, y);
-                	card.setVisible(true);
-            	} else {
-            		card.setVisible(false);
+            	int previousSelectedIndex = selectionChangeTransition.previousSelectedIndex;
+            	int selectedIndex = selectionChangeTransition.selectedIndex;
+
+            	if (previousSelectedIndex != -1
+        			&& selectedIndex != -1) {
+                	float percentComplete = selectionChangeTransition.getPercentComplete();
+
+                	int direction = Integer.signum(previousSelectedIndex - selectedIndex);
+
+        			int dx = (int)((float)width * percentComplete) * direction;
+        			int dy = (int)((float)height * percentComplete) * direction;
+
+        			for (int i = 0, n = cardPane.getLength(); i < n; i++) {
+                		Component card = cardPane.get(i);
+
+                		if (i == previousSelectedIndex) {
+        	    			if (orientation == Orientation.HORIZONTAL) {
+        	    				card.setLocation(dx, 0);
+        	    			} else {
+        	    				card.setLocation(0, dy);
+        	    			}
+
+                			card.setVisible(true);
+                		} else if (i == selectedIndex) {
+        	    			if (orientation == Orientation.HORIZONTAL) {
+        	    				card.setLocation(-width * direction + dx, 0);
+        	    			} else {
+        	    				card.setLocation(0, -height * direction + dy);
+        	    			}
+
+        	    			card.setVisible(true);
+                		} else {
+                			card.setVisible(false);
+                		}
+                	}
             	}
             }
         }
@@ -269,41 +450,53 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 	@Override
     public void componentInserted(Container container, int index) {
 		super.componentInserted(container, index);
+
+		if (selectionChangeTransition != null) {
+			selectionChangeTransition.stop();
+			selectionChangeTransition = null;
+		}
+
 		invalidateComponent();
 	}
 
-    public Vote previewSelectedIndexChange(final CardPane cardPane, final int selectedIndex) {
+	@Override
+    public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
+		super.componentsRemoved(container, index, removed);
+
+		if (selectionChangeTransition != null) {
+			selectionChangeTransition.stop();
+			selectionChangeTransition = null;
+		}
+
+		invalidateComponent();
+	}
+
+	public Vote previewSelectedIndexChange(final CardPane cardPane, final int selectedIndex) {
     	Vote vote = Vote.APPROVE;
 
-    	if (matchSelectedCardSize
-			&& !cardPane.isPreferredSizeSet()) {
-    		if (selectionChangeTransition == null) {
-	    		int previousSelectedIndex = cardPane.getSelectedIndex();
+		if (selectionChangeTransition == null) {
+			if (matchSelectedCardSize
+				|| orientation != null) {
+				int previousSelectedIndex = cardPane.getSelectedIndex();
 
-	    		if (selectedIndex != -1
-    				&& previousSelectedIndex != -1) {
-		    		Component oldCard = cardPane.get(previousSelectedIndex);
-		    		Component newCard = cardPane.get(selectedIndex);
+	    		selectionChangeTransition = new SelectionChangeTransition(previousSelectedIndex, selectedIndex,
+					SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE);
 
-		    		selectionChangeTransition = new SelectionChangeTransition(oldCard, newCard,
-	    				SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE);
+	    		selectionChangeTransition.start(new TransitionListener() {
+	    			public void transitionCompleted(Transition transition) {
+	    				cardPane.setSelectedIndex(selectedIndex);
+	    				selectionChangeTransition = null;
 
-		    		selectionChangeTransition.start(new TransitionListener() {
-		    			public void transitionCompleted(Transition transition) {
-		    				cardPane.setSelectedIndex(selectedIndex);
-		    				selectionChangeTransition = null;
+	    				invalidateComponent();
+	    			}
+	    		});
 
-		    				invalidateComponent();
-		    			}
-		    		});
-
-		    		vote = Vote.DEFER;
-	    		}
-	    	} else {
-	    		if (selectionChangeTransition.isRunning()) {
-	    			vote = Vote.DEFER;
-	    		}
-	    	}
+	    		vote = Vote.DEFER;
+			}
+    	} else {
+    		if (selectionChangeTransition.isRunning()) {
+    			vote = Vote.DEFER;
+    		}
     	}
 
     	return vote;

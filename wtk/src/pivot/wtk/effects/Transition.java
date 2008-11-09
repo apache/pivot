@@ -42,7 +42,7 @@ public abstract class Transition {
         public void run() {
             if (intervalID == -1) {
                 // TODO Figure out why this is happening
-                System.out.println("Interval task executed after it was canceled.");
+                // System.out.println("Interval task executed after it was canceled.");
                 return;
             }
 
