@@ -255,13 +255,27 @@ public abstract class Transition {
     }
 
     /**
-     * Stops the transition.
+     * Stops the transition. Does not fire a
+     * {@link TransitionListener#transitionCompleted(Transition)} event.
      */
     public void stop() {
         if (intervalID != -1) {
             ApplicationContext.clearInterval(intervalID);
             intervalID = -1;
         }
+    }
+
+    /**
+     * "Fast-forwards" to the end of the transition and fires a
+     * {@link TransitionListener#transitionCompleted(Transition)} event.
+     */
+    public void end() {
+    	if (intervalID != -1) {
+        	currentTime = startTime + duration;
+        	stop();
+        	update();
+        	transitionListener.transitionCompleted(this);
+    	}
     }
 
     /**

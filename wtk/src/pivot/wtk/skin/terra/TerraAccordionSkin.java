@@ -302,7 +302,17 @@ public class TerraAccordionSkin extends ContainerSkin
         panelHeaderGroup.getGroupListeners().add(this);
     }
 
-    public void install(Component component) {
+	@Override
+	public void setSize(int width, int height) {
+		if (selectionChangeTransition != null) {
+			selectionChangeTransition.end();
+			selectionChangeTransition = null;
+		}
+
+		super.setSize(width, height);
+	}
+
+	public void install(Component component) {
         super.install(component);
 
         Accordion accordion = (Accordion)component;
@@ -598,7 +608,12 @@ public class TerraAccordionSkin extends ContainerSkin
 
     // Accordion events
     public void panelInserted(Accordion accordion, int index) {
-        // Create a new button for the panel
+		if (selectionChangeTransition != null) {
+			selectionChangeTransition.stop();
+			selectionChangeTransition = null;
+		}
+
+		// Create a new button for the panel
         Component panel = accordion.getPanels().get(index);
         PanelHeader panelHeader = new PanelHeader(new ButtonData(Accordion.getIcon(panel),
             Accordion.getName(panel)));
@@ -611,7 +626,12 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     public void panelsRemoved(Accordion accordion, int index, Sequence<Component> panels) {
-        // Remove the buttons
+		if (selectionChangeTransition != null) {
+			selectionChangeTransition.stop();
+			selectionChangeTransition = null;
+		}
+
+		// Remove the buttons
         Sequence<PanelHeader> removed = panelHeaders.remove(index, panels.getLength());
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {

@@ -16,9 +16,11 @@
 package pivot.wtk.test;
 
 import pivot.collections.Dictionary;
+import pivot.util.Vote;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.CardPane;
+import pivot.wtk.CardPaneListener;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
@@ -47,8 +49,32 @@ public class CardPaneTest implements Application {
         Button.Group sizeGroup = Button.getGroup("sizeGroup");
         sizeGroup.getGroupListeners().add(new Button.GroupListener() {
         	public void selectionChanged(Button.Group buttonGroup, Button previousSelection) {
-        		Button selection = buttonGroup.getSelection();
+        		final Button selection = buttonGroup.getSelection();
         		int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(selection);
+
+        		cardPane.getCardPaneListeners().add(new CardPaneListener() {
+        			public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
+        				if (selection != null) {
+        					selection.getParent().setEnabled(false);
+        				}
+
+        				return Vote.APPROVE;
+        			}
+
+        			public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
+        				if (selection != null
+    						&& reason == Vote.DENY) {
+        					selection.getParent().setEnabled(true);
+        				}
+        			}
+
+        			public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+        				if (selection != null) {
+        					selection.getParent().setEnabled(true);
+        				}
+        			}
+        		});
+
         		cardPane.setSelectedIndex(selectedIndex);
         	}
         });

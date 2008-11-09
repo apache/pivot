@@ -650,6 +650,11 @@ public class TerraExpanderSkin extends ContainerSkin
     }
 
     public void contentChanged(Expander expander, Component previousContent) {
+    	if (expandTransition != null) {
+    		expandTransition.stop();
+    		expandTransition = null;
+    	}
+
         invalidateComponent();
     }
 }

@@ -154,7 +154,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 			if (!matchSelectedCardSize) {
 				if ((orientation == Orientation.HORIZONTAL && width != getWidth())
 					|| (orientation == Orientation.VERTICAL && height != getHeight())) {
-					selectionChangeTransition.stop();
+					selectionChangeTransition.end();
 					selectionChangeTransition = null;
 				}
 			}
@@ -449,24 +449,24 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
 	@Override
     public void componentInserted(Container container, int index) {
-		super.componentInserted(container, index);
-
 		if (selectionChangeTransition != null) {
 			selectionChangeTransition.stop();
 			selectionChangeTransition = null;
 		}
+
+		super.componentInserted(container, index);
 
 		invalidateComponent();
 	}
 
 	@Override
     public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
-		super.componentsRemoved(container, index, removed);
-
 		if (selectionChangeTransition != null) {
 			selectionChangeTransition.stop();
 			selectionChangeTransition = null;
 		}
+
+		super.componentsRemoved(container, index, removed);
 
 		invalidateComponent();
 	}
