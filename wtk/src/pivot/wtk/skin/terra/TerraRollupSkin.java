@@ -19,7 +19,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.RoundRectangle2D;
 
 import pivot.collections.Sequence;
@@ -183,17 +182,13 @@ public class TerraRollupSkin extends ContainerSkin
             graphics.setStroke(new BasicStroke(0));
             graphics.setPaint(buttonColor);
 
-            GeneralPath shape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-            shape.moveTo(0, 0);
-            shape.lineTo(6, 3);
-            shape.lineTo(0, 6);
-            shape.closePath();
-
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+                    RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.draw(shape);
-            graphics.fill(shape);
+            int[] xPoints = {0, 6, 0};
+            int[] yPoints = {0, 3, 6};
+            graphics.fillPolygon(xPoints, yPoints, 3);
+            graphics.drawPolygon(xPoints, yPoints, 3);
         }
     }
 
@@ -202,17 +197,13 @@ public class TerraRollupSkin extends ContainerSkin
             graphics.setStroke(new BasicStroke(0));
             graphics.setPaint(buttonColor);
 
-            GeneralPath shape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-            shape.moveTo(0, 0);
-            shape.lineTo(3, 6);
-            shape.lineTo(6, 0);
-            shape.closePath();
-
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+                    RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.draw(shape);
-            graphics.fill(shape);
+            int[] xPoints = {0, 3, 6};
+            int[] yPoints = {0, 6, 0};
+            graphics.fillPolygon(xPoints, yPoints, 3);
+            graphics.drawPolygon(xPoints, yPoints, 3);
         }
     }
 

@@ -85,12 +85,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         @Override
-        public boolean isEnabled() {
-            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
-            return tabPane.isEnabled();
-        }
-
-        @Override
         public void setEnabled(boolean enabled) {
             throw new UnsupportedOperationException();
         }

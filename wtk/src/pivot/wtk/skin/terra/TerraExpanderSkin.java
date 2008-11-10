@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import pivot.collections.Dictionary;
 import pivot.util.Vote;
@@ -33,12 +34,13 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
 import pivot.wtk.Label;
+import pivot.wtk.LinkButton;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
-import pivot.wtk.PushButton;
 import pivot.wtk.FlowPane;
 import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
+import pivot.wtk.content.ButtonDataRenderer;
 import pivot.wtk.effects.ClipDecorator;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
@@ -111,23 +113,16 @@ public class TerraExpanderSkin extends ContainerSkin
      *
      * @author tvolkert
      */
-    public static class ShadeButton extends PushButton {
-        private Expander expander = null;
-
-        public ShadeButton(Expander expander) {
-            this(expander, null);
+    public class ShadeButton extends LinkButton {
+        public ShadeButton() {
+            this(null);
         }
 
-        public ShadeButton(Expander expander, Object buttonData) {
+        public ShadeButton(Object buttonData) {
             super(buttonData);
 
-            this.expander = expander;
-
-            installSkin(ShadeButton.class);
-        }
-
-        public Expander getExpander() {
-            return expander;
+            setSkin(new ShadeButtonSkin());
+            setDataRenderer(new ButtonDataRenderer());
         }
     }
 
@@ -136,28 +131,7 @@ public class TerraExpanderSkin extends ContainerSkin
      *
      * @author tvolkert
      */
-    public static class ShadeButtonSkin extends TerraPushButtonSkin {
-        public ShadeButtonSkin() {
-            super();
-
-            setPadding(new Insets(2));
-        }
-
-        @Override
-        public void install(Component component) {
-            super.install(component);
-
-            ShadeButton shadeButton = (ShadeButton)component;
-            Expander expander = shadeButton.getExpander();
-
-            Color shadeButtonBackgroundColor = (Color)expander.getStyles().get("shadeButtonBackgroundColor");
-            setBackgroundColor(shadeButtonBackgroundColor);
-            setDisabledBackgroundColor(shadeButtonBackgroundColor);
-
-            Color borderColor = (Color)expander.getStyles().get("borderColor");
-            setBorderColor(borderColor);
-        }
-
+    public class ShadeButtonSkin extends TerraLinkButtonSkin {
         @Override
         public boolean isFocusable() {
             return false;
@@ -166,25 +140,39 @@ public class TerraExpanderSkin extends ContainerSkin
 
     protected abstract class ButtonImage extends Image {
         public int getWidth() {
-            return 6;
+            return 13;
         }
 
         public int getHeight() {
-            return 6;
+            return 13;
         }
     }
 
     protected class CollapseImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
+            graphics.setStroke(new BasicStroke(0));
             graphics.setPaint(shadeButtonColor);
-            graphics.fillRect(0, 0, 6, 2);
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int[] xPoints = {3, 6, 9};
+            int[] yPoints = {9, 3, 9};
+            graphics.fillPolygon(xPoints, yPoints, 3);
+            graphics.drawPolygon(xPoints, yPoints, 3);
         }
     }
 
     protected class ExpandImage extends ButtonImage {
         public void paint(Graphics2D graphics) {
+            graphics.setStroke(new BasicStroke(0));
             graphics.setPaint(shadeButtonColor);
-            graphics.drawRect(0, 0, 5, 5);
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int[] xPoints = {3, 6, 9};
+            int[] yPoints = {3, 9, 3};
+            graphics.fillPolygon(xPoints, yPoints, 3);
+            graphics.drawPolygon(xPoints, yPoints, 3);
         }
     }
 
@@ -239,7 +227,7 @@ public class TerraExpanderSkin extends ContainerSkin
 
         titleBarBackgroundColor = theme.getColor(10);
         titleBarBorderColor = theme.getColor(7);
-        shadeButtonColor = theme.getColor(16);
+        shadeButtonColor = theme.getColor(7);
         shadeButtonBackgroundColor = theme.getColor(4);
         borderColor = theme.getColor(7);
         padding = new Insets(4);
@@ -289,7 +277,7 @@ public class TerraExpanderSkin extends ContainerSkin
         expander.add(titleBarFlowPane);
 
         Image buttonData = expander.isExpanded() ? collapseImage : expandImage;
-        shadeButton = new ShadeButton(expander, buttonData);
+        shadeButton = new ShadeButton(buttonData);
         buttonFlowPane.add(shadeButton);
 
         shadeButton.getButtonPressListeners().add(this);

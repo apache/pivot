@@ -26,7 +26,6 @@ import pivot.wtk.Component;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Menu;
-import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.MenuItemSkin;
 
