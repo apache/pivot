@@ -361,6 +361,8 @@ public class TerraTabPaneSkin extends ContainerSkin
         	TabButton tabButton = (TabButton)buttonFlowPane.get(selectedIndex);
         	tabButton.active = true;
 
+        	getComponent().setEnabled(false);
+
             super.start(transitionListener);
         }
 
@@ -373,6 +375,8 @@ public class TerraTabPaneSkin extends ContainerSkin
         	int selectedIndex = tabPane.getSelectedIndex();
         	TabButton tabButton = (TabButton)buttonFlowPane.get(selectedIndex);
         	tabButton.active = false;
+
+        	getComponent().setEnabled(true);
 
         	super.stop();
         }

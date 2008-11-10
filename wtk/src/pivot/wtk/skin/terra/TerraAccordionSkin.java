@@ -239,6 +239,8 @@ public class TerraAccordionSkin extends ContainerSkin
 	    	previousSelectedPanel.getDecorators().add(previousSelectedPanelClipDecorator);
 	        selectedPanel.getDecorators().add(selectedPanelClipDecorator);
 
+	        getComponent().setEnabled(false);
+
 	        super.start(transitionListener);
 	    }
 
@@ -246,6 +248,8 @@ public class TerraAccordionSkin extends ContainerSkin
 	    public void stop() {
 	    	previousSelectedPanel.getDecorators().remove(previousSelectedPanelClipDecorator);
 	    	selectedPanel.getDecorators().remove(selectedPanelClipDecorator);
+
+	    	getComponent().setEnabled(true);
 
 	        super.stop();
 	    }

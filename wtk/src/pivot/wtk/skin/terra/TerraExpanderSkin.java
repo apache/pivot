@@ -84,6 +84,8 @@ public class TerraExpanderSkin extends ContainerSkin
         	Component content = expander.getContent();
         	content.getDecorators().add(clipDecorator);
 
+        	getComponent().setEnabled(false);
+
             super.start(transitionListener);
         }
 
@@ -92,6 +94,8 @@ public class TerraExpanderSkin extends ContainerSkin
         	Expander expander = (Expander)getComponent();
         	Component content = expander.getContent();
         	content.getDecorators().remove(clipDecorator);
+
+        	getComponent().setEnabled(true);
 
         	super.stop();
         }
