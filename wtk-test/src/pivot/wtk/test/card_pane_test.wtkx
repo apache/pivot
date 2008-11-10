@@ -28,7 +28,7 @@ limitations under the License.
             </FlowPane>
         </TablePane.Row>
         <TablePane.Row height="1*">
-            <CardPane wtkx:id="cardPane" styles="{matchSelectedCardSize:false, orientation:'horizontal'}">
+            <CardPane wtkx:id="cardPane" styles="{matchSelectedCardSize:true, orientation:'horizontal'}">
                 <Label text="320x240" preferredWidth="320" preferredHeight="240"
                     styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                 <Label text="640x480" preferredWidth="640" preferredHeight="480"

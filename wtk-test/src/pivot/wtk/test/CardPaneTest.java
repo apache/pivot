@@ -38,11 +38,11 @@ public class CardPaneTest implements Application {
     	Frame frame = new Frame(new FlowPane());
     	frame.getStyles().put("padding", 0);
     	frame.setTitle("Card Pane Test");
-    	frame.setMaximized(true);
+    	frame.setPreferredSize(800, 600);
+    	frame.setLocation(20, 20);
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         sheet = new Sheet((Component)wtkxSerializer.readObject(getClass().getResource("card_pane_test.wtkx")));
-        sheet.getDecorators().removeAll();
 
         cardPane = (CardPane)wtkxSerializer.getObjectByName("cardPane");
 

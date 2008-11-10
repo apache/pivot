@@ -60,7 +60,11 @@ public class Sheet extends Window {
         }
 
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            alignToOwnerContent();
+            ApplicationContext.queueCallback(new Runnable() {
+                public void run() {
+                    alignToOwnerContent();
+                }
+            });
         }
 
         public void locationChanged(Component component, int previousX, int previousY) {
