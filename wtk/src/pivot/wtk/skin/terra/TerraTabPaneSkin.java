@@ -43,6 +43,11 @@ import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Button.Group;
 import pivot.wtk.content.ButtonData;
 import pivot.wtk.content.ButtonDataRenderer;
+import pivot.wtk.effects.ClipDecorator;
+import pivot.wtk.effects.Transition;
+import pivot.wtk.effects.TransitionListener;
+import pivot.wtk.effects.easing.Easing;
+import pivot.wtk.effects.easing.Quadratic;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
@@ -318,6 +323,54 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
     }
 
+    public class ExpandTransition extends Transition {
+        private boolean collapse;
+        private Easing easing = new Quadratic();
+        private ClipDecorator clipDecorator = new ClipDecorator();
+
+        public ExpandTransition(boolean collapse, int duration, int rate) {
+            super(duration, rate, false);
+            this.collapse = collapse;
+        }
+
+        public float getScale() {
+            int elapsedTime = getElapsedTime();
+            int duration = getDuration();
+
+            float scale;
+            if (collapse) {
+                scale = easing.easeIn(elapsedTime, 1, -1, duration);
+            } else {
+                scale = easing.easeOut(elapsedTime, 0, 1, duration);
+            }
+
+            return scale;
+        }
+
+        @Override
+        public void start(TransitionListener transitionListener) {
+        	TabPane tabPane = (TabPane)getComponent();
+        	Component selectedTab = tabPane.getSelectedTab();
+        	selectedTab.getDecorators().add(clipDecorator);
+
+            super.start(transitionListener);
+        }
+
+        @Override
+        public void stop() {
+        	TabPane tabPane = (TabPane)getComponent();
+        	Component selectedTab = tabPane.getSelectedTab();
+        	selectedTab.getDecorators().remove(clipDecorator);
+
+        	super.stop();
+        }
+
+        @Override
+        protected void update() {
+            invalidateComponent();
+        }
+    }
+
     protected Panorama buttonPanorama = new Panorama();
     protected FlowPane buttonFlowPane = new FlowPane();
     private Button.Group tabButtonGroup = new Button.Group();
@@ -332,6 +385,11 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     // Derived colors
     private Color buttonBevelColor;
+
+    private ExpandTransition expandTransition = null;
+
+    private static final int EXPAND_DURATION = 250;
+    private static final int EXPAND_RATE = 30;
 
 	public static final int GRADIENT_BEVEL_THICKNESS = 4;
 	private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
@@ -353,6 +411,22 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         buttonFlowPane.getStyles().put("spacing", 2);
     }
+
+	@Override
+	public void setSize(int width, int height) {
+		TabPane tabPane = (TabPane)getComponent();
+		Orientation tabOrientation = tabPane.getTabOrientation();
+
+		if (expandTransition != null) {
+			if ((tabOrientation == Orientation.HORIZONTAL && width != getWidth())
+				|| (tabOrientation == Orientation.VERTICAL && height != getHeight())) {
+				expandTransition.end();
+				expandTransition = null;
+			}
+		}
+
+		super.setSize(width, height);
+	}
 
     public void install(Component component) {
         super.install(component);
@@ -448,12 +522,15 @@ public class TerraTabPaneSkin extends ContainerSkin
                 }
 
                 if (tabPane.getSelectedIndex() != -1) {
+                	int contentWidth = 0;
                     for (Component tab : tabPane.getTabs()) {
-                        preferredWidth = Math.max(preferredWidth,
+                        contentWidth = Math.max(contentWidth,
                             tab.getPreferredWidth(height));
                     }
 
-                    preferredWidth += (padding.left + padding.right + 2);
+                    float scale = (expandTransition == null) ? 1.0f : expandTransition.getScale();
+                    preferredWidth += (int)(scale * (float)(padding.left + padding.right + contentWidth));
+                    preferredWidth += 2;
                 } else {
                     preferredWidth += 1;
                 }
@@ -487,12 +564,15 @@ public class TerraTabPaneSkin extends ContainerSkin
                 }
 
                 if (tabPane.getSelectedIndex() != -1) {
+                	int contentHeight = 0;
                     for (Component tab : tabPane.getTabs()) {
-                        preferredHeight = Math.max(preferredHeight,
+                    	contentHeight = Math.max(contentHeight,
                             tab.getPreferredHeight(width));
                     }
 
-                    preferredHeight += (padding.top + padding.bottom + 2);
+                    float scale = (expandTransition == null) ? 1.0f : expandTransition.getScale();
+                    preferredHeight += (int)(scale * (float)(padding.top + padding.bottom + contentHeight));
+                    preferredHeight += 2;
                 } else {
                     preferredHeight += 1;
                 }
@@ -901,8 +981,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
     }
 
-    // TabPaneListener methods
-
+    // Tab pane events
     public void tabOrientationChanged(TabPane tabPane) {
         Orientation tabOrientation = tabPane.getTabOrientation();
 
@@ -929,6 +1008,11 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     public void tabInserted(TabPane tabPane, int index) {
+    	if (expandTransition != null) {
+    		expandTransition.stop();
+    		expandTransition = null;
+    	}
+
         // Create a new button for the tab
         Component tab = tabPane.getTabs().get(index);
         TabButton tabButton = new TabButton(new ButtonData(TabPane.getIcon(tab),
@@ -939,7 +1023,12 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
-        // Remove the buttons
+    	if (expandTransition != null) {
+    		expandTransition.stop();
+    		expandTransition = null;
+    	}
+
+    	// Remove the buttons
         Sequence<Component> removed = buttonFlowPane.remove(index, tabs.getLength());
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
@@ -953,14 +1042,39 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     // Tab pane selection events
-	public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
-		// TODO Animate transition when collapsing
+	public Vote previewSelectedIndexChange(final TabPane tabPane, final int selectedIndex) {
+        Vote vote = Vote.APPROVE;
 
-		return Vote.APPROVE;
+        if (tabPane.getDisplay() != null) {
+            if (expandTransition == null) {
+                if (selectedIndex == -1) {
+                    expandTransition = new ExpandTransition(true, EXPAND_DURATION, EXPAND_RATE);
+                    vote = Vote.DEFER;
+
+                    expandTransition.start(new TransitionListener() {
+                        public void transitionCompleted(Transition transition) {
+                            tabPane.setSelectedIndex(-1);
+                            expandTransition = null;
+                        }
+                    });
+                }
+            } else {
+            	if (expandTransition.isRunning()) {
+                	vote = Vote.DEFER;
+            	}
+            }
+        }
+
+        return vote;
 	}
 
 	public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
-		// No-op
+        if (reason == Vote.DENY
+            && expandTransition != null) {
+            expandTransition.stop();
+            expandTransition = null;
+            invalidateComponent();
+        }
 	}
 
 	public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
@@ -974,6 +1088,17 @@ public class TerraTabPaneSkin extends ContainerSkin
         } else {
             Button button = (Button)buttonFlowPane.get(selectedIndex);
             button.setSelected(true);
+
+            if (previousSelectedIndex == -1) {
+                if (tabPane.getDisplay() != null) {
+                    expandTransition = new ExpandTransition(false, EXPAND_DURATION, EXPAND_RATE);
+                    expandTransition.start(new TransitionListener() {
+                        public void transitionCompleted(Transition transition) {
+                            expandTransition = null;
+                        }
+                    });
+                }
+            }
         }
 
         invalidateComponent();

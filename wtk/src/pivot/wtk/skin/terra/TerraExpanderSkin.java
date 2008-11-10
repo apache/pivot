@@ -607,7 +607,7 @@ public class TerraExpanderSkin extends ContainerSkin
 
                     expandTransition.start(new TransitionListener() {
                         public void transitionCompleted(Transition transition) {
-                            expander.setExpanded(!expander.isExpanded());
+                            expander.setExpanded(false);
                             expandTransition = null;
                         }
                     });

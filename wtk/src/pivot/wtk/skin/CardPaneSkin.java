@@ -474,29 +474,31 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 	public Vote previewSelectedIndexChange(final CardPane cardPane, final int selectedIndex) {
     	Vote vote = Vote.APPROVE;
 
-		if (selectionChangeTransition == null) {
-			if (matchSelectedCardSize
-				|| orientation != null) {
-				int previousSelectedIndex = cardPane.getSelectedIndex();
+    	if (cardPane.getDisplay() != null) {
+        	if (selectionChangeTransition == null) {
+    			if (matchSelectedCardSize
+    				|| orientation != null) {
+    				int previousSelectedIndex = cardPane.getSelectedIndex();
 
-	    		selectionChangeTransition = new SelectionChangeTransition(previousSelectedIndex, selectedIndex,
-					SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE);
+    	    		selectionChangeTransition = new SelectionChangeTransition(previousSelectedIndex, selectedIndex,
+    					SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE);
 
-	    		selectionChangeTransition.start(new TransitionListener() {
-	    			public void transitionCompleted(Transition transition) {
-	    				cardPane.setSelectedIndex(selectedIndex);
-	    				selectionChangeTransition = null;
+    	    		selectionChangeTransition.start(new TransitionListener() {
+    	    			public void transitionCompleted(Transition transition) {
+    	    				cardPane.setSelectedIndex(selectedIndex);
+    	    				selectionChangeTransition = null;
 
-	    				invalidateComponent();
-	    			}
-	    		});
+    	    				invalidateComponent();
+    	    			}
+    	    		});
 
-	    		vote = Vote.DEFER;
-			}
-    	} else {
-    		if (selectionChangeTransition.isRunning()) {
-    			vote = Vote.DEFER;
-    		}
+    	    		vote = Vote.DEFER;
+    			}
+        	} else {
+        		if (selectionChangeTransition.isRunning()) {
+        			vote = Vote.DEFER;
+        		}
+        	}
     	}
 
     	return vote;

@@ -230,7 +230,7 @@ public class TerraAccordionSkin extends ContainerSkin
 	        this.newPanel = newPanel;
 	    }
 
-        public float getScale() {
+        public float getEasedPercentComplete() {
             return easing.easeOut(getElapsedTime(), 0, 1, getDuration());
         }
 
@@ -441,13 +441,13 @@ public class TerraAccordionSkin extends ContainerSkin
                     panel.setVisible(false);
                 }
         	} else {
-        		float scale = selectionChangeTransition.getScale();
+        		float easedPercentComplete = selectionChangeTransition.getEasedPercentComplete();
 
         		if (panel == selectionChangeTransition.oldPanel) {
         			panel.setSize(contentWidth, contentHeight);
                     panel.setLocation(padding.left + 1, panelY + padding.top);
 
-        			int oldPanelHeight = Math.round((float)panelHeight * (1.0f - scale));
+        			int oldPanelHeight = Math.round((float)panelHeight * (1.0f - easedPercentComplete));
         			selectionChangeTransition.oldPanelClipDecorator.setWidth(contentWidth);
                     selectionChangeTransition.oldPanelClipDecorator.setHeight(oldPanelHeight);
 
@@ -456,7 +456,7 @@ public class TerraAccordionSkin extends ContainerSkin
         			panel.setSize(contentWidth, contentHeight);
                     panel.setLocation(padding.left + 1, panelY + padding.top);
 
-        			int newPanelHeight = Math.round((float)panelHeight * scale);
+        			int newPanelHeight = Math.round((float)panelHeight * easedPercentComplete);
         			selectionChangeTransition.newPanelClipDecorator.setWidth(contentWidth);
                     selectionChangeTransition.newPanelClipDecorator.setHeight(newPanelHeight);
 
@@ -647,32 +647,34 @@ public class TerraAccordionSkin extends ContainerSkin
 	public Vote previewSelectedIndexChange(final Accordion accordion, final int selectedIndex) {
 		Vote vote = Vote.APPROVE;
 
-		if (selectionChangeTransition == null) {
-    		int previousSelectedIndex = accordion.getSelectedIndex();
+		if (accordion.getDisplay() != null) {
+			if (selectionChangeTransition == null) {
+	    		int previousSelectedIndex = accordion.getSelectedIndex();
 
-    		if (selectedIndex != -1
-				&& previousSelectedIndex != -1) {
-    			Component oldPanel = accordion.getPanels().get(previousSelectedIndex);
-    			Component newPanel = accordion.getPanels().get(selectedIndex);
+	    		if (selectedIndex != -1
+					&& previousSelectedIndex != -1) {
+	    			Component oldPanel = accordion.getPanels().get(previousSelectedIndex);
+	    			Component newPanel = accordion.getPanels().get(selectedIndex);
 
-        		selectionChangeTransition = new SelectionChangeTransition(oldPanel, newPanel,
-    				SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE);
+	        		selectionChangeTransition = new SelectionChangeTransition(oldPanel, newPanel,
+	    				SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE);
 
-        		selectionChangeTransition.start(new TransitionListener() {
-        			public void transitionCompleted(Transition transition) {
-        				accordion.setSelectedIndex(selectedIndex);
-        				selectionChangeTransition = null;
+	        		selectionChangeTransition.start(new TransitionListener() {
+	        			public void transitionCompleted(Transition transition) {
+	        				accordion.setSelectedIndex(selectedIndex);
+	        				selectionChangeTransition = null;
 
-        				invalidateComponent();
-        			}
-        		});
+	        				invalidateComponent();
+	        			}
+	        		});
 
-        		vote = Vote.DEFER;
-    		}
-		} else {
-    		if (selectionChangeTransition.isRunning()) {
-    			vote = Vote.DEFER;
-    		}
+	        		vote = Vote.DEFER;
+	    		}
+			} else {
+	    		if (selectionChangeTransition.isRunning()) {
+	    			vote = Vote.DEFER;
+	    		}
+			}
 		}
 
 		return vote;
