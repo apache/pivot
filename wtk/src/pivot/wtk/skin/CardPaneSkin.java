@@ -26,6 +26,8 @@ import pivot.wtk.Orientation;
 import pivot.wtk.effects.FadeDecorator;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
+import pivot.wtk.effects.easing.Easing;
+import pivot.wtk.effects.easing.Quartic;
 
 /**
  * Card pane skin.
@@ -39,6 +41,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     	private FadeDecorator fadeOutDecorator = new FadeDecorator();
 	    private FadeDecorator fadeInDecorator = new FadeDecorator();
+
+	    private Easing slideEasing = new Quartic();
 
 	    public SelectionChangeTransition(int previousSelectedIndex, int selectedIndex,
     		int duration, int rate) {
@@ -129,6 +133,10 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     		invalidateComponent();
 	    }
+
+        public float getEasedSlidePercentComplete() {
+            return slideEasing.easeOut(getElapsedTime(), 0, 1, getDuration());
+        }
 
 	    public Component getPreviousSelectedCard() {
 	    	CardPane cardPane = (CardPane)getComponent();
@@ -387,7 +395,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
             	if (previousSelectedIndex != -1
         			&& selectedIndex != -1) {
-                	float percentComplete = selectionChangeTransition.getPercentComplete();
+                	float percentComplete = selectionChangeTransition.getEasedSlidePercentComplete();
 
                 	int direction = Integer.signum(previousSelectedIndex - selectedIndex);
 
