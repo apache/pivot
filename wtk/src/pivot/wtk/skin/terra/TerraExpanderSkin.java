@@ -265,6 +265,17 @@ public class TerraExpanderSkin extends ContainerSkin
         titleFlowPane.add(titleLabel);
     }
 
+	@Override
+	public void setSize(int width, int height) {
+		if (expandTransition != null
+			&& width != getWidth()) {
+			expandTransition.end();
+			expandTransition = null;
+		}
+
+		super.setSize(width, height);
+	}
+
     @Override
     public void install(Component component) {
         super.install(component);
@@ -295,34 +306,40 @@ public class TerraExpanderSkin extends ContainerSkin
     }
 
     public int getPreferredWidth(int height) {
-        int preferredWidth = 2;
+        int preferredWidth;
 
-        Expander expander = (Expander)getComponent();
-        Component content = expander.getContent();
+        if (expandTransition == null) {
+        	preferredWidth = 2;
 
-        int titleBarPreferredWidth = titleBarFlowPane.getPreferredWidth(-1);
-        int contentPreferredWidth = 0;
+            Expander expander = (Expander)getComponent();
+            Component content = expander.getContent();
 
-        if (content != null) {
-            int contentHeightConstraint = -1;
+            int titleBarPreferredWidth = titleBarFlowPane.getPreferredWidth(-1);
+            int contentPreferredWidth = 0;
 
-            if (height >= 0) {
-                int reservedHeight = 2 + padding.top + padding.bottom
-                    + titleBarFlowPane.getPreferredHeight(-1);
+            if (content != null) {
+                int contentHeightConstraint = -1;
 
-                if (expander.isExpanded()) {
-                    // Title bar border is only drawn when expander is expanded
-                    reservedHeight += 1;
+                if (height >= 0) {
+                    int reservedHeight = 2 + padding.top + padding.bottom
+                        + titleBarFlowPane.getPreferredHeight(-1);
+
+                    if (expander.isExpanded()) {
+                        // Title bar border is only drawn when expander is expanded
+                        reservedHeight += 1;
+                    }
+
+                    contentHeightConstraint = Math.max(height - reservedHeight, 0);
                 }
 
-                contentHeightConstraint = Math.max(height - reservedHeight, 0);
+                contentPreferredWidth = padding.left + padding.right
+                    + content.getPreferredWidth(contentHeightConstraint);
             }
 
-            contentPreferredWidth = padding.left + padding.right
-                + content.getPreferredWidth(contentHeightConstraint);
+            preferredWidth += Math.max(titleBarPreferredWidth, contentPreferredWidth);
+        } else {
+        	preferredWidth = getWidth();
         }
-
-        preferredWidth += Math.max(titleBarPreferredWidth, contentPreferredWidth);
 
         return preferredWidth;
     }
@@ -331,7 +348,6 @@ public class TerraExpanderSkin extends ContainerSkin
         int preferredHeight = 2 + titleBarFlowPane.getPreferredHeight(-1);
 
         Expander expander = (Expander)getComponent();
-
         if (expander.isExpanded()) {
             // Title bar border is only drawn when expander is expanded
             preferredHeight += 1;
@@ -345,9 +361,14 @@ public class TerraExpanderSkin extends ContainerSkin
                     contentWidthConstraint = Math.max(width - reservedWidth, 0);
                 }
 
-                float scale = (expandTransition == null) ? 1.0f : expandTransition.getScale();
-                preferredHeight += (int)(scale * (float)(padding.top + padding.bottom
-                    + content.getPreferredHeight(contentWidthConstraint)));
+                if (expandTransition == null) {
+                    preferredHeight += (padding.top + padding.bottom
+                        + content.getPreferredHeight(contentWidthConstraint));
+                } else {
+                    float scale = expandTransition.getScale();
+                    preferredHeight += (int)(scale * (float)(padding.top + padding.bottom
+                		+ content.getHeight()));
+                }
             }
         }
 
@@ -366,10 +387,15 @@ public class TerraExpanderSkin extends ContainerSkin
 
         int width = getWidth();
         int height = getHeight();
-        int titleBarHeight = titleBarFlowPane.getPreferredHeight(-1);
 
-        titleBarFlowPane.setSize(Math.max(width - 2, 0), titleBarHeight);
-        titleBarFlowPane.setLocation(1, 1);
+        int titleBarHeight;
+        if (expandTransition == null) {
+            titleBarHeight = titleBarFlowPane.getPreferredHeight(-1);
+            titleBarFlowPane.setSize(Math.max(width - 2, 0), titleBarHeight);
+            titleBarFlowPane.setLocation(1, 1);
+        } else {
+        	titleBarHeight = titleBarFlowPane.getHeight();
+        }
 
         if (content != null) {
             if (expander.isExpanded()) {
@@ -384,9 +410,12 @@ public class TerraExpanderSkin extends ContainerSkin
                 if (expandTransition == null) {
                 	content.setSize(contentWidth, contentHeight);
                 } else {
+                	if (!expandTransition.isRunning()) {
+                    	content.setSize(contentWidth, content.getPreferredHeight(contentWidth));
+                	}
+
                 	expandTransition.clipDecorator.setWidth(contentWidth);
                 	expandTransition.clipDecorator.setHeight(contentHeight);
-                	content.setSize(contentWidth, content.getPreferredHeight(contentWidth));
                 }
 
                 int contentX = 1 + padding.left;
@@ -599,18 +628,21 @@ public class TerraExpanderSkin extends ContainerSkin
     public Vote previewExpandedChange(final Expander expander) {
         Vote vote = Vote.APPROVE;
 
-        if (expander.getDisplay() != null) {
+        if (expander.isShowing()) {
             if (expandTransition == null) {
-                if (expander.isExpanded()) {
+                if (expander.isExpanded()
+            		&& expander.getContent() != null) {
                     expandTransition = new ExpandTransition(true, EXPAND_DURATION, EXPAND_RATE);
-                    vote = Vote.DEFER;
 
+                    layout();
                     expandTransition.start(new TransitionListener() {
                         public void transitionCompleted(Transition transition) {
                             expander.setExpanded(false);
                             expandTransition = null;
                         }
                     });
+
+                    vote = Vote.DEFER;
                 }
             } else {
             	if (expandTransition.isRunning()) {
@@ -632,9 +664,12 @@ public class TerraExpanderSkin extends ContainerSkin
     }
 
     public void expandedChanged(Expander expander) {
-        if (expander.getDisplay() != null) {
-            if (expander.isExpanded()) {
+        if (expander.isShowing()) {
+            if (expander.isExpanded()
+        		&& expander.getContent() != null) {
                 expandTransition = new ExpandTransition(false, EXPAND_DURATION, EXPAND_RATE);
+
+                layout();
                 expandTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
                         expandTransition = null;

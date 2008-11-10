@@ -215,19 +215,19 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
 	public class SelectionChangeTransition extends Transition {
-	    public final Component oldPanel;
-	    public final Component newPanel;
+	    public final Component previousSelectedPanel;
+	    public final Component selectedPanel;
 
-	    public final ClipDecorator oldPanelClipDecorator = new ClipDecorator();
-	    public final ClipDecorator newPanelClipDecorator = new ClipDecorator();
+	    public final ClipDecorator previousSelectedPanelClipDecorator = new ClipDecorator();
+	    public final ClipDecorator selectedPanelClipDecorator = new ClipDecorator();
 
 	    private Easing easing = new Quartic();
 
-	    public SelectionChangeTransition(Component oldPanel, Component newPanel,
+	    public SelectionChangeTransition(Component previousSelectedPanel, Component selectedPanel,
     		int duration, int rate) {
 	        super(duration, rate, false);
-	        this.oldPanel = oldPanel;
-	        this.newPanel = newPanel;
+	        this.previousSelectedPanel = previousSelectedPanel;
+	        this.selectedPanel = selectedPanel;
 	    }
 
         public float getEasedPercentComplete() {
@@ -236,20 +236,16 @@ public class TerraAccordionSkin extends ContainerSkin
 
         @Override
 	    public void start(TransitionListener transitionListener) {
-	    	oldPanel.getDecorators().add(oldPanelClipDecorator);
-
-	        newPanel.setVisible(true);
-	        newPanel.getDecorators().add(newPanelClipDecorator);
+	    	previousSelectedPanel.getDecorators().add(previousSelectedPanelClipDecorator);
+	        selectedPanel.getDecorators().add(selectedPanelClipDecorator);
 
 	        super.start(transitionListener);
 	    }
 
 	    @Override
 	    public void stop() {
-	    	oldPanel.getDecorators().remove(oldPanelClipDecorator);
-	    	oldPanel.setVisible(false);
-
-	    	newPanel.getDecorators().remove(newPanelClipDecorator);
+	    	previousSelectedPanel.getDecorators().remove(previousSelectedPanelClipDecorator);
+	    	selectedPanel.getDecorators().remove(selectedPanelClipDecorator);
 
 	        super.stop();
 	    }
@@ -351,47 +347,56 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     public int getPreferredWidth(int height) {
-        Accordion accordion = (Accordion)getComponent();
+    	int preferredWidth;
+    	if (selectionChangeTransition == null) {
+            Accordion accordion = (Accordion)getComponent();
 
-        // The preferred width is the maximum unconstrained preferred width of
-        // the headers and the panels, plus border
-        int maxPanelHeaderWidth = 0;
-        for (PanelHeader panelHeader : panelHeaders) {
-        	maxPanelHeaderWidth = Math.max(panelHeader.getPreferredWidth(), maxPanelHeaderWidth);
-        }
+            // The preferred width is the maximum unconstrained preferred width of
+            // the headers and the panels, plus border
+            int maxPanelHeaderWidth = 0;
+            for (PanelHeader panelHeader : panelHeaders) {
+            	maxPanelHeaderWidth = Math.max(panelHeader.getPreferredWidth(), maxPanelHeaderWidth);
+            }
 
-        int maxPanelWidth = 0;
-        for (Component panel : accordion.getPanels()) {
-        	maxPanelWidth = Math.max(panel.getPreferredWidth(), maxPanelWidth);
-        }
+            int maxPanelWidth = 0;
+            for (Component panel : accordion.getPanels()) {
+            	maxPanelWidth = Math.max(panel.getPreferredWidth(), maxPanelWidth);
+            }
 
-        int preferredWidth = Math.max(maxPanelHeaderWidth, maxPanelWidth
-        	+ (padding.left + padding.right + 2));
+            preferredWidth = Math.max(maxPanelHeaderWidth, maxPanelWidth
+            	+ (padding.left + padding.right + 2));
+    	} else {
+    		preferredWidth = getWidth();
+    	}
 
         return preferredWidth;
     }
 
     public int getPreferredHeight(int width) {
-        int preferredHeight = 0;
+        int preferredHeight;
+        if (selectionChangeTransition == null) {
+        	preferredHeight = getHeight();
+        } else {
+        	preferredHeight = 0;
+            Accordion accordion = (Accordion)getComponent();
 
-        Accordion accordion = (Accordion)getComponent();
+            // The preferred height is the sum of the constrained preferred heights
+            // of the headers and selected panel, plus border
+            for (PanelHeader panelHeader : panelHeaders) {
+            	preferredHeight += panelHeader.getPreferredHeight(width) - 1;
+            }
 
-        // The preferred height is the sum of the constrained preferred heights
-        // of the headers and selected panel, plus border
-        for (PanelHeader panelHeader : panelHeaders) {
-        	preferredHeight += panelHeader.getPreferredHeight(width) - 1;
+        	if (width != -1) {
+        		width = Math.max(0, width - (padding.left + padding.right + 2));
+        	}
+
+        	int maxPanelHeight = 0;
+            for (Component panel : accordion.getPanels()) {
+            	maxPanelHeight = Math.max(maxPanelHeight, panel.getPreferredHeight(width));
+            }
+
+            preferredHeight += (maxPanelHeight + padding.top + padding.bottom);
         }
-
-    	if (width != -1) {
-    		width = Math.max(0, width - (padding.left + padding.right + 2));
-    	}
-
-    	int maxPanelHeight = 0;
-        for (Component panel : accordion.getPanels()) {
-        	maxPanelHeight = Math.max(maxPanelHeight, panel.getPreferredHeight(width));
-        }
-
-        preferredHeight += (maxPanelHeight + padding.top + padding.bottom);
 
         return preferredHeight;
     }
@@ -403,23 +408,32 @@ public class TerraAccordionSkin extends ContainerSkin
 
     public void layout() {
         Accordion accordion = (Accordion)getComponent();
+
         int width = getWidth();
         int height = getHeight();
 
         int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
 
-        int panelHeight = height;
-        for (PanelHeader panelHeader : panelHeaders) {
-        	panelHeader.setSize(width, panelHeader.getPreferredHeight(width));
-        	panelHeight -= (panelHeader.getHeight() - 1);
-        }
+        // Determine the content height
+        int panelHeight = 0;
+        int contentHeight = 0;
 
-        panelHeight = Math.max(panelHeight - 1, 0);
-        int contentHeight = Math.max(panelHeight - (padding.top + padding.bottom), 0);
+        if (selectionChangeTransition == null) {
+            panelHeight = height;
+            for (PanelHeader panelHeader : panelHeaders) {
+            	panelHeader.setSize(width, panelHeader.getPreferredHeight(width));
+            	panelHeight -= (panelHeader.getHeight() - 1);
+            }
+
+            panelHeight = Math.max(panelHeight - 1, 0);
+            contentHeight = Math.max(panelHeight - (padding.top + padding.bottom), 0);
+        } else {
+        	panelHeight = selectionChangeTransition.selectedPanel.getHeight()
+        		+ (padding.top + padding.bottom);
+        }
 
         // Lay out the components
         Accordion.PanelSequence panels = accordion.getPanels();
-        Component selectedPanel = accordion.getSelectedPanel();
 
         int panelY = 0;
         for (int i = 0, n = panels.getLength(); i < n; i++) {
@@ -430,6 +444,8 @@ public class TerraAccordionSkin extends ContainerSkin
         	panelY += (panelHeader.getHeight() - 1);
 
         	if (selectionChangeTransition == null) {
+                Component selectedPanel = accordion.getSelectedPanel();
+
                 if (panel == selectedPanel) {
                     panel.setVisible(true);
 
@@ -441,28 +457,34 @@ public class TerraAccordionSkin extends ContainerSkin
                     panel.setVisible(false);
                 }
         	} else {
-        		float easedPercentComplete = selectionChangeTransition.getEasedPercentComplete();
+        		Component previousSelectedPanel = selectionChangeTransition.previousSelectedPanel;
+        		Component selectedPanel = selectionChangeTransition.selectedPanel;
 
-        		if (panel == selectionChangeTransition.oldPanel) {
-        			panel.setSize(contentWidth, contentHeight);
-                    panel.setLocation(padding.left + 1, panelY + padding.top);
+        		if (selectionChangeTransition.isRunning()) {
+            		if (panel == previousSelectedPanel) {
+                        panel.setLocation(padding.left + 1, panelY + padding.top);
 
-        			int oldPanelHeight = Math.round((float)panelHeight * (1.0f - easedPercentComplete));
-        			selectionChangeTransition.oldPanelClipDecorator.setWidth(contentWidth);
-                    selectionChangeTransition.oldPanelClipDecorator.setHeight(oldPanelHeight);
+                        int previousSelectedPanelHeight = Math.round((float)panelHeight * (1.0f
+                    		- selectionChangeTransition.getEasedPercentComplete()));
+            			selectionChangeTransition.previousSelectedPanelClipDecorator.setWidth(contentWidth);
+                        selectionChangeTransition.previousSelectedPanelClipDecorator.setHeight(previousSelectedPanelHeight);
 
-                    panelY += oldPanelHeight;
-        		} else if (panel == selectionChangeTransition.newPanel) {
-        			panel.setSize(contentWidth, contentHeight);
-                    panel.setLocation(padding.left + 1, panelY + padding.top);
+                        panelY += previousSelectedPanelHeight;
+            		}
 
-        			int newPanelHeight = Math.round((float)panelHeight * easedPercentComplete);
-        			selectionChangeTransition.newPanelClipDecorator.setWidth(contentWidth);
-                    selectionChangeTransition.newPanelClipDecorator.setHeight(newPanelHeight);
+            		if (panel == selectedPanel) {
+                        panel.setLocation(padding.left + 1, panelY + padding.top);
 
-        			panelY += newPanelHeight;
+            			int selectedPanelHeight = Math.round((float)panelHeight
+        					* selectionChangeTransition.getEasedPercentComplete());
+            			selectionChangeTransition.selectedPanelClipDecorator.setWidth(contentWidth);
+                        selectionChangeTransition.selectedPanelClipDecorator.setHeight(selectedPanelHeight);
+
+            			panelY += selectedPanelHeight;
+            		}
         		} else {
-                    panel.setVisible(false);
+        			selectedPanel.setSize(previousSelectedPanel.getSize());
+        			selectedPanel.setVisible(true);
         		}
         	}
         }
@@ -647,18 +669,19 @@ public class TerraAccordionSkin extends ContainerSkin
 	public Vote previewSelectedIndexChange(final Accordion accordion, final int selectedIndex) {
 		Vote vote = Vote.APPROVE;
 
-		if (accordion.getDisplay() != null) {
+		if (accordion.isShowing()) {
 			if (selectionChangeTransition == null) {
 	    		int previousSelectedIndex = accordion.getSelectedIndex();
 
 	    		if (selectedIndex != -1
 					&& previousSelectedIndex != -1) {
-	    			Component oldPanel = accordion.getPanels().get(previousSelectedIndex);
-	    			Component newPanel = accordion.getPanels().get(selectedIndex);
+	    			Component previousSelectedPanel = accordion.getPanels().get(previousSelectedIndex);
+	    			Component selectedPanel = accordion.getPanels().get(selectedIndex);
 
-	        		selectionChangeTransition = new SelectionChangeTransition(oldPanel, newPanel,
+	        		selectionChangeTransition = new SelectionChangeTransition(previousSelectedPanel, selectedPanel,
 	    				SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE);
 
+	        		layout();
 	        		selectionChangeTransition.start(new TransitionListener() {
 	        			public void transitionCompleted(Transition transition) {
 	        				accordion.setSelectedIndex(selectedIndex);

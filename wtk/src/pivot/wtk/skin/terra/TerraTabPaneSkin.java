@@ -69,7 +69,9 @@ public class TerraTabPaneSkin extends ContainerSkin
     implements TabPaneListener, TabPaneSelectionListener, TabPaneAttributeListener,
         Button.GroupListener {
     protected class TabButton extends Button {
-        public TabButton() {
+    	private boolean active = false;
+
+    	public TabButton() {
             this(null);
         }
 
@@ -216,7 +218,8 @@ public class TerraTabPaneSkin extends ContainerSkin
             TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
             Orientation tabOrientation = tabPane.getTabOrientation();
 
-            Color backgroundColor = (tabButton.isSelected()) ?
+            Color backgroundColor = (tabButton.isSelected()
+        		|| tabButton.active) ?
                 activeTabColor : inactiveTabColor;
 
             int width = getWidth();
@@ -247,7 +250,8 @@ public class TerraTabPaneSkin extends ContainerSkin
             // Draw the border
             graphics.setPaint(borderColor);
 
-            if (tabButton.isSelected()) {
+            if (tabButton.isSelected()
+        		|| tabButton.active) {
                 switch(tabOrientation) {
 		            case HORIZONTAL: {
 		                graphics.drawLine(0, height - 1, 0, 0);
@@ -324,7 +328,7 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     public class ExpandTransition extends Transition {
-        private boolean collapse;
+    	boolean collapse;
         private Easing easing = new Quadratic();
         private ClipDecorator clipDecorator = new ClipDecorator();
 
@@ -353,6 +357,10 @@ public class TerraTabPaneSkin extends ContainerSkin
         	Component selectedTab = tabPane.getSelectedTab();
         	selectedTab.getDecorators().add(clipDecorator);
 
+        	int selectedIndex = tabPane.getSelectedIndex();
+        	TabButton tabButton = (TabButton)buttonFlowPane.get(selectedIndex);
+        	tabButton.active = true;
+
             super.start(transitionListener);
         }
 
@@ -361,6 +369,10 @@ public class TerraTabPaneSkin extends ContainerSkin
         	TabPane tabPane = (TabPane)getComponent();
         	Component selectedTab = tabPane.getSelectedTab();
         	selectedTab.getDecorators().remove(clipDecorator);
+
+        	int selectedIndex = tabPane.getSelectedIndex();
+        	TabButton tabButton = (TabButton)buttonFlowPane.get(selectedIndex);
+        	tabButton.active = false;
 
         	super.stop();
         }
@@ -474,154 +486,183 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     public int getPreferredWidth(int height) {
-        int preferredWidth = 0;
+        int preferredWidth;
 
         TabPane tabPane = (TabPane)getComponent();
         Orientation tabOrientation = tabPane.getTabOrientation();
-        Component corner = tabPane.getCorner();
 
-        switch (tabOrientation) {
-            case HORIZONTAL: {
-                if (height != -1) {
+        if (expandTransition == null
+    		|| tabOrientation == Orientation.VERTICAL) {
+        	preferredWidth = 0;
+
+            Component selectedTab = tabPane.getSelectedTab();
+            Component corner = tabPane.getCorner();
+
+            switch (tabOrientation) {
+                case HORIZONTAL: {
+                    if (height != -1) {
+                        if (corner != null
+                            && corner.isDisplayable()) {
+                            height = Math.max(height - Math.max(corner.getPreferredHeight(-1),
+                                Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0)), 0);
+                        } else {
+                            height = Math.max(height - (buttonPanorama.getPreferredHeight(-1) - 1), 0);
+                        }
+
+                        height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+                    }
+
+                    if (selectedTab != null) {
+                        for (Component tab : tabPane.getTabs()) {
+                            preferredWidth = Math.max(preferredWidth,
+                                tab.getPreferredWidth(height));
+                        }
+
+                        preferredWidth += (padding.left + padding.right + 2);
+                    }
+
+                    int buttonAreaPreferredWidth = buttonPanorama.getPreferredWidth(-1);
+
                     if (corner != null
                         && corner.isDisplayable()) {
-                        height = Math.max(height - Math.max(corner.getPreferredHeight(-1),
-                            Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0)), 0);
+                        buttonAreaPreferredWidth += corner.getPreferredWidth(-1);
+                    }
+
+                    preferredWidth = Math.max(preferredWidth,
+                        buttonAreaPreferredWidth);
+
+                    break;
+                }
+
+                case VERTICAL: {
+                    if (height != -1) {
+                        height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+                    }
+
+                    if (selectedTab != null) {
+                    	if (expandTransition == null) {
+                        	int contentWidth = 0;
+                            for (Component tab : tabPane.getTabs()) {
+                                contentWidth = Math.max(contentWidth,
+                                    tab.getPreferredWidth(height));
+                            }
+
+                            preferredWidth += (padding.left + padding.right + contentWidth);
+                    	} else {
+                            float scale = expandTransition.getScale();
+                            preferredWidth += (int)(scale * (float)(padding.left + padding.right
+                        		+ selectedTab.getWidth()));
+                    	}
+
+                        preferredWidth += 2;
                     } else {
-                        height = Math.max(height - (buttonPanorama.getPreferredHeight(-1) - 1), 0);
+                        preferredWidth += 1;
                     }
 
-                    height = Math.max(height - (padding.top + padding.bottom + 2), 0);
-                }
-
-                if (tabPane.getSelectedIndex() != -1) {
-                    for (Component tab : tabPane.getTabs()) {
-                        preferredWidth = Math.max(preferredWidth,
-                            tab.getPreferredWidth(height));
+                    if (corner != null
+                        && corner.isDisplayable()) {
+                        preferredWidth += Math.max(corner.getPreferredWidth(-1),
+                            Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0));
+                    } else {
+                        preferredWidth += Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0);
                     }
 
-                    preferredWidth += (padding.left + padding.right + 2);
+                    break;
                 }
-
-                int buttonAreaPreferredWidth = buttonPanorama.getPreferredWidth(-1);
-
-                if (corner != null
-                    && corner.isDisplayable()) {
-                    buttonAreaPreferredWidth += corner.getPreferredWidth(-1);
-                }
-
-                preferredWidth = Math.max(preferredWidth,
-                    buttonAreaPreferredWidth);
-
-                break;
             }
-
-            case VERTICAL: {
-                if (height != -1) {
-                    height = Math.max(height - (padding.top + padding.bottom + 2), 0);
-                }
-
-                if (tabPane.getSelectedIndex() != -1) {
-                	int contentWidth = 0;
-                    for (Component tab : tabPane.getTabs()) {
-                        contentWidth = Math.max(contentWidth,
-                            tab.getPreferredWidth(height));
-                    }
-
-                    float scale = (expandTransition == null) ? 1.0f : expandTransition.getScale();
-                    preferredWidth += (int)(scale * (float)(padding.left + padding.right + contentWidth));
-                    preferredWidth += 2;
-                } else {
-                    preferredWidth += 1;
-                }
-
-                if (corner != null
-                    && corner.isDisplayable()) {
-                    preferredWidth += Math.max(corner.getPreferredWidth(-1),
-                        Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0));
-                } else {
-                    preferredWidth += Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0);
-                }
-
-                break;
-            }
+        } else {
+        	preferredWidth = getWidth();
         }
 
         return preferredWidth;
     }
 
     public int getPreferredHeight(int width) {
-        int preferredHeight = 0;
+        int preferredHeight;
 
         TabPane tabPane = (TabPane)getComponent();
         Orientation tabOrientation = tabPane.getTabOrientation();
-        Component corner = tabPane.getCorner();
 
-        switch (tabOrientation) {
-            case HORIZONTAL: {
-                if (width != -1) {
-                    width = Math.max(width - (padding.left + padding.right + 2), 0);
-                }
+        if (expandTransition == null
+    		|| tabOrientation == Orientation.HORIZONTAL) {
+        	preferredHeight = 0;
+            Component selectedTab = tabPane.getSelectedTab();
+            Component corner = tabPane.getCorner();
 
-                if (tabPane.getSelectedIndex() != -1) {
-                	int contentHeight = 0;
-                    for (Component tab : tabPane.getTabs()) {
-                    	contentHeight = Math.max(contentHeight,
-                            tab.getPreferredHeight(width));
+            switch (tabOrientation) {
+                case HORIZONTAL: {
+                    if (width != -1) {
+                        width = Math.max(width - (padding.left + padding.right + 2), 0);
                     }
 
-                    float scale = (expandTransition == null) ? 1.0f : expandTransition.getScale();
-                    preferredHeight += (int)(scale * (float)(padding.top + padding.bottom + contentHeight));
-                    preferredHeight += 2;
-                } else {
-                    preferredHeight += 1;
-                }
+                    if (selectedTab != null) {
+                    	if (expandTransition == null) {
+                    		int contentHeight = 0;
+                            for (Component tab : tabPane.getTabs()) {
+                            	contentHeight = Math.max(contentHeight,
+                                    tab.getPreferredHeight(width));
+                            }
 
-                if (corner != null
-                    && corner.isDisplayable()) {
-                    preferredHeight += Math.max(corner.getPreferredHeight(-1),
-                        Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0));
-                } else {
-                    preferredHeight += Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0);
-                }
+                            preferredHeight += (padding.top + padding.bottom + contentHeight);
+                    	} else {
+                    		float scale = expandTransition.getScale();
+                            preferredHeight += (int)(scale * (float)(padding.top + padding.bottom
+                        		+ selectedTab.getHeight()));
+                    	}
 
-                break;
-            }
+                        preferredHeight += 2;
+                    } else {
+                        preferredHeight += 1;
+                    }
 
-            case VERTICAL: {
-                if (width != -1) {
                     if (corner != null
                         && corner.isDisplayable()) {
-                        width = Math.max(width - Math.max(corner.getPreferredWidth(-1),
-                            Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0)), 0);
+                        preferredHeight += Math.max(corner.getPreferredHeight(-1),
+                            Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0));
                     } else {
-                        width = Math.max(width - (buttonPanorama.getPreferredWidth(-1) - 1), 0);
+                        preferredHeight += Math.max(buttonPanorama.getPreferredHeight(-1) - 1, 0);
                     }
 
-                    width = Math.max(width - (padding.left + padding.right + 2), 0);
+                    break;
                 }
 
-                if (tabPane.getSelectedIndex() != -1) {
-                    for (Component tab : tabPane.getTabs()) {
-                        preferredHeight = Math.max(preferredHeight,
-                            tab.getPreferredHeight(width));
+                case VERTICAL: {
+                    if (width != -1) {
+                        if (corner != null
+                            && corner.isDisplayable()) {
+                            width = Math.max(width - Math.max(corner.getPreferredWidth(-1),
+                                Math.max(buttonPanorama.getPreferredWidth(-1) - 1, 0)), 0);
+                        } else {
+                            width = Math.max(width - (buttonPanorama.getPreferredWidth(-1) - 1), 0);
+                        }
+
+                        width = Math.max(width - (padding.left + padding.right + 2), 0);
                     }
 
-                    preferredHeight += (padding.top + padding.bottom + 2);
+                    if (selectedTab != null) {
+                        for (Component tab : tabPane.getTabs()) {
+                            preferredHeight = Math.max(preferredHeight,
+                                tab.getPreferredHeight(width));
+                        }
+
+                        preferredHeight += (padding.top + padding.bottom + 2);
+                    }
+
+                    int buttonAreaPreferredHeight = buttonPanorama.getPreferredHeight(-1);
+
+                    if (corner != null
+                        && corner.isDisplayable()) {
+                        buttonAreaPreferredHeight += corner.getPreferredHeight(-1);
+                    }
+
+                    preferredHeight = Math.max(preferredHeight,
+                        buttonAreaPreferredHeight);
+
+                    break;
                 }
-
-                int buttonAreaPreferredHeight = buttonPanorama.getPreferredHeight(-1);
-
-                if (corner != null
-                    && corner.isDisplayable()) {
-                    buttonAreaPreferredHeight += corner.getPreferredHeight(-1);
-                }
-
-                preferredHeight = Math.max(preferredHeight,
-                    buttonAreaPreferredHeight);
-
-                break;
             }
+        } else {
+        	preferredHeight = getHeight();
         }
 
         return preferredHeight;
@@ -634,8 +675,6 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     public void layout() {
         TabPane tabPane = (TabPane)getComponent();
-        Component corner = tabPane.getCorner();
-
         int width = getWidth();
         int height = getHeight();
 
@@ -644,20 +683,29 @@ public class TerraTabPaneSkin extends ContainerSkin
         int tabWidth = 0;
         int tabHeight = 0;
 
-        Dimensions buttonPanoramaPreferredSize = buttonPanorama.getPreferredSize();
+        Component selectedTab = tabPane.getSelectedTab();
+        Component corner = tabPane.getCorner();
 
-        switch (tabPane.getTabOrientation()) {
+        Dimensions buttonPanoramaSize;
+        if (expandTransition == null) {
+        	buttonPanoramaSize = buttonPanorama.getPreferredSize();
+        } else {
+        	buttonPanoramaSize = buttonPanorama.getSize();
+        }
+
+        Orientation tabOrientation = tabPane.getTabOrientation();
+        switch (tabOrientation) {
             case HORIZONTAL: {
                 int buttonPanoramaWidth = Math.min(width,
-                    buttonPanoramaPreferredSize.width);
-                int buttonPanoramaHeight = buttonPanoramaPreferredSize.height;
+                    buttonPanoramaSize.width);
+                int buttonPanoramaHeight = buttonPanoramaSize.height;
                 int buttonPanoramaX = 0;
                 int buttonPanoramaY = 0;
 
                 if (corner != null) {
                     if (corner.isDisplayable()) {
                         int cornerWidth = width - buttonPanoramaWidth;
-                        int cornerHeight = Math.max(corner.getPreferredHeight(-1), buttonPanoramaPreferredSize.height - 1);
+                        int cornerHeight = Math.max(corner.getPreferredHeight(-1), buttonPanoramaSize.height - 1);
                         int cornerX = buttonPanoramaWidth;
                         int cornerY = Math.max(buttonPanoramaHeight - cornerHeight - 1, 0);
 
@@ -684,9 +732,9 @@ public class TerraTabPaneSkin extends ContainerSkin
             }
 
             case VERTICAL: {
-                int buttonPanoramaWidth = buttonPanoramaPreferredSize.width;
+                int buttonPanoramaWidth = buttonPanoramaSize.width;
                 int buttonPanoramaHeight = Math.min(height,
-                    buttonPanoramaPreferredSize.height);
+                    buttonPanoramaSize.height);
                 int buttonPanoramaX = 0;
                 int buttonPanoramaY = 0;
 
@@ -720,21 +768,51 @@ public class TerraTabPaneSkin extends ContainerSkin
             }
         }
 
-        TabPane.TabSequence tabs = tabPane.getTabs();
-        int selectedIndex = tabPane.getSelectedIndex();
+        if (expandTransition == null) {
+            for (Component tab : tabPane.getTabs()) {
+                if (tab == selectedTab) {
+                    // Show the selected tab
+                    tab.setVisible(true);
 
-        for (int i = 0, n = tabs.getLength(); i < n; i++) {
-            Component tab = tabs.get(i);
-            if (i == selectedIndex) {
-                // Show the selected tab
-                tab.setVisible(true);
-
-                // Set the tab's size and location
-                tab.setLocation(tabX, tabY);
-                tab.setSize(tabWidth, tabHeight);
-            } else {
-                tab.setVisible(false);
+                    // Set the tab's size and location
+                    tab.setLocation(tabX, tabY);
+                    tab.setSize(tabWidth, tabHeight);
+                } else {
+                    tab.setVisible(false);
+                }
             }
+        } else {
+        	if (expandTransition.isRunning()) {
+            	// Update the clip
+            	expandTransition.clipDecorator.setWidth(tabWidth);
+            	expandTransition.clipDecorator.setHeight(tabHeight);
+        	} else {
+            	switch (tabOrientation) {
+            		case HORIZONTAL: {
+            			tabHeight = 0;
+            			for (Component tab : tabPane.getTabs()) {
+            				tabHeight = Math.max(tab.getPreferredHeight(tabWidth), tabHeight);
+            			}
+
+            			break;
+            		}
+
+            		case VERTICAL: {
+            			tabWidth = 0;
+            			for (Component tab : tabPane.getTabs()) {
+            				tabWidth = Math.max(tab.getPreferredWidth(tabHeight), tabWidth);
+            			}
+
+            			break;
+            		}
+            	}
+
+                selectedTab.setLocation(tabX, tabY);
+                selectedTab.setSize(tabWidth, tabHeight);
+
+            	selectedTab.setVisible(true);
+        	}
+
         }
     }
 
@@ -1045,18 +1123,20 @@ public class TerraTabPaneSkin extends ContainerSkin
 	public Vote previewSelectedIndexChange(final TabPane tabPane, final int selectedIndex) {
         Vote vote = Vote.APPROVE;
 
-        if (tabPane.getDisplay() != null) {
+        if (tabPane.isShowing()) {
             if (expandTransition == null) {
                 if (selectedIndex == -1) {
                     expandTransition = new ExpandTransition(true, EXPAND_DURATION, EXPAND_RATE);
-                    vote = Vote.DEFER;
 
+                    layout();
                     expandTransition.start(new TransitionListener() {
                         public void transitionCompleted(Transition transition) {
                             tabPane.setSelectedIndex(-1);
                             expandTransition = null;
                         }
                     });
+
+                    vote = Vote.DEFER;
                 }
             } else {
             	if (expandTransition.isRunning()) {
@@ -1090,8 +1170,10 @@ public class TerraTabPaneSkin extends ContainerSkin
             button.setSelected(true);
 
             if (previousSelectedIndex == -1) {
-                if (tabPane.getDisplay() != null) {
+                if (tabPane.isShowing()) {
                     expandTransition = new ExpandTransition(false, EXPAND_DURATION, EXPAND_RATE);
+
+                    layout();
                     expandTransition.start(new TransitionListener() {
                         public void transitionCompleted(Transition transition) {
                             expandTransition = null;

@@ -474,7 +474,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 	public Vote previewSelectedIndexChange(final CardPane cardPane, final int selectedIndex) {
     	Vote vote = Vote.APPROVE;
 
-    	if (cardPane.getDisplay() != null) {
+    	if (cardPane.isShowing()) {
         	if (selectionChangeTransition == null) {
     			if (matchSelectedCardSize
     				|| orientation != null) {
