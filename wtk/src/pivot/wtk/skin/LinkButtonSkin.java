@@ -27,7 +27,9 @@ import pivot.wtk.Mouse;
 public abstract class LinkButtonSkin extends ButtonSkin {
     @Override
     public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        LinkButton linkButton = (LinkButton)getComponent();
-        linkButton.press();
+        if (button == Mouse.Button.LEFT) {
+            LinkButton linkButton = (LinkButton)getComponent();
+            linkButton.press();
+        }
     }
 }
