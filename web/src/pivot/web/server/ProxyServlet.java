@@ -30,18 +30,47 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import pivot.collections.HashSet;
+
 /**
  * HTTP proxy that allows an unsigned applet to issue web queries to services
  * outside of its origin server.
  *
  * @author gbrown
+ * @author tvolkert
  */
 public class ProxyServlet extends HttpServlet {
+    /**
+     * A set of HTTP response header names, stored in a case-insensitive manner.
+     *
+     * @author tvolkert
+     */
+    private static class ResponseHeaderSet extends HashSet<String> {
+        private static final long serialVersionUID = 3055851700567335445L;
+
+        @Override
+        public void add(String element) {
+            super.add(element.toLowerCase());
+        }
+
+        @Override
+        public void remove(String element) {
+            super.remove(element.toLowerCase());
+        }
+
+        @Override
+        public boolean contains(String element) {
+            return super.contains(element.toLowerCase());
+        }
+    }
+
     private String hostname = null;
     private int port = -1;
     private String path = null;
 
-    public static final long serialVersionUID = 0;
+    private static ResponseHeaderSet ignoreResponseHeaders = new ResponseHeaderSet();
+
+    private static final long serialVersionUID = -1794977331184160392L;
 
     public static final String METHOD_GET = "GET";
     public static final String METHOD_POST = "POST";
@@ -53,6 +82,10 @@ public class ProxyServlet extends HttpServlet {
     public static final String PATH_PARAM = "path";
 
     public static final int BUFFER_SIZE = 1024;
+
+    static {
+        ignoreResponseHeaders.add("Transfer-Encoding");
+    }
 
     @Override
     public void init(ServletConfig config)
@@ -182,7 +215,7 @@ public class ProxyServlet extends HttpServlet {
         for (String key = connection.getHeaderFieldKey(i);
             key != null;
             key = connection.getHeaderFieldKey(++i)) {
-            if (key != null) {
+            if (key != null && !ignoreResponseHeaders.contains(key)) {
                 String value = connection.getHeaderField(i);
                 System.out.println(key + ": " + value);
 
