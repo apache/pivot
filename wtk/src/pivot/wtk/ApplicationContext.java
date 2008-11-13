@@ -96,7 +96,7 @@ public abstract class ApplicationContext {
             try {
                 System.setProperty("sun.awt.noerasebackground", "true");
                 System.setProperty("sun.awt.erasebackgroundonresize", "true");
-            } catch(SecurityException exception) {
+            } catch (SecurityException exception) {
             }
 
             setFocusTraversalKeysEnabled(false);
@@ -551,7 +551,7 @@ public abstract class ApplicationContext {
             // Load and instantiate the default theme, if possible
             Class<?> themeClass = Class.forName(DEFAULT_THEME_CLASS_NAME);
             Theme.setTheme((Theme)themeClass.newInstance());
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             // No-op; assume that a custom theme will be installed later
             // by the caller
             System.out.println("Warning: Unable to load default theme.");
@@ -684,12 +684,15 @@ public abstract class ApplicationContext {
 
         try {
             timer.schedule(intervalTask, 0, period);
-        } catch(IllegalStateException exception) {
+        } catch (IllegalStateException exception) {
+            exception.printStackTrace();
+
             // TODO This is a workaround for an apparent bug in the Mac OSX
             // Java Plugin, which appears to prematurely kill the timer thread.
             // Remove this when the issue is fixed.
             timer = new Timer(true);
             timerTaskMap.clear();
+            timerTaskMap.put(intervalID, intervalTask);
             timer.schedule(intervalTask, 0, period);
         }
 
@@ -723,12 +726,15 @@ public abstract class ApplicationContext {
 
         try {
             timer.schedule(timeoutTask, timeout);
-        } catch(IllegalStateException exception) {
+        } catch (IllegalStateException exception) {
+            exception.printStackTrace();
+
             // TODO This is a workaround for an apparent bug in the Mac OSX
             // Java Plugin, which appears to prematurely kill the timer thread.
             // Remove this when the issue is fixed.
             timer = new Timer(true);
             timerTaskMap.clear();
+            timerTaskMap.put(timeoutID, timeoutTask);
             timer.schedule(timeoutTask, timeout);
         }
 
