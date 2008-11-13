@@ -50,6 +50,12 @@ public class Dispatcher {
                 // Block until an entry is available
                 Runnable runnable = pendingQueue.dequeue();
 
+                // When our thread group is disposed, this thread will get
+                // interrupted, and the #dequeue() call will return null
+                if (runnable == null) {
+                    break;
+                }
+
                 // TODO Use the thread pool
                 Thread workerThread = new Thread(runnable,
                     Dispatcher.this.getClass().getName() + "-WorkerThread");
