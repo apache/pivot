@@ -181,7 +181,10 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     // Component mouse events
     public boolean mouseMove(Component component, int x, int y) {
-        ApplicationContext.clearTimeout(showTooltipTimeoutID);
+        if (showTooltipTimeoutID != -1) {
+            ApplicationContext.clearTimeout(showTooltipTimeoutID);
+            showTooltipTimeoutID = -1;
+        }
 
         if (getComponent().getTooltipText() != null) {
             showTooltipTimeoutID = ApplicationContext.setTimeout(showTooltipCallback,
@@ -195,7 +198,10 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     public void mouseOut(Component component) {
-        ApplicationContext.clearTimeout(showTooltipTimeoutID);
+        if (showTooltipTimeoutID != -1) {
+            ApplicationContext.clearTimeout(showTooltipTimeoutID);
+            showTooltipTimeoutID = -1;
+        }
     }
 
     // Component mouse button events
