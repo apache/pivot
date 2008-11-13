@@ -105,7 +105,8 @@ public final class Mouse {
         }
 
         if (Mouse.cursor != cursor) {
-            java.awt.Container activeDisplayHost = ApplicationContext.getActiveDisplayHost();
+            java.awt.Container activeDisplayHost =
+            	ApplicationContext.getApplicationContext().getDisplayHost();
 
             if (activeDisplayHost != null) {
                 int cursorID = -1;

@@ -15,6 +15,7 @@
  */
 package pivot.wtk;
 
+import java.applet.Applet;
 import java.awt.Graphics;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -76,7 +77,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
             	}
 
                 // Create the application context
-                applicationContext = new BrowserApplicationContext();
+                applicationContext = new BrowserApplicationContext(HostApplet.this);
 
                 // Load properties specified on the query string
                 properties = new HashMap<String, String>();
@@ -228,5 +229,23 @@ public final class BrowserApplicationContext extends ApplicationContext {
         public void update(Graphics graphics) {
             paint(graphics);
         }
+    }
+
+    private Applet applet = null;
+
+    private BrowserApplicationContext(Applet applet) {
+    	this.applet = applet;
+    }
+
+    protected void contextOpen(URL location, String target) {
+    	if (target == null) {
+    		applet.getAppletContext().showDocument(location);
+    	} else {
+    		applet.getAppletContext().showDocument(location, target);
+    	}
+    }
+
+    protected void contextExit() {
+    	// TODO?
     }
 }

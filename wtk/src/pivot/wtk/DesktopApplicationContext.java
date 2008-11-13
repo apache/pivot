@@ -18,6 +18,9 @@ package pivot.wtk;
 import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URL;
 
 import pivot.collections.HashMap;
 import pivot.collections.immutable.ImmutableMap;
@@ -155,6 +158,26 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static final String HEIGHT_ARGUMENT = "height";
     private static final String CENTER_ARGUMENT = "center";
     private static final String RESIZABLE_ARGUMENT = "resizable";
+
+    protected void contextOpen(URL location, String target) {
+        // TODO Remove dynamic invocation when Java 6 is supported on the Mac
+
+        try {
+            Class<?> desktopClass = Class.forName("java.awt.Desktop");
+            Method getDesktopMethod = desktopClass.getMethod("getDesktop",
+                new Class<?>[] {});
+            Method browseMethod = desktopClass.getMethod("browse",
+                new Class[] {URI.class});
+            Object desktop = getDesktopMethod.invoke(null, (Object[]) null);
+            browseMethod.invoke(desktop, location.toURI());
+        } catch (Exception exception) {
+            System.out.println("Unable to open URL in default browser.");
+        }
+    }
+
+    protected void contextExit() {
+    	System.exit(0);
+    }
 
     public static void main(String[] args) throws Exception {
         // Get the application class name and startup properties

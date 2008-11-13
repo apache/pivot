@@ -140,11 +140,11 @@ public class TerraExpanderSkin extends ContainerSkin
 
     protected abstract class ButtonImage extends Image {
         public int getWidth() {
-            return 13;
+            return 11;
         }
 
         public int getHeight() {
-            return 13;
+            return 11;
         }
     }
 

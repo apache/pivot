@@ -27,8 +27,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Timer;
@@ -326,13 +324,11 @@ public abstract class ApplicationContext {
 
                 case MouseEvent.MOUSE_ENTERED: {
                     display.mouseOver();
-                    activeDisplayHost = this;
                     break;
                 }
 
                 case MouseEvent.MOUSE_EXITED: {
                     display.mouseOut();
-                    activeDisplayHost = null;
                     break;
                 }
             }
@@ -525,8 +521,6 @@ public abstract class ApplicationContext {
     private DisplayHost displayHost = null;
     private DragDropManager dragDropManager = null;
 
-    private static DisplayHost activeDisplayHost = null;
-
     private static HashMap<URL, Object> resourceCache = new HashMap<URL, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
@@ -534,11 +528,21 @@ public abstract class ApplicationContext {
     private static HashMap<Integer, TimerTask> timerTaskMap = new HashMap<Integer, TimerTask>();
     private static int nextTimerTaskID = 0;
 
+    private static ThreadLocal<ApplicationContext> applicationContext;
+
     private static final int DEFAULT_MULTI_CLICK_INTERVAL = 400;
     private static final int DEFAULT_CURSOR_BLINK_RATE = 600;
     private static final String DEFAULT_THEME_CLASS_NAME = "pivot.wtk.skin.terra.TerraTheme";
 
     protected ApplicationContext() {
+    	assert (applicationContext == null);
+
+    	applicationContext = new ThreadLocal<ApplicationContext>() {
+	    	protected synchronized ApplicationContext initialValue() {
+	    		return ApplicationContext.this;
+	    	}
+	    };
+
         display = new Display(this);
         displayHost = new DisplayHost();
         dragDropManager = new DragDropManager(this);
@@ -599,39 +603,11 @@ public abstract class ApplicationContext {
         return graphics;
     }
 
-    /**
-     * Issues a system alert sound.
-     */
-    public static void beep() {
-        java.awt.Toolkit.getDefaultToolkit().beep();
-    }
+    protected abstract void contextOpen(URL location, String target);
+    protected abstract void contextExit();
 
-    /**
-     * Opens the given resource.
-     *
-     * @param location
-     */
-    public static void open(URL location) {
-        // TODO Remove dynamic invocation when Java 6 is supported on the Mac
-
-        try {
-            Class<?> desktopClass = Class.forName("java.awt.Desktop");
-            Method getDesktopMethod = desktopClass.getMethod("getDesktop",
-                new Class<?>[] {});
-            Method browseMethod = desktopClass.getMethod("browse",
-                new Class[] {URI.class});
-            Object desktop = getDesktopMethod.invoke(null, (Object[]) null);
-            browseMethod.invoke(desktop, location.toURI());
-        } catch (Exception exception) {
-            System.out.println("Unable to open URL in default browser.");
-        }
-    }
-
-    /**
-     * Resource properties accessor.
-     */
-    public static ResourceCacheDictionary getResourceCache() {
-        return resourceCacheDictionary;
+    public static ApplicationContext getApplicationContext() {
+    	return applicationContext.get();
     }
 
     /**
@@ -642,14 +618,43 @@ public abstract class ApplicationContext {
     }
 
     /**
+     * Resource properties accessor.
+     */
+    public static ResourceCacheDictionary getResourceCache() {
+        return resourceCacheDictionary;
+    }
+
+    /**
+     * Opens the resource at the given location.
+     *
+     * @param location
+     */
+    public static void open(URL location) {
+    	open(location, null);
+    }
+
+    /**
+     * Opens the resource at the given location.
+     *
+     * @param location
+     * @param target
+     */
+    public static void open(URL location, String target) {
+    	applicationContext.get().contextOpen(location, target);
+    }
+
+    /**
      * Terminates the application context.
      */
     public static void exit() {
-        try {
-            System.exit(0);
-        } catch(SecurityException exception) {
-            System.out.println("Unable to exit application context.");
-        }
+    	applicationContext.get().contextExit();
+    }
+
+    /**
+     * Issues a system alert sound.
+     */
+    public static void beep() {
+        java.awt.Toolkit.getDefaultToolkit().beep();
     }
 
     /**
@@ -733,6 +738,11 @@ public abstract class ApplicationContext {
         clearTimerTask(timeoutID);
     }
 
+    /**
+     * Cancels execution of a timer task.
+     *
+     * @param timerTaskID
+     */
     private static void clearTimerTask(int timerTaskID) {
         TimerTask timerTask = timerTaskMap.remove(timerTaskID);
         if (timerTask != null) {
@@ -774,6 +784,9 @@ public abstract class ApplicationContext {
         }
     }
 
+    /**
+     * Returns the system multi-click interval.
+     */
     public static int getMultiClickInterval() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Integer multiClickInterval = (Integer)toolkit.getDesktopProperty("awt.multiClickInterval");
@@ -785,6 +798,9 @@ public abstract class ApplicationContext {
         return multiClickInterval;
     }
 
+    /**
+     * Returns the system cursor blink rate.
+     */
     public static int getCursorBlinkRate() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Integer cursorBlinkRate = (Integer)toolkit.getDesktopProperty("awt.cursorBlinkRate");
@@ -794,16 +810,5 @@ public abstract class ApplicationContext {
         }
 
         return cursorBlinkRate;
-    }
-
-    /**
-     * Gets the active display host.
-     *
-     * @deprecated
-     * This method will likely be made <tt>protected</tt> in a future release
-     */
-    @Deprecated
-    public static java.awt.Container getActiveDisplayHost() {
-        return activeDisplayHost;
     }
 }
