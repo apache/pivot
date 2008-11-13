@@ -77,10 +77,6 @@ public abstract class Viewport extends Container {
     }
 
     public void setScrollTop(int scrollTop) {
-        if (scrollTop < 0) {
-            throw new IllegalArgumentException("Scroll top must be positive");
-        }
-
         int previousScrollTop = this.scrollTop;
 
         if (scrollTop != previousScrollTop) {
@@ -94,10 +90,6 @@ public abstract class Viewport extends Container {
     }
 
     public void setScrollLeft(int scrollLeft) {
-        if (scrollLeft < 0) {
-            throw new IllegalArgumentException("Scroll left must be positive");
-        }
-
         int previousScrollLeft = this.scrollLeft;
 
         if (scrollLeft != previousScrollLeft) {
