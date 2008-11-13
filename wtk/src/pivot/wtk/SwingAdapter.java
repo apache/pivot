@@ -33,6 +33,7 @@ import pivot.wtk.skin.ComponentSkin;
  *
  * @author tvolkert
  */
+@SuppressWarnings("deprecation")
 public class SwingAdapter extends Component {
     /**
      * Swing adapter skin.
