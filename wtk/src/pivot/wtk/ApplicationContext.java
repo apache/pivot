@@ -611,7 +611,6 @@ public abstract class ApplicationContext {
     }
 
     protected abstract void contextOpen(URL location, String target);
-    protected abstract void contextExit();
 
     public static ApplicationContext getApplicationContext() {
     	return applicationContext.get();
@@ -648,13 +647,6 @@ public abstract class ApplicationContext {
      */
     public static void open(URL location, String target) {
     	applicationContext.get().contextOpen(location, target);
-    }
-
-    /**
-     * Terminates the application context.
-     */
-    public static void exit() {
-    	applicationContext.get().contextExit();
     }
 
     /**

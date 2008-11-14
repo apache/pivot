@@ -176,8 +176,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
     }
 
-    protected void contextExit() {
-    	System.exit(0);
+    /**
+     * Terminates the application context.
+     */
+    public static void exit() {
+        System.exit(0);
     }
 
     public static void main(String[] args) throws Exception {

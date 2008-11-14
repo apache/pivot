@@ -21,6 +21,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 
+import netscape.javascript.JSObject;
+
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
@@ -63,19 +65,19 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         private class InitCallback implements Runnable {
             public void run() {
-            	// Set the origin
-            	URL codeBase = getCodeBase();
-            	if (codeBase != null) {
-                	try {
-                		System.out.println("Code base: " + codeBase);
-    	            	origin = new URL(codeBase.getProtocol(), codeBase.getHost(),
-	            			codeBase.getPort(), "");
-    	            	System.out.println("Origin: " + origin);
-                	} catch(Exception exception) {
-                		System.out.print("Unable to determine application origin: "
-            				+ exception);
-                	}
-            	}
+               // Set the origin
+               URL codeBase = getCodeBase();
+               if (codeBase != null) {
+                  try {
+                     System.out.println("Code base: " + codeBase);
+                     origin = new URL(codeBase.getProtocol(), codeBase.getHost(),
+                        codeBase.getPort(), "");
+                     System.out.println("Origin: " + origin);
+                  } catch(Exception exception) {
+                     System.out.print("Unable to determine application origin: "
+                        + exception);
+                  }
+               }
 
                 // Create the application context
                 applicationContext = new BrowserApplicationContext(HostApplet.this);
@@ -85,28 +87,28 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
                 URL documentBase = getDocumentBase();
                 if (documentBase != null) {
-	                String queryString = documentBase.getQuery();
-	                if (queryString != null) {
-	                    String[] arguments = queryString.split("&");
+                   String queryString = documentBase.getQuery();
+                   if (queryString != null) {
+                       String[] arguments = queryString.split("&");
 
-	                    for (int i = 0, n = arguments.length; i < n; i++) {
-	                        String argument = arguments[i];
-	                        String[] property = argument.split("=");
+                       for (int i = 0, n = arguments.length; i < n; i++) {
+                           String argument = arguments[i];
+                           String[] property = argument.split("=");
 
-	                        if (property.length == 2) {
-	                            String key, value;
-	                            try {
-	                                final String encoding = "UTF-8";
-	                                key = URLDecoder.decode(property[0], encoding);
-	                                value = URLDecoder.decode(property[1], encoding);
-	                                properties.put(key, value);
-	                            } catch(UnsupportedEncodingException exception) {
-	                            }
-	                        } else {
-	                            System.out.println(argument + " is not a valid startup property.");
-	                        }
-	                    }
-	                }
+                           if (property.length == 2) {
+                               String key, value;
+                               try {
+                                   final String encoding = "UTF-8";
+                                   key = URLDecoder.decode(property[0], encoding);
+                                   value = URLDecoder.decode(property[1], encoding);
+                                   properties.put(key, value);
+                               } catch(UnsupportedEncodingException exception) {
+                               }
+                           } else {
+                               System.out.println(argument + " is not a valid startup property.");
+                           }
+                       }
+                   }
                 }
 
                 // Create the display host and add it to the applet
@@ -235,18 +237,32 @@ public final class BrowserApplicationContext extends ApplicationContext {
     private Applet applet = null;
 
     private BrowserApplicationContext(Applet applet) {
-    	this.applet = applet;
+        this.applet = applet;
     }
 
     protected void contextOpen(URL location, String target) {
-    	if (target == null) {
-    		applet.getAppletContext().showDocument(location);
-    	} else {
-    		applet.getAppletContext().showDocument(location, target);
-    	}
+        if (target == null) {
+            applet.getAppletContext().showDocument(location);
+        } else {
+            applet.getAppletContext().showDocument(location, target);
+        }
     }
 
-    protected void contextExit() {
-    	// TODO?
+    /**
+     * Evaluates the specified script in the browser's JavaScript page
+     * context and returns the result.
+     *
+     * @throws UnsupportedOperationException
+     * Thrown if the current runtime environment doesn't support this feature
+     */
+    public static Object eval(String script) {
+        BrowserApplicationContext browserApplicationContext =
+            (BrowserApplicationContext)ApplicationContext.getApplicationContext();
+        try {
+            JSObject window = JSObject.getWindow(browserApplicationContext.applet);
+            return window.eval(script);
+        } catch (Throwable throwable) {
+            throw new UnsupportedOperationException(throwable);
+        }
     }
 }

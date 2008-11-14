@@ -19,7 +19,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
-import pivot.wtk.ApplicationContext;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Dialog;
 import pivot.wtk.DialogCloseListener;
 import pivot.wtk.Display;
@@ -49,7 +49,7 @@ public class ReflectionDecoratorTest implements Application {
                 if (alert.getResult()) {
                     if (alert.getSelectedOption() == 0) {
                         shutdown = true;
-                        ApplicationContext.exit();
+                        DesktopApplicationContext.exit();
                     }
                 }
             }

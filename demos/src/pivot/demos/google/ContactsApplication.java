@@ -26,8 +26,8 @@ import pivot.collections.HashMap;
 import pivot.collections.adapter.ListAdapter;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.Form;
@@ -158,7 +158,7 @@ public class ContactsApplication implements Application {
 						Alert.alert(exception.getMessage(), window);
 					}
 				} else {
-					ApplicationContext.exit();
+					DesktopApplicationContext.exit();
 				}
 			}
 		});
