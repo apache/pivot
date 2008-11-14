@@ -302,12 +302,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
 
         Method getterMethod = getGetterMethod(key);
 
-        if (getterMethod == null) {
-            throw new PropertyNotFoundException("Property \"" + key
-                + "\" does not exist.");
-        }
-
-        return getterMethod.getReturnType();
+        return (getterMethod == null) ? null : getterMethod.getReturnType();
     }
 
     /**

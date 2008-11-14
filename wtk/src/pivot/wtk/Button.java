@@ -595,11 +595,23 @@ public abstract class Button extends Component {
         return buttonListeners;
     }
 
+    public void setButtonListener(ButtonListener listener) {
+    	buttonListeners.add(listener);
+    }
+
     public ListenerList<ButtonStateListener> getButtonStateListeners() {
         return buttonStateListeners;
     }
 
+    public void setButtonStateListener(ButtonStateListener listener) {
+    	buttonStateListeners.add(listener);
+    }
+
     public ListenerList<ButtonPressListener> getButtonPressListeners() {
         return buttonPressListeners;
+    }
+
+    public void setButtonPressListener(ButtonPressListener listener) {
+    	buttonPressListeners.add(listener);
     }
 }

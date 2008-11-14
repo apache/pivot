@@ -16,13 +16,19 @@
 package pivot.wtkx;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
@@ -88,6 +94,8 @@ public class WTKXSerializer implements Serializer {
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
 
+    private ScriptEngineManager scriptEngineManager = null;
+
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
     public static final char OBJECT_REFERENCE_PREFIX = '$';
@@ -99,6 +107,10 @@ public class WTKXSerializer implements Serializer {
     public static final String INCLUDE_SRC_ATTRIBUTE = "src";
     public static final String INCLUDE_NAMESPACE_ATTRIBUTE = "namespace";
     public static final String INCLUDE_RESOURCES_ATTRIBUTE = "resources";
+
+    public static final String SCRIPT_TAG = "script";
+    public static final String SCRIPT_SRC_ATTRIBUTE = "src";
+    public static final String SCRIPT_LANGUAGE_ATTRIBUTE = "language";
 
     public static final String MIME_TYPE = "application/wtkx";
 
@@ -171,14 +183,7 @@ public class WTKXSerializer implements Serializer {
                                 String src = null;
                                 String namespace = null;
 
-                                Dictionary<String, Object> includeResources;
-                                if (resources != null
-                                    && namespace != null
-                                    && resources.containsKey(namespace)) {
-                                    includeResources = (Dictionary<String, Object>)resources.get(namespace);
-                                } else {
-                                    includeResources = resources;
-                                }
+                                Dictionary<String, Object> includeResources = resources;
 
                                 ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 
@@ -231,6 +236,96 @@ public class WTKXSerializer implements Serializer {
                                 }
 
                                 element = new Element(element, Element.Type.INCLUDE, attributes, value);
+                            } else if (localName.equals(SCRIPT_TAG)) {
+                            	// Instantiate the script engine manager
+                            	if (scriptEngineManager == null) {
+                                    scriptEngineManager = new ScriptEngineManager();
+
+                                    // Add any existing object references
+                                    for (String objectID : namedObjects) {
+                                    	scriptEngineManager.put(objectID, namedObjects.get(objectID));
+                                    }
+                            	}
+
+                                // The element represents a script
+                                String src = null;
+                                String language = null;
+
+                                ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+
+                                for (int i = 0, n = reader.getAttributeCount(); i < n; i++) {
+                                    String attributeNamespaceURI = reader.getAttributeNamespace(i);
+                                    if (attributeNamespaceURI == null) {
+                                        attributeNamespaceURI = reader.getNamespaceURI("");
+                                    }
+
+                                    String attributePrefix = reader.getAttributePrefix(i);
+                                    String attributeLocalName = reader.getAttributeLocalName(i);
+                                    String attributeValue = reader.getAttributeValue(i);
+
+                                    if (attributePrefix != null
+                                        && attributePrefix.equals(WTKX_PREFIX)) {
+                                        if (attributeLocalName.equals(ID_ATTRIBUTE)) {
+                                            id = attributeValue;
+                                        }
+                                    } else {
+                                        if (attributeLocalName.equals(SCRIPT_SRC_ATTRIBUTE)) {
+                                            src = attributeValue;
+                                        } else if (attributeLocalName.equals(SCRIPT_LANGUAGE_ATTRIBUTE)) {
+                                            language = attributeValue;
+                                        } else {
+                                            attributes.add(new Attribute(attributeNamespaceURI,
+                                                attributePrefix, attributeLocalName, attributeValue));
+                                        }
+                                    }
+                                }
+
+                                if (src != null) {
+                                	int i = src.lastIndexOf(".");
+                                	if (i == -1) {
+                                		throw new SerializationException("Cannot determine type of script \""
+                            				+ src + "\".");
+                                	}
+
+                                	String extension = src.substring(i + 1);
+                                    ScriptEngine scriptEngine = scriptEngineManager.getEngineByExtension(extension);
+                                    if (scriptEngine == null) {
+                                    	throw new SerializationException("Unable to find scripting engine for "
+                                			+ " extension " + extension + ".");
+                                    }
+
+                                    try {
+                                        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                                    	URL scriptLocation;
+
+                                    	if (src.charAt(0) == '/') {
+                                    		scriptLocation = classLoader.getResource(src);
+                                        } else {
+                                        	scriptLocation = new URL(location, src);
+                                        }
+
+                                    	scriptEngine.eval(new BufferedReader(new InputStreamReader(scriptLocation.openStream())),
+                                			scriptEngineManager.getBindings());
+                                    } catch(ScriptException exception) {
+                                    	throw new SerializationException(exception);
+                                    }
+                                } else {
+                                    if (language != null) {
+                                        ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
+                                        if (scriptEngine == null) {
+                                        	throw new SerializationException("Unable to find scripting engine for "
+                                    			+ language + ".");
+                                        }
+
+                                        try {
+                                        	scriptEngine.eval(reader.getElementText(),
+                                    			scriptEngineManager.getBindings());
+                                        } catch(ScriptException exception) {
+                                        	System.out.println(exception.getMessage());
+                                        	throw new SerializationException(exception);
+                                        }
+                                    }
+                                }
                             } else {
                                 throw new SerializationException(prefix + ":" + localName
                                     + " is not a valid tag.");
@@ -308,6 +403,10 @@ public class WTKXSerializer implements Serializer {
                                 // If an ID was specified, add the value to the named object map
                                 if (id != null) {
                                     namedObjects.put(id, element.value);
+
+                                    if (scriptEngineManager != null) {
+                                    	scriptEngineManager.put(id, namedObjects.get(id));
+                                	}
                                 }
 
                                 break;
@@ -453,10 +552,24 @@ public class WTKXSerializer implements Serializer {
         }
 
         if (serializer != null) {
-            object = serializer.namedObjects.get(namespacePath[i]);
+        	object = serializer.getObjectByID(namespacePath[i]);
         }
 
         return object;
+    }
+
+    private Object getObjectByID(String id) {
+    	Object object = null;
+
+    	if (namedObjects.containsKey(id)) {
+    		object = namedObjects.get(id);
+    	} else {
+    		if (scriptEngineManager != null) {
+    			object = scriptEngineManager.get(id);
+    		}
+    	}
+
+    	return object;
     }
 
     /**
@@ -564,7 +677,7 @@ public class WTKXSerializer implements Serializer {
                     if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
                         resolvedValue = attributeValue.substring(1);
                     } else {
-                        resolvedValue = namedObjects.get(attributeValue.substring(1));
+                        resolvedValue = getObjectByID(attributeValue.substring(1));
                     }
                 }
             } else {
