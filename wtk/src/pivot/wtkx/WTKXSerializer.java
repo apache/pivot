@@ -28,7 +28,6 @@ import java.net.URL;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
@@ -238,6 +237,7 @@ public class WTKXSerializer implements Serializer {
                                 element = new Element(element, Element.Type.INCLUDE, attributes, value);
                             } else if (localName.equals(SCRIPT_TAG)) {
                             	// Instantiate the script engine manager
+                            	// TODO Instantiate this in constructor when Java 6 is supported on OSX
                             	if (scriptEngineManager == null) {
                                     scriptEngineManager = new ScriptEngineManager();
 
@@ -306,7 +306,8 @@ public class WTKXSerializer implements Serializer {
 
                                     	scriptEngine.eval(new BufferedReader(new InputStreamReader(scriptLocation.openStream())),
                                 			scriptEngineManager.getBindings());
-                                    } catch(ScriptException exception) {
+                                    } catch(Exception exception) {
+                                    	// TODO Catch ScriptException when Java 6 is supported on OSX
                                     	throw new SerializationException(exception);
                                     }
                                 } else {
@@ -318,10 +319,9 @@ public class WTKXSerializer implements Serializer {
                                         }
 
                                         try {
-                                        	scriptEngine.eval(reader.getElementText(),
-                                    			scriptEngineManager.getBindings());
-                                        } catch(ScriptException exception) {
-                                        	System.out.println(exception.getMessage());
+                                        	scriptEngine.eval(reader.getElementText(), scriptEngineManager.getBindings());
+                                        } catch(Exception exception) {
+                                        	// TODO Catch ScriptException when Java 6 is supported on OSX
                                         	throw new SerializationException(exception);
                                         }
                                     }
