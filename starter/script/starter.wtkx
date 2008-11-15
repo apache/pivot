@@ -15,11 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Pivot Starter Application"
-    xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+<Border xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    <wtkx:script src="starter.js"/>
     <content>
-        <FlowPane styles="{padding:4, horizontalAlignment:'center', verticalAlignment:'center'}">
-            <PushButton wtkx:id="pushButton" buttonData="Click Me!"/>
+        <FlowPane styles="{padding:4, horizontalAlignment:'center',
+            verticalAlignment:'center'}">
+            <PushButton wtkx:id="pushButton" buttonData="Click Me!"
+                buttonPressListener="$buttonPressListener"/>
         </FlowPane>
     </content>
-</Window>
+</Border>

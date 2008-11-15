@@ -20,6 +20,7 @@ import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
+import pivot.wtk.Component;
 import pivot.wtk.Display;
 import pivot.wtk.MessageType;
 import pivot.wtk.PushButton;
@@ -32,18 +33,19 @@ public class StarterApplication implements Application {
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
     	// Load the WTKX source
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject("pivot/starter/starter_application.wtkx");
+        window = new Window((Component)wtkxSerializer.readObject("pivot/starter/starter.wtkx"));
 
         // Get a reference to the button and add a button press listener
         PushButton pushButton =
             (PushButton)wtkxSerializer.getObjectByName("pushButton");
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                Alert.alert(MessageType.INFO, "Welcome to Pivot!", window);
+                Alert.alert("Welcome to Pivot!", window);
             }
         });
 
         // Open the window
+        window.setTitle("Pivot Starter Application - Java");
         window.setMaximized(true);
         window.open(display);
     }

@@ -1,1 +1,0 @@
-java -cp lib/pivot-core.jar;lib/pivot-web.jar;lib/pivot-wtk.jar;lib/pivot-wtk.terra.jar;lib/stax-1.2.0.jar;lib/stax-api-1.0.jar;pivot-starter.jar pivot.wtk.DesktopApplicationContext pivot.starter.StarterApplication

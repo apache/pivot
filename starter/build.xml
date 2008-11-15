@@ -2,10 +2,11 @@
 <project name="pivot" default="build">
     <property name="src" value="src"/>
     <property name="bin" value="bin"/>
-    <property name="starter" value="starter"/>
+    <property name="lib" value="lib"/>
 
     <!-- Build starter library -->
     <target name="build">
+        <delete dir="${bin}"/>
         <mkdir dir="${bin}"/>
 
         <!-- Compile source files -->
@@ -22,18 +23,15 @@
         </javac>
 
         <!-- Rebuild the JAR file -->
-        <delete file="${ant.project.name}-starter.jar"/>
-        <jar jarfile="${ant.project.name}-starter.jar">
+        <delete file="${lib}/${ant.project.name}-starter.jar"/>
+        <jar jarfile="${lib}/${ant.project.name}-starter.jar">
             <fileset dir="${bin}"/>
             <fileset dir="${src}">
                 <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
             </fileset>
         </jar>
-    </target>
 
-    <!-- Clean the starter classes -->
-    <target name="clean">
         <delete dir="${bin}"/>
-        <delete file="${ant.project.name}-starter.jar"/>
     </target>
 </project>

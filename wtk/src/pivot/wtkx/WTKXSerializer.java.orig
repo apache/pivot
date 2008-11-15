@@ -21,12 +21,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
@@ -46,16 +48,6 @@ import pivot.util.Resources;
 
 /**
  * Loads an object hierarchy from an XML document.
- * <p>
- * IMPORTANT This class currently uses reflection to dynamically load the Java
- * scripting engine classes because Java 6 is not universally supported on
- * Mac OSX yet. Dynamic loading allows developers targeting other platforms
- * to take advantage of Pivot's scripting features without breaking
- * compatibility with OSX for non-scripted applications. The original version
- * of this class has been preserved in WTKXSerializer.java.orig. When Java 6 is
- * fully supported on OSX, this version will be replaced by the original
- * version. In the interim, ANY UPDATES made to this file that do not affect
- * the reflection code MUST also be made to the original class.
  *
  * @author gbrown
  */
@@ -103,8 +95,7 @@ public class WTKXSerializer implements Serializer {
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
 
-    private Object scriptEngineManager;
-    private Class<?> scriptEngineManagerClass;
+    private ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
 
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
@@ -129,14 +120,6 @@ public class WTKXSerializer implements Serializer {
 
     public WTKXSerializer(Dictionary<String, Object> resources) {
         this.resources = resources;
-
-        try {
-        	scriptEngineManagerClass = Class.forName("javax.script.ScriptEngineManager");
-        	scriptEngineManager = scriptEngineManagerClass.newInstance();
-        } catch(Exception exception) {
-        	scriptEngineManagerClass = null;
-        	scriptEngineManager = null;
-        }
     }
 
     public Dictionary<String, Object> getResources() {
@@ -254,10 +237,6 @@ public class WTKXSerializer implements Serializer {
 
                                 element = new Element(element, Element.Type.INCLUDE, attributes, value);
                             } else if (localName.equals(SCRIPT_TAG)) {
-                            	if (scriptEngineManagerClass == null) {
-                            		throw new SerializationException("Scripting is not supported on this platform.");
-                            	}
-
                                 // The element represents a script
                                 String src = null;
 
@@ -268,8 +247,8 @@ public class WTKXSerializer implements Serializer {
                                     if (attributeLocalName.equals(SCRIPT_SRC_ATTRIBUTE)) {
                                         src = attributeValue;
                                     } else {
-                                    	throw new SerializationException(attributeLocalName + " is not a valid "
-                                			+ " attribute for the " + WTKX_PREFIX + ":" + SCRIPT_TAG + ".");
+                                        throw new SerializationException(attributeLocalName + " is not a valid "
+                                            + " attribute for the " + WTKX_PREFIX + ":" + SCRIPT_TAG + ".");
                                     }
                                 }
 
@@ -279,51 +258,33 @@ public class WTKXSerializer implements Serializer {
                                         + " tag.");
                                 }
 
-                            	int i = src.lastIndexOf(".");
-                            	if (i == -1) {
-                            		throw new SerializationException("Cannot determine type of script \""
-                        				+ src + "\".");
-                            	}
+                                int i = src.lastIndexOf(".");
+                                if (i == -1) {
+                                    throw new SerializationException("Cannot determine type of script \""
+                                        + src + "\".");
+                                }
 
-                            	String extension = src.substring(i + 1);
-
-                            	Object scriptEngine = null;
-                            	try {
-                                	Method getEngineByExtensionMethod =
-                                		scriptEngineManagerClass.getMethod("getEngineByExtension", new Class<?>[] {String.class});
-
-                                    scriptEngine = getEngineByExtensionMethod.invoke(scriptEngineManager, new Object[] {extension});
-                            	} catch(Exception exception) {
-                            		throw new RuntimeException(exception);
-                            	}
-
-                            	if (scriptEngine == null) {
-                                	throw new SerializationException("Unable to find scripting engine for "
-                            			+ " extension " + extension + ".");
+                                String extension = src.substring(i + 1);
+                                ScriptEngine scriptEngine = scriptEngineManager.getEngineByExtension(extension);
+                                if (scriptEngine == null) {
+                                    throw new SerializationException("Unable to find scripting engine for "
+                                        + " extension " + extension + ".");
                                 }
 
                                 try {
                                     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                                	URL scriptLocation;
+                                    URL scriptLocation;
 
-                                	if (src.charAt(0) == '/') {
-                                		scriptLocation = classLoader.getResource(src);
+                                    if (src.charAt(0) == '/') {
+                                        scriptLocation = classLoader.getResource(src);
                                     } else {
-                                    	scriptLocation = new URL(location, src);
+                                        scriptLocation = new URL(location, src);
                                     }
 
-                                	Class<?> bindingsClass = Class.forName("javax.script.Bindings");
-                                	Method evalMethod = scriptEngine.getClass().getMethod("eval",
-                                			new Class<?>[] {Reader.class, bindingsClass});
-
-                                	Method getBindingsMethod =
-                                		scriptEngineManagerClass.getMethod("getBindings", new Class<?>[] {});
-
-                                	Object bindings = getBindingsMethod.invoke(scriptEngineManager, new Object[] {});
-                                	Reader scriptReader = new BufferedReader(new InputStreamReader(scriptLocation.openStream()));
-                                	evalMethod.invoke(scriptEngine, new Object[] {scriptReader, bindings});
-                                } catch(Exception exception) {
-                                	throw new SerializationException(exception);
+                                    scriptEngine.eval(new BufferedReader(new InputStreamReader(scriptLocation.openStream())),
+                                        scriptEngineManager.getBindings());
+                                } catch(ScriptException exception) {
+                                    throw new SerializationException(exception);
                                 }
 
                                 element = new Element(element, Element.Type.SCRIPT, null, null);
@@ -406,14 +367,8 @@ public class WTKXSerializer implements Serializer {
                                     namedObjects.put(id, element.value);
 
                                     if (scriptEngineManager != null) {
-                                    	try {
-	                                    	Method putMethod = scriptEngineManagerClass.getMethod("put",
-                                    			new Class<?>[] {String.class, Object.class});
-	                                    	putMethod.invoke(scriptEngineManager, new Object[] {id, namedObjects.get(id)});
-                                    	} catch(Exception exception) {
-                                    		throw new RuntimeException(exception);
-                                    	}
-                                	}
+                                        scriptEngineManager.put(id, namedObjects.get(id));
+                                    }
                                 }
 
                                 break;
@@ -434,7 +389,7 @@ public class WTKXSerializer implements Serializer {
                             }
 
                             case SCRIPT: {
-                            	break;
+                                break;
                             }
 
                             default: {
@@ -563,29 +518,24 @@ public class WTKXSerializer implements Serializer {
         }
 
         if (serializer != null) {
-        	object = serializer.getObjectByID(namespacePath[i]);
+            object = serializer.getObjectByID(namespacePath[i]);
         }
 
         return object;
     }
 
     private Object getObjectByID(String id) {
-    	Object object = null;
+        Object object = null;
 
-    	if (namedObjects.containsKey(id)) {
-    		object = namedObjects.get(id);
-    	} else {
-    		if (scriptEngineManager != null) {
-            	try {
-                	Method getMethod = scriptEngineManagerClass.getMethod("get", new Class<?>[] {String.class});
-                	object = getMethod.invoke(scriptEngineManager, new Object[] {id});
-            	} catch(Exception exception) {
-            		throw new RuntimeException(exception);
-            	}
-    		}
-    	}
+        if (namedObjects.containsKey(id)) {
+            object = namedObjects.get(id);
+        } else {
+            if (scriptEngineManager != null) {
+                object = scriptEngineManager.get(id);
+            }
+        }
 
-    	return object;
+        return object;
     }
 
     /**
