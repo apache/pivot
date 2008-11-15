@@ -1,4 +1,4 @@
-package pivot.wtk.test;
+package pivot.demos.scripting;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
@@ -7,13 +7,13 @@ import pivot.wtk.Display;
 import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
-public class ScriptingTest implements Application {
+public class ScriptingDemo implements Application {
     private Window window = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("scripting_test.wtkx")));
+        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("scripting_demo.wtkx")));
 
         String foo = (String)wtkxSerializer.getObjectByName("foo");
         System.out.println("foo = " + foo);

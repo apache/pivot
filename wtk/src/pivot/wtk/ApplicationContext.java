@@ -564,11 +564,7 @@ public abstract class ApplicationContext {
 
     /**
      * Gets the display host.
-     *
-     * @deprecated
-     * This method will likely be made <tt>protected</tt> in a future release
      */
-    @Deprecated
     public DisplayHost getDisplayHost() {
         return displayHost;
     }
