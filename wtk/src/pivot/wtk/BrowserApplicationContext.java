@@ -55,7 +55,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
             }
 
             public boolean containsKey(String key) {
-                return properties.containsKey(key);
+                return properties.containsKey(key)
+                	|| getParameter(key) != null;
             }
 
             public boolean isEmpty() {
