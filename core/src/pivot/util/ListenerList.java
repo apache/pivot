@@ -40,7 +40,16 @@ public abstract class ListenerList<T> implements Iterable<T> {
             throw new IllegalArgumentException("listener is null.");
         }
 
-        if (list.indexOf(listener) == -1) {
+        // NOTE We don't use indexOf() here because it calls the equals()
+        // method of the item, which isn't implemented by dynamically generated
+        // listener implementations
+        int i = 0, n = list.size();
+        while (i < n
+            && list.get(i) != listener) {
+            i++;
+        }
+
+        if (i == list.size()) {
             list.add(listener);
         } else {
             System.out.println("Duplicate listener " + listener + " added to " + this);

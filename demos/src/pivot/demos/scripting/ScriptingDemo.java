@@ -18,7 +18,7 @@ public class ScriptingDemo implements Application {
         String foo = (String)wtkxSerializer.getObjectByName("foo");
         System.out.println("foo = " + foo);
 
-        window.setTitle("Scripting Test");
+        window.setTitle("Scripting Demo");
         window.setMaximized(true);
         window.open(display);
     }
