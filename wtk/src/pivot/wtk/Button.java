@@ -596,10 +596,6 @@ public abstract class Button extends Component {
     }
 
     public void setButtonListener(ButtonListener listener) {
-    	if (listener == null) {
-    		throw new IllegalArgumentException("listener is null.");
-    	}
-
     	buttonListeners.add(listener);
     }
 
@@ -608,10 +604,6 @@ public abstract class Button extends Component {
     }
 
     public void setButtonStateListener(ButtonStateListener listener) {
-    	if (listener == null) {
-    		throw new IllegalArgumentException("listener is null.");
-    	}
-
     	buttonStateListeners.add(listener);
     }
 
@@ -620,10 +612,6 @@ public abstract class Button extends Component {
     }
 
     public void setButtonPressListener(ButtonPressListener listener) {
-    	if (listener == null) {
-    		throw new IllegalArgumentException("listener is null.");
-    	}
-
     	buttonPressListeners.add(listener);
     }
 }

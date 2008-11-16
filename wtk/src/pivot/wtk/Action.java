@@ -145,4 +145,8 @@ public abstract class Action {
     public ListenerList<ActionListener> getActionListeners() {
         return actionListeners;
     }
+
+    public void setActionListener(ActionListener listener) {
+        actionListeners.add(listener);
+    }
 }

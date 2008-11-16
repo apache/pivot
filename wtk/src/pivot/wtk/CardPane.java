@@ -125,4 +125,8 @@ public class CardPane extends Container {
     public ListenerList<CardPaneListener> getCardPaneListeners() {
         return cardPaneListeners;
     }
+
+    public void setCardPaneListener(CardPaneListener listener) {
+        cardPaneListeners.add(listener);
+    }
 }

@@ -205,6 +205,10 @@ public class ArrayList<T> implements List<T>, Serializable {
         return listListeners;
     }
 
+    public void setListListener(ListListener<T> listener) {
+        listListeners.add(listener);
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

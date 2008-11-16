@@ -121,4 +121,13 @@ public class ImageView extends Component {
     public ListenerList<ImageViewListener> getImageViewListeners() {
         return imageViewListeners;
     }
+
+    /**
+     * Adds a listener to the image view listener list.
+     *
+     * @param listener
+     */
+    public void setImageViewListener(ImageViewListener listener) {
+        imageViewListeners.add(listener);
+    }
 }

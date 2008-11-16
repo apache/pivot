@@ -94,4 +94,8 @@ public class ContainerAdapter extends ComponentAdapter
     public ListenerList<ListListener<ComponentAdapter>> getListListeners() {
         return listListeners;
     }
+
+    public void setListListener(ListListener<ComponentAdapter> listener) {
+        listListeners.add(listener);
+    }
 }

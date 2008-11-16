@@ -283,12 +283,24 @@ public class Accordion extends Container {
         return accordionListeners;
     }
 
+    public void setAccordionListener(AccordionListener listener) {
+        accordionListeners.add(listener);
+    }
+
     public ListenerList<AccordionSelectionListener> getAccordionSelectionListeners() {
         return accordionSelectionListeners;
     }
 
+    public void setAccordionSelectionListener(AccordionSelectionListener listener) {
+        accordionSelectionListeners.add(listener);
+    }
+
     public ListenerList<AccordionAttributeListener> getAccordionAttributeListeners() {
         return accordionAttributeListeners;
+    }
+
+    public void setAccordionAttributeListener(AccordionAttributeListener listener) {
+        accordionAttributeListeners.add(listener);
     }
 
     public static String getName(Component component) {

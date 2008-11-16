@@ -137,4 +137,8 @@ public class Border extends Container {
     public ListenerList<BorderListener> getBorderListeners() {
         return borderListeners;
     }
+
+    public void setBorderListener(BorderListener listener) {
+        borderListeners.add(listener);
+    }
 }

@@ -1052,10 +1052,28 @@ public class ListView extends Component {
     }
 
     /**
+     * Adds a listener to the list view listener list.
+     *
+     * @param listener
+     */
+    public void setListViewListener(ListViewListener listener) {
+        listViewListeners.add(listener);
+    }
+
+    /**
      * Returns the list view item listener list.
      */
     public ListenerList<ListViewItemListener> getListViewItemListeners() {
         return listViewItemListeners;
+    }
+
+    /**
+     * Adds a listener to the list view item listener list.
+     *
+     * @param listener
+     */
+    public void setListViewItemListener(ListViewItemListener listener) {
+        listViewItemListeners.add(listener);
     }
 
     /**
@@ -1066,6 +1084,15 @@ public class ListView extends Component {
     }
 
     /**
+     * Adds a listener to the list view item state listener list.
+     *
+     * @param listener
+     */
+    public void setListViewItemStateListener(ListViewItemStateListener listener) {
+        listViewItemStateListeners.add(listener);
+    }
+
+    /**
      * Returns the list view selection listener list.
      */
     public ListenerList<ListViewSelectionListener> getListViewSelectionListeners() {
@@ -1073,9 +1100,26 @@ public class ListView extends Component {
     }
 
     /**
+     * Adds a listener to the list view selection listener list.
+     * @param listener
+     */
+    public void setListViewSelectionListener(ListViewSelectionListener listener) {
+        listViewSelectionListeners.add(listener);
+    }
+
+    /**
      * Returns the list view selection detail listener list.
      */
     public ListenerList<ListViewSelectionDetailListener> getListViewSelectionDetailListeners() {
         return listViewSelectionDetailListeners;
+    }
+
+    /**
+     * Adds a listener to the list view selection detail listener list.
+     *
+     * @param listener
+     */
+    public void setListViewSelectionDetailListener(ListViewSelectionDetailListener listener) {
+        listViewSelectionDetailListeners.add(listener);
     }
 }

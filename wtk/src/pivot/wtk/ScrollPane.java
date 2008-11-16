@@ -348,4 +348,8 @@ public class ScrollPane extends Viewport {
     public ListenerList<ScrollPaneListener> getScrollPaneListeners() {
         return scrollPaneListeners;
     }
+
+    public void setScrollPaneListener(ScrollPaneListener listener) {
+        scrollPaneListeners.add(listener);
+    }
 }

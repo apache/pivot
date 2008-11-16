@@ -715,7 +715,15 @@ public abstract class Container extends Component
         return containerListeners;
     }
 
+    public void setContainerListener(ContainerListener listener) {
+        containerListeners.add(listener);
+    }
+
     public ListenerList<ContainerMouseListener> getContainerMouseListeners() {
         return containerMouseListeners;
+    }
+
+    public void setContainerMouseListener(ContainerMouseListener listener) {
+        containerMouseListeners.add(listener);
     }
 }

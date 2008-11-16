@@ -628,9 +628,18 @@ public abstract class Query<V> extends Task<V> {
     }
 
     /**
-     * Gets the query's <tt>QueryListener</tt>s.
+     * Returns the query listener list.
      */
     public ListenerList<QueryListener<V>> getQueryListeners() {
         return queryListeners;
+    }
+
+    /**
+     * Adds a listener to the query listener list.
+     *
+     * @param listener
+     */
+    public void setQueryListener(QueryListener<V> listener) {
+        queryListeners.add(listener);
     }
 }

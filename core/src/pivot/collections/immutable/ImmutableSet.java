@@ -74,4 +74,8 @@ public class ImmutableSet<E> implements Set<E> {
     public ListenerList<SetListener<E>> getSetListeners() {
         throw new UnsupportedOperationException();
     }
+
+    public void setSetListener(SetListener<E> listener) {
+        throw new UnsupportedOperationException();
+    }
 }

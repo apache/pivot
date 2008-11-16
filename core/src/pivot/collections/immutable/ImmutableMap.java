@@ -79,4 +79,8 @@ public class ImmutableMap<K, V> implements Map<K, V> {
     public ListenerList<MapListener<K, V>> getMapListeners() {
         throw new UnsupportedOperationException();
     }
+
+    public void setMapListener(MapListener<K, V> listener) {
+        throw new UnsupportedOperationException();
+    }
 }

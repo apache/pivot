@@ -136,6 +136,10 @@ public class Menu extends Container {
         public ListenerList<ItemListener> getItemListeners() {
             return itemListeners;
         }
+
+        public void setItemListener(ItemListener listener) {
+            itemListeners.add(listener);
+        }
     }
 
     /**
@@ -392,7 +396,15 @@ public class Menu extends Container {
         return menuListeners;
     }
 
+    public void setMenuListener(MenuListener listener) {
+        menuListeners.add(listener);
+    }
+
     public ListenerList<MenuItemSelectionListener> getMenuItemSelectionListeners() {
         return menuItemSelectionListeners;
+    }
+
+    public void setMenuItemSelectionListener(MenuItemSelectionListener listener) {
+        menuItemSelectionListeners.add(listener);
     }
 }

@@ -97,4 +97,8 @@ public class MapAdapter<K, V> implements Map<K, V> {
     public ListenerList<MapListener<K, V>> getMapListeners() {
         return mapListeners;
     }
+
+    public void setMapListener(MapListener<K, V> listener) {
+        mapListeners.add(listener);
+    }
 }

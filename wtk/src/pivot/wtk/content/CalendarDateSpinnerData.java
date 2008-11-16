@@ -238,4 +238,8 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     public ListenerList<ListListener<CalendarDate>> getListListeners() {
         return listListeners;
     }
+
+    public void setListListener(ListListener<CalendarDate> listener) {
+        listListeners.add(listener);
+    }
 }

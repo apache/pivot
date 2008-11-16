@@ -89,4 +89,8 @@ public class LinkedList<T> implements List<T> {
         // TODO Auto-generated method stub
         return null;
     }
+
+    public void setListListener(ListListener<T> listener) {
+        // TODO
+    }
 }

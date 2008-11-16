@@ -115,4 +115,8 @@ public class Label extends Component {
     public ListenerList<LabelListener> getLabelListeners() {
         return labelListeners;
     }
+
+    public void setLabelListener(LabelListener listener) {
+        labelListeners.add(listener);
+    }
 }

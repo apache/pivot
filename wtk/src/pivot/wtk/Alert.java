@@ -119,6 +119,10 @@ public class Alert extends Dialog {
         return alertListeners;
     }
 
+    public void setAlertListener(AlertListener listener) {
+        alertListeners.add(listener);
+    }
+
     public static void alert(String message, Display display) {
         alert(MessageType.INFO, message, display, null);
     }

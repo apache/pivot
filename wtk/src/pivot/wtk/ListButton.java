@@ -295,9 +295,27 @@ public class ListButton extends Button {
     }
 
     /**
+     * Adds a listener to the list button listener list.
+     *
+     * @param listener
+     */
+    public void setListButtonListener(ListButtonListener listener) {
+        listButtonListeners.add(listener);
+    }
+
+    /**
      * Returns the list button selection listener list.
      */
     public ListenerList<ListButtonSelectionListener> getListButtonSelectionListeners() {
         return listButtonSelectionListeners;
+    }
+
+    /**
+     * Adds a listener to the list button selection listener list.
+     *
+     * @param listener
+     */
+    public void setListButtonSelectionListener(ListButtonSelectionListener listener) {
+        listButtonSelectionListeners.add(listener);
     }
 }

@@ -571,41 +571,65 @@ public class TextInput extends Component {
 
     /**
      * Returns the text input listener list.
-     *
-     * @return
-     * The text input listener list.
      */
     public ListenerList<TextInputListener> getTextInputListeners() {
         return textInputListeners;
     }
 
     /**
-     * Returns the text input text listener list.
+     * Adds a listener to the text input listener list.
      *
-     * @return
-     * The text input text listener list.
+     * @param listener
+     */
+    public void setTextInputListener(TextInputListener listener) {
+        textInputListeners.add(listener);
+    }
+
+    /**
+     * Returns the text input text listener list.
      */
     public ListenerList<TextInputTextListener> getTextInputTextListeners() {
         return textInputTextListeners;
     }
 
     /**
-     * Returns the text input selection listener list.
+     * Adds a listener to the text input text listener list.
      *
-     * @return
-     * The text input selection listener list.
+     * @param listener
+     */
+    public void setTextInputTextListener(TextInputTextListener listener) {
+        textInputTextListeners.add(listener);
+    }
+
+    /**
+     * Returns the text input selection listener list.
      */
     public ListenerList<TextInputSelectionListener> getTextInputSelectionListeners() {
         return textInputSelectionListeners;
     }
 
     /**
-     * Returns the text input character listener list.
+     * Adds a listener to the text input selection listener list.
      *
-     * @return
-     * The text input character listener list.
+     * @param listener
+     */
+    public void setTextInputSelectionListener(TextInputSelectionListener listener) {
+        textInputSelectionListeners.add(listener);
+    }
+
+    /**
+     * Returns the text input character listener list.
      */
     public ListenerList<TextInputCharacterListener> getTextInputCharacterListeners() {
         return textInputCharacterListeners;
+    }
+
+    /**
+     * Adds a listener to the text input character listener list.
+     *
+     * @param listener
+     */
+    public void setTextInputCharacterListener(TextInputCharacterListener listener) {
+        textInputCharacterListeners.add(listener);
     }
 }

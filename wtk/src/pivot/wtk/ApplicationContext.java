@@ -448,7 +448,7 @@ public abstract class ApplicationContext {
             switch (event.getID()) {
                 case KeyEvent.KEY_TYPED: {
                     if (focusedComponent != null) {
-                    	char keyChar = event.getKeyChar();
+                        char keyChar = event.getKeyChar();
                         focusedComponent.keyTyped(keyChar);
                     }
 
@@ -464,7 +464,7 @@ public abstract class ApplicationContext {
                     }
 
                     if (consumed) {
-                    	event.consume();
+                        event.consume();
                     } else {
                         dragDropManager.keyPressed(keyCode, keyLocation);
                     }
@@ -481,7 +481,7 @@ public abstract class ApplicationContext {
                     }
 
                     if (consumed) {
-                    	event.consume();
+                        event.consume();
                     } else {
                         dragDropManager.keyReleased(keyCode, keyLocation);
                     }
@@ -541,13 +541,13 @@ public abstract class ApplicationContext {
     private static final String DEFAULT_THEME_CLASS_NAME = "pivot.wtk.skin.terra.TerraTheme";
 
     protected ApplicationContext() {
-    	assert (applicationContext == null);
+        assert (applicationContext == null);
 
-    	applicationContext = new ThreadLocal<ApplicationContext>() {
-	    	protected synchronized ApplicationContext initialValue() {
-	    		return ApplicationContext.this;
-	    	}
-	    };
+        applicationContext = new ThreadLocal<ApplicationContext>() {
+            protected synchronized ApplicationContext initialValue() {
+                return ApplicationContext.this;
+            }
+        };
 
         display = new Display(this);
         displayHost = new DisplayHost();
@@ -615,14 +615,14 @@ public abstract class ApplicationContext {
     protected abstract void contextOpen(URL location, String target);
 
     public static ApplicationContext getApplicationContext() {
-    	return applicationContext.get();
+        return applicationContext.get();
     }
 
     /**
      * Returns this application's origin (the URL of it's originating server).
      */
     public static URL getOrigin() {
-    	return origin;
+        return origin;
     }
 
     /**
@@ -638,7 +638,7 @@ public abstract class ApplicationContext {
      * @param location
      */
     public static void open(URL location) {
-    	open(location, null);
+        open(location, null);
     }
 
     /**
@@ -648,7 +648,7 @@ public abstract class ApplicationContext {
      * @param target
      */
     public static void open(URL location, String target) {
-    	applicationContext.get().contextOpen(location, target);
+        applicationContext.get().contextOpen(location, target);
     }
 
     /**
@@ -721,7 +721,7 @@ public abstract class ApplicationContext {
         try {
             timer.schedule(timeoutTask, timeout);
         } catch (IllegalStateException exception) {
-        	System.out.println(exception.getMessage());
+            System.out.println(exception.getMessage());
 
             // TODO This is a workaround for an apparent bug in the Mac OSX
             // Java Plugin, which appears to prematurely kill the timer thread.
@@ -795,28 +795,28 @@ public abstract class ApplicationContext {
      * Returns the system text anti-aliasing hint.
      */
     public static Object getTextAntialiasingHint() {
-    	if (textAntialiasingHint == null) {
-        	Toolkit toolkit = Toolkit.getDefaultToolkit();
-        	java.util.Map<?, ?> fontDesktopHints =
-        		(java.util.Map<?, ?>)toolkit.getDesktopProperty("awt.font.desktophints");
+        if (textAntialiasingHint == null) {
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
+            java.util.Map<?, ?> fontDesktopHints =
+                (java.util.Map<?, ?>)toolkit.getDesktopProperty("awt.font.desktophints");
 
-        	if (fontDesktopHints == null) {
-        		textAntialiasingHint = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
-        	} else {
-        		textAntialiasingHint = fontDesktopHints.get(RenderingHints.KEY_TEXT_ANTIALIASING);
-        		if (textAntialiasingHint.equals(RenderingHints.VALUE_TEXT_ANTIALIAS_OFF)) {
-        			textAntialiasingHint = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
-        		}
+            if (fontDesktopHints == null) {
+                textAntialiasingHint = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
+            } else {
+                textAntialiasingHint = fontDesktopHints.get(RenderingHints.KEY_TEXT_ANTIALIASING);
+                if (textAntialiasingHint.equals(RenderingHints.VALUE_TEXT_ANTIALIAS_OFF)) {
+                    textAntialiasingHint = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
+                }
 
-        		// Listen for changes to the property
-        		toolkit.addPropertyChangeListener("awt.font.desktophints", new PropertyChangeListener() {
-        		    public void propertyChange(PropertyChangeEvent event) {
-        		        ApplicationContext.textAntialiasingHint = null;
-        		    }
-        		});
-        	}
+                // Listen for changes to the property
+                toolkit.addPropertyChangeListener("awt.font.desktophints", new PropertyChangeListener() {
+                    public void propertyChange(PropertyChangeEvent event) {
+                        ApplicationContext.textAntialiasingHint = null;
+                    }
+                });
+            }
 
-        	System.out.println("Set text anti-aliasing hint to \"" + textAntialiasingHint + "\".");
+            System.out.println("Set text anti-aliasing hint to \"" + textAntialiasingHint + "\".");
         }
 
         return textAntialiasingHint;

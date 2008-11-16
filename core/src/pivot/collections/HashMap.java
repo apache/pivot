@@ -126,6 +126,10 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return mapListeners;
     }
 
+    public void setMapListener(MapListener<K, V> listener) {
+        mapListeners.add(listener);
+    }
+
     public String toString() {
         return hashMap.toString();
     }

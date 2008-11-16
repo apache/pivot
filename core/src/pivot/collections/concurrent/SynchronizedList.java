@@ -110,4 +110,8 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
     public ListenerList<ListListener<T>> getListListeners() {
         return listListeners;
     }
+
+    public void setListListener(ListListener<T> listener) {
+        listListeners.add(listener);
+    }
 }

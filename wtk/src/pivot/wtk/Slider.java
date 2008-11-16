@@ -158,7 +158,15 @@ public class Slider extends Container {
 		return sliderListeners;
 	}
 
-	public ListenerList<SliderValueListener> getSliderValueListeners() {
+    public void setSliderListener(SliderListener listener) {
+        sliderListeners.add(listener);
+    }
+
+    public ListenerList<SliderValueListener> getSliderValueListeners() {
 		return sliderValueListeners;
 	}
+
+    public void setSliderValueListener(SliderValueListener listener) {
+        sliderValueListeners.add(listener);
+    }
 }

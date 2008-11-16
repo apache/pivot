@@ -160,4 +160,8 @@ public final class ListAdapter<T> implements List<T> {
     public ListenerList<ListListener<T>> getListListeners() {
         return listListeners;
     }
+
+    public void setListListener(ListListener<T> listener) {
+        listListeners.add(listener);
+    }
 }

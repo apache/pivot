@@ -78,4 +78,8 @@ public class Meter extends Component {
     public ListenerList<MeterListener> getMeterListeners() {
         return meterListeners;
     }
+
+    public void setMeterListener(MeterListener listener) {
+        meterListeners.add(listener);
+    }
 }

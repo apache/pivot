@@ -136,4 +136,8 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     public ListenerList<ListListener<TreeNode>> getListListeners() {
         return listListeners;
     }
+
+    public void setListListener(ListListener<TreeNode> listener) {
+        listListeners.add(listener);
+    }
 }

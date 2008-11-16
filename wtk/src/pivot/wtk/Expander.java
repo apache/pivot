@@ -157,4 +157,8 @@ public class Expander extends Container {
     public ListenerList<ExpanderListener> getExpanderListeners() {
         return expanderListeners;
     }
+
+    public void setExpanderListener(ExpanderListener listener) {
+        expanderListeners.add(listener);
+    }
 }

@@ -89,4 +89,8 @@ public final class ImmutableList<T> implements List<T> {
     public ListenerList<ListListener<T>> getListListeners() {
         throw new UnsupportedOperationException();
     }
+
+    public void setListListener(ListListener<T> listener) {
+        throw new UnsupportedOperationException();
+    }
 }

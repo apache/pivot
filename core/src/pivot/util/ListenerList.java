@@ -36,17 +36,25 @@ public abstract class ListenerList<T> implements Iterable<T> {
     private java.util.ArrayList<T> list = new java.util.ArrayList<T>();
 
     public void add(T listener) {
-        assert (list.indexOf(listener) != -1)
-            : "Duplicate listener " + listener + " added to " + this;
+        if (listener == null) {
+            throw new IllegalArgumentException("listener is null.");
+        }
 
-        list.add(listener);
+        if (list.indexOf(listener) == -1) {
+            list.add(listener);
+        } else {
+            System.out.println("Duplicate listener " + listener + " added to " + this);
+        }
     }
 
     public void remove(T listener) {
-        assert (list.indexOf(listener) == -1)
-            : "Nonexistent listener " + listener + " removed from " + this;
+        if (listener == null) {
+            throw new IllegalArgumentException("listener is null.");
+        }
 
-        list.remove(listener);
+        if (!list.remove(listener)) {
+            System.out.println("Nonexistent listener " + listener + " removed from " + this);
+        }
     }
 
     public int getCount() {

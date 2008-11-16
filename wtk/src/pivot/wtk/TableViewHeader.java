@@ -163,7 +163,15 @@ public class TableViewHeader extends Component {
         return tableViewHeaderListeners;
     }
 
+    public void setTableViewHeaderListeners(TableViewHeaderListener listener) {
+        tableViewHeaderListeners.add(listener);
+    }
+
     public ListenerList<TableViewHeaderPressListener> getTableViewHeaderPressListeners() {
         return tableViewHeaderPressListeners;
+    }
+
+    public void setTableViewHeaderPressListener(TableViewHeaderPressListener listener) {
+        tableViewHeaderPressListeners.add(listener);
     }
 }

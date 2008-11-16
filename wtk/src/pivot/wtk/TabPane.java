@@ -374,12 +374,24 @@ public class TabPane extends Container {
         return tabPaneListeners;
     }
 
+    public void setTabPaneListener(TabPaneListener listener) {
+        tabPaneListeners.add(listener);
+    }
+
     public ListenerList<TabPaneSelectionListener> getTabPaneSelectionListeners() {
         return tabPaneSelectionListeners;
     }
 
+    public void setTabPaneSelectionListener(TabPaneSelectionListener listener) {
+        tabPaneSelectionListeners.add(listener);
+    }
+
     public ListenerList<TabPaneAttributeListener> getTabPaneAttributeListeners() {
         return tabPaneAttributeListeners;
+    }
+
+    public void setTabPaneAttributeListener(TabPaneAttributeListener listener) {
+        tabPaneAttributeListeners.add(listener);
     }
 
     public static String getName(Component component) {

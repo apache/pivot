@@ -267,4 +267,8 @@ public class SwingAdapter extends Component {
     public ListenerList<SwingAdapterListener> getSwingAdapterListeners() {
         return swingAdapterListeners;
     }
+
+    public void setSwingAdapterListener(SwingAdapterListener listener) {
+        swingAdapterListeners.add(listener);
+    }
 }

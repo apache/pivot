@@ -209,7 +209,15 @@ public class ScrollBar extends Container {
         return scrollBarListeners;
     }
 
+    public void setScrollBarListener(ScrollBarListener listener) {
+        scrollBarListeners.add(listener);
+    }
+
     public ListenerList<ScrollBarValueListener> getScrollBarValueListeners() {
         return scrollBarValueListeners;
+    }
+
+    public void setScrollBarValueListener(ScrollBarValueListener listener) {
+        scrollBarValueListeners.add(listener);
     }
 }

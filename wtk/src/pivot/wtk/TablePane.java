@@ -939,23 +939,35 @@ public class TablePane extends Container {
     }
 
     /**
-     * Gets this component's table pane listener list.
-     *
-     * @return
-     * The table pane listeners on this component
+     * Returns the table pane listener list.
      */
     public ListenerList<TablePaneListener> getTablePaneListeners() {
         return tablePaneListeners;
     }
 
     /**
-     * Gets this component's table pane attribute listener list.
+     * Adds a listener to the table pane listener list.
      *
-     * @return
-     * The table pane attribute listeners on this component
+     * @param listener
+     */
+    public void setTablePaneListener(TablePaneListener listener) {
+        tablePaneListeners.add(listener);
+    }
+
+    /**
+     * Returns the table pane attribute listener list.
      */
     public ListenerList<TablePaneAttributeListener> getTablePaneAttributeListeners() {
         return tablePaneAttributeListeners;
+    }
+
+    /**
+     * Adds a listener to the table pane attribute listener list.
+     *
+     * @param listener
+     */
+    public void setTablePaneAttributeListener(TablePaneAttributeListener listener) {
+        tablePaneAttributeListeners.add(listener);
     }
 
     public static int getRowSpan(Component component) {

@@ -267,4 +267,8 @@ public class Dialog extends Frame {
     public ListenerList<DialogStateListener> getDialogStateListeners() {
         return dialogStateListeners;
     }
+
+    public void setDialogStateListener(DialogStateListener listener) {
+        dialogStateListeners.add(listener);
+    }
 }

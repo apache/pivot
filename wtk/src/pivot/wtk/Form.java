@@ -468,6 +468,15 @@ public class Form extends Container {
     }
 
     /**
+     * Adds a listener to the form listener list.
+     *
+     * @param listener
+     */
+    public void setFormListener(FormListener listener) {
+        formListeners.add(listener);
+    }
+
+    /**
      * Returns the form attribute listener list.
      *
      * @return
@@ -475,6 +484,15 @@ public class Form extends Container {
      */
     public ListenerList<FormAttributeListener> getFormAttributeListeners() {
         return formAttributeListeners;
+    }
+
+    /**
+     * Adds a listener to the form attribute listener list.
+     *
+     * @param listener
+     */
+    public void setFormAttributeListener(FormAttributeListener listener) {
+        formAttributeListeners.add(listener);
     }
 
     public static Section getSection(Component component) {
