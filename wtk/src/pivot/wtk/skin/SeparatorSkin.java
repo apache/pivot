@@ -11,6 +11,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
@@ -113,10 +114,8 @@ public class SeparatorSkin extends ComponentSkin
             LineMetrics lm = font.getLineMetrics(heading, fontRenderContext);
 
             if (fontRenderContext.isAntiAliased()) {
-                // TODO Use VALUE_TEXT_ANTIALIAS_LCD_HRGB when JDK 1.6 is
-                // available on OSX?
                 graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            		ApplicationContext.getTextAntialiasingHint());
             }
 
             if (fontRenderContext.usesFractionalMetrics()) {

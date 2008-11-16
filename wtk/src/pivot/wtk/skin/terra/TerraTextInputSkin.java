@@ -461,10 +461,8 @@ public class TerraTextInputSkin extends ComponentSkin
         if (text.length() > 0) {
             // Paint the text
             if (fontRenderContext.isAntiAliased()) {
-                // TODO Use VALUE_TEXT_ANTIALIAS_LCD_HRGB when JDK 1.6 is
-                // available on OSX?
                 graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                    ApplicationContext.getTextAntialiasingHint());
             }
 
             if (fontRenderContext.usesFractionalMetrics()) {

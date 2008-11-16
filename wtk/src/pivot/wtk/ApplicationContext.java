@@ -19,6 +19,7 @@ import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.event.ComponentEvent;
@@ -26,11 +27,14 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.util.ImmutableIterator;
@@ -521,6 +525,8 @@ public abstract class ApplicationContext {
     private DisplayHost displayHost = null;
     private DragDropManager dragDropManager = null;
 
+    private static ThreadLocal<ApplicationContext> applicationContext;
+
     private static HashMap<URL, Object> resourceCache = new HashMap<URL, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
@@ -528,7 +534,7 @@ public abstract class ApplicationContext {
     private static HashMap<Integer, TimerTask> timerTaskMap = new HashMap<Integer, TimerTask>();
     private static int nextTimerTaskID = 0;
 
-    private static ThreadLocal<ApplicationContext> applicationContext;
+    private static Object textAntialiasingHint = null;
 
     private static final int DEFAULT_MULTI_CLICK_INTERVAL = 400;
     private static final int DEFAULT_CURSOR_BLINK_RATE = 600;
@@ -649,7 +655,7 @@ public abstract class ApplicationContext {
      * Issues a system alert sound.
      */
     public static void beep() {
-        java.awt.Toolkit.getDefaultToolkit().beep();
+        Toolkit.getDefaultToolkit().beep();
     }
 
     /**
@@ -673,7 +679,7 @@ public abstract class ApplicationContext {
         try {
             timer.schedule(intervalTask, 0, period);
         } catch (IllegalStateException exception) {
-            exception.printStackTrace();
+            System.out.println(exception.getMessage());
 
             // TODO This is a workaround for an apparent bug in the Mac OSX
             // Java Plugin, which appears to prematurely kill the timer thread.
@@ -715,7 +721,7 @@ public abstract class ApplicationContext {
         try {
             timer.schedule(timeoutTask, timeout);
         } catch (IllegalStateException exception) {
-            exception.printStackTrace();
+        	System.out.println(exception.getMessage());
 
             // TODO This is a workaround for an apparent bug in the Mac OSX
             // Java Plugin, which appears to prematurely kill the timer thread.
@@ -783,6 +789,37 @@ public abstract class ApplicationContext {
         } else {
             java.awt.EventQueue.invokeLater(runnable);
         }
+    }
+
+    /**
+     * Returns the system text anti-aliasing hint.
+     */
+    public static Object getTextAntialiasingHint() {
+    	if (textAntialiasingHint == null) {
+        	Toolkit toolkit = Toolkit.getDefaultToolkit();
+        	java.util.Map<?, ?> fontDesktopHints =
+        		(java.util.Map<?, ?>)toolkit.getDesktopProperty("awt.font.desktophints");
+
+        	if (fontDesktopHints == null) {
+        		textAntialiasingHint = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
+        	} else {
+        		textAntialiasingHint = fontDesktopHints.get(RenderingHints.KEY_TEXT_ANTIALIASING);
+        		if (textAntialiasingHint.equals(RenderingHints.VALUE_TEXT_ANTIALIAS_OFF)) {
+        			textAntialiasingHint = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
+        		}
+
+        		// Listen for changes to the property
+        		toolkit.addPropertyChangeListener("awt.font.desktophints", new PropertyChangeListener() {
+        		    public void propertyChange(PropertyChangeEvent event) {
+        		        ApplicationContext.textAntialiasingHint = null;
+        		    }
+        		});
+        	}
+
+        	System.out.println("Set text anti-aliasing hint to \"" + textAntialiasingHint + "\".");
+        }
+
+        return textAntialiasingHint;
     }
 
     /**
