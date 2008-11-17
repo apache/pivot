@@ -838,7 +838,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                 x = 0;
                 y = Math.max(buttonPanorama.getY() + buttonPanorama.getHeight() - 1, 0);
                 width = tabPaneBounds.width;
-                height = Math.max(tabPaneBounds.height - (y + 1), 0);
+                height = Math.max(tabPaneBounds.height - y, 0);
 
                 break;
             }
@@ -846,7 +846,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             case VERTICAL: {
                 x = Math.max(buttonPanorama.getX() + buttonPanorama.getWidth() - 1, 0);
                 y = 0;
-                width = Math.max(tabPaneBounds.width - (x + 1), 0);
+                width = Math.max(tabPaneBounds.width - x, 0);
                 height = tabPaneBounds.height;
 
                 break;
