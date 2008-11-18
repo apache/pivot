@@ -72,39 +72,21 @@ public class Calendar extends Container {
 
     private int year;
     private int month;
-
     private CalendarDate selectedDate = null;
-
     private String selectedDateKey = null;
 
     private CalendarListenerList calendarListeners = new CalendarListenerList();
     private CalendarSelectionListenerList calendarSelectionListeners =
         new CalendarSelectionListenerList();
 
-    /**
-     * Creates a calendar set to the current month and year in the default
-     * timezone in the default locale.
-     */
     public Calendar() {
         this(new CalendarDate());
     }
 
-    /**
-     * Creates a new calendar set to the specified calendar's year and
-     * month.
-     */
     private Calendar(CalendarDate calendarDate) {
         this(calendarDate.getYear(), calendarDate.getMonth());
     }
 
-    /**
-     * Creates a new calendar set to the specified year and month.
-     *
-     * @param year
-     * The year (e.g. 2008)
-     * @param month
-     * The month, 0-based (e.g. 2 for March)
-     */
     public Calendar(int year, int month) {
         this.year = year;
         this.month = month;

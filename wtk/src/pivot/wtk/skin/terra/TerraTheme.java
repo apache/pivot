@@ -27,6 +27,7 @@ import pivot.wtk.Alert;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Border;
 import pivot.wtk.Calendar;
+import pivot.wtk.CalendarButton;
 import pivot.wtk.Checkbox;
 import pivot.wtk.Dialog;
 import pivot.wtk.Expander;
@@ -96,6 +97,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Border.class, TerraBorderSkin.class);
         componentSkinMap.put(Checkbox.class, TerraCheckboxSkin.class);
         componentSkinMap.put(Calendar.class, TerraCalendarSkin.class);
+        componentSkinMap.put(CalendarButton.class, TerraCalendarButtonSkin.class);
         componentSkinMap.put(Dialog.class, TerraDialogSkin.class);
         componentSkinMap.put(Expander.class, TerraExpanderSkin.class);
         componentSkinMap.put(Form.class, TerraFormSkin.class);
@@ -134,6 +136,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Tooltip.class, TerraTooltipSkin.class);
         componentSkinMap.put(TreeView.class, TerraTreeViewSkin.class);
 
+        componentSkinMap.put(TerraCalendarSkin.DateButton.class, TerraCalendarSkin.DateButtonSkin.class);
         componentSkinMap.put(TerraExpanderSkin.ShadeButton.class, TerraExpanderSkin.ShadeButtonSkin.class);
         componentSkinMap.put(TerraFrameSkin.FrameButton.class, TerraFrameSkin.FrameButtonSkin.class);
         componentSkinMap.put(TerraRollupSkin.RollupButton.class, TerraRollupSkin.RollupButtonSkin.class);

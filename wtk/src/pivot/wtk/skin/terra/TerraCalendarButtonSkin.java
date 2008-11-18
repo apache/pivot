@@ -18,62 +18,82 @@ package pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 
-import pivot.util.CalendarDate;
+import pivot.collections.Dictionary;
+import pivot.util.Vote;
 import pivot.wtk.Border;
 import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
-import pivot.wtk.Calendar;
-import pivot.wtk.CalendarButton;
-import pivot.wtk.CalendarButtonListener;
-import pivot.wtk.CalendarButtonSelectionListener;
-import pivot.wtk.Component;
-import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.Insets;
-import pivot.wtk.Keyboard;
-import pivot.wtk.Mouse;
-import pivot.wtk.Point;
-import pivot.wtk.Popup;
+import pivot.wtk.CalendarButton;
+import pivot.wtk.Bounds;
 import pivot.wtk.Theme;
-import pivot.wtk.skin.ButtonSkin;
+import pivot.wtk.Window;
+import pivot.wtk.WindowStateListener;
+import pivot.wtk.effects.Transition;
+import pivot.wtk.effects.TransitionListener;
+import pivot.wtk.skin.CalendarButtonSkin;
 
 /**
- * calendar button skin.
+ * Terra calendar button skin.
  *
- * @author tvolkert
+ * @author gbrown
  */
-public class TerraCalendarButtonSkin extends ButtonSkin
-    implements CalendarButton.Skin, ButtonPressListener,
-               CalendarButtonListener, CalendarButtonSelectionListener {
+public class TerraCalendarButtonSkin extends CalendarButtonSkin {
+    private Border calendarBorder;
 
-    private class CalendarPopupKeyHandler implements ComponentKeyListener {
-        public void keyTyped(Component component, char character) {
+    private WindowStateListener calendarPopupStateListener = new WindowStateListener() {
+        public Vote previewWindowOpen(Window window, Display display) {
+            return Vote.APPROVE;
+        }
+
+        public void windowOpenVetoed(Window window, Vote reason) {
             // No-op
         }
 
-        public boolean keyPressed(Component component, int keyCode,
-            Keyboard.KeyLocation keyLocation) {
-            switch (keyCode) {
-                case Keyboard.KeyCode.ESCAPE: {
-                    calendarPopup.close();
-                    getComponent().requestFocus();
-                    break;
-                }
+        public void windowOpened(Window window) {
+            // No-op
+        }
+
+        public Vote previewWindowClose(final Window window) {
+            Vote vote = Vote.APPROVE;
+
+            if (closeTransition == null) {
+                closeTransition = new FadeTransition(window,
+                    CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE);
+
+                closeTransition.start(new TransitionListener() {
+                    public void transitionCompleted(Transition transition) {
+                        window.close();
+                    }
+                });
+
+                vote = Vote.DEFER;
+            } else {
+                vote = (closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
             }
 
-            return false;
+            return vote;
         }
 
-        public boolean keyReleased(Component component, int keyCode,
-            Keyboard.KeyLocation keyLocation) {
-            return false;
+        public void windowCloseVetoed(Window window, Vote reason) {
+            if (reason == Vote.DENY
+                && closeTransition != null) {
+                closeTransition.stop();
+                closeTransition = null;
+            }
         }
-    }
+
+        public void windowClosed(Window window, Display display) {
+            closeTransition = null;
+            getComponent().requestFocus();
+        }
+    };
 
     private Font font;
     private Color color;
@@ -89,13 +109,12 @@ public class TerraCalendarButtonSkin extends ButtonSkin
     private Color pressedBevelColor;
     private Color disabledBevelColor;
 
-    private Calendar calendar = null;
-    private Border calendarBorder = null;
-    private Popup calendarPopup = null;
-
-    private boolean pressed = false;
+    private Transition closeTransition = null;
 
     private static final int TRIGGER_WIDTH = 14;
+
+    private static final int CLOSE_TRANSITION_DURATION = 150;
+    private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraCalendarButtonSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -107,54 +126,37 @@ public class TerraCalendarButtonSkin extends ButtonSkin
         disabledBackgroundColor = theme.getColor(10);
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
-        padding = new Insets(3);
+        padding = new Insets(2, 3, 2, 3);
 
         // Set the derived colors
         bevelColor = TerraTheme.brighten(backgroundColor);
         pressedBevelColor = TerraTheme.darken(backgroundColor);
         disabledBevelColor = disabledBackgroundColor;
 
-        // Create the calendar and border
-        calendar = new Calendar();
+        calendarPopup.getWindowStateListeners().add(calendarPopupStateListener);
+
+        // Create the border
         calendarBorder = new Border(calendar);
-        calendarBorder.getStyles().put("padding", new Insets(0));
+        calendarBorder.getStyles().put("padding", 0);
+        calendarBorder.getStyles().put("color", borderColor);
 
-        // Create the popup
-        calendarPopup = new Popup(calendarBorder);
-        calendarPopup.getComponentKeyListeners().add(new CalendarPopupKeyHandler());
-    }
-
-    @Override
-    public void install(Component component) {
-        super.install(component);
-
-        CalendarButton calendarButton = (CalendarButton)component;
-        calendarButton.getCalendarButtonSelectionListeners().add(this);
-
-        calendar.setYear(calendarButton.getYear());
-        calendar.setMonth(calendarButton.getMonth());
-
-        calendarBorder.getStyles().put("borderColor", borderColor);
-    }
-
-    @Override
-    public void uninstall() {
-        CalendarButton calendarButton = (CalendarButton)getComponent();
-
-        calendarPopup.close();
-        calendarButton.getCalendarButtonSelectionListeners().remove(this);
-
-        super.uninstall();
+        // Set the popup content
+        calendarPopup.setContent(calendarBorder);
     }
 
     @SuppressWarnings("unchecked")
     public int getPreferredWidth(int height) {
         CalendarButton calendarButton = (CalendarButton)getComponent();
 
-        Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
+        // Include padding in constraint
+        if (height != -1) {
+            height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+        }
 
         // Determine the preferred width of the current button data
-        dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
+        Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
+        dataRenderer.render(calendarButton.getButtonData(),
+            calendarButton, false);
         int preferredWidth = dataRenderer.getPreferredWidth(-1);
 
         preferredWidth += TRIGGER_WIDTH + padding.left + padding.right + 2;
@@ -195,7 +197,8 @@ public class TerraCalendarButtonSkin extends ButtonSkin
 
         if (calendarButton.isEnabled()) {
             backgroundColor = this.backgroundColor;
-            bevelColor = (pressed) ? pressedBevelColor : this.bevelColor;
+            bevelColor = (pressed
+                || (calendarPopup.isOpen() && closeTransition == null)) ? pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
         } else {
             backgroundColor = disabledBackgroundColor;
@@ -203,43 +206,35 @@ public class TerraCalendarButtonSkin extends ButtonSkin
             borderColor = disabledBorderColor;
         }
 
-        // Paint the background
-        graphics.setPaint(backgroundColor);
-        graphics.fillRect(0, 0, width, height);
-
-        // Draw all lines with a 1px solid stroke
         graphics.setStroke(new BasicStroke());
 
-        // Paint the bevel
-        graphics.setPaint(bevelColor);
-        graphics.drawLine(1, 1, width - 2, 1);
+        // Paint the background
+        graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
+            width / 2, height / 2, backgroundColor));
+        graphics.fillRect(0, 0, width, height);
 
         // Paint the border
         graphics.setPaint(borderColor);
 
-        int contentX = 0;
-        int contentY = 0;
-        int contentWidth = Math.max(width - TRIGGER_WIDTH - 1, 0);
-        int contentHeight = Math.max(height - 1, 0);
+        Bounds contentBounds = new Bounds(0, 0,
+            Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(height - 1, 0));
+        graphics.drawRect(contentBounds.x, contentBounds.y, contentBounds.width, contentBounds.height);
 
-        graphics.drawRect(contentX, contentY, contentWidth, contentHeight);
-
-        int triggerX = Math.max(width - TRIGGER_WIDTH - 1, 0);
-        int triggerY = 0;
-        int triggerHeight = Math.max(height - 1, 0);
-
-        graphics.drawRect(triggerX, triggerY, TRIGGER_WIDTH, triggerHeight);
+        Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
+            TRIGGER_WIDTH, Math.max(height - 1, 0));
+        graphics.drawRect(triggerBounds.x, triggerBounds.y, triggerBounds.width, triggerBounds.height);
 
         // Paint the content
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
         dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
-        dataRenderer.setSize(Math.max(contentWidth - (padding.left + padding.right + 2) + 1, 0),
-            Math.max(contentHeight - (padding.top + padding.bottom + 2) + 1, 0));
+        dataRenderer.setSize(Math.max(contentBounds.width - (padding.left + padding.right + 2) + 1, 0),
+            Math.max(contentBounds.height - (padding.top + padding.bottom + 2) + 1, 0));
 
         Graphics2D contentGraphics = (Graphics2D)graphics.create();
         contentGraphics.translate(padding.left + 1, padding.top + 1);
         contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
         dataRenderer.paint(contentGraphics);
+        contentGraphics.dispose();
 
         // Paint the focus state
         if (calendarButton.isFocused()) {
@@ -252,8 +247,8 @@ public class TerraCalendarButtonSkin extends ButtonSkin
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.drawRect(2, 2, Math.max(contentWidth - 4, 0),
-                Math.max(contentHeight - 4, 0));
+            graphics.drawRect(2, 2, Math.max(contentBounds.width - 4, 0),
+                Math.max(contentBounds.height - 4, 0));
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -270,169 +265,201 @@ public class TerraCalendarButtonSkin extends ButtonSkin
         triggerGraphics.setStroke(new BasicStroke(0));
         triggerGraphics.setPaint(color);
 
-        int tx = triggerX + Math.round((TRIGGER_WIDTH
+        int tx = triggerBounds.x + Math.round((triggerBounds.width
             - triggerIconShape.getBounds().width) / 2f);
-        int ty = triggerY + Math.round((triggerHeight
+        int ty = triggerBounds.y + Math.round((triggerBounds.height
             - triggerIconShape.getBounds().height) / 2f);
         triggerGraphics.translate(tx, ty);
 
         triggerGraphics.draw(triggerIconShape);
         triggerGraphics.fill(triggerIconShape);
+
+        triggerGraphics.dispose();
     }
 
-    @Override
-    public void mouseOut(Component component) {
-        super.mouseOut(component);
-
-        if (pressed) {
-            pressed = false;
-            repaintComponent();
-        }
+    public Font getFont() {
+        return font;
     }
 
-    @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(component, button, x, y);
-
-        pressed = true;
-        repaintComponent();
-
-        consumed |= calendarPopup.isOpen();
-
-        return consumed;
-    }
-
-    @Override
-    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseUp(component, button, x, y);
-
-        pressed = false;
-        repaintComponent();
-
-        return consumed;
-    }
-
-    @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        CalendarButton calendarButton = (CalendarButton)getComponent();
-
-        calendarButton.requestFocus();
-        calendarButton.press();
-    }
-
-    @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
-
-        if (keyCode == Keyboard.KeyCode.SPACE) {
-            pressed = true;
-            repaintComponent();
-            consumed = true;
-        } else {
-            consumed = super.keyPressed(component, keyCode, keyLocation);
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        return consumed;
+        this.font = font;
+        invalidateComponent();
     }
 
-    @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
-
-        CalendarButton calendarButton = (CalendarButton)getComponent();
-
-        if (keyCode == Keyboard.KeyCode.SPACE) {
-            pressed = false;
-            repaintComponent();
-
-            calendarButton.press();
-        } else {
-            consumed = super.keyReleased(component, keyCode, keyLocation);
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
         }
 
-        return consumed;
+        setFont(Font.decode(font));
     }
 
-    // CalendarButton.Skin methods
-
-    public Calendar getCalendar() {
-        return calendar;
+    public Color getColor() {
+        return color;
     }
 
-    // ComponentStateListener methods
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
 
-    @Override
-    public void enabledChanged(Component component) {
-        super.enabledChanged(component);
-
-        calendarPopup.close();
-
-        pressed = false;
+        this.color = color;
         repaintComponent();
     }
 
-    @Override
-    public void focusedChanged(Component component, boolean temporary) {
-        super.focusedChanged(component, temporary);
-
-        // Close the popup if focus was transferred to a component whose
-        // window is not the popup
-        if (!component.isFocused()) {
-            Component focusedComponent = Component.getFocusedComponent();
-            if (focusedComponent != null
-                && focusedComponent.getWindow() != calendarPopup) {
-                calendarPopup.close();
-            }
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
         }
 
-        pressed = false;
+        setColor(decodeColor(color));
+    }
+
+    public Color getDisabledColor() {
+        return disabledColor;
+    }
+
+    public void setDisabledColor(Color disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        this.disabledColor = disabledColor;
         repaintComponent();
     }
 
-    // ButtonPressListener methods
-
-    public void buttonPressed(Button button) {
-        if (calendarPopup.isOpen()) {
-            calendarPopup.close();
-        } else {
-            CalendarButton calendarButton = (CalendarButton)button;
-
-            // Determine the popup's location and preferred size, relative
-            // to the button
-            Display display = calendarButton.getDisplay();
-            Point displayCoordinates = calendarButton.mapPointToAncestor(display, 0, 0);
-            displayCoordinates.y += getHeight() - 1;
-
-            // TODO Ensure that the popup remains within the bounds of the display
-            calendarPopup.setLocation(displayCoordinates);
-            calendarPopup.open(calendarButton);
+    public final void setDisabledColor(String disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
         }
+
+        setDisabledColor(decodeColor(disabledColor));
     }
 
-    // CalendarButtonListener methods
-
-    public void yearChanged(CalendarButton calendarButton, int previousYear) {
-        // No-op
+    public Color getBackgroundColor() {
+        return backgroundColor;
     }
 
-    public void monthChanged(CalendarButton calendarButton, int previousMonth) {
-        // No-op
+    public void setBackgroundColor(Color backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null.");
+        }
+
+        this.backgroundColor = backgroundColor;
+        bevelColor = TerraTheme.brighten(backgroundColor);
+        pressedBevelColor = TerraTheme.darken(backgroundColor);
+        repaintComponent();
     }
 
-    public void selectedDateKeyChanged(CalendarButton calendarButton,
-        String previousSelectedDateKey) {
-        // No-op
+    public final void setBackgroundColor(String backgroundColor) {
+        if (backgroundColor == null) {
+            throw new IllegalArgumentException("backgroundColor is null.");
+        }
+
+        setBackgroundColor(decodeColor(backgroundColor));
     }
 
-    // CalendarButtonSelectionListener methods
-
-    public void selectedDateChanged(CalendarButton calendarButton,
-        CalendarDate previousSelectedDate) {
-        CalendarDate selectedDate = calendarButton.getSelectedDate();
-        calendar.setSelectedDate((CalendarDate)null);
-        calendarButton.setButtonData(selectedDate);
-
-        calendarPopup.close();
-        getComponent().requestFocus();
+    public Color getDisabledBackgroundColor() {
+        return disabledBackgroundColor;
     }
+
+    public void setDisabledBackgroundColor(Color disabledBackgroundColor) {
+        if (disabledBackgroundColor == null) {
+            throw new IllegalArgumentException("disabledBackgroundColor is null.");
+        }
+
+        this.disabledBackgroundColor = disabledBackgroundColor;
+        disabledBevelColor = disabledBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
+        if (disabledBackgroundColor == null) {
+            throw new IllegalArgumentException("disabledBackgroundColor is null.");
+        }
+
+        setDisabledBackgroundColor(decodeColor(disabledBackgroundColor));
+    }
+
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
+        }
+
+        this.borderColor = borderColor;
+        calendarBorder.getStyles().put("color", borderColor);
+        repaintComponent();
+    }
+
+    public final void setBorderColor(String borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
+        }
+
+        setBorderColor(decodeColor(borderColor));
+    }
+
+    public Color getDisabledBorderColor() {
+        return disabledBorderColor;
+    }
+
+    public void setDisabledBorderColor(Color disabledBorderColor) {
+        if (disabledBorderColor == null) {
+            throw new IllegalArgumentException("disabledBorderColor is null.");
+        }
+
+        this.disabledBorderColor = disabledBorderColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledBorderColor(String disabledBorderColor) {
+        if (disabledBorderColor == null) {
+            throw new IllegalArgumentException("disabledBorderColor is null.");
+        }
+
+        setDisabledBorderColor(decodeColor(disabledBorderColor));
+    }
+
+    public Insets getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Insets padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        this.padding = padding;
+        invalidateComponent();
+    }
+
+    public final void setPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(int padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
+    }
+
+    // TODO Calendar pass-through styles
 }

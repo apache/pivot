@@ -16,194 +16,212 @@
 package pivot.wtk.skin.terra;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
-import pivot.collections.ArrayList;
 import pivot.util.CalendarDate;
 import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Calendar;
 import pivot.wtk.CalendarListener;
 import pivot.wtk.CalendarSelectionListener;
-import pivot.wtk.CardPane;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
-import pivot.wtk.PushButton;
+import pivot.wtk.Spinner;
 import pivot.wtk.TablePane;
-import pivot.wtk.VerticalAlignment;
-import pivot.wtk.skin.ComponentSkin;
-import pivot.wtk.skin.ContainerSkin;
+import pivot.wtk.Theme;
+import pivot.wtk.content.ButtonDataRenderer;
+import pivot.wtk.skin.ButtonSkin;
+import pivot.wtk.skin.CalendarSkin;
 
 /**
- * calendar skin.
+ * Terra calendar skin.
  *
- * @author tvolkert
+ * @author gbrown
  */
-public class TerraCalendarSkin extends ContainerSkin
+public class TerraCalendarSkin extends CalendarSkin
     implements CalendarListener, CalendarSelectionListener {
-
-    /**
-     * calendar calendar view component.
-     *
-     * @author tvolkert
-     */
-    public static class CalendarView extends Component {
-        private Calendar calendar;
-
-        public CalendarView(Calendar calendar) {
-            this.calendar = calendar;
-
-            installSkin(CalendarView.class);
+    public class DateButton extends Button {
+        public DateButton() {
+            this(null);
         }
 
-        public Calendar getCalendar() {
-            return calendar;
+        public DateButton(Object buttonData) {
+            super(buttonData);
+
+            setToggleButton(true);
+            setDataRenderer(DEFAULT_DATA_RENDERER);
+
+            setSkin(new DateButtonSkin());
+        }
+
+        public void press() {
+            if (isToggleButton()) {
+                State state = getState();
+
+                if (state == State.SELECTED) {
+                    setState(State.UNSELECTED);
+                }
+                else if (state == State.UNSELECTED) {
+                    setState(isTriState() ? State.MIXED : State.SELECTED);
+                }
+                else {
+                    setState(State.SELECTED);
+                }
+            }
+
+            super.press();
         }
     }
 
-    /**
-     * calendar calendar view component skin.
-     *
-     * @author tvolkert
-     */
-    public static class CalendarViewSkin extends ComponentSkin {
-        private ArrayList<String> daysOfWeek = new ArrayList<String>();
-
-        public CalendarViewSkin() {
-            GregorianCalendar calendar = new GregorianCalendar(0, 0, 1);
-            calendar.set(java.util.Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE");
-
-            for (int i = 0; i < 7; i++) {
-                Date date = calendar.getTime();
-                daysOfWeek.add(dateFormat.format(date));
-                calendar.add(java.util.Calendar.DAY_OF_WEEK, 1);
-            }
-        }
-
+    public class DateButtonSkin extends ButtonSkin {
         public int getPreferredWidth(int height) {
-            return 100;
+            DateButton dateButton = (DateButton)getComponent();
+
+            int preferredWidth = 0;
+
+            Button.DataRenderer dataRenderer = dateButton.getDataRenderer();
+            dataRenderer.render(dateButton.getButtonData(), dateButton, false);
+
+            preferredWidth = dataRenderer.getPreferredWidth(height) + padding * 2;
+
+            return preferredWidth;
         }
 
         public int getPreferredHeight(int width) {
-            return 100;
+            int preferredHeight = 0;
+
+            DateButton dateButton = (DateButton)getComponent();
+
+            Button.DataRenderer dataRenderer = dateButton.getDataRenderer();
+            dataRenderer.render(dateButton.getButtonData(), dateButton, false);
+
+            preferredHeight = dataRenderer.getPreferredHeight(width) + padding * 2;
+
+            return preferredHeight;
         }
 
         public Dimensions getPreferredSize() {
-            // TODO Optimize
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
-        }
+            DateButton dateButton = (DateButton)getComponent();
 
-        public void layout() {
-            // No-op
+            Button.DataRenderer dataRenderer = dateButton.getDataRenderer();
+            dataRenderer.render(dateButton.getButtonData(), dateButton, false);
+
+            Dimensions preferredSize = dataRenderer.getPreferredSize();
+
+            preferredSize.width += padding * 2;
+            preferredSize.height += padding * 2;
+
+            return preferredSize;
         }
 
         public void paint(Graphics2D graphics) {
+            DateButton dateButton = (DateButton)getComponent();
+
             int width = getWidth();
             int height = getHeight();
 
-            graphics.setPaint(Color.WHITE);
-            graphics.fill(new Rectangle2D.Double(0, 0, width, height));
+            // TODO Paint highlight/selection state
 
-            // TODO
+            Button.DataRenderer dataRenderer = dateButton.getDataRenderer();
+            dataRenderer.render(dateButton.getButtonData(), dateButton, highlighted);
+            dataRenderer.setSize(width - padding * 2, height - padding * 2);
+
+            graphics.translate(padding, padding);
+            dataRenderer.paint(graphics);
+        }
+
+        public Font getFont() {
+            return font;
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public Color getDisabledColor() {
+            return disabledColor;
         }
     }
 
-    private TablePane tablePane = new TablePane();
-    private PushButton yearPrevButton = new PushButton("<");
-    private PushButton yearNextButton = new PushButton(">");
-    private PushButton monthPrevButton = new PushButton("<");
-    private PushButton monthNextButton = new PushButton(">");
-    private CardPane monthCardPane = new CardPane();
-    private Label yearLabel = new Label();
-    private CalendarView calendarView;
+    private TablePane tablePane;
+    private Spinner monthSpinner;
+    private Spinner yearSpinner;
+
+    private DateButton[][] dateButtons = new DateButton[6][7];
+    private Button.Group dateButtonGroup;
+
+    private Font font;
+    private Color color;
+    private Color disabledColor;
+    private int padding = 4;
+
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
     public TerraCalendarSkin() {
-        tablePane.getRows().add(new TablePane.Row(-1));
-        tablePane.getRows().add(new TablePane.Row(-1));
-        tablePane.getColumns().add(new TablePane.Column(-1));
-        tablePane.getColumns().add(new TablePane.Column(1, true));
-        tablePane.getColumns().add(new TablePane.Column(-1));
-        tablePane.getStyles().put("backgroundColor", new Color(0xE6, 0xE3, 0xDA));
-        tablePane.getStyles().put("verticalSpacing", 1);
-        tablePane.getStyles().put("showHorizontalGridLines", true);
-        tablePane.getStyles().put("gridColor", new Color(0x99, 0x99, 0x99));
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        font = theme.getFont();
+        color = theme.getColor(13);
+        disabledColor = theme.getColor(7);
 
-        GregorianCalendar calendar = new GregorianCalendar(0, 0, 15);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM");
-
-        for (int i = 0; i < 12; i++) {
-            calendar.set(java.util.Calendar.MONTH, i);
-            Date date = calendar.getTime();
-            Label label = new Label(dateFormat.format(date));
-            label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-            monthCardPane.add(label);
+        // Create the table pane
+        tablePane = new TablePane();
+        for (int i = 0; i < 7; i++) {
+            tablePane.getColumns().add(new TablePane.Column(1, true));
         }
 
-        FlowPane monthFlowPane = new FlowPane();
-        monthFlowPane.getStyles().put("padding", 2);
-        monthFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        tablePane.setCellComponent(0, 0, monthFlowPane);
-        monthFlowPane.add(monthPrevButton);
-        monthFlowPane.add(monthCardPane);
-        monthFlowPane.add(monthNextButton);
+        // TODO Set custom data models and renderers on spinners
+        // NOTE Month renderer should use locale-specific strings
 
-        FlowPane yearFlowPane = new FlowPane();
-        yearFlowPane.getStyles().put("padding", 2);
-        yearFlowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        tablePane.setCellComponent(0, 2, yearFlowPane);
-        yearFlowPane.add(yearPrevButton);
-        yearFlowPane.add(yearLabel);
-        yearFlowPane.add(yearNextButton);
+        monthSpinner = new Spinner();
+        yearSpinner = new Spinner();
 
-        monthPrevButton.getButtonPressListeners().add(new ButtonPressListener() {
-            public void buttonPressed(Button button) {
-                Calendar calendar = (Calendar)getComponent();
-                int month = calendar.getMonth();
+        TablePane.Row row;
 
-                if (month == 0) {
-                    calendar.setMonth(11);
-                    calendar.setYear(calendar.getYear() - 1);
-                } else {
-                    calendar.setMonth(month - 1);
-                }
+        // Add the month/year flow pane
+        FlowPane monthYearFlowPane = new FlowPane();
+        monthYearFlowPane.getStyles().put("padding", 2);
+
+        monthYearFlowPane.add(monthSpinner);
+        monthYearFlowPane.add(yearSpinner);
+
+        row = new TablePane.Row();
+        row.add(monthYearFlowPane);
+        tablePane.getRows().add(row);
+
+        TablePane.setColumnSpan(monthYearFlowPane, 7);
+
+        // Add the day labels
+        row = new TablePane.Row();
+        for (int i = 0; i < 7; i++) {
+            // TODO Get a locale-specific abbreviation
+            Label label = new Label(Integer.toString(i));
+            label.getStyles().put("fontBold", true);
+            label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
+            row.add(label);
+        }
+
+        tablePane.getRows().add(row);
+
+        // Add the buttons
+        dateButtonGroup = new Button.Group();
+
+        for (int j = 0; j < 6; j++) {
+            row = new TablePane.Row(1, true);
+
+            for (int i = 0; i < 7; i++) {
+                // TODO Remove the index values
+                DateButton dateButton = new DateButton(Integer.toString(i * j + i));
+                dateButtons[j][i] = dateButton;
+                dateButton.setGroup(dateButtonGroup);
+
+                row.add(dateButton);
             }
-        });
 
-        monthNextButton.getButtonPressListeners().add(new ButtonPressListener() {
-            public void buttonPressed(Button button) {
-                Calendar calendar = (Calendar)getComponent();
-                int month = calendar.getMonth();
-
-                if (month == 11) {
-                    calendar.setMonth(0);
-                    calendar.setYear(calendar.getYear() + 1);
-                } else {
-                    calendar.setMonth(month + 1);
-                }
-            }
-        });
-
-        yearPrevButton.getButtonPressListeners().add(new ButtonPressListener() {
-            public void buttonPressed(Button button) {
-                Calendar calendar = (Calendar)getComponent();
-                calendar.setYear(calendar.getYear() - 1);
-            }
-        });
-
-        yearNextButton.getButtonPressListeners().add(new ButtonPressListener() {
-            public void buttonPressed(Button button) {
-                Calendar calendar = (Calendar)getComponent();
-                calendar.setYear(calendar.getYear() + 1);
-            }
-        });
+            tablePane.getRows().add(row);
+        }
     }
 
     @Override
@@ -211,27 +229,15 @@ public class TerraCalendarSkin extends ContainerSkin
         super.install(component);
 
         Calendar calendar = (Calendar)component;
-        calendar.getCalendarListeners().add(this);
-        calendar.getCalendarSelectionListeners().add(this);
-
         calendar.add(tablePane);
 
-        calendarView = new CalendarView(calendar);
-        tablePane.setCellComponent(1, 0, calendarView);
-        TablePane.setColumnSpan(calendarView, 3);
-
-        updateYear();
-        updateMonth();
+        updateCalendar();
     }
 
     @Override
     public void uninstall() {
         Calendar calendar = (Calendar)getComponent();
-        calendar.getCalendarListeners().remove(this);
-        calendar.getCalendarSelectionListeners().remove(this);
-
         calendar.remove(tablePane);
-        calendar.remove(calendar);
 
         super.uninstall();
     }
@@ -256,35 +262,42 @@ public class TerraCalendarSkin extends ContainerSkin
         tablePane.setLocation(0, 0);
     }
 
-    private void updateYear() {
-        Calendar calendar = (Calendar)getComponent();
-        yearLabel.setText(String.valueOf(calendar.getYear()));
+    private void updateCalendar() {
+        // TODO Update month/year spinners
+
+        for (int j = 0; j < 6; j++) {
+            for (int i = 0; i < 7; i++) {
+                DateButton dateButton = dateButtons[j][i];
+
+                // TODO
+            }
+        }
     }
 
-    private void updateMonth() {
-        Calendar calendar = (Calendar)getComponent();
-        monthCardPane.setSelectedIndex(calendar.getMonth());
-    }
-
-    // CalendarListener methods
-
+    // Calendar events
+    @Override
     public void yearChanged(Calendar calendar, int previousYear) {
-        updateYear();
+        updateCalendar();
     }
 
+    @Override
     public void monthChanged(Calendar calendar, int previousMonth) {
-        updateMonth();
+        updateCalendar();
     }
 
+    @Override
     public void selectedDateKeyChanged(Calendar calendar,
         String previousSelectedDateKey) {
-        // TODO
+        // No-op
     }
 
-    // CalendarSelectionListener methods
-
-    public void selectedDateChanged(Calendar calendar,
-        CalendarDate previousSelectedDate) {
-        // TODO
+    // Calendar selection events
+    @Override
+    public void selectedDateChanged(Calendar calendar, CalendarDate previousSelectedDate) {
+        CalendarDate date = calendar.getSelectedDate();
+        if (date.getYear() == calendar.getYear()
+            && date.getMonth() == calendar.getMonth()) {
+            repaintComponent();
+        }
     }
 }

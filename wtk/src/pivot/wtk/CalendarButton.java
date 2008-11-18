@@ -25,18 +25,9 @@ import pivot.wtk.content.ButtonDataRenderer;
  * is hidden until the user pushes the button.
  *
  * @author tvolkert
+ * @author gbrown
  */
 public class CalendarButton extends Button {
-    /**
-     * Calendar button skin interface. calendar button skins are required
-     * to implement this.
-     *
-     * @author tvolkert
-     */
-    public interface Skin {
-        public Calendar getCalendar();
-    }
-
     /**
      * Calendar button listener list.
      *
@@ -67,7 +58,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * calendar button selection listener list.
+     * Calendar button selection listener list.
      *
      * @author tvolkert
      */
@@ -83,45 +74,48 @@ public class CalendarButton extends Button {
         }
     }
 
+    private int year;
+    private int month;
+    private CalendarDate selectedDate = null;
+    private String selectedDateKey = null;
+
     private CalendarButtonListenerList calendarButtonListeners =
         new CalendarButtonListenerList();
     private CalendarButtonSelectionListenerList calendarButtonSelectionListeners =
         new CalendarButtonSelectionListenerList();
 
+    // TODO This should be a renderer that can present dates
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
-    /**
-     * Creates a blank calendar button whose calendar is set to the
-     * current month and year in the default timezone in the default locale.
-     */
     public CalendarButton() {
-        this(null);
+        this(null, new CalendarDate());
     }
 
-    /**
-     * Creates a calendar button with the given button data and whose date
-     * picker is set to the current month and year in the default timezone in
-     * the default locale.
-     *
-     * @param buttonData
-     * The button's button data
-     */
     public CalendarButton(Object buttonData) {
+        this(buttonData, new CalendarDate());
+    }
+
+    public CalendarButton(CalendarDate calendarDate) {
+        this(null, calendarDate);
+    }
+
+    public CalendarButton(int year, int month) {
+        this(null, year, month);
+    }
+
+    public CalendarButton(Object buttonData, CalendarDate calendarDate) {
+        this(buttonData, calendarDate.getYear(), calendarDate.getMonth());
+    }
+
+    public CalendarButton(Object buttonData, int year, int month) {
         super(buttonData);
+
+        this.year = year;
+        this.month = month;
 
         setDataRenderer(DEFAULT_DATA_RENDERER);
 
         installSkin(CalendarButton.class);
-    }
-
-    @Override
-    protected void setSkin(pivot.wtk.Skin skin) {
-        if (!(skin instanceof CalendarButton.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + CalendarButton.Skin.class.getName());
-        }
-
-        super.setSkin(skin);
     }
 
     /**
@@ -130,7 +124,7 @@ public class CalendarButton extends Button {
      */
     @Override
     public void setToggleButton(boolean toggleButton) {
-        throw new UnsupportedOperationException("calendar buttons cannot be toggle buttons.");
+        throw new UnsupportedOperationException("Calendar buttons cannot be toggle buttons.");
     }
 
     /**
@@ -140,10 +134,7 @@ public class CalendarButton extends Button {
      * The calendar year.
      */
     public int getYear() {
-        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
-        Calendar calendar = calendarButtonSkin.getCalendar();
-
-        return calendar.getYear();
+        return year;
     }
 
     /**
@@ -155,12 +146,10 @@ public class CalendarButton extends Button {
      * The year
      */
     public void setYear(int year) {
-        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
-        Calendar calendar = calendarButtonSkin.getCalendar();
-        int previousYear = calendar.getYear();
+        int previousYear = this.year;
 
         if (previousYear != year) {
-            calendar.setYear(year);
+            this.year = year;
             calendarButtonListeners.yearChanged(this, previousYear);
         }
     }
@@ -172,10 +161,7 @@ public class CalendarButton extends Button {
      * The calendar month.
      */
     public int getMonth() {
-        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
-        Calendar calendar = calendarButtonSkin.getCalendar();
-
-        return calendar.getMonth();
+        return month;
     }
 
     /**
@@ -187,12 +173,10 @@ public class CalendarButton extends Button {
      * The month
      */
     public void setMonth(int month) {
-        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
-        Calendar calendar = calendarButtonSkin.getCalendar();
-        int previousMonth = calendar.getMonth();
+        int previousMonth = this.month;
 
         if (previousMonth != month) {
-            calendar.setMonth(month);
+            this.month = month;
             calendarButtonListeners.monthChanged(this, previousMonth);
         }
     }
@@ -201,29 +185,23 @@ public class CalendarButton extends Button {
      * Returns the currently selected date.
      *
      * @return
-     * The currently selected date, or <tt>null</tt> if nothing is selected
+     * The currently selected date, or <tt>null</tt> if nothing is selected.
      */
     public CalendarDate getSelectedDate() {
-        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
-        Calendar calendar = calendarButtonSkin.getCalendar();
-
-        return calendar.getSelectedDate();
+        return selectedDate;
     }
 
     /**
      * Sets the selected date.
      *
      * @param selectedDate
-     * The date to select, or <tt>null</tt> to clear the selection
+     * The date to select, or <tt>null</tt> to clear the selection.
      */
     public void setSelectedDate(CalendarDate selectedDate) {
-        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
-        Calendar calendar = calendarButtonSkin.getCalendar();
-        CalendarDate previousSelectedDate = calendar.getSelectedDate();
+        CalendarDate previousSelectedDate = this.selectedDate;
 
-        if ((selectedDate == null ^ previousSelectedDate == null)
-            || (selectedDate != null && !selectedDate.equals(previousSelectedDate))) {
-            calendar.setSelectedDate(selectedDate);
+        if (previousSelectedDate != selectedDate) {
+            this.selectedDate = selectedDate;
             calendarButtonSelectionListeners.selectedDateChanged(this,
                 previousSelectedDate);
         }
@@ -249,24 +227,17 @@ public class CalendarButton extends Button {
      * Gets the data binding key that is set on this calendar button.
      */
     public String getSelectedDateKey() {
-        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
-        Calendar calendar = calendarButtonSkin.getCalendar();
-
-        return calendar.getSelectedDateKey();
+        return selectedDateKey;
     }
 
     /**
      * Sets this calendar button's data binding key.
      */
     public void setSelectedDateKey(String selectedDateKey) {
-        CalendarButton.Skin calendarButtonSkin = (CalendarButton.Skin)getSkin();
-        Calendar calendar = calendarButtonSkin.getCalendar();
+        String previousSelectedDateKey = this.selectedDateKey;
 
-        String previousSelectedDateKey = calendar.getSelectedDateKey();
-
-        if ((selectedDateKey == null ^ previousSelectedDateKey == null)
-            || (selectedDateKey != null && !selectedDateKey.equals(previousSelectedDateKey))) {
-            calendar.setSelectedDateKey(selectedDateKey);
+        if (previousSelectedDateKey != selectedDateKey) {
+            this.selectedDateKey = selectedDateKey;
             calendarButtonListeners.selectedDateKeyChanged(this,
                 previousSelectedDateKey);
         }

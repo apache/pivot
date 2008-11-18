@@ -32,13 +32,9 @@ import pivot.wtk.ListView;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.Popup;
-import pivot.wtk.Window;
 
 /**
  * Abstract base class for list button skins.
- * <p>
- * TODO Extend Popup instead of adding event listeners? May slightly simplify
- * implementation.
  * <p>
  * TODO Rather than blindly closing when a mouse down is received, we could
  * instead cache the selection state in the popup's container mouse down event
@@ -274,18 +270,16 @@ public abstract class ListButtonSkin extends ButtonSkin
         } else {
             ListButton listButton = (ListButton)button;
 
-            Component content = listViewPopup.getContent();
-
             if (listButton.getListData().getLength() > 0) {
                 // Determine the popup's location and preferred size, relative
                 // to the button
-                Window window = listButton.getWindow();
+                Display display = listButton.getDisplay();
 
-                if (window != null) {
+                if (display != null) {
                     int width = getWidth();
                     int height = getHeight();
 
-                    Display display = listButton.getDisplay();
+                    Component content = listViewPopup.getContent();
 
                     // Ensure that the popup remains within the bounds of the display
                     Point buttonLocation = listButton.mapPointToAncestor(display, 0, 0);
