@@ -24,6 +24,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 
 import pivot.collections.Dictionary;
+import pivot.util.CalendarDate;
 import pivot.util.Vote;
 import pivot.wtk.Border;
 import pivot.wtk.Button;
@@ -111,6 +112,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
     private Transition closeTransition = null;
 
+    private static final CalendarDate SAMPLE_DATE = new CalendarDate(2000, 0, 0);
     private static final int TRIGGER_WIDTH = 14;
 
     private static final int CLOSE_TRANSITION_DURATION = 150;
@@ -153,22 +155,20 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
             height = Math.max(height - (padding.top + padding.bottom + 2), 0);
         }
 
-        // Determine the preferred width of the current button data
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
-        dataRenderer.render(calendarButton.getButtonData(),
-            calendarButton, false);
-        int preferredWidth = dataRenderer.getPreferredWidth(-1);
+        dataRenderer.render(SAMPLE_DATE, calendarButton, false);
 
-        preferredWidth += TRIGGER_WIDTH + padding.left + padding.right + 2;
+        int preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH
+            + padding.left + padding.right + 2;
 
         return preferredWidth;
     }
 
     public int getPreferredHeight(int width) {
         CalendarButton calendarButton = (CalendarButton)getComponent();
-        Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
 
-        dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
+        Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
+        dataRenderer.render(SAMPLE_DATE, calendarButton, false);
 
         int preferredHeight = dataRenderer.getPreferredHeight(-1)
             + padding.top + padding.bottom + 2;

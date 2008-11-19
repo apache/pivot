@@ -30,9 +30,11 @@ import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
 import pivot.wtk.Spinner;
+import pivot.wtk.SpinnerSelectionListener;
 import pivot.wtk.TablePane;
 import pivot.wtk.Theme;
 import pivot.wtk.content.ButtonDataRenderer;
+import pivot.wtk.content.NumericSpinnerData;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.CalendarSkin;
 
@@ -174,9 +176,20 @@ public class TerraCalendarSkin extends CalendarSkin
 
         // TODO Set custom data models and renderers on spinners
         // NOTE Month renderer should use locale-specific strings
-
         monthSpinner = new Spinner();
+        monthSpinner.setSpinnerData(new NumericSpinnerData(0, 11));
+
         yearSpinner = new Spinner();
+        yearSpinner.setSpinnerData(new NumericSpinnerData(0, Short.MAX_VALUE));
+
+        SpinnerSelectionListener spinnerSelectionListener = new SpinnerSelectionListener() {
+            public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
+                updateCalendar();
+            }
+        };
+
+        monthSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
+        yearSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
 
         TablePane.Row row;
 
@@ -231,6 +244,8 @@ public class TerraCalendarSkin extends CalendarSkin
         Calendar calendar = (Calendar)component;
         calendar.add(tablePane);
 
+        yearSpinner.setSelectedIndex(calendar.getYear());
+        monthSpinner.setSelectedIndex(calendar.getMonth());
         updateCalendar();
     }
 
@@ -277,11 +292,13 @@ public class TerraCalendarSkin extends CalendarSkin
     // Calendar events
     @Override
     public void yearChanged(Calendar calendar, int previousYear) {
+        yearSpinner.setSelectedIndex(calendar.getYear());
         updateCalendar();
     }
 
     @Override
     public void monthChanged(Calendar calendar, int previousMonth) {
+        monthSpinner.setSelectedIndex(calendar.getMonth());
         updateCalendar();
     }
 

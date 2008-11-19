@@ -15,6 +15,8 @@
  */
 package pivot.wtk.skin;
 
+import java.util.Locale;
+
 import pivot.util.CalendarDate;
 import pivot.wtk.Button;
 import pivot.wtk.Calendar;
@@ -134,6 +136,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
         calendar.setYear(calendarButton.getYear());
         calendar.setMonth(calendarButton.getMonth());
+        calendar.setLocale(calendarButton.getLocale());
     }
 
     @Override
@@ -305,6 +308,11 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     public void selectedDateKeyChanged(CalendarButton calendarButton,
         String previousSelectedDateKey) {
         // No-op
+    }
+
+    public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
+        calendar.setLocale(calendarButton.getLocale());
+        invalidateComponent();
     }
 
     // Calendar button selection events

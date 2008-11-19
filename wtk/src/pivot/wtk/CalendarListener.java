@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import java.util.Locale;
+
 /**
  * Calendar listener interface.
  *
@@ -45,4 +47,12 @@ public interface CalendarListener {
      */
     public void selectedDateKeyChanged(Calendar calendar,
         String previousSelectedDateKey);
+
+    /**
+     * Called when a calendar's locale has changed.
+     *
+     * @param calendar
+     * @param previousLocale
+     */
+    public void localeChanged(Calendar calendar, Locale previousLocale);
 }

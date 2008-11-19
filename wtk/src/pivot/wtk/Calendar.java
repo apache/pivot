@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import java.util.Locale;
+
 import pivot.collections.Dictionary;
 import pivot.util.CalendarDate;
 import pivot.util.ListenerList;
@@ -23,6 +25,7 @@ import pivot.util.ListenerList;
  * Component that allows the user to select a date.
  *
  * @author tvolkert
+ * @author gbrown
  */
 public class Calendar extends Container {
     /**
@@ -51,6 +54,12 @@ public class Calendar extends Container {
                 listener.selectedDateKeyChanged(calendar, previousSelectedDateKey);
             }
         }
+
+        public void localeChanged(Calendar calendar, Locale previousLocale) {
+            for (CalendarListener listener : this) {
+                listener.localeChanged(calendar, previousLocale);
+            }
+        }
     }
 
     /**
@@ -72,12 +81,18 @@ public class Calendar extends Container {
 
     private int year;
     private int month;
+
     private CalendarDate selectedDate = null;
     private String selectedDateKey = null;
+    private Locale locale = Locale.getDefault();
 
     private CalendarListenerList calendarListeners = new CalendarListenerList();
     private CalendarSelectionListenerList calendarSelectionListeners =
         new CalendarSelectionListenerList();
+
+    public static final String LANGUAGE_KEY = "language";
+    public static final String COUNTRY_KEY = "country";
+    public static final String VARIANT_KEY = "variant";
 
     public Calendar() {
         this(new CalendarDate());
@@ -149,8 +164,7 @@ public class Calendar extends Container {
     public void setSelectedDate(CalendarDate selectedDate) {
         CalendarDate previousSelectedDate = this.selectedDate;
 
-        if ((selectedDate == null ^ previousSelectedDate == null)
-            || (selectedDate != null && !selectedDate.equals(previousSelectedDate))) {
+        if (previousSelectedDate != selectedDate) {
             this.selectedDate = selectedDate;
             calendarSelectionListeners.selectedDateChanged(this, previousSelectedDate);
         }
@@ -189,6 +203,62 @@ public class Calendar extends Container {
             || (selectedDateKey != null && !selectedDateKey.equals(previousSelectedDateKey))) {
             this.selectedDateKey = selectedDateKey;
             calendarListeners.selectedDateKeyChanged(this, previousSelectedDateKey);
+        }
+    }
+
+    /**
+     * Returns the locale used to present calendar data.
+     */
+    public Locale getLocale() {
+        return locale;
+    }
+
+    /**
+     * Sets the locale used to present calendar data.
+     *
+     * @param locale
+     */
+    public void setLocale(Locale locale) {
+        if (locale == null) {
+            throw new IllegalArgumentException("locale is null.");
+        }
+
+        Locale previousLocale = this.locale;
+        if (previousLocale != locale) {
+            this.locale = locale;
+            calendarListeners.localeChanged(this, previousLocale);
+        }
+    }
+
+    /**
+     * Sets the locale used to present calendar data.
+     *
+     * @param locale
+     * An dictionary containing values for language, country, and variant.
+     * Country and variant are optional but the must adhere to the following
+     * rules:
+     *
+     * <ul>
+     * <li>If variant is specified, language and country are required;</li>
+     * <li>Otherwise, if country is specified, language is required;</li>
+     * <li>Otherwise, language is required.</li>
+     * </ul>
+     */
+    public void setLocale(Dictionary<String, ?> locale) {
+        if (locale == null) {
+            throw new IllegalArgumentException("locale is null.");
+        }
+
+        String language = (String)locale.get(LANGUAGE_KEY);
+        String country = (String)locale.get(COUNTRY_KEY);
+        String variant = (String)locale.get(VARIANT_KEY);
+
+        if (variant != null) {
+            setLocale(new Locale(language, country, variant));
+        } else if (country != null) {
+            setLocale(new Locale(language, country));
+        } else {
+            setLocale(new Locale(language));
         }
     }
 

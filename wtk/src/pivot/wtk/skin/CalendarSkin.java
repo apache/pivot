@@ -15,6 +15,8 @@
  */
 package pivot.wtk.skin;
 
+import java.util.Locale;
+
 import pivot.util.CalendarDate;
 import pivot.wtk.Calendar;
 import pivot.wtk.CalendarListener;
@@ -60,6 +62,10 @@ public abstract class CalendarSkin extends ContainerSkin
     public void selectedDateKeyChanged(Calendar calendar,
         String previousSelectedDateKey) {
         // No-op
+    }
+
+    public void localeChanged(Calendar calendar, Locale previousLocale) {
+        invalidateComponent();
     }
 
     // Calendar selection events

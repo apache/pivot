@@ -15,10 +15,12 @@
  */
 package pivot.wtk;
 
+import java.util.Locale;
+
 import pivot.collections.Dictionary;
 import pivot.util.CalendarDate;
 import pivot.util.ListenerList;
-import pivot.wtk.content.ButtonDataRenderer;
+import pivot.wtk.content.CalendarButtonDataRenderer;
 
 /**
  * A component that allows a user to select a calendar date. The calendar
@@ -55,6 +57,12 @@ public class CalendarButton extends Button {
                 listener.selectedDateKeyChanged(calendarButton, previousSelectedDateKey);
             }
         }
+
+        public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
+            for (CalendarButtonListener listener : this) {
+                listener.localeChanged(calendarButton, previousLocale);
+            }
+        }
     }
 
     /**
@@ -76,16 +84,21 @@ public class CalendarButton extends Button {
 
     private int year;
     private int month;
+
     private CalendarDate selectedDate = null;
     private String selectedDateKey = null;
+    private Locale locale = Locale.getDefault();
 
     private CalendarButtonListenerList calendarButtonListeners =
         new CalendarButtonListenerList();
     private CalendarButtonSelectionListenerList calendarButtonSelectionListeners =
         new CalendarButtonSelectionListenerList();
 
-    // TODO This should be a renderer that can present dates
-    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
+    public static final String LANGUAGE_KEY = "language";
+    public static final String COUNTRY_KEY = "country";
+    public static final String VARIANT_KEY = "variant";
+
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new CalendarButtonDataRenderer();
 
     public CalendarButton() {
         this(null, new CalendarDate());
@@ -240,6 +253,62 @@ public class CalendarButton extends Button {
             this.selectedDateKey = selectedDateKey;
             calendarButtonListeners.selectedDateKeyChanged(this,
                 previousSelectedDateKey);
+        }
+    }
+
+    /**
+     * Returns the locale used to present calendar data.
+     */
+    public Locale getLocale() {
+        return locale;
+    }
+
+    /**
+     * Sets the locale used to present calendar data.
+     *
+     * @param locale
+     */
+    public void setLocale(Locale locale) {
+        if (locale == null) {
+            throw new IllegalArgumentException("locale is null.");
+        }
+
+        Locale previousLocale = this.locale;
+        if (previousLocale != locale) {
+            this.locale = locale;
+            calendarButtonListeners.localeChanged(this, previousLocale);
+        }
+    }
+
+    /**
+     * Sets the locale used to present calendar data.
+     *
+     * @param locale
+     * An dictionary containing values for language, country, and variant.
+     * Country and variant are optional but the must adhere to the following
+     * rules:
+     *
+     * <ul>
+     * <li>If variant is specified, language and country are required;</li>
+     * <li>Otherwise, if country is specified, language is required;</li>
+     * <li>Otherwise, language is required.</li>
+     * </ul>
+     */
+    public void setLocale(Dictionary<String, ?> locale) {
+        if (locale == null) {
+            throw new IllegalArgumentException("locale is null.");
+        }
+
+        String language = (String)locale.get(LANGUAGE_KEY);
+        String country = (String)locale.get(COUNTRY_KEY);
+        String variant = (String)locale.get(VARIANT_KEY);
+
+        if (variant != null) {
+            setLocale(new Locale(language, country, variant));
+        } else if (country != null) {
+            setLocale(new Locale(language, country));
+        } else {
+            setLocale(new Locale(language));
         }
     }
 
