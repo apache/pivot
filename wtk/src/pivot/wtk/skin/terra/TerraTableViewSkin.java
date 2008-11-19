@@ -807,7 +807,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
+
         TableView tableView = (TableView)getComponent();
 
         if (isFocusable()) {
@@ -835,7 +837,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 } else {
                     // TODO Split the range by the disabled indexes; for now,
                     // just return
-                    return;
+                    return consumed;
                 }
 
                 tableView.setSelectedRanges(selectedRanges);
@@ -856,6 +858,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 }
             }
         }
+
+        return consumed;
     }
 
     @Override

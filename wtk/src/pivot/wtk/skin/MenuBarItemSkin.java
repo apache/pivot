@@ -120,11 +120,13 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     }
 
     @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        super.mouseClick(component, button, x, y, count);
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
 
         MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
         menuBarItem.press();
+
+        return consumed;
     }
 
     @Override
@@ -204,8 +206,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
 
                 // Listen for key events from the popup
                 menuPopup.getComponentKeyListeners().add(new ComponentKeyListener() {
-                    public void keyTyped(Component component, char character) {
-                        // No-op
+                    public boolean keyTyped(Component component, char character) {
+                        return false;
                     }
 
                     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

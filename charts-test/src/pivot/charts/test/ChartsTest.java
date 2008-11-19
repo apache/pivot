@@ -29,7 +29,7 @@ public class ChartsTest implements Application {
         }
 
         @SuppressWarnings("unchecked")
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             ChartView chartView = (ChartView)component;
             ChartView.Element element = chartView.getElementAt(x, y);
 
@@ -60,6 +60,8 @@ public class ChartsTest implements Application {
                 Alert.alert("You clicked element " + elementLabel + " in \""
                     + seriesDictionary.get(seriesNameKey) + "\".", frame);
             }
+
+            return false;
         }
     }
 

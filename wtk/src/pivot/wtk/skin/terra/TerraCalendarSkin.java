@@ -25,10 +25,12 @@ import pivot.wtk.Calendar;
 import pivot.wtk.CalendarListener;
 import pivot.wtk.CalendarSelectionListener;
 import pivot.wtk.Component;
+import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
+import pivot.wtk.Mouse;
 import pivot.wtk.Spinner;
 import pivot.wtk.SpinnerSelectionListener;
 import pivot.wtk.TablePane;
@@ -190,6 +192,23 @@ public class TerraCalendarSkin extends CalendarSkin
 
         monthSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
         yearSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
+
+        ComponentMouseButtonListener spinnerMouseButtonListener = new ComponentMouseButtonListener() {
+            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+                return false;
+            }
+
+            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+                return false;
+            }
+
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                return true;
+            }
+        };
+
+        monthSpinner.getComponentMouseButtonListeners().add(spinnerMouseButtonListener);
+        yearSpinner.getComponentMouseButtonListeners().add(spinnerMouseButtonListener);
 
         TablePane.Row row;
 

@@ -484,9 +484,9 @@ public class TerraScrollBarSkin extends ContainerSkin
                 return false;
             }
 
-            public void mouseClick(Component component, Mouse.Button button,
+            public boolean mouseClick(Component component, Mouse.Button button,
                 int x, int y, int count) {
-                // No-op
+                return false;
             }
         }
 
@@ -653,8 +653,9 @@ public class TerraScrollBarSkin extends ContainerSkin
             return false;
         }
 
-        public void mouseClick(Component component, Mouse.Button button, int x, int y,
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
             int count) {
+            return false;
         }
     }
 

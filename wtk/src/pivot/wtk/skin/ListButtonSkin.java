@@ -50,8 +50,8 @@ public abstract class ListButtonSkin extends ButtonSkin
     protected Popup listViewPopup;
 
     private ComponentKeyListener listViewPopupKeyListener = new ComponentKeyListener() {
-        public void keyTyped(Component component, char character) {
-            // No-op
+        public boolean keyTyped(Component component, char character) {
+            return false;
         }
 
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
@@ -102,7 +102,7 @@ public abstract class ListButtonSkin extends ButtonSkin
             return false;
         }
 
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             ListButton listButton = (ListButton)getComponent();
 
             int index = listView.getSelectedIndex();
@@ -112,6 +112,8 @@ public abstract class ListButtonSkin extends ButtonSkin
 
             listViewPopup.close();
             getComponent().requestFocus();
+
+            return true;
         }
     };
 
@@ -202,7 +204,9 @@ public abstract class ListButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
+
         ListButton listButton = (ListButton)getComponent();
 
         listButton.requestFocus();
@@ -211,6 +215,8 @@ public abstract class ListButtonSkin extends ButtonSkin
         if (listView.isShowing()) {
             listView.requestFocus();
         }
+
+        return consumed;
     }
 
     @Override

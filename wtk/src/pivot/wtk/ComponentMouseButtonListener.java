@@ -57,6 +57,10 @@ public interface ComponentMouseButtonListener {
      * @param x
      * @param y
      * @param count
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count);
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count);
 }

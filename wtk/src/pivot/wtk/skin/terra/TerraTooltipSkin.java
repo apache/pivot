@@ -69,7 +69,8 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
             return false;
         }
 
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            return false;
         }
 
         public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
@@ -80,7 +81,8 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
         }
 
         // Component key events
-        public void keyTyped(Component component, char character) {
+        public boolean keyTyped(Component component, char character) {
+            return false;
         }
 
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

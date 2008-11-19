@@ -53,8 +53,8 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     protected boolean pressed = false;
 
     private ComponentKeyListener calendarPopupKeyListener = new ComponentKeyListener() {
-        public void keyTyped(Component component, char character) {
-            // No-op
+        public boolean keyTyped(Component component, char character) {
+            return false;
         }
 
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
@@ -105,7 +105,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             return false;
         }
 
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             CalendarButton calendarButton = (CalendarButton)getComponent();
 
             CalendarDate date = calendar.getSelectedDate();
@@ -115,6 +115,8 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
             calendarPopup.close();
             getComponent().requestFocus();
+
+            return true;
         }
     };
 
@@ -202,7 +204,9 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
+
         CalendarButton calendarButton = (CalendarButton)getComponent();
 
         calendarButton.requestFocus();
@@ -211,6 +215,8 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         if (calendar.isShowing()) {
             calendar.requestFocus();
         }
+
+        return consumed;
     }
 
     @Override

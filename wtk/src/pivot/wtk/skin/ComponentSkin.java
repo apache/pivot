@@ -213,7 +213,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         return false;
     }
 
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        return false;
     }
 
     // Component mouse wheel events
@@ -223,7 +224,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     // Component key events
-    public void keyTyped(Component component, char character) {
+    public boolean keyTyped(Component component, char character) {
+        return false;
     }
 
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

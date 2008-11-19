@@ -186,11 +186,16 @@ public class TerraExpanderSkin extends ContainerSkin
             return false;
         }
 
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            boolean consumed = false;
+
             if (count == 2) {
                 Expander expander = (Expander)getComponent();
                 expander.setExpanded(!expander.isExpanded());
+                consumed = true;
             }
+
+            return consumed;
         }
     }
 

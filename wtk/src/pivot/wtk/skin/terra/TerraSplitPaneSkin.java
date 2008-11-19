@@ -161,7 +161,8 @@ public class TerraSplitPaneSkin extends ContainerSkin
                 return false;
             }
 
-            public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                return false;
             }
         }
 
@@ -247,6 +248,8 @@ public class TerraSplitPaneSkin extends ContainerSkin
 
         @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseDown(component, button, x, y);
+
             Splitter splitter = (Splitter)getComponent();
             SplitPane splitPane = (SplitPane)TerraSplitPaneSkin.this.getComponent();
 
@@ -280,7 +283,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
                 display.getComponentMouseButtonListeners().add(dragHandler);
             }
 
-            return false;
+            return consumed;
         }
 
         private int boundSplitLocation(int splitLocation) {

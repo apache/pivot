@@ -69,7 +69,8 @@ public class MenuTest implements Application {
                 return false;
             }
 
-            public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                return false;
             }
         });
 

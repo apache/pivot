@@ -74,8 +74,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             return false;
         }
 
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            // No-op
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            return false;
         }
     };
 

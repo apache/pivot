@@ -303,9 +303,13 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         @Override
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            boolean consumed = super.mouseClick(component, button, x, y, count);
+
             TabButton tabButton = (TabButton)getComponent();
             tabButton.press();
+
+            return consumed;
         }
 
         public Font getFont() {

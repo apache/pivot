@@ -26,8 +26,12 @@ public interface ComponentKeyListener {
      *
      * @param component
      * @param character
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void keyTyped(Component component, char character);
+    public boolean keyTyped(Component component, char character);
 
     /**
      * Called when a key has been pressed.

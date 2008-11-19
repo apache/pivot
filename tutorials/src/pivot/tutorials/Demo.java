@@ -116,7 +116,7 @@ public class Demo implements Application {
         }
 
         @SuppressWarnings("unchecked")
-        public void mouseClick(Component component, Mouse.Button button, int x, int y,
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
             int count) {
             if (armed
                 && count == 1) {
@@ -174,9 +174,12 @@ public class Demo implements Application {
             }
 
             armed = false;
+
+            return false;
         }
 
-        public void keyTyped(Component component, char character) {
+        public boolean keyTyped(Component component, char character) {
+            return false;
         }
 
         @SuppressWarnings("unchecked")
@@ -371,7 +374,8 @@ public class Demo implements Application {
                 return false;
             }
 
-            public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                return false;
             }
         });
 
@@ -493,7 +497,7 @@ public class Demo implements Application {
             	return false;
             }
 
-            public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             	if (button == Mouse.Button.LEFT) {
             		int columnIndex = customTableView.getColumnAt(x);
             		if (columnIndex == 0) {
@@ -509,6 +513,8 @@ public class Demo implements Application {
             			customTableData.update(rowIndex, row);
             		}
             	}
+
+            	return false;
             }
         });
     }

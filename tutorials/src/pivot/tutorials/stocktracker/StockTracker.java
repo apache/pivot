@@ -112,7 +112,8 @@ public class StockTracker implements Application {
         });
 
         stocksTableView.getComponentKeyListeners().add(new ComponentKeyListener() {
-            public void keyTyped(Component component, char character) {
+            public boolean keyTyped(Component component, char character) {
+                return false;
             }
 
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
@@ -136,7 +137,8 @@ public class StockTracker implements Application {
         });
 
         symbolTextInput.getComponentKeyListeners().add(new ComponentKeyListener() {
-            public void keyTyped(Component component, char character) {
+            public boolean keyTyped(Component component, char character) {
+                return false;
             }
 
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

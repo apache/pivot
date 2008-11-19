@@ -161,9 +161,10 @@ public class TerraRollupSkin extends ContainerSkin
         }
 
         @Override
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             PushButton pushButton = (PushButton)getComponent();
             pushButton.press();
+            return true;
         }
     }
 
@@ -232,9 +233,10 @@ public class TerraRollupSkin extends ContainerSkin
             return false;
         }
 
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             Rollup rollup = (Rollup)getComponent();
             rollup.setExpanded(!rollup.isExpanded());
+            return true;
         }
     }
 

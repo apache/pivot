@@ -196,9 +196,11 @@ public class TerraAccordionSkin extends ContainerSkin
         }
 
         @Override
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             PanelHeader panelHeader = (PanelHeader)getComponent();
             panelHeader.press();
+
+            return true;
         }
 
         public Font getFont() {

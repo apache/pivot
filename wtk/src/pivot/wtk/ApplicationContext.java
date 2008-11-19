@@ -447,9 +447,15 @@ public abstract class ApplicationContext {
 
             switch (event.getID()) {
                 case KeyEvent.KEY_TYPED: {
+                    boolean consumed = false;
+
                     if (focusedComponent != null) {
                         char keyChar = event.getKeyChar();
-                        focusedComponent.keyTyped(keyChar);
+                        consumed = focusedComponent.keyTyped(keyChar);
+                    }
+
+                    if (consumed) {
+                        event.consume();
                     }
 
                     break;

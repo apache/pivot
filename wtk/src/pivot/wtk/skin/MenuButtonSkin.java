@@ -149,7 +149,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         MenuButton menuButton = (MenuButton)getComponent();
 
         if (menuButton.isFocusable()) {
@@ -161,6 +161,8 @@ public abstract class MenuButtonSkin extends ButtonSkin
         if (menuPopup.isShowing()) {
             menuPopup.requestFocus();
         }
+
+        return true;
     }
 
     @Override

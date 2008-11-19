@@ -380,8 +380,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
                 pressed = true;
                 repaintComponent();
-
-                consumed = true;
             }
 
             return consumed;
@@ -611,8 +609,9 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         spinnerContent.requestFocus();
+        return false;
     }
 
     protected void invalidateContent() {

@@ -370,10 +370,14 @@ public abstract class Component implements ConstrainedVisual {
             return consumed;
         }
 
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            boolean consumed = false;
+
             for (ComponentMouseButtonListener listener : this) {
-                listener.mouseClick(component, button, x, y, count);
+                consumed |= listener.mouseClick(component, button, x, y, count);
             }
+
+            return consumed;
         }
     }
 
@@ -394,10 +398,14 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentKeyListenerList extends ListenerList<ComponentKeyListener>
         implements ComponentKeyListener {
-        public void keyTyped(Component component, char character) {
+        public boolean keyTyped(Component component, char character) {
+            boolean consumed = false;
+
             for (ComponentKeyListener listener : this) {
-                listener.keyTyped(component, character);
+                consumed |= listener.keyTyped(component, character);
             }
+
+            return consumed;
         }
 
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
@@ -2275,10 +2283,14 @@ public abstract class Component implements ConstrainedVisual {
         return consumed;
     }
 
-    protected void mouseClick(Mouse.Button button, int x, int y, int count) {
+    protected boolean mouseClick(Mouse.Button button, int x, int y, int count) {
+        boolean consumed = false;
+
         if (enabled) {
-            componentMouseButtonListeners.mouseClick(this, button, x, y, count);
+            consumed = componentMouseButtonListeners.mouseClick(this, button, x, y, count);
         }
+
+        return consumed;
     }
 
     protected boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
@@ -2293,14 +2305,18 @@ public abstract class Component implements ConstrainedVisual {
         return consumed;
     }
 
-    protected void keyTyped(char character) {
-        if (enabled) {
-            componentKeyListeners.keyTyped(this, character);
+    protected boolean keyTyped(char character) {
+        boolean consumed = false;
 
-            if (parent != null) {
-                parent.keyTyped(character);
+        if (enabled) {
+            consumed = componentKeyListeners.keyTyped(this, character);
+
+            if (!consumed && parent != null) {
+                consumed = parent.keyTyped(character);
             }
         }
+
+        return consumed;
     }
 
     protected boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {

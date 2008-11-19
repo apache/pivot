@@ -161,7 +161,8 @@ public class TerraTextInputSkin extends ComponentSkin
             return false;
         }
 
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            return false;
         }
     }
 
@@ -929,18 +930,20 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
     @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         if (button == Mouse.Button.LEFT
             && count > 1) {
             TextInput textInput = (TextInput)getComponent();
             textInput.setSelection(0, textInput.getCharacterCount());
         }
 
-        super.mouseClick(component, button, x, y, count);
+        return super.mouseClick(component, button, x, y, count);
     }
 
     @Override
-    public void keyTyped(Component component, char character) {
+    public boolean keyTyped(Component component, char character) {
+        boolean consumed = super.keyTyped(component, character);
+
         // Ignore characters in the control range and the ASCII delete
         // character
         if (character > 0x1F
@@ -960,6 +963,8 @@ public class TerraTextInputSkin extends ComponentSkin
                 ApplicationContext.beep();
             }
         }
+
+        return consumed;
     }
 
     @Override

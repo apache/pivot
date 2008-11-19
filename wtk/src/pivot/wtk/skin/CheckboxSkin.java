@@ -27,11 +27,15 @@ import pivot.wtk.Mouse;
  */
 public abstract class CheckboxSkin extends ButtonSkin {
     @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
+
         Checkbox checkbox = (Checkbox)getComponent();
 
         checkbox.requestFocus();
         checkbox.press();
+
+        return consumed;
     }
 
     @Override

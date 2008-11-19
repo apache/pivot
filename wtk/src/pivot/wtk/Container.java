@@ -117,6 +117,7 @@ public abstract class Container extends Component
     private Component mouseDownComponent = null;
     private long mouseDownTime = 0;
     private int mouseClickCount = 0;
+    private boolean mouseClickConsumed = false;
 
     private ContainerListenerList containerListeners = new ContainerListenerList();
     private ContainerMouseListenerList containerMouseListeners = new ContainerMouseListenerList();
@@ -666,22 +667,35 @@ public abstract class Container extends Component
             if (component != null) {
                 consumed = component.mouseUp(button, x - component.getX(),
                     y - component.getY());
-
-                // Synthesize mouse click event
-                if (component == mouseDownComponent) {
-                    component.mouseClick(button, x - component.getX(), y - component.getY(),
-                        mouseClickCount);
-                    mouseDownComponent = null;
-                }
             }
 
             // Notify the base class
             if (!consumed) {
                 consumed = super.mouseUp(button, x, y);
             }
+
+            // Synthesize mouse click event
+            if (component != null
+                && component == mouseDownComponent) {
+                mouseClickConsumed = component.mouseClick(button, x - component.getX(),
+                    y - component.getY(), mouseClickCount);
+                mouseDownComponent = null;
+            }
         }
 
         return consumed;
+    }
+
+    @Override
+    protected boolean mouseClick(Mouse.Button button, int x, int y, int count) {
+        if (isEnabled()) {
+            if (!mouseClickConsumed) {
+                // Allow the event to propagate
+                mouseClickConsumed = super.mouseClick(button, x, y, count);
+            }
+        }
+
+        return mouseClickConsumed;
     }
 
     @Override

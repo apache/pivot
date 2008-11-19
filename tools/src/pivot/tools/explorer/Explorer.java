@@ -173,7 +173,8 @@ public class Explorer implements Application, TreeViewSelectionListener {
 			    return false;
 			}
 
-			public void keyTyped(Component component, char character) {
+			public boolean keyTyped(Component component, char character) {
+			    return false;
 			}
 		});
 

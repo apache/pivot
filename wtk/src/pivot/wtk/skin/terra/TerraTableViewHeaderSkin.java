@@ -148,7 +148,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             return false;
         }
 
-        public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            return false;
         }
     }
 
@@ -758,7 +759,9 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
+
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
 
         if (pressedHeaderIndex != -1
@@ -767,6 +770,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
 
         pressedHeaderIndex = -1;
+
+        return consumed;
     }
 
     // Table view header events

@@ -518,7 +518,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     @SuppressWarnings("unchecked")
-    public void mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
+
         ListView listView = (ListView)getComponent();
 
         if (isFocusable()) {
@@ -557,7 +559,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     } else {
                         // TODO Split the range by the disabled indexes; for now,
                         // just return
-                        return;
+                        return consumed;
                     }
 
                     listView.setSelectedRanges(selectedRanges);
@@ -579,6 +581,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 }
         	}
         }
+
+        return consumed;
     }
 
     @Override

@@ -194,8 +194,9 @@ public class TerraSliderSkin extends SliderSkin {
             return true;
         }
 
-        public void mouseClick(Component component, Mouse.Button button, int x, int y,
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
             int count) {
+            return false;
         }
     }
 
