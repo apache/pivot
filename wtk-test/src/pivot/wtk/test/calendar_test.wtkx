@@ -20,7 +20,7 @@ limitations under the License.
     <ListButton listData="['One', 'Two', 'Three']"/>
     <Border styles="{padding:0}">
         <content>
-            <Calendar/>
+            <Calendar month="2" year="2009" locale="{language:'fr', country:'ca'}"/>
         </content>
     </Border>
 </FlowPane>

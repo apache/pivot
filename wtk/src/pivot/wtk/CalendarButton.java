@@ -18,6 +18,7 @@ package pivot.wtk;
 import java.util.Locale;
 
 import pivot.collections.Dictionary;
+import pivot.serialization.JSONSerializer;
 import pivot.util.CalendarDate;
 import pivot.util.ListenerList;
 import pivot.wtk.content.CalendarButtonDataRenderer;
@@ -310,6 +311,22 @@ public class CalendarButton extends Button {
         } else {
             setLocale(new Locale(language));
         }
+    }
+
+    /**
+     * Sets the locale used to present calendar data.
+     *
+     * @param locale
+     * A JSON map containing values for language, country, and variant.
+     *
+     * @see #setLocale(Dictionary)
+     */
+    public void setLocale(String locale) {
+        if (locale == null) {
+            throw new IllegalArgumentException("locale is null.");
+        }
+
+        setLocale(JSONSerializer.parseMap(locale));
     }
 
     /**

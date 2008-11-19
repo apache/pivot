@@ -60,7 +60,10 @@ public class Form extends Container {
             String previousHeading = this.heading;
             if (previousHeading != heading) {
                 this.heading = heading;
-                form.formListeners.sectionHeadingChanged(this);
+
+                if (form != null) {
+                    form.formListeners.sectionHeadingChanged(this);
+                }
             }
         }
 

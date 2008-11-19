@@ -18,6 +18,8 @@ package pivot.wtk.skin.terra;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import pivot.util.CalendarDate;
 import pivot.wtk.Button;
@@ -37,6 +39,7 @@ import pivot.wtk.TablePane;
 import pivot.wtk.Theme;
 import pivot.wtk.content.ButtonDataRenderer;
 import pivot.wtk.content.NumericSpinnerData;
+import pivot.wtk.content.SpinnerItemRenderer;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.CalendarSkin;
 
@@ -150,6 +153,22 @@ public class TerraCalendarSkin extends CalendarSkin
         }
     }
 
+    public class MonthSpinnerItemRenderer extends SpinnerItemRenderer {
+        @Override
+        public void render(Object item, Spinner spinner) {
+            Calendar calendar = (Calendar)getComponent();
+
+            CalendarDate date = new CalendarDate();
+            date.setMonth((Integer)item);
+
+            SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM",
+                calendar.getLocale());
+            item = monthFormat.format(date.toCalendar().getTime());
+
+            super.render(item, spinner);
+        }
+    }
+
     private TablePane tablePane;
     private Spinner monthSpinner;
     private Spinner yearSpinner;
@@ -176,23 +195,31 @@ public class TerraCalendarSkin extends CalendarSkin
             tablePane.getColumns().add(new TablePane.Column(1, true));
         }
 
-        // TODO Set custom data models and renderers on spinners
-        // NOTE Month renderer should use locale-specific strings
+        // Month spinner
         monthSpinner = new Spinner();
         monthSpinner.setSpinnerData(new NumericSpinnerData(0, 11));
+        monthSpinner.setItemRenderer(new MonthSpinnerItemRenderer());
+        monthSpinner.getStyles().put("sizeToContent", true);
 
+        monthSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
+            public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
+                Calendar calendar = (Calendar)getComponent();
+                calendar.setMonth((Integer)spinner.getSelectedValue());
+            }
+        });
+
+        // Year spinner
         yearSpinner = new Spinner();
         yearSpinner.setSpinnerData(new NumericSpinnerData(0, Short.MAX_VALUE));
 
-        SpinnerSelectionListener spinnerSelectionListener = new SpinnerSelectionListener() {
+        yearSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
             public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
-                updateCalendar();
+                Calendar calendar = (Calendar)getComponent();
+                calendar.setYear((Integer)spinner.getSelectedValue());
             }
-        };
+        });
 
-        monthSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
-        yearSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
-
+        // Attach a listener to consume mouse clicks
         ComponentMouseButtonListener spinnerMouseButtonListener = new ComponentMouseButtonListener() {
             public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
                 return false;
@@ -214,7 +241,9 @@ public class TerraCalendarSkin extends CalendarSkin
 
         // Add the month/year flow pane
         FlowPane monthYearFlowPane = new FlowPane();
-        monthYearFlowPane.getStyles().put("padding", 2);
+        monthYearFlowPane.getStyles().put("padding", 3);
+        monthYearFlowPane.getStyles().put("backgroundColor", theme.getColor(10));
+        monthYearFlowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
 
         monthYearFlowPane.add(monthSpinner);
         monthYearFlowPane.add(yearSpinner);
@@ -297,7 +326,9 @@ public class TerraCalendarSkin extends CalendarSkin
     }
 
     private void updateCalendar() {
-        // TODO Update month/year spinners
+        Calendar calendar = (Calendar)getComponent();
+        monthSpinner.setSelectedIndex(calendar.getMonth());
+        yearSpinner.setSelectedIndex(calendar.getYear());
 
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 7; i++) {
@@ -325,6 +356,13 @@ public class TerraCalendarSkin extends CalendarSkin
     public void selectedDateKeyChanged(Calendar calendar,
         String previousSelectedDateKey) {
         // No-op
+    }
+
+    @Override
+    public void localeChanged(Calendar calendar, Locale previousLocale) {
+        super.localeChanged(calendar, previousLocale);
+
+        // TODO Repopulate day labels
     }
 
     // Calendar selection events

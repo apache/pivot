@@ -143,6 +143,15 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
     }
 
     /**
+     * Sets the year field.
+     *
+     * @param year
+     */
+    public void setYear(int year) {
+        set(year, month, day);
+    }
+
+    /**
      * Gets the month field, 0-based. (e.g. <tt>2</tt> for March).
      *
      * @return
@@ -153,6 +162,15 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
     }
 
     /**
+     * Sets the month field.
+     *
+     * @param year
+     */
+    public void setMonth(int month) {
+        set(year, month, day);
+    }
+
+    /**
      * Gets the day of the month, 0-based. (e.g. <tt>14</tt> for the 15th).
      *
      * @return
@@ -160,6 +178,15 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
      */
     public int getDay() {
         return day;
+    }
+
+    /**
+     * Sets the day field.
+     *
+     * @param year
+     */
+    public void setDay(int day) {
+        set(year, month, day);
     }
 
     /**

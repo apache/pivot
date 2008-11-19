@@ -18,7 +18,6 @@ package pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Font;
 
-import pivot.wtk.Component;
 import pivot.wtk.Insets;
 import pivot.wtk.Label;
 import pivot.wtk.Spinner;
@@ -39,29 +38,22 @@ public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
     public void render(Object item, Spinner spinner) {
         setText(item == null ? null : item.toString());
 
-        renderStyles(spinner);
-    }
-
-    protected void renderStyles(Spinner spinner) {
-        Component.StyleDictionary spinnerStyles = spinner.getStyles();
-        Component.StyleDictionary styles = getStyles();
-
-        Object font = spinnerStyles.get("font");
+        Object font = spinner.getStyles().get("font");
 
         if (font instanceof Font) {
-            styles.put("font", font);
+            getStyles().put("font", font);
         }
 
         Object color = null;
 
         if (spinner.isEnabled()) {
-            color = spinnerStyles.get("color");
+            color = spinner.getStyles().get("color");
         } else {
-            color = spinnerStyles.get("disabledColor");
+            color = spinner.getStyles().get("disabledColor");
         }
 
         if (color instanceof Color) {
-            styles.put("color", color);
+            getStyles().put("color", color);
         }
     }
 }

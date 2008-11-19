@@ -16,7 +16,6 @@
 package pivot.wtk.content;
 
 import java.text.DateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import pivot.util.CalendarDate;
@@ -38,7 +37,6 @@ public class CalendarButtonDataRenderer extends ButtonDataRenderer {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void render(Object data, Button button, boolean highlight) {
         CalendarButton calendarButton = (CalendarButton)button;
         Locale locale = calendarButton.getLocale();
@@ -51,7 +49,7 @@ public class CalendarButtonDataRenderer extends ButtonDataRenderer {
             CalendarDate date = (CalendarDate)data;
 
             DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-            data = dateFormat.format(new Date(date.getYear() - 1900, date.getMonth(), date.getDay() + 1));
+            data = dateFormat.format(date.toCalendar().getTime());
         }
 
         super.render(data, button, highlight);

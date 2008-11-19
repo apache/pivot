@@ -157,7 +157,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
     @SuppressWarnings("unchecked")
     public int getPreferredWidth(int height) {
         ListButton listButton = (ListButton)getComponent();
-        List<Object> listData = (List<Object>)listButton.getListData();
+        List<?> listData = listButton.getListData();
 
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
 

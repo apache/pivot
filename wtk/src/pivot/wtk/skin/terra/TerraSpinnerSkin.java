@@ -155,27 +155,51 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
      */
     protected class SpinnerContentSkin extends ComponentSkin {
         public int getPreferredWidth(int height) {
+            int preferredWidth = 0;
+
             Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
-            itemRenderer.render(spinner.getSelectedValue(), spinner);
-            return itemRenderer.getPreferredWidth(height);
+            if (sizeToContent) {
+                List<?> spinnerData = spinner.getSpinnerData();
+                for (Object item : spinnerData) {
+                    itemRenderer.render(item, spinner);
+                    preferredWidth = Math.max(preferredWidth, itemRenderer.getPreferredWidth(height));
+                }
+            } else {
+                itemRenderer.render(spinner.getSelectedValue(), spinner);
+                preferredWidth = itemRenderer.getPreferredWidth(height);
+            }
+
+            return preferredWidth;
         }
 
         public int getPreferredHeight(int width) {
+            int preferredHeight = 0;
+
             Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
             itemRenderer.render(spinner.getSelectedValue(), spinner);
-            return itemRenderer.getPreferredHeight(width);
+            preferredHeight = itemRenderer.getPreferredHeight(width);
+
+            return preferredHeight;
         }
 
         public Dimensions getPreferredSize() {
+            Dimensions preferredSize;
+
             Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
-            itemRenderer.render(spinner.getSelectedValue(), spinner);
-            return itemRenderer.getPreferredSize();
+            if (sizeToContent) {
+                preferredSize = new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+            } else {
+                itemRenderer.render(spinner.getSelectedValue(), spinner);
+                preferredSize = itemRenderer.getPreferredSize();
+            }
+
+            return preferredSize;
         }
 
         public void layout() {
@@ -194,8 +218,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             itemRenderer.render(spinner.getSelectedValue(), spinner);
 
             Graphics2D contentGraphics = (Graphics2D)graphics.create();
-            Dimensions rendererSize = itemRenderer.getPreferredSize();
-            itemRenderer.setSize(rendererSize.width, rendererSize.height);
+            itemRenderer.setSize(width, height);
             itemRenderer.paint(contentGraphics);
             contentGraphics.dispose();
 
@@ -450,6 +473,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     private Color borderColor;
     private Color buttonColor;
     private Color buttonBackgroundColor;
+    private boolean sizeToContent = false;
 
     // Derived colors
     private Color buttonBevelColor;
@@ -739,6 +763,15 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         setFont(Font.decode(font));
+    }
+
+    public boolean isSizeToContent() {
+        return sizeToContent;
+    }
+
+    public void setSizeToContent(boolean sizeToContent) {
+        this.sizeToContent = sizeToContent;
+        invalidateComponent();
     }
 
     // Spinner.Skin methods
