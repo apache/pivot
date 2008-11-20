@@ -52,6 +52,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private Border listViewBorder;
 
     private WindowStateListener listViewPopupStateListener = new WindowStateListener() {
+        private boolean focusButtonOnClose = true;
+
         public Vote previewWindowOpen(Window window, Display display) {
             return Vote.APPROVE;
         }
@@ -61,7 +63,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
 
         public void windowOpened(Window window) {
-            // No-op
+            focusButtonOnClose = true;
         }
 
         public Vote previewWindowClose(final Window window) {
@@ -73,6 +75,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
                 closeTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
+                        focusButtonOnClose = window.containsFocus();
                         window.close();
                     }
                 });
@@ -95,7 +98,9 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         public void windowClosed(Window window, Display display) {
             closeTransition = null;
-            getComponent().requestFocus();
+            if (focusButtonOnClose) {
+                getComponent().requestFocus();
+            }
         }
     };
 

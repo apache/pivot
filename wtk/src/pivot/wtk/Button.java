@@ -102,6 +102,12 @@ public abstract class Button extends Component {
      * @author gbrown
      */
     public interface GroupListener {
+        /**
+         * Called when a button group's selection has changed.
+         *
+         * @param group
+         * @param previousSelection
+         */
         public void selectionChanged(Group group, Button previousSelection);
     }
 

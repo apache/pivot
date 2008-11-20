@@ -164,7 +164,7 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
     /**
      * Sets the month field.
      *
-     * @param year
+     * @param month
      */
     public void setMonth(int month) {
         set(year, month, day);
@@ -183,7 +183,7 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
     /**
      * Sets the day field.
      *
-     * @param year
+     * @param day
      */
     public void setDay(int day) {
         set(year, month, day);

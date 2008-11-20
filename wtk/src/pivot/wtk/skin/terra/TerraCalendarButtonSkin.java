@@ -50,6 +50,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     private Border calendarBorder;
 
     private WindowStateListener calendarPopupStateListener = new WindowStateListener() {
+        private boolean focusButtonOnClose = true;
+
         public Vote previewWindowOpen(Window window, Display display) {
             return Vote.APPROVE;
         }
@@ -59,7 +61,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         }
 
         public void windowOpened(Window window) {
-            // No-op
+            focusButtonOnClose = true;
         }
 
         public Vote previewWindowClose(final Window window) {
@@ -71,6 +73,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
                 closeTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
+                        focusButtonOnClose = window.containsFocus();
                         window.close();
                     }
                 });
@@ -93,7 +96,9 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
         public void windowClosed(Window window, Display display) {
             closeTransition = null;
-            getComponent().requestFocus();
+            if (focusButtonOnClose) {
+                getComponent().requestFocus();
+            }
         }
     };
 
