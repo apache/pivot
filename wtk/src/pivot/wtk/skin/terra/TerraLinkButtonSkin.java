@@ -81,15 +81,6 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
         dataRenderer.paint(graphics);
     }
 
-    /**
-     * @return
-     * <tt>false</tt>; link buttons are not focusable.
-     */
-    @Override
-    public boolean isFocusable() {
-        return false;
-    }
-
     public Font getFont() {
         return font;
     }

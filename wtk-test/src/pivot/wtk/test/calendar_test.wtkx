@@ -16,11 +16,14 @@ limitations under the License.
 -->
 
 <FlowPane xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
-    <CalendarButton/>
+    <wtkx:script src="calendar_test.js"/>
+
+    <CalendarButton wtkx:id="calendarButton" locale="{language:'fr', country:'ca'}"/>
     <ListButton listData="['One', 'Two', 'Three']"/>
     <Border styles="{padding:0}">
         <content>
-            <Calendar month="2" year="2009" locale="{language:'fr', country:'ca'}"/>
+            <Calendar wtkx:id="calendar"
+                month="2" year="2009" locale="{language:'fr', country:'ca'}"/>
         </content>
     </Border>
 </FlowPane>

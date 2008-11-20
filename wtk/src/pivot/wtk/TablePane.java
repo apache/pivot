@@ -846,6 +846,17 @@ public class TablePane extends Container {
     }
 
     /**
+     * Returns the bounds of a given row.
+     *
+     * @param row
+     * The row index.
+     */
+    public Bounds getRowBounds(int row) {
+        TablePane.Skin tablePaneSkin = (TablePane.Skin)getSkin();
+        return tablePaneSkin.getRowBounds(row);
+    }
+
+    /**
      * Returns the table pane column sequence.
      *
      * @return
@@ -868,6 +879,17 @@ public class TablePane extends Container {
     public int getColumnAt(int x) {
         TablePane.Skin tablePaneSkin = (TablePane.Skin)getSkin();
         return tablePaneSkin.getColumnAt(x);
+    }
+
+    /**
+     * Returns the bounds of a given column.
+     *
+     * @param column
+     * The column index.
+     */
+    public Bounds getColumnBounds(int column) {
+        TablePane.Skin tablePaneSkin = (TablePane.Skin)getSkin();
+        return tablePaneSkin.getColumnBounds(column);
     }
 
     /**

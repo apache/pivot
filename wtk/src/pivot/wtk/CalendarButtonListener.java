@@ -21,24 +21,9 @@ import java.util.Locale;
  * Calendar button listener interface.
  *
  * @author tvolkert
+ * @author gbrown
  */
 public interface CalendarButtonListener {
-    /**
-     * Called when a calendar button's year value has changed.
-     *
-     * @param calendarButton
-     * @param previousYear
-     */
-    public void yearChanged(CalendarButton calendarButton, int previousYear);
-
-    /**
-     * Called when a calendar button's month value has changed.
-     *
-     * @param calendarButton
-     * @param previousMonth
-     */
-    public void monthChanged(CalendarButton calendarButton, int previousMonth);
-
     /**
      * Called when a calendar button's selected date key has changed.
      *

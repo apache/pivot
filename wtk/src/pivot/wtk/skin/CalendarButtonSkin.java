@@ -136,8 +136,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         calendarButton.getCalendarButtonListeners().add(this);
         calendarButton.getCalendarButtonSelectionListeners().add(this);
 
-        calendar.setYear(calendarButton.getYear());
-        calendar.setMonth(calendarButton.getMonth());
         calendar.setLocale(calendarButton.getLocale());
     }
 
@@ -148,6 +146,8 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         CalendarButton calendarButton = (CalendarButton)getComponent();
         calendarButton.getCalendarButtonListeners().remove(this);
         calendarButton.getCalendarButtonSelectionListeners().remove(this);
+
+        calendar.setLocale(Locale.getDefault());
 
         super.uninstall();
     }
@@ -303,14 +303,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     }
 
     // Calendar button events
-    public void yearChanged(CalendarButton calendarButton, int previousYear) {
-        calendar.setYear(calendarButton.getYear());
-    }
-
-    public void monthChanged(CalendarButton calendarButton, int previousMonth) {
-        calendar.setMonth(calendarButton.getMonth());
-    }
-
     public void selectedDateKeyChanged(CalendarButton calendarButton,
         String previousSelectedDateKey) {
         // No-op

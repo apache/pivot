@@ -41,15 +41,15 @@ public class CalendarButtonDataRenderer extends ButtonDataRenderer {
         CalendarButton calendarButton = (CalendarButton)button;
         Locale locale = calendarButton.getLocale();
 
-        if (data instanceof String) {
-            data = new CalendarDate((String)data);
-        }
+        if (data == null) {
+            data = "";
+        } else {
+            if (data instanceof CalendarDate) {
+                CalendarDate date = (CalendarDate)data;
 
-        if (data instanceof CalendarDate) {
-            CalendarDate date = (CalendarDate)data;
-
-            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-            data = dateFormat.format(date.toCalendar().getTime());
+                DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+                data = dateFormat.format(date.toCalendar().getTime());
+            }
         }
 
         super.render(data, button, highlight);

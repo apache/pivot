@@ -24,7 +24,6 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 
 import pivot.collections.Dictionary;
-import pivot.util.CalendarDate;
 import pivot.util.Vote;
 import pivot.wtk.Border;
 import pivot.wtk.Button;
@@ -42,6 +41,8 @@ import pivot.wtk.skin.CalendarButtonSkin;
 
 /**
  * Terra calendar button skin.
+ *
+ * TODO Calendar pass-through styles
  *
  * @author gbrown
  */
@@ -112,7 +113,6 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
     private Transition closeTransition = null;
 
-    private static final CalendarDate SAMPLE_DATE = new CalendarDate(2000, 0, 0);
     private static final int TRIGGER_WIDTH = 14;
 
     private static final int CLOSE_TRANSITION_DURATION = 150;
@@ -155,8 +155,9 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
             height = Math.max(height - (padding.top + padding.bottom + 2), 0);
         }
 
+        Object buttonData = calendarButton.getButtonData();
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
-        dataRenderer.render(SAMPLE_DATE, calendarButton, false);
+        dataRenderer.render(buttonData, calendarButton, false);
 
         int preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH
             + padding.left + padding.right + 2;
@@ -167,8 +168,9 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     public int getPreferredHeight(int width) {
         CalendarButton calendarButton = (CalendarButton)getComponent();
 
+        Object buttonData = calendarButton.getButtonData();
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
-        dataRenderer.render(SAMPLE_DATE, calendarButton, false);
+        dataRenderer.render(buttonData, calendarButton, false);
 
         int preferredHeight = dataRenderer.getPreferredHeight(-1)
             + padding.top + padding.bottom + 2;
@@ -460,6 +462,4 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
         setPadding(padding.intValue());
     }
-
-    // TODO Calendar pass-through styles
 }

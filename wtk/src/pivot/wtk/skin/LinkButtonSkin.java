@@ -25,6 +25,15 @@ import pivot.wtk.Mouse;
  * @author gbrown
  */
 public abstract class LinkButtonSkin extends ButtonSkin {
+    /**
+     * @return
+     * <tt>false</tt>; link buttons are not focusable.
+     */
+    @Override
+    public boolean isFocusable() {
+        return false;
+    }
+
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);

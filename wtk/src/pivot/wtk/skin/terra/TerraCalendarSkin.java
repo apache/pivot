@@ -17,22 +17,27 @@ package pivot.wtk.skin.terra;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import pivot.util.CalendarDate;
+import pivot.wtk.Bounds;
 import pivot.wtk.Button;
 import pivot.wtk.Calendar;
 import pivot.wtk.CalendarListener;
 import pivot.wtk.CalendarSelectionListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
+import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
+import pivot.wtk.Insets;
 import pivot.wtk.Label;
 import pivot.wtk.Mouse;
+import pivot.wtk.PushButton;
 import pivot.wtk.Spinner;
 import pivot.wtk.SpinnerSelectionListener;
 import pivot.wtk.TablePane;
@@ -40,17 +45,19 @@ import pivot.wtk.Theme;
 import pivot.wtk.content.ButtonDataRenderer;
 import pivot.wtk.content.NumericSpinnerData;
 import pivot.wtk.content.SpinnerItemRenderer;
-import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.CalendarSkin;
+import pivot.wtk.skin.PushButtonSkin;
 
 /**
  * Terra calendar skin.
+ *
+ * TODO In calendar focus change event, repaint currently selected date button.
  *
  * @author gbrown
  */
 public class TerraCalendarSkin extends CalendarSkin
     implements CalendarListener, CalendarSelectionListener {
-    public class DateButton extends Button {
+    public class DateButton extends PushButton {
         public DateButton() {
             this(null);
         }
@@ -59,31 +66,20 @@ public class TerraCalendarSkin extends CalendarSkin
             super(buttonData);
 
             setToggleButton(true);
-            setDataRenderer(DEFAULT_DATA_RENDERER);
+            setDataRenderer(dateButtonDataRenderer);
 
             setSkin(new DateButtonSkin());
         }
-
-        public void press() {
-            if (isToggleButton()) {
-                State state = getState();
-
-                if (state == State.SELECTED) {
-                    setState(State.UNSELECTED);
-                }
-                else if (state == State.UNSELECTED) {
-                    setState(isTriState() ? State.MIXED : State.SELECTED);
-                }
-                else {
-                    setState(State.SELECTED);
-                }
-            }
-
-            super.press();
-        }
     }
 
-    public class DateButtonSkin extends ButtonSkin {
+    public class DateButtonSkin extends PushButtonSkin {
+        @Override
+        public void install(Component component) {
+            super.install(component);
+
+            component.setCursor(Cursor.DEFAULT);
+        }
+
         public int getPreferredWidth(int height) {
             DateButton dateButton = (DateButton)getComponent();
 
@@ -125,12 +121,30 @@ public class TerraCalendarSkin extends CalendarSkin
         }
 
         public void paint(Graphics2D graphics) {
+            Calendar calendar = (Calendar)TerraCalendarSkin.this.getComponent();
             DateButton dateButton = (DateButton)getComponent();
 
             int width = getWidth();
             int height = getHeight();
 
-            // TODO Paint highlight/selection state
+            if (dateButton.isSelected()) {
+                if (calendar.containsFocus()) {
+                    graphics.setPaint(new GradientPaint(width / 2, 0, selectionBevelColor,
+                        width / 2, height, selectionBackgroundColor));
+                } else {
+                    graphics.setColor(inactiveSelectionBackgroundColor);
+                }
+
+                graphics.fillRect(0, 0, width, height);
+            } else if (pressed) {
+                graphics.setColor(inactiveSelectionBackgroundColor);
+                graphics.fillRect(0, 0, width, height);
+            } else {
+                if (highlighted) {
+                    graphics.setColor(highlightBackgroundColor);
+                    graphics.fillRect(0, 0, width, height);
+                }
+            }
 
             Button.DataRenderer dataRenderer = dateButton.getDataRenderer();
             dataRenderer.render(dateButton.getButtonData(), dateButton, highlighted);
@@ -138,6 +152,9 @@ public class TerraCalendarSkin extends CalendarSkin
 
             graphics.translate(padding, padding);
             dataRenderer.paint(graphics);
+
+            // TODO Paint a focus state (only when this button actually has
+            // the focus)
         }
 
         public Font getFont() {
@@ -150,6 +167,10 @@ public class TerraCalendarSkin extends CalendarSkin
 
         public Color getDisabledColor() {
             return disabledColor;
+        }
+
+        public Color getSelectionColor() {
+            return selectionColor;
         }
     }
 
@@ -169,6 +190,18 @@ public class TerraCalendarSkin extends CalendarSkin
         }
     }
 
+    private class DateButtonDataRenderer extends ButtonDataRenderer {
+        public void render(Object data, Button button, boolean highlighted) {
+            super.render(data, button, highlighted);
+
+            Calendar calendar = (Calendar)TerraCalendarSkin.this.getComponent();
+            if (button.isSelected()
+                && calendar.containsFocus()) {
+                label.getStyles().put("color", button.getStyles().get("selectionColor"));
+            }
+        }
+    }
+
     private TablePane tablePane;
     private Spinner monthSpinner;
     private Spinner yearSpinner;
@@ -176,18 +209,35 @@ public class TerraCalendarSkin extends CalendarSkin
     private DateButton[][] dateButtons = new DateButton[6][7];
     private Button.Group dateButtonGroup;
 
+    private Button.DataRenderer dateButtonDataRenderer = new DateButtonDataRenderer();
+
     private Font font;
     private Color color;
     private Color disabledColor;
+    private Color selectionColor;
+    private Color selectionBackgroundColor;
+    private Color inactiveSelectionColor;
+    private Color inactiveSelectionBackgroundColor;
+    private Color highlightColor;
+    private Color highlightBackgroundColor;
     private int padding = 4;
 
-    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
+    // Derived colors
+    private Color selectionBevelColor;
 
     public TerraCalendarSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         font = theme.getFont();
-        color = theme.getColor(13);
+        color = theme.getColor(1);
         disabledColor = theme.getColor(7);
+        selectionColor = theme.getColor(4);
+        selectionBackgroundColor = theme.getColor(19);
+        inactiveSelectionColor = theme.getColor(1);
+        inactiveSelectionBackgroundColor = theme.getColor(9);
+        highlightColor = theme.getColor(1);
+        highlightBackgroundColor = theme.getColor(10);
+
+        selectionBevelColor = TerraTheme.brighten(selectionBackgroundColor);
 
         // Create the table pane
         tablePane = new TablePane();
@@ -242,7 +292,6 @@ public class TerraCalendarSkin extends CalendarSkin
         // Add the month/year flow pane
         FlowPane monthYearFlowPane = new FlowPane();
         monthYearFlowPane.getStyles().put("padding", 3);
-        monthYearFlowPane.getStyles().put("backgroundColor", theme.getColor(10));
         monthYearFlowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
 
         monthYearFlowPane.add(monthSpinner);
@@ -260,6 +309,7 @@ public class TerraCalendarSkin extends CalendarSkin
             // TODO Get a locale-specific abbreviation
             Label label = new Label(Integer.toString(i));
             label.getStyles().put("fontBold", true);
+            label.getStyles().put("padding", new Insets(2, 2, 4, 2));
             label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
             row.add(label);
         }
@@ -325,6 +375,23 @@ public class TerraCalendarSkin extends CalendarSkin
         tablePane.setLocation(0, 0);
     }
 
+    @Override
+    public void paint(Graphics2D graphics) {
+        super.paint(graphics);
+
+        int width = getWidth();
+        Bounds monthYearRowBounds = tablePane.getRowBounds(0);
+        graphics.setColor(highlightBackgroundColor);
+        graphics.fillRect(monthYearRowBounds.x, monthYearRowBounds.y,
+            monthYearRowBounds.width, monthYearRowBounds.height);
+
+        Bounds labelRowBounds = tablePane.getRowBounds(1);
+
+        graphics.setColor(inactiveSelectionBackgroundColor);
+        int dividerY = labelRowBounds.y + labelRowBounds.height - 2;
+        graphics.drawLine(2, dividerY, Math.max(0, width - 3), dividerY);
+    }
+
     private void updateCalendar() {
         Calendar calendar = (Calendar)getComponent();
         monthSpinner.setSelectedIndex(calendar.getMonth());
@@ -337,6 +404,196 @@ public class TerraCalendarSkin extends CalendarSkin
                 // TODO
             }
         }
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        this.font = font;
+        invalidateComponent();
+    }
+
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(Font.decode(font));
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.color = color;
+        repaintComponent();
+    }
+
+    public final void setColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setColor(decodeColor(color));
+    }
+
+    public Color getDisabledColor() {
+        return disabledColor;
+    }
+
+    public void setDisabledColor(Color disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        this.disabledColor = disabledColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledColor(String disabledColor) {
+        if (disabledColor == null) {
+            throw new IllegalArgumentException("disabledColor is null.");
+        }
+
+        setDisabledColor(decodeColor(disabledColor));
+    }
+
+    public Color getSelectionColor() {
+        return selectionColor;
+    }
+
+    public void setSelectionColor(Color selectionColor) {
+        if (selectionColor == null) {
+            throw new IllegalArgumentException("selectionColor is null.");
+        }
+
+        this.selectionColor = selectionColor;
+        repaintComponent();
+    }
+
+    public final void setSelectionColor(String selectionColor) {
+        if (selectionColor == null) {
+            throw new IllegalArgumentException("selectionColor is null.");
+        }
+
+        setSelectionColor(decodeColor(selectionColor));
+    }
+
+    public Color getSelectionBackgroundColor() {
+        return selectionBackgroundColor;
+    }
+
+    public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
+        if (selectionBackgroundColor == null) {
+            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+        }
+
+        this.selectionBackgroundColor = selectionBackgroundColor;
+        selectionBevelColor = TerraTheme.brighten(selectionBackgroundColor);
+        repaintComponent();
+    }
+
+    public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
+        if (selectionBackgroundColor == null) {
+            throw new IllegalArgumentException("selectionBackgroundColor is null.");
+        }
+
+        setSelectionBackgroundColor(decodeColor(selectionBackgroundColor));
+    }
+
+    public Color getInactiveSelectionColor() {
+        return inactiveSelectionColor;
+    }
+
+    public void setInactiveSelectionColor(Color inactiveSelectionColor) {
+        if (inactiveSelectionColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionColor is null.");
+        }
+
+        this.inactiveSelectionColor = inactiveSelectionColor;
+        repaintComponent();
+    }
+
+    public final void setInactiveSelectionColor(String inactiveSelectionColor) {
+        if (inactiveSelectionColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionColor is null.");
+        }
+
+        setInactiveSelectionColor(decodeColor(inactiveSelectionColor));
+    }
+
+    public Color getInactiveSelectionBackgroundColor() {
+        return inactiveSelectionBackgroundColor;
+    }
+
+    public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
+        if (inactiveSelectionBackgroundColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
+        }
+
+        this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
+        if (inactiveSelectionBackgroundColor == null) {
+            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
+        }
+
+        setInactiveSelectionBackgroundColor(decodeColor(inactiveSelectionBackgroundColor));
+    }
+
+    public Color getHighlightColor() {
+        return highlightColor;
+    }
+
+    public void setHighlightColor(Color highlightColor) {
+        if (highlightColor == null) {
+            throw new IllegalArgumentException("highlightColor is null.");
+        }
+
+        this.highlightColor = highlightColor;
+        repaintComponent();
+    }
+
+    public final void setHighlightColor(String highlightColor) {
+        if (highlightColor == null) {
+            throw new IllegalArgumentException("highlightColor is null.");
+        }
+
+        setHighlightColor(decodeColor(highlightColor));
+    }
+
+    public Color getHighlightBackgroundColor() {
+        return highlightBackgroundColor;
+    }
+
+    public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
+        if (highlightBackgroundColor == null) {
+            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+        }
+
+        this.highlightBackgroundColor = highlightBackgroundColor;
+        repaintComponent();
+    }
+
+    public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
+        if (highlightBackgroundColor == null) {
+            throw new IllegalArgumentException("highlightBackgroundColor is null.");
+        }
+
+        setHighlightBackgroundColor(decodeColor(highlightBackgroundColor));
     }
 
     // Calendar events
@@ -369,8 +626,9 @@ public class TerraCalendarSkin extends CalendarSkin
     @Override
     public void selectedDateChanged(Calendar calendar, CalendarDate previousSelectedDate) {
         CalendarDate date = calendar.getSelectedDate();
-        if (date.getYear() == calendar.getYear()
-            && date.getMonth() == calendar.getMonth()) {
+        if (date == null
+            || (date.getYear() == calendar.getYear()
+                && date.getMonth() == calendar.getMonth())) {
             repaintComponent();
         }
     }

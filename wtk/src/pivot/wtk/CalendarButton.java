@@ -39,19 +39,6 @@ public class CalendarButton extends Button {
     private static class CalendarButtonListenerList
         extends ListenerList<CalendarButtonListener>
         implements CalendarButtonListener {
-
-        public void yearChanged(CalendarButton calendarButton, int previousYear) {
-            for (CalendarButtonListener listener : this) {
-                listener.yearChanged(calendarButton, previousYear);
-            }
-        }
-
-        public void monthChanged(CalendarButton calendarButton, int previousMonth) {
-            for (CalendarButtonListener listener : this) {
-                listener.monthChanged(calendarButton, previousMonth);
-            }
-        }
-
         public void selectedDateKeyChanged(CalendarButton calendarButton,
             String previousSelectedDateKey) {
             for (CalendarButtonListener listener : this) {
@@ -83,9 +70,6 @@ public class CalendarButton extends Button {
         }
     }
 
-    private int year;
-    private int month;
-
     private CalendarDate selectedDate = null;
     private String selectedDateKey = null;
     private Locale locale = Locale.getDefault();
@@ -102,34 +86,16 @@ public class CalendarButton extends Button {
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new CalendarButtonDataRenderer();
 
     public CalendarButton() {
-        this(null, new CalendarDate());
+        this(null);
     }
 
     public CalendarButton(Object buttonData) {
-        this(buttonData, new CalendarDate());
-    }
-
-    public CalendarButton(CalendarDate calendarDate) {
-        this(null, calendarDate);
-    }
-
-    public CalendarButton(int year, int month) {
-        this(null, year, month);
-    }
-
-    public CalendarButton(Object buttonData, CalendarDate calendarDate) {
-        this(buttonData, calendarDate.getYear(), calendarDate.getMonth());
-    }
-
-    public CalendarButton(Object buttonData, int year, int month) {
         super(buttonData);
 
-        this.year = year;
-        this.month = month;
-
         setDataRenderer(DEFAULT_DATA_RENDERER);
-
         installSkin(CalendarButton.class);
+
+        setSelectedDate(new CalendarDate());
     }
 
     /**
@@ -139,60 +105,6 @@ public class CalendarButton extends Button {
     @Override
     public void setToggleButton(boolean toggleButton) {
         throw new UnsupportedOperationException("Calendar buttons cannot be toggle buttons.");
-    }
-
-    /**
-     * Returns the year associated with this calendar button.
-     *
-     * @return
-     * The calendar year.
-     */
-    public int getYear() {
-        return year;
-    }
-
-    /**
-     * Sets the year associated with this calendar button.
-     * <p>
-     * Fires {@link CalendarButtonListener#yearChanged(CalendarButton, int)}.
-     *
-     * @param year
-     * The year
-     */
-    public void setYear(int year) {
-        int previousYear = this.year;
-
-        if (previousYear != year) {
-            this.year = year;
-            calendarButtonListeners.yearChanged(this, previousYear);
-        }
-    }
-
-    /**
-     * Returns the month associated with this calendar button.
-     *
-     * @return
-     * The calendar month.
-     */
-    public int getMonth() {
-        return month;
-    }
-
-    /**
-     * Sets the month associated with this calendar button.
-     * <p>
-     * Fires {@link CalendarButtonListener#monthChanged(CalendarButton, int)}.
-     *
-     * @param month
-     * The month
-     */
-    public void setMonth(int month) {
-        int previousMonth = this.month;
-
-        if (previousMonth != month) {
-            this.month = month;
-            calendarButtonListeners.monthChanged(this, previousMonth);
-        }
     }
 
     /**
