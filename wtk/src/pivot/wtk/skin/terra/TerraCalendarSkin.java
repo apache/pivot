@@ -39,7 +39,6 @@ import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Label;
 import pivot.wtk.Mouse;
-import pivot.wtk.PushButton;
 import pivot.wtk.Spinner;
 import pivot.wtk.SpinnerSelectionListener;
 import pivot.wtk.TablePane;
@@ -48,8 +47,8 @@ import pivot.wtk.Button.Group;
 import pivot.wtk.content.ButtonDataRenderer;
 import pivot.wtk.content.NumericSpinnerData;
 import pivot.wtk.content.SpinnerItemRenderer;
+import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.CalendarSkin;
-import pivot.wtk.skin.PushButtonSkin;
 
 /**
  * Terra calendar skin.
@@ -58,22 +57,34 @@ import pivot.wtk.skin.PushButtonSkin;
  */
 public class TerraCalendarSkin extends CalendarSkin
     implements CalendarListener, CalendarSelectionListener {
-    public class DateButton extends PushButton {
+    public class DateButton extends Button {
         public DateButton() {
-            this(null);
-        }
+            super(null);
 
-        public DateButton(Object buttonData) {
-            super(buttonData);
-
-            setToggleButton(true);
+            super.setToggleButton(true);
             setDataRenderer(dateButtonDataRenderer);
 
             setSkin(new DateButtonSkin());
         }
+
+        public void press() {
+            setSelected(true);
+
+            super.press();
+        }
+
+        @Override
+        public void setToggleButton(boolean toggleButton) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setTriState(boolean triState) {
+            throw new UnsupportedOperationException();
+        }
     }
 
-    public class DateButtonSkin extends PushButtonSkin {
+    public class DateButtonSkin extends ButtonSkin {
         @Override
         public void install(Component component) {
             super.install(component);
@@ -140,7 +151,16 @@ public class TerraCalendarSkin extends CalendarSkin
                 }
             }
 
-            // TODO Paint a border if this button represents today
+            // Paint a border if this button represents today
+            int year = yearSpinner.getSelectedIndex();
+            int month = monthSpinner.getSelectedIndex();
+            int day = (Integer)dateButton.getButtonData() - 1;
+            if (year == today.getYear()
+                && month == today.getMonth()
+                && day == today.getDay()) {
+                graphics.setColor(dividerColor);
+                graphics.drawRect(0, 0, width - 1, height - 1);
+            }
 
             // Paint the content
             Button.DataRenderer dataRenderer = dateButton.getDataRenderer();
@@ -185,19 +205,118 @@ public class TerraCalendarSkin extends CalendarSkin
         }
 
         @Override
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            boolean consumed = super.mouseClick(component, button, x, y, count);
+
+            DateButton dateButton = (DateButton)getComponent();
+            dateButton.requestFocus();
+            dateButton.press();
+
+            return consumed;
+        }
+
+        @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 
-            if (keyCode == Keyboard.KeyCode.UP) {
-                // TODO
-            } else if (keyCode == Keyboard.KeyCode.DOWN) {
-                // TODO
-            } else if (keyCode == Keyboard.KeyCode.LEFT) {
-                // TODO
-            } else if (keyCode == Keyboard.KeyCode.RIGHT) {
-                // TODO
+            DateButton dateButton = (DateButton)getComponent();
+
+            if (keyCode == Keyboard.KeyCode.ENTER) {
+                dateButton.press();
+            } else if (keyCode == Keyboard.KeyCode.UP
+                || keyCode == Keyboard.KeyCode.DOWN
+                || keyCode == Keyboard.KeyCode.LEFT
+                || keyCode == Keyboard.KeyCode.RIGHT) {
+                int year = yearSpinner.getSelectedIndex();
+                int month = monthSpinner.getSelectedIndex();
+                int day = (Integer)dateButton.getButtonData() - 1;
+
+                int cellIndex = getCellIndex(year, month, day);
+                int rowIndex = cellIndex / 7;
+                int columnIndex = cellIndex % 7;
+
+                Component nextButton;
+                switch (keyCode) {
+                    case Keyboard.KeyCode.UP: {
+                        do {
+                            rowIndex--;
+                            if (rowIndex < 0) {
+                                rowIndex = 5;
+                            }
+
+                            TablePane.Row row = tablePane.getRows().get(rowIndex + 2);
+                            nextButton = row.get(columnIndex);
+                        } while (!nextButton.isEnabled());
+
+                        nextButton.requestFocus();
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.DOWN: {
+                        do {
+                            rowIndex++;
+                            if (rowIndex > 5) {
+                                rowIndex = 0;
+                            }
+
+                            TablePane.Row row = tablePane.getRows().get(rowIndex + 2);
+                            nextButton = row.get(columnIndex);
+                        } while (!nextButton.isEnabled());
+
+                        nextButton.requestFocus();
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.LEFT: {
+                        TablePane.Row row = tablePane.getRows().get(rowIndex + 2);
+
+                        do {
+                            columnIndex--;
+                            if (columnIndex < 0) {
+                                columnIndex = 6;
+                            }
+
+                            nextButton = row.get(columnIndex);
+                        } while (!nextButton.isEnabled());
+
+                        nextButton.requestFocus();
+                        break;
+                    }
+
+                    case Keyboard.KeyCode.RIGHT: {
+                        TablePane.Row row = tablePane.getRows().get(rowIndex + 2);
+
+                        do {
+                            columnIndex++;
+                            if (columnIndex > 6) {
+                                columnIndex = 0;
+                            }
+
+                            nextButton = row.get(columnIndex);
+                        } while (!nextButton.isEnabled());
+
+                        nextButton.requestFocus();
+                        break;
+                    }
+                }
             } else {
                 consumed = super.keyPressed(component, keyCode, keyLocation);
+            }
+
+            return consumed;
+        }
+
+        @Override
+        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            boolean consumed = false;
+
+            DateButton dateButton = (DateButton)getComponent();
+
+            if (keyCode == Keyboard.KeyCode.SPACE) {
+                dateButton.press();
+                consumed = true;
+            } else {
+                consumed = super.keyReleased(component, keyCode, keyLocation);
             }
 
             return consumed;
@@ -239,6 +358,8 @@ public class TerraCalendarSkin extends CalendarSkin
 
     private Button.DataRenderer dateButtonDataRenderer = new DateButtonDataRenderer();
 
+    private CalendarDate today = null;
+
     private Font font;
     private Color color;
     private Color disabledColor;
@@ -275,6 +396,7 @@ public class TerraCalendarSkin extends CalendarSkin
         monthSpinner = new Spinner();
         monthSpinner.setSpinnerData(new NumericSpinnerData(0, 11));
         monthSpinner.setItemRenderer(new MonthSpinnerItemRenderer());
+        monthSpinner.setCircular(true);
         monthSpinner.getStyles().put("sizeToContent", true);
 
         monthSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
@@ -500,6 +622,8 @@ public class TerraCalendarSkin extends CalendarSkin
                 dateButton.setButtonData(buttonData);
             }
         }
+
+        today = new CalendarDate();
     }
 
     private void updateSelection(CalendarDate selectedDate) {
@@ -519,10 +643,7 @@ public class TerraCalendarSkin extends CalendarSkin
                 int day = selectedDate.getDay();
 
                 // Update the button group
-                GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month, 1);
-                int firstDay = gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK)
-                    - java.util.Calendar.SUNDAY;
-                int cellIndex = firstDay + day;
+                int cellIndex = getCellIndex(year, month, day);
                 int rowIndex = cellIndex / 7;
                 int columnIndex = cellIndex % 7;
 
@@ -535,6 +656,15 @@ public class TerraCalendarSkin extends CalendarSkin
                 }
             }
         }
+    }
+
+    private static int getCellIndex(int year, int month, int day) {
+        GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month, 1);
+        int firstDay = gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK)
+            - java.util.Calendar.SUNDAY;
+        int cellIndex = firstDay + day;
+
+        return cellIndex;
     }
 
     public Font getFont() {

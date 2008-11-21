@@ -38,6 +38,10 @@ public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
     public void render(Object item, Spinner spinner) {
         setText(item == null ? null : item.toString());
 
+        renderStyles(spinner);
+    }
+
+    protected void renderStyles(Spinner spinner) {
         Object font = spinner.getStyles().get("font");
 
         if (font instanceof Font) {

@@ -36,6 +36,10 @@ limitations under the License.
                                 <wtkx:include namespace="text" src="text.wtkx"/>
                             </Rollup>
                             <Rollup>
+                                <Label text="Calendars" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                <wtkx:include namespace="calendars" src="calendars.wtkx"/>
+                            </Rollup>
+                            <Rollup>
                                 <Label text="Navigation" styles="{fontBold:true, fontSize:12, color:13}"/>
                                 <wtkx:include namespace="navigation" src="navigation.wtkx"/>
                             </Rollup>

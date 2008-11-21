@@ -109,8 +109,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             CalendarButton calendarButton = (CalendarButton)getComponent();
 
             CalendarDate date = calendar.getSelectedDate();
-
-            calendar.setSelectedDate((CalendarDate)null);
             calendarButton.setSelectedDate(date);
 
             calendarPopup.close();
