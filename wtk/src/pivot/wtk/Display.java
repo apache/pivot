@@ -42,10 +42,6 @@ public final class Display extends Container {
         return applicationContext;
     }
 
-    public DragDropManager getDragDropManager() {
-        return applicationContext.getDragDropManager();
-    }
-
     @Override
     protected void setSkin(Skin skin) {
         throw new UnsupportedOperationException("Can't replace Display skin.");

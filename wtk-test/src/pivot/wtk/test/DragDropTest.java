@@ -81,19 +81,24 @@ public class DragDropTest implements Application {
     }
 
     private static class ImageDropHandler implements DropHandler {
-        public DropAction drop(Component component, int x, int y) {
+        public DropAction getDropAction(Component component, int x, int y) {
             DropAction dropAction = null;
 
-            DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
+            DragDropManager dragDropManager = DragDropManager.getDragDropManager();
             Object dragContent = dragDropManager.getContent();
             if (dragContent instanceof Image) {
-                ImageView imageView = (ImageView)component;
-                imageView.setImage((Image)dragContent);
-                imageView.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
                 dropAction = DropAction.MOVE;
             }
 
             return dropAction;
+        }
+
+        public void drop(Component component, int x, int y) {
+            DragDropManager dragDropManager = DragDropManager.getDragDropManager();
+            Object dragContent = dragDropManager.getContent();
+            ImageView imageView = (ImageView)component;
+            imageView.setImage((Image)dragContent);
+            imageView.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
         }
     }
 
@@ -103,7 +108,7 @@ public class DragDropTest implements Application {
         }
 
         public void mouseOver(Component component) {
-            DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
+            DragDropManager dragDropManager = DragDropManager.getDragDropManager();
             if (dragDropManager.isActive()) {
                 Object dragContent = dragDropManager.getContent();
                 if (dragContent instanceof Image) {

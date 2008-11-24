@@ -289,7 +289,7 @@ public abstract class ApplicationContext {
                 buttonBitfield |= Mouse.Button.RIGHT.getMask();
             }
 
-            Mouse.setButtons(buttonBitfield);
+            mouse.setButtons(buttonBitfield);
 
             // Get the button associated with this event
             Mouse.Button button = null;
@@ -346,8 +346,8 @@ public abstract class ApplicationContext {
             int x = event.getX();
             int y = event.getY();
 
-            // Set the Mouse location state
-            Mouse.setLocation(x, y);
+            // Set the mouse location
+            mouse.setLocation(x, y);
 
             // Process the event
             switch (event.getID()) {
@@ -529,6 +529,8 @@ public abstract class ApplicationContext {
 
     private Display display = null;
     private DisplayHost displayHost = null;
+
+    private Mouse mouse = null;
     private DragDropManager dragDropManager = null;
 
     private static ThreadLocal<ApplicationContext> applicationContext;
@@ -557,7 +559,9 @@ public abstract class ApplicationContext {
 
         display = new Display(this);
         displayHost = new DisplayHost();
-        dragDropManager = new DragDropManager(this);
+
+        mouse = new Mouse();
+        dragDropManager = new DragDropManager();
 
         try {
             // Load and instantiate the default theme, if possible
@@ -570,15 +574,16 @@ public abstract class ApplicationContext {
         }
     }
 
+    public DisplayHost getDisplayHost() {
+        return displayHost;
+    }
+
     protected Display getDisplay() {
         return display;
     }
 
-    /**
-     * Gets the display host.
-     */
-    public DisplayHost getDisplayHost() {
-        return displayHost;
+    protected Mouse getMouse() {
+        return mouse;
     }
 
     protected DragDropManager getDragDropManager() {

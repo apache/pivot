@@ -254,22 +254,27 @@ public class Demo implements Application {
     }
 
     private static class ImageDropHandler implements DropHandler {
-        public DropAction drop(Component component, int x, int y) {
+        public DropAction getDropAction(Component component, int x, int y) {
             DropAction dropAction = null;
 
-            DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
+            DragDropManager dragDropManager = DragDropManager.getDragDropManager();
             Object dragContent = dragDropManager.getContent();
             if (dragContent instanceof Image) {
-                ImageView imageView = (ImageView)component;
-
-                if (imageView.getImage() == null) {
-                    imageView.setImage((Image)dragContent);
-                    imageView.getStyles().put("backgroundColor", null);
-                    dropAction = DropAction.MOVE;
-                }
+                dropAction = DropAction.MOVE;
             }
 
             return dropAction;
+        }
+
+        public void drop(Component component, int x, int y) {
+            DragDropManager dragDropManager = DragDropManager.getDragDropManager();
+            Object dragContent = dragDropManager.getContent();
+            ImageView imageView = (ImageView)component;
+
+            if (imageView.getImage() == null) {
+                imageView.setImage((Image)dragContent);
+                imageView.getStyles().put("backgroundColor", null);
+            }
         }
     }
 
@@ -281,7 +286,7 @@ public class Demo implements Application {
         }
 
         public void mouseOver(Component component) {
-            DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
+            DragDropManager dragDropManager = DragDropManager.getDragDropManager();
 
             if (dragDropManager.isActive()) {
                 Object dragContent = dragDropManager.getContent();

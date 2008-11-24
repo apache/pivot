@@ -22,11 +22,20 @@ package pivot.wtk;
  */
 public interface DropHandler {
     /**
+     * Called to obtain the drop action the handler would use if an item were
+     * to be dropped.
+     *
+     * @return
+     * The drop action to be used, or <tt>null</tt> for no drop action.
+     */
+    public DropAction getDropAction(Component component, int x, int y);
+
+    /**
      * Called when an item is dropped during a drag/drop operation.
      *
      * @param component
      * @param x
      * @param y
      */
-    public DropAction drop(Component component, int x, int y);
+    public void drop(Component component, int x, int y);
 }

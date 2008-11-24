@@ -1145,7 +1145,7 @@ public class TerraTextInputSkin extends ComponentSkin
             showCaret(textInput.getSelectionLength() == 0);
 
             if (!temporary
-                && Mouse.getButtons() == 0) {
+                && Mouse.getMouse().getButtons() == 0) {
                 textInput.setSelection(0, textInput.getCharacterCount());
             }
         } else {

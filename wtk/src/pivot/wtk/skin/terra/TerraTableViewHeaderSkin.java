@@ -671,7 +671,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
 
         if (!resizing
-    		&& Mouse.getButtons() == 0) {
+    		&& Mouse.getMouse().getButtons() == 0) {
             TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
             TableView tableView = tableViewHeader.getTableView();
 

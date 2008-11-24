@@ -53,11 +53,10 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
             // The tooltip text may have been cleared while the timeout was
             // outstanding; if so, don't display the tooltip
             if (tooltipText != null) {
-                // TODO Re-use a static tooltip?
                 Tooltip tooltip = new Tooltip(tooltipText);
 
                 // TODO Ensure that the tooltip stays on screen
-                tooltip.setLocation(Mouse.getX() + 16, Mouse.getY());
+                tooltip.setLocation(Mouse.getMouse().getX() + 16, Mouse.getMouse().getY());
                 tooltip.open(component.getWindow());
             }
         }

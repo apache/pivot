@@ -23,23 +23,14 @@ import java.awt.Graphics2D;
  * TODO If Escape is pressed, cancel drag (call endDrag(null)).
  * <p>
  * TODO Paint an appropriate overlay icon if drop action is copy or link.
- * <p>
- * TODO ApplicationContext.DisplayHost should marshall/unmarshall native
- * drag/drop content when a drag out/over occurs, respectively?
  *
  * @author gbrown
  */
 public final class DragDropManager {
-    private ApplicationContext applicationContext = null;
-
     private Point dragLocation = null;
     private DragHandler dragHandler = null;
 
     public static final int DRAG_THRESHOLD = 4;
-
-    protected DragDropManager(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
 
     public boolean isActive() {
         return (dragHandler != null);
@@ -97,8 +88,23 @@ public final class DragDropManager {
     }
 
     protected void mouseMove(int x, int y) {
+        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
+
         if (isActive()) {
-            invalidate(x, y);
+            Visual representation = getRepresentation();
+            if (representation != null) {
+                Dimensions offset = getOffset();
+
+                applicationContext.repaint(dragLocation.x - offset.width,
+                    dragLocation.y - offset.height,
+                    representation.getWidth(), representation.getHeight());
+
+                applicationContext.repaint(x - offset.width, y - offset.height,
+                    representation.getWidth(), representation.getHeight());
+            }
+
+            dragLocation.x = x;
+            dragLocation.y = y;
         } else {
             if (dragLocation != null) {
                 if (Math.abs(x - dragLocation.x) > DRAG_THRESHOLD
@@ -149,6 +155,7 @@ public final class DragDropManager {
 
     protected void mouseUp(Mouse.Button button, int x, int y) {
         if (isActive()) {
+            ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
             Display display = applicationContext.getDisplay();
             Component dropTarget = display.getDescendantAt(x, y);
 
@@ -167,13 +174,24 @@ public final class DragDropManager {
             DropAction dropAction = null;
 
             if (dropHandler != null) {
-                // A drop handler was found; drop the content
-                Point componentDropLocation = dropTarget.mapPointFromAncestor(display, x, y);
-                dropAction = dropHandler.drop(dropTarget,
-                    componentDropLocation.x, componentDropLocation.y);
+                // A drop handler was found
+                Point dropLocation = dropTarget.mapPointFromAncestor(display, x, y);
+                dropAction = dropHandler.getDropAction(dropTarget,
+                    dropLocation.x, dropLocation.y);
+
+                if (dropAction != null) {
+                    // Drop the content
+                    dropHandler.drop(dropTarget, dropLocation.x, dropLocation.y);
+                }
             }
 
-            invalidate(x, y);
+            Visual representation = getRepresentation();
+            if (representation != null) {
+                Dimensions offset = getOffset();
+                applicationContext.repaint(dragLocation.x - offset.width,
+                    dragLocation.y - offset.height,
+                    representation.getWidth(), representation.getHeight());
+            }
 
             // End the drag
             dragHandler.endDrag(dropAction);
@@ -191,19 +209,7 @@ public final class DragDropManager {
     protected void keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
     }
 
-    private void invalidate(int x, int y) {
-        Visual representation = getRepresentation();
-        Dimensions offset = getOffset();
-
-        applicationContext.repaint(dragLocation.x - offset.width,
-            dragLocation.y - offset.height,
-            representation.getWidth(), representation.getHeight());
-
-        dragLocation.x = x;
-        dragLocation.y = y;
-
-        applicationContext.repaint(dragLocation.x - offset.width,
-            dragLocation.y - offset.height,
-            representation.getWidth(), representation.getHeight());
+    public static DragDropManager getDragDropManager() {
+        return ApplicationContext.getApplicationContext().getDragDropManager();
     }
 }
