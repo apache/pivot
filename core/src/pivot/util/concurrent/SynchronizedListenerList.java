@@ -35,10 +35,6 @@ public abstract class SynchronizedListenerList<T> extends ListenerList<T> {
         super.remove(listener);
     }
 
-    public synchronized int getCount() {
-        return super.getCount();
-    }
-
     /**
      * NOTE Callers must manually synchronize on the SynchronizedListenerList
      * instance to ensure thread safety during iteration.

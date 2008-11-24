@@ -22,6 +22,7 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
 import pivot.wtk.Cursor;
+import pivot.wtk.Mouse;
 
 /**
  * Abstract base class for button skins.
@@ -81,8 +82,10 @@ public abstract class ButtonSkin extends ComponentSkin
     public void mouseOver(Component component) {
         super.mouseOver(component);
 
-        highlighted = true;
-        repaintComponent();
+        if (Mouse.getButtons() == 0) {
+            highlighted = true;
+            repaintComponent();
+        }
     }
 
     @Override

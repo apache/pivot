@@ -16,72 +16,127 @@
 package pivot.util;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Abstract base class for listener lists.
  * <p>
- * NOTE This class is not thread-safe.
- * <p>
- * IMPORTANT This class does not implement Sequence, since this would
- * provide direct access to listeners via index, enabling concurrent
- * modification by removing listeners during iteration.
- * <p>
- * TODO Eliminate dependency on java.util.ArrayList and use an internal
- * linked list (not an instance of pivot.collections.LinkedList, since
- * that will create a circular dependency).
+ * NOTE This class is not thread safe. For thread-safe management of events,
+ * use {@link pivot.util.concurrent.SynchronizedListenerList}.
  *
  * @author gbrown
  */
 public abstract class ListenerList<T> implements Iterable<T> {
-    private java.util.ArrayList<T> list = new java.util.ArrayList<T>();
+    /**
+     * Represents a node in the linked list of event listeners.
+     *
+     * @author gbrown
+     */
+    private class Node {
+        private Node previous;
+        private Node next;
+        private T listener;
 
+        public Node(Node previous, Node next, T listener) {
+            this.previous = previous;
+            this.next = next;
+            this.listener = listener;
+        }
+    }
+
+    /**
+     * Listener list iterator.
+     *
+     * @author gbrown
+     */
+    private class NodeIterator implements Iterator<T> {
+        private Node node;
+
+        public NodeIterator(Node node) {
+            this.node = node;
+        }
+
+        public boolean hasNext() {
+            return (node != null);
+        }
+
+        public T next() {
+            if (node == null) {
+                throw new NoSuchElementException();
+            }
+
+            T listener = node.listener;
+            node = node.next;
+
+            return listener;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     * The first node in the list, or <tt>null</tt> if the list is empty.
+     */
+    private Node first = null;
+
+    /**
+     * Adds a listener to the list, if it has not previously been added.
+     *
+     * @param listener
+     */
     public void add(T listener) {
         if (listener == null) {
             throw new IllegalArgumentException("listener is null.");
         }
 
-        // NOTE We don't use indexOf() here because it calls the equals()
-        // method of the item, which isn't implemented by dynamically generated
-        // listener implementations
-        int i = 0, n = list.size();
-        while (i < n
-            && list.get(i) != listener) {
-            i++;
-        }
+        Node node = first;
 
-        if (i == list.size()) {
-            list.add(listener);
+        if (node == null) {
+            first = new Node(null, null, listener);
         } else {
-            System.out.println("Duplicate listener " + listener + " added to " + this);
+            while (node.next != null
+                && node.listener != listener) {
+                node = node.next;
+            }
+
+            if (node.next == null) {
+                node.next = new Node(node, null, listener);
+            } else {
+                System.out.println("Duplicate listener " + listener + " added to " + this);
+            }
         }
     }
 
+    /**
+     * Removes a listener from the list, if it has previously been added.
+     *
+     * @param listener
+     */
     public void remove(T listener) {
         if (listener == null) {
             throw new IllegalArgumentException("listener is null.");
         }
 
-        if (!list.remove(listener)) {
+        Node node = first;
+        while (node != null
+            && node.listener != listener) {
+            node = node.next;
+        }
+
+        if (node == null) {
             System.out.println("Nonexistent listener " + listener + " removed from " + this);
+        } else {
+            if (node.previous == null) {
+                first = node.next;
+            } else {
+                node.previous.next = node.next;
+            }
         }
     }
 
-    public int getCount() {
-        return list.size();
-    }
-
     public Iterator<T> iterator() {
-        // TODO For now, return an iterator on a copy of the list; this will
-        // allow callers to remove themselves as listeners while an event is
-        // being fired
-
-        // In the future, we can use the linked list nodes to support this;
-        // when a node is removed, the previous node will be updated to point
-        // to the following node, but the node itself does not need to be
-        // updated - it will continue to point to the following node, allowing
-        // iteration to continue
-
-        java.util.ArrayList<T> list = new java.util.ArrayList<T>(this.list);
-        return new ImmutableIterator<T>(list.iterator());
+        return new NodeIterator(first);
     }
 }
