@@ -38,6 +38,8 @@ public class ListenerListTest {
         testSource.setTestListener(listener2);
         testSource.getTestListeners().add(listener3);
         testSource.getTestListeners().add(listener4);
+        testSource.getTestListeners().add(listener3);
+        testSource.getTestListeners().add(listener4);
 
         // testSource.getTestListeners().remove(listener1);
         // testSource.getTestListeners().remove(listener4);

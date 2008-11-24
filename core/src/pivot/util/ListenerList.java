@@ -101,7 +101,8 @@ public abstract class ListenerList<T> implements Iterable<T> {
                 node = node.next;
             }
 
-            if (node.next == null) {
+            if (node.next == null
+                && node.listener != listener) {
                 node.next = new Node(node, null, listener);
             } else {
                 System.out.println("Duplicate listener " + listener + " added to " + this);
@@ -130,8 +131,16 @@ public abstract class ListenerList<T> implements Iterable<T> {
         } else {
             if (node.previous == null) {
                 first = node.next;
+
+                if (first != null) {
+                    first.previous = null;
+                }
             } else {
                 node.previous.next = node.next;
+
+                if (node.next != null) {
+                    node.next.previous = node.previous;
+                }
             }
         }
     }
