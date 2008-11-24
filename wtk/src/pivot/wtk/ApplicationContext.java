@@ -561,7 +561,7 @@ public abstract class ApplicationContext {
         displayHost = new DisplayHost();
 
         mouse = new Mouse();
-        dragDropManager = new DragDropManager();
+        dragDropManager = new DragDropManager(this);
 
         try {
             // Load and instantiate the default theme, if possible

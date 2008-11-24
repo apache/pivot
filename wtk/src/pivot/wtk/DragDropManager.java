@@ -16,6 +16,18 @@
 package pivot.wtk;
 
 import java.awt.Graphics2D;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
+import java.io.File;
+import java.io.IOException;
+import pivot.collections.adapter.ListAdapter;
 
 /**
  * Provides framework support for drag/drop operations.
@@ -27,10 +39,162 @@ import java.awt.Graphics2D;
  * @author gbrown
  */
 public final class DragDropManager {
+    public class NativeDragHandler implements DragHandler {
+        public boolean beginDrag(Component component, int x, int y) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void endDrag(DropAction dropAction) {
+            throw new UnsupportedOperationException();
+        }
+
+        @SuppressWarnings("unchecked")
+        public Object getContent() {
+            Object content = null;
+
+            Transferable transferable = dropTargetDragEvent.getTransferable();
+            try {
+                if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                    content = transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                    content = new ListAdapter<File>((java.util.List<File>)content);
+                } else {
+                    if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                        content = (String)transferable.getTransferData(DataFlavor.stringFlavor);
+                    }
+                }
+            } catch (UnsupportedFlavorException exception) {
+            } catch (IOException exception) {
+            }
+
+            return content;
+        }
+
+        public Visual getRepresentation() {
+            return null;
+        }
+
+        public Dimensions getOffset() {
+            throw new UnsupportedOperationException();
+        }
+
+        public int getSupportedDropActions() {
+            int supportedDropActions = 0;
+
+            int awtDropAction = dropTargetDragEvent.getDropAction();
+
+            if ((awtDropAction & DnDConstants.ACTION_COPY) == DnDConstants.ACTION_COPY) {
+                supportedDropActions |= DropAction.COPY.getMask();
+            }
+
+            if ((awtDropAction & DnDConstants.ACTION_MOVE) == DnDConstants.ACTION_MOVE) {
+                supportedDropActions |= DropAction.MOVE.getMask();
+            }
+
+            if ((awtDropAction & DnDConstants.ACTION_LINK) == DnDConstants.ACTION_LINK) {
+                supportedDropActions |= DropAction.LINK.getMask();
+            }
+
+            return supportedDropActions;
+        }
+    }
+
+    private class DropTargetHandler implements DropTargetListener {
+        public void dragEnter(DropTargetDragEvent dropTargetDragEvent) {
+            dragHandler = new NativeDragHandler();
+            DragDropManager.this.dropTargetDragEvent = dropTargetDragEvent;
+        }
+
+        public void dragExit(DropTargetEvent dropTargetEvent) {
+            dragHandler = null;
+        }
+
+        public void dragOver(DropTargetDragEvent dropTargetDragEvent) {
+            // No-op
+        }
+
+        public void dropActionChanged(DropTargetDragEvent dropTargetDragEvent) {
+            DragDropManager.this.dropTargetDragEvent = dropTargetDragEvent;
+        }
+
+        public void drop(DropTargetDropEvent dropTargetDropEvent) {
+            // Look for a drop handler
+            Display display = applicationContext.getDisplay();
+
+            Mouse mouse = Mouse.getMouse();
+            int x = mouse.getX();
+            int y = mouse.getY();
+
+            Component dropTarget = display.getDescendantAt(x, y);
+
+            DropHandler dropHandler = null;
+            while (dropTarget != null) {
+                dropHandler = dropTarget.getDropHandler();
+
+                if (dropHandler == null) {
+                    dropTarget = dropTarget.getParent();
+                } else {
+                    break;
+                }
+            }
+
+            if (dropHandler != null) {
+                // A drop handler was found
+                DropAction dropAction = null;
+
+                Point dropLocation = dropTarget.mapPointFromAncestor(display, x, y);
+                dropAction = dropHandler.getDropAction(dropTarget,
+                    dropLocation.x, dropLocation.y);
+
+                if (dropAction != null) {
+                    int awtDropAction = 0;
+
+                    switch(dropAction) {
+                        case COPY: {
+                            awtDropAction = DnDConstants.ACTION_COPY;
+                            break;
+                        }
+
+                        case MOVE: {
+                            awtDropAction = DnDConstants.ACTION_MOVE;
+                            break;
+                        }
+
+                        case LINK: {
+                            awtDropAction = DnDConstants.ACTION_LINK;
+                            break;
+                        }
+                    }
+
+                    // Drop the content
+                    dropTargetDropEvent.acceptDrop(awtDropAction);
+                    dropHandler.drop(dropTarget, dropLocation.x, dropLocation.y);
+
+                    dropTargetDropEvent.dropComplete(true);
+                }
+            } else {
+                dropTargetDropEvent.rejectDrop();
+            }
+
+            // Clear the drag handler
+            dragHandler = null;
+        }
+    }
+
+    private ApplicationContext applicationContext;
+
     private Point dragLocation = null;
     private DragHandler dragHandler = null;
 
+    private DropTargetDragEvent dropTargetDragEvent = null;
+
     public static final int DRAG_THRESHOLD = 4;
+
+    public DragDropManager(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+
+        java.awt.Container displayHost = applicationContext.getDisplayHost();
+        new DropTarget(displayHost, new DropTargetHandler());
+    }
 
     public boolean isActive() {
         return (dragHandler != null);
@@ -88,8 +252,6 @@ public final class DragDropManager {
     }
 
     protected void mouseMove(int x, int y) {
-        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
-
         if (isActive()) {
             Visual representation = getRepresentation();
             if (representation != null) {
@@ -155,7 +317,6 @@ public final class DragDropManager {
 
     protected void mouseUp(Mouse.Button button, int x, int y) {
         if (isActive()) {
-            ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
             Display display = applicationContext.getDisplay();
             Component dropTarget = display.getDescendantAt(x, y);
 
