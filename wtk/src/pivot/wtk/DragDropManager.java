@@ -58,8 +58,9 @@ public final class DragDropManager {
                     content = transferable.getTransferData(DataFlavor.javaFileListFlavor);
                     content = new ListAdapter<File>((java.util.List<File>)content);
                 } else {
-                    if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                        content = (String)transferable.getTransferData(DataFlavor.stringFlavor);
+                    DataFlavor[] dataFlavors = transferable.getTransferDataFlavors();
+                    if (dataFlavors.length > 0) {
+                        content = transferable.getTransferData(dataFlavors[0]);
                     }
                 }
             } catch (UnsupportedFlavorException exception) {
