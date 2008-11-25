@@ -56,7 +56,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
                 Tooltip tooltip = new Tooltip(tooltipText);
 
                 // TODO Ensure that the tooltip stays on screen
-                tooltip.setLocation(Mouse.getMouse().getX() + 16, Mouse.getMouse().getY());
+                tooltip.setLocation(Mouse.getX() + 16, Mouse.getY());
                 tooltip.open(component.getWindow());
             }
         }

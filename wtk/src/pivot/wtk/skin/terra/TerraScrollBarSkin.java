@@ -593,7 +593,7 @@ public class TerraScrollBarSkin extends ContainerSkin
         public void mouseOut(Component component) {
             super.mouseOut(component);
 
-            if (Mouse.getMouse().isPressed(Mouse.Button.LEFT)) {
+            if (Mouse.isPressed(Mouse.Button.LEFT)) {
                 // The user is currently dragging the handle.  We don't
                 // un-highlight it until the user releases the left mouse
                 // button.  NOTE the code that actually sets the scroll bar's

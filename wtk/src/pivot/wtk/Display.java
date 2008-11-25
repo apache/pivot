@@ -30,16 +30,22 @@ public final class Display extends Container {
         }
     }
 
-    private ApplicationContext applicationContext = null;
+    private ApplicationContext applicationContext;
+    private DragDropManager dragDropManager;
 
     protected Display(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+        dragDropManager = new DragDropManager(this);
 
         super.setSkin(new DisplaySkin());
     }
 
-    protected ApplicationContext getApplicationContext() {
+    public ApplicationContext getApplicationContext() {
         return applicationContext;
+    }
+
+    public DragDropManager getDragDropManager() {
+        return dragDropManager;
     }
 
     @Override

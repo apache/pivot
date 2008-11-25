@@ -34,4 +34,12 @@ public enum DropAction {
     public int getMask() {
         return this.mask;
     }
+
+    public boolean isSelected(int dropActions) {
+        return ((dropActions & getMask()) > 0);
+    }
+
+    public static DropAction decode(String value) {
+        return valueOf(value.toUpperCase());
+    }
 }

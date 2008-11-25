@@ -38,6 +38,7 @@ import java.util.TimerTask;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.util.ImmutableIterator;
+import pivot.wtk.Component.DecoratorSequence;
 
 /**
  * Base class for application contexts.
@@ -84,7 +85,7 @@ public abstract class ApplicationContext {
      *
      * @author gbrown
      */
-    protected class DisplayHost extends java.awt.Container {
+    public class DisplayHost extends java.awt.Container {
         public static final long serialVersionUID = 0;
 
         private Component focusedComponent = null;
@@ -118,8 +119,7 @@ public abstract class ApplicationContext {
                 try {
                     if (!paintVolatileBuffered((Graphics2D)graphics)) {
                         if (!paintBuffered((Graphics2D)graphics)) {
-                            display.paint((Graphics2D)graphics);
-                            dragDropManager.paint((Graphics2D)graphics);
+                            paintDisplay((Graphics2D)graphics);
                         }
                     }
                 } catch (RuntimeException exception) {
@@ -155,8 +155,7 @@ public abstract class ApplicationContext {
                 bufferedImageGraphics.translate(-clipBounds.x, -clipBounds.y);
 
                 try {
-                    display.paint(bufferedImageGraphics);
-                    dragDropManager.paint(bufferedImageGraphics);
+                    paintDisplay(bufferedImageGraphics);
                     graphics.drawImage(bufferedImage, clipBounds.x, clipBounds.y, this);
                 } finally {
                     bufferedImageGraphics.dispose();
@@ -200,8 +199,7 @@ public abstract class ApplicationContext {
                     volatileImageGraphics.translate(-clipBounds.x, -clipBounds.y);
 
                     try {
-                        display.paint(volatileImageGraphics);
-                        dragDropManager.paint(volatileImageGraphics);
+                        paintDisplay(volatileImageGraphics);
                         graphics.drawImage(volatileImage, clipBounds.x, clipBounds.y, this);
                     } finally {
                         volatileImageGraphics.dispose();
@@ -212,6 +210,29 @@ public abstract class ApplicationContext {
             }
 
             return painted;
+        }
+
+        /**
+         * Paints the display including any decorators.
+         *
+         * @param graphics
+         */
+        private void paintDisplay(Graphics2D graphics) {
+            Graphics2D decoratedGraphics = graphics;
+
+            DecoratorSequence decorators = display.getDecorators();
+            int n = decorators.getLength();
+            for (int i = n - 1; i >= 0; i--) {
+                Decorator decorator = decorators.get(i);
+                decoratedGraphics = decorator.prepare(display, decoratedGraphics);
+            }
+
+            display.paint(graphics);
+
+            for (int i = 0; i < n; i++) {
+                Decorator decorator = decorators.get(i);
+                decorator.update();
+            }
         }
 
         @Override
@@ -289,7 +310,7 @@ public abstract class ApplicationContext {
                 buttonBitfield |= Mouse.Button.RIGHT.getMask();
             }
 
-            mouse.setButtons(buttonBitfield);
+            Mouse.setButtons(buttonBitfield);
 
             // Get the button associated with this event
             Mouse.Button button = null;
@@ -314,15 +335,12 @@ public abstract class ApplicationContext {
             switch (event.getID()) {
                 case MouseEvent.MOUSE_PRESSED: {
                     requestFocus();
-
                     display.mouseDown(button, x, y);
-                    dragDropManager.mouseDown(button, x, y);
                     break;
                 }
 
                 case MouseEvent.MOUSE_RELEASED: {
                     display.mouseUp(button, x, y);
-                    dragDropManager.mouseUp(button, x, y);
                     break;
                 }
 
@@ -347,14 +365,13 @@ public abstract class ApplicationContext {
             int y = event.getY();
 
             // Set the mouse location
-            mouse.setLocation(x, y);
+            Mouse.setLocation(x, y);
 
             // Process the event
             switch (event.getID()) {
                 case MouseEvent.MOUSE_MOVED:
                 case MouseEvent.MOUSE_DRAGGED: {
                     display.mouseMove(x, y);
-                    dragDropManager.mouseMove(x, y);
                     break;
                 }
             }
@@ -471,8 +488,6 @@ public abstract class ApplicationContext {
 
                     if (consumed) {
                         event.consume();
-                    } else {
-                        dragDropManager.keyPressed(keyCode, keyLocation);
                     }
 
                     break;
@@ -488,8 +503,6 @@ public abstract class ApplicationContext {
 
                     if (consumed) {
                         event.consume();
-                    } else {
-                        dragDropManager.keyReleased(keyCode, keyLocation);
                     }
 
                     break;
@@ -525,13 +538,10 @@ public abstract class ApplicationContext {
         }
     }
 
-    protected static URL origin = null;
-
-    private Display display = null;
     private DisplayHost displayHost = null;
+    private Display display = null;
 
-    private Mouse mouse = null;
-    private DragDropManager dragDropManager = null;
+    protected static URL origin = null;
 
     private static ThreadLocal<ApplicationContext> applicationContext;
 
@@ -557,11 +567,8 @@ public abstract class ApplicationContext {
             }
         };
 
-        display = new Display(this);
         displayHost = new DisplayHost();
-
-        mouse = new Mouse();
-        dragDropManager = new DragDropManager(this);
+        display = new Display(this);
 
         try {
             // Load and instantiate the default theme, if possible
@@ -578,16 +585,8 @@ public abstract class ApplicationContext {
         return displayHost;
     }
 
-    protected Display getDisplay() {
+    public Display getDisplay() {
         return display;
-    }
-
-    protected Mouse getMouse() {
-        return mouse;
-    }
-
-    protected DragDropManager getDragDropManager() {
-        return dragDropManager;
     }
 
     protected void repaint(int x, int y, int width, int height) {

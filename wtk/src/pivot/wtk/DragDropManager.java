@@ -119,11 +119,8 @@ public final class DragDropManager {
 
         public void drop(DropTargetDropEvent dropTargetDropEvent) {
             // Look for a drop handler
-            Display display = applicationContext.getDisplay();
-
-            Mouse mouse = Mouse.getMouse();
-            int x = mouse.getX();
-            int y = mouse.getY();
+            int x = Mouse.getX();
+            int y = Mouse.getY();
 
             Component dropTarget = display.getDescendantAt(x, y);
 
@@ -181,7 +178,7 @@ public final class DragDropManager {
         }
     }
 
-    private ApplicationContext applicationContext;
+    private Display display;
 
     private Point dragLocation = null;
     private DragHandler dragHandler = null;
@@ -190,9 +187,10 @@ public final class DragDropManager {
 
     public static final int DRAG_THRESHOLD = 4;
 
-    public DragDropManager(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+    public DragDropManager(Display display) {
+        this.display = display;
 
+        ApplicationContext applicationContext = display.getApplicationContext();
         java.awt.Container displayHost = applicationContext.getDisplayHost();
         new DropTarget(displayHost, new DropTargetHandler());
     }
@@ -252,27 +250,34 @@ public final class DragDropManager {
         }
     }
 
+    protected void mouseOver() {
+    }
+
+    protected void mouseOut() {
+    }
+
     protected void mouseMove(int x, int y) {
         if (isActive()) {
             Visual representation = getRepresentation();
             if (representation != null) {
                 Dimensions offset = getOffset();
 
-                applicationContext.repaint(dragLocation.x - offset.width,
+                display.repaint(dragLocation.x - offset.width,
                     dragLocation.y - offset.height,
                     representation.getWidth(), representation.getHeight());
 
-                applicationContext.repaint(x - offset.width, y - offset.height,
+                display.repaint(x - offset.width, y - offset.height,
                     representation.getWidth(), representation.getHeight());
             }
 
-            dragLocation.x = x;
-            dragLocation.y = y;
+            if (dragLocation != null) {
+                dragLocation.x = x;
+                dragLocation.y = y;
+            }
         } else {
             if (dragLocation != null) {
                 if (Math.abs(x - dragLocation.x) > DRAG_THRESHOLD
                     || Math.abs(y - dragLocation.y) > DRAG_THRESHOLD) {
-                    Display display = applicationContext.getDisplay();
                     Component dragSource = display.getDescendantAt(dragLocation.x,
                         dragLocation.y);
 
@@ -318,7 +323,6 @@ public final class DragDropManager {
 
     protected void mouseUp(Mouse.Button button, int x, int y) {
         if (isActive()) {
-            Display display = applicationContext.getDisplay();
             Component dropTarget = display.getDescendantAt(x, y);
 
             // Look for a drop handler
@@ -350,7 +354,7 @@ public final class DragDropManager {
             Visual representation = getRepresentation();
             if (representation != null) {
                 Dimensions offset = getOffset();
-                applicationContext.repaint(dragLocation.x - offset.width,
+                display.repaint(dragLocation.x - offset.width,
                     dragLocation.y - offset.height,
                     representation.getWidth(), representation.getHeight());
             }
@@ -369,9 +373,5 @@ public final class DragDropManager {
     }
 
     protected void keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
-    }
-
-    public static DragDropManager getDragDropManager() {
-        return ApplicationContext.getApplicationContext().getDragDropManager();
     }
 }

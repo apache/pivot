@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import java.awt.Toolkit;
+import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -29,26 +30,38 @@ import java.io.IOException;
  * @author gbrown
  */
 public class Clipboard {
-    private static java.awt.datatransfer.Clipboard awtClipboard;
-    private static Clipboard instance = new Clipboard();
+    private static Object contents = null;
+    private static java.awt.datatransfer.Clipboard awtClipboard = null;
 
-    public Clipboard() {
+    static {
         try {
             awtClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         } catch(SecurityException exception) {
             System.out.println("Access to system clipboard is not allowed; using local clipboard.");
-            awtClipboard = new java.awt.datatransfer.Clipboard(null);
         }
     }
 
-    public Object get() {
-        Object contents = null;
+    /**
+     * Retrieves the contents of the clipboard.
+     *
+     * @return
+     * The current contents of the clipboard. If the clipboard contents were
+     * populated by this application or another application loaded by the same
+     * class loader, the return value will be the same value that was passed
+     * to the call to {@link #put(Object)}. Otherwise, if the application has
+     * access to the system clipboard and a string value is available, it will
+     * be returned; otherwise, returns <tt>null</tt>.
+     */
+    public static Object get() {
+        Object contents = Clipboard.contents;
 
-        if (awtClipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-            Transferable systemClipboardContents = awtClipboard.getContents(this);
+        if (contents == null
+            && awtClipboard != null
+            && awtClipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
+            Transferable awtClipboardContents = awtClipboard.getContents(null);
 
             try {
-                contents = systemClipboardContents.getTransferData(DataFlavor.stringFlavor);
+                contents = awtClipboardContents.getTransferData(DataFlavor.stringFlavor);
             } catch (UnsupportedFlavorException exception) {
                 System.out.println(exception);
             } catch (IOException exception) {
@@ -59,20 +72,27 @@ public class Clipboard {
         return contents;
     }
 
-    public void put(Object contents) {
+    /**
+     * Places a value on the clipboard. If the application has access to the
+     * system clipboard, a string representation of the content will be copied
+     * to it.
+     *
+     * @param contents
+     */
+    public static void put(Object contents) {
         if (contents == null) {
             throw new IllegalArgumentException("contents is null");
         }
 
-        if (!(contents instanceof String)) {
-            throw new IllegalArgumentException("Only string content is currently supported.");
+        if (awtClipboard != null) {
+            awtClipboard.setContents(new StringSelection(contents.toString()), new ClipboardOwner() {
+                public void lostOwnership(java.awt.datatransfer.Clipboard awtClipboard,
+                    Transferable awtClipboardContents) {
+                    Clipboard.contents = null;
+                }
+            });
         }
 
-        StringSelection stringSelection = new StringSelection((String)contents);
-        awtClipboard.setContents(stringSelection, stringSelection);
-    }
-
-    public static Clipboard getInstance() {
-        return instance;
+        Clipboard.contents = contents;
     }
 }

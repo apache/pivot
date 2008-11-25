@@ -73,41 +73,48 @@
 			                        <Menu.Section>
 			                            <Menu.Item>
 			                                <buttonData>
-			                                    <content:ButtonData text="Undo" icon="@edit-undo.png"/>
+			                                    <content:MenuItemData text="Undo" icon="@edit-undo.png"
+			                                        keyboardShortcut="CTRL-Z"/>
 			                                </buttonData>
 			                            </Menu.Item>
 			                            <Menu.Item>
 			                                <buttonData>
-			                                    <content:ButtonData text="Redo" icon="@edit-redo.png"/>
-			                                </buttonData>
-			                            </Menu.Item>
-			                        </Menu.Section>
-			                        <Menu.Section>
-			                            <Menu.Item>
-			                                <buttonData>
-			                                    <content:ButtonData text="Cut" icon="@edit-cut.png"/>
-			                                </buttonData>
-			                            </Menu.Item>
-			                            <Menu.Item>
-			                                <buttonData>
-			                                    <content:ButtonData text="Copy" icon="@edit-copy.png"/>
-			                                </buttonData>
-			                            </Menu.Item>
-			                            <Menu.Item>
-			                                <buttonData>
-			                                    <content:ButtonData text="Paste" icon="@edit-paste.png"/>
+			                                    <content:MenuItemData text="Redo" icon="@edit-redo.png"
+			                                        keyboardShortcut="SHIFT-CTRL-Z"/>
 			                                </buttonData>
 			                            </Menu.Item>
 			                        </Menu.Section>
 			                        <Menu.Section>
 			                            <Menu.Item>
 			                                <buttonData>
-			                                    <content:ButtonData text="Delete" icon="@edit-delete.png"/>
+			                                    <content:MenuItemData text="Cut" icon="@edit-cut.png"
+			                                        keyboardShortcut="CTRL-X"/>
 			                                </buttonData>
 			                            </Menu.Item>
 			                            <Menu.Item>
 			                                <buttonData>
-			                                    <content:ButtonData text="Select All" icon="@edit-select-all.png"/>
+			                                    <content:MenuItemData text="Copy" icon="@edit-copy.png"
+			                                        keyboardShortcut="CTRL-C"/>
+			                                </buttonData>
+			                            </Menu.Item>
+			                            <Menu.Item>
+			                                <buttonData>
+			                                    <content:MenuItemData text="Paste" icon="@edit-paste.png"
+			                                        keyboardShortcut="CTRL-V"/>
+			                                </buttonData>
+			                            </Menu.Item>
+			                        </Menu.Section>
+			                        <Menu.Section>
+			                            <Menu.Item>
+			                                <buttonData>
+			                                    <content:MenuItemData text="Delete" icon="@edit-delete.png"
+			                                        keyboardShortcut="DELETE"/>
+			                                </buttonData>
+			                            </Menu.Item>
+			                            <Menu.Item>
+			                                <buttonData>
+			                                    <content:MenuItemData text="Select All" icon="@edit-select-all.png"
+			                                        keyboardShortcut="CTRL-A"/>
 			                                </buttonData>
 			                            </Menu.Item>
 			                        </Menu.Section>

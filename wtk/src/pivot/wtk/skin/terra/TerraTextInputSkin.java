@@ -1080,7 +1080,7 @@ public class TerraTextInputSkin extends ComponentSkin
                     String removedText = textInput.removeText(textInput.getSelectionStart(),
                         selectionLength);
 
-                    Clipboard.getInstance().put(removedText);
+                    Clipboard.put(removedText);
                 }
             }
         } else if (keyCode == Keyboard.KeyCode.C
@@ -1092,13 +1092,13 @@ public class TerraTextInputSkin extends ComponentSkin
                 // Copy selection to clipboard
                 String selectedText = textInput.getSelectedText();
                 if (selectedText != null) {
-                    Clipboard.getInstance().put(selectedText);
+                    Clipboard.put(selectedText);
                 }
             }
         } else if (keyCode == Keyboard.KeyCode.V
             && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
             // "Paste"
-            Object clipboardContents = Clipboard.getInstance().get();
+            Object clipboardContents = Clipboard.get();
 
             if (clipboardContents != null) {
                 // Paste the string representation of the content
@@ -1145,7 +1145,7 @@ public class TerraTextInputSkin extends ComponentSkin
             showCaret(textInput.getSelectionLength() == 0);
 
             if (!temporary
-                && Mouse.getMouse().getButtons() == 0) {
+                && Mouse.getButtons() == 0) {
                 textInput.setSelection(0, textInput.getCharacterCount());
             }
         } else {

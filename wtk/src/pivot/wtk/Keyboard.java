@@ -39,6 +39,10 @@ public final class Keyboard {
             return 2 << ordinal();
         }
 
+        public boolean isSelected(int modifiers) {
+            return ((modifiers & getMask()) > 0);
+        }
+
         public static Modifier decode(String value) {
             return valueOf(value.toUpperCase());
         }
@@ -109,19 +113,19 @@ public final class Keyboard {
         public String toString() {
             int awtModifiers = 0x00;
 
-            if ((modifiers & Modifier.META.getMask()) == Modifier.META.getMask()) {
+            if (Modifier.META.isSelected(modifiers)) {
                 awtModifiers |= KeyEvent.META_DOWN_MASK;
             }
 
-            if ((modifiers & Modifier.CTRL.getMask()) == Modifier.CTRL.getMask()) {
+            if (Modifier.CTRL.isSelected(modifiers)) {
                 awtModifiers |= KeyEvent.CTRL_DOWN_MASK;
             }
 
-            if ((modifiers & Modifier.ALT.getMask()) == Modifier.ALT.getMask()) {
+            if (Modifier.ALT.isSelected(modifiers)) {
                 awtModifiers |= KeyEvent.ALT_DOWN_MASK;
             }
 
-            if ((modifiers & Modifier.SHIFT.getMask()) == Modifier.SHIFT.getMask()) {
+            if (Modifier.SHIFT.isSelected(modifiers)) {
                 awtModifiers |= KeyEvent.SHIFT_DOWN_MASK;
             }
 
@@ -271,7 +275,7 @@ public final class Keyboard {
      * <tt>true</tt> if the modifier is pressed; <tt>false</tt>, otherwise.
      */
     public static boolean isPressed(Modifier modifier) {
-        return (modifiers & modifier.getMask()) > 0;
+        return modifier.isSelected(modifiers);
     }
 }
 

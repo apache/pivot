@@ -257,7 +257,7 @@ public class Demo implements Application {
         public DropAction getDropAction(Component component, int x, int y) {
             DropAction dropAction = null;
 
-            DragDropManager dragDropManager = DragDropManager.getDragDropManager();
+            DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
             Object dragContent = dragDropManager.getContent();
             if (dragContent instanceof Image) {
                 dropAction = DropAction.MOVE;
@@ -267,7 +267,7 @@ public class Demo implements Application {
         }
 
         public void drop(Component component, int x, int y) {
-            DragDropManager dragDropManager = DragDropManager.getDragDropManager();
+            DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
             Object dragContent = dragDropManager.getContent();
             ImageView imageView = (ImageView)component;
 
@@ -286,7 +286,7 @@ public class Demo implements Application {
         }
 
         public void mouseOver(Component component) {
-            DragDropManager dragDropManager = DragDropManager.getDragDropManager();
+            DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
 
             if (dragDropManager.isActive()) {
                 Object dragContent = dragDropManager.getContent();
