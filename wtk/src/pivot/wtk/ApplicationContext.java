@@ -88,6 +88,11 @@ public abstract class ApplicationContext {
     public class DisplayHost extends java.awt.Container {
         public static final long serialVersionUID = 0;
 
+        private int mouseX = 0;
+        private int mouseY = 0;
+        private int mouseButtonModifiersEx = 0;
+        private int keyboardModifiersEx = 0;
+
         private Component focusedComponent = null;
 
         protected DisplayHost() {
@@ -235,6 +240,22 @@ public abstract class ApplicationContext {
             }
         }
 
+        public int getMouseX() {
+            return mouseX;
+        }
+
+        public int getMouseY() {
+            return mouseY;
+        }
+
+        public int getMouseButtonModifiersEx() {
+            return mouseButtonModifiersEx;
+        }
+
+        public int getKeyboardModifiersEx() {
+            return keyboardModifiersEx;
+        }
+
         @Override
         protected void processComponentEvent(ComponentEvent event) {
             super.processComponentEvent(event);
@@ -294,23 +315,8 @@ public abstract class ApplicationContext {
             int x = event.getX();
             int y = event.getY();
 
-            // Set the Mouse button state
-            int modifierMask = event.getModifiersEx();
-            int buttonBitfield = 0x00;
-
-            if ((modifierMask & MouseEvent.BUTTON1_DOWN_MASK) == MouseEvent.BUTTON1_DOWN_MASK) {
-                buttonBitfield |= Mouse.Button.LEFT.getMask();
-            }
-
-            if ((modifierMask & MouseEvent.BUTTON2_DOWN_MASK) == MouseEvent.BUTTON2_DOWN_MASK) {
-                buttonBitfield |= Mouse.Button.MIDDLE.getMask();
-            }
-
-            if ((modifierMask & MouseEvent.BUTTON3_DOWN_MASK) == MouseEvent.BUTTON3_DOWN_MASK) {
-                buttonBitfield |= Mouse.Button.RIGHT.getMask();
-            }
-
-            Mouse.setButtons(buttonBitfield);
+            // Get the mouse button modifiers
+            mouseButtonModifiersEx = event.getModifiersEx();
 
             // Get the button associated with this event
             Mouse.Button button = null;
@@ -361,17 +367,14 @@ public abstract class ApplicationContext {
             super.processMouseMotionEvent(event);
 
             // Get the event coordinates
-            int x = event.getX();
-            int y = event.getY();
-
-            // Set the mouse location
-            Mouse.setLocation(x, y);
+            mouseX = event.getX();
+            mouseY = event.getY();
 
             // Process the event
             switch (event.getID()) {
                 case MouseEvent.MOUSE_MOVED:
                 case MouseEvent.MOUSE_DRAGGED: {
-                    display.mouseMove(x, y);
+                    display.mouseMove(mouseX, mouseY);
                     break;
                 }
             }
@@ -437,27 +440,8 @@ public abstract class ApplicationContext {
                 }
             }
 
-            // Set Keyboard state
-            int awtModifiers = event.getModifiersEx();
-            int modifiers = 0x00;
-
-            if ((awtModifiers & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK) {
-                modifiers |= Keyboard.Modifier.SHIFT.getMask();
-            }
-
-            if ((awtModifiers & KeyEvent.CTRL_DOWN_MASK) == KeyEvent.CTRL_DOWN_MASK) {
-                modifiers |= Keyboard.Modifier.CTRL.getMask();
-            }
-
-            if ((awtModifiers & KeyEvent.ALT_DOWN_MASK) == KeyEvent.ALT_DOWN_MASK) {
-                modifiers |= Keyboard.Modifier.ALT.getMask();
-            }
-
-            if ((awtModifiers & KeyEvent.META_DOWN_MASK) == KeyEvent.META_DOWN_MASK) {
-                modifiers |= Keyboard.Modifier.META.getMask();
-            }
-
-            Keyboard.setModifiers(modifiers);
+            // Get the keyboard modifiers
+            keyboardModifiersEx = event.getModifiersEx();
 
             // Process the event
             Component focusedComponent = Component.getFocusedComponent();
@@ -540,6 +524,7 @@ public abstract class ApplicationContext {
 
     private DisplayHost displayHost = null;
     private Display display = null;
+    private DragDropManager dragDropManager;
 
     protected static URL origin = null;
 
@@ -569,6 +554,7 @@ public abstract class ApplicationContext {
 
         displayHost = new DisplayHost();
         display = new Display(this);
+        dragDropManager = new DragDropManager(display);
 
         try {
             // Load and instantiate the default theme, if possible
@@ -587,6 +573,10 @@ public abstract class ApplicationContext {
 
     public Display getDisplay() {
         return display;
+    }
+
+    public DragDropManager getDragDropManager() {
+        return dragDropManager;
     }
 
     protected void repaint(int x, int y, int width, int height) {

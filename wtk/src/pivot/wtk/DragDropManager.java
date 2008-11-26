@@ -20,14 +20,11 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.io.File;
 import java.io.IOException;
-import pivot.collections.adapter.ListAdapter;
 
 /**
  * Provides framework support for drag/drop operations.
@@ -39,7 +36,186 @@ import pivot.collections.adapter.ListAdapter;
  * @author gbrown
  */
 public final class DragDropManager {
-    public class NativeDragHandler implements DragHandler {
+    /**
+     * Handles display mouse events.
+     *
+     * @author gbrown
+     */
+    private class DisplayMouseHandler
+        implements ComponentMouseListener, ComponentMouseButtonListener {
+        public boolean mouseMove(Component component, int x, int y) {
+            if (isActive()) {
+                // A drag is currently in progress
+                Visual representation = getRepresentation();
+                if (representation != null) {
+                    Dimensions offset = getOffset();
+
+                    display.repaint(dragLocation.x - offset.width,
+                        dragLocation.y - offset.height,
+                        representation.getWidth(), representation.getHeight());
+
+                    display.repaint(x - offset.width, y - offset.height,
+                        representation.getWidth(), representation.getHeight());
+                }
+
+                if (dragLocation != null) {
+                    dragLocation.x = x;
+                    dragLocation.y = y;
+                }
+            } else {
+                if (dragLocation != null) {
+                    if (Math.abs(x - dragLocation.x) > DRAG_THRESHOLD
+                        || Math.abs(y - dragLocation.y) > DRAG_THRESHOLD) {
+                        Component dragSource = display.getDescendantAt(dragLocation.x,
+                            dragLocation.y);
+
+                        // Look for a drag handler
+                        dragHandler = null;
+                        while (dragSource != null) {
+                            dragHandler = dragSource.getDragSource();
+
+                            if (dragHandler == null) {
+                                dragSource = dragSource.getParent();
+                            } else {
+                                break;
+                            }
+                        }
+
+                        if (dragHandler == null) {
+                            // A drag handler could not be found, so stop looking
+                            // until the next mouse down event
+                            dragLocation = null;
+                        } else {
+                            // A drag handler was found; begin the drag
+                            Mouse.setCursor(Cursor.DEFAULT);
+                            Point componentDragLocation = dragSource.mapPointFromAncestor(display,
+                                dragLocation.x, dragLocation.y);
+
+                            boolean drag = dragHandler.beginDrag(dragSource,
+                                componentDragLocation.x, componentDragLocation.y);
+
+                            if (!drag) {
+                                // The drag source rejected the drag
+                                dragLocation = null;
+                                dragHandler = null;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public void mouseOver(Component component) {
+        }
+
+        public void mouseOut(Component component) {
+        }
+
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            dragLocation = new Point(x, y);
+            return false;
+        }
+
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            if (isActive()) {
+                Component dropTarget = display.getDescendantAt(x, y);
+
+                // Look for a drop handler
+                DropTarget dropHandler = null;
+                while (dropTarget != null) {
+                    dropHandler = dropTarget.getDropTarget();
+
+                    if (dropHandler == null) {
+                        dropTarget = dropTarget.getParent();
+                    } else {
+                        break;
+                    }
+                }
+
+                DropAction dropAction = null;
+
+                if (dropHandler != null) {
+                    // A drop handler was found
+                    Point dropLocation = dropTarget.mapPointFromAncestor(display, x, y);
+                    dropAction = dropHandler.getDropAction(dropTarget, getContentType(),
+                        dropLocation.x, dropLocation.y);
+
+                    if (dropAction != null) {
+                        // Drop the content
+                        dropHandler.drop(dropTarget, getContent(), dropLocation.x, dropLocation.y);
+                    }
+                }
+
+                Visual representation = getRepresentation();
+                if (representation != null) {
+                    Dimensions offset = getOffset();
+                    display.repaint(dragLocation.x - offset.width,
+                        dragLocation.y - offset.height,
+                        representation.getWidth(), representation.getHeight());
+                }
+
+                // End the drag
+                dragHandler.endDrag(dropAction);
+                dragHandler = null;
+
+                Mouse.setCursor(dropTarget == null ? Cursor.DEFAULT : dropTarget.getCursor());
+            }
+
+            dragLocation = null;
+
+            return false;
+        }
+
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            return false;
+        }
+    }
+
+    /**
+     * Paints drag representations on display.
+     *
+     * @author gbrown
+     */
+    private class DragOverlayDecorator implements Decorator {
+        private Graphics2D graphics = null;
+
+        public Graphics2D prepare(Component component, Graphics2D graphics) {
+            this.graphics = graphics;
+            return graphics;
+        }
+
+        public void update() {
+            if (isActive()) {
+                Visual representation = getRepresentation();
+
+                if (representation != null) {
+                    Dimensions offset = getOffset();
+                    int tx = dragLocation.x - offset.width;
+                    int ty = dragLocation.y - offset.height;
+
+                    Graphics2D representationGraphics = (Graphics2D)graphics.create(tx, ty,
+                        representation.getWidth(), representation.getHeight());
+
+                    representation.paint(representationGraphics);
+
+                    representationGraphics.dispose();
+                }
+            }
+        }
+
+        public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     * Drag handler wrapper around native AWT drag source.
+     *
+     * @author gbrown
+     */
+    private class NativeDragHandler implements DragSource {
         public boolean beginDrag(Component component, int x, int y) {
             throw new UnsupportedOperationException();
         }
@@ -53,21 +229,31 @@ public final class DragDropManager {
             Object content = null;
 
             Transferable transferable = dropTargetDragEvent.getTransferable();
-            try {
-                if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                    content = transferable.getTransferData(DataFlavor.javaFileListFlavor);
-                    content = new ListAdapter<File>((java.util.List<File>)content);
-                } else {
-                    DataFlavor[] dataFlavors = transferable.getTransferDataFlavors();
-                    if (dataFlavors.length > 0) {
-                        content = transferable.getTransferData(dataFlavors[0]);
-                    }
+            DataFlavor[] dataFlavors = transferable.getTransferDataFlavors();
+
+            if (dataFlavors.length > 0) {
+                try {
+                    content = transferable.getTransferData(dataFlavors[0]);
+                } catch (UnsupportedFlavorException exception) {
+                } catch (IOException exception) {
                 }
-            } catch (UnsupportedFlavorException exception) {
-            } catch (IOException exception) {
             }
 
             return content;
+        }
+
+        public Class<?> getContentType() {
+            Class<?> contentType = null;
+
+            Transferable transferable = dropTargetDragEvent.getTransferable();
+            DataFlavor[] dataFlavors = transferable.getTransferDataFlavors();
+
+            if (dataFlavors.length > 0) {
+                contentType = dataFlavors[0].getRepresentationClass();
+            }
+
+            System.out.println(contentType);
+            return contentType;
         }
 
         public Visual getRepresentation() {
@@ -99,6 +285,11 @@ public final class DragDropManager {
         }
     }
 
+    /**
+     * Implementation of native AWT drop target listener.
+     *
+     * @author gbrown
+     */
     private class DropTargetHandler implements DropTargetListener {
         public void dragEnter(DropTargetDragEvent dropTargetDragEvent) {
             dragHandler = new NativeDragHandler();
@@ -124,9 +315,9 @@ public final class DragDropManager {
 
             Component dropTarget = display.getDescendantAt(x, y);
 
-            DropHandler dropHandler = null;
+            DropTarget dropHandler = null;
             while (dropTarget != null) {
-                dropHandler = dropTarget.getDropHandler();
+                dropHandler = dropTarget.getDropTarget();
 
                 if (dropHandler == null) {
                     dropTarget = dropTarget.getParent();
@@ -140,7 +331,7 @@ public final class DragDropManager {
                 DropAction dropAction = null;
 
                 Point dropLocation = dropTarget.mapPointFromAncestor(display, x, y);
-                dropAction = dropHandler.getDropAction(dropTarget,
+                dropAction = dropHandler.getDropAction(dropTarget, getContentType(),
                     dropLocation.x, dropLocation.y);
 
                 if (dropAction != null) {
@@ -165,7 +356,7 @@ public final class DragDropManager {
 
                     // Drop the content
                     dropTargetDropEvent.acceptDrop(awtDropAction);
-                    dropHandler.drop(dropTarget, dropLocation.x, dropLocation.y);
+                    dropHandler.drop(dropTarget, getContent(), dropLocation.x, dropLocation.y);
 
                     dropTargetDropEvent.dropComplete(true);
                 }
@@ -181,18 +372,24 @@ public final class DragDropManager {
     private Display display;
 
     private Point dragLocation = null;
-    private DragHandler dragHandler = null;
+    private DragSource dragHandler = null;
 
     private DropTargetDragEvent dropTargetDragEvent = null;
 
     public static final int DRAG_THRESHOLD = 4;
 
-    public DragDropManager(Display display) {
+    protected DragDropManager(Display display) {
         this.display = display;
+
+        DisplayMouseHandler displayMouseHandler = new DisplayMouseHandler();
+        display.getComponentMouseListeners().add(displayMouseHandler);
+        display.getComponentMouseButtonListeners().add(displayMouseHandler);
+
+        display.getDecorators().add(new DragOverlayDecorator());
 
         ApplicationContext applicationContext = display.getApplicationContext();
         java.awt.Container displayHost = applicationContext.getDisplayHost();
-        new DropTarget(displayHost, new DropTargetHandler());
+        new java.awt.dnd.DropTarget(displayHost, new DropTargetHandler());
     }
 
     public boolean isActive() {
@@ -200,178 +397,22 @@ public final class DragDropManager {
     }
 
     public Object getContent() {
-        if (!isActive()) {
-            throw new IllegalStateException();
-        }
+        return (dragHandler == null) ? null : dragHandler.getContent();
+    }
 
-        return dragHandler.getContent();
+    public Class<?> getContentType() {
+        return (dragHandler == null) ? null : dragHandler.getContentType();
     }
 
     public Visual getRepresentation() {
-        if (!isActive()) {
-            throw new IllegalStateException();
-        }
-
-        return dragHandler.getRepresentation();
+        return (dragHandler == null) ? null : dragHandler.getRepresentation();
     }
 
     public Dimensions getOffset() {
-        if (!isActive()) {
-            throw new IllegalStateException();
-        }
-
-        return dragHandler.getOffset();
+        return (dragHandler == null) ? null : dragHandler.getOffset();
     }
 
     public int getSupportedDropActions() {
-        if (!isActive()) {
-            throw new IllegalStateException();
-        }
-
-        return dragHandler.getSupportedDropActions();
-    }
-
-    public void paint(Graphics2D graphics) {
-        if (isActive()) {
-            Visual representation = getRepresentation();
-
-            if (representation != null) {
-                Dimensions offset = getOffset();
-                int tx = dragLocation.x - offset.width;
-                int ty = dragLocation.y - offset.height;
-
-                Graphics2D representationGraphics = (Graphics2D)graphics.create(tx, ty,
-                    representation.getWidth(), representation.getHeight());
-
-                representation.paint(representationGraphics);
-
-                representationGraphics.dispose();
-            }
-        }
-    }
-
-    protected void mouseOver() {
-    }
-
-    protected void mouseOut() {
-    }
-
-    protected void mouseMove(int x, int y) {
-        if (isActive()) {
-            Visual representation = getRepresentation();
-            if (representation != null) {
-                Dimensions offset = getOffset();
-
-                display.repaint(dragLocation.x - offset.width,
-                    dragLocation.y - offset.height,
-                    representation.getWidth(), representation.getHeight());
-
-                display.repaint(x - offset.width, y - offset.height,
-                    representation.getWidth(), representation.getHeight());
-            }
-
-            if (dragLocation != null) {
-                dragLocation.x = x;
-                dragLocation.y = y;
-            }
-        } else {
-            if (dragLocation != null) {
-                if (Math.abs(x - dragLocation.x) > DRAG_THRESHOLD
-                    || Math.abs(y - dragLocation.y) > DRAG_THRESHOLD) {
-                    Component dragSource = display.getDescendantAt(dragLocation.x,
-                        dragLocation.y);
-
-                    // Look for a drag handler
-                    dragHandler = null;
-                    while (dragSource != null) {
-                        dragHandler = dragSource.getDragHandler();
-
-                        if (dragHandler == null) {
-                            dragSource = dragSource.getParent();
-                        } else {
-                            break;
-                        }
-                    }
-
-                    if (dragHandler == null) {
-                        // A drag handler could not be found, so stop looking
-                        // until the next mouse down event
-                        dragLocation = null;
-                    } else {
-                        // A drag handler was found; begin the drag
-                        Mouse.setCursor(Cursor.DEFAULT);
-                        Point componentDragLocation = dragSource.mapPointFromAncestor(display,
-                            dragLocation.x, dragLocation.y);
-
-                        boolean drag = dragHandler.beginDrag(dragSource,
-                            componentDragLocation.x, componentDragLocation.y);
-
-                        if (!drag) {
-                            // The drag source rejected the drag
-                            dragLocation = null;
-                            dragHandler = null;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    protected void mouseDown(Mouse.Button button, int x, int y) {
-        dragLocation = new Point(x, y);
-    }
-
-    protected void mouseUp(Mouse.Button button, int x, int y) {
-        if (isActive()) {
-            Component dropTarget = display.getDescendantAt(x, y);
-
-            // Look for a drop handler
-            DropHandler dropHandler = null;
-            while (dropTarget != null) {
-                dropHandler = dropTarget.getDropHandler();
-
-                if (dropHandler == null) {
-                    dropTarget = dropTarget.getParent();
-                } else {
-                    break;
-                }
-            }
-
-            DropAction dropAction = null;
-
-            if (dropHandler != null) {
-                // A drop handler was found
-                Point dropLocation = dropTarget.mapPointFromAncestor(display, x, y);
-                dropAction = dropHandler.getDropAction(dropTarget,
-                    dropLocation.x, dropLocation.y);
-
-                if (dropAction != null) {
-                    // Drop the content
-                    dropHandler.drop(dropTarget, dropLocation.x, dropLocation.y);
-                }
-            }
-
-            Visual representation = getRepresentation();
-            if (representation != null) {
-                Dimensions offset = getOffset();
-                display.repaint(dragLocation.x - offset.width,
-                    dragLocation.y - offset.height,
-                    representation.getWidth(), representation.getHeight());
-            }
-
-            // End the drag
-            dragHandler.endDrag(dropAction);
-            dragHandler = null;
-
-            Mouse.setCursor(dropTarget == null ? Cursor.DEFAULT : dropTarget.getCursor());
-        }
-
-        dragLocation = null;
-    }
-
-    protected void keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-    }
-
-    protected void keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
+        return (dragHandler == null) ? null : dragHandler.getSupportedDropActions();
     }
 }

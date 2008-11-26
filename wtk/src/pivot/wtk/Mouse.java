@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import java.awt.MouseInfo;
+import java.awt.event.MouseEvent;
 
 /**
  * Class representing the system mouse.
@@ -56,16 +57,14 @@ public final class Mouse {
         BLOCK
     }
 
-    private static int x = 0;
-    private static int y = 0;
-    private static int buttons = 0x00;
-
     /**
      * Returns the x-coordinate of the mouse, in the coordinate system of
      * the display used by the current thread.
      */
     public static int getX() {
-        return x;
+        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
+        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
+        return displayHost.getMouseX();
     }
 
     /**
@@ -73,12 +72,9 @@ public final class Mouse {
      * the display used by the current thread.
      */
     public static int getY() {
-        return y;
-    }
-
-    protected static void setLocation(int x, int y) {
-        Mouse.x = x;
-        Mouse.y = y;
+        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
+        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
+        return displayHost.getMouseY();
     }
 
     /**
@@ -86,11 +82,25 @@ public final class Mouse {
      * pressed.
      */
     public static int getButtons() {
-        return buttons;
-    }
+        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
+        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
 
-    protected static void setButtons(int buttons) {
-        Mouse.buttons = buttons;
+        int modifiersEx = displayHost.getMouseButtonModifiersEx();
+        int buttons = 0x00;
+
+        if ((modifiersEx & MouseEvent.BUTTON1_DOWN_MASK) > 0) {
+            buttons |= Mouse.Button.LEFT.getMask();
+        }
+
+        if ((modifiersEx & MouseEvent.BUTTON2_DOWN_MASK) > 0) {
+            buttons |= Mouse.Button.MIDDLE.getMask();
+        }
+
+        if ((modifiersEx & MouseEvent.BUTTON3_DOWN_MASK) > 0) {
+            buttons |= Mouse.Button.RIGHT.getMask();
+        }
+
+        return buttons;
     }
 
     /**
@@ -102,7 +112,7 @@ public final class Mouse {
      * <tt>true</tt> if the button is pressed; <tt>false</tt>, otherwise.
      */
     public static boolean isPressed(Button button) {
-        return button.isSelected(buttons);
+        return button.isSelected(getButtons());
     }
 
     /**
@@ -112,6 +122,9 @@ public final class Mouse {
         return MouseInfo.getNumberOfButtons();
     }
 
+    /**
+     * Returns the system cursor.
+     */
     public static Cursor getCursor() {
         Cursor cursor = null;
 
@@ -198,6 +211,11 @@ public final class Mouse {
         return cursor;
     }
 
+    /**
+     * Sets the system cursor.
+     *
+     * @param cursor
+     */
     @SuppressWarnings("deprecation")
     public static void setCursor(Cursor cursor) {
         if (cursor == null) {

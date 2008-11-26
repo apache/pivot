@@ -7,10 +7,9 @@ import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
-import pivot.wtk.DragDropManager;
-import pivot.wtk.DragHandler;
+import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
-import pivot.wtk.DropHandler;
+import pivot.wtk.DropTarget;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
 import pivot.wtk.VerticalAlignment;
@@ -27,7 +26,7 @@ public class NativeDragDropTest implements Application {
         label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
-        label.setDragHandler(new DragHandler() {
+        label.setDragSource(new DragSource() {
             public boolean beginDrag(Component component, int x, int y) {
                 return true;
             }
@@ -37,6 +36,10 @@ public class NativeDragDropTest implements Application {
 
             public Object getContent() {
                 return label.getText();
+            }
+
+            public Class<?> getContentType() {
+                return String.class;
             }
 
             public Visual getRepresentation() {
@@ -52,14 +55,13 @@ public class NativeDragDropTest implements Application {
             }
         });
 
-        label.setDropHandler(new DropHandler() {
-            public DropAction getDropAction(Component component, int x, int y) {
+        label.setDropTarget(new DropTarget() {
+            public DropAction getDropAction(Component component, Class<?> contentType,
+                int x, int y) {
                 return DropAction.COPY;
             }
 
-            public void drop(Component component, int x, int y) {
-                DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
-                Object content = dragDropManager.getContent();
+            public void drop(Component component, Object content, int x, int y) {
                 String text = (content == null) ? null : content.toString();
                 Label label = (Label)component;
                 label.setText(text);

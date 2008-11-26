@@ -38,9 +38,9 @@ import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.DragDropManager;
-import pivot.wtk.DragHandler;
+import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
-import pivot.wtk.DropHandler;
+import pivot.wtk.DropTarget;
 import pivot.wtk.ImageView;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
@@ -212,7 +212,7 @@ public class Demo implements Application {
         }
     }
 
-    private static class ImageDragHandler implements DragHandler {
+    private static class ImageDragHandler implements DragSource {
         ImageView imageView = null;
         private Image image = null;
         private Dimensions offset = null;
@@ -240,6 +240,10 @@ public class Demo implements Application {
             return image;
         }
 
+        public Class<?> getContentType() {
+            return image.getClass();
+        }
+
         public Visual getRepresentation() {
             return image;
         }
@@ -253,26 +257,23 @@ public class Demo implements Application {
         }
     }
 
-    private static class ImageDropHandler implements DropHandler {
-        public DropAction getDropAction(Component component, int x, int y) {
+    private static class ImageDropHandler implements DropTarget {
+        public DropAction getDropAction(Component component, Class<?> contentType,
+            int x, int y) {
             DropAction dropAction = null;
 
-            DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
-            Object dragContent = dragDropManager.getContent();
-            if (dragContent instanceof Image) {
+            if (Image.class.isAssignableFrom(contentType)) {
                 dropAction = DropAction.MOVE;
             }
 
             return dropAction;
         }
 
-        public void drop(Component component, int x, int y) {
-            DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
-            Object dragContent = dragDropManager.getContent();
+        public void drop(Component component, Object content, int x, int y) {
             ImageView imageView = (ImageView)component;
 
             if (imageView.getImage() == null) {
-                imageView.setImage((Image)dragContent);
+                imageView.setImage((Image)content);
                 imageView.getStyles().put("backgroundColor", null);
             }
         }
@@ -286,7 +287,8 @@ public class Demo implements Application {
         }
 
         public void mouseOver(Component component) {
-            DragDropManager dragDropManager = component.getDisplay().getDragDropManager();
+            DragDropManager dragDropManager =
+                ApplicationContext.getApplicationContext().getDragDropManager();
 
             if (dragDropManager.isActive()) {
                 Object dragContent = dragDropManager.getContent();
@@ -428,18 +430,18 @@ public class Demo implements Application {
         ImageMouseHandler imageMouseHandler = new ImageMouseHandler();
 
         ImageView imageView1 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView1");
-        imageView1.setDragHandler(imageDragHandler);
-        imageView1.setDropHandler(imageDropHandler);
+        imageView1.setDragSource(imageDragHandler);
+        imageView1.setDropTarget(imageDropHandler);
         imageView1.getComponentMouseListeners().add(imageMouseHandler);
 
         ImageView imageView2 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView2");
-        imageView2.setDragHandler(imageDragHandler);
-        imageView2.setDropHandler(imageDropHandler);
+        imageView2.setDragSource(imageDragHandler);
+        imageView2.setDropTarget(imageDropHandler);
         imageView2.getComponentMouseListeners().add(imageMouseHandler);
 
         ImageView imageView3 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView3");
-        imageView3.setDragHandler(imageDragHandler);
-        imageView3.setDropHandler(imageDropHandler);
+        imageView3.setDragSource(imageDragHandler);
+        imageView3.setDropTarget(imageDropHandler);
         imageView3.getComponentMouseListeners().add(imageMouseHandler);
 
         alertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.alertButton");

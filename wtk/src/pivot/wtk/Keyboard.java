@@ -252,18 +252,34 @@ public final class Keyboard {
         public static final int UNDEFINED = KeyEvent.VK_UNDEFINED;
     }
 
-    private static int modifiers = 0x00;
-
     /**
      * Returns a bitfield representing the keyboard modifiers that are
      * currently pressed.
      */
     public static int getModifiers() {
-        return modifiers;
-    }
+        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
+        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
 
-    protected static void setModifiers(int modifiers) {
-        Keyboard.modifiers = modifiers;
+        int modifiersEx = displayHost.getKeyboardModifiersEx();
+        int modifiers = 0x00;
+
+        if ((modifiersEx & KeyEvent.SHIFT_DOWN_MASK) > 0) {
+            modifiers |= Keyboard.Modifier.SHIFT.getMask();
+        }
+
+        if ((modifiersEx & KeyEvent.CTRL_DOWN_MASK) > 0) {
+            modifiers |= Keyboard.Modifier.CTRL.getMask();
+        }
+
+        if ((modifiersEx & KeyEvent.ALT_DOWN_MASK) > 0) {
+            modifiers |= Keyboard.Modifier.ALT.getMask();
+        }
+
+        if ((modifiersEx & KeyEvent.META_DOWN_MASK) > 0) {
+            modifiers |= Keyboard.Modifier.META.getMask();
+        }
+
+        return modifiers;
     }
 
     /**
@@ -275,7 +291,7 @@ public final class Keyboard {
      * <tt>true</tt> if the modifier is pressed; <tt>false</tt>, otherwise.
      */
     public static boolean isPressed(Modifier modifier) {
-        return modifier.isSelected(modifiers);
+        return modifier.isSelected(getModifiers());
     }
 }
 

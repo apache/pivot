@@ -440,15 +440,15 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentDragDropListenerList extends ListenerList<ComponentDragDropListener>
         implements ComponentDragDropListener {
-        public void dragHandlerChanged(Component component, DragHandler previousDragHandler) {
+        public void dragSourceChanged(Component component, DragSource previousDragHandler) {
             for (ComponentDragDropListener listener : this) {
-                listener.dragHandlerChanged(component, previousDragHandler);
+                listener.dragSourceChanged(component, previousDragHandler);
             }
         }
 
-        public void dropHandlerChanged(Component component, DropHandler previousDropHandler) {
+        public void dropTargetChanged(Component component, DropTarget previousDropHandler) {
             for (ComponentDragDropListener listener : this) {
-                listener.dropHandlerChanged(component, previousDropHandler);
+                listener.dropTargetChanged(component, previousDropHandler);
             }
         }
     }
@@ -543,12 +543,12 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Drag handler.
      */
-    private DragHandler dragHandler = null;
+    private DragSource dragSource = null;
 
     /**
      * Drop handler.
      */
-    private DropHandler dropHandler = null;
+    private DropTarget dropTarget = null;
 
     /**
      * Proxy class for getting/setting style properties on the skin.
@@ -1861,52 +1861,52 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the component's drag handler.
+     * Returns the component's drag source.
      *
      * @return
-     * The component's drag handler, or <tt>null</tt> if no handler is
+     * The component's drag source, or <tt>null</tt> if no drag source is
      * installed.
      */
-    public DragHandler getDragHandler() {
-        return dragHandler;
+    public DragSource getDragSource() {
+        return dragSource;
     }
 
     /**
-     * Sets the component's drag handler.
+     * Sets the component's drag source.
      *
-     * @param dragHandler
-     * The drag handler to install, or <tt>null</tt> for no handler.
+     * @param dragSource
+     * The drag source to install, or <tt>null</tt> for no drag source.
      */
-    public void setDragHandler(DragHandler dragHandler) {
-        DragHandler previousDragHandler = this.dragHandler;
-        if (previousDragHandler != dragHandler) {
-            this.dragHandler = dragHandler;
-            componentDragDropListeners.dragHandlerChanged(this, previousDragHandler);
+    public void setDragSource(DragSource dragSource) {
+        DragSource previousDragSource = this.dragSource;
+        if (previousDragSource != dragSource) {
+            this.dragSource = dragSource;
+            componentDragDropListeners.dragSourceChanged(this, previousDragSource);
         }
     }
 
     /**
-     * Returns the component's drop handler.
+     * Returns the component's drop target.
      *
      * @return
-     * The component's drop handler, or <tt>null</tt> if no handler is
+     * The component's drop target, or <tt>null</tt> if no drop target is
      * installed.
      */
-    public DropHandler getDropHandler() {
-        return dropHandler;
+    public DropTarget getDropTarget() {
+        return dropTarget;
     }
 
     /**
-     * Sets the component's drop handler.
+     * Sets the component's drop target.
      *
-     * @param dropHandler
-     * The drop handler to install, or <tt>null</tt> for no handler.
+     * @param dropTarget
+     * The drop target to install, or <tt>null</tt> for no drop target.
      */
-    public void setDropHandler(DropHandler dropHandler) {
-        DropHandler previousDropHandler = this.dropHandler;
-        if (previousDropHandler != dropHandler) {
-            this.dropHandler = dropHandler;
-            componentDragDropListeners.dropHandlerChanged(this, previousDropHandler);
+    public void setDropTarget(DropTarget dropTarget) {
+        DropTarget previousDropTarget = this.dropTarget;
+        if (previousDropTarget  != dropTarget) {
+            this.dropTarget = dropTarget;
+            componentDragDropListeners.dropTargetChanged(this, previousDropTarget );
         }
     }
 

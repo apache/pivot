@@ -20,7 +20,7 @@ package pivot.wtk;
  *
  * @author gbrown
  */
-public interface DragHandler {
+public interface DragSource {
     /**
      * Called when a drag operation is initiated.
      *
@@ -41,6 +41,11 @@ public interface DragHandler {
      * Returns the content of the drag operation (i.e. the item being dragged).
      */
     public Object getContent();
+
+    /**
+     * Returns the type of the drag content.
+     */
+    public Class<?> getContentType();
 
     /**
      * Returns a visual representation of the drag content.

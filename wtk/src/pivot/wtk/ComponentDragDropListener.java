@@ -7,18 +7,18 @@ package pivot.wtk;
  */
 public interface ComponentDragDropListener {
     /**
-     * Called when a component's drag handler has changed.
+     * Called when a component's drag source has changed.
      *
      * @param component
-     * @param previousDragHandler
+     * @param previousDragSource
      */
-    public void dragHandlerChanged(Component component, DragHandler previousDragHandler);
+    public void dragSourceChanged(Component component, DragSource previousDragSource);
 
     /**
-     * Called when a component's drop handler has changed.
+     * Called when a component's drop target has changed.
      *
      * @param component
-     * @param previousDropHandler
+     * @param previousDropTarget
      */
-    public void dropHandlerChanged(Component component, DropHandler previousDropHandler);
+    public void dropTargetChanged(Component component, DropTarget previousDropTarget);
 }
