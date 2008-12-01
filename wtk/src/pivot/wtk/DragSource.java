@@ -27,8 +27,11 @@ public interface DragSource {
      * @param component
      * @param x
      * @param y
+     *
+     * @return
+     * The value to drag, or <tt>null</tt> to reject the operation.
      */
-    public boolean beginDrag(Component component, int x, int y);
+    public Object beginDrag(Component component, int x, int y);
 
     /**
      * Called when a drag operation completes.
@@ -36,16 +39,6 @@ public interface DragSource {
      * @param dropAction
      */
     public void endDrag(DropAction dropAction);
-
-    /**
-     * Returns the content of the drag operation (i.e. the item being dragged).
-     */
-    public Object getContent();
-
-    /**
-     * Returns the type of the drag content.
-     */
-    public Class<?> getContentType();
 
     /**
      * Returns a visual representation of the drag content.
@@ -57,10 +50,4 @@ public interface DragSource {
      * representation should be drawn.
      */
     public Dimensions getOffset();
-
-    /**
-     * Returns a bitfield containing the drop operations supported by this
-     * handler.
-     */
-    public int getSupportedDropActions();
 }

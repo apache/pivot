@@ -33,7 +33,7 @@ public class BinarySerializer implements Serializer {
     public static final String MIME_TYPE = "application/x-java-serialized-object";
 
     /**
-     * Reads a sequence of serialized objects from an input stream.
+     * Reads a graph of serialized objects from an input stream.
      */
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
@@ -54,7 +54,7 @@ public class BinarySerializer implements Serializer {
     }
 
     /**
-     * Writes a sequence of serializable objects to an output stream.
+     * Writes a graph of serializable objects to an output stream.
      */
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
@@ -70,7 +70,12 @@ public class BinarySerializer implements Serializer {
         objectOutputStream.writeObject(object);
     }
 
-    public String getMIMEType() {
-        return MIME_TYPE;
+    public String getMIMEType(Object object) {
+        String mimeType = MIME_TYPE;
+        if (object != null) {
+            mimeType += "; class=" + object.getClass().getName();
+        }
+
+        return mimeType;
     }
 }

@@ -22,7 +22,7 @@ package pivot.wtk;
  */
 public interface DropTarget {
     /**
-     * Called to obtain the drop action the handler would use if an item were
+     * Called to obtain the drop action the target would use if an item were
      * to be dropped at a given location.
      *
      * @param component

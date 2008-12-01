@@ -37,7 +37,6 @@ import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Dimensions;
-import pivot.wtk.DragDropManager;
 import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
 import pivot.wtk.DropTarget;
@@ -217,7 +216,7 @@ public class Demo implements Application {
         private Image image = null;
         private Dimensions offset = null;
 
-        public boolean beginDrag(Component component, int x, int y) {
+        public Object beginDrag(Component component, int x, int y) {
             imageView = (ImageView)component;
             image = imageView.getImage();
 
@@ -227,7 +226,7 @@ public class Demo implements Application {
                     y - (imageView.getHeight() - image.getHeight()) / 2);
             }
 
-            return (image != null);
+            return image;
         }
 
         public void endDrag(DropAction dropAction) {
@@ -236,24 +235,12 @@ public class Demo implements Application {
             }
         }
 
-        public Object getContent() {
-            return image;
-        }
-
-        public Class<?> getContentType() {
-            return image.getClass();
-        }
-
         public Visual getRepresentation() {
             return image;
         }
 
         public Dimensions getOffset() {
             return offset;
-        }
-
-        public int getSupportedDropActions() {
-            return DropAction.MOVE.getMask();
         }
     }
 
@@ -287,15 +274,12 @@ public class Demo implements Application {
         }
 
         public void mouseOver(Component component) {
-            DragDropManager dragDropManager =
-                ApplicationContext.getApplicationContext().getDragDropManager();
-
-            if (dragDropManager.isActive()) {
-                Object dragContent = dragDropManager.getContent();
+            Class<?> dragContentType = Mouse.getDragContentType();
+            if (dragContentType != null
+                && Image.class.isAssignableFrom(dragContentType)) {
                 ImageView imageView = (ImageView)component;
 
-                if (dragContent instanceof Image
-                    && imageView.getImage() == null) {
+                if (imageView.getImage() == null) {
                     component.getStyles().put("backgroundColor", DROP_HIGHLIGHT_COLOR);
                 }
             }

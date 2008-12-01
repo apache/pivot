@@ -517,7 +517,7 @@ public abstract class QueryServlet extends HttpServlet {
 
             response.setStatus(200);
             setResponseHeaders(response);
-            response.setContentType(serializer.getMIMEType());
+            response.setContentType(serializer.getMIMEType(result));
 
             OutputStream responseOutputStream = response.getOutputStream();
 

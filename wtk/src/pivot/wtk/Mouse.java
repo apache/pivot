@@ -24,6 +24,8 @@ import java.awt.event.MouseEvent;
  * @author gbrown
  */
 public final class Mouse {
+    private static Class<?> dragContentType = null;
+
     /**
      * Enumeration representing mouse buttons.
      *
@@ -303,5 +305,20 @@ public final class Mouse {
         }
 
         displayHost.setCursor(new java.awt.Cursor(cursorID));
+    }
+
+    /**
+     * Returns the type of the item currently being dragged.
+     *
+     * @return
+     * The type of the item being dragged, or <tt>null</tt> if nothing is
+     * currently being dragged.
+     */
+    public static Class<?> getDragContentType() {
+        return dragContentType;
+    }
+
+    protected static void setDragContentType(Class<?> dragContentType) {
+        Mouse.dragContentType = dragContentType;
     }
 }

@@ -82,7 +82,7 @@ public class WebQueryTestServlet extends HttpServlet {
         response.setStatus(200);
 
         Serializer serializer = new BinarySerializer();
-        response.setContentType(serializer.getMIMEType());
+        response.setContentType(serializer.getMIMEType(map));
 
         try {
             serializer.writeObject(map, response.getOutputStream());

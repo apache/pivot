@@ -94,7 +94,7 @@ public class PropertiesSerializer implements Serializer {
         properties.store(outputStream, null);
     }
 
-    public String getMIMEType() {
+    public String getMIMEType(Object object) {
         return MIME_TYPE;
     }
 }

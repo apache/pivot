@@ -544,8 +544,8 @@ public class JSONSerializer implements Serializer {
         }
     }
 
-    public String getMIMEType() {
-        return MIME_TYPE;
+    public String getMIMEType(Object object) {
+        return MIME_TYPE + "; charset=" + charset.name();
     }
 
     /**

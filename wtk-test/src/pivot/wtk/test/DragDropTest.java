@@ -19,17 +19,16 @@ import java.awt.Color;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
-import pivot.wtk.DragDropManager;
 import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
 import pivot.wtk.DropTarget;
 import pivot.wtk.Frame;
 import pivot.wtk.ImageView;
+import pivot.wtk.Mouse;
 import pivot.wtk.Visual;
 import pivot.wtk.media.Image;
 
@@ -45,7 +44,7 @@ public class DragDropTest implements Application {
         private Image image = null;
         private Dimensions offset = null;
 
-        public boolean beginDrag(Component component, int x, int y) {
+        public Object beginDrag(Component component, int x, int y) {
             imageView = (ImageView)component;
             image = imageView.getImage();
 
@@ -55,7 +54,7 @@ public class DragDropTest implements Application {
                     y - (imageView.getHeight() - image.getHeight()) / 2);
             }
 
-            return (image != null);
+            return image;
         }
 
         public void endDrag(DropAction dropAction) {
@@ -78,10 +77,6 @@ public class DragDropTest implements Application {
 
         public Dimensions getOffset() {
             return offset;
-        }
-
-        public int getSupportedDropActions() {
-            return DropAction.MOVE.getMask();
         }
     }
 
@@ -109,14 +104,11 @@ public class DragDropTest implements Application {
         }
 
         public void mouseOver(Component component) {
-            DragDropManager dragDropManager =
-                ApplicationContext.getApplicationContext().getDragDropManager();
+            Class<?> dragContentType = Mouse.getDragContentType();
 
-            if (dragDropManager.isActive()) {
-                Object dragContent = dragDropManager.getContent();
-                if (dragContent instanceof Image) {
-                    component.getStyles().put("backgroundColor", IMAGE_VIEW_DROP_HIGHLIGHT_COLOR);
-                }
+            if (dragContentType != null
+                && Image.class.isAssignableFrom(dragContentType)) {
+                component.getStyles().put("backgroundColor", IMAGE_VIEW_DROP_HIGHLIGHT_COLOR);
             }
         }
 

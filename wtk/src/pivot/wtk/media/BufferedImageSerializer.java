@@ -123,7 +123,9 @@ public class BufferedImageSerializer implements Serializer {
         ImageIO.write(bufferedImage, outputFormat.getName(), outputStream);
     }
 
-    public String getMIMEType() {
+    public String getMIMEType(Object object) {
+        // TODO Are there parameters we should add here?
+
         return outputFormat.getMIMEType();
     }
 }

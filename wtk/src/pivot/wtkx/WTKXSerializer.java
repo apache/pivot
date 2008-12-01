@@ -502,7 +502,7 @@ public class WTKXSerializer implements Serializer {
         throw new UnsupportedOperationException();
     }
 
-    public String getMIMEType() {
+    public String getMIMEType(Object object) {
         return MIME_TYPE;
     }
 

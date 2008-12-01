@@ -524,7 +524,6 @@ public abstract class ApplicationContext {
 
     private DisplayHost displayHost = null;
     private Display display = null;
-    private DragDropManager dragDropManager;
 
     protected static URL origin = null;
 
@@ -554,7 +553,6 @@ public abstract class ApplicationContext {
 
         displayHost = new DisplayHost();
         display = new Display(this);
-        dragDropManager = new DragDropManager(display);
 
         try {
             // Load and instantiate the default theme, if possible
@@ -573,10 +571,6 @@ public abstract class ApplicationContext {
 
     public Display getDisplay() {
         return display;
-    }
-
-    public DragDropManager getDragDropManager() {
-        return dragDropManager;
     }
 
     protected void repaint(int x, int y, int width, int height) {

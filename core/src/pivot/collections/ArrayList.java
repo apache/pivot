@@ -16,6 +16,7 @@
 package pivot.collections;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -169,6 +170,23 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     public int getLength() {
         return arrayList.size();
+    }
+
+    @SuppressWarnings("unchecked")
+    public T[] toArray() {
+        T[] array = null;
+
+        int n = getLength();
+        if (n > 0) {
+            Class<?> type = get(0).getClass();
+            array = (T[])Array.newInstance(type, n);
+
+            for (int i = 0; i < n; i++) {
+                array[i] = get(i);
+            }
+        }
+
+        return array;
     }
 
     public Comparator<T> getComparator() {

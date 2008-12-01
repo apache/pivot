@@ -30,7 +30,7 @@ import java.io.IOException;
  * @author gbrown
  */
 public class Clipboard {
-    private static Object contents = null;
+    private static Object content = null;
     private static java.awt.datatransfer.Clipboard awtClipboard = null;
 
     static {
@@ -48,20 +48,26 @@ public class Clipboard {
      * The current contents of the clipboard. If the clipboard contents were
      * populated by this application or another application loaded by the same
      * class loader, the return value will be the same value that was passed
-     * to the call to {@link #put(Object)}. Otherwise, if the application has
-     * access to the system clipboard and a string value is available, it will
-     * be returned; otherwise, returns <tt>null</tt>.
+     * to the call to {@link #setContent(Object)}.
+     * <p>
+     * Otherwise, if the application has access to the system clipboard and a
+     * supported value is available, it will be returned. Supported types
+     * include:
+     * <ul>
+     * <li>{@link String}</li>
+     * </ul>
+     * Otherwise, returns <tt>null</tt>.
      */
-    public static Object get() {
-        Object contents = Clipboard.contents;
+    public static Object getContent() {
+        Object content = Clipboard.content;
 
-        if (contents == null
+        if (content == null
             && awtClipboard != null
             && awtClipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
             Transferable awtClipboardContents = awtClipboard.getContents(null);
 
             try {
-                contents = awtClipboardContents.getTransferData(DataFlavor.stringFlavor);
+                content = awtClipboardContents.getTransferData(DataFlavor.stringFlavor);
             } catch (UnsupportedFlavorException exception) {
                 System.out.println(exception);
             } catch (IOException exception) {
@@ -69,30 +75,37 @@ public class Clipboard {
             }
         }
 
-        return contents;
+        return content;
     }
 
     /**
-     * Places a value on the clipboard. If the application has access to the
-     * system clipboard, a string representation of the content will be copied
-     * to it.
+     * Places a value on the clipboard.
+     * <p>
+     * If the application has access to the system clipboard and the value is
+     * of a supported type, it will be copied to the system clipboard.
+     * Supported types include:
+     * <ul>
+     * <li>{@link String}</li>
+     * </ul>
+     * Otherwise, the string representation of the value will be copied to the
+     * system clipboard.
      *
-     * @param contents
+     * @param content
      */
-    public static void put(Object contents) {
-        if (contents == null) {
-            throw new IllegalArgumentException("contents is null");
+    public static void setContent(Object content) {
+        if (content == null) {
+            throw new IllegalArgumentException("content is null");
         }
 
         if (awtClipboard != null) {
-            awtClipboard.setContents(new StringSelection(contents.toString()), new ClipboardOwner() {
+            awtClipboard.setContents(new StringSelection(content.toString()), new ClipboardOwner() {
                 public void lostOwnership(java.awt.datatransfer.Clipboard awtClipboard,
                     Transferable awtClipboardContents) {
-                    Clipboard.contents = null;
+                    Clipboard.content = null;
                 }
             });
         }
 
-        Clipboard.contents = contents;
+        Clipboard.content = content;
     }
 }
