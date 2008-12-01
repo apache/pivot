@@ -211,7 +211,7 @@ public class Demo implements Application {
         }
     }
 
-    private static class ImageDragHandler implements DragSource {
+    private static class ImageDragSource implements DragSource {
         ImageView imageView = null;
         private Image image = null;
         private Dimensions offset = null;
@@ -244,7 +244,7 @@ public class Demo implements Application {
         }
     }
 
-    private static class ImageDropHandler implements DropTarget {
+    private static class ImageDropTarget implements DropTarget {
         public DropAction getDropAction(Component component, Class<?> contentType,
             int x, int y) {
             DropAction dropAction = null;
@@ -409,8 +409,8 @@ public class Demo implements Application {
         editableTreeViewScrollPane = (ScrollPane)wtkxSerializer.getObjectByName("trees.editableTreeViewScrollPane");
         initializeEditableTreeView();
 
-        ImageDragHandler imageDragHandler = new ImageDragHandler();
-        ImageDropHandler imageDropHandler = new ImageDropHandler();
+        ImageDragSource imageDragHandler = new ImageDragSource();
+        ImageDropTarget imageDropHandler = new ImageDropTarget();
         ImageMouseHandler imageMouseHandler = new ImageMouseHandler();
 
         ImageView imageView1 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView1");

@@ -32,6 +32,12 @@ public final class Display extends Container {
 
     private ApplicationContext applicationContext;
 
+    private Point dragLocation = null;
+    private DragSource dragSource = null;
+    private Object dragContent = null;
+
+    public static final int DRAG_THRESHOLD = 4;
+
     protected Display(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
         super.setSkin(new DisplaySkin());
@@ -69,6 +75,166 @@ public final class Display extends Container {
         } else {
             applicationContext.repaint(x, y, width, height);
         }
+    }
+
+    @Override
+    public void paint(Graphics2D graphics) {
+        super.paint(graphics);
+
+        if (dragSource != null) {
+            Visual representation = dragSource.getRepresentation();
+
+            if (representation != null) {
+                Dimensions offset = dragSource.getOffset();
+                int tx = dragLocation.x - offset.width;
+                int ty = dragLocation.y - offset.height;
+
+                Graphics2D representationGraphics = (Graphics2D)graphics.create(tx, ty,
+                    representation.getWidth(), representation.getHeight());
+
+                representation.paint(representationGraphics);
+
+                representationGraphics.dispose();
+            }
+        }
+    }
+
+    @Override
+    protected boolean mouseMove(int x, int y) {
+        boolean consumed = super.mouseMove(x, y);
+
+        if (!consumed) {
+            if (dragSource == null) {
+                if (dragLocation != null) {
+                    if (Math.abs(x - dragLocation.x) > DRAG_THRESHOLD
+                        || Math.abs(y - dragLocation.y) > DRAG_THRESHOLD) {
+                        Component descendant = getDescendantAt(dragLocation.x,
+                            dragLocation.y);
+
+                        // Look for a drag source
+                        while (descendant != null) {
+                            dragSource = descendant.getDragSource();
+
+                            if (dragSource == null) {
+                                descendant = descendant.getParent();
+                            } else {
+                                break;
+                            }
+                        }
+
+                        if (dragSource == null) {
+                            // A drag source could not be found, so stop looking
+                            // until the next mouse down event
+                            dragLocation = null;
+                        } else {
+                            // A drag handler was found; begin the drag
+                            Mouse.setCursor(Cursor.DEFAULT);
+                            Point componentDragLocation = descendant.mapPointFromAncestor(this,
+                                dragLocation.x, dragLocation.y);
+
+                            dragContent = dragSource.beginDrag(descendant,
+                                componentDragLocation.x, componentDragLocation.y);
+
+                            if (dragContent == null) {
+                                // The drag source rejected the drag
+                                dragLocation = null;
+                                dragSource = null;
+                            } else {
+                                Mouse.setDragContentType(dragContent.getClass());
+                            }
+                        }
+                    }
+                }
+            } else {
+                // A drag is currently in progress
+                Visual representation = dragSource.getRepresentation();
+
+                if (representation != null) {
+                    Dimensions offset = dragSource.getOffset();
+
+                    repaint(dragLocation.x - offset.width,
+                        dragLocation.y - offset.height,
+                        representation.getWidth(), representation.getHeight());
+
+                    repaint(x - offset.width, y - offset.height,
+                        representation.getWidth(), representation.getHeight());
+                }
+
+                if (dragLocation != null) {
+                    dragLocation.x = x;
+                    dragLocation.y = y;
+                }
+            }
+        }
+
+        return consumed;
+    }
+
+    @Override
+    protected boolean mouseDown(Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(button, x, y);
+
+        if (!consumed) {
+            dragLocation = new Point(x, y);
+        }
+
+        return consumed;
+    }
+
+    @Override
+    protected boolean mouseUp(Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(button, x, y);
+
+        if (!consumed) {
+            if (dragSource != null) {
+                Component descendant = getDescendantAt(x, y);
+
+                // Look for a drop target
+                DropTarget dropTarget = null;
+                while (descendant != null) {
+                    dropTarget = descendant.getDropTarget();
+
+                    if (dropTarget == null) {
+                        descendant = descendant.getParent();
+                    } else {
+                        break;
+                    }
+                }
+
+                DropAction dropAction = null;
+
+                if (dropTarget != null) {
+                    // A drop target was found
+                    Point dropLocation = descendant.mapPointFromAncestor(this, x, y);
+                    dropAction = dropTarget.getDropAction(descendant, dragContent.getClass(),
+                        dropLocation.x, dropLocation.y);
+
+                    if (dropAction != null) {
+                        // Drop the content
+                        dropTarget.drop(descendant, dragContent, dropLocation.x, dropLocation.y);
+                    }
+                }
+
+                Visual representation = dragSource.getRepresentation();
+
+                if (representation != null) {
+                    Dimensions offset = dragSource.getOffset();
+                    repaint(dragLocation.x - offset.width, dragLocation.y - offset.height,
+                        representation.getWidth(), representation.getHeight());
+                }
+
+                // End the drag
+                dragSource.endDrag(dropAction);
+                dragSource = null;
+
+                dragLocation = null;
+
+                Mouse.setDragContentType(null);
+                Mouse.setCursor(descendant == null ? Cursor.DEFAULT : descendant.getCursor());
+            }
+        }
+
+        return consumed;
     }
 
     @Override

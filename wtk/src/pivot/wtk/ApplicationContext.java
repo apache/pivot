@@ -22,6 +22,12 @@ import java.awt.GraphicsConfiguration;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Transparency;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
@@ -29,6 +35,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Iterator;
@@ -552,6 +559,83 @@ public abstract class ApplicationContext {
         };
 
         displayHost = new DisplayHost();
+        new java.awt.dnd.DropTarget(displayHost, new DropTargetAdapter() {
+            public void drop(DropTargetDropEvent event) {
+                Transferable transferable = event.getTransferable();
+                DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
+
+                if (transferDataFlavors.length > 0) {
+                    DataFlavor dataFlavor = transferDataFlavors[0];
+
+                    // Look for a drop handler
+                    int x = Mouse.getX();
+                    int y = Mouse.getY();
+
+                    Component dropTarget = display.getDescendantAt(x, y);
+
+                    DropTarget dropHandler = null;
+                    while (dropTarget != null) {
+                        dropHandler = dropTarget.getDropTarget();
+
+                        if (dropHandler == null) {
+                            dropTarget = dropTarget.getParent();
+                        } else {
+                            break;
+                        }
+                    }
+
+                    if (dropHandler != null) {
+                        // A drop handler was found
+                        DropAction dropAction = null;
+                        Point dropLocation = dropTarget.mapPointFromAncestor(display, x, y);
+
+                        Class<?> contentType = dataFlavor.getRepresentationClass();
+                        dropAction = dropHandler.getDropAction(dropTarget, contentType,
+                            dropLocation.x, dropLocation.y);
+
+                        if (dropAction != null) {
+                            int awtDropAction = 0;
+
+                            switch(dropAction) {
+                                case COPY: {
+                                    awtDropAction = DnDConstants.ACTION_COPY;
+                                    break;
+                                }
+
+                                case MOVE: {
+                                    awtDropAction = DnDConstants.ACTION_MOVE;
+                                    break;
+                                }
+
+                                case LINK: {
+                                    awtDropAction = DnDConstants.ACTION_LINK;
+                                    break;
+                                }
+                            }
+
+                            // Drop the content
+                            event.acceptDrop(awtDropAction);
+
+                            Object content = null;
+                            try {
+                                content = transferable.getTransferData(dataFlavor);
+                            } catch(UnsupportedFlavorException exception) {
+                            } catch(IOException exception) {
+                            }
+
+                            if (content != null) {
+                                dropHandler.drop(dropTarget, content, dropLocation.x, dropLocation.y);
+                            }
+
+                            event.dropComplete(true);
+                        }
+                    } else {
+                        event.rejectDrop();
+                    }
+                }
+            }
+        });
+
         display = new Display(this);
 
         try {
