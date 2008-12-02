@@ -21,7 +21,6 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
-import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
@@ -29,6 +28,7 @@ import pivot.wtk.DropTarget;
 import pivot.wtk.Frame;
 import pivot.wtk.ImageView;
 import pivot.wtk.Mouse;
+import pivot.wtk.Point;
 import pivot.wtk.Visual;
 import pivot.wtk.media.Image;
 
@@ -42,7 +42,7 @@ public class DragDropTest implements Application {
     private static class ImageDragHandler implements DragSource {
         ImageView imageView = null;
         private Image image = null;
-        private Dimensions offset = null;
+        private Point offset = null;
 
         public boolean beginDrag(Component component, int x, int y) {
             imageView = (ImageView)component;
@@ -50,7 +50,7 @@ public class DragDropTest implements Application {
 
             if (image != null) {
                 imageView.setImage((Image)null);
-                offset = new Dimensions(x - (imageView.getWidth() - image.getWidth()) / 2,
+                offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2,
                     y - (imageView.getHeight() - image.getHeight()) / 2);
             }
 
@@ -67,6 +67,10 @@ public class DragDropTest implements Application {
             return image;
         }
 
+        public boolean isNative() {
+            return false;
+        }
+
         public Class<?> getContentType() {
             return image.getClass();
         }
@@ -75,7 +79,7 @@ public class DragDropTest implements Application {
             return image;
         }
 
-        public Dimensions getOffset() {
+        public Point getOffset() {
             return offset;
         }
 

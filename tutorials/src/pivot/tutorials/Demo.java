@@ -36,7 +36,6 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.ComponentMouseListener;
-import pivot.wtk.Dimensions;
 import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
 import pivot.wtk.DropTarget;
@@ -214,7 +213,7 @@ public class Demo implements Application {
     private static class ImageDragSource implements DragSource {
         ImageView imageView = null;
         private Image image = null;
-        private Dimensions offset = null;
+        private Point offset = null;
 
         public boolean beginDrag(Component component, int x, int y) {
             imageView = (ImageView)component;
@@ -222,7 +221,7 @@ public class Demo implements Application {
 
             if (image != null) {
                 imageView.setImage((Image)null);
-                offset = new Dimensions(x - (imageView.getWidth() - image.getWidth()) / 2,
+                offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2,
                     y - (imageView.getHeight() - image.getHeight()) / 2);
             }
 
@@ -231,6 +230,10 @@ public class Demo implements Application {
 
         public Object getContent() {
             return image;
+        }
+
+        public boolean isNative() {
+            return true;
         }
 
         public void endDrag(DropAction dropAction) {
@@ -243,7 +246,7 @@ public class Demo implements Application {
             return image;
         }
 
-        public Dimensions getOffset() {
+        public Point getOffset() {
             return offset;
         }
 

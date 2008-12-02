@@ -5,7 +5,6 @@ import java.awt.Font;
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
-import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
@@ -13,6 +12,7 @@ import pivot.wtk.DropTarget;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
 import pivot.wtk.VerticalAlignment;
+import pivot.wtk.Point;
 import pivot.wtk.Visual;
 import pivot.wtk.Window;
 
@@ -38,11 +38,15 @@ public class NativeDragDropTest implements Application {
                 return label.getText();
             }
 
+            public boolean isNative() {
+                return true;
+            }
+
             public Visual getRepresentation() {
                 return null;
             }
 
-            public Dimensions getOffset() {
+            public Point getOffset() {
                 return null;
             }
 

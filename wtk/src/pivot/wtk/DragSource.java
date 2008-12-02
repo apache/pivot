@@ -47,6 +47,16 @@ public interface DragSource {
     public Object getContent();
 
     /**
+     * Returns a flag indicating that this drag should be handled by the
+     * operating system.
+     *
+     * @return
+     * <tt>true</tt> if this is a native drag operation; <tt>false</tt>,
+     * otherwise.
+     */
+    public boolean isNative();
+
+    /**
      * Returns a visual representation of the drag content.
      *
      * @return
@@ -63,7 +73,7 @@ public interface DragSource {
      * The offset of the mouse pointer within the representation visual; may
      * be <tt>null</tt> if the content has no visual representation.
      */
-    public Dimensions getOffset();
+    public Point getOffset();
 
     /**
      * Returns the drop actions supported by this drag source.

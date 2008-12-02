@@ -24,12 +24,16 @@ import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureRecognizer;
+import java.awt.dnd.DragSourceAdapter;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -45,6 +49,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.util.ImmutableIterator;
 import pivot.wtk.Component.DecoratorSequence;
+import pivot.wtk.media.Picture;
 
 /**
  * Base class for application contexts.
@@ -317,6 +322,8 @@ public abstract class ApplicationContext {
         protected void processMouseEvent(MouseEvent event) {
             super.processMouseEvent(event);
 
+            mouseEvent = event;
+
             // Get the event coordinates
             int x = event.getX();
             int y = event.getY();
@@ -366,11 +373,15 @@ public abstract class ApplicationContext {
                     break;
                 }
             }
+
+            mouseEvent = null;
         }
 
         @Override
         protected void processMouseMotionEvent(MouseEvent event) {
             super.processMouseMotionEvent(event);
+
+            mouseEvent = event;
 
             // Get the event coordinates
             mouseX = event.getX();
@@ -384,6 +395,8 @@ public abstract class ApplicationContext {
                     break;
                 }
             }
+
+            mouseEvent = null;
         }
 
         @Override
@@ -528,8 +541,10 @@ public abstract class ApplicationContext {
         }
     }
 
-    private DisplayHost displayHost = null;
-    private Display display = null;
+    private DisplayHost displayHost;
+    private Display display;
+
+    private MouseEvent mouseEvent = null;
 
     protected static URL origin = null;
 
@@ -557,7 +572,10 @@ public abstract class ApplicationContext {
             }
         };
 
+        // Create the display host
         displayHost = new DisplayHost();
+
+        // Add native drop support
         new java.awt.dnd.DropTarget(displayHost, new DropTargetAdapter() {
             @Override
             public void dragEnter(DropTargetDragEvent event) {
@@ -588,12 +606,10 @@ public abstract class ApplicationContext {
 
             public void drop(DropTargetDropEvent event) {
                 Transferable transferable = event.getTransferable();
+                java.awt.Point location = event.getLocation();
 
                 // Look for a drop handler
-                int x = Mouse.getX();
-                int y = Mouse.getY();
-
-                Component dropTarget = display.getDescendantAt(x, y);
+                Component dropTarget = display.getDescendantAt(location.x, location.y);
 
                 DropTarget dropHandler = null;
                 while (dropTarget != null) {
@@ -609,7 +625,8 @@ public abstract class ApplicationContext {
                 if (dropHandler != null) {
                     // A drop handler was found
                     DropAction dropAction = null;
-                    Point dropLocation = dropTarget.mapPointFromAncestor(display, x, y);
+                    Point dropLocation = dropTarget.mapPointFromAncestor(display,
+                        location.x, location.y);
 
                     Class<?> contentType = Clipboard.getContentType(transferable);
                     dropAction = dropHandler.getDropAction(dropTarget, contentType,
@@ -651,6 +668,7 @@ public abstract class ApplicationContext {
             }
         });
 
+        // Create the display
         display = new Display(this);
 
         try {
@@ -703,6 +721,70 @@ public abstract class ApplicationContext {
         }
 
         return graphics;
+    }
+
+    protected void startDrag(DragSource dragSource) {
+        java.awt.dnd.DragSource awtDragSource = java.awt.dnd.DragSource.getDefaultDragSource();
+
+        final int supportedDropActions = dragSource.getSupportedDropActions();
+
+        DragGestureRecognizer dragGestureRecognizer =
+            new DragGestureRecognizer(java.awt.dnd.DragSource.getDefaultDragSource(), displayHost) {
+            private static final long serialVersionUID = 0;
+
+            {   appendEvent(mouseEvent);
+            }
+
+            public int getSourceActions() {
+                int awtSourceActions = 0;
+
+                if (DropAction.COPY.isSelected(supportedDropActions)) {
+                    awtSourceActions |= DnDConstants.ACTION_COPY;
+                }
+
+                if (DropAction.MOVE.isSelected(supportedDropActions)) {
+                    awtSourceActions |= DnDConstants.ACTION_MOVE;
+                }
+
+                if (DropAction.LINK.isSelected(supportedDropActions)) {
+                    awtSourceActions |= DnDConstants.ACTION_LINK;
+                }
+
+                return awtSourceActions;
+            }
+
+            protected void registerListeners() {
+                // No-op
+            }
+
+            protected void unregisterListeners() {
+                // No-op
+            }
+        };
+
+        java.util.List<InputEvent> inputEvents = new java.util.ArrayList<InputEvent>();
+        inputEvents.add(mouseEvent);
+
+        DragGestureEvent trigger = new DragGestureEvent(dragGestureRecognizer,
+            DnDConstants.ACTION_COPY, new java.awt.Point(Mouse.getX(), Mouse.getY()),
+            inputEvents);
+
+        java.awt.Image image = null;
+        java.awt.Point awtOffset = new java.awt.Point();
+
+        Visual representation = dragSource.getRepresentation();
+        if (representation instanceof Picture) {
+            Picture picture = (Picture)representation;
+            image = picture.getBufferedImage();
+
+            Point offset = dragSource.getOffset();
+            awtOffset.x = -offset.x;
+            awtOffset.y = -offset.y;
+        }
+
+        Transferable transferable = new Clipboard.TransferableContent(dragSource.getContent());
+        awtDragSource.startDrag(trigger, java.awt.Cursor.getDefaultCursor(),
+            image, awtOffset, transferable, new DragSourceAdapter() {});
     }
 
     protected abstract void contextOpen(URL location, String target);

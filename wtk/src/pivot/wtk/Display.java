@@ -46,6 +46,10 @@ public final class Display extends Container {
         return applicationContext;
     }
 
+    protected DragSource getActiveDragSource() {
+        return dragSource;
+    }
+
     @Override
     protected void setSkin(Skin skin) {
         throw new UnsupportedOperationException("Can't replace Display skin.");
@@ -84,9 +88,9 @@ public final class Display extends Container {
             Visual representation = dragSource.getRepresentation();
 
             if (representation != null) {
-                Dimensions offset = dragSource.getOffset();
-                int tx = dragLocation.x - offset.width;
-                int ty = dragLocation.y - offset.height;
+                Point offset = dragSource.getOffset();
+                int tx = dragLocation.x - offset.x;
+                int ty = dragLocation.y - offset.y;
 
                 Graphics2D representationGraphics = (Graphics2D)graphics.create(tx, ty,
                     representation.getWidth(), representation.getHeight());
@@ -132,11 +136,19 @@ public final class Display extends Container {
 
                             if (dragSource.beginDrag(descendant,
                                 componentDragLocation.x, componentDragLocation.y)) {
-                                Mouse.setCursor(Cursor.DEFAULT);
+                                if (dragSource.isNative()) {
+                                    // Start a native drag
+                                    applicationContext.startDrag(dragSource);
+                                    dragLocation = null;
+                                    dragSource = null;
+                                } else {
+                                    // Start a local drag
+                                    Mouse.setCursor(Cursor.DEFAULT);
 
-                                Object dragContent = dragSource.getContent();
-                                Mouse.setDragContentType(dragContent.getClass());
-                                Mouse.setSupportedDropActions(dragSource.getSupportedDropActions());
+                                    Object dragContent = dragSource.getContent();
+                                    Mouse.setDragContentType(dragContent.getClass());
+                                    Mouse.setSupportedDropActions(dragSource.getSupportedDropActions());
+                                }
                             } else {
                                 // The drag source rejected the drag
                                 dragLocation = null;
@@ -150,13 +162,13 @@ public final class Display extends Container {
                 Visual representation = dragSource.getRepresentation();
 
                 if (representation != null) {
-                    Dimensions offset = dragSource.getOffset();
+                    Point offset = dragSource.getOffset();
 
-                    repaint(dragLocation.x - offset.width,
-                        dragLocation.y - offset.height,
+                    repaint(dragLocation.x - offset.x,
+                        dragLocation.y - offset.y,
                         representation.getWidth(), representation.getHeight());
 
-                    repaint(x - offset.width, y - offset.height,
+                    repaint(x - offset.x, y - offset.y,
                         representation.getWidth(), representation.getHeight());
                 }
 
@@ -222,8 +234,8 @@ public final class Display extends Container {
                 Visual representation = dragSource.getRepresentation();
 
                 if (representation != null) {
-                    Dimensions offset = dragSource.getOffset();
-                    repaint(dragLocation.x - offset.width, dragLocation.y - offset.height,
+                    Point offset = dragSource.getOffset();
+                    repaint(dragLocation.x - offset.x, dragLocation.y - offset.y,
                         representation.getWidth(), representation.getHeight());
                 }
 
