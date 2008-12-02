@@ -44,7 +44,7 @@ public class DragDropTest implements Application {
         private Image image = null;
         private Dimensions offset = null;
 
-        public Object beginDrag(Component component, int x, int y) {
+        public boolean beginDrag(Component component, int x, int y) {
             imageView = (ImageView)component;
             image = imageView.getImage();
 
@@ -54,7 +54,7 @@ public class DragDropTest implements Application {
                     y - (imageView.getHeight() - image.getHeight()) / 2);
             }
 
-            return image;
+            return (image != null);
         }
 
         public void endDrag(DropAction dropAction) {
@@ -78,13 +78,19 @@ public class DragDropTest implements Application {
         public Dimensions getOffset() {
             return offset;
         }
+
+        public int getSupportedDropActions() {
+            return DropAction.MOVE.getMask();
+        }
     }
 
     private static class ImageDropHandler implements DropTarget {
-        public DropAction getDropAction(Component component, Class<?> contentType, int x, int y) {
+        public DropAction getDropAction(Component component, Class<?> contentType,
+            int supportedDropActions, int x, int y) {
             DropAction dropAction = null;
 
-            if (Image.class.isAssignableFrom(contentType)) {
+            if (Image.class.isAssignableFrom(contentType)
+                && DropAction.MOVE.isSelected(supportedDropActions)) {
                 dropAction = DropAction.MOVE;
             }
 

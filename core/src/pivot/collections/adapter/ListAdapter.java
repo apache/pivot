@@ -42,6 +42,10 @@ public final class ListAdapter<T> implements List<T> {
         this.list = list;
     }
 
+    public java.util.List<T> getList() {
+        return list;
+    }
+
     public int add(T item) {
         int index = -1;
 

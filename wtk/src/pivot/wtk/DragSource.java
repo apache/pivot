@@ -29,9 +29,10 @@ public interface DragSource {
      * @param y
      *
      * @return
-     * The value to drag, or <tt>null</tt> to reject the operation.
+     * <tt>true</tt> to begin the drag, or <tt>false</tt> to reject the
+     * operation.
      */
-    public Object beginDrag(Component component, int x, int y);
+    public boolean beginDrag(Component component, int x, int y);
 
     /**
      * Called when a drag operation completes.
@@ -41,13 +42,31 @@ public interface DragSource {
     public void endDrag(DropAction dropAction);
 
     /**
+     * Returns the drag content.
+     */
+    public Object getContent();
+
+    /**
      * Returns a visual representation of the drag content.
+     *
+     * @return
+     * A visual that represents the drag content, or <tt>null</tt> for no
+     * visual.
      */
     public Visual getRepresentation();
 
     /**
      * Returns the offset from the mouse pointer location at which the
      * representation should be drawn.
+     *
+     * @return
+     * The offset of the mouse pointer within the representation visual; may
+     * be <tt>null</tt> if the content has no visual representation.
      */
     public Dimensions getOffset();
+
+    /**
+     * Returns the drop actions supported by this drag source.
+     */
+    public int getSupportedDropActions();
 }

@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
  */
 public final class Mouse {
     private static Class<?> dragContentType = null;
+    private static int supportedDropActions = 0;
 
     /**
      * Enumeration representing mouse buttons.
@@ -320,5 +321,21 @@ public final class Mouse {
 
     protected static void setDragContentType(Class<?> dragContentType) {
         Mouse.dragContentType = dragContentType;
+    }
+
+    /**
+     * Returns a bitfield containing the supported drop actions for the current
+     * drag operation.
+     *
+     * @return
+     * The supported drop actions, or <tt>0</tt> if nothing is currently being
+     * dragged.
+     */
+    public static int getSupportedDropActions() {
+        return supportedDropActions;
+    }
+
+    protected static void setSupportedDropActions(int supportedDropActions) {
+        Mouse.supportedDropActions = supportedDropActions;
     }
 }

@@ -18,10 +18,14 @@ package pivot.wtk;
 import java.awt.Toolkit;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+
+import pivot.io.FileSequence;
+import pivot.wtk.media.Picture;
 
 /**
  * Singleton class providing a means of sharing data between components and
@@ -29,7 +33,49 @@ import java.io.IOException;
  *
  * @author gbrown
  */
-public class Clipboard {
+public final class Clipboard {
+    protected static class TransferableContent implements Transferable {
+        private Object content;
+        private DataFlavor dataFlavor;
+
+        public TransferableContent(Object content) {
+            if (content instanceof Picture) {
+                dataFlavor = DataFlavor.imageFlavor;
+            } else if (content instanceof FileSequence) {
+                dataFlavor = DataFlavor.javaFileListFlavor;
+            } else {
+                dataFlavor = DataFlavor.stringFlavor;
+            }
+
+            this.content = content;
+        }
+
+        public Object getTransferData(DataFlavor dataFlavor)
+            throws UnsupportedFlavorException, IOException {
+            Object transferData = null;
+
+            if (dataFlavor == DataFlavor.imageFlavor) {
+                Picture picture = (Picture)content;
+                transferData = picture.getBufferedImage();
+            } else if (dataFlavor == DataFlavor.javaFileListFlavor) {
+                FileSequence fileSequence = (FileSequence)content;
+                transferData = fileSequence.getList();
+            } else {
+                transferData = content.toString();
+            }
+
+            return transferData;
+        }
+
+        public DataFlavor[] getTransferDataFlavors() {
+            return new DataFlavor[] {dataFlavor};
+        }
+
+        public boolean isDataFlavorSupported(DataFlavor dataFlavor) {
+            return (this.dataFlavor.isMimeTypeEqual(dataFlavor));
+        }
+    }
+
     private static Object content = null;
     private static java.awt.datatransfer.Clipboard awtClipboard = null;
 
@@ -62,17 +108,8 @@ public class Clipboard {
         Object content = Clipboard.content;
 
         if (content == null
-            && awtClipboard != null
-            && awtClipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-            Transferable awtClipboardContents = awtClipboard.getContents(null);
-
-            try {
-                content = awtClipboardContents.getTransferData(DataFlavor.stringFlavor);
-            } catch (UnsupportedFlavorException exception) {
-                System.out.println(exception);
-            } catch (IOException exception) {
-                System.out.println(exception);
-            }
+            && awtClipboard != null) {
+            content = getContent(awtClipboard.getContents(null));
         }
 
         return content;
@@ -98,7 +135,7 @@ public class Clipboard {
         }
 
         if (awtClipboard != null) {
-            awtClipboard.setContents(new StringSelection(content.toString()), new ClipboardOwner() {
+            awtClipboard.setContents(new TransferableContent(content), new ClipboardOwner() {
                 public void lostOwnership(java.awt.datatransfer.Clipboard awtClipboard,
                     Transferable awtClipboardContents) {
                     Clipboard.content = null;
@@ -107,5 +144,92 @@ public class Clipboard {
         }
 
         Clipboard.content = content;
+    }
+
+    /**
+     * Selects the most appropriate content type from a given transferable
+     * object.
+     *
+     * @param transferable
+     *
+     * @return
+     * The preferred content type, or <tt>null</tt> if the transferable
+     * object did not contain any usable data.
+     */
+    protected static Class<?> getContentType(Transferable transferable) {
+        Class<?> contentType = null;
+
+        DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
+
+        int i = 0;
+        int n = transferDataFlavors.length;
+        while (i < n
+            && contentType == null) {
+            DataFlavor dataFlavor = transferDataFlavors[i++];
+
+            if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
+                contentType = Picture.class;
+            } else {
+                if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
+                    contentType = FileSequence.class;
+                }
+            }
+        }
+
+        if (contentType == null) {
+            contentType = String.class;
+        }
+
+        return contentType;
+    }
+
+    /**
+     * Selects the most appropriate content from a given transferable object.
+     *
+     * @param transferable
+     *
+     * @return
+     * The preferred content value, or <tt>null</tt> if the transferable
+     * object did not contain any usable data.
+     */
+    @SuppressWarnings("unchecked")
+    protected static Object getContent(Transferable transferable) {
+        Object content = null;
+
+        DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
+
+        int i = 0;
+        int n = transferDataFlavors.length;
+        while (i < n
+            && content == null) {
+            DataFlavor dataFlavor = transferDataFlavors[i++];
+
+            if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
+                try {
+                    content = new Picture((BufferedImage)transferable.getTransferData(dataFlavor));
+                } catch(Exception exception) {
+                    // No-op
+                }
+            } else {
+                if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
+                    try {
+                        content = new FileSequence((java.util.List<File>)transferable.getTransferData(dataFlavor));
+                    } catch(Exception exception) {
+                        // No-op
+                    }
+                }
+            }
+        }
+
+        if (content == null
+            && transferDataFlavors.length > 0) {
+            try {
+                content = transferable.getTransferData(transferDataFlavors[0]).toString();
+            } catch(Exception exception) {
+                // No-op
+            }
+        }
+
+        return content;
     }
 }

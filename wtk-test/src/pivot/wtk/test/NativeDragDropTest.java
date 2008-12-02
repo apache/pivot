@@ -27,11 +27,15 @@ public class NativeDragDropTest implements Application {
         label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
         label.setDragSource(new DragSource() {
-            public Object beginDrag(Component component, int x, int y) {
-                return label.getText();
+            public boolean beginDrag(Component component, int x, int y) {
+                return true;
             }
 
             public void endDrag(DropAction dropAction) {
+            }
+
+            public Object getContent() {
+                return label.getText();
             }
 
             public Visual getRepresentation() {
@@ -41,11 +45,15 @@ public class NativeDragDropTest implements Application {
             public Dimensions getOffset() {
                 return null;
             }
+
+            public int getSupportedDropActions() {
+                return DropAction.COPY.getMask();
+            }
         });
 
         label.setDropTarget(new DropTarget() {
             public DropAction getDropAction(Component component, Class<?> contentType,
-                int x, int y) {
+                int supportedDropActions, int x, int y) {
                 return DropAction.COPY;
             }
 

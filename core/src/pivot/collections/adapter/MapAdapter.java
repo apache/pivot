@@ -39,6 +39,10 @@ public class MapAdapter<K, V> implements Map<K, V> {
         this.map = map;
     }
 
+    public java.util.Map<K, V> getMap() {
+        return map;
+    }
+
     public V get(K key) {
         return map.get(key);
     }

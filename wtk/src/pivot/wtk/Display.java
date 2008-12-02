@@ -34,7 +34,6 @@ public final class Display extends Container {
 
     private Point dragLocation = null;
     private DragSource dragSource = null;
-    private Object dragContent = null;
 
     public static final int DRAG_THRESHOLD = 4;
 
@@ -128,19 +127,20 @@ public final class Display extends Container {
                             dragLocation = null;
                         } else {
                             // A drag handler was found; begin the drag
-                            Mouse.setCursor(Cursor.DEFAULT);
                             Point componentDragLocation = descendant.mapPointFromAncestor(this,
                                 dragLocation.x, dragLocation.y);
 
-                            dragContent = dragSource.beginDrag(descendant,
-                                componentDragLocation.x, componentDragLocation.y);
+                            if (dragSource.beginDrag(descendant,
+                                componentDragLocation.x, componentDragLocation.y)) {
+                                Mouse.setCursor(Cursor.DEFAULT);
 
-                            if (dragContent == null) {
+                                Object dragContent = dragSource.getContent();
+                                Mouse.setDragContentType(dragContent.getClass());
+                                Mouse.setSupportedDropActions(dragSource.getSupportedDropActions());
+                            } else {
                                 // The drag source rejected the drag
                                 dragLocation = null;
                                 dragSource = null;
-                            } else {
-                                Mouse.setDragContentType(dragContent.getClass());
                             }
                         }
                     }
@@ -205,11 +205,15 @@ public final class Display extends Container {
 
                 if (dropTarget != null) {
                     // A drop target was found
+                    Object dragContent = dragSource.getContent();
+                    int supportedDropActions = dragSource.getSupportedDropActions();
                     Point dropLocation = descendant.mapPointFromAncestor(this, x, y);
-                    dropAction = dropTarget.getDropAction(descendant, dragContent.getClass(),
-                        dropLocation.x, dropLocation.y);
 
-                    if (dropAction != null) {
+                    dropAction = dropTarget.getDropAction(descendant, dragContent.getClass(),
+                        supportedDropActions, dropLocation.x, dropLocation.y);
+
+                    if (dropAction != null
+                        && dropAction.isSelected(supportedDropActions)) {
                         // Drop the content
                         dropTarget.drop(descendant, dragContent, dropLocation.x, dropLocation.y);
                     }
@@ -230,6 +234,8 @@ public final class Display extends Container {
                 dragLocation = null;
 
                 Mouse.setDragContentType(null);
+                Mouse.setSupportedDropActions(0);
+
                 Mouse.setCursor(descendant == null ? Cursor.DEFAULT : descendant.getCursor());
             }
         }

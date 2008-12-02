@@ -39,6 +39,10 @@ public class SetAdapter<E> implements Set<E> {
         this.set = set;
     }
 
+    public java.util.Set<E> getSet() {
+        return set;
+    }
+
     public void add(E element) {
         if (!set.contains(element)) {
             set.add(element);

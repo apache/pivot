@@ -216,7 +216,7 @@ public class Demo implements Application {
         private Image image = null;
         private Dimensions offset = null;
 
-        public Object beginDrag(Component component, int x, int y) {
+        public boolean beginDrag(Component component, int x, int y) {
             imageView = (ImageView)component;
             image = imageView.getImage();
 
@@ -226,6 +226,10 @@ public class Demo implements Application {
                     y - (imageView.getHeight() - image.getHeight()) / 2);
             }
 
+            return (image != null);
+        }
+
+        public Object getContent() {
             return image;
         }
 
@@ -242,14 +246,19 @@ public class Demo implements Application {
         public Dimensions getOffset() {
             return offset;
         }
+
+        public int getSupportedDropActions() {
+            return DropAction.MOVE.getMask();
+        }
     }
 
     private static class ImageDropTarget implements DropTarget {
         public DropAction getDropAction(Component component, Class<?> contentType,
-            int x, int y) {
+            int supportedDropActions, int x, int y) {
             DropAction dropAction = null;
 
-            if (Image.class.isAssignableFrom(contentType)) {
+            if (Image.class.isAssignableFrom(contentType)
+                && DropAction.MOVE.isSelected(supportedDropActions)) {
                 dropAction = DropAction.MOVE;
             }
 

@@ -22,12 +22,12 @@ import java.awt.GraphicsConfiguration;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Transparency;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
@@ -35,7 +35,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Iterator;
@@ -560,78 +559,94 @@ public abstract class ApplicationContext {
 
         displayHost = new DisplayHost();
         new java.awt.dnd.DropTarget(displayHost, new DropTargetAdapter() {
+            @Override
+            public void dragEnter(DropTargetDragEvent event) {
+                Mouse.setDragContentType(Clipboard.getContentType(event.getTransferable()));
+
+                int supportedDropActions = 0;
+                int awtSourceActions = event.getSourceActions();
+                if ((awtSourceActions & DnDConstants.ACTION_COPY) > 0) {
+                    supportedDropActions |= DropAction.COPY.getMask();
+                }
+
+                if ((awtSourceActions & DnDConstants.ACTION_MOVE) > 0) {
+                    supportedDropActions |= DropAction.MOVE.getMask();
+                }
+
+                if ((awtSourceActions & DnDConstants.ACTION_LINK) > 0) {
+                    supportedDropActions |= DropAction.LINK.getMask();
+                }
+
+                Mouse.setSupportedDropActions(supportedDropActions);
+            }
+
+            @Override
+            public void dragExit(DropTargetEvent event) {
+                Mouse.setDragContentType(null);
+                Mouse.setSupportedDropActions(0);
+            }
+
             public void drop(DropTargetDropEvent event) {
                 Transferable transferable = event.getTransferable();
-                DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
 
-                if (transferDataFlavors.length > 0) {
-                    DataFlavor dataFlavor = transferDataFlavors[0];
+                // Look for a drop handler
+                int x = Mouse.getX();
+                int y = Mouse.getY();
 
-                    // Look for a drop handler
-                    int x = Mouse.getX();
-                    int y = Mouse.getY();
+                Component dropTarget = display.getDescendantAt(x, y);
 
-                    Component dropTarget = display.getDescendantAt(x, y);
+                DropTarget dropHandler = null;
+                while (dropTarget != null) {
+                    dropHandler = dropTarget.getDropTarget();
 
-                    DropTarget dropHandler = null;
-                    while (dropTarget != null) {
-                        dropHandler = dropTarget.getDropTarget();
-
-                        if (dropHandler == null) {
-                            dropTarget = dropTarget.getParent();
-                        } else {
-                            break;
-                        }
-                    }
-
-                    if (dropHandler != null) {
-                        // A drop handler was found
-                        DropAction dropAction = null;
-                        Point dropLocation = dropTarget.mapPointFromAncestor(display, x, y);
-
-                        Class<?> contentType = dataFlavor.getRepresentationClass();
-                        dropAction = dropHandler.getDropAction(dropTarget, contentType,
-                            dropLocation.x, dropLocation.y);
-
-                        if (dropAction != null) {
-                            int awtDropAction = 0;
-
-                            switch(dropAction) {
-                                case COPY: {
-                                    awtDropAction = DnDConstants.ACTION_COPY;
-                                    break;
-                                }
-
-                                case MOVE: {
-                                    awtDropAction = DnDConstants.ACTION_MOVE;
-                                    break;
-                                }
-
-                                case LINK: {
-                                    awtDropAction = DnDConstants.ACTION_LINK;
-                                    break;
-                                }
-                            }
-
-                            // Drop the content
-                            event.acceptDrop(awtDropAction);
-
-                            Object content = null;
-                            try {
-                                content = transferable.getTransferData(dataFlavor);
-                            } catch(UnsupportedFlavorException exception) {
-                            } catch(IOException exception) {
-                            }
-
-                            if (content != null) {
-                                dropHandler.drop(dropTarget, content, dropLocation.x, dropLocation.y);
-                            }
-
-                            event.dropComplete(true);
-                        }
+                    if (dropHandler == null) {
+                        dropTarget = dropTarget.getParent();
                     } else {
-                        event.rejectDrop();
+                        break;
                     }
+                }
+
+                if (dropHandler != null) {
+                    // A drop handler was found
+                    DropAction dropAction = null;
+                    Point dropLocation = dropTarget.mapPointFromAncestor(display, x, y);
+
+                    Class<?> contentType = Clipboard.getContentType(transferable);
+                    dropAction = dropHandler.getDropAction(dropTarget, contentType,
+                        Mouse.getSupportedDropActions(), dropLocation.x, dropLocation.y);
+
+                    if (dropAction != null) {
+                        int awtDropAction = 0;
+
+                        switch(dropAction) {
+                            case COPY: {
+                                awtDropAction = DnDConstants.ACTION_COPY;
+                                break;
+                            }
+
+                            case MOVE: {
+                                awtDropAction = DnDConstants.ACTION_MOVE;
+                                break;
+                            }
+
+                            case LINK: {
+                                awtDropAction = DnDConstants.ACTION_LINK;
+                                break;
+                            }
+                        }
+
+                        // Drop the content
+                        event.acceptDrop(awtDropAction);
+
+                        Object content = Clipboard.getContent(transferable);
+                        if (content != null) {
+                            dropHandler.drop(dropTarget, content, dropLocation.x, dropLocation.y);
+                        }
+
+                        event.dropComplete(true);
+                    }
+                } else {
+                    event.rejectDrop();
                 }
             }
         });

@@ -152,19 +152,15 @@ public class TerraCalendarSkin extends CalendarSkin
             }
 
             // Paint a border if this button represents today
-            int year = yearSpinner.getSelectedIndex();
-            int month = monthSpinner.getSelectedIndex();
-            int day = (Integer)dateButton.getButtonData() - 1;
-            if (year == today.getYear()
-                && month == today.getMonth()
-                && day == today.getDay()) {
+            CalendarDate date = (CalendarDate)dateButton.getButtonData();
+            if (date.equals(today)) {
                 graphics.setColor(dividerColor);
                 graphics.drawRect(0, 0, width - 1, height - 1);
             }
 
             // Paint the content
             Button.DataRenderer dataRenderer = dateButton.getDataRenderer();
-            dataRenderer.render(dateButton.getButtonData(), dateButton, highlighted);
+            dataRenderer.render(date, dateButton, highlighted);
             dataRenderer.setSize(width - padding * 2, height - padding * 2);
 
             graphics.translate(padding, padding);
@@ -230,11 +226,9 @@ public class TerraCalendarSkin extends CalendarSkin
                 || keyCode == Keyboard.KeyCode.DOWN
                 || keyCode == Keyboard.KeyCode.LEFT
                 || keyCode == Keyboard.KeyCode.RIGHT) {
-                int year = yearSpinner.getSelectedIndex();
-                int month = monthSpinner.getSelectedIndex();
-                int day = (Integer)dateButton.getButtonData() - 1;
+                CalendarDate date = (CalendarDate)dateButton.getButtonData();
 
-                int cellIndex = getCellIndex(year, month, day);
+                int cellIndex = getCellIndex(date.getYear(), date.getMonth(), date.getDay());
                 int rowIndex = cellIndex / 7;
                 int columnIndex = cellIndex % 7;
 
@@ -344,7 +338,8 @@ public class TerraCalendarSkin extends CalendarSkin
 
     private class DateButtonDataRenderer extends ButtonDataRenderer {
         public void render(Object data, Button button, boolean highlighted) {
-            super.render(data, button, highlighted);
+            CalendarDate date = (CalendarDate)data;
+            super.render(date.getDay() + 1, button, highlighted);
 
             if (button.isSelected()) {
                 label.getStyles().put("color", button.getStyles().get("selectionColor"));
@@ -485,11 +480,7 @@ public class TerraCalendarSkin extends CalendarSkin
                         calendar.setSelectedDate((CalendarDate)null);
                     }
                 } else {
-                    int year = yearSpinner.getSelectedIndex();
-                    int month = monthSpinner.getSelectedIndex();
-                    int day = (Integer)selection.getButtonData() - 1;
-
-                    calendar.setSelectedDate(new CalendarDate(year, month, day));
+                    calendar.setSelectedDate((CalendarDate)selection.getButtonData());
                 }
             }
         });
@@ -587,7 +578,6 @@ public class TerraCalendarSkin extends CalendarSkin
 
     private void updateCalendar() {
         Calendar calendar = (Calendar)getComponent();
-
         int month = calendar.getMonth();
         int year = calendar.getYear();
 
@@ -606,23 +596,38 @@ public class TerraCalendarSkin extends CalendarSkin
 
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 7; i++) {
+                month = calendar.getMonth();
+                year = calendar.getYear();
+
                 int k = j * 7 + i;
 
                 DateButton dateButton = dateButtons[j][i];
 
-                int buttonData;
+                int day;
                 if (k < firstIndex) {
-                    buttonData = daysLastMonth - (firstIndex - k) + 1;
+                    month--;
+                    if (month < 0) {
+                        month = 11;
+                        year--;
+                    }
+
+                    day = daysLastMonth - (firstIndex - k);
                     dateButton.setEnabled(false);
                 } else if (k >= lastIndex) {
-                    buttonData = k - lastIndex + 1;
+                    month++;
+                    if (month > 11) {
+                        month = 0;
+                        year++;
+                    }
+
+                    day = k - lastIndex;
                     dateButton.setEnabled(false);
                 } else {
-                    buttonData = k - firstIndex + 1;
+                    day = k - firstIndex;
                     dateButton.setEnabled(true);
                 }
 
-                dateButton.setButtonData(buttonData);
+                dateButton.setButtonData(new CalendarDate(year, month, day));
             }
         }
 

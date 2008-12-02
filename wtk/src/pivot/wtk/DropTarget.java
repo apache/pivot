@@ -27,13 +27,15 @@ public interface DropTarget {
      *
      * @param component
      * @param contentType
+     * @param supportedDropActions
      * @param x
      * @param y
      *
      * @return
      * The drop action to be used, or <tt>null</tt> for no drop action.
      */
-    public DropAction getDropAction(Component component, Class<?> contentType, int x, int y);
+    public DropAction getDropAction(Component component, Class<?> contentType,
+        int supportedDropActions, int x, int y);
 
     /**
      * Called when an item is dropped during a drag/drop operation.
