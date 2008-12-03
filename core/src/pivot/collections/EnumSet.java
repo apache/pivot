@@ -18,11 +18,11 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     private SetListenerList<E> setListeners = new SetListenerList<E>();
 
     public void add(E element) {
-        bitSet |= (2 << element.ordinal());
+        bitSet |= (1 << element.ordinal());
     }
 
     public void remove(E element) {
-        bitSet &= ~(2 << element.ordinal());
+        bitSet &= ~(1 << element.ordinal());
     }
 
     public void clear() {
@@ -30,7 +30,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     }
 
     public boolean contains(E element) {
-        return (bitSet & (2 << element.ordinal())) > 0;
+        return (bitSet & (1 << element.ordinal())) > 0;
     }
 
     public boolean isEmpty() {

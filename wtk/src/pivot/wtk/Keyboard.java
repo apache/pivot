@@ -15,11 +15,15 @@
  */
 package pivot.wtk;
 
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 
 /**
  * Class representing the system keyboard.
+ * <p>
+ * TODO Provide a means of mapping common "actions" to keystrokes (e.g. "copy"
+ * to Control-C or Command-C)
  *
  * @author gbrown
  */
@@ -36,7 +40,7 @@ public final class Keyboard {
         META;
 
         public int getMask() {
-            return 2 << ordinal();
+            return 1 << ordinal();
         }
 
         public boolean isSelected(int modifiers) {
@@ -87,11 +91,11 @@ public final class Keyboard {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(Object object) {
             boolean equals = false;
 
-            if (o instanceof KeyStroke) {
-                KeyStroke keyStroke = (KeyStroke)o;
+            if (object instanceof KeyStroke) {
+                KeyStroke keyStroke = (KeyStroke)object;
                 equals = (this.keyCode == keyStroke.keyCode
                     && this.modifiers == keyStroke.modifiers);
             }
@@ -101,7 +105,7 @@ public final class Keyboard {
 
         @Override
         public int hashCode() {
-            // TODO Key codes are currently defined as 16-bit values, so
+            // NOTE Key codes are currently defined as 16-bit values, so
             // shifting by 4 bits to append the modifiers should be OK.
             // However, if Sun changes the key code values in the future,
             // this may no longer be safe.
@@ -252,15 +256,29 @@ public final class Keyboard {
         public static final int UNDEFINED = KeyEvent.VK_UNDEFINED;
     }
 
+    private static int modifiersEx = 0;
+
+    protected static void initialize(ApplicationContext applicationContext) {
+        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
+
+        displayHost.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent event) {
+                modifiersEx = event.getModifiersEx();
+                Mouse.updateDragCursor();
+            }
+
+            public void keyReleased(KeyEvent event) {
+                modifiersEx = event.getModifiersEx();
+                Mouse.updateDragCursor();
+            }
+        });
+    }
+
     /**
      * Returns a bitfield representing the keyboard modifiers that are
      * currently pressed.
      */
     public static int getModifiers() {
-        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
-        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
-
-        int modifiersEx = displayHost.getKeyboardModifiersEx();
         int modifiers = 0x00;
 
         if ((modifiersEx & KeyEvent.SHIFT_DOWN_MASK) > 0) {
@@ -292,6 +310,32 @@ public final class Keyboard {
      */
     public static boolean isPressed(Modifier modifier) {
         return modifier.isSelected(getModifiers());
+    }
+
+    /**
+     * Returns the current drop action.
+     *
+     * @return
+     * The drop action corresponding to the currently pressed modifier keys,
+     * or <tt>null</tt> if no modifiers are pressed.
+     */
+    public static Mouse.DropAction getDropAction() {
+        // TODO Return an appropriate action for OS
+        // Windows: no modifier - move; control - copy; control-shift - link
+        // Mac OSX: no modifier - move; option - copy; option-command - link
+
+        Mouse.DropAction dropAction = null;
+
+        if (isPressed(Modifier.CTRL)
+            && isPressed(Modifier.SHIFT)) {
+            dropAction = Mouse.DropAction.LINK;
+        } else if (isPressed(Modifier.CTRL)) {
+            dropAction = Mouse.DropAction.COPY;
+        } else {
+            dropAction = Mouse.DropAction.MOVE;
+        }
+
+        return dropAction;
     }
 }
 

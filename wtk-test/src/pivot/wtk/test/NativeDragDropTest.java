@@ -7,6 +7,7 @@ import pivot.wtk.Application;
 import pivot.wtk.Display;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
+import pivot.wtk.Mouse;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
 

@@ -16,30 +16,15 @@
 package pivot.wtk;
 
 /**
- * Enumeration defining supported drop actions.
+ * Mouse drag listener interface.
  *
  * @author gbrown
  */
-public enum DropAction {
-    COPY,
-    MOVE,
-    LINK;
-
-    private int mask = 0x00;
-
-    DropAction() {
-        this.mask = 2 << (ordinal() + 1);
-    }
-
-    public int getMask() {
-        return this.mask;
-    }
-
-    public boolean isSelected(int dropActions) {
-        return ((dropActions & getMask()) > 0);
-    }
-
-    public static DropAction decode(String value) {
-        return valueOf(value.toUpperCase());
-    }
+public interface MouseDragListener {
+    /**
+     * Called when the mouse's drag content has been dropped.
+     *
+     * @param dropAction
+     */
+    public void mouseDrop(Mouse.DropAction dropAction);
 }

@@ -16,7 +16,9 @@
 package pivot.wtk;
 
 import java.awt.MouseInfo;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 /**
  * Class representing the system mouse.
@@ -24,9 +26,6 @@ import java.awt.event.MouseEvent;
  * @author gbrown
  */
 public final class Mouse {
-    private static Class<?> dragContentType = null;
-    private static int supportedDropActions = 0;
-
     /**
      * Enumeration representing mouse buttons.
      *
@@ -38,7 +37,7 @@ public final class Mouse {
         MIDDLE;
 
         public int getMask() {
-            return 2 << ordinal();
+            return 1 << ordinal();
         }
 
         public boolean isSelected(int buttons) {
@@ -61,13 +60,73 @@ public final class Mouse {
     }
 
     /**
+     * Enumeration defining supported drop actions.
+     *
+     * @author gbrown
+     */
+    public enum DropAction {
+        COPY,
+        MOVE,
+        LINK;
+
+        public int getMask() {
+            return 1 << ordinal();
+        }
+
+        public boolean isSelected(int dropActions) {
+            return ((dropActions & getMask()) > 0);
+        }
+
+        public static DropAction decode(String value) {
+            return valueOf(value.toUpperCase());
+        }
+    }
+
+    private static int x = 0;
+    private static int y = 0;
+    private static int modifiersEx = 0;
+
+    private static Object dragContent = null;
+    private static Class<?> dragContentType = null;
+    private static int supportedDropActions = 0;
+    private static Visual dragRepresentation = null;
+    private static Point dragOffset = null;
+    private static MouseDragListener mouseDragListener = null;
+
+    protected static void initialize(ApplicationContext applicationContext) {
+        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
+
+        displayHost.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent event) {
+                modifiersEx = event.getModifiersEx();
+            }
+
+            public void mouseReleased(MouseEvent event) {
+                modifiersEx = event.getModifiersEx();
+            }
+        });
+
+        displayHost.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseMoved(MouseEvent event) {
+                x = event.getX();
+                y = event.getY();
+            }
+
+            public void mouseDragged(MouseEvent event) {
+                x = event.getX();
+                y = event.getY();
+            }
+        });
+
+        // TODO Add native drop handler (DropTargetAdapter)
+    }
+
+    /**
      * Returns the x-coordinate of the mouse, in the coordinate system of
      * the display used by the current thread.
      */
     public static int getX() {
-        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
-        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
-        return displayHost.getMouseX();
+        return x;
     }
 
     /**
@@ -75,9 +134,7 @@ public final class Mouse {
      * the display used by the current thread.
      */
     public static int getY() {
-        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
-        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
-        return displayHost.getMouseY();
+        return y;
     }
 
     /**
@@ -85,10 +142,6 @@ public final class Mouse {
      * pressed.
      */
     public static int getButtons() {
-        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
-        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
-
-        int modifiersEx = displayHost.getMouseButtonModifiersEx();
         int buttons = 0x00;
 
         if ((modifiersEx & MouseEvent.BUTTON1_DOWN_MASK) > 0) {
@@ -309,6 +362,91 @@ public final class Mouse {
     }
 
     /**
+     * Initiates a drag operation.
+     *
+     * @param dragContent
+     * @param supportedDropActions
+     */
+    public static void drag(Object dragContent, int supportedDropActions) {
+        drag(dragContent, supportedDropActions, null, null, null);
+    }
+
+    /**
+     * Initiates a drag operation.
+     *
+     * @param dragContent
+     * @param supportedDropActions
+     * @param mouseDragListener
+     */
+    public static void drag(Object dragContent, int supportedDropActions,
+        MouseDragListener mouseDragListener) {
+        drag(dragContent, supportedDropActions, null, null, mouseDragListener);
+    }
+
+    /**
+     * Initiates a drag operation.
+     *
+     * @param dragContent
+     * @param supportedDropActions
+     * @param dragRepresentation
+     * @param dragOffset
+     */
+    public static void drag(Object dragContent, int supportedDropActions,
+        Visual dragRepresentation, Point dragOffset) {
+        drag(dragContent, supportedDropActions, dragRepresentation, dragOffset, null);
+    }
+
+    /**
+     * Initiates a drag operation.
+     *
+     * @param dragContent
+     * @param supportedDropActions
+     * @param dragRepresentation
+     * @param dragOffset
+     * @param mouseDragListener
+     */
+    public static void drag(Object dragContent, int supportedDropActions,
+        Visual dragRepresentation, Point dragOffset, MouseDragListener mouseDragListener) {
+        if (dragContent == null) {
+            throw new IllegalArgumentException("dragContent is null.");
+        }
+
+        if (supportedDropActions == 0) {
+            throw new IllegalArgumentException("supportedDropActions must be greater than 0.");
+        }
+
+        if (dragRepresentation != null
+            && dragOffset == null) {
+            throw new IllegalArgumentException("offset is required when a representation is specified.");
+        }
+
+        // TODO Should this override an existing drag?
+        if (isDrag()) {
+            throw new IllegalStateException("A drag is already in progress.");
+        }
+
+        Mouse.dragContent = dragContent;
+        Mouse.dragContentType = dragContent.getClass();
+        Mouse.supportedDropActions = supportedDropActions;
+        Mouse.dragRepresentation = dragRepresentation;
+        Mouse.dragOffset = dragOffset;
+        Mouse.mouseDragListener = mouseDragListener;
+
+        updateDragCursor();
+    }
+
+    /**
+     * Returns the drag state.
+     *
+     * @return
+     * <tt>true</tt> if a drag operation is in progress; <tt>false</tt>,
+     * otherwise.
+     */
+    public static boolean isDrag() {
+        return (dragContentType != null);
+    }
+
+    /**
      * Returns the type of the item currently being dragged.
      *
      * @return
@@ -317,10 +455,6 @@ public final class Mouse {
      */
     public static Class<?> getDragContentType() {
         return dragContentType;
-    }
-
-    protected static void setDragContentType(Class<?> dragContentType) {
-        Mouse.dragContentType = dragContentType;
     }
 
     /**
@@ -335,7 +469,133 @@ public final class Mouse {
         return supportedDropActions;
     }
 
-    protected static void setSupportedDropActions(int supportedDropActions) {
-        Mouse.supportedDropActions = supportedDropActions;
+    /**
+     * Returns a visual representing the item being dragged.
+     *
+     * @return
+     * The drag representation, or <tt>null</tt> if nothing is currently
+     * being dragged or the item has no visual representation.
+     */
+    public static Visual getDragRepresentation() {
+        return dragRepresentation;
+    }
+
+    /**
+     * Returns the drag offset.
+     *
+     * @return
+     * The offset of the mouse pointer within the drag visual, or <tt>null</tt>
+     * if nothing is currently being dragged or the item has no visual
+     * representation.
+     */
+    public static Point getDragOffset() {
+        return dragOffset;
+    }
+
+    /**
+     * Tests whether a drop action is valid for the current drag state. A
+     * drop action is valid if it is supported by the drag source and currently
+     * selected via keyboard modifier keys.
+     *
+     * @param dropAction
+     *
+     * @return
+     * <tt>true</tt> if the drop option is valid; <tt>false</tt>, otherwise.
+     */
+    public static boolean isValidDropAction(DropAction dropAction) {
+        return (Keyboard.getDropAction() == dropAction
+            && dropAction.isSelected(supportedDropActions));
+    }
+
+    /**
+     * Drops the item currently being dragged.
+     *
+     * @param dropAction
+     * The drop action to apply, or <tt>null</tt> for no drop action.
+     *
+     * @return
+     * The item that was dragged, or <tt>null</tt> if <tt>dropAction</tt> is
+     * null.
+     */
+    public static Object drop(DropAction dropAction) {
+        if (dragContentType == null) {
+            throw new IllegalStateException("A drag is not in progress.");
+        }
+
+        Object dragContent = null;
+        if (dropAction != null) {
+            if (!isValidDropAction(dropAction)) {
+                throw new IllegalStateException("dropAction is not valid.");
+            }
+
+            dragContent = Mouse.dragContent;
+        }
+
+        if (mouseDragListener != null) {
+            mouseDragListener.mouseDrop(dropAction);
+        }
+
+        Mouse.dragContent = null;
+
+        dragContentType = null;
+        supportedDropActions = 0;
+        dragRepresentation = null;
+        dragOffset = null;
+        mouseDragListener = null;
+
+        return dragContent;
+    }
+
+    protected static void updateDragCursor() {
+        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
+        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
+
+        java.awt.Cursor cursor = java.awt.Cursor.getDefaultCursor();
+
+        if (isDrag()) {
+            // Show an appropriate cursor for the union of the supported drop
+            // actions and the user's selected drop action
+            DropAction dropAction = Keyboard.getDropAction();
+
+            if (dropAction != null) {
+                if (dropAction.isSelected(supportedDropActions)) {
+                    switch (dropAction) {
+                        case COPY: {
+                            cursor = java.awt.dnd.DragSource.DefaultCopyDrop;
+                            break;
+                        }
+
+                        case MOVE: {
+                            cursor = java.awt.dnd.DragSource.DefaultMoveDrop;
+                            break;
+                        }
+
+                        case LINK: {
+                            cursor = java.awt.dnd.DragSource.DefaultLinkDrop;
+                            break;
+                        }
+                    }
+                } else {
+                    switch (dropAction) {
+                        case COPY: {
+                            cursor = java.awt.dnd.DragSource.DefaultCopyNoDrop;
+                            break;
+                        }
+
+                        case MOVE: {
+                            cursor = java.awt.dnd.DragSource.DefaultMoveNoDrop;
+                            break;
+                        }
+
+                        case LINK: {
+                            cursor = java.awt.dnd.DragSource.DefaultLinkNoDrop;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        displayHost.setCursor(cursor);
     }
 }

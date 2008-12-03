@@ -94,11 +94,6 @@ public abstract class ApplicationContext {
     public class DisplayHost extends java.awt.Container {
         public static final long serialVersionUID = 0;
 
-        private int mouseX = 0;
-        private int mouseY = 0;
-        private int mouseButtonModifiersEx = 0;
-        private int keyboardModifiersEx = 0;
-
         private Component focusedComponent = null;
 
         protected DisplayHost() {
@@ -246,22 +241,6 @@ public abstract class ApplicationContext {
             }
         }
 
-        public int getMouseX() {
-            return mouseX;
-        }
-
-        public int getMouseY() {
-            return mouseY;
-        }
-
-        public int getMouseButtonModifiersEx() {
-            return mouseButtonModifiersEx;
-        }
-
-        public int getKeyboardModifiersEx() {
-            return keyboardModifiersEx;
-        }
-
         @Override
         protected void processComponentEvent(ComponentEvent event) {
             super.processComponentEvent(event);
@@ -321,9 +300,6 @@ public abstract class ApplicationContext {
             int x = event.getX();
             int y = event.getY();
 
-            // Get the mouse button modifiers
-            mouseButtonModifiersEx = event.getModifiersEx();
-
             // Get the button associated with this event
             Mouse.Button button = null;
             switch (event.getButton()) {
@@ -373,14 +349,14 @@ public abstract class ApplicationContext {
             super.processMouseMotionEvent(event);
 
             // Get the event coordinates
-            mouseX = event.getX();
-            mouseY = event.getY();
+            int x = event.getX();
+            int y = event.getY();
 
             // Process the event
             switch (event.getID()) {
                 case MouseEvent.MOUSE_MOVED:
                 case MouseEvent.MOUSE_DRAGGED: {
-                    display.mouseMove(mouseX, mouseY);
+                    display.mouseMove(x, y);
                     break;
                 }
             }
@@ -445,9 +421,6 @@ public abstract class ApplicationContext {
                     break;
                 }
             }
-
-            // Get the keyboard modifiers
-            keyboardModifiersEx = event.getModifiersEx();
 
             // Process the event
             Component focusedComponent = Component.getFocusedComponent();
@@ -557,11 +530,13 @@ public abstract class ApplicationContext {
             }
         };
 
-        // Create the display host
+        // Create the display host and display
         displayHost = new DisplayHost();
-
-        // Create the display
         display = new Display(this);
+
+        // Initialize the mouse and keyboard
+        Mouse.initialize(this);
+        Keyboard.initialize(this);
 
         try {
             // Load and instantiate the default theme, if possible
