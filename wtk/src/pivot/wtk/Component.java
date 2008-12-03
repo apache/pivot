@@ -429,26 +429,37 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
+    private static class ComponentMouseDragListenerList extends ListenerList<ComponentMouseDragListener>
+        implements ComponentMouseDragListener {
+        public boolean mouseDrag(Component component, int x, int y) {
+            boolean consumed = false;
+
+            for (ComponentMouseDragListener listener : this) {
+                consumed |= listener.mouseDrag(component, x, y);
+            }
+
+            return consumed;
+        }
+    }
+
+    private static class ComponentMouseDropListenerList extends ListenerList<ComponentMouseDropListener>
+        implements ComponentMouseDropListener {
+        public boolean mouseDrop(Component component, int x, int y) {
+            boolean consumed = false;
+
+            for (ComponentMouseDropListener listener : this) {
+                consumed |= listener.mouseDrop(component, x, y);
+            }
+
+            return consumed;
+        }
+    }
+
     private static class ComponentDataListenerList extends ListenerList<ComponentDataListener>
         implements ComponentDataListener {
         public void userDataChanged(Component component, Object previousValue) {
             for (ComponentDataListener listener : this) {
                 listener.userDataChanged(component, previousValue);
-            }
-        }
-    }
-
-    private static class ComponentDragDropListenerList extends ListenerList<ComponentDragDropListener>
-        implements ComponentDragDropListener {
-        public void dragSourceChanged(Component component, DragSource previousDragHandler) {
-            for (ComponentDragDropListener listener : this) {
-                listener.dragSourceChanged(component, previousDragHandler);
-            }
-        }
-
-        public void dropTargetChanged(Component component, DropTarget previousDropHandler) {
-            for (ComponentDragDropListener listener : this) {
-                listener.dropTargetChanged(component, previousDropHandler);
             }
         }
     }
@@ -541,16 +552,6 @@ public abstract class Component implements ConstrainedVisual {
     private Object userData = null;
 
     /**
-     * Drag handler.
-     */
-    private DragSource dragSource = null;
-
-    /**
-     * Drop handler.
-     */
-    private DropTarget dropTarget = null;
-
-    /**
      * Proxy class for getting/setting style properties on the skin.
      */
     private StyleDictionary styleDictionary = null;
@@ -575,9 +576,10 @@ public abstract class Component implements ConstrainedVisual {
     private ComponentMouseListenerList componentMouseListeners = new ComponentMouseListenerList();
     private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
     private ComponentMouseWheelListenerList componentMouseWheelListeners = new ComponentMouseWheelListenerList();
+    private ComponentMouseDragListenerList componentMouseDragListeners = new ComponentMouseDragListenerList();
+    private ComponentMouseDropListenerList componentMouseDropListeners = new ComponentMouseDropListenerList();
     private ComponentKeyListenerList componentKeyListeners = new ComponentKeyListenerList();
     private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
-    private ComponentDragDropListenerList componentDragDropListeners = new ComponentDragDropListenerList();
 
     /**
      * The component that currently has the focus.
@@ -1861,56 +1863,6 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the component's drag source.
-     *
-     * @return
-     * The component's drag source, or <tt>null</tt> if no drag source is
-     * installed.
-     */
-    public DragSource getDragSource() {
-        return dragSource;
-    }
-
-    /**
-     * Sets the component's drag source.
-     *
-     * @param dragSource
-     * The drag source to install, or <tt>null</tt> for no drag source.
-     */
-    public void setDragSource(DragSource dragSource) {
-        DragSource previousDragSource = this.dragSource;
-        if (previousDragSource != dragSource) {
-            this.dragSource = dragSource;
-            componentDragDropListeners.dragSourceChanged(this, previousDragSource);
-        }
-    }
-
-    /**
-     * Returns the component's drop target.
-     *
-     * @return
-     * The component's drop target, or <tt>null</tt> if no drop target is
-     * installed.
-     */
-    public DropTarget getDropTarget() {
-        return dropTarget;
-    }
-
-    /**
-     * Sets the component's drop target.
-     *
-     * @param dropTarget
-     * The drop target to install, or <tt>null</tt> for no drop target.
-     */
-    public void setDropTarget(DropTarget dropTarget) {
-        DropTarget previousDropTarget = this.dropTarget;
-        if (previousDropTarget  != dropTarget) {
-            this.dropTarget = dropTarget;
-            componentDragDropListeners.dropTargetChanged(this, previousDropTarget );
-        }
-    }
-
-    /**
      * Returns this component's focusability. A focusable component is capable
      * of receiving the focus.
      *
@@ -2299,6 +2251,26 @@ public abstract class Component implements ConstrainedVisual {
         return consumed;
     }
 
+    protected boolean mouseDrag(int x, int y) {
+        boolean consumed = false;
+
+        if (enabled) {
+            consumed = componentMouseDragListeners.mouseDrag(this, x, y);
+        }
+
+        return consumed;
+    }
+
+    protected boolean mouseDrop(int x, int y) {
+        boolean consumed = false;
+
+        if (enabled) {
+            consumed = componentMouseDropListeners.mouseDrop(this, x, y);
+        }
+
+        return consumed;
+    }
+
     protected boolean keyTyped(char character) {
         boolean consumed = false;
 
@@ -2403,6 +2375,22 @@ public abstract class Component implements ConstrainedVisual {
         componentMouseWheelListeners.add(listener);
     }
 
+    public ListenerList<ComponentMouseDragListener> getComponentMouseDragListeners() {
+        return componentMouseDragListeners;
+    }
+
+    public void setComponentMouseDragListener(ComponentMouseDragListener listener) {
+        componentMouseDragListeners.add(listener);
+    }
+
+    public ListenerList<ComponentMouseDropListener> getComponentMouseDropListeners() {
+        return componentMouseDropListeners;
+    }
+
+    public void setComponentMouseDropListener(ComponentMouseDropListener listener) {
+        componentMouseDropListeners.add(listener);
+    }
+
     public ListenerList<ComponentKeyListener> getComponentKeyListeners() {
         return componentKeyListeners;
     }
@@ -2417,14 +2405,6 @@ public abstract class Component implements ConstrainedVisual {
 
     public void setComponentDataListener(ComponentDataListener listener) {
         componentDataListeners.add(listener);
-    }
-
-    public ListenerList<ComponentDragDropListener> getComponentDragDropListeners() {
-        return componentDragDropListeners;
-    }
-
-    public void setComponentDragDropListener(ComponentDragDropListener listener) {
-        componentDragDropListeners.add(listener);
     }
 
     public static ListenerList<ComponentClassListener> getComponentClassListeners() {

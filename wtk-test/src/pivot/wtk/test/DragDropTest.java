@@ -19,17 +19,9 @@ import java.awt.Color;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Display;
-import pivot.wtk.DragSource;
-import pivot.wtk.DropAction;
-import pivot.wtk.DropTarget;
 import pivot.wtk.Frame;
 import pivot.wtk.ImageView;
-import pivot.wtk.Mouse;
-import pivot.wtk.Point;
-import pivot.wtk.Visual;
 import pivot.wtk.media.Image;
 
 public class DragDropTest implements Application {
@@ -39,108 +31,13 @@ public class DragDropTest implements Application {
     private static final Color IMAGE_VIEW_BACKGROUND_COLOR = new Color(0x99, 0x99, 0x99);
     private static final Color IMAGE_VIEW_DROP_HIGHLIGHT_COLOR = new Color(0xf0, 0xe6, 0x8c);
 
-    private static class ImageDragHandler implements DragSource {
-        ImageView imageView = null;
-        private Image image = null;
-        private Point offset = null;
-
-        public boolean beginDrag(Component component, int x, int y) {
-            imageView = (ImageView)component;
-            image = imageView.getImage();
-
-            if (image != null) {
-                imageView.setImage((Image)null);
-                offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2,
-                    y - (imageView.getHeight() - image.getHeight()) / 2);
-            }
-
-            return (image != null);
-        }
-
-        public void endDrag(DropAction dropAction) {
-            if (dropAction == null) {
-                imageView.setImage(image);
-            }
-        }
-
-        public Object getContent() {
-            return image;
-        }
-
-        public boolean isNative() {
-            return false;
-        }
-
-        public Class<?> getContentType() {
-            return image.getClass();
-        }
-
-        public Visual getRepresentation() {
-            return image;
-        }
-
-        public Point getOffset() {
-            return offset;
-        }
-
-        public int getSupportedDropActions() {
-            return DropAction.MOVE.getMask();
-        }
-    }
-
-    private static class ImageDropHandler implements DropTarget {
-        public DropAction getDropAction(Component component, Class<?> contentType,
-            int supportedDropActions, int x, int y) {
-            DropAction dropAction = null;
-
-            if (Image.class.isAssignableFrom(contentType)
-                && DropAction.MOVE.isSelected(supportedDropActions)) {
-                dropAction = DropAction.MOVE;
-            }
-
-            return dropAction;
-        }
-
-        public void drop(Component component, Object content, int x, int y) {
-            ImageView imageView = (ImageView)component;
-            imageView.setImage((Image)content);
-            imageView.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
-        }
-    }
-
-    private static class ImageMouseHandler implements ComponentMouseListener {
-        public boolean mouseMove(Component component, int x, int y) {
-            return false;
-        }
-
-        public void mouseOver(Component component) {
-            Class<?> dragContentType = Mouse.getDragContentType();
-
-            if (dragContentType != null
-                && Image.class.isAssignableFrom(dragContentType)) {
-                component.getStyles().put("backgroundColor", IMAGE_VIEW_DROP_HIGHLIGHT_COLOR);
-            }
-        }
-
-        public void mouseOut(Component component) {
-            component.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
-        }
-    }
-
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         frame1.setTitle("Frame 1");
         frame1.setPreferredSize(160, 120);
         frame1.getStyles().put("resizable", false);
 
-        ImageDragHandler imageDragHandler = new ImageDragHandler();
-        ImageDropHandler imageDropHandler = new ImageDropHandler();
-        ImageMouseHandler imageMouseHandler = new ImageMouseHandler();
-
         ImageView imageView1 = new ImageView();
         imageView1.setImage(Image.load(getClass().getResource("go-home.png")));
-        imageView1.setDragSource(imageDragHandler);
-        imageView1.setDropTarget(imageDropHandler);
-        imageView1.getComponentMouseListeners().add(imageMouseHandler);
         imageView1.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
         frame1.setContent(imageView1);
         frame1.open(display);
@@ -150,9 +47,6 @@ public class DragDropTest implements Application {
         frame2.setLocation(180, 0);
 
         ImageView imageView2 = new ImageView();
-        imageView2.setDragSource(imageDragHandler);
-        imageView2.setDropTarget(imageDropHandler);
-        imageView2.getComponentMouseListeners().add(imageMouseHandler);
         imageView2.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
         frame2.setContent(imageView2);
 

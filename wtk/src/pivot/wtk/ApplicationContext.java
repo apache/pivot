@@ -22,23 +22,17 @@ import java.awt.GraphicsConfiguration;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Transparency;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragGestureEvent;
-import java.awt.dnd.DragGestureRecognizer;
-import java.awt.dnd.DragSourceAdapter;
-import java.awt.dnd.DropTargetAdapter;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Iterator;
@@ -47,6 +41,7 @@ import java.util.TimerTask;
 
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
+import pivot.io.FileSequence;
 import pivot.util.ImmutableIterator;
 import pivot.wtk.Component.DecoratorSequence;
 import pivot.wtk.media.Picture;
@@ -322,8 +317,6 @@ public abstract class ApplicationContext {
         protected void processMouseEvent(MouseEvent event) {
             super.processMouseEvent(event);
 
-            mouseEvent = event;
-
             // Get the event coordinates
             int x = event.getX();
             int y = event.getY();
@@ -373,15 +366,11 @@ public abstract class ApplicationContext {
                     break;
                 }
             }
-
-            mouseEvent = null;
         }
 
         @Override
         protected void processMouseMotionEvent(MouseEvent event) {
             super.processMouseMotionEvent(event);
-
-            mouseEvent = event;
 
             // Get the event coordinates
             mouseX = event.getX();
@@ -395,8 +384,6 @@ public abstract class ApplicationContext {
                     break;
                 }
             }
-
-            mouseEvent = null;
         }
 
         @Override
@@ -544,8 +531,6 @@ public abstract class ApplicationContext {
     private DisplayHost displayHost;
     private Display display;
 
-    private MouseEvent mouseEvent = null;
-
     protected static URL origin = null;
 
     private static ThreadLocal<ApplicationContext> applicationContext;
@@ -574,99 +559,6 @@ public abstract class ApplicationContext {
 
         // Create the display host
         displayHost = new DisplayHost();
-
-        // Add native drop support
-        new java.awt.dnd.DropTarget(displayHost, new DropTargetAdapter() {
-            @Override
-            public void dragEnter(DropTargetDragEvent event) {
-                Mouse.setDragContentType(Clipboard.getContentType(event.getTransferable()));
-
-                int supportedDropActions = 0;
-                int awtSourceActions = event.getSourceActions();
-                if ((awtSourceActions & DnDConstants.ACTION_COPY) > 0) {
-                    supportedDropActions |= DropAction.COPY.getMask();
-                }
-
-                if ((awtSourceActions & DnDConstants.ACTION_MOVE) > 0) {
-                    supportedDropActions |= DropAction.MOVE.getMask();
-                }
-
-                if ((awtSourceActions & DnDConstants.ACTION_LINK) > 0) {
-                    supportedDropActions |= DropAction.LINK.getMask();
-                }
-
-                Mouse.setSupportedDropActions(supportedDropActions);
-            }
-
-            @Override
-            public void dragExit(DropTargetEvent event) {
-                Mouse.setDragContentType(null);
-                Mouse.setSupportedDropActions(0);
-            }
-
-            public void drop(DropTargetDropEvent event) {
-                Transferable transferable = event.getTransferable();
-                java.awt.Point location = event.getLocation();
-
-                // Look for a drop handler
-                Component dropTarget = display.getDescendantAt(location.x, location.y);
-
-                DropTarget dropHandler = null;
-                while (dropTarget != null) {
-                    dropHandler = dropTarget.getDropTarget();
-
-                    if (dropHandler == null) {
-                        dropTarget = dropTarget.getParent();
-                    } else {
-                        break;
-                    }
-                }
-
-                if (dropHandler != null) {
-                    // A drop handler was found
-                    DropAction dropAction = null;
-                    Point dropLocation = dropTarget.mapPointFromAncestor(display,
-                        location.x, location.y);
-
-                    Class<?> contentType = Clipboard.getContentType(transferable);
-                    dropAction = dropHandler.getDropAction(dropTarget, contentType,
-                        Mouse.getSupportedDropActions(), dropLocation.x, dropLocation.y);
-
-                    if (dropAction != null) {
-                        int awtDropAction = 0;
-
-                        switch(dropAction) {
-                            case COPY: {
-                                awtDropAction = DnDConstants.ACTION_COPY;
-                                break;
-                            }
-
-                            case MOVE: {
-                                awtDropAction = DnDConstants.ACTION_MOVE;
-                                break;
-                            }
-
-                            case LINK: {
-                                awtDropAction = DnDConstants.ACTION_LINK;
-                                break;
-                            }
-                        }
-
-                        // Drop the content
-                        event.acceptDrop(awtDropAction);
-
-                        Object content = Clipboard.getContent(transferable);
-                        if (content != null) {
-                            dropHandler.drop(dropTarget, content, dropLocation.x, dropLocation.y);
-                        }
-
-                        event.dropComplete(true);
-                    }
-                } else {
-                    event.rejectDrop();
-                }
-            }
-        });
 
         // Create the display
         display = new Display(this);
@@ -721,70 +613,6 @@ public abstract class ApplicationContext {
         }
 
         return graphics;
-    }
-
-    protected void startDrag(DragSource dragSource) {
-        java.awt.dnd.DragSource awtDragSource = java.awt.dnd.DragSource.getDefaultDragSource();
-
-        final int supportedDropActions = dragSource.getSupportedDropActions();
-
-        DragGestureRecognizer dragGestureRecognizer =
-            new DragGestureRecognizer(java.awt.dnd.DragSource.getDefaultDragSource(), displayHost) {
-            private static final long serialVersionUID = 0;
-
-            {   appendEvent(mouseEvent);
-            }
-
-            public int getSourceActions() {
-                int awtSourceActions = 0;
-
-                if (DropAction.COPY.isSelected(supportedDropActions)) {
-                    awtSourceActions |= DnDConstants.ACTION_COPY;
-                }
-
-                if (DropAction.MOVE.isSelected(supportedDropActions)) {
-                    awtSourceActions |= DnDConstants.ACTION_MOVE;
-                }
-
-                if (DropAction.LINK.isSelected(supportedDropActions)) {
-                    awtSourceActions |= DnDConstants.ACTION_LINK;
-                }
-
-                return awtSourceActions;
-            }
-
-            protected void registerListeners() {
-                // No-op
-            }
-
-            protected void unregisterListeners() {
-                // No-op
-            }
-        };
-
-        java.util.List<InputEvent> inputEvents = new java.util.ArrayList<InputEvent>();
-        inputEvents.add(mouseEvent);
-
-        DragGestureEvent trigger = new DragGestureEvent(dragGestureRecognizer,
-            DnDConstants.ACTION_COPY, new java.awt.Point(Mouse.getX(), Mouse.getY()),
-            inputEvents);
-
-        java.awt.Image image = null;
-        java.awt.Point awtOffset = new java.awt.Point();
-
-        Visual representation = dragSource.getRepresentation();
-        if (representation instanceof Picture) {
-            Picture picture = (Picture)representation;
-            image = picture.getBufferedImage();
-
-            Point offset = dragSource.getOffset();
-            awtOffset.x = -offset.x;
-            awtOffset.y = -offset.y;
-        }
-
-        Transferable transferable = new Clipboard.TransferableContent(dragSource.getContent());
-        awtDragSource.startDrag(trigger, java.awt.Cursor.getDefaultCursor(),
-            image, awtOffset, transferable, new DragSourceAdapter() {});
     }
 
     protected abstract void contextOpen(URL location, String target);
@@ -990,8 +818,6 @@ public abstract class ApplicationContext {
                     }
                 });
             }
-
-            System.out.println("Set text anti-aliasing hint to \"" + textAntialiasingHint + "\".");
         }
 
         return textAntialiasingHint;
@@ -1023,5 +849,99 @@ public abstract class ApplicationContext {
         }
 
         return cursorBlinkRate;
+    }
+
+    /**
+     * Returns the system drag threshold.
+     */
+    public static int getDragThreshold() {
+        return java.awt.dnd.DragSource.getDragThreshold();
+    }
+
+    /**
+     * Selects the most appropriate content from a given transferable object.
+     *
+     * @param transferable
+     *
+     * @return
+     * The preferred content value, or <tt>null</tt> if the transferable
+     * object did not contain any usable data.
+     */
+    @SuppressWarnings("unchecked")
+    protected static Object getPreferredContent(Transferable transferable) {
+        Object content = null;
+
+        DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
+
+        int i = 0;
+        int n = transferDataFlavors.length;
+        while (i < n
+            && content == null) {
+            DataFlavor dataFlavor = transferDataFlavors[i++];
+
+            if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
+                try {
+                    content = new Picture((BufferedImage)transferable.getTransferData(dataFlavor));
+                } catch(Exception exception) {
+                    // No-op
+                }
+            } else {
+                if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
+                    try {
+                        content = new FileSequence((java.util.List<File>)transferable.getTransferData(dataFlavor));
+                    } catch(Exception exception) {
+                        // No-op
+                    }
+                }
+            }
+        }
+
+        if (content == null
+            && transferDataFlavors.length > 0) {
+            try {
+                content = transferable.getTransferData(transferDataFlavors[0]).toString();
+            } catch(Exception exception) {
+                // No-op
+            }
+        }
+
+        return content;
+    }
+
+    /**
+     * Selects the most appropriate content type from a given transferable
+     * object.
+     *
+     * @param transferable
+     *
+     * @return
+     * The preferred content type, or <tt>null</tt> if the transferable
+     * object did not contain any usable data.
+     */
+    protected static Class<?> getPreferredContentType(Transferable transferable) {
+        Class<?> contentType = null;
+
+        DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
+
+        int i = 0;
+        int n = transferDataFlavors.length;
+        while (i < n
+            && contentType == null) {
+            DataFlavor dataFlavor = transferDataFlavors[i++];
+
+            if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
+                contentType = Picture.class;
+            } else {
+                if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
+                    contentType = FileSequence.class;
+                }
+            }
+        }
+
+        if (contentType == null) {
+            contentType = String.class;
+        }
+
+        return contentType;
     }
 }

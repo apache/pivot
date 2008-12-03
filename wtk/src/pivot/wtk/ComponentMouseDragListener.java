@@ -16,34 +16,21 @@
 package pivot.wtk;
 
 /**
- * Interface representing the destination of a drag/drop operation.
+ * Component mouse drag listener interface.
  *
  * @author gbrown
  */
-public interface DropTarget {
+public interface ComponentMouseDragListener {
     /**
-     * Called to obtain the drop action the target would use if an item were
-     * to be dropped at a given location.
+     * Called when the mouse has been dragged over a component.
      *
      * @param component
-     * @param contentType
-     * @param supportedDropActions
      * @param x
      * @param y
      *
      * @return
-     * The drop action to be used, or <tt>null</tt> for no drop action.
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public DropAction getDropAction(Component component, Class<?> contentType,
-        int supportedDropActions, int x, int y);
-
-    /**
-     * Called when an item is dropped during a drag/drop operation.
-     *
-     * @param component
-     * @param content
-     * @param x
-     * @param y
-     */
-    public void drop(Component component, Object content, int x, int y);
+    public boolean mouseDrag(Component component, int x, int y);
 }
