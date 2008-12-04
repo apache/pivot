@@ -20,12 +20,14 @@ import java.awt.Color;
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Display;
+import pivot.wtk.DragSource;
+import pivot.wtk.DropAction;
+import pivot.wtk.DropTarget;
 import pivot.wtk.Frame;
 import pivot.wtk.ImageView;
-import pivot.wtk.Mouse;
 import pivot.wtk.Point;
+import pivot.wtk.Visual;
 import pivot.wtk.media.Image;
 
 public class DragDropTest implements Application {
@@ -40,9 +42,76 @@ public class DragDropTest implements Application {
         frame1.setPreferredSize(160, 120);
         frame1.getStyles().put("resizable", false);
 
+        DragSource imageDragSource = new DragSource() {
+            ImageView imageView = null;
+            private Image image = null;
+            private Point offset = null;
+
+            public boolean beginDrag(Component component, int x, int y) {
+                imageView = (ImageView)component;
+                image = imageView.getImage();
+
+                if (image != null) {
+                    imageView.setImage((Image)null);
+                    offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2,
+                        y - (imageView.getHeight() - image.getHeight()) / 2);
+                }
+
+                return (image != null);
+            }
+
+            public void endDrag(DropAction dropAction) {
+                if (dropAction == null) {
+                    imageView.setImage(image);
+                }
+            }
+
+            public Object getContent() {
+                return image;
+            }
+
+            public Visual getRepresentation() {
+                return image;
+            }
+
+            public Point getOffset() {
+                return offset;
+            }
+
+            public int getSupportedDropActions() {
+                return DropAction.MOVE.getMask();
+            }
+        };
+
+        DropTarget imageDropTarget = new DropTarget() {
+            public boolean isDrop(Component component, Class<?> dragContentType,
+                DropAction dropAction, int x, int y) {
+                return (Image.class.isAssignableFrom(dragContentType)
+                    && dropAction == DropAction.MOVE);
+            }
+
+            public void highlightDrop(Component component, boolean highlight) {
+                component.getStyles().put("backgroundColor", highlight ?
+                    IMAGE_VIEW_DROP_HIGHLIGHT_COLOR : IMAGE_VIEW_BACKGROUND_COLOR);
+            }
+
+            public void updateDropHighlight(Component component, Class<?> dragContentType,
+                DropAction dropAction, int x, int y) {
+                // No-op
+            }
+
+            public void drop(Component component, Object dragContent, DropAction dropAction,
+                int x, int y) {
+                ImageView imageView = (ImageView)component;
+                imageView.setImage((Image)dragContent);
+            }
+        };
+
         ImageView imageView1 = new ImageView();
         imageView1.setImage(Image.load(getClass().getResource("go-home.png")));
         imageView1.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
+        imageView1.setDragSource(imageDragSource);
+        imageView1.setDropTarget(imageDropTarget);
 
         frame1.setContent(imageView1);
         frame1.open(display);
@@ -53,6 +122,8 @@ public class DragDropTest implements Application {
 
         ImageView imageView2 = new ImageView();
         imageView2.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
+        imageView2.setDragSource(imageDragSource);
+        imageView2.setDropTarget(imageDropTarget);
 
         frame2.setContent(imageView2);
 

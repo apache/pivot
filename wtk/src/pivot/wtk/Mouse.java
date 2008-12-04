@@ -16,9 +16,7 @@
 package pivot.wtk;
 
 import java.awt.MouseInfo;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 
 /**
  * Class representing the system mouse.
@@ -63,34 +61,6 @@ public final class Mouse {
     private static int y = 0;
     private static int modifiersEx = 0;
 
-    protected static void initialize(ApplicationContext applicationContext) {
-        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
-
-        displayHost.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent event) {
-                modifiersEx = event.getModifiersEx();
-            }
-
-            public void mouseReleased(MouseEvent event) {
-                modifiersEx = event.getModifiersEx();
-            }
-        });
-
-        displayHost.addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseMoved(MouseEvent event) {
-                x = event.getX();
-                y = event.getY();
-            }
-
-            public void mouseDragged(MouseEvent event) {
-                x = event.getX();
-                y = event.getY();
-            }
-        });
-
-        // TODO Add native drop handler (DropTargetAdapter)
-    }
-
     /**
      * Returns the x-coordinate of the mouse, in the coordinate system of
      * the display used by the current thread.
@@ -105,6 +75,11 @@ public final class Mouse {
      */
     public static int getY() {
         return y;
+    }
+
+    protected static void setLocation(int x, int y) {
+        Mouse.x = x;
+        Mouse.y = y;
     }
 
     /**
@@ -127,6 +102,12 @@ public final class Mouse {
         }
 
         return buttons;
+    }
+
+    protected static void setModifiersEx(int modifiersEx) {
+        // TODO Determine WTK bitfield here instead of getButtons()?
+
+        Mouse.modifiersEx = modifiersEx;
     }
 
     /**

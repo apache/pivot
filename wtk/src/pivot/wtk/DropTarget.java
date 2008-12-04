@@ -26,6 +26,6 @@ public interface DropTarget {
     public void highlightDrop(Component component, boolean highlight);
     public void updateDropHighlight(Component component, Class<?> dragContentType,
         DropAction dropAction, int x, int y);
-    public void drop(Object dragContent, DropAction dropAction, int x, int y);
-
+    public void drop(Component component, Object dragContent, DropAction dropAction,
+        int x, int y);
 }

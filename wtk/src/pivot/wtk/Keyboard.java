@@ -15,15 +15,11 @@
  */
 package pivot.wtk;
 
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 
 /**
  * Class representing the system keyboard.
- * <p>
- * TODO Provide a means of mapping common "actions" to keystrokes (e.g. "copy"
- * to Control-C or Command-C)
  *
  * @author gbrown
  */
@@ -258,20 +254,6 @@ public final class Keyboard {
 
     private static int modifiersEx = 0;
 
-    protected static void initialize(ApplicationContext applicationContext) {
-        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
-
-        displayHost.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent event) {
-                modifiersEx = event.getModifiersEx();
-            }
-
-            public void keyReleased(KeyEvent event) {
-                modifiersEx = event.getModifiersEx();
-            }
-        });
-    }
-
     /**
      * Returns a bitfield representing the keyboard modifiers that are
      * currently pressed.
@@ -296,6 +278,12 @@ public final class Keyboard {
         }
 
         return modifiers;
+    }
+
+    protected static void setModifiersEx(int modifiersEx) {
+        // TODO Determine WTK bitfield here instead of getModifiers()?
+
+        Keyboard.modifiersEx = modifiersEx;
     }
 
     /**

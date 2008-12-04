@@ -92,7 +92,7 @@ public final class Clipboard {
      * The current contents of the clipboard. If the clipboard contents were
      * populated by this application or another application loaded by the same
      * class loader, the return value will be the same value that was passed
-     * to the call to {@link #put(Object)}.
+     * to the call to {@link #setContent(Object)}.
      * <p>
      * Otherwise, if the application has access to the system clipboard and a
      * supported value is available, it will be returned. Supported types
@@ -102,7 +102,7 @@ public final class Clipboard {
      * </ul>
      * Otherwise, returns <tt>null</tt>.
      */
-    public static Object get() {
+    public static Object getContent() {
         Object content = Clipboard.content;
 
         if (content == null
@@ -127,7 +127,7 @@ public final class Clipboard {
      *
      * @param content
      */
-    public static void put(Object content) {
+    public static void setContent(Object content) {
         if (content == null) {
             throw new IllegalArgumentException("content is null");
         }

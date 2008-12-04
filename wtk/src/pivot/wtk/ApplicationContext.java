@@ -24,6 +24,7 @@ import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
@@ -50,6 +51,9 @@ import pivot.wtk.media.Picture;
  * Base class for application contexts.
  * <p>
  * TODO Fire events when entries are added to/removed from the cache?
+ * <p>
+ * TODO Provide a means of mapping common "actions" to keystrokes (e.g. "copy"
+ * to Control-C or Command-C)
  *
  * @author gbrown
  */
@@ -239,6 +243,20 @@ public abstract class ApplicationContext {
                 Decorator decorator = decorators.get(i);
                 decorator.update();
             }
+
+            // Paint the drag visual
+            if (dragSource != null) {
+                Visual dragRepresentation = dragSource.getRepresentation();
+
+                if (dragRepresentation != null) {
+                    Point dragOffset = dragSource.getOffset();
+                    int tx = dragLocation.x - dragOffset.x;
+                    int ty = dragLocation.y - dragOffset.y;
+
+                    graphics.translate(tx, ty);
+                    dragRepresentation.paint(graphics);
+                }
+            }
         }
 
         @Override
@@ -300,6 +318,10 @@ public abstract class ApplicationContext {
             int x = event.getX();
             int y = event.getY();
 
+            // Set the mouse state
+            Mouse.setLocation(x, y);
+            Mouse.setModifiersEx(event.getModifiersEx());
+
             // Get the button associated with this event
             Mouse.Button button = null;
             switch (event.getButton()) {
@@ -323,12 +345,71 @@ public abstract class ApplicationContext {
             switch (event.getID()) {
                 case MouseEvent.MOUSE_PRESSED: {
                     requestFocus();
+                    dragLocation = new Point(x, y);
                     display.mouseDown(button, x, y);
                     break;
                 }
 
                 case MouseEvent.MOUSE_RELEASED: {
-                    display.mouseUp(button, x, y);
+                    if (dragSource == null) {
+                        display.mouseUp(button, x, y);
+                    } else {
+                        // TODO Move this to a method? e.g. getDropTargetDescendant()
+
+                        // Try to find drop target and drop
+                        Object dragContent = dragSource.getContent();
+
+                        Class<?> dragContentType = dragContent.getClass();
+                        DropAction dropAction = getDropAction();
+
+                        DropTarget dropTarget = null;
+                        Component descendant = display.getDescendantAt(x, y);
+
+                        if (descendant != null) {
+                            Point descendantDropLocation = descendant.mapPointFromAncestor(display, x, y);
+
+                            while (descendant != null
+                                && dropTarget == null) {
+                                dropTarget = descendant.getDropTarget();
+
+                                if (dropTarget != null
+                                    && !dropTarget.isDrop(descendant, dragContentType, dropAction,
+                                        descendantDropLocation.x, descendantDropLocation.y)) {
+                                    // The drop target rejected the drop
+                                    dropTarget = null;
+                                }
+
+                                if (dropTarget == null) {
+                                    // A drop target has not been found; keep walking
+                                    // up the tree
+                                    descendantDropLocation.x += descendant.getX();
+                                    descendantDropLocation.y += descendant.getY();
+
+                                    descendant = descendant.getParent();
+                                }
+                            }
+                        }
+
+                        if (dropTarget == null) {
+                            dragSource.endDrag(null);
+                        } else {
+                            dropTarget.drop(descendant, dragContent, dropAction, x, y);
+                            dragSource.endDrag(dropAction);
+                        }
+
+                        repaintDragRepresentation();
+
+                        setCursor(java.awt.Cursor.getDefaultCursor());
+
+                        // TODO Clear the drop target
+
+                        // Clear the drag source
+                        dragSource = null;
+                    }
+
+                    // Clear the drag location
+                    dragLocation = null;
+
                     break;
                 }
 
@@ -352,11 +433,90 @@ public abstract class ApplicationContext {
             int x = event.getX();
             int y = event.getY();
 
+            // Set the mouse state
+            Mouse.setLocation(x, y);
+
             // Process the event
             switch (event.getID()) {
                 case MouseEvent.MOUSE_MOVED:
                 case MouseEvent.MOUSE_DRAGGED: {
-                    display.mouseMove(x, y);
+                    if (dragSource == null) {
+                        // A drag is not active, so propagate the event to the display
+                        display.mouseMove(x, y);
+
+                        int dragThreshold = getDragThreshold();
+
+                        if (dragLocation != null
+                            && (Math.abs(x - dragLocation.x) > dragThreshold
+                                || Math.abs(y - dragLocation.y) > dragThreshold)) {
+                            // The user has dragged the mouse past the drag threshold; try
+                            // to find a drag source
+                            Component descendant = display.getDescendantAt(dragLocation.x,
+                                dragLocation.y);
+
+                            if (descendant != null) {
+                                Point descendantDragLocation = descendant.mapPointFromAncestor(display,
+                                    dragLocation.x, dragLocation.y);
+
+                                while (descendant != null
+                                    && dragSource == null) {
+                                    dragSource = descendant.getDragSource();
+
+                                    if (dragSource != null
+                                        && !dragSource.beginDrag(descendant, descendantDragLocation.x,
+                                            descendantDragLocation.y)) {
+                                        // The drag source rejected the drag
+                                        dragSource = null;
+                                    }
+
+                                    if (dragSource == null) {
+                                        // A drag source has not been found; keep walking
+                                        // up the tree
+                                        descendantDragLocation.x += descendant.getX();
+                                        descendantDragLocation.y += descendant.getY();
+
+                                        descendant = descendant.getParent();
+                                    }
+                                }
+
+                                if (dragSource == null) {
+                                    // There was nothing to drag, so clear the drag location
+                                    dragLocation = null;
+                                } else {
+                                    // A drag has started
+                                    if (display.isMouseOver()) {
+                                        display.mouseOut();
+                                    }
+
+                                    dragLocation.x = x;
+                                    dragLocation.y = y;
+
+                                    repaintDragRepresentation();
+
+                                    // TODO Get the intial user drop action (assuming that we
+                                    // don't preserve it when DnD is not in progress)
+
+                                    // TODO Update the drop target
+                                    // TODO Update drag cursor
+                                }
+                            }
+                        }
+                    } else {
+                        // A drag is currently in progress
+                        repaintDragRepresentation();
+
+                        dragLocation.x = x;
+                        dragLocation.y = y;
+
+                        repaintDragRepresentation();
+
+                        // TODO Update the drop target (may either call
+                        // highlightDrop() twice, or updateDropHighlight())
+
+                        // TODO Update drag cursor if the drop target changes
+                        // or the existing drop target changes its dropability
+                    }
+
                     break;
                 }
             }
@@ -387,8 +547,10 @@ public abstract class ApplicationContext {
             // Process the event
             switch (event.getID()) {
                 case MouseEvent.MOUSE_WHEEL: {
-                    display.mouseWheel(scrollType, event.getScrollAmount(),
-                        event.getWheelRotation(), x, y);
+                    if (dragSource == null) {
+                        display.mouseWheel(scrollType, event.getScrollAmount(),
+                            event.getWheelRotation(), x, y);
+                    }
                     break;
                 }
             }
@@ -397,6 +559,9 @@ public abstract class ApplicationContext {
         @Override
         protected void processKeyEvent(KeyEvent event) {
             super.processKeyEvent(event);
+
+            // Set the keyboard state
+            Keyboard.setModifiersEx(event.getModifiersEx());
 
             // Get the key location
             Keyboard.KeyLocation keyLocation = null;
@@ -426,24 +591,40 @@ public abstract class ApplicationContext {
             Component focusedComponent = Component.getFocusedComponent();
 
             switch (event.getID()) {
-                case KeyEvent.KEY_TYPED: {
-                    boolean consumed = false;
-
-                    if (focusedComponent != null) {
-                        char keyChar = event.getKeyChar();
-                        consumed = focusedComponent.keyTyped(keyChar);
-                    }
-
-                    if (consumed) {
-                        event.consume();
-                    }
-
-                    break;
-                }
-
                 case KeyEvent.KEY_PRESSED: {
                     boolean consumed = false;
                     int keyCode = event.getKeyCode();
+
+                    // TODO Don't bother doing any of this unless a drag is active
+
+                    // TODO If escape and a drag is active, cancel drag
+
+
+                    // Update the user drop action
+                    DropAction previousUserDropAction = userDropAction;
+
+                    // TODO Move this to a method: getUserDropAction(InputEvent):DropAction?
+                    // I think we'll still need the member variable so we can know if it
+                    // changes (and call the drop target accordingly)
+
+                    // TODO Use an appropriate action for OS
+                    // Windows: no modifier - move; control - copy; control-shift - link
+                    // Mac OSX: no modifier - move; option - copy; option-command - link
+                    if (event.isControlDown()
+                        && event.isShiftDown()) {
+                        userDropAction = DropAction.LINK;
+                    } else if (event.isControlDown()) {
+                        userDropAction = DropAction.COPY;
+                    } else {
+                        userDropAction = DropAction.MOVE;
+                    }
+
+                    if (previousUserDropAction != userDropAction) {
+                        if (dragSource != null) {
+                            // TODO Update drop target
+                            // TODO Update drag cursor
+                        }
+                    }
 
                     if (focusedComponent != null) {
                         consumed = focusedComponent.keyPressed(keyCode, keyLocation);
@@ -460,8 +641,25 @@ public abstract class ApplicationContext {
                     boolean consumed = false;
                     int keyCode = event.getKeyCode();
 
+                    // TODO If drop action changed, update drop target and drag cursor
+
                     if (focusedComponent != null) {
                         consumed = focusedComponent.keyReleased(keyCode, keyLocation);
+                    }
+
+                    if (consumed) {
+                        event.consume();
+                    }
+
+                    break;
+                }
+
+                case KeyEvent.KEY_TYPED: {
+                    boolean consumed = false;
+
+                    if (focusedComponent != null) {
+                        char keyChar = event.getKeyChar();
+                        consumed = focusedComponent.keyTyped(keyChar);
                     }
 
                     if (consumed) {
@@ -504,6 +702,11 @@ public abstract class ApplicationContext {
     private DisplayHost displayHost;
     private Display display;
 
+    private Point dragLocation = null;
+    private DragSource dragSource = null;
+    private DropTarget dropTarget = null;
+    private DropAction userDropAction = DropAction.MOVE;
+
     protected static URL origin = null;
 
     private static ThreadLocal<ApplicationContext> applicationContext;
@@ -533,10 +736,6 @@ public abstract class ApplicationContext {
         // Create the display host and display
         displayHost = new DisplayHost();
         display = new Display(this);
-
-        // Initialize the mouse and keyboard
-        Mouse.initialize(this);
-        Keyboard.initialize(this);
 
         try {
             // Load and instantiate the default theme, if possible
@@ -591,6 +790,22 @@ public abstract class ApplicationContext {
     }
 
     protected abstract void contextOpen(URL location, String target);
+
+    private void repaintDragRepresentation() {
+        Visual dragRepresentation = dragSource.getRepresentation();
+
+        if (dragRepresentation != null) {
+            Point dragOffset = dragSource.getOffset();
+
+            repaint(dragLocation.x - dragOffset.x, dragLocation.y - dragOffset.y,
+                dragRepresentation.getWidth(), dragRepresentation.getHeight());
+        }
+    }
+
+    private DropAction getDropAction() {
+        int supportedDropActions = dragSource.getSupportedDropActions();
+        return (userDropAction.isSelected(supportedDropActions) ? userDropAction : null);
+    }
 
     public static ApplicationContext getApplicationContext() {
         return applicationContext.get();
