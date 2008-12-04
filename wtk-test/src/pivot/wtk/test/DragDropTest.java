@@ -78,7 +78,7 @@ public class DragDropTest implements Application {
 
                     if (imageView.getImage() == null) {
                         imageView.setImage((Image)Mouse.drop(Mouse.DropAction.MOVE));
-                        imageView.getStyles().put("backgroundColor", null);
+                        imageView.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
                     }
                 }
 
