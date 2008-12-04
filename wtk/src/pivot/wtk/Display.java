@@ -32,9 +32,6 @@ public final class Display extends Container {
 
     private ApplicationContext applicationContext;
 
-    private Point mouseDownLocation = null;
-    private Point dragLocation = null;
-
     protected Display(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
         super.setSkin(new DisplaySkin());
@@ -72,123 +69,6 @@ public final class Display extends Container {
         } else {
             applicationContext.repaint(x, y, width, height);
         }
-    }
-
-    @Override
-    public void paint(Graphics2D graphics) {
-        super.paint(graphics);
-
-        if (dragLocation != null) {
-            Visual dragRepresentation = Mouse.getDragRepresentation();
-
-            if (dragRepresentation != null) {
-                Point dragOffset = Mouse.getDragOffset();
-                int tx = dragLocation.x - dragOffset.x;
-                int ty = dragLocation.y - dragOffset.y;
-
-                graphics.translate(tx, ty);
-                dragRepresentation.paint(graphics);
-            }
-        }
-    }
-
-    @Override
-    protected boolean mouseMove(int x, int y) {
-        boolean consumed = super.mouseMove(x, y);
-
-        int dragThreshold = ApplicationContext.getDragThreshold();
-
-        if (dragLocation == null) {
-            // A drag has not yet started
-            if (mouseDownLocation != null) {
-                if (Math.abs(x - mouseDownLocation.x) > dragThreshold
-                    || Math.abs(y - mouseDownLocation.y) > dragThreshold) {
-                    Component descendant = getDescendantAt(mouseDownLocation.x,
-                        mouseDownLocation.y);
-
-                    if (descendant == null) {
-                        // Nothing to drag
-                        mouseDownLocation = null;
-                    } else {
-                        // Fire the drag event
-                        mouseDownLocation = descendant.mapPointFromAncestor(this,
-                            mouseDownLocation.x, mouseDownLocation.y);
-
-                        while (descendant != null
-                            && !descendant.mouseDrag(mouseDownLocation.x, mouseDownLocation.y)) {
-                            mouseDownLocation.x += descendant.getX();
-                            mouseDownLocation.y += descendant.getY();
-
-                            descendant = descendant.getParent();
-                        }
-                        
-                        dragLocation = new Point(x, y);
-                    }
-                }
-            }
-        } else {
-            // A drag is currently in progress
-            Visual dragRepresentation = Mouse.getDragRepresentation();
-
-            if (dragRepresentation != null) {
-                Point dragOffset = Mouse.getDragOffset();
-
-                repaint(dragLocation.x - dragOffset.x, dragLocation.y - dragOffset.y,
-                    dragRepresentation.getWidth(), dragRepresentation.getHeight());
-
-                repaint(x - dragOffset.x, y - dragOffset.y,
-                    dragRepresentation.getWidth(), dragRepresentation.getHeight());
-            }
-
-            dragLocation.x = x;
-            dragLocation.y = y;
-        }
-
-        return consumed;
-    }
-
-    @Override
-    protected boolean mouseDown(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(button, x, y);
-
-        mouseDownLocation = new Point(x, y);
-
-        return consumed;
-    }
-
-    @Override
-    protected boolean mouseUp(Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseUp(button, x, y);
-
-        if (dragLocation != null) {
-            // Repaint the area formerly occupied by the drag representation
-            Visual dragRepresentation = Mouse.getDragRepresentation();
-
-            if (dragRepresentation != null) {
-                Point dragOffset = Mouse.getDragOffset();
-
-                repaint(dragLocation.x - dragOffset.x, dragLocation.y - dragOffset.y,
-                    dragRepresentation.getWidth(), dragRepresentation.getHeight());
-            }
-
-            // Fire the drop event
-            Component descendant = getDescendantAt(x, y);
-
-            while (descendant != null
-                && !descendant.mouseDrop(x, y)) {
-                descendant = descendant.getParent();
-            }
-
-            // Ensure that the drag is canceled
-            if (Mouse.isDrag()) {
-                Mouse.drop(null);
-            }
-        }
-
-        mouseDownLocation = null;
-        dragLocation = null;
-
-        return consumed;
     }
 
     @Override

@@ -264,12 +264,10 @@ public final class Keyboard {
         displayHost.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent event) {
                 modifiersEx = event.getModifiersEx();
-                Mouse.updateDragCursor();
             }
 
             public void keyReleased(KeyEvent event) {
                 modifiersEx = event.getModifiersEx();
-                Mouse.updateDragCursor();
             }
         });
     }
@@ -319,20 +317,20 @@ public final class Keyboard {
      * The drop action corresponding to the currently pressed modifier keys,
      * or <tt>null</tt> if no modifiers are pressed.
      */
-    public static Mouse.DropAction getDropAction() {
+    public static DropAction getDropAction() {
         // TODO Return an appropriate action for OS
         // Windows: no modifier - move; control - copy; control-shift - link
         // Mac OSX: no modifier - move; option - copy; option-command - link
 
-        Mouse.DropAction dropAction = null;
+        DropAction dropAction = null;
 
         if (isPressed(Modifier.CTRL)
             && isPressed(Modifier.SHIFT)) {
-            dropAction = Mouse.DropAction.LINK;
+            dropAction = DropAction.LINK;
         } else if (isPressed(Modifier.CTRL)) {
-            dropAction = Mouse.DropAction.COPY;
+            dropAction = DropAction.COPY;
         } else {
-            dropAction = Mouse.DropAction.MOVE;
+            dropAction = DropAction.MOVE;
         }
 
         return dropAction;

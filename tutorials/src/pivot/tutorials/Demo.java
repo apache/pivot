@@ -35,9 +35,6 @@ import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
-import pivot.wtk.ComponentMouseDragListener;
-import pivot.wtk.ComponentMouseDropListener;
-import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.ImageView;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
@@ -46,7 +43,6 @@ import pivot.wtk.Menu;
 import pivot.wtk.MenuPopup;
 import pivot.wtk.MessageType;
 import pivot.wtk.Mouse;
-import pivot.wtk.MouseDragListener;
 import pivot.wtk.Point;
 import pivot.wtk.Popup;
 import pivot.wtk.Prompt;
@@ -329,86 +325,11 @@ public class Demo implements Application {
         initializeEditableTreeView();
 
         // TODO Add drag/drop
-        ComponentMouseDragListener imageDragListener = new ComponentMouseDragListener() {
-            public boolean mouseDrag(Component component, int x, int y) {
-                final ImageView imageView = (ImageView)component;
-                final Image image = imageView.getImage();
-
-                if (image != null) {
-                    imageView.setImage((Image)null);
-                    Point offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2,
-                        y - (imageView.getHeight() - image.getHeight()) / 2);
-
-                    Mouse.drag(image, Mouse.DropAction.MOVE.getMask(), image, offset,
-                        new MouseDragListener() {
-                            public void mouseDrop(Mouse.DropAction dropAction) {
-                                if (dropAction == null) {
-                                    imageView.setImage(image);
-                                }
-                            }
-                    });
-                }
-
-                return false;
-            }
-        };
-
-        ComponentMouseDropListener imageDropListener = new ComponentMouseDropListener() {
-            public boolean mouseDrop(Component component, int x, int y) {
-                Class<?> dragContentType = Mouse.getDragContentType();
-
-                if (dragContentType != null
-                    && Image.class.isAssignableFrom(dragContentType)
-                    && Mouse.isValidDropAction(Mouse.DropAction.MOVE)) {
-                    ImageView imageView = (ImageView)component;
-
-                    if (imageView.getImage() == null) {
-                        imageView.setImage((Image)Mouse.drop(Mouse.DropAction.MOVE));
-                        imageView.getStyles().put("backgroundColor", null);
-                    }
-                }
-
-                return false;
-            }
-        };
-
-        ComponentMouseListener imageMouseListener = new ComponentMouseListener() {
-            public boolean mouseMove(Component component, int x, int y) {
-                return false;
-            }
-
-            public void mouseOver(Component component) {
-                Class<?> dragContentType = Mouse.getDragContentType();
-
-                if (dragContentType != null
-                    && Image.class.isAssignableFrom(dragContentType)) {
-                    ImageView imageView = (ImageView)component;
-
-                    if (imageView.getImage() == null) {
-                        component.getStyles().put("backgroundColor", "#ffff99");
-                    }
-                }
-            }
-
-            public void mouseOut(Component component) {
-                component.getStyles().put("backgroundColor", null);
-            }
-        };
-        
         ImageView imageView1 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView1");
-        imageView1.getComponentMouseDragListeners().add(imageDragListener);
-        imageView1.getComponentMouseDropListeners().add(imageDropListener);
-        imageView1.getComponentMouseListeners().add(imageMouseListener);
 
         ImageView imageView2 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView2");
-        imageView2.getComponentMouseDragListeners().add(imageDragListener);
-        imageView2.getComponentMouseDropListeners().add(imageDropListener);
-        imageView2.getComponentMouseListeners().add(imageMouseListener);
 
         ImageView imageView3 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView3");
-        imageView3.getComponentMouseDragListeners().add(imageDragListener);
-        imageView3.getComponentMouseDropListeners().add(imageDropListener);
-        imageView3.getComponentMouseListeners().add(imageMouseListener);
 
         alertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.alertButton");
         promptButton = (PushButton)wtkxSerializer.getObjectByName("alerts.promptButton");

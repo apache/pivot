@@ -16,21 +16,24 @@
 package pivot.wtk;
 
 /**
- * Component mouse drag listener interface.
+ * Component drag/drop listener interface.
  *
  * @author gbrown
  */
-public interface ComponentMouseDragListener {
+public interface ComponentDragDropListener {
     /**
-     * Called when the mouse has been dragged over a component.
+     * Called when a component's drag source has changed.
      *
      * @param component
-     * @param x
-     * @param y
-     *
-     * @return
-     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
-     * propagate.
+     * @param previousDragSource
      */
-    public boolean mouseDrag(Component component, int x, int y);
+    public void dragSourceChanged(Component component, DragSource previousDragSource);
+
+    /**
+     * Called when a component's drop target has changed.
+     *
+     * @param component
+     * @param previousDropTarget
+     */
+    public void dropTargetChanged(Component component, DropTarget previousDropTarget);
 }

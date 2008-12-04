@@ -219,11 +219,6 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    /**
-     * Component listener list.
-     *
-     * @author gbrown
-     */
     private static class ComponentListenerList extends ListenerList<ComponentListener>
         implements ComponentListener {
         public void parentChanged(Component component, Container previousParent) {
@@ -429,29 +424,18 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentMouseDragListenerList extends ListenerList<ComponentMouseDragListener>
-        implements ComponentMouseDragListener {
-        public boolean mouseDrag(Component component, int x, int y) {
-            boolean consumed = false;
-
-            for (ComponentMouseDragListener listener : this) {
-                consumed |= listener.mouseDrag(component, x, y);
+    private static class ComponentDragDropListenerList extends ListenerList<ComponentDragDropListener>
+        implements ComponentDragDropListener {
+        public void dragSourceChanged(Component component, DragSource previousDragSource) {
+            for (ComponentDragDropListener listener : this) {
+                listener.dragSourceChanged(component, previousDragSource);
             }
-
-            return consumed;
         }
-    }
 
-    private static class ComponentMouseDropListenerList extends ListenerList<ComponentMouseDropListener>
-        implements ComponentMouseDropListener {
-        public boolean mouseDrop(Component component, int x, int y) {
-            boolean consumed = false;
-
-            for (ComponentMouseDropListener listener : this) {
-                consumed |= listener.mouseDrop(component, x, y);
+        public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
+            for (ComponentDragDropListener listener : this) {
+                listener.dropTargetChanged(component, previousDropTarget);
             }
-
-            return consumed;
         }
     }
 
@@ -464,11 +448,6 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    /**
-     * Component class listener list.
-     *
-     * @author tvolkert
-     */
     private static class ComponentClassListenerList extends ListenerList<ComponentClassListener>
         implements ComponentClassListener {
         public void focusedComponentChanged(Component previousFocusedComponent) {
@@ -547,6 +526,16 @@ public abstract class Component implements ConstrainedVisual {
     private String tooltipText = null;
 
     /**
+     * The component's drag source.
+     */
+    private DragSource dragSource = null;
+
+    /**
+     * The component's drop target.
+     */
+    private DropTarget dropTarget = null;
+
+    /**
      * User data.
      */
     private Object userData = null;
@@ -576,9 +565,8 @@ public abstract class Component implements ConstrainedVisual {
     private ComponentMouseListenerList componentMouseListeners = new ComponentMouseListenerList();
     private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
     private ComponentMouseWheelListenerList componentMouseWheelListeners = new ComponentMouseWheelListenerList();
-    private ComponentMouseDragListenerList componentMouseDragListeners = new ComponentMouseDragListenerList();
-    private ComponentMouseDropListenerList componentMouseDropListeners = new ComponentMouseDropListenerList();
     private ComponentKeyListenerList componentKeyListeners = new ComponentKeyListenerList();
+    private ComponentDragDropListenerList componentDragDropListeners = new ComponentDragDropListenerList();
     private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
 
     /**
@@ -2070,6 +2058,32 @@ public abstract class Component implements ConstrainedVisual {
     public void store(Dictionary<String, Object> context) {
     }
 
+    public DragSource getDragSource() {
+        return dragSource;
+    }
+
+    public void setDragSource(DragSource dragSource) {
+        DragSource previousDragSource = this.dragSource;
+
+        if (previousDragSource != dragSource) {
+            this.dragSource = dragSource;
+            componentDragDropListeners.dragSourceChanged(this, previousDragSource);
+        }
+    }
+
+    public DropTarget getDropTarget() {
+        return dropTarget;
+    }
+
+    public void setDropTarget(DropTarget dropTarget) {
+        DropTarget previousDropTarget = this.dropTarget;
+
+        if (previousDropTarget != dropTarget) {
+            this.dropTarget = dropTarget;
+            componentDragDropListeners.dropTargetChanged(this, previousDropTarget);
+        }
+    }
+
     public Object getUserData() {
         return userData;
     }
@@ -2251,26 +2265,6 @@ public abstract class Component implements ConstrainedVisual {
         return consumed;
     }
 
-    protected boolean mouseDrag(int x, int y) {
-        boolean consumed = false;
-
-        if (enabled) {
-            consumed = componentMouseDragListeners.mouseDrag(this, x, y);
-        }
-
-        return consumed;
-    }
-
-    protected boolean mouseDrop(int x, int y) {
-        boolean consumed = false;
-
-        if (enabled) {
-            consumed = componentMouseDropListeners.mouseDrop(this, x, y);
-        }
-
-        return consumed;
-    }
-
     protected boolean keyTyped(char character) {
         boolean consumed = false;
 
@@ -2375,28 +2369,20 @@ public abstract class Component implements ConstrainedVisual {
         componentMouseWheelListeners.add(listener);
     }
 
-    public ListenerList<ComponentMouseDragListener> getComponentMouseDragListeners() {
-        return componentMouseDragListeners;
-    }
-
-    public void setComponentMouseDragListener(ComponentMouseDragListener listener) {
-        componentMouseDragListeners.add(listener);
-    }
-
-    public ListenerList<ComponentMouseDropListener> getComponentMouseDropListeners() {
-        return componentMouseDropListeners;
-    }
-
-    public void setComponentMouseDropListener(ComponentMouseDropListener listener) {
-        componentMouseDropListeners.add(listener);
-    }
-
     public ListenerList<ComponentKeyListener> getComponentKeyListeners() {
         return componentKeyListeners;
     }
 
     public void setComponentKeyListener(ComponentKeyListener listener) {
         componentKeyListeners.add(listener);
+    }
+
+    public ListenerList<ComponentDragDropListener> getComponentDragDropListeners() {
+        return componentDragDropListeners;
+    }
+
+    public void setComponentDragDropListener(ComponentDragDropListener listener) {
+        componentDragDropListeners.add(listener);
     }
 
     public ListenerList<ComponentDataListener> getComponentDataListeners() {

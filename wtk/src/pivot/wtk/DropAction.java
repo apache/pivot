@@ -16,15 +16,24 @@
 package pivot.wtk;
 
 /**
- * Mouse drag listener interface.
+ * Enumeration defining supported drop actions.
  *
  * @author gbrown
  */
-public interface MouseDragListener {
-    /**
-     * Called when the mouse's drag content has been dropped.
-     *
-     * @param dropAction
-     */
-    public void mouseDrop(Mouse.DropAction dropAction);
+public enum DropAction {
+    COPY,
+    MOVE,
+    LINK;
+
+    public int getMask() {
+        return 1 << ordinal();
+    }
+
+    public boolean isSelected(int dropActions) {
+        return ((dropActions & getMask()) > 0);
+    }
+
+    public static DropAction decode(String value) {
+        return valueOf(value.toUpperCase());
+    }
 }
