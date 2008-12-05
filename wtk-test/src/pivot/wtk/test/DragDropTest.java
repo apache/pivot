@@ -66,6 +66,10 @@ public class DragDropTest implements Application {
                 }
             }
 
+            public boolean isNative() {
+                return true;
+            }
+
             public Object getContent() {
                 return image;
             }

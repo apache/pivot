@@ -352,6 +352,10 @@ public class Demo implements Application {
                 }
             }
 
+            public boolean isNative() {
+                return false;
+            }
+
             public Object getContent() {
                 return image;
             }

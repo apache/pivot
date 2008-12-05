@@ -43,6 +43,15 @@ public interface DragSource {
     public void endDrag(DropAction dropAction);
 
     /**
+     * Returns the drag source's native flag.
+     *
+     * @return
+     * If <tt>true</tt>, the drag will be executed via the native OS. Otherwise,
+     * it will be executed locally.
+     */
+    public boolean isNative();
+
+    /**
      * Returns the drag content.
      */
     public Object getContent();

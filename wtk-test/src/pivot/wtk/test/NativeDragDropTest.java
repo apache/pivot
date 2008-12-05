@@ -6,11 +6,14 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
+import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
 import pivot.wtk.DropTarget;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
+import pivot.wtk.Point;
 import pivot.wtk.VerticalAlignment;
+import pivot.wtk.Visual;
 import pivot.wtk.Window;
 
 public class NativeDragDropTest implements Application {
@@ -30,12 +33,11 @@ public class NativeDragDropTest implements Application {
             }
 
             public void highlightDrop(Component component, boolean highlight) {
-                // TODO
+                window.getStyles().put("backgroundColor", highlight ? "#ffcccc" : "#ffffff");
             }
 
             public void updateDropHighlight(Component component, Class<?> dragContentType,
                 DropAction dropAction, int x, int y) {
-                // TODO
             }
 
             public void drop(Component component, Object dragContent, DropAction dropAction,
@@ -43,6 +45,36 @@ public class NativeDragDropTest implements Application {
                 String text = (dragContent == null) ? null : dragContent.toString();
                 Label label = (Label)component;
                 label.setText(text);
+                window.getStyles().put("backgroundColor", "#ffffff");
+            }
+        });
+
+        label.setDragSource(new DragSource() {
+            public boolean beginDrag(Component component, int x, int y) {
+                return true;
+            }
+
+            public void endDrag(DropAction dropAction) {
+            }
+
+            public boolean isNative() {
+                return true;
+            }
+
+            public Object getContent() {
+                return label.getText();
+            }
+
+            public Visual getRepresentation() {
+                return null;
+            }
+
+            public Point getOffset() {
+                return null;
+            }
+
+            public int getSupportedDropActions() {
+                return DropAction.COPY.getMask();
             }
         });
 
