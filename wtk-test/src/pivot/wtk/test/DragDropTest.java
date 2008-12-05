@@ -104,6 +104,7 @@ public class DragDropTest implements Application {
                 int x, int y) {
                 ImageView imageView = (ImageView)component;
                 imageView.setImage((Image)dragContent);
+                component.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
             }
         };
 

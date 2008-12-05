@@ -21,10 +21,55 @@ package pivot.wtk;
  * @author gbrown
  */
 public interface DragSource {
+    /**
+     * Called by the framework to initiate a drag operation.
+     *
+     * @param component
+     * @param x
+     * @param y
+     *
+     * @return
+     * <tt>true</tt> to accept the drag; <tt>false</tt> to reject it.
+     */
     public boolean beginDrag(Component component, int x, int y);
+
+    /**
+     * Called by the framework to terminate a drag operation.
+     *
+     * @param dropAction
+     * The drop action selected by the user, or <tt>null</tt> to abort the
+     * drag.
+     */
     public void endDrag(DropAction dropAction);
+
+    /**
+     * Returns the drag content.
+     */
     public Object getContent();
+
+    /**
+     * Returns a visual representing the drag content.
+     *
+     * @return
+     * The drag visual, or <tt>null</tt> for no visual.
+     */
     public Visual getRepresentation();
+
+    /**
+     * Returns the offset of the mouse pointer within the drag visual. Not
+     * required unless a representation is specified.
+     *
+     * @return
+     * The mouse offset within the drag visual, or <tt>null</tt> if no visual
+     * is specified.
+     */
     public Point getOffset();
+
+    /**
+     * Returns the drop actions supported by this drag source.
+     *
+     * @return
+     * A bitfield of the supported drop actions.
+     */
     public int getSupportedDropActions();
 }

@@ -35,6 +35,9 @@ import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
+import pivot.wtk.DragSource;
+import pivot.wtk.DropAction;
+import pivot.wtk.DropTarget;
 import pivot.wtk.ImageView;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
@@ -58,6 +61,7 @@ import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TextInput;
 import pivot.wtk.TreeView;
+import pivot.wtk.Visual;
 import pivot.wtk.Window;
 import pivot.wtk.WindowStateListener;
 import pivot.wtk.content.CalendarDateSpinnerData;
@@ -324,12 +328,85 @@ public class Demo implements Application {
         editableTreeViewScrollPane = (ScrollPane)wtkxSerializer.getObjectByName("trees.editableTreeViewScrollPane");
         initializeEditableTreeView();
 
-        // TODO Add drag/drop
+        DragSource imageDragSource = new DragSource() {
+            ImageView imageView = null;
+            private Image image = null;
+            private Point offset = null;
+
+            public boolean beginDrag(Component component, int x, int y) {
+                imageView = (ImageView)component;
+                image = imageView.getImage();
+
+                if (image != null) {
+                    imageView.setImage((Image)null);
+                    offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2,
+                        y - (imageView.getHeight() - image.getHeight()) / 2);
+                }
+
+                return (image != null);
+            }
+
+            public void endDrag(DropAction dropAction) {
+                if (dropAction == null) {
+                    imageView.setImage(image);
+                }
+            }
+
+            public Object getContent() {
+                return image;
+            }
+
+            public Visual getRepresentation() {
+                return image;
+            }
+
+            public Point getOffset() {
+                return offset;
+            }
+
+            public int getSupportedDropActions() {
+                return DropAction.MOVE.getMask();
+            }
+        };
+
+        DropTarget imageDropTarget = new DropTarget() {
+            public boolean isDrop(Component component, Class<?> dragContentType,
+                DropAction dropAction, int x, int y) {
+                ImageView imageView = (ImageView)component;
+
+                return (imageView.getImage() == null
+                    && Image.class.isAssignableFrom(dragContentType)
+                    && dropAction == DropAction.MOVE);
+            }
+
+            public void highlightDrop(Component component, boolean highlight) {
+                component.getStyles().put("backgroundColor", highlight ? "#f0e68c" : null);
+            }
+
+            public void updateDropHighlight(Component component, Class<?> dragContentType,
+                DropAction dropAction, int x, int y) {
+                // No-op
+            }
+
+            public void drop(Component component, Object dragContent, DropAction dropAction,
+                int x, int y) {
+                ImageView imageView = (ImageView)component;
+                imageView.setImage((Image)dragContent);
+                component.getStyles().put("backgroundColor", null);
+            }
+        };
+
         ImageView imageView1 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView1");
+        imageView1.setDragSource(imageDragSource);
+        imageView1.setDropTarget(imageDropTarget);
 
         ImageView imageView2 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView2");
+        imageView2.setDragSource(imageDragSource);
+        imageView2.setDropTarget(imageDropTarget);
 
         ImageView imageView3 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView3");
+        imageView3.setDragSource(imageDragSource);
+        imageView3.setDropTarget(imageDropTarget);
 
         alertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.alertButton");
         promptButton = (PushButton)wtkxSerializer.getObjectByName("alerts.promptButton");
