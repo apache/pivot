@@ -329,27 +329,48 @@ public abstract class ApplicationContext {
             return descendant;
         }
 
-        private DropAction getDropAction() {
-            int supportedDropActions = dragSource.getSupportedDropActions();
-            return (userDropAction.isSelected(supportedDropActions) ? userDropAction : null);
-        }
+        private void updateDragCursor() {
+            java.awt.Cursor cursor = java.awt.Cursor.getDefaultCursor();
 
-        private DropAction getUserDropAction(InputEvent event) {
-            DropAction userDropAction;
+            if (userDropAction != null) {
+                if (dropDescendant == null) {
+                    switch (userDropAction) {
+                        case COPY: {
+                            cursor = java.awt.dnd.DragSource.DefaultCopyNoDrop;
+                            break;
+                        }
 
-            // TODO Use an appropriate action for OS
-            // Windows: no modifier - move; control - copy; control-shift - link
-            // Mac OSX: no modifier - move; option - copy; option-command - link
-            if (event.isControlDown()
-                && event.isShiftDown()) {
-                userDropAction = DropAction.LINK;
-            } else if (event.isControlDown()) {
-                userDropAction = DropAction.COPY;
-            } else {
-                userDropAction = DropAction.MOVE;
+                        case MOVE: {
+                            cursor = java.awt.dnd.DragSource.DefaultMoveNoDrop;
+                            break;
+                        }
+
+                        case LINK: {
+                            cursor = java.awt.dnd.DragSource.DefaultLinkNoDrop;
+                            break;
+                        }
+                    }
+                } else {
+                    switch (userDropAction) {
+                        case COPY: {
+                            cursor = java.awt.dnd.DragSource.DefaultCopyDrop;
+                            break;
+                        }
+
+                        case MOVE: {
+                            cursor = java.awt.dnd.DragSource.DefaultMoveDrop;
+                            break;
+                        }
+
+                        case LINK: {
+                            cursor = java.awt.dnd.DragSource.DefaultLinkDrop;
+                            break;
+                        }
+                    }
+                }
             }
 
-            return userDropAction;
+            setCursor(cursor);
         }
 
         @Override
@@ -452,9 +473,9 @@ public abstract class ApplicationContext {
                         } else {
                             DropTarget dropTarget = dropDescendant.getDropTarget();
                             Object dragContent = dragSource.getContent();
-                            DropAction dropAction = getDropAction();
-                            dropTarget.drop(dropDescendant, dragContent, dropAction, x, y);
-                            dragSource.endDrag(dropAction);
+
+                            dropTarget.drop(dropDescendant, dragContent, userDropAction, x, y);
+                            dragSource.endDrag(userDropAction);
 
                             // Clear the drop descendant
                             dropDescendant = null;
@@ -553,13 +574,18 @@ public abstract class ApplicationContext {
                                     userDropAction = getUserDropAction(event);
 
                                     // Update the drop target
-                                    Object dragContent = dragSource.getContent();
-                                    DropAction dropAction = getDropAction();
+                                    int supportedDropActions = dragSource.getSupportedDropActions();
 
-                                    dropDescendant = getDropDescendant(dragContent.getClass(),
-                                        dropAction, x, y);
+                                    if (userDropAction.isSelected(supportedDropActions)) {
+                                        Object dragContent = dragSource.getContent();
+                                        dropDescendant = getDropDescendant(dragContent.getClass(),
+                                            userDropAction, x, y);
+                                    } else {
+                                        dropDescendant = null;
+                                    }
 
-                                    // TODO Update drag cursor
+                                    // Update the drag cursor
+                                    updateDragCursor();
 
                                     // Repaint the drag visual
                                     dragLocation.x = x;
@@ -570,22 +596,19 @@ public abstract class ApplicationContext {
                             }
                         }
                     } else {
-                        // A drag is currently in progress
+                        // Get the drop descendant at this location
                         Component previousDropDescendant = dropDescendant;
 
                         Object dragContent = dragSource.getContent();
-                        DropAction dropAction = getDropAction();
-
-                        // Get the drop descendant at this location
                         dropDescendant = getDropDescendant(dragContent.getClass(),
-                            getDropAction(), x, y);
+                            userDropAction, x, y);
 
                         if (previousDropDescendant == dropDescendant) {
                             // The descendant hasn't changed
                             if (dropDescendant != null) {
                                 DropTarget dropTarget = dropDescendant.getDropTarget();
                                 dropTarget.updateDropHighlight(dropDescendant, dragContent.getClass(),
-                                    dropAction, x, y);
+                                    userDropAction, x, y);
                             }
                         } else {
                             // The drop descendant changed as a result of this move
@@ -598,10 +621,9 @@ public abstract class ApplicationContext {
                                 DropTarget dropTarget = dropDescendant.getDropTarget();
                                 dropTarget.highlightDrop(dropDescendant, true);
                             }
-                        }
 
-                        // TODO Update drag cursor if the drop target changes
-                        // or the existing drop target changes its dropability
+                            updateDragCursor();
+                        }
 
                         // Repaint the drag visual
                         repaintDragRepresentation();
@@ -740,14 +762,18 @@ public abstract class ApplicationContext {
                 if (previousUserDropAction != userDropAction) {
                     Component previousDropDescendant = dropDescendant;
 
-                    Object dragContent = dragSource.getContent();
-                    DropAction dropAction = getDropAction();
+                    // Update the drop target
+                    int supportedDropActions = dragSource.getSupportedDropActions();
 
-                    // Get the drop descendant at the current mouse location
-                    int x = Mouse.getX();
-                    int y = Mouse.getY();
-                    dropDescendant = getDropDescendant(dragContent.getClass(),
-                        dropAction, x, y);
+                    if (userDropAction.isSelected(supportedDropActions)) {
+                        Object dragContent = dragSource.getContent();
+                        int x = Mouse.getX();
+                        int y = Mouse.getY();
+                        dropDescendant = getDropDescendant(dragContent.getClass(),
+                            userDropAction, x, y);
+                    } else {
+                        dropDescendant = null;
+                    }
 
                     if (previousDropDescendant != dropDescendant) {
                         // The drop descendant changed as a result of this modifier key change
@@ -760,9 +786,10 @@ public abstract class ApplicationContext {
                             DropTarget dropTarget = dropDescendant.getDropTarget();
                             dropTarget.highlightDrop(dropDescendant, true);
                         }
-                    }
 
-                    // TODO Update drag cursor
+                        // Update the drag cursor
+                        updateDragCursor();
+                    }
                 }
             }
         }
@@ -1191,5 +1218,23 @@ public abstract class ApplicationContext {
         }
 
         return contentType;
+    }
+
+    private static DropAction getUserDropAction(InputEvent event) {
+        DropAction userDropAction;
+
+        // TODO Use an appropriate action for OS
+        // Windows: no modifier - move; control - copy; control-shift - link
+        // Mac OSX: no modifier - move; option - copy; option-command - link
+        if (event.isControlDown()
+            && event.isShiftDown()) {
+            userDropAction = DropAction.LINK;
+        } else if (event.isControlDown()) {
+            userDropAction = DropAction.COPY;
+        } else {
+            userDropAction = DropAction.MOVE;
+        }
+
+        return userDropAction;
     }
 }
