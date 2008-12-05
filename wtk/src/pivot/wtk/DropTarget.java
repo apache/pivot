@@ -28,38 +28,43 @@ public interface DropTarget {
      *
      * @param component
      * @param dragContentType
-     * @param dropAction
+     * @param supportedDropActions
+     * @param userDropAction
      * @param x
      * @param y
      *
      * @return
-     * <tt>true</tt> if this drag state would result in a drop; <tt>false</tt>,
-     * otherwise.
+     * The drop action that would result if the user dropped the item at this
+     * location, or <tt>null</tt> if the target cannot accept the drop.
      */
-    public boolean isDrop(Component component, Class<?> dragContentType,
-        DropAction dropAction, int x, int y);
+    public DropAction getDropAction(Component component, Class<?> dragContentType,
+        int supportedDropActions, DropAction userDropAction, int x, int y);
 
     /**
-     * Called to notify a drop target that it should show or hide a drop
-     * highlight state.
-     *
-     * @param component
-     * @param highlight
-     */
-    public void highlightDrop(Component component, boolean highlight);
-
-    /**
-     * Called to notify a drop target that it should update its highlight
-     * state.
+     * Called to notify a drop target that it should show a drop state.
      *
      * @param component
      * @param dragContentType
      * @param dropAction
+     */
+    public void showDropState(Component component, Class<?> dragContentType,
+        DropAction dropAction);
+
+    /**
+     * Called to notify a drop target that it should hide its drop state.
+     *
+     * @param component
+     */
+    public void hideDropState(Component component);
+
+    /**
+     * Called to notify a drop target that it should update its drop state.
+     *
+     * @param dropAction
      * @param x
      * @param y
      */
-    public void updateDropHighlight(Component component, Class<?> dragContentType,
-        DropAction dropAction, int x, int y);
+    public void updateDropState(Component component, DropAction dropAction, int x, int y);
 
     /**
      * Called when the user drops the drag content.

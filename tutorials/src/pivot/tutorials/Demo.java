@@ -374,21 +374,30 @@ public class Demo implements Application {
         };
 
         DropTarget imageDropTarget = new DropTarget() {
-            public boolean isDrop(Component component, Class<?> dragContentType,
-                DropAction dropAction, int x, int y) {
+            public DropAction getDropAction(Component component, Class<?> dragContentType,
+                int supportedDropActions, DropAction userDropAction, int x, int y) {
+                DropAction dropAction = null;
+
                 ImageView imageView = (ImageView)component;
-
-                return (imageView.getImage() == null
+                if (imageView.getImage() == null
                     && Image.class.isAssignableFrom(dragContentType)
-                    && dropAction == DropAction.MOVE);
+                    && DropAction.MOVE.isSelected(supportedDropActions)) {
+                    dropAction = DropAction.MOVE;
+                }
+
+                return dropAction;
             }
 
-            public void highlightDrop(Component component, boolean highlight) {
-                component.getStyles().put("backgroundColor", highlight ? "#f0e68c" : null);
+            public void showDropState(Component component, Class<?> dragContentType,
+                DropAction dropAction) {
+                component.getStyles().put("backgroundColor", "#f0e68c");
             }
 
-            public void updateDropHighlight(Component component, Class<?> dragContentType,
-                DropAction dropAction, int x, int y) {
+            public void hideDropState(Component component) {
+                component.getStyles().put("backgroundColor", null);
+            }
+
+            public void updateDropState(Component component, DropAction dropAction, int x, int y) {
                 // No-op
             }
 

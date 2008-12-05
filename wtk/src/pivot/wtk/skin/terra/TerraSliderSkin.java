@@ -104,10 +104,8 @@ public class TerraSliderSkin extends SliderSkin {
 	    public void mouseOver(Component component) {
 			super.mouseOver(component);
 
-			if (Mouse.getButtons() == 0) {
-				highlighted = true;
-				repaintComponent();
-			}
+			highlighted = true;
+			repaintComponent();
 	    }
 
 		@Override

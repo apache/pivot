@@ -27,17 +27,22 @@ public class NativeDragDropTest implements Application {
         label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
         label.setDropTarget(new DropTarget() {
-            public boolean isDrop(Component component, Class<?> contentType,
-                DropAction dropAction, int x, int y) {
-                return true;
+            public DropAction getDropAction(Component component, Class<?> dragContentType,
+                int supportedDropActions, DropAction userDropAction, int x, int y) {
+                return DropAction.COPY;
             }
 
-            public void highlightDrop(Component component, boolean highlight) {
-                window.getStyles().put("backgroundColor", highlight ? "#ffcccc" : "#ffffff");
+            public void showDropState(Component component, Class<?> dragContentType,
+                DropAction dropAction) {
+                window.getStyles().put("backgroundColor", "#ffcccc");
             }
 
-            public void updateDropHighlight(Component component, Class<?> dragContentType,
-                DropAction dropAction, int x, int y) {
+            public void hideDropState(Component component) {
+                window.getStyles().put("backgroundColor", "#ffffff");
+            }
+
+            public void updateDropState(Component component, DropAction dropAction, int x, int y) {
+                // No-op
             }
 
             public void drop(Component component, Object dragContent, DropAction dropAction,
@@ -45,7 +50,8 @@ public class NativeDragDropTest implements Application {
                 String text = (dragContent == null) ? null : dragContent.toString();
                 Label label = (Label)component;
                 label.setText(text);
-                window.getStyles().put("backgroundColor", "#ffffff");
+
+                hideDropState(component);
             }
         });
 

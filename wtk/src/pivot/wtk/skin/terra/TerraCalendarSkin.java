@@ -194,12 +194,10 @@ public class TerraCalendarSkin extends CalendarSkin
         public void mouseOver(Component component) {
             super.mouseOver(component);
 
-            if (Mouse.getButtons() == 0) {
-                Calendar calendar = (Calendar)TerraCalendarSkin.this.getComponent();
+            Calendar calendar = (Calendar)TerraCalendarSkin.this.getComponent();
 
-                if (calendar.containsFocus()) {
-                    component.requestFocus();
-                }
+            if (calendar.containsFocus()) {
+                component.requestFocus();
             }
         }
 

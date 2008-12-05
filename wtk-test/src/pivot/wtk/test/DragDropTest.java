@@ -67,7 +67,7 @@ public class DragDropTest implements Application {
             }
 
             public boolean isNative() {
-                return true;
+                return false;
             }
 
             public Object getContent() {
@@ -88,19 +88,30 @@ public class DragDropTest implements Application {
         };
 
         DropTarget imageDropTarget = new DropTarget() {
-            public boolean isDrop(Component component, Class<?> dragContentType,
-                DropAction dropAction, int x, int y) {
-                return (Image.class.isAssignableFrom(dragContentType)
-                    && dropAction == DropAction.MOVE);
+            public DropAction getDropAction(Component component, Class<?> dragContentType,
+                int supportedDropActions, DropAction userDropAction, int x, int y) {
+                DropAction dropAction = null;
+
+                ImageView imageView = (ImageView)component;
+                if (imageView.getImage() == null
+                    && Image.class.isAssignableFrom(dragContentType)
+                    && DropAction.MOVE.isSelected(supportedDropActions)) {
+                    dropAction = DropAction.MOVE;
+                }
+
+                return dropAction;
             }
 
-            public void highlightDrop(Component component, boolean highlight) {
-                component.getStyles().put("backgroundColor", highlight ?
-                    IMAGE_VIEW_DROP_HIGHLIGHT_COLOR : IMAGE_VIEW_BACKGROUND_COLOR);
+            public void showDropState(Component component, Class<?> dragContentType,
+                DropAction dropAction) {
+                component.getStyles().put("backgroundColor", IMAGE_VIEW_DROP_HIGHLIGHT_COLOR);
             }
 
-            public void updateDropHighlight(Component component, Class<?> dragContentType,
-                DropAction dropAction, int x, int y) {
+            public void hideDropState(Component component) {
+                component.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
+            }
+
+            public void updateDropState(Component component, DropAction dropAction, int x, int y) {
                 // No-op
             }
 
