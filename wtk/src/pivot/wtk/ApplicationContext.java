@@ -122,7 +122,8 @@ public abstract class ApplicationContext {
                 dragContentType = getPreferredContentType(event.getTransferable());
 
                 java.awt.Point location = event.getLocation();
-                updateDropState(dragContentType, getUserDropAction(event), location.x, location.y);
+                updateDropState(dragContentType, getUserDropAction(event),
+                    location.x, location.y, false);
 
                 if (dropAction == null) {
                     event.rejectDrag();
@@ -148,7 +149,8 @@ public abstract class ApplicationContext {
 
             public void dragOver(DropTargetDragEvent event) {
                 java.awt.Point location = event.getLocation();
-                updateDropState(dragContentType, getUserDropAction(event), location.x, location.y);
+                updateDropState(dragContentType, getUserDropAction(event),
+                    location.x, location.y, false);
 
                 if (dropAction == null) {
                     event.rejectDrag();
@@ -159,7 +161,8 @@ public abstract class ApplicationContext {
 
             public void dropActionChanged(DropTargetDragEvent event) {
                 java.awt.Point location = event.getLocation();
-                updateDropState(dragContentType, getUserDropAction(event), location.x, location.y);
+                updateDropState(dragContentType, getUserDropAction(event),
+                    location.x, location.y, false);
 
                 if (dropAction == null) {
                     event.rejectDrag();
@@ -392,10 +395,12 @@ public abstract class ApplicationContext {
             }
         }
 
-        private void updateDropState(Class<?> dragContentType, DropAction userDropAction, int x, int y) {
+        private void updateDropState(Class<?> dragContentType, DropAction userDropAction,
+            int x, int y, boolean updateCursor) {
             // Update the drop descendant
             Component previousDropDescendant = dropDescendant;
             dropDescendant = display.getDescendantAt(x, y);
+            dropAction = null;
 
             if (dropDescendant != null) {
                 // Determine the supported drop actions
@@ -453,54 +458,57 @@ public abstract class ApplicationContext {
                     DropTarget dropTarget = dropDescendant.getDropTarget();
                     dropTarget.showDropState(dropDescendant, dragContentType, dropAction);
                 }
-            }
 
-            // Update the drop cursor
-            java.awt.Cursor cursor = java.awt.Cursor.getDefaultCursor();
+                if (updateCursor) {
+                    // Update the drop cursor
+                    java.awt.Cursor cursor = java.awt.Cursor.getDefaultCursor();
 
-            if (dropAction != null) {
-                // Show the cursor for the drop action returned by the
-                // drop target
-                switch (dropAction) {
-                    case COPY: {
-                        cursor = java.awt.dnd.DragSource.DefaultCopyDrop;
-                        break;
+                    if (dropAction != null) {
+                        // Show the cursor for the drop action returned by the
+                        // drop target
+                        switch (dropAction) {
+                            case COPY: {
+                                cursor = java.awt.dnd.DragSource.DefaultCopyDrop;
+                                break;
+                            }
+
+                            case MOVE: {
+                                cursor = java.awt.dnd.DragSource.DefaultMoveDrop;
+                                break;
+                            }
+
+                            case LINK: {
+                                cursor = java.awt.dnd.DragSource.DefaultLinkDrop;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (userDropAction != null) {
+                            // The user's requested drop action was rejected by the
+                            // drop target
+                            switch (userDropAction) {
+                                case COPY: {
+                                    cursor = java.awt.dnd.DragSource.DefaultCopyNoDrop;
+                                    break;
+                                }
+
+                                case MOVE: {
+                                    cursor = java.awt.dnd.DragSource.DefaultMoveNoDrop;
+                                    break;
+                                }
+
+                                case LINK: {
+                                    cursor = java.awt.dnd.DragSource.DefaultLinkNoDrop;
+                                    break;
+                                }
+                            }
+                        }
                     }
 
-                    case MOVE: {
-                        cursor = java.awt.dnd.DragSource.DefaultMoveDrop;
-                        break;
-                    }
-
-                    case LINK: {
-                        cursor = java.awt.dnd.DragSource.DefaultLinkDrop;
-                        break;
-                    }
+                    System.out.println("Setting cursor to " + cursor);
+                    setCursor(cursor);
                 }
-            } else {
-                if (userDropAction != null) {
-                    // The user's requested drop action was rejected by the
-                    // drop target
-                    switch (userDropAction) {
-                        case COPY: {
-                            cursor = java.awt.dnd.DragSource.DefaultCopyNoDrop;
-                            break;
-                        }
-
-                        case MOVE: {
-                            cursor = java.awt.dnd.DragSource.DefaultMoveNoDrop;
-                            break;
-                        }
-
-                        case LINK: {
-                            cursor = java.awt.dnd.DragSource.DefaultLinkNoDrop;
-                            break;
-                        }
-                    }
-                }
             }
-
-            setCursor(cursor);
         }
 
         private void startNativeDrag(DragSource dragSource, final MouseEvent mouseEvent) {
@@ -758,7 +766,8 @@ public abstract class ApplicationContext {
 
                                     // Update the drop state
                                     Object dragContent = dragSource.getContent();
-                                    updateDropState(dragContent.getClass(), getUserDropAction(event), x, y);
+                                    updateDropState(dragContent.getClass(), getUserDropAction(event),
+                                        x, y, true);
 
                                     // Repaint the drag visual
                                     dragLocation.x = x;
@@ -777,7 +786,8 @@ public abstract class ApplicationContext {
                         if (dragLocation != null) {
                             // Update the drop state
                             Object dragContent = dragSource.getContent();
-                            updateDropState(dragContent.getClass(), getUserDropAction(event), x, y);
+                            updateDropState(dragContent.getClass(), getUserDropAction(event),
+                                x, y, true);
 
                             // Repaint the drag visual
                             repaintDragRepresentation();
@@ -913,7 +923,7 @@ public abstract class ApplicationContext {
                 // Update the drop state
                 Object dragContent = dragSource.getContent();
                 updateDropState(dragContent.getClass(), getUserDropAction(event),
-                    Mouse.getX(), Mouse.getY());
+                    Mouse.getX(), Mouse.getY(), true);
             }
         }
     }
