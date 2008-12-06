@@ -765,31 +765,35 @@ public abstract class ApplicationContext {
                                     // There was nothing to drag, so clear the drag location
                                     dragLocation = null;
                                 } else {
-                                    // A drag has started
-                                    if (dragSource.getRepresentation() != null
-                                        && dragSource.getOffset() == null) {
-                                        throw new IllegalStateException("Drag offset is required when a "
-                                    		+ " respresentation is specified.");
-                                    }
-
-                                    if (display.isMouseOver()) {
-                                        display.mouseOut();
-                                    }
-
-                                    // Update the drop state
-                                    Object dragContent = dragSource.getContent();
-                                    updateDropState(dragContent.getClass(), getUserDropAction(event),
-                                        x, y, true);
-
-                                    // Repaint the drag visual
-                                    dragLocation.x = x;
-                                    dragLocation.y = y;
-
-                                    repaintDragRepresentation();
-
-                                    // Start native drag
                                     if (dragSource.isNative()) {
                                         startNativeDrag(dragSource, event);
+
+                                        // Clear the drag source, since we may need to create a new
+                                        // one wrapping the native drag; also clear the drag location
+                                        dragSource = null;
+                                        dragLocation = null;
+                                    } else {
+                                        // A drag has started
+                                        if (dragSource.getRepresentation() != null
+                                            && dragSource.getOffset() == null) {
+                                            throw new IllegalStateException("Drag offset is required when a "
+                                                + " respresentation is specified.");
+                                        }
+
+                                        if (display.isMouseOver()) {
+                                            display.mouseOut();
+                                        }
+
+                                        // Update the drop state
+                                        Object dragContent = dragSource.getContent();
+                                        updateDropState(dragContent.getClass(), getUserDropAction(event),
+                                            x, y, true);
+
+                                        // Repaint the drag visual
+                                        dragLocation.x = x;
+                                        dragLocation.y = y;
+
+                                        repaintDragRepresentation();
                                     }
                                 }
                             }

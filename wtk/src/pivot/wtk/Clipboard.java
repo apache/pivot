@@ -32,7 +32,7 @@ import pivot.wtk.media.Picture;
  * @author gbrown
  */
 public final class Clipboard {
-    protected static class TransferableContent implements Transferable {
+    static class TransferableContent implements Transferable {
         private Object content;
         private DataFlavor dataFlavor;
 
