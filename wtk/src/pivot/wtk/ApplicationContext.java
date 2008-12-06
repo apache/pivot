@@ -50,7 +50,7 @@ import java.util.TimerTask;
 
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
-import pivot.io.FileSequence;
+import pivot.io.FileList;
 import pivot.util.ImmutableIterator;
 import pivot.wtk.Component.DecoratorSequence;
 import pivot.wtk.media.Picture;
@@ -505,7 +505,6 @@ public abstract class ApplicationContext {
                         }
                     }
 
-                    System.out.println("Setting cursor to " + cursor);
                     setCursor(cursor);
                 }
             }
@@ -553,14 +552,12 @@ public abstract class ApplicationContext {
             java.util.List<InputEvent> inputEvents = new java.util.ArrayList<InputEvent>();
             inputEvents.add(mouseEvent);
 
-            // TODO Are there better defaults than "move" here?
-
             java.awt.Point location = new java.awt.Point(mouseEvent.getX(), mouseEvent.getY());
             DragGestureEvent trigger = new DragGestureEvent(dragGestureRecognizer,
                 DnDConstants.ACTION_MOVE, location, inputEvents);
 
             Transferable transferable = new Clipboard.TransferableContent(dragSource.getContent());
-            awtDragSource.startDrag(trigger, java.awt.dnd.DragSource.DefaultMoveDrop,
+            awtDragSource.startDrag(trigger, java.awt.Cursor.getDefaultCursor(),
                 null, null, transferable, new DragSourceAdapter() {
                 // TODO?
             });
@@ -1344,7 +1341,7 @@ public abstract class ApplicationContext {
             } else {
                 if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
                     try {
-                        content = new FileSequence((java.util.List<File>)transferable.getTransferData(dataFlavor));
+                        content = new FileList((java.util.List<File>)transferable.getTransferData(dataFlavor));
                     } catch(Exception exception) {
                         // No-op
                     }
@@ -1389,7 +1386,7 @@ public abstract class ApplicationContext {
                 contentType = Picture.class;
             } else {
                 if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
-                    contentType = FileSequence.class;
+                    contentType = FileList.class;
                 }
             }
         }
@@ -1445,20 +1442,22 @@ public abstract class ApplicationContext {
     private static int getNativeDropAction(DropAction dropAction) {
         int nativeDropAction = 0;
 
-        switch(dropAction) {
-            case COPY: {
-                nativeDropAction = DnDConstants.ACTION_COPY;
-                break;
-            }
+        if (dropAction != null) {
+            switch(dropAction) {
+                case COPY: {
+                    nativeDropAction = DnDConstants.ACTION_COPY;
+                    break;
+                }
 
-            case MOVE: {
-                nativeDropAction = DnDConstants.ACTION_MOVE;
-                break;
-            }
+                case MOVE: {
+                    nativeDropAction = DnDConstants.ACTION_MOVE;
+                    break;
+                }
 
-            case LINK: {
-                nativeDropAction = DnDConstants.ACTION_LINK;
-                break;
+                case LINK: {
+                    nativeDropAction = DnDConstants.ACTION_LINK;
+                    break;
+                }
             }
         }
 

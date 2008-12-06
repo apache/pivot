@@ -31,7 +31,10 @@ import pivot.wtk.media.Image;
 /**
  * Image view skin.
  * <p>
- * TODO Add rotation style
+ * TODO Add rotation style.
+ * <p>
+ * TODO If horizontal or vertical alignment is specified, but not both, scale
+ * aspect-correct in that dimension.
  *
  * @author gbrown
  */

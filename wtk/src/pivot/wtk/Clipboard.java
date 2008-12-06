@@ -22,7 +22,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
-import pivot.io.FileSequence;
+import pivot.io.FileList;
 import pivot.wtk.media.Picture;
 
 /**
@@ -39,7 +39,7 @@ public final class Clipboard {
         public TransferableContent(Object content) {
             if (content instanceof Picture) {
                 dataFlavor = DataFlavor.imageFlavor;
-            } else if (content instanceof FileSequence) {
+            } else if (content instanceof FileList) {
                 dataFlavor = DataFlavor.javaFileListFlavor;
             } else {
                 dataFlavor = DataFlavor.stringFlavor;
@@ -56,7 +56,7 @@ public final class Clipboard {
                 Picture picture = (Picture)content;
                 transferData = picture.getBufferedImage();
             } else if (dataFlavor == DataFlavor.javaFileListFlavor) {
-                FileSequence fileSequence = (FileSequence)content;
+                FileList fileSequence = (FileList)content;
                 transferData = fileSequence.getList();
             } else {
                 transferData = content.toString();

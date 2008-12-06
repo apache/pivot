@@ -28,7 +28,7 @@ import pivot.util.ListenerList;
  * Implementation of the {@link List} interface that is backed by an
  * instance of <tt>java.util.List</tt>.
  */
-public final class ListAdapter<T> implements List<T> {
+public class ListAdapter<T> implements List<T> {
     private java.util.List<T> list = null;
     private Comparator<T> comparator = null;
 

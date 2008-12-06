@@ -9,15 +9,15 @@ import pivot.wtk.Display;
 import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
 import pivot.wtk.DropTarget;
+import pivot.wtk.Frame;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
 import pivot.wtk.Point;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Visual;
-import pivot.wtk.Window;
 
 public class NativeDragDropTest implements Application {
-    private Window window = null;
+    private Frame frame = null;
 
     public void startup(final Display display, Dictionary<String, String> properties)
         throws Exception {
@@ -34,11 +34,11 @@ public class NativeDragDropTest implements Application {
 
             public void showDropState(Component component, Class<?> dragContentType,
                 DropAction dropAction) {
-                window.getStyles().put("backgroundColor", "#ffcccc");
+                frame.getStyles().put("backgroundColor", "#ffcccc");
             }
 
             public void hideDropState(Component component) {
-                window.getStyles().put("backgroundColor", "#ffffff");
+                frame.getStyles().put("backgroundColor", "#ffffff");
             }
 
             public void updateDropState(Component component, DropAction dropAction, int x, int y) {
@@ -84,12 +84,12 @@ public class NativeDragDropTest implements Application {
             }
         });
 
-        window = new Window(label);
-        window.setMaximized(true);
-        window.open(display);
+        frame = new Frame(label);
+        frame.open(display);
     }
 
     public boolean shutdown(boolean optional) {
+        frame.close();
         return true;
     }
 
