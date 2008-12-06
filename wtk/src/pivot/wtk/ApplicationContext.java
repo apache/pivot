@@ -558,6 +558,8 @@ public abstract class ApplicationContext {
             java.util.List<InputEvent> inputEvents = new java.util.ArrayList<InputEvent>();
             inputEvents.add(mouseEvent);
 
+            // TODO If current user drop action is supported by drag source, use it
+            // as initial action - otherwise, select MOVE, COPY, LINK in that order
             java.awt.Point location = new java.awt.Point(mouseEvent.getX(), mouseEvent.getY());
             DragGestureEvent trigger = new DragGestureEvent(dragGestureRecognizer,
                 DnDConstants.ACTION_MOVE, location, inputEvents);
@@ -1351,7 +1353,13 @@ public abstract class ApplicationContext {
             && content == null) {
             DataFlavor dataFlavor = transferDataFlavors[i++];
 
-            if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
+            if (dataFlavor.isMimeTypeEqual(DataFlavor.stringFlavor)) {
+                try {
+                    content = (String)transferable.getTransferData(dataFlavor);
+                } catch(Exception exception) {
+                    // No-op
+                }
+            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
                 try {
                     content = new Picture((BufferedImage)transferable.getTransferData(dataFlavor));
                 } catch(Exception exception) {
@@ -1401,7 +1409,9 @@ public abstract class ApplicationContext {
             && contentType == null) {
             DataFlavor dataFlavor = transferDataFlavors[i++];
 
-            if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
+            if (dataFlavor.isMimeTypeEqual(DataFlavor.stringFlavor)) {
+                contentType = String.class;
+            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
                 contentType = Picture.class;
             } else {
                 if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
