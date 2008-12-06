@@ -75,7 +75,7 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
             icon = (Image)item;
         } else {
             if (item != null) {
-                text = (String)item.toString();
+                text = item.toString();
             }
         }
 

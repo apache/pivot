@@ -37,7 +37,7 @@
 		                            styles="{fontBold:true, horizontalAlignment:'center'}" />
                             </TablePane.Row>
                             <TablePane.Row height="1*">
-                                <Border styles="{padding:0}">
+                                <Border>
                                     <content>
                                         <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
                                             <view>
@@ -47,6 +47,12 @@
                                         </ScrollPane>
                                     </content>
                                 </Border>
+                            </TablePane.Row>
+                            <TablePane.Row>
+                                <FlowPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
+                                    <PushButton wtkx:id="copyTextButton" buttonData="Copy"/>
+                                    <PushButton wtkx:id="pasteTextButton" buttonData="Paste"/>
+                                </FlowPane>
                             </TablePane.Row>
                         </rows>
 					</TablePane>
@@ -71,6 +77,12 @@
 				                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}" />
                                     </content>
                                 </Border>
+                            </TablePane.Row>
+                            <TablePane.Row>
+                                <FlowPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
+                                    <PushButton wtkx:id="copyImageButton" buttonData="Copy"/>
+                                    <PushButton wtkx:id="pasteImageButton" buttonData="Paste"/>
+                                </FlowPane>
                             </TablePane.Row>
                         </rows>
                     </TablePane>
@@ -98,6 +110,12 @@
 		                                </ScrollPane>
                                     </content>
                                 </Border>
+                            </TablePane.Row>
+                            <TablePane.Row>
+                                <FlowPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
+                                    <PushButton wtkx:id="copyFilesButton" buttonData="Copy"/>
+                                    <PushButton wtkx:id="pasteFilesButton" buttonData="Paste"/>
+                                </FlowPane>
                             </TablePane.Row>
                         </rows>
                     </TablePane>
