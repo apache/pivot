@@ -27,8 +27,11 @@ import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragGestureRecognizer;
-import java.awt.dnd.DragSourceAdapter;
+import java.awt.dnd.DragSourceContext;
+import java.awt.dnd.DragSourceDragEvent;
 import java.awt.dnd.DragSourceDropEvent;
+import java.awt.dnd.DragSourceEvent;
+import java.awt.dnd.DragSourceListener;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
@@ -402,7 +405,7 @@ public abstract class ApplicationContext {
         }
 
         private void updateDropState(Class<?> dragContentType, DropAction userDropAction,
-            int x, int y, boolean updateCursor) {
+            int x, int y, boolean updateDropCursor) {
             // Update the drop descendant
             Component previousDropDescendant = dropDescendant;
             dropDescendant = display.getDescendantAt(x, y);
@@ -465,53 +468,8 @@ public abstract class ApplicationContext {
                     dropTarget.showDropState(dropDescendant, dragContentType, dropAction);
                 }
 
-                if (updateCursor) {
-                    // Update the drop cursor
-                    java.awt.Cursor cursor = java.awt.Cursor.getDefaultCursor();
-
-                    if (dropAction != null) {
-                        // Show the cursor for the drop action returned by the
-                        // drop target
-                        switch (dropAction) {
-                            case COPY: {
-                                cursor = java.awt.dnd.DragSource.DefaultCopyDrop;
-                                break;
-                            }
-
-                            case MOVE: {
-                                cursor = java.awt.dnd.DragSource.DefaultMoveDrop;
-                                break;
-                            }
-
-                            case LINK: {
-                                cursor = java.awt.dnd.DragSource.DefaultLinkDrop;
-                                break;
-                            }
-                        }
-                    } else {
-                        if (userDropAction != null) {
-                            // The user's requested drop action was rejected by the
-                            // drop target
-                            switch (userDropAction) {
-                                case COPY: {
-                                    cursor = java.awt.dnd.DragSource.DefaultCopyNoDrop;
-                                    break;
-                                }
-
-                                case MOVE: {
-                                    cursor = java.awt.dnd.DragSource.DefaultMoveNoDrop;
-                                    break;
-                                }
-
-                                case LINK: {
-                                    cursor = java.awt.dnd.DragSource.DefaultLinkNoDrop;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    setCursor(cursor);
+                if (updateDropCursor) {
+                    setCursor(getDropCursor(dropAction));
                 }
             }
         }
@@ -566,8 +524,27 @@ public abstract class ApplicationContext {
 
             Transferable transferable = new Clipboard.TransferableContent(dragSource.getContent());
             awtDragSource.startDrag(trigger, java.awt.Cursor.getDefaultCursor(),
-                null, null, transferable, new DragSourceAdapter() {
-                @Override
+                null, null, transferable, new DragSourceListener() {
+                public void dragEnter(DragSourceDragEvent event) {
+                    DragSourceContext context = event.getDragSourceContext();
+                    context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
+                }
+
+                public void dragExit(DragSourceEvent event) {
+                    DragSourceContext context = event.getDragSourceContext();
+                    context.setCursor(java.awt.Cursor.getDefaultCursor());
+                }
+
+                public void dragOver(DragSourceDragEvent event) {
+                    DragSourceContext context = event.getDragSourceContext();
+                    context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
+                }
+
+                public void dropActionChanged(DragSourceDragEvent event) {
+                    DragSourceContext context = event.getDragSourceContext();
+                    context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
+                }
+
                 public void dragDropEnd(DragSourceDropEvent event) {
                     dragSource.endDrag(getDropAction(event.getDropAction()));
                 }
@@ -1491,5 +1468,33 @@ public abstract class ApplicationContext {
         }
 
         return nativeDropAction;
+    }
+
+    private static java.awt.Cursor getDropCursor(DropAction dropAction) {
+        // Update the drop cursor
+        java.awt.Cursor cursor = java.awt.Cursor.getDefaultCursor();
+
+        if (dropAction != null) {
+            // Show the cursor for the drop action returned by the
+            // drop target
+            switch (dropAction) {
+                case COPY: {
+                    cursor = java.awt.dnd.DragSource.DefaultCopyDrop;
+                    break;
+                }
+
+                case MOVE: {
+                    cursor = java.awt.dnd.DragSource.DefaultMoveDrop;
+                    break;
+                }
+
+                case LINK: {
+                    cursor = java.awt.dnd.DragSource.DefaultLinkDrop;
+                    break;
+                }
+            }
+        }
+
+        return cursor;
     }
 }
