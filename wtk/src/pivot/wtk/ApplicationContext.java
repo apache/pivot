@@ -1331,25 +1331,23 @@ public abstract class ApplicationContext {
             && content == null) {
             DataFlavor dataFlavor = transferDataFlavors[i++];
 
-            if (dataFlavor.isMimeTypeEqual(DataFlavor.stringFlavor)) {
-                try {
-                    content = (String)transferable.getTransferData(dataFlavor);
-                } catch(Exception exception) {
-                    // No-op
-                }
-            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
+            if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
                 try {
                     content = new Picture((BufferedImage)transferable.getTransferData(dataFlavor));
                 } catch(Exception exception) {
                     // No-op
                 }
-            } else {
-                if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
-                    try {
-                        content = new FileList((java.util.List<File>)transferable.getTransferData(dataFlavor));
-                    } catch(Exception exception) {
-                        // No-op
-                    }
+            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
+                try {
+                    content = new FileList((java.util.List<File>)transferable.getTransferData(dataFlavor));
+                } catch(Exception exception) {
+                    // No-op
+                }
+            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.stringFlavor)) {
+                try {
+                    content = (String)transferable.getTransferData(dataFlavor);
+                } catch(Exception exception) {
+                    // No-op
                 }
             }
         }
@@ -1387,14 +1385,12 @@ public abstract class ApplicationContext {
             && contentType == null) {
             DataFlavor dataFlavor = transferDataFlavors[i++];
 
-            if (dataFlavor.isMimeTypeEqual(DataFlavor.stringFlavor)) {
-                contentType = String.class;
-            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
+            if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
                 contentType = Picture.class;
-            } else {
-                if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
-                    contentType = FileList.class;
-                }
+            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
+                contentType = FileList.class;
+            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.stringFlavor)) {
+                contentType = String.class;
             }
         }
 

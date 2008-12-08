@@ -59,6 +59,7 @@ public final class Clipboard {
                 FileList fileSequence = (FileList)content;
                 transferData = fileSequence.getList();
             } else {
+                System.out.println("Thread ID in getTransferData(): " + Thread.currentThread().getId());
                 transferData = content.toString();
             }
 
@@ -99,6 +100,8 @@ public final class Clipboard {
      * include:
      * <ul>
      * <li>{@link String}</li>
+     * <li>{@link pivot.io.FileList}</li>
+     * <li>{@link pivot.wtk.media.Picture}</li>
      * </ul>
      * Otherwise, returns <tt>null</tt>.
      */
@@ -121,6 +124,8 @@ public final class Clipboard {
      * Supported types include:
      * <ul>
      * <li>{@link String}</li>
+     * <li>{@link pivot.io.FileList}</li>
+     * <li>{@link pivot.wtk.media.Picture}</li>
      * </ul>
      * Otherwise, the string representation of the value will be copied to the
      * system clipboard.
@@ -133,6 +138,8 @@ public final class Clipboard {
         }
 
         if (awtClipboard != null) {
+            System.out.println("Thread ID in setContent(): " + Thread.currentThread().getId());
+
             awtClipboard.setContents(new TransferableContent(content), new ClipboardOwner() {
                 public void lostOwnership(java.awt.datatransfer.Clipboard awtClipboard,
                     Transferable awtClipboardContents) {
