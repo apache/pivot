@@ -36,7 +36,6 @@ import pivot.util.ListenerList;
  *
  * @author tvolkert
  */
-@ComponentInfo(icon="SplitPane.png")
 public class SplitPane extends Container {
     /**
      * Enumeration defining split pane regions.

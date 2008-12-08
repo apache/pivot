@@ -19,7 +19,6 @@ import java.awt.Graphics2D;
 
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
-import pivot.wtk.Decorator;
 
 /**
  * Decorator that adds a rectangular region to the current clip.

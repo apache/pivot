@@ -24,7 +24,6 @@ import pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="ImageView.png")
 public class ImageView extends Component {
     private static class ImageViewListenerList extends ListenerList<ImageViewListener>
         implements ImageViewListener {

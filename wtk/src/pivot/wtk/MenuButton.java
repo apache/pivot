@@ -30,7 +30,6 @@ import pivot.wtk.content.ButtonDataRenderer;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="MenuButton.png")
 public class MenuButton extends Button {
     private class MenuButtonListenerList extends ListenerList<MenuButtonListener>
         implements MenuButtonListener {

@@ -22,7 +22,6 @@ import pivot.wtk.content.LinkButtonDataRenderer;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="LinkButton.png")
 public class LinkButton extends Button {
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new LinkButtonDataRenderer();
 

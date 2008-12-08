@@ -21,7 +21,6 @@ import java.awt.Graphics2D;
 import java.net.URL;
 
 import pivot.wtk.Component;
-import pivot.wtk.Decorator;
 import pivot.wtk.FlowPane;
 import pivot.wtk.ImageView;
 import pivot.wtk.Label;

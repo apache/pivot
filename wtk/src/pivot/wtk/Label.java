@@ -23,7 +23,6 @@ import pivot.util.ListenerList;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="Label.png")
 public class Label extends Component {
     private static class LabelListenerList extends ListenerList<LabelListener>
         implements LabelListener {

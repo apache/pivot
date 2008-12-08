@@ -1,6 +1,7 @@
 package pivot.wtk;
 
 import pivot.collections.Sequence;
+import pivot.wtk.effects.Decorator;
 
 /**
  * Component decorator listener interface.

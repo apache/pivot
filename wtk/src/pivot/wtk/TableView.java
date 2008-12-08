@@ -34,7 +34,6 @@ import pivot.wtk.content.TableViewHeaderData;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="TableView.png")
 public class TableView extends Component {
     /**
      * Contains information about a table column.

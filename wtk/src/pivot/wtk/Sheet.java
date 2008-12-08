@@ -24,7 +24,6 @@ import pivot.util.Vote;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="Sheet.png")
 public class Sheet extends Window {
     private static class SheetStateListenerList extends ListenerList<SheetStateListener>
         implements SheetStateListener {

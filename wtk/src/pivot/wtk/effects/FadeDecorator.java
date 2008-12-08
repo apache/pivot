@@ -4,7 +4,6 @@ import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 
 import pivot.wtk.Component;
-import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**

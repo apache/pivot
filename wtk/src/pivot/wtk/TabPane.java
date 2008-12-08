@@ -32,7 +32,6 @@ import pivot.wtk.media.Image;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="TabPane.png")
 public class TabPane extends Container {
     /**
      * Defines tab attributes.

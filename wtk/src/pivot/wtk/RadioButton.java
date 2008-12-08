@@ -22,7 +22,6 @@ import pivot.wtk.content.ButtonDataRenderer;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="RadioButton.png")
 public class RadioButton extends Button {
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 

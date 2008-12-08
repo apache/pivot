@@ -32,6 +32,7 @@ import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
+import pivot.wtk.effects.Decorator;
 
 /**
  * Top level abstract base class for all components. In MVC terminology, a

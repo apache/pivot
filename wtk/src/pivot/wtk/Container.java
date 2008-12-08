@@ -25,6 +25,7 @@ import pivot.collections.Map;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
+import pivot.wtk.effects.Decorator;
 
 /**
  * Abstract base class for containers.
@@ -42,7 +43,6 @@ import pivot.util.ListenerList;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="Container.png")
 public abstract class Container extends Component
     implements Sequence<Component>, Iterable<Component> {
     private static class ContainerListenerList extends ListenerList<ContainerListener>

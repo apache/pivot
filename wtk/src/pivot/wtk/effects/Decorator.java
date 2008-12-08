@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk;
+package pivot.wtk.effects;
 
 import java.awt.Graphics2D;
+
+import pivot.wtk.Bounds;
+import pivot.wtk.Component;
 
 /**
  * Interface defining a component "decorator". Decorators allow a caller to

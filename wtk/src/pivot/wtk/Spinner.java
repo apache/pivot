@@ -31,7 +31,6 @@ import pivot.wtk.content.SpinnerItemRenderer;
  *
  * @author tvolkert
  */
-@ComponentInfo(icon="Spinner.png")
 public class Spinner extends Container {
     /**
      * Spinner renderer interface.

@@ -23,6 +23,14 @@ import pivot.util.Vote;
  * @author gbrown
  */
 public interface CardPaneListener {
+    /**
+     * Called when a card pane's orientation has changed.
+     *
+     * @param cardPane
+     * @param previousOrientation
+     */
+    public void orientationChanged(CardPane cardPane, Orientation previousOrientation);
+
 	/**
 	 * Called to preview a selected index change.
 	 *

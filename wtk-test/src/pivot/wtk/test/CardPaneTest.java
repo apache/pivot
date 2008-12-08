@@ -25,6 +25,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.Frame;
+import pivot.wtk.Orientation;
 import pivot.wtk.Sheet;
 import pivot.wtkx.WTKXSerializer;
 
@@ -53,6 +54,10 @@ public class CardPaneTest implements Application {
         		int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(selection);
 
         		cardPane.getCardPaneListeners().add(new CardPaneListener() {
+        		    public void orientationChanged(CardPane cardPane, Orientation previousOrientation) {
+
+        		    }
+
         			public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
         				if (selection != null) {
         					selection.getParent().setEnabled(false);

@@ -19,7 +19,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import pivot.wtk.Component;
-import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**

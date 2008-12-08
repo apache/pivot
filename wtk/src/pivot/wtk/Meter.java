@@ -22,7 +22,6 @@ import pivot.util.ListenerList;
  *
  * @author tvolkert
  */
-@ComponentInfo(icon="Meter.png")
 public class Meter extends Component {
     private static class MeterListenerList extends ListenerList<MeterListener>
     implements MeterListener {

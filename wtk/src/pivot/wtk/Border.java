@@ -26,7 +26,6 @@ import pivot.util.ListenerList;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="Border.png")
 public class Border extends Container {
     private static class BorderListenerList extends ListenerList<BorderListener>
         implements BorderListener {

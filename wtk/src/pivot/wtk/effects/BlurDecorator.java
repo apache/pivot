@@ -21,7 +21,6 @@ import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 
 import pivot.wtk.Component;
-import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**

@@ -23,7 +23,6 @@ import pivot.util.ListenerList;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="TextInput.png")
 public class TextInput extends Component {
     /**
      * Text input listener list.

@@ -7,7 +7,6 @@ import pivot.beans.BeanDictionary;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentInfo;
 import pivot.wtk.Component.Attributes;
 import pivot.wtk.Component.StyleDictionary;
 
@@ -80,9 +79,8 @@ public class ComponentAdapter {
     }
 
     public Image getIcon() {
-        ComponentInfo componentInfo = component.getClass().getAnnotation(ComponentInfo.class);
-        URL iconURL = component.getClass().getResource(componentInfo != null ?
-            componentInfo.icon() : "component.png");
+        // TODO Load component icon from application resources
+        URL iconURL = null;
 
         Image icon = null;
 

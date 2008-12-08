@@ -29,7 +29,6 @@ import pivot.wtk.content.ListViewItemRenderer;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="ListButton.png")
 public class ListButton extends Button {
     /**
      * List button listener list.

@@ -22,7 +22,6 @@ import pivot.wtk.ApplicationContext;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
-import pivot.wtk.Decorator;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.VerticalAlignment;
 

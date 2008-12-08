@@ -28,6 +28,12 @@ import pivot.util.Vote;
 public class CardPane extends Container {
     private static class CardPaneListenerList extends ListenerList<CardPaneListener>
         implements CardPaneListener {
+        public void orientationChanged(CardPane cardPane, Orientation previousOrientation) {
+            for (CardPaneListener listener : this) {
+                listener.orientationChanged(cardPane, previousOrientation);
+            }
+        }
+
     	public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
             Vote vote = Vote.APPROVE;
 
@@ -51,11 +57,33 @@ public class CardPane extends Container {
         }
     }
 
+    private Orientation orientation = null;
     private int selectedIndex = -1;
     private CardPaneListenerList cardPaneListeners = new CardPaneListenerList();
 
     public CardPane() {
         installSkin(CardPane.class);
+    }
+
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(Orientation orientation) {
+        Orientation previousOrientation = this.orientation;
+
+        if (previousOrientation != orientation) {
+            this.orientation = orientation;
+            cardPaneListeners.orientationChanged(this, previousOrientation);
+        }
+    }
+
+    public final void setOrientation(String orientation) {
+        if (orientation == null) {
+            throw new IllegalArgumentException("orientation is null.");
+        }
+
+        setOrientation(Orientation.decode(orientation));
     }
 
     /**

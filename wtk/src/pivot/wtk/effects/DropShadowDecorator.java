@@ -25,7 +25,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import pivot.wtk.Component;
-import pivot.wtk.Decorator;
 import pivot.wtk.Bounds;
 
 /**

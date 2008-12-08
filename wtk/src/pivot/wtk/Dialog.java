@@ -24,7 +24,6 @@ import pivot.util.Vote;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="Dialog.png")
 public class Dialog extends Frame {
     private static class DialogStateListenerList extends ListenerList<DialogStateListener>
         implements DialogStateListener {

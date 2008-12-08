@@ -32,7 +32,6 @@ import pivot.wtk.content.ListViewItemRenderer;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="ListView.png")
 public class ListView extends Component {
     /**
      * Enumeration defining supported selection modes.

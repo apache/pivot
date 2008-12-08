@@ -23,7 +23,6 @@ import pivot.util.ListenerList;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="ScrollBar.png")
 public class ScrollBar extends Container {
     private static class ScrollBarListenerList extends ListenerList<ScrollBarListener>
         implements ScrollBarListener {

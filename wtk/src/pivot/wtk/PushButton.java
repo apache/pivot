@@ -22,7 +22,6 @@ import pivot.wtk.content.ButtonDataRenderer;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="PushButton.png")
 public class PushButton extends Button {
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 

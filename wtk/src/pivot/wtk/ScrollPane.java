@@ -24,7 +24,6 @@ import pivot.util.ListenerList;
  *
  * @author tvolkert
  */
-@ComponentInfo(icon="ScrollPane.png")
 public class ScrollPane extends Viewport {
     /**
      * Enumeration defining scroll pane scroll bar policies.

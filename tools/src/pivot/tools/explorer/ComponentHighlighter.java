@@ -9,8 +9,8 @@ import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
-import pivot.wtk.Decorator;
 import pivot.wtk.TreeView;
+import pivot.wtk.effects.Decorator;
 
 
 /**

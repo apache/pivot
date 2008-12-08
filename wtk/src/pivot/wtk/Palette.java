@@ -21,7 +21,6 @@ package pivot.wtk;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="Palette.png")
 public class Palette extends Window {
     /**
      * Creates a new palette.

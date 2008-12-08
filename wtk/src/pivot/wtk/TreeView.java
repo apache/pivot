@@ -34,7 +34,6 @@ import pivot.wtk.content.TreeViewNodeRenderer;
  * @author gbrown
  * @author tvolkert
  */
-@ComponentInfo(icon="TreeView.png")
 public class TreeView extends Component {
     /**
      * Enumeration defining supported selection modes.

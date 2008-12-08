@@ -31,7 +31,6 @@ import pivot.util.ListenerList;
  *
  * @author gbrown
  */
-@ComponentInfo(icon="Form.png")
 public class Form extends Container {
     /**
      * Class representing a menu section. A section is a grouping of menu

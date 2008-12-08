@@ -57,6 +57,7 @@ import pivot.collections.HashMap;
 import pivot.io.FileList;
 import pivot.util.ImmutableIterator;
 import pivot.wtk.Component.DecoratorSequence;
+import pivot.wtk.effects.Decorator;
 import pivot.wtk.media.Picture;
 
 /**
