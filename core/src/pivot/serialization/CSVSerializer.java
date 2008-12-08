@@ -152,7 +152,8 @@ public class CSVSerializer implements Serializer {
     @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
-        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset),
+            BUFFER_SIZE);
         Object object = readObject(reader);
 
         return object;
@@ -286,7 +287,8 @@ public class CSVSerializer implements Serializer {
         Writer writer = null;
 
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(outputStream), BUFFER_SIZE);
+            writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
+                BUFFER_SIZE);
             writeObject(object, writer);
         } finally {
             if (writer != null) {

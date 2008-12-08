@@ -15,9 +15,13 @@
  */
 package pivot.serialization;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
 /**
@@ -50,13 +54,31 @@ public class PlainTextSerializer implements Serializer {
 
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream, charset);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader, BUFFER_SIZE);
+
+        String line = bufferedReader.readLine();
+        while (line != null) {
+            stringBuilder.append(line);
+            line = bufferedReader.readLine();
+        }
+
+        return stringBuilder.toString();
     }
 
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
-        // TODO Auto-generated method stub
+        if (!(object instanceof String)) {
+            throw new IllegalArgumentException("object must be an instance of "
+                + String.class.getName());
+        }
+
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, charset);
+        BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter, BUFFER_SIZE);
+
+        bufferedWriter.write((String)object);
     }
 
     public String getMIMEType(Object object) {

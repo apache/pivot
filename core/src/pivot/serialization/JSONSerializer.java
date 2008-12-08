@@ -401,7 +401,8 @@ public class JSONSerializer implements Serializer {
         Writer writer = null;
 
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset), BUFFER_SIZE);
+            writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
+                BUFFER_SIZE);
             writeObject(object, writer);
         } finally {
             if (writer != null) {
