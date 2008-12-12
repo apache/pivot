@@ -41,7 +41,7 @@ public class PlainTextSerializer implements Serializer {
     }
 
     public PlainTextSerializer(String charsetName) {
-        this(Charset.forName(charsetName));
+        this(charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName));
     }
 
     public PlainTextSerializer(Charset charset) {
@@ -65,6 +65,8 @@ public class PlainTextSerializer implements Serializer {
             line = bufferedReader.readLine();
         }
 
+        bufferedReader.close();
+
         return stringBuilder.toString();
     }
 
@@ -77,8 +79,8 @@ public class PlainTextSerializer implements Serializer {
 
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, charset);
         BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter, BUFFER_SIZE);
-
         bufferedWriter.write((String)object);
+        bufferedWriter.close();
     }
 
     public String getMIMEType(Object object) {

@@ -15,6 +15,7 @@
  */
 package pivot.wtk.data;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import pivot.serialization.Serializer;
@@ -37,6 +38,9 @@ public abstract class Transport {
         if (serializer == null) {
             throw new IllegalArgumentException("serializer is null.");
         }
+
+        this.object = object;
+        this.serializer = serializer;
     }
 
     public Object getObject() {
@@ -51,5 +55,10 @@ public abstract class Transport {
      * Returns an input stream containing the object as written to an output
      * stream using the serializer.
      */
-    public abstract InputStream getInputStream();
+    public abstract InputStream getInputStream() throws IOException;
+
+    /**
+     * Releases any resources currently being used by the transport.
+     */
+    public abstract void dispose();
 }

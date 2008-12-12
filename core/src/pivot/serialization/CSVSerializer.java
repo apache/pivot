@@ -101,7 +101,7 @@ public class CSVSerializer implements Serializer {
     }
 
     public CSVSerializer(String charsetName) {
-        this(Charset.forName(charsetName));
+        this(charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName));
     }
 
     public CSVSerializer(Charset charset) {

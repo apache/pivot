@@ -56,7 +56,7 @@ public class JSONSerializer implements Serializer {
     }
 
     public JSONSerializer(String charsetName) {
-        this(Charset.forName(charsetName));
+        this(charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName));
     }
 
     public JSONSerializer(Charset charset) {

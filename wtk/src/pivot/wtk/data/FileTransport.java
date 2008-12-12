@@ -20,16 +20,7 @@ import java.io.InputStream;
 import pivot.serialization.Serializer;
 
 /**
- * Transport backed by the file system. A thread is started by the constructor
- * to write the object to a file; an input stream on the file is created
- * on-demand.
- * <p>
- * The created file is a temporary file that will be cleaned up when the
- * transport is finalized or the JVM exits.
- * <p>
- * TODO Should the file be created on demand? If so, what differentiates a
- * file transport from a piped transport? The ability to convey larger data
- * sets?
+ * Transport backed by the file system.
  *
  * @author gbrown
  */
@@ -44,4 +35,7 @@ public class FileTransport extends Transport {
         return null;
     }
 
+    public void dispose() {
+        // TODO
+    }
 }

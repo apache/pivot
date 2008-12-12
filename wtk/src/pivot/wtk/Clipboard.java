@@ -17,13 +17,11 @@ package pivot.wtk;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 
-import pivot.io.FileList;
-import pivot.wtk.media.Picture;
+import pivot.collections.Sequence;
+import pivot.wtk.data.Manifest;
+import pivot.wtk.data.Transport;
 
 /**
  * Singleton class providing a means of sharing data between components and
@@ -32,122 +30,53 @@ import pivot.wtk.media.Picture;
  * @author gbrown
  */
 public final class Clipboard {
-    static class TransferableContent implements Transferable {
-        private Object content;
-        private DataFlavor dataFlavor;
-
-        public TransferableContent(Object content) {
-            if (content instanceof Picture) {
-                dataFlavor = DataFlavor.imageFlavor;
-            } else if (content instanceof FileList) {
-                dataFlavor = DataFlavor.javaFileListFlavor;
-            } else {
-                dataFlavor = DataFlavor.stringFlavor;
-            }
-
-            this.content = content;
-        }
-
-        public Object getTransferData(DataFlavor dataFlavor)
-            throws UnsupportedFlavorException, IOException {
-            Object transferData = null;
-
-            if (dataFlavor == DataFlavor.imageFlavor) {
-                Picture picture = (Picture)content;
-                transferData = picture.getBufferedImage();
-            } else if (dataFlavor == DataFlavor.javaFileListFlavor) {
-                FileList fileSequence = (FileList)content;
-                transferData = fileSequence.getList();
-            } else {
-                System.out.println("Thread ID in getTransferData(): " + Thread.currentThread().getId());
-                transferData = content.toString();
-            }
-
-            return transferData;
-        }
-
-        public DataFlavor[] getTransferDataFlavors() {
-            return new DataFlavor[] {dataFlavor};
-        }
-
-        public boolean isDataFlavorSupported(DataFlavor dataFlavor) {
-            return (this.dataFlavor.isMimeTypeEqual(dataFlavor));
-        }
-    }
-
-    private static Object content = null;
-    private static java.awt.datatransfer.Clipboard awtClipboard = null;
-
-    static {
-        try {
-            awtClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        } catch(SecurityException exception) {
-            System.out.println("Access to system clipboard is not allowed; using local clipboard.");
-        }
-    }
+    private static Manifest content = null;
 
     /**
      * Retrieves the contents of the clipboard.
-     *
-     * @return
-     * The current contents of the clipboard. If the clipboard contents were
-     * populated by this application or another application loaded by the same
-     * class loader, the return value will be the same value that was passed
-     * to the call to {@link #setContent(Object)}.
-     * <p>
-     * Otherwise, if the application has access to the system clipboard and a
-     * supported value is available, it will be returned. Supported types
-     * include:
-     * <ul>
-     * <li>{@link String}</li>
-     * <li>{@link pivot.io.FileList}</li>
-     * <li>{@link pivot.wtk.media.Picture}</li>
-     * </ul>
-     * Otherwise, returns <tt>null</tt>.
      */
-    public static Object getContent() {
-        Object content = Clipboard.content;
+    public static Manifest getContent() {
+        Manifest content = Clipboard.content;
 
-        if (content == null
-            && awtClipboard != null) {
-            content = ApplicationContext.getPreferredContent(awtClipboard.getContents(null));
+        if (content == null) {
+            try {
+                java.awt.datatransfer.Clipboard awtClipboard =
+                    Toolkit.getDefaultToolkit().getSystemClipboard();
+                content = new RemoteManifest(awtClipboard.getContents(null));
+            } catch(SecurityException exception) {
+                // No-op
+            }
         }
 
         return content;
     }
 
     /**
-     * Places a value on the clipboard.
-     * <p>
-     * If the application has access to the system clipboard and the value is
-     * of a supported type, it will be copied to the system clipboard.
-     * Supported types include:
-     * <ul>
-     * <li>{@link String}</li>
-     * <li>{@link pivot.io.FileList}</li>
-     * <li>{@link pivot.wtk.media.Picture}</li>
-     * </ul>
-     * Otherwise, the string representation of the value will be copied to the
-     * system clipboard.
+     * Places content on the clipboard.
      *
      * @param content
      */
-    public static void setContent(Object content) {
+    public static void setContent(Sequence<Transport> content) {
         if (content == null) {
             throw new IllegalArgumentException("content is null");
         }
 
-        if (awtClipboard != null) {
-            System.out.println("Thread ID in setContent(): " + Thread.currentThread().getId());
+        final LocalManifest localManifest = new LocalManifest(content);
 
-            awtClipboard.setContents(new TransferableContent(content), new ClipboardOwner() {
-                public void lostOwnership(java.awt.datatransfer.Clipboard awtClipboard,
-                    Transferable awtClipboardContents) {
+        try {
+            java.awt.datatransfer.Clipboard awtClipboard =
+                Toolkit.getDefaultToolkit().getSystemClipboard();
+            awtClipboard.setContents(localManifest.getTransferable(), new ClipboardOwner() {
+                public void lostOwnership(java.awt.datatransfer.Clipboard clipboard,
+                    Transferable contents) {
+                    localManifest.dispose();
                     Clipboard.content = null;
                 }
             });
+        } catch(SecurityException exception) {
+            // No-op
         }
 
-        Clipboard.content = content;
+        Clipboard.content = localManifest;
     }
 }

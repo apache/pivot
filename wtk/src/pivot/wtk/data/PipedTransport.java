@@ -20,12 +20,7 @@ import java.io.InputStream;
 import pivot.serialization.Serializer;
 
 /**
- * Transport backed by a "pipe". The object is written to a piped output stream
- * by a separate thread created when the input stream is requested. The returned
- * input stream reads data from the pipe.
- * <p>
- * TODO Should the piped output stream be created on demand, and then re-used if
- * requested again?
+ * Transport backed by a "pipe".
  *
  * @author gbrown
  */
@@ -40,4 +35,7 @@ public class PipedTransport extends Transport {
         return null;
     }
 
+    public void dispose() {
+        // TODO
+    }
 }

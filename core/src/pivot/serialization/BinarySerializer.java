@@ -31,6 +31,7 @@ import java.io.Serializable;
  */
 public class BinarySerializer implements Serializer {
     public static final String MIME_TYPE = "application/x-java-serialized-object";
+    public static final String CLASS_PARAMETER = "class";
 
     /**
      * Reads a graph of serialized objects from an input stream.
@@ -73,7 +74,7 @@ public class BinarySerializer implements Serializer {
     public String getMIMEType(Object object) {
         String mimeType = MIME_TYPE;
         if (object != null) {
-            mimeType += "; class=" + object.getClass().getName();
+            mimeType += "; " + CLASS_PARAMETER + "=" + object.getClass().getName();
         }
 
         return mimeType;

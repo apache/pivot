@@ -15,6 +15,8 @@
  */
 package pivot.util;
 
+import java.util.Iterator;
+
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
@@ -23,7 +25,7 @@ import pivot.collections.HashMap;
  *
  * @author gbrown
  */
-public class MIMEType implements Dictionary<String, String> {
+public class MIMEType implements Dictionary<String, String>, Iterable<String> {
     private String baseType;
     private HashMap<String, String> parameters = new HashMap<String, String>();
 
@@ -57,6 +59,23 @@ public class MIMEType implements Dictionary<String, String> {
 
     public boolean isEmpty() {
         return parameters.isEmpty();
+    }
+
+    public Iterator<String> iterator() {
+        return new ImmutableIterator<String>(parameters.iterator());
+    }
+
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(baseType);
+        if (!parameters.isEmpty()) {
+            for (String parameter : parameters) {
+                stringBuilder.append("; " + parameter + "=" + parameters.get(parameter));
+            }
+        }
+
+        return stringBuilder.toString();
     }
 
     public static MIMEType decode(String value) {

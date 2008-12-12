@@ -22,7 +22,6 @@ import java.awt.GraphicsConfiguration;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Transparency;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
@@ -42,10 +41,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Iterator;
@@ -54,11 +51,11 @@ import java.util.TimerTask;
 
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
-import pivot.io.FileList;
+import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.wtk.Component.DecoratorSequence;
+import pivot.wtk.data.Transport;
 import pivot.wtk.effects.Decorator;
-import pivot.wtk.media.Picture;
 
 /**
  * Base class for application contexts.
@@ -115,25 +112,37 @@ public abstract class ApplicationContext {
 
         private Point dragLocation = null;
         private DragSource dragSource = null;
+        private LocalManifest localDragManifest = null;
 
+        private DropAction userDropAction = null;
         private Component dropDescendant = null;
-        private DropAction dropAction = null;
 
         private DropTargetListener dropTargetListener = new DropTargetListener() {
-            private Class<?> dragContentType = null;
+            private RemoteManifest remoteDragManifest = null;
 
             public void dragEnter(DropTargetDragEvent event) {
-                // TODO
                 if (dragSource != null) {
                     throw new IllegalStateException("Drag source already exists.");
                 }
 
+                // Initialize drag state
                 dragSource = new NativeDragSource(event);
-                dragContentType = getPreferredContentType(event.getTransferable());
+                remoteDragManifest = new RemoteManifest(event.getTransferable());
 
+                // Initialize drop state
+                userDropAction = getDropAction(event.getDropAction());
+
+                // Notify drop target
                 java.awt.Point location = event.getLocation();
-                updateDropState(dragContentType, getDropAction(event.getDropAction()),
-                    location.x, location.y, false);
+                dropDescendant = getDropDescendant(location.x, location.y);
+
+                DropAction dropAction = null;
+
+                if (dropDescendant != null) {
+                    DropTarget dropTarget = dropDescendant.getDropTarget();
+                    dropAction = dropTarget.dragEnter(dropDescendant, remoteDragManifest,
+                        dragSource.getSupportedDropActions(), userDropAction);
+                }
 
                 if (dropAction == null) {
                     event.rejectDrag();
@@ -145,22 +154,22 @@ public abstract class ApplicationContext {
             public void dragExit(DropTargetEvent event) {
                 // Clear drag state
                 dragSource = null;
-                dragContentType = null;
+                remoteDragManifest = null;
 
                 // Clear drop state
+                userDropAction = null;
+
                 if (dropDescendant != null) {
                     DropTarget dropTarget = dropDescendant.getDropTarget();
-                    dropTarget.hideDropState(dropDescendant);
+                    dropTarget.dragExit(dropDescendant);
                 }
 
                 dropDescendant = null;
-                dropAction = null;
             }
 
             public void dragOver(DropTargetDragEvent event) {
                 java.awt.Point location = event.getLocation();
-                updateDropState(dragContentType, getDropAction(event.getDropAction()),
-                    location.x, location.y, false);
+                DropAction dropAction = handleDragMove(location.x, location.y);
 
                 if (dropAction == null) {
                     event.rejectDrag();
@@ -170,9 +179,20 @@ public abstract class ApplicationContext {
             }
 
             public void dropActionChanged(DropTargetDragEvent event) {
-                java.awt.Point location = event.getLocation();
-                updateDropState(dragContentType, getDropAction(event.getDropAction()),
-                    location.x, location.y, false);
+                userDropAction = getDropAction(event.getDropAction());
+
+                DropAction dropAction = null;
+
+                if (dropDescendant != null) {
+                    java.awt.Point location = event.getLocation();
+                    Point dropLocation = dropDescendant.mapPointFromAncestor(display,
+                        location.x, location.y);
+
+                    DropTarget dropTarget = dropDescendant.getDropTarget();
+                    dropAction = dropTarget.userDropActionChange(dropDescendant, remoteDragManifest,
+                        dragSource.getSupportedDropActions(),
+                        dropLocation.x, dropLocation.y, userDropAction);
+                }
 
                 if (dropAction == null) {
                     event.rejectDrag();
@@ -182,31 +202,45 @@ public abstract class ApplicationContext {
             }
 
             public void drop(DropTargetDropEvent event) {
-                if (dropAction == null) {
-                    event.rejectDrop();
-                } else {
-                    event.acceptDrop(getNativeDropAction(dropAction));
+                java.awt.Point location = event.getLocation();
+                dropDescendant = getDropDescendant(location.x, location.y);
 
+                DropAction dropAction = null;
+
+                if (dropDescendant != null) {
+                    Point dropLocation = dropDescendant.mapPointFromAncestor(display,
+                        location.x, location.y);
                     DropTarget dropTarget = dropDescendant.getDropTarget();
 
-                    Object dragContent = getPreferredContent(event.getTransferable());
-                    java.awt.Point location = event.getLocation();
+                    // Simulate a user drop action change to get the current drop action
+                    int supportedDropActions = dragSource.getSupportedDropActions();
 
-                    dropTarget.drop(dropDescendant, dragContent, dropAction, location.x, location.y);
+                    dropAction = dropTarget.userDropActionChange(dropDescendant, remoteDragManifest,
+                        supportedDropActions, dropLocation.x, dropLocation.y, userDropAction);
 
-                    event.dropComplete(true);
+                    if (dropAction != null) {
+                        // Perform the drop
+                        event.acceptDrop(getNativeDropAction(dropAction));
+                        dropTarget.drop(dropDescendant, remoteDragManifest,
+                            supportedDropActions, dropLocation.x, dropLocation.y, userDropAction);
+                    }
                 }
+
+                if (dropAction == null) {
+                    event.rejectDrop();
+                }
+
+                event.dropComplete(true);
 
                 // Restore the cursor to the default
                 setCursor(java.awt.Cursor.getDefaultCursor());
 
                 // Clear drag state
                 dragSource = null;
-                dragContentType = null;
+                remoteDragManifest = null;
 
                 // Clear drop state
                 dropDescendant = null;
-                dropAction = null;
             }
         };
 
@@ -405,74 +439,51 @@ public abstract class ApplicationContext {
             }
         }
 
-        private void updateDropState(Class<?> dragContentType, DropAction userDropAction,
-            int x, int y, boolean updateDropCursor) {
-            // Update the drop descendant
+        private DropAction handleDragMove(int x, int y) {
+            // Get the previous and current drop descendant and call
+            // move or exit/enter as appropriate
             Component previousDropDescendant = dropDescendant;
-            dropDescendant = display.getDescendantAt(x, y);
-            dropAction = null;
+            dropDescendant = getDropDescendant(x, y);
 
-            if (dropDescendant != null) {
-                // Determine the supported drop actions
-                int supportedDropActions = dragSource.getSupportedDropActions();
-
-                // Map the location to the descendant's coordinate system
-                Point dropLocation = dropDescendant.mapPointFromAncestor(display, x, y);
-
-                DropTarget dropTarget = null;
-
-                while (dropDescendant != null
-                    && dropTarget == null) {
-                    dropTarget = dropDescendant.getDropTarget();
-
-                    if (dropTarget != null) {
-                        DropAction dropAction = dropTarget.getDropAction(dropDescendant,
-                            dragContentType, supportedDropActions, userDropAction,
-                            dropLocation.x, dropLocation.y);
-
-                        if (dropAction == null
-                            || !dropAction.isSelected(supportedDropActions)) {
-                            // The drop target rejected the drop or returned an invalid
-                            // drop action
-                            dropTarget = null;
-                        } else {
-                            this.dropAction = dropAction;
-                        }
-                    }
-
-                    if (dropTarget == null) {
-                        // A drop target has not been found; keep walking
-                        // up the tree
-                        dropLocation.x += dropDescendant.getX();
-                        dropLocation.y += dropDescendant.getY();
-
-                        dropDescendant = dropDescendant.getParent();
-                    }
-                }
-            }
+            DropAction dropAction = null;
 
             if (previousDropDescendant == dropDescendant) {
-                // The descendant hasn't changed
                 if (dropDescendant != null) {
                     DropTarget dropTarget = dropDescendant.getDropTarget();
-                    dropTarget.updateDropState(dropDescendant, dropAction, x, y);
+
+                    Point dropLocation = dropDescendant.mapPointFromAncestor(display, x, y);
+                    dropAction = dropTarget.dragMove(dropDescendant, localDragManifest,
+                        dragSource.getSupportedDropActions(),
+                        dropLocation.x, dropLocation.y, userDropAction);
                 }
             } else {
-                // The drop descendant changed as a result of this move
                 if (previousDropDescendant != null) {
                     DropTarget previousDropTarget = previousDropDescendant.getDropTarget();
-                    previousDropTarget.hideDropState(previousDropDescendant);
+                    previousDropTarget.dragExit(previousDropDescendant);
                 }
 
                 if (dropDescendant != null) {
                     DropTarget dropTarget = dropDescendant.getDropTarget();
-                    dropTarget.showDropState(dropDescendant, dragContentType, dropAction);
-                }
-
-                if (updateDropCursor) {
-                    setCursor(getDropCursor(dropAction));
+                    dropAction = dropTarget.dragEnter(dropDescendant, localDragManifest,
+                        dragSource.getSupportedDropActions(), userDropAction);
                 }
             }
+
+            // Update cursor
+            setCursor(getDropCursor(dropAction));
+
+            return dropAction;
+        }
+
+        private Component getDropDescendant(int x, int y) {
+            Component dropDescendant = display.getDescendantAt(x, y);
+
+            while (dropDescendant != null
+                && dropDescendant.getDropTarget() == null) {
+                dropDescendant = dropDescendant.getParent();
+            }
+
+            return dropDescendant;
         }
 
         private void startNativeDrag(final DragSource dragSource, final MouseEvent mouseEvent) {
@@ -523,7 +534,10 @@ public abstract class ApplicationContext {
             DragGestureEvent trigger = new DragGestureEvent(dragGestureRecognizer,
                 DnDConstants.ACTION_MOVE, location, inputEvents);
 
-            Transferable transferable = new Clipboard.TransferableContent(dragSource.getContent());
+            Sequence<Transport> dragContent = dragSource.getContent();
+            LocalManifest localManifest = new LocalManifest(dragContent);
+            Transferable transferable = localManifest.getTransferable();
+
             awtDragSource.startDrag(trigger, java.awt.Cursor.getDefaultCursor(),
                 null, null, transferable, new DragSourceListener() {
                 public void dragEnter(DragSourceDragEvent event) {
@@ -547,7 +561,8 @@ public abstract class ApplicationContext {
                 }
 
                 public void dragDropEnd(DragSourceDropEvent event) {
-                    dragSource.endDrag(getDropAction(event.getDropAction()));
+                    DragSourceContext context = event.getDragSourceContext();
+                    context.setCursor(java.awt.Cursor.getDefaultCursor());
                 }
             });
         }
@@ -647,26 +662,28 @@ public abstract class ApplicationContext {
                     if (dragSource == null) {
                         display.mouseUp(button, x, y);
                     } else {
+                        repaintDragRepresentation();
+
                         if (dropDescendant == null) {
-                            dragSource.endDrag(null);
+                            dragSource.endDrag(dropDescendant, null);
                         } else {
                             DropTarget dropTarget = dropDescendant.getDropTarget();
-                            Object dragContent = dragSource.getContent();
-
-                            dropTarget.drop(dropDescendant, dragContent, dropAction, x, y);
-                            dragSource.endDrag(dropAction);
+                            DropAction dropAction = dropTarget.drop(dropDescendant, localDragManifest,
+                                dragSource.getSupportedDropActions(), x, y, getUserDropAction(event));
+                            dragSource.endDrag(dropDescendant, dropAction);
                         }
-
-                        repaintDragRepresentation();
 
                         setCursor(java.awt.Cursor.getDefaultCursor());
 
                         // Clear the drag state
                         dragSource = null;
 
+                        localDragManifest.dispose();
+                        localDragManifest = null;
+
                         // Clear the drop state
+                        userDropAction = null;
                         dropDescendant = null;
-                        dropAction = null;
                     }
 
                     // Clear the drag location
@@ -713,20 +730,20 @@ public abstract class ApplicationContext {
                                 || Math.abs(y - dragLocation.y) > dragThreshold)) {
                             // The user has dragged the mouse past the drag threshold; try
                             // to find a drag source
-                            Component descendant = display.getDescendantAt(dragLocation.x,
+                            Component dragDescendant = display.getDescendantAt(dragLocation.x,
                                 dragLocation.y);
 
-                            if (descendant != null) {
-                                Point descendantDragLocation = descendant.mapPointFromAncestor(display,
+                            if (dragDescendant != null) {
+                                dragLocation = dragDescendant.mapPointFromAncestor(display,
                                     dragLocation.x, dragLocation.y);
 
-                                while (descendant != null
+                                while (dragDescendant != null
                                     && dragSource == null) {
-                                    dragSource = descendant.getDragSource();
+                                    dragSource = dragDescendant.getDragSource();
 
                                     if (dragSource != null
-                                        && !dragSource.beginDrag(descendant, descendantDragLocation.x,
-                                            descendantDragLocation.y)) {
+                                        && !dragSource.beginDrag(dragDescendant, dragLocation.x,
+                                            dragLocation.y)) {
                                         // The drag source rejected the drag
                                         dragSource = null;
                                     }
@@ -734,10 +751,10 @@ public abstract class ApplicationContext {
                                     if (dragSource == null) {
                                         // A drag source has not been found; keep walking
                                         // up the tree
-                                        descendantDragLocation.x += descendant.getX();
-                                        descendantDragLocation.y += descendant.getY();
+                                        dragLocation.x += dragDescendant.getX();
+                                        dragLocation.y += dragDescendant.getY();
 
-                                        descendant = descendant.getParent();
+                                        dragDescendant = dragDescendant.getParent();
                                     }
                                 }
 
@@ -764,10 +781,12 @@ public abstract class ApplicationContext {
                                             display.mouseOut();
                                         }
 
-                                        // Update the drop state
-                                        Object dragContent = dragSource.getContent();
-                                        updateDropState(dragContent.getClass(), getUserDropAction(event),
-                                            x, y, true);
+                                        // Create a local manifest to wrap the content
+                                        Sequence<Transport> dragContent = dragSource.getContent();
+                                        localDragManifest = new LocalManifest(dragContent);
+
+                                        // Get the initial user drop action
+                                        userDropAction = getUserDropAction(event);
 
                                         // Repaint the drag visual
                                         dragLocation.x = x;
@@ -780,10 +799,7 @@ public abstract class ApplicationContext {
                         }
                     } else {
                         if (dragLocation != null) {
-                            // Update the drop state
-                            Object dragContent = dragSource.getContent();
-                            updateDropState(dragContent.getClass(), getUserDropAction(event),
-                                x, y, true);
+                            handleDragMove(x, y);
 
                             // Repaint the drag visual
                             repaintDragRepresentation();
@@ -916,10 +932,21 @@ public abstract class ApplicationContext {
                     }
                 }
             } else {
-                // Update the drop state
-                Object dragContent = dragSource.getContent();
-                updateDropState(dragContent.getClass(), getUserDropAction(event),
-                    Mouse.getX(), Mouse.getY(), true);
+                // If the user drop action changed, notify the drop descendant
+                if (dropDescendant != null) {
+                    DropAction previousUserDropAction = userDropAction;
+                    userDropAction = getUserDropAction(event);
+
+                    if (previousUserDropAction != userDropAction) {
+                        DropTarget dropTarget = dropDescendant.getDropTarget();
+
+                        Point dropLocation = dropDescendant.mapPointFromAncestor(display,
+                            Mouse.getX(), Mouse.getY());
+                        dropTarget.userDropActionChange(dropDescendant, localDragManifest,
+                            dragSource.getSupportedDropActions(),
+                            dropLocation.x, dropLocation.y, userDropAction);
+                    }
+                }
             }
         }
     }
@@ -974,7 +1001,7 @@ public abstract class ApplicationContext {
             throw new UnsupportedOperationException();
         }
 
-        public void endDrag(DropAction dropAction) {
+        public void endDrag(Component component, DropAction dropAction) {
             throw new UnsupportedOperationException();
         }
 
@@ -982,7 +1009,7 @@ public abstract class ApplicationContext {
             throw new UnsupportedOperationException();
         }
 
-        public Object getContent() {
+        public Sequence<Transport> getContent() {
             throw new UnsupportedOperationException();
         }
 
@@ -1308,97 +1335,6 @@ public abstract class ApplicationContext {
      */
     public static int getDragThreshold() {
         return java.awt.dnd.DragSource.getDragThreshold();
-    }
-
-    /**
-     * Selects the most appropriate content from a given transferable object.
-     *
-     * @param transferable
-     *
-     * @return
-     * The preferred content value, or <tt>null</tt> if the transferable
-     * object did not contain any usable data.
-     */
-    @SuppressWarnings("unchecked")
-    protected static Object getPreferredContent(Transferable transferable) {
-        Object content = null;
-
-        DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
-
-        int i = 0;
-        int n = transferDataFlavors.length;
-        while (i < n
-            && content == null) {
-            DataFlavor dataFlavor = transferDataFlavors[i++];
-
-            if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
-                try {
-                    content = new Picture((BufferedImage)transferable.getTransferData(dataFlavor));
-                } catch(Exception exception) {
-                    // No-op
-                }
-            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
-                try {
-                    content = new FileList((java.util.List<File>)transferable.getTransferData(dataFlavor));
-                } catch(Exception exception) {
-                    // No-op
-                }
-            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.stringFlavor)) {
-                try {
-                    content = (String)transferable.getTransferData(dataFlavor);
-                } catch(Exception exception) {
-                    // No-op
-                }
-            }
-        }
-
-        if (content == null
-            && transferDataFlavors.length > 0) {
-            try {
-                content = transferable.getTransferData(transferDataFlavors[0]).toString();
-            } catch(Exception exception) {
-                // No-op
-            }
-        }
-
-        return content;
-    }
-
-    /**
-     * Selects the most appropriate content type from a given transferable
-     * object.
-     *
-     * @param transferable
-     *
-     * @return
-     * The preferred content type, or <tt>null</tt> if the transferable
-     * object did not contain any usable data.
-     */
-    protected static Class<?> getPreferredContentType(Transferable transferable) {
-        Class<?> contentType = null;
-
-        DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
-
-        int i = 0;
-        int n = transferDataFlavors.length;
-        while (i < n
-            && contentType == null) {
-            DataFlavor dataFlavor = transferDataFlavors[i++];
-
-            if (dataFlavor.isMimeTypeEqual(DataFlavor.imageFlavor)) {
-                contentType = Picture.class;
-            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.javaFileListFlavor)) {
-                contentType = FileList.class;
-            } else if (dataFlavor.isMimeTypeEqual(DataFlavor.stringFlavor)) {
-                contentType = String.class;
-            }
-        }
-
-        if (contentType == null) {
-            contentType = String.class;
-        }
-
-        return contentType;
     }
 
     private static DropAction getUserDropAction(InputEvent event) {

@@ -15,21 +15,13 @@
  */
 package pivot.io;
 
-import java.io.File;
-
-import pivot.collections.adapter.ListAdapter;
+import pivot.util.concurrent.Task;
 
 /**
- * A list of files, typically used during drag/drop operations.
+ * Abstract base class for input/output tasks.
  *
  * @author gbrown
  */
-public class FileList extends ListAdapter<File> {
-    public FileList() {
-        this(new java.util.ArrayList<File>());
-    }
-
-    public FileList(java.util.List<File> files) {
-        super(files);
-    }
+public abstract class IOTask<V> extends Task<V> {
+    // TODO Move MonitoredInputStream and MonitoredOutputStream here
 }

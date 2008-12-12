@@ -15,27 +15,47 @@
  */
 package pivot.wtk.data;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
+import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
 
 /**
- * Transport backed by a byte array. The object is written to an in-memory
- * output stream immediately by the constructor; an input stream on the byte
- * array is created on-demand.
- * <p>
- * TODO Should the byte array be created on demand?
+ * Transport backed by a byte array.
  *
  * @author gbrown
  */
 public class ByteArrayTransport extends Transport {
+    private byte[] data = null;
+
     public ByteArrayTransport(Object object, Serializer serializer) {
         super(object, serializer);
     }
 
     @Override
-    public InputStream getInputStream() {
-        // TODO Auto-generated method stub
-        return null;
+    public InputStream getInputStream() throws IOException {
+        if (data == null) {
+            Object object = getObject();
+            Serializer serializer = getSerializer();
+
+            try {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                serializer.writeObject(object, outputStream);
+                outputStream.close();
+
+                data = outputStream.toByteArray();
+            } catch(SerializationException exception) {
+                System.out.println(exception);
+            }
+        }
+
+        return (data == null) ? null : new ByteArrayInputStream(data);
+    }
+
+    public void dispose() {
+        data = null;
     }
 }

@@ -16,8 +16,12 @@
 package pivot.wtk.test;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 
+import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
+import pivot.collections.Sequence;
+import pivot.util.concurrent.TaskExecutionException;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
@@ -28,7 +32,12 @@ import pivot.wtk.Frame;
 import pivot.wtk.ImageView;
 import pivot.wtk.Point;
 import pivot.wtk.Visual;
+import pivot.wtk.data.ByteArrayTransport;
+import pivot.wtk.data.Manifest;
+import pivot.wtk.data.Transport;
+import pivot.wtk.media.BufferedImageSerializer;
 import pivot.wtk.media.Image;
+import pivot.wtk.media.Picture;
 
 public class DragDropTest implements Application {
     private Frame frame1 = new Frame();
@@ -43,39 +52,53 @@ public class DragDropTest implements Application {
         frame1.getStyles().put("resizable", false);
 
         DragSource imageDragSource = new DragSource() {
-            ImageView imageView = null;
-            private Image image = null;
+            private Picture picture = null;
             private Point offset = null;
+            private ArrayList<Transport> content = null;
 
             public boolean beginDrag(Component component, int x, int y) {
-                imageView = (ImageView)component;
-                image = imageView.getImage();
+                ImageView imageView = (ImageView)component;
+                Image image = imageView.getImage();
+                if (image instanceof Picture) {
+                    picture = (Picture)image;
+                }
 
-                if (image != null) {
+                if (picture != null) {
                     imageView.setImage((Image)null);
+                    content = new ArrayList<Transport>();
+
+                    BufferedImageSerializer serializer = new BufferedImageSerializer();
+                    serializer.setOutputFormat(BufferedImageSerializer.Format.PNG);
+                    content.add(new ByteArrayTransport(picture.getBufferedImage(), serializer));
+
                     offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2,
                         y - (imageView.getHeight() - image.getHeight()) / 2);
                 }
 
-                return (image != null);
+                return (picture != null);
             }
 
-            public void endDrag(DropAction dropAction) {
+            public void endDrag(Component component, DropAction dropAction) {
                 if (dropAction == null) {
-                    imageView.setImage(image);
+                    ImageView imageView = (ImageView)component;
+                    imageView.setImage(picture);
                 }
+
+                picture = null;
+                offset = null;
+                content = null;
             }
 
             public boolean isNative() {
                 return false;
             }
 
-            public Object getContent() {
-                return image;
+            public Sequence<Transport> getContent() {
+                return content;
             }
 
             public Visual getRepresentation() {
-                return image;
+                return picture;
             }
 
             public Point getOffset() {
@@ -88,38 +111,73 @@ public class DragDropTest implements Application {
         };
 
         DropTarget imageDropTarget = new DropTarget() {
-            public DropAction getDropAction(Component component, Class<?> dragContentType,
-                int supportedDropActions, DropAction userDropAction, int x, int y) {
+            private int contentIndex = -1;
+
+            public DropAction dragEnter(Component component, Manifest dragContent,
+                int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
 
+                // Identify the first stream we can read with a buffered image
+                // serializer
                 ImageView imageView = (ImageView)component;
                 if (imageView.getImage() == null
-                    && Image.class.isAssignableFrom(dragContentType)
                     && DropAction.MOVE.isSelected(supportedDropActions)) {
-                    dropAction = DropAction.MOVE;
+                    for (int i = 0, n = dragContent.getLength(); i < n; i++) {
+                        String mimeType = dragContent.getMIMEType(i);
+
+                        if (mimeType.startsWith(BufferedImageSerializer.Format.BMP.getMIMEType())
+                            || mimeType.startsWith(BufferedImageSerializer.Format.GIF.getMIMEType())
+                            || mimeType.startsWith(BufferedImageSerializer.Format.JPEG.getMIMEType())
+                            || mimeType.startsWith(BufferedImageSerializer.Format.PNG.getMIMEType())) {
+                            contentIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (contentIndex != -1) {
+                        dropAction = DropAction.MOVE;
+                        component.getStyles().put("backgroundColor", IMAGE_VIEW_DROP_HIGHLIGHT_COLOR);
+                    }
                 }
 
                 return dropAction;
             }
 
-            public void showDropState(Component component, Class<?> dragContentType,
-                DropAction dropAction) {
-                component.getStyles().put("backgroundColor", IMAGE_VIEW_DROP_HIGHLIGHT_COLOR);
-            }
-
-            public void hideDropState(Component component) {
+            public void dragExit(Component component) {
                 component.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
             }
 
-            public void updateDropState(Component component, DropAction dropAction, int x, int y) {
-                // No-op
+            public DropAction dragMove(Component component, Manifest dragContent,
+                int supportedDropActions, int x, int y, DropAction userDropAction) {
+                return (contentIndex == -1 ? null : DropAction.MOVE);
             }
 
-            public void drop(Component component, Object dragContent, DropAction dropAction,
-                int x, int y) {
-                ImageView imageView = (ImageView)component;
-                imageView.setImage((Image)dragContent);
-                component.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
+            public DropAction userDropActionChange(Component component, Manifest dragContent,
+                int supportedDropActions, int x, int y, DropAction userDropAction) {
+                return (contentIndex == -1 ? null : DropAction.MOVE);
+            }
+
+            public DropAction drop(Component component, Manifest dragContent,
+                int supportedDropActions, int x, int y, DropAction userDropAction) {
+                DropAction dropAction = null;
+
+                if (contentIndex != -1) {
+                    ImageView imageView = (ImageView)component;
+
+                    BufferedImageSerializer serializer = new BufferedImageSerializer();
+                    Manifest.ReadTask readTask = new Manifest.ReadTask(dragContent, contentIndex, serializer);
+
+                    try {
+                        imageView.setImage(new Picture((BufferedImage)readTask.execute()));
+                        dropAction = DropAction.MOVE;
+                    } catch(TaskExecutionException exception) {
+                        // No-op; we couldn't set the image
+                    }
+                }
+
+                dragExit(component);
+
+                return dropAction;
             }
         };
 

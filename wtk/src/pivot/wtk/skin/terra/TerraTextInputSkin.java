@@ -28,7 +28,11 @@ import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 
+import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
+import pivot.serialization.PlainTextSerializer;
+import pivot.util.MIMEType;
+import pivot.util.concurrent.TaskExecutionException;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Clipboard;
 import pivot.wtk.Component;
@@ -45,6 +49,9 @@ import pivot.wtk.TextInputListener;
 import pivot.wtk.TextInputCharacterListener;
 import pivot.wtk.TextInputSelectionListener;
 import pivot.wtk.Theme;
+import pivot.wtk.data.ByteArrayTransport;
+import pivot.wtk.data.Manifest;
+import pivot.wtk.data.Transport;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -1080,7 +1087,9 @@ public class TerraTextInputSkin extends ComponentSkin
                     String removedText = textInput.removeText(textInput.getSelectionStart(),
                         selectionLength);
 
-                    Clipboard.setContent(removedText);
+                    ArrayList<Transport> clipboardContent = new ArrayList<Transport>();
+                    clipboardContent.add(new ByteArrayTransport(removedText, new PlainTextSerializer()));
+                    Clipboard.setContent(clipboardContent);
                 }
             }
         } else if (keyCode == Keyboard.KeyCode.C
@@ -1092,32 +1101,47 @@ public class TerraTextInputSkin extends ComponentSkin
                 // Copy selection to clipboard
                 String selectedText = textInput.getSelectedText();
                 if (selectedText != null) {
-                    Clipboard.setContent(selectedText);
+                    ArrayList<Transport> clipboardContent = new ArrayList<Transport>();
+                    clipboardContent.add(new ByteArrayTransport(selectedText, new PlainTextSerializer()));
+                    Clipboard.setContent(clipboardContent);
                 }
             }
         } else if (keyCode == Keyboard.KeyCode.V
             && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
             // "Paste"
-            Object clipboardContents = Clipboard.getContent();
+            Manifest clipboardContent = Clipboard.getContent();
 
-            if (clipboardContents != null) {
+            int textIndex = clipboardContent.getIndex("text/plain");
+            if (textIndex != -1) {
                 // Paste the string representation of the content
-                String clipboardText = clipboardContents.toString();
+                MIMEType mimeType = MIMEType.decode(clipboardContent.getMIMEType(textIndex));
+                PlainTextSerializer serializer = new PlainTextSerializer(mimeType.get("charset"));
 
-                if ((clipboardText.length()
-                    + textInput.getCharacterCount()) > textInput.getMaximumLength()) {
-                    ApplicationContext.beep();
-                } else {
-                    // Remove any existing selection
-                    int selectionLength = textInput.getSelectionLength();
-                    if (selectionLength > 0) {
-                        textInput.removeText(textInput.getSelectionStart(),
-                            selectionLength);
+                Manifest.ReadTask readTask = new Manifest.ReadTask(clipboardContent, textIndex, serializer);
+
+                String text = null;
+                try {
+                    text = (String)readTask.execute();
+                } catch(TaskExecutionException exception) {
+                    // No-op; we couldn't retrieve the text
+                }
+
+                if (text != null) {
+                    if ((text.length()
+                        + textInput.getCharacterCount()) > textInput.getMaximumLength()) {
+                        ApplicationContext.beep();
+                    } else {
+                        // Remove any existing selection
+                        int selectionLength = textInput.getSelectionLength();
+                        if (selectionLength > 0) {
+                            textInput.removeText(textInput.getSelectionStart(),
+                                selectionLength);
+                        }
+
+                        // Insert the clipboard contents
+                        int selectionStart = textInput.getSelectionStart();
+                        textInput.insertText(text, selectionStart);
                     }
-
-                    // Insert the clipboard contents
-                    int selectionStart = textInput.getSelectionStart();
-                    textInput.insertText(clipboardText, selectionStart);
                 }
             }
         } else {

@@ -15,6 +15,8 @@
  */
 package pivot.wtk;
 
+import pivot.wtk.data.Manifest;
+
 /**
  * Interface representing a drop target.
  *
@@ -22,59 +24,75 @@ package pivot.wtk;
  */
 public interface DropTarget {
     /**
-     * Tests whether the current drag state is a valid drop target. This method
-     * is called repeatedly as the user drags the mouse or presses and releases
-     * drag modifier keys.
+     * Called when the mouse first enters a drop target during a drag
+     * operation.
      *
      * @param component
-     * @param dragContentType
+     * @param dragContent
      * @param supportedDropActions
      * @param userDropAction
-     * @param x
-     * @param y
      *
      * @return
      * The drop action that would result if the user dropped the item at this
      * location, or <tt>null</tt> if the target cannot accept the drop.
      */
-    public DropAction getDropAction(Component component, Class<?> dragContentType,
-        int supportedDropActions, DropAction userDropAction, int x, int y);
+    public DropAction dragEnter(Component component, Manifest dragContent,
+        int supportedDropActions, DropAction userDropAction);
 
     /**
-     * Called to notify a drop target that it should show a drop state.
-     *
-     * @param component
-     * @param dragContentType
-     * @param dropAction
-     */
-    public void showDropState(Component component, Class<?> dragContentType,
-        DropAction dropAction);
-
-    /**
-     * Called to notify a drop target that it should hide its drop state.
+     * Called when the mouse leaves a drop target during a drag operation.
      *
      * @param component
      */
-    public void hideDropState(Component component);
+    public void dragExit(Component component);
 
     /**
-     * Called to notify a drop target that it should update its drop state.
-     *
-     * @param dropAction
-     * @param x
-     * @param y
-     */
-    public void updateDropState(Component component, DropAction dropAction, int x, int y);
-
-    /**
-     * Called when the user drops the drag content.
+     * Called when mouse is moved over a drop target during a drag operation.
      *
      * @param component
      * @param dragContent
-     * @param dropAction
+     * @param supportedDropActions
      * @param x
      * @param y
+     * @param userDropAction
+     *
+     * @return
+     * The drop action that would result if the user dropped the item at this
+     * location, or <tt>null</tt> if the target cannot accept the drop.
      */
-    public void drop(Component component, Object dragContent, DropAction dropAction,
-        int x, int y);
+    public DropAction dragMove(Component component, Manifest dragContent,
+        int supportedDropActions, int x, int y, DropAction userDropAction);
+
+    /**
+     * Called when the user drop action has changed.
+     *
+     * @param component
+     * @param dragContent
+     * @param supportedDropActions
+     * @param x
+     * @param y
+     * @param userDropAction
+     *
+     * @return
+     * The drop action that would result if the user dropped the item at this
+     * location, or <tt>null</tt> if the target cannot accept the drop.
+     */
+    public DropAction userDropActionChange(Component component, Manifest dragContent,
+        int supportedDropActions, int x, int y, DropAction userDropAction);
+
+    /**
+     * Called to drop the drag content.
+     *
+     * @param component
+     * @param dragContent
+     * @param supportedDropActions
+     * @param x
+     * @param y
+     * @param userDropAction
+     *
+     * @return
+     * The drop action used to perform the drop.
+     */
+    public DropAction drop(Component component, Manifest dragContent,
+        int supportedDropActions, int x, int y, DropAction userDropAction);
 }

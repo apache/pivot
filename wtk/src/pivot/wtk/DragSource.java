@@ -15,6 +15,9 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Sequence;
+import pivot.wtk.data.Transport;
+
 /**
  * Interface representing a drag source.
  *
@@ -36,11 +39,10 @@ public interface DragSource {
     /**
      * Called by the framework to terminate a drag operation.
      *
+     * @param component
      * @param dropAction
-     * The drop action selected by the user, or <tt>null</tt> to abort the
-     * drag.
      */
-    public void endDrag(DropAction dropAction);
+    public void endDrag(Component component, DropAction dropAction);
 
     /**
      * Returns the drag source's native flag.
@@ -54,7 +56,7 @@ public interface DragSource {
     /**
      * Returns the drag content.
      */
-    public Object getContent();
+    public Sequence<Transport> getContent();
 
     /**
      * Returns a visual representing the drag content.
