@@ -331,6 +331,8 @@ public class DragAndDropDemo implements Application {
 
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
+                // TODO
+
                 return (contentIndex == -1 ? null : DropAction.COPY);
             }
 
@@ -352,11 +354,13 @@ public class DragAndDropDemo implements Application {
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
 
+                // TODO
+
                 dragExit(component);
 
                 return dropAction;
             }
-        }); // TODO
+        });
 
         PushButton copyFilesButton = (PushButton)wtkxSerializer.getObjectByName("copyFilesButton");
         copyFilesButton.getButtonPressListeners().add(new ButtonPressListener() {
