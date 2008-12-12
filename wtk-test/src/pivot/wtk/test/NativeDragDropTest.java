@@ -88,6 +88,7 @@ public class NativeDragDropTest implements Application {
 
             public void dragExit(Component component) {
                 frame.getStyles().put("backgroundColor", "#ffffff");
+                contentIndex = -1;
             }
 
             public DropAction dragMove(Component component, Manifest dragContent,

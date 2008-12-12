@@ -54,6 +54,7 @@ import pivot.collections.HashMap;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.wtk.Component.DecoratorSequence;
+import pivot.wtk.data.Manifest;
 import pivot.wtk.data.Transport;
 import pivot.wtk.effects.Decorator;
 
@@ -112,21 +113,20 @@ public abstract class ApplicationContext {
 
         private Point dragLocation = null;
         private Component dragDescendant = null;
-        private LocalManifest localDragManifest = null;
+
+        private Manifest dragManifest = null;
 
         private DropAction userDropAction = null;
         private Component dropDescendant = null;
 
         private DropTargetListener dropTargetListener = new DropTargetListener() {
-            private RemoteManifest remoteDragManifest = null;
-
             public void dragEnter(DropTargetDragEvent event) {
                 if (dragDescendant != null) {
-                    throw new IllegalStateException("Local drag source already exists.");
+                    throw new IllegalStateException("Local drag already in progress.");
                 }
 
                 // Initialize drag state
-                remoteDragManifest = new RemoteManifest(event.getTransferable());
+                dragManifest = new RemoteManifest(event.getTransferable());
 
                 // Initialize drop state
                 userDropAction = getDropAction(event.getDropAction());
@@ -139,7 +139,7 @@ public abstract class ApplicationContext {
 
                 if (dropDescendant != null) {
                     DropTarget dropTarget = dropDescendant.getDropTarget();
-                    dropAction = dropTarget.dragEnter(dropDescendant, remoteDragManifest,
+                    dropAction = dropTarget.dragEnter(dropDescendant, dragManifest,
                         getSupportedDropActions(event.getSourceActions()), userDropAction);
                 }
 
@@ -152,7 +152,7 @@ public abstract class ApplicationContext {
 
             public void dragExit(DropTargetEvent event) {
                 // Clear drag state
-                remoteDragManifest = null;
+                dragManifest = null;
 
                 // Clear drop state
                 userDropAction = null;
@@ -167,7 +167,40 @@ public abstract class ApplicationContext {
 
             public void dragOver(DropTargetDragEvent event) {
                 java.awt.Point location = event.getLocation();
-                DropAction dropAction = handleDragMove(location.x, location.y);
+
+                // Get the previous and current drop descendant and call
+                // move or exit/enter as appropriate
+                Component previousDropDescendant = dropDescendant;
+                dropDescendant = getDropDescendant(location.x, location.y);
+
+                DropAction dropAction = null;
+
+                if (previousDropDescendant == dropDescendant) {
+                    if (dropDescendant != null) {
+                        DropTarget dropTarget = dropDescendant.getDropTarget();
+
+                        Point dropLocation = dropDescendant.mapPointFromAncestor(display,
+                            location.x, location.y);
+                        dropAction = dropTarget.dragMove(dropDescendant, dragManifest,
+                            getSupportedDropActions(event.getSourceActions()),
+                            dropLocation.x, dropLocation.y, userDropAction);
+                    }
+                } else {
+                    if (previousDropDescendant != null) {
+                        DropTarget previousDropTarget = previousDropDescendant.getDropTarget();
+                        previousDropTarget.dragExit(previousDropDescendant);
+                    }
+
+                    if (dropDescendant != null) {
+                        DropTarget dropTarget = dropDescendant.getDropTarget();
+                        dropAction = dropTarget.dragEnter(dropDescendant, dragManifest,
+                            getSupportedDropActions(event.getSourceActions()),
+                            userDropAction);
+                    }
+                }
+
+                // Update cursor
+                setCursor(getDropCursor(dropAction));
 
                 if (dropAction == null) {
                     event.rejectDrag();
@@ -187,7 +220,7 @@ public abstract class ApplicationContext {
                         location.x, location.y);
 
                     DropTarget dropTarget = dropDescendant.getDropTarget();
-                    dropAction = dropTarget.userDropActionChange(dropDescendant, remoteDragManifest,
+                    dropAction = dropTarget.userDropActionChange(dropDescendant, dragManifest,
                         getSupportedDropActions(event.getSourceActions()), dropLocation.x, dropLocation.y,
                         userDropAction);
                 }
@@ -213,13 +246,13 @@ public abstract class ApplicationContext {
                     // Simulate a user drop action change to get the current drop action
                     int supportedDropActions = getSupportedDropActions(event.getSourceActions());
 
-                    dropAction = dropTarget.userDropActionChange(dropDescendant, remoteDragManifest,
+                    dropAction = dropTarget.userDropActionChange(dropDescendant, dragManifest,
                         supportedDropActions, dropLocation.x, dropLocation.y, userDropAction);
 
                     if (dropAction != null) {
                         // Perform the drop
                         event.acceptDrop(getNativeDropAction(dropAction));
-                        dropTarget.drop(dropDescendant, remoteDragManifest,
+                        dropTarget.drop(dropDescendant, dragManifest,
                             supportedDropActions, dropLocation.x, dropLocation.y, userDropAction);
                     }
                 }
@@ -234,7 +267,7 @@ public abstract class ApplicationContext {
                 setCursor(java.awt.Cursor.getDefaultCursor());
 
                 // Clear drag state
-                remoteDragManifest = null;
+                dragManifest = null;
 
                 // Clear drop state
                 dropDescendant = null;
@@ -438,44 +471,6 @@ public abstract class ApplicationContext {
             }
         }
 
-        private DropAction handleDragMove(int x, int y) {
-            DragSource dragSource = dragDescendant.getDragSource();
-
-            // Get the previous and current drop descendant and call
-            // move or exit/enter as appropriate
-            Component previousDropDescendant = dropDescendant;
-            dropDescendant = getDropDescendant(x, y);
-
-            DropAction dropAction = null;
-
-            if (previousDropDescendant == dropDescendant) {
-                if (dropDescendant != null) {
-                    DropTarget dropTarget = dropDescendant.getDropTarget();
-
-                    Point dropLocation = dropDescendant.mapPointFromAncestor(display, x, y);
-                    dropAction = dropTarget.dragMove(dropDescendant, localDragManifest,
-                        dragSource.getSupportedDropActions(),
-                        dropLocation.x, dropLocation.y, userDropAction);
-                }
-            } else {
-                if (previousDropDescendant != null) {
-                    DropTarget previousDropTarget = previousDropDescendant.getDropTarget();
-                    previousDropTarget.dragExit(previousDropDescendant);
-                }
-
-                if (dropDescendant != null) {
-                    DropTarget dropTarget = dropDescendant.getDropTarget();
-                    dropAction = dropTarget.dragEnter(dropDescendant, localDragManifest,
-                        dragSource.getSupportedDropActions(), userDropAction);
-                }
-            }
-
-            // Update cursor
-            setCursor(getDropCursor(dropAction));
-
-            return dropAction;
-        }
-
         private Component getDropDescendant(int x, int y) {
             Component dropDescendant = display.getDescendantAt(x, y);
 
@@ -671,7 +666,7 @@ public abstract class ApplicationContext {
                             dragSource.endDrag(dragDescendant, null);
                         } else {
                             DropTarget dropTarget = dropDescendant.getDropTarget();
-                            DropAction dropAction = dropTarget.drop(dropDescendant, localDragManifest,
+                            DropAction dropAction = dropTarget.drop(dropDescendant, dragManifest,
                                 dragSource.getSupportedDropActions(), x, y, getUserDropAction(event));
                             dragSource.endDrag(dragDescendant, dropAction);
                         }
@@ -681,8 +676,10 @@ public abstract class ApplicationContext {
                         // Clear the drag state
                         dragDescendant = null;
 
+                        LocalManifest localDragManifest = (LocalManifest)dragManifest;
                         localDragManifest.dispose();
-                        localDragManifest = null;
+
+                        dragManifest = null;
 
                         // Clear the drop state
                         userDropAction = null;
@@ -745,18 +742,18 @@ public abstract class ApplicationContext {
                                 // There was nothing to drag, so clear the drag location
                                 dragLocation = null;
                             } else {
-                                Point dragLocation = dragDescendant.mapPointFromAncestor(display, x, y);
                                 DragSource dragSource = dragDescendant.getDragSource();
+                                dragLocation = dragDescendant.mapPointFromAncestor(display, x, y);
 
                                 if (dragSource.beginDrag(dragDescendant, dragLocation.x, dragLocation.y)) {
                                     // A drag has started
                                     if (dragSource.isNative()) {
-                                        startNativeDrag(dragSource, event);
-
-                                        // Clear the drag state since it is not used
-                                        // during native drags
-                                        dragSource = null;
+                                        // Clear the drag state since it is not used for
+                                        // native drags
+                                        dragDescendant = null;
                                         dragLocation = null;
+
+                                        startNativeDrag(dragSource, event);
                                     } else {
                                         if (dragSource.getRepresentation() != null
                                             && dragSource.getOffset() == null) {
@@ -770,7 +767,7 @@ public abstract class ApplicationContext {
 
                                         // Create a local manifest to wrap the content
                                         Sequence<Transport> dragContent = dragSource.getContent();
-                                        localDragManifest = new LocalManifest(dragContent);
+                                        dragManifest = new LocalManifest(dragContent);
 
                                         // Get the initial user drop action
                                         userDropAction = getUserDropAction(event);
@@ -783,14 +780,46 @@ public abstract class ApplicationContext {
                                     }
                                 } else {
                                     // Clear the drag state
-                                    dragSource = null;
+                                    dragDescendant = null;
                                     dragLocation = null;
                                 }
                             }
                         }
                     } else {
                         if (dragLocation != null) {
-                            handleDragMove(x, y);
+                            DragSource dragSource = dragDescendant.getDragSource();
+
+                            // Get the previous and current drop descendant and call
+                            // move or exit/enter as appropriate
+                            Component previousDropDescendant = dropDescendant;
+                            dropDescendant = getDropDescendant(x, y);
+
+                            DropAction dropAction = null;
+
+                            if (previousDropDescendant == dropDescendant) {
+                                if (dropDescendant != null) {
+                                    DropTarget dropTarget = dropDescendant.getDropTarget();
+
+                                    Point dropLocation = dropDescendant.mapPointFromAncestor(display, x, y);
+                                    dropAction = dropTarget.dragMove(dropDescendant, dragManifest,
+                                        dragSource.getSupportedDropActions(),
+                                        dropLocation.x, dropLocation.y, userDropAction);
+                                }
+                            } else {
+                                if (previousDropDescendant != null) {
+                                    DropTarget previousDropTarget = previousDropDescendant.getDropTarget();
+                                    previousDropTarget.dragExit(previousDropDescendant);
+                                }
+
+                                if (dropDescendant != null) {
+                                    DropTarget dropTarget = dropDescendant.getDropTarget();
+                                    dropAction = dropTarget.dragEnter(dropDescendant, dragManifest,
+                                        dragSource.getSupportedDropActions(), userDropAction);
+                                }
+                            }
+
+                            // Update cursor
+                            setCursor(getDropCursor(dropAction));
 
                             // Repaint the drag visual
                             repaintDragRepresentation();
@@ -935,7 +964,7 @@ public abstract class ApplicationContext {
 
                         Point dropLocation = dropDescendant.mapPointFromAncestor(display,
                             Mouse.getX(), Mouse.getY());
-                        dropTarget.userDropActionChange(dropDescendant, localDragManifest,
+                        dropTarget.userDropActionChange(dropDescendant, dragManifest,
                             dragSource.getSupportedDropActions(),
                             dropLocation.x, dropLocation.y, userDropAction);
                     }

@@ -1111,36 +1111,38 @@ public class TerraTextInputSkin extends ComponentSkin
             // "Paste"
             Manifest clipboardContent = Clipboard.getContent();
 
-            int textIndex = clipboardContent.getIndex("text/plain");
-            if (textIndex != -1) {
-                // Paste the string representation of the content
-                MIMEType mimeType = MIMEType.decode(clipboardContent.getMIMEType(textIndex));
-                PlainTextSerializer serializer = new PlainTextSerializer(mimeType.get("charset"));
+            if (clipboardContent != null) {
+                int textIndex = clipboardContent.getIndex("text/plain");
+                if (textIndex != -1) {
+                    // Paste the string representation of the content
+                    MIMEType mimeType = MIMEType.decode(clipboardContent.getMIMEType(textIndex));
+                    PlainTextSerializer serializer = new PlainTextSerializer(mimeType.get("charset"));
 
-                Manifest.ReadTask readTask = new Manifest.ReadTask(clipboardContent, textIndex, serializer);
+                    Manifest.ReadTask readTask = new Manifest.ReadTask(clipboardContent, textIndex, serializer);
 
-                String text = null;
-                try {
-                    text = (String)readTask.execute();
-                } catch(TaskExecutionException exception) {
-                    // No-op; we couldn't retrieve the text
-                }
+                    String text = null;
+                    try {
+                        text = (String)readTask.execute();
+                    } catch(TaskExecutionException exception) {
+                        // No-op; we couldn't retrieve the text
+                    }
 
-                if (text != null) {
-                    if ((text.length()
-                        + textInput.getCharacterCount()) > textInput.getMaximumLength()) {
-                        ApplicationContext.beep();
-                    } else {
-                        // Remove any existing selection
-                        int selectionLength = textInput.getSelectionLength();
-                        if (selectionLength > 0) {
-                            textInput.removeText(textInput.getSelectionStart(),
-                                selectionLength);
+                    if (text != null) {
+                        if ((text.length()
+                            + textInput.getCharacterCount()) > textInput.getMaximumLength()) {
+                            ApplicationContext.beep();
+                        } else {
+                            // Remove any existing selection
+                            int selectionLength = textInput.getSelectionLength();
+                            if (selectionLength > 0) {
+                                textInput.removeText(textInput.getSelectionStart(),
+                                    selectionLength);
+                            }
+
+                            // Insert the clipboard contents
+                            int selectionStart = textInput.getSelectionStart();
+                            textInput.insertText(text, selectionStart);
                         }
-
-                        // Insert the clipboard contents
-                        int selectionStart = textInput.getSelectionStart();
-                        textInput.insertText(text, selectionStart);
                     }
                 }
             }

@@ -47,7 +47,8 @@ public interface DropTarget {
     public void dragExit(Component component);
 
     /**
-     * Called when mouse is moved over a drop target during a drag operation.
+     * Called when the mouse is moved while positioned over a drop target
+     * during a drag operation.
      *
      * @param component
      * @param dragContent
@@ -64,7 +65,8 @@ public interface DropTarget {
         int supportedDropActions, int x, int y, DropAction userDropAction);
 
     /**
-     * Called when the user drop action has changed.
+     * Called when the user drop action changes while the mouse is positioned
+     * over a drop target during a drag operation.
      *
      * @param component
      * @param dragContent
@@ -91,7 +93,8 @@ public interface DropTarget {
      * @param userDropAction
      *
      * @return
-     * The drop action used to perform the drop.
+     * The drop action used to perform the drop, or <tt>null</tt> if the target
+     * rejected the drop.
      */
     public DropAction drop(Component component, Manifest dragContent,
         int supportedDropActions, int x, int y, DropAction userDropAction);
