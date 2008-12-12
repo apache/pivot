@@ -111,7 +111,7 @@ public abstract class ApplicationContext {
         private Component focusedComponent = null;
 
         private Point dragLocation = null;
-        private DragSource dragSource = null;
+        private Component dragDescendant = null;
         private LocalManifest localDragManifest = null;
 
         private DropAction userDropAction = null;
@@ -121,12 +121,11 @@ public abstract class ApplicationContext {
             private RemoteManifest remoteDragManifest = null;
 
             public void dragEnter(DropTargetDragEvent event) {
-                if (dragSource != null) {
-                    throw new IllegalStateException("Drag source already exists.");
+                if (dragDescendant != null) {
+                    throw new IllegalStateException("Local drag source already exists.");
                 }
 
                 // Initialize drag state
-                dragSource = new NativeDragSource(event);
                 remoteDragManifest = new RemoteManifest(event.getTransferable());
 
                 // Initialize drop state
@@ -141,7 +140,7 @@ public abstract class ApplicationContext {
                 if (dropDescendant != null) {
                     DropTarget dropTarget = dropDescendant.getDropTarget();
                     dropAction = dropTarget.dragEnter(dropDescendant, remoteDragManifest,
-                        dragSource.getSupportedDropActions(), userDropAction);
+                        getSupportedDropActions(event.getSourceActions()), userDropAction);
                 }
 
                 if (dropAction == null) {
@@ -153,7 +152,6 @@ public abstract class ApplicationContext {
 
             public void dragExit(DropTargetEvent event) {
                 // Clear drag state
-                dragSource = null;
                 remoteDragManifest = null;
 
                 // Clear drop state
@@ -190,8 +188,8 @@ public abstract class ApplicationContext {
 
                     DropTarget dropTarget = dropDescendant.getDropTarget();
                     dropAction = dropTarget.userDropActionChange(dropDescendant, remoteDragManifest,
-                        dragSource.getSupportedDropActions(),
-                        dropLocation.x, dropLocation.y, userDropAction);
+                        getSupportedDropActions(event.getSourceActions()), dropLocation.x, dropLocation.y,
+                        userDropAction);
                 }
 
                 if (dropAction == null) {
@@ -213,7 +211,7 @@ public abstract class ApplicationContext {
                     DropTarget dropTarget = dropDescendant.getDropTarget();
 
                     // Simulate a user drop action change to get the current drop action
-                    int supportedDropActions = dragSource.getSupportedDropActions();
+                    int supportedDropActions = getSupportedDropActions(event.getSourceActions());
 
                     dropAction = dropTarget.userDropActionChange(dropDescendant, remoteDragManifest,
                         supportedDropActions, dropLocation.x, dropLocation.y, userDropAction);
@@ -236,7 +234,6 @@ public abstract class ApplicationContext {
                 setCursor(java.awt.Cursor.getDefaultCursor());
 
                 // Clear drag state
-                dragSource = null;
                 remoteDragManifest = null;
 
                 // Clear drop state
@@ -414,7 +411,8 @@ public abstract class ApplicationContext {
             }
 
             // Paint the drag visual
-            if (dragSource != null) {
+            if (dragDescendant != null) {
+                DragSource dragSource = dragDescendant.getDragSource();
                 Visual dragRepresentation = dragSource.getRepresentation();
 
                 if (dragRepresentation != null) {
@@ -429,6 +427,7 @@ public abstract class ApplicationContext {
         }
 
         private void repaintDragRepresentation() {
+            DragSource dragSource = dragDescendant.getDragSource();
             Visual dragRepresentation = dragSource.getRepresentation();
 
             if (dragRepresentation != null) {
@@ -440,6 +439,8 @@ public abstract class ApplicationContext {
         }
 
         private DropAction handleDragMove(int x, int y) {
+            DragSource dragSource = dragDescendant.getDragSource();
+
             // Get the previous and current drop descendant and call
             // move or exit/enter as appropriate
             Component previousDropDescendant = dropDescendant;
@@ -659,24 +660,26 @@ public abstract class ApplicationContext {
                 }
 
                 case MouseEvent.MOUSE_RELEASED: {
-                    if (dragSource == null) {
+                    if (dragDescendant == null) {
                         display.mouseUp(button, x, y);
                     } else {
+                        DragSource dragSource = dragDescendant.getDragSource();
+
                         repaintDragRepresentation();
 
                         if (dropDescendant == null) {
-                            dragSource.endDrag(dropDescendant, null);
+                            dragSource.endDrag(dragDescendant, null);
                         } else {
                             DropTarget dropTarget = dropDescendant.getDropTarget();
                             DropAction dropAction = dropTarget.drop(dropDescendant, localDragManifest,
                                 dragSource.getSupportedDropActions(), x, y, getUserDropAction(event));
-                            dragSource.endDrag(dropDescendant, dropAction);
+                            dragSource.endDrag(dragDescendant, dropAction);
                         }
 
                         setCursor(java.awt.Cursor.getDefaultCursor());
 
                         // Clear the drag state
-                        dragSource = null;
+                        dragDescendant = null;
 
                         localDragManifest.dispose();
                         localDragManifest = null;
@@ -719,7 +722,7 @@ public abstract class ApplicationContext {
             switch (event.getID()) {
                 case MouseEvent.MOUSE_MOVED:
                 case MouseEvent.MOUSE_DRAGGED: {
-                    if (dragSource == null) {
+                    if (dragDescendant == null) {
                         // A drag is not active, so propagate the event to the display
                         display.mouseMove(x, y);
 
@@ -730,47 +733,31 @@ public abstract class ApplicationContext {
                                 || Math.abs(y - dragLocation.y) > dragThreshold)) {
                             // The user has dragged the mouse past the drag threshold; try
                             // to find a drag source
-                            Component dragDescendant = display.getDescendantAt(dragLocation.x,
+                            dragDescendant = display.getDescendantAt(dragLocation.x,
                                 dragLocation.y);
 
-                            if (dragDescendant != null) {
-                                dragLocation = dragDescendant.mapPointFromAncestor(display,
-                                    dragLocation.x, dragLocation.y);
+                            while (dragDescendant != null
+                                && dragDescendant.getDragSource() == null) {
+                                dragDescendant = dragDescendant.getParent();
+                            }
 
-                                while (dragDescendant != null
-                                    && dragSource == null) {
-                                    dragSource = dragDescendant.getDragSource();
+                            if (dragDescendant == null) {
+                                // There was nothing to drag, so clear the drag location
+                                dragLocation = null;
+                            } else {
+                                Point dragLocation = dragDescendant.mapPointFromAncestor(display, x, y);
+                                DragSource dragSource = dragDescendant.getDragSource();
 
-                                    if (dragSource != null
-                                        && !dragSource.beginDrag(dragDescendant, dragLocation.x,
-                                            dragLocation.y)) {
-                                        // The drag source rejected the drag
-                                        dragSource = null;
-                                    }
-
-                                    if (dragSource == null) {
-                                        // A drag source has not been found; keep walking
-                                        // up the tree
-                                        dragLocation.x += dragDescendant.getX();
-                                        dragLocation.y += dragDescendant.getY();
-
-                                        dragDescendant = dragDescendant.getParent();
-                                    }
-                                }
-
-                                if (dragSource == null) {
-                                    // There was nothing to drag, so clear the drag location
-                                    dragLocation = null;
-                                } else {
+                                if (dragSource.beginDrag(dragDescendant, dragLocation.x, dragLocation.y)) {
+                                    // A drag has started
                                     if (dragSource.isNative()) {
                                         startNativeDrag(dragSource, event);
 
-                                        // Clear the drag source, since we may need to create a new
-                                        // one wrapping the native drag; also clear the drag location
+                                        // Clear the drag state since it is not used
+                                        // during native drags
                                         dragSource = null;
                                         dragLocation = null;
                                     } else {
-                                        // A drag has started
                                         if (dragSource.getRepresentation() != null
                                             && dragSource.getOffset() == null) {
                                             throw new IllegalStateException("Drag offset is required when a "
@@ -794,6 +781,10 @@ public abstract class ApplicationContext {
 
                                         repaintDragRepresentation();
                                     }
+                                } else {
+                                    // Clear the drag state
+                                    dragSource = null;
+                                    dragLocation = null;
                                 }
                             }
                         }
@@ -841,7 +832,7 @@ public abstract class ApplicationContext {
             // Process the event
             switch (event.getID()) {
                 case MouseEvent.MOUSE_WHEEL: {
-                    if (dragSource == null) {
+                    if (dragDescendant == null) {
                         display.mouseWheel(scrollType, event.getScrollAmount(),
                             event.getWheelRotation(), x, y);
                     }
@@ -881,7 +872,7 @@ public abstract class ApplicationContext {
                 }
             }
 
-            if (dragSource == null) {
+            if (dragDescendant == null) {
                 // Process the event
                 Component focusedComponent = Component.getFocusedComponent();
 
@@ -932,6 +923,8 @@ public abstract class ApplicationContext {
                     }
                 }
             } else {
+                DragSource dragSource = dragDescendant.getDragSource();
+
                 // If the user drop action changed, notify the drop descendant
                 if (dropDescendant != null) {
                     DropAction previousUserDropAction = userDropAction;
@@ -975,54 +968,6 @@ public abstract class ApplicationContext {
         public void run() {
             queueCallback(runnable, true);
             clearTimeout(timeoutID);
-        }
-    }
-
-    private static class NativeDragSource implements DragSource {
-        private int supportedDropActions;
-
-        public NativeDragSource(DropTargetDragEvent event) {
-            int awtSourceActions = event.getSourceActions();
-
-            if ((awtSourceActions & DnDConstants.ACTION_COPY) > 0) {
-                supportedDropActions |= DropAction.COPY.getMask();
-            }
-
-            if ((awtSourceActions & DnDConstants.ACTION_MOVE) > 0) {
-                supportedDropActions |= DropAction.MOVE.getMask();
-            }
-
-            if ((awtSourceActions & DnDConstants.ACTION_LINK) > 0) {
-                supportedDropActions |= DropAction.LINK.getMask();
-            }
-        }
-
-        public boolean beginDrag(Component component, int x, int y) {
-            throw new UnsupportedOperationException();
-        }
-
-        public void endDrag(Component component, DropAction dropAction) {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean isNative() {
-            throw new UnsupportedOperationException();
-        }
-
-        public Sequence<Transport> getContent() {
-            throw new UnsupportedOperationException();
-        }
-
-        public Visual getRepresentation() {
-            return null;
-        }
-
-        public Point getOffset() {
-            return null;
-        }
-
-        public int getSupportedDropActions() {
-            return supportedDropActions;
         }
     }
 
@@ -1376,6 +1321,24 @@ public abstract class ApplicationContext {
         }
 
         return dropAction;
+    }
+
+    private static int getSupportedDropActions(int sourceActions) {
+        int dropActions = 0;
+
+        if ((sourceActions & DnDConstants.ACTION_COPY) > 0) {
+            dropActions |= DropAction.COPY.getMask();
+        }
+
+        if ((sourceActions & DnDConstants.ACTION_MOVE) > 0) {
+            dropActions |= DropAction.MOVE.getMask();
+        }
+
+        if ((sourceActions & DnDConstants.ACTION_LINK) > 0) {
+            dropActions |= DropAction.LINK.getMask();
+        }
+
+        return dropActions;
     }
 
     private static int getNativeDropAction(DropAction dropAction) {

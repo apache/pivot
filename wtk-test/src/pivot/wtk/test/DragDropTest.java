@@ -133,11 +133,11 @@ public class DragDropTest implements Application {
                             break;
                         }
                     }
+                }
 
-                    if (contentIndex != -1) {
-                        dropAction = DropAction.MOVE;
-                        component.getStyles().put("backgroundColor", IMAGE_VIEW_DROP_HIGHLIGHT_COLOR);
-                    }
+                if (contentIndex != -1) {
+                    dropAction = DropAction.MOVE;
+                    component.getStyles().put("backgroundColor", IMAGE_VIEW_DROP_HIGHLIGHT_COLOR);
                 }
 
                 return dropAction;
@@ -145,6 +145,7 @@ public class DragDropTest implements Application {
 
             public void dragExit(Component component) {
                 component.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
+                contentIndex = -1;
             }
 
             public DropAction dragMove(Component component, Manifest dragContent,

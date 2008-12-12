@@ -417,11 +417,11 @@ public class Demo implements Application {
                             break;
                         }
                     }
+                }
 
-                    if (contentIndex != -1) {
-                        dropAction = DropAction.MOVE;
-                        component.getStyles().put("backgroundColor", "#f0e68c");
-                    }
+                if (contentIndex != -1) {
+                    dropAction = DropAction.MOVE;
+                    component.getStyles().put("backgroundColor", "#f0e68c");
                 }
 
                 return dropAction;
@@ -429,6 +429,7 @@ public class Demo implements Application {
 
             public void dragExit(Component component) {
                 component.getStyles().put("backgroundColor", null);
+                contentIndex = -1;
             }
 
             public DropAction dragMove(Component component, Manifest dragContent,
