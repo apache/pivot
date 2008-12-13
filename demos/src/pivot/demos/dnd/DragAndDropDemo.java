@@ -4,7 +4,9 @@ import java.awt.image.BufferedImage;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
+import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.net.URIListSerializer;
 import pivot.serialization.PlainTextSerializer;
 import pivot.util.MIMEType;
 import pivot.util.concurrent.TaskExecutionException;
@@ -46,11 +48,15 @@ public class DragAndDropDemo implements Application {
             private ArrayList<Transport> content = null;
 
             public boolean beginDrag(Component component, int x, int y) {
-                content = new ArrayList<Transport>();
+                String text = label.getText();
+                if (text != null) {
+                    content = new ArrayList<Transport>();
 
-                PlainTextSerializer serializer = new PlainTextSerializer();
-                content.add(new ByteArrayTransport(label.getText(), serializer));
-                return true;
+                    PlainTextSerializer serializer = new PlainTextSerializer();
+                    content.add(new ByteArrayTransport(label.getText(), serializer));
+                }
+
+                return (content != null);
             }
 
             public void endDrag(Component component, DropAction dropAction) {
@@ -83,7 +89,9 @@ public class DragAndDropDemo implements Application {
 
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
-                contentIndex = dragContent.getIndex("text/plain");
+                if (DropAction.COPY.isSelected(supportedDropActions)) {
+                    contentIndex = dragContent.getIndex("text/plain");
+                }
 
                 return (contentIndex == -1 ? null : DropAction.COPY);
             }
@@ -112,7 +120,6 @@ public class DragAndDropDemo implements Application {
                     Manifest.ReadTask readTask = new Manifest.ReadTask(dragContent, contentIndex, serializer);
 
                     try {
-                        Label label = (Label)component;
                         label.setText((String)readTask.execute());
                     } catch(TaskExecutionException exception) {
                         // No-op; we couldn't retrieve the text
@@ -169,9 +176,6 @@ public class DragAndDropDemo implements Application {
             private ArrayList<Transport> content = null;
 
             public boolean beginDrag(Component component, int x, int y) {
-                boolean beginDrag = false;
-
-                ImageView imageView = (ImageView)component;
                 Image image = imageView.getImage();
 
                 if (image instanceof Picture) {
@@ -181,11 +185,9 @@ public class DragAndDropDemo implements Application {
                     BufferedImageSerializer serializer = new BufferedImageSerializer();
                     serializer.setOutputFormat(BufferedImageSerializer.Format.PNG);
                     content.add(new ByteArrayTransport(picture.getBufferedImage(), serializer));
-
-                    beginDrag = true;
                 }
 
-                return beginDrag;
+                return (content != null);
             }
 
             public void endDrag(Component component, DropAction dropAction) {
@@ -218,22 +220,8 @@ public class DragAndDropDemo implements Application {
 
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
-                // Identify the first stream we can read with a buffered image
-                // serializer
-                ImageView imageView = (ImageView)component;
-                if (imageView.getImage() == null
-                    && DropAction.COPY.isSelected(supportedDropActions)) {
-                    for (int i = 0, n = dragContent.getLength(); i < n; i++) {
-                        String mimeType = dragContent.getMIMEType(i);
-
-                        if (mimeType.startsWith(BufferedImageSerializer.Format.BMP.getMIMEType())
-                            || mimeType.startsWith(BufferedImageSerializer.Format.GIF.getMIMEType())
-                            || mimeType.startsWith(BufferedImageSerializer.Format.JPEG.getMIMEType())
-                            || mimeType.startsWith(BufferedImageSerializer.Format.PNG.getMIMEType())) {
-                            contentIndex = i;
-                            break;
-                        }
-                    }
+                if (DropAction.COPY.isSelected(supportedDropActions)) {
+                    contentIndex = dragContent.getIndex(BufferedImageSerializer.Format.PNG.getMIMEType());
                 }
 
                 return (contentIndex == -1 ? null : DropAction.COPY);
@@ -258,8 +246,6 @@ public class DragAndDropDemo implements Application {
                 DropAction dropAction = null;
 
                 if (contentIndex != -1) {
-                    ImageView imageView = (ImageView)component;
-
                     BufferedImageSerializer serializer = new BufferedImageSerializer();
                     Manifest.ReadTask readTask = new Manifest.ReadTask(dragContent, contentIndex, serializer);
 
@@ -299,23 +285,16 @@ public class DragAndDropDemo implements Application {
                 Manifest clipboardContent = Clipboard.getContent();
 
                 if (clipboardContent != null) {
-                    for (int i = 0, n = clipboardContent.getLength(); i < n; i++) {
-                        String mimeType = clipboardContent.getMIMEType(i);
+                    int imageIndex = clipboardContent.getIndex(BufferedImageSerializer.Format.PNG.getMIMEType());
 
-                        if (mimeType.startsWith(BufferedImageSerializer.Format.BMP.getMIMEType())
-                            || mimeType.startsWith(BufferedImageSerializer.Format.GIF.getMIMEType())
-                            || mimeType.startsWith(BufferedImageSerializer.Format.JPEG.getMIMEType())
-                            || mimeType.startsWith(BufferedImageSerializer.Format.PNG.getMIMEType())) {
-                            BufferedImageSerializer serializer = new BufferedImageSerializer();
-                            Manifest.ReadTask readTask = new Manifest.ReadTask(clipboardContent, i, serializer);
+                    if (imageIndex != -1) {
+                        BufferedImageSerializer serializer = new BufferedImageSerializer();
+                        Manifest.ReadTask readTask = new Manifest.ReadTask(clipboardContent, imageIndex, serializer);
 
-                            try {
-                                imageView.setImage(new Picture((BufferedImage)readTask.execute()));
-                            } catch(TaskExecutionException exception) {
-                                // No-op; we couldn't set the image
-                            }
-
-                            break;
+                        try {
+                            imageView.setImage(new Picture((BufferedImage)readTask.execute()));
+                        } catch(TaskExecutionException exception) {
+                            // No-op; we couldn't set the image
                         }
                     }
                 }
@@ -324,14 +303,56 @@ public class DragAndDropDemo implements Application {
 
         // Files
         final ListView listView = (ListView)wtkxSerializer.getObjectByName("listView");
-        listView.setDragSource(null); // TODO
+        listView.setDragSource(new DragSource() {
+            private ArrayList<Transport> content = null;
+
+            public boolean beginDrag(Component component, int x, int y) {
+                ListView listView = (ListView)component;
+                List<?> urlList = listView.getListData();
+
+                if (urlList.getLength() > 0) {
+                    content = new ArrayList<Transport>();
+
+                    URIListSerializer serializer = new URIListSerializer();
+                    content.add(new ByteArrayTransport(urlList, serializer));
+                }
+
+                return (content != null);
+            }
+
+            public void endDrag(Component component, DropAction dropAction) {
+                content = null;
+            }
+
+            public boolean isNative() {
+                return true;
+            }
+
+            public Sequence<Transport> getContent() {
+                return content;
+            }
+
+            public Visual getRepresentation() {
+                return null;
+            }
+
+            public Point getOffset() {
+                return null;
+            }
+
+            public int getSupportedDropActions() {
+                return DropAction.COPY.getMask();
+            }
+        });
 
         listView.setDropTarget(new DropTarget() {
             private int contentIndex = -1;
 
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
-                // TODO
+                if (DropAction.COPY.isSelected(supportedDropActions)) {
+                    contentIndex = dragContent.getIndex("text/uri-list");
+                }
 
                 return (contentIndex == -1 ? null : DropAction.COPY);
             }
@@ -354,7 +375,18 @@ public class DragAndDropDemo implements Application {
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                // TODO
+                if (contentIndex != -1) {
+                    MIMEType mimeType = MIMEType.decode(dragContent.getMIMEType(contentIndex));
+                    URIListSerializer serializer = new URIListSerializer(mimeType.get("charset"));
+                    Manifest.ReadTask readTask = new Manifest.ReadTask(dragContent, contentIndex, serializer);
+
+                    try {
+                        ListView listView = (ListView)component;
+                        listView.setListData((List<?>)readTask.execute());
+                    } catch(TaskExecutionException exception) {
+                        // No-op; we couldn't retrieve the list
+                    }
+                }
 
                 dragExit(component);
 

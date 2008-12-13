@@ -401,18 +401,12 @@ public class Demo implements Application {
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                // Identify the first stream we can read with a buffered image
-                // serializer
                 ImageView imageView = (ImageView)component;
                 if (imageView.getImage() == null
                     && DropAction.MOVE.isSelected(supportedDropActions)) {
                     for (int i = 0, n = dragContent.getLength(); i < n; i++) {
                         String mimeType = dragContent.getMIMEType(i);
-
-                        if (mimeType.startsWith(BufferedImageSerializer.Format.BMP.getMIMEType())
-                            || mimeType.startsWith(BufferedImageSerializer.Format.GIF.getMIMEType())
-                            || mimeType.startsWith(BufferedImageSerializer.Format.JPEG.getMIMEType())
-                            || mimeType.startsWith(BufferedImageSerializer.Format.PNG.getMIMEType())) {
+                        if (mimeType.startsWith(BufferedImageSerializer.Format.PNG.getMIMEType())) {
                             contentIndex = i;
                             break;
                         }

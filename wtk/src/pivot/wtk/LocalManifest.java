@@ -28,38 +28,6 @@ import pivot.wtk.data.Transport;
 class LocalManifest extends Manifest {
     private Sequence<Transport> content;
 
-    private Transferable transferable = new Transferable() {
-        public Object getTransferData(DataFlavor flavor) throws IOException {
-            int index = getIndex(flavor.getMimeType());
-            return (index == -1) ? null : getInputStream(index);
-        }
-
-        public DataFlavor[] getTransferDataFlavors() {
-            DataFlavor[] transferDataFlavors = new DataFlavor[content.getLength()];
-
-            for (int i = 0, n = content.getLength(); i < n; i++) {
-                Transport transport = content.get(i);
-                Serializer serializer = transport.getSerializer();
-                Object object = transport.getObject();
-                String mimeType = serializer.getMIMEType(object);
-
-                try {
-                    DataFlavor dataFlavor = new DataFlavor(mimeType);
-                    transferDataFlavors[i] = dataFlavor;
-                } catch(ClassNotFoundException exception) {
-                    // No-op; since we don't append a class name, InputStream
-                    // will be used by default and we shouldn't get here
-                }
-            }
-
-            return transferDataFlavors;
-        }
-
-        public boolean isDataFlavorSupported(DataFlavor flavor) {
-            return (getIndex(flavor.getMimeType()) != -1);
-        }
-    };
-
     public LocalManifest(Sequence<Transport> content) {
         assert (content != null);
         this.content = content;
@@ -67,6 +35,10 @@ class LocalManifest extends Manifest {
 
     @Override
     public String getMIMEType(int index) {
+        if (index < 0 || index >= content.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
         Transport transport = content.get(index);
         Object object = transport.getObject();
         Serializer serializer = transport.getSerializer();
@@ -76,6 +48,10 @@ class LocalManifest extends Manifest {
 
     @Override
     public InputStream getInputStream(int index) throws IOException {
+        if (index < 0 || index >= content.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
         return content.get(index).getInputStream();
     }
 
@@ -84,10 +60,7 @@ class LocalManifest extends Manifest {
         return content.getLength();
     }
 
-    public Transferable getTransferable() {
-        return transferable;
-    }
-
+    @Override
     public void dispose() {
         for (int i = 0, n = content.getLength(); i < n; i++) {
             Transport transport = content.get(i);
@@ -95,3 +68,40 @@ class LocalManifest extends Manifest {
         }
     }
 }
+
+class Export implements Transferable {
+    private LocalManifest localManifest;
+
+    public Export(LocalManifest localManifest) {
+        this.localManifest = localManifest;
+    }
+
+    public Object getTransferData(DataFlavor flavor) throws IOException {
+        int index = localManifest.getIndex(flavor.getMimeType());
+        return (index == -1) ? null : localManifest.getInputStream(index);
+    }
+
+    public DataFlavor[] getTransferDataFlavors() {
+        int n = localManifest.getLength();
+        DataFlavor[] transferDataFlavors = new DataFlavor[n];
+
+        for (int i = 0; i < n; i++) {
+            String mimeType = localManifest.getMIMEType(i);
+
+            try {
+                DataFlavor dataFlavor = new DataFlavor(mimeType);
+                transferDataFlavors[i] = dataFlavor;
+            } catch(ClassNotFoundException exception) {
+                // No-op; since we don't append a class name, InputStream
+                // will be used by default and we shouldn't get here
+            }
+        }
+
+        return transferDataFlavors;
+    }
+
+    public boolean isDataFlavorSupported(DataFlavor flavor) {
+        return (localManifest.getIndex(flavor.getMimeType()) != -1);
+    }
+}
+

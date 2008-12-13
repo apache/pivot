@@ -79,6 +79,7 @@ public class JSONSerializer implements Serializer {
         throws IOException, SerializationException {
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
         Object object = readObject(reader);
+        reader.close();
 
         return object;
     }

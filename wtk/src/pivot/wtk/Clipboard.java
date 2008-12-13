@@ -61,12 +61,16 @@ public final class Clipboard {
             throw new IllegalArgumentException("content is null");
         }
 
+        if (Clipboard.content != null) {
+            Clipboard.content.dispose();
+        }
+
         final LocalManifest localManifest = new LocalManifest(content);
 
         try {
             java.awt.datatransfer.Clipboard awtClipboard =
                 Toolkit.getDefaultToolkit().getSystemClipboard();
-            awtClipboard.setContents(localManifest.getTransferable(), new ClipboardOwner() {
+            awtClipboard.setContents(new Export(localManifest), new ClipboardOwner() {
                 public void lostOwnership(java.awt.datatransfer.Clipboard clipboard,
                     Transferable contents) {
                     localManifest.dispose();

@@ -154,4 +154,9 @@ public abstract class Manifest {
      * Returns the number of entries in the manifest.
      */
     public abstract int getLength();
+
+    /**
+     * Releases any resources currently being used by the manifest.
+     */
+    public abstract void dispose();
 }

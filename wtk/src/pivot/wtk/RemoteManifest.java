@@ -24,94 +24,96 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.net.URI;
+import java.net.URL;
 
 import pivot.collections.ArrayList;
-import pivot.collections.adapter.ListAdapter;
+import pivot.net.URIListSerializer;
 import pivot.serialization.PlainTextSerializer;
-import pivot.serialization.URIListSerializer;
 import pivot.util.MIMEType;
 import pivot.wtk.data.ByteArrayTransport;
 import pivot.wtk.data.Manifest;
+import pivot.wtk.data.Transport;
 import pivot.wtk.media.BufferedImageSerializer;
 
 class RemoteManifest extends Manifest {
-    private Transferable transferable;
-    private ArrayList<DataFlavor> content;
+    private class ContentProxy {
+        private DataFlavor dataFlavor;
+        private Transport transport = null;
 
-    private static BufferedImageSerializer bufferedImageSerializer = new BufferedImageSerializer();
-    private static URIListSerializer uriListSerializer = new URIListSerializer();
-
-    static {
-        bufferedImageSerializer.setOutputFormat(BufferedImageSerializer.Format.PNG);
-    }
-
-    public RemoteManifest(Transferable transferable) {
-        this.transferable = transferable;
-
-        // Extract applicable content
-        content = new ArrayList<DataFlavor>();
-
-        DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
-        for (int i = 0, n = transferDataFlavors.length; i < n; i++) {
-            DataFlavor dataFlavor = transferDataFlavors[i];
-            System.out.println(dataFlavor.getMimeType());
-
-            if (dataFlavor.equals(DataFlavor.imageFlavor)
-                || dataFlavor.equals(DataFlavor.javaFileListFlavor)
-                || dataFlavor.isRepresentationClassInputStream()) {
-                System.out.println(content.getLength() + " " + dataFlavor.getMimeType());
-                content.add(dataFlavor);
-            }
-        }
-    }
-
-    @Override
-    public String getMIMEType(int index) {
-        String mimeType;
-
-        DataFlavor dataFlavor = content.get(index);
-
-        if (dataFlavor.equals(DataFlavor.imageFlavor)) {
-            mimeType = bufferedImageSerializer.getMIMEType(null);
-        } else if (dataFlavor.equals(DataFlavor.javaFileListFlavor)) {
-            mimeType = uriListSerializer.getMIMEType(null);
-        } else {
-            mimeType = dataFlavor.getMimeType();
+        public ContentProxy(DataFlavor dataFlavor) {
+            this.dataFlavor = dataFlavor;
         }
 
-        return mimeType;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public InputStream getInputStream(int index) throws IOException {
-        InputStream inputStream = null;
-
-        try {
-            DataFlavor dataFlavor = content.get(index);
+        public String getMIMEType() {
+            String mimeType;
 
             if (dataFlavor.equals(DataFlavor.imageFlavor)) {
-                // Write the image to a memory buffer as a PNG
-                BufferedImage bufferedImage = (BufferedImage)transferable.getTransferData(dataFlavor);
-                ByteArrayTransport transport = new ByteArrayTransport(bufferedImage, bufferedImageSerializer);
+                mimeType = bufferedImageSerializer.getMIMEType(null);
+            } else if (dataFlavor.equals(DataFlavor.javaFileListFlavor)) {
+                mimeType = uriListSerializer.getMIMEType(null);
+            } else {
+                mimeType = dataFlavor.getMimeType();
+            }
+
+            return mimeType;
+        }
+
+        @SuppressWarnings("unchecked")
+        public InputStream getInputStream() throws IOException {
+            InputStream inputStream = null;
+
+            if (dataFlavor.equals(DataFlavor.imageFlavor)) {
+                if (transport == null) {
+                    // Write the image to a memory buffer as a PNG
+                    BufferedImage bufferedImage = null;
+                    try {
+                        bufferedImage = (BufferedImage)transferable.getTransferData(dataFlavor);
+                    } catch(UnsupportedFlavorException exception) {
+                        // No-op; shouldn't get here
+                    }
+
+                    transport = new ByteArrayTransport(bufferedImage, bufferedImageSerializer);
+                }
+
                 inputStream = transport.getInputStream();
             } else if (dataFlavor.equals(DataFlavor.javaFileListFlavor)) {
-                // Wrap the java.util.List<File> in a ListAdapter and
-                // write it to a memory buffer
-                java.util.List<File> fileList = (java.util.List<File>)transferable.getTransferData(dataFlavor);
-                ListAdapter<File> fileListAdapter = new ListAdapter<File>(fileList);
-                ByteArrayTransport transport = new ByteArrayTransport(fileListAdapter, uriListSerializer);
+                if (transport == null) {
+                    // Wrap the java.util.List<File> in a ListAdapter and write it
+                    // to a memory buffer
+                    java.util.List<File> fileList = null;
+                    try {
+                        fileList = (java.util.List<File>)transferable.getTransferData(dataFlavor);
+                    } catch(UnsupportedFlavorException exception) {
+                        // No-op; shouldn't get here
+                    }
+
+                    ArrayList<URL> urlList = new ArrayList<URL>();
+                    for (File file : fileList) {
+                        URI uri = file.toURI();
+                        urlList.add(uri.toURL());
+                    }
+
+                    transport = new ByteArrayTransport(urlList, uriListSerializer);
+                }
+
                 inputStream = transport.getInputStream();
             } else {
-                Object transferData = transferable.getTransferData(dataFlavor);
+                Object transferData = null;
+                try {
+                    transferData = transferable.getTransferData(dataFlavor);
+                } catch(UnsupportedFlavorException exception) {
+                    // No-op; shouldn't get here
+                }
 
                 if (transferData instanceof InputStream) {
                     inputStream = (InputStream)transferData;
                 } else {
                     // NOTE This is a workaround for Sun bug #4147507
                     // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4147507
+                    assert (transferData instanceof Reader);
 
-                    if (transferData instanceof Reader) {
+                    if (transport == null) {
                         // Read the data into a string buffer
                         Reader reader = (Reader)transferData;
                         BufferedReader bufferedReader = new BufferedReader(reader);
@@ -131,20 +133,80 @@ class RemoteManifest extends Manifest {
 
                         MIMEType mimeType = MIMEType.decode(dataFlavor.getMimeType());
                         PlainTextSerializer serializer = new PlainTextSerializer(mimeType.get("charset"));
-                        ByteArrayTransport transport = new ByteArrayTransport(text, serializer);
-                        inputStream = transport.getInputStream();
+                        transport = new ByteArrayTransport(text, serializer);
                     }
+
+                    inputStream = transport.getInputStream();
                 }
             }
-        } catch(UnsupportedFlavorException exception) {
-            // No-op; shouldn't get here
+
+            return inputStream;
         }
 
-        return inputStream;
+        public void dispose() {
+            if (transport != null) {
+                transport.dispose();
+            }
+        }
+    }
+
+    private Transferable transferable;
+    private ArrayList<ContentProxy> content;
+
+    private static BufferedImageSerializer bufferedImageSerializer = new BufferedImageSerializer();
+    private static URIListSerializer uriListSerializer = new URIListSerializer();
+
+    static {
+        bufferedImageSerializer.setOutputFormat(BufferedImageSerializer.Format.PNG);
+    }
+
+    public RemoteManifest(Transferable transferable) {
+        this.transferable = transferable;
+
+        // Extract applicable content
+        content = new ArrayList<ContentProxy>();
+
+        DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
+        for (int i = 0, n = transferDataFlavors.length; i < n; i++) {
+            DataFlavor dataFlavor = transferDataFlavors[i];
+
+            if (dataFlavor.equals(DataFlavor.imageFlavor)
+                || dataFlavor.equals(DataFlavor.javaFileListFlavor)
+                || dataFlavor.isRepresentationClassInputStream()) {
+                content.add(new ContentProxy(dataFlavor));
+            }
+        }
+    }
+
+    @Override
+    public String getMIMEType(int index) {
+        if (index < 0 || index >= content.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        ContentProxy proxy = content.get(index);
+        return proxy.getMIMEType();
+    }
+
+    @Override
+    public InputStream getInputStream(int index) throws IOException {
+        if (index < 0 || index >= content.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        ContentProxy proxy = content.get(index);
+        return proxy.getInputStream();
     }
 
     @Override
     public int getLength() {
         return content.getLength();
+    }
+
+    @Override
+    public void dispose() {
+        for (ContentProxy proxy : content) {
+            proxy.dispose();
+        }
     }
 }

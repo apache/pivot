@@ -152,6 +152,7 @@ public abstract class ApplicationContext {
 
             public void dragExit(DropTargetEvent event) {
                 // Clear drag state
+                dragManifest.dispose();
                 dragManifest = null;
 
                 // Clear drop state
@@ -267,6 +268,7 @@ public abstract class ApplicationContext {
                 setCursor(java.awt.Cursor.getDefaultCursor());
 
                 // Clear drag state
+                dragManifest.dispose();
                 dragManifest = null;
 
                 // Clear drop state
@@ -532,7 +534,7 @@ public abstract class ApplicationContext {
 
             Sequence<Transport> dragContent = dragSource.getContent();
             LocalManifest localManifest = new LocalManifest(dragContent);
-            Transferable transferable = localManifest.getTransferable();
+            Transferable transferable = new Export(localManifest);
 
             awtDragSource.startDrag(trigger, java.awt.Cursor.getDefaultCursor(),
                 null, null, transferable, new DragSourceListener() {
