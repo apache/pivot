@@ -1,15 +1,9 @@
 package pivot.demos.dnd;
 
-import java.awt.image.BufferedImage;
+import java.io.IOException;
 
-import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
-import pivot.collections.List;
-import pivot.collections.Sequence;
-import pivot.net.URIListSerializer;
-import pivot.serialization.PlainTextSerializer;
-import pivot.util.MIMEType;
-import pivot.util.concurrent.TaskExecutionException;
+import pivot.io.FileList;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
@@ -22,16 +16,13 @@ import pivot.wtk.DropTarget;
 import pivot.wtk.ImageView;
 import pivot.wtk.Label;
 import pivot.wtk.ListView;
+import pivot.wtk.LocalManifest;
+import pivot.wtk.Manifest;
 import pivot.wtk.Point;
 import pivot.wtk.PushButton;
 import pivot.wtk.Visual;
 import pivot.wtk.Window;
-import pivot.wtk.data.ByteArrayTransport;
-import pivot.wtk.data.Manifest;
-import pivot.wtk.data.Transport;
-import pivot.wtk.media.BufferedImageSerializer;
 import pivot.wtk.media.Image;
-import pivot.wtk.media.Picture;
 import pivot.wtkx.WTKXSerializer;
 
 public class DragAndDropDemo implements Application {
@@ -45,15 +36,13 @@ public class DragAndDropDemo implements Application {
         // Text
         final Label label = (Label)wtkxSerializer.getObjectByName("label");
         label.setDragSource(new DragSource() {
-            private ArrayList<Transport> content = null;
+            private LocalManifest content = null;
 
             public boolean beginDrag(Component component, int x, int y) {
                 String text = label.getText();
                 if (text != null) {
-                    content = new ArrayList<Transport>();
-
-                    PlainTextSerializer serializer = new PlainTextSerializer();
-                    content.add(new ByteArrayTransport(label.getText(), serializer));
+                    content = new LocalManifest();
+                    content.putText(label.getText());
                 }
 
                 return (content != null);
@@ -67,7 +56,7 @@ public class DragAndDropDemo implements Application {
                 return true;
             }
 
-            public Sequence<Transport> getContent() {
+            public LocalManifest getContent() {
                 return content;
             }
 
@@ -85,44 +74,41 @@ public class DragAndDropDemo implements Application {
         });
 
         label.setDropTarget(new DropTarget() {
-            private int contentIndex = -1;
-
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
-                if (DropAction.COPY.isSelected(supportedDropActions)) {
-                    contentIndex = dragContent.getIndex("text/plain");
+                DropAction dropAction = null;
+
+                if (dragContent.containsText()
+                    && DropAction.COPY.isSelected(supportedDropActions)) {
+                    dropAction = DropAction.COPY;
                 }
 
-                return (contentIndex == -1 ? null : DropAction.COPY);
+                return dropAction;
             }
 
             public void dragExit(Component component) {
-                contentIndex = -1;
             }
 
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (contentIndex == -1 ? null : DropAction.COPY);
+                return (dragContent.containsText() ? DropAction.COPY : null);
             }
 
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (contentIndex == -1 ? null : DropAction.COPY);
+                return (dragContent.containsText() ? DropAction.COPY : null);
             }
 
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                if (contentIndex != -1) {
-                    MIMEType mimeType = MIMEType.decode(dragContent.getMIMEType(contentIndex));
-                    PlainTextSerializer serializer = new PlainTextSerializer(mimeType.get("charset"));
-                    Manifest.ReadTask readTask = new Manifest.ReadTask(dragContent, contentIndex, serializer);
-
+                if (dragContent.containsText()) {
                     try {
-                        label.setText((String)readTask.execute());
-                    } catch(TaskExecutionException exception) {
-                        // No-op; we couldn't retrieve the text
+                        label.setText(dragContent.getText());
+                        dropAction = DropAction.COPY;
+                    } catch(IOException exception) {
+                        System.err.println(exception);
                     }
                 }
 
@@ -136,8 +122,8 @@ public class DragAndDropDemo implements Application {
         copyTextButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 String text = label.getText();
-                ArrayList<Transport> clipboardContent = new ArrayList<Transport>();
-                clipboardContent.add(new ByteArrayTransport(text, new PlainTextSerializer()));
+                LocalManifest clipboardContent = new LocalManifest();
+                clipboardContent.putText(text);
                 Clipboard.setContent(clipboardContent);
             }
         });
@@ -147,24 +133,12 @@ public class DragAndDropDemo implements Application {
             public void buttonPressed(Button button) {
                 Manifest clipboardContent = Clipboard.getContent();
 
-                if (clipboardContent != null) {
-                    int textIndex = clipboardContent.getIndex("text/plain");
-
-                    if (textIndex != -1) {
-                        // Paste the string representation of the content
-                        MIMEType mimeType = MIMEType.decode(clipboardContent.getMIMEType(textIndex));
-                        PlainTextSerializer serializer = new PlainTextSerializer(mimeType.get("charset"));
-
-                        Manifest.ReadTask readTask = new Manifest.ReadTask(clipboardContent, textIndex, serializer);
-
-                        String text = null;
-                        try {
-                            text = (String)readTask.execute();
-                        } catch(TaskExecutionException exception) {
-                            // No-op; we couldn't retrieve the text
-                        }
-
-                        label.setText(text);
+                if (clipboardContent != null
+                    && clipboardContent.containsText()) {
+                    try {
+                        label.setText(clipboardContent.getText());
+                    } catch(IOException exception) {
+                        System.err.println(exception);
                     }
                 }
             }
@@ -173,18 +147,14 @@ public class DragAndDropDemo implements Application {
         // Images
         final ImageView imageView = (ImageView)wtkxSerializer.getObjectByName("imageView");
         imageView.setDragSource(new DragSource() {
-            private ArrayList<Transport> content = null;
+            private LocalManifest content = null;
 
             public boolean beginDrag(Component component, int x, int y) {
                 Image image = imageView.getImage();
 
-                if (image instanceof Picture) {
-                    Picture picture = (Picture)image;
-                    content = new ArrayList<Transport>();
-
-                    BufferedImageSerializer serializer = new BufferedImageSerializer();
-                    serializer.setOutputFormat(BufferedImageSerializer.Format.PNG);
-                    content.add(new ByteArrayTransport(picture.getBufferedImage(), serializer));
+                if (image != null) {
+                    content = new LocalManifest();
+                    content.putImage(image);
                 }
 
                 return (content != null);
@@ -198,7 +168,7 @@ public class DragAndDropDemo implements Application {
                 return true;
             }
 
-            public Sequence<Transport> getContent() {
+            public LocalManifest getContent() {
                 return content;
             }
 
@@ -216,44 +186,41 @@ public class DragAndDropDemo implements Application {
         });
 
         imageView.setDropTarget(new DropTarget() {
-            private int contentIndex = -1;
-
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
-                if (DropAction.COPY.isSelected(supportedDropActions)) {
-                    contentIndex = dragContent.getIndex(BufferedImageSerializer.Format.PNG.getMIMEType());
+                DropAction dropAction = null;
+
+                if (dragContent.containsImage()
+                    && DropAction.COPY.isSelected(supportedDropActions)) {
+                    dropAction = DropAction.COPY;
                 }
 
-                return (contentIndex == -1 ? null : DropAction.COPY);
+                return dropAction;
             }
 
             public void dragExit(Component component) {
-                contentIndex = -1;
             }
 
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (contentIndex == -1 ? null : DropAction.COPY);
+                return (dragContent.containsImage() ? DropAction.COPY : null);
             }
 
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (contentIndex == -1 ? null : DropAction.COPY);
+                return (dragContent.containsImage() ? DropAction.COPY : null);
             }
 
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                if (contentIndex != -1) {
-                    BufferedImageSerializer serializer = new BufferedImageSerializer();
-                    Manifest.ReadTask readTask = new Manifest.ReadTask(dragContent, contentIndex, serializer);
-
+                if (dragContent.containsImage()) {
                     try {
-                        imageView.setImage(new Picture((BufferedImage)readTask.execute()));
+                        imageView.setImage(dragContent.getImage());
                         dropAction = DropAction.COPY;
-                    } catch(TaskExecutionException exception) {
-                        // No-op; we couldn't set the image
+                    } catch(IOException exception) {
+                        System.err.println(exception);
                     }
                 }
 
@@ -267,13 +234,9 @@ public class DragAndDropDemo implements Application {
         copyImageButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 Image image = imageView.getImage();
-                if (image instanceof Picture) {
-                    Picture picture = (Picture)image;
-
-                    ArrayList<Transport> clipboardContent = new ArrayList<Transport>();
-                    BufferedImageSerializer serializer = new BufferedImageSerializer();
-                    serializer.setOutputFormat(BufferedImageSerializer.Format.PNG);
-                    clipboardContent.add(new ByteArrayTransport(picture.getBufferedImage(), serializer));
+                if (image != null) {
+                    LocalManifest clipboardContent = new LocalManifest();
+                    clipboardContent.putImage(image);
                     Clipboard.setContent(clipboardContent);
                 }
             }
@@ -284,18 +247,12 @@ public class DragAndDropDemo implements Application {
             public void buttonPressed(Button button) {
                 Manifest clipboardContent = Clipboard.getContent();
 
-                if (clipboardContent != null) {
-                    int imageIndex = clipboardContent.getIndex(BufferedImageSerializer.Format.PNG.getMIMEType());
-
-                    if (imageIndex != -1) {
-                        BufferedImageSerializer serializer = new BufferedImageSerializer();
-                        Manifest.ReadTask readTask = new Manifest.ReadTask(clipboardContent, imageIndex, serializer);
-
-                        try {
-                            imageView.setImage(new Picture((BufferedImage)readTask.execute()));
-                        } catch(TaskExecutionException exception) {
-                            // No-op; we couldn't set the image
-                        }
+                if (clipboardContent != null
+                    && clipboardContent.containsImage()) {
+                    try {
+                        imageView.setImage((Image)clipboardContent.getImage());
+                    } catch(IOException exception) {
+                        System.err.println(exception);
                     }
                 }
             }
@@ -303,18 +260,18 @@ public class DragAndDropDemo implements Application {
 
         // Files
         final ListView listView = (ListView)wtkxSerializer.getObjectByName("listView");
+        listView.setListData(new FileList());
+
         listView.setDragSource(new DragSource() {
-            private ArrayList<Transport> content = null;
+            private LocalManifest content = null;
 
             public boolean beginDrag(Component component, int x, int y) {
                 ListView listView = (ListView)component;
-                List<?> urlList = listView.getListData();
+                FileList fileList = (FileList)listView.getListData();
 
-                if (urlList.getLength() > 0) {
-                    content = new ArrayList<Transport>();
-
-                    URIListSerializer serializer = new URIListSerializer();
-                    content.add(new ByteArrayTransport(urlList, serializer));
+                if (fileList.getLength() > 0) {
+                    content = new LocalManifest();
+                    content.putFileList(fileList);
                 }
 
                 return (content != null);
@@ -328,7 +285,7 @@ public class DragAndDropDemo implements Application {
                 return true;
             }
 
-            public Sequence<Transport> getContent() {
+            public LocalManifest getContent() {
                 return content;
             }
 
@@ -346,45 +303,41 @@ public class DragAndDropDemo implements Application {
         });
 
         listView.setDropTarget(new DropTarget() {
-            private int contentIndex = -1;
-
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
-                if (DropAction.COPY.isSelected(supportedDropActions)) {
-                    contentIndex = dragContent.getIndex("text/uri-list");
+                DropAction dropAction = null;
+
+                if (dragContent.containsFileList()
+                    && DropAction.COPY.isSelected(supportedDropActions)) {
+                    dropAction = DropAction.COPY;
                 }
 
-                return (contentIndex == -1 ? null : DropAction.COPY);
+                return dropAction;
             }
 
             public void dragExit(Component component) {
-                contentIndex = -1;
             }
 
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (contentIndex == -1 ? null : DropAction.COPY);
+                return (dragContent.containsFileList() ? DropAction.COPY : null);
             }
 
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (contentIndex == -1 ? null : DropAction.COPY);
+                return (dragContent.containsFileList() ? DropAction.COPY : null);
             }
 
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                if (contentIndex != -1) {
-                    MIMEType mimeType = MIMEType.decode(dragContent.getMIMEType(contentIndex));
-                    URIListSerializer serializer = new URIListSerializer(mimeType.get("charset"));
-                    Manifest.ReadTask readTask = new Manifest.ReadTask(dragContent, contentIndex, serializer);
-
+                if (dragContent.containsFileList()) {
                     try {
-                        ListView listView = (ListView)component;
-                        listView.setListData((List<?>)readTask.execute());
-                    } catch(TaskExecutionException exception) {
-                        // No-op; we couldn't retrieve the list
+                        listView.setListData(dragContent.getFileList());
+                        dropAction = DropAction.COPY;
+                    } catch(IOException exception) {
+                        System.err.println(exception);
                     }
                 }
 

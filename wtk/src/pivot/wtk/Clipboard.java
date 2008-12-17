@@ -19,10 +19,6 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 
-import pivot.collections.Sequence;
-import pivot.wtk.data.Manifest;
-import pivot.wtk.data.Transport;
-
 /**
  * Singleton class providing a means of sharing data between components and
  * applications.
@@ -30,7 +26,8 @@ import pivot.wtk.data.Transport;
  * @author gbrown
  */
 public final class Clipboard {
-    private static Manifest content = null;
+    private static LocalManifest content = null;
+    private static ClipboardContentListener clipboardContentListener = null;
 
     /**
      * Retrieves the contents of the clipboard.
@@ -56,31 +53,42 @@ public final class Clipboard {
      *
      * @param content
      */
-    public static void setContent(Sequence<Transport> content) {
+    public static void setContent(LocalManifest content) {
+        setContent(content, null);
+    }
+
+    /**
+     * Places content on the clipboard.
+     *
+     * @param content
+     */
+    public static void setContent(LocalManifest content,
+        ClipboardContentListener clipboardContentListener) {
         if (content == null) {
             throw new IllegalArgumentException("content is null");
         }
 
-        if (Clipboard.content != null) {
-            Clipboard.content.dispose();
-        }
-
-        final LocalManifest localManifest = new LocalManifest(content);
-
         try {
             java.awt.datatransfer.Clipboard awtClipboard =
                 Toolkit.getDefaultToolkit().getSystemClipboard();
-            awtClipboard.setContents(new Export(localManifest), new ClipboardOwner() {
+
+            LocalManifestAdapter localManifestAdapter = new LocalManifestAdapter(content);
+            awtClipboard.setContents(localManifestAdapter, new ClipboardOwner() {
                 public void lostOwnership(java.awt.datatransfer.Clipboard clipboard,
                     Transferable contents) {
-                    localManifest.dispose();
+                    LocalManifest previousContent = Clipboard.content;
                     Clipboard.content = null;
+
+                    if (Clipboard.clipboardContentListener != null) {
+                        Clipboard.clipboardContentListener.contentChanged(previousContent);
+                    }
                 }
             });
         } catch(SecurityException exception) {
             // No-op
         }
 
-        Clipboard.content = localManifest;
+        Clipboard.content = content;
+        Clipboard.clipboardContentListener = clipboardContentListener;
     }
 }

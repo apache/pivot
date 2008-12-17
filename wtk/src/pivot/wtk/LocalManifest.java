@@ -17,91 +17,188 @@ package pivot.wtk;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.io.IOException;
-import java.io.InputStream;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.net.URL;
+import java.util.Iterator;
 
-import pivot.collections.Sequence;
+import pivot.collections.ArrayList;
+import pivot.io.FileList;
 import pivot.serialization.Serializer;
-import pivot.wtk.data.Manifest;
-import pivot.wtk.data.Transport;
+import pivot.wtk.media.Image;
+import pivot.wtk.media.Picture;
 
-class LocalManifest extends Manifest {
-    private Sequence<Transport> content;
+/**
+ * Manifest class that serves as data source for a clipboard or drag/drop
+ * operation.
+ *
+ * @author gbrown
+ */
+public class LocalManifest implements Manifest, Iterable<String> {
+    // TODO Create an Entry class that contains an Object, Serializer, and
+    // byte[]
 
-    public LocalManifest(Sequence<Transport> content) {
-        assert (content != null);
-        this.content = content;
+    protected String text = null;
+    protected Image image = null;
+    protected FileList fileList = null;
+    protected URL url = null;
+
+    public String getText() {
+        return text;
     }
 
-    @Override
-    public String getMIMEType(int index) {
-        if (index < 0 || index >= content.getLength()) {
-            throw new IndexOutOfBoundsException();
+    public void putText(String text) {
+        if (text == null) {
+            throw new IllegalArgumentException("text is null.");
         }
 
-        Transport transport = content.get(index);
-        Object object = transport.getObject();
-        Serializer serializer = transport.getSerializer();
-
-        return serializer.getMIMEType(object);
+        this.text = text;
     }
 
-    @Override
-    public InputStream getInputStream(int index) throws IOException {
-        if (index < 0 || index >= content.getLength()) {
-            throw new IndexOutOfBoundsException();
+    public boolean containsText() {
+        return (text != null);
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void putImage(Image image) {
+        if (image == null) {
+            throw new IllegalArgumentException("image is null.");
         }
 
-        return content.get(index).getInputStream();
+        this.image = image;
     }
 
-    @Override
-    public int getLength() {
-        return content.getLength();
+    public boolean containsImage() {
+        return image != null;
     }
 
-    @Override
-    public void dispose() {
-        for (int i = 0, n = content.getLength(); i < n; i++) {
-            Transport transport = content.get(i);
-            transport.dispose();
+    public FileList getFileList() {
+        return fileList;
+    }
+
+    public void putFileList(FileList fileList) {
+        if (fileList == null) {
+            throw new IllegalArgumentException("fileList is null.");
         }
+
+        this.fileList = fileList;
+    }
+
+    public boolean containsFileList() {
+        return fileList != null;
+    }
+
+    public URL getURL() {
+        return url;
+    }
+
+    public void putURL(URL url) {
+        if (url == null) {
+            throw new IllegalArgumentException("url is null.");
+        }
+    }
+
+    public boolean containsURL() {
+        return url != null;
+    }
+
+    public byte[] getBinaryData(String mimeType) {
+        // TODO
+        return null;
+    }
+
+    public void putData(String mimeType, byte[] byteArray) {
+        // TODO
+    }
+
+    public boolean containsBinaryData(String mimeType) {
+        // TODO
+        return false;
+    }
+
+    public Object getValue(String mimeType) {
+        // TODO
+        return null;
+    }
+
+    public void putValue(String mimeType, Object value) {
+        // TODO
+    }
+
+    public void putValue(Object value, Serializer serializer) {
+        // TODO
+    }
+
+    public boolean containsValue(String key) {
+        // TODO
+        return false;
+    }
+
+    public Iterator<String> iterator() {
+        // TODO
+        return null;
     }
 }
 
-class Export implements Transferable {
+class LocalManifestAdapter implements Transferable {
     private LocalManifest localManifest;
+    private ArrayList<DataFlavor> transferDataFlavors = new ArrayList<DataFlavor>();
 
-    public Export(LocalManifest localManifest) {
+    public LocalManifestAdapter(LocalManifest localManifest) {
         this.localManifest = localManifest;
+
+        if (localManifest.containsText()) {
+            transferDataFlavors.add(DataFlavor.stringFlavor);
+        }
+
+        if (localManifest.containsImage()) {
+            transferDataFlavors.add(DataFlavor.imageFlavor);
+        }
+
+        if (localManifest.containsFileList()) {
+            transferDataFlavors.add(DataFlavor.javaFileListFlavor);
+        }
+
+        if (localManifest.containsURL()) {
+            transferDataFlavors.add(new DataFlavor(URL.class, URL.class.getName()));
+        }
+
+        // TODO Enumerate MIME types and add byte arrays
     }
 
-    public Object getTransferData(DataFlavor flavor) throws IOException {
-        int index = localManifest.getIndex(flavor.getMimeType());
-        return (index == -1) ? null : localManifest.getInputStream(index);
+    public Object getTransferData(DataFlavor dataFlavor)
+        throws UnsupportedFlavorException {
+        Object transferData = null;
+
+        int index = transferDataFlavors.indexOf(dataFlavor);
+        if (index == -1) {
+            throw new UnsupportedFlavorException(dataFlavor);
+        }
+
+        if (dataFlavor.equals(DataFlavor.stringFlavor)) {
+            transferData = localManifest.getText();
+        } else if (dataFlavor.equals(DataFlavor.imageFlavor)) {
+            Picture picture = (Picture)localManifest.getImage();
+            transferData = picture.getBufferedImage();
+        } else if (dataFlavor.equals(DataFlavor.javaFileListFlavor)) {
+            FileList fileList = localManifest.getFileList();
+            transferData = fileList.getList();
+        } else if (dataFlavor.getRepresentationClass() == URL.class) {
+            transferData = localManifest.getURL();
+        } else if (dataFlavor.isRepresentationClassByteBuffer()) {
+            // TODO
+        }
+
+        return transferData;
     }
 
     public DataFlavor[] getTransferDataFlavors() {
-        int n = localManifest.getLength();
-        DataFlavor[] transferDataFlavors = new DataFlavor[n];
-
-        for (int i = 0; i < n; i++) {
-            String mimeType = localManifest.getMIMEType(i);
-
-            try {
-                DataFlavor dataFlavor = new DataFlavor(mimeType);
-                transferDataFlavors[i] = dataFlavor;
-            } catch(ClassNotFoundException exception) {
-                // No-op; since we don't append a class name, InputStream
-                // will be used by default and we shouldn't get here
-            }
-        }
-
-        return transferDataFlavors;
+        return transferDataFlavors.toArray();
     }
 
-    public boolean isDataFlavorSupported(DataFlavor flavor) {
-        return (localManifest.getIndex(flavor.getMimeType()) != -1);
+    public boolean isDataFlavorSupported(DataFlavor dataFlavor) {
+        return (transferDataFlavors.indexOf(dataFlavor) != -1);
     }
 }
-

@@ -407,7 +407,7 @@ public class JSONSerializer implements Serializer {
             writeObject(object, writer);
         } finally {
             if (writer != null) {
-                writer.flush();
+                writer.close();
             }
         }
     }

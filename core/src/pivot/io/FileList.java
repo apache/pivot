@@ -13,29 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk.data;
+package pivot.io;
 
-import java.io.InputStream;
+import java.io.File;
 
-import pivot.serialization.Serializer;
+import pivot.collections.adapter.ListAdapter;
 
-/**
- * Transport backed by a "pipe".
- *
- * @author gbrown
- */
-public class PipedTransport extends Transport {
-    public PipedTransport(Object object, Serializer serializer) {
-        super(object, serializer);
+public class FileList extends ListAdapter<File> {
+    public FileList() {
+        this(new java.util.ArrayList<File>());
     }
 
-    @Override
-    public InputStream getInputStream() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void dispose() {
-        // TODO
+    public FileList(java.util.List<File> files) {
+        super(files);
     }
 }

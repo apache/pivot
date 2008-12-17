@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -85,7 +84,7 @@ public class CSVSerializer implements Serializer {
         }
     }
 
-	private Charset charset;
+    private Charset charset;
 
     private ArrayList<String> keys = new ArrayList<String>();
     private KeySequence keySequence = new KeySequence();
@@ -109,7 +108,7 @@ public class CSVSerializer implements Serializer {
             throw new IllegalArgumentException("charset is null.");
         }
 
-    	this.charset = charset;
+        this.charset = charset;
     }
 
     /**
@@ -293,7 +292,7 @@ public class CSVSerializer implements Serializer {
             writeObject(object, writer);
         } finally {
             if (writer != null) {
-                writer.flush();
+                writer.close();
             }
         }
     }
@@ -315,28 +314,24 @@ public class CSVSerializer implements Serializer {
         throws IOException, SerializationException {
         List<Dictionary<String, Object>> items = (List<Dictionary<String, Object>>)object;
 
-        PrintWriter printWriter = null;
-
         try {
-            printWriter = new PrintWriter(writer);
-
             for (Dictionary<String, Object> item : items) {
                 for (int i = 0, n = keys.getLength(); i < n; i++) {
                     String key = keys.get(i);
 
                     if (i > 0) {
-                        printWriter.print(",");
+                        writer.append(",");
                     }
 
                     Object value = item.get(key);
-                    printWriter.print(value.toString());
+                    writer.append(value.toString());
                 }
 
-                printWriter.println();
+                writer.append("\r\n");
             }
         } finally {
-            if (printWriter != null) {
-                printWriter.close();
+            if (writer != null) {
+                writer.close();
             }
         }
     }

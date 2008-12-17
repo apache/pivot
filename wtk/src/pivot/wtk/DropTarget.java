@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.wtk.data.Manifest;
-
 /**
  * Interface representing a drop target.
  *

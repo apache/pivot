@@ -16,12 +16,9 @@
 package pivot.wtk.test;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
+import java.io.IOException;
 
-import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
-import pivot.collections.Sequence;
-import pivot.util.concurrent.TaskExecutionException;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
@@ -32,12 +29,9 @@ import pivot.wtk.Frame;
 import pivot.wtk.ImageView;
 import pivot.wtk.Point;
 import pivot.wtk.Visual;
-import pivot.wtk.data.ByteArrayTransport;
-import pivot.wtk.data.Manifest;
-import pivot.wtk.data.Transport;
-import pivot.wtk.media.BufferedImageSerializer;
+import pivot.wtk.LocalManifest;
+import pivot.wtk.Manifest;
 import pivot.wtk.media.Image;
-import pivot.wtk.media.Picture;
 
 public class DragDropTest implements Application {
     private Frame frame1 = new Frame();
@@ -52,39 +46,32 @@ public class DragDropTest implements Application {
         frame1.getStyles().put("resizable", false);
 
         DragSource imageDragSource = new DragSource() {
-            private Picture picture = null;
+            private Image image = null;
             private Point offset = null;
-            private ArrayList<Transport> content = null;
+            private LocalManifest content = null;
 
             public boolean beginDrag(Component component, int x, int y) {
                 ImageView imageView = (ImageView)component;
-                Image image = imageView.getImage();
-                if (image instanceof Picture) {
-                    picture = (Picture)image;
-                }
+                image = imageView.getImage();
 
-                if (picture != null) {
+                if (image != null) {
                     imageView.setImage((Image)null);
-                    content = new ArrayList<Transport>();
-
-                    BufferedImageSerializer serializer = new BufferedImageSerializer();
-                    serializer.setOutputFormat(BufferedImageSerializer.Format.PNG);
-                    content.add(new ByteArrayTransport(picture.getBufferedImage(), serializer));
-
+                    content = new LocalManifest();
+                    content.putImage(image);
                     offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2,
                         y - (imageView.getHeight() - image.getHeight()) / 2);
                 }
 
-                return (picture != null);
+                return (image != null);
             }
 
             public void endDrag(Component component, DropAction dropAction) {
                 if (dropAction == null) {
                     ImageView imageView = (ImageView)component;
-                    imageView.setImage(picture);
+                    imageView.setImage(image);
                 }
 
-                picture = null;
+                image = null;
                 offset = null;
                 content = null;
             }
@@ -93,12 +80,12 @@ public class DragDropTest implements Application {
                 return false;
             }
 
-            public Sequence<Transport> getContent() {
+            public LocalManifest getContent() {
                 return content;
             }
 
             public Visual getRepresentation() {
-                return picture;
+                return image;
             }
 
             public Point getOffset() {
@@ -111,25 +98,14 @@ public class DragDropTest implements Application {
         };
 
         DropTarget imageDropTarget = new DropTarget() {
-            private int contentIndex = -1;
-
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
 
                 ImageView imageView = (ImageView)component;
                 if (imageView.getImage() == null
+                    && dragContent.containsImage()
                     && DropAction.MOVE.isSelected(supportedDropActions)) {
-                    for (int i = 0, n = dragContent.getLength(); i < n; i++) {
-                        String mimeType = dragContent.getMIMEType(i);
-                        if (mimeType.startsWith(BufferedImageSerializer.Format.PNG.getMIMEType())) {
-                            contentIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                if (contentIndex != -1) {
                     dropAction = DropAction.MOVE;
                     component.getStyles().put("backgroundColor", IMAGE_VIEW_DROP_HIGHLIGHT_COLOR);
                 }
@@ -139,34 +115,29 @@ public class DragDropTest implements Application {
 
             public void dragExit(Component component) {
                 component.getStyles().put("backgroundColor", IMAGE_VIEW_BACKGROUND_COLOR);
-                contentIndex = -1;
             }
 
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (contentIndex == -1 ? null : DropAction.MOVE);
+                return (dragContent.containsImage() ? DropAction.MOVE : null);
             }
 
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (contentIndex == -1 ? null : DropAction.MOVE);
+                return (dragContent.containsImage() ? DropAction.MOVE : null);
             }
 
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                if (contentIndex != -1) {
+                if (dragContent.containsImage()) {
                     ImageView imageView = (ImageView)component;
-
-                    BufferedImageSerializer serializer = new BufferedImageSerializer();
-                    Manifest.ReadTask readTask = new Manifest.ReadTask(dragContent, contentIndex, serializer);
-
                     try {
-                        imageView.setImage(new Picture((BufferedImage)readTask.execute()));
+                        imageView.setImage(dragContent.getImage());
                         dropAction = DropAction.MOVE;
-                    } catch(TaskExecutionException exception) {
-                        // No-op; we couldn't set the image
+                    } catch(IOException exception) {
+                        System.err.println(exception);
                     }
                 }
 

@@ -13,29 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk.data;
-
-import java.io.InputStream;
-
-import pivot.serialization.Serializer;
+package pivot.wtk;
 
 /**
- * Transport backed by the file system.
+ * Clipboard content listener interface.
  *
  * @author gbrown
  */
-public class FileTransport extends Transport {
-    public FileTransport(Object object, Serializer serializer) {
-        super(object, serializer);
-    }
-
-    @Override
-    public InputStream getInputStream() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void dispose() {
-        // TODO
-    }
+public interface ClipboardContentListener {
+    public void contentChanged(LocalManifest previousContent);
 }

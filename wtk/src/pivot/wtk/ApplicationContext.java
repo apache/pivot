@@ -22,7 +22,6 @@ import java.awt.GraphicsConfiguration;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Transparency;
-import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragGestureRecognizer;
@@ -51,11 +50,10 @@ import java.util.TimerTask;
 
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
-import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.wtk.Component.DecoratorSequence;
-import pivot.wtk.data.Manifest;
-import pivot.wtk.data.Transport;
+import pivot.wtk.Manifest;
+import pivot.wtk.RemoteManifest;
 import pivot.wtk.effects.Decorator;
 
 /**
@@ -152,7 +150,6 @@ public abstract class ApplicationContext {
 
             public void dragExit(DropTargetEvent event) {
                 // Clear drag state
-                dragManifest.dispose();
                 dragManifest = null;
 
                 // Clear drop state
@@ -268,7 +265,6 @@ public abstract class ApplicationContext {
                 setCursor(java.awt.Cursor.getDefaultCursor());
 
                 // Clear drag state
-                dragManifest.dispose();
                 dragManifest = null;
 
                 // Clear drop state
@@ -532,12 +528,11 @@ public abstract class ApplicationContext {
             DragGestureEvent trigger = new DragGestureEvent(dragGestureRecognizer,
                 DnDConstants.ACTION_MOVE, location, inputEvents);
 
-            Sequence<Transport> dragContent = dragSource.getContent();
-            LocalManifest localManifest = new LocalManifest(dragContent);
-            Transferable transferable = new Export(localManifest);
+            LocalManifest dragContent = dragSource.getContent();
+            LocalManifestAdapter localManifestAdapter = new LocalManifestAdapter(dragContent);
 
             awtDragSource.startDrag(trigger, java.awt.Cursor.getDefaultCursor(),
-                null, null, transferable, new DragSourceListener() {
+                null, null, localManifestAdapter, new DragSourceListener() {
                 public void dragEnter(DragSourceDragEvent event) {
                     DragSourceContext context = event.getDragSourceContext();
                     context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
@@ -677,10 +672,6 @@ public abstract class ApplicationContext {
 
                         // Clear the drag state
                         dragDescendant = null;
-
-                        LocalManifest localDragManifest = (LocalManifest)dragManifest;
-                        localDragManifest.dispose();
-
                         dragManifest = null;
 
                         // Clear the drop state
@@ -767,9 +758,8 @@ public abstract class ApplicationContext {
                                             display.mouseOut();
                                         }
 
-                                        // Create a local manifest to wrap the content
-                                        Sequence<Transport> dragContent = dragSource.getContent();
-                                        dragManifest = new LocalManifest(dragContent);
+                                        // Get the drag content
+                                        dragManifest = dragSource.getContent();
 
                                         // Get the initial user drop action
                                         userDropAction = getUserDropAction(event);

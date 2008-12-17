@@ -1,13 +1,9 @@
 package pivot.wtk.test;
 
 import java.awt.Font;
+import java.io.IOException;
 
-import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
-import pivot.collections.Sequence;
-import pivot.serialization.PlainTextSerializer;
-import pivot.util.MIMEType;
-import pivot.util.concurrent.TaskExecutionException;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
@@ -20,9 +16,8 @@ import pivot.wtk.Label;
 import pivot.wtk.Point;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Visual;
-import pivot.wtk.data.ByteArrayTransport;
-import pivot.wtk.data.Manifest;
-import pivot.wtk.data.Transport;
+import pivot.wtk.LocalManifest;
+import pivot.wtk.Manifest;
 
 public class NativeDragDropTest implements Application {
     private Frame frame = null;
@@ -35,13 +30,11 @@ public class NativeDragDropTest implements Application {
         label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
         label.setDragSource(new DragSource() {
-            private ArrayList<Transport> content = null;
+            private LocalManifest content = null;
 
             public boolean beginDrag(Component component, int x, int y) {
-                content = new ArrayList<Transport>();
-
-                PlainTextSerializer serializer = new PlainTextSerializer();
-                content.add(new ByteArrayTransport(label.getText(), serializer));
+                content = new LocalManifest();
+                content.putText(label.getText());
                 return true;
             }
 
@@ -53,7 +46,7 @@ public class NativeDragDropTest implements Application {
                 return true;
             }
 
-            public Sequence<Transport> getContent() {
+            public LocalManifest getContent() {
                 return content;
             }
 
@@ -71,14 +64,11 @@ public class NativeDragDropTest implements Application {
         });
 
         label.setDropTarget(new DropTarget() {
-            private int contentIndex = -1;
-
             public DropAction dragEnter(Component component, Manifest dragContent,
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                contentIndex = dragContent.getIndex("text/plain");
-                if (contentIndex != -1) {
+                if (dragContent.containsText()) {
                     frame.getStyles().put("backgroundColor", "#ffcccc");
                     dropAction = DropAction.COPY;
                 }
@@ -88,33 +78,28 @@ public class NativeDragDropTest implements Application {
 
             public void dragExit(Component component) {
                 frame.getStyles().put("backgroundColor", "#ffffff");
-                contentIndex = -1;
             }
 
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (contentIndex == -1 ? null : DropAction.COPY);
+                return (dragContent.containsText() ? DropAction.COPY : null);
             }
 
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (contentIndex == -1 ? null : DropAction.COPY);
+                return (dragContent.containsText() ? DropAction.COPY : null);
             }
 
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                if (contentIndex != -1) {
-                    MIMEType mimeType = MIMEType.decode(dragContent.getMIMEType(contentIndex));
-                    PlainTextSerializer serializer = new PlainTextSerializer(mimeType.get("charset"));
-                    Manifest.ReadTask readTask = new Manifest.ReadTask(dragContent, contentIndex, serializer);
-
+                if (dragContent.containsText()) {
+                    Label label = (Label)component;
                     try {
-                        Label label = (Label)component;
-                        label.setText((String)readTask.execute());
-                    } catch(TaskExecutionException exception) {
-                        // No-op; we couldn't retrieve the text
+                        label.setText(dragContent.getText());
+                    } catch(IOException exception) {
+                        System.err.println(exception);
                     }
                 }
 

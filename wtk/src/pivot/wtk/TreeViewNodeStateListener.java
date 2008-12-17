@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import pivot.collections.Sequence;
-import pivot.util.Vote;
 
 /**
  * Tree view node state listener interface.

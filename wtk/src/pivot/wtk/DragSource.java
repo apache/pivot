@@ -15,9 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Sequence;
-import pivot.wtk.data.Transport;
-
 /**
  * Interface representing a drag source.
  *
@@ -56,7 +53,7 @@ public interface DragSource {
     /**
      * Returns the drag content.
      */
-    public Sequence<Transport> getContent();
+    public LocalManifest getContent();
 
     /**
      * Returns a visual representing the drag content.
