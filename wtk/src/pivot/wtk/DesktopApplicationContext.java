@@ -18,9 +18,6 @@ package pivot.wtk;
 import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
-import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URL;
 
 import pivot.collections.HashMap;
 import pivot.collections.immutable.ImmutableMap;
@@ -43,7 +40,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 | AWTEvent.WINDOW_STATE_EVENT_MASK);
 
             // Add the display host
-            add(ApplicationContext.getDisplayHost());
+            add(applicationContext.getDisplayHost());
 
             // Disable focus traversal keys
             setFocusTraversalKeysEnabled(false);
@@ -63,10 +60,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             switch(event.getID()) {
                 case WindowEvent.WINDOW_OPENED: {
-                    ApplicationContext.getDisplayHost().requestFocus();
+                    applicationContext.getDisplayHost().requestFocus();
 
                     try {
-                        application.startup(ApplicationContext.getDisplay(),
+                        application.startup(applicationContext.getDisplay(),
                             new ImmutableMap<String, String>(properties));
                     } catch(Exception exception) {
                         exception.printStackTrace();
@@ -75,7 +72,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             message = exception.getClass().getName();
                         }
 
-                        Alert.alert(MessageType.ERROR, message, ApplicationContext.getDisplay());
+                        Alert.alert(MessageType.ERROR, message, applicationContext.getDisplay());
                     }
 
                     break;
@@ -89,7 +86,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     } catch(Exception exception) {
                         exception.printStackTrace();
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            ApplicationContext.getDisplay());
+                            applicationContext.getDisplay());
                     }
 
                     if (shutdown) {
@@ -119,7 +116,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     } catch(Exception exception) {
                         exception.printStackTrace();
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            ApplicationContext.getDisplay());
+                            applicationContext.getDisplay());
                     }
 
                     break;
@@ -131,7 +128,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     } catch(Exception exception) {
                         exception.printStackTrace();
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            ApplicationContext.getDisplay());
+                            applicationContext.getDisplay());
                     }
 
                     break;
@@ -140,6 +137,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
     }
 
+    private static DesktopApplicationContext applicationContext = null;
     private static HashMap<String, String> properties = null;
     private static Application application = null;
 
@@ -158,22 +156,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static final String HEIGHT_ARGUMENT = "height";
     private static final String CENTER_ARGUMENT = "center";
     private static final String RESIZABLE_ARGUMENT = "resizable";
-
-    protected void contextOpen(URL location, String target) {
-        // TODO Remove dynamic invocation when Java 6 is supported on the Mac
-
-        try {
-            Class<?> desktopClass = Class.forName("java.awt.Desktop");
-            Method getDesktopMethod = desktopClass.getMethod("getDesktop",
-                new Class<?>[] {});
-            Method browseMethod = desktopClass.getMethod("browse",
-                new Class[] {URI.class});
-            Object desktop = getDesktopMethod.invoke(null, (Object[]) null);
-            browseMethod.invoke(desktop, location.toURI());
-        } catch (Exception exception) {
-            System.out.println("Unable to open URL in default browser.");
-        }
-    }
 
     /**
      * Terminates the application context.
@@ -221,7 +203,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         // Create the application context
-        new DesktopApplicationContext();
+        applicationContext = new DesktopApplicationContext();
 
         // Load the application
         if (applicationClassName == null) {

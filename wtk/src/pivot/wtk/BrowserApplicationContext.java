@@ -21,8 +21,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 
-import netscape.javascript.JSObject;
-
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
@@ -38,7 +36,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
      *
      * @author gbrown
      */
-    public static final class HostApplet extends java.applet.Applet {
+    public static final class HostApplet extends Applet {
         private class PropertyDictionary implements Dictionary<String, String> {
             public String get(String key) {
                 String value = properties.containsKey(key) ?
@@ -81,7 +79,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                }
 
                 // Create the application context
-                new BrowserApplicationContext(HostApplet.this);
+               applicationContext = new BrowserApplicationContext();
 
                 // Load properties specified on the query string
                 properties = new HashMap<String, String>();
@@ -112,8 +110,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
                    }
                 }
 
-                // Create the display host and add it to the applet
-                DisplayHost displayHost = ApplicationContext.getDisplayHost();
+                // Add the display host to the applet
+                DisplayHost displayHost = applicationContext.getDisplayHost();
                 setLayout(new java.awt.BorderLayout());
                 add(displayHost);
 
@@ -127,14 +125,14 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
                 if (applicationClassName == null) {
                     Alert.alert(MessageType.ERROR, "Application class name is required.",
-                        ApplicationContext.getDisplay());
+                        applicationContext.getDisplay());
                 } else {
                     try {
                         Class<?> applicationClass = Class.forName(applicationClassName);
                         application = (Application)applicationClass.newInstance();
                     } catch(Exception exception) {
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            ApplicationContext.getDisplay());
+                            applicationContext.getDisplay());
                         exception.printStackTrace();
                     }
                 }
@@ -144,15 +142,15 @@ public final class BrowserApplicationContext extends ApplicationContext {
         private class StartCallback implements Runnable {
             public void run() {
                 // Set focus to the display host
-                DisplayHost displayHost = ApplicationContext.getDisplayHost();
+                DisplayHost displayHost = applicationContext.getDisplayHost();
                 displayHost.requestFocus();
 
                 if (application != null) {
                     try {
-                        application.startup(ApplicationContext.getDisplay(), propertyDictionary);
+                        application.startup(applicationContext.getDisplay(), propertyDictionary);
                     } catch(Exception exception) {
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            ApplicationContext.getDisplay());
+                            applicationContext.getDisplay());
                         exception.printStackTrace();
                     }
                 }
@@ -165,7 +163,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     application.shutdown(false);
                 } catch(Exception exception) {
                     Alert.alert(MessageType.ERROR, exception.getMessage(),
-                        ApplicationContext.getDisplay());
+                        applicationContext.getDisplay());
                     exception.printStackTrace();
                 }
             }
@@ -177,6 +175,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
             }
         }
 
+        private BrowserApplicationContext applicationContext = null;
         private HashMap<String, String> properties = null;
         private PropertyDictionary propertyDictionary = new PropertyDictionary();
         private Application application = null;
@@ -231,38 +230,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
         @Override
         public void update(Graphics graphics) {
             paint(graphics);
-        }
-    }
-
-    private Applet applet = null;
-
-    private BrowserApplicationContext(Applet applet) {
-        this.applet = applet;
-    }
-
-    protected void contextOpen(URL location, String target) {
-        if (target == null) {
-            applet.getAppletContext().showDocument(location);
-        } else {
-            applet.getAppletContext().showDocument(location, target);
-        }
-    }
-
-    /**
-     * Evaluates the specified script in the browser's JavaScript page
-     * context and returns the result.
-     *
-     * @throws UnsupportedOperationException
-     * Thrown if the current runtime environment doesn't support this feature
-     */
-    public static Object eval(String script) {
-        BrowserApplicationContext browserApplicationContext =
-            (BrowserApplicationContext)getApplicationContext();
-        try {
-            JSObject window = JSObject.getWindow(browserApplicationContext.applet);
-            return window.eval(script);
-        } catch (Throwable throwable) {
-            throw new UnsupportedOperationException(throwable);
         }
     }
 }

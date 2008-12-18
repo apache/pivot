@@ -30,15 +30,15 @@ public final class Display extends Container {
         }
     }
 
-    private ApplicationContext applicationContext;
+    private ApplicationContext.DisplayHost displayHost;
 
-    protected Display(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+    protected Display(ApplicationContext.DisplayHost displayHost) {
+        this.displayHost = displayHost;
         super.setSkin(new DisplaySkin());
     }
 
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
+    public ApplicationContext.DisplayHost getDisplayHost() {
+        return displayHost;
     }
 
     @Override
@@ -61,16 +61,13 @@ public final class Display extends Container {
 
     @Override
     public void repaint(int x, int y, int width, int height, boolean immediate) {
-        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
-        if (displayHost != null) {
-            if (immediate) {
-                Graphics2D graphics = (Graphics2D)displayHost.getGraphics();
-                graphics.clipRect(x, y, width, height);
-                paint(graphics);
-                graphics.dispose();
-            } else {
-                displayHost.repaint(x, y, width, height);
-            }
+        if (immediate) {
+            Graphics2D graphics = (Graphics2D)displayHost.getGraphics();
+            graphics.clipRect(x, y, width, height);
+            paint(graphics);
+            graphics.dispose();
+        } else {
+            displayHost.repaint(x, y, width, height);
         }
     }
 

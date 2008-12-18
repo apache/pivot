@@ -67,11 +67,11 @@ public class SwingAdapter extends Component {
                 // Add our swingContainer to the correct display host
                 if (display != previousDisplay) {
                     if (previousDisplay != null) {
-                        previousDisplay.getApplicationContext().getDisplayHost().remove(swingContainer);
+                        previousDisplay.getDisplayHost().remove(swingContainer);
                     }
 
                     if (display != null) {
-                        display.getApplicationContext().getDisplayHost().add(swingContainer);
+                        display.getDisplayHost().add(swingContainer);
                     }
                 }
 
@@ -148,7 +148,7 @@ public class SwingAdapter extends Component {
 
             Display display = swingAdapter.getDisplay();
             if (display != null) {
-                display.getApplicationContext().getDisplayHost().remove(swingContainer);
+                display.getDisplayHost().remove(swingContainer);
             }
 
             JComponent swingComponent = swingAdapter.getSwingComponent();

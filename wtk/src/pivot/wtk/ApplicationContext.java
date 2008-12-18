@@ -40,6 +40,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Timer;
@@ -105,11 +107,6 @@ public abstract class ApplicationContext {
         public static final long serialVersionUID = 0;
 
         private Component focusedComponent = null;
-
-        private int mouseX = -1;
-        private int mouseY = -1;
-        private int mouseModifiersEx = 0;
-        private int keyboardModifiersEx = 0;
 
         private Point dragLocation = null;
         private Component dragDescendant = null;
@@ -292,22 +289,6 @@ public abstract class ApplicationContext {
             new java.awt.dnd.DropTarget(this, dropTargetListener);
 
             setFocusTraversalKeysEnabled(false);
-        }
-
-        public int getMouseX() {
-            return mouseX;
-        }
-
-        public int getMouseY() {
-            return mouseY;
-        }
-
-        public int getMouseModifiersEx() {
-            return mouseModifiersEx;
-        }
-
-        public int getKeyboardModifiersEx() {
-            return keyboardModifiersEx;
         }
 
         @Override
@@ -633,10 +614,10 @@ public abstract class ApplicationContext {
         protected void processMouseEvent(MouseEvent event) {
             super.processMouseEvent(event);
 
-            // Set the mouse state
-            mouseX = event.getX();
-            mouseY = event.getY();
-            mouseModifiersEx = event.getModifiersEx();
+            setInputState(event);
+
+            int x = event.getX();
+            int y = event.getY();
 
             // Get the button associated with this event
             Mouse.Button button = null;
@@ -661,14 +642,14 @@ public abstract class ApplicationContext {
             switch (event.getID()) {
                 case MouseEvent.MOUSE_PRESSED: {
                     requestFocus();
-                    dragLocation = new Point(mouseX, mouseY);
-                    display.mouseDown(button, mouseX, mouseY);
+                    dragLocation = new Point(x, y);
+                    display.mouseDown(button, x, y);
                     break;
                 }
 
                 case MouseEvent.MOUSE_RELEASED: {
                     if (dragDescendant == null) {
-                        display.mouseUp(button, mouseX, mouseY);
+                        display.mouseUp(button, x, y);
                     } else {
                         DragSource dragSource = dragDescendant.getDragSource();
 
@@ -679,7 +660,7 @@ public abstract class ApplicationContext {
                         } else {
                             DropTarget dropTarget = dropDescendant.getDropTarget();
                             DropAction dropAction = dropTarget.drop(dropDescendant, dragManifest,
-                                dragSource.getSupportedDropActions(), mouseX, mouseY, getUserDropAction(event));
+                                dragSource.getSupportedDropActions(), x, y, getUserDropAction(event));
                             dragSource.endDrag(dragDescendant, dropAction);
                         }
 
@@ -701,27 +682,29 @@ public abstract class ApplicationContext {
                 }
 
                 case MouseEvent.MOUSE_ENTERED: {
+                    Mouse.setDisplayHost(this);
                     display.mouseOver();
                     break;
                 }
 
                 case MouseEvent.MOUSE_EXITED: {
-                    mouseX = -1;
-                    mouseY = -1;
-                    mouseModifiersEx = 0;
                     display.mouseOut();
+                    Mouse.setDisplayHost(null);
                     break;
                 }
             }
+
+            setInputState(null);
         }
 
         @Override
         protected void processMouseMotionEvent(MouseEvent event) {
             super.processMouseMotionEvent(event);
 
-            // Set the mouse state
-            mouseX = event.getX();
-            mouseY = event.getY();
+            setInputState(event);
+
+            int x = event.getX();
+            int y = event.getY();
 
             // Process the event
             switch (event.getID()) {
@@ -729,13 +712,13 @@ public abstract class ApplicationContext {
                 case MouseEvent.MOUSE_DRAGGED: {
                     if (dragDescendant == null) {
                         // A drag is not active, so propagate the event to the display
-                        display.mouseMove(mouseX, mouseY);
+                        display.mouseMove(x, y);
 
                         int dragThreshold = Platform.getDragThreshold();
 
                         if (dragLocation != null
-                            && (Math.abs(mouseX - dragLocation.x) > dragThreshold
-                                || Math.abs(mouseY - dragLocation.y) > dragThreshold)) {
+                            && (Math.abs(x - dragLocation.x) > dragThreshold
+                                || Math.abs(y - dragLocation.y) > dragThreshold)) {
                             // The user has dragged the mouse past the drag threshold; try
                             // to find a drag source
                             dragDescendant = display.getDescendantAt(dragLocation.x,
@@ -751,7 +734,7 @@ public abstract class ApplicationContext {
                                 dragLocation = null;
                             } else {
                                 DragSource dragSource = dragDescendant.getDragSource();
-                                dragLocation = dragDescendant.mapPointFromAncestor(display, mouseX, mouseY);
+                                dragLocation = dragDescendant.mapPointFromAncestor(display, x, y);
 
                                 if (dragSource.beginDrag(dragDescendant, dragLocation.x, dragLocation.y)) {
                                     // A drag has started
@@ -780,8 +763,8 @@ public abstract class ApplicationContext {
                                         userDropAction = getUserDropAction(event);
 
                                         // Repaint the drag visual
-                                        dragLocation.x = mouseX;
-                                        dragLocation.y = mouseY;
+                                        dragLocation.x = x;
+                                        dragLocation.y = y;
 
                                         repaintDragRepresentation();
                                     }
@@ -799,7 +782,7 @@ public abstract class ApplicationContext {
                             // Get the previous and current drop descendant and call
                             // move or exit/enter as appropriate
                             Component previousDropDescendant = dropDescendant;
-                            dropDescendant = getDropDescendant(mouseX, mouseY);
+                            dropDescendant = getDropDescendant(x, y);
 
                             DropAction dropAction = null;
 
@@ -807,7 +790,7 @@ public abstract class ApplicationContext {
                                 if (dropDescendant != null) {
                                     DropTarget dropTarget = dropDescendant.getDropTarget();
 
-                                    Point dropLocation = dropDescendant.mapPointFromAncestor(display, mouseX, mouseY);
+                                    Point dropLocation = dropDescendant.mapPointFromAncestor(display, x, y);
                                     dropAction = dropTarget.dragMove(dropDescendant, dragManifest,
                                         dragSource.getSupportedDropActions(),
                                         dropLocation.x, dropLocation.y, userDropAction);
@@ -831,8 +814,8 @@ public abstract class ApplicationContext {
                             // Repaint the drag visual
                             repaintDragRepresentation();
 
-                            dragLocation.x = mouseX;
-                            dragLocation.y = mouseY;
+                            dragLocation.x = x;
+                            dragLocation.y = y;
 
                             repaintDragRepresentation();
                         }
@@ -841,11 +824,15 @@ public abstract class ApplicationContext {
                     break;
                 }
             }
+
+            setInputState(null);
         }
 
         @Override
         protected void processMouseWheelEvent(MouseWheelEvent event) {
             super.processMouseWheelEvent(event);
+
+            setInputState(event);
 
             // Get the event coordinates
             int x = event.getX();
@@ -875,14 +862,15 @@ public abstract class ApplicationContext {
                     break;
                 }
             }
+
+            setInputState(null);
         }
 
         @Override
         protected void processKeyEvent(KeyEvent event) {
             super.processKeyEvent(event);
 
-            // Set the keyboard state
-            keyboardModifiersEx = event.getModifiersEx();
+            setInputState(event);
 
             // Get the key location
             Keyboard.KeyLocation keyLocation = null;
@@ -977,6 +965,8 @@ public abstract class ApplicationContext {
                     }
                 }
             }
+
+            setInputState(null);
         }
     }
 
@@ -1012,8 +1002,6 @@ public abstract class ApplicationContext {
 
     protected static URL origin = null;
 
-    private static ThreadLocal<ApplicationContext> applicationContext;
-
     private static HashMap<URL, Object> resourceCache = new HashMap<URL, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
@@ -1024,17 +1012,9 @@ public abstract class ApplicationContext {
     private static final String DEFAULT_THEME_CLASS_NAME = "pivot.wtk.skin.terra.TerraTheme";
 
     protected ApplicationContext() {
-        assert (applicationContext == null);
-
-        applicationContext = new ThreadLocal<ApplicationContext>() {
-            protected synchronized ApplicationContext initialValue() {
-                return ApplicationContext.this;
-            }
-        };
-
         // Create the display host and display
         displayHost = new DisplayHost();
-        display = new Display(this);
+        display = new Display(displayHost);
 
         try {
             // Load and instantiate the default theme, if possible
@@ -1047,20 +1027,12 @@ public abstract class ApplicationContext {
         }
     }
 
-    protected abstract void contextOpen(URL location, String target);
-
-    /**
-     * Returns the current display host.
-     */
-    public static DisplayHost getDisplayHost() {
-        return getApplicationContext().displayHost;
+    protected DisplayHost getDisplayHost() {
+        return displayHost;
     }
 
-    /**
-     * Returns the current display.
-     */
-    public static Display getDisplay() {
-        return getApplicationContext().display;
+    protected Display getDisplay() {
+        return display;
     }
 
     /**
@@ -1083,17 +1055,17 @@ public abstract class ApplicationContext {
      * @param location
      */
     public static void open(URL location) {
-        open(location, null);
-    }
+        // TODO Remove dynamic invocation when Java 6 is supported on the Mac
 
-    /**
-     * Opens the resource at the given location.
-     *
-     * @param location
-     * @param target
-     */
-    public static void open(URL location, String target) {
-        applicationContext.get().contextOpen(location, target);
+        try {
+            Class<?> desktopClass = Class.forName("java.awt.Desktop");
+            Method getDesktopMethod = desktopClass.getMethod("getDesktop", new Class<?>[] {});
+            Method browseMethod = desktopClass.getMethod("browse", new Class[] {URI.class});
+            Object desktop = getDesktopMethod.invoke(null, (Object[]) null);
+            browseMethod.invoke(desktop, location.toURI());
+        } catch (Exception exception) {
+            System.out.println("Unable to open URL in default browser.");
+        }
     }
 
     /**
@@ -1236,8 +1208,32 @@ public abstract class ApplicationContext {
         }
     }
 
-    protected static ApplicationContext getApplicationContext() {
-        return applicationContext.get();
+    private static void setInputState(InputEvent event) {
+        int modifiersEx;
+        if (event == null) {
+            modifiersEx = -1;
+        } else {
+            modifiersEx = event.getModifiersEx();
+        }
+
+        Mouse.setModifiersEx(modifiersEx);
+        Keyboard.setModifiersEx(modifiersEx);
+    }
+
+    private static void setInputState(MouseEvent event) {
+        setInputState((InputEvent)event);
+
+        int x;
+        int y;
+        if (event == null) {
+            x = -1;
+            y = -1;
+        } else {
+            x = event.getX();
+            y = event.getY();
+        }
+
+        Mouse.setLocation(x, y);
     }
 
     private static DropAction getUserDropAction(InputEvent event) {

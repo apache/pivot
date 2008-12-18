@@ -57,13 +57,22 @@ public final class Mouse {
         BLOCK
     }
 
+    private static int x = 0;
+    private static int y = 0;
+    private static int modifiersEx = -1;
+
+    private static ApplicationContext.DisplayHost displayHost = null;
+
     /**
      * Returns the x-coordinate of the mouse, in the coordinate system of
      * the display used by the current thread.
      */
     public static int getX() {
-        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
-        return displayHost.getMouseX();
+        if (x == -1) {
+            throw new IllegalStateException();
+        }
+
+        return x;
     }
 
     /**
@@ -71,8 +80,16 @@ public final class Mouse {
      * the display used by the current thread.
      */
     public static int getY() {
-        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
-        return displayHost.getMouseY();
+        if (y == -1) {
+            throw new IllegalStateException();
+        }
+
+        return y;
+    }
+
+    protected static void setLocation(int x, int y) {
+        Mouse.x = x;
+        Mouse.y = y;
     }
 
     /**
@@ -80,10 +97,11 @@ public final class Mouse {
      * pressed.
      */
     public static int getButtons() {
-        int buttons = 0x00;
+        if (modifiersEx == -1) {
+            throw new IllegalStateException();
+        }
 
-        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
-        int modifiersEx = displayHost.getMouseModifiersEx();
+        int buttons = 0x00;
 
         if ((modifiersEx & MouseEvent.BUTTON1_DOWN_MASK) > 0) {
             buttons |= Mouse.Button.LEFT.getMask();
@@ -98,6 +116,11 @@ public final class Mouse {
         }
 
         return buttons;
+    }
+
+    protected static void setModifiersEx(int modifiersEx) {
+        // TODO Determine WTK bitfield here instead of getButtons()?
+        Mouse.modifiersEx = modifiersEx;
     }
 
     /**
@@ -123,11 +146,13 @@ public final class Mouse {
      * Returns the system cursor.
      */
     public static Cursor getCursor() {
+        if (displayHost == null) {
+            throw new IllegalStateException();
+        }
+
         Cursor cursor = null;
 
-        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
         int cursorID = displayHost.getCursor().getType();
-
         switch (cursorID) {
             case java.awt.Cursor.DEFAULT_CURSOR: {
                 cursor = Cursor.DEFAULT;
@@ -212,13 +237,15 @@ public final class Mouse {
      *
      * @param cursor
      */
-    @SuppressWarnings("deprecation")
     public static void setCursor(Cursor cursor) {
         if (cursor == null) {
             throw new IllegalArgumentException("cursor is null.");
         }
 
-        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
+        if (displayHost == null) {
+            throw new IllegalStateException();
+        }
+
         int cursorID = -1;
 
         switch (cursor) {
@@ -298,5 +325,9 @@ public final class Mouse {
         }
 
         displayHost.setCursor(new java.awt.Cursor(cursorID));
+    }
+
+    protected static void setDisplayHost(ApplicationContext.DisplayHost displayHost) {
+        Mouse.displayHost = displayHost;
     }
 }
