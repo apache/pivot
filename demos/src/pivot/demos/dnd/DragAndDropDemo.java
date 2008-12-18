@@ -250,7 +250,7 @@ public class DragAndDropDemo implements Application {
                 if (clipboardContent != null
                     && clipboardContent.containsImage()) {
                     try {
-                        imageView.setImage((Image)clipboardContent.getImage());
+                        imageView.setImage(clipboardContent.getImage());
                     } catch(IOException exception) {
                         System.err.println(exception);
                     }

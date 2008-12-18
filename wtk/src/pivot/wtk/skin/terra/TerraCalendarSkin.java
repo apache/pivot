@@ -220,9 +220,6 @@ public class TerraCalendarSkin extends CalendarSkin
 
             if (keyCode == Keyboard.KeyCode.ENTER) {
                 dateButton.press();
-            } else if (keyCode == Keyboard.KeyCode.TAB) {
-                monthSpinner.requestFocus();
-                consumed = true;
             } else if (keyCode == Keyboard.KeyCode.UP
                 || keyCode == Keyboard.KeyCode.DOWN
                 || keyCode == Keyboard.KeyCode.LEFT

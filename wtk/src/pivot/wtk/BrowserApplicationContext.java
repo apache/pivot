@@ -81,7 +81,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                }
 
                 // Create the application context
-                applicationContext = new BrowserApplicationContext(HostApplet.this);
+                new BrowserApplicationContext(HostApplet.this);
 
                 // Load properties specified on the query string
                 properties = new HashMap<String, String>();
@@ -113,7 +113,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 }
 
                 // Create the display host and add it to the applet
-                DisplayHost displayHost = applicationContext.getDisplayHost();
+                DisplayHost displayHost = ApplicationContext.getDisplayHost();
                 setLayout(new java.awt.BorderLayout());
                 add(displayHost);
 
@@ -127,14 +127,14 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
                 if (applicationClassName == null) {
                     Alert.alert(MessageType.ERROR, "Application class name is required.",
-                        applicationContext.getDisplay());
+                        ApplicationContext.getDisplay());
                 } else {
                     try {
                         Class<?> applicationClass = Class.forName(applicationClassName);
                         application = (Application)applicationClass.newInstance();
                     } catch(Exception exception) {
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            applicationContext.getDisplay());
+                            ApplicationContext.getDisplay());
                         exception.printStackTrace();
                     }
                 }
@@ -144,15 +144,15 @@ public final class BrowserApplicationContext extends ApplicationContext {
         private class StartCallback implements Runnable {
             public void run() {
                 // Set focus to the display host
-                DisplayHost displayHost = applicationContext.getDisplayHost();
+                DisplayHost displayHost = ApplicationContext.getDisplayHost();
                 displayHost.requestFocus();
 
                 if (application != null) {
                     try {
-                        application.startup(applicationContext.getDisplay(), propertyDictionary);
+                        application.startup(ApplicationContext.getDisplay(), propertyDictionary);
                     } catch(Exception exception) {
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            applicationContext.getDisplay());
+                            ApplicationContext.getDisplay());
                         exception.printStackTrace();
                     }
                 }
@@ -165,7 +165,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     application.shutdown(false);
                 } catch(Exception exception) {
                     Alert.alert(MessageType.ERROR, exception.getMessage(),
-                        applicationContext.getDisplay());
+                        ApplicationContext.getDisplay());
                     exception.printStackTrace();
                 }
             }
@@ -177,7 +177,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
             }
         }
 
-        private BrowserApplicationContext applicationContext = null;
         private HashMap<String, String> properties = null;
         private PropertyDictionary propertyDictionary = new PropertyDictionary();
         private Application application = null;

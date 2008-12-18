@@ -17,6 +17,9 @@ package pivot.wtk;
 
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.FlavorMap;
+import java.awt.datatransfer.SystemFlavorMap;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -30,6 +33,23 @@ public class Platform {
 
     private static final int DEFAULT_MULTI_CLICK_INTERVAL = 400;
     private static final int DEFAULT_CURSOR_BLINK_RATE = 600;
+
+    static {
+        FlavorMap flavorMap = SystemFlavorMap.getDefaultFlavorMap();
+
+        if (flavorMap instanceof SystemFlavorMap) {
+            SystemFlavorMap systemFlavorMap = (SystemFlavorMap)flavorMap;
+
+            // TODO Set mappings based on current OS; this only works for
+            // Windows
+            try {
+                DataFlavor csvDataFlavor = new DataFlavor("text/csv; class=java.nio.ByteBuffer");
+                systemFlavorMap.addUnencodedNativeForFlavor(csvDataFlavor, "CSV");
+                systemFlavorMap.addFlavorForUnencodedNative("CSV", csvDataFlavor);
+            } catch(ClassNotFoundException exception) {
+            }
+        }
+    }
 
     /**
      * Returns the system text anti-aliasing hint.

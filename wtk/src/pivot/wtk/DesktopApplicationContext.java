@@ -43,7 +43,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 | AWTEvent.WINDOW_STATE_EVENT_MASK);
 
             // Add the display host
-            add(applicationContext.getDisplayHost());
+            add(ApplicationContext.getDisplayHost());
 
             // Disable focus traversal keys
             setFocusTraversalKeysEnabled(false);
@@ -63,10 +63,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             switch(event.getID()) {
                 case WindowEvent.WINDOW_OPENED: {
-                    applicationContext.getDisplayHost().requestFocus();
+                    ApplicationContext.getDisplayHost().requestFocus();
 
                     try {
-                        application.startup(applicationContext.getDisplay(),
+                        application.startup(ApplicationContext.getDisplay(),
                             new ImmutableMap<String, String>(properties));
                     } catch(Exception exception) {
                         exception.printStackTrace();
@@ -75,7 +75,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             message = exception.getClass().getName();
                         }
 
-                        Alert.alert(MessageType.ERROR, message, applicationContext.getDisplay());
+                        Alert.alert(MessageType.ERROR, message, ApplicationContext.getDisplay());
                     }
 
                     break;
@@ -89,7 +89,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     } catch(Exception exception) {
                         exception.printStackTrace();
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            applicationContext.getDisplay());
+                            ApplicationContext.getDisplay());
                     }
 
                     if (shutdown) {
@@ -119,7 +119,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     } catch(Exception exception) {
                         exception.printStackTrace();
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            applicationContext.getDisplay());
+                            ApplicationContext.getDisplay());
                     }
 
                     break;
@@ -131,7 +131,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     } catch(Exception exception) {
                         exception.printStackTrace();
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            applicationContext.getDisplay());
+                            ApplicationContext.getDisplay());
                     }
 
                     break;
@@ -140,7 +140,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
     }
 
-    private static DesktopApplicationContext applicationContext = null;
     private static HashMap<String, String> properties = null;
     private static Application application = null;
 
@@ -222,7 +221,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         // Create the application context
-        applicationContext = new DesktopApplicationContext();
+        new DesktopApplicationContext();
 
         // Load the application
         if (applicationClassName == null) {
