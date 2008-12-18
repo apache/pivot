@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import pivot.collections.HashMap;
 import pivot.io.FileList;
 import pivot.wtk.media.Image;
 import pivot.wtk.media.Picture;
@@ -40,8 +39,6 @@ public class RemoteManifest implements Manifest {
     private DataFlavor imageDataFlavor = null;
     private DataFlavor fileListDataFlavor = null;
     private DataFlavor urlDataFlavor = null;
-
-    private HashMap<String, DataFlavor> byteArrayDataFlavors = new HashMap<String, DataFlavor>();
 
     RemoteManifest(Transferable transferable) {
         assert(transferable != null);
@@ -60,7 +57,11 @@ public class RemoteManifest implements Manifest {
             } else if (dataFlavor.getRepresentationClass() == URL.class) {
                 urlDataFlavor = dataFlavor;
             } else if (dataFlavor.isRepresentationClassByteBuffer()) {
-                // TODO
+                // TODO If we have a serializer for the type, deserialize it
+
+                // TODO Do we still need a workaround for Sun bug #4147507
+                // (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4147507)
+                // if we are using ByteBuffers?
             }
         }
     }
@@ -126,20 +127,7 @@ public class RemoteManifest implements Manifest {
         return (urlDataFlavor != null);
     }
 
-    public byte[] getBinaryData(String mimeType) {
-        // TODO Do we still need a workaround for Sun bug #4147507
-        // (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4147507)
-        // if we are using ByteBuffers?
-
-        // TODO
-        return null;
-    }
-
-    public boolean containsBinaryData(String mimeType) {
-        return byteArrayDataFlavors.containsKey(mimeType);
-    }
-
-    public Object getValue(String mimeType) {
+    public Object getValue(String key) {
         return null;
     }
 

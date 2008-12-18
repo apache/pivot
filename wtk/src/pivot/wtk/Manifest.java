@@ -24,6 +24,13 @@ import pivot.wtk.media.Image;
 /**
  * Interface representing a "manifest". Manifests are collections of data used
  * in clipboard and drag/drop operations.
+ * <p>
+ * TODO In the future, we may want to make this an abstract base class and
+ * add a SerializerDictionary that maps keys to Serializers. Local manifests
+ * can use the dictionary to write data out to the native OS, and remote
+ * manifests can do the opposite. We'll still need a means of mapping value
+ * keys to native IDs (which we would need to do via MIME types if the system
+ * is based on AWT's DnD mechanism).
  *
  * @author gbrown
  */
@@ -40,9 +47,6 @@ public interface Manifest {
     public URL getURL() throws IOException;
     public boolean containsURL();
 
-    public Object getValue(String mimeType) throws IOException;
-    public boolean containsValue(String mimeType);
-
-    public byte[] getBinaryData(String mimeType) throws IOException;
-    public boolean containsBinaryData(String mimeType);
+    public Object getValue(String key) throws IOException;
+    public boolean containsValue(String key);
 }

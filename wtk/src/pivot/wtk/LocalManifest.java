@@ -19,11 +19,10 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.net.URL;
-import java.util.Iterator;
 
 import pivot.collections.ArrayList;
+import pivot.collections.HashMap;
 import pivot.io.FileList;
-import pivot.serialization.Serializer;
 import pivot.wtk.media.Image;
 import pivot.wtk.media.Picture;
 
@@ -33,14 +32,12 @@ import pivot.wtk.media.Picture;
  *
  * @author gbrown
  */
-public class LocalManifest implements Manifest, Iterable<String> {
-    // TODO Create an Entry class that contains an Object, Serializer, and
-    // byte[]
-
+public class LocalManifest implements Manifest {
     protected String text = null;
     protected Image image = null;
     protected FileList fileList = null;
     protected URL url = null;
+    protected HashMap<String, Object> values = new HashMap<String, Object>();
 
     public String getText() {
         return text;
@@ -104,41 +101,16 @@ public class LocalManifest implements Manifest, Iterable<String> {
         return url != null;
     }
 
-    public byte[] getBinaryData(String mimeType) {
-        // TODO
-        return null;
+    public Object getValue(String key) {
+        return values.get(key);
     }
 
-    public void putData(String mimeType, byte[] byteArray) {
-        // TODO
-    }
-
-    public boolean containsBinaryData(String mimeType) {
-        // TODO
-        return false;
-    }
-
-    public Object getValue(String mimeType) {
-        // TODO
-        return null;
-    }
-
-    public void putValue(String mimeType, Object value) {
-        // TODO
-    }
-
-    public void putValue(Object value, Serializer serializer) {
-        // TODO
+    public Object putValue(String key, Object value) {
+        return values.put(key, value);
     }
 
     public boolean containsValue(String key) {
-        // TODO
-        return false;
-    }
-
-    public Iterator<String> iterator() {
-        // TODO
-        return null;
+        return values.containsKey(key);
     }
 }
 
@@ -164,8 +136,6 @@ class LocalManifestAdapter implements Transferable {
         if (localManifest.containsURL()) {
             transferDataFlavors.add(new DataFlavor(URL.class, URL.class.getName()));
         }
-
-        // TODO Enumerate MIME types and add byte arrays
     }
 
     public Object getTransferData(DataFlavor dataFlavor)
@@ -189,6 +159,20 @@ class LocalManifestAdapter implements Transferable {
             transferData = localManifest.getURL();
         } else if (dataFlavor.isRepresentationClassByteBuffer()) {
             // TODO
+            /*
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+                Object value = localManifest.getValue(key);
+
+                try {
+                    serializer.writeObject(value, byteArrayOutputStream);
+                    byteArrayOutputStream.close();
+                    ByteBuffer byteBuffer = ByteBuffer.wrap(byteArrayOutputStream.toByteArray());
+
+                } catch(Exception exception) {
+                    System.err.println(exception);
+                }
+             */
         }
 
         return transferData;
