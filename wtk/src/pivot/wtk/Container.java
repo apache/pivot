@@ -622,7 +622,7 @@ public abstract class Container extends Component
             mouseDownComponent = component;
 
             long currentTime = System.currentTimeMillis();
-            int multiClickInterval = ApplicationContext.getMultiClickInterval();
+            int multiClickInterval = Platform.getMultiClickInterval();
 
             if (currentTime - mouseDownTime > multiClickInterval) {
                 mouseDownTime = System.currentTimeMillis();

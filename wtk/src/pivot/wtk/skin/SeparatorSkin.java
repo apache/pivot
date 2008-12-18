@@ -11,10 +11,10 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
+import pivot.wtk.Platform;
 import pivot.wtk.Separator;
 import pivot.wtk.SeparatorListener;
 import pivot.wtk.Theme;
@@ -115,7 +115,7 @@ public class SeparatorSkin extends ComponentSkin
 
             if (fontRenderContext.isAntiAliased()) {
                 graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-            		ApplicationContext.getTextAntialiasingHint());
+                    Platform.getTextAntialiasingHint());
             }
 
             if (fontRenderContext.usesFractionalMetrics()) {

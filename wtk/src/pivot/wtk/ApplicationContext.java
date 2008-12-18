@@ -19,7 +19,6 @@ import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.dnd.DnDConstants;
@@ -40,8 +39,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Iterator;
@@ -108,6 +105,11 @@ public abstract class ApplicationContext {
         public static final long serialVersionUID = 0;
 
         private Component focusedComponent = null;
+
+        private int mouseX = -1;
+        private int mouseY = -1;
+        private int mouseModifiersEx = 0;
+        private int keyboardModifiersEx = 0;
 
         private Point dragLocation = null;
         private Component dragDescendant = null;
@@ -290,6 +292,22 @@ public abstract class ApplicationContext {
             new java.awt.dnd.DropTarget(this, dropTargetListener);
 
             setFocusTraversalKeysEnabled(false);
+        }
+
+        public int getMouseX() {
+            return mouseX;
+        }
+
+        public int getMouseY() {
+            return mouseY;
+        }
+
+        public int getMouseModifiersEx() {
+            return mouseModifiersEx;
+        }
+
+        public int getKeyboardModifiersEx() {
+            return keyboardModifiersEx;
         }
 
         @Override
@@ -615,13 +633,10 @@ public abstract class ApplicationContext {
         protected void processMouseEvent(MouseEvent event) {
             super.processMouseEvent(event);
 
-            // Get the event coordinates
-            int x = event.getX();
-            int y = event.getY();
-
             // Set the mouse state
-            Mouse.setLocation(x, y);
-            Mouse.setModifiersEx(event.getModifiersEx());
+            mouseX = event.getX();
+            mouseY = event.getY();
+            mouseModifiersEx = event.getModifiersEx();
 
             // Get the button associated with this event
             Mouse.Button button = null;
@@ -646,14 +661,14 @@ public abstract class ApplicationContext {
             switch (event.getID()) {
                 case MouseEvent.MOUSE_PRESSED: {
                     requestFocus();
-                    dragLocation = new Point(x, y);
-                    display.mouseDown(button, x, y);
+                    dragLocation = new Point(mouseX, mouseY);
+                    display.mouseDown(button, mouseX, mouseY);
                     break;
                 }
 
                 case MouseEvent.MOUSE_RELEASED: {
                     if (dragDescendant == null) {
-                        display.mouseUp(button, x, y);
+                        display.mouseUp(button, mouseX, mouseY);
                     } else {
                         DragSource dragSource = dragDescendant.getDragSource();
 
@@ -664,7 +679,7 @@ public abstract class ApplicationContext {
                         } else {
                             DropTarget dropTarget = dropDescendant.getDropTarget();
                             DropAction dropAction = dropTarget.drop(dropDescendant, dragManifest,
-                                dragSource.getSupportedDropActions(), x, y, getUserDropAction(event));
+                                dragSource.getSupportedDropActions(), mouseX, mouseY, getUserDropAction(event));
                             dragSource.endDrag(dragDescendant, dropAction);
                         }
 
@@ -691,6 +706,9 @@ public abstract class ApplicationContext {
                 }
 
                 case MouseEvent.MOUSE_EXITED: {
+                    mouseX = -1;
+                    mouseY = -1;
+                    mouseModifiersEx = 0;
                     display.mouseOut();
                     break;
                 }
@@ -701,12 +719,9 @@ public abstract class ApplicationContext {
         protected void processMouseMotionEvent(MouseEvent event) {
             super.processMouseMotionEvent(event);
 
-            // Get the event coordinates
-            int x = event.getX();
-            int y = event.getY();
-
             // Set the mouse state
-            Mouse.setLocation(x, y);
+            mouseX = event.getX();
+            mouseY = event.getY();
 
             // Process the event
             switch (event.getID()) {
@@ -714,13 +729,13 @@ public abstract class ApplicationContext {
                 case MouseEvent.MOUSE_DRAGGED: {
                     if (dragDescendant == null) {
                         // A drag is not active, so propagate the event to the display
-                        display.mouseMove(x, y);
+                        display.mouseMove(mouseX, mouseY);
 
-                        int dragThreshold = getDragThreshold();
+                        int dragThreshold = Platform.getDragThreshold();
 
                         if (dragLocation != null
-                            && (Math.abs(x - dragLocation.x) > dragThreshold
-                                || Math.abs(y - dragLocation.y) > dragThreshold)) {
+                            && (Math.abs(mouseX - dragLocation.x) > dragThreshold
+                                || Math.abs(mouseY - dragLocation.y) > dragThreshold)) {
                             // The user has dragged the mouse past the drag threshold; try
                             // to find a drag source
                             dragDescendant = display.getDescendantAt(dragLocation.x,
@@ -736,7 +751,7 @@ public abstract class ApplicationContext {
                                 dragLocation = null;
                             } else {
                                 DragSource dragSource = dragDescendant.getDragSource();
-                                dragLocation = dragDescendant.mapPointFromAncestor(display, x, y);
+                                dragLocation = dragDescendant.mapPointFromAncestor(display, mouseX, mouseY);
 
                                 if (dragSource.beginDrag(dragDescendant, dragLocation.x, dragLocation.y)) {
                                     // A drag has started
@@ -765,8 +780,8 @@ public abstract class ApplicationContext {
                                         userDropAction = getUserDropAction(event);
 
                                         // Repaint the drag visual
-                                        dragLocation.x = x;
-                                        dragLocation.y = y;
+                                        dragLocation.x = mouseX;
+                                        dragLocation.y = mouseY;
 
                                         repaintDragRepresentation();
                                     }
@@ -784,7 +799,7 @@ public abstract class ApplicationContext {
                             // Get the previous and current drop descendant and call
                             // move or exit/enter as appropriate
                             Component previousDropDescendant = dropDescendant;
-                            dropDescendant = getDropDescendant(x, y);
+                            dropDescendant = getDropDescendant(mouseX, mouseY);
 
                             DropAction dropAction = null;
 
@@ -792,7 +807,7 @@ public abstract class ApplicationContext {
                                 if (dropDescendant != null) {
                                     DropTarget dropTarget = dropDescendant.getDropTarget();
 
-                                    Point dropLocation = dropDescendant.mapPointFromAncestor(display, x, y);
+                                    Point dropLocation = dropDescendant.mapPointFromAncestor(display, mouseX, mouseY);
                                     dropAction = dropTarget.dragMove(dropDescendant, dragManifest,
                                         dragSource.getSupportedDropActions(),
                                         dropLocation.x, dropLocation.y, userDropAction);
@@ -816,8 +831,8 @@ public abstract class ApplicationContext {
                             // Repaint the drag visual
                             repaintDragRepresentation();
 
-                            dragLocation.x = x;
-                            dragLocation.y = y;
+                            dragLocation.x = mouseX;
+                            dragLocation.y = mouseY;
 
                             repaintDragRepresentation();
                         }
@@ -867,7 +882,7 @@ public abstract class ApplicationContext {
             super.processKeyEvent(event);
 
             // Set the keyboard state
-            Keyboard.setModifiersEx(event.getModifiersEx());
+            keyboardModifiersEx = event.getModifiersEx();
 
             // Get the key location
             Keyboard.KeyLocation keyLocation = null;
@@ -1006,10 +1021,6 @@ public abstract class ApplicationContext {
     private static HashMap<Integer, TimerTask> timerTaskMap = new HashMap<Integer, TimerTask>();
     private static int nextTimerTaskID = 0;
 
-    private static Object textAntialiasingHint = null;
-
-    private static final int DEFAULT_MULTI_CLICK_INTERVAL = 400;
-    private static final int DEFAULT_CURSOR_BLINK_RATE = 600;
     private static final String DEFAULT_THEME_CLASS_NAME = "pivot.wtk.skin.terra.TerraTheme";
 
     protected ApplicationContext() {
@@ -1036,34 +1047,20 @@ public abstract class ApplicationContext {
         }
     }
 
-    public DisplayHost getDisplayHost() {
-        return displayHost;
-    }
-
-    public Display getDisplay() {
-        return display;
-    }
-
-    protected void repaint(int x, int y, int width, int height) {
-        if (displayHost != null) {
-            displayHost.repaint(x, y, width, height);
-        }
-    }
-
-    protected Graphics2D getGraphics() {
-        Graphics2D graphics = null;
-
-        if (displayHost != null) {
-            graphics = (Graphics2D)displayHost.getGraphics();
-        }
-
-        return graphics;
-    }
-
     protected abstract void contextOpen(URL location, String target);
 
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext.get();
+    /**
+     * Returns the current display host.
+     */
+    public static DisplayHost getDisplayHost() {
+        return getApplicationContext().displayHost;
+    }
+
+    /**
+     * Returns the current display.
+     */
+    public static Display getDisplay() {
+        return getApplicationContext().display;
     }
 
     /**
@@ -1239,68 +1236,8 @@ public abstract class ApplicationContext {
         }
     }
 
-    /**
-     * Returns the system text anti-aliasing hint.
-     */
-    public static Object getTextAntialiasingHint() {
-        if (textAntialiasingHint == null) {
-            Toolkit toolkit = Toolkit.getDefaultToolkit();
-            java.util.Map<?, ?> fontDesktopHints =
-                (java.util.Map<?, ?>)toolkit.getDesktopProperty("awt.font.desktophints");
-
-            if (fontDesktopHints == null) {
-                textAntialiasingHint = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
-            } else {
-                textAntialiasingHint = fontDesktopHints.get(RenderingHints.KEY_TEXT_ANTIALIASING);
-                if (textAntialiasingHint.equals(RenderingHints.VALUE_TEXT_ANTIALIAS_OFF)) {
-                    textAntialiasingHint = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
-                }
-
-                // Listen for changes to the property
-                toolkit.addPropertyChangeListener("awt.font.desktophints", new PropertyChangeListener() {
-                    public void propertyChange(PropertyChangeEvent event) {
-                        ApplicationContext.textAntialiasingHint = null;
-                    }
-                });
-            }
-        }
-
-        return textAntialiasingHint;
-    }
-
-    /**
-     * Returns the system multi-click interval.
-     */
-    public static int getMultiClickInterval() {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Integer multiClickInterval = (Integer)toolkit.getDesktopProperty("awt.multiClickInterval");
-
-        if (multiClickInterval == null) {
-            multiClickInterval = DEFAULT_MULTI_CLICK_INTERVAL;
-        }
-
-        return multiClickInterval;
-    }
-
-    /**
-     * Returns the system cursor blink rate.
-     */
-    public static int getCursorBlinkRate() {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Integer cursorBlinkRate = (Integer)toolkit.getDesktopProperty("awt.cursorBlinkRate");
-
-        if (cursorBlinkRate == null) {
-            cursorBlinkRate = DEFAULT_CURSOR_BLINK_RATE;
-        }
-
-        return cursorBlinkRate;
-    }
-
-    /**
-     * Returns the system drag threshold.
-     */
-    public static int getDragThreshold() {
-        return java.awt.dnd.DragSource.getDragThreshold();
+    protected static ApplicationContext getApplicationContext() {
+        return applicationContext.get();
     }
 
     private static DropAction getUserDropAction(InputEvent event) {

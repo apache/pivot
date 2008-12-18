@@ -258,7 +258,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
      */
     public static Object eval(String script) {
         BrowserApplicationContext browserApplicationContext =
-            (BrowserApplicationContext)ApplicationContext.getApplicationContext();
+            (BrowserApplicationContext)getApplicationContext();
         try {
             JSObject window = JSObject.getWindow(browserApplicationContext.applet);
             return window.eval(script);

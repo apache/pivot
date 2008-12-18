@@ -18,11 +18,11 @@ package pivot.wtk.effects;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.HorizontalAlignment;
+import pivot.wtk.Platform;
 import pivot.wtk.VerticalAlignment;
 
 /**
@@ -322,7 +322,7 @@ public class ScaleDecorator implements Decorator {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-    		ApplicationContext.getTextAntialiasingHint());
+            Platform.getTextAntialiasingHint());
 
         int tx = getTranslatedX(component);
         int ty = getTranslatedY(component);

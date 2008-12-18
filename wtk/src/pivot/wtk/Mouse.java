@@ -57,16 +57,13 @@ public final class Mouse {
         BLOCK
     }
 
-    private static int x = 0;
-    private static int y = 0;
-    private static int modifiersEx = 0;
-
     /**
      * Returns the x-coordinate of the mouse, in the coordinate system of
      * the display used by the current thread.
      */
     public static int getX() {
-        return x;
+        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
+        return displayHost.getMouseX();
     }
 
     /**
@@ -74,12 +71,8 @@ public final class Mouse {
      * the display used by the current thread.
      */
     public static int getY() {
-        return y;
-    }
-
-    protected static void setLocation(int x, int y) {
-        Mouse.x = x;
-        Mouse.y = y;
+        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
+        return displayHost.getMouseY();
     }
 
     /**
@@ -88,6 +81,9 @@ public final class Mouse {
      */
     public static int getButtons() {
         int buttons = 0x00;
+
+        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
+        int modifiersEx = displayHost.getMouseModifiersEx();
 
         if ((modifiersEx & MouseEvent.BUTTON1_DOWN_MASK) > 0) {
             buttons |= Mouse.Button.LEFT.getMask();
@@ -102,12 +98,6 @@ public final class Mouse {
         }
 
         return buttons;
-    }
-
-    protected static void setModifiersEx(int modifiersEx) {
-        // TODO Determine WTK bitfield here instead of getButtons()?
-
-        Mouse.modifiersEx = modifiersEx;
     }
 
     /**
@@ -135,8 +125,7 @@ public final class Mouse {
     public static Cursor getCursor() {
         Cursor cursor = null;
 
-        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
-        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
+        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
         int cursorID = displayHost.getCursor().getType();
 
         switch (cursorID) {
@@ -229,8 +218,7 @@ public final class Mouse {
             throw new IllegalArgumentException("cursor is null.");
         }
 
-        ApplicationContext applicationContext = ApplicationContext.getApplicationContext();
-        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
+        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
         int cursorID = -1;
 
         switch (cursor) {

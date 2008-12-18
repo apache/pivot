@@ -31,13 +31,13 @@ import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
 import pivot.collections.Dictionary;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
 import pivot.wtk.Label;
 import pivot.wtk.LabelListener;
+import pivot.wtk.Platform;
 import pivot.wtk.TextDecoration;
 import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
@@ -186,7 +186,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             && text.length() > 0) {
             if (fontRenderContext.isAntiAliased()) {
                 graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-            		ApplicationContext.getTextAntialiasingHint());
+                    Platform.getTextAntialiasingHint());
             }
 
             if (fontRenderContext.usesFractionalMetrics()) {

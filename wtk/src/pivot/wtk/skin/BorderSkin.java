@@ -26,13 +26,13 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Border;
 import pivot.wtk.BorderListener;
 import pivot.wtk.Component;
 import pivot.wtk.CornerRadii;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
+import pivot.wtk.Platform;
 import pivot.wtk.Theme;
 
 /**
@@ -225,7 +225,7 @@ public class BorderSkin extends ContainerSkin
         if (title != null) {
             if (fontRenderContext.isAntiAliased()) {
                 graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-            		ApplicationContext.getTextAntialiasingHint());
+                    Platform.getTextAntialiasingHint());
             }
 
             if (fontRenderContext.usesFractionalMetrics()) {

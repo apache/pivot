@@ -61,13 +61,16 @@ public final class Display extends Container {
 
     @Override
     public void repaint(int x, int y, int width, int height, boolean immediate) {
-        if (immediate) {
-            Graphics2D graphics = applicationContext.getGraphics();
-            graphics.clipRect(x, y, width, height);
-            paint(graphics);
-            graphics.dispose();
-        } else {
-            applicationContext.repaint(x, y, width, height);
+        ApplicationContext.DisplayHost displayHost = ApplicationContext.getDisplayHost();
+        if (displayHost != null) {
+            if (immediate) {
+                Graphics2D graphics = (Graphics2D)displayHost.getGraphics();
+                graphics.clipRect(x, y, width, height);
+                paint(graphics);
+                graphics.dispose();
+            } else {
+                displayHost.repaint(x, y, width, height);
+            }
         }
     }
 

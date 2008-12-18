@@ -42,6 +42,7 @@ import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.LocalManifest;
 import pivot.wtk.Mouse;
+import pivot.wtk.Platform;
 import pivot.wtk.TextInput;
 import pivot.wtk.TextInputListener;
 import pivot.wtk.TextInputCharacterListener;
@@ -466,7 +467,7 @@ public class TerraTextInputSkin extends ComponentSkin
             // Paint the text
             if (fontRenderContext.isAntiAliased()) {
                 graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                    ApplicationContext.getTextAntialiasingHint());
+                    Platform.getTextAntialiasingHint());
             }
 
             if (fontRenderContext.usesFractionalMetrics()) {
@@ -551,7 +552,7 @@ public class TerraTextInputSkin extends ComponentSkin
         if (show) {
             if (blinkCursorIntervalID == -1) {
                 blinkCursorIntervalID = ApplicationContext.setInterval(blinkCursorCallback,
-                    ApplicationContext.getCursorBlinkRate());
+                    Platform.getCursorBlinkRate());
 
                 // Run the callback once now to show the cursor immediately
                 blinkCursorCallback.run();

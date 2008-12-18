@@ -15,8 +15,6 @@
  */
 package pivot.wtk;
 
-import pivot.util.Vote;
-
 /**
  * List view item state listener interface.
  *
