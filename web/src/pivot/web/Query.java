@@ -16,7 +16,6 @@
 package pivot.web;
 
 import java.io.InputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -27,13 +26,12 @@ import java.util.Iterator;
 
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
+import pivot.io.IOTask;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.Serializer;
 import pivot.util.ListenerList;
-import pivot.util.concurrent.AbortException;
 import pivot.util.concurrent.Dispatcher;
 import pivot.util.concurrent.SynchronizedListenerList;
-import pivot.util.concurrent.Task;
 
 /**
  * Abstract base class for web queries. A web query is an asynchronous
@@ -54,7 +52,7 @@ import pivot.util.concurrent.Task;
  * @author gbrown
  * @author tvolkert
  */
-public abstract class Query<V> extends Task<V> {
+public abstract class Query<V> extends IOTask<V> {
     /**
      * The supported HTTP methods.
      *
@@ -158,161 +156,6 @@ public abstract class Query<V> extends Task<V> {
     }
 
     /**
-     * Output stream that monitors the bytes that are written to it by
-     * incrementing the <tt>bytesSent</tt> member variable.
-     *
-     * @author tvolkert
-     */
-    private class MonitoredOutputStream extends OutputStream {
-        private OutputStream outputStream;
-
-        public MonitoredOutputStream(OutputStream outputStream) {
-            this.outputStream = outputStream;
-        }
-
-        public void close() throws IOException {
-            outputStream.close();
-        }
-
-        public void flush() throws IOException {
-            if (abort) {
-                throw new AbortException();
-            }
-
-            outputStream.flush();
-        }
-
-        public void write(byte[] b) throws IOException {
-            if (abort) {
-                throw new AbortException();
-            }
-
-            outputStream.write(b);
-            bytesSent += b.length;
-        }
-
-        public void write(byte[] b, int off, int len) throws IOException {
-            if (abort) {
-                throw new AbortException();
-            }
-
-            outputStream.write(b, off, len);
-            bytesSent += len;
-        }
-
-        public void write(int b) throws IOException {
-            if (abort) {
-                throw new AbortException();
-            }
-
-            outputStream.write(b);
-            bytesSent++;
-        }
-    }
-
-    /**
-     * Input stream that monitors the bytes that are read from it by
-     * incrementing the <tt>bytesReceived</tt> member variable.
-     *
-     * @author tvolkert
-     */
-    private class MonitoredInputStream extends InputStream {
-        private InputStream inputStream;
-
-        long mark = 0;
-
-        public MonitoredInputStream(InputStream inputStream) {
-            this.inputStream = inputStream;
-        }
-
-        public int read() throws IOException {
-            if (abort) {
-                throw new AbortException();
-            }
-
-            int result = inputStream.read();
-
-            if (result != -1) {
-                bytesReceived++;
-            }
-
-            return result;
-        }
-
-        public int read(byte b[]) throws IOException {
-            if (abort) {
-                throw new AbortException();
-            }
-
-            int count = inputStream.read(b);
-
-            if (count != -1) {
-                bytesReceived += count;
-            }
-
-            return count;
-        }
-
-        public int read(byte b[], int off, int len) throws IOException {
-            if (abort) {
-                throw new AbortException();
-            }
-
-            int count = inputStream.read(b, off, len);
-
-            if (count != -1) {
-                bytesReceived += count;
-            }
-
-            return count;
-        }
-
-        public long skip(long n) throws IOException {
-            if (abort) {
-                throw new AbortException();
-            }
-
-            long count = inputStream.skip(n);
-            bytesReceived += count;
-            return count;
-        }
-
-        public int available() throws IOException {
-            if (abort) {
-                throw new AbortException();
-            }
-
-            return inputStream.available();
-        }
-
-        public void close() throws IOException {
-            inputStream.close();
-        }
-
-        public void mark(int readLimit) {
-            if (abort) {
-                throw new AbortException();
-            }
-
-            inputStream.mark(readLimit);
-            mark = bytesReceived;
-        }
-
-        public void reset() throws IOException {
-            if (abort) {
-                throw new AbortException();
-            }
-
-            inputStream.reset();
-            bytesReceived = mark;
-        }
-
-        public boolean markSupported() {
-            return inputStream.markSupported();
-        }
-    }
-
-    /**
      * Query listener list.
      *
      * @author tvolkert
@@ -356,8 +199,6 @@ public abstract class Query<V> extends Task<V> {
 
     private Serializer serializer = new JSONSerializer();
 
-    private volatile long bytesSent = 0;
-    private volatile long bytesReceived = 0;
     private volatile long bytesExpected = -1;
 
     private QueryListenerList<V> queryListeners = new QueryListenerList<V>();

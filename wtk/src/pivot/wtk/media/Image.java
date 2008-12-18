@@ -19,8 +19,9 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.URL;
+
+import pivot.io.IOTask;
 import pivot.util.concurrent.Dispatcher;
-import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskListener;
 import pivot.util.concurrent.TaskExecutionException;
 import pivot.wtk.Dimensions;
@@ -38,12 +39,13 @@ public abstract class Image implements Visual {
      *
      * @author gbrown
      */
-    public static class LoadTask extends Task<Image> {
+    public static class LoadTask extends IOTask<Image> {
         private URL url = null;
 
+        private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
+
         public LoadTask(URL url) {
-            super();
-            this.url = url;
+            this(url, DEFAULT_DISPATCHER);
         }
 
         public LoadTask(URL url, Dispatcher dispatcher) {
@@ -70,11 +72,9 @@ public abstract class Image implements Visual {
                     // determine the type from the file extension in the URL, or
                     // by looking at the first few bytes of the input stream.
 
-                    // TODO Use a monitored input stream here, similar to
-                    // the one used in web queries. This will allow us to abort
-                    // and time out image load operations.
                     BufferedImageSerializer serializer = new BufferedImageSerializer();
-                    BufferedImage bufferedImage = (BufferedImage)serializer.readObject(inputStream);
+                    BufferedImage bufferedImage =
+                        (BufferedImage)serializer.readObject(new MonitoredInputStream(inputStream));
                     image = new Picture(bufferedImage);
                 } finally {
                     if (inputStream != null) {
