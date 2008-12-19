@@ -2,6 +2,8 @@ package pivot.wtk.test;
 
 import java.awt.Font;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
@@ -24,7 +26,7 @@ public class NativeDragDropTest implements Application {
 
     public void startup(final Display display, Dictionary<String, String> properties)
         throws Exception {
-        final Label label = new Label("Drag Text Here");
+        final Label label = new Label("http://www.apple.com");
         label.getStyles().put("font", new Font("Arial", Font.PLAIN, 24));
         label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
@@ -34,7 +36,17 @@ public class NativeDragDropTest implements Application {
 
             public boolean beginDrag(Component component, int x, int y) {
                 content = new LocalManifest();
-                content.putText(label.getText());
+
+                URL url = null;
+                try {
+                    url = new URL(label.getText());
+                } catch(MalformedURLException exception) {
+                }
+
+                if (url != null) {
+                    content.putURL(url);
+                }
+
                 return true;
             }
 
@@ -68,7 +80,7 @@ public class NativeDragDropTest implements Application {
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                if (dragContent.containsText()) {
+                if (dragContent.containsURL()) {
                     frame.getStyles().put("backgroundColor", "#ffcccc");
                     dropAction = DropAction.COPY;
                 }
@@ -82,22 +94,22 @@ public class NativeDragDropTest implements Application {
 
             public DropAction dragMove(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (dragContent.containsText() ? DropAction.COPY : null);
+                return (dragContent.containsURL() ? DropAction.COPY : null);
             }
 
             public DropAction userDropActionChange(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (dragContent.containsText() ? DropAction.COPY : null);
+                return (dragContent.containsURL() ? DropAction.COPY : null);
             }
 
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                if (dragContent.containsText()) {
+                if (dragContent.containsURL()) {
                     Label label = (Label)component;
                     try {
-                        label.setText(dragContent.getText());
+                        label.setText(dragContent.getURL().toString());
                     } catch(IOException exception) {
                         System.err.println(exception);
                     }

@@ -95,6 +95,8 @@ public class LocalManifest implements Manifest {
         if (url == null) {
             throw new IllegalArgumentException("url is null.");
         }
+
+        this.url = url;
     }
 
     public boolean containsURL() {

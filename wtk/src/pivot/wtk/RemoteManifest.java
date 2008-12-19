@@ -45,23 +45,25 @@ public class RemoteManifest implements Manifest {
         this.transferable = transferable;
 
         DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
-        for (int i = 0, n = transferDataFlavors.length; i < n; i++) {
-            DataFlavor dataFlavor = transferDataFlavors[i];
+        if (transferDataFlavors != null) {
+            for (int i = 0, n = transferDataFlavors.length; i < n; i++) {
+                DataFlavor dataFlavor = transferDataFlavors[i];
 
-            if (dataFlavor.equals(DataFlavor.stringFlavor)) {
-                textDataFlavor = dataFlavor;
-            } else if (dataFlavor.equals(DataFlavor.imageFlavor)) {
-                imageDataFlavor = dataFlavor;
-            } else if (dataFlavor.equals(DataFlavor.javaFileListFlavor)) {
-                fileListDataFlavor = dataFlavor;
-            } else if (dataFlavor.getRepresentationClass() == URL.class) {
-                urlDataFlavor = dataFlavor;
-            } else if (dataFlavor.isRepresentationClassByteBuffer()) {
-                // TODO If we have a serializer for the type, deserialize it
+                if (dataFlavor.equals(DataFlavor.stringFlavor)) {
+                    textDataFlavor = dataFlavor;
+                } else if (dataFlavor.equals(DataFlavor.imageFlavor)) {
+                    imageDataFlavor = dataFlavor;
+                } else if (dataFlavor.equals(DataFlavor.javaFileListFlavor)) {
+                    fileListDataFlavor = dataFlavor;
+                } else if (dataFlavor.getRepresentationClass() == URL.class) {
+                    urlDataFlavor = dataFlavor;
+                } else if (dataFlavor.isRepresentationClassByteBuffer()) {
+                    // TODO If we have a serializer for the type, deserialize it
 
-                // TODO Do we still need a workaround for Sun bug #4147507
-                // (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4147507)
-                // if we are using ByteBuffers?
+                    // TODO Do we still need a workaround for Sun bug #4147507
+                    // (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4147507)
+                    // if we are using ByteBuffers?
+                }
             }
         }
     }

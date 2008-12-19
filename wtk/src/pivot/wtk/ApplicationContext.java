@@ -122,6 +122,9 @@ public abstract class ApplicationContext {
                     throw new IllegalStateException("Local drag already in progress.");
                 }
 
+                // Set display host
+                Mouse.setDisplayHost(DisplayHost.this);
+
                 // Initialize drag state
                 dragManifest = new RemoteManifest(event.getTransferable());
 
@@ -148,6 +151,9 @@ public abstract class ApplicationContext {
             }
 
             public void dragExit(DropTargetEvent event) {
+                // Clear display host
+                Mouse.setDisplayHost(null);
+
                 // Clear drag state
                 dragManifest = null;
 
