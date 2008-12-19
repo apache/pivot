@@ -619,17 +619,18 @@ public abstract class Container extends Component
 
             // Synthesize mouse click event
             Component component = getComponentAt(x, y);
-            mouseDownComponent = component;
 
             long currentTime = System.currentTimeMillis();
             int multiClickInterval = Platform.getMultiClickInterval();
-
-            if (currentTime - mouseDownTime > multiClickInterval) {
+            if (mouseDownComponent == component
+                && currentTime - mouseDownTime < multiClickInterval) {
+                mouseClickCount++;
+            } else {
                 mouseDownTime = System.currentTimeMillis();
                 mouseClickCount = 1;
-            } else {
-                mouseClickCount++;
             }
+
+            mouseDownComponent = component;
 
             // Propagate event to subcomponents
             if (component != null) {
@@ -654,13 +655,6 @@ public abstract class Container extends Component
             // Notify container listeners
             containerMouseListeners.mouseUp(this, button, x, y);
 
-            // Clear the mouse down component if its visibility or enabled
-            // state has changed
-            if (mouseDownComponent != null
-                && !(mouseDownComponent.isEnabled() && mouseDownComponent.isVisible())) {
-                mouseDownComponent = null;
-            }
-
             // Propagate event to subcomponents
             Component component = getComponentAt(x, y);
 
@@ -676,10 +670,11 @@ public abstract class Container extends Component
 
             // Synthesize mouse click event
             if (component != null
-                && component == mouseDownComponent) {
+                && component == mouseDownComponent
+                && mouseDownComponent.isEnabled()
+                && mouseDownComponent.isVisible()) {
                 mouseClickConsumed = component.mouseClick(button, x - component.getX(),
                     y - component.getY(), mouseClickCount);
-                mouseDownComponent = null;
             }
         }
 

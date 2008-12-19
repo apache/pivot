@@ -162,6 +162,8 @@ public class TerraTextInputSkin extends ComponentSkin
             component.getComponentMouseListeners().remove(this);
             component.getComponentMouseButtonListeners().remove(this);
 
+            mouseSelectionHandler = null;
+
             return false;
         }
 
@@ -312,6 +314,8 @@ public class TerraTextInputSkin extends ComponentSkin
 
     private BlinkCursorCallback blinkCursorCallback = new BlinkCursorCallback();
     private int blinkCursorIntervalID = -1;
+
+    private MouseSelectionHandler mouseSelectionHandler = null;
 
     private Font font;
     private Color color;
@@ -920,7 +924,7 @@ public class TerraTextInputSkin extends ComponentSkin
             }
 
             // Begin selecting text
-            MouseSelectionHandler mouseSelectionHandler = new MouseSelectionHandler();
+            mouseSelectionHandler = new MouseSelectionHandler();
 
             Display display = textInput.getDisplay();
             display.getComponentMouseListeners().add(mouseSelectionHandler);
@@ -1160,7 +1164,7 @@ public class TerraTextInputSkin extends ComponentSkin
             showCaret(textInput.getSelectionLength() == 0);
 
             if (!temporary
-                && Mouse.getButtons() == 0) {
+                && mouseSelectionHandler == null) {
                 textInput.setSelection(0, textInput.getCharacterCount());
             }
         } else {
