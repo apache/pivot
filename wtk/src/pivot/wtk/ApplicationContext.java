@@ -106,6 +106,8 @@ public abstract class ApplicationContext {
     public final class DisplayHost extends java.awt.Container {
         public static final long serialVersionUID = 0;
 
+        private Point mouseLocation = null;
+
         private Component focusedComponent = null;
 
         private Point dragLocation = null;
@@ -295,6 +297,10 @@ public abstract class ApplicationContext {
             new java.awt.dnd.DropTarget(this, dropTargetListener);
 
             setFocusTraversalKeysEnabled(false);
+        }
+
+        public Point getMouseLocation() {
+            return mouseLocation;
         }
 
         @Override
@@ -620,10 +626,26 @@ public abstract class ApplicationContext {
         protected void processMouseEvent(MouseEvent event) {
             super.processMouseEvent(event);
 
-            setInputState(event);
-
             int x = event.getX();
             int y = event.getY();
+
+            // Set the mouse button state
+            int mouseButtons = 0x00;
+
+            int modifiersEx = event.getModifiersEx();
+            if ((modifiersEx & MouseEvent.BUTTON1_DOWN_MASK) > 0) {
+                mouseButtons |= Mouse.Button.LEFT.getMask();
+            }
+
+            if ((modifiersEx & MouseEvent.BUTTON2_DOWN_MASK) > 0) {
+                mouseButtons |= Mouse.Button.MIDDLE.getMask();
+            }
+
+            if ((modifiersEx & MouseEvent.BUTTON3_DOWN_MASK) > 0) {
+                mouseButtons |= Mouse.Button.RIGHT.getMask();
+            }
+
+            Mouse.setButtons(mouseButtons);
 
             // Get the button associated with this event
             Mouse.Button button = null;
@@ -689,28 +711,30 @@ public abstract class ApplicationContext {
 
                 case MouseEvent.MOUSE_ENTERED: {
                     Mouse.setDisplayHost(this);
+                    mouseLocation = new Point(x, y);
                     display.mouseOver();
                     break;
                 }
 
                 case MouseEvent.MOUSE_EXITED: {
                     display.mouseOut();
+                    mouseLocation = null;
                     Mouse.setDisplayHost(null);
                     break;
                 }
             }
-
-            setInputState(null);
         }
 
         @Override
         protected void processMouseMotionEvent(MouseEvent event) {
             super.processMouseMotionEvent(event);
 
-            setInputState(event);
-
             int x = event.getX();
             int y = event.getY();
+
+            // Set the mouse location
+            mouseLocation.x = x;
+            mouseLocation.y = y;
 
             // Process the event
             switch (event.getID()) {
@@ -830,15 +854,11 @@ public abstract class ApplicationContext {
                     break;
                 }
             }
-
-            setInputState(null);
         }
 
         @Override
         protected void processMouseWheelEvent(MouseWheelEvent event) {
             super.processMouseWheelEvent(event);
-
-            setInputState(event);
 
             // Get the event coordinates
             int x = event.getX();
@@ -868,15 +888,33 @@ public abstract class ApplicationContext {
                     break;
                 }
             }
-
-            setInputState(null);
         }
 
         @Override
         protected void processKeyEvent(KeyEvent event) {
             super.processKeyEvent(event);
 
-            setInputState(event);
+            // Set the keyboard modifier state
+            int keyboardModifiers = 0;
+
+            int modifiersEx = event.getModifiersEx();
+            if ((modifiersEx & KeyEvent.SHIFT_DOWN_MASK) > 0) {
+                keyboardModifiers |= Keyboard.Modifier.SHIFT.getMask();
+            }
+
+            if ((modifiersEx & KeyEvent.CTRL_DOWN_MASK) > 0) {
+                keyboardModifiers |= Keyboard.Modifier.CTRL.getMask();
+            }
+
+            if ((modifiersEx & KeyEvent.ALT_DOWN_MASK) > 0) {
+                keyboardModifiers |= Keyboard.Modifier.ALT.getMask();
+            }
+
+            if ((modifiersEx & KeyEvent.META_DOWN_MASK) > 0) {
+                keyboardModifiers |= Keyboard.Modifier.META.getMask();
+            }
+
+            Keyboard.setModifiers(keyboardModifiers);
 
             // Get the key location
             Keyboard.KeyLocation keyLocation = null;
@@ -964,15 +1002,13 @@ public abstract class ApplicationContext {
                         DropTarget dropTarget = dropDescendant.getDropTarget();
 
                         Point dropLocation = dropDescendant.mapPointFromAncestor(display,
-                            Mouse.getX(), Mouse.getY());
+                            mouseLocation.x, mouseLocation.y);
                         dropTarget.userDropActionChange(dropDescendant, dragManifest,
                             dragSource.getSupportedDropActions(),
                             dropLocation.x, dropLocation.y, userDropAction);
                     }
                 }
             }
-
-            setInputState(null);
         }
     }
 
@@ -1212,34 +1248,6 @@ public abstract class ApplicationContext {
         } else {
             java.awt.EventQueue.invokeLater(runnable);
         }
-    }
-
-    private static void setInputState(InputEvent event) {
-        int modifiersEx;
-        if (event == null) {
-            modifiersEx = -1;
-        } else {
-            modifiersEx = event.getModifiersEx();
-        }
-
-        Mouse.setModifiersEx(modifiersEx);
-        Keyboard.setModifiersEx(modifiersEx);
-    }
-
-    private static void setInputState(MouseEvent event) {
-        setInputState((InputEvent)event);
-
-        int x;
-        int y;
-        if (event == null) {
-            x = -1;
-            y = -1;
-        } else {
-            x = event.getX();
-            y = event.getY();
-        }
-
-        Mouse.setLocation(x, y);
     }
 
     private static DropAction getUserDropAction(InputEvent event) {

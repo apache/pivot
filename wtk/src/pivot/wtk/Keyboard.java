@@ -252,41 +252,18 @@ public final class Keyboard {
         public static final int UNDEFINED = KeyEvent.VK_UNDEFINED;
     }
 
-    private static int modifiersEx = -1;
+    private static int modifiers = 0;
 
     /**
      * Returns a bitfield representing the keyboard modifiers that are
      * currently pressed.
      */
     public static int getModifiers() {
-        if (modifiersEx == -1) {
-            throw new IllegalStateException();
-        }
-
-        int modifiers = 0;
-
-        if ((modifiersEx & KeyEvent.SHIFT_DOWN_MASK) > 0) {
-            modifiers |= Keyboard.Modifier.SHIFT.getMask();
-        }
-
-        if ((modifiersEx & KeyEvent.CTRL_DOWN_MASK) > 0) {
-            modifiers |= Keyboard.Modifier.CTRL.getMask();
-        }
-
-        if ((modifiersEx & KeyEvent.ALT_DOWN_MASK) > 0) {
-            modifiers |= Keyboard.Modifier.ALT.getMask();
-        }
-
-        if ((modifiersEx & KeyEvent.META_DOWN_MASK) > 0) {
-            modifiers |= Keyboard.Modifier.META.getMask();
-        }
-
         return modifiers;
     }
 
-    protected static void setModifiersEx(int modifiersEx) {
-        // TODO Determine WTK bitfield here instead of getModifiers()?
-        Keyboard.modifiersEx = modifiersEx;
+    protected static void setModifiers(int modifiers) {
+        Keyboard.modifiers = modifiers;
     }
 
     /**

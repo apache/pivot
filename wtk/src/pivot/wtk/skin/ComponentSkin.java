@@ -33,6 +33,7 @@ import pivot.wtk.Direction;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Bounds;
+import pivot.wtk.Point;
 import pivot.wtk.Skin;
 import pivot.wtk.Tooltip;
 
@@ -56,7 +57,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
                 Tooltip tooltip = new Tooltip(tooltipText);
 
                 // TODO Ensure that the tooltip stays on screen
-                tooltip.setLocation(Mouse.getX() + 16, Mouse.getY());
+                Point mouseLocation = component.getDisplay().getMouseLocation();
+                tooltip.setLocation(mouseLocation.x + 16, mouseLocation.y);
                 tooltip.open(component.getWindow());
             }
         }

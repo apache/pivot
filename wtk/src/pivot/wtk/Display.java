@@ -41,6 +41,10 @@ public final class Display extends Container {
         return displayHost;
     }
 
+    public Point getMouseLocation() {
+        return displayHost.getMouseLocation();
+    }
+
     @Override
     protected void setSkin(Skin skin) {
         throw new UnsupportedOperationException("Can't replace Display skin.");

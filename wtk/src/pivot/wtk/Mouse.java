@@ -16,7 +16,6 @@
 package pivot.wtk;
 
 import java.awt.MouseInfo;
-import java.awt.event.MouseEvent;
 
 /**
  * Class representing the system mouse.
@@ -57,70 +56,19 @@ public final class Mouse {
         BLOCK
     }
 
-    private static int x = 0;
-    private static int y = 0;
-    private static int modifiersEx = -1;
-
+    private static int buttons = 0;
     private static ApplicationContext.DisplayHost displayHost = null;
-
-    /**
-     * Returns the x-coordinate of the mouse, in the coordinate system of
-     * the display used by the current thread.
-     */
-    public static int getX() {
-        if (x == -1) {
-            throw new IllegalStateException();
-        }
-
-        return x;
-    }
-
-    /**
-     * Returns the y-coordinate of the mouse, in the coordinate system of
-     * the display used by the current thread.
-     */
-    public static int getY() {
-        if (y == -1) {
-            throw new IllegalStateException();
-        }
-
-        return y;
-    }
-
-    protected static void setLocation(int x, int y) {
-        Mouse.x = x;
-        Mouse.y = y;
-    }
 
     /**
      * Returns a bitfield representing the mouse buttons that are currently
      * pressed.
      */
     public static int getButtons() {
-        if (modifiersEx == -1) {
-            throw new IllegalStateException();
-        }
-
-        int buttons = 0x00;
-
-        if ((modifiersEx & MouseEvent.BUTTON1_DOWN_MASK) > 0) {
-            buttons |= Mouse.Button.LEFT.getMask();
-        }
-
-        if ((modifiersEx & MouseEvent.BUTTON2_DOWN_MASK) > 0) {
-            buttons |= Mouse.Button.MIDDLE.getMask();
-        }
-
-        if ((modifiersEx & MouseEvent.BUTTON3_DOWN_MASK) > 0) {
-            buttons |= Mouse.Button.RIGHT.getMask();
-        }
-
         return buttons;
     }
 
-    protected static void setModifiersEx(int modifiersEx) {
-        // TODO Determine WTK bitfield here instead of getButtons()?
-        Mouse.modifiersEx = modifiersEx;
+    protected static void setButtons(int buttons) {
+        Mouse.buttons = buttons;
     }
 
     /**
