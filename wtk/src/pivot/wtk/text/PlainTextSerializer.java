@@ -62,33 +62,56 @@ public class PlainTextSerializer implements Serializer {
 
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
-        StringBuilder stringBuilder = new StringBuilder();
+        Document document = new Document();
 
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, charset);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader, BUFFER_SIZE);
 
         String line = bufferedReader.readLine();
         while (line != null) {
-            stringBuilder.append(line);
+            if (line.length() > 0) {
+                Paragraph paragraph = new Paragraph();
+                paragraph.add(new TextNode(line));
+            }
+
             line = bufferedReader.readLine();
         }
 
         bufferedReader.close();
 
-        return stringBuilder.toString();
+        return document;
     }
 
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
-        if (!(object instanceof String)) {
+        if (!(object instanceof Document)) {
             throw new IllegalArgumentException("object must be an instance of "
-                + String.class.getName());
+                + Document.class.getName());
         }
 
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, charset);
         BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter, BUFFER_SIZE);
-        bufferedWriter.write((String)object);
+        writeElement((Document)object, bufferedWriter);
         bufferedWriter.close();
+    }
+
+    private void writeElement(Element element, BufferedWriter bufferedWriter)
+        throws IOException {
+        for (Node node : element) {
+            if (node instanceof TextNode) {
+                TextNode textNode = (TextNode)node;
+                bufferedWriter.write(textNode.getText());
+            } else {
+                if (node instanceof Element) {
+                    Element childElement = (Element)node;
+                    writeElement(childElement, bufferedWriter);
+
+                    if (childElement instanceof BlockElement) {
+                        bufferedWriter.newLine();
+                    }
+                }
+            }
+        }
     }
 
     public String getMIMEType(Object object) {
