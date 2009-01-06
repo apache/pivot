@@ -30,6 +30,11 @@ import pivot.serialization.Serializer;
 /**
  * Implementation of the {@link Serializer} interface that reads data from
  * and writes data to a plain text file.
+ * <p>
+ * TODO Add support for serializing elements/text nodes. This implies that
+ * the return value of readObject() should be a Document, not a String; the
+ * inverse applies to writeObject(). Be sure to update the test app, which
+ * currently assumes Strings.
  *
  * @author gbrown
  */

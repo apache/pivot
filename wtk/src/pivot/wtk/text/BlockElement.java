@@ -17,6 +17,8 @@ package pivot.wtk.text;
 
 /**
  * Abstract base class for block elements.
+ * <p>
+ * TODO Add a horizontalAlignment property.
  *
  * @author gbrown
  */
@@ -27,7 +29,5 @@ public abstract class BlockElement extends Element {
 
     public BlockElement(BlockElement blockElement, boolean recursive) {
         super(blockElement, recursive);
-
-        // TODO?
     }
 }

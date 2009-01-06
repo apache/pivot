@@ -17,6 +17,8 @@ package pivot.wtk.text;
 
 /**
  * Abstract base class for inline elements.
+ * <p>
+ * TODO Add a verticalAlignment style.
  *
  * @author gbrown
  */
@@ -27,7 +29,5 @@ public abstract class InlineElement extends Element {
 
     public InlineElement(InlineElement inlineElement, boolean recursive) {
         super(inlineElement, recursive);
-
-        // TODO?
     }
 }

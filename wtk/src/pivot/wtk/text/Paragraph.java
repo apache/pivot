@@ -27,8 +27,6 @@ public class Paragraph extends BlockElement {
 
     public Paragraph(Paragraph paragraph, boolean recursive) {
         super(paragraph, recursive);
-
-        // TODO?
     }
 
     @Override

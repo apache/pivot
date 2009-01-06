@@ -15,16 +15,81 @@
  */
 package pivot.wtk.text;
 
+import java.util.Comparator;
+import java.util.Iterator;
+
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
+import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 
 /**
  * Abstract base class for elements.
+ * <p>
+ * TODO Add style properties.
  *
  * @author gbrown
  */
-public abstract class Element extends Node implements Sequence<Node> {
+public abstract class Element extends Node
+    implements Sequence<Node>, Iterable<Node> {
+    /**
+     * Private node class that simply represents an offset value. Used to
+     * perform binary searches using offsets rather than actual nodes.
+     *
+     * @author gbrown
+     */
+    private static class NullNode extends Node {
+        public void insertRange(Node range, int offset) {
+            throw new UnsupportedOperationException();
+        }
+
+        public Node removeRange(int offset, int characterCount) {
+            throw new UnsupportedOperationException();
+        }
+
+        public Node getRange(int offset, int characterCount) {
+            return duplicate(false);
+        }
+
+        public int getCharacterCount() {
+            return 0;
+        }
+
+        public Node duplicate(boolean recursive) {
+            return new NullNode();
+        }
+    }
+
+    /**
+     * Comparator used to perform binary searches on child nodes.
+     *
+     * @author gbrown
+     */
+    private static class OffsetComparator implements Comparator<Node> {
+        public int compare(Node leftNode, Node rightNode) {
+            int leftOffset = leftNode.getOffset();
+            int leftCharacterCount = leftNode.getCharacterCount();
+
+            int rightOffset = rightNode.getOffset();
+
+            int result;
+            if (leftOffset > rightOffset) {
+                result = 1;
+            } else if (leftOffset + leftCharacterCount <= rightOffset) {
+                result = -1;
+            } else {
+                result = 0;
+            }
+
+            return result;
+        }
+    }
+
+    /**
+     * Element listener list.
+     *
+     * @author gbrown
+     */
     private static class ElementListenerList extends ListenerList<ElementListener>
         implements ElementListener {
         public void nodeInserted(Element element, int index) {
@@ -51,15 +116,28 @@ public abstract class Element extends Node implements Sequence<Node> {
 
     private ElementListenerList elementListeners = new ElementListenerList();
 
+    private static NullNode nullNode = new NullNode();
+
+    private static final OffsetComparator OFFSET_COMPARATOR = new OffsetComparator();
+
     public Element() {
     }
 
     public Element(Element element, boolean recursive) {
-        // TODO
+        if (recursive) {
+            for (Node node : element) {
+                add(node.duplicate(true));
+            }
+        }
     }
 
     @Override
     public void insertRange(Node range, int offset) {
+        if (offset < 0
+            || offset > characterCount) {
+            throw new IndexOutOfBoundsException();
+        }
+
         if (!(range instanceof Element)) {
             throw new IllegalArgumentException("range is not an element.");
         }
@@ -101,13 +179,62 @@ public abstract class Element extends Node implements Sequence<Node> {
 
     @Override
     public Node removeRange(int offset, int characterCount) {
+        if (offset < 0
+            || offset + characterCount > this.characterCount) {
+            throw new IndexOutOfBoundsException();
+        }
+
         // Create a copy of this element
         Node range = duplicate(false);
+        Element element = (Element)range;
 
-        // TODO Get the nodes at offset and offset + characterCount; if defined,
-        // split the nodes and add the segments to the element copy
+        // Split the start node, if necessary
+        Node leadingSegment = null;
 
-        // TODO Remove all intervening nodes and add them to the copy
+        int start = getIndexAt(offset);
+        if (start < 0) {
+            start = -(start + 1);
+        } else {
+            Node node = get(start);
+
+            int leadingSegmentOffset = offset - node.getOffset();
+            leadingSegment = node.removeRange(leadingSegmentOffset,
+                node.getCharacterCount() - leadingSegmentOffset);
+
+            characterCount -= leadingSegment.getCharacterCount();
+            start++;
+        }
+
+        // Split the end node, if necessary
+        Node trailingSegment = null;
+
+        int end = getIndexAt(offset + characterCount);
+        if (end < 0) {
+            end = -(end + 1);
+        } else {
+            Node node = get(end);
+
+            int trailingSegmentCharacterCount = (offset + characterCount)
+                - node.getOffset();
+            trailingSegment = node.removeRange(0, trailingSegmentCharacterCount);
+        }
+
+        // Remove the intervening nodes
+        int count = end - start;
+        Sequence<Node> removedNodes = remove(start, count);
+
+        // Add the removed segments and nodes to the range
+        if (leadingSegment != null) {
+            element.add(leadingSegment);
+        }
+
+        for (int i = 0, n = removedNodes.getLength(); i < n; i++) {
+            element.add(removedNodes.get(i));
+        }
+
+        if (trailingSegment != null) {
+            element.add(trailingSegment);
+        }
 
         // Fire event and notify parent
         rangeRemoved(offset, range);
@@ -117,14 +244,60 @@ public abstract class Element extends Node implements Sequence<Node> {
 
     @Override
     public Node getRange(int offset, int characterCount) {
-        // TODO Create a copy of this element (possibly via a duplicate() call)
+        if (offset < 0
+            || offset + characterCount > this.characterCount) {
+            throw new IndexOutOfBoundsException();
+        }
 
-        // TODO Get the nodes at offset and offset + characterCount; if defined,
-        // get ranges from the nodes and add the segments to the element copy
+        // Create a copy of this element
+        Node range = duplicate(false);
+        Element element = (Element)range;
 
-        // TODO Add all intervening nodes to the copy
+        // Split the start node, if necessary
+        Node leadingSegment = null;
 
-        return null;
+        int start = getIndexAt(offset);
+        if (start < 0) {
+            start = -(start + 1);
+        } else {
+            Node node = get(start);
+
+            int leadingSegmentOffset = offset - node.getOffset();
+            leadingSegment = node.getRange(leadingSegmentOffset,
+                node.getCharacterCount() - leadingSegmentOffset);
+
+            start++;
+        }
+
+        // Split the end node, if necessary
+        Node trailingSegment = null;
+
+        int end = getIndexAt(offset + characterCount);
+        if (end < 0) {
+            end = -(end + 1);
+        } else {
+            Node node = get(end);
+            int trailingSegmentCharacterCount = (offset + characterCount)
+                - node.getOffset();
+            trailingSegment = node.getRange(0, trailingSegmentCharacterCount);
+        }
+
+        // Add the leading segment to the range
+        if (leadingSegment != null) {
+            element.add(leadingSegment);
+        }
+
+        // Duplicate the intervening nodes
+        for (int i = start; i < end; i++) {
+            element.add(get(i).duplicate(true));
+        }
+
+        // Add the trailing segment to the range
+        if (trailingSegment != null) {
+            element.add(trailingSegment);
+        }
+
+        return range;
     }
 
     @Override
@@ -152,12 +325,24 @@ public abstract class Element extends Node implements Sequence<Node> {
             throw new IllegalArgumentException("Cannot add an element to itself.");
         }
 
+        // Set this as the node's parent
         node.setParent(this);
+
+        // Set the node's offset
+        if (index > 0) {
+            Node nextNode = nodes.get(index);
+            node.setOffset(nextNode.getOffset());
+        }
+
+        // Add the node
         nodes.insert(node, index);
 
-        // TODO Set the node's offset
-
-        // TODO Update the offsets of successive nodes
+        // Update the offsets of consecutive nodes
+        int offsetShift = node.getCharacterCount();
+        for (int i = index + 1, n = nodes.getLength(); i < n; i++) {
+            Node consecutiveNode = nodes.get(i);
+            consecutiveNode.setOffset(consecutiveNode.getOffset() + offsetShift);
+        }
 
         rangeInserted(node, node.getOffset());
     }
@@ -179,16 +364,22 @@ public abstract class Element extends Node implements Sequence<Node> {
         Sequence<Node> removed = nodes.remove(index, count);
 
         Node range = duplicate(false);
+        Element element = (Element)range;
 
+        int offsetShift = 0;
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             Node node = removed.get(i);
-
-            // TODO Clear the node's offset & parent
-
-            // TODO Add the node to the range
+            node.setParent(null);
+            node.setOffset(0);
+            element.add(node);
+            offsetShift += node.getCharacterCount();
         }
 
-        // TODO Update the offsets of successive nodes
+        // Update the offsets of consecutive nodes
+        for (int i = index + 1, n = nodes.getLength(); i < n; i++) {
+            Node consecutiveNode = nodes.get(i);
+            consecutiveNode.setOffset(consecutiveNode.getOffset() - offsetShift);
+        }
 
         if (removed.getLength() > 0) {
             rangeRemoved(index, range);
@@ -198,30 +389,94 @@ public abstract class Element extends Node implements Sequence<Node> {
     }
 
     public Node get(int index) {
+        if (index < 0
+            || index > nodes.getLength() - 1) {
+            throw new IndexOutOfBoundsException();
+        }
+
         return nodes.get(index);
     }
 
     public int indexOf(Node node) {
-        // TODO Perform a binary search based on the node's offset
+        if (node == null) {
+            throw new IllegalArgumentException("node is null.");
+        }
 
-        return -1;
+        return Sequence.Search.binarySearch(nodes, node, OFFSET_COMPARATOR);
     }
 
     public int getLength() {
         return nodes.getLength();
     }
 
+    /**
+     * Determines the index of the child node at a given offset.
+     *
+     * @param offset
+     *
+     * @return
+     * The index of the child node at the given offset, or <tt>(-(<i>insertion
+     * point</i>) - 1)</tt> if no node contains the offset.
+     */
     public int getIndexAt(int offset) {
-        // TODO
-        return -1;
+        if (offset < 0
+            || offset > characterCount) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        nullNode.setOffset(offset);
+        return indexOf(nullNode);
     }
 
+    /**
+     * Determines the path of the descendant node at a given offset.
+     *
+     * @param offset
+     *
+     * @return
+     * The path to the descendant node at the given offset. The last index of
+     * the path will be either a positive value representing the index of a
+     * leaf node within its parent element, or <tt>(-(<i>insertion point</i>)
+     * - 1)</tt> if no leaf descendant contains the offset.
+     */
     public Sequence<Integer> getPathAt(int offset) {
-        // TODO
-        return null;
+        Sequence<Integer> path;
+
+        int index = getIndexAt(offset);
+
+        if (index >= 0) {
+            Node node = get(index);
+
+            if (node instanceof Element) {
+                Element element = (Element)node;
+                path = element.getPathAt(offset - element.getOffset());
+            } else {
+                path = new ArrayList<Integer>();
+            }
+        } else {
+            path = new ArrayList<Integer>();
+        }
+
+        path.insert(index, 0);
+
+        return path;
     }
 
+    /**
+     * Determines the child node at a given offset.
+     *
+     * @param offset
+     *
+     * @return
+     * The child node at the given offset, or <tt>null</tt> if no node contains
+     * the offset.
+     */
     public Node getNodeAt(int offset) {
+        if (offset < 0
+            || characterCount > this.characterCount) {
+            throw new IndexOutOfBoundsException();
+        }
+
         Node node = null;
 
         int index = getIndexAt(offset);
@@ -232,13 +487,64 @@ public abstract class Element extends Node implements Sequence<Node> {
         return node;
     }
 
+    /**
+     * Determines the descendant node at a given offset.
+     *
+     * @param offset
+     *
+     * @return
+     * The descendant node at the given offset. If a leaf node contains the
+     * offset, it will be returned. Otherwise, the parent element that would
+     * contain a leaf at the given offset will be returned.
+     */
     public Node getDescendantAt(int offset) {
-        // TODO
-        return null;
+        Node descendant = getNodeAt(offset);
+
+        if (descendant instanceof Element) {
+            Element element = (Element)descendant;
+            descendant = element.getDescendantAt(offset - element.getOffset());
+        }
+
+        if (descendant == null) {
+            descendant = this;
+        }
+
+        return descendant;
     }
 
+    /**
+     * Recursively consolidates all contiguous text nodes.
+     */
     public void normalize() {
-        // TODO Recursively consolidate all contiguous text nodes
+        int i = getLength() - 1;
+
+        while (i >= 0) {
+            Node node = get(i--);
+
+            if (node instanceof TextNode) {
+                // Determine the bounds of any contiguous text nodes
+                int j = i;
+                while (j >= 0
+                    && (get(j) instanceof TextNode)) {
+                    j--;
+                }
+
+                Sequence<Node> removed = remove(j + 1, i - j);
+
+                // Create a new text node containing the consolidated text
+                TextNode textNode = new TextNode();
+                for (int k = 0, n = removed.getLength(); k < n; k++) {
+                    textNode.insertRange(removed.get(k), textNode.getCharacterCount());
+                }
+
+                insert(textNode, j + 1);
+
+                i = j;
+            } else {
+                Element element = (Element)node;
+                element.normalize();
+            }
+        }
     }
 
     @Override
@@ -251,6 +557,10 @@ public abstract class Element extends Node implements Sequence<Node> {
     protected void rangeRemoved(int offset, Node range) {
         characterCount -= range.getCharacterCount();
         super.rangeInserted(range, offset);
+    }
+
+    public Iterator<Node> iterator() {
+        return new ImmutableIterator<Node>(nodes.iterator());
     }
 
     /**

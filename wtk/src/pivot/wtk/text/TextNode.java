@@ -81,13 +81,13 @@ public final class TextNode extends Node {
 
     @Override
     public void insertRange(Node range, int offset) {
-        if (!(range instanceof TextNode)) {
-            throw new IllegalArgumentException("range is not a text node.");
-        }
-
         if (offset < 0
             || offset > textBuilder.length()) {
             throw new IndexOutOfBoundsException();
+        }
+
+        if (!(range instanceof TextNode)) {
+            throw new IllegalArgumentException("range is not a text node.");
         }
 
         TextNode textNode = (TextNode)range;
@@ -98,13 +98,13 @@ public final class TextNode extends Node {
 
     @Override
     public Node removeRange(int offset, int characterCount) {
-        int start = offset;
-        int end = offset + characterCount;
-
-        if (start < 0
-            || end > textBuilder.length()) {
+        if (offset < 0
+            || offset + characterCount > textBuilder.length()) {
             throw new IndexOutOfBoundsException();
         }
+
+        int start = offset;
+        int end = offset + characterCount;
 
         String text = textBuilder.substring(start, end);
         textBuilder.delete(start, end);
@@ -117,13 +117,13 @@ public final class TextNode extends Node {
 
     @Override
     public Node getRange(int offset, int characterCount) {
-        int start = offset;
-        int end = offset + characterCount;
-
-        if (start < 0
-            || end > textBuilder.length()) {
+        if (offset < 0
+            || offset + characterCount > textBuilder.length()) {
             throw new IndexOutOfBoundsException();
         }
+
+        int start = offset;
+        int end = offset + characterCount;
 
         String text = textBuilder.substring(start, end);
         TextNode textNode = new TextNode(text);
