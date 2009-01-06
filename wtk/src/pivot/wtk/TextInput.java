@@ -89,9 +89,9 @@ public class TextInput extends Component {
             }
         }
 
-        public void charactersRemoved(TextInput textInput, int index, int count) {
+        public void charactersRemoved(TextInput textInput, int index, String characters) {
             for (TextInputCharacterListener listener : this) {
-                listener.charactersRemoved(textInput, index, count);
+                listener.charactersRemoved(textInput, index, characters);
             }
         }
 
@@ -272,7 +272,7 @@ public class TextInput extends Component {
         int start = index;
         int end = index + count;
 
-        String text = textBuilder.substring(start, end);
+        String removed = textBuilder.substring(start, end);
         textBuilder.delete(start, end);
 
         // Update selection
@@ -289,7 +289,7 @@ public class TextInput extends Component {
             selectionLength = selectionEnd - selectionStart + 1;
         }
 
-        textInputCharacterListeners.charactersRemoved(this, index, count);
+        textInputCharacterListeners.charactersRemoved(this, index, removed);
         textInputTextListeners.textChanged(this);
 
         if (previousSelectionStart != selectionStart
@@ -298,7 +298,7 @@ public class TextInput extends Component {
                 previousSelectionStart, previousSelectionLength);
         }
 
-        return text;
+        return removed;
     }
 
     /**

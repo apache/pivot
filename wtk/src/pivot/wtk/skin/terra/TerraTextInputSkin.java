@@ -1205,7 +1205,7 @@ public class TerraTextInputSkin extends ComponentSkin
         repaintComponent();
     }
 
-    public void charactersRemoved(TextInput textInput, int index, int count) {
+    public void charactersRemoved(TextInput textInput, int index, String characters) {
         String text = getText();
         Rectangle2D textBounds = font.getStringBounds(text, fontRenderContext);
 

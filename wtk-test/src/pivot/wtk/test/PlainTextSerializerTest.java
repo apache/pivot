@@ -1,9 +1,9 @@
-package pivot.core.test;
+package pivot.wtk.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-import pivot.serialization.PlainTextSerializer;
+import pivot.wtk.text.PlainTextSerializer;
 
 public class PlainTextSerializerTest {
     public static void main(String[] args) {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.serialization;
+package pivot.wtk.text;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,6 +23,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+
+import pivot.serialization.SerializationException;
+import pivot.serialization.Serializer;
 
 /**
  * Implementation of the {@link Serializer} interface that reads data from

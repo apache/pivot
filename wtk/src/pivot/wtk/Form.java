@@ -28,6 +28,8 @@ import pivot.util.ListenerList;
  * an optional text label associated with it and may be flagged as requiring
  * attention using one of several flag types and an optional flag message (for
  * use during form validation, for example).
+ * <p>
+ * TODO Add a label alignment attribute (vertical).
  *
  * @author gbrown
  */

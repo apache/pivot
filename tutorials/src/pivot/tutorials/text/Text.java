@@ -127,7 +127,8 @@ public class Text implements Application {
                 }
             }
 
-            public void charactersRemoved(TextInput textInput, int index, int count) {
+            public void charactersRemoved(TextInput textInput, int index,
+                String characters) {
             }
 
             public void charactersReset(TextInput textInput) {

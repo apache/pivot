@@ -21,6 +21,8 @@ import pivot.wtk.media.Image;
 
 /**
  * Component that displays an image.
+ * <p>
+ * TODO Load images asynchronously in setImage()?
  *
  * @author gbrown
  */

@@ -169,17 +169,16 @@ public abstract class Container extends Component
     public Sequence<Component> remove(int index, int count) {
         Sequence<Component> removed = components.remove(index, count);
 
-        if (count > 0) {
-            // Set the removed components' parent to null and repaint the area
-            // formerly occupied by the components
-            for (int i = 0, n = removed.getLength(); i < n; i++) {
-                Component component = removed.get(i);
-                component.repaint();
-                component.setParent(null);
-            }
+        // Set the removed components' parent to null and repaint the area
+        // formerly occupied by the components
+        for (int i = 0, n = removed.getLength(); i < n; i++) {
+            Component component = removed.get(i);
+            component.repaint();
+            component.setParent(null);
+        }
 
+        if (removed.getLength() > 0) {
             invalidate();
-
             containerListeners.componentsRemoved(Container.this, index, removed);
         }
 

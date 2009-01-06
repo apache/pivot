@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 VMware, Inc.
+ * Copyright (c) 2009 VMware, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,36 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk;
+package pivot.wtk.text;
+
+import pivot.collections.Sequence;
 
 /**
- * Text input character listener interface.
+ * Element listener interface.
  *
  * @author gbrown
  */
-public interface TextInputCharacterListener {
+public interface ElementListener {
     /**
-     * Called when characters have been inserted into a text input.
+     * Called when a node has been inserted into an element.
      *
-     * @param textInput
+     * @param element
      * @param index
-     * @param count
      */
-    public void charactersInserted(TextInput textInput, int index, int count);
+    public void nodeInserted(Element element, int index);
 
     /**
-     * Called when characters have been removed from a text input.
+     * Called when an element node has been updated.
      *
-     * @param textInput
+     * @param element
      * @param index
-     * @param characters
+     * @param previousNode
      */
-    public void charactersRemoved(TextInput textInput, int index, String characters);
+    public void nodeUpdated(Element element, int index, Node previousNode);
 
     /**
-     * Called when a text input's character state has been reset.
+     * Called when nodes have been removed from an element.
      *
-     * @param textInput
+     * @param element
+     * @param index
+     * @param nodes
      */
-    public void charactersReset(TextInput textInput);
+    public void nodesRemoved(Element element, int index, Sequence<Node> nodes);
 }
