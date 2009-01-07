@@ -70,8 +70,7 @@ public class PlainTextSerializer implements Serializer {
         String line = bufferedReader.readLine();
         while (line != null) {
             if (line.length() > 0) {
-                Paragraph paragraph = new Paragraph();
-                paragraph.add(new TextNode(line));
+                document.add(new Paragraph(line));
             }
 
             line = bufferedReader.readLine();

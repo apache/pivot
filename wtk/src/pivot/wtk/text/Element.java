@@ -313,6 +313,11 @@ public abstract class Element extends Node
     }
 
     public void insert(Node node, int index) {
+        if (index < 0
+            || index > nodes.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
         if (node == null) {
             throw new IllegalArgumentException("node is null.");
         }
@@ -330,7 +335,7 @@ public abstract class Element extends Node
 
         // Set the node's offset
         if (index > 0) {
-            Node nextNode = nodes.get(index);
+            Node nextNode = nodes.get(index - 1);
             node.setOffset(nextNode.getOffset());
         }
 
@@ -361,6 +366,11 @@ public abstract class Element extends Node
     }
 
     public Sequence<Node> remove(int index, int count) {
+        if (index < 0
+            || index + count > nodes.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
         Sequence<Node> removed = nodes.remove(index, count);
 
         Node range = duplicate(false);

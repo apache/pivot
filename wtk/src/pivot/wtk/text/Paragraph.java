@@ -25,6 +25,11 @@ public class Paragraph extends BlockElement {
         super();
     }
 
+    public Paragraph(String text) {
+        super();
+        add(new TextNode(text));
+    }
+
     public Paragraph(Paragraph paragraph, boolean recursive) {
         super(paragraph, recursive);
     }
