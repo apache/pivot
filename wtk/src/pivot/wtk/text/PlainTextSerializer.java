@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.charset.Charset;
 
 import pivot.serialization.SerializationException;
@@ -62,10 +64,17 @@ public class PlainTextSerializer implements Serializer {
 
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
+        Reader reader = new InputStreamReader(inputStream, charset);
+        Object object = readObject(reader);
+
+        return object;
+    }
+
+    public Object readObject(Reader reader)
+        throws IOException, SerializationException {
         Document document = new Document();
 
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream, charset);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader, BUFFER_SIZE);
+        BufferedReader bufferedReader = new BufferedReader(reader, BUFFER_SIZE);
 
         String line = bufferedReader.readLine();
         while (line != null) {
@@ -76,41 +85,47 @@ public class PlainTextSerializer implements Serializer {
             line = bufferedReader.readLine();
         }
 
-        bufferedReader.close();
-
         return document;
     }
 
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
-        if (!(object instanceof Document)) {
-            throw new IllegalArgumentException("object must be an instance of "
-                + Document.class.getName());
-        }
-
-        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, charset);
-        BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter, BUFFER_SIZE);
-        writeElement((Document)object, bufferedWriter);
-        bufferedWriter.close();
+        Writer writer = new OutputStreamWriter(outputStream, charset);
+        writeObject(object, writer);
     }
 
-    private void writeElement(Element element, BufferedWriter bufferedWriter)
-        throws IOException {
-        for (Node node : element) {
-            if (node instanceof TextNode) {
-                TextNode textNode = (TextNode)node;
-                bufferedWriter.write(textNode.getText());
-            } else {
-                if (node instanceof Element) {
-                    Element childElement = (Element)node;
-                    writeElement(childElement, bufferedWriter);
-
-                    if (childElement instanceof BlockElement) {
-                        bufferedWriter.newLine();
-                    }
-                }
-            }
+    public void writeObject(Object object, Writer writer)
+        throws IOException, SerializationException {
+        if (writer == null) {
+            throw new IllegalArgumentException("writer is null.");
         }
+
+        BufferedWriter bufferedWriter = new BufferedWriter(writer, BUFFER_SIZE);
+
+        if (object instanceof Element) {
+            Element element = (Element)object;
+
+            for (Node node : element) {
+                writeObject(node, writer);
+            }
+
+            if (element instanceof BlockElement) {
+                bufferedWriter.newLine();
+            }
+        } else {
+            String text;
+
+            if (object instanceof TextNode) {
+                TextNode textNode = (TextNode)object;
+                text = textNode.getText();
+            } else {
+                text = object.toString();
+            }
+
+            bufferedWriter.write(text);
+        }
+
+        bufferedWriter.flush();
     }
 
     public String getMIMEType(Object object) {

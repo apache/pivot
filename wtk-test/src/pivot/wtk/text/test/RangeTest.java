@@ -15,32 +15,25 @@
  */
 package pivot.wtk.text.test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
 import pivot.wtk.text.Document;
+import pivot.wtk.text.Node;
 import pivot.wtk.text.Paragraph;
 import pivot.wtk.text.PlainTextSerializer;
 
-public class PlainTextSerializerTest {
+public class RangeTest {
     public static void main(String[] args) {
         Document document = new Document();
         document.add(new Paragraph("Hello, World!"));
-        document.add(new Paragraph("ABC"));
-        document.add(new Paragraph("123"));
+        document.add(new Paragraph("ABCDE"));
+        document.add(new Paragraph("1234"));
 
         PlainTextSerializer serializer = new PlainTextSerializer();
 
         try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            serializer.writeObject(document, byteArrayOutputStream);
-            byteArrayOutputStream.close();
-
-            byte[] data = byteArrayOutputStream.toByteArray();
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
-            document = (Document)serializer.readObject(byteArrayInputStream);
-
             serializer.writeObject(document, System.out);
+
+            Node range = document.getRange(3, 14);
+            serializer.writeObject(range, System.out);
         } catch(Exception exception) {
             System.out.println(exception);
         }

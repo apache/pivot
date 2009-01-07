@@ -79,7 +79,6 @@ public class JSONSerializer implements Serializer {
         throws IOException, SerializationException {
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
         Object object = readObject(reader);
-        reader.close();
 
         return object;
     }
@@ -399,17 +398,9 @@ public class JSONSerializer implements Serializer {
      */
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
-        Writer writer = null;
-
-        try {
-            writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
-                BUFFER_SIZE);
-            writeObject(object, writer);
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
-        }
+        Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
+            BUFFER_SIZE);
+        writeObject(object, writer);
     }
 
     /**
@@ -432,6 +423,10 @@ public class JSONSerializer implements Serializer {
     @SuppressWarnings("unchecked")
     public void writeObject(Object object, Writer writer)
         throws IOException, SerializationException {
+        if (writer == null) {
+            throw new IllegalArgumentException("writer is null.");
+        }
+
         if (object == null) {
             writer.append("null");
         } else if (object instanceof String) {
@@ -544,6 +539,8 @@ public class JSONSerializer implements Serializer {
             throw new IllegalArgumentException(object.getClass()
                 + " is not a supported type.");
         }
+
+        writer.flush();
     }
 
     public String getMIMEType(Object object) {

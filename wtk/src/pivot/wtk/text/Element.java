@@ -195,11 +195,11 @@ public abstract class Element extends Node
         if (start < 0) {
             start = -(start + 1);
         } else {
-            Node node = get(start);
+            Node startNode = get(start);
 
-            int leadingSegmentOffset = offset - node.getOffset();
-            leadingSegment = node.removeRange(leadingSegmentOffset,
-                node.getCharacterCount() - leadingSegmentOffset);
+            int leadingSegmentOffset = offset - startNode.getOffset();
+            leadingSegment = startNode.removeRange(leadingSegmentOffset,
+                startNode.getCharacterCount() - leadingSegmentOffset);
 
             characterCount -= leadingSegment.getCharacterCount();
             start++;
@@ -212,11 +212,11 @@ public abstract class Element extends Node
         if (end < 0) {
             end = -(end + 1);
         } else {
-            Node node = get(end);
+            Node endNode = get(end);
 
             int trailingSegmentCharacterCount = (offset + characterCount)
-                - node.getOffset();
-            trailingSegment = node.removeRange(0, trailingSegmentCharacterCount);
+                - endNode.getOffset();
+            trailingSegment = endNode.removeRange(0, trailingSegmentCharacterCount);
         }
 
         // Remove the intervening nodes
@@ -260,13 +260,11 @@ public abstract class Element extends Node
         if (start < 0) {
             start = -(start + 1);
         } else {
-            Node node = get(start);
+            Node startNode = get(start);
 
-            int leadingSegmentOffset = offset - node.getOffset();
-            leadingSegment = node.getRange(leadingSegmentOffset,
-                node.getCharacterCount() - leadingSegmentOffset);
-
-            start++;
+            int leadingSegmentOffset = offset - startNode.getOffset();
+            leadingSegment = startNode.getRange(leadingSegmentOffset,
+                startNode.getCharacterCount() - leadingSegmentOffset);
         }
 
         // Split the end node, if necessary
@@ -276,15 +274,20 @@ public abstract class Element extends Node
         if (end < 0) {
             end = -(end + 1);
         } else {
-            Node node = get(end);
-            int trailingSegmentCharacterCount = (offset + characterCount)
-                - node.getOffset();
-            trailingSegment = node.getRange(0, trailingSegmentCharacterCount);
+            // TODO This check may not be correct
+            if (end > start) {
+                Node endNode = get(end);
+
+                int trailingSegmentCharacterCount = (offset + characterCount)
+                    - endNode.getOffset();
+                trailingSegment = endNode.getRange(0, trailingSegmentCharacterCount);
+            }
         }
 
         // Add the leading segment to the range
         if (leadingSegment != null) {
             element.add(leadingSegment);
+            start++;
         }
 
         // Duplicate the intervening nodes
@@ -335,8 +338,8 @@ public abstract class Element extends Node
 
         // Set the node's offset
         if (index > 0) {
-            Node nextNode = nodes.get(index - 1);
-            node.setOffset(nextNode.getOffset());
+            Node previousNode = nodes.get(index - 1);
+            node.setOffset(previousNode.getOffset() + previousNode.getCharacterCount());
         }
 
         // Add the node

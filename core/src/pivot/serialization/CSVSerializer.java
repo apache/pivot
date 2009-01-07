@@ -148,13 +148,11 @@ public class CSVSerializer implements Serializer {
      *
      * @see #readObject(Reader)
      */
-    @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset),
             BUFFER_SIZE);
         Object object = readObject(reader);
-        reader.close();
 
         return object;
     }
@@ -284,17 +282,9 @@ public class CSVSerializer implements Serializer {
      */
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
-        Writer writer = null;
-
-        try {
-            writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
-                BUFFER_SIZE);
-            writeObject(object, writer);
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
-        }
+        Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
+            BUFFER_SIZE);
+        writeObject(object, writer);
     }
 
     /**
@@ -312,28 +302,28 @@ public class CSVSerializer implements Serializer {
     @SuppressWarnings("unchecked")
     public void writeObject(Object object, Writer writer)
         throws IOException, SerializationException {
+        if (writer == null) {
+            throw new IllegalArgumentException("writer is null.");
+        }
+
         List<Dictionary<String, Object>> items = (List<Dictionary<String, Object>>)object;
 
-        try {
-            for (Dictionary<String, Object> item : items) {
-                for (int i = 0, n = keys.getLength(); i < n; i++) {
-                    String key = keys.get(i);
+        for (Dictionary<String, Object> item : items) {
+            for (int i = 0, n = keys.getLength(); i < n; i++) {
+                String key = keys.get(i);
 
-                    if (i > 0) {
-                        writer.append(",");
-                    }
-
-                    Object value = item.get(key);
-                    writer.append(value.toString());
+                if (i > 0) {
+                    writer.append(",");
                 }
 
-                writer.append("\r\n");
+                Object value = item.get(key);
+                writer.append(value.toString());
             }
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
+
+            writer.append("\r\n");
         }
+
+        writer.flush();
     }
 
     public String getMIMEType(Object object) {

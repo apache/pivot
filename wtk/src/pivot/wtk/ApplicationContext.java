@@ -127,6 +127,9 @@ public abstract class ApplicationContext {
                 // Set display host
                 Mouse.setDisplayHost(DisplayHost.this);
 
+                java.awt.Point location = event.getLocation();
+                mouseLocation = new Point(location.x, location.y);
+
                 // Initialize drag state
                 dragManifest = new RemoteManifest(event.getTransferable());
 
@@ -134,7 +137,6 @@ public abstract class ApplicationContext {
                 userDropAction = getDropAction(event.getDropAction());
 
                 // Notify drop target
-                java.awt.Point location = event.getLocation();
                 dropDescendant = getDropDescendant(location.x, location.y);
 
                 DropAction dropAction = null;
@@ -155,6 +157,7 @@ public abstract class ApplicationContext {
             public void dragExit(DropTargetEvent event) {
                 // Clear display host
                 Mouse.setDisplayHost(null);
+                mouseLocation = null;
 
                 // Clear drag state
                 dragManifest = null;
