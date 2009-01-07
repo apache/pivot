@@ -133,52 +133,58 @@ public abstract class Element extends Node
 
     @Override
     public void insertRange(Node range, int offset) {
+        if (!(range instanceof Element)) {
+            throw new IllegalArgumentException("range is not an element.");
+        }
+
         if (offset < 0
             || offset > characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
-        if (!(range instanceof Element)) {
-            throw new IllegalArgumentException("range is not an element.");
-        }
+        if (range.getCharacterCount() > 0) {
+            Element element = (Element)range;
+            int n = element.getLength();
 
-        Element element = (Element)range;
-        int n = element.getLength();
+            // Get the index of the node at the given offset
+            int index = getIndexAt(offset);
 
-        // Get the index of the node at the given offset
-        int index = getIndexAt(offset);
+            if (index < 0) {
+                // No node intersects with this offset; insert the range contents
+                index = -(index + 1);
 
-        if (index < 0) {
-            // No node intersects with this offset; insert the range contents
-            index = -(index + 1);
+                for (int i = 0; i < n; i++) {
+                    insert(element.get(i), index + i);
+                }
+            } else {
+                // The offset intersects with a node; splice the range into it
+                Node node = get(index);
 
-            for (int i = 0; i < n; i++) {
-                insert(element.get(i), index + i);
+                // Split the node
+                int spliceOffset = offset - node.getOffset();
+                node = node.removeRange(spliceOffset, node.getCharacterCount()
+                    - spliceOffset);
+
+                // Insert the range contents
+                for (int i = 0; i < n; i++) {
+                    insert(element.get(i), index + i + 1);
+                }
+
+                // Insert the remainder of the node
+                insert(node, index + n + 1);
             }
-        } else {
-            // The offset intersects with a node; splice the range into it
-            Node node = get(index);
 
-            // Split the node
-            int spliceOffset = offset - node.getOffset();
-            node = node.removeRange(spliceOffset, node.getCharacterCount()
-                - spliceOffset);
-
-            // Insert the range contents
-            for (int i = 0; i < n; i++) {
-                insert(element.get(i), index + i + 1);
-            }
-
-            // Insert the remainder of the node
-            insert(node, index + n + 1);
+            // Fire event and notify parent
+            rangeInserted(range, offset);
         }
-
-        // Fire event and notify parent
-        rangeInserted(range, offset);
     }
 
     @Override
     public Node removeRange(int offset, int characterCount) {
+        if (characterCount < 0) {
+            throw new IllegalArgumentException("characterCount is negative.");
+        }
+
         if (offset < 0
             || offset + characterCount > this.characterCount) {
             throw new IndexOutOfBoundsException();
@@ -186,64 +192,79 @@ public abstract class Element extends Node
 
         // Create a copy of this element
         Node range = duplicate(false);
-        Element element = (Element)range;
 
-        // Split the start node, if necessary
-        Node leadingSegment = null;
+        if (characterCount > 0) {
+            Element element = (Element)range;
 
-        int start = getIndexAt(offset);
-        if (start < 0) {
-            start = -(start + 1);
-        } else {
-            Node startNode = get(start);
+            int start = getIndexAt(offset);
+            int end = getIndexAt(offset + characterCount);
 
-            int leadingSegmentOffset = offset - startNode.getOffset();
-            leadingSegment = startNode.removeRange(leadingSegmentOffset,
-                startNode.getCharacterCount() - leadingSegmentOffset);
+            if (start == end) {
+                // The range is entirely contained by one child node
+                Node node = get(start);
+                element.add(node.removeRange(offset - node.getOffset(), characterCount));
+            } else {
+                // The range spans multiple child nodes
+                Node leadingSegment = null;
 
-            characterCount -= leadingSegment.getCharacterCount();
-            start++;
+                if (start < 0) {
+                    start = -(start + 1);
+                } else {
+                    Node startNode = get(start);
+
+                    int leadingSegmentOffset = offset - startNode.getOffset();
+                    leadingSegment = startNode.removeRange(leadingSegmentOffset,
+                        startNode.getCharacterCount() - leadingSegmentOffset);
+
+                    characterCount -= leadingSegment.getCharacterCount();
+                    start++;
+                }
+
+                Node trailingSegment = null;
+
+                if (end < 0) {
+                    end = -(end + 1);
+                } else {
+                    Node endNode = get(end);
+
+                    int trailingSegmentCharacterCount = (offset + characterCount)
+                        - endNode.getOffset();
+                    trailingSegment = endNode.removeRange(0, trailingSegmentCharacterCount);
+                }
+
+                // Remove the intervening nodes
+                int count = end - start;
+                Sequence<Node> removedNodes = remove(start, count);
+
+                // Add the removed segments and nodes to the range
+                if (leadingSegment != null
+                    && leadingSegment.getCharacterCount() > 0) {
+                    element.add(leadingSegment);
+                }
+
+                for (int i = 0, n = removedNodes.getLength(); i < n; i++) {
+                    element.add(removedNodes.get(i));
+                }
+
+                if (trailingSegment != null
+                    && trailingSegment.getCharacterCount() > 0) {
+                    element.add(trailingSegment);
+                }
+            }
+
+            // Fire event and notify parent
+            rangeRemoved(offset, range);
         }
-
-        // Split the end node, if necessary
-        Node trailingSegment = null;
-
-        int end = getIndexAt(offset + characterCount);
-        if (end < 0) {
-            end = -(end + 1);
-        } else {
-            Node endNode = get(end);
-
-            int trailingSegmentCharacterCount = (offset + characterCount)
-                - endNode.getOffset();
-            trailingSegment = endNode.removeRange(0, trailingSegmentCharacterCount);
-        }
-
-        // Remove the intervening nodes
-        int count = end - start;
-        Sequence<Node> removedNodes = remove(start, count);
-
-        // Add the removed segments and nodes to the range
-        if (leadingSegment != null) {
-            element.add(leadingSegment);
-        }
-
-        for (int i = 0, n = removedNodes.getLength(); i < n; i++) {
-            element.add(removedNodes.get(i));
-        }
-
-        if (trailingSegment != null) {
-            element.add(trailingSegment);
-        }
-
-        // Fire event and notify parent
-        rangeRemoved(offset, range);
 
         return range;
     }
 
     @Override
     public Node getRange(int offset, int characterCount) {
+        if (characterCount < 0) {
+            throw new IllegalArgumentException("characterCount is negative.");
+        }
+
         if (offset < 0
             || offset + characterCount > this.characterCount) {
             throw new IndexOutOfBoundsException();
@@ -251,53 +272,61 @@ public abstract class Element extends Node
 
         // Create a copy of this element
         Node range = duplicate(false);
-        Element element = (Element)range;
 
-        // Split the start node, if necessary
-        Node leadingSegment = null;
+        if (characterCount > 0) {
+            Element element = (Element)range;
 
-        int start = getIndexAt(offset);
-        if (start < 0) {
-            start = -(start + 1);
-        } else {
-            Node startNode = get(start);
+            int start = getIndexAt(offset);
+            int end = getIndexAt(offset + characterCount);
 
-            int leadingSegmentOffset = offset - startNode.getOffset();
-            leadingSegment = startNode.getRange(leadingSegmentOffset,
-                startNode.getCharacterCount() - leadingSegmentOffset);
-        }
+            if (start == end) {
+                // The range is entirely contained by one child node
+                Node node = get(start);
+                element.add(node.getRange(offset - node.getOffset(), characterCount));
+            } else {
+                // The range spans multiple child nodes
+                Node leadingSegment = null;
 
-        // Split the end node, if necessary
-        Node trailingSegment = null;
+                if (start < 0) {
+                    start = -(start + 1);
+                } else {
+                    Node startNode = get(start);
 
-        int end = getIndexAt(offset + characterCount);
-        if (end < 0) {
-            end = -(end + 1);
-        } else {
-            // TODO This check may not be correct
-            if (end > start) {
-                Node endNode = get(end);
+                    int leadingSegmentOffset = offset - startNode.getOffset();
+                    leadingSegment = startNode.getRange(leadingSegmentOffset,
+                        startNode.getCharacterCount() - leadingSegmentOffset);
+                }
 
-                int trailingSegmentCharacterCount = (offset + characterCount)
-                    - endNode.getOffset();
-                trailingSegment = endNode.getRange(0, trailingSegmentCharacterCount);
+                Node trailingSegment = null;
+
+                if (end < 0) {
+                    end = -(end + 1);
+                } else {
+                    Node endNode = get(end);
+
+                    int trailingSegmentCharacterCount = (offset + characterCount)
+                        - endNode.getOffset();
+                    trailingSegment = endNode.getRange(0, trailingSegmentCharacterCount);
+                }
+
+                // Add the leading segment to the range
+                if (leadingSegment != null
+                    && leadingSegment.getCharacterCount() > 0) {
+                    element.add(leadingSegment);
+                    start++;
+                }
+
+                // Duplicate the intervening nodes
+                for (int i = start; i < end; i++) {
+                    element.add(get(i).duplicate(true));
+                }
+
+                // Add the trailing segment to the range
+                if (trailingSegment != null
+                    && trailingSegment.getCharacterCount() > 0) {
+                    element.add(trailingSegment);
+                }
             }
-        }
-
-        // Add the leading segment to the range
-        if (leadingSegment != null) {
-            element.add(leadingSegment);
-            start++;
-        }
-
-        // Duplicate the intervening nodes
-        for (int i = start; i < end; i++) {
-            element.add(get(i).duplicate(true));
-        }
-
-        // Add the trailing segment to the range
-        if (trailingSegment != null) {
-            element.add(trailingSegment);
         }
 
         return range;

@@ -81,13 +81,13 @@ public final class TextNode extends Node {
 
     @Override
     public void insertRange(Node range, int offset) {
+        if (!(range instanceof TextNode)) {
+            throw new IllegalArgumentException("range is not a text node.");
+        }
+
         if (offset < 0
             || offset > textBuilder.length()) {
             throw new IndexOutOfBoundsException();
-        }
-
-        if (!(range instanceof TextNode)) {
-            throw new IllegalArgumentException("range is not a text node.");
         }
 
         TextNode textNode = (TextNode)range;
@@ -98,6 +98,10 @@ public final class TextNode extends Node {
 
     @Override
     public Node removeRange(int offset, int characterCount) {
+        if (characterCount < 0) {
+            throw new IllegalArgumentException("characterCount is negative.");
+        }
+
         if (offset < 0
             || offset + characterCount > textBuilder.length()) {
             throw new IndexOutOfBoundsException();
@@ -117,6 +121,10 @@ public final class TextNode extends Node {
 
     @Override
     public Node getRange(int offset, int characterCount) {
+        if (characterCount < 0) {
+            throw new IllegalArgumentException("characterCount is negative.");
+        }
+
         if (offset < 0
             || offset + characterCount > textBuilder.length()) {
             throw new IndexOutOfBoundsException();

@@ -16,26 +16,37 @@
 package pivot.wtk.text.test;
 
 import pivot.wtk.text.Document;
-import pivot.wtk.text.Node;
 import pivot.wtk.text.Paragraph;
 import pivot.wtk.text.PlainTextSerializer;
 
 public class RangeTest {
-    public static void main(String[] args) {
-        Document document = new Document();
-        document.add(new Paragraph("Hello, World!"));
-        document.add(new Paragraph("ABCDE"));
-        document.add(new Paragraph("1234"));
+    private static Document document = null;
 
-        PlainTextSerializer serializer = new PlainTextSerializer();
+    public static void main(String[] args) {
+        document = new Document();
+        document.add(new Paragraph("ABCDE"));
+        document.add(new Paragraph("FGH"));
+        document.add(new Paragraph("IJKLMNO"));
+
+        dumpRange(1, 1);
+        dumpRange(1, 4);
+        dumpRange(3, 7);
+        dumpRange(4, 2);
+
+        // TODO Test adding and removing ranges
+    }
+
+    public static void dumpRange(int offset, int characterCount) {
+        PlainTextSerializer serializer  = new PlainTextSerializer();
+
+        System.out.println("Range " + offset + ":" + characterCount);
 
         try {
-            serializer.writeObject(document, System.out);
-
-            Node range = document.getRange(3, 14);
-            serializer.writeObject(range, System.out);
+            serializer.writeObject(document.getRange(offset, characterCount), System.out);
         } catch(Exception exception) {
             System.out.println(exception);
         }
+
+        System.out.println();
     }
 }
