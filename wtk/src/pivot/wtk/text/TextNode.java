@@ -21,17 +21,22 @@ package pivot.wtk.text;
  * @author gbrown
  */
 public final class TextNode extends Node {
-    private StringBuilder textBuilder = new StringBuilder();
+    private StringBuilder textBuilder;
 
     public TextNode() {
-    }
-
-    public TextNode(String text) {
-        setText(text);
+        this("");
     }
 
     public TextNode(TextNode textNode) {
-        setText(textNode.getText());
+        this(textNode.getText());
+    }
+
+    public TextNode(String text) {
+        if (text == null) {
+            throw new IllegalArgumentException("text is null.");
+        }
+
+        textBuilder = new StringBuilder(text);
     }
 
     public void insertText(char character, int index) {
@@ -76,7 +81,8 @@ public final class TextNode extends Node {
             throw new IllegalArgumentException("text is null.");
         }
 
-        textBuilder = new StringBuilder(text);
+        removeRange(0, getCharacterCount());
+        insertRange(new TextNode(text), 0);
     }
 
     @Override
@@ -107,11 +113,16 @@ public final class TextNode extends Node {
             throw new IndexOutOfBoundsException();
         }
 
-        int start = offset;
-        int end = offset + characterCount;
+        String text;
+        if (characterCount == 0) {
+            text = "";
+        } else {
+            int start = offset;
+            int end = offset + characterCount;
 
-        String text = textBuilder.substring(start, end);
-        textBuilder.delete(start, end);
+            text = textBuilder.substring(start, end);
+            textBuilder.delete(start, end);
+        }
 
         TextNode textNode = new TextNode(text);
         rangeRemoved(offset, textNode);

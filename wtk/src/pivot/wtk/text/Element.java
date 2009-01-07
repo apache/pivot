@@ -146,36 +146,30 @@ public abstract class Element extends Node
             Element element = (Element)range;
             int n = element.getLength();
 
-            // Get the index of the node at the given offset
-            int index = getIndexAt(offset);
+            // Remove the nodes from the range element
+            Sequence<Node> nodes = element.remove(0, n);
 
-            if (index < 0) {
-                // No node intersects with this offset; insert the range contents
-                index = -(index + 1);
-
+            if (offset == characterCount) {
+                // Append the range contents
                 for (int i = 0; i < n; i++) {
-                    insert(element.get(i), index + i);
+                    add(nodes.get(i));
                 }
             } else {
-                // The offset intersects with a node; splice the range into it
-                Node node = get(index);
+                // Merge the range contents
+                int index = getIndexAt(offset);
+                Node leadingSegment = get(index);
 
-                // Split the node
-                int spliceOffset = offset - node.getOffset();
-                node = node.removeRange(spliceOffset, node.getCharacterCount()
-                    - spliceOffset);
+                int spliceOffset = offset - leadingSegment.getOffset();
+                Node trailingSegment = leadingSegment.removeRange(spliceOffset,
+                    leadingSegment.getCharacterCount() - spliceOffset);
 
-                // Insert the range contents
                 for (int i = 0; i < n; i++) {
-                    insert(element.get(i), index + i + 1);
+                    insert(nodes.get(i), index + i + 1);
                 }
 
                 // Insert the remainder of the node
-                insert(node, index + n + 1);
+                insert(trailingSegment, index + n + 1);
             }
-
-            // Fire event and notify parent
-            rangeInserted(range, offset);
         }
     }
 
@@ -197,40 +191,31 @@ public abstract class Element extends Node
             Element element = (Element)range;
 
             int start = getIndexAt(offset);
-            int end = getIndexAt(offset + characterCount);
+            int end = getIndexAt(offset + characterCount - 1);
 
             if (start == end) {
                 // The range is entirely contained by one child node
                 Node node = get(start);
                 element.add(node.removeRange(offset - node.getOffset(), characterCount));
             } else {
-                // The range spans multiple child nodes
+                // The range spans multiple child nodes; locate the first node
                 Node leadingSegment = null;
+                Node startNode = get(start);
 
-                if (start < 0) {
-                    start = -(start + 1);
-                } else {
-                    Node startNode = get(start);
+                int leadingSegmentOffset = offset - startNode.getOffset();
+                leadingSegment = startNode.removeRange(leadingSegmentOffset,
+                    startNode.getCharacterCount() - leadingSegmentOffset);
 
-                    int leadingSegmentOffset = offset - startNode.getOffset();
-                    leadingSegment = startNode.removeRange(leadingSegmentOffset,
-                        startNode.getCharacterCount() - leadingSegmentOffset);
+                characterCount -= leadingSegment.getCharacterCount();
+                start++;
 
-                    characterCount -= leadingSegment.getCharacterCount();
-                    start++;
-                }
-
+                // Locate the last node
                 Node trailingSegment = null;
+                Node endNode = get(end);
 
-                if (end < 0) {
-                    end = -(end + 1);
-                } else {
-                    Node endNode = get(end);
-
-                    int trailingSegmentCharacterCount = (offset + characterCount)
-                        - endNode.getOffset();
-                    trailingSegment = endNode.removeRange(0, trailingSegmentCharacterCount);
-                }
+                int trailingSegmentCharacterCount = (offset + characterCount)
+                    - endNode.getOffset();
+                trailingSegment = endNode.removeRange(0, trailingSegmentCharacterCount);
 
                 // Remove the intervening nodes
                 int count = end - start;
@@ -251,9 +236,6 @@ public abstract class Element extends Node
                     element.add(trailingSegment);
                 }
             }
-
-            // Fire event and notify parent
-            rangeRemoved(offset, range);
         }
 
         return range;
@@ -277,7 +259,7 @@ public abstract class Element extends Node
             Element element = (Element)range;
 
             int start = getIndexAt(offset);
-            int end = getIndexAt(offset + characterCount);
+            int end = getIndexAt(offset + characterCount - 1);
 
             if (start == end) {
                 // The range is entirely contained by one child node
@@ -457,12 +439,11 @@ public abstract class Element extends Node
      * @param offset
      *
      * @return
-     * The index of the child node at the given offset, or <tt>(-(<i>insertion
-     * point</i>) - 1)</tt> if no node contains the offset.
+     * The index of the child node at the given offset.
      */
     public int getIndexAt(int offset) {
         if (offset < 0
-            || offset > characterCount) {
+            || offset >= characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -476,10 +457,7 @@ public abstract class Element extends Node
      * @param offset
      *
      * @return
-     * The path to the descendant node at the given offset. The last index of
-     * the path will be either a positive value representing the index of a
-     * leaf node within its parent element, or <tt>(-(<i>insertion point</i>)
-     * - 1)</tt> if no leaf descendant contains the offset.
+     * The path to the descendant node at the given offset.
      */
     public Sequence<Integer> getPathAt(int offset) {
         Sequence<Integer> path;
@@ -510,12 +488,11 @@ public abstract class Element extends Node
      * @param offset
      *
      * @return
-     * The child node at the given offset, or <tt>null</tt> if no node contains
-     * the offset.
+     * The child node at the given offset.
      */
     public Node getNodeAt(int offset) {
         if (offset < 0
-            || characterCount > this.characterCount) {
+            || offset >= characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -535,9 +512,7 @@ public abstract class Element extends Node
      * @param offset
      *
      * @return
-     * The descendant node at the given offset. If a leaf node contains the
-     * offset, it will be returned. Otherwise, the parent element that would
-     * contain a leaf at the given offset will be returned.
+     * The descendant node at the given offset.
      */
     public Node getDescendantAt(int offset) {
         Node descendant = getNodeAt(offset);
@@ -545,10 +520,6 @@ public abstract class Element extends Node
         if (descendant instanceof Element) {
             Element element = (Element)descendant;
             descendant = element.getDescendantAt(offset - element.getOffset());
-        }
-
-        if (descendant == null) {
-            descendant = this;
         }
 
         return descendant;
@@ -598,7 +569,7 @@ public abstract class Element extends Node
     @Override
     protected void rangeRemoved(int offset, Node range) {
         characterCount -= range.getCharacterCount();
-        super.rangeInserted(range, offset);
+        super.rangeRemoved(offset, range);
     }
 
     public Iterator<Node> iterator() {

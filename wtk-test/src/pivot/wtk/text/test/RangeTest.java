@@ -33,7 +33,18 @@ public class RangeTest {
         dumpRange(3, 7);
         dumpRange(4, 2);
 
-        // TODO Test adding and removing ranges
+        System.out.println(document.getIndexAt(2));
+        System.out.println(document.getIndexAt(14));
+
+        // TODO Test removal of spanning ranges
+        dumpRange(0, 6);
+        document.removeRange(1, 3);
+        dumpRange(0, 6);
+
+        Document range = new Document();
+        range.add(new Paragraph("123"));
+        document.insertRange(range, 1);
+        dumpRange(0, 6);
     }
 
     public static void dumpRange(int offset, int characterCount) {
