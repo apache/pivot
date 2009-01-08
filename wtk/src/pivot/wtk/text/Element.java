@@ -106,15 +106,19 @@ public abstract class Element extends Node
         int n = element.getLength();
 
         if (n > 0) {
+            // Clear the range content, since the child nodes will become children
+            // of this element
+            Sequence<Node> nodes = element.remove(0, n);
+
             if (offset == characterCount) {
-                // Append the range contents
+                // Append the range contents to the end of this element
                 for (int i = 0; i < n; i++) {
-                    Node node = element.get(i);
+                    Node node = nodes.get(i);
                     node.setParent(null);
                     add(node);
                 }
             } else {
-                // Merge the range contents
+                // Merge the range contents into this element
                 int index = getIndexAt(offset);
                 Node leadingSegment = get(index);
 
@@ -123,7 +127,7 @@ public abstract class Element extends Node
                     leadingSegment.getCharacterCount() - spliceOffset);
 
                 for (int i = 0; i < n; i++) {
-                    Node node = element.get(i);
+                    Node node = nodes.get(i);
                     node.setParent(null);
                     insert(node, index + i + 1);
                 }
@@ -132,10 +136,6 @@ public abstract class Element extends Node
                 insert(trailingSegment, index + n + 1);
             }
         }
-
-        // TODO The range element still contains references to children that
-        // no longer belong to it; how should we resolve this? Flag it as
-        // abandoned or read-only? Or simply clear its contents?
     }
 
     @Override
@@ -161,31 +161,36 @@ public abstract class Element extends Node
             if (start == end) {
                 // The range is entirely contained by one child node
                 Node node = get(start);
-                element.add(node.removeRange(offset - node.getOffset(), characterCount));
+                Node segment = node.removeRange(offset - node.getOffset(), characterCount);
+                element.add(segment);
             } else {
                 // The range spans multiple child nodes; locate the first node
                 Node leadingSegment = null;
                 Node startNode = get(start);
 
                 int leadingSegmentOffset = offset - startNode.getOffset();
-                leadingSegment = startNode.removeRange(leadingSegmentOffset,
-                    startNode.getCharacterCount() - leadingSegmentOffset);
+                if (leadingSegmentOffset > 0) {
+                    leadingSegment = startNode.removeRange(leadingSegmentOffset,
+                        startNode.getCharacterCount() - leadingSegmentOffset);
 
-                characterCount -= leadingSegment.getCharacterCount();
-                start++;
+                    characterCount -= leadingSegment.getCharacterCount();
+                    start++;
+                }
 
                 // Locate the last node
                 Node trailingSegment = null;
                 Node endNode = get(end);
 
-                // TODO Move this below the removal of the intervening nodes?
                 int trailingSegmentCharacterCount = (offset + characterCount)
                     - endNode.getOffset();
-                trailingSegment = endNode.removeRange(0, trailingSegmentCharacterCount);
+                if (trailingSegmentCharacterCount < endNode.getCharacterCount()) {
+                    trailingSegment = endNode.removeRange(0, trailingSegmentCharacterCount);
+                    end--;
+                }
 
                 // Remove the intervening nodes
-                int count = end - start;
-                Sequence<Node> removedNodes = remove(start, count);
+                int count = (end - start) + 1;
+                Sequence<Node> removed = remove(start, count);
 
                 // Add the removed segments and nodes to the range
                 if (leadingSegment != null
@@ -193,8 +198,10 @@ public abstract class Element extends Node
                     element.add(leadingSegment);
                 }
 
-                for (int i = 0, n = removedNodes.getLength(); i < n; i++) {
-                    element.add(removedNodes.get(i));
+                for (int i = 0, n = removed.getLength(); i < n; i++) {
+                    Node node = removed.get(i);
+                    node.setParent(null);
+                    element.add(node);
                 }
 
                 if (trailingSegment != null
@@ -230,7 +237,8 @@ public abstract class Element extends Node
             if (start == end) {
                 // The range is entirely contained by one child node
                 Node node = get(start);
-                element.add(node.getRange(offset - node.getOffset(), characterCount));
+                Node segment = node.getRange(offset - node.getOffset(), characterCount);
+                element.add(segment);
             } else {
                 // The range spans multiple child nodes
                 Node leadingSegment = null;
@@ -377,18 +385,20 @@ public abstract class Element extends Node
             // Update the character count
             characterCount -= removedCharacterCount;
 
-            // Update the offsets of successive nodes
-            for (int i = index + 1, n = nodes.getLength(); i < n; i++) {
-                Node node = nodes.get(i);
-                node.setOffset(node.getOffset() - removedCharacterCount);
+            // Update the offsets of consecutive nodes
+            int n = nodes.getLength();
+            for (int i = index; i < n; i++) {
+                Node nextNode = nodes.get(i);
+                nextNode.setOffset(nextNode.getOffset() - removedCharacterCount);
             }
 
+            // Determine the affected offset within this element
             int offset;
-            if (index < getLength()) {
-                offset = getLength();
-            } else {
+            if (index < n) {
                 Node node = get(index);
                 offset = node.getOffset();
+            } else {
+                offset = characterCount;
             }
 
             // Notify parent and listeners

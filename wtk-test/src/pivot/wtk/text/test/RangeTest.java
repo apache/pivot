@@ -41,18 +41,32 @@ public class RangeTest {
         dumpRange(3, 7);
         dumpRange(4, 2);
 
-        // TODO Test removal of spanning ranges
         dumpRange(0, 6);
         document.removeRange(1, 3);
         dumpRange(0, 6);
-        document.dumpOffsets();
 
         Document range = new Document();
         range.add(new Paragraph("123"));
+        System.out.println("range.getLength() = " + range.getLength());
 
         document.insertRange(range, 1);
+        System.out.println("range.getLength() = " + range.getLength());
+
         dumpRange(0, 6);
+
+        document.removeRange(0, 6);
+        dumpRange(0, document.getCharacterCount());
+
+        document.insert(new Paragraph("00101001"), 3);
+        dumpRange(0, document.getCharacterCount());
+
+        document.remove(2, 2);
+        dumpRange(0, document.getCharacterCount());
         document.dumpOffsets();
+
+        // TODO Test getDescendantAt() and getPathAt() methods
+
+        // TODO Test normalize() method
     }
 
     public static void dumpRange(int offset, int characterCount) {
