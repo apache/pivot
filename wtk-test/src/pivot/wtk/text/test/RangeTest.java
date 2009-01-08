@@ -27,24 +27,32 @@ public class RangeTest {
         document.add(new Paragraph("ABCDE"));
         document.add(new Paragraph("FGH"));
         document.add(new Paragraph("IJKLMNO"));
+        document.add(new Paragraph("PQRS"));
+        document.add(new Paragraph("TUVWX"));
+        document.add(new Paragraph("YZ"));
+        document.dumpOffsets();
+
+        System.out.println(document.getIndexAt(2));
+        System.out.println(document.getIndexAt(14));
+        System.out.println(document.getIndexAt(25));
 
         dumpRange(1, 1);
         dumpRange(1, 4);
         dumpRange(3, 7);
         dumpRange(4, 2);
 
-        System.out.println(document.getIndexAt(2));
-        System.out.println(document.getIndexAt(14));
-
         // TODO Test removal of spanning ranges
         dumpRange(0, 6);
         document.removeRange(1, 3);
         dumpRange(0, 6);
+        document.dumpOffsets();
 
         Document range = new Document();
         range.add(new Paragraph("123"));
+
         document.insertRange(range, 1);
         dumpRange(0, 6);
+        document.dumpOffsets();
     }
 
     public static void dumpRange(int offset, int characterCount) {
