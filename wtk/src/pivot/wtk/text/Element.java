@@ -604,6 +604,8 @@ public abstract class Element extends Node
             System.out.println("[" + i + "] " + node.getOffset()
                 + ":" + node.getCharacterCount());
         }
+
+        System.out.println();
     }
 
 }

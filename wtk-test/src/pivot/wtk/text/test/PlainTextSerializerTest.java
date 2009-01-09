@@ -17,6 +17,7 @@ package pivot.wtk.text.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import pivot.wtk.text.Document;
 import pivot.wtk.text.Paragraph;
@@ -24,6 +25,11 @@ import pivot.wtk.text.PlainTextSerializer;
 
 public class PlainTextSerializerTest {
     public static void main(String[] args) {
+        test1();
+        test2();
+    }
+
+    public static void test1() {
         Document document = new Document();
         document.add(new Paragraph("Hello, World!"));
         document.add(new Paragraph("ABC"));
@@ -41,6 +47,17 @@ public class PlainTextSerializerTest {
             document = (Document)serializer.readObject(byteArrayInputStream);
 
             serializer.writeObject(document, System.out);
+        } catch(Exception exception) {
+            System.out.println(exception);
+        }
+    }
+
+    public static void test2() {
+        PlainTextSerializer serializer = new PlainTextSerializer("UTF-8");
+        InputStream inputStream = PlainTextSerializerTest.class.getResourceAsStream("jabberwocky.txt");
+
+        try {
+            serializer.writeObject(serializer.readObject(inputStream), System.out);
         } catch(Exception exception) {
             System.out.println(exception);
         }

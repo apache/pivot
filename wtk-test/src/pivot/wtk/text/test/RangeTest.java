@@ -16,6 +16,9 @@
 package pivot.wtk.text.test;
 
 import pivot.wtk.text.Document;
+import pivot.wtk.text.Element;
+import pivot.wtk.text.Node;
+import pivot.wtk.text.NodeListener;
 import pivot.wtk.text.Paragraph;
 import pivot.wtk.text.PlainTextSerializer;
 
@@ -24,6 +27,26 @@ public class RangeTest {
 
     public static void main(String[] args) {
         document = new Document();
+        document.getNodeListeners().add(new NodeListener() {
+            public void parentChanged(Node node, Element previousParent) {
+            }
+
+            public void offsetChanged(Node node, int previousOffset) {
+            }
+
+            public void rangeInserted(Node node, Node range, int offset) {
+                System.out.println(range.getClass().getName() + "("
+                    + range.getCharacterCount() + ") inserted at " + offset);
+                dumpRange(0, document.getCharacterCount());
+            }
+
+            public void rangeRemoved(Node node, int offset, Node range) {
+                System.out.println(range.getClass().getName() + " ("
+                    + range.getCharacterCount() + ") removed at " + offset);
+                dumpRange(0, document.getCharacterCount());
+            }
+        });
+
         document.add(new Paragraph("ABCDE"));
         document.add(new Paragraph("FGH"));
         document.add(new Paragraph("IJKLMNO"));
@@ -32,41 +55,37 @@ public class RangeTest {
         document.add(new Paragraph("YZ"));
         document.dumpOffsets();
 
-        System.out.println(document.getIndexAt(2));
-        System.out.println(document.getIndexAt(14));
-        System.out.println(document.getIndexAt(25));
+        dumpIndexAt(2);
+        dumpIndexAt(14);
+        dumpIndexAt(25);
 
         dumpRange(1, 1);
         dumpRange(1, 4);
         dumpRange(3, 7);
         dumpRange(4, 2);
 
-        dumpRange(0, 6);
         document.removeRange(1, 3);
-        dumpRange(0, 6);
 
         Document range = new Document();
         range.add(new Paragraph("123"));
-        System.out.println("range.getLength() = " + range.getLength());
 
         document.insertRange(range, 1);
-        System.out.println("range.getLength() = " + range.getLength());
-
-        dumpRange(0, 6);
 
         document.removeRange(0, 6);
-        dumpRange(0, document.getCharacterCount());
 
         document.insert(new Paragraph("00101001"), 3);
-        dumpRange(0, document.getCharacterCount());
 
         document.remove(2, 2);
-        dumpRange(0, document.getCharacterCount());
+
         document.dumpOffsets();
 
         // TODO Test getDescendantAt() and getPathAt() methods
 
         // TODO Test normalize() method
+    }
+
+    public static void dumpIndexAt(int offset) {
+        System.out.println("Index at " + offset + ": " + document.getIndexAt(offset) + "\n");
     }
 
     public static void dumpRange(int offset, int characterCount) {
