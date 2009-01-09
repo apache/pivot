@@ -21,6 +21,7 @@ import java.util.Iterator;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
+import pivot.util.ListenerList;
 
 /**
  * Abstract base class for elements.
@@ -73,8 +74,26 @@ public abstract class Element extends Node
         }
     }
 
+    private class ElementListenerList extends ListenerList<ElementListener>
+    implements ElementListener {
+        public void nodeInserted(Element element, int index) {
+            for (ElementListener listener : this) {
+                listener.nodeInserted(element, index);
+            }
+        }
+
+        public void nodesRemoved(Element element, int index,
+            Sequence<Node> nodes) {
+            for (ElementListener listener : this) {
+                listener.nodesRemoved(element, index, nodes);
+            }
+        }
+    }
+
     private int characterCount = 0;
     private ArrayList<Node> nodes = new ArrayList<Node>();
+
+    private ElementListenerList elementListeners = new ElementListenerList();
 
     private static final NullNode nullNode = new NullNode();
     private static final NodeOffsetComparator nodeOffsetComparator =
@@ -113,9 +132,7 @@ public abstract class Element extends Node
             if (offset == characterCount) {
                 // Append the range contents to the end of this element
                 for (int i = 0; i < n; i++) {
-                    Node node = nodes.get(i);
-                    node.setParent(null);
-                    add(node);
+                    add(nodes.get(i));
                 }
             } else {
                 // Merge the range contents into this element
@@ -127,9 +144,7 @@ public abstract class Element extends Node
                     leadingSegment.getCharacterCount() - spliceOffset);
 
                 for (int i = 0; i < n; i++) {
-                    Node node = nodes.get(i);
-                    node.setParent(null);
-                    insert(node, index + i + 1);
+                    insert(nodes.get(i), index + i + 1);
                 }
 
                 // Insert the remainder of the node
@@ -199,9 +214,7 @@ public abstract class Element extends Node
                 }
 
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
-                    Node node = removed.get(i);
-                    node.setParent(null);
-                    element.add(node);
+                    element.add(removed.get(i));
                 }
 
                 if (trailingSegment != null
@@ -340,8 +353,11 @@ public abstract class Element extends Node
             nextNode.setOffset(nextNode.getOffset() + nodeCharacterCount);
         }
 
-        // Notify parent and listeners
-        super.rangeInserted(node, node.getOffset());
+        // Notify parent
+        super.rangeInserted(node.getOffset(), nodeCharacterCount);
+
+        // Fire event
+        elementListeners.nodeInserted(this, index);
     }
 
     public Node update(int index, Node node) {
@@ -368,18 +384,11 @@ public abstract class Element extends Node
         count = removed.getLength();
 
         if (count > 0) {
-            // Create a range to contain the removed nodes
-            Node range = duplicate(false);
-            Element element = (Element)range;
-
             int removedCharacterCount = 0;
             for (int i = 0; i < count; i++) {
                 Node node = removed.get(i);
-                removedCharacterCount += node.getCharacterCount();
-
-                // Add the removed node to the range element
                 node.setParent(null);
-                element.add(node);
+                removedCharacterCount += node.getCharacterCount();
             }
 
             // Update the character count
@@ -401,8 +410,11 @@ public abstract class Element extends Node
                 offset = characterCount;
             }
 
-            // Notify parent and listeners
-            super.rangeRemoved(offset, range);
+            // Notify parent
+            super.rangeRemoved(offset, removedCharacterCount);
+
+            // Fire event
+            elementListeners.nodesRemoved(this, index, removed);
         }
 
         return removed;
@@ -561,37 +573,35 @@ public abstract class Element extends Node
     }
 
     @Override
-    protected void rangeInserted(Node range, int offset) {
-        characterCount += range.getCharacterCount();
+    protected void rangeInserted(int offset, int characterCount) {
+        this.characterCount += characterCount;
 
         // Update the offsets of consecutive nodes
         int index = getIndexAt(offset);
-        int rangeCharacterCount = range.getCharacterCount();
 
         for (int i = index + 1, n = nodes.getLength(); i < n; i++) {
             Node node = nodes.get(i);
-            node.setOffset(node.getOffset() + rangeCharacterCount);
+            node.setOffset(node.getOffset() + characterCount);
         }
 
-        super.rangeInserted(range, offset);
+        super.rangeInserted(offset, characterCount);
     }
 
     @Override
-    protected void rangeRemoved(int offset, Node range) {
-        characterCount -= range.getCharacterCount();
+    protected void rangeRemoved(int offset, int characterCount) {
+        this.characterCount -= characterCount;
 
         // Update the offsets of consecutive nodes, if any
-        if (offset < characterCount) {
+        if (offset < this.characterCount) {
             int index = getIndexAt(offset);
-            int rangeCharacterCount = range.getCharacterCount();
 
             for (int i = index + 1, n = nodes.getLength(); i < n; i++) {
                 Node node = nodes.get(i);
-                node.setOffset(node.getOffset() - rangeCharacterCount);
+                node.setOffset(node.getOffset() - characterCount);
             }
         }
 
-        super.rangeRemoved(offset, range);
+        super.rangeRemoved(offset, characterCount);
     }
 
     public Iterator<Node> iterator() {
@@ -608,4 +618,7 @@ public abstract class Element extends Node
         System.out.println();
     }
 
+    public ListenerList<ElementListener> getElementListeners() {
+        return elementListeners;
+    }
 }

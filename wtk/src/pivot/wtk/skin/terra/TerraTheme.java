@@ -61,7 +61,6 @@ import pivot.wtk.TablePane;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TableView;
 import pivot.wtk.TabPane;
-import pivot.wtk.TextArea;
 import pivot.wtk.TextInput;
 import pivot.wtk.Theme;
 import pivot.wtk.Tooltip;
@@ -133,7 +132,6 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TableViewHeader.class, TerraTableViewHeaderSkin.class);
         componentSkinMap.put(TableView.class, TerraTableViewSkin.class);
         componentSkinMap.put(TabPane.class, TerraTabPaneSkin.class);
-        componentSkinMap.put(TextArea.class, TerraTextAreaSkin.class);
         componentSkinMap.put(TextInput.class, TerraTextInputSkin.class);
         componentSkinMap.put(Tooltip.class, TerraTooltipSkin.class);
         componentSkinMap.put(TreeView.class, TerraTreeViewSkin.class);

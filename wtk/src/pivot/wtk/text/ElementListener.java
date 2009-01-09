@@ -15,26 +15,28 @@
  */
 package pivot.wtk.text;
 
+import pivot.collections.Sequence;
+
 /**
- * Node listener interface.
+ * Element listener interface.
  *
  * @author gbrown
  */
-public interface NodeListener {
+public interface ElementListener {
     /**
-     * Called when a node's parent has changed, either as a result of being
-     * added to or removed from an element.
+     * Called when a node has been inserted into an element.
      *
-     * @param node
-     * @param previousParent
+     * @param element
+     * @param index
      */
-    public void parentChanged(Node node, Element previousParent);
+    public void nodeInserted(Element element, int index);
 
     /**
-     * Called when a node's offset has changed within it's parent element.
+     * Called when nodes have been removed from an element.
      *
-     * @param node
-     * @param previousOffset
+     * @param element
+     * @param index
+     * @param nodes
      */
-    public void offsetChanged(Node node, int previousOffset);
+    public void nodesRemoved(Element element, int index, Sequence<Node> nodes);
 }

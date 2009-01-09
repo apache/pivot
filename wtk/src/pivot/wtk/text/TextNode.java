@@ -15,13 +15,31 @@
  */
 package pivot.wtk.text;
 
+import pivot.util.ListenerList;
+
 /**
  * Node representing a sequence of characters.
  *
  * @author gbrown
  */
 public final class TextNode extends Node {
+    private class TextNodeListenerList extends ListenerList<TextNodeListener>
+        implements TextNodeListener {
+        public void charactersInserted(TextNode textNode, int index, int count) {
+            for (TextNodeListener listener : this) {
+                listener.charactersInserted(textNode, index, count);
+            }
+        }
+
+        public void charactersRemoved(TextNode textNode, int index, String characters) {
+            for (TextNodeListener listener : this) {
+                listener.charactersRemoved(textNode, index, characters);
+            }
+        }
+    }
+
     private StringBuilder textBuilder;
+    private TextNodeListenerList textNodeListeners = new TextNodeListenerList();
 
     public TextNode() {
         this("");
@@ -48,14 +66,40 @@ public final class TextNode extends Node {
             throw new IllegalArgumentException("text is null.");
         }
 
-        insertRange(new TextNode(text), index);
+        if (index < 0
+            || index > textBuilder.length()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        int characterCount = text.length();
+        if (characterCount > 0) {
+            textBuilder.insert(index, text);
+            rangeInserted(index, characterCount);
+            textNodeListeners.charactersInserted(this, index, characterCount);
+        }
     }
 
     public String removeText(int index, int count) {
-        Node range = removeRange(index, count);
-        TextNode textNode = (TextNode)range;
+        if (index < 0
+            || index + count > textBuilder.length()) {
+            throw new IndexOutOfBoundsException();
+        }
 
-        return textNode.getText();
+        String text;
+        if (count == 0) {
+            text = "";
+        } else {
+            int start = index;
+            int end = index + count;
+
+            text = textBuilder.substring(start, end);
+            textBuilder.delete(start, end);
+
+            rangeRemoved(index, count);
+            textNodeListeners.charactersRemoved(this, index, text);
+        }
+
+        return text;
     }
 
     public char getCharacter(int index) {
@@ -81,8 +125,8 @@ public final class TextNode extends Node {
             throw new IllegalArgumentException("text is null.");
         }
 
-        removeRange(0, getCharacterCount());
-        insertRange(new TextNode(text), 0);
+        removeText(0, getCharacterCount());
+        insertText(text, 0);
     }
 
     @Override
@@ -91,15 +135,8 @@ public final class TextNode extends Node {
             throw new IllegalArgumentException("range is not a text node.");
         }
 
-        if (offset < 0
-            || offset > textBuilder.length()) {
-            throw new IndexOutOfBoundsException();
-        }
-
         TextNode textNode = (TextNode)range;
-        textBuilder.insert(offset, textNode.getText());
-
-        rangeInserted(range, offset);
+        insertText(textNode.getText(), offset);
     }
 
     @Override
@@ -108,26 +145,10 @@ public final class TextNode extends Node {
             throw new IllegalArgumentException("characterCount is negative.");
         }
 
-        if (offset < 0
-            || offset + characterCount > textBuilder.length()) {
-            throw new IndexOutOfBoundsException();
-        }
+        String removed = removeText(offset, characterCount);
+        TextNode range = new TextNode(removed);
 
-        String text;
-        if (characterCount == 0) {
-            text = "";
-        } else {
-            int start = offset;
-            int end = offset + characterCount;
-
-            text = textBuilder.substring(start, end);
-            textBuilder.delete(start, end);
-        }
-
-        TextNode textNode = new TextNode(text);
-        rangeRemoved(offset, textNode);
-
-        return textNode;
+        return range;
     }
 
     @Override
@@ -153,5 +174,9 @@ public final class TextNode extends Node {
     @Override
     public Node duplicate(boolean recursive) {
         return new TextNode(this);
+    }
+
+    public ListenerList<TextNodeListener> getTextNodeListeners() {
+        return textNodeListeners;
     }
 }

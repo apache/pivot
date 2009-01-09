@@ -36,18 +36,6 @@ public abstract class Node {
                 listener.offsetChanged(node, previousOffset);
             }
         }
-
-        public void rangeInserted(Node node, Node range, int offset) {
-            for (NodeListener listener : this) {
-                listener.rangeInserted(node, range, offset);
-            }
-        }
-
-        public void rangeRemoved(Node node, int offset, Node range) {
-            for (NodeListener listener : this) {
-                listener.rangeRemoved(node, offset, range);
-            }
-        }
     }
 
     private Element parent = null;
@@ -142,14 +130,12 @@ public abstract class Node {
     /**
      * Called to notify a node that a range has been inserted.
      *
-     * @param range
      * @param offset
+     * @param characterCount
      */
-    protected void rangeInserted(Node range, int offset) {
-        nodeListeners.rangeInserted(this, range, offset);
-
+    protected void rangeInserted(int offset, int characterCount) {
         if (parent != null) {
-            parent.rangeInserted(range, offset + this.offset);
+            parent.rangeInserted(offset + this.offset, characterCount);
         }
     }
 
@@ -157,13 +143,11 @@ public abstract class Node {
      * Called to notify a node that a range has been removed.
      *
      * @param offset
-     * @param range
+     * @param characterCount
      */
-    protected void rangeRemoved(int offset, Node range) {
-        nodeListeners.rangeRemoved(this, offset, range);
-
+    protected void rangeRemoved(int offset, int characterCount) {
         if (parent != null) {
-            parent.rangeRemoved(offset + this.offset, range);
+            parent.rangeRemoved(offset + this.offset, characterCount);
         }
     }
 

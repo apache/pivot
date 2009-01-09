@@ -16,25 +16,26 @@
 package pivot.wtk.text;
 
 /**
- * Node listener interface.
+ * Text node listener interface.
  *
  * @author gbrown
  */
-public interface NodeListener {
+public interface TextNodeListener {
     /**
-     * Called when a node's parent has changed, either as a result of being
-     * added to or removed from an element.
+     * Called when characters have been inserted into a text node.
      *
-     * @param node
-     * @param previousParent
+     * @param textNode
+     * @param index
+     * @param count
      */
-    public void parentChanged(Node node, Element previousParent);
+    public void charactersInserted(TextNode textNode, int index, int count);
 
     /**
-     * Called when a node's offset has changed within it's parent element.
+     * Called when characters have been removed from a text node.
      *
-     * @param node
-     * @param previousOffset
+     * @param textNode
+     * @param index
+     * @param characters
      */
-    public void offsetChanged(Node node, int previousOffset);
+    public void charactersRemoved(TextNode textNode, int index, String characters);
 }
