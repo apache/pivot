@@ -12,19 +12,24 @@ public class TextNodeView extends NodeView implements TextNodeListener {
         return 0;
     }
 
-    public Dimensions getPreferredSize() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     public int getPreferredWidth(int height) {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    public Dimensions getPreferredSize() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     public void paint(Graphics2D graphics) {
         // TODO Auto-generated method stub
 
+    }
+
+    public NodeView breakAt(int x) {
+        // TODO
+        return null;
     }
 
     public void charactersInserted(TextNode textNode, int index, int count) {
@@ -33,8 +38,7 @@ public class TextNodeView extends NodeView implements TextNodeListener {
     }
 
     public void charactersRemoved(TextNode textNode, int index,
-            String characters) {
+        String characters) {
         // TODO Auto-generated method stub
-
     }
 }

@@ -16,33 +16,16 @@
 package pivot.wtk.text;
 
 /**
- * Node representing the root of an element hierarchy.
+ * Abstract base class for section elements.
  *
  * @author gbrown
  */
-public class Document extends Section {
-    public Document() {
+public abstract class Section extends Block {
+    public Section() {
         super();
     }
 
-    public Document(Document document, boolean recursive) {
-        super(document, recursive);
-
-        // TODO?
-    }
-
-    @Override
-    public Node duplicate(boolean recursive) {
-        return new Document(this, recursive);
-    }
-
-    @Override
-    public void insert(Node node, int index) {
-        if (!(node instanceof Block)) {
-            throw new IllegalArgumentException("node must be an instance of "
-                + Block.class.getName());
-        }
-
-        super.insert(node, index);
+    public Section(Section section, boolean recursive) {
+        super(section, recursive);
     }
 }

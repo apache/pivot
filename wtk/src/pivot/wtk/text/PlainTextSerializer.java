@@ -109,7 +109,7 @@ public class PlainTextSerializer implements Serializer {
                 writeObject(node, writer);
             }
 
-            if (element instanceof BlockElement) {
+            if (element instanceof Block) {
                 bufferedWriter.newLine();
             }
         } else {

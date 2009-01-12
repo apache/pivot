@@ -22,12 +22,12 @@ package pivot.wtk.text;
  *
  * @author gbrown
  */
-public abstract class BlockElement extends Element {
-    public BlockElement() {
+public abstract class Block extends Element {
+    public Block() {
         super();
     }
 
-    public BlockElement(BlockElement blockElement, boolean recursive) {
+    public Block(Block blockElement, boolean recursive) {
         super(blockElement, recursive);
     }
 }

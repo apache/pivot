@@ -28,6 +28,7 @@ import pivot.wtk.text.NodeListener;
  */
 public abstract class NodeView implements ConstrainedVisual, NodeListener {
     private ElementView parent = null;
+    private Node node = null;
 
     private int x = 0;
     private int y = 0;
@@ -41,6 +42,22 @@ public abstract class NodeView implements ConstrainedVisual, NodeListener {
 
     protected void setParent(ElementView parent) {
         this.parent = parent;
+    }
+
+    public void attach(Node node) {
+        node.getNodeListeners().add(this);
+
+        this.node = node;
+    }
+
+    public void detach() {
+        node.getNodeListeners().remove(this);
+
+        node = null;
+    }
+
+    public Node getNode() {
+        return node;
     }
 
     public int getX() {
@@ -96,6 +113,8 @@ public abstract class NodeView implements ConstrainedVisual, NodeListener {
     public void layout() {
         // No-op
     }
+
+    public abstract NodeView breakAt(int x);
 
     public void parentChanged(Node node, Element previousParent) {
         // No-op

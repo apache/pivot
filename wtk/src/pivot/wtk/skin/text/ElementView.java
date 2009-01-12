@@ -30,12 +30,52 @@ import pivot.wtk.text.Node;
  * @author gbrown
  */
 public abstract class ElementView extends NodeView
-    implements ElementListener {
+    implements Sequence<NodeView>, ElementListener {
     ArrayList<NodeView> nodeViews = new ArrayList<NodeView>();
     private boolean valid = true;
 
+    @Override
+    public void attach(Node node) {
+        super.attach(node);
+
+        Element element = (Element)node;
+        element.getElementListeners().add(this);
+    }
+
+    @Override
+    public void detach() {
+        Element element = (Element)getNode();
+        element.getElementListeners().remove(this);
+
+        super.detach();
+    }
+
+    public int add(NodeView nodeView) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void insert(NodeView nodeView, int index) {
+        throw new UnsupportedOperationException();
+    }
+
+    public NodeView update(int index, NodeView nodeView) {
+        throw new UnsupportedOperationException();
+    }
+
+    public int remove(NodeView nodeView) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Sequence<NodeView> remove(int index, int count) {
+        throw new UnsupportedOperationException();
+    }
+
     public NodeView get(int index) {
         return nodeViews.get(index);
+    }
+
+    public int indexOf(NodeView nodeView) {
+        return nodeViews.indexOf(nodeView);
     }
 
     public int getLength() {
@@ -96,11 +136,17 @@ public abstract class ElementView extends NodeView
         }
     }
 
+    public NodeView getNodeViewAt(int x, int y) {
+        // TODO DocumentView can override this and perform a binary search to
+        // locate the top-level node?
+        return null;
+    }
+
     public void nodeInserted(Element element, int index) {
-        // TODO
+        // TODO Instantiate an appropriate view and insert at index
     }
 
     public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
-        // TODO
+        // TODO Remove views from the affected range
     }
 }

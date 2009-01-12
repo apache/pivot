@@ -20,7 +20,7 @@ package pivot.wtk.text;
  *
  * @author gbrown
  */
-public class Paragraph extends BlockElement {
+public class Paragraph extends Block {
     public Paragraph() {
         super();
     }
@@ -37,9 +37,9 @@ public class Paragraph extends BlockElement {
     @Override
     public void insert(Node node, int index) {
         if (node instanceof Element
-            && !(node instanceof InlineElement)) {
-            throw new IllegalArgumentException("Element node must be an instance of "
-                + InlineElement.class.getName());
+            && !(node instanceof Span)) {
+            throw new IllegalArgumentException("Child node must be an instance of "
+                + TextNode.class.getName() + " or " + Span.class.getName());
         }
 
         super.insert(node, index);

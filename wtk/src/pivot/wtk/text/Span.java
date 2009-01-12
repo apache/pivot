@@ -16,18 +16,23 @@
 package pivot.wtk.text;
 
 /**
- * Abstract base class for inline elements.
+ * Element representing an inline run of text.
  * <p>
- * TODO Add a verticalAlignment style.
+ * TODO Text alignment style/enum.
  *
  * @author gbrown
  */
-public abstract class InlineElement extends Element {
-    public InlineElement() {
+public class Span extends Element {
+    public Span() {
         super();
     }
 
-    public InlineElement(InlineElement inlineElement, boolean recursive) {
-        super(inlineElement, recursive);
+    public Span(Span span, boolean recursive) {
+        super(span, recursive);
+    }
+
+    @Override
+    public Node duplicate(boolean recursive) {
+        return new Span(this, recursive);
     }
 }
