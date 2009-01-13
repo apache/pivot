@@ -20,7 +20,7 @@ package pivot.wtk.text;
  *
  * @author gbrown
  */
-public class Document extends Section {
+public class Document extends Block {
     public Document() {
         super();
     }
@@ -32,6 +32,11 @@ public class Document extends Section {
     }
 
     @Override
+    protected void setParent(Element parent) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Node duplicate(boolean recursive) {
         return new Document(this, recursive);
     }
@@ -39,7 +44,7 @@ public class Document extends Section {
     @Override
     public void insert(Node node, int index) {
         if (!(node instanceof Block)) {
-            throw new IllegalArgumentException("node must be an instance of "
+            throw new IllegalArgumentException("Child node must be an instance of "
                 + Block.class.getName());
         }
 

@@ -22,7 +22,6 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ButtonStateListener;
 import pivot.wtk.Component;
 import pivot.wtk.Cursor;
-import pivot.wtk.Mouse;
 
 /**
  * Abstract base class for button skins.

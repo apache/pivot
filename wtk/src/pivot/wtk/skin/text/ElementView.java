@@ -40,6 +40,8 @@ public abstract class ElementView extends NodeView
 
         Element element = (Element)node;
         element.getElementListeners().add(this);
+
+        // TODO Create/attach child views
     }
 
     @Override
@@ -47,15 +49,18 @@ public abstract class ElementView extends NodeView
         Element element = (Element)getNode();
         element.getElementListeners().remove(this);
 
+        // TODO Detach/release child views
+
         super.detach();
     }
 
     public int add(NodeView nodeView) {
-        throw new UnsupportedOperationException();
+        // TODO
+        return -1;
     }
 
     public void insert(NodeView nodeView, int index) {
-        throw new UnsupportedOperationException();
+        // TODO
     }
 
     public NodeView update(int index, NodeView nodeView) {
@@ -63,11 +68,13 @@ public abstract class ElementView extends NodeView
     }
 
     public int remove(NodeView nodeView) {
-        throw new UnsupportedOperationException();
+        // TODO
+        return -1;
     }
 
     public Sequence<NodeView> remove(int index, int count) {
-        throw new UnsupportedOperationException();
+        // TODO
+        return null;
     }
 
     public NodeView get(int index) {

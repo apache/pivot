@@ -18,7 +18,7 @@ package pivot.wtk.text;
 /**
  * Abstract base class for block elements.
  * <p>
- * TODO Add a horizontalAlignment property.
+ * TODO Add horizontal alignment, margin, and line spacing properties.
  *
  * @author gbrown
  */

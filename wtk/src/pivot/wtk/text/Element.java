@@ -27,6 +27,8 @@ import pivot.util.ListenerList;
  * Abstract base class for elements.
  * <p>
  * TODO Add style properties.
+ * <p>
+ * TODO Add style class property.
  *
  * @author gbrown
  */

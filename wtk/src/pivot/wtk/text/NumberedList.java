@@ -16,34 +16,50 @@
 package pivot.wtk.text;
 
 /**
- * Element representing an inline range of styled characters.
- * <p>
- * TODO Add text alignment enum/property.
+ * Element representing a numbered list.
  *
  * @author gbrown
  */
-public class Span extends Element {
-    public Span() {
+public class NumberedList extends List {
+    /**
+     * List numbering styles.
+     *
+     * @author gbrown
+     */
+    public enum Style {
+        DECIMAL,
+        LOWER_ALPHA,
+        UPPER_ALPHA,
+        LOWER_ROMAN,
+        UPPER_ROMAN
+    }
+
+    private Style style = Style.DECIMAL;
+
+    public NumberedList() {
         super();
     }
 
-    public Span(Span span, boolean recursive) {
-        super(span, recursive);
+    public NumberedList(NumberedList numberedList, boolean recursive) {
+        super(numberedList, recursive);
     }
 
-    @Override
-    public void insert(Node node, int index) {
-        if (node instanceof Element
-            && !(node instanceof Span)) {
-            throw new IllegalArgumentException("Child node must be an instance of "
-                + TextNode.class.getName() + " or " + Span.class.getName());
+    public Style getStyle() {
+        return style;
+    }
+
+    public void setStyle(Style style) {
+        if (style == null) {
+            throw new IllegalArgumentException("style is null.");
         }
 
-        super.insert(node, index);
+        this.style = style;
+
+        // TODO Fire event
     }
 
     @Override
     public Node duplicate(boolean recursive) {
-        return new Span(this, recursive);
+        return new NumberedList(this, recursive);
     }
 }

@@ -15,24 +15,35 @@
  */
 package pivot.wtk.skin.text;
 
-import java.awt.Graphics2D;
-
 import pivot.wtk.Dimensions;
-import pivot.wtk.text.TextNode;
-import pivot.wtk.text.TextNodeListener;
+import pivot.wtk.text.Node;
 
 /**
- * Text node view.
+ * Paragraph view.
  *
  * @author gbrown
  */
-public class TextNodeView extends NodeView implements TextNodeListener {
-    public int getPreferredHeight(int width) {
+public class ParagraphView extends ElementView {
+    @Override
+    public void attach(Node node) {
+        super.attach(node);
+
+        // TODO
+    }
+
+    @Override
+    public void detach() {
+        // TODO
+
+        super.detach();
+    }
+
+    public int getPreferredWidth(int height) {
         // TODO Auto-generated method stub
         return 0;
     }
 
-    public int getPreferredWidth(int height) {
+    public int getPreferredHeight(int width) {
         // TODO Auto-generated method stub
         return 0;
     }
@@ -42,23 +53,12 @@ public class TextNodeView extends NodeView implements TextNodeListener {
         return null;
     }
 
-    public void paint(Graphics2D graphics) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public NodeView breakAt(int x) {
+    public void layout() {
         // TODO
-        return null;
     }
 
-    public void charactersInserted(TextNode textNode, int index, int count) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void charactersRemoved(TextNode textNode, int index,
-        String characters) {
-        // TODO Auto-generated method stub
+    @Override
+    public NodeView breakAt(int x) {
+        return this;
     }
 }

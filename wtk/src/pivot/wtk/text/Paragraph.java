@@ -16,7 +16,9 @@
 package pivot.wtk.text;
 
 /**
- * Node representing a paragraph element.
+ * Element representing a paragraph.
+ * <p>
+ * TODO Add indent property.
  *
  * @author gbrown
  */

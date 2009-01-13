@@ -51,6 +51,11 @@ public final class Display extends Container {
     }
 
     @Override
+    protected void setParent(Container parent) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void setLocation(int x, int y) {
         throw new UnsupportedOperationException("Can't change the location of the display.");
     }

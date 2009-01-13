@@ -85,6 +85,9 @@ public abstract class NodeView implements ConstrainedVisual, NodeListener {
     }
 
     public void setSize(int width, int height) {
+        assert(width >= 0);
+        assert(height >= 0);
+
         this.width = width;
         this.height = height;
     }
