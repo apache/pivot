@@ -578,9 +578,6 @@ public abstract class Component implements ConstrainedVisual {
      */
     private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
 
-    public static int preferredWidthCount = 0;
-    public static int preferredHeightCount = 0;
-
     /**
      * Creates a new component.
      */
@@ -808,7 +805,6 @@ public abstract class Component implements ConstrainedVisual {
             if (height == -1) {
                 preferredWidth = getPreferredSize().width;
             } else {
-                preferredWidthCount++;
                 preferredWidth = skin.getPreferredWidth(height);
             }
         } else {
@@ -866,7 +862,6 @@ public abstract class Component implements ConstrainedVisual {
             if (width == -1) {
                 preferredHeight = getPreferredSize().height;
             } else {
-                preferredHeightCount++;
                 preferredHeight = skin.getPreferredHeight(width);
             }
         } else {

@@ -736,6 +736,10 @@ public abstract class ApplicationContext {
             int y = event.getY();
 
             // Set the mouse location
+            if (mouseLocation == null) {
+                mouseLocation = new Point();
+            }
+
             mouseLocation.x = x;
             mouseLocation.y = y;
 
