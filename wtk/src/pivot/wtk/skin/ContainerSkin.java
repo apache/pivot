@@ -162,10 +162,10 @@ public abstract class ContainerSkin extends ComponentSkin
 
     /**
      * @return
-     * <tt>false</tt>; by default, containers are not focusable.
+     * <tt>false</tt>; containers are not focusable.
      */
     @Override
-    public boolean isFocusable() {
+    public final boolean isFocusable() {
         return false;
     }
 

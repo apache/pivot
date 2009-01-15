@@ -63,9 +63,10 @@ public final class Display extends Container {
     @Override
     public void invalidate() {
         if (isValid()) {
-            super.invalidate();
             ApplicationContext.queueCallback(new ValidateCallback());
         }
+
+        super.invalidate();
     }
 
     @Override

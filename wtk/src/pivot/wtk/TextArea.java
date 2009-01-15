@@ -24,7 +24,7 @@ import pivot.wtk.text.Document;
  *
  * @author gbrown
  */
-public class TextArea extends Container {
+public class TextArea extends Component {
     private static class TextAreaListenerList extends ListenerList<TextAreaListener>
         implements TextAreaListener {
         public void textChanged(TextArea textArea, Document previousText) {

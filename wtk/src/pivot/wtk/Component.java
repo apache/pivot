@@ -153,21 +153,6 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Holds cached preferred size constraint/value pairs.
-     *
-     * @author tvolkert
-     */
-    private static class PreferredSizeCache {
-        public int constraint;
-        public int value;
-
-        public PreferredSizeCache(int constraint, int value) {
-            this.constraint = constraint;
-            this.value = value;
-        }
-    }
-
-    /**
      * Abstract base class for component "attributes". Attributes are attached
      * properties that are specific to a particular component type.
      *
@@ -469,13 +454,15 @@ public abstract class Component implements ConstrainedVisual {
     private pivot.wtk.Skin skin = null;
 
     /**
-     * The component's preferred width, height, and cache.
+     * The component's explicitly-set preferred width and height.
      */
     private int preferredWidth = -1;
     private int preferredHeight = -1;
 
-    private PreferredSizeCache preferredWidthCache = null;
-    private PreferredSizeCache preferredHeightCache = null;
+    /**
+     * The preferred size reported by the skin.
+     */
+    private Dimensions preferredSize = null;
 
     /**
      * The component's parent container, or null if the component does not have
@@ -590,6 +577,9 @@ public abstract class Component implements ConstrainedVisual {
      * Class event listener list.
      */
     private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
+
+    public static int preferredWidthCount = 0;
+    public static int preferredHeightCount = 0;
 
     /**
      * Creates a new component.
@@ -812,30 +802,17 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     public int getPreferredWidth(int height) {
-        int preferredWidth = this.preferredWidth;
+        int preferredWidth;
 
-        if (preferredWidth == -1) {
+        if (this.preferredWidth == -1) {
             if (height == -1) {
-                height = preferredHeight;
-            }
-
-            if (preferredWidthCache != null
-                && preferredWidthCache.constraint == height) {
-                preferredWidth = preferredWidthCache.value;
+                preferredWidth = getPreferredSize().width;
             } else {
+                preferredWidthCount++;
                 preferredWidth = skin.getPreferredWidth(height);
-
-                if (isValid()) {
-                    // Update the cache
-                    if (preferredWidthCache == null) {
-                        preferredWidthCache = new PreferredSizeCache(height,
-                            preferredWidth);
-                    } else {
-                        preferredWidthCache.constraint = height;
-                        preferredWidthCache.value = preferredWidth;
-                    }
-                }
             }
+        } else {
+            preferredWidth = this.preferredWidth;
         }
 
         return preferredWidth;
@@ -883,30 +860,17 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     public int getPreferredHeight(int width) {
-        int preferredHeight = this.preferredHeight;
+        int preferredHeight;
 
-        if (preferredHeight == -1) {
+        if (this.preferredHeight == -1) {
             if (width == -1) {
-                width = preferredWidth;
-            }
-
-            if (preferredHeightCache != null
-                && preferredHeightCache.constraint == width) {
-                preferredHeight = preferredHeightCache.value;
+                preferredHeight = getPreferredSize().height;
             } else {
+                preferredHeightCount++;
                 preferredHeight = skin.getPreferredHeight(width);
-
-                if (isValid()) {
-                    // Update the cache
-                    if (preferredHeightCache == null) {
-                        preferredHeightCache = new PreferredSizeCache(width,
-                            preferredHeight);
-                    } else {
-                        preferredHeightCache.constraint = width;
-                        preferredHeightCache.value = preferredHeight;
-                    }
-                }
             }
+        } else {
+            preferredHeight = this.preferredHeight;
         }
 
         return preferredHeight;
@@ -953,83 +917,18 @@ public abstract class Component implements ConstrainedVisual {
      * Gets the component's unconstrained preferred size.
      */
     public Dimensions getPreferredSize() {
-        Dimensions preferredSize = null;
-
-        if (isPreferredWidthSet()
-            && isPreferredHeightSet()) {
-            preferredSize = new Dimensions(preferredWidth, preferredHeight);
-        } else if (isPreferredWidthSet()) {
-            int preferredHeight;
-
-            if (preferredHeightCache != null
-                && preferredHeightCache.constraint == preferredWidth) {
-                preferredHeight = preferredHeightCache.value;
-            } else {
-                preferredHeight = skin.getPreferredHeight(preferredWidth);
-
-                if (isValid()) {
-                    // Update the cache
-                    if (preferredHeightCache == null) {
-                        preferredHeightCache = new PreferredSizeCache(preferredWidth,
-                            preferredHeight);
-                    } else {
-                        preferredHeightCache.constraint = preferredWidth;
-                        preferredHeightCache.value = preferredHeight;
-                    }
-                }
-            }
-
-            preferredSize = new Dimensions(preferredWidth, preferredHeight);
-        } else if (isPreferredHeightSet()) {
-            int preferredWidth;
-
-            if (preferredWidthCache != null
-                && preferredWidthCache.constraint == preferredHeight) {
-                preferredWidth = preferredWidthCache.value;
-            } else {
-                preferredWidth = skin.getPreferredWidth(preferredHeight);
-
-                if (isValid()) {
-                    // Update the cache
-                    if (preferredWidthCache == null) {
-                        preferredWidthCache = new PreferredSizeCache(preferredHeight,
-                            preferredWidth);
-                    } else {
-                        preferredWidthCache.constraint = preferredHeight;
-                        preferredWidthCache.value = preferredWidth;
-                    }
-                }
-            }
-
-            preferredSize = new Dimensions(preferredWidth, preferredHeight);
-        } else {
-            if (preferredWidthCache != null
-                && preferredWidthCache.constraint == -1
-                && preferredHeightCache != null
-                && preferredHeightCache.constraint == -1) {
-                preferredSize = new Dimensions(preferredWidthCache.value,
-                    preferredHeightCache.value);
-            } else {
+        if (preferredSize == null) {
+            if (preferredWidth == -1
+                && preferredHeight == -1) {
                 preferredSize = skin.getPreferredSize();
-
-                if (isValid()) {
-                    // Update the cache
-                    if (preferredWidthCache == null) {
-                        preferredWidthCache = new PreferredSizeCache(-1,
-                            preferredSize.width);
-                    } else {
-                        preferredWidthCache.constraint = -1;
-                        preferredWidthCache.value = preferredSize.width;
-                    }
-
-                    if (preferredHeightCache == null) {
-                        preferredHeightCache = new PreferredSizeCache(-1,
-                            preferredSize.height);
-                    } else {
-                        preferredHeightCache.constraint = -1;
-                        preferredHeightCache.value = preferredSize.height;
-                    }
-                }
+            } else if (preferredWidth == -1) {
+                preferredSize = new Dimensions(skin.getPreferredWidth(preferredHeight),
+                    preferredHeight);
+            } else if (preferredHeight == -1) {
+                preferredSize = new Dimensions(preferredWidth,
+                    skin.getPreferredHeight(preferredWidth));
+            } else {
+                preferredSize = new Dimensions(preferredWidth, preferredHeight);
             }
         }
 
@@ -1592,15 +1491,14 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>true</tt>; non-container components are always valid.
      */
     public boolean isValid() {
-        return true;
+        return (preferredSize != null);
     }
 
     /**
      * Notifies the component's parent that it needs to re-layout.
      */
     public void invalidate() {
-        preferredWidthCache = null;
-        preferredHeightCache = null;
+        preferredSize = null;
 
         if (parent != null) {
             parent.invalidate();

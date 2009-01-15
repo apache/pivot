@@ -273,10 +273,8 @@ public abstract class Container extends Component
 
     @Override
     public void invalidate() {
-        if (valid) {
-            valid = false;
-            super.invalidate();
-        }
+        super.invalidate();
+        valid = false;
     }
 
     @Override

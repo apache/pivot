@@ -163,6 +163,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
             preferredWidth = (int)Math.ceil(stringBounds.getWidth());
             preferredHeight = (int)Math.ceil(stringBounds.getHeight());
+        } else {
+            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
+            preferredHeight = (int)Math.ceil(lm.getAscent() + lm.getDescent()
+                + lm.getLeading());
         }
 
         preferredWidth += (padding.left + padding.right);

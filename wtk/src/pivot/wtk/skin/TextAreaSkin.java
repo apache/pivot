@@ -39,8 +39,7 @@ import pivot.wtk.text.TextNodeListener;
  *
  * @author gbrown
  */
-public class TextAreaSkin extends ContainerSkin
-    implements TextAreaListener {
+public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
     /**
      * Abstract base class for node views.
      *
@@ -80,15 +79,12 @@ public class TextAreaSkin extends ContainerSkin
             return x;
         }
 
-        public void setX(int x) {
-            this.x = x;
-        }
-
         public int getY() {
             return y;
         }
 
-        public void setY(int y) {
+        public void setLocation(int x, int y) {
+            this.x = x;
             this.y = y;
         }
 
@@ -150,8 +146,8 @@ public class TextAreaSkin extends ContainerSkin
      * @author gbrown
      */
     public abstract class ElementView extends NodeView
-        implements ElementListener {
-        protected ArrayList<NodeView> nodeViews = new ArrayList<NodeView>();
+        implements Sequence<NodeView>, ElementListener {
+        private ArrayList<NodeView> nodeViews = new ArrayList<NodeView>();
         private boolean valid = true;
 
         public ElementView(ElementView parent, Element element) {
@@ -178,8 +174,32 @@ public class TextAreaSkin extends ContainerSkin
             super.dispose();
         }
 
+        public int add(NodeView nodeView) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void insert(NodeView nodeView, int index) {
+            throw new UnsupportedOperationException();
+        }
+
+        public NodeView update(int index, NodeView nodeView) {
+            throw new UnsupportedOperationException();
+        }
+
+        public int remove(NodeView nodeView) {
+            throw new UnsupportedOperationException();
+        }
+
+        public Sequence<NodeView> remove(int index, int count) {
+            throw new UnsupportedOperationException();
+        }
+
         public NodeView get(int index) {
             return nodeViews.get(index);
+        }
+
+        public int indexOf(NodeView nodeView) {
+            return nodeViews.indexOf(nodeView);
         }
 
         public int getLength() {
@@ -264,6 +284,8 @@ public class TextAreaSkin extends ContainerSkin
         public void nodeInserted(Element element, int index) {
             Node node = element.get(index);
             nodeViews.insert(createNodeView(node), index);
+
+            invalidate();
         }
 
         public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
@@ -272,6 +294,8 @@ public class TextAreaSkin extends ContainerSkin
                 NodeView nodeView = removed.get(i);
                 nodeView.dispose();
             }
+
+            invalidate();
         }
 
         private NodeView createNodeView(Node node) {
@@ -303,22 +327,39 @@ public class TextAreaSkin extends ContainerSkin
         }
 
         public int getPreferredWidth(int height) {
-            // TODO Auto-generated method stub
-            return 0;
+            int preferredWidth = 0;
+
+            for (int i = 0, n = getLength(); i < n; i++) {
+                NodeView nodeView = get(i);
+                preferredWidth = Math.max(nodeView.getPreferredWidth(-1), preferredWidth);
+            }
+
+            return preferredWidth;
         }
 
         public int getPreferredHeight(int width) {
-            // TODO Auto-generated method stub
-            return 0;
+            int preferredHeight = 0;
+
+            for (int i = 0, n = getLength(); i < n; i++) {
+                NodeView nodeView = get(i);
+                preferredHeight += nodeView.getPreferredHeight(width);
+            }
+
+            return preferredHeight;
         }
 
         public Dimensions getPreferredSize() {
-            // TODO Auto-generated method stub
-            return null;
+            // TODO Optimize
+            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
         }
 
         public void layout() {
-            // TODO
+            int y = 0;
+            for (int i = 0, n = getLength(); i < n; i++) {
+                NodeView nodeView = get(i);
+                nodeView.setLocation(0, y);
+                y += nodeView.getPreferredHeight(-1);
+            }
         }
 
         @Override
@@ -335,15 +376,15 @@ public class TextAreaSkin extends ContainerSkin
     }
 
     public class ParagraphView extends ElementView {
+        // TODO IMPORTANT This won't work, because the base ElementView class
+        // paints the contents of nodeViews, not layoutNodeViews. We'll need
+        // a way for subclasses such as this to specify the contents of the
+        // node list that actually gets laid out.
+
+        private ArrayList<NodeView> layoutNodeViews = null;
+
         public ParagraphView(ElementView parent, Paragraph paragraph) {
             super(parent, paragraph);
-        }
-
-        @Override
-        public void dispose() {
-            // TODO
-
-            super.dispose();
         }
 
         public int getPreferredWidth(int height) {
@@ -357,8 +398,8 @@ public class TextAreaSkin extends ContainerSkin
         }
 
         public Dimensions getPreferredSize() {
-            // TODO Auto-generated method stub
-            return null;
+            // TODO Optimize
+            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
         }
 
         public void layout() {
@@ -379,6 +420,15 @@ public class TextAreaSkin extends ContainerSkin
     public class TextNodeView extends NodeView implements TextNodeListener {
         public TextNodeView(ElementView parent, TextNode textNode) {
             super(parent, textNode);
+
+            textNode.getTextNodeListeners().add(this);
+        }
+
+        public void dispose() {
+            TextNode textNode = (TextNode)getNode();
+            textNode.getTextNodeListeners().remove(this);
+
+            super.dispose();
         }
 
         public int getPreferredHeight(int width) {
@@ -392,8 +442,8 @@ public class TextAreaSkin extends ContainerSkin
         }
 
         public Dimensions getPreferredSize() {
-            // TODO Auto-generated method stub
-            return null;
+            // TODO Optimize
+            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
         }
 
         public void paint(Graphics2D graphics) {
@@ -407,13 +457,11 @@ public class TextAreaSkin extends ContainerSkin
         }
 
         public void charactersInserted(TextNode textNode, int index, int count) {
-            // TODO Auto-generated method stub
-
+            invalidate();
         }
 
-        public void charactersRemoved(TextNode textNode, int index,
-            String characters) {
-            // TODO Auto-generated method stub
+        public void charactersRemoved(TextNode textNode, int index, String characters) {
+            invalidate();
         }
     }
 
@@ -463,20 +511,6 @@ public class TextAreaSkin extends ContainerSkin
 
     public void paint(Graphics2D graphics) {
         documentView.paint(graphics);
-    }
-
-    @Override
-    public boolean isFocusable() {
-        // TODO Update Container#requestFocus() to only transfer focus to
-        // first subcomponent if the container itself is not focusable;
-        // alternatively, we could define an inner component that wraps the
-        // document view and set focus to that.
-
-        // Note that this is only an issue when the text area is enabled
-        // (i.e. editable).
-
-
-        return true;
     }
 
     public void textChanged(TextArea textArea, Document previousText) {

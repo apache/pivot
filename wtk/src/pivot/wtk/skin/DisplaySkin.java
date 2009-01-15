@@ -52,19 +52,15 @@ public class DisplaySkin extends ContainerSkin {
             Window window = (Window)component;
 
             if (window.isDisplayable()) {
-                boolean maximized = window.isMaximized();
-
-                if (maximized) {
+                if (window.isMaximized()) {
                     window.setLocation(0, 0);
                     window.setSize(display.getSize());
                 } else {
                     Dimensions preferredSize = window.getPreferredSize();
-                    int preferredWidth = preferredSize.width;
-                    int preferredHeight = preferredSize.height;
 
-                    if (window.getWidth() != preferredWidth
-                        || window.getHeight() != preferredHeight) {
-                        window.setSize(preferredWidth, preferredHeight);
+                    if (window.getWidth() != preferredSize.width
+                        || window.getHeight() != preferredSize.height) {
+                        window.setSize(preferredSize.width, preferredSize.height);
                     }
                 }
 
