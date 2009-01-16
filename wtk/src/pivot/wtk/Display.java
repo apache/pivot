@@ -27,10 +27,12 @@ public final class Display extends Container {
     private class ValidateCallback implements Runnable {
         public void run() {
             validate();
+            validateCallback = null;
         }
     }
 
     private ApplicationContext.DisplayHost displayHost;
+    private ValidateCallback validateCallback = null;
 
     protected Display(ApplicationContext.DisplayHost displayHost) {
         this.displayHost = displayHost;
@@ -62,8 +64,9 @@ public final class Display extends Container {
 
     @Override
     public void invalidate() {
-        if (isValid()) {
-            ApplicationContext.queueCallback(new ValidateCallback());
+        if (validateCallback == null) {
+            validateCallback = new ValidateCallback();
+            ApplicationContext.queueCallback(validateCallback);
         }
 
         super.invalidate();

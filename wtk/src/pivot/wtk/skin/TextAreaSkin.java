@@ -21,10 +21,10 @@ import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
-import pivot.wtk.ConstrainedVisual;
 import pivot.wtk.Dimensions;
 import pivot.wtk.TextArea;
 import pivot.wtk.TextAreaListener;
+import pivot.wtk.Visual;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.Element;
 import pivot.wtk.text.ElementListener;
@@ -45,9 +45,9 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
      *
      * @author gbrown
      */
-    public abstract class NodeView implements ConstrainedVisual, NodeListener {
-        private ElementView parent = null;
+    public abstract class NodeView implements Visual, NodeListener {
         private Node node = null;
+        private ElementView parent = null;
 
         private int x = 0;
         private int y = 0;
@@ -55,24 +55,50 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         private int width = 0;
         private int height = 0;
 
-        public NodeView(ElementView parent, Node node) {
-            this.parent = parent;
+        private boolean valid = false;
 
-            node.getNodeListeners().add(this);
+        public NodeView(Node node) {
             this.node = node;
-        }
-
-        public ElementView getParent() {
-            return parent;
         }
 
         public Node getNode() {
             return node;
         }
 
-        public void dispose() {
+        public ElementView getParent() {
+            return parent;
+        }
+
+        protected void setParent(ElementView parent) {
+            this.parent = parent;
+        }
+
+        protected void attach() {
+            node.getNodeListeners().add(this);
+        }
+
+        protected void detach() {
             node.getNodeListeners().remove(this);
-            node = null;
+        }
+
+        public int getWidth() {
+            validate();
+            return width;
+        }
+
+        public int getHeight() {
+            validate();
+            return height;
+        }
+
+        public Dimensions getSize() {
+            validate();
+            return new Dimensions(width, height);
+        }
+
+        protected void setSize(int width, int height) {
+            this.width = width;
+            this.height = height;
         }
 
         public int getX() {
@@ -83,50 +109,36 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             return y;
         }
 
-        public void setLocation(int x, int y) {
+        protected void setLocation(int x, int y) {
             this.x = x;
             this.y = y;
         }
 
-        public int getWidth() {
-            return width;
-        }
-
-        public int getHeight() {
-            return height;
-        }
-
-        public void setSize(int width, int height) {
-            assert(width >= 0);
-            assert(height >= 0);
-
-            this.width = width;
-            this.height = height;
-        }
-
         public Bounds getBounds() {
-            return new Bounds(x, y, width, height);
+            return new Bounds(x, y, getWidth(), getHeight());
+        }
+
+        public void repaint() {
+            repaint(0, 0, width, height);
+        }
+
+        public void repaint(int x, int y, int width, int height) {
+            if (parent != null) {
+                parent.repaint(x + this.x, y + this.y, width, height);
+            }
         }
 
         public boolean isValid() {
-            return true;
+            return valid;
         }
 
-        public void invalidate() {
-            if (parent != null) {
-                parent.invalidate();
-            }
+        public void invalidate(int x, int y) {
+            // TODO Repaint the rectangle containing x, y, (width - x), (height - y)
+            valid = false;
         }
 
         public void validate() {
-            if (width > 0
-                && height > 0) {
-                layout();
-            }
-        }
-
-        public void layout() {
-            // No-op
+            valid = true;
         }
 
         public abstract NodeView breakAt(int x);
@@ -148,38 +160,46 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
     public abstract class ElementView extends NodeView
         implements Sequence<NodeView>, ElementListener {
         private ArrayList<NodeView> nodeViews = new ArrayList<NodeView>();
-        private boolean valid = true;
 
-        public ElementView(ElementView parent, Element element) {
-            super(parent, element);
+        public ElementView(Element element) {
+            super(element);
 
+        }
+
+        @Override
+        protected void attach() {
+            Element element = (Element)getNode();
             element.getElementListeners().add(this);
 
-            // Create child node views
+            // Attach child node views
+            // TODO We may want to do this in subclasses, since not all
+            // components may benefit?
             for (Node node : element) {
-                nodeViews.add(createNodeView(node));
+                add(createNodeView(node));
             }
         }
 
         @Override
-        public void dispose() {
-            // Dispose child node views
-            for (NodeView nodeView : nodeViews) {
-                nodeView.dispose();
-            }
-
+        protected void detach() {
             Element element = (Element)getNode();
             element.getElementListeners().remove(this);
 
-            super.dispose();
+            // Detach child node views
+            remove(0, nodeViews.getLength());
         }
 
         public int add(NodeView nodeView) {
-            throw new UnsupportedOperationException();
+            int index = getLength();
+            insert(nodeView, index);
+
+            return index;
         }
 
         public void insert(NodeView nodeView, int index) {
-            throw new UnsupportedOperationException();
+            nodeView.setParent(this);
+            nodeView.attach();
+
+            nodeViews.insert(nodeView, index);
         }
 
         public NodeView update(int index, NodeView nodeView) {
@@ -187,11 +207,24 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         public int remove(NodeView nodeView) {
-            throw new UnsupportedOperationException();
+            int index = indexOf(nodeView);
+            if (index != -1) {
+                remove(index, 1);
+            }
+
+            return index;
         }
 
         public Sequence<NodeView> remove(int index, int count) {
-            throw new UnsupportedOperationException();
+            Sequence<NodeView> removed = nodeViews.remove(index, count);
+
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                NodeView nodeView = removed.get(i);
+                nodeView.setParent(null);
+                nodeView.detach();
+            }
+
+            return removed;
         }
 
         public NodeView get(int index) {
@@ -204,35 +237,6 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
         public int getLength() {
             return nodeViews.getLength();
-        }
-
-        @Override
-        public boolean isValid() {
-            return valid;
-        }
-
-        @Override
-        public void invalidate() {
-            if (valid) {
-                valid = false;
-                super.invalidate();
-            }
-        }
-
-        @Override
-        public void validate() {
-            if (!valid) {
-                try {
-                    super.validate();
-
-                    for (int i = 0, n = nodeViews.getLength(); i < n; i++) {
-                        NodeView nodeView = nodeViews.get(i);
-                        nodeView.validate();
-                    }
-                } finally {
-                    valid = true;
-                }
-            }
         }
 
         public void paint(Graphics2D graphics) {
@@ -282,31 +286,25 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         public void nodeInserted(Element element, int index) {
-            Node node = element.get(index);
-            nodeViews.insert(createNodeView(node), index);
-
-            invalidate();
+            // TODO
+            invalidate(0, 0);
         }
 
         public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
-            Sequence<NodeView> removed = nodeViews.remove(index, nodes.getLength());
-            for (int i = 0, n = removed.getLength(); i < n; i++) {
-                NodeView nodeView = removed.get(i);
-                nodeView.dispose();
-            }
-
-            invalidate();
+         // TODO
+            invalidate(0, 0);
         }
 
-        private NodeView createNodeView(Node node) {
+        protected NodeView createNodeView(Node node) {
+            // TODO Should this be final?
             NodeView nodeView = null;
 
             if (node instanceof Document) {
-                nodeView = new DocumentView(this, (Document)node);
+                nodeView = new DocumentView((Document)node);
             } else if (node instanceof Paragraph) {
-                nodeView = new ParagraphView(this, (Paragraph)node);
+                nodeView = new ParagraphView((Paragraph)node);
             } else if (node instanceof TextNode) {
-                nodeView = new TextNodeView(this, (TextNode)node);
+                nodeView = new TextNodeView((TextNode)node);
             } else {
                 throw new IllegalArgumentException("Unsupported node type: "
                     + node.getClass().getName());
@@ -322,49 +320,24 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
      * @author gbrown
      */
     public class DocumentView extends ElementView {
-        public DocumentView(ElementView parent, Document document) {
-            super(parent, document);
-        }
-
-        public int getPreferredWidth(int height) {
-            int preferredWidth = 0;
-
-            for (int i = 0, n = getLength(); i < n; i++) {
-                NodeView nodeView = get(i);
-                preferredWidth = Math.max(nodeView.getPreferredWidth(-1), preferredWidth);
-            }
-
-            return preferredWidth;
-        }
-
-        public int getPreferredHeight(int width) {
-            int preferredHeight = 0;
-
-            for (int i = 0, n = getLength(); i < n; i++) {
-                NodeView nodeView = get(i);
-                preferredHeight += nodeView.getPreferredHeight(width);
-            }
-
-            return preferredHeight;
-        }
-
-        public Dimensions getPreferredSize() {
-            // TODO Optimize
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+        public DocumentView(Document document) {
+            super(document);
         }
 
         public void layout() {
-            int y = 0;
-            for (int i = 0, n = getLength(); i < n; i++) {
-                NodeView nodeView = get(i);
-                nodeView.setLocation(0, y);
-                y += nodeView.getPreferredHeight(-1);
-            }
+            // TODO
         }
 
         @Override
-        public void invalidate() {
-            super.invalidate();
+        public void repaint(int x, int y, int width, int height) {
+            super.repaint(x, y, width, height);
+
+            // TODO Call repaintComponent()
+        }
+
+        @Override
+        public void invalidate(int x, int y) {
+            super.invalidate(x, y);
 
             TextAreaSkin.this.invalidateComponent();
         }
@@ -376,30 +349,8 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
     }
 
     public class ParagraphView extends ElementView {
-        // TODO IMPORTANT This won't work, because the base ElementView class
-        // paints the contents of nodeViews, not layoutNodeViews. We'll need
-        // a way for subclasses such as this to specify the contents of the
-        // node list that actually gets laid out.
-
-        private ArrayList<NodeView> layoutNodeViews = null;
-
-        public ParagraphView(ElementView parent, Paragraph paragraph) {
-            super(parent, paragraph);
-        }
-
-        public int getPreferredWidth(int height) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getPreferredHeight(int width) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public Dimensions getPreferredSize() {
-            // TODO Optimize
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+        public ParagraphView(Paragraph paragraph) {
+            super(paragraph);
         }
 
         public void layout() {
@@ -418,32 +369,25 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
      * @author gbrown
      */
     public class TextNodeView extends NodeView implements TextNodeListener {
-        public TextNodeView(ElementView parent, TextNode textNode) {
-            super(parent, textNode);
+        public TextNodeView(TextNode textNode) {
+            super(textNode);
 
+        }
+
+        @Override
+        protected void attach() {
+            super.attach();
+
+            TextNode textNode = (TextNode)getNode();
             textNode.getTextNodeListeners().add(this);
         }
 
-        public void dispose() {
+        @Override
+        protected void detach() {
+            super.detach();
+
             TextNode textNode = (TextNode)getNode();
             textNode.getTextNodeListeners().remove(this);
-
-            super.dispose();
-        }
-
-        public int getPreferredHeight(int width) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getPreferredWidth(int height) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public Dimensions getPreferredSize() {
-            // TODO Optimize
-            return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
         }
 
         public void paint(Graphics2D graphics) {
@@ -457,11 +401,13 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         public void charactersInserted(TextNode textNode, int index, int count) {
-            invalidate();
+            // TODO
+            invalidate(0, 0);
         }
 
         public void charactersRemoved(TextNode textNode, int index, String characters) {
-            invalidate();
+            // TODO
+            invalidate(0, 0);
         }
     }
 
@@ -471,56 +417,78 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         super.install(component);
 
         TextArea textArea = (TextArea)component;
-        Document text = textArea.getText();
-
-        if (text != null) {
-            documentView = new DocumentView(null, text);
-        }
-
         textArea.getTextAreaListeners().add(this);
+
+        Document text = textArea.getText();
+        if (text != null) {
+            documentView = new DocumentView(text);
+            documentView.attach();
+        }
     }
 
     public void uninstall() {
-        if (documentView != null) {
-            documentView.dispose();
-        }
-
-        documentView = null;
-
         TextArea textArea = (TextArea)getComponent();
         textArea.getTextAreaListeners().remove(this);
+
+        if (documentView != null) {
+            documentView.detach();
+            documentView = null;
+        }
 
         super.uninstall();
     }
 
     public int getPreferredWidth(int height) {
-        return documentView.getPreferredWidth(height);
+        // TODO
+        return 0;
     }
 
     public int getPreferredHeight(int width) {
-        return documentView.getPreferredHeight(width);
+        // TODO
+        return 0;
     }
 
     public Dimensions getPreferredSize() {
-        return documentView.getPreferredSize();
+        Dimensions preferredSize;
+
+        if (documentView == null) {
+            preferredSize = new Dimensions(0, 0);
+        } else {
+            preferredSize = documentView.getSize();
+        }
+
+        return preferredSize;
     }
 
     public void layout() {
-        documentView.validate();
+        if (documentView != null) {
+            documentView.validate();
+
+            // TODO Here is where we would resize/reposition form components
+            // (i.e. components attached to ComponentNodeViews); we'd probably
+            // want a top-level list of ComponentNodeViews so we wouldn't have
+            // to search the tree for them.
+        }
     }
 
     public void paint(Graphics2D graphics) {
-        documentView.paint(graphics);
+        if (documentView != null) {
+            documentView.paint(graphics);
+        }
     }
 
     public void textChanged(TextArea textArea, Document previousText) {
         if (documentView != null) {
-            documentView.dispose();
+            documentView.detach();
+            documentView = null;
         }
 
         Document text = textArea.getText();
         if (text != null) {
-            documentView = new DocumentView(null, text);
+            documentView = new DocumentView(text);
+            documentView.attach();
         }
+
+        invalidateComponent();
     }
 }

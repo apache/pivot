@@ -1486,7 +1486,7 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>true</tt>; non-container components are always valid.
      */
     public boolean isValid() {
-        return (preferredSize != null);
+        return true;
     }
 
     /**
@@ -1507,10 +1507,7 @@ public abstract class Component implements ConstrainedVisual {
      * implementation of layout() will be a no-op.
      */
     public void validate() {
-        if (getWidth() > 0
-            && getHeight() > 0) {
-            skin.layout();
-        }
+        skin.layout();
     }
 
     /**

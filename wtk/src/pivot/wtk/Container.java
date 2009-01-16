@@ -273,16 +273,16 @@ public abstract class Container extends Component
 
     @Override
     public void invalidate() {
-        super.invalidate();
         valid = false;
+        super.invalidate();
     }
 
     @Override
     public void validate() {
+        super.validate();
+
         if (!valid) {
             try {
-                super.validate();
-
                 for (int i = 0, n = components.getLength(); i < n; i++) {
                     Component component = components.get(i);
                     component.validate();
