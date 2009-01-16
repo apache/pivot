@@ -132,9 +132,12 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             return valid;
         }
 
-        public void invalidate(int x, int y) {
-            // TODO Repaint the rectangle containing x, y, (width - x), (height - y)
+        public void invalidate() {
             valid = false;
+
+            if (parent != null) {
+                parent.invalidate();
+            }
         }
 
         public void validate() {
@@ -170,13 +173,6 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         protected void attach() {
             Element element = (Element)getNode();
             element.getElementListeners().add(this);
-
-            // Attach child node views
-            // TODO We may want to do this in subclasses, since not all
-            // components may benefit?
-            for (Node node : element) {
-                add(createNodeView(node));
-            }
         }
 
         @Override
@@ -185,7 +181,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             element.getElementListeners().remove(this);
 
             // Detach child node views
-            remove(0, nodeViews.getLength());
+            remove(0, getLength());
         }
 
         public int add(NodeView nodeView) {
@@ -264,53 +260,14 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             }
         }
 
-        public NodeView getNodeViewAt(int x, int y) {
-            NodeView nodeView = null;
-
-            int i = nodeViews.getLength() - 1;
-            while (i >= 0) {
-                nodeView = nodeViews.get(i);
-                Bounds bounds = nodeView.getBounds();
-                if (bounds.contains(x, y)) {
-                    break;
-                }
-
-                i--;
-            }
-
-            if (i < 0) {
-                nodeView = null;
-            }
-
-            return nodeView;
-        }
+        public abstract NodeView getNodeViewAt(int x, int y);
 
         public void nodeInserted(Element element, int index) {
-            // TODO
-            invalidate(0, 0);
+            invalidate();
         }
 
         public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
-         // TODO
-            invalidate(0, 0);
-        }
-
-        protected NodeView createNodeView(Node node) {
-            // TODO Should this be final?
-            NodeView nodeView = null;
-
-            if (node instanceof Document) {
-                nodeView = new DocumentView((Document)node);
-            } else if (node instanceof Paragraph) {
-                nodeView = new ParagraphView((Paragraph)node);
-            } else if (node instanceof TextNode) {
-                nodeView = new TextNodeView((TextNode)node);
-            } else {
-                throw new IllegalArgumentException("Unsupported node type: "
-                    + node.getClass().getName());
-            }
-
-            return nodeView;
+            invalidate();
         }
     }
 
@@ -324,27 +281,49 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             super(document);
         }
 
-        public void layout() {
-            // TODO
+        @Override
+        public void attach() {
+            super.attach();
+
+            // Attach child node views
+            Document document = (Document)getNode();
+            for (Node node : document) {
+                add(createNodeView(node));
+            }
         }
 
         @Override
         public void repaint(int x, int y, int width, int height) {
             super.repaint(x, y, width, height);
 
-            // TODO Call repaintComponent()
+            TextAreaSkin.this.repaintComponent(x, y, width, height);
         }
 
         @Override
-        public void invalidate(int x, int y) {
-            super.invalidate(x, y);
+        public void invalidate() {
+            super.invalidate();
 
             TextAreaSkin.this.invalidateComponent();
         }
 
         @Override
+        public void validate() {
+            if (!isValid()) {
+                // TODO Relayout and set size
+            }
+
+            super.validate();
+        }
+
+        @Override
         public NodeView breakAt(int x) {
             return this;
+        }
+
+        @Override
+        public NodeView getNodeViewAt(int x, int y) {
+            // TODO
+            return null;
         }
     }
 
@@ -353,13 +332,25 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             super(paragraph);
         }
 
-        public void layout() {
-            // TODO
+        @Override
+        public void validate() {
+            if (!isValid()) {
+                // TODO Relayout and set size; start at the first invalid
+                // view so we don't need to recreate views unnecessarily
+            }
+
+            super.validate();
         }
 
         @Override
         public NodeView breakAt(int x) {
             return this;
+        }
+
+        @Override
+        public NodeView getNodeViewAt(int x, int y) {
+            // TODO
+            return null;
         }
     }
 
@@ -390,6 +381,15 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             textNode.getTextNodeListeners().remove(this);
         }
 
+        @Override
+        public void validate() {
+            if (!isValid()) {
+                // TODO Recalculate size
+            }
+
+            super.validate();
+        }
+
         public void paint(Graphics2D graphics) {
             // TODO Auto-generated method stub
 
@@ -401,13 +401,11 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         public void charactersInserted(TextNode textNode, int index, int count) {
-            // TODO
-            invalidate(0, 0);
+            invalidate();
         }
 
         public void charactersRemoved(TextNode textNode, int index, String characters) {
-            // TODO
-            invalidate(0, 0);
+            invalidate();
         }
     }
 
@@ -439,25 +437,15 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
     }
 
     public int getPreferredWidth(int height) {
-        // TODO
-        return 0;
+        return (documentView == null) ? 0 : documentView.getWidth();
     }
 
     public int getPreferredHeight(int width) {
-        // TODO
-        return 0;
+        return (documentView == null) ? 0 : documentView.getHeight();
     }
 
     public Dimensions getPreferredSize() {
-        Dimensions preferredSize;
-
-        if (documentView == null) {
-            preferredSize = new Dimensions(0, 0);
-        } else {
-            preferredSize = documentView.getSize();
-        }
-
-        return preferredSize;
+        return (documentView == null) ? new Dimensions(0, 0) : documentView.getSize();
     }
 
     public void layout() {
@@ -490,5 +478,22 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         invalidateComponent();
+    }
+
+    public NodeView createNodeView(Node node) {
+        NodeView nodeView = null;
+
+        if (node instanceof Document) {
+            nodeView = new DocumentView((Document)node);
+        } else if (node instanceof Paragraph) {
+            nodeView = new ParagraphView((Paragraph)node);
+        } else if (node instanceof TextNode) {
+            nodeView = new TextNodeView((TextNode)node);
+        } else {
+            throw new IllegalArgumentException("Unsupported node type: "
+                + node.getClass().getName());
+        }
+
+        return nodeView;
     }
 }
