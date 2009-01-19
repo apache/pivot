@@ -15,15 +15,30 @@
  */
 package pivot.wtk.skin;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineBreakMeasurer;
+import java.awt.font.LineMetrics;
+import java.awt.font.TextAttribute;
+import java.awt.geom.Rectangle2D;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.util.Iterator;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
+import pivot.util.ImmutableIterator;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Platform;
+import pivot.wtk.Point;
 import pivot.wtk.TextArea;
 import pivot.wtk.TextAreaListener;
+import pivot.wtk.Theme;
 import pivot.wtk.Visual;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.Element;
@@ -49,13 +64,14 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         private Node node = null;
         private ElementView parent = null;
 
+        private int width = -1;
+        private int height = -1;
+        private boolean valid = false;
+
         private int x = 0;
         private int y = 0;
 
-        private int width = 0;
-        private int height = 0;
-
-        private boolean valid = false;
+        private int maximumWidth = -1;
 
         public NodeView(Node node) {
             this.node = node;
@@ -83,22 +99,37 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
         public int getWidth() {
             validate();
+            assert(width >= 0);
             return width;
         }
 
         public int getHeight() {
             validate();
+            assert(height >= 0);
             return height;
         }
 
         public Dimensions getSize() {
             validate();
+            assert(width >= 0
+                && height >= 0);
             return new Dimensions(width, height);
         }
 
         protected void setSize(int width, int height) {
+            assert(width >= 0);
+            assert(height >= 0);
+            assert(maximumWidth == -1
+                || width <= maximumWidth);
+
+            // Redraw the region formerly occupied by this view
+            repaint();
+
             this.width = width;
             this.height = height;
+
+            // Redraw the region currently occupied by this view
+            repaint();
         }
 
         public int getX() {
@@ -109,9 +140,19 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             return y;
         }
 
+        public Point getLocation() {
+            return new Point(x, y);
+        }
+
         protected void setLocation(int x, int y) {
+            // Redraw the region formerly occupied by this view
+            repaint();
+
             this.x = x;
             this.y = y;
+
+            // Redraw the region currently occupied by this view
+            repaint();
         }
 
         public Bounds getBounds() {
@@ -123,6 +164,9 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         public void repaint(int x, int y, int width, int height) {
+            assert(width >= 0);
+            assert(height >= 0);
+
             if (parent != null) {
                 parent.repaint(x + this.x, y + this.y, width, height);
             }
@@ -133,6 +177,8 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         public void invalidate() {
+            width = -1;
+            height = -1;
             valid = false;
 
             if (parent != null) {
@@ -144,7 +190,25 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             valid = true;
         }
 
-        public abstract NodeView breakAt(int x);
+        public int getMaximumWidth() {
+            return maximumWidth;
+        }
+
+        public void setMaximumWidth(int maximumWidth) {
+            if (maximumWidth < -1) {
+                throw new IllegalArgumentException(maximumWidth
+                    + " is not a valid value for maximumWidth.");
+            }
+
+            int previousMaximumWidth = this.maximumWidth;
+
+            if (previousMaximumWidth != maximumWidth) {
+                this.maximumWidth = maximumWidth;
+                invalidate();
+            }
+        }
+
+        public abstract NodeView getNext();
 
         public void parentChanged(Node node, Element previousParent) {
             // No-op
@@ -161,7 +225,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
      * @author gbrown
      */
     public abstract class ElementView extends NodeView
-        implements Sequence<NodeView>, ElementListener {
+        implements Sequence<NodeView>, Iterable<NodeView>, ElementListener {
         private ArrayList<NodeView> nodeViews = new ArrayList<NodeView>();
 
         public ElementView(Element element) {
@@ -173,6 +237,10 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         protected void attach() {
             Element element = (Element)getNode();
             element.getElementListeners().add(this);
+
+            // NOTE We don't attach child views here because this may not
+            // be efficient for all subclasses (e.g. paragraph views need to
+            // recreate child views when breaking across multiple lines)
         }
 
         @Override
@@ -269,6 +337,10 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
             invalidate();
         }
+
+        public Iterator<NodeView> iterator() {
+            return new ImmutableIterator<NodeView>(nodeViews.iterator());
+        }
     }
 
     /**
@@ -309,20 +381,34 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         @Override
         public void validate() {
             if (!isValid()) {
-                // TODO Relayout and set size
+                int width = 0;
+
+                int y = 0;
+                for (NodeView nodeView : this) {
+                    nodeView.setMaximumWidth(getMaximumWidth());
+                    nodeView.validate();
+
+                    nodeView.setLocation(0, y);
+
+                    width = Math.max(width, nodeView.getWidth());
+                    y += nodeView.getHeight();
+                }
+
+                setSize(width, y);
             }
 
             super.validate();
         }
 
         @Override
-        public NodeView breakAt(int x) {
-            return this;
+        public NodeView getNext() {
+            return null;
         }
 
         @Override
         public NodeView getNodeViewAt(int x, int y) {
-            // TODO
+            // TODO Perform a binary search for the node view at the given
+            // y-coordinate
             return null;
         }
     }
@@ -335,21 +421,96 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         @Override
         public void validate() {
             if (!isValid()) {
-                // TODO Relayout and set size; start at the first invalid
-                // view so we don't need to recreate views unnecessarily
+                Paragraph paragraph = (Paragraph)getNode();
+
+                int maximumWidth = getMaximumWidth();
+
+                // Determine index of first invalid node view
+                int i = 0;
+                int n = getLength();
+                if (i < n) {
+                    NodeView nodeView;
+                    do {
+                        nodeView = get(i++);
+                        nodeView.setMaximumWidth(maximumWidth);
+                    } while (nodeView.isValid());
+                }
+
+                i--;
+
+                // Determine index of first node for which new views will be
+                // created
+                NodeView nodeView;
+                int j;
+
+                if (i < 0) {
+                    nodeView = null;
+                    j = -1;
+                } else {
+                    nodeView = get(i);
+                    Node node = nodeView.getNode();
+                    j = paragraph.indexOf(node);
+                }
+
+                j++;
+
+                // Remove all subsequent views; they will be recreated
+                i++;
+                remove(i, n - i);
+
+                // Initialize geometry values
+                int width = 0;
+
+                int x = 0;
+                int y = 0;
+
+                int lineHeight = 0;
+
+                int c = paragraph.getLength();
+                while (j < c) {
+                    if (nodeView != null) {
+                        nodeView.setMaximumWidth(maximumWidth - x);
+                        nodeView.validate();
+
+                        // Set view position; update geometry values
+                        nodeView.setLocation(x, y);
+
+                        x += nodeView.getWidth();
+                        if (x > maximumWidth) {
+                            width = Math.max(width, x - nodeView.getWidth());
+                            x = 0;
+                            y += lineHeight;
+                            lineHeight = 0;
+                        } else {
+                            lineHeight = Math.max(lineHeight, nodeView.getHeight());
+                        }
+
+                        // Add node view and subsequent views to this view
+                        while (nodeView != null) {
+                            add(nodeView);
+                            nodeView = nodeView.getNext();
+                        }
+                    }
+
+                    // Create a new view for the next node
+                    Node node = paragraph.get(j++);
+                    nodeView = createNodeView(node);
+                }
+
+                setSize(width, y);
             }
 
             super.validate();
         }
 
         @Override
-        public NodeView breakAt(int x) {
-            return this;
+        public NodeView getNext() {
+            return null;
         }
 
         @Override
         public NodeView getNodeViewAt(int x, int y) {
-            // TODO
+            // TODO Perform a binary search based on both x and y values
             return null;
         }
     }
@@ -360,9 +521,18 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
      * @author gbrown
      */
     public class TextNodeView extends NodeView implements TextNodeListener {
-        public TextNodeView(TextNode textNode) {
-            super(textNode);
+        private int start;
+        private int length = -1;
 
+        private TextNodeView next = null;
+
+        public TextNodeView(TextNode textNode) {
+            this(textNode, 0);
+        }
+
+        public TextNodeView(TextNode textNode, int start) {
+            super(textNode);
+            this.start = start;
         }
 
         @Override
@@ -382,22 +552,114 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         @Override
+        public void invalidate() {
+            length = -1;
+            super.invalidate();
+        }
+
+        @Override
         public void validate() {
             if (!isValid()) {
-                // TODO Recalculate size
+                TextNode textNode = (TextNode)getNode();
+                String text = textNode.getText();
+
+                // Reset the length and next node values
+                length = text.length() - start;
+                next = null;
+
+                // Get the characters that this view represents
+                // TODO Optimize using a character iterator
+                text = text.substring(start, length);
+
+                // Trim whitespace
+                text = text.trim();
+
+                // Calculate the size of the text
+                int width;
+                int height;
+
+                if (text.length() == 0) {
+                    // Return a width of 0 and the font height
+                    width = 0;
+
+                    LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
+                    height = (int)Math.ceil(lm.getAscent() + lm.getDescent()
+                        + lm.getLeading());
+                } else {
+                    int maximumWidth = getMaximumWidth();
+
+                    if (maximumWidth == -1) {
+                        // Calculate the unconstrained text bounds
+                        Rectangle2D stringBounds = font.getStringBounds(text,
+                            fontRenderContext);
+                        width = (int)Math.ceil(stringBounds.getWidth());
+                        height = (int)Math.ceil(stringBounds.getHeight());
+                    } else {
+                        // Attempt to break the text at max. width
+                        AttributedString attributedText = new AttributedString(text);
+                        attributedText.addAttribute(TextAttribute.FONT, font);
+
+                        AttributedCharacterIterator aci = attributedText.getIterator();
+                        LineBreakMeasurer lbm = new LineBreakMeasurer(aci,
+                            fontRenderContext);
+
+                        assert(lbm.getPosition() < aci.getEndIndex());
+
+                        // Get the break index
+                        int end = lbm.nextOffset(maximumWidth);
+
+                        text = text.substring(start, end);
+                        Rectangle2D stringBounds = font.getStringBounds(text,
+                            fontRenderContext);
+                        width = (int)Math.ceil(stringBounds.getWidth());
+                        height = (int)Math.ceil(stringBounds.getHeight());
+
+                        // Create a new node containing the remainder of the text
+                        if (end < length) {
+                            next = new TextNodeView(textNode, end);
+                            length = end - start;
+
+                            next.setMaximumWidth(maximumWidth);
+                            next.validate();
+                        }
+                    }
+                }
+
+                setSize(width, height);
             }
 
             super.validate();
         }
 
         public void paint(Graphics2D graphics) {
-            // TODO Auto-generated method stub
+            TextNode textNode = (TextNode)getNode();
+            String text = textNode.getText();
 
+            // TODO Optimize using a character iterator
+            text = text.substring(start, length - start);
+
+            if (text.length() > 0) {
+                LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
+
+                if (fontRenderContext.isAntiAliased()) {
+                    graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                        Platform.getTextAntialiasingHint());
+                }
+
+                if (fontRenderContext.usesFractionalMetrics()) {
+                    graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+                        RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+                }
+
+                graphics.setFont(font);
+                graphics.setPaint(Color.BLACK);
+                graphics.drawString(text, 0, lm.getAscent());
+            }
         }
 
-        public NodeView breakAt(int x) {
-            // TODO
-            return null;
+        @Override
+        public NodeView getNext() {
+            return next;
         }
 
         public void charactersInserted(TextNode textNode, int index, int count) {
@@ -410,6 +672,15 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
     }
 
     private DocumentView documentView = null;
+
+    private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
+
+    private Font font;
+
+    public TextAreaSkin() {
+        Theme theme = Theme.getTheme();
+        font = theme.getFont();
+    }
 
     public void install(Component component) {
         super.install(component);
@@ -437,21 +708,44 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
     }
 
     public int getPreferredWidth(int height) {
-        return (documentView == null) ? 0 : documentView.getWidth();
+        int preferredWidth;
+        if (documentView == null) {
+            preferredWidth = 0;
+        } else {
+            documentView.setMaximumWidth(-1);
+            preferredWidth = documentView.getWidth();
+        }
+
+        return preferredWidth;
     }
 
     public int getPreferredHeight(int width) {
-        return (documentView == null) ? 0 : documentView.getHeight();
+        int preferredHeight;
+        if (documentView == null) {
+            preferredHeight = 0;
+        } else {
+            documentView.setMaximumWidth(width);
+            preferredHeight = documentView.getHeight();
+        }
+
+        return preferredHeight;
     }
 
     public Dimensions getPreferredSize() {
-        return (documentView == null) ? new Dimensions(0, 0) : documentView.getSize();
+        Dimensions preferredSize;
+
+        if (documentView == null) {
+            preferredSize = new Dimensions(0, 0);
+        } else {
+            documentView.setMaximumWidth(-1);
+            preferredSize = documentView.getSize();
+        }
+
+        return preferredSize;
     }
 
     public void layout() {
         if (documentView != null) {
-            documentView.validate();
-
             // TODO Here is where we would resize/reposition form components
             // (i.e. components attached to ComponentNodeViews); we'd probably
             // want a top-level list of ComponentNodeViews so we wouldn't have
