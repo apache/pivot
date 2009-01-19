@@ -464,40 +464,53 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                 int x = 0;
                 int y = 0;
 
+                int lineWidth = 0;
                 int lineHeight = 0;
 
                 int c = paragraph.getLength();
-                while (j < c) {
-                    if (nodeView != null) {
-                        nodeView.setMaximumWidth(maximumWidth - x);
-                        nodeView.validate();
-
-                        // Set view position; update geometry values
-                        nodeView.setLocation(x, y);
-
-                        x += nodeView.getWidth();
-                        if (x > maximumWidth) {
-                            width = Math.max(width, x - nodeView.getWidth());
-                            x = 0;
-                            y += lineHeight;
-                            lineHeight = 0;
-                        } else {
-                            lineHeight = Math.max(lineHeight, nodeView.getHeight());
-                        }
-
-                        // Add node view and subsequent views to this view
-                        while (nodeView != null) {
-                            add(nodeView);
-                            nodeView = nodeView.getNext();
-                        }
-                    }
-
-                    // Create a new view for the next node
+                if (nodeView == null
+                    && j < c) {
                     Node node = paragraph.get(j++);
                     nodeView = createNodeView(node);
                 }
 
-                setSize(width, y);
+                while (nodeView != null) {
+                    nodeView.setMaximumWidth(maximumWidth - x);
+                    nodeView.validate();
+
+                    // Set view position; update geometry values
+                    nodeView.setLocation(x, y);
+                    lineWidth += nodeView.getWidth();
+                    lineHeight = Math.max(lineHeight, nodeView.getHeight());
+
+                    x += nodeView.getWidth();
+                    if (x > maximumWidth) {
+                        width = Math.max(width, lineWidth);
+                        lineWidth = 0;
+
+                        x = 0;
+
+                        y += lineHeight;
+                        lineHeight = 0;
+                    }
+
+                    // Add node view and subsequent views to this view
+                    while (nodeView != null) {
+                        add(nodeView);
+                        nodeView = nodeView.getNext();
+                    }
+
+                    // Create a new view for the next node
+                    if (j < c) {
+                        Node node = paragraph.get(j++);
+                        nodeView = createNodeView(node);
+                    } else {
+                        nodeView = null;
+                    }
+                };
+
+                // TODO Don't hard-code padding
+                setSize(width, y + 6);
             }
 
             super.validate();
