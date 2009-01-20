@@ -176,7 +176,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         for (int itemIndex = itemStart; itemIndex <= itemEnd; itemIndex++) {
             Object item = listData.get(itemIndex);
             boolean highlighted = (itemIndex == highlightedIndex
-                && listView.getSelectMode() != ListView.SelectMode.NONE);
+                && listView.getSelectMode() != ListView.SelectMode.NONE
+                && Mouse.getButtons() == 0);
             boolean selected = listView.isIndexSelected(itemIndex);
             boolean disabled = listView.isItemDisabled(itemIndex);
 

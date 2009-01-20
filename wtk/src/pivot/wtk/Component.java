@@ -2093,7 +2093,9 @@ public abstract class Component implements ConstrainedVisual {
 
     protected void mouseOver() {
         if (enabled) {
-            Mouse.setCursor(cursor);
+            if (Mouse.getButtons() == 0) {
+                Mouse.setCursor(cursor);
+            }
 
             mouseOver = true;
             componentMouseListeners.mouseOver(this);
@@ -2102,8 +2104,10 @@ public abstract class Component implements ConstrainedVisual {
 
     protected void mouseOut() {
         if (enabled) {
-            Mouse.setCursor((parent == null) ?
-                Cursor.DEFAULT : parent.getCursor());
+            if (Mouse.getButtons() == 0) {
+                Mouse.setCursor((parent == null) ?
+                    Cursor.DEFAULT : parent.getCursor());
+            }
 
             mouseOver = false;
             componentMouseListeners.mouseOut(this);

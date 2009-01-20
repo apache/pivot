@@ -20,12 +20,13 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
-import java.awt.font.LineBreakMeasurer;
 import java.awt.font.LineMetrics;
 import java.awt.font.TextAttribute;
+import java.awt.font.TextMeasurer;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
+import java.text.BreakIterator;
 import java.util.Iterator;
 
 import pivot.collections.ArrayList;
@@ -71,7 +72,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         private int x = 0;
         private int y = 0;
 
-        private int maximumWidth = -1;
+        private int breakWidth = -1;
 
         public NodeView(Node node) {
             this.node = node;
@@ -119,8 +120,8 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         protected void setSize(int width, int height) {
             assert(width >= 0);
             assert(height >= 0);
-            assert(maximumWidth == -1
-                || width <= maximumWidth);
+            assert(breakWidth == -1
+                || width <= breakWidth);
 
             // Redraw the region formerly occupied by this view
             repaint();
@@ -190,20 +191,20 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             valid = true;
         }
 
-        public int getMaximumWidth() {
-            return maximumWidth;
+        public int getBreakWidth() {
+            return breakWidth;
         }
 
-        public void setMaximumWidth(int maximumWidth) {
-            if (maximumWidth < -1) {
-                throw new IllegalArgumentException(maximumWidth
-                    + " is not a valid value for maximumWidth.");
+        public void setBreakWidth(int breakWidth) {
+            if (breakWidth < -1) {
+                throw new IllegalArgumentException(breakWidth
+                    + " is not a valid value for breakWidth.");
             }
 
-            int previousMaximumWidth = this.maximumWidth;
+            int previousMaximumWidth = this.breakWidth;
 
-            if (previousMaximumWidth != maximumWidth) {
-                this.maximumWidth = maximumWidth;
+            if (previousMaximumWidth != breakWidth) {
+                this.breakWidth = breakWidth;
                 invalidate();
             }
         }
@@ -381,11 +382,13 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         @Override
         public void validate() {
             if (!isValid()) {
-                int width = 0;
+                int breakWidth = getBreakWidth();
 
+                int width = 0;
                 int y = 0;
+
                 for (NodeView nodeView : this) {
-                    nodeView.setMaximumWidth(getMaximumWidth());
+                    nodeView.setBreakWidth(breakWidth);
                     nodeView.validate();
 
                     nodeView.setLocation(0, y);
@@ -421,96 +424,88 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         @Override
         public void validate() {
             if (!isValid()) {
+                // Build the row list
                 Paragraph paragraph = (Paragraph)getNode();
+                ArrayList<ArrayList<NodeView>> rows = new ArrayList<ArrayList<NodeView>>();
 
-                int maximumWidth = getMaximumWidth();
-
-                // Determine index of first invalid node view
-                int i = 0;
-                int n = getLength();
-                if (i < n) {
-                    NodeView nodeView;
-                    do {
-                        nodeView = get(i++);
-                        nodeView.setMaximumWidth(maximumWidth);
-                    } while (nodeView.isValid());
-                }
-
-                i--;
-
-                // Determine index of first node for which new views will be
-                // created
-                NodeView nodeView;
-                int j;
-
-                if (i < 0) {
-                    nodeView = null;
-                    j = -1;
+                int breakWidth = getBreakWidth();
+                if (breakWidth == -1) {
+                    // Add each view to its own row
+                    for (Node node : paragraph) {
+                        NodeView nodeView = createNodeView(node);
+                        nodeView.validate();
+                        ArrayList<NodeView> row = new ArrayList<NodeView>();
+                        row.add(nodeView);
+                        rows.add(row);
+                    }
                 } else {
-                    nodeView = get(i);
-                    Node node = nodeView.getNode();
-                    j = paragraph.indexOf(node);
+                    // Break the views into multiple rows
+                    ArrayList<NodeView> row = new ArrayList<NodeView>();
+                    int rowWidth = 0;
+
+                    for (Node node : paragraph) {
+                        NodeView nodeView = createNodeView(node);
+
+                        while (nodeView != null) {
+                            nodeView.setBreakWidth(breakWidth - rowWidth);
+                            nodeView.validate();
+
+                            int nodeViewWidth = nodeView.getWidth();
+
+                            if (rowWidth + nodeViewWidth > breakWidth) {
+                                if (row.getLength() == 0) {
+                                    // This view doesn't fit on a line; give it its
+                                    // own row and advance to the next view
+                                    row.add(nodeView);
+                                    nodeView = nodeView.getNext();
+                                }
+
+                                rows.add(row);
+
+                                row = new ArrayList<NodeView>();
+                                rowWidth = 0;
+                            } else {
+                                // Add the view to the current row and advance to the
+                                // next view
+                                row.add(nodeView);
+
+                                rowWidth += nodeViewWidth;
+                                nodeView = nodeView.getNext();
+                            }
+                        }
+                    }
+
+                    // Add the last row
+                    if (row.getLength() > 0) {
+                        rows.add(row);
+                    }
                 }
 
-                j++;
+                // Clear all existing views
+                remove(0, getLength());
 
-                // Remove all subsequent views; they will be recreated
-                i++;
-                remove(i, n - i);
-
-                // Initialize geometry values
+                // Add the row views to this view, lay out, and calculate size
                 int width = 0;
-
-                int x = 0;
                 int y = 0;
 
-                int lineWidth = 0;
-                int lineHeight = 0;
+                for (ArrayList<NodeView> row : rows) {
+                    int x = 0;
+                    int rowHeight = 0;
 
-                int c = paragraph.getLength();
-                if (nodeView == null
-                    && j < c) {
-                    Node node = paragraph.get(j++);
-                    nodeView = createNodeView(node);
+                    for (NodeView nodeView : row) {
+                        nodeView.setLocation(x, y);
+                        x += nodeView.getWidth();
+                        rowHeight = Math.max(rowHeight, nodeView.getHeight());
+
+                        add(nodeView);
+                    }
+
+                    width = Math.max(width, x);
+                    y += rowHeight;
                 }
 
-                while (nodeView != null) {
-                    nodeView.setMaximumWidth(maximumWidth - x);
-                    nodeView.validate();
-
-                    // Set view position; update geometry values
-                    nodeView.setLocation(x, y);
-                    lineWidth += nodeView.getWidth();
-                    lineHeight = Math.max(lineHeight, nodeView.getHeight());
-
-                    x += nodeView.getWidth();
-                    if (x > maximumWidth) {
-                        width = Math.max(width, lineWidth);
-                        lineWidth = 0;
-
-                        x = 0;
-
-                        y += lineHeight;
-                        lineHeight = 0;
-                    }
-
-                    // Add node view and subsequent views to this view
-                    while (nodeView != null) {
-                        add(nodeView);
-                        nodeView = nodeView.getNext();
-                    }
-
-                    // Create a new view for the next node
-                    if (j < c) {
-                        Node node = paragraph.get(j++);
-                        nodeView = createNodeView(node);
-                    } else {
-                        nodeView = null;
-                    }
-                };
-
                 // TODO Don't hard-code padding
-                setSize(width, y + 6);
+                setSize(width, y + 4);
             }
 
             super.validate();
@@ -567,6 +562,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         @Override
         public void invalidate() {
             length = -1;
+            next = null;
             super.invalidate();
         }
 
@@ -576,64 +572,79 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                 TextNode textNode = (TextNode)getNode();
                 String text = textNode.getText();
 
-                // Reset the length and next node values
+                // TODO Use a custom iterator so we don't have to copy the string
+                AttributedString attributedText = new AttributedString(text);
+                attributedText.addAttribute(TextAttribute.FONT, font);
+
+                AttributedCharacterIterator aci = attributedText.getIterator();
+
+                // Update the length value
                 length = text.length() - start;
-                next = null;
-
-                // Get the characters that this view represents
-                // TODO Optimize using a character iterator
-                text = text.substring(start, length);
-
-                // Trim whitespace
-                text = text.trim();
 
                 // Calculate the size of the text
                 int width;
                 int height;
 
-                if (text.length() == 0) {
+                if (length == 0) {
                     // Return a width of 0 and the font height
                     width = 0;
 
-                    LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
+                    LineMetrics lm = font.getLineMetrics(aci, start, start + length,
+                        fontRenderContext);
                     height = (int)Math.ceil(lm.getAscent() + lm.getDescent()
                         + lm.getLeading());
                 } else {
-                    int maximumWidth = getMaximumWidth();
+                    int breakWidth = getBreakWidth();
 
-                    if (maximumWidth == -1) {
+                    if (breakWidth == -1) {
                         // Calculate the unconstrained text bounds
-                        Rectangle2D stringBounds = font.getStringBounds(text,
-                            fontRenderContext);
+                        Rectangle2D stringBounds = font.getStringBounds(aci,
+                            start, start + length, fontRenderContext);
                         width = (int)Math.ceil(stringBounds.getWidth());
                         height = (int)Math.ceil(stringBounds.getHeight());
                     } else {
-                        // Attempt to break the text at max. width
-                        AttributedString attributedText = new AttributedString(text);
-                        attributedText.addAttribute(TextAttribute.FONT, font);
-
-                        AttributedCharacterIterator aci = attributedText.getIterator();
-                        LineBreakMeasurer lbm = new LineBreakMeasurer(aci,
-                            fontRenderContext);
-
-                        assert(lbm.getPosition() < aci.getEndIndex());
+                        // Attempt to break the text
+                        TextMeasurer textMeasurer = new TextMeasurer(aci, fontRenderContext);
 
                         // Get the break index
-                        int end = lbm.nextOffset(maximumWidth);
+                        int lineBreakIndex = textMeasurer.getLineBreakIndex(start, breakWidth);
 
-                        text = text.substring(start, end);
-                        Rectangle2D stringBounds = font.getStringBounds(text,
-                            fontRenderContext);
+                        int end;
+                        if (lineBreakIndex < text.length()) {
+                            BreakIterator breakIterator = BreakIterator.getLineInstance();
+                            breakIterator.setText(aci);
+
+                            char c = text.charAt(lineBreakIndex);
+                            if (Character.isWhitespace(c)) {
+                                end = breakIterator.following(lineBreakIndex);
+                            } else {
+                                // Move back to the previous break
+                                end = breakIterator.preceding(lineBreakIndex);
+
+                                if (end <= start) {
+                                    // The whole word doesn't fit in the given space; move forward
+                                    // to the next break
+                                    end = breakIterator.following(start);
+                                }
+                            }
+
+                            if (end == BreakIterator.DONE) {
+                                end = text.length();
+                            }
+                        } else {
+                            end = text.length();
+                        }
+
+                        // Calculate the string bounds
+                        Rectangle2D stringBounds = font.getStringBounds(aci,
+                            start, end, fontRenderContext);
                         width = (int)Math.ceil(stringBounds.getWidth());
                         height = (int)Math.ceil(stringBounds.getHeight());
 
                         // Create a new node containing the remainder of the text
-                        if (end < length) {
-                            next = new TextNodeView(textNode, end);
+                        if (end < text.length()) {
                             length = end - start;
-
-                            next.setMaximumWidth(maximumWidth);
-                            next.validate();
+                            next = new TextNodeView(textNode, end);
                         }
                     }
                 }
@@ -648,8 +659,8 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             TextNode textNode = (TextNode)getNode();
             String text = textNode.getText();
 
-            // TODO Optimize using a character iterator
-            text = text.substring(start, length - start);
+            // TODO Use a custom iterator so we don't have to copy the string
+            text = text.substring(start, start + length);
 
             if (text.length() > 0) {
                 LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
@@ -681,6 +692,13 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
         public void charactersRemoved(TextNode textNode, int index, String characters) {
             invalidate();
+        }
+
+        @Override
+        public String toString() {
+            TextNode textNode = (TextNode)getNode();
+            String text = textNode.getText();
+            return text.substring(start, start + length);
         }
     }
 
@@ -725,7 +743,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         if (documentView == null) {
             preferredWidth = 0;
         } else {
-            documentView.setMaximumWidth(-1);
+            documentView.setBreakWidth(-1);
             preferredWidth = documentView.getWidth();
         }
 
@@ -737,7 +755,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         if (documentView == null) {
             preferredHeight = 0;
         } else {
-            documentView.setMaximumWidth(width);
+            documentView.setBreakWidth(width);
             preferredHeight = documentView.getHeight();
         }
 
@@ -750,7 +768,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         if (documentView == null) {
             preferredSize = new Dimensions(0, 0);
         } else {
-            documentView.setMaximumWidth(-1);
+            documentView.setBreakWidth(-1);
             preferredSize = documentView.getSize();
         }
 

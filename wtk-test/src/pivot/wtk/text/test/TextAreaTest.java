@@ -19,14 +19,16 @@ import java.io.InputStream;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.Border;
 import pivot.wtk.Display;
+import pivot.wtk.Frame;
+import pivot.wtk.ScrollPane;
 import pivot.wtk.TextArea;
-import pivot.wtk.Window;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.PlainTextSerializer;
 
 public class TextAreaTest implements Application {
-    private Window window = null;
+    private Frame frame = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
@@ -36,21 +38,30 @@ public class TextAreaTest implements Application {
         Document text = null;
         try {
             text = (Document)serializer.readObject(inputStream);
-            serializer.writeObject(text, System.out);
         } catch(Exception exception) {
             System.out.println(exception);
         }
 
         TextArea textArea = new TextArea();
+        textArea.setPreferredWidth(120);
         textArea.setText(text);
 
-        window = new Window(textArea);
-        window.setTitle("TextArea Test");
-        window.open(display);
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPane.ScrollBarPolicy.FILL);
+        scrollPane.setView(textArea);
+
+        Border border = new Border();
+        border.getStyles().put("padding", 0);
+        border.setContent(scrollPane);
+
+        frame = new Frame(border);
+        frame.setTitle("TextArea Test");
+        frame.setPreferredSize(320, 240);
+        frame.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        frame.close();
         return true;
     }
 
