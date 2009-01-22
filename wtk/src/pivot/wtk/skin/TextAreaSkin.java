@@ -446,32 +446,38 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                     for (Node node : paragraph) {
                         NodeView nodeView = createNodeView(node);
 
+                        nodeView.setBreakWidth(breakWidth - rowWidth);
+                        nodeView.validate();
+
+                        int nodeViewWidth = nodeView.getWidth();
+
+                        if (rowWidth + nodeViewWidth > breakWidth
+                            && rowWidth > 0) {
+                            // The view is too big to fit in the remaining space,
+                            // and it is not the only view in this row
+                            rows.add(row);
+                            row = new ArrayList<NodeView>();
+                            rowWidth = 0;
+                        }
+
+                        // Add the view to the row
+                        row.add(nodeView);
+                        rowWidth += nodeViewWidth;
+
+                        // If the view was split into multiple views, add them to
+                        // their own rows
+                        nodeView = nodeView.getNext();
                         while (nodeView != null) {
-                            nodeView.setBreakWidth(breakWidth - rowWidth);
+                            rows.add(row);
+                            row = new ArrayList<NodeView>();
+
+                            nodeView.setBreakWidth(breakWidth);
                             nodeView.validate();
 
-                            int nodeViewWidth = nodeView.getWidth();
+                            row.add(nodeView);
+                            rowWidth = nodeView.getWidth();
 
-                            if (rowWidth + nodeViewWidth > breakWidth) {
-                                if (row.getLength() == 0) {
-                                    // This view doesn't fit on a line; give it its
-                                    // own row and advance to the next view
-                                    row.add(nodeView);
-                                    nodeView = nodeView.getNext();
-                                }
-
-                                rows.add(row);
-
-                                row = new ArrayList<NodeView>();
-                                rowWidth = 0;
-                            } else {
-                                // Add the view to the current row and advance to the
-                                // next view
-                                row.add(nodeView);
-
-                                rowWidth += nodeViewWidth;
-                                nodeView = nodeView.getNext();
-                            }
+                            nodeView = nodeView.getNext();
                         }
                     }
 

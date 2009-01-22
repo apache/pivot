@@ -33,7 +33,7 @@ public class TextAreaTest implements Application {
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
         PlainTextSerializer serializer = new PlainTextSerializer("UTF-8");
-        InputStream inputStream = PlainTextSerializerTest.class.getResourceAsStream("jabberwocky.txt");
+        InputStream inputStream = PlainTextSerializerTest.class.getResourceAsStream("pivot.txt");
 
         Document text = null;
         try {
@@ -55,7 +55,7 @@ public class TextAreaTest implements Application {
         border.setContent(scrollPane);
 
         frame = new Frame(border);
-        frame.setTitle("TextArea Test");
+        frame.setTitle("Test");
         frame.setPreferredSize(320, 240);
         frame.open(display);
     }
