@@ -322,6 +322,8 @@ public abstract class Container extends Component
             // Only paint components that are visible and intersect the
             // current clip rectangle
             if (component.isVisible()
+                && componentBounds.width > 0
+                && componentBounds.height > 0
                 && affectedArea.intersects(paintBounds)) {
                 // Create a copy of the current graphics context and
                 // translate to the component's coordinate system

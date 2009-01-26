@@ -329,7 +329,11 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             }
         }
 
-        public abstract NodeView getNodeViewAt(int x, int y);
+        public abstract int getIndexAt(int x, int y);
+        
+        public NodeView getNodeViewAt(int x, int y) {
+            return get(getIndexAt(x, y));
+        }
 
         public void nodeInserted(Element element, int index) {
             invalidate();
@@ -409,10 +413,10 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         @Override
-        public NodeView getNodeViewAt(int x, int y) {
+        public int getIndexAt(int x, int y) {
             // TODO Perform a binary search for the node view at the given
             // y-coordinate
-            return null;
+            return -1;
         }
     }
 
@@ -511,7 +515,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                 }
 
                 // TODO Don't hard-code padding
-                setSize(width, y + 4);
+                setSize(width, y + 6);
             }
 
             super.validate();
@@ -523,9 +527,9 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         @Override
-        public NodeView getNodeViewAt(int x, int y) {
+        public int getIndexAt(int x, int y) {
             // TODO Perform a binary search based on both x and y values
-            return null;
+            return -1;
         }
     }
 

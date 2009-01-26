@@ -491,6 +491,11 @@ public abstract class ApplicationContext {
                 dropDescendant = dropDescendant.getParent();
             }
 
+            if (dropDescendant != null
+                && dropDescendant.isBlocked()) {
+                dropDescendant = null;
+            }
+            
             return dropDescendant;
         }
 
@@ -766,8 +771,10 @@ public abstract class ApplicationContext {
                                 dragDescendant = dragDescendant.getParent();
                             }
 
-                            if (dragDescendant == null) {
+                            if (dragDescendant == null
+                                || dragDescendant.isBlocked()) {
                                 // There was nothing to drag, so clear the drag location
+                                dragDescendant = null;
                                 dragLocation = null;
                             } else {
                                 DragSource dragSource = dragDescendant.getDragSource();
