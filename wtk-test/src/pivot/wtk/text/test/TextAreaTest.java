@@ -21,7 +21,9 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Border;
 import pivot.wtk.Display;
+import pivot.wtk.FlowPane;
 import pivot.wtk.Frame;
+import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ScrollPane;
 import pivot.wtk.TextArea;
 import pivot.wtk.text.Document;
@@ -46,13 +48,19 @@ public class TextAreaTest implements Application {
         textArea.setPreferredWidth(120);
         textArea.setText(text);
 
+        /*
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(ScrollPane.ScrollBarPolicy.FILL);
         scrollPane.setView(textArea);
+        */
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.JUSTIFY);
+        flowPane.add(textArea);
 
         Border border = new Border();
         border.getStyles().put("padding", 0);
-        border.setContent(scrollPane);
+        border.setContent(flowPane);
 
         frame = new Frame(border);
         frame.setTitle("Test");

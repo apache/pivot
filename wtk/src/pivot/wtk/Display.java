@@ -27,12 +27,15 @@ public final class Display extends Container {
     private class ValidateCallback implements Runnable {
         public void run() {
             validate();
-            validateCallback = null;
+            if (!paintPending) {
+                validateCallback = null;
+            }
         }
     }
 
     private ApplicationContext.DisplayHost displayHost;
     private ValidateCallback validateCallback = null;
+    private boolean paintPending = false;
 
     protected Display(ApplicationContext.DisplayHost displayHost) {
         this.displayHost = displayHost;
@@ -81,6 +84,17 @@ public final class Display extends Container {
             graphics.dispose();
         } else {
             displayHost.repaint(x, y, width, height);
+            paintPending = true;
+        }
+    }
+
+    @Override
+    public void paint(Graphics2D graphics) {
+        super.paint(graphics);
+        paintPending = false;
+
+        if (validateCallback != null) {
+            ApplicationContext.queueCallback(validateCallback);
         }
     }
 
