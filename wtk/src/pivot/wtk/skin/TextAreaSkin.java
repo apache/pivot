@@ -27,6 +27,7 @@ import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.text.BreakIterator;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import pivot.collections.ArrayList;
@@ -329,8 +330,19 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             }
         }
 
-        public abstract int getIndexAt(int x, int y);
-        
+        public int getIndexAt(int x, int y) {
+            nullNodeView.setLocation(x, y);
+
+            int index = Sequence.Search.binarySearch(nodeViews, nullNodeView,
+                nodeViewLocationComparator);
+
+            if (index < 0) {
+                index = -(index + 1) - 1;
+            }
+
+            return index;
+        }
+
         public NodeView getNodeViewAt(int x, int y) {
             return get(getIndexAt(x, y));
         }
@@ -410,13 +422,6 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         @Override
         public NodeView getNext() {
             return null;
-        }
-
-        @Override
-        public int getIndexAt(int x, int y) {
-            // TODO Perform a binary search for the node view at the given
-            // y-coordinate
-            return -1;
         }
     }
 
@@ -524,12 +529,6 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         @Override
         public NodeView getNext() {
             return null;
-        }
-
-        @Override
-        public int getIndexAt(int x, int y) {
-            // TODO Perform a binary search based on both x and y values
-            return -1;
         }
     }
 
@@ -712,11 +711,52 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
     }
 
+    /**
+     * Null node view, used for binary searches.
+     *
+     * @author gbrown
+     */
+    public class NullNodeView extends NodeView {
+        public NullNodeView() {
+            super(null);
+        }
+
+        @Override
+        public NodeView getNext() {
+            return null;
+        }
+
+        public void paint(Graphics2D graphics) {
+            // No-op
+        }
+    }
+
+    /**
+     * Comparator used to perform binary searches on node views.
+     *
+     * @author gbrown
+     */
+    public class NodeViewLocationComparator implements Comparator<NodeView> {
+        public int compare(NodeView nodeView1, NodeView nodeView2) {
+            int width = getWidth();
+
+            int x1 = nodeView1.getX();
+            int y1 = nodeView1.getY();
+
+            int x2 = nodeView2.getX();
+            int y2 = nodeView2.getY();
+
+            return (y1 * width + x1) - (y2 * width + x2);
+        }
+    }
+
     private DocumentView documentView = null;
 
     private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
-
     private Font font;
+
+    private NullNodeView nullNodeView = new NullNodeView();
+    private NodeViewLocationComparator nodeViewLocationComparator = new NodeViewLocationComparator();
 
     public TextAreaSkin() {
         Theme theme = Theme.getTheme();
