@@ -326,7 +326,7 @@ public class TerraCalendarSkin extends CalendarSkin
             Calendar calendar = (Calendar)getComponent();
 
             CalendarDate date = new CalendarDate();
-            date.setMonth((Integer)item);
+            date.set(date.getYear(), (Integer)item, 0);
 
             SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM",
                 calendar.getLocale());

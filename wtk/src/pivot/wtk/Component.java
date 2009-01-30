@@ -1295,6 +1295,19 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
+     * Determines the visible bounds of a component (the intersection of the
+     * component's area with the visible area of its ancestors).
+     *
+     * @return
+     * The visible bounds of the component in display coordinates,
+     * or <tt>null</tt> if the component is either not showing (see
+     * {@link #isShowing()}) or not part of the container hierarchy.
+     */
+    public Bounds getVisibleArea() {
+        return getVisibleArea(0, 0, getWidth(), getHeight());
+    }
+
+    /**
      * Determines the visible bounds of an area within a component (the
      * intersection of the area with the visible area of the component
      * and its ancestors).
@@ -1302,7 +1315,7 @@ public abstract class Component implements ConstrainedVisual {
      * @return
      * The visible bounds of the given area in display coordinates,
      * or <tt>null</tt> if the component is either not showing (see
-     * {@link #isShowing()}) or not part of the container hierarchy
+     * {@link #isShowing()}) or not part of the container hierarchy.
      */
     public Bounds getVisibleArea(Bounds area) {
         if (area == null) {
@@ -1325,7 +1338,7 @@ public abstract class Component implements ConstrainedVisual {
      * @return
      * The visible bounds of the given area in display coordinates,
      * or <tt>null</tt> if the component is either not showing (see
-     * {@link #isShowing()}) or not part of the container hierarchy
+     * {@link #isShowing()}) or not part of the container hierarchy.
      */
     public Bounds getVisibleArea(int x, int y, int width, int height) {
         Bounds visibleArea = null;
@@ -1339,25 +1352,10 @@ public abstract class Component implements ConstrainedVisual {
 
         while (component != null
             && component.isVisible()) {
-            int topCutoff = 0;
-            int leftCutoff = 0;
-            int bottomCutoff = component.getHeight() - 1;
-            int rightCutoff = component.getWidth() - 1;
-
-            if (component instanceof Viewport) {
-                Viewport viewport = (Viewport)component;
-                Bounds viewportBounds = viewport.getViewportBounds();
-
-                topCutoff = viewportBounds.y;
-                leftCutoff = viewportBounds.x;
-                bottomCutoff = topCutoff + viewportBounds.height - 1;
-                rightCutoff = leftCutoff + viewportBounds.width - 1;
-            }
-
-            top = component.y + Math.max(top, topCutoff);
-            left = component.x + Math.max(left, leftCutoff);
-            bottom = component.y + Math.max(Math.min(bottom, bottomCutoff), -1);
-            right = component.x + Math.max(Math.min(right, rightCutoff), -1);
+            top = component.y + Math.max(top, 0);
+            left = component.x + Math.max(left, 0);
+            bottom = component.y + Math.max(Math.min(bottom, component.getHeight() - 1), -1);
+            right = component.x + Math.max(Math.min(right, component.getWidth() - 1), -1);
 
             if (component instanceof Display) {
                 visibleArea = new Bounds(left, top, right - left + 1, bottom - top + 1);
@@ -1467,7 +1465,7 @@ public abstract class Component implements ConstrainedVisual {
                 } catch (UnsupportedOperationException ex) {
                     // If the viewport doesn't support getting the viewport
                     // bounds, we simply act as we would have had the viewport
-                    // been any other type of component.  Namely, we do nothing
+                    // been any other type of component; namely, we do nothing
                     // and proceed to its parent
                 }
             }

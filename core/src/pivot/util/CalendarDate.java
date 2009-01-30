@@ -105,9 +105,13 @@ public class CalendarDate implements Comparable<CalendarDate>, Serializable {
     }
 
     /**
-     * Sets this date's inner fields.
+     * Sets the date.
+     *
+     * @param year
+     * @param month
+     * @param day
      */
-    private void set(int year, int month, int day) {
+    public void set(int year, int month, int day) {
         if (year <= GREGORIAN_CUTOVER_YEAR || year > 9999) {
             throw new IllegalArgumentException("Invalid year: " + year);
         }

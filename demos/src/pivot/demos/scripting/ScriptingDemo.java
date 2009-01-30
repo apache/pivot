@@ -24,7 +24,10 @@ public class ScriptingDemo implements Application {
     }
 
     public boolean shutdown(boolean optional) {
-    	window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 

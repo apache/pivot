@@ -495,7 +495,7 @@ public abstract class ApplicationContext {
                 && dropDescendant.isBlocked()) {
                 dropDescendant = null;
             }
-            
+
             return dropDescendant;
         }
 
