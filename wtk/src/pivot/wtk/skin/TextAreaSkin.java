@@ -33,6 +33,7 @@ import java.util.Iterator;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
@@ -41,6 +42,7 @@ import pivot.wtk.Point;
 import pivot.wtk.TextArea;
 import pivot.wtk.TextAreaListener;
 import pivot.wtk.Theme;
+import pivot.wtk.Viewport;
 import pivot.wtk.Visual;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.Element;
@@ -66,14 +68,14 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         private Node node = null;
         private ElementView parent = null;
 
-        private int width = -1;
-        private int height = -1;
-        private boolean valid = false;
-
+        private int width = 0;
+        private int height = 0;
         private int x = 0;
         private int y = 0;
 
         private int breakWidth = -1;
+
+        private boolean valid = false;
 
         public NodeView(Node node) {
             this.node = node;
@@ -101,28 +103,22 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
         public int getWidth() {
             validate();
-            assert(width >= 0);
             return width;
         }
 
         public int getHeight() {
             validate();
-            assert(height >= 0);
             return height;
         }
 
         public Dimensions getSize() {
             validate();
-            assert(width >= 0
-                && height >= 0);
             return new Dimensions(width, height);
         }
 
         protected void setSize(int width, int height) {
             assert(width >= 0);
             assert(height >= 0);
-            assert(breakWidth == -1
-                || width <= breakWidth);
 
             // Redraw the region formerly occupied by this view
             repaint();
@@ -179,8 +175,6 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         public void invalidate() {
-            width = -1;
-            height = -1;
             valid = false;
 
             if (parent != null) {
@@ -197,7 +191,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         public void setBreakWidth(int breakWidth) {
-            if (breakWidth < -1) {
+            if (breakWidth < 0) {
                 throw new IllegalArgumentException(breakWidth
                     + " is not a valid value for breakWidth.");
             }
@@ -400,23 +394,33 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             if (!isValid()) {
                 int breakWidth = getBreakWidth();
 
-                int width = 0;
-                int y = 0;
+                if (breakWidth != -1) {
+                    int width = 0;
+                    int y = 0;
 
-                for (NodeView nodeView : this) {
-                    nodeView.setBreakWidth(breakWidth);
-                    nodeView.validate();
+                    // TODO Constrain child validation to viewport bounds
 
-                    nodeView.setLocation(0, y);
+                    for (NodeView nodeView : this) {
+                        nodeView.setBreakWidth(breakWidth);
+                        nodeView.validate();
 
-                    width = Math.max(width, nodeView.getWidth());
-                    y += nodeView.getHeight();
+                        nodeView.setLocation(0, y);
+
+                        width = Math.max(width, nodeView.getWidth());
+                        y += nodeView.getHeight();
+                    }
+
+                    setSize(width, y);
+
+                    super.validate();
                 }
 
-                setSize(width, y);
+                ApplicationContext.queueCallback(new Runnable() {
+                    public void run() {
+                        invalidateComponent();
+                    }
+                });
             }
-
-            super.validate();
         }
 
         @Override
@@ -437,63 +441,53 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                 Paragraph paragraph = (Paragraph)getNode();
                 ArrayList<ArrayList<NodeView>> rows = new ArrayList<ArrayList<NodeView>>();
 
+                // Break the views into multiple rows
                 int breakWidth = getBreakWidth();
-                if (breakWidth == -1) {
-                    // Add each view to its own row
-                    for (Node node : paragraph) {
-                        NodeView nodeView = createNodeView(node);
-                        nodeView.validate();
-                        ArrayList<NodeView> row = new ArrayList<NodeView>();
-                        row.add(nodeView);
+
+                ArrayList<NodeView> row = new ArrayList<NodeView>();
+                int rowWidth = 0;
+
+                for (Node node : paragraph) {
+                    NodeView nodeView = createNodeView(node);
+
+                    nodeView.setBreakWidth(breakWidth - rowWidth);
+                    nodeView.validate();
+
+                    int nodeViewWidth = nodeView.getWidth();
+
+                    if (rowWidth + nodeViewWidth > breakWidth
+                        && rowWidth > 0) {
+                        // The view is too big to fit in the remaining space,
+                        // and it is not the only view in this row
                         rows.add(row);
+                        row = new ArrayList<NodeView>();
+                        rowWidth = 0;
                     }
-                } else {
-                    // Break the views into multiple rows
-                    ArrayList<NodeView> row = new ArrayList<NodeView>();
-                    int rowWidth = 0;
 
-                    for (Node node : paragraph) {
-                        NodeView nodeView = createNodeView(node);
+                    // Add the view to the row
+                    row.add(nodeView);
+                    rowWidth += nodeViewWidth;
 
-                        nodeView.setBreakWidth(breakWidth - rowWidth);
+                    // If the view was split into multiple views, add them to
+                    // their own rows
+                    nodeView = nodeView.getNext();
+                    while (nodeView != null) {
+                        rows.add(row);
+                        row = new ArrayList<NodeView>();
+
+                        nodeView.setBreakWidth(breakWidth);
                         nodeView.validate();
 
-                        int nodeViewWidth = nodeView.getWidth();
-
-                        if (rowWidth + nodeViewWidth > breakWidth
-                            && rowWidth > 0) {
-                            // The view is too big to fit in the remaining space,
-                            // and it is not the only view in this row
-                            rows.add(row);
-                            row = new ArrayList<NodeView>();
-                            rowWidth = 0;
-                        }
-
-                        // Add the view to the row
                         row.add(nodeView);
-                        rowWidth += nodeViewWidth;
+                        rowWidth = nodeView.getWidth();
 
-                        // If the view was split into multiple views, add them to
-                        // their own rows
                         nodeView = nodeView.getNext();
-                        while (nodeView != null) {
-                            rows.add(row);
-                            row = new ArrayList<NodeView>();
-
-                            nodeView.setBreakWidth(breakWidth);
-                            nodeView.validate();
-
-                            row.add(nodeView);
-                            rowWidth = nodeView.getWidth();
-
-                            nodeView = nodeView.getNext();
-                        }
                     }
+                }
 
-                    // Add the last row
-                    if (row.getLength() > 0) {
-                        rows.add(row);
-                    }
+                // Add the last row
+                if (row.getLength() > 0) {
+                    rows.add(row);
                 }
 
                 // Clear all existing views
@@ -503,7 +497,9 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                 int width = 0;
                 int y = 0;
 
-                for (ArrayList<NodeView> row : rows) {
+                for (int i = 0, n = rows.getLength(); i < n; i++) {
+                    row = rows.get(i);
+
                     int x = 0;
                     int rowHeight = 0;
 
@@ -539,7 +535,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
      */
     public class TextNodeView extends NodeView implements TextNodeListener {
         private int start;
-        private int length = -1;
+        private int length = 0;
 
         private TextNodeView next = null;
 
@@ -570,7 +566,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
         @Override
         public void invalidate() {
-            length = -1;
+            length = 0;
             next = null;
             super.invalidate();
         }
@@ -605,56 +601,53 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                 } else {
                     int breakWidth = getBreakWidth();
 
-                    if (breakWidth == -1) {
-                        // Calculate the unconstrained text bounds
-                        Rectangle2D stringBounds = font.getStringBounds(aci,
-                            start, start + length, fontRenderContext);
-                        width = (int)Math.ceil(stringBounds.getWidth());
-                        height = (int)Math.ceil(stringBounds.getHeight());
-                    } else {
-                        // Attempt to break the text
-                        TextMeasurer textMeasurer = new TextMeasurer(aci, fontRenderContext);
+                    // Attempt to break the text
+                    TextMeasurer textMeasurer = new TextMeasurer(aci, fontRenderContext);
 
-                        // Get the break index
-                        int lineBreakIndex = textMeasurer.getLineBreakIndex(start, breakWidth);
+                    // Get the break index
+                    int lineBreakIndex = textMeasurer.getLineBreakIndex(start, breakWidth);
 
-                        int end;
-                        if (lineBreakIndex < text.length()) {
-                            BreakIterator breakIterator = BreakIterator.getLineInstance();
-                            breakIterator.setText(aci);
+                    int end;
+                    if (lineBreakIndex < text.length()) {
+                        BreakIterator breakIterator = BreakIterator.getLineInstance();
+                        breakIterator.setText(aci);
 
-                            char c = text.charAt(lineBreakIndex);
-                            if (Character.isWhitespace(c)) {
-                                end = breakIterator.following(lineBreakIndex);
-                            } else {
-                                // Move back to the previous break
-                                end = breakIterator.preceding(lineBreakIndex);
+                        char c = text.charAt(lineBreakIndex);
+                        if (Character.isWhitespace(c)) {
+                            end = breakIterator.following(lineBreakIndex);
+                        } else {
+                            // Move back to the previous break
+                            end = breakIterator.preceding(lineBreakIndex);
 
-                                if (end <= start) {
-                                    // The whole word doesn't fit in the given space; move forward
-                                    // to the next break
+                            if (end <= start) {
+                                // The whole word doesn't fit in the given space
+                                if (breakOnWhitespaceOnly) {
+                                    // Move forward to the next break
                                     end = breakIterator.following(start);
+                                } else {
+                                    // Force a break at this index
+                                    end = lineBreakIndex;
                                 }
                             }
+                        }
 
-                            if (end == BreakIterator.DONE) {
-                                end = text.length();
-                            }
-                        } else {
+                        if (end == BreakIterator.DONE) {
                             end = text.length();
                         }
+                    } else {
+                        end = text.length();
+                    }
 
-                        // Calculate the string bounds
-                        Rectangle2D stringBounds = font.getStringBounds(aci,
-                            start, end, fontRenderContext);
-                        width = (int)Math.ceil(stringBounds.getWidth());
-                        height = (int)Math.ceil(stringBounds.getHeight());
+                    // Calculate the string bounds
+                    Rectangle2D stringBounds = font.getStringBounds(aci,
+                        start, end, fontRenderContext);
+                    width = (int)Math.ceil(stringBounds.getWidth());
+                    height = (int)Math.ceil(stringBounds.getHeight());
 
-                        // Create a new node containing the remainder of the text
-                        if (end < text.length()) {
-                            length = end - start;
-                            next = new TextNodeView(textNode, end);
-                        }
+                    // Create a new node containing the remainder of the text
+                    if (end < text.length()) {
+                        length = end - start;
+                        next = new TextNodeView(textNode, end);
                     }
                 }
 
@@ -754,6 +747,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
     private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
     private Font font;
+    private boolean breakOnWhitespaceOnly = true;
 
     private NullNodeView nullNodeView = new NullNodeView();
     private NodeViewLocationComparator nodeViewLocationComparator = new NodeViewLocationComparator();
@@ -793,7 +787,6 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         if (documentView == null) {
             preferredWidth = 0;
         } else {
-            documentView.setBreakWidth(-1);
             preferredWidth = documentView.getWidth();
         }
 
@@ -805,7 +798,6 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         if (documentView == null) {
             preferredHeight = 0;
         } else {
-            documentView.setBreakWidth(width);
             preferredHeight = documentView.getHeight();
         }
 
@@ -818,7 +810,6 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         if (documentView == null) {
             preferredSize = new Dimensions(0, 0);
         } else {
-            documentView.setBreakWidth(-1);
             preferredSize = documentView.getSize();
         }
 
@@ -827,10 +818,15 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
     public void layout() {
         if (documentView != null) {
-            // TODO Here is where we would resize/reposition form components
-            // (i.e. components attached to ComponentNodeViews); we'd probably
-            // want a top-level list of ComponentNodeViews so we wouldn't have
-            // to search the tree for them.
+            TextArea textArea = (TextArea)getComponent();
+            Viewport viewport = (Viewport)textArea.getParent();
+            Bounds viewportBounds = viewport.getViewportBounds();
+
+            documentView.setBreakWidth(viewportBounds.width);
+
+            // TODO Set viewport top, height
+
+            documentView.validate();
         }
     }
 

@@ -28,7 +28,6 @@ public class JTextAreaTest {
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
 
-        textArea.setLineWrap(true);
         JScrollPane scrollPane = new JScrollPane(textArea);
         // scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setPreferredSize(new Dimension(320, 240));

@@ -42,6 +42,18 @@ public class TextArea extends Component {
         installSkin(TextArea.class);
     }
 
+    @Override
+    protected void setParent(Container parent) {
+        if (parent != null
+            && !(parent instanceof Viewport)) {
+            throw new IllegalArgumentException(getClass().getName()
+                + " parent must be an instance of "
+                + Viewport.class.getName());
+        }
+
+        super.setParent(parent);
+    }
+
     public Document getText() {
         return text;
     }

@@ -47,7 +47,7 @@ public class TextAreaTest implements Application {
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(ScrollPane.ScrollBarPolicy.FILL);
-        // scrollPane.setVerticalScrollBarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        // scrollPane.setVerticalScrollBarPolicy(ScrollPane.ScrollBarPolicy.FILL_TO_CAPACITY);
         scrollPane.setView(textArea);
 
         Border border = new Border();
