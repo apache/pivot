@@ -50,6 +50,9 @@ public class ScrollPaneSkin extends ContainerSkin
     private int horizontalReveal = 30;
     private int verticalReveal = 30;
 
+    private int cachedHorizontalScrollBarHeight = 0;
+    private int cachedVerticalScrollBarWidth = 0;
+
     private static final int DEFAULT_HORIZONTAL_INCREMENT = 10;
     private static final int DEFAULT_VERTICAL_INCREMENT = 10;
 
@@ -571,6 +574,9 @@ public class ScrollPaneSkin extends ContainerSkin
                 layoutHelper(horizontalPolicy, verticalPolicy);
             }
         }
+
+        cachedHorizontalScrollBarHeight = horizontalScrollBar.getHeight();
+        cachedVerticalScrollBarWidth = verticalScrollBar.getWidth();
     }
 
     /**
@@ -610,8 +616,8 @@ public class ScrollPaneSkin extends ContainerSkin
 
         int previousViewWidth, viewWidth = 0;
         int previousViewHeight, viewHeight = 0;
-        int previousHorizontalScrollBarHeight, horizontalScrollBarHeight = 0;
-        int previousVerticalScrollBarWidth, verticalScrollBarWidth = 0;
+        int previousHorizontalScrollBarHeight, horizontalScrollBarHeight = cachedHorizontalScrollBarHeight;
+        int previousVerticalScrollBarWidth, verticalScrollBarWidth = cachedVerticalScrollBarWidth;
         int i = 0;
 
         do {
