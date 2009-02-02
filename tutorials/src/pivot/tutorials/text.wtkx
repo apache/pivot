@@ -38,9 +38,28 @@ limitations under the License.
     <Border>
         <content>
             <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:8, right:4}}">
+                <Label text="Text Area" styles="{fontBold:true}"/>
+                <Border styles="{padding:0, color:10}">
+                    <content>
+                        <ScrollPane preferredWidth="240" preferredHeight="180"
+                            horizontalScrollBarPolicy="fill"
+                            verticalScrollBarPolicy="fillToCapacity">
+                            <view>
+                                <TextArea wtkx:id="textArea"/>
+                            </view>
+                        </ScrollPane>
+                    </content>
+                </Border>	                
+            </FlowPane>
+        </content>
+    </Border>
+
+    <Border>
+        <content>
+            <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:8, right:4}}">
                 <Label text="Label Wrapping" styles="{fontBold:true}"/>
-                <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,  sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                    preferredWidth="320" styles="{font:'Times New Roman 13', wrapText:true}"/>
+                <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+                    preferredWidth="240" styles="{wrapText:true}"/>
             </FlowPane>
         </content>
     </Border>

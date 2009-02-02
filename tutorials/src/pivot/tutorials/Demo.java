@@ -17,6 +17,7 @@ package pivot.tutorials;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import pivot.collections.ArrayList;
@@ -62,6 +63,7 @@ import pivot.wtk.SliderValueListener;
 import pivot.wtk.Spinner;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
+import pivot.wtk.TextArea;
 import pivot.wtk.TextInput;
 import pivot.wtk.TreeView;
 import pivot.wtk.Visual;
@@ -75,6 +77,8 @@ import pivot.wtk.content.TreeNode;
 import pivot.wtk.content.TreeViewNodeRenderer;
 import pivot.wtk.effects.ReflectionDecorator;
 import pivot.wtk.media.Image;
+import pivot.wtk.text.Document;
+import pivot.wtk.text.PlainTextSerializer;
 import pivot.wtkx.WTKXSerializer;
 
 public class Demo implements Application {
@@ -240,6 +244,20 @@ public class Demo implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
 
+        // Text
+        PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
+        InputStream inputStream = getClass().getResourceAsStream("text_area.txt");
+
+        Document document = null;
+        try {
+            document = (Document)plainTextSerializer.readObject(inputStream);
+        } catch(Exception exception) {
+            System.out.println(exception);
+        }
+
+        TextArea textArea = (TextArea)wtkxSerializer.getObjectByName("text.textArea");
+        textArea.setDocument(document);
+        
         new Action("selectImageAction") {
             public String getDescription() {
                 return "Select Image Action";

@@ -92,13 +92,19 @@ public class TextArea extends Component {
     }
 
     public void setText(String text) {
-        try {
-            PlainTextSerializer serializer = new PlainTextSerializer();
-            StringReader reader = new StringReader(text);
-            setDocument((Document)serializer.readObject(reader));
-        } catch(SerializationException exception) {
-        } catch(IOException exception) {
+        Document document = null;
+        
+        if (text != null) {
+            try {
+                PlainTextSerializer serializer = new PlainTextSerializer();
+                StringReader reader = new StringReader(text);
+                document = (Document)serializer.readObject(reader);
+            } catch(SerializationException exception) {
+            } catch(IOException exception) {
+            }
         }
+        
+        setDocument(document);
     }
 
     public ListenerList<TextAreaListener> getTextAreaListeners() {

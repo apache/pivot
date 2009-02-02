@@ -390,6 +390,20 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         @Override
         public void validate() {
             if (!isValid()) {
+                // TODO Constrain validation to the maximum visible area of the
+                // TextArea; begin validation at the first visible child and
+                // proceed through the last child that would be visible within
+                // the TextArea's parent
+                
+                // TODO If any subsequent views remain that would not be visible
+                // within this window, queue a callback to continue validation;
+                // this callback should validate the remaining views and ultimately
+                // invalidate the TextArea itself, such that it is again asked
+                // for its preferred size
+                
+                // TODO Define a boolean style that will allow callers to turn
+                // this behavior on or off
+                
                 int breakWidth = getBreakWidth();
 
                 int width = 0;

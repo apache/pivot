@@ -17,10 +17,16 @@ package pivot.wtk.test;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.Component;
+import pivot.wtk.ComponentListener;
+import pivot.wtk.Container;
+import pivot.wtk.Cursor;
 import pivot.wtk.Dialog;
 import pivot.wtk.Display;
 import pivot.wtk.Frame;
+import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Palette;
+import pivot.wtk.VerticalAlignment;
 import pivot.wtk.effects.ReflectionDecorator;
 
 public class WindowTest implements Application {
@@ -29,6 +35,33 @@ public class WindowTest implements Application {
     public void startup(Display display, Dictionary<String, String> properties) {
         window1.setTitle("Window 1");
         window1.setPreferredSize(320, 240);
+        
+        window1.getComponentListeners().add(new ComponentListener() {
+            public void parentChanged(Component component, Container previousParent) {
+            }
+
+            public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+                window1.align(window1.getDisplay().getBounds(),
+                    HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
+                window1.getComponentListeners().remove(this);
+            }
+
+            public void locationChanged(Component component, int previousX, int previousY) {
+            }
+
+            public void visibleChanged(Component component) {
+            }
+
+            public void styleUpdated(Component component, String styleKey, Object previousValue) {
+            }
+
+            public void cursorChanged(Component component, Cursor previousCursor) {
+            }
+
+            public void tooltipTextChanged(Component component, String previousTooltipText) {
+            }
+        });
+        
         window1.open(display);
 
         Frame window1a = new Frame();
