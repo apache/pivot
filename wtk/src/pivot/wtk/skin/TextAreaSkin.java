@@ -33,7 +33,6 @@ import java.util.Iterator;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
@@ -42,7 +41,6 @@ import pivot.wtk.Point;
 import pivot.wtk.TextArea;
 import pivot.wtk.TextAreaListener;
 import pivot.wtk.Theme;
-import pivot.wtk.Viewport;
 import pivot.wtk.Visual;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.Element;
@@ -73,7 +71,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         private int x = 0;
         private int y = 0;
 
-        private int breakWidth = -1;
+        private int breakWidth = 0;
 
         private boolean valid = false;
 
@@ -379,14 +377,14 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         public void repaint(int x, int y, int width, int height) {
             super.repaint(x, y, width, height);
 
-            TextAreaSkin.this.repaintComponent(x, y, width, height);
+            repaintComponent(x, y, width, height);
         }
 
         @Override
         public void invalidate() {
             super.invalidate();
 
-            TextAreaSkin.this.invalidateComponent();
+            invalidateComponent();
         }
 
         @Override
@@ -394,33 +392,23 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             if (!isValid()) {
                 int breakWidth = getBreakWidth();
 
-                if (breakWidth != -1) {
-                    int width = 0;
-                    int y = 0;
+                int width = 0;
+                int y = 0;
 
-                    // TODO Constrain child validation to viewport bounds
+                for (NodeView nodeView : this) {
+                    nodeView.setBreakWidth(breakWidth);
+                    nodeView.validate();
 
-                    for (NodeView nodeView : this) {
-                        nodeView.setBreakWidth(breakWidth);
-                        nodeView.validate();
+                    nodeView.setLocation(0, y);
 
-                        nodeView.setLocation(0, y);
-
-                        width = Math.max(width, nodeView.getWidth());
-                        y += nodeView.getHeight();
-                    }
-
-                    setSize(width, y);
-
-                    super.validate();
+                    width = Math.max(width, nodeView.getWidth());
+                    y += nodeView.getHeight();
                 }
 
-                ApplicationContext.queueCallback(new Runnable() {
-                    public void run() {
-                        invalidateComponent();
-                    }
-                });
+                setSize(width, y);
             }
+
+            super.validate();
         }
 
         @Override
@@ -746,6 +734,8 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
     private DocumentView documentView = null;
 
     private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
+
+    // TODO Add accessors for style properties
     private Font font;
     private boolean breakOnWhitespaceOnly = true;
 
@@ -787,6 +777,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         if (documentView == null) {
             preferredWidth = 0;
         } else {
+            documentView.setBreakWidth(Integer.MAX_VALUE);
             preferredWidth = documentView.getWidth();
         }
 
@@ -798,6 +789,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         if (documentView == null) {
             preferredHeight = 0;
         } else {
+            documentView.setBreakWidth((width == -1) ? Integer.MAX_VALUE : width);
             preferredHeight = documentView.getHeight();
         }
 
@@ -810,6 +802,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         if (documentView == null) {
             preferredSize = new Dimensions(0, 0);
         } else {
+            documentView.setBreakWidth(Integer.MAX_VALUE);
             preferredSize = documentView.getSize();
         }
 
@@ -818,15 +811,10 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
     public void layout() {
         if (documentView != null) {
-            TextArea textArea = (TextArea)getComponent();
-            Viewport viewport = (Viewport)textArea.getParent();
-            Bounds viewportBounds = viewport.getViewportBounds();
-
-            documentView.setBreakWidth(viewportBounds.width);
-
-            // TODO Set viewport top, height
-
-            documentView.validate();
+            // TODO Here is where we would resize/reposition form components
+            // (i.e. components attached to ComponentNodeViews); we'd probably
+            // want a top-level list of ComponentNodeViews so we wouldn't have
+            // to search the tree for them.
         }
     }
 
