@@ -75,15 +75,17 @@ public class TextArea extends Component {
 
     public String getText() {
         String text = null;
+        Document document = getDocument();
 
-        try {
-            Document document = getDocument();
-            PlainTextSerializer serializer = new PlainTextSerializer();
-            StringWriter writer = new StringWriter();
-            serializer.writeObject(document, writer);
-            text = writer.toString();
-        } catch(SerializationException exception) {
-        } catch(IOException exception) {
+        if (document != null) {
+            try {
+                PlainTextSerializer serializer = new PlainTextSerializer();
+                StringWriter writer = new StringWriter();
+                serializer.writeObject(document, writer);
+                text = writer.toString();
+            } catch(SerializationException exception) {
+            } catch(IOException exception) {
+            }
         }
 
         return text;
