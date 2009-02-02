@@ -24,10 +24,10 @@ import pivot.wtk.text.Document;
  */
 public interface TextAreaListener {
     /**
-     * Called when a text area's text property has changed.
+     * Called when a text area's document has changed.
      *
      * @param textArea
-     * @param previousText
+     * @param previousDocument
      */
-    public void textChanged(TextArea textArea, Document previousText);
+    public void documentChanged(TextArea textArea, Document previousDocument);
 }

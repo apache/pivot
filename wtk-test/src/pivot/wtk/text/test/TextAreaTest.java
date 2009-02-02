@@ -35,15 +35,15 @@ public class TextAreaTest implements Application {
         PlainTextSerializer serializer = new PlainTextSerializer("UTF-8");
         InputStream inputStream = PlainTextSerializerTest.class.getResourceAsStream("pivot.txt");
 
-        Document text = null;
+        Document document = null;
         try {
-            text = (Document)serializer.readObject(inputStream);
+            document = (Document)serializer.readObject(inputStream);
         } catch(Exception exception) {
             System.out.println(exception);
         }
 
         TextArea textArea = new TextArea();
-        textArea.setText(text);
+        textArea.setDocument(document);
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(ScrollPane.ScrollBarPolicy.FILL);

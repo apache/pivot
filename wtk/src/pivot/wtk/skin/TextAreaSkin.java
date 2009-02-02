@@ -753,9 +753,9 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         TextArea textArea = (TextArea)component;
         textArea.getTextAreaListeners().add(this);
 
-        Document text = textArea.getText();
-        if (text != null) {
-            documentView = new DocumentView(text);
+        Document document = textArea.getDocument();
+        if (document != null) {
+            documentView = new DocumentView(document);
             documentView.attach();
         }
     }
@@ -824,15 +824,15 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
     }
 
-    public void textChanged(TextArea textArea, Document previousText) {
+    public void documentChanged(TextArea textArea, Document previousDocument) {
         if (documentView != null) {
             documentView.detach();
             documentView = null;
         }
 
-        Document text = textArea.getText();
-        if (text != null) {
-            documentView = new DocumentView(text);
+        Document document = textArea.getDocument();
+        if (document != null) {
+            documentView = new DocumentView(document);
             documentView.attach();
         }
 

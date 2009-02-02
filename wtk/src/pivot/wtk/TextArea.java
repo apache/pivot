@@ -15,8 +15,14 @@
  */
 package pivot.wtk;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+
+import pivot.serialization.SerializationException;
 import pivot.util.ListenerList;
 import pivot.wtk.text.Document;
+import pivot.wtk.text.PlainTextSerializer;
 
 /**
  * Component that allows a user to enter and edit multiple lines of (optionally
@@ -27,14 +33,14 @@ import pivot.wtk.text.Document;
 public class TextArea extends Component {
     private static class TextAreaListenerList extends ListenerList<TextAreaListener>
         implements TextAreaListener {
-        public void textChanged(TextArea textArea, Document previousText) {
+        public void documentChanged(TextArea textArea, Document previousText) {
             for (TextAreaListener listener : this) {
-                listener.textChanged(textArea, previousText);
+                listener.documentChanged(textArea, previousText);
             }
         }
     }
 
-    private Document text = null;
+    private Document document = null;
 
     private TextAreaListenerList textAreaListeners = new TextAreaListenerList();
 
@@ -54,16 +60,42 @@ public class TextArea extends Component {
         super.setParent(parent);
     }
 
-    public Document getText() {
+    public Document getDocument() {
+        return document;
+    }
+
+    public void setDocument(Document document) {
+        Document previousDocument = this.document;
+
+        if (previousDocument != document) {
+            this.document = document;
+            textAreaListeners.documentChanged(this, previousDocument);
+        }
+    }
+
+    public String getText() {
+        String text = null;
+
+        try {
+            Document document = getDocument();
+            PlainTextSerializer serializer = new PlainTextSerializer();
+            StringWriter writer = new StringWriter();
+            serializer.writeObject(document, writer);
+            text = writer.toString();
+        } catch(SerializationException exception) {
+        } catch(IOException exception) {
+        }
+
         return text;
     }
 
-    public void setText(Document text) {
-        Document previousText = this.text;
-
-        if (previousText != text) {
-            this.text = text;
-            textAreaListeners.textChanged(this, previousText);
+    public void setText(String text) {
+        try {
+            PlainTextSerializer serializer = new PlainTextSerializer();
+            StringReader reader = new StringReader(text);
+            setDocument((Document)serializer.readObject(reader));
+        } catch(SerializationException exception) {
+        } catch(IOException exception) {
         }
     }
 
