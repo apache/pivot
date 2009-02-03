@@ -395,7 +395,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                     nodeView.validate();
 
                     if (index < getLength()) {
-                        ApplicationContext.queueCallback(this);
+                        ApplicationContext.setTimeout(this, 0);
                     } else {
                         validateCallback = null;
                         invalidateComponent();
@@ -436,11 +436,6 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         public void invalidate() {
             super.invalidate();
 
-            if (validateCallback != null) {
-                validateCallback.abort();
-                validateCallback = null;
-            }
-
             invalidateComponent();
         }
 
@@ -455,7 +450,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                 int width = 0;
                 int y = 0;
 
-                int top = textArea.getY();
+                int top = -textArea.getY();
                 int bottom = top + parent.getHeight();
 
                 int i = 0;
@@ -496,8 +491,12 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                     super.validate();
                 } else {
                     if (start != -1) {
+                        if (validateCallback != null) {
+                            validateCallback.abort();
+                        }
+
                         validateCallback = new ValidateCallback(start);
-                        ApplicationContext.queueCallback(validateCallback);
+                        ApplicationContext.setTimeout(validateCallback, 0);
                     }
                 }
             }
@@ -913,6 +912,17 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
     public void paint(Graphics2D graphics) {
         if (documentView != null) {
             documentView.paint(graphics);
+        }
+    }
+
+    @Override
+    public void locationChanged(Component component, int previousX, int previousY) {
+        super.locationChanged(component, previousX, previousY);
+
+        if (documentView != null
+            && !documentView.isValid()
+            && component.getY() > previousY) {
+            invalidateComponent();
         }
     }
 
