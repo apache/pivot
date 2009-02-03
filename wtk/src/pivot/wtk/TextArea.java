@@ -93,7 +93,7 @@ public class TextArea extends Component {
 
     public void setText(String text) {
         Document document = null;
-        
+
         if (text != null) {
             try {
                 PlainTextSerializer serializer = new PlainTextSerializer();
@@ -103,7 +103,7 @@ public class TextArea extends Component {
             } catch(IOException exception) {
             }
         }
-        
+
         setDocument(document);
     }
 

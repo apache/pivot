@@ -257,7 +257,7 @@ public class Demo implements Application {
 
         TextArea textArea = (TextArea)wtkxSerializer.getObjectByName("text.textArea");
         textArea.setDocument(document);
-        
+
         new Action("selectImageAction") {
             public String getDescription() {
                 return "Select Image Action";

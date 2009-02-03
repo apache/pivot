@@ -35,7 +35,7 @@ public class WindowTest implements Application {
     public void startup(Display display, Dictionary<String, String> properties) {
         window1.setTitle("Window 1");
         window1.setPreferredSize(320, 240);
-        
+
         window1.getComponentListeners().add(new ComponentListener() {
             public void parentChanged(Component component, Container previousParent) {
             }
@@ -61,7 +61,7 @@ public class WindowTest implements Application {
             public void tooltipTextChanged(Component component, String previousTooltipText) {
             }
         });
-        
+
         window1.open(display);
 
         Frame window1a = new Frame();

@@ -33,8 +33,10 @@ import java.util.Iterator;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
+import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Platform;
 import pivot.wtk.Point;
@@ -105,12 +107,26 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         public int getHeight() {
-            validate();
+            return getHeight(true);
+        }
+
+        public int getHeight(boolean validate) {
+            if (validate) {
+                validate();
+            }
+
             return height;
         }
 
         public Dimensions getSize() {
-            validate();
+            return getSize(true);
+        }
+
+        public Dimensions getSize(boolean validate) {
+            if (validate) {
+                validate();
+            }
+
             return new Dimensions(width, height);
         }
 
@@ -152,7 +168,15 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         public Bounds getBounds() {
-            return new Bounds(x, y, getWidth(), getHeight());
+            return getBounds(true);
+        }
+
+        public Bounds getBounds(boolean validate) {
+            if (validate) {
+                validate();
+            }
+
+            return new Bounds(x, y, width, height);
         }
 
         public void repaint() {
@@ -303,7 +327,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                 new Bounds(0, 0, getWidth(), getHeight()) : new Bounds(clipBounds);
 
             for (NodeView nodeView : nodeViews) {
-                Bounds nodeViewBounds = nodeView.getBounds();
+                Bounds nodeViewBounds = nodeView.getBounds(false);
 
                 // Only paint node views that intersect the current clip rectangle
                 if (nodeViewBounds.intersects(paintBounds)) {
@@ -358,6 +382,34 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
      * @author gbrown
      */
     public class DocumentView extends ElementView {
+        private class ValidateCallback implements Runnable {
+            private int index;
+
+            public ValidateCallback(int index) {
+                this.index = index;
+            }
+
+            public void run() {
+                if (index != -1) {
+                    NodeView nodeView = get(index++);
+                    nodeView.validate();
+
+                    if (index < getLength()) {
+                        ApplicationContext.queueCallback(this);
+                    } else {
+                        validateCallback = null;
+                        invalidateComponent();
+                    }
+                }
+            }
+
+            public void abort() {
+                index = -1;
+            }
+        }
+
+        private ValidateCallback validateCallback = null;
+
         public DocumentView(Document document) {
             super(document);
         }
@@ -384,45 +436,71 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         public void invalidate() {
             super.invalidate();
 
+            if (validateCallback != null) {
+                validateCallback.abort();
+                validateCallback = null;
+            }
+
             invalidateComponent();
         }
 
         @Override
         public void validate() {
             if (!isValid()) {
-                // TODO Constrain validation to the maximum visible area of the
-                // TextArea; begin validation at the first visible child and
-                // proceed through the last child that would be visible within
-                // the TextArea's parent
-                
-                // TODO If any subsequent views remain that would not be visible
-                // within this window, queue a callback to continue validation;
-                // this callback should validate the remaining views and ultimately
-                // invalidate the TextArea itself, such that it is again asked
-                // for its preferred size
-                
-                // TODO Define a boolean style that will allow callers to turn
-                // this behavior on or off
-                
+                TextArea textArea = (TextArea)getComponent();
+                Container parent = textArea.getParent();
+
                 int breakWidth = getBreakWidth();
 
                 int width = 0;
                 int y = 0;
 
-                for (NodeView nodeView : this) {
+                int top = textArea.getY();
+                int bottom = top + parent.getHeight();
+
+                int i = 0;
+                int j = 0;
+                int n = getLength();
+                int start = -1;
+
+                while (i < n) {
+                    NodeView nodeView = get(i++);
                     nodeView.setBreakWidth(breakWidth);
-                    nodeView.validate();
+
+                    // TODO Make this configurable; e.g. validateVisibleContentOnly = false
+                    int height = nodeView.getHeight(false);
+                    if (y + height >= top) {
+                        if (y < bottom) {
+                            nodeView.validate();
+                        } else {
+                            if (start == -1) {
+                                start = i - 1;
+                            }
+                        }
+                    }
 
                     nodeView.setLocation(0, y);
 
-                    width = Math.max(width, nodeView.getWidth());
-                    y += nodeView.getHeight();
+                    if (nodeView.isValid()) {
+                        width = Math.max(width, nodeView.getWidth());
+                        height = nodeView.getHeight();
+                        j++;
+                    }
+
+                    y += height;
                 }
 
                 setSize(width, y);
-            }
 
-            super.validate();
+                if (i == j) {
+                    super.validate();
+                } else {
+                    if (start != -1) {
+                        validateCallback = new ValidateCallback(start);
+                        ApplicationContext.queueCallback(validateCallback);
+                    }
+                }
+            }
         }
 
         @Override
@@ -751,7 +829,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
     // TODO Add accessors for style properties
     private Font font;
-    private boolean breakOnWhitespaceOnly = true;
+    private boolean breakOnWhitespaceOnly = false;
 
     private NullNodeView nullNodeView = new NullNodeView();
     private NodeViewLocationComparator nodeViewLocationComparator = new NodeViewLocationComparator();

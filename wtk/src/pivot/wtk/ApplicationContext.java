@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import java.awt.AWTEvent;
+import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -295,6 +296,19 @@ public abstract class ApplicationContext {
                 System.setProperty("sun.awt.erasebackgroundonresize", "true");
             } catch (SecurityException exception) {
             }
+
+            // Add debug event queue
+            EventQueue eventQueue = Toolkit.getDefaultToolkit().getSystemEventQueue();
+            eventQueue.push(new EventQueue() {
+                public void postEvent(AWTEvent event) {
+                    // TODO System.out.println(event);
+                    super.postEvent(event);
+                }
+                public void dispatchEvent(AWTEvent event) {
+                    // TODO System.out.println(event);
+                    super.dispatchEvent(event);
+                }
+            });
 
             // Add native drop support
             new java.awt.dnd.DropTarget(this, dropTargetListener);
