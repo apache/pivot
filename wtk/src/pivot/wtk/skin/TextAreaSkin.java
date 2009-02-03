@@ -596,7 +596,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                     y += rowHeight;
                 }
 
-                // TODO Don't hard-code padding; use the value specified 
+                // TODO Don't hard-code padding; use the value specified
                 // by the Paragraph
                 setSize(width, y + 6);
             }
@@ -883,7 +883,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         if (documentView == null) {
             preferredHeight = 0;
         } else {
-            documentView.setBreakWidth((width == -1) ? 
+            documentView.setBreakWidth((width == -1) ?
                 Integer.MAX_VALUE : width - (margin.left + margin.right));
             preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
         }
@@ -928,13 +928,13 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
     public void setFont(Font font) {
         if (font == null) {
-            throw new IllegalArgumentException("font is null.");           
+            throw new IllegalArgumentException("font is null.");
         }
-        
+
         this.font = font;
         invalidateComponent();
     }
-    
+
     public final void setFont(String font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -975,7 +975,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
         setMargin(margin.intValue());
     }
-    
+
     public boolean isBreakOnWhitespaceOnly() {
         return breakOnWhitespaceOnly;
     }
