@@ -31,6 +31,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import pivot.collections.ArrayList;
+import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.wtk.ApplicationContext;
@@ -38,6 +39,7 @@ import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Insets;
 import pivot.wtk.Platform;
 import pivot.wtk.Point;
 import pivot.wtk.TextArea;
@@ -594,7 +596,8 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                     y += rowHeight;
                 }
 
-                // TODO Don't hard-code padding
+                // TODO Don't hard-code padding; use the value specified 
+                // by the Paragraph
                 setSize(width, y + 6);
             }
 
@@ -826,8 +829,8 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
     private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
 
-    // TODO Add accessors for style properties
     private Font font;
+    private Insets margin = new Insets(4);
     private boolean breakOnWhitespaceOnly = false;
 
     private NullNodeView nullNodeView = new NullNodeView();
@@ -869,7 +872,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             preferredWidth = 0;
         } else {
             documentView.setBreakWidth(Integer.MAX_VALUE);
-            preferredWidth = documentView.getWidth();
+            preferredWidth = documentView.getWidth() + margin.left + margin.right;
         }
 
         return preferredWidth;
@@ -880,8 +883,9 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         if (documentView == null) {
             preferredHeight = 0;
         } else {
-            documentView.setBreakWidth((width == -1) ? Integer.MAX_VALUE : width);
-            preferredHeight = documentView.getHeight();
+            documentView.setBreakWidth((width == -1) ? 
+                Integer.MAX_VALUE : width - (margin.left + margin.right));
+            preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
         }
 
         return preferredHeight;
@@ -895,6 +899,8 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         } else {
             documentView.setBreakWidth(Integer.MAX_VALUE);
             preferredSize = documentView.getSize();
+            preferredSize.width += margin.left + margin.right;
+            preferredSize.height += margin.top + margin.bottom;
         }
 
         return preferredSize;
@@ -911,8 +917,72 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
     public void paint(Graphics2D graphics) {
         if (documentView != null) {
+            graphics.translate(margin.left, margin.top);
             documentView.paint(graphics);
         }
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");           
+        }
+        
+        this.font = font;
+        invalidateComponent();
+    }
+    
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(Font.decode(font));
+    }
+
+    public Insets getMargin() {
+        return margin;
+    }
+
+    public void setMargin(Insets margin) {
+        if (margin == null) {
+            throw new IllegalArgumentException("margin is null.");
+        }
+
+        this.margin = margin;
+        invalidateComponent();
+    }
+
+    public final void setMargin(Dictionary<String, ?> margin) {
+        if (margin == null) {
+            throw new IllegalArgumentException("margin is null.");
+        }
+
+        setMargin(new Insets(margin));
+    }
+
+    public final void setMargin(int margin) {
+        setMargin(new Insets(margin));
+    }
+
+    public final void setMargin(Number margin) {
+        if (margin == null) {
+            throw new IllegalArgumentException("margin is null.");
+        }
+
+        setMargin(margin.intValue());
+    }
+    
+    public boolean isBreakOnWhitespaceOnly() {
+        return breakOnWhitespaceOnly;
+    }
+
+    public void setBreakOnWhitespaceOnly(boolean breakOnWhitespaceOnly) {
+        this.breakOnWhitespaceOnly = breakOnWhitespaceOnly;
+        invalidateComponent();
     }
 
     @Override
@@ -941,7 +1011,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         invalidateComponent();
     }
 
-    public NodeView createNodeView(Node node) {
+    private NodeView createNodeView(Node node) {
         NodeView nodeView = null;
 
         if (node instanceof Document) {
