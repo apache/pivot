@@ -40,9 +40,23 @@ public class TextArea extends Component {
         }
     }
 
+    private static class TextAreaSelectionListenerList extends ListenerList<TextAreaSelectionListener>
+        implements TextAreaSelectionListener {
+        public void selectionChanged(TextArea textArea,
+            int previousSelectionStart, int previousSelectionLength) {
+            for (TextAreaSelectionListener listener : this) {
+                listener.selectionChanged(textArea, previousSelectionStart, previousSelectionLength);
+            }
+        }
+    }
+
     private Document document = null;
 
+    private int selectionStart = 0;
+    private int selectionLength = 0;
+
     private TextAreaListenerList textAreaListeners = new TextAreaListenerList();
+    private TextAreaSelectionListenerList textAreaSelectionListeners = new TextAreaSelectionListenerList();
 
     public TextArea() {
         installSkin(TextArea.class);
@@ -70,6 +84,11 @@ public class TextArea extends Component {
         if (previousDocument != document) {
             this.document = document;
             textAreaListeners.documentChanged(this, previousDocument);
+
+            // TODO We need to be notified of character insertions/removals so
+            // we can update the selection state; define a
+            // pivot.wtk.text.DocumentListener interface that will fire events
+            // when rangeInserted() and rangeRemoved() are called
         }
     }
 
@@ -107,7 +126,62 @@ public class TextArea extends Component {
         setDocument(document);
     }
 
+    /**
+     * Returns the starting index of the selection.
+     *
+     * @return
+     * The starting index of the selection.
+     */
+    public int getSelectionStart() {
+        return selectionStart;
+    }
+
+    /**
+     * Returns the length of the selection.
+     *
+     * @return
+     * The length of the selection; may be <tt>0</tt>.
+     */
+    public int getSelectionLength() {
+        return selectionLength;
+    }
+
+    /**
+     * Sets the selection. The sum of the selection start and length must be
+     * less than the length of the text input's content.
+     *
+     * @param selectionStart
+     * The starting index of the selection.
+     *
+     * @param selectionLength
+     * The length of the selection.
+     */
+    public void setSelection(int selectionStart, int selectionLength) {
+        if (document == null
+            || selectionStart < 0
+            || selectionStart + selectionLength > document.getCharacterCount()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        int previousSelectionStart = this.selectionStart;
+        int previousSelectionLength = this.selectionLength;
+
+        if (previousSelectionStart != selectionStart
+            || previousSelectionLength != selectionLength) {
+            this.selectionStart = selectionStart;
+            this.selectionLength = selectionLength;
+
+            textAreaSelectionListeners.selectionChanged(this,
+                previousSelectionStart, previousSelectionLength);
+        }
+    }
+
+
     public ListenerList<TextAreaListener> getTextAreaListeners() {
         return textAreaListeners;
+    }
+
+    public ListenerList<TextAreaSelectionListener> getTextAreaSelectionListeners() {
+        return textAreaSelectionListeners;
     }
 }

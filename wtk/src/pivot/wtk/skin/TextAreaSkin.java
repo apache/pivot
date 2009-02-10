@@ -18,6 +18,7 @@ package pivot.wtk.skin;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
@@ -38,12 +39,15 @@ import pivot.wtk.ApplicationContext;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
+import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
+import pivot.wtk.Mouse;
 import pivot.wtk.Platform;
 import pivot.wtk.Point;
 import pivot.wtk.TextArea;
 import pivot.wtk.TextAreaListener;
+import pivot.wtk.TextAreaSelectionListener;
 import pivot.wtk.Theme;
 import pivot.wtk.Visual;
 import pivot.wtk.text.Document;
@@ -60,7 +64,8 @@ import pivot.wtk.text.TextNodeListener;
  *
  * @author gbrown
  */
-public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
+public class TextAreaSkin extends ComponentSkin
+    implements TextAreaListener, TextAreaSelectionListener {
     /**
      * Abstract base class for node views.
      *
@@ -324,7 +329,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         public void paint(Graphics2D graphics) {
-            java.awt.Rectangle clipBounds = graphics.getClipBounds();
+            Rectangle clipBounds = graphics.getClipBounds();
             Bounds paintBounds = (clipBounds == null) ?
                 new Bounds(0, 0, getWidth(), getHeight()) : new Bounds(clipBounds);
 
@@ -337,7 +342,10 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                     // translate to the node view's coordinate system
                     Graphics2D nodeViewGraphics = (Graphics2D)graphics.create();
                     nodeViewGraphics.translate(nodeViewBounds.x, nodeViewBounds.y);
-                    nodeViewGraphics.clipRect(0, 0, nodeViewBounds.width, nodeViewBounds.height);
+
+                    // NOTE We don't clip here because views should generally
+                    // not overlap and clipping would impose an unnecessary
+                    // performance penalty
 
                     // Paint the node view
                     nodeView.paint(nodeViewGraphics);
@@ -508,6 +516,19 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         public NodeView getNext() {
             return null;
         }
+
+        public void nodeInserted(Element element, int index) {
+            super.nodeInserted(element, index);
+
+            Document document = (Document)getNode();
+            insert(createNodeView(document.get(index)), index);
+        }
+
+        public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
+            remove(index, nodes.getLength());
+
+            super.nodesRemoved(element, index, nodes);
+        }
     }
 
     public class ParagraphView extends ElementView {
@@ -659,12 +680,6 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                 TextNode textNode = (TextNode)getNode();
                 String text = textNode.getText();
 
-                // TODO Use a custom iterator so we don't have to copy the string
-                AttributedString attributedText = new AttributedString(text);
-                attributedText.addAttribute(TextAttribute.FONT, font);
-
-                AttributedCharacterIterator aci = attributedText.getIterator();
-
                 // Update the length value
                 length = text.length() - start;
 
@@ -676,11 +691,17 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
                     // Return a width of 0 and the font height
                     width = 0;
 
-                    LineMetrics lm = font.getLineMetrics(aci, start, start + length,
+                    LineMetrics lm = font.getLineMetrics("", start, start + length,
                         fontRenderContext);
                     height = (int)Math.ceil(lm.getAscent() + lm.getDescent()
                         + lm.getLeading());
                 } else {
+                    // TODO Use a custom iterator so we don't have to copy the string
+                    AttributedString attributedText = new AttributedString(text);
+                    attributedText.addAttribute(TextAttribute.FONT, font);
+
+                    AttributedCharacterIterator aci = attributedText.getIterator();
+
                     int breakWidth = getBreakWidth();
 
                     // Attempt to break the text
@@ -825,9 +846,23 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
     }
 
+    private class BlinkCursorCallback implements Runnable {
+        public void run() {
+            caretOn = !caretOn;
+
+            TextArea textArea = (TextArea)getComponent();
+            textArea.repaint(caret.x, caret.y, caret.width, caret.height, true);
+        }
+    }
+
     private DocumentView documentView = null;
 
     private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
+
+    private Rectangle caret = new Rectangle();
+    private boolean caretOn = true;
+    private BlinkCursorCallback blinkCursorCallback = new BlinkCursorCallback();
+    private int blinkCursorIntervalID = -1;
 
     private Font font;
     private Insets margin = new Insets(4);
@@ -846,17 +881,25 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
         TextArea textArea = (TextArea)component;
         textArea.getTextAreaListeners().add(this);
+        textArea.getTextAreaSelectionListeners().add(this);
+
+        textArea.setCursor(Cursor.TEXT);
 
         Document document = textArea.getDocument();
         if (document != null) {
             documentView = new DocumentView(document);
             documentView.attach();
         }
+
+        selectionChanged(textArea, 0, 0);
     }
 
     public void uninstall() {
         TextArea textArea = (TextArea)getComponent();
         textArea.getTextAreaListeners().remove(this);
+        textArea.getTextAreaSelectionListeners().remove(this);
+
+        textArea.setCursor(Cursor.DEFAULT);
 
         if (documentView != null) {
             documentView.detach();
@@ -884,7 +927,7 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
             preferredHeight = 0;
         } else {
             documentView.setBreakWidth((width == -1) ?
-                Integer.MAX_VALUE : width - (margin.left + margin.right));
+                Integer.MAX_VALUE : Math.max(width - (margin.left + margin.right), 0));
             preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
         }
 
@@ -917,8 +960,36 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
 
     public void paint(Graphics2D graphics) {
         if (documentView != null) {
+            TextArea textArea = (TextArea)getComponent();
+
+            // TODO Paint selection background
+
             graphics.translate(margin.left, margin.top);
             documentView.paint(graphics);
+
+            if (textArea.getSelectionLength() == 0
+                && textArea.isFocused()
+                && caretOn) {
+                graphics.setPaint(Color.BLACK);
+                graphics.fill(caret);
+            }
+        }
+    }
+
+    private void showCaret(boolean show) {
+        if (show) {
+            if (blinkCursorIntervalID == -1) {
+                blinkCursorIntervalID = ApplicationContext.setInterval(blinkCursorCallback,
+                    Platform.getCursorBlinkRate());
+
+                // Run the callback once now to show the cursor immediately
+                blinkCursorCallback.run();
+            }
+        } else {
+            if (blinkCursorIntervalID != -1) {
+                ApplicationContext.clearInterval(blinkCursorIntervalID);
+                blinkCursorIntervalID = -1;
+            }
         }
     }
 
@@ -996,6 +1067,33 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
     }
 
+    @Override
+    public void focusedChanged(Component component, boolean temporary) {
+        super.focusedChanged(component, temporary);
+
+        TextArea textArea = (TextArea)getComponent();
+        showCaret(textArea.isFocused()
+            && textArea.getSelectionLength() == 0);
+
+        repaintComponent();
+    }
+
+    @Override
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        if (button == Mouse.Button.LEFT) {
+            TextArea textArea = (TextArea)component;
+
+            // TODO Move the caret to the insertion point
+
+            // TODO Register mouse listener to begin selecting text
+
+            // Set focus to the text input
+            textArea.requestFocus();
+        }
+
+        return super.mouseDown(component, button, x, y);
+    }
+
     public void documentChanged(TextArea textArea, Document previousDocument) {
         if (documentView != null) {
             documentView.detach();
@@ -1009,6 +1107,20 @@ public class TextAreaSkin extends ComponentSkin implements TextAreaListener {
         }
 
         invalidateComponent();
+    }
+
+    public void selectionChanged(TextArea textArea, int previousSelectionStart,
+        int previousSelectionLength) {
+        // TODO Determine the caret shape/bounds
+        caret.x = 0;
+        caret.y = 0;
+        caret.width = 1;
+        caret.height = 14;
+
+        showCaret(textArea.isFocused()
+            && textArea.getSelectionLength() == 0);
+
+        repaintComponent();
     }
 
     private NodeView createNodeView(Node node) {

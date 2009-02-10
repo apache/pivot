@@ -25,7 +25,9 @@ import pivot.wtk.Frame;
 import pivot.wtk.ScrollPane;
 import pivot.wtk.TextArea;
 import pivot.wtk.text.Document;
+import pivot.wtk.text.Paragraph;
 import pivot.wtk.text.PlainTextSerializer;
+import pivot.wtk.text.TextNode;
 
 public class TextAreaTest implements Application {
     private Frame frame = null;
@@ -42,12 +44,32 @@ public class TextAreaTest implements Application {
             System.out.println(exception);
         }
 
+        document = new Document();
+
+        Paragraph p1 = new Paragraph();
+        TextNode t1 = new TextNode("ABCD");
+        p1.add(t1);
+        document.add(p1);
+
+        Paragraph p2 = new Paragraph();
+        TextNode t2 = new TextNode("");
+        p2.add(t2);
+        document.add(p2);
+
+        Paragraph p3 = new Paragraph();
+        TextNode t3 = new TextNode("1234");
+        p3.add(t3);
+        document.add(p3);
+
+        System.out.println(p2.getOffset());
+        System.out.println(p3.getOffset());
+
         TextArea textArea = new TextArea();
         textArea.setDocument(document);
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(ScrollPane.ScrollBarPolicy.FILL);
-        // scrollPane.setVerticalScrollBarPolicy(ScrollPane.ScrollBarPolicy.FILL_TO_CAPACITY);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPane.ScrollBarPolicy.FILL_TO_CAPACITY);
         scrollPane.setView(textArea);
 
         Border border = new Border();
@@ -58,6 +80,10 @@ public class TextAreaTest implements Application {
         frame.setTitle("Test");
         frame.setPreferredSize(640, 480);
         frame.open(display);
+
+        t2.insertText('a', 0);
+        t2.insertText('b', 1);
+        t2.insertText('c', 2);
     }
 
     public boolean shutdown(boolean optional) {

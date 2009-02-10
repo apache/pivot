@@ -176,6 +176,11 @@ public final class TextNode extends Node {
         return new TextNode(this);
     }
 
+    @Override
+    public String toString() {
+        return getText();
+    }
+
     public ListenerList<TextNodeListener> getTextNodeListeners() {
         return textNodeListeners;
     }
