@@ -124,7 +124,7 @@ public interface Sequence<T> {
                 throw new IllegalArgumentException("item is not a descendant of sequence.");
             }
 
-            remove(sequence, path);
+            remove(sequence, path, 1);
 
             return path;
         }
@@ -139,7 +139,7 @@ public interface Sequence<T> {
          * The path of the item to remove.
          */
         @SuppressWarnings("unchecked")
-        public static <T> void remove(Sequence<T> sequence, Sequence<Integer> path) {
+        public static <T> Sequence<T> remove(Sequence<T> sequence, Sequence<Integer> path, int count) {
             if (sequence == null) {
                 throw new IllegalArgumentException("sequence is null.");
             }
@@ -153,7 +153,7 @@ public interface Sequence<T> {
                 sequence = (Sequence<T>)sequence.get(path.get(i++));
             }
 
-            sequence.remove(path.get(i), 1);
+            return sequence.remove(path.get(i), count);
         }
 
         /**
@@ -229,59 +229,6 @@ public interface Sequence<T> {
             }
 
             return path;
-        }
-
-        /**
-         * Returns the rank of an item in a nested sequence. An item's rank
-         * is defined as its position in a depth-first traversal of the tree.
-         *
-         * @param sequence
-         * The root sequence.
-         *
-         * @param item
-         * The item to locate.
-         *
-         * @return
-         * The rank of the first occurrence of the item if it exists in the
-         * sequence, or <tt>-(<i>descendant count</i> + 1)</tt> if the item is not
-         * found.
-         */
-        @SuppressWarnings("unchecked")
-        public static <T> int rankOf(Sequence<T> sequence, T item) {
-            if (sequence == null) {
-                throw new IllegalArgumentException("sequence is null.");
-            }
-
-            if (item == null) {
-                throw new IllegalArgumentException("item is null.");
-            }
-
-            int rank = -1;
-
-            for (int i = 0, n = sequence.getLength(); i < n && rank < 0; i++) {
-                rank--;
-
-                T t = sequence.get(i);
-
-                if (t.equals(item)) {
-                    // The item was found in this sequence
-                    rank = -(rank + 1);
-                } else {
-                    if (t instanceof Sequence) {
-                        int r = rankOf((Sequence<T>)t, item);
-
-                        if (r < 0) {
-                            // The item is not a descendant of this sequence
-                            rank += (r + 1);
-                        } else {
-                            // The item was found in a nested sequence
-                            rank = -(rank + 1) + r;
-                        }
-                    }
-                }
-            }
-
-            return rank;
         }
     }
 
