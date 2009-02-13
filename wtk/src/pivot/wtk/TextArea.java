@@ -22,6 +22,7 @@ import java.io.StringWriter;
 import pivot.serialization.SerializationException;
 import pivot.util.ListenerList;
 import pivot.wtk.text.Document;
+import pivot.wtk.text.DocumentListener;
 import pivot.wtk.text.PlainTextSerializer;
 
 /**
@@ -55,6 +56,50 @@ public class TextArea extends Component {
     private int selectionStart = 0;
     private int selectionLength = 0;
 
+    private DocumentListener documentListener = new DocumentListener() {
+        public void rangeInserted(Document document, int offset, int span) {
+            int previousSelectionStart = selectionStart;
+            int previousSelectionLength = selectionLength;
+
+            if (selectionStart + selectionLength >= offset) {
+                if (selectionStart >= offset) {
+                    selectionStart += span;
+                } else {
+                    selectionLength += span;
+                }
+            }
+
+            if (previousSelectionStart != selectionStart
+                || previousSelectionLength != selectionLength) {
+                textAreaSelectionListeners.selectionChanged(TextArea.this,
+                    previousSelectionStart, previousSelectionLength);
+            }
+        }
+
+        public void rangeRemoved(Document document, int offset, int span) {
+            int start = offset;
+            int end = offset + span;
+
+            int previousSelectionStart = selectionStart;
+            int previousSelectionLength = selectionLength;
+
+            int selectionEnd = selectionStart + selectionLength - 1;
+
+            if (selectionEnd >= start) {
+                selectionStart = Math.min(start, selectionStart);
+                selectionEnd = Math.max(end - 1, selectionEnd) - span;
+
+                selectionLength = selectionEnd - selectionStart + 1;
+            }
+
+            if (previousSelectionStart != selectionStart
+                || previousSelectionLength != selectionLength) {
+                textAreaSelectionListeners.selectionChanged(TextArea.this,
+                    previousSelectionStart, previousSelectionLength);
+            }
+        }
+    };
+
     private TextAreaListenerList textAreaListeners = new TextAreaListenerList();
     private TextAreaSelectionListenerList textAreaSelectionListeners = new TextAreaSelectionListenerList();
 
@@ -82,13 +127,17 @@ public class TextArea extends Component {
         Document previousDocument = this.document;
 
         if (previousDocument != document) {
-            this.document = document;
-            textAreaListeners.documentChanged(this, previousDocument);
+            if (previousDocument != null) {
+                previousDocument.getDocumentListeners().remove(documentListener);
+            }
 
-            // TODO We need to be notified of character insertions/removals so
-            // we can update the selection state; define a
-            // pivot.wtk.text.DocumentListener interface that will fire events
-            // when rangeInserted() and rangeRemoved() are called
+            if (document != null) {
+                document.getDocumentListeners().add(documentListener);
+            }
+
+            this.document = document;
+
+            textAreaListeners.documentChanged(this, previousDocument);
         }
     }
 

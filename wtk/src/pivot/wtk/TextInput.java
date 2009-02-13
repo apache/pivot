@@ -225,8 +225,8 @@ public class TextInput extends Component {
         textBuilder.insert(index, text);
 
         // Update the selection
-        int previousSelectionStart = this.selectionStart;
-        int previousSelectionLength = this.selectionLength;
+        int previousSelectionStart = selectionStart;
+        int previousSelectionLength = selectionLength;
 
         int count = text.length();
 
@@ -276,8 +276,8 @@ public class TextInput extends Component {
         textBuilder.delete(start, end);
 
         // Update selection
-        int previousSelectionStart = this.selectionStart;
-        int previousSelectionLength = this.selectionLength;
+        int previousSelectionStart = selectionStart;
+        int previousSelectionLength = selectionLength;
 
         // The selection interval is defined as [selectionStart, selectionEnd]
         int selectionEnd = selectionStart + selectionLength - 1;

@@ -50,6 +50,15 @@ public abstract class Element extends Node
         }
 
         public Node getRange(int offset, int characterCount) {
+            if (characterCount < 0) {
+                throw new IllegalArgumentException("characterCount is negative.");
+            }
+
+            if (offset < 0
+                || offset + characterCount > getCharacterCount()) {
+                throw new IndexOutOfBoundsException();
+            }
+
             return duplicate(false);
         }
 

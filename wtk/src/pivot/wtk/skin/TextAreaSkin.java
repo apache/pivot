@@ -50,9 +50,12 @@ import pivot.wtk.TextAreaListener;
 import pivot.wtk.TextAreaSelectionListener;
 import pivot.wtk.Theme;
 import pivot.wtk.Visual;
+import pivot.wtk.media.Image;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.Element;
 import pivot.wtk.text.ElementListener;
+import pivot.wtk.text.ImageNode;
+import pivot.wtk.text.ImageNodeListener;
 import pivot.wtk.text.Node;
 import pivot.wtk.text.NodeListener;
 import pivot.wtk.text.Paragraph;
@@ -807,12 +810,69 @@ public class TextAreaSkin extends ComponentSkin
         }
     }
 
+    public class ImageNodeView extends NodeView implements ImageNodeListener {
+        public ImageNodeView(ImageNode imageNode) {
+            super(imageNode);
+        }
+
+        @Override
+        protected void attach() {
+            super.attach();
+
+            ImageNode imageNode = (ImageNode)getNode();
+            imageNode.getImageNodeListeners().add(this);
+        }
+
+        @Override
+        protected void detach() {
+            super.detach();
+
+            ImageNode imageNode = (ImageNode)getNode();
+            imageNode.getImageNodeListeners().remove(this);
+        }
+
+        @Override
+        public void validate() {
+            if (!isValid()) {
+                ImageNode imageNode = (ImageNode)getNode();
+                Image image = imageNode.getImage();
+
+                if (image == null) {
+                    setSize(0, 0);
+                } else {
+                    setSize(image.getWidth(), image.getHeight());
+                }
+
+                super.validate();
+            }
+        }
+
+        public void paint(Graphics2D graphics) {
+            ImageNode imageNode = (ImageNode)getNode();
+            Image image = imageNode.getImage();
+
+            if (image != null) {
+                image.paint(graphics);
+            }
+        }
+
+        @Override
+        public NodeView getNext() {
+            return null;
+        }
+
+        public void imageChanged(ImageNode imageNode, Image previousImage) {
+            invalidate();
+        }
+    }
+
     /**
      * Null node view, used for binary searches.
      *
      * @author gbrown
      */
-    public class NullNodeView extends NodeView {
+    private class NullNodeView extends NodeView {
+
         public NullNodeView() {
             super(null);
         }
@@ -832,7 +892,7 @@ public class TextAreaSkin extends ComponentSkin
      *
      * @author gbrown
      */
-    public class NodeViewLocationComparator implements Comparator<NodeView> {
+    private class NodeViewLocationComparator implements Comparator<NodeView> {
         public int compare(NodeView nodeView1, NodeView nodeView2) {
             int width = getWidth();
 
@@ -1132,6 +1192,8 @@ public class TextAreaSkin extends ComponentSkin
             nodeView = new ParagraphView((Paragraph)node);
         } else if (node instanceof TextNode) {
             nodeView = new TextNodeView((TextNode)node);
+        } else if (node instanceof ImageNode) {
+            nodeView = new ImageNodeView((ImageNode)node);
         } else {
             throw new IllegalArgumentException("Unsupported node type: "
                 + node.getClass().getName());

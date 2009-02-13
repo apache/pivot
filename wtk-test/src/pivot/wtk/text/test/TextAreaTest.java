@@ -25,6 +25,7 @@ import pivot.wtk.Frame;
 import pivot.wtk.ScrollPane;
 import pivot.wtk.TextArea;
 import pivot.wtk.text.Document;
+import pivot.wtk.text.ImageNode;
 import pivot.wtk.text.Paragraph;
 import pivot.wtk.text.PlainTextSerializer;
 import pivot.wtk.text.TextNode;
@@ -57,9 +58,14 @@ public class TextAreaTest implements Application {
         document.add(p2);
 
         Paragraph p3 = new Paragraph();
-        TextNode t3 = new TextNode("1234");
-        p3.add(t3);
+        ImageNode i3 = new ImageNode("pivot/wtk/text/test/IMG_0767_2.jpg");
+        p3.add(i3);
         document.add(p3);
+
+        Paragraph p4 = new Paragraph();
+        TextNode t4 = new TextNode("1234");
+        p4.add(t4);
+        document.add(p4);
 
         System.out.println(p2.getOffset());
         System.out.println(p3.getOffset());
