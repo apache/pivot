@@ -911,7 +911,8 @@ public class TextAreaSkin extends ComponentSkin
             caretOn = !caretOn;
 
             TextArea textArea = (TextArea)getComponent();
-            textArea.repaint(caret.x, caret.y, caret.width, caret.height, true);
+            textArea.repaint(caret.x + margin.left, caret.y + margin.top,
+                caret.width, caret.height, true);
         }
     }
 
@@ -1031,7 +1032,9 @@ public class TextAreaSkin extends ComponentSkin
                 && textArea.isFocused()
                 && caretOn) {
                 graphics.setPaint(Color.BLACK);
-                graphics.fill(caret);
+
+                // TODO Paint caret
+                // graphics.fill(caret);
             }
         }
     }
