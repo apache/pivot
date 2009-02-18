@@ -361,6 +361,10 @@ public class TextInput extends Component {
      * The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
+        if (selectionLength < 0) {
+            throw new IllegalArgumentException("selectionLength is negative.");
+        }
+
         if (selectionStart < 0
             || selectionStart + selectionLength > textBuilder.length()) {
             throw new IndexOutOfBoundsException();

@@ -15,6 +15,9 @@
  */
 package pivot.wtk.text;
 
+import pivot.collections.ArrayList;
+import pivot.collections.Sequence;
+
 /**
  * Element representing a paragraph.
  * <p>
@@ -36,6 +39,28 @@ public class Paragraph extends Block {
         super(paragraph, recursive);
     }
 
+    public Node removeRange(int offset, int characterCount) {
+        if (offset + characterCount == getCharacterCount()) {
+            characterCount--;
+        }
+
+        return super.removeRange(offset, characterCount);
+    }
+
+    @Override
+    public Node getRange(int offset, int characterCount) {
+        if (offset + characterCount == getCharacterCount()) {
+            characterCount--;
+        }
+
+        return super.getRange(offset, characterCount);
+    }
+
+    @Override
+    public int getCharacterCount() {
+        return super.getCharacterCount() + 1;
+    }
+
     @Override
     public void insert(Node node, int index) {
         if (node instanceof Element
@@ -45,6 +70,32 @@ public class Paragraph extends Block {
         }
 
         super.insert(node, index);
+    }
+
+    @Override
+    public Sequence<Integer> getPathAt(int offset) {
+        Sequence<Integer> path;
+
+        if (offset < super.getCharacterCount()) {
+            path = super.getPathAt(offset);
+        } else {
+            path = new ArrayList<Integer>();
+        }
+
+        return path;
+    }
+
+    @Override
+    public Node getDescendantAt(int offset) {
+        Node descendant;
+
+        if (offset < super.getCharacterCount()) {
+            descendant = super.getDescendantAt(offset);
+        } else {
+            descendant = this;
+        }
+
+        return descendant;
     }
 
     @Override

@@ -34,22 +34,22 @@ public class RangeTest {
         document.dumpOffsets();
 
         dumpIndexAt(2);
-        dumpIndexAt(14);
-        dumpIndexAt(25);
+        dumpIndexAt(17);
+        dumpIndexAt(31);
 
         dumpRange(1, 1);
-        dumpRange(1, 4);
-        dumpRange(3, 7);
-        dumpRange(4, 2);
+        dumpRange(1, 6);
+        dumpRange(3, 9);
+        dumpRange(4, 3);
 
-        document.removeRange(1, 3);
+        document.removeRange(1, 12);
         dumpRange(0, document.getCharacterCount());
         document.dumpOffsets();
 
         Document range = new Document();
         range.add(new Paragraph("123"));
 
-        document.insertRange(range, 1);
+        document.insertRange(range, 4);
         dumpRange(0, document.getCharacterCount());
         document.dumpOffsets();
 
@@ -65,13 +65,29 @@ public class RangeTest {
         dumpRange(0, document.getCharacterCount());
         document.dumpOffsets();
 
-        // TODO Test getDescendantAt() and getPathAt() methods
+        dumpPathAt(0);
+        dumpPathAt(2);
+        dumpPathAt(3);
+        dumpPathAt(5);
+        dumpPathAt(7);
 
-        // TODO Test normalize() method
+        dumpDescendantAt(0);
+        dumpDescendantAt(2);
+        dumpDescendantAt(3);
+        dumpDescendantAt(5);
+        dumpDescendantAt(7);
     }
 
     public static void dumpIndexAt(int offset) {
-        System.out.println("Index at " + offset + ": " + document.getIndexAt(offset) + "\n");
+        System.out.println("Index at " + offset + ": " + document.getIndexAt(offset));
+    }
+
+    public static void dumpPathAt(int offset) {
+        System.out.println("Path at " + offset + ": " + document.getPathAt(offset));
+    }
+
+    public static void dumpDescendantAt(int offset) {
+        System.out.println("Descendant at " + offset + ": " + document.getDescendantAt(offset));
     }
 
     public static void dumpRange(int offset, int characterCount) {

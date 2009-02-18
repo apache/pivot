@@ -50,16 +50,7 @@ public abstract class Element extends Node
         }
 
         public Node getRange(int offset, int characterCount) {
-            if (characterCount < 0) {
-                throw new IllegalArgumentException("characterCount is negative.");
-            }
-
-            if (offset < 0
-                || offset + characterCount > getCharacterCount()) {
-                throw new IndexOutOfBoundsException();
-            }
-
-            return duplicate(false);
+            throw new UnsupportedOperationException();
         }
 
         public int getCharacterCount() {
@@ -67,7 +58,7 @@ public abstract class Element extends Node
         }
 
         public Node duplicate(boolean recursive) {
-            return new NullNode();
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -190,25 +181,24 @@ public abstract class Element extends Node
                 Node segment = node.removeRange(offset - node.getOffset(), characterCount);
                 element.add(segment);
             } else {
-                // The range spans multiple child nodes; locate the first node
-                Node leadingSegment = null;
+                // The range spans multiple child nodes
                 Node startNode = get(start);
-
                 int leadingSegmentOffset = offset - startNode.getOffset();
+
+                Node endNode = get(end);
+                int trailingSegmentCharacterCount = (offset + characterCount)
+                    - endNode.getOffset();
+
+                // Extract the leading segment
+                Node leadingSegment = null;
                 if (leadingSegmentOffset > 0) {
                     leadingSegment = startNode.removeRange(leadingSegmentOffset,
                         startNode.getCharacterCount() - leadingSegmentOffset);
-
-                    characterCount -= leadingSegment.getCharacterCount();
                     start++;
                 }
 
-                // Locate the last node
+                // Extract the trailing segment
                 Node trailingSegment = null;
-                Node endNode = get(end);
-
-                int trailingSegmentCharacterCount = (offset + characterCount)
-                    - endNode.getOffset();
                 if (trailingSegmentCharacterCount < endNode.getCharacterCount()) {
                     trailingSegment = endNode.removeRange(0, trailingSegmentCharacterCount);
                     end--;
@@ -546,41 +536,6 @@ public abstract class Element extends Node
         }
 
         return descendant;
-    }
-
-    /**
-     * Recursively consolidates all contiguous text nodes.
-     */
-    public void normalize() {
-        int i = getLength() - 1;
-
-        while (i >= 0) {
-            Node node = get(i--);
-
-            if (node instanceof TextNode) {
-                // Determine the bounds of any contiguous text nodes
-                int j = i;
-                while (j >= 0
-                    && (get(j) instanceof TextNode)) {
-                    j--;
-                }
-
-                Sequence<Node> removed = remove(j + 1, i - j);
-
-                // Create a new text node containing the consolidated text
-                TextNode textNode = new TextNode();
-                for (int k = 0, n = removed.getLength(); k < n; k++) {
-                    textNode.insertRange(removed.get(k), textNode.getCharacterCount());
-                }
-
-                insert(textNode, j + 1);
-
-                i = j;
-            } else {
-                Element element = (Element)node;
-                element.normalize();
-            }
-        }
     }
 
     @Override

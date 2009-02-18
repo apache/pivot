@@ -112,7 +112,7 @@ public class ImageNode extends Node {
         }
 
         if (offset < 0
-            || offset + characterCount > getCharacterCount()) {
+            || offset + characterCount > 1) {
             throw new IndexOutOfBoundsException();
         }
 

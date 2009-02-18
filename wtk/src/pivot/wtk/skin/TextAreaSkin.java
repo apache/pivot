@@ -622,7 +622,7 @@ public class TextAreaSkin extends ComponentSkin
 
                 // TODO Don't hard-code padding; use the value specified
                 // by the Paragraph
-                setSize(width, y + 6);
+                setSize(width, y + 2);
             }
 
             super.validate();

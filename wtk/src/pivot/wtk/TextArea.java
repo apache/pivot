@@ -206,8 +206,15 @@ public class TextArea extends Component {
      * The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
-        if (document == null
-            || selectionStart < 0
+        if (document == null) {
+            throw new IllegalStateException("No document.");
+        }
+
+        if (selectionLength < 0) {
+            throw new IllegalArgumentException("selectionLength is negative.");
+        }
+
+        if (selectionStart < 0
             || selectionStart + selectionLength > document.getCharacterCount()) {
             throw new IndexOutOfBoundsException();
         }
