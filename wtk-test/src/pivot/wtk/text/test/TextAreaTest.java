@@ -20,6 +20,7 @@ import java.io.InputStream;
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Border;
+import pivot.wtk.Direction;
 import pivot.wtk.Display;
 import pivot.wtk.Frame;
 import pivot.wtk.ScrollPane;
@@ -58,6 +59,29 @@ public class TextAreaTest implements Application {
         frame.setTitle("Test");
         frame.setPreferredSize(640, 480);
         frame.open(display);
+
+        // TODO This is a workaround to a possible DropShadowDecorator bug;
+        // fix this bug (probably related to not recreating the buffered image
+        // every time)
+        frame.getDecorators().removeAll();
+
+        /*
+        textArea.setSelection(6, 7);
+        textArea.insertText("BRILLIG");
+        System.out.println(textArea.getSelectionStart() + ":" + textArea.getSelectionLength());
+
+        textArea.setSelection(14, 0);
+        textArea.insertParagraph();
+        System.out.println(textArea.getSelectionStart() + ":" + textArea.getSelectionLength());
+        */
+
+        textArea.setSelection(10, 0);
+        textArea.delete(Direction.BACKWARD);
+        System.out.println(textArea.getSelectionStart() + ":" + textArea.getSelectionLength());
+
+        textArea.setSelection(10, 0);
+        textArea.delete(Direction.FORWARD);
+        System.out.println(textArea.getSelectionStart() + ":" + textArea.getSelectionLength());
     }
 
     public boolean shutdown(boolean optional) {

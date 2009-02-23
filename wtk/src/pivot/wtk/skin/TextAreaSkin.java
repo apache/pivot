@@ -245,6 +245,14 @@ public class TextAreaSkin extends ComponentSkin
         public void offsetChanged(Node node, int previousOffset) {
             // No-op
         }
+
+        public void rangeInserted(Node node, int offset, int span) {
+            // No-op
+        }
+
+        public void rangeRemoved(Node node, int offset, int span) {
+            // No-op
+        }
     }
 
     /**
@@ -1034,7 +1042,7 @@ public class TextAreaSkin extends ComponentSkin
                 graphics.setPaint(Color.BLACK);
 
                 // TODO Paint caret
-                // graphics.fill(caret);
+                graphics.fill(caret);
             }
         }
     }

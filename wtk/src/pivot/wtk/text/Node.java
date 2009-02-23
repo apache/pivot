@@ -36,6 +36,18 @@ public abstract class Node {
                 listener.offsetChanged(node, previousOffset);
             }
         }
+
+        public void rangeInserted(Node node, int offset, int span) {
+            for (NodeListener listener : this) {
+                listener.rangeInserted(node, offset, span);
+            }
+        }
+
+        public void rangeRemoved(Node node, int offset, int span) {
+            for (NodeListener listener : this) {
+                listener.rangeRemoved(node, offset, span);
+            }
+        }
     }
 
     private Element parent = null;
@@ -104,6 +116,24 @@ public abstract class Node {
     public abstract Node removeRange(int offset, int characterCount);
 
     /**
+     * Replaces an existing range with a new range.
+     *
+     * @param offset
+     * @param characterCount
+     * @param range
+     *
+     * @return
+     * The removed range. This will be a copy of the node structure relative
+     * to this node.
+     */
+    public Node replaceRange(int offset, int characterCount, Node range) {
+        Node removed = removeRange(offset, characterCount);
+        insertRange(range, offset);
+
+        return removed;
+    }
+
+    /**
      * Returns a range from the node.
      *
      * @param offset
@@ -137,6 +167,8 @@ public abstract class Node {
         if (parent != null) {
             parent.rangeInserted(offset + this.offset, characterCount);
         }
+
+        nodeListeners.rangeInserted(this, offset, characterCount);
     }
 
     /**
@@ -149,6 +181,8 @@ public abstract class Node {
         if (parent != null) {
             parent.rangeRemoved(offset + this.offset, characterCount);
         }
+
+        nodeListeners.rangeRemoved(this, offset, characterCount);
     }
 
     /**

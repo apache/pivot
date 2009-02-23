@@ -180,6 +180,11 @@ public abstract class Element extends Node
                 Node node = get(start);
                 Node segment = node.removeRange(offset - node.getOffset(), characterCount);
                 element.add(segment);
+
+                // If the node's character count is now zero, remove it
+                if (node.getCharacterCount() == 0) {
+                    remove(start, 1);
+                }
             } else {
                 // The range spans multiple child nodes
                 Node startNode = get(start);

@@ -67,23 +67,14 @@ public class ShadeDecorator implements Decorator {
         this.color = color;
     }
 
-    /**
-     *
-     */
     public float getOpacity() {
         return opacity;
     }
 
-    /**
-     *
-     */
     public void setOpacity(float opacity) {
         this.opacity = opacity;
     }
 
-    /**
-     *
-     */
     public void setOpacity(Number opacity) {
         if (opacity == null) {
             throw new IllegalArgumentException("opacity is null.");
@@ -92,16 +83,10 @@ public class ShadeDecorator implements Decorator {
         setOpacity(opacity.floatValue());
     }
 
-    /**
-     *
-     */
     public Color getColor() {
         return color;
     }
 
-    /**
-     *
-     */
     public void setColor(Color color) {
         if (color == null) {
             throw new IllegalArgumentException("color is null.");

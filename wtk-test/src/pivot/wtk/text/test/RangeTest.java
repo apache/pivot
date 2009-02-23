@@ -16,6 +16,9 @@
 package pivot.wtk.text.test;
 
 import pivot.wtk.text.Document;
+import pivot.wtk.text.Element;
+import pivot.wtk.text.Node;
+import pivot.wtk.text.NodeListener;
 import pivot.wtk.text.Paragraph;
 import pivot.wtk.text.PlainTextSerializer;
 
@@ -23,7 +26,66 @@ public class RangeTest {
     private static Document document = null;
 
     public static void main(String[] args) {
+        NodeListener documentListener = new NodeListener() {
+            public void parentChanged(Node node, Element previousParent) {
+            }
+
+            public void offsetChanged(Node node, int previousOffset) {
+            }
+
+            public void rangeInserted(Node node, int offset, int span) {
+                System.out.println("[" + offset + ":" + span + "] inserted");
+            }
+
+            public void rangeRemoved(Node node, int offset, int span) {
+                System.out.println("[" + offset + ":" + span + "] removed");
+            }
+        };
+
+        // Test 1
         document = new Document();
+        document.getNodeListeners().add(documentListener);
+
+        document.add(new Paragraph("ABCD"));
+        document.add(new Paragraph("EF"));
+        System.out.println(document.getIndexAt(5));
+        document.add(new Paragraph("GHI"));
+        document.add(new Paragraph("JKLMN"));
+        document.add(new Paragraph("OP"));
+
+        System.out.println(document.getIndexAt(5));
+
+        document.remove(1, 2);
+        System.out.println(document.getCharacterCount());
+        document.dumpOffsets();
+        dumpRange(0, document.getCharacterCount());
+
+        document.remove(0, 1);
+        System.out.println(document.getCharacterCount());
+        document.dumpOffsets();
+        dumpRange(0, document.getCharacterCount());
+
+        document.remove(0, 2);
+        System.out.println(document.getCharacterCount());
+        document.dumpOffsets();
+        dumpRange(0, document.getCharacterCount());
+
+        // Test 2
+        document = new Document();
+        document.getNodeListeners().add(documentListener);
+
+        document.add(new Paragraph("ABCD"));
+
+        Document range = new Document();
+        range.add(new Paragraph("123"));
+        document.insertRange(range, 2);
+        System.out.println(document.getCharacterCount());
+        dumpRange(0, document.getCharacterCount());
+
+        // Test 3
+        document = new Document();
+        document.getNodeListeners().add(documentListener);
+
         document.add(new Paragraph("ABCDE"));
         document.add(new Paragraph("FGH"));
         document.add(new Paragraph("IJKLMNO"));
@@ -46,7 +108,7 @@ public class RangeTest {
         dumpRange(0, document.getCharacterCount());
         document.dumpOffsets();
 
-        Document range = new Document();
+        range = new Document();
         range.add(new Paragraph("123"));
 
         document.insertRange(range, 4);

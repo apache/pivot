@@ -21,9 +21,15 @@ import java.io.StringWriter;
 
 import pivot.serialization.SerializationException;
 import pivot.util.ListenerList;
+import pivot.wtk.media.Image;
 import pivot.wtk.text.Document;
-import pivot.wtk.text.DocumentListener;
+import pivot.wtk.text.Element;
+import pivot.wtk.text.ImageNode;
+import pivot.wtk.text.Node;
+import pivot.wtk.text.NodeListener;
+import pivot.wtk.text.Paragraph;
 import pivot.wtk.text.PlainTextSerializer;
+import pivot.wtk.text.TextNode;
 
 /**
  * Component that allows a user to enter and edit multiple lines of (optionally
@@ -56,16 +62,22 @@ public class TextArea extends Component {
     private int selectionStart = 0;
     private int selectionLength = 0;
 
-    private DocumentListener documentListener = new DocumentListener() {
-        public void rangeInserted(Document document, int offset, int span) {
+    private NodeListener documentListener = new NodeListener() {
+        public void parentChanged(Node node, Element previousParent) {
+        }
+
+        public void offsetChanged(Node node, int previousOffset) {
+        }
+
+        public void rangeInserted(Node node, int offset, int characterCount) {
             int previousSelectionStart = selectionStart;
             int previousSelectionLength = selectionLength;
 
-            if (selectionStart + selectionLength >= offset) {
-                if (selectionStart >= offset) {
-                    selectionStart += span;
+            if (selectionStart + selectionLength > offset) {
+                if (selectionStart > offset) {
+                    selectionStart += characterCount;
                 } else {
-                    selectionLength += span;
+                    selectionLength += characterCount;
                 }
             }
 
@@ -76,20 +88,16 @@ public class TextArea extends Component {
             }
         }
 
-        public void rangeRemoved(Document document, int offset, int span) {
-            int start = offset;
-            int end = offset + span;
-
+        public void rangeRemoved(Node node, int offset, int characterCount) {
             int previousSelectionStart = selectionStart;
             int previousSelectionLength = selectionLength;
 
-            int selectionEnd = selectionStart + selectionLength - 1;
-
-            if (selectionEnd >= start) {
-                selectionStart = Math.min(start, selectionStart);
-                selectionEnd = Math.max(end - 1, selectionEnd) - span;
-
-                selectionLength = selectionEnd - selectionStart + 1;
+            if (selectionStart + selectionLength > offset) {
+                if (selectionStart > offset) {
+                    selectionStart -= characterCount;
+                } else {
+                    selectionLength -= characterCount;
+                }
             }
 
             if (previousSelectionStart != selectionStart
@@ -128,11 +136,11 @@ public class TextArea extends Component {
 
         if (previousDocument != document) {
             if (previousDocument != null) {
-                previousDocument.getDocumentListeners().remove(documentListener);
+                previousDocument.getNodeListeners().remove(documentListener);
             }
 
             if (document != null) {
-                document.getDocumentListeners().add(documentListener);
+                document.getNodeListeners().add(documentListener);
             }
 
             this.document = document;
@@ -232,6 +240,115 @@ public class TextArea extends Component {
         }
     }
 
+    public void insertText(char character) {
+        insertText(Character.toString(character));
+    }
+
+    public void insertText(String text) {
+        if (text == null) {
+            throw new IllegalArgumentException("text is null.");
+        }
+
+        if (document == null) {
+            throw new IllegalStateException("No document.");
+        }
+
+        if (selectionLength > 0) {
+            document.removeRange(selectionStart, selectionLength);
+        }
+
+        Node descendant = document.getDescendantAt(selectionStart);
+        Element parent = descendant.getParent();
+
+        Element range = (Element)parent.duplicate(false);
+        range.add(new TextNode(text));
+
+        int offset = selectionStart - parent.getOffset();
+        parent.insertRange(range, offset);
+
+        // Set the selection start to the character following the insertion
+        setSelection(selectionStart + text.length(), selectionLength);
+    }
+
+    public void insertImage(Image image) {
+        if (image == null) {
+            throw new IllegalArgumentException("image is null.");
+        }
+
+        if (document == null) {
+            throw new IllegalStateException("No document.");
+        }
+
+        if (selectionLength > 0) {
+            document.removeRange(selectionStart, selectionLength);
+        }
+
+        Node descendant = document.getDescendantAt(selectionStart);
+        Element parent = descendant.getParent();
+
+        Element range = (Element)parent.duplicate(false);
+        range.add(new ImageNode(image));
+
+        int offset = selectionStart - parent.getOffset();
+        parent.insertRange(range, offset);
+
+        // Set the selection start to the character following the insertion
+        setSelection(selectionStart + 1, selectionLength);
+    }
+
+    public void insertParagraph() {
+        // TODO Add a flag indicating if the paragraph should be added inline
+        // or as a top-level element?
+
+        if (document == null) {
+            throw new IllegalStateException("No document.");
+        }
+
+        if (selectionLength > 0) {
+            document.removeRange(selectionStart, selectionLength);
+        }
+
+        Document range = new Document();
+        Paragraph paragraph = new Paragraph();
+        range.add(paragraph);
+        document.insertRange(range, selectionStart);
+
+        // Set the selection start to the character following the insertion
+        setSelection(selectionStart + paragraph.getCharacterCount(), selectionLength);
+    }
+
+    public void delete(Direction direction) {
+        if (direction == null) {
+            throw new IllegalArgumentException("direction is null.");
+        }
+
+        if (document == null) {
+            throw new IllegalStateException("No document.");
+        }
+
+        if (selectionLength > 0) {
+            document.removeRange(selectionStart, selectionLength);
+        } else {
+            int offset = selectionStart;
+
+            switch (direction) {
+                case FORWARD: {
+                    offset++;
+                    break;
+                }
+
+                case BACKWARD: {
+                    offset--;
+                    break;
+                }
+            }
+
+            if (offset >= 0
+                && offset < document.getCharacterCount()) {
+                document.removeRange(offset, 1);
+            }
+        }
+    }
 
     public ListenerList<TextAreaListener> getTextAreaListeners() {
         return textAreaListeners;

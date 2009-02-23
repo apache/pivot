@@ -15,31 +15,12 @@
  */
 package pivot.wtk.text;
 
-import pivot.util.ListenerList;
-
 /**
  * Node representing the root of an element hierarchy.
  *
  * @author gbrown
  */
 public class Document extends Block {
-    private static class DocumentListenerList extends ListenerList<DocumentListener>
-        implements DocumentListener {
-        public void rangeInserted(Document document, int offset, int span) {
-            for (DocumentListener listener : this) {
-                listener.rangeInserted(document, offset, span);
-            }
-        }
-
-        public void rangeRemoved(Document document, int offset, int span) {
-            for (DocumentListener listener : this) {
-                listener.rangeRemoved(document, offset, span);
-            }
-        }
-    }
-
-    private DocumentListenerList documentListeners = new DocumentListenerList();
-
     public Document() {
         super();
     }
@@ -68,23 +49,5 @@ public class Document extends Block {
         }
 
         super.insert(node, index);
-    }
-
-    @Override
-    protected void rangeInserted(int offset, int characterCount) {
-        super.rangeInserted(offset, characterCount);
-
-        documentListeners.rangeInserted(this, offset, characterCount);
-    }
-
-    @Override
-    protected void rangeRemoved(int offset, int characterCount) {
-        super.rangeRemoved(offset, characterCount);
-
-        documentListeners.rangeRemoved(this, offset, characterCount);
-    }
-
-    public ListenerList<DocumentListener> getDocumentListeners() {
-        return documentListeners;
     }
 }

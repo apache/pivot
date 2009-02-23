@@ -1585,14 +1585,14 @@ public abstract class Component implements ConstrainedVisual {
 
             if (width > 0
                 && height > 0) {
-                parent.repaint(x + this.x, y + this.y, width, height);
+                parent.repaint(x + this.x, y + this.y, width, height, immediate);
 
                 for (Decorator decorator : decorators) {
                     Bounds affectedArea = decorator.getAffectedArea(this, x, y, width, height);
                     parent.repaint(affectedArea.x + this.x,
                         affectedArea.y + this.y,
                         affectedArea.width,
-                        affectedArea.height);
+                        affectedArea.height, immediate);
                 }
             }
         }

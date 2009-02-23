@@ -37,4 +37,22 @@ public interface NodeListener {
      * @param previousOffset
      */
     public void offsetChanged(Node node, int previousOffset);
+
+    /**
+     * Called when a range has been inserted into a node.
+     *
+     * @param node
+     * @param offset
+     * @param span
+     */
+    public void rangeInserted(Node node, int offset, int span);
+
+    /**
+     * Called when a range has been removed from a node.
+     *
+     * @param node
+     * @param offset
+     * @param span
+     */
+    public void rangeRemoved(Node node, int offset, int span);
 }
