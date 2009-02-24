@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright (c) 2008 Satellite Consulting, Inc. -->
+<Window title="HTTP Client"
+  maximized="true"
+  xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+  xmlns="pivot.wtk">
+  <content>
+    <Border styles="{backgroundColor:10, thickness:0, padding:8}">
+      <content>
+        <Border styles="{padding:0}">
+          <content>
+            <ScrollPane styles="{backgroundColor:11}">
+              <view>
+                <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:6}">
+                  <Rollup expanded="true">
+                    <Label text="Server" styles="{fontBold:true, fontSize:12, color:13}" />
+                    <wtkx:include namespace="server" src="server.wtkx" />
+                  </Rollup>
+                  <Rollup expanded="true">
+                    <Label text="Authentication" styles="{fontBold:true, fontSize:12, color:13}" />
+                    <wtkx:include namespace="authentication" src="authentication.wtkx" />
+                  </Rollup>
+                  <Rollup expanded="true">
+                    <Label text="Request" styles="{fontBold:true, fontSize:12, color:13}" />
+                    <wtkx:include namespace="request" src="request.wtkx" />
+                  </Rollup>
+                  <FlowPane styles="{padding:12}">
+                    <PushButton wtkx:id="submit" buttonData="Submit" />
+                  </FlowPane>
+                </FlowPane>
+              </view>
+            </ScrollPane>
+          </content>
+        </Border>
+      </content>
+    </Border>
+  </content>
+</Window>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright (c) 2008 Satellite Consulting, Inc. -->
+<Border xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+  xmlns:swing="javax.swing"
+  xmlns="pivot.wtk"
+  styles="{padding:8}">
+  <content>
+    <Form wtkx:id="form">
+      <sections>
+        <Form.Section>
+          <TextInput wtkx:id="path"
+            Form.name="Path"
+            text="/ui/sb" />
+          <FlowPane Form.name="Method">
+            <RadioButton buttonData="GET" group="method" />
+            <RadioButton buttonData="POST" group="method" selected="true" />
+            <RadioButton buttonData="PUT" group="method" />
+            <RadioButton buttonData="DELETE" group="method" />
+          </FlowPane>
+          <SwingAdapter wtkx:id="body"
+            Form.name="Body">
+            <swingComponent>
+              <swing:JScrollPane wtkx:id="scrollPane">
+                <viewport>
+                  <swing:JViewport>
+                    <view>
+                      <swing:JTextArea wtkx:id="bodyText" rows="10" lineWrap="true" wrapStyleWord="true" text="[{i:'2',exec:'/action/login',args:['http://10.17.195.99:80/sdk','administrator','vmware123']}]" />
+                    </view>
+                  </swing:JViewport>
+                </viewport>
+              </swing:JScrollPane>
+            </swingComponent>
+          </SwingAdapter>
+        </Form.Section>
+      </sections>
+    </Form>
+  </content>
+</Border>

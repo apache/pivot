@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright (c) 2008 Satellite Consulting, Inc. -->
+<Border xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+  xmlns="pivot.wtk"
+  styles="{padding:8}">
+  <content>
+    <Form wtkx:id="form">
+      <sections>
+        <Form.Section>
+          <TextInput wtkx:id="host"
+            Form.name="Host"
+            textSize="40"
+            text="g11n-auto-130.eng.vmware.com" />
+          <TextInput wtkx:id="port"
+            Form.name="Port"
+            text="443" />
+          <Checkbox wtkx:id="secure"
+            Form.name="Secure"
+            selected="true" />
+        </Form.Section>
+      </sections>
+    </Form>
+  </content>
+</Border>
