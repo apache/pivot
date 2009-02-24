@@ -20,58 +20,27 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.CharBuffer;
 import javax.swing.JTextArea;
 
 import pivot.collections.Dictionary;
-import pivot.collections.List;
-import pivot.collections.Map;
-import pivot.collections.immutable.ImmutableMap;
 import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
-import pivot.util.ListenerList;
-import pivot.util.Resources;
-import pivot.util.Vote;
-import pivot.util.concurrent.Task;
-import pivot.util.concurrent.TaskGroup;
-import pivot.util.concurrent.TaskListener;
 import pivot.web.BasicAuthentication;
 import pivot.web.DeleteQuery;
 import pivot.web.GetQuery;
 import pivot.web.PostQuery;
 import pivot.web.PutQuery;
 import pivot.web.Query;
-import pivot.wtk.Action;
 import pivot.wtk.Application;
-import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
-import pivot.wtk.CardPane;
 import pivot.wtk.Checkbox;
-import pivot.wtk.Component;
-import pivot.wtk.Dialog;
 import pivot.wtk.Display;
-import pivot.wtk.Keyboard;
-import pivot.wtk.MessageType;
-import pivot.wtk.Meter;
-import pivot.wtk.Prompt;
-import pivot.wtk.PushButton;
-import pivot.wtk.Sheet;
-import pivot.wtk.SheetCloseListener;
-import pivot.wtk.TaskAdapter;
 import pivot.wtk.TextInput;
 import pivot.wtk.Window;
-import pivot.wtk.effects.SaturationDecorator;
-import pivot.wtk.effects.Transition;
-import pivot.wtk.effects.TransitionListener;
-import pivot.wtk.effects.easing.Easing;
-import pivot.wtk.effects.easing.Quadratic;
 import pivot.wtkx.WTKXSerializer;
 
 /**
- *
+ * HTTP client.
  *
  * @author tvolkert
  */
@@ -192,10 +161,9 @@ public class HTTPClient implements Application {
 
     // Application methods
 
-    @Override
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        System.setProperty("javax.net.ssl.trustStore", "/mts-cm/home/tvolkert/project/sci/etc/sci.keystore"); 
-        System.setProperty("javax.net.ssl.keyStorePassword", "bigbird1"); 
+        System.setProperty("javax.net.ssl.trustStore", "/mts-cm/home/tvolkert/project/sci/etc/sci.keystore");
+        System.setProperty("javax.net.ssl.keyStorePassword", "bigbird1");
 
         // Load the main app window
         serializer = new WTKXSerializer();
@@ -244,18 +212,15 @@ public class HTTPClient implements Application {
         */
     }
 
-    @Override
     public boolean shutdown(boolean optional) throws Exception {
         // No-op
         return true;
     }
 
-    @Override
     public void suspend() throws Exception {
         // No-op
     }
 
-    @Override
     public void resume() throws Exception {
         // No-op
     }
