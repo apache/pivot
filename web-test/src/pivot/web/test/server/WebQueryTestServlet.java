@@ -27,7 +27,6 @@ import pivot.collections.HashMap;
 import pivot.serialization.BinarySerializer;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
-import pivot.serialization.Serializer;
 import pivot.util.Base64;
 
 public class WebQueryTestServlet extends HttpServlet {
@@ -81,7 +80,7 @@ public class WebQueryTestServlet extends HttpServlet {
 
         response.setStatus(200);
 
-        Serializer serializer = new BinarySerializer();
+        BinarySerializer serializer = new BinarySerializer();
         response.setContentType(serializer.getMIMEType(map));
 
         try {

@@ -17,6 +17,7 @@ package pivot.core.test;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import pivot.collections.List;
 import pivot.serialization.CSVSerializer;
 
 public class CSVSerializerTest {
@@ -38,10 +39,10 @@ public class CSVSerializerTest {
         for (int i = 0, n = testStrings.length; i < n; i++) {
             try {
                 System.out.println("Input: " + testStrings[i]);
-                Object object = csvSerializer.readObject(new StringReader(testStrings[i]));
+                List<?> objects = csvSerializer.readObject(new StringReader(testStrings[i]));
 
                 StringWriter writer = new StringWriter();
-                csvSerializer.writeObject(object, writer);
+                csvSerializer.writeObject(objects, writer);
                 System.out.println("Output: " + writer);
             } catch(Exception exception) {
                 System.out.println(exception);

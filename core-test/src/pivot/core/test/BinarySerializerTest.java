@@ -23,7 +23,7 @@ import pivot.serialization.BinarySerializer;
 public class BinarySerializerTest {
 
     public static void main(String[] args) {
-        Serializer serializer = new BinarySerializer();
+        Serializer<Object> serializer = new BinarySerializer();
 
         Object[] testData = {
             "Hello World",

@@ -74,7 +74,7 @@ public abstract class Image implements Visual {
 
                     BufferedImageSerializer serializer = new BufferedImageSerializer();
                     BufferedImage bufferedImage =
-                        (BufferedImage)serializer.readObject(new MonitoredInputStream(inputStream));
+                        serializer.readObject(new MonitoredInputStream(inputStream));
                     image = new Picture(bufferedImage);
                 } finally {
                     if (inputStream != null) {

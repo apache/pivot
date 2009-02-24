@@ -31,7 +31,7 @@ import pivot.serialization.Serializer;
  *
  * @author tvolkert
  */
-public class BufferedImageSerializer implements Serializer {
+public class BufferedImageSerializer implements Serializer<BufferedImage> {
     /**
      * Supported image formats.
      *
@@ -95,7 +95,7 @@ public class BufferedImageSerializer implements Serializer {
      * @return
      * A <tt>BufferedImage</tt> object
      */
-    public Object readObject(InputStream inputStream) throws IOException,
+    public BufferedImage readObject(InputStream inputStream) throws IOException,
         SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
@@ -109,23 +109,20 @@ public class BufferedImageSerializer implements Serializer {
     /**
      * Writes a buffered image to an output stream.
      */
-    public void writeObject(Object object, OutputStream outputStream)
+    public void writeObject(BufferedImage bufferedImage, OutputStream outputStream)
         throws IOException, SerializationException {
-        if (object == null) {
-            throw new IllegalArgumentException("object is null.");
+        if (bufferedImage == null) {
+            throw new IllegalArgumentException("bufferedImage is null.");
         }
 
         if (outputStream == null) {
             throw new IllegalArgumentException("outputStream is null.");
         }
 
-        BufferedImage bufferedImage = (BufferedImage)object;
         ImageIO.write(bufferedImage, outputFormat.getName(), outputStream);
     }
 
-    public String getMIMEType(Object object) {
-        // TODO Are there parameters we should add here?
-
+    public String getMIMEType(BufferedImage bufferedImage) {
         return outputFormat.getMIMEType();
     }
 }

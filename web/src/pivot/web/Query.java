@@ -201,7 +201,7 @@ public abstract class Query<V> extends IOTask<V> {
     private RequestPropertiesDictionary requestPropertiesDictionary = new RequestPropertiesDictionary();
     private ResponsePropertiesDictionary responsePropertiesDictionary = new ResponsePropertiesDictionary();
 
-    private Serializer serializer = new JSONSerializer();
+    private Serializer<?> serializer = new JSONSerializer();
 
     private volatile long bytesExpected = -1;
 
@@ -320,7 +320,7 @@ public abstract class Query<V> extends IOTask<V> {
      * Returns the serializer used to stream the value passed to or from the
      * web query. By default, an instance of {@link JSONSerializer} is used.
      */
-    public Serializer getSerializer() {
+    public Serializer<?> getSerializer() {
         return serializer;
     }
 
@@ -329,8 +329,9 @@ public abstract class Query<V> extends IOTask<V> {
      * web query.
      *
      * @param serializer
+     * The serializer (must be non-null).
      */
-    public void setSerializer(Serializer serializer) {
+    public void setSerializer(Serializer<?> serializer) {
         if (serializer == null) {
             throw new IllegalArgumentException("serializer is null.");
         }
@@ -384,10 +385,13 @@ public abstract class Query<V> extends IOTask<V> {
         return bytesExpected;
     }
 
+    @SuppressWarnings("unchecked")
     protected Object execute(Method method, Object value)
         throws QueryException {
         URL location = getLocation();
         HttpURLConnection connection = null;
+
+        Serializer<Object> serializer = (Serializer<Object>)this.serializer;
 
         bytesSent = 0;
         bytesReceived = 0;

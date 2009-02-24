@@ -46,7 +46,7 @@ import pivot.collections.Sequence;
  *
  * @author gbrown
  */
-public class CSVSerializer implements Serializer {
+public class CSVSerializer implements Serializer<List<?>> {
     /**
      * Class representing the serializers key sequence.
      */
@@ -148,13 +148,13 @@ public class CSVSerializer implements Serializer {
      *
      * @see #readObject(Reader)
      */
-    public Object readObject(InputStream inputStream)
+    public List<?> readObject(InputStream inputStream)
         throws IOException, SerializationException {
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset),
             BUFFER_SIZE);
-        Object object = readObject(reader);
+        List<?> objects = readObject(reader);
 
-        return object;
+        return objects;
     }
 
     /**
@@ -164,13 +164,13 @@ public class CSVSerializer implements Serializer {
      * The reader from which data will be read.
      *
      * @return
-     * An instance of List<Object> containing the data read from the CSV file.
+     * A list containing the data read from the CSV file.
      * The list items are instances of Dictionary<String, Object> populated by
      * mapping columns in the CSV file to keys in the key sequence.
      */
-    public Object readObject(Reader reader)
+    public List<?> readObject(Reader reader)
         throws IOException, SerializationException {
-        ArrayList<Dictionary<String, Object>> items = new ArrayList<Dictionary<String, Object>>();
+        ArrayList<Object> items = new ArrayList<Object>();
 
         // Move to the first character
         c = reader.read();
@@ -278,20 +278,20 @@ public class CSVSerializer implements Serializer {
      * @param outputStream
      * The output stream to which data will be written.
      *
-     * @see #writeObject(Object, Writer)
+     * @see #writeObject(List<?>, Writer)
      */
-    public void writeObject(Object object, OutputStream outputStream)
+    public void writeObject(List<?> objects, OutputStream outputStream)
         throws IOException, SerializationException {
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
             BUFFER_SIZE);
-        writeObject(object, writer);
+        writeObject(objects, writer);
     }
 
     /**
      * Writes values to a comma-separated value stream.
      *
      * @param object
-     * An instance of List<Object> containing the data to write to the CSV
+     * A list containing the data to write to the CSV
      * file. List items must be instances of Dictionary<String, Object>. The
      * dictionary values will be written out in the order specified by the
      * key sequence.
@@ -300,15 +300,15 @@ public class CSVSerializer implements Serializer {
      * The writer to which data will be written.
      */
     @SuppressWarnings("unchecked")
-    public void writeObject(Object object, Writer writer)
+    public void writeObject(List<?> objects, Writer writer)
         throws IOException, SerializationException {
         if (writer == null) {
             throw new IllegalArgumentException("writer is null.");
         }
 
-        List<Dictionary<String, Object>> items = (List<Dictionary<String, Object>>)object;
+        for (Object object : objects) {
+            Dictionary<String, Object> item = (Dictionary<String, Object>)object;
 
-        for (Dictionary<String, Object> item : items) {
             for (int i = 0, n = keys.getLength(); i < n; i++) {
                 String key = keys.get(i);
 
@@ -326,7 +326,7 @@ public class CSVSerializer implements Serializer {
         writer.flush();
     }
 
-    public String getMIMEType(Object object) {
+    public String getMIMEType(List<?> objects) {
         return MIME_TYPE + "; charset=" + charset.name();
     }
 }

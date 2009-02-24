@@ -30,7 +30,7 @@ import pivot.collections.adapter.MapAdapter;
  * @author smartini
  * @author gbrown
  */
-public class PropertiesSerializer implements Serializer {
+public class PropertiesSerializer implements Serializer<Map<?, ?>> {
     public static final String MIME_TYPE = "text/plain";
 
     /**
@@ -43,8 +43,7 @@ public class PropertiesSerializer implements Serializer {
      * An instance of {@link Map} containing the data read from the properties
      * file. Both keys and values are strings.
      */
-    @SuppressWarnings("unchecked")
-    public Object readObject(InputStream inputStream) throws IOException,
+    public Map<?, ?> readObject(InputStream inputStream) throws IOException,
         SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
@@ -68,21 +67,17 @@ public class PropertiesSerializer implements Serializer {
      * The output stream to which data will be written.
      */
     @SuppressWarnings("unchecked")
-    public void writeObject(Object object, OutputStream outputStream) throws IOException,
+    public void writeObject(Map<?, ?> object, OutputStream outputStream) throws IOException,
         SerializationException {
-        if (!(object instanceof Map<?, ?>)) {
-            throw new IllegalArgumentException("object must be an instance of "
-                + Map.class.getName());
-        }
-
         if (outputStream == null) {
             throw new IllegalArgumentException("outputStream is null.");
         }
 
-        Map<String, Object> map = (Map<String, Object>) object;
+        Map<Object, Object> map = (Map<Object, Object>)object;
+
         Properties properties = new Properties();
 
-        for (String key : map) {
+        for (Object key : map) {
             Object value = map.get(key);
             if (value != null) {
                 value = value.toString();
@@ -94,7 +89,7 @@ public class PropertiesSerializer implements Serializer {
         properties.store(outputStream, null);
     }
 
-    public String getMIMEType(Object object) {
+    public String getMIMEType(Map<?, ?> object) {
         return MIME_TYPE;
     }
 }

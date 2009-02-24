@@ -23,9 +23,13 @@ import java.io.IOException;
  * Defines an interface for writing objects to and reading objects from a data
  * stream.
  *
+ * @param <T>
+ * The type of data being read and written.
+ *
  * @author gbrown
+ * @author tvolkert
  */
-public interface Serializer {
+public interface Serializer<T> {
     /**
      * Reads an object from an input stream.
      *
@@ -35,7 +39,7 @@ public interface Serializer {
      * @return
      * The deserialized object.
      */
-    public Object readObject(InputStream inputStream) throws IOException, SerializationException;
+    public T readObject(InputStream inputStream) throws IOException, SerializationException;
 
     /**
      * Writes an object to an output stream.
@@ -46,7 +50,7 @@ public interface Serializer {
      * @param outputStream
      * The data stream to which the object will be written.
      */
-    public void writeObject(Object object, OutputStream outputStream) throws IOException, SerializationException;
+    public void writeObject(T object, OutputStream outputStream) throws IOException, SerializationException;
 
     /**
      * Returns the MIME type of the data read and written by this serializer.
@@ -56,5 +60,5 @@ public interface Serializer {
      * MIME type containing more detailed information about the data. If
      * <tt>null</tt>, the base MIME type is returned.
      */
-    public String getMIMEType(Object object);
+    public String getMIMEType(T object);
 }

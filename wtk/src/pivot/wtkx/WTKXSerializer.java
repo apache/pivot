@@ -59,7 +59,7 @@ import pivot.util.Resources;
  *
  * @author gbrown
  */
-public class WTKXSerializer implements Serializer {
+public class WTKXSerializer implements Serializer<Object> {
     private static class Element  {
         public enum Type {
             INSTANCE,

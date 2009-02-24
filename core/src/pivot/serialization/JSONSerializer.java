@@ -42,7 +42,7 @@ import pivot.collections.Sequence;
  *
  * @author gbrown
  */
-public class JSONSerializer implements Serializer {
+public class JSONSerializer implements Serializer<Object> {
     private Charset charset = null;
 
     private int c = -1;

@@ -29,7 +29,7 @@ import java.io.Serializable;
  *
  * @author gbrown
  */
-public class BinarySerializer implements Serializer {
+public class BinarySerializer implements Serializer<Object> {
     public static final String MIME_TYPE = "application/x-java-serialized-object";
     public static final String CLASS_PARAMETER = "class";
 

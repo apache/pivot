@@ -204,7 +204,7 @@ public abstract class QueryServlet extends HttpServlet {
     private RequestPropertiesDictionary requestPropertiesDictionary = new RequestPropertiesDictionary();
     private ResponsePropertiesDictionary responsePropertiesDictionary = new ResponsePropertiesDictionary();
 
-    private Serializer serializer = new JSONSerializer();
+    private Serializer<?> serializer = new JSONSerializer();
 
     private static final String BASIC_AUTHENTICATION_TAG = "Basic";
     private static final String HTTP_PROTOCOL = "http";
@@ -350,7 +350,7 @@ public abstract class QueryServlet extends HttpServlet {
      * Returns the serializer used to stream the value passed to or from the
      * web query. By default, an instance of {@link JSONSerializer} is used.
      */
-    public Serializer getSerializer() {
+    public Serializer<?> getSerializer() {
         return serializer;
     }
 
@@ -359,8 +359,9 @@ public abstract class QueryServlet extends HttpServlet {
      * web query.
      *
      * @param serializer
+     * The serializer (must be non-null).
      */
-    public void setSerializer(Serializer serializer) {
+    public void setSerializer(Serializer<?> serializer) {
         if (serializer == null) {
             throw new IllegalArgumentException("serializer is null.");
         }
@@ -510,8 +511,11 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected final void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
+        Serializer<Object> serializer = (Serializer<Object>)this.serializer;
+
         try {
             Object result = doGet();
 
