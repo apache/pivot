@@ -194,7 +194,7 @@
     </target>
 
     <!-- Web -->
-    <target name="web">
+    <target name="web" depends="core">
         <mkdir dir="${web}/${bin}"/>
 
         <!-- Compile source files -->
@@ -255,7 +255,7 @@
     </target>
 
     <!-- Web Test -->
-    <target name="web-test" depends="web">
+    <target name="web-test" depends="web, wtk">
         <mkdir dir="${webtest}/${bin}"/>
 
         <!-- Compile source files -->
