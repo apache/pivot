@@ -24,6 +24,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Iterator;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.io.IOTask;
@@ -188,6 +191,7 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     private URL locationContext = null;
+    private HostnameVerifier hostnameVerifier = null;
 
     private HashMap<String, String> arguments = new HashMap<String, String>();
     private HashMap<String, String> requestProperties = new HashMap<String, String>();
@@ -246,6 +250,14 @@ public abstract class Query<V> extends IOTask<V> {
     public boolean isSecure() {
         String protocol = locationContext.getProtocol();
         return protocol.equalsIgnoreCase(HTTPS_PROTOCOL);
+    }
+
+    public HostnameVerifier getHostnameVerifier() {
+        return hostnameVerifier;
+    }
+
+    public void setHostnameVerifier(HostnameVerifier hostnameVerifier) {
+        this.hostnameVerifier = hostnameVerifier;
     }
 
     public URL getLocation() {
@@ -395,9 +407,16 @@ public abstract class Query<V> extends IOTask<V> {
             connection.setInstanceFollowRedirects(false);
             connection.setUseCaches(false);
 
+            if (connection instanceof HttpsURLConnection
+                && hostnameVerifier != null) {
+                HttpsURLConnection httpsConnection = (HttpsURLConnection)connection;
+                httpsConnection.setHostnameVerifier(hostnameVerifier);
+            }
+
             // Set the request headers
+            connection.setRequestProperty("Content-Type", serializer.getMIMEType(value));
             for (String key : requestProperties) {
-                connection.addRequestProperty(key, requestProperties.get(key));
+                connection.setRequestProperty(key, requestProperties.get(key));
             }
 
             // Set the input/output state
