@@ -785,13 +785,17 @@ public abstract class Component implements ConstrainedVisual {
             invalidate();
 
             // Redraw the region formerly occupied by this component
-            repaint();
+            if (parent != null) {
+                parent.repaint(getDecoratedBounds());
+            }
 
             // Set the size of the skin
             skin.setSize(width, height);
 
             // Redraw the region currently occupied by this component
-            repaint();
+            if (parent != null) {
+                parent.repaint(getDecoratedBounds());
+            }
 
             componentListeners.sizeChanged(this, previousWidth, previousHeight);
         }
@@ -1047,14 +1051,18 @@ public abstract class Component implements ConstrainedVisual {
         if (previousX != x
             || previousY != y) {
             // Redraw the region formerly occupied by this component
-            repaint();
+            if (parent != null) {
+                parent.repaint(getDecoratedBounds());
+            }
 
             // Set the new coordinates
             this.x = x;
             this.y = y;
 
             // Redraw the region currently occupied by this component
-            repaint();
+            if (parent != null) {
+                parent.repaint(getDecoratedBounds());
+            }
 
             componentListeners.locationChanged(this, previousX, previousY);
         }
@@ -1086,6 +1094,26 @@ public abstract class Component implements ConstrainedVisual {
      */
     public Bounds getBounds() {
         return new Bounds(x, y, getWidth(), getHeight());
+    }
+
+    /**
+     * Returns the component's bounding area including decorators.
+     *
+     * @return
+     * The decorated bounding area. The <tt>x</tt> and <tt>y</tt> values are
+     * relative to the parent container.
+     */
+    public Bounds getDecoratedBounds() {
+        Bounds decoratedBounds = new Bounds(0, 0, getWidth(), getHeight());
+
+        for (Decorator decorator : decorators) {
+            decoratedBounds.union(decorator.getBounds(this));
+        }
+
+        decoratedBounds.x += x;
+        decoratedBounds.y += y;
+
+        return decoratedBounds;
     }
 
     /**
@@ -1125,12 +1153,16 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             // Redraw the region formerly occupied by this component
-            repaint();
+            if (parent != null) {
+                parent.repaint(getDecoratedBounds());
+            }
 
             this.visible = visible;
 
             // Redraw the region currently occupied by this component
-            repaint();
+            if (parent != null) {
+                parent.repaint(getDecoratedBounds());
+            }
 
             if (visible) {
                 // This component is being shown; ensure that it's layout
@@ -1525,15 +1557,6 @@ public abstract class Component implements ConstrainedVisual {
      */
     public void repaint(boolean immediate) {
         repaint(0, 0, getWidth(), getHeight(), immediate);
-
-        if (parent != null) {
-            for (Decorator decorator : decorators) {
-                Bounds decoratorBounds = decorator.getBounds(this);
-
-                parent.repaint(decoratorBounds.x + this.x, decoratorBounds.y + this.y,
-                    decoratorBounds.width, decoratorBounds.height, immediate);
-            }
-        }
     }
 
     /**

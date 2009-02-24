@@ -147,7 +147,7 @@ public abstract class Container extends Component
         components.insert(component, index);
 
         // Repaint the area occupied by the new component
-        component.repaint();
+        repaint(component.getDecoratedBounds());
 
         invalidate();
 
@@ -174,7 +174,7 @@ public abstract class Container extends Component
         // formerly occupied by the components
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             Component component = removed.get(i);
-            component.repaint();
+            repaint(component.getDecoratedBounds());
             component.setParent(null);
         }
 
@@ -312,20 +312,14 @@ public abstract class Container extends Component
 
         for (Component component : this) {
             // Calculate the decorated bounds
-            Bounds componentBounds = component.getBounds();
-
-            Bounds decoratedBounds = new Bounds(0, 0, componentBounds.width, componentBounds.height);
-            for (Decorator decorator : component.getDecorators()) {
-                decoratedBounds.union(decorator.getBounds(component));
-            }
-
-            decoratedBounds.x += componentBounds.x;
-            decoratedBounds.y += componentBounds.y;
+            Bounds decoratedBounds = component.getDecoratedBounds();
 
             // Only paint components that are visible and intersect the
             // current clip rectangle
             if (component.isVisible()
                 && decoratedBounds.intersects(paintBounds)) {
+                Bounds componentBounds = component.getBounds();
+
                 // Create a copy of the current graphics context and
                 // translate to the component's coordinate system
                 Graphics2D decoratedGraphics = (Graphics2D)graphics.create();
