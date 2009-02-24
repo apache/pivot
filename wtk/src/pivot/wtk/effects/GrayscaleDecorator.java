@@ -16,6 +16,7 @@
 package pivot.wtk.effects;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import pivot.wtk.Component;
@@ -58,7 +59,11 @@ public class GrayscaleDecorator implements Decorator {
         graphics.drawImage(bufferedImage, 0, 0, null);
     }
 
-    public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
-        return new Bounds(x, y, width, height);
+    public Bounds getBounds(Component component) {
+        return new Bounds(0, 0, component.getWidth(), component.getHeight());
+    }
+
+    public AffineTransform getTransform(Component component) {
+        return new AffineTransform();
     }
 }

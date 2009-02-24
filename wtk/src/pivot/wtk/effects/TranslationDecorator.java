@@ -16,6 +16,7 @@
 package pivot.wtk.effects;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
@@ -92,12 +93,19 @@ public class TranslationDecorator implements Decorator {
     public void update() {
     }
 
-    public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
-        Bounds affectedArea = new Bounds(x + this.x, y + this.y, width, height);
+    public Bounds getBounds(Component component) {
+        Bounds bounds = component.getBounds();
+        bounds.x += x;
+        bounds.y += y;
+
         if (clip) {
-            affectedArea.intersect(component.getBounds());
+            bounds.intersect(component.getBounds());
         }
 
-        return affectedArea;
+        return bounds;
+    }
+
+    public AffineTransform getTransform(Component component) {
+        return AffineTransform.getTranslateInstance(x, y);
     }
 }

@@ -46,7 +46,7 @@ public class DecoratorDemo implements Application {
         fadeFrame.setTitle("Translucent Window");
 
         final FadeDecorator fadeDecorator = new FadeDecorator();
-        fadeFrame.getDecorators().update(0, fadeDecorator);
+        fadeFrame.getDecorators().insert(fadeDecorator, 0);
 
         fadeFrame.getComponentMouseListeners().add(new ComponentMouseListener() {
             public boolean mouseMove(Component component, int x, int y) {

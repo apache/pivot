@@ -16,6 +16,7 @@
 package pivot.wtk.effects;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
@@ -36,9 +37,7 @@ public class TagDecorator implements Decorator {
     private int yOffset;
 
     private Graphics2D graphics = null;
-    private Component component = null;
-    private int tagX = 0;
-    private int tagY = 0;
+    private Bounds bounds = null;
 
     public TagDecorator() {
         this(null);
@@ -107,43 +106,9 @@ public class TagDecorator implements Decorator {
     }
 
     public Graphics2D prepare(Component component, Graphics2D graphics) {
-        this.graphics = graphics;
-        this.component = component;
-
         if (tag != null) {
-            switch (horizontalAlignment) {
-                case LEFT: {
-                    tagX = xOffset;
-                    break;
-                }
-
-                case RIGHT: {
-                    tagX = component.getWidth() - tag.getWidth() + xOffset;
-                    break;
-                }
-
-                case CENTER: {
-                    tagX = (component.getWidth() - tag.getWidth() / 2) + xOffset;
-                    break;
-                }
-            }
-
-            switch (verticalAlignment) {
-                case TOP: {
-                    tagY = yOffset;
-                    break;
-                }
-
-                case BOTTOM: {
-                    tagY = component.getHeight() - tag.getHeight() + yOffset;
-                    break;
-                }
-
-                case CENTER: {
-                    tagY = (component.getHeight() - tag.getHeight() / 2) + yOffset;
-                    break;
-                }
-            }
+            bounds = getBounds(component);
+            this.graphics = graphics;
         }
 
         return graphics;
@@ -151,17 +116,61 @@ public class TagDecorator implements Decorator {
 
     public void update() {
         if (tag != null) {
-            graphics.translate(tagX, tagY);
+            graphics.translate(bounds.x, bounds.y);
             tag.paint(graphics);
         }
     }
 
-    public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
-        if (tag != null) {
-            x += xOffset;
-            y += yOffset;
+    public Bounds getBounds(Component component) {
+        Bounds bounds;
+
+        if (tag == null) {
+            bounds = null;
+        } else {
+            bounds = new Bounds();
+
+            switch (horizontalAlignment) {
+                case LEFT: {
+                    bounds.x = xOffset;
+                    break;
+                }
+
+                case RIGHT: {
+                    bounds.x = component.getWidth() - tag.getWidth() + xOffset;
+                    break;
+                }
+
+                case CENTER: {
+                    bounds.x = (component.getWidth() - tag.getWidth() / 2) + xOffset;
+                    break;
+                }
+            }
+
+            switch (verticalAlignment) {
+                case TOP: {
+                    bounds.y = yOffset;
+                    break;
+                }
+
+                case BOTTOM: {
+                    bounds.y = component.getHeight() - tag.getHeight() + yOffset;
+                    break;
+                }
+
+                case CENTER: {
+                    bounds.y = (component.getHeight() - tag.getHeight() / 2) + yOffset;
+                    break;
+                }
+            }
+
+            bounds.width = tag.getWidth();
+            bounds.height = tag.getHeight();
         }
 
-        return new Bounds(x, y, width, height);
+        return bounds;
+    }
+
+    public AffineTransform getTransform(Component component) {
+        return new AffineTransform();
     }
 }

@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.Iterator;
 
 import pivot.beans.BeanDictionary;
@@ -302,38 +303,35 @@ public abstract class Container extends Component
         super.paint(containerGraphics);
         containerGraphics.dispose();
 
-        java.awt.Rectangle clipBounds = graphics.getClipBounds();
-        Bounds paintBounds = (clipBounds == null) ?
-            new Bounds(0, 0, getWidth(), getHeight()) : new Bounds(clipBounds);
+        // Determine the paint bounds
+        Bounds paintBounds = new Bounds(0, 0, getWidth(), getHeight());
+        Rectangle clipBounds = graphics.getClipBounds();
+        if (clipBounds != null) {
+            paintBounds.intersect(new Bounds(clipBounds));
+        }
 
         for (Component component : this) {
+            // Calculate the decorated bounds
             Bounds componentBounds = component.getBounds();
 
-            // Calculate the decorated bounds
-            Bounds affectedArea = new Bounds(0, 0, componentBounds.width, componentBounds.height);
+            Bounds decoratedBounds = new Bounds(0, 0, componentBounds.width, componentBounds.height);
             for (Decorator decorator : component.getDecorators()) {
-                affectedArea.union(decorator.getAffectedArea(component, 0, 0,
-                    componentBounds.width, componentBounds.height));
+                decoratedBounds.union(decorator.getBounds(component));
             }
 
-            affectedArea.x += componentBounds.x;
-            affectedArea.y += componentBounds.y;
+            decoratedBounds.x += componentBounds.x;
+            decoratedBounds.y += componentBounds.y;
 
             // Only paint components that are visible and intersect the
             // current clip rectangle
             if (component.isVisible()
-                && componentBounds.width > 0
-                && componentBounds.height > 0
-                && affectedArea.intersects(paintBounds)) {
+                && decoratedBounds.intersects(paintBounds)) {
                 // Create a copy of the current graphics context and
                 // translate to the component's coordinate system
-                Graphics2D componentGraphics = (Graphics2D)graphics.create();
-                componentGraphics.translate(componentBounds.x, componentBounds.y);
-                componentGraphics.clipRect(0, 0, componentBounds.width, componentBounds.height);
+                Graphics2D decoratedGraphics = (Graphics2D)graphics.create();
+                decoratedGraphics.translate(componentBounds.x, componentBounds.y);
 
                 // Prepare the decorators
-                Graphics2D decoratedGraphics = componentGraphics;
-
                 DecoratorSequence decorators = component.getDecorators();
                 int n = decorators.getLength();
                 for (int i = n - 1; i >= 0; i--) {
@@ -342,16 +340,16 @@ public abstract class Container extends Component
                 }
 
                 // Paint the component
-                component.paint(decoratedGraphics);
+                Graphics2D componentGraphics = (Graphics2D)decoratedGraphics.create();
+                componentGraphics.clipRect(0, 0, componentBounds.width, componentBounds.height);
+                component.paint(componentGraphics);
+                componentGraphics.dispose();
 
                 // Update the decorators
                 for (int i = 0; i < n; i++) {
                     Decorator decorator = decorators.get(i);
                     decorator.update();
                 }
-
-                // Dispose of the component's graphics
-                componentGraphics.dispose();
             }
         }
     }

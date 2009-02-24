@@ -17,6 +17,7 @@ package pivot.wtk.effects;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
@@ -340,16 +341,6 @@ public class ScaleDecorator implements Decorator {
         // No-op
     }
 
-    public Bounds getBounds(Component component) {
-        int width = (int)Math.ceil(component.getWidth() * scaleX);
-        int height = (int)Math.ceil(component.getHeight() * scaleY);
-
-        int tx = getTranslatedX(component);
-        int ty = getTranslatedY(component);
-
-        return new Bounds(tx, ty, width, height);
-    }
-
     public void repaint(Component component, int x, int y, int width, int height) {
         Container parent = component.getParent();
 
@@ -366,8 +357,17 @@ public class ScaleDecorator implements Decorator {
         }
     }
 
-    public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
-        // TODO
-        return new Bounds(x, y, width, height);
+    public Bounds getBounds(Component component) {
+        int width = (int)Math.ceil(component.getWidth() * scaleX);
+        int height = (int)Math.ceil(component.getHeight() * scaleY);
+
+        int tx = getTranslatedX(component);
+        int ty = getTranslatedY(component);
+
+        return new Bounds(tx, ty, width, height);
+    }
+
+    public AffineTransform getTransform(Component component) {
+        return AffineTransform.getScaleInstance(scaleX, scaleY);
     }
 }

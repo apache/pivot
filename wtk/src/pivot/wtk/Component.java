@@ -16,6 +16,9 @@
 package pivot.wtk;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
@@ -1516,13 +1519,21 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Flags the entire component as needing to be repainted or repaints
-     * the entire component immediately.
+     * Flags the entire component as needing to be repainted.
      *
      * @param immediate
      */
     public void repaint(boolean immediate) {
         repaint(0, 0, getWidth(), getHeight(), immediate);
+
+        if (parent != null) {
+            for (Decorator decorator : decorators) {
+                Bounds decoratorBounds = decorator.getBounds(this);
+
+                parent.repaint(decoratorBounds.x + this.x, decoratorBounds.y + this.y,
+                    decoratorBounds.width, decoratorBounds.height, immediate);
+            }
+        }
     }
 
     /**
@@ -1562,8 +1573,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Flags an area as needing to be repainted or repaints the rectangle
-     * immediately.
+     * Flags an area as needing to be repainted.
      *
      * @param x
      * @param y
@@ -1573,6 +1583,7 @@ public abstract class Component implements ConstrainedVisual {
      */
     public void repaint(int x, int y, int width, int height, boolean immediate) {
         if (parent != null) {
+            // Constrain the repaint area to this component's bounds
             int top = y;
             int left = x;
             int bottom = top + height - 1;
@@ -1585,14 +1596,26 @@ public abstract class Component implements ConstrainedVisual {
 
             if (width > 0
                 && height > 0) {
+                // Notify the parent that the region needs updating
                 parent.repaint(x + this.x, y + this.y, width, height, immediate);
 
+                // Repaint any affected decorators
                 for (Decorator decorator : decorators) {
-                    Bounds affectedArea = decorator.getAffectedArea(this, x, y, width, height);
-                    parent.repaint(affectedArea.x + this.x,
-                        affectedArea.y + this.y,
-                        affectedArea.width,
-                        affectedArea.height, immediate);
+                    AffineTransform transform = decorator.getTransform(this);
+
+                    if (!transform.isIdentity()) {
+                        // Apply the decorator's transform to the repaint area
+                        Rectangle area = new Rectangle(x, y, width, height);
+                        Shape transformedShape = transform.createTransformedShape(area);
+                        Bounds tranformedBounds = new Bounds(transformedShape.getBounds());
+
+                        // Limit the transformed area to the decorator's bounds
+                        tranformedBounds.intersect(decorator.getBounds(this));
+
+                        // Add the bounded area to the repaint region
+                        parent.repaint(tranformedBounds.x + this.x, tranformedBounds.y + this.y,
+                            tranformedBounds.width, tranformedBounds.height, immediate);
+                    }
                 }
             }
         }

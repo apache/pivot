@@ -16,6 +16,7 @@
 package pivot.wtk.effects;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
@@ -51,18 +52,21 @@ public interface Decorator {
     public void update();
 
     /**
-     * Returns the bounds of the area affected by a change to a given region
-     * within a component.
+     * Returns the bounding area of the decorator.
      *
      * @param component
-     * @param x
-     * @param y
-     * @param width
-     * @param height
      *
      * @return
-     * The bounds of the affected area, relative to the component's
-     * origin. The bounds may exceed the actual bounds of the component.
+     * The decorator's bounds, relative to the component's origin.
      */
-    public Bounds getAffectedArea(Component component, int x, int y, int width, int height);
+    public Bounds getBounds(Component component);
+
+    /**
+     * Returns the transformation the decorator applies to the component's
+     * coordinate space.
+     *
+     * @return
+     * The decorator's transform.
+     */
+    public AffineTransform getTransform(Component component);
 }

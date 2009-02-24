@@ -62,6 +62,7 @@ public class WindowTest implements Application {
             }
         });
 
+        display.getStyles().put("backgroundColor", "#aaaaff");
         window1.open(display);
 
         Frame window1a = new Frame();

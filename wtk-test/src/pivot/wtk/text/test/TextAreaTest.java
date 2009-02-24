@@ -60,11 +60,6 @@ public class TextAreaTest implements Application {
         frame.setPreferredSize(640, 480);
         frame.open(display);
 
-        // TODO This is a workaround to a possible DropShadowDecorator bug;
-        // fix this bug (probably related to not recreating the buffered image
-        // every time)
-        frame.getDecorators().removeAll();
-
         /*
         textArea.setSelection(6, 7);
         textArea.insertText("BRILLIG");

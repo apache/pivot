@@ -46,7 +46,10 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
 
     public TerraMenuSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setBackgroundColor(theme.getColor(4));
+        Color backgroundColor = theme.getColor(4);
+        backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
+            backgroundColor.getBlue(), 228);
+        setBackgroundColor(backgroundColor);
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -54,6 +57,8 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
         highlightColor = theme.getColor(4);
         highlightBackgroundColor = theme.getColor(19);
         marginColor = theme.getColor(11);
+        marginColor = new Color(marginColor.getRed(), marginColor.getGreen(),
+            marginColor.getBlue(), 228);
         margin = 20;
         separatorColor = theme.getColor(7);
         sectionSpacing = 7;

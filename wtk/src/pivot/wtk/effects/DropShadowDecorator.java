@@ -19,8 +19,10 @@
  */
 package pivot.wtk.effects;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
@@ -29,10 +31,6 @@ import pivot.wtk.Bounds;
 
 /**
  * Decorator that adds a drop shadows to a component.
- *
- * TODO Drop shadows do not work with any background opacity?
- *
- * TODO Optimize so we only repaint on resize?
  *
  * @author gbrown
  * @author tvolkert
@@ -48,11 +46,9 @@ public class DropShadowDecorator implements Decorator {
     private Color shadowColor = Color.BLACK;
     private float shadowOpacity = 0.33f;
 
-    private Component component = null;
     private Graphics2D graphics = null;
-
     private BufferedImage componentImage = null;
-    private Graphics2D componentGraphics = null;
+    private Graphics2D componentImageGraphics = null;
 
     public DropShadowDecorator() {
         this(5, 5, 5);
@@ -179,49 +175,52 @@ public class DropShadowDecorator implements Decorator {
     }
 
     public Graphics2D prepare(Component component, Graphics2D graphics) {
+        this.graphics = graphics;
+
         int width = component.getWidth();
         int height = component.getHeight();
 
-        if (this.component != component
-            || componentImage == null
-            || componentImage.getWidth() != width
-            || componentImage.getHeight() != height) {
-            componentImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        if (width > 0
+            && height > 0) {
+            if (componentImage == null
+                || componentImage.getWidth() != width
+                || componentImage.getHeight() != height) {
+                componentImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            }
+
+            componentImageGraphics = componentImage.createGraphics();
+            componentImageGraphics.setClip(graphics.getClip());
+
+            componentImageGraphics.setComposite(AlphaComposite.Clear);
+            componentImageGraphics.fillRect(0, 0, componentImage.getWidth(), componentImage.getHeight());
+
+            componentImageGraphics.setComposite(AlphaComposite.SrcOver);
+
+            graphics = componentImageGraphics;
         }
 
-        this.component = component;
-        this.graphics = graphics;
-
-        componentGraphics = componentImage.createGraphics();
-        componentGraphics.setClip(graphics.getClip());
-
-        return componentGraphics;
+        return graphics;
     }
 
     public void update() {
-        componentGraphics.dispose();
+        if (componentImage != null) {
+            componentImageGraphics.dispose();
 
-        BufferedImage shadowImage = createShadow(componentImage);
+            BufferedImage shadowImage = createShadow(componentImage);
 
-        java.awt.Shape clip = graphics.getClip();
-        if (clip != null) {
-            java.awt.Rectangle clipBounds = clip.getBounds();
-            Bounds affectedArea = getAffectedArea(component, clipBounds.x, clipBounds.y,
-                clipBounds.width, clipBounds.height);
-            clipBounds = affectedArea.toRectangle();
-            graphics.setClip(clipBounds);
+            graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
+            graphics.drawImage(componentImage, 0, 0, null);
         }
-
-        graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
-        graphics.setClip(clip);
-        graphics.drawImage(componentImage, 0, 0, null);
     }
 
-    public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
-        return new Bounds(x + xOffset - blurRadius,
-            y + yOffset - blurRadius,
-            width + blurRadius * 2,
-            height + blurRadius * 2);
+    public Bounds getBounds(Component component) {
+        return new Bounds(xOffset - blurRadius, yOffset - blurRadius,
+            component.getWidth() + blurRadius * 2,
+            component.getHeight() + blurRadius * 2);
+    }
+
+    public AffineTransform getTransform(Component component) {
+        return new AffineTransform();
     }
 
     /**

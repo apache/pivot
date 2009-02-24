@@ -16,6 +16,7 @@
 package pivot.wtk.effects;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
@@ -72,7 +73,11 @@ public class ClipDecorator implements Decorator {
 		// No-op
 	}
 
-	public Bounds getAffectedArea(Component component, int x, int y, int width, int height) {
-		return new Bounds(x, y, width, height);
-	}
+    public Bounds getBounds(Component component) {
+        return new Bounds(x, y, width, height);
+    }
+
+    public AffineTransform getTransform(Component component) {
+        return new AffineTransform();
+    }
 }

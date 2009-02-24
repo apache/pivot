@@ -340,9 +340,12 @@ public class TextAreaSkin extends ComponentSkin
         }
 
         public void paint(Graphics2D graphics) {
+            // Determine the paint bounds
+            Bounds paintBounds = new Bounds(0, 0, getWidth(), getHeight());
             Rectangle clipBounds = graphics.getClipBounds();
-            Bounds paintBounds = (clipBounds == null) ?
-                new Bounds(0, 0, getWidth(), getHeight()) : new Bounds(clipBounds);
+            if (clipBounds != null) {
+                paintBounds.intersect(new Bounds(clipBounds));
+            }
 
             for (NodeView nodeView : nodeViews) {
                 Bounds nodeViewBounds = nodeView.getBounds(false);

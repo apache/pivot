@@ -33,6 +33,7 @@ import pivot.wtk.Theme;
 import pivot.wtk.Tooltip;
 import pivot.wtk.TooltipListener;
 import pivot.wtk.Window;
+import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.WindowSkin;
@@ -102,6 +103,8 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     private CloseHandler closeHandler = new CloseHandler();
     private Transition closeTransition = null;
 
+    private DropShadowDecorator dropShadowDecorator = null;
+
     private static final int CLOSE_TRANSITION_DURATION = 500;
     private static final int CLOSE_TRANSITION_RATE = 30;
 
@@ -128,6 +131,10 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
         super.install(component);
 
         Tooltip tooltip = (Tooltip)component;
+
+        dropShadowDecorator = new DropShadowDecorator(5, 2, 2);
+        tooltip.getDecorators().add(dropShadowDecorator);
+
         tooltip.setContent(border);
         tooltip.getTooltipListeners().add(this);
 
@@ -137,6 +144,10 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
     @Override
     public void uninstall() {
         Tooltip tooltip = (Tooltip)getComponent();
+
+        tooltip.getDecorators().remove(dropShadowDecorator);
+        dropShadowDecorator = null;
+
         tooltip.setContent(null);
         tooltip.getTooltipListeners().remove(this);
     }
