@@ -44,7 +44,9 @@ import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
+import pivot.wtk.Direction;
 import pivot.wtk.Insets;
+import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Platform;
 import pivot.wtk.Point;
@@ -467,7 +469,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             int i = Sequence.Search.binarySearch(nodeViews, nullNodeView,
                 nodeViewLocationComparator);
 
-            // TODO Should this ever actually happen?
             if (i < 0) {
                 i = -(i + 1) - 1;
             }
@@ -506,7 +507,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             int i = Sequence.Search.binarySearch(nodeViews, nullNodeView,
                 nodeViewOffsetComparator);
 
-            // TODO Should this ever actually happen?
             if (i < 0) {
                 i = -(i + 1) - 1;
             }
@@ -653,6 +653,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                 if (i == j) {
                     super.validate();
+                    updateSelectionBounds();
                 } else {
                     if (start != -1) {
                         if (validateCallback != null) {
@@ -1090,7 +1091,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
 
     private Rectangle caret = new Rectangle();
-    private boolean caretOn = true;
+    private boolean caretOn = false;
     private BlinkCursorCallback blinkCursorCallback = new BlinkCursorCallback();
     private int blinkCursorIntervalID = -1;
 
@@ -1136,6 +1137,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
 
         super.uninstall();
+    }
+
+    @Override
+    public boolean isFocusable() {
+        TextArea textArea = (TextArea)getComponent();
+        return textArea.isEditable();
     }
 
     public int getPreferredWidth(int height) {
@@ -1192,13 +1199,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             TextArea textArea = (TextArea)getComponent();
 
             graphics.translate(margin.left, margin.top);
-
-            if (highlightBounds != null) {
-                graphics.setPaint(Color.CYAN);
-                graphics.fillRect(highlightBounds.x, highlightBounds.y,
-                    highlightBounds.width, highlightBounds.height);
-            }
-
             documentView.paint(graphics);
 
             if (textArea.getSelectionLength() == 0
@@ -1311,6 +1311,107 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     @Override
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        TextArea textArea = (TextArea)component;
+
+        if (button == Mouse.Button.LEFT) {
+            // Move the caret to the insertion point
+            int offset = getCharacterAt(x, y);
+            if (offset != -1) {
+                textArea.setSelection(offset, 0);
+            }
+
+            // TODO Register mouse listener to begin selecting text
+
+            // Set focus to the text input
+            if (textArea.isEditable()) {
+                textArea.requestFocus();
+            }
+        }
+
+        return super.mouseDown(component, button, x, y);
+    }
+
+    @Override
+    public boolean keyTyped(Component component, char character) {
+        boolean consumed = super.keyTyped(component, character);
+
+        TextArea textArea = (TextArea)getComponent();
+
+        if (textArea.isEditable()) {
+            Document document = textArea.getDocument();
+
+            if (document != null) {
+                // Ignore characters in the control range and the ASCII delete
+                // character
+                if (character > 0x1F
+                    && character != 0x7F) {
+                    textArea.insertText(character);
+                }
+            }
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = false;
+
+        TextArea textArea = (TextArea)getComponent();
+
+        if (textArea.isEditable()) {
+            Document document = textArea.getDocument();
+
+            if (document != null) {
+                if (keyCode == Keyboard.KeyCode.ENTER) {
+                    textArea.insertParagraph();
+                } else if (keyCode == Keyboard.KeyCode.DELETE) {
+                    textArea.delete(Direction.FORWARD);
+                } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
+                    textArea.delete(Direction.BACKWARD);
+                } else if (keyCode == Keyboard.KeyCode.LEFT) {
+                    // TODO
+                } else if (keyCode == Keyboard.KeyCode.RIGHT) {
+                    // TODO
+                } else if (keyCode == Keyboard.KeyCode.UP) {
+                    // TODO
+                } else if (keyCode == Keyboard.KeyCode.DOWN) {
+                    // TODO
+                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                    if (keyCode == Keyboard.KeyCode.A) {
+                        textArea.setSelection(0, document.getCharacterCount());
+                    } else if (keyCode == Keyboard.KeyCode.X) {
+                        textArea.cut();
+                    } else if (keyCode == Keyboard.KeyCode.C) {
+                        textArea.copy();
+                    } else if (keyCode == Keyboard.KeyCode.V) {
+                        textArea.paste();
+                    } else if (keyCode == Keyboard.KeyCode.Z) {
+                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                            textArea.undo();
+                        } else {
+                            textArea.redo();
+                        }
+                    }
+                } else {
+                    consumed = super.keyPressed(component, keyCode, keyLocation);
+                }
+            }
+        }
+
+        return consumed;
+    }
+
+    // Component state events
+    @Override
+    public void enabledChanged(Component component) {
+        super.enabledChanged(component);
+
+        repaintComponent();
+    }
+
+    @Override
     public void focusedChanged(Component component, boolean temporary) {
         super.focusedChanged(component, temporary);
 
@@ -1321,54 +1422,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         repaintComponent();
     }
 
-    private int highlightOffset = -1;
-    private Bounds highlightBounds = null;
-
-    @Override
-    public boolean mouseMove(Component component, int x, int y) {
-        int highlightOffset = getCharacterAt(x, y);
-        if (highlightOffset != this.highlightOffset) {
-            this.highlightOffset = highlightOffset;
-
-            if (highlightBounds != null) {
-                repaintComponent(highlightBounds.x + margin.left,
-                    highlightBounds.y + margin.top,
-                    highlightBounds.width, highlightBounds.height);
-            }
-
-            if (highlightOffset == -1) {
-                highlightBounds = null;
-            } else {
-                highlightBounds = getCharacterBounds(highlightOffset);
-            }
-
-            if (highlightBounds != null) {
-                repaintComponent(highlightBounds.x + margin.left,
-                    highlightBounds.y + margin.top,
-                    highlightBounds.width, highlightBounds.height);
-            }
-        }
-
-
-        return false;
-    }
-
-    @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-        if (button == Mouse.Button.LEFT) {
-            TextArea textArea = (TextArea)component;
-
-            // TODO Move the caret to the insertion point
-
-            // TODO Register mouse listener to begin selecting text
-
-            // Set focus to the text input
-            textArea.requestFocus();
-        }
-
-        return super.mouseDown(component, button, x, y);
-    }
-
+    // Text area events
     public void documentChanged(TextArea textArea, Document previousDocument) {
         if (documentView != null) {
             documentView.detach();
@@ -1384,17 +1438,36 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         invalidateComponent();
     }
 
+    public void editableChanged(TextArea textArea) {
+        // No-op
+    }
+
+    // Text area selection events
     public void selectionChanged(TextArea textArea, int previousSelectionStart,
         int previousSelectionLength) {
-        caret.x = 0;
-        caret.y = 0;
-        caret.width = 1;
-        caret.height = 14;
+        if (textArea.getDocument() != null) {
+            updateSelectionBounds();
 
-        showCaret(textArea.isFocused()
-            && textArea.getSelectionLength() == 0);
+            showCaret(textArea.isFocused()
+                && textArea.getSelectionLength() == 0);
 
-        repaintComponent();
+            repaintComponent();
+        }
+    }
+
+    private void updateSelectionBounds() {
+        if (documentView.isValid()) {
+            TextArea textArea = (TextArea)getComponent();
+
+            int selectionStart = textArea.getSelectionStart();
+
+            Bounds startCharacterBounds = getCharacterBounds(selectionStart);
+
+            caret.x = startCharacterBounds.x;
+            caret.y = startCharacterBounds.y;
+            caret.width = 1;
+            caret.height = startCharacterBounds.height;
+        }
     }
 
     private NodeView createNodeView(Node node) {

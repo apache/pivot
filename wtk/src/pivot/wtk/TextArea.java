@@ -75,6 +75,12 @@ public class TextArea extends Component {
                 listener.documentChanged(textArea, previousText);
             }
         }
+
+        public void editableChanged(TextArea textArea) {
+            for (TextAreaListener listener : this) {
+                listener.editableChanged(textArea);
+            }
+        }
     }
 
     private static class TextAreaSelectionListenerList extends ListenerList<TextAreaSelectionListener>
@@ -88,6 +94,7 @@ public class TextArea extends Component {
     }
 
     private Document document = null;
+    private boolean editable = true;
 
     private int selectionStart = 0;
     private int selectionLength = 0;
@@ -224,6 +231,36 @@ public class TextArea extends Component {
     }
 
     /**
+     * Returns the text area's editable flag.
+     *
+     * @return
+     */
+    public boolean isEditable() {
+        return editable;
+    }
+
+    /**
+     * Sets the text area's editable flag.
+     *
+     * @param editable
+     *
+     * @return
+     */
+    public void setEditable(boolean editable) {
+        if (this.editable != editable) {
+            if (!editable) {
+                if (isFocused()) {
+                    clearFocus();
+                }
+            }
+
+            this.editable = editable;
+
+            textAreaListeners.editableChanged(this);
+        }
+    }
+
+    /**
      * Returns the starting index of the selection.
      *
      * @return
@@ -350,6 +387,11 @@ public class TextArea extends Component {
 
         Document range = new Document();
         Paragraph paragraph = new Paragraph();
+
+        // TODO We may not need/want to add a text node here once we add the
+        // terminator node to Paragraph
+        paragraph.add(new TextNode());
+
         range.add(paragraph);
         document.insertRange(range, selectionStart);
 
@@ -388,6 +430,26 @@ public class TextArea extends Component {
                 document.removeRange(offset, 1);
             }
         }
+    }
+
+    public void cut() {
+        // TODO
+    }
+
+    public void copy() {
+        // TODO
+    }
+
+    public void paste() {
+        // TODO
+    }
+
+    public void undo() {
+        // TODO
+    }
+
+    public void redo() {
+        // TODO
     }
 
     public int getCharacterAt(int x, int y) {

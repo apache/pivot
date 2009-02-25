@@ -30,4 +30,11 @@ public interface TextAreaListener {
      * @param previousDocument
      */
     public void documentChanged(TextArea textArea, Document previousDocument);
+
+    /**
+     * Called when a text area's editable state has changed.
+     *
+     * @param textArea
+     */
+    public void editableChanged(TextArea textArea);
 }

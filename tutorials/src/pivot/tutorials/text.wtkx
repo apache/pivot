@@ -52,7 +52,8 @@ limitations under the License.
                                     <content>
                                         <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
                                             <view>
-                                                <TextArea wtkx:id="textArea" styles="{breakOnWhitespaceOnly:true}"/>
+                                                <TextArea wtkx:id="textArea" editable="false" 
+                                                    styles="{breakOnWhitespaceOnly:true}"/>
                                             </view>
                                         </ScrollPane>
                                     </content>
