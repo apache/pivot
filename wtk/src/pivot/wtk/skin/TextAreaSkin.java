@@ -21,8 +21,11 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
 import java.awt.font.TextAttribute;
+import java.awt.font.TextHitInfo;
+import java.awt.font.TextLayout;
 import java.awt.font.TextMeasurer;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
@@ -67,8 +70,8 @@ import pivot.wtk.text.TextNodeListener;
  *
  * @author gbrown
  */
-public class TextAreaSkin extends ComponentSkin
-    implements TextAreaListener, TextAreaSelectionListener {
+public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
+    TextAreaListener, TextAreaSelectionListener {
     /**
      * Abstract base class for node views.
      *
@@ -236,7 +239,10 @@ public class TextAreaSkin extends ComponentSkin
             }
         }
 
+        public abstract int getOffset();
         public abstract NodeView getNext();
+        public abstract int getCharacterAt(int x, int y);
+        public abstract Bounds getCharacterBounds(int offset);
 
         public void parentChanged(Node node, Element previousParent) {
             // No-op
@@ -262,7 +268,85 @@ public class TextAreaSkin extends ComponentSkin
      */
     public abstract class ElementView extends NodeView
         implements Sequence<NodeView>, Iterable<NodeView>, ElementListener {
+        /**
+         * Null node view, used for binary searches.
+         *
+         * @author gbrown
+         */
+        private class NullNodeView extends NodeView {
+            private int offset;
+
+            public NullNodeView() {
+                super(null);
+            }
+
+            @Override
+            public int getOffset() {
+                return offset;
+            }
+
+            protected void setOffset(int offset) {
+                this.offset = offset;
+            }
+
+            @Override
+            public NodeView getNext() {
+                return null;
+            }
+
+            @Override
+            public int getCharacterAt(int x, int y) {
+                return -1;
+            }
+
+            @Override
+            public Bounds getCharacterBounds(int offset) {
+                return null;
+            }
+
+            public void paint(Graphics2D graphics) {
+                // No-op
+            }
+        }
+
+        /**
+         * Comparator used to perform binary searches on node views by location.
+         *
+         * @author gbrown
+         */
+        private class NodeViewLocationComparator implements Comparator<NodeView> {
+            public int compare(NodeView nodeView1, NodeView nodeView2) {
+                int width = getWidth();
+
+                int x1 = nodeView1.getX();
+                int y1 = nodeView1.getY();
+
+                int x2 = nodeView2.getX();
+                int y2 = nodeView2.getY();
+
+                return (y1 * width + x1) - (y2 * width + x2);
+            }
+        }
+
+        /**
+         * Comparator used to perform binary searches on node views by offset.
+         *
+         * @author gbrown
+         */
+        private class NodeViewOffsetComparator implements Comparator<NodeView> {
+            public int compare(NodeView nodeView1, NodeView nodeView2) {
+                int offset1 = nodeView1.getOffset();
+                int offset2 = nodeView2.getOffset();
+
+                return (offset1 - offset2);
+            }
+        }
+
         private ArrayList<NodeView> nodeViews = new ArrayList<NodeView>();
+
+        private NullNodeView nullNodeView = new NullNodeView();
+        private NodeViewLocationComparator nodeViewLocationComparator = new NodeViewLocationComparator();
+        private NodeViewOffsetComparator nodeViewOffsetComparator = new NodeViewOffsetComparator();
 
         public ElementView(Element element) {
             super(element);
@@ -370,21 +454,75 @@ public class TextAreaSkin extends ComponentSkin
             }
         }
 
-        public int getIndexAt(int x, int y) {
-            nullNodeView.setLocation(x, y);
-
-            int index = Sequence.Search.binarySearch(nodeViews, nullNodeView,
-                nodeViewLocationComparator);
-
-            if (index < 0) {
-                index = -(index + 1) - 1;
-            }
-
-            return index;
+        @Override
+        public int getOffset() {
+            return getNode().getOffset();
         }
 
-        public NodeView getNodeViewAt(int x, int y) {
-            return get(getIndexAt(x, y));
+        @Override
+        public int getCharacterAt(int x, int y) {
+            // Get the index of the node view at x, y
+            nullNodeView.setLocation(x, y);
+
+            int i = Sequence.Search.binarySearch(nodeViews, nullNodeView,
+                nodeViewLocationComparator);
+
+            // TODO Should this ever actually happen?
+            if (i < 0) {
+                i = -(i + 1) - 1;
+            }
+
+            int offset;
+            if (i < 0) {
+                offset = -1;
+            } else {
+                if (i < nodeViews.getLength()) {
+                    NodeView nodeView = nodeViews.get(i);
+
+                    // Adjust the x and y values
+                    x -= nodeView.getX();
+                    y -= nodeView.getY();
+
+                    offset = nodeView.getCharacterAt(x, y);
+
+                    // Adjust the offset
+                    Node node = nodeView.getNode();
+                    offset += node.getOffset();
+                } else {
+                    // Return the character count of this node
+                    Node node = getNode();
+                    offset = node.getCharacterCount();
+                }
+            }
+
+            return offset;
+        }
+
+        @Override
+        public Bounds getCharacterBounds(int offset) {
+            // Get the index of the node view at offset
+            nullNodeView.setOffset(offset);
+
+            int i = Sequence.Search.binarySearch(nodeViews, nullNodeView,
+                nodeViewOffsetComparator);
+
+            // TODO Should this ever actually happen?
+            if (i < 0) {
+                i = -(i + 1) - 1;
+            }
+
+            Bounds bounds = null;
+            if (i < nodeViews.getLength()) {
+                NodeView nodeView = nodeViews.get(i);
+
+                offset -= nodeView.getOffset();
+                bounds = nodeView.getCharacterBounds(offset);
+
+                bounds.x += nodeView.getX();
+                bounds.y += nodeView.getY();
+            }
+
+            return bounds;
         }
 
         public void nodeInserted(Element element, int index) {
@@ -486,7 +624,9 @@ public class TextAreaSkin extends ComponentSkin
                     NodeView nodeView = get(i++);
                     nodeView.setBreakWidth(breakWidth);
 
-                    // TODO Make this configurable; e.g. validateVisibleContentOnly = false
+                    // TODO Make this configurable (e.g. validateVisibleContentOnly
+                    // = false); this will allow the text area to report an actual
+                    // preferred size
                     int height = nodeView.getHeight(false);
                     if (y + height >= top) {
                         if (y < bottom) {
@@ -795,14 +935,58 @@ public class TextAreaSkin extends ComponentSkin
                 }
 
                 graphics.setFont(font);
-                graphics.setPaint(Color.BLACK);
+                graphics.setPaint(color);
                 graphics.drawString(text, 0, lm.getAscent());
             }
         }
 
         @Override
+        public int getOffset() {
+            return getNode().getOffset() + start;
+        }
+
+        @Override
         public NodeView getNext() {
             return next;
+        }
+
+        @Override
+        public int getCharacterAt(int x, int y) {
+            TextNode textNode = (TextNode)getNode();
+
+            // TODO This isn't terribly efficient - either use a character
+            // iterator or cache the generated string in TextNode#getText()
+            String text = textNode.getText();
+
+            // TODO Can we use a glyph vector for this? We could create the
+            // vector when the view is created so we don't need to rebuild it
+            // every time
+            int offset;
+            if (text.length() > 0) {
+                TextLayout textLayout = new TextLayout(text, font, fontRenderContext);
+                TextHitInfo textHitInfo = textLayout.hitTestChar(x, y);
+                offset = textHitInfo.getInsertionIndex();
+            } else {
+                offset = -1;
+            }
+
+            return offset;
+        }
+
+        @Override
+        public Bounds getCharacterBounds(int offset) {
+            TextNode textNode = (TextNode)getNode();
+
+            // TODO This isn't terribly efficient - either use a character
+            // iterator or cache the generated string in TextNode#getText()
+            String text = textNode.getText();
+            GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, text);
+
+            Rectangle glyphBounds = glyphVector.getGlyphPixelBounds(offset,
+                fontRenderContext, 0, 0);
+            Bounds bounds = new Bounds(glyphBounds.x, 0, glyphBounds.width, getHeight());
+
+            return bounds;
         }
 
         public void charactersInserted(TextNode textNode, int index, int count) {
@@ -868,24 +1052,8 @@ public class TextAreaSkin extends ComponentSkin
         }
 
         @Override
-        public NodeView getNext() {
-            return null;
-        }
-
-        public void imageChanged(ImageNode imageNode, Image previousImage) {
-            invalidate();
-        }
-    }
-
-    /**
-     * Null node view, used for binary searches.
-     *
-     * @author gbrown
-     */
-    private class NullNodeView extends NodeView {
-
-        public NullNodeView() {
-            super(null);
+        public int getOffset() {
+            return getNode().getOffset();
         }
 
         @Override
@@ -893,27 +1061,17 @@ public class TextAreaSkin extends ComponentSkin
             return null;
         }
 
-        public void paint(Graphics2D graphics) {
-            // No-op
+        public int getCharacterAt(int x, int y) {
+            return 0;
         }
-    }
 
-    /**
-     * Comparator used to perform binary searches on node views.
-     *
-     * @author gbrown
-     */
-    private class NodeViewLocationComparator implements Comparator<NodeView> {
-        public int compare(NodeView nodeView1, NodeView nodeView2) {
-            int width = getWidth();
+        @Override
+        public Bounds getCharacterBounds(int offset) {
+            return getBounds();
+        }
 
-            int x1 = nodeView1.getX();
-            int y1 = nodeView1.getY();
-
-            int x2 = nodeView2.getX();
-            int y2 = nodeView2.getY();
-
-            return (y1 * width + x1) - (y2 * width + x2);
+        public void imageChanged(ImageNode imageNode, Image previousImage) {
+            invalidate();
         }
     }
 
@@ -937,15 +1095,14 @@ public class TextAreaSkin extends ComponentSkin
     private int blinkCursorIntervalID = -1;
 
     private Font font;
+    private Color color;
     private Insets margin = new Insets(4);
     private boolean breakOnWhitespaceOnly = false;
-
-    private NullNodeView nullNodeView = new NullNodeView();
-    private NodeViewLocationComparator nodeViewLocationComparator = new NodeViewLocationComparator();
 
     public TextAreaSkin() {
         Theme theme = Theme.getTheme();
         font = theme.getFont();
+        color = Color.BLACK;
     }
 
     public void install(Component component) {
@@ -1034,20 +1191,32 @@ public class TextAreaSkin extends ComponentSkin
         if (documentView != null) {
             TextArea textArea = (TextArea)getComponent();
 
-            // TODO Paint selection background
-
             graphics.translate(margin.left, margin.top);
+
+            if (highlightBounds != null) {
+                graphics.setPaint(Color.CYAN);
+                graphics.fillRect(highlightBounds.x, highlightBounds.y,
+                    highlightBounds.width, highlightBounds.height);
+            }
+
             documentView.paint(graphics);
 
             if (textArea.getSelectionLength() == 0
                 && textArea.isFocused()
                 && caretOn) {
                 graphics.setPaint(Color.BLACK);
-
-                // TODO Paint caret
                 graphics.fill(caret);
             }
         }
+    }
+
+    public int getCharacterAt(int x, int y) {
+        return (documentView == null) ?
+            -1 : documentView.getCharacterAt(x - margin.left, y - margin.top);
+    }
+
+    public Bounds getCharacterBounds(int offset) {
+        return (documentView == null) ? null : documentView.getCharacterBounds(offset);
     }
 
     private void showCaret(boolean show) {
@@ -1152,6 +1321,38 @@ public class TextAreaSkin extends ComponentSkin
         repaintComponent();
     }
 
+    private int highlightOffset = -1;
+    private Bounds highlightBounds = null;
+
+    @Override
+    public boolean mouseMove(Component component, int x, int y) {
+        int highlightOffset = getCharacterAt(x, y);
+        if (highlightOffset != this.highlightOffset) {
+            this.highlightOffset = highlightOffset;
+
+            if (highlightBounds != null) {
+                repaintComponent(highlightBounds.x + margin.left,
+                    highlightBounds.y + margin.top,
+                    highlightBounds.width, highlightBounds.height);
+            }
+
+            if (highlightOffset == -1) {
+                highlightBounds = null;
+            } else {
+                highlightBounds = getCharacterBounds(highlightOffset);
+            }
+
+            if (highlightBounds != null) {
+                repaintComponent(highlightBounds.x + margin.left,
+                    highlightBounds.y + margin.top,
+                    highlightBounds.width, highlightBounds.height);
+            }
+        }
+
+
+        return false;
+    }
+
     @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         if (button == Mouse.Button.LEFT) {
@@ -1185,7 +1386,6 @@ public class TextAreaSkin extends ComponentSkin
 
     public void selectionChanged(TextArea textArea, int previousSelectionStart,
         int previousSelectionLength) {
-        // TODO Determine the caret shape/bounds
         caret.x = 0;
         caret.y = 0;
         caret.width = 1;

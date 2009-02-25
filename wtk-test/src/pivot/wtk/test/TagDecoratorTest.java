@@ -20,7 +20,6 @@ public class TagDecoratorTest implements Application {
 
         Image tag = Image.load(getClass().getResource("go-home.png"));
 
-        // frame.getDecorators().removeAll();
         frame.getDecorators().add(new TagDecorator(tag,
             HorizontalAlignment.RIGHT, VerticalAlignment.TOP,
             10, -10));

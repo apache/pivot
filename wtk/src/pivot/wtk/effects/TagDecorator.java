@@ -141,7 +141,7 @@ public class TagDecorator implements Decorator {
                 }
 
                 case CENTER: {
-                    bounds.x = (component.getWidth() - tag.getWidth() / 2) + xOffset;
+                    bounds.x = (component.getWidth() - tag.getWidth()) / 2 + xOffset;
                     break;
                 }
             }
@@ -158,7 +158,7 @@ public class TagDecorator implements Decorator {
                 }
 
                 case CENTER: {
-                    bounds.y = (component.getHeight() - tag.getHeight() / 2) + yOffset;
+                    bounds.y = (component.getHeight() - tag.getHeight()) / 2 + yOffset;
                     break;
                 }
             }

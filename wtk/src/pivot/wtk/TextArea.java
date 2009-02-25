@@ -38,6 +38,36 @@ import pivot.wtk.text.TextNode;
  * @author gbrown
  */
 public class TextArea extends Component {
+    /**
+     * Text area skin interface. Text area skins are required to implement
+     * this.
+     *
+     * @author gbrown
+     */
+    public interface Skin {
+        /**
+         * Returns the offset of the character at a given location.
+         *
+         * @param x
+         * @param y
+         *
+         * @return
+         * The character offset at the given location.
+         */
+        public int getCharacterAt(int x, int y);
+
+        /**
+         * Returns the bounds of the character at a given offset within the
+         * document.
+         *
+         * @param offset
+         *
+         * @return
+         * The bounds of the character at the given offset.
+         */
+        public Bounds getCharacterBounds(int offset);
+    }
+
     private static class TextAreaListenerList extends ListenerList<TextAreaListener>
         implements TextAreaListener {
         public void documentChanged(TextArea textArea, Document previousText) {
@@ -113,6 +143,16 @@ public class TextArea extends Component {
 
     public TextArea() {
         installSkin(TextArea.class);
+    }
+
+    @Override
+    protected void setSkin(pivot.wtk.Skin skin) {
+        if (!(skin instanceof TextArea.Skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + TextArea.Skin.class.getName());
+        }
+
+        super.setSkin(skin);
     }
 
     @Override
@@ -348,6 +388,16 @@ public class TextArea extends Component {
                 document.removeRange(offset, 1);
             }
         }
+    }
+
+    public int getCharacterAt(int x, int y) {
+        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        return textAreaSkin.getCharacterAt(x, y);
+    }
+
+    public Bounds getCharacterBounds(int offset) {
+        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        return textAreaSkin.getCharacterBounds(offset);
     }
 
     public ListenerList<TextAreaListener> getTextAreaListeners() {

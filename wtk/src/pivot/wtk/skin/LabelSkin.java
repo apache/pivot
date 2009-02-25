@@ -62,8 +62,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     public LabelSkin() {
         Theme theme = Theme.getTheme();
-        color = Color.BLACK;
         font = theme.getFont();
+        color = Color.BLACK;
         textDecoration = null;
         horizontalAlignment = HorizontalAlignment.LEFT;
         verticalAlignment = VerticalAlignment.TOP;
