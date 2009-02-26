@@ -141,16 +141,24 @@ public abstract class Element extends Node
                 int index = getIndexAt(offset);
                 Node leadingSegment = get(index);
 
+                Node trailingSegment;
                 int spliceOffset = offset - leadingSegment.getOffset();
-                Node trailingSegment = leadingSegment.removeRange(spliceOffset,
-                    leadingSegment.getCharacterCount() - spliceOffset);
+                if (spliceOffset > 0) {
+                    trailingSegment = leadingSegment.removeRange(spliceOffset,
+                        leadingSegment.getCharacterCount() - spliceOffset);
+                    index++;
+                } else {
+                    trailingSegment = null;
+                }
 
                 for (int i = 0; i < n; i++) {
-                    insert(nodes.get(i), index + i + 1);
+                    insert(nodes.get(i), index + i);
                 }
 
                 // Insert the remainder of the node
-                insert(trailingSegment, index + n + 1);
+                if (trailingSegment != null) {
+                    insert(trailingSegment, index + n);
+                }
             }
         }
     }

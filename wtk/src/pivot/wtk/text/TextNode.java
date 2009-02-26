@@ -95,8 +95,9 @@ public final class TextNode extends Node {
             text = textBuilder.substring(start, end);
             textBuilder.delete(start, end);
 
-            rangeRemoved(index, count);
             textNodeListeners.charactersRemoved(this, index, text);
+
+            rangeRemoved(index, count);
         }
 
         return text;

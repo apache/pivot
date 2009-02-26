@@ -318,13 +318,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
          */
         private class NodeViewLocationComparator implements Comparator<NodeView> {
             public int compare(NodeView nodeView1, NodeView nodeView2) {
-                int width = getWidth();
-
                 int x1 = nodeView1.getX();
                 int y1 = nodeView1.getY();
 
                 int x2 = nodeView2.getX();
                 int y2 = nodeView2.getY();
+
+                int width = (x2 - x1);
 
                 return (y1 * width + x1) - (y2 * width + x2);
             }
@@ -473,6 +473,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 i = -(i + 1) - 1;
             }
 
+            // TODO i should never be less than 0 here?
             int offset;
             if (i < 0) {
                 offset = -1;
@@ -784,6 +785,27 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public NodeView getNext() {
             return null;
         }
+
+        @Override
+        public int getCharacterAt(int x, int y) {
+            // TODO Detect the terminator character
+            return super.getCharacterAt(x, y);
+        }
+
+        @Override
+        public Bounds getCharacterBounds(int offset) {
+            Bounds bounds;
+
+            Paragraph paragraph = (Paragraph)getNode();
+            if (offset == paragraph.getCharacterCount() - 1) {
+                // TODO Give the terminator character some actual space
+                bounds = new Bounds();
+            } else {
+                bounds = super.getCharacterBounds(offset);
+            }
+
+            return bounds;
+        }
     }
 
     /**
@@ -1068,7 +1090,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public Bounds getCharacterBounds(int offset) {
-            return getBounds();
+            return new Bounds(0, 0, getWidth(), getHeight());
         }
 
         public void imageChanged(ImageNode imageNode, Image previousImage) {
@@ -1321,7 +1343,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 textArea.setSelection(offset, 0);
             }
 
-            // TODO Register mouse listener to begin selecting text
+            // TODO Set magic caret X
+
+            // TODO Register mouse listener to begin selecting text; also handle
+            // auto-scrolling when the mouse moves outside the component
 
             // Set focus to the text input
             if (textArea.isEditable()) {
@@ -1371,13 +1396,66 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
                     textArea.delete(Direction.BACKWARD);
                 } else if (keyCode == Keyboard.KeyCode.LEFT) {
-                    // TODO
+                    int selectionStart = textArea.getSelectionStart();
+                    int selectionLength = textArea.getSelectionLength();
+
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        // Add the previous character to the selection
+                        if (selectionStart > 0) {
+                            selectionStart--;
+                            selectionLength++;
+                        }
+                    } else {
+                        // Clear the selection and move the caret back by one
+                        // character
+                        if (selectionLength == 0
+                            && selectionStart > 0) {
+                            selectionStart--;
+                        }
+
+                        selectionLength = 0;
+                    }
+
+                    textArea.setSelection(selectionStart, selectionLength);
+
+                    // TODO Set magic caret X
+
+                    consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.RIGHT) {
-                    // TODO
+                    int selectionStart = textArea.getSelectionStart();
+                    int selectionLength = textArea.getSelectionLength();
+
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        // Add the next character to the selection
+                        if (selectionStart + selectionLength < document.getCharacterCount()) {
+                            selectionLength++;
+                        }
+                    } else {
+                        // Clear the selection and move the caret forward by one
+                        // character
+                        selectionStart += selectionLength;
+
+                        if (selectionLength == 0
+                            && selectionStart < document.getCharacterCount()) {
+                            selectionStart++;
+                        }
+
+                        selectionLength = 0;
+                    }
+
+                    textArea.setSelection(selectionStart, selectionLength);
+
+                    // TODO Set magic caret X
+
+                    consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.UP) {
                     // TODO
+                    // NOTE Make sure we scroll the next view to visible
+                    consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.DOWN) {
                     // TODO
+                    // NOTE Make sure we scroll the next view to visible
+                    consumed = true;
                 } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                     if (keyCode == Keyboard.KeyCode.A) {
                         textArea.setSelection(0, document.getCharacterCount());

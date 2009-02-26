@@ -107,16 +107,16 @@ public class ImageNode extends Node {
 
     @Override
     public Node getRange(int offset, int characterCount) {
-        if (characterCount < 0) {
-            throw new IllegalArgumentException("characterCount is negative.");
-        }
-
         if (offset < 0
-            || offset + characterCount > 1) {
+            || offset > 1) {
             throw new IndexOutOfBoundsException();
         }
 
-        return new ImageNode(characterCount == 0 ? null : this);
+        if (characterCount != 1) {
+            throw new IllegalArgumentException("Invalid characterCount.");
+        }
+
+        return new ImageNode(this);
     }
 
     @Override

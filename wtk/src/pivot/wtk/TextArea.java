@@ -318,6 +318,8 @@ public class TextArea extends Component {
     }
 
     public void insertText(char character) {
+        // TODO Merge character into text node, or create a new one if we
+        // need to; don't make every add undoable
         insertText(Character.toString(character));
     }
 
@@ -331,6 +333,7 @@ public class TextArea extends Component {
         }
 
         if (selectionLength > 0) {
+            // TODO Make this part of the undoable action?
             document.removeRange(selectionStart, selectionLength);
         }
 

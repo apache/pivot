@@ -95,6 +95,16 @@ public abstract class Node {
     }
 
     /**
+     * Returns the node's offset within the document.
+     *
+     * @return
+     */
+    public int getDocumentOffset() {
+        Element parent = getParent();
+        return (parent == null) ? 0 : parent.getDocumentOffset() + offset;
+    }
+
+    /**
      * Inserts a range into the node. Note that the contents of the range,
      * rather than the range itself, is added to the node.
      *
