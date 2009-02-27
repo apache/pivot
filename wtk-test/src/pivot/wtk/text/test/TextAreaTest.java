@@ -65,7 +65,7 @@ public class TextAreaTest implements Application {
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
         PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
-        InputStream inputStream = PlainTextSerializerTest.class.getResourceAsStream("test.txt");
+        InputStream inputStream = getClass().getResourceAsStream("pivot.txt");
 
         Document document = null;
         try {

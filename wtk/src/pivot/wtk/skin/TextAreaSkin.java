@@ -821,11 +821,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             super.paint(graphics);
 
             // TODO Make this styleable
+            /*
             Paragraph paragraph = (Paragraph)getNode();
             Bounds terminatorBounds = getCharacterBounds(paragraph.getCharacterCount() - 1);
             graphics.setColor(Color.RED);
             graphics.fillRect(terminatorBounds.x, terminatorBounds.y,
                 terminatorBounds.width, terminatorBounds.height);
+            */
         }
 
         @Override
@@ -1049,7 +1051,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 offset = -1;
             }
 
-            return offset;
+            return offset + start;
         }
 
         @Override
