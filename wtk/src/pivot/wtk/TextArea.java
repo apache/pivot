@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import pivot.collections.Dictionary;
+import pivot.collections.Sequence;
 import pivot.serialization.SerializationException;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
@@ -80,6 +82,12 @@ public class TextArea extends Component {
                 listener.editableChanged(textArea);
             }
         }
+
+        public void textKeyChanged(TextArea textArea, String previousTextKey) {
+            for (TextAreaListener listener : this) {
+                listener.textKeyChanged(textArea, previousTextKey);
+            }
+        }
     }
 
     private static class TextAreaSelectionListenerList extends ListenerList<TextAreaSelectionListener>
@@ -94,6 +102,7 @@ public class TextArea extends Component {
 
     private Document document = null;
     private boolean editable = true;
+    private String textKey = null;
 
     private int selectionStart = 0;
     private int selectionLength = 0;
@@ -260,6 +269,54 @@ public class TextArea extends Component {
     }
 
     /**
+     * Returns the text area's text key.
+     *
+     * @return
+     * The text key, or <tt>null</tt> if no text key is set.
+     */
+    public String getTextKey() {
+        return textKey;
+    }
+
+    /**
+     * Sets the text area's text key.
+     *
+     * @param textKey
+     * The text key, or <tt>null</tt> to clear the binding.
+     */
+    public void setTextKey(String textKey) {
+        String previousTextKey = this.textKey;
+
+        if ((previousTextKey != null
+            && textKey != null
+            && !previousTextKey.equals(textKey))
+            || previousTextKey != textKey) {
+            this.textKey = textKey;
+            textAreaListeners.textKeyChanged(this, previousTextKey);
+        }
+    }
+
+    @Override
+    public void load(Dictionary<String, Object> context) {
+        if (textKey != null
+            && context.containsKey(textKey)) {
+            Object value = context.get(textKey);
+            if (value != null) {
+                value = value.toString();
+            }
+
+            setText((String)value);
+        }
+    }
+
+    @Override
+    public void store(Dictionary<String, Object> context) {
+        if (textKey != null) {
+            context.put(textKey, getText());
+        }
+    }
+
+    /**
      * Returns the starting index of the selection.
      *
      * @return
@@ -367,9 +424,8 @@ public class TextArea extends Component {
             // The caret is positioned on a non-text character node; insert
             // the text into the descendant's parent
             Element parent = descendant.getParent();
-            Element range = (Element)parent.duplicate(false);
-            range.add(new TextNode(text));
-            parent.insertRange(range, offset);
+            int index = parent.indexOf(descendant);
+            parent.insert(new TextNode(text), index);
         }
 
         // Set the selection start to the character following the insertion
@@ -389,18 +445,15 @@ public class TextArea extends Component {
             document.removeRange(selectionStart, selectionLength);
         }
 
-        // TODO
+        // TODO If the caret is placed in the middle of a text node, split it;
+        // otherwise, insert an ImageNode immediately following the node
+        // containing the caret
 
         // Set the selection start to the character following the insertion
         setSelection(selectionStart + 1, selectionLength);
     }
 
     public void insertParagraph() {
-        // TODO Add a flag indicating if the paragraph should be added inline
-        // or as a top-level element? For example, when inserting a new
-        // paragraph into a list item, we don't want to insert the range into
-        // the document - we want to insert it into the list item.
-
         if (document == null) {
             throw new IllegalStateException("No document.");
         }
@@ -409,14 +462,25 @@ public class TextArea extends Component {
             document.removeRange(selectionStart, selectionLength);
         }
 
-        Document range = new Document();
-        Paragraph paragraph = new Paragraph();
+        // Walk up the tree until we find a paragraph
+        Node descendant = document.getDescendantAt(selectionStart);
+        while (!(descendant instanceof Paragraph)) {
+            descendant = descendant.getParent();
+        }
 
-        range.add(paragraph);
-        document.insertRange(range, selectionStart);
+        // Split the paragraph at the insertion point
+        Paragraph leadingSegment = (Paragraph)descendant;
+        int offset = selectionStart - leadingSegment.getDocumentOffset();
+        int characterCount = leadingSegment.getCharacterCount() - offset;
+
+        Paragraph trailingSegment = (Paragraph)leadingSegment.removeRange(offset, characterCount);
+
+        Element parent = leadingSegment.getParent();
+        int index = parent.indexOf(leadingSegment);
+        parent.insert(trailingSegment, index + 1);
 
         // Set the selection start to the character following the insertion
-        setSelection(selectionStart + paragraph.getCharacterCount(), selectionLength);
+        setSelection(selectionStart + 1, selectionLength);
     }
 
     public void delete(Direction direction) {
@@ -447,7 +511,30 @@ public class TextArea extends Component {
 
             if (offset >= 0
                 && offset < document.getCharacterCount()) {
-                document.removeRange(offset, 1);
+                Node descendant = document.getDescendantAt(offset);
+
+                if (descendant instanceof Paragraph) {
+                    // We are deleting a paragraph terminator
+                    Paragraph paragraph = (Paragraph)descendant;
+
+                    Element parent = paragraph.getParent();
+                    int index = parent.indexOf(paragraph);
+
+                    // Attempt to merge any successive content into the paragraph
+                    if (index < parent.getLength() - 1) {
+                        // TODO This won't always be a paragraph - we'll need to
+                        // find the next paragraph by walking the tree, then
+                        // remove any empty nodes
+                        Sequence<Node> removed = parent.remove(index + 1, 1);
+                        Paragraph nextParagraph = (Paragraph)removed.get(0);
+                        paragraph.insertRange(nextParagraph, paragraph.getCharacterCount() - 1);
+
+                        // Move the caret to the merge point
+                        setSelection(offset, 0);
+                    }
+                } else {
+                    document.removeRange(offset, 1);
+                }
             }
         }
     }

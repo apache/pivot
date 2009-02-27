@@ -37,4 +37,12 @@ public interface TextAreaListener {
      * @param textArea
      */
     public void editableChanged(TextArea textArea);
+
+    /**
+     * Called when a text area's text key has changed.
+     *
+     * @param textInput
+     * @param previousTextKey
+     */
+    public void textKeyChanged(TextArea textArea, String previousTextKey);
 }

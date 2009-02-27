@@ -20,6 +20,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
@@ -688,8 +689,17 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     public class ParagraphView extends ElementView {
+        private Bounds terminatorBounds = null;
+
         public ParagraphView(Paragraph paragraph) {
             super(paragraph);
+        }
+
+        @Override
+        public void invalidate() {
+            super.invalidate();
+
+            terminatorBounds = null;
         }
 
         @Override
@@ -700,7 +710,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 ArrayList<ArrayList<NodeView>> rows = new ArrayList<ArrayList<NodeView>>();
 
                 // Break the views into multiple rows
-                int breakWidth = getBreakWidth() - paragraphTerminatorSize;
+                int breakWidth = getBreakWidth() - PARAGRAPH_TERMINATOR_WIDTH;
 
                 ArrayList<NodeView> row = new ArrayList<NodeView>();
                 int rowWidth = 0;
@@ -753,37 +763,55 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                 // Add the row views to this view, lay out, and calculate size
                 int width = 0;
-                int y = 0;
+                int height = 0;
 
                 for (int i = 0, n = rows.getLength(); i < n; i++) {
                     row = rows.get(i);
 
-                    int x = 0;
+                    // Determine the row height
                     int rowHeight = 0;
-
                     for (NodeView nodeView : row) {
-                        // TODO Set vertical alignment; we may need to calculate
-                        // row height in the previous loop to do so
-                        nodeView.setLocation(x, y);
-                        x += nodeView.getWidth();
                         rowHeight = Math.max(rowHeight, nodeView.getHeight());
+                    }
+
+                    int x = 0;
+                    for (NodeView nodeView : row) {
+                        // TODO Use node's vertical alignment properties to
+                        // determine y-value
+                        int y = rowHeight - nodeView.getHeight();
+
+                        nodeView.setLocation(x, y + height);
+                        x += nodeView.getWidth();
 
                         add(nodeView);
                     }
 
                     width = Math.max(width, x);
-                    y += rowHeight;
+                    height += rowHeight;
                 }
 
-                // TODO Set terminator bounds here so we don't need to
-                // recalculate them every time
+                // Recalculate terminator bounds
+                LineMetrics lm = font.getLineMetrics("", 0, 0, fontRenderContext);
+                terminatorBounds = new Bounds(0, 0, PARAGRAPH_TERMINATOR_WIDTH,
+                    (int)Math.ceil(lm.getAscent() + lm.getDescent()
+                        + lm.getLeading()));
 
-                width = Math.max(width, paragraphTerminatorSize);
-                y = Math.max(y, paragraphTerminatorSize);
+                int n = getLength();
+                if (n > 0) {
+                    NodeView lastNodeView = get(n - 1);
+
+                    terminatorBounds.x = lastNodeView.getX() + lastNodeView.getWidth();
+                    terminatorBounds.y = lastNodeView.getY();
+                }
+
+                // Ensure that the paragraph is at least as large as the
+                // terminator, so it still has space even when empty
+                width = Math.max(width, terminatorBounds.width);
+                height = Math.max(height, terminatorBounds.height);
 
                 // TODO Don't hard-code padding; use the value specified
                 // by the Paragraph
-                setSize(width, y + 2);
+                setSize(width, height + 2);
             }
 
             super.validate();
@@ -792,6 +820,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
+            // TODO Make this styleable
             Paragraph paragraph = (Paragraph)getNode();
             Bounds terminatorBounds = getCharacterBounds(paragraph.getCharacterCount() - 1);
             graphics.setColor(Color.RED);
@@ -826,18 +855,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             Paragraph paragraph = (Paragraph)getNode();
             if (offset == paragraph.getCharacterCount() - 1) {
-                int x = 0;
-                int y = 0;
-
-                int n = getLength();
-                if (n > 0) {
-                    NodeView lastNodeView = get(n - 1);
-
-                    x = lastNodeView.getX() + lastNodeView.getWidth();
-                    y = lastNodeView.getY();
-                }
-
-                bounds = new Bounds(x, y, paragraphTerminatorSize, paragraphTerminatorSize);
+                bounds = new Bounds(terminatorBounds);
             } else {
                 bounds = super.getCharacterBounds(offset);
             }
@@ -903,8 +921,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 int height;
 
                 if (length == 0) {
-                    // Return a width of 0 and the font height
-                    width = 0;
+                    // TODO Should we even support this case?
+                    width = PARAGRAPH_TERMINATOR_WIDTH;
 
                     LineMetrics lm = font.getLineMetrics("", start, start + length,
                         fontRenderContext);
@@ -1043,8 +1061,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             String text = textNode.getText();
             GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, text);
 
-            Rectangle glyphBounds = glyphVector.getGlyphPixelBounds(offset,
-                fontRenderContext, 0, 0);
+            Shape glyphVisualBounds = glyphVector.getGlyphVisualBounds(offset);
+            Rectangle glyphBounds = glyphVisualBounds.getBounds();
             Bounds bounds = new Bounds(glyphBounds.x, 0, glyphBounds.width, getHeight());
 
             return bounds;
@@ -1159,7 +1177,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private Color color;
     private Insets margin = new Insets(4);
     private boolean breakOnWhitespaceOnly = false;
-    private int paragraphTerminatorSize = 8;
+
+    public static final int PARAGRAPH_TERMINATOR_WIDTH = 2;
 
     public TextAreaSkin() {
         Theme theme = Theme.getTheme();
@@ -1556,6 +1575,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     public void editableChanged(TextArea textArea) {
+        // No-op
+    }
+
+    public void textKeyChanged(TextArea textArea, String previousTextKey) {
         // No-op
     }
 

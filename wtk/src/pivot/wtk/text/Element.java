@@ -185,11 +185,6 @@ public abstract class Element extends Node
 
             if (start == end) {
                 // The range is entirely contained by one child node
-
-                // TODO Remove the entire node, if the range contains it; this
-                // is required to delete empty elements such as paragraphs and
-                // spans
-
                 Node node = get(start);
                 Node segment = node.removeRange(offset - node.getOffset(), characterCount);
                 element.add(segment);
