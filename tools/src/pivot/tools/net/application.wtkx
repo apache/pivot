@@ -1,39 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Copyright (c) 2008 VMware, Inc.
 
-<!-- Copyright (c) 2008 Satellite Consulting, Inc. -->
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+
 <Window title="HTTP Client"
-  maximized="true"
-  xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
-  xmlns="pivot.wtk">
+        maximized="true"
+        xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+        xmlns="pivot.wtk"
+        xmlns:content="pivot.wtk.content">
   <content>
-    <Border styles="{backgroundColor:10, thickness:0, padding:8}">
-      <content>
-        <Border styles="{padding:0}">
-          <content>
-            <ScrollPane styles="{backgroundColor:11}">
-              <view>
-                <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:6}">
-                  <Rollup expanded="true">
-                    <Label text="Server" styles="{fontBold:true, fontSize:12, color:13}" />
-                    <wtkx:include namespace="server" src="server.wtkx" />
-                  </Rollup>
-                  <Rollup expanded="true">
-                    <Label text="Authentication" styles="{fontBold:true, fontSize:12, color:13}" />
-                    <wtkx:include namespace="authentication" src="authentication.wtkx" />
-                  </Rollup>
-                  <Rollup expanded="true">
-                    <Label text="Request" styles="{fontBold:true, fontSize:12, color:13}" />
-                    <wtkx:include namespace="request" src="request.wtkx" />
-                  </Rollup>
-                  <FlowPane styles="{padding:12}">
-                    <PushButton wtkx:id="submit" buttonData="Submit" />
-                  </FlowPane>
-                </FlowPane>
-              </view>
-            </ScrollPane>
-          </content>
-        </Border>
-      </content>
-    </Border>
+    <TablePane styles="{verticalSpacing:1, showHorizontalGridLines:true, gridColor:7}">
+      <columns>
+        <TablePane.Column width="1*" />
+      </columns>
+      <rows>
+        <TablePane.Row height="-1">
+          <wtkx:include namespace="menuBar" src="menuBar.wtkx" />
+        </TablePane.Row>
+        <TablePane.Row height="1*">
+          <Border styles="{thickness:0, padding:2}">
+            <content>
+              <SplitPane orientation="vertical" splitLocation="400" primaryRegion="top_left">
+                <top>
+                  <wtkx:include namespace="request" src="request.wtkx" />
+                </top>
+                <bottom>
+                  <wtkx:include namespace="log" src="log.wtkx" />
+                </bottom>
+              </SplitPane>
+            </content>
+          </Border>
+        </TablePane.Row>
+      </rows>
+    </TablePane>
   </content>
 </Window>

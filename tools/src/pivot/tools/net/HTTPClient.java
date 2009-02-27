@@ -15,28 +15,45 @@
  */
 package pivot.tools.net;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.IOException;
-import javax.swing.JTextArea;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
 
 import pivot.collections.Dictionary;
 import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
+import pivot.util.Vote;
+import pivot.util.concurrent.Task;
+import pivot.util.concurrent.TaskListener;
 import pivot.web.BasicAuthentication;
 import pivot.web.DeleteQuery;
 import pivot.web.GetQuery;
 import pivot.web.PostQuery;
 import pivot.web.PutQuery;
 import pivot.web.Query;
+import pivot.wtk.Action;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
+import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Checkbox;
+import pivot.wtk.Component;
 import pivot.wtk.Display;
+import pivot.wtk.ListButton;
+import pivot.wtk.ListButtonSelectionListener;
+import pivot.wtk.PushButton;
+import pivot.wtk.Sheet;
+import pivot.wtk.SheetStateListener;
+import pivot.wtk.TaskAdapter;
+import pivot.wtk.TextArea;
 import pivot.wtk.TextInput;
 import pivot.wtk.Window;
+import pivot.wtk.content.ListItem;
 import pivot.wtkx.WTKXSerializer;
 
 /**
@@ -46,6 +63,24 @@ import pivot.wtkx.WTKXSerializer;
  */
 @SuppressWarnings("unchecked")
 public class HTTPClient implements Application {
+    /**
+     * The supported protocols.
+     *
+     * @author tvolkert
+     */
+    private static enum Protocol {
+        HTTP,
+        HTTPS;
+
+        public static Protocol decode(String value) {
+            return valueOf(value.toUpperCase());
+        }
+
+        public boolean isSecure() {
+            return (this == HTTPS);
+        }
+    }
+
     /**
      * The supported HTTP methods.
      *
@@ -71,8 +106,8 @@ public class HTTPClient implements Application {
      *
      * @author tvolkert
      */
-    private static class StringSerializer implements Serializer {
-        public Object readObject(InputStream inputStream)
+    private static class StringSerializer implements Serializer<String> {
+        public String readObject(InputStream inputStream)
             throws IOException, SerializationException {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -84,55 +119,71 @@ public class HTTPClient implements Application {
                 stringBuilder.append(characterBuffer, 0, charCount);
             }
 
-            System.out.println("IN  --> " + stringBuilder.toString());
             return stringBuilder.toString();
         }
 
-        public void writeObject(Object object, OutputStream outputStream)
+        public void writeObject(String string, OutputStream outputStream)
             throws IOException, SerializationException {
-            String string = (String)object;
             OutputStreamWriter writer = new OutputStreamWriter(outputStream);
-            System.out.println("OUT --> " + string);
             writer.write(string);
             writer.flush();
         }
 
-        public String getMIMEType(Object object) {
+        public String getMIMEType(String string) {
             return "text/plain";
+        }
+    }
+
+    /**
+     * Considers all SSL hostnames as valid (performs no actual verification).
+     *
+     * @author tvolkert
+     */
+    private static class LenientHostnameVerifier implements HostnameVerifier {
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
         }
     }
 
     private WTKXSerializer serializer;
     private Window window;
 
-    private static StringSerializer stringSerializer = new StringSerializer();
+    private boolean authenticate = false;
+    private boolean lenientHostnameVerification = false;
 
-    private BasicAuthentication getAuthentication() {
-        TextInput usernameInput = (TextInput)serializer.getObjectByName("authentication.username");
-        TextInput passwordInput = (TextInput)serializer.getObjectByName("authentication.password");
-        return new BasicAuthentication(usernameInput.getText(), passwordInput.getText());
-    }
+    private StringSerializer stringSerializer = new StringSerializer();
+    private LenientHostnameVerifier lenientHostnameVerifier = new LenientHostnameVerifier();
 
+    /**
+     * Gets the query to issue to the server, authenticated if needed.
+     */
     private Query<?> getQuery() {
-        Button.Group methods = Button.getGroup("method");
-        Button selectedMethod = methods.getSelection();
-        Method method = Method.decode((String)selectedMethod.getButtonData());
+        ListButton protocolListButton = (ListButton)serializer.getObjectByName("request.protocol");
+        ListItem protocolListItem = (ListItem)protocolListButton.getSelectedValue();
+        Protocol protocol = Protocol.decode(protocolListItem.getText());
+        boolean secure = protocol.isSecure();
 
-        TextInput hostInput = (TextInput)serializer.getObjectByName("server.host");
-        TextInput portInput = (TextInput)serializer.getObjectByName("server.port");
-        Checkbox secureCheckbox = (Checkbox)serializer.getObjectByName("server.secure");
+        TextInput hostTextInput = (TextInput)serializer.getObjectByName("request.host");
+        String host = hostTextInput.getText();
 
-        String host = hostInput.getText();
-        int port = Integer.parseInt(portInput.getText());
-        boolean secure = secureCheckbox.isSelected();
+        TextInput portTextInput = (TextInput)serializer.getObjectByName("request.port");
+        String portText = portTextInput.getText();
+        int port;
+        try {
+            port = Integer.parseInt(portText);
+        } catch (Exception ex) {
+            port = secure ? 443 : 80;
+        }
 
-        TextInput pathInput = (TextInput)serializer.getObjectByName("request.path");
+        TextInput pathTextInput = (TextInput)serializer.getObjectByName("request.path");
         // TODO Arguments
-        String path = pathInput.getText();
+        String path = pathTextInput.getText();
 
-        JTextArea textArea = (JTextArea)serializer.getObjectByName("request.bodyText");
-        String body = textArea.getText();
+        ListButton methodListButton = (ListButton)serializer.getObjectByName("request.method");
+        ListItem methodListItem = (ListItem)methodListButton.getSelectedValue();
+        Method method = Method.decode(methodListItem.getText());
 
+        // Construct the query
         Query<?> query = null;
 
         switch (method) {
@@ -140,21 +191,45 @@ public class HTTPClient implements Application {
             query = new GetQuery(host, port, path, secure);
             break;
 
-        case POST:
+        case POST: {
             query = new PostQuery(host, port, path, secure);
+            TextArea textArea = (TextArea)serializer.getObjectByName("request.body");
+            String body = textArea.getText();
             ((PostQuery)query).setValue(body);
             break;
+        }
 
-        case PUT:
+        case PUT: {
             query = new PutQuery(host, port, path, secure);
+            TextArea textArea = (TextArea)serializer.getObjectByName("request.body");
+            String body = textArea.getText();
             ((PutQuery)query).setValue(body);
             break;
+        }
 
         case DELETE:
             query = new DeleteQuery(host, port, path, secure);
             break;
         }
+
+        // Use String (pass-through) serialization on the query
         query.setSerializer(stringSerializer);
+
+        if (secure && lenientHostnameVerification) {
+            // Use a lenient hostname verifier to ensude that the request goes through
+            query.setHostnameVerifier(lenientHostnameVerifier);
+        }
+
+        if (authenticate) {
+            TextInput usernameInput = (TextInput)serializer.getObjectByName("request.username");
+            TextInput passwordInput = (TextInput)serializer.getObjectByName("request.password");
+
+            String username = usernameInput.getText();
+            String password = passwordInput.getText();
+
+            BasicAuthentication authentication = new BasicAuthentication(username, password);
+            authentication.authenticate(query);
+        }
 
         return query;
     }
@@ -162,37 +237,132 @@ public class HTTPClient implements Application {
     // Application methods
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        System.setProperty("javax.net.ssl.trustStore", "/mts-cm/home/tvolkert/project/sci/etc/sci.keystore");
-        System.setProperty("javax.net.ssl.keyStorePassword", "bigbird1");
+        new Action("toggleAuthenticationAction") {
+            public String getDescription() {
+                return "Toggles authentication of requests";
+            }
+
+            public void perform() {
+                authenticate = !authenticate;
+
+                Component component = (Component)serializer.getObjectByName("request.authentication");
+                component.setDisplayable(authenticate);
+            }
+        };
+
+        new Action("toggleHostnameVerificationAction") {
+            public String getDescription() {
+                return "Toggles lenient hostname verification";
+            }
+
+            public void perform() {
+                lenientHostnameVerification = !lenientHostnameVerification;
+            }
+        };
+
+        new Action("setKeystoreAction") {
+            private String keystorePath = null;
+            private String keystorePassword = null;
+
+            public String getDescription() {
+                return "Sets a trusted keystore";
+            }
+
+            public void perform() {
+                final WTKXSerializer sheetSerializer = new WTKXSerializer();
+                final Sheet sheet;
+
+                try {
+                    sheet = (Sheet)sheetSerializer.readObject("pivot/tools/net/setKeystore.wtkx");
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                Button okButton = (Button)sheetSerializer.getObjectByName("okButton");
+                okButton.getButtonPressListeners().add(new ButtonPressListener() {
+                    public void buttonPressed(Button button) {
+                        sheet.close(true);
+                    }
+                });
+
+                Button cancelButton = (Button)sheetSerializer.getObjectByName("cancelButton");
+                cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
+                    public void buttonPressed(Button button) {
+                        sheet.close(false);
+                    }
+                });
+
+                if (keystorePath != null) {
+                    TextInput pathTextInput = (TextInput)sheetSerializer.getObjectByName("path");
+                    pathTextInput.setText(keystorePath);
+                }
+
+                if (keystorePassword != null) {
+                    TextInput passwdTextInput = (TextInput)sheetSerializer.getObjectByName("passwd");
+                    passwdTextInput.setText(keystorePassword);
+                }
+
+                sheet.getSheetStateListeners().add(new SheetStateListener() {
+                    public Vote previewSheetClose(Sheet sheet, boolean result) {
+                        Vote vote = Vote.APPROVE;
+
+                        if (result) {
+                            TextInput pathTextInput = (TextInput)sheetSerializer.getObjectByName("path");
+                            TextInput passwdTextInput = (TextInput)sheetSerializer.getObjectByName("passwd");
+
+                            keystorePath = pathTextInput.getText();
+                            keystorePassword = passwdTextInput.getText();
+
+                            File file = new File(keystorePath);
+                            if (!file.exists()
+                                || !file.isFile()) {
+                                vote = Vote.DENY;
+                            } else if (!file.canRead()) {
+                                vote = Vote.DENY;
+                            }
+                        }
+
+                        return vote;
+                    }
+
+                    public void sheetCloseVetoed(Sheet sheet, Vote reaso) {
+                        // No-op
+                    }
+
+                    public void sheetClosed(Sheet sheet) {
+                        if (sheet.getResult()) {
+                            System.setProperty("javax.net.ssl.trustStore", keystorePath);
+                            System.setProperty("javax.net.ssl.keyStorePassword", keystorePassword);
+                        }
+                    }
+                });
+
+                sheet.open(window);
+            }
+        };
 
         // Load the main app window
         serializer = new WTKXSerializer();
-        window = (Window)serializer.readObject("com/sci/test/application.wtkx");
+        window = (Window)serializer.readObject("pivot/tools/net/application.wtkx");
         window.open(display);
 
-        /*
-        final SwingAdapter body = (SwingAdapter)serializer.getObjectByName("request.body");
-        final Button.Group methods = Button.getGroup("method");
-        methods.getGroupListeners().add(new Button.GroupListener() {
-            @Override
-            public void selectionChanged(Button.Group group, Button previousSelection) {
-                Button selection = group.getSelection();
-                Method method = Method.decode((String)selection.getButtonData());
-                body.setDisplayable(method.hasBody());
+        ListButton methodListButton = (ListButton)serializer.getObjectByName("request.method");
+        methodListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
+            public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
+                ListItem listItem = (ListItem)listButton.getSelectedValue();
+                Method method = Method.decode(listItem.getText());
+                TextArea bodyTextArea = (TextArea)serializer.getObjectByName("request.body");
+                bodyTextArea.setEnabled(method.hasBody());
             }
         });
 
-        PushButton submitButton = (PushButton)serializer.getObjectByName("submit");
+        PushButton submitButton = (PushButton)serializer.getObjectByName("request.submit");
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
-            @Override
             public void buttonPressed(final Button button) {
                 button.setEnabled(false);
 
                 Query<Object> query = (Query<Object>)getQuery();
-                //getAuthentication().authenticate(query);
-
                 query.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
-                    @Override
                     public void taskExecuted(Task<Object> task) {
                         button.setEnabled(true);
                         Object result = task.getResult();
@@ -201,7 +371,6 @@ public class HTTPClient implements Application {
                         System.out.println(result);
                     }
 
-                    @Override
                     public void executeFailed(Task<Object> task) {
                         button.setEnabled(true);
                         task.getFault().printStackTrace();
@@ -209,7 +378,6 @@ public class HTTPClient implements Application {
                 }));
             }
         });
-        */
     }
 
     public boolean shutdown(boolean optional) throws Exception {
