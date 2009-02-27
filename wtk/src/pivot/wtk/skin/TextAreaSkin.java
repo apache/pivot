@@ -700,7 +700,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 ArrayList<ArrayList<NodeView>> rows = new ArrayList<ArrayList<NodeView>>();
 
                 // Break the views into multiple rows
-                int breakWidth = getBreakWidth();
+                int breakWidth = getBreakWidth() - paragraphTerminatorSize;
 
                 ArrayList<NodeView> row = new ArrayList<NodeView>();
                 int rowWidth = 0;
@@ -762,6 +762,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     int rowHeight = 0;
 
                     for (NodeView nodeView : row) {
+                        // TODO Set vertical alignment; we may need to calculate
+                        // row height in the previous loop to do so
                         nodeView.setLocation(x, y);
                         x += nodeView.getWidth();
                         rowHeight = Math.max(rowHeight, nodeView.getHeight());
@@ -773,12 +775,28 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     y += rowHeight;
                 }
 
+                // TODO Set terminator bounds here so we don't need to
+                // recalculate them every time
+
+                width = Math.max(width, paragraphTerminatorSize);
+                y = Math.max(y, paragraphTerminatorSize);
+
                 // TODO Don't hard-code padding; use the value specified
                 // by the Paragraph
                 setSize(width, y + 2);
             }
 
             super.validate();
+        }
+
+        public void paint(Graphics2D graphics) {
+            super.paint(graphics);
+
+            Paragraph paragraph = (Paragraph)getNode();
+            Bounds terminatorBounds = getCharacterBounds(paragraph.getCharacterCount() - 1);
+            graphics.setColor(Color.RED);
+            graphics.fillRect(terminatorBounds.x, terminatorBounds.y,
+                terminatorBounds.width, terminatorBounds.height);
         }
 
         @Override
@@ -788,8 +806,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
         @Override
         public int getCharacterAt(int x, int y) {
-            // TODO Detect the terminator character
-            return super.getCharacterAt(x, y);
+            Paragraph paragraph = (Paragraph)getNode();
+            int terminatorOffset = paragraph.getCharacterCount() - 1;
+            Bounds terminatorBounds = getCharacterBounds(terminatorOffset);
+
+            int offset;
+            if (terminatorBounds.contains(x, y)) {
+                offset = terminatorOffset;
+            } else {
+                offset = super.getCharacterAt(x, y);
+            }
+
+            return offset;
         }
 
         @Override
@@ -798,8 +826,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             Paragraph paragraph = (Paragraph)getNode();
             if (offset == paragraph.getCharacterCount() - 1) {
-                // TODO Give the terminator character some actual space
-                bounds = new Bounds();
+                int x = 0;
+                int y = 0;
+
+                int n = getLength();
+                if (n > 0) {
+                    NodeView lastNodeView = get(n - 1);
+
+                    x = lastNodeView.getX() + lastNodeView.getWidth();
+                    y = lastNodeView.getY();
+                }
+
+                bounds = new Bounds(x, y, paragraphTerminatorSize, paragraphTerminatorSize);
             } else {
                 bounds = super.getCharacterBounds(offset);
             }
@@ -1121,6 +1159,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private Color color;
     private Insets margin = new Insets(4);
     private boolean breakOnWhitespaceOnly = false;
+    private int paragraphTerminatorSize = 8;
 
     public TextAreaSkin() {
         Theme theme = Theme.getTheme();

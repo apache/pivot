@@ -24,7 +24,6 @@ import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.Element;
-import pivot.wtk.text.ImageNode;
 import pivot.wtk.text.Node;
 import pivot.wtk.text.NodeListener;
 import pivot.wtk.text.Paragraph;
@@ -318,8 +317,8 @@ public class TextArea extends Component {
     }
 
     public void insertText(char character) {
-        // TODO Merge character into text node, or create a new one if we
-        // need to; don't make every add undoable
+        // TODO Don't make every character undoable; break at word boundaries?
+
         insertText(Character.toString(character));
     }
 
@@ -333,18 +332,45 @@ public class TextArea extends Component {
         }
 
         if (selectionLength > 0) {
-            // TODO Make this part of the undoable action?
+            // TODO Make this part of the undoable action (for all such
+            // actions)
             document.removeRange(selectionStart, selectionLength);
         }
 
         Node descendant = document.getDescendantAt(selectionStart);
-        Element parent = descendant.getParent();
+        int offset = selectionStart - descendant.getDocumentOffset();
 
-        Element range = (Element)parent.duplicate(false);
-        range.add(new TextNode(text));
+        if (descendant instanceof TextNode) {
+            // The caret is positioned within an existing text node
+            TextNode textNode = (TextNode)descendant;
+            textNode.insertText(text, offset);
+        } else if (descendant instanceof Paragraph) {
+            // The caret is positioned on the paragraph terminator
+            Paragraph paragraph = (Paragraph)descendant;
 
-        int offset = selectionStart - parent.getOffset();
-        parent.insertRange(range, offset);
+            int n = paragraph.getLength();
+            if (n > 0) {
+                Node node = paragraph.get(n - 1);
+                if (node instanceof TextNode) {
+                    // Insert the text into the existing node
+                    TextNode textNode = (TextNode)node;
+                    textNode.insertText(text, offset);
+                } else {
+                    // Append a new text node
+                    paragraph.add(new TextNode(text));
+                }
+            } else {
+                // The paragraph is currently empty
+                paragraph.add(new TextNode(text));
+            }
+        } else {
+            // The caret is positioned on a non-text character node; insert
+            // the text into the descendant's parent
+            Element parent = descendant.getParent();
+            Element range = (Element)parent.duplicate(false);
+            range.add(new TextNode(text));
+            parent.insertRange(range, offset);
+        }
 
         // Set the selection start to the character following the insertion
         setSelection(selectionStart + text.length(), selectionLength);
@@ -363,14 +389,7 @@ public class TextArea extends Component {
             document.removeRange(selectionStart, selectionLength);
         }
 
-        Node descendant = document.getDescendantAt(selectionStart);
-        Element parent = descendant.getParent();
-
-        Element range = (Element)parent.duplicate(false);
-        range.add(new ImageNode(image));
-
-        int offset = selectionStart - parent.getOffset();
-        parent.insertRange(range, offset);
+        // TODO
 
         // Set the selection start to the character following the insertion
         setSelection(selectionStart + 1, selectionLength);
@@ -378,7 +397,9 @@ public class TextArea extends Component {
 
     public void insertParagraph() {
         // TODO Add a flag indicating if the paragraph should be added inline
-        // or as a top-level element?
+        // or as a top-level element? For example, when inserting a new
+        // paragraph into a list item, we don't want to insert the range into
+        // the document - we want to insert it into the list item.
 
         if (document == null) {
             throw new IllegalStateException("No document.");
@@ -390,10 +411,6 @@ public class TextArea extends Component {
 
         Document range = new Document();
         Paragraph paragraph = new Paragraph();
-
-        // TODO We may not need/want to add a text node here once we add the
-        // terminator node to Paragraph
-        paragraph.add(new TextNode());
 
         range.add(paragraph);
         document.insertRange(range, selectionStart);
