@@ -149,6 +149,11 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         }
     }
 
+    public final void setBackgroundColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(color));
+    }
+
     public Font getFont() {
         return font;
     }
@@ -191,6 +196,11 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         setColor(decodeColor(color));
     }
 
+    public final void setColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setColor(theme.getColor(color));
+    }
+
     public Color getDisabledColor() {
         return disabledColor;
     }
@@ -210,6 +220,11 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         }
 
         setDisabledColor(decodeColor(disabledColor));
+    }
+
+    public final void setDisabledColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledColor(theme.getColor(color));
     }
 
     public Color getHighlightColor() {
@@ -233,6 +248,11 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         setHighlightColor(decodeColor(highlightColor));
     }
 
+    public final void setHighlightColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setHighlightColor(theme.getColor(color));
+    }
+
     public Color getHighlightBackgroundColor() {
         return highlightBackgroundColor;
     }
@@ -252,6 +272,11 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         }
 
         setHighlightBackgroundColor(decodeColor(highlightBackgroundColor));
+    }
+
+    public final void setHighlightBackgroundColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setHighlightBackgroundColor(theme.getColor(color));
     }
 
     public int getSpacing() {
