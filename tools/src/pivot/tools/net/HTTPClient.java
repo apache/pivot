@@ -102,39 +102,6 @@ public class HTTPClient implements Application {
     }
 
     /**
-     * Serializes HTTP requests and responses to strings.
-     *
-     * @author tvolkert
-     */
-    private static class StringSerializer implements Serializer<String> {
-        public String readObject(InputStream inputStream)
-            throws IOException, SerializationException {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            InputStreamReader reader = new InputStreamReader(inputStream);
-            char[] characterBuffer = new char[1024];
-            int charCount = 0;
-
-            while ((charCount = reader.read(characterBuffer)) != -1) {
-                stringBuilder.append(characterBuffer, 0, charCount);
-            }
-
-            return stringBuilder.toString();
-        }
-
-        public void writeObject(String string, OutputStream outputStream)
-            throws IOException, SerializationException {
-            OutputStreamWriter writer = new OutputStreamWriter(outputStream);
-            writer.write(string);
-            writer.flush();
-        }
-
-        public String getMIMEType(String string) {
-            return "text/plain";
-        }
-    }
-
-    /**
      * Considers all SSL hostnames as valid (performs no actual verification).
      *
      * @author tvolkert
@@ -151,13 +118,12 @@ public class HTTPClient implements Application {
     private boolean authenticate = false;
     private boolean lenientHostnameVerification = false;
 
-    private StringSerializer stringSerializer = new StringSerializer();
     private LenientHostnameVerifier lenientHostnameVerifier = new LenientHostnameVerifier();
 
     /**
      * Gets the query to issue to the server, authenticated if needed.
      */
-    private Query<?> getQuery() {
+    private HTTPRequest getHTTPRequest() {
         ListButton protocolListButton = (ListButton)serializer.getObjectByName("request.protocol");
         ListItem protocolListItem = (ListItem)protocolListButton.getSelectedValue();
         Protocol protocol = Protocol.decode(protocolListItem.getText());
@@ -176,48 +142,22 @@ public class HTTPClient implements Application {
         }
 
         TextInput pathTextInput = (TextInput)serializer.getObjectByName("request.path");
-        // TODO Arguments
         String path = pathTextInput.getText();
 
         ListButton methodListButton = (ListButton)serializer.getObjectByName("request.method");
         ListItem methodListItem = (ListItem)methodListButton.getSelectedValue();
         Method method = Method.decode(methodListItem.getText());
 
-        // Construct the query
-        Query<?> query = null;
+        // Construct the HTTP request
+        HTTPRequest httpRequest = new HTTPRequest(method.toString(), protocol.toString(), host, port, path);
 
-        switch (method) {
-        case GET:
-            query = new GetQuery(host, port, path, secure);
-            break;
+        TextArea textArea = (TextArea)serializer.getObjectByName("request.body");
+        String body = textArea.getText();
+        httpRequest.setBody(body.getBytes());
 
-        case POST: {
-            query = new PostQuery(host, port, path, secure);
-            TextArea textArea = (TextArea)serializer.getObjectByName("request.body");
-            String body = textArea.getText();
-            ((PostQuery)query).setValue(body);
-            break;
-        }
-
-        case PUT: {
-            query = new PutQuery(host, port, path, secure);
-            TextArea textArea = (TextArea)serializer.getObjectByName("request.body");
-            String body = textArea.getText();
-            ((PutQuery)query).setValue(body);
-            break;
-        }
-
-        case DELETE:
-            query = new DeleteQuery(host, port, path, secure);
-            break;
-        }
-
-        // Use String (pass-through) serialization on the query
-        query.setSerializer(stringSerializer);
-
-        if (secure && lenientHostnameVerification) {
+        if (lenientHostnameVerification) {
             // Use a lenient hostname verifier to ensude that the request goes through
-            query.setHostnameVerifier(lenientHostnameVerifier);
+            httpRequest.setHostnameVerifier(lenientHostnameVerifier);
         }
 
         if (authenticate) {
@@ -227,11 +167,10 @@ public class HTTPClient implements Application {
             String username = usernameInput.getText();
             String password = passwordInput.getText();
 
-            BasicAuthentication authentication = new BasicAuthentication(username, password);
-            authentication.authenticate(query);
+            // TODO
         }
 
-        return query;
+        return httpRequest;
     }
 
     // Application methods
@@ -333,6 +272,7 @@ public class HTTPClient implements Application {
                         if (sheet.getResult()) {
                             System.setProperty("javax.net.ssl.trustStore", keystorePath);
                             System.setProperty("javax.net.ssl.keyStorePassword", keystorePassword);
+                            System.out.println("Set system properties");
                         }
                     }
                 });
@@ -346,32 +286,23 @@ public class HTTPClient implements Application {
         window = (Window)serializer.readObject("pivot/tools/net/application.wtkx");
         window.open(display);
 
-        ListButton methodListButton = (ListButton)serializer.getObjectByName("request.method");
-        methodListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
-            public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
-                ListItem listItem = (ListItem)listButton.getSelectedValue();
-                Method method = Method.decode(listItem.getText());
-                TextArea bodyTextArea = (TextArea)serializer.getObjectByName("request.body");
-                bodyTextArea.setEnabled(method.hasBody());
-            }
-        });
-
         PushButton submitButton = (PushButton)serializer.getObjectByName("request.submit");
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(final Button button) {
                 button.setEnabled(false);
 
-                Query<Object> query = (Query<Object>)getQuery();
-                query.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
-                    public void taskExecuted(Task<Object> task) {
+                HTTPRequest httpRequest = getHTTPRequest();
+                httpRequest.execute(new TaskAdapter<HTTPResponse>(new TaskListener<HTTPResponse>() {
+                    public void taskExecuted(Task<HTTPResponse> task) {
                         button.setEnabled(true);
-                        Object result = task.getResult();
+                        HTTPResponse httpResponse = task.getResult();
 
                         // TODO
-                        System.out.println(result);
+                        System.out.println(httpResponse);
+                        System.out.println(new String(httpResponse.getBody()));
                     }
 
-                    public void executeFailed(Task<Object> task) {
+                    public void executeFailed(Task<HTTPResponse> task) {
                         button.setEnabled(true);
                         task.getFault().printStackTrace();
                     }

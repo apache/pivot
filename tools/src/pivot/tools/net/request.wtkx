@@ -64,7 +64,7 @@
                                 horizontalScrollBarPolicy="fill"
                                 verticalScrollBarPolicy="fillToCapacity">
                       <view>
-                        <TextArea wtkx:id="body" enabled="false" text="Content" />
+                        <TextArea wtkx:id="body" text="Content" />
                       </view>
                     </ScrollPane>
                   </content>
