@@ -128,7 +128,7 @@ public class HTTPClient implements Application {
     /**
      * Gets the query to issue to the server, authenticated if needed.
      */
-    private HTTPRequest getHTTPRequest() {
+    private Request getRequest() {
         ListButton protocolListButton = (ListButton)serializer.getObjectByName("request.protocol");
         ListItem protocolListItem = (ListItem)protocolListButton.getSelectedValue();
         Protocol protocol = Protocol.decode(protocolListItem.getText());
@@ -154,7 +154,7 @@ public class HTTPClient implements Application {
         Method method = Method.decode(methodListItem.getText());
 
         // Construct the HTTP request
-        HTTPRequest httpRequest = new HTTPRequest(method.toString(), protocol.toString(), host, port, path);
+        Request httpRequest = new Request(method.toString(), protocol.toString(), host, port, path);
 
         TextArea textArea = (TextArea)serializer.getObjectByName("request.body");
         String body = textArea.getText();
@@ -346,19 +346,19 @@ public class HTTPClient implements Application {
             public void buttonPressed(final Button button) {
                 button.setEnabled(false);
 
-                HTTPRequest httpRequest = getHTTPRequest();
-                httpRequest.execute(new TaskAdapter<HTTPResponse>(new TaskListener<HTTPResponse>() {
-                    public void taskExecuted(Task<HTTPResponse> task) {
+                Request httpRequest = getRequest();
+                httpRequest.execute(new TaskAdapter<Response>(new TaskListener<Response>() {
+                    public void taskExecuted(Task<Response> task) {
                         button.setEnabled(true);
-                        HTTPResponse httpResponse = task.getResult();
-                        Transaction transaction = new Transaction((HTTPRequest)task, httpResponse);
+                        Response httpResponse = task.getResult();
+                        Transaction transaction = new Transaction((Request)task, httpResponse);
 
                         TableView tableView = (TableView)serializer.getObjectByName("log.tableView");
                         List<Transaction> tableData = (List<Transaction>)tableView.getTableData();
                         tableData.add(transaction);
                     }
 
-                    public void executeFailed(Task<HTTPResponse> task) {
+                    public void executeFailed(Task<Response> task) {
                         button.setEnabled(true);
                         task.getFault().printStackTrace();
                     }

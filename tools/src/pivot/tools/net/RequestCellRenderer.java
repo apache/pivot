@@ -19,7 +19,7 @@ import pivot.wtk.TableView;
 import pivot.wtk.content.TableViewCellRenderer;
 
 /**
- * Renders an <tt>HTTPRequest</tt> in the form of <tt>[method] [resource]</tt>.
+ * Renders an <tt>Request</tt> in the form of <tt>[method] [resource]</tt>.
  *
  * @author tvolkert
  */
@@ -28,7 +28,7 @@ public class RequestCellRenderer extends TableViewCellRenderer {
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
         Transaction transaction = (Transaction)value;
-        HTTPRequest httpRequest = transaction.getRequest();
+        Request httpRequest = transaction.getRequest();
 
         StringBuilder buf = new StringBuilder();
         buf.append(httpRequest.getMethod());

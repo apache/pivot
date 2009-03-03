@@ -26,7 +26,7 @@ import pivot.collections.Map;
  *
  * @author tvolkert
  */
-public class HTTPResponse {
+public class Response {
     /**
      * Response headers dictionary implementation.
      */
@@ -77,16 +77,16 @@ public class HTTPResponse {
     private ResponseHeadersDictionary responseHeadersDictionary = new ResponseHeadersDictionary();
 
     /**
-     * Creates a new <tt>HTTPResponse</tt>.
+     * Creates a new <tt>Response</tt>.
      */
-    HTTPResponse(int statusCode, String statusMessage, Map<String, String> responseHeaders) {
+    Response(int statusCode, String statusMessage, Map<String, String> responseHeaders) {
         this(statusCode, statusMessage, responseHeaders, null);
     }
 
     /**
-     * Creates a new <tt>HTTPResponse</tt>.
+     * Creates a new <tt>Response</tt>.
      */
-    HTTPResponse(int statusCode, String statusMessage, Map<String, String> responseHeaders, byte[] body) {
+    Response(int statusCode, String statusMessage, Map<String, String> responseHeaders, byte[] body) {
         if (statusMessage == null) {
             throw new IllegalArgumentException("statusMessage is null.");
         }

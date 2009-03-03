@@ -18,7 +18,7 @@ package pivot.tools.net;
 /**
  * Defines event listener methods that pertain to HTTP requests. Developers
  * register for such events by adding themselves to a request's list of "HTTP
- * request listeners" (see {@link HTTPRequest#getHTTPRequestListeners()}).
+ * request listeners" (see {@link Request#getRequestListeners()}).
  * <p>
  * Note that, like {@link pivot.util.concurrent.TaskListener task listeners},
  * query listeners will be notified on the query's worker thread, not the thread
@@ -26,14 +26,14 @@ package pivot.tools.net;
  *
  * @author tvolkert
  */
-public interface HTTPRequestListener {
+public interface RequestListener {
     /**
-     * Called when an <tt>HTTPRequest</tt> has connected to the server but the
+     * Called when an <tt>Request</tt> has connected to the server but the
      * request has not yet been sent.
      *
      * @param httpRequest
      */
-    public void connected(HTTPRequest httpRequest);
+    public void connected(Request httpRequest);
 
     /**
      * Called when the request has been sent to the server but the response has
@@ -41,19 +41,19 @@ public interface HTTPRequestListener {
      *
      * @param httpRequest
      */
-    public void requestSent(HTTPRequest httpRequest);
+    public void requestSent(Request httpRequest);
 
     /**
      * Called when a response has been received from the server.
      *
      * @param httpRequest
      */
-    public void responseReceived(HTTPRequest httpRequest);
+    public void responseReceived(Request httpRequest);
 
     /**
      * Called when an error has occurred
      *
      * @param httpRequest
      */
-    public void failed(HTTPRequest httpRequest);
+    public void failed(Request httpRequest);
 }

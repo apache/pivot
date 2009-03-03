@@ -21,19 +21,19 @@ package pivot.tools.net;
  * @author tvolkert
  */
 public class Transaction {
-    private HTTPRequest request;
-    private HTTPResponse response;
+    private Request request;
+    private Response response;
 
-    public Transaction(HTTPRequest request, HTTPResponse response) {
+    public Transaction(Request request, Response response) {
         this.request = request;
         this.response = response;
     }
 
-    public HTTPRequest getRequest() {
+    public Request getRequest() {
         return request;
     }
 
-    public HTTPResponse getResponse() {
+    public Response getResponse() {
         return response;
     }
 }

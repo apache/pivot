@@ -19,7 +19,7 @@ import pivot.wtk.TableView;
 import pivot.wtk.content.TableViewCellRenderer;
 
 /**
- * Renders an <tt>HTTPRequest</tt> in the form of <tt>[status code] [status message]</tt>.
+ * Renders an <tt>Request</tt> in the form of <tt>[status code] [status message]</tt>.
  *
  * @author tvolkert
  */
@@ -28,7 +28,7 @@ public class ResponseCellRenderer extends TableViewCellRenderer {
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
         Transaction transaction = (Transaction)value;
-        HTTPResponse response = transaction.getResponse();
+        Response response = transaction.getResponse();
 
         StringBuilder buf = new StringBuilder();
         buf.append(response.getStatusCode());

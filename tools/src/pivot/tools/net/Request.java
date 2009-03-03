@@ -38,7 +38,7 @@ import pivot.util.concurrent.TaskExecutionException;
  *
  * @author tvolkert
  */
-public class HTTPRequest extends IOTask<HTTPResponse> {
+public class Request extends IOTask<Response> {
     /**
      * Request headers dictionary implementation.
      */
@@ -74,28 +74,28 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
      *
      * @author tvolkert
      */
-    private static class HTTPRequestListenerList extends SynchronizedListenerList<HTTPRequestListener>
-        implements HTTPRequestListener {
-        public synchronized void connected(HTTPRequest httpRequest) {
-            for (HTTPRequestListener listener : this) {
+    private static class RequestListenerList extends SynchronizedListenerList<RequestListener>
+        implements RequestListener {
+        public synchronized void connected(Request httpRequest) {
+            for (RequestListener listener : this) {
                 listener.connected(httpRequest);
             }
         }
 
-        public synchronized void requestSent(HTTPRequest httpRequest) {
-            for (HTTPRequestListener listener : this) {
+        public synchronized void requestSent(Request httpRequest) {
+            for (RequestListener listener : this) {
                 listener.requestSent(httpRequest);
             }
         }
 
-        public synchronized void responseReceived(HTTPRequest httpRequest) {
-            for (HTTPRequestListener listener : this) {
+        public synchronized void responseReceived(Request httpRequest) {
+            for (RequestListener listener : this) {
                 listener.responseReceived(httpRequest);
             }
         }
 
-        public synchronized void failed(HTTPRequest httpRequest) {
-            for (HTTPRequestListener listener : this) {
+        public synchronized void failed(Request httpRequest) {
+            for (RequestListener listener : this) {
                 listener.failed(httpRequest);
             }
         }
@@ -112,12 +112,12 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
 
     private volatile long bytesExpected = -1;
 
-    private HTTPRequestListenerList httpRequestListeners = new HTTPRequestListenerList();
+    private RequestListenerList httpRequestListeners = new RequestListenerList();
 
     /**
      *
      */
-    public HTTPRequest(String method, String protocol, String host, int port, String path) {
+    public Request(String method, String protocol, String host, int port, String path) {
         this.method = method;
 
         try {
@@ -169,9 +169,9 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
     /**
      * Gets the number of bytes that have been sent in the body of this
      * HTTP request.  This number will increment in between the
-     * {@link HTTPRequestListener#connected(HTTPRequest) connected} and
-     * {@link HTTPRequestListener#requestSent(HTTPRequest) requestSent} phases
-     * of the <tt>HTTPRequestListener</tt> lifecycle methods. Interested
+     * {@link RequestListener#connected(Request) connected} and
+     * {@link RequestListener#requestSent(Request) requestSent} phases
+     * of the <tt>RequestListener</tt> lifecycle methods. Interested
      * listeners can poll for this value during that phase.
      */
     public long getBytesSent() {
@@ -181,9 +181,9 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
     /**
      * Gets the number of bytes that have been received from the server in the
      * body of the HTTP response.  This number will increment in between the
-     * {@link HTTPRequestListener#requestSent(HTTPRequest) requestSent} and
-     * {@link HTTPRequestListener#responseReceived(HTTPRequest) responseReceived}
-     * phases of the <tt>HTTPRequestListener</tt> lifecycle methods. Interested
+     * {@link RequestListener#requestSent(Request) requestSent} and
+     * {@link RequestListener#responseReceived(Request) responseReceived}
+     * phases of the <tt>RequestListener</tt> lifecycle methods. Interested
      * listeners can poll for this value during that phase.
      */
     public long getBytesReceived() {
@@ -206,8 +206,8 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
     }
 
     @Override
-    public HTTPResponse execute() throws TaskExecutionException {
-        HTTPResponse httpResponse = null;
+    public Response execute() throws TaskExecutionException {
+        Response httpResponse = null;
 
         HttpURLConnection connection = null;
 
@@ -277,7 +277,7 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
             int statusPrefix = statusCode / 100;
             if (statusPrefix != 2) {
                 // WE only retrieve the body for HTTP 200 (OK)
-                httpResponse = new HTTPResponse(statusCode, statusMessage, responseHeaders);
+                httpResponse = new Response(statusCode, statusMessage, responseHeaders);
             } else {
                 // Record the content length
                 bytesExpected = connection.getContentLength();
@@ -299,7 +299,7 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
                     }
                 }
 
-                httpResponse = new HTTPResponse(statusCode, statusMessage,
+                httpResponse = new Response(statusCode, statusMessage,
                     responseHeaders, byteArrayOutputStream.toByteArray());
             }
 
@@ -316,7 +316,7 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
     /**
      * Returns the HTTP request listener list.
      */
-    public ListenerList<HTTPRequestListener> getHTTPRequestListeners() {
+    public ListenerList<RequestListener> getRequestListeners() {
         return httpRequestListeners;
     }
 
@@ -325,7 +325,7 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
      *
      * @param listener
      */
-    public void setHTTPRequestListener(HTTPRequestListener listener) {
+    public void setRequestListener(RequestListener listener) {
         httpRequestListeners.add(listener);
     }
 }
