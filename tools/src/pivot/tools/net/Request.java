@@ -40,6 +40,29 @@ import pivot.util.concurrent.TaskExecutionException;
  */
 public class Request extends IOTask<Response> {
     /**
+     * The supported HTTP methods.
+     *
+     * @author tvolkert
+     */
+    public static enum Method {
+        GET,
+        POST,
+        PUT,
+        DELETE,
+        OPTIONS,
+        HEAD,
+        TRACE;
+
+        public static Method decode(String value) {
+            return valueOf(value.toUpperCase());
+        }
+
+        public boolean supportsOutput() {
+            return (this == POST || this == PUT);
+        }
+    }
+
+    /**
      * Request headers dictionary implementation.
      */
     public final class RequestHeadersDictionary
@@ -101,7 +124,7 @@ public class Request extends IOTask<Response> {
         }
     }
 
-    private String method;
+    private Method method;
     private URL location = null;
     private byte[] body = null;
     private HostnameVerifier hostnameVerifier = null;
@@ -118,7 +141,7 @@ public class Request extends IOTask<Response> {
      *
      */
     public Request(String method, String protocol, String host, int port, String path) {
-        this.method = method;
+        this.method = Method.decode(method);
 
         try {
             location = new URL(protocol, host, port, path);
@@ -128,7 +151,7 @@ public class Request extends IOTask<Response> {
     }
 
     public String getMethod() {
-        return method;
+        return method.toString();
     }
 
     public URL getLocation() {
@@ -222,7 +245,7 @@ public class Request extends IOTask<Response> {
         try {
             // Open a connection
             connection = (HttpURLConnection)location.openConnection();
-            connection.setRequestMethod(method);
+            connection.setRequestMethod(method.toString());
             connection.setAllowUserInteraction(false);
             connection.setInstanceFollowRedirects(false);
             connection.setUseCaches(false);
@@ -240,14 +263,14 @@ public class Request extends IOTask<Response> {
 
             // Set the input/output state
             connection.setDoInput(true);
-            connection.setDoOutput(!method.equalsIgnoreCase("GET"));
+            connection.setDoOutput(method.supportsOutput());
 
             // Connect to the server
             connection.connect();
             httpRequestListeners.connected(this);
 
             // Write the request body
-            if (body != null && !method.equalsIgnoreCase("GET")) {
+            if (method.supportsOutput() && body != null) {
                 OutputStream outputStream = null;
                 try {
                     outputStream = new MonitoredOutputStream(connection.getOutputStream());

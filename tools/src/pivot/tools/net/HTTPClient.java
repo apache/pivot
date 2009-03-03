@@ -68,26 +68,6 @@ public class HTTPClient implements Application {
         }
     }
 
-    /**
-     * The supported HTTP methods.
-     *
-     * @author tvolkert
-     */
-    private static enum Method {
-        GET,
-        POST,
-        PUT,
-        DELETE;
-
-        public static Method decode(String value) {
-            return valueOf(value.toUpperCase());
-        }
-
-        public boolean hasBody() {
-            return (this == POST || this == PUT);
-        }
-    }
-
     private static class Credentials {
         private String username;
         private String password;
@@ -151,10 +131,9 @@ public class HTTPClient implements Application {
 
         ListButton methodListButton = (ListButton)serializer.getObjectByName("request.method");
         ListItem methodListItem = (ListItem)methodListButton.getSelectedValue();
-        Method method = Method.decode(methodListItem.getText());
 
         // Construct the HTTP request
-        Request httpRequest = new Request(method.toString(), protocol.toString(), host, port, path);
+        Request httpRequest = new Request(methodListItem.getText(), protocol.toString(), host, port, path);
 
         TextArea textArea = (TextArea)serializer.getObjectByName("request.body");
         String body = textArea.getText();

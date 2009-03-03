@@ -35,6 +35,9 @@
               </cellRenderer>
             </TableView.Column>
             <TableView.Column name="received" width="60">
+              <cellRenderer>
+                <net:BytesReceivedCellRenderer />
+              </cellRenderer>
             </TableView.Column>
             <TableView.Column name="time" width="1*">
             </TableView.Column>
