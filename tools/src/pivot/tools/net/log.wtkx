@@ -17,10 +17,29 @@
 
 <Border xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
         xmlns="pivot.wtk"
+        xmlns:net="pivot.tools.net"
         styles="{thickness:1, color:7, backgroundColor:11, padding:0}">
   <content>
-    <ScrollPane>
+    <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
       <view>
+        <TableView wtkx:id="tableView">
+          <columns>
+            <TableView.Column name="request" width="185">
+              <cellRenderer>
+                <net:RequestCellRenderer />
+              </cellRenderer>
+            </TableView.Column>
+            <TableView.Column name="response" width="120">
+              <cellRenderer>
+                <net:ResponseCellRenderer />
+              </cellRenderer>
+            </TableView.Column>
+            <TableView.Column name="received" width="60">
+            </TableView.Column>
+            <TableView.Column name="time" width="1*">
+            </TableView.Column>
+          </columns>
+        </TableView>
       </view>
     </ScrollPane>
   </content>

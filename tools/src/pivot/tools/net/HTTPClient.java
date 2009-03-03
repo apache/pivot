@@ -16,39 +16,26 @@
 package pivot.tools.net;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.IOException;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
 import pivot.collections.Dictionary;
-import pivot.serialization.SerializationException;
-import pivot.serialization.Serializer;
+import pivot.collections.List;
+import pivot.util.Base64;
 import pivot.util.Vote;
 import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskListener;
-import pivot.web.BasicAuthentication;
-import pivot.web.DeleteQuery;
-import pivot.web.GetQuery;
-import pivot.web.PostQuery;
-import pivot.web.PutQuery;
-import pivot.web.Query;
 import pivot.wtk.Action;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
-import pivot.wtk.Checkbox;
-import pivot.wtk.Component;
 import pivot.wtk.Display;
 import pivot.wtk.ListButton;
-import pivot.wtk.ListButtonSelectionListener;
 import pivot.wtk.PushButton;
 import pivot.wtk.Sheet;
 import pivot.wtk.SheetStateListener;
+import pivot.wtk.TableView;
 import pivot.wtk.TaskAdapter;
 import pivot.wtk.TextArea;
 import pivot.wtk.TextInput;
@@ -101,6 +88,24 @@ public class HTTPClient implements Application {
         }
     }
 
+    private static class Credentials {
+        private String username;
+        private String password;
+
+        public Credentials(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+    }
+
     /**
      * Considers all SSL hostnames as valid (performs no actual verification).
      *
@@ -115,7 +120,7 @@ public class HTTPClient implements Application {
     private WTKXSerializer serializer;
     private Window window;
 
-    private boolean authenticate = false;
+    private Credentials credentials = null;
     private boolean lenientHostnameVerification = false;
 
     private LenientHostnameVerifier lenientHostnameVerifier = new LenientHostnameVerifier();
@@ -156,18 +161,14 @@ public class HTTPClient implements Application {
         httpRequest.setBody(body.getBytes());
 
         if (lenientHostnameVerification) {
-            // Use a lenient hostname verifier to ensude that the request goes through
+            // Use a lenient hostname verifier to ensure that the request goes through
             httpRequest.setHostnameVerifier(lenientHostnameVerifier);
         }
 
-        if (authenticate) {
-            TextInput usernameInput = (TextInput)serializer.getObjectByName("request.username");
-            TextInput passwordInput = (TextInput)serializer.getObjectByName("request.password");
-
-            String username = usernameInput.getText();
-            String password = passwordInput.getText();
-
-            // TODO
+        if (credentials != null) {
+            String token = credentials.getUsername() + ":" + credentials.getPassword();
+            String encodedToken = Base64.encode(token.getBytes());
+            httpRequest.getRequestHeaders().put("Authorization", "Basic " + encodedToken);
         }
 
         return httpRequest;
@@ -176,16 +177,71 @@ public class HTTPClient implements Application {
     // Application methods
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        new Action("toggleAuthenticationAction") {
+        new Action("setAuthenticationAction") {
             public String getDescription() {
-                return "Toggles authentication of requests";
+                return "Specifies authentication credentials";
             }
 
             public void perform() {
-                authenticate = !authenticate;
+                final WTKXSerializer sheetSerializer = new WTKXSerializer();
+                final Sheet sheet;
 
-                Component component = (Component)serializer.getObjectByName("request.authentication");
-                component.setDisplayable(authenticate);
+                try {
+                    sheet = (Sheet)sheetSerializer.readObject("pivot/tools/net/setAuthentication.wtkx");
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                Button okButton = (Button)sheetSerializer.getObjectByName("okButton");
+                okButton.getButtonPressListeners().add(new ButtonPressListener() {
+                    public void buttonPressed(Button button) {
+                        sheet.close(true);
+                    }
+                });
+
+                Button cancelButton = (Button)sheetSerializer.getObjectByName("cancelButton");
+                cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
+                    public void buttonPressed(Button button) {
+                        sheet.close(false);
+                    }
+                });
+
+                if (credentials != null) {
+                    TextInput usernameTextInput = (TextInput)sheetSerializer.getObjectByName("username");
+                    TextInput passwordTextInput = (TextInput)sheetSerializer.getObjectByName("password");
+                    usernameTextInput.setText(credentials.getUsername());
+                    passwordTextInput.setText(credentials.getPassword());
+                }
+
+                sheet.getSheetStateListeners().add(new SheetStateListener() {
+                    public Vote previewSheetClose(Sheet sheet, boolean result) {
+                        return Vote.APPROVE;
+                    }
+
+                    public void sheetCloseVetoed(Sheet sheet, Vote reaso) {
+                        // No-op
+                    }
+
+                    public void sheetClosed(Sheet sheet) {
+                        if (sheet.getResult()) {
+                            TextInput usernameTextInput = (TextInput)
+                                sheetSerializer.getObjectByName("username");
+                            TextInput passwordTextInput = (TextInput)
+                                sheetSerializer.getObjectByName("password");
+
+                            String username = usernameTextInput.getText();
+                            String password = passwordTextInput.getText();
+
+                            if (username.length() == 0 && password.length() == 0) {
+                                credentials = null;
+                            } else {
+                                credentials = new Credentials(username, password);
+                            }
+                        }
+                    }
+                });
+
+                sheet.open(window);
             }
         };
 
@@ -272,7 +328,6 @@ public class HTTPClient implements Application {
                         if (sheet.getResult()) {
                             System.setProperty("javax.net.ssl.trustStore", keystorePath);
                             System.setProperty("javax.net.ssl.keyStorePassword", keystorePassword);
-                            System.out.println("Set system properties");
                         }
                     }
                 });
@@ -296,10 +351,11 @@ public class HTTPClient implements Application {
                     public void taskExecuted(Task<HTTPResponse> task) {
                         button.setEnabled(true);
                         HTTPResponse httpResponse = task.getResult();
+                        Transaction transaction = new Transaction((HTTPRequest)task, httpResponse);
 
-                        // TODO
-                        System.out.println(httpResponse);
-                        System.out.println(new String(httpResponse.getBody()));
+                        TableView tableView = (TableView)serializer.getObjectByName("log.tableView");
+                        List<Transaction> tableData = (List<Transaction>)tableView.getTableData();
+                        tableData.add(transaction);
                     }
 
                     public void executeFailed(Task<HTTPResponse> task) {

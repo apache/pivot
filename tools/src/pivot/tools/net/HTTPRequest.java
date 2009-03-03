@@ -30,7 +30,6 @@ import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.io.IOTask;
 import pivot.util.ListenerList;
-import pivot.util.concurrent.Dispatcher;
 import pivot.util.concurrent.SynchronizedListenerList;
 import pivot.util.concurrent.TaskExecutionException;
 
@@ -115,8 +114,6 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
 
     private HTTPRequestListenerList httpRequestListeners = new HTTPRequestListenerList();
 
-    private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
-
     /**
      *
      */
@@ -128,6 +125,14 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
         } catch (MalformedURLException ex) {
             throw new IllegalArgumentException("Unable to construct URL.", ex);
         }
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public URL getLocation() {
+        return location;
     }
 
     public HostnameVerifier getHostnameVerifier() {
@@ -235,17 +240,17 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
 
             // Set the input/output state
             connection.setDoInput(true);
-            connection.setDoOutput(body != null);
+            connection.setDoOutput(!method.equalsIgnoreCase("GET"));
 
             // Connect to the server
             connection.connect();
             httpRequestListeners.connected(this);
 
             // Write the request body
-            if (body != null) {
+            if (body != null && !method.equalsIgnoreCase("GET")) {
                 OutputStream outputStream = null;
                 try {
-                    outputStream = connection.getOutputStream();
+                    outputStream = new MonitoredOutputStream(connection.getOutputStream());
                     outputStream.write(body);
                 } finally {
                     if (outputStream != null) {
@@ -282,7 +287,7 @@ public class HTTPRequest extends IOTask<HTTPResponse> {
                     new ByteArrayOutputStream(bytesExpected >= 0 ? (int)bytesExpected : 256);
                 InputStream inputStream = null;
                 try {
-                    inputStream = connection.getInputStream();
+                    inputStream = new MonitoredInputStream(connection.getInputStream());
 
                     byte[] buf = new byte[256];
                     for (int n = inputStream.read(buf); n != -1; n = inputStream.read(buf)) {

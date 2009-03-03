@@ -32,8 +32,8 @@
               <Form>
                 <sections>
                   <Form.Section>
-                    <TextInput wtkx:id="path" Form.name="Path" />
-                    <TextInput wtkx:id="passwd" Form.name="Password" password="true" />
+                    <TextInput wtkx:id="username" Form.name="Username" />
+                    <TextInput wtkx:id="password" Form.name="Password" password="true" />
                   </Form.Section>
                 </sections>
               </Form>

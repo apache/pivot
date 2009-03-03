@@ -18,19 +18,28 @@
 <MenuBar xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
          xmlns="pivot.wtk"
          xmlns:content="pivot.wtk.content"
-         styles="{backgroundColor:10}">
+         preferredHeight="20"
+         styles="{backgroundColor:10, spacing:8}">
   <items>
-    <MenuBar.Item buttonData="Application">
+    <MenuBar.Item buttonData="HTTP">
       <menu>
         <Menu>
           <sections>
             <Menu.Section>
-              <Menu.Item toggleButton="true" action="toggleAuthenticationAction">
+              <Menu.Item action="setAuthenticationAction">
                 <buttonData>
-                  <content:ButtonData text="Authenticate requests" icon="@vcard.png" />
+                  <content:ButtonData text="Basic authentication" icon="@vcard.png" />
                 </buttonData>
               </Menu.Item>
             </Menu.Section>
+          </sections>
+        </Menu>
+      </menu>
+    </MenuBar.Item>
+    <MenuBar.Item buttonData="SSL">
+      <menu>
+        <Menu>
+          <sections>
             <Menu.Section>
               <Menu.Item toggleButton="true" action="toggleHostnameVerificationAction">
                 <buttonData>
@@ -39,7 +48,7 @@
               </Menu.Item>
               <Menu.Item action="setKeystoreAction">
                 <buttonData>
-                  <content:ButtonData text="Enter trusted keystore" icon="@rosette.png" />
+                  <content:ButtonData text="Trusted keystore" icon="@rosette.png" />
                 </buttonData>
               </Menu.Item>
             </Menu.Section>
