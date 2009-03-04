@@ -21,7 +21,7 @@ import pivot.util.concurrent.TaskExecutionException;
  * Thrown when an error occurs while executing a web query.
  */
 public class QueryException extends TaskExecutionException {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     private int status = -1;
 

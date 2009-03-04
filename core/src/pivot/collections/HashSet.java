@@ -30,7 +30,7 @@ import pivot.util.ListenerList;
  * Eventually, we'll replace this with an internal set representation.
  */
 public class HashSet<E> implements Set<E>, Serializable {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     protected java.util.HashSet<E> hashSet = null;
 

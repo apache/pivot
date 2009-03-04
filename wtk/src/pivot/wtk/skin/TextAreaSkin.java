@@ -1170,6 +1170,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
 
+    private int caretX = 0;
     private Rectangle caret = new Rectangle();
     private boolean caretOn = false;
     private BlinkCursorCallback blinkCursorCallback = new BlinkCursorCallback();
@@ -1403,7 +1404,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 textArea.setSelection(offset, 0);
             }
 
-            // TODO Set magic caret X
+            caretX = x;
 
             // TODO Register mouse listener to begin selecting text; also handle
             // auto-scrolling when the mouse moves outside the component
@@ -1451,6 +1452,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             if (document != null) {
                 if (keyCode == Keyboard.KeyCode.ENTER) {
                     textArea.insertParagraph();
+                    caretX = 0;
                 } else if (keyCode == Keyboard.KeyCode.DELETE) {
                     textArea.delete(Direction.FORWARD);
                 } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
@@ -1478,7 +1480,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     textArea.setSelection(selectionStart, selectionLength);
 
-                    // TODO Set magic caret X
+                    caretX = caret.x;
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.RIGHT) {
@@ -1505,16 +1507,27 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                     textArea.setSelection(selectionStart, selectionLength);
 
-                    // TODO Set magic caret X
+                    caretX = caret.x;
 
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.UP) {
-                    // TODO
-                    // NOTE Make sure we scroll the next view to visible
+                    // TODO We shouldn't need a "magic" number like 2 here
+                    int offset = documentView.getCharacterAt(caretX, caret.y - 2);
+
+                    // TODO Modify selection based on SHIFT key
+                    textArea.setSelection(offset, 0);
+
+                    // TODO Make sure we scroll the next view to visible
+
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.DOWN) {
-                    // TODO
-                    // NOTE Make sure we scroll the next view to visible
+                    int offset = documentView.getCharacterAt(caretX, caret.y + caret.height + 1);
+
+                    // TODO Modify selection based on SHIFT key
+                    textArea.setSelection(offset, 0);
+
+                    // TODO Make sure we scroll the next view to visible
+
                     consumed = true;
                 } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                     if (keyCode == Keyboard.KeyCode.A) {

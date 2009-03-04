@@ -89,6 +89,7 @@ public class StockTracker implements Application {
         symbols.add("AMZN");
         symbols.add("GOOG");
         symbols.add("VMW");
+        symbols.add("JAVA");
     }
 
     public void startup(Display display, Dictionary<String, String> properties)

@@ -180,8 +180,9 @@ public final class BrowserApplicationContext extends ApplicationContext {
         private PropertyDictionary propertyDictionary = new PropertyDictionary();
         private Application application = null;
 
-        public static final long serialVersionUID = 0;
         public static final String APPLICATION_CLASS_NAME_PARAMETER = "applicationClassName";
+
+        private static final long serialVersionUID = 0;
 
         @Override
         public void init() {

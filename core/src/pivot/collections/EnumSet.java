@@ -12,7 +12,7 @@ import pivot.util.ListenerList;
  * ordinal value.
  */
 public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     private int bitSet = 0;
     private SetListenerList<E> setListeners = new SetListenerList<E>();

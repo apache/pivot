@@ -23,7 +23,7 @@ import pivot.collections.ArrayList;
  * @author gbrown
  */
 public class ValueSeries<T> extends ArrayList<T> {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     private String name = null;
 

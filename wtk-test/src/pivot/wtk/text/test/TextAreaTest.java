@@ -25,6 +25,7 @@ import pivot.wtk.Display;
 import pivot.wtk.Frame;
 import pivot.wtk.Label;
 import pivot.wtk.TextArea;
+import pivot.wtk.TextAreaSelectionListener;
 import pivot.wtk.TreeView;
 import pivot.wtk.TreeViewSelectionListener;
 import pivot.wtk.text.Document;
@@ -36,7 +37,11 @@ import pivot.wtkx.WTKXSerializer;
 
 public class TextAreaTest implements Application {
     private Frame frame = null;
+
     private TextArea textArea = null;
+    private Label selectionStartLabel = null;
+    private Label selectionLengthLabel = null;
+
     private TreeView treeView = null;
     private Label offsetLabel = null;
     private Label charactersLabel = null;
@@ -81,6 +86,16 @@ public class TextAreaTest implements Application {
         frame.open(display);
 
         textArea = (TextArea)wtkxSerializer.getObjectByName("textArea");
+        textArea.getTextAreaSelectionListeners().add(new TextAreaSelectionListener() {
+            public void selectionChanged(TextArea textArea,
+                int previousSelectionStart, int previousSelectionLength) {
+                selectionStartLabel.setText(Integer.toString(textArea.getSelectionStart()));
+                selectionLengthLabel.setText(Integer.toString(textArea.getSelectionLength()));
+            }
+        });
+
+        selectionStartLabel = (Label)wtkxSerializer.getObjectByName("selectionStartLabel");
+        selectionLengthLabel = (Label)wtkxSerializer.getObjectByName("selectionLengthLabel");
 
         treeView = (TreeView)wtkxSerializer.getObjectByName("treeView");
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {

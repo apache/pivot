@@ -33,7 +33,7 @@ import pivot.util.ListenerList;
  * @author gbrown
  */
 public class ArrayList<T> implements List<T>, Serializable {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     protected java.util.ArrayList<T> arrayList = null;
 
@@ -84,6 +84,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
 
         arrayList.add(index, item);
+
         listListeners.itemInserted(this, index);
 
         return index;

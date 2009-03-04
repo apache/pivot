@@ -15,6 +15,7 @@
  */
 package pivot.collections;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -26,7 +27,9 @@ import pivot.util.ListenerList;
  * <p>
  * TODO This class is currently incomplete.
  */
-public class LinkedList<T> implements List<T> {
+public class LinkedList<T> implements List<T>, Serializable {
+    private static final long serialVersionUID = 0;
+
     public int add(T item) {
         // TODO
         return 0;

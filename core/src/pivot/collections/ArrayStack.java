@@ -22,7 +22,7 @@ package pivot.collections;
  * @author gbrown
  */
 public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     public ArrayStack() {
         super();

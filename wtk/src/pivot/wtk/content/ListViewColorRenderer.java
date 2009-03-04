@@ -21,6 +21,11 @@ import java.awt.Graphics2D;
 import pivot.wtk.ListView;
 import pivot.wtk.media.Image;
 
+/**
+ * List view renderer for displaying color swatches.
+ *
+ * @author gbrown
+ */
 public class ListViewColorRenderer extends ListViewItemRenderer {
     public static class ColorBadge extends Image {
         private Color color = Color.BLACK;

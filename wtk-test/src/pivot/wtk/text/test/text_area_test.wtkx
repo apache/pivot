@@ -20,15 +20,32 @@ limitations under the License.
     xmlns:test="pivot.wtk.text.test"
     xmlns="pivot.wtk">
     <left>
-		<Border styles="{padding:0}">
-		    <content>
-		        <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
-		            <view>
-		                <TextArea wtkx:id="textArea"/>
-		            </view>
-		        </ScrollPane>
-		    </content>
-		</Border>
+        <TablePane styles="{verticalSpacing:8}">
+            <columns>
+                <TablePane.Column width="1*"/>
+            </columns>
+            <rows>
+                <TablePane.Row height="1*">
+					<Border styles="{padding:0}">
+					    <content>
+					        <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
+					            <view>
+					                <TextArea wtkx:id="textArea"/>
+					            </view>
+					        </ScrollPane>
+					    </content>
+					</Border>
+                </TablePane.Row>
+                <TablePane.Row height="-1">
+                    <FlowPane>
+                        <Label text="Selection:"/>
+	                    <Label wtkx:id="selectionStartLabel"/>
+	                    <Label text=":"/>
+	                    <Label wtkx:id="selectionLengthLabel"/>
+                    </FlowPane>
+                </TablePane.Row>
+            </rows>
+        </TablePane>
     </left>
 
     <right>

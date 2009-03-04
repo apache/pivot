@@ -30,7 +30,7 @@ import pivot.serialization.SerializationException;
 import pivot.util.Base64;
 
 public class WebQueryTestServlet extends HttpServlet {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     private String username = null;
     private static final String BASIC_AUTHENTICATION_TAG = "Basic";

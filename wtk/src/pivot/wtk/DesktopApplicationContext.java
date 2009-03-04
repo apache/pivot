@@ -33,7 +33,7 @@ import pivot.wtk.media.Picture;
 @SuppressWarnings("deprecation")
 public final class DesktopApplicationContext extends ApplicationContext {
     private static class HostFrame extends java.awt.Frame {
-        public static final long serialVersionUID = 0;
+        private static final long serialVersionUID = 0;
 
         private HostFrame() {
             enableEvents(AWTEvent.WINDOW_EVENT_MASK

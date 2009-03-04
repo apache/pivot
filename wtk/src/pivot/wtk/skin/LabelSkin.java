@@ -46,6 +46,8 @@ import pivot.wtk.VerticalAlignment;
  * Label skin.
  * <p>
  * TODO showEllipsis style
+ * <p>
+ * TODO breakOnWhitespaceOnly style
  *
  * @author gbrown
  */

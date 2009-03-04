@@ -21,7 +21,7 @@ package pivot.serialization;
  * @author gbrown
  */
 public class SerializationException extends Exception {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     public SerializationException() {
         this(null, null);

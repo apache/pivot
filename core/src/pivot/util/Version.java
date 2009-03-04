@@ -27,7 +27,7 @@ import java.io.Serializable;
  * @author gbrown
  */
 public class Version implements Comparable<Version>, Serializable {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     private byte majorRevision = 0;
     private byte minorRevision = 0;

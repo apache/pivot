@@ -105,7 +105,7 @@ public abstract class ApplicationContext {
      * @author gbrown
      */
     public final class DisplayHost extends java.awt.Container {
-        public static final long serialVersionUID = 0;
+        private static final long serialVersionUID = 0;
 
         private Point mouseLocation = null;
 

@@ -51,8 +51,6 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
 
         imageView.setPreferredSize(DEFAULT_ICON_WIDTH, DEFAULT_ICON_HEIGHT);
         imageView.setDisplayable(DEFAULT_SHOW_ICON);
-
-        setPreferredHeight(DEFAULT_ICON_HEIGHT);
     }
 
     public void setSize(int width, int height) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 VMware, Inc.
+ * Copyright (c) 2009 VMware, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,11 @@ import java.awt.Color;
 import pivot.wtk.Button;
 import pivot.wtk.ImageView;
 
+/**
+ * List button renderer for displaying color swatches.
+ *
+ * @author gbrown
+ */
 public class ListButtonColorRenderer extends ImageView
 	implements Button.DataRenderer {
     private ListViewColorRenderer.ColorBadge colorBadge =

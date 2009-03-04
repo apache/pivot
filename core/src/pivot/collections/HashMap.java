@@ -30,7 +30,7 @@ import pivot.util.ListenerList;
  * Eventually, we'll replace this with an internal map representation.
  */
 public class HashMap<K, V> implements Map<K, V>, Serializable {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     protected java.util.Map<K, V> hashMap = null;
 

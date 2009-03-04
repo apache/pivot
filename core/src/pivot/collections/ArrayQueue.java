@@ -30,7 +30,7 @@ package pivot.collections;
  * @author gbrown
  */
 public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     public ArrayQueue() {
         super();

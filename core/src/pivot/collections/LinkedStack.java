@@ -22,6 +22,7 @@ package pivot.collections;
  * TODO This class is currently incomplete.
  */
 public class LinkedStack<T> extends LinkedList<T> implements Stack<T> {
+    private static final long serialVersionUID = 0;
 
     public void push(T item) {
         // TODO Auto-generated method stub

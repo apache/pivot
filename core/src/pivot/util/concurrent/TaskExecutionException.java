@@ -21,7 +21,7 @@ package pivot.util.concurrent;
  * @author gbrown
  */
 public class TaskExecutionException extends Exception {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     public TaskExecutionException() {
         super();

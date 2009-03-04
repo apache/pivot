@@ -22,7 +22,7 @@ package pivot.beans;
  * @author gbrown
  */
 public class PropertyNotFoundException extends RuntimeException {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     public PropertyNotFoundException() {
         this(null, null);

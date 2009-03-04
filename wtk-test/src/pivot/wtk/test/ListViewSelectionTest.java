@@ -21,6 +21,7 @@ import pivot.collections.List;
 import pivot.wtk.Application;
 import pivot.wtk.Display;
 import pivot.wtk.ListView;
+import pivot.wtk.ListViewSelectionListener;
 import pivot.wtk.Span;
 
 public class ListViewSelectionTest implements Application {
@@ -111,6 +112,15 @@ public class ListViewSelectionTest implements Application {
         listView.removeSelectedRange(new Span(0, 4));
         dumpSelection();
         verifySelection(4);
+
+        listView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
+            public void selectionChanged(ListView listView) {
+                System.out.println("Selection changed");
+            }
+        });
+
+        listView.setSelectedIndex(2);
+        listView.getListData().remove(2, 1);
     }
 
     public boolean shutdown(boolean optional) {

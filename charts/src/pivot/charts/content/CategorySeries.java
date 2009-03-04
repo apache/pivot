@@ -23,7 +23,7 @@ import pivot.collections.HashMap;
  * @author gbrown
  */
 public class CategorySeries extends HashMap<String, Object> {
-    public static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 0;
 
     public static final String NAME_KEY = "name";
 

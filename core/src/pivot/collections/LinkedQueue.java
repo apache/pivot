@@ -22,6 +22,7 @@ package pivot.collections;
  * TODO This class is currently incomplete.
  */
 public class LinkedQueue<T> extends LinkedList<T> implements Queue<T> {
+    private static final long serialVersionUID = 0;
 
     public void enqueue(T item) {
         // TODO Auto-generated method stub
