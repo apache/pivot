@@ -44,7 +44,7 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
     public static final int ICON_WIDTH = 16;
     public static final int ICON_HEIGHT = 16;
 
-    private static final Image folderImage =
+    private static final Image defaultFolderImage =
         Image.load(TreeViewFileRenderer.class.getResource("folder.png"));
     private static final Image defaultFileImage =
         Image.load(TreeViewFileRenderer.class.getResource("page_white.png"));
@@ -82,19 +82,24 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
 
         // Update the image view
         Image icon = null;
-        if (file instanceof Folder) {
-            icon = folderImage;
-        } else {
-            try {
-                ShellFolder shellFolder = ShellFolder.getShellFolder(file);
-                java.awt.Image image = shellFolder.getIcon(false);
 
-                if (image instanceof BufferedImage) {
-                    icon = new Picture((BufferedImage)image);
-                } else {
-                    icon = defaultFileImage;
-                }
-            } catch(FileNotFoundException exception) {
+        ShellFolder shellFolder = null;
+        try {
+            shellFolder = ShellFolder.getShellFolder(file);
+        } catch(FileNotFoundException exception) {
+        }
+
+        java.awt.Image image = null;
+        if (shellFolder != null) {
+            image = shellFolder.getIcon(false);
+        }
+
+        if (image instanceof BufferedImage) {
+            icon = new Picture((BufferedImage)image);
+        } else {
+            if (file instanceof Folder) {
+                icon = defaultFolderImage;
+            } else {
                 icon = defaultFileImage;
             }
         }
