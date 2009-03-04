@@ -619,6 +619,11 @@ public class TerraFrameSkin extends WindowSkin {
         contentBevelColor = TerraTheme.brighten(backgroundColor);
     }
 
+    public final void setBackgroundColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(color));
+    }
+
     public boolean getShowMinimizeButton() {
         return minimizeButton.isDisplayable();
     }
