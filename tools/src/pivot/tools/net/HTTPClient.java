@@ -30,8 +30,12 @@ import pivot.wtk.Action;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
+import pivot.wtk.Component;
+import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Display;
+import pivot.wtk.Frame;
 import pivot.wtk.ListButton;
+import pivot.wtk.Mouse;
 import pivot.wtk.PushButton;
 import pivot.wtk.Sheet;
 import pivot.wtk.SheetStateListener;
@@ -99,6 +103,8 @@ public class HTTPClient implements Application {
 
     private WTKXSerializer serializer;
     private Window window;
+
+    private Frame detailsFrame = null;
 
     private Credentials credentials = null;
     private boolean lenientHostnameVerification = false;
@@ -319,6 +325,40 @@ public class HTTPClient implements Application {
         serializer = new WTKXSerializer();
         window = (Window)serializer.readObject("pivot/tools/net/application.wtkx");
         window.open(display);
+
+        TableView tableView = (TableView)serializer.getObjectByName("log.tableView");
+        tableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
+            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+                return false;
+            }
+
+            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+                return false;
+            }
+
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                boolean consumed = false;
+
+                if (button == Mouse.Button.LEFT && count == 2) {
+                    consumed = true;
+
+                    if (detailsFrame == null) {
+                        final WTKXSerializer frameSerializer = new WTKXSerializer();
+
+                        try {
+                            detailsFrame = (Frame)frameSerializer.readObject
+                                ("pivot/tools/net/detailsFrame.wtkx");
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+
+                    detailsFrame.open(window);
+                }
+
+                return consumed;
+            }
+        });
 
         PushButton submitButton = (PushButton)serializer.getObjectByName("request.submit");
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
