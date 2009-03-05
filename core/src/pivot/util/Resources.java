@@ -18,6 +18,7 @@ package pivot.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
@@ -38,8 +39,9 @@ import pivot.serialization.SerializationException;
  * @see java.util.ResourceBundle
  *
  * @author brindy
+ * @author gbrown
  */
-public class Resources implements Dictionary<String, Object> {
+public class Resources implements Dictionary<String, Object>, Iterable<String> {
     private String baseName = null;
     private Locale locale = null;
     private Charset charset = null;
@@ -196,5 +198,9 @@ public class Resources implements Dictionary<String, Object> {
         }
 
         return resourceMap;
+    }
+
+    public Iterator<String> iterator() {
+        return new ImmutableIterator<String>(resourceMap.iterator());
     }
 }
