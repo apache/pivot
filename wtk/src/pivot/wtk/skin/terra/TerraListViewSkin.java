@@ -519,8 +519,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        boolean consumed = super.mouseClick(component, button, x, y, count);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         ListView listView = (ListView)getComponent();
 
@@ -537,13 +537,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             && !listView.isItemDisabled(itemIndex)) {
         	int itemY = itemIndex * itemHeight;
 
-        	if (listView.getCheckmarksEnabled()
+        	if (!(listView.getCheckmarksEnabled()
         		&& x > checkboxPadding.left
 				&& x < checkboxPadding.left + CHECKBOX.getWidth()
 				&& y > itemY + checkboxPadding.top
-				&& y < itemY + checkboxPadding.top + CHECKBOX.getHeight()) {
-        		listView.setItemChecked(itemIndex, !listView.isItemChecked(itemIndex));
-        	} else {
+				&& y < itemY + checkboxPadding.top + CHECKBOX.getHeight())) {
                 ListView.SelectMode selectMode = listView.getSelectMode();
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                     && selectMode == ListView.SelectMode.MULTI) {
@@ -581,6 +579,34 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     }
                 }
         	}
+        }
+
+        return consumed;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
+
+        ListView listView = (ListView)getComponent();
+
+        List<Object> listData = (List<Object>)listView.getListData();
+
+        int itemHeight = getItemHeight();
+        int itemIndex = y / itemHeight;
+
+        if (itemIndex < listData.getLength()
+            && !listView.isItemDisabled(itemIndex)) {
+            int itemY = itemIndex * itemHeight;
+
+            if (listView.getCheckmarksEnabled()
+                && x > checkboxPadding.left
+                && x < checkboxPadding.left + CHECKBOX.getWidth()
+                && y > itemY + checkboxPadding.top
+                && y < itemY + checkboxPadding.top + CHECKBOX.getHeight()) {
+                listView.setItemChecked(itemIndex, !listView.isItemChecked(itemIndex));
+            }
         }
 
         return consumed;

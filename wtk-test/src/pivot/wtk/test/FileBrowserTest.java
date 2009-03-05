@@ -33,7 +33,9 @@ public class FileBrowserTest implements Application {
         frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("file_browser_test.wtkx")));
 
         TreeView folderTreeView = (TreeView)wtkxSerializer.getObjectByName("folderTreeView");
-        folderTreeView.setTreeData(new Folder("/Users/greg/Install"));
+
+        String pathname = System.getProperty("user.home");
+        folderTreeView.setTreeData(new Folder(pathname));
 
         frame.setTitle("File Browser Test");
         frame.setPreferredSize(480, 640);

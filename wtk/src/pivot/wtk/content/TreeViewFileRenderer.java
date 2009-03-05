@@ -38,8 +38,10 @@ import sun.awt.shell.ShellFolder;
  * @author gbrown
  */
 public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRenderer {
-    protected ImageView imageView = new ImageView();
-    protected Label label = new Label();
+    private ImageView imageView = new ImageView();
+    private Label label = new Label();
+
+    private boolean useNativeIcons = true;
 
     public static final int ICON_WIDTH = 16;
     public static final int ICON_HEIGHT = 16;
@@ -94,7 +96,8 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
             image = shellFolder.getIcon(false);
         }
 
-        if (image instanceof BufferedImage) {
+        if (image instanceof BufferedImage
+            && useNativeIcons) {
             icon = new Picture((BufferedImage)image);
         } else {
             if (file instanceof Folder) {
@@ -134,5 +137,13 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
         if (color instanceof Color) {
             label.getStyles().put("color", color);
         }
+    }
+
+    public boolean getUseNativeIcons() {
+        return useNativeIcons;
+    }
+
+    public void setUseNativeIcons(boolean useNativeIcons) {
+        this.useNativeIcons = useNativeIcons;
     }
 }

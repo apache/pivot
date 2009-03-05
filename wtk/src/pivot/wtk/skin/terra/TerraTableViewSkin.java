@@ -808,8 +808,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        boolean consumed = super.mouseClick(component, button, x, y, count);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         TableView tableView = (TableView)getComponent();
 

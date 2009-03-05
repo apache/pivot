@@ -1036,8 +1036,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        boolean consumed = super.mouseClick(component, button, x, y, count);
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
 
         if (button == Mouse.Button.LEFT) {
             TreeView treeView = (TreeView)getComponent();
