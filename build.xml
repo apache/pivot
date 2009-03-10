@@ -14,6 +14,16 @@
     <property name="wtk" value="wtk"/>
     <property name="wtktest" value="wtk-test"/>
 
+    <property name="demos" value="demos"/>
+    <property name="tutorials" value="tutorials"/>
+    <property name="tools" value="tools"/>
+
+    <property name="keystore" value="${user.home}/myKeystore"/>
+    <property name="storepass" value="keystore"/>
+    <property name="alias" value="myself"/>
+
+    <property name="deploy" value="${user.home}/${ant.project.name}-deploy"/>
+
     <tstamp/>
     <property file="build.properties"/>
 
@@ -22,11 +32,10 @@
     <property name="compiler.deprecation" value="true"/>
     <property name="compiler.debug" value="false"/>
 
-    <target name="build" depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test"/>
-    <target name="clean" depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean"/>
+    <target name="build" depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
+    <target name="clean" depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, demos-clean, tutorials-clean, tools-clean"/>
 
     <target name="doc">
-        <delete dir="${doc}"/>
         <javadoc packagenames="pivot.*" destdir="${doc}" author="true" version="true" use="true">
             <classpath>
                 <pathelement location="${charts}/lib/jcommon-1.0.12.jar"/>
@@ -445,25 +454,163 @@
         <delete file="${wtktest}/${ant.project.name}-wtk.test.jar"/>
     </target>
 
+    <!-- Build demos library -->
+    <target name="demos" depends="core, wtk, web, charts">
+        <mkdir dir="${demos}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${demos}/${src}"
+            destDir="${demos}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="core/pivot-core.jar"/>
+                <pathelement location="web/pivot-web.jar"/>
+                <pathelement location="wtk/pivot-wtk.jar"/>
+                <pathelement location="demos/lib/flex-messaging-common.jar"/>
+                <pathelement location="demos/lib/flex-messaging-core.jar"/>
+                <pathelement location="demos/lib/gdata-base-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-client-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-client-meta-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-contacts-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-contacts-meta-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-core-1.0.jar"/>
+                <pathelement location="demos/lib/smack.jar"/>
+                <pathelement location="demos/lib/smackx.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${demos}/${ant.project.name}-demos.jar"/>
+        <jar jarfile="${demos}/${ant.project.name}-demos.jar">
+            <fileset dir="${demos}/${bin}"/>
+            <fileset dir="${demos}/${src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Clean the demos classes -->
+    <target name="demos-clean">
+        <delete dir="${demos}/${bin}"/>
+        <delete file="${demos}/${ant.project.name}-demos.jar"/>
+    </target>
+
+    <!-- Build tutorials library -->
+    <target name="tutorials" depends="core, wtk, web, charts">
+        <mkdir dir="${tutorials}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${tutorials}/${src}"
+            destDir="${tutorials}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="core/pivot-core.jar"/>
+                <pathelement location="web/pivot-web.jar"/>
+                <pathelement location="wtk/pivot-wtk.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR files -->
+        <delete file="${tutorials}/${ant.project.name}-tutorials.jar"/>
+        <jar jarfile="${tutorials}/${ant.project.name}-tutorials.jar">
+            <fileset dir="${tutorials}/${bin}">
+                <exclude name="pivot/tutorials/stocktracker/**"/>
+            </fileset>
+            <fileset dir="${tutorials}/${src}">
+                <exclude name="**/*.java"/>
+                <exclude name="pivot/tutorials/stocktracker/**"/>
+            </fileset>
+        </jar>
+
+        <delete file="${tutorials}/${ant.project.name}-stocktracker.jar"/>
+        <jar jarfile="${tutorials}/${ant.project.name}-stocktracker.jar">
+            <fileset dir="${tutorials}/${bin}">
+                <include name="pivot/tutorials/stocktracker/*"/>
+            </fileset>
+            <fileset dir="${tutorials}/${src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Clean the tutorial classes -->
+    <target name="tutorials-clean">
+        <delete dir="${tutorials}/${bin}"/>
+        <delete file="${tutorials}/${ant.project.name}-tutorials.jar"/>
+        <delete file="${tutorials}/${ant.project.name}-stocktracker.jar"/>
+    </target>
+
+    <!-- Build tools library -->
+    <target name="tools" depends="core, wtk, web">
+        <mkdir dir="${tools}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${tools}/${src}"
+            destDir="${tools}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="core/pivot-core.jar"/>
+                <pathelement location="web/pivot-web.jar"/>
+                <pathelement location="wtk/pivot-wtk.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${tools}/${ant.project.name}-tools.jar"/>
+        <jar jarfile="${tools}/${ant.project.name}-tools.jar">
+            <fileset dir="${tools}/${bin}"/>
+            <fileset dir="${tools}/${src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Clean the tools classes -->
+    <target name="tools-clean">
+        <delete dir="${tools}/${bin}"/>
+        <delete file="${tools}/${ant.project.name}-tools.jar"/>
+    </target>
+
     <!-- Package all binaries and source -->
     <target name="package" depends="trim-whitespace, clean, build, doc">
         <delete file="${ant.project.name}_${version}.zip"/>
         <zip destfile="${ant.project.name}_${version}.zip">
             <fileset dir="${charts}">
                 <include name="${ant.project.name}-charts.jar"/>
+                <include name="${ant.project.name}-charts.signed.jar"/>
             </fileset>
             <fileset dir="${core}">
                 <include name="${ant.project.name}-core.jar"/>
             </fileset>
             <fileset dir="${web}">
                 <include name="${ant.project.name}-web.jar"/>
+                <include name="${ant.project.name}-web.server.jar"/>
             </fileset>
             <fileset dir="${wtk}">
                 <include name="${ant.project.name}-wtk.jar"/>
                 <include name="${ant.project.name}-wtk.terra.jar"/>
             </fileset>
+            <fileset dir="${tools}">
+                <include name="${ant.project.name}-tools.jar"/>
+            </fileset>
         </zip>
 
+        <!-- Package source -->
         <delete file="${ant.project.name}_${version}-src.zip"/>
         <zip destfile="${ant.project.name}_${version}-src.zip">
             <fileset dir="${charts}/${src}"/>
@@ -473,10 +620,82 @@
         </zip>
     </target>
 
-    <target name="package-starter">
-        <delete file="starter_${version}.zip"/>
-        <zip destfile="starter_${version}.zip" basedir="."
-            includes="starter/**" excludes="starter/**/.*"/>
+    <!-- Generate deployment files for online demos and tutorials -->
+    <target name="deploy" depends="package">
+        <delete dir="${deploy}"/>
+        <mkdir dir="${deploy}"/>
+
+        <!-- Platform -->
+        <copy file="${charts}/${ant.project.name}-charts.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-charts.jar" signedjar="${deploy}/${ant.project.name}-charts.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${core}/${ant.project.name}-core.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-core.jar" signedjar="${deploy}/${ant.project.name}-core.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${web}/${ant.project.name}-web.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-web.jar" signedjar="${deploy}/${ant.project.name}-web.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${wtk}/${ant.project.name}-wtk.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-wtk.jar" signedjar="${deploy}/${ant.project.name}-wtk.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${wtk}/${ant.project.name}-wtk.terra.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-wtk.terra.jar" signedjar="${deploy}/${ant.project.name}-wtk.terra.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- StAX -->
+        <copy file="${wtk}/lib/stax-api-1.0.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/stax-api-1.0.jar" signedjar="${deploy}/stax-api-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${wtk}/lib/stax-1.2.0.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/stax-1.2.0.jar" signedjar="${deploy}/stax-1.2.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- JFree -->
+        <copy file="${charts}/lib/jcommon-1.0.12.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/jcommon-1.0.12.jar" signedjar="${deploy}/jcommon-1.0.12.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${charts}/lib/jfreechart-1.0.9.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/jfreechart-1.0.9.jar" signedjar="${deploy}/jfreechart-1.0.9.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- Google Data -->
+        <signjar jar="${demos}/${lib}/gdata-base-1.0.jar" signedjar="${deploy}/gdata-base-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-client-1.0.jar" signedjar="${deploy}/gdata-client-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-client-meta-1.0.jar" signedjar="${deploy}/gdata-client-meta-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-contacts-1.0.jar" signedjar="${deploy}/gdata-contacts-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-contacts-meta-1.0.jar" signedjar="${deploy}/gdata-contacts-meta-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-core-1.0.jar" signedjar="${deploy}/gdata-core-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-media-1.0.jar" signedjar="${deploy}/gdata-media-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- Smack -->
+        <signjar jar="${demos}/${lib}/smack.jar" signedjar="${deploy}/smack.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/smackx.jar" signedjar="${deploy}/smackx.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- Demos -->
+        <copy file="${chartstest}/${ant.project.name}-charts.test.jar" todir="${deploy}"/>
+        <copy file="${demos}/${ant.project.name}-demos.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-demos.jar" signedjar="${deploy}/${ant.project.name}-demos.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- Tutorials -->
+        <copy file="${tutorials}/${ant.project.name}-tutorials.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-tutorials.jar" signedjar="${deploy}/${ant.project.name}-tutorials.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
     </target>
 
     <!-- Remove trailing white space in all source files -->
