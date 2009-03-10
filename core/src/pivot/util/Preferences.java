@@ -19,9 +19,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 
-import com.sun.xml.internal.ws.encoding.soap.SerializationException;
-
 import pivot.collections.Dictionary;
+import pivot.serialization.SerializationException;
 
 /**
  * Provides access to application preference data. Preferences are modeled as
