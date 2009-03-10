@@ -507,13 +507,6 @@ public class Demo implements Application {
         // Install header press listener
         sortableTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler());
 
-        // Load images for custom table
-        final List<TableRow> customTableData = (List<TableRow>)customTableView.getTableData();
-        for (int i = 0, n = customTableData.getLength(); i < n; i++) {
-            TableRow tableRow = customTableData.get(i);
-            tableRow.put("b", Image.load((URL)tableRow.get("b")));
-        }
-
         customTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
             public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             	return false;
@@ -525,17 +518,15 @@ public class Demo implements Application {
 
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             	if (button == Mouse.Button.LEFT) {
+            	    List<CustomTableRow> customTableData =
+            	        (List<CustomTableRow>)customTableView.getTableData();
+
             		int columnIndex = customTableView.getColumnAt(x);
             		if (columnIndex == 0) {
             			int rowIndex = customTableView.getRowAt(y);
-            			TableRow row = customTableData.get(rowIndex);
+            			CustomTableRow row = customTableData.get(rowIndex);
 
-            			Object a = row.get("a");
-            			if (a instanceof String) {
-            				a = Boolean.parseBoolean((String)a);
-            			}
-
-            			row.put("a", !(Boolean)a);
+            			row.setA(!row.getA());
             			customTableData.update(rowIndex, row);
             		}
             	}

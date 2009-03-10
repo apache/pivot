@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
+import pivot.collections.HashMap;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.serialization.CSVSerializer;
@@ -240,14 +241,14 @@ public class StockTracker implements Application {
         getQuery.getArguments().put("f", "snl1ohgc1v");
 
         CSVSerializer quoteSerializer = new CSVSerializer();
-        quoteSerializer.getKeys().add(StockQuote.SYMBOL_KEY);
-        quoteSerializer.getKeys().add(StockQuote.COMPANY_NAME_KEY);
-        quoteSerializer.getKeys().add(StockQuote.VALUE_KEY);
-        quoteSerializer.getKeys().add(StockQuote.OPENING_VALUE_KEY);
-        quoteSerializer.getKeys().add(StockQuote.HIGH_VALUE_KEY);
-        quoteSerializer.getKeys().add(StockQuote.LOW_VALUE_KEY);
-        quoteSerializer.getKeys().add(StockQuote.CHANGE_KEY);
-        quoteSerializer.getKeys().add(StockQuote.VOLUME_KEY);
+        quoteSerializer.getKeys().add("symbol");
+        quoteSerializer.getKeys().add("companyName");
+        quoteSerializer.getKeys().add("value");
+        quoteSerializer.getKeys().add("openingValue");
+        quoteSerializer.getKeys().add("highValue");
+        quoteSerializer.getKeys().add("lowValue");
+        quoteSerializer.getKeys().add("change");
+        quoteSerializer.getKeys().add("volume");
 
         quoteSerializer.setItemClass(StockQuote.class);
         getQuery.setSerializer(quoteSerializer);
@@ -308,8 +309,12 @@ public class StockTracker implements Application {
             }
         }
 
-        StockQuoteView stockQuoteView = new StockQuoteView(stockQuote);
-        detailRootPane.load(stockQuoteView);
+        if (stockQuote == null) {
+            detailRootPane.load(new HashMap<String, Object>());
+        } else {
+            StockQuoteView stockQuoteView = new StockQuoteView(stockQuote);
+            detailRootPane.load(stockQuoteView);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -320,7 +325,7 @@ public class StockTracker implements Application {
 
             List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
             StockQuote stockQuote = new StockQuote();
-            stockQuote.put(StockQuote.SYMBOL_KEY, symbol);
+            stockQuote.setSymbol(symbol);
             tableData.insert(stockQuote, index);
 
             stocksTableView.setSelectedIndex(index);

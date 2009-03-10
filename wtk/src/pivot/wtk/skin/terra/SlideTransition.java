@@ -16,6 +16,7 @@
 package pivot.wtk.skin.terra;
 
 import pivot.wtk.Component;
+import pivot.wtk.Container;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.effects.TranslationDecorator;
@@ -84,6 +85,10 @@ public class SlideTransition extends Transition {
             : easing.easeOut(elapsedTime, y0, y1 - y0, duration));
 
         translationDecorator.setOffset(x, y);
-        component.repaint();
+
+        Container parent = component.getParent();
+        if (parent != null) {
+            parent.repaint(component.getDecoratedBounds());
+        }
     }
 }

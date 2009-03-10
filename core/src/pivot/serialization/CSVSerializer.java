@@ -26,6 +26,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
+import pivot.beans.BeanDictionary;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
@@ -35,10 +36,6 @@ import pivot.collections.Sequence;
 /**
  * Implementation of the {@link Serializer} interface that reads data from
  * and writes data to a comma-separated value (CSV) file.
- * <p>
- * TODO Allow caller to specify a class that does not implement Dictionary.
- * We can use BeanDictionary to allow the caller to instantiate and populate
- * arbitrary types.
  * <p>
  * TODO Add "firstLineContainsKeys" flag.
  * <p>
@@ -176,7 +173,7 @@ public class CSVSerializer implements Serializer<List<?>> {
         c = reader.read();
 
         while (c != -1) {
-            Dictionary<String, Object> item = readItem(reader);
+            Object item = readItem(reader);
             while (item != null) {
                 items.add(item);
 
@@ -195,14 +192,22 @@ public class CSVSerializer implements Serializer<List<?>> {
     }
 
     @SuppressWarnings("unchecked")
-    private Dictionary<String, Object> readItem(Reader reader)
+    private Object readItem(Reader reader)
         throws IOException, SerializationException {
-        Dictionary<String, Object> item = null;
+        Object item = null;
 
         if (c != -1) {
             // Instantiate the item
+            Dictionary<String, Object> itemDictionary;
+
             try {
-                item = (Dictionary<String, Object>)itemClass.newInstance();
+                item = itemClass.newInstance();
+
+                if (item instanceof Dictionary) {
+                    itemDictionary = (Dictionary<String, Object>)item;
+                } else {
+                    itemDictionary = new BeanDictionary(item);
+                }
             } catch(IllegalAccessException exception) {
                 throw new SerializationException(exception);
             } catch(InstantiationException exception) {
@@ -218,7 +223,7 @@ public class CSVSerializer implements Serializer<List<?>> {
                         + key + " from input stream.");
                 }
 
-                item.put(key, value);
+                itemDictionary.put(key, value);
             }
         }
 

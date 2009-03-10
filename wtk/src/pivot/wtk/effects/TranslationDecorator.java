@@ -91,12 +91,11 @@ public class TranslationDecorator implements Decorator {
     }
 
     public void update() {
+        // No-op
     }
 
     public Bounds getBounds(Component component) {
-        Bounds bounds = component.getBounds();
-        bounds.x += x;
-        bounds.y += y;
+        Bounds bounds = new Bounds(x, y, component.getWidth(), component.getHeight());
 
         if (clip) {
             bounds.intersect(component.getBounds());

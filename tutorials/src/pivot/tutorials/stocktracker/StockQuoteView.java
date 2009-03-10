@@ -1,17 +1,31 @@
+/*
+ * Copyright (c) 2009 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pivot.tutorials.stocktracker;
 
 import java.text.DecimalFormat;
-import pivot.collections.Dictionary;
 
-public class StockQuoteView implements Dictionary<String, Object> {
-    private StockQuote stockQuote = null;
+import pivot.beans.BeanDictionary;
 
-    private static DecimalFormat valueFormat = new DecimalFormat("$0.00");
-    private static DecimalFormat changeFormat = new DecimalFormat("+0.00;-0.00");
-    private static DecimalFormat volumeFormat = new DecimalFormat();
+public class StockQuoteView extends BeanDictionary {
+    private static final DecimalFormat valueFormat = new DecimalFormat("$0.00");
+    private static final DecimalFormat changeFormat = new DecimalFormat("+0.00;-0.00");
+    private static final DecimalFormat volumeFormat = new DecimalFormat();
 
     public StockQuoteView(StockQuote stockQuote) {
-        this.stockQuote = stockQuote;
+        super(stockQuote);
     }
 
     public Object get(String key) {
@@ -20,56 +34,42 @@ public class StockQuoteView implements Dictionary<String, Object> {
         }
 
         Object value = null;
+        StockQuote stockQuote = (StockQuote)getBean();
 
         if (stockQuote == null) {
             value = "";
         } else {
-            value = stockQuote.get(key);
+            value = super.get(key);
 
-            if (key.equals(StockQuote.VALUE_KEY)
-                || key.equals(StockQuote.OPENING_VALUE_KEY)
-                || key.equals(StockQuote.HIGH_VALUE_KEY)
-                || key.equals(StockQuote.LOW_VALUE_KEY)) {
+            if (key.equals("value")
+                || key.equals("openingValue")
+                || key.equals("highValue")
+                || key.equals("lowValue")) {
                 try {
                     value = valueFormat.format((Number)value);
                 } catch(Exception exception) {
                     value = "";
                 }
-            } else if (key.equals(StockQuote.CHANGE_KEY)) {
+            } else if (key.equals("change")) {
                 try {
                     value = changeFormat.format((Number)value);
                 } catch(Exception exception) {
                     value = "";
                 }
-            } else if (key.equals(StockQuote.VOLUME_KEY)) {
+            } else if (key.equals("volume")) {
                 try {
                     value = volumeFormat.format((Number)value);
                 } catch(Exception exception) {
                     value = "";
                 }
             } else {
-                value = value.toString();
+                if (value != null) {
+                    value = value.toString();
+                }
             }
         }
 
-
         return value;
-    }
-
-    public Object put(String key, Object value) {
-        throw new UnsupportedOperationException();
-    }
-
-    public Object remove(String key) {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean containsKey(String key) {
-        return (stockQuote == null ? true : stockQuote.containsKey(key));
-    }
-
-    public boolean isEmpty() {
-        return (stockQuote == null ? false : stockQuote.isEmpty());
     }
 }
 

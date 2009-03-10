@@ -1,55 +1,115 @@
+/*
+ * Copyright (c) 2009 VMware, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pivot.tutorials.stocktracker;
 
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
+public class StockQuote {
+    private String symbol = null;
+    private String companyName = null;
+    private float value = 0;
+    private float openingValue = 0;
+    private float highValue = 0;
+    private float lowValue = 0;
+    private float change = 0;
+    private float volume = 0;
 
-public class StockQuote implements Dictionary<String, Object> {
-    private HashMap<String, Object> values = new HashMap<String, Object>();
+    public String getSymbol() {
+        return symbol;
+    }
 
-    public static final String SYMBOL_KEY = "symbol";
-    public static final String COMPANY_NAME_KEY = "companyName";
-    public static final String VALUE_KEY = "value";
-    public static final String OPENING_VALUE_KEY = "openingValue";
-    public static final String HIGH_VALUE_KEY = "highValue";
-    public static final String LOW_VALUE_KEY = "lowValue";
-    public static final String CHANGE_KEY = "change";
-    public static final String VOLUME_KEY = "volume";
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public float getValue() {
+        return value;
+    }
+
+    public void setValue(float value) {
+        this.value = value;
+    }
+
+    public void setValue(String value) {
+        setValue(Float.parseFloat(value));
+    }
+
+    public float getOpeningValue() {
+        return openingValue;
+    }
+
+    public void setOpeningValue(float openingValue) {
+        this.openingValue = openingValue;
+    }
+
+    public void setOpeningValue(String openingValue) {
+        setOpeningValue(Float.parseFloat(openingValue));
+    }
+
+    public float getHighValue() {
+        return highValue;
+    }
+
+    public void setHighValue(float highValue) {
+        this.highValue = highValue;
+    }
+
+    public void setHighValue(String highValue) {
+        setHighValue(Float.parseFloat(highValue));
+    }
+
+    public float getLowValue() {
+        return lowValue;
+    }
+
+    public void setLowValue(float lowValue) {
+        this.lowValue = lowValue;
+    }
+
+    public void setLowValue(String lowValue) {
+        setLowValue(Float.parseFloat(lowValue));
+    }
 
     public float getChange() {
-        return (values.containsKey(CHANGE_KEY) ? (Float)values.get(CHANGE_KEY) : 0);
+        return change;
     }
 
-    public Object get(String key) {
-        return values.get(key);
+    public void setChange(float change) {
+        this.change = change;
     }
 
-    public Object put(String key, Object value) {
-        if (key.equals(VALUE_KEY)
-            || key.equals(OPENING_VALUE_KEY)
-            || key.equals(HIGH_VALUE_KEY)
-            || key.equals(LOW_VALUE_KEY)
-            || key.equals(CHANGE_KEY)
-            || key.equals(VOLUME_KEY)) {
-            try {
-                value = Float.parseFloat((String)value);
-            } catch(NumberFormatException exception) {
-                value = 0f;
-            }
-        }
-
-        return values.put(key, value);
+    public void setChange(String change) {
+        setChange(Float.parseFloat(change));
     }
 
-    public Object remove(String key) {
-        return values.remove(key);
+    public float getVolume() {
+        return volume;
     }
 
-    public boolean containsKey(String key) {
-        return values.containsKey(key);
+    public void setVolume(float volume) {
+        this.volume = volume;
     }
 
-    public boolean isEmpty() {
-        return values.isEmpty();
+    public void setVolume(String volume) {
+        setVolume(Float.parseFloat(volume));
     }
 }
-

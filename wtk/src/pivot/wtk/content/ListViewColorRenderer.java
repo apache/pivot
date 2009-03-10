@@ -65,7 +65,7 @@ public class ListViewColorRenderer extends ListViewItemRenderer {
     }
 
     public void render(Object item, ListView listView, boolean selected,
-        boolean highlighted, boolean disabled) {
+        boolean checked, boolean highlighted, boolean disabled) {
     	ColorItem colorItem;
     	if (item instanceof ColorItem) {
     		colorItem = (ColorItem)item;
@@ -83,6 +83,6 @@ public class ListViewColorRenderer extends ListViewItemRenderer {
     	colorBadge.setColor(colorItem.getColor());
         listItem.setText(colorItem.getName());
 
-        super.render(listItem, listView, selected, highlighted, disabled);
+        super.render(listItem, listView, selected, checked, highlighted, disabled);
     }
 }

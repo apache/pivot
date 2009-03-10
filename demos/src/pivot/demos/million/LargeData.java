@@ -38,6 +38,8 @@ import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
 public class LargeData implements Application {
+    private String basePath = null;
+
 	private Window window = null;
 
     private ListButton fileListButton = null;
@@ -49,6 +51,8 @@ public class LargeData implements Application {
     private GetQuery getQuery = null;
     private CSVSerializer csvSerializer;
 
+    private static final String BASE_PATH_KEY = "basePath";
+
     public LargeData() {
     	csvSerializer = new CSVSerializer("ISO-8859-1");
     	csvSerializer.getKeys().add("c0");
@@ -59,6 +63,11 @@ public class LargeData implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
+        basePath = properties.get(BASE_PATH_KEY);
+        if (basePath == null) {
+            throw new IllegalArgumentException("basePath is required.");
+        }
+
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(getClass().getResource("large_data.wtkx"));
 
@@ -107,7 +116,8 @@ public class LargeData implements Application {
 
     	URL origin = ApplicationContext.getOrigin();
     	System.out.println(origin);
-    	getQuery = new GetQuery(origin.getHost(), origin.getPort(), "/demos/assets/" + fileName, false);
+
+    	getQuery = new GetQuery(origin.getHost(), origin.getPort(), basePath + fileName, false);
     	String location = getQuery.getLocation().toString();
     	statusLabel.setText("Loading data from " + location);
     	System.out.println(location);

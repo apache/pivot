@@ -63,7 +63,7 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
     }
 
     public void render(Object item, ListView listView, boolean selected,
-        boolean highlighted, boolean disabled) {
+        boolean checked, boolean highlighted, boolean disabled) {
         Image icon = null;
         String text = null;
 

@@ -18,6 +18,8 @@ package pivot.wtk.content;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import pivot.beans.BeanDictionary;
 import pivot.collections.Dictionary;
 import pivot.wtk.TableView;
 
@@ -57,11 +59,20 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
         // Get the row and cell data
         String columnName = column.getName();
         if (columnName != null) {
-            Dictionary<String, Object> rowData = (Dictionary<String, Object>)value;
+            Dictionary<String, Object> rowData;
+            if (value instanceof Dictionary<?, ?>) {
+                rowData = (Dictionary<String, Object>)value;
+            } else {
+                rowData = new BeanDictionary(value);
+            }
+
             Object cellData = rowData.get(columnName);
 
             if (cellData instanceof Date) {
                 formattedDate = dateFormat.format((Date)cellData);
+            } else {
+                System.err.println("Data for \"" + columnName + "\" is not an instance of "
+                    + Date.class.getName());
             }
         }
 

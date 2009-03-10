@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright (c) 2008 VMware, Inc.
+Copyright (c) 2009 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@ limitations under the License.
 
 <Border xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
     xmlns:collections="pivot.collections"
-    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
+    xmlns:content="pivot.wtk.content"
+    xmlns:tutorials="pivot.tutorials"
+    xmlns="pivot.wtk">
     <content>
         <FlowPane styles="{padding:4, spacing:8}">
             <FlowPane orientation="vertical">
@@ -73,12 +75,12 @@ limitations under the License.
                                     </columns>
                                     <tableData>
                                         <collections:ArrayList>
-                                            <content:TableRow a="true" b="@anchor.png" c="Anchor"/>
-                                            <content:TableRow a="false" b="@bell.png" c="Bell"/>
-                                            <content:TableRow a="false" b="@clock.png" c="Clock"/>
-                                            <content:TableRow a="true" b="@cup.png" c="Cup"/>
-                                            <content:TableRow a="false" b="@house.png" c="House"/>
-                                            <content:TableRow a="true" b="@star.png" c="Star"/>
+                                            <tutorials:CustomTableRow a="true" b="@anchor.png" c="Anchor"/>
+                                            <tutorials:CustomTableRow a="false" b="@bell.png" c="Bell"/>
+                                            <tutorials:CustomTableRow a="false" b="@clock.png" c="Clock"/>
+                                            <tutorials:CustomTableRow a="true" b="@cup.png" c="Cup"/>
+                                            <tutorials:CustomTableRow a="false" b="@house.png" c="House"/>
+                                            <tutorials:CustomTableRow a="true" b="@star.png" c="Star"/>
                                         </collections:ArrayList>
                                     </tableData>
                                 </TableView>

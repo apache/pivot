@@ -15,6 +15,7 @@
  */
 package pivot.wtk.content;
 
+import pivot.beans.BeanDictionary;
 import pivot.collections.Dictionary;
 import pivot.wtk.Checkbox;
 import pivot.wtk.FlowPane;
@@ -58,7 +59,13 @@ public class TableViewBooleanCellRenderer extends FlowPane
         // Get the row and cell data
         String columnName = column.getName();
         if (columnName != null) {
-            Dictionary<String, Object> rowData = (Dictionary<String, Object>)value;
+            Dictionary<String, Object> rowData;
+            if (value instanceof Dictionary<?, ?>) {
+                rowData = (Dictionary<String, Object>)value;
+            } else {
+                rowData = new BeanDictionary(value);
+            }
+
             Object cellData = rowData.get(columnName);
 
             if (cellData instanceof String) {
@@ -67,6 +74,9 @@ public class TableViewBooleanCellRenderer extends FlowPane
 
             if (cellData instanceof Boolean) {
                 checkboxSelected = (Boolean)cellData;
+            } else {
+                System.err.println("Data for \"" + columnName + "\" is not an instance of "
+                    + Boolean.class.getName());
             }
         }
 

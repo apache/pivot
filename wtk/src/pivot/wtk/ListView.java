@@ -81,7 +81,7 @@ public class ListView extends Component {
          * for the item.
          */
         public void render(Object item, ListView listView, boolean selected,
-            boolean highlighted, boolean disabled);
+            boolean checked, boolean highlighted, boolean disabled);
     }
 
     /**

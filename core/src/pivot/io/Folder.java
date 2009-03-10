@@ -123,14 +123,16 @@ public class Folder extends File implements List<File> {
             fileList = listFiles();
         }
 
-        for (int i = 0; i < fileList.length; i++) {
-            File file = fileList[i];
+        if (fileList != null) {
+            for (int i = 0; i < fileList.length; i++) {
+                File file = fileList[i];
 
-            if (!file.isHidden()) {
-                if (file.isDirectory()) {
-                    files.add(new Folder(file.getPath()));
-                } else {
-                    files.add(file);
+                if (!file.isHidden()) {
+                    if (file.isDirectory()) {
+                        files.add(new Folder(file.getPath()));
+                    } else {
+                        files.add(file);
+                    }
                 }
             }
         }

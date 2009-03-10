@@ -15,8 +15,12 @@
  */
 package pivot.util;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
+
+import com.sun.xml.internal.ws.encoding.soap.SerializationException;
+
 import pivot.collections.Dictionary;
 
 /**
@@ -58,8 +62,10 @@ public class Preferences implements Dictionary<String, Object>, Iterable<String>
      * a given URL.
      *
      * @param url
+     * @param defaults
      */
-    public Preferences(URL url) {
+    public Preferences(URL url, Dictionary<String, Object> defaults)
+        throws IOException, SerializationException {
         // TODO
     }
 
@@ -86,6 +92,10 @@ public class Preferences implements Dictionary<String, Object>, Iterable<String>
     public boolean isEmpty() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    public void save() throws IOException, SerializationException {
+        // TODO
     }
 
     public Iterator<String> iterator() {

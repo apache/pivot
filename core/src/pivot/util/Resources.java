@@ -133,14 +133,6 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         }
     }
 
-    public boolean containsKey(String key) {
-        return resourceMap.containsKey(key);
-    }
-
-    public Object get(String key) {
-        return resourceMap.get(key);
-    }
-
     public String getBaseName() {
         return baseName;
     }
@@ -149,8 +141,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         return locale;
     }
 
-    public boolean isEmpty() {
-        return resourceMap.isEmpty();
+    public Object get(String key) {
+        return JSONSerializer.getValue(resourceMap, key);
     }
 
     public Object put(String key, Object value) {
@@ -159,6 +151,14 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     public Object remove(String key) {
         throw new UnsupportedOperationException("Resources instances are immutable");
+    }
+
+    public boolean containsKey(String key) {
+        return resourceMap.containsKey(key);
+    }
+
+    public boolean isEmpty() {
+        return resourceMap.isEmpty();
     }
 
     @SuppressWarnings("unchecked")

@@ -20,7 +20,7 @@ public class ContactListViewItemRenderer extends Label
     }
 
     public void render(Object item, ListView listView, boolean selected,
-        boolean highlighted, boolean disabled) {
+        boolean checked, boolean highlighted, boolean disabled) {
     	ContactEntry contactEntry = (ContactEntry)item;
     	String text = contactEntry.getTitle().getPlainText();
     	setText(text);
