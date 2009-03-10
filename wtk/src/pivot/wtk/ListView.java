@@ -190,15 +190,15 @@ public class ListView extends Component {
             }
         }
 
-        public void selectedValueKeyChanged(ListView listView, String previousSelectedValueKey) {
+        public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
             for (ListViewListener listener : this) {
-                listener.selectedValueKeyChanged(listView, previousSelectedValueKey);
+                listener.selectedItemKeyChanged(listView, previousSelectedItemKey);
             }
         }
 
-        public void selectedValuesKeyChanged(ListView listView, String previousSelectedValuesKey) {
+        public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
             for (ListViewListener listener : this) {
-                listener.selectedValuesKeyChanged(listView, previousSelectedValuesKey);
+                listener.selectedItemsKeyChanged(listView, previousSelectedItemsKey);
             }
         }
     }
@@ -308,8 +308,8 @@ public class ListView extends Component {
 
     private ArrayList<Integer> disabledIndexes = new ArrayList<Integer>();
 
-    private String selectedValueKey = null;
-    private String selectedValuesKey = null;
+    private String selectedItemKey = null;
+    private String selectedItemsKey = null;
 
     private ListViewListenerList listViewListeners = new ListViewListenerList();
     private ListViewItemListenerList listViewItemListeners = new ListViewItemListenerList();
@@ -675,7 +675,7 @@ public class ListView extends Component {
      * @return <tt>true</tt> if the index is selected; <tt>false</tt>,
      * otherwise.
      */
-    public boolean isIndexSelected(int index) {
+    public boolean isItemSelected(int index) {
         return isRangeSelected(index, index);
     }
 
@@ -728,59 +728,59 @@ public class ListView extends Component {
         return selected;
     }
 
-    public Object getSelectedValue() {
+    public Object getSelectedItem() {
         int index = getSelectedIndex();
-        Object value = null;
+        Object item = null;
 
         if (index >= 0) {
-            value = listData.get(index);
+            item = listData.get(index);
         }
 
-        return value;
+        return item;
     }
 
     @SuppressWarnings("unchecked")
-    public void setSelectedValue(Object value) {
-        if (value == null) {
-            throw new IllegalArgumentException("value is null");
+    public void setSelectedItem(Object item) {
+        if (item == null) {
+            throw new IllegalArgumentException("item is null");
         }
 
-        int index = ((List<Object>)listData).indexOf(value);
+        int index = ((List<Object>)listData).indexOf(item);
         if (index == -1) {
-            throw new IllegalArgumentException("\"" + value + "\" is not a valid selection.");
+            throw new IllegalArgumentException("\"" + item + "\" is not a valid selection.");
         }
 
         setSelectedIndex(index);
     }
 
-    public Sequence<Object> getSelectedValues() {
-        ArrayList<Object> values = new ArrayList<Object>();
+    public Sequence<Object> getSelectedItems() {
+        ArrayList<Object> items = new ArrayList<Object>();
 
         for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
             Span span = selectedRanges.get(i);
 
             for (int index = span.getStart(), end = span.getEnd(); index <= end; index++) {
-                Object value = listData.get(index);
-                values.add(value);
+                Object item = listData.get(index);
+                items.add(item);
             }
         }
 
-        return values;
+        return items;
     }
 
     @SuppressWarnings("unchecked")
-    public void setSelectedValues(Sequence<Object> values) {
+    public void setSelectedItems(Sequence<Object> items) {
         ArrayList<Span> selectedRanges = new ArrayList<Span>();
 
-        for (int i = 0, n = values.getLength(); i < n; i++) {
-            Object value = values.get(i);
-            if (value == null) {
-                throw new IllegalArgumentException("value is null");
+        for (int i = 0, n = items.getLength(); i < n; i++) {
+            Object item = items.get(i);
+            if (item == null) {
+                throw new IllegalArgumentException("item is null");
             }
 
-            int index = ((List<Object>)listData).indexOf(value);
+            int index = ((List<Object>)listData).indexOf(item);
             if (index == -1) {
-                throw new IllegalArgumentException("\"" + value + "\" is not a valid selection.");
+                throw new IllegalArgumentException("\"" + item + "\" is not a valid selection.");
             }
 
             selectedRanges.add(new Span(index, index));
@@ -961,57 +961,53 @@ public class ListView extends Component {
         return disabledIndexes;
     }
 
-    public String getSelectedValueKey() {
-        return selectedValueKey;
+    public String getSelectedItemKey() {
+        return selectedItemKey;
     }
 
-    public void setSelectedValueKey(String selectedValueKey) {
-        String previousSelectedValueKey = this.selectedValueKey;
-        this.selectedValueKey = selectedValueKey;
-        listViewListeners.selectedValueKeyChanged(this, previousSelectedValueKey);
+    public void setSelectedItemKey(String selectedItemKey) {
+        String previousSelectedItemKey = this.selectedItemKey;
+        this.selectedItemKey = selectedItemKey;
+        listViewListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
     }
 
-    public String getSelectedValuesKey() {
-        return selectedValuesKey;
+    public String getSelectedItemsKey() {
+        return selectedItemsKey;
     }
 
-    public void setSelectedValuesKey(String selectedValuesKey) {
-        String previousSelectedValuesKey = this.selectedValuesKey;
-        this.selectedValuesKey = selectedValuesKey;
-        listViewListeners.selectedValuesKeyChanged(this, previousSelectedValuesKey);
+    public void setSelectedItemsKey(String selectedItemsKey) {
+        String previousSelectedItemsKey = this.selectedItemsKey;
+        this.selectedItemsKey = selectedItemsKey;
+        listViewListeners.selectedItemsKeyChanged(this, previousSelectedItemsKey);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void load(Dictionary<String, Object> context) {
-        if (selectedValueKey != null
-            && context.containsKey(selectedValueKey)) {
-            Object value = context.get(selectedValueKey);
-            setSelectedValue(value);
+        if (selectedItemKey != null
+            && context.containsKey(selectedItemKey)) {
+            Object item = context.get(selectedItemKey);
+            setSelectedItem(item);
         }
 
-        if (selectedValuesKey != null
-            && context.containsKey(selectedValuesKey)) {
-            Sequence<Object> values = (Sequence<Object>)context.get(selectedValuesKey);
-            setSelectedValues(values);
+        if (selectedItemsKey != null
+            && context.containsKey(selectedItemsKey)) {
+            Sequence<Object> items = (Sequence<Object>)context.get(selectedItemsKey);
+            setSelectedItems(items);
         }
-
-        // TODO Add support for checked values
     }
 
     @Override
     public void store(Dictionary<String, Object> context) {
-        if (selectedValueKey != null) {
-            Object value = getSelectedValue();
-            context.put(selectedValueKey, value);
+        if (selectedItemKey != null) {
+            Object item = getSelectedItem();
+            context.put(selectedItemKey, item);
         }
 
-        if (selectedValuesKey != null) {
-            Sequence<Object> values = getSelectedValues();
-            context.put(selectedValuesKey, values);
+        if (selectedItemsKey != null) {
+            Sequence<Object> items = getSelectedItems();
+            context.put(selectedItemsKey, items);
         }
-
-        // TODO Add support for checked values
     }
 
     /**

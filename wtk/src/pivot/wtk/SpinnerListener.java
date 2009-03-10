@@ -50,7 +50,7 @@ public interface SpinnerListener {
      * Called when a spinner's selected value key has changed.
      *
      * @param spinner
-     * @param previousSelectedValueKey
+     * @param previousSelectedItemKey
      */
-    public void selectedValueKeyChanged(Spinner spinner, String previousSelectedValueKey);
+    public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey);
 }

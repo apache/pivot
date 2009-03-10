@@ -139,6 +139,6 @@ public class ListViewSelectionTest implements Application {
 
     protected void verifySelection(int index) {
         System.out.println("Index " + index + " "
-            + (listView.isIndexSelected(index) ? "is" : "is not") + " selected");
+            + (listView.isItemSelected(index) ? "is" : "is not") + " selected");
     }
 }

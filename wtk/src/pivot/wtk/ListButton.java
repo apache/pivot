@@ -49,9 +49,9 @@ public class ListButton extends Button {
             }
         }
 
-        public void selectedValueKeyChanged(ListButton listButton, String previousSelectedValueKey) {
+        public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
             for (ListButtonListener listener : this) {
-                listener.selectedValueKeyChanged(listButton, previousSelectedValueKey);
+                listener.selectedItemKeyChanged(listButton, previousSelectedItemKey);
             }
         }
     }
@@ -73,7 +73,7 @@ public class ListButton extends Button {
     private List<?> listData;
     private ListView.ItemRenderer itemRenderer = null;
     private int selectedIndex = -1;
-    private String selectedValueKey = null;
+    private String selectedItemKey = null;
 
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
     private ListButtonSelectionListenerList listButtonSelectionListeners = new ListButtonSelectionListenerList();
@@ -234,55 +234,55 @@ public class ListButton extends Button {
         }
     }
 
-    public Object getSelectedValue() {
+    public Object getSelectedItem() {
         int index = getSelectedIndex();
-        Object value = null;
+        Object item = null;
 
         if (index >= 0) {
-            value = listData.get(index);
+            item = listData.get(index);
         }
 
-        return value;
+        return item;
     }
 
     @SuppressWarnings("unchecked")
-    public void setSelectedValue(Object value) {
-        if (value == null) {
-            throw new IllegalArgumentException("value is null");
+    public void setSelectedItem(Object item) {
+        if (item == null) {
+            throw new IllegalArgumentException("item is null");
         }
 
-        int index = ((List<Object>)listData).indexOf(value);
+        int index = ((List<Object>)listData).indexOf(item);
         if (index == -1) {
-            throw new IllegalArgumentException("\"" + value + "\" is not a valid selection.");
+            throw new IllegalArgumentException("\"" + item + "\" is not a valid selection.");
         }
 
         setSelectedIndex(index);
     }
 
-    public String getSelectedValueKey() {
-        return selectedValueKey;
+    public String getSelectedItemKey() {
+        return selectedItemKey;
     }
 
-    public void setSelectedValueKey(String selectedValueKey) {
-        String previousSelectedValueKey = this.selectedValueKey;
-        this.selectedValueKey = selectedValueKey;
-        listButtonListeners.selectedValueKeyChanged(this, previousSelectedValueKey);
+    public void setSelectedItemKey(String selectedItemKey) {
+        String previousSelectedItemKey = this.selectedItemKey;
+        this.selectedItemKey = selectedItemKey;
+        listButtonListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
     }
 
     @Override
     public void load(Dictionary<String, Object> context) {
-        if (selectedValueKey != null
-            && context.containsKey(selectedValueKey)) {
-            Object value = context.get(selectedValueKey);
-            setSelectedValue(value);
+        if (selectedItemKey != null
+            && context.containsKey(selectedItemKey)) {
+            Object item = context.get(selectedItemKey);
+            setSelectedItem(item);
         }
     }
 
     @Override
     public void store(Dictionary<String, Object> context) {
-        if (selectedValueKey != null) {
-            Object value = getSelectedValue();
-            context.put(selectedValueKey, value);
+        if (selectedItemKey != null) {
+            Object item = getSelectedItem();
+            context.put(selectedItemKey, item);
         }
     }
 

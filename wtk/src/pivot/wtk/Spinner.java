@@ -158,10 +158,9 @@ public class Spinner extends Container {
             }
         }
 
-        public void selectedValueKeyChanged(Spinner spinner,
-            String previousSelectedValueKey) {
+        public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
             for (SpinnerListener listener : this) {
-                listener.selectedValueKeyChanged(spinner, previousSelectedValueKey);
+                listener.selectedItemKeyChanged(spinner, previousSelectedItemKey);
             }
         }
     }
@@ -221,7 +220,7 @@ public class Spinner extends Container {
     private boolean circular = false;
     private int selectedIndex = -1;
 
-    private String selectedValueKey = null;
+    private String selectedItemKey = null;
 
     private SpinnerListenerList spinnerListeners = new SpinnerListenerList();
     private SpinnerItemListenerList spinnerItemListeners = new SpinnerItemListenerList();
@@ -373,26 +372,26 @@ public class Spinner extends Container {
         }
     }
 
-    public Object getSelectedValue() {
+    public Object getSelectedItem() {
         int index = getSelectedIndex();
-        Object value = null;
+        Object item = null;
 
         if (index >= 0) {
-            value = spinnerData.get(index);
+            item = spinnerData.get(index);
         }
 
-        return value;
+        return item;
     }
 
     @SuppressWarnings("unchecked")
-    public void setSelectedValue(Object value) {
-        if (value == null) {
-            throw new IllegalArgumentException("value is null");
+    public void setSelectedItem(Object item) {
+        if (item == null) {
+            throw new IllegalArgumentException("item is null");
         }
 
-        int index = ((List<Object>)spinnerData).indexOf(value);
+        int index = ((List<Object>)spinnerData).indexOf(item);
         if (index == -1) {
-            throw new IllegalArgumentException("\"" + value + "\" is not a valid selection.");
+            throw new IllegalArgumentException("\"" + item + "\" is not a valid selection.");
         }
 
         setSelectedIndex(index);
@@ -401,37 +400,33 @@ public class Spinner extends Container {
     /**
      * Gets the data binding key that is set on this spinner.
      */
-    public String getSelectedValueKey() {
-        return selectedValueKey;
+    public String getSelectedItemKey() {
+        return selectedItemKey;
     }
 
     /**
      * Sets this spinner's data binding key.
      */
-    public void setSelectedValueKey(String selectedValueKey) {
-        String previousSelectedValueKey = this.selectedValueKey;
-
-        if ((selectedValueKey == null ^ previousSelectedValueKey == null)
-            || (selectedValueKey != null && !selectedValueKey.equals(previousSelectedValueKey))) {
-            this.selectedValueKey = selectedValueKey;
-            spinnerListeners.selectedValueKeyChanged(this, previousSelectedValueKey);
-        }
+    public void setSelectedItemKey(String selectedItemKey) {
+        String previousSelectedItemKey = this.selectedItemKey;
+        this.selectedItemKey = selectedItemKey;
+        spinnerListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
     }
 
     @Override
     public void load(Dictionary<String, Object> context) {
-        if (selectedValueKey != null
-            && context.containsKey(selectedValueKey)) {
-            Object value = context.get(selectedValueKey);
-            setSelectedValue(value);
+        if (selectedItemKey != null
+            && context.containsKey(selectedItemKey)) {
+            Object item = context.get(selectedItemKey);
+            setSelectedItem(item);
         }
     }
 
     @Override
     public void store(Dictionary<String, Object> context) {
-        if (selectedValueKey != null) {
-            Object value = getSelectedValue();
-            context.put(selectedValueKey, value);
+        if (selectedItemKey != null) {
+            Object item = getSelectedItem();
+            context.put(selectedItemKey, item);
         }
     }
 

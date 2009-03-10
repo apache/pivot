@@ -400,7 +400,7 @@ public class TerraCalendarSkin extends CalendarSkin
         monthSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
             public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
                 Calendar calendar = (Calendar)getComponent();
-                calendar.setMonth((Integer)spinner.getSelectedValue());
+                calendar.setMonth((Integer)spinner.getSelectedItem());
             }
         });
 
@@ -411,7 +411,7 @@ public class TerraCalendarSkin extends CalendarSkin
         yearSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
             public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
                 Calendar calendar = (Calendar)getComponent();
-                calendar.setYear((Integer)spinner.getSelectedValue());
+                calendar.setYear((Integer)spinner.getSelectedItem());
             }
         });
 

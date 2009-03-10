@@ -554,7 +554,7 @@ public class Demo implements Application {
 
         CalendarDate today = new CalendarDate();
         dateSpinner.setSpinnerData(spinnerData);
-        dateSpinner.setSelectedValue(today);
+        dateSpinner.setSelectedItem(today);
     }
 
     @SuppressWarnings("unchecked")

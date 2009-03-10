@@ -116,7 +116,7 @@ public class HTTPClient implements Application {
      */
     private Request getRequest() {
         ListButton protocolListButton = (ListButton)serializer.getObjectByName("request.protocol");
-        ListItem protocolListItem = (ListItem)protocolListButton.getSelectedValue();
+        ListItem protocolListItem = (ListItem)protocolListButton.getSelectedItem();
         Protocol protocol = Protocol.decode(protocolListItem.getText());
         boolean secure = protocol.isSecure();
 
@@ -136,7 +136,7 @@ public class HTTPClient implements Application {
         String path = pathTextInput.getText();
 
         ListButton methodListButton = (ListButton)serializer.getObjectByName("request.method");
-        ListItem methodListItem = (ListItem)methodListButton.getSelectedValue();
+        ListItem methodListItem = (ListItem)methodListButton.getSelectedItem();
 
         // Construct the HTTP request
         Request httpRequest = new Request(methodListItem.getText(), protocol.toString(), host, port, path);

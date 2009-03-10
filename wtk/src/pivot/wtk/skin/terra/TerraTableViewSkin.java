@@ -194,7 +194,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             boolean rowHighlighted = (rowIndex == highlightedIndex
                 && tableView.getSelectMode() != TableView.SelectMode.NONE
                 && Mouse.getButtons() == 0);
-            boolean rowSelected = tableView.isIndexSelected(rowIndex);
+            boolean rowSelected = tableView.isRowSelected(rowIndex);
             boolean rowDisabled = tableView.isRowDisabled(rowIndex);
 
             Color rowBackgroundColor = null;
@@ -845,7 +845,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
                 && selectMode == TableView.SelectMode.MULTI) {
                 // Toggle the item's selection state
-                if (tableView.isIndexSelected(rowIndex)) {
+                if (tableView.isRowSelected(rowIndex)) {
                     tableView.removeSelectedIndex(rowIndex);
                 } else {
                     tableView.addSelectedIndex(rowIndex);

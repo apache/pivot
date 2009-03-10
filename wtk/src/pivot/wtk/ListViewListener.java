@@ -55,18 +55,18 @@ public interface ListViewListener {
     public void checkmarksEnabledChanged(ListView listView);
 
     /**
-     * Called when a list view's selected value key has changed.
+     * Called when a list view's selected item key has changed.
      *
      * @param listView
-     * @param previousSelectedIndexKey
+     * @param previousSelectedItemKey
      */
-    public void selectedValueKeyChanged(ListView listView, String previousSelectedIndexKey);
+    public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey);
 
     /**
-     * Called when a list view's selected values key has changed.
+     * Called when a list view's selected items key has changed.
      *
      * @param listView
-     * @param previousSelectedValuesKey
+     * @param previousSelectedItemsKey
      */
-    public void selectedValuesKeyChanged(ListView listView, String previousSelectedValuesKey);
+    public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey);
 }

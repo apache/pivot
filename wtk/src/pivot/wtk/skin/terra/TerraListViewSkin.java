@@ -178,7 +178,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             boolean highlighted = (itemIndex == highlightedIndex
                 && listView.getSelectMode() != ListView.SelectMode.NONE
                 && Mouse.getButtons() == 0);
-            boolean selected = listView.isIndexSelected(itemIndex);
+            boolean selected = listView.isItemSelected(itemIndex);
             boolean disabled = listView.isItemDisabled(itemIndex);
 
             Color itemBackgroundColor = null;
@@ -568,7 +568,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
                     && selectMode == ListView.SelectMode.MULTI) {
                     // Toggle the item's selection state
-                    if (listView.isIndexSelected(itemIndex)) {
+                    if (listView.isItemSelected(itemIndex)) {
                         listView.removeSelectedIndex(itemIndex);
                     } else {
                         listView.addSelectedIndex(itemIndex);
@@ -735,11 +735,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     	invalidateComponent();
     }
 
-    public void selectedValueKeyChanged(ListView listView, String previousSelectedIndexKey) {
+    public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
         // No-op
     }
 
-    public void selectedValuesKeyChanged(ListView listView, String previousSelectedValuesKey) {
+    public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
         // No-op
     }
 

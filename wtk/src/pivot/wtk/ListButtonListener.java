@@ -43,7 +43,7 @@ public interface ListButtonListener {
      * Called when a list button's selected value key has changed.
      *
      * @param listButton
-     * @param previousSelectedValueKey
+     * @param previousSelectedItemKey
      */
-    public void selectedValueKeyChanged(ListButton listButton, String previousSelectedValueKey);
+    public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey);
 }

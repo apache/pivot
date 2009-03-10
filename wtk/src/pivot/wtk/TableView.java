@@ -1171,7 +1171,7 @@ public class TableView extends Component {
      * @return <tt>true</tt> if the index is selected; <tt>false</tt>,
      * otherwise.
      */
-    public boolean isIndexSelected(int index) {
+    public boolean isRowSelected(int index) {
         return isRangeSelected(index, index);
     }
 
@@ -1222,6 +1222,32 @@ public class TableView extends Component {
         }
 
         return selected;
+    }
+
+    public Object getSelectedRow() {
+        int index = getSelectedIndex();
+        Object row = null;
+
+        if (index >= 0) {
+            row = tableData.get(index);
+        }
+
+        return row;
+    }
+
+    public Sequence<Object> getSelectedRows() {
+        ArrayList<Object> rows = new ArrayList<Object>();
+
+        for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
+            Span span = selectedRanges.get(i);
+
+            for (int index = span.getStart(), end = span.getEnd(); index <= end; index++) {
+                Object row = tableData.get(index);
+                rows.add(row);
+            }
+        }
+
+        return rows;
     }
 
     /**

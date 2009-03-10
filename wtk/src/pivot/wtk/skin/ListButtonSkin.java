@@ -334,7 +334,7 @@ public abstract class ListButtonSkin extends ButtonSkin
         listView.setItemRenderer(listButton.getItemRenderer());
     }
 
-    public void selectedValueKeyChanged(ListButton listButton, String previousSelectedValueKey) {
+    public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
         // No-op
     }
 

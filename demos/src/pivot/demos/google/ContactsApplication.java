@@ -218,7 +218,7 @@ public class ContactsApplication implements Application {
 
 		presenceStatusMonitors.clear();
 
-		ContactEntry contactEntry = (ContactEntry)contactListView.getSelectedValue();
+		ContactEntry contactEntry = (ContactEntry)contactListView.getSelectedItem();
 		if (contactEntry != null) {
 			nameLabel.setText(contactEntry.getTitle().getPlainText());
 

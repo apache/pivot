@@ -167,7 +167,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
                     preferredWidth = Math.max(preferredWidth, itemRenderer.getPreferredWidth(height));
                 }
             } else {
-                itemRenderer.render(spinner.getSelectedValue(), spinner);
+                itemRenderer.render(spinner.getSelectedItem(), spinner);
                 preferredWidth = itemRenderer.getPreferredWidth(height);
             }
 
@@ -180,7 +180,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
-            itemRenderer.render(spinner.getSelectedValue(), spinner);
+            itemRenderer.render(spinner.getSelectedItem(), spinner);
             preferredHeight = itemRenderer.getPreferredHeight(width);
 
             return preferredHeight;
@@ -195,7 +195,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             if (sizeToContent) {
                 preferredSize = new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
             } else {
-                itemRenderer.render(spinner.getSelectedValue(), spinner);
+                itemRenderer.render(spinner.getSelectedItem(), spinner);
                 preferredSize = itemRenderer.getPreferredSize();
             }
 
@@ -215,7 +215,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
             // Paint the content
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
-            itemRenderer.render(spinner.getSelectedValue(), spinner);
+            itemRenderer.render(spinner.getSelectedItem(), spinner);
 
             Graphics2D contentGraphics = (Graphics2D)graphics.create();
             itemRenderer.setSize(width, height);
@@ -795,8 +795,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         // No-op
     }
 
-    public void selectedValueKeyChanged(Spinner spinner,
-        String previousSelectedValueKey) {
+    public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
         // No-op
     }
 

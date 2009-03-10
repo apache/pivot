@@ -112,7 +112,7 @@ public class LargeData implements Application {
     }
 
     private void loadData() {
-    	String fileName = (String)fileListButton.getSelectedValue();
+    	String fileName = (String)fileListButton.getSelectedItem();
 
     	URL origin = ApplicationContext.getOrigin();
     	System.out.println(origin);

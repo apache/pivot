@@ -149,9 +149,7 @@ public class CSVSerializer implements Serializer<List<?>> {
         throws IOException, SerializationException {
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset),
             BUFFER_SIZE);
-        List<?> objects = readObject(reader);
-
-        return objects;
+        return readObject(reader);
     }
 
     /**
@@ -278,24 +276,24 @@ public class CSVSerializer implements Serializer<List<?>> {
     /**
      * Writes values to a comma-separated value stream.
      *
-     * @param object
+     * @param items
      *
      * @param outputStream
      * The output stream to which data will be written.
      *
-     * @see #writeObject(List<?>, Writer)
+     * @see #writeObject(List, Writer)
      */
-    public void writeObject(List<?> objects, OutputStream outputStream)
+    public void writeObject(List<?> items, OutputStream outputStream)
         throws IOException, SerializationException {
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
             BUFFER_SIZE);
-        writeObject(objects, writer);
+        writeObject(items, writer);
     }
 
     /**
      * Writes values to a comma-separated value stream.
      *
-     * @param object
+     * @param items
      * A list containing the data to write to the CSV
      * file. List items must be instances of Dictionary<String, Object>. The
      * dictionary values will be written out in the order specified by the
@@ -305,14 +303,19 @@ public class CSVSerializer implements Serializer<List<?>> {
      * The writer to which data will be written.
      */
     @SuppressWarnings("unchecked")
-    public void writeObject(List<?> objects, Writer writer)
+    public void writeObject(List<?> items, Writer writer)
         throws IOException, SerializationException {
         if (writer == null) {
             throw new IllegalArgumentException("writer is null.");
         }
 
-        for (Object object : objects) {
-            Dictionary<String, Object> item = (Dictionary<String, Object>)object;
+        for (Object item : items) {
+            Dictionary<String, Object> itemDictionary;
+            if (item instanceof Dictionary) {
+                itemDictionary = (Dictionary<String, Object>)item;
+            } else {
+                itemDictionary = new BeanDictionary(item);
+            }
 
             for (int i = 0, n = keys.getLength(); i < n; i++) {
                 String key = keys.get(i);
@@ -321,7 +324,7 @@ public class CSVSerializer implements Serializer<List<?>> {
                     writer.append(",");
                 }
 
-                Object value = item.get(key);
+                Object value = itemDictionary.get(key);
                 writer.append(value.toString());
             }
 
