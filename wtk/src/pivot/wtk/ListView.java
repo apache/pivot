@@ -102,9 +102,34 @@ public class ListView extends Component {
      */
     private class ListHandler implements ListListener<Object> {
         public void itemInserted(List<Object> list, int index) {
+            // Increment selected ranges
             selectedRanges.insertIndex(index);
 
-            // TODO Update checked and disabled indexes
+            int i, n;
+
+            // Increment checked indexes
+            i = Sequence.Search.binarySearch(checkedIndexes, index);
+            if (i < 0) {
+                i = -(i + 1);
+            }
+
+            n = checkedIndexes.getLength();
+            while (i < n) {
+                checkedIndexes.update(i, checkedIndexes.get(i) + 1);
+                i++;
+            }
+
+            // Increment disabled indexes
+            i = Sequence.Search.binarySearch(disabledIndexes, index);
+            if (i < 0) {
+                i = -(i + 1);
+            }
+
+            n = disabledIndexes.getLength();
+            while (i < n) {
+                disabledIndexes.update(i, disabledIndexes.get(i) + 1);
+                i++;
+            }
 
             // Notify listeners that items were inserted
             listViewItemListeners.itemInserted(ListView.this, index);
@@ -115,16 +140,41 @@ public class ListView extends Component {
                 // All items were removed; clear the selection and notify
                 // listeners
                 selectedRanges.clear();
-
-                // TODO Clear checked and disabled indexes
+                checkedIndexes.clear();
+                disabledIndexes.clear();
 
                 listViewItemListeners.itemsRemoved(ListView.this, index, -1);
             } else {
                 int count = items.getLength();
 
+                // Decrement selected ranges
                 selectedRanges.removeIndexes(index, count);
 
-                // TODO Update checked and disabled indexes
+                int i, n;
+
+                // Decrement checked indexes
+                i = Sequence.Search.binarySearch(checkedIndexes, index);
+                if (i < 0) {
+                    i = -(i + 1);
+                }
+
+                n = checkedIndexes.getLength();
+                while (i < n) {
+                    checkedIndexes.update(i, checkedIndexes.get(i) - count);
+                    i++;
+                }
+
+                // Decrement disabled indexes
+                i = Sequence.Search.binarySearch(disabledIndexes, index);
+                if (i < 0) {
+                    i = -(i + 1);
+                }
+
+                n = disabledIndexes.getLength();
+                while (i < n) {
+                    disabledIndexes.update(i, disabledIndexes.get(i) - count);
+                    i++;
+                }
 
                 // Notify listeners that items were removed
                 listViewItemListeners.itemsRemoved(ListView.this, index, count);
@@ -139,8 +189,8 @@ public class ListView extends Component {
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
                 selectedRanges.clear();
-
-                // TODO Clear checked and disabled indexes
+                checkedIndexes.clear();
+                disabledIndexes.clear();
 
                 listViewItemListeners.itemsSorted(ListView.this);
             }
@@ -343,8 +393,8 @@ public class ListView extends Component {
             if (previousListData != null) {
                 // Clear any existing selection
                 selectedRanges.clear();
-
-                // TODO Update checked and disabled indexes
+                checkedIndexes.clear();
+                disabledIndexes.clear();
 
                 ((List<Object>)previousListData).getListListeners().remove(listDataHandler);
             }

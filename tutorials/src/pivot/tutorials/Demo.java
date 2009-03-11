@@ -216,8 +216,6 @@ public class Demo implements Application {
         }
     }
 
-    private ListView checkedListView = null;
-
     private MenuPopup menuPopup = null;
     private ImageView menuImageView = null;
 
@@ -286,7 +284,11 @@ public class Demo implements Application {
             }
         };
 
-        checkedListView = (ListView)wtkxSerializer.getObjectByName("lists.checkedListView");
+        ListView iconListView = (ListView)wtkxSerializer.getObjectByName("lists.iconListView");
+        iconListView.setItemDisabled(3, true);
+        iconListView.setItemDisabled(4, true);
+
+        ListView checkedListView = (ListView)wtkxSerializer.getObjectByName("lists.checkedListView");
         checkedListView.setItemChecked(0, true);
         checkedListView.setItemChecked(2, true);
         checkedListView.setItemChecked(3, true);

@@ -594,9 +594,20 @@ public class TableView extends Component {
      */
     private class ListHandler implements ListListener<Object> {
         public void itemInserted(List<Object> list, int index) {
+            // Increment selected ranges
             selectedRanges.insertIndex(index);
 
-            // TODO Update disabled indexes
+            // Increment disabled indexes
+            int i = Sequence.Search.binarySearch(disabledIndexes, index);
+            if (i < 0) {
+                i = -(i + 1);
+            }
+
+            int n = disabledIndexes.getLength();
+            while (i < n) {
+                disabledIndexes.update(i, disabledIndexes.get(i) + 1);
+                i++;
+            }
 
             // Notify listeners that items were inserted
             tableViewRowListeners.rowInserted(TableView.this, index);
@@ -607,16 +618,26 @@ public class TableView extends Component {
                 // All items were removed; clear the selection and notify
                 // listeners
                 selectedRanges.clear();
-
-                // TODO Clear disabled indexes
+                disabledIndexes.clear();
 
                 tableViewRowListeners.rowsRemoved(TableView.this, index, -1);
             } else {
                 int count = items.getLength();
 
+                // Decrement selected ranges
                 selectedRanges.removeIndexes(index, count);
 
-                // TODO Update disabled indexes
+                // Decrement disabled indexes
+                int i = Sequence.Search.binarySearch(disabledIndexes, index);
+                if (i < 0) {
+                    i = -(i + 1);
+                }
+
+                int n = disabledIndexes.getLength();
+                while (i < n) {
+                    disabledIndexes.update(i, disabledIndexes.get(i) - count);
+                    i++;
+                }
 
                 // Notify listeners that items were removed
                 tableViewRowListeners.rowsRemoved(TableView.this, index, count);
@@ -631,8 +652,7 @@ public class TableView extends Component {
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
                 selectedRanges.clear();
-
-                // TODO Clear disabled indexes
+                disabledIndexes.clear();
 
                 tableViewRowListeners.rowsSorted(TableView.this);
             }

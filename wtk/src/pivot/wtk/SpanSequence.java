@@ -293,14 +293,8 @@ public class SpanSequence implements Sequence<Span> {
      *
      * @param index
      * The index to insert.
-     *
-     * @return
-     * The number of spans that were modified as a result of the insertion.
      */
-    public int insertIndex(int index) {
-        // Keep track of the number of modified spans
-        int m = 0;
-
+    public void insertIndex(int index) {
         // Get the insertion point for the span corresponding to the given index
         Span indexSpan = new Span(index, index);
         int i = indexOf(indexSpan);
@@ -316,7 +310,6 @@ public class SpanSequence implements Sequence<Span> {
             // otherwise, insert the index into the selection
             if (span.getStart() > indexSpan.getStart()) {
                 span.setEnd(span.getEnd() + 1);
-                m++;
 
                 // Start incrementing span bounds beginning at the next span index
                 i++;
@@ -325,15 +318,11 @@ public class SpanSequence implements Sequence<Span> {
 
         // Increment any subsequent selection indexes
         int n = getLength();
-        m += (n - i);
-
         while (i < n) {
             Span span = get(i);
             span.setRange(span.getStart() + 1, span.getEnd() + 1);
             i++;
         }
-
-        return m;
     }
 
     /**
@@ -344,11 +333,8 @@ public class SpanSequence implements Sequence<Span> {
      *
      * @param count
      * The number of indexes to remove.
-     *
-     * @return
-     * The number of spans that were modified as a result of the removal.
      */
-    public int removeIndexes(int index, int count) {
+    public void removeIndexes(int index, int count) {
         // Clear any selections in the given range
         Span rangeSpan = new Span(index, (index + count) - 1);
         remove(rangeSpan);
@@ -362,14 +348,10 @@ public class SpanSequence implements Sequence<Span> {
 
         // Determine the number of spans to modify
         int n = getLength();
-        int m = (n - i);
-
         while (i < n) {
             Span span = get(i);
             span.setRange(span.getStart() - count, span.getEnd() - count);
             i++;
         }
-
-        return m;
     }
 }
