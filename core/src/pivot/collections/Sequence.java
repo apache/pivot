@@ -230,6 +230,38 @@ public interface Sequence<T> {
 
             return path;
         }
+
+        /**
+         * Tells whether or not the path represented by the second argument is
+         * a descendant of the path represented by the first argument.
+         *
+         * @param ancestor
+         * The alleged ancestor path.
+         *
+         * @param descendant
+         * The alleged descendant path.
+         */
+        public static boolean isDescendant(Sequence<Integer> ancestorPath,
+            Sequence<Integer> descendantPath) {
+            int ancestorLength = ancestorPath.getLength();
+            int descendantLength = descendantPath.getLength();
+
+            boolean result = (ancestorLength <= descendantLength);
+
+            if (result) {
+                for (int i = 0, n = ancestorLength; i < n; i++) {
+                    int index1 = ancestorPath.get(i);
+                    int index2 = descendantPath.get(i);
+
+                    if (index1 != index2) {
+                        result = false;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 
     /**
