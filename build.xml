@@ -83,7 +83,7 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Version" value="${version}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="${charts}/${bin}"/>
             <fileset dir="${charts}/${src}">
@@ -155,7 +155,7 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Version" value="${version}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="${core}/${bin}"/>
             <fileset dir="${core}/${src}">
@@ -227,7 +227,7 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Version" value="${version}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="${web}/${bin}">
                 <exclude name="pivot/web/server/**"/>
@@ -244,7 +244,7 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Version" value="${version}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="${web}/${bin}">
                 <include name="pivot/web/server/*"/>
@@ -360,7 +360,7 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Version" value="${version}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <metainf dir="${wtk}">
                 <include name="services/**"/>
@@ -382,7 +382,7 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Version" value="${version}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="${wtk}/${bin}">
                 <include name="pivot/wtk/skin/terra/**"/>
@@ -399,7 +399,7 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Version" value="${version}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="${wtk}/${bin}">
                 <include name="pivot/wtk/skin/obsidian/**"/>
@@ -487,6 +487,10 @@
         <!-- Rebuild the JAR file -->
         <delete file="${demos}/${ant.project.name}-demos.jar"/>
         <jar jarfile="${demos}/${ant.project.name}-demos.jar">
+            <manifest>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
             <fileset dir="${demos}/${bin}"/>
             <fileset dir="${demos}/${src}">
                 <exclude name="**/*.java"/>
@@ -523,6 +527,10 @@
         <!-- Rebuild the JAR files -->
         <delete file="${tutorials}/${ant.project.name}-tutorials.jar"/>
         <jar jarfile="${tutorials}/${ant.project.name}-tutorials.jar">
+            <manifest>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
             <fileset dir="${tutorials}/${bin}">
                 <exclude name="pivot/tutorials/stocktracker/**"/>
             </fileset>
@@ -534,6 +542,10 @@
 
         <delete file="${tutorials}/${ant.project.name}-stocktracker.jar"/>
         <jar jarfile="${tutorials}/${ant.project.name}-stocktracker.jar">
+            <manifest>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
             <fileset dir="${tutorials}/${bin}">
                 <include name="pivot/tutorials/stocktracker/*"/>
             </fileset>
@@ -573,6 +585,10 @@
         <!-- Rebuild the JAR file -->
         <delete file="${tools}/${ant.project.name}-tools.jar"/>
         <jar jarfile="${tools}/${ant.project.name}-tools.jar">
+            <manifest>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
             <fileset dir="${tools}/${bin}"/>
             <fileset dir="${tools}/${src}">
                 <exclude name="**/*.java"/>
