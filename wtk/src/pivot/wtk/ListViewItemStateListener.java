@@ -31,7 +31,7 @@ public interface ListViewItemStateListener {
     public void itemDisabledChanged(ListView listView, int index);
 
     /**
-     * Called when an item's disabled state has changed.
+     * Called when an item's checked state has changed.
      *
      * @param listView
      * @param index

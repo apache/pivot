@@ -15,8 +15,6 @@
  */
 package pivot.wtk.text.test;
 
-import java.io.InputStream;
-
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.wtk.Application;
@@ -28,11 +26,9 @@ import pivot.wtk.TextArea;
 import pivot.wtk.TextAreaSelectionListener;
 import pivot.wtk.TreeView;
 import pivot.wtk.TreeViewSelectionListener;
-import pivot.wtk.text.Document;
 import pivot.wtk.text.Element;
 import pivot.wtk.text.Node;
 import pivot.wtk.text.NodeListener;
-import pivot.wtk.text.PlainTextSerializer;
 import pivot.wtkx.WTKXSerializer;
 
 public class TextAreaTest implements Application {
@@ -69,16 +65,6 @@ public class TextAreaTest implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
-        InputStream inputStream = getClass().getResourceAsStream("pivot.txt");
-
-        Document document = null;
-        try {
-            document = (Document)plainTextSerializer.readObject(inputStream);
-        } catch(Exception exception) {
-            System.out.println(exception);
-        }
-
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("text_area_test.wtkx")));
         frame.setTitle("TextArea Test");
@@ -124,9 +110,7 @@ public class TextAreaTest implements Application {
         offsetLabel = (Label)wtkxSerializer.getObjectByName("offsetLabel");
         charactersLabel = (Label)wtkxSerializer.getObjectByName("charactersLabel");
 
-        textArea.setDocument(document);
-
-        documentAdapter = new DocumentAdapter(document);
+        documentAdapter = new DocumentAdapter(textArea.getDocument());
         treeView.setTreeData(documentAdapter);
     }
 

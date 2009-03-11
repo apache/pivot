@@ -17,8 +17,7 @@ limitations under the License.
 
 <SplitPane splitLocation="420"
     xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
-    xmlns:test="pivot.wtk.text.test"
-    xmlns="pivot.wtk">
+    xmlns:test="pivot.wtk.text.test" xmlns="pivot.wtk">
     <left>
         <TablePane styles="{verticalSpacing:8}">
             <columns>
@@ -30,7 +29,11 @@ limitations under the License.
 					    <content>
 					        <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
 					            <view>
-					                <TextArea wtkx:id="textArea"/>
+					                <TextArea wtkx:id="textArea">
+					                   <document>
+					                       <wtkx:include src="document.wtkx"/>
+					                   </document>
+					                </TextArea>
 					            </view>
 					        </ScrollPane>
 					    </content>
@@ -38,7 +41,9 @@ limitations under the License.
                 </TablePane.Row>
                 <TablePane.Row height="-1">
                     <FlowPane>
-                        <Label text="Selection:"/>
+                        <Label>
+                            <text><![CDATA[Selection:]]></text>
+                        </Label>
 	                    <Label wtkx:id="selectionStartLabel"/>
 	                    <Label text=":"/>
 	                    <Label wtkx:id="selectionLengthLabel"/>

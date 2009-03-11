@@ -61,6 +61,10 @@ public class Paragraph extends Block {
         return super.getCharacterCount() + 1;
     }
 
+    public int add(String text) {
+        return add(new TextNode(text));
+    }
+
     @Override
     public void insert(Node node, int index) {
         if (node instanceof Element

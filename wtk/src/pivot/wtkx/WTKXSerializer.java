@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,16 +46,6 @@ import pivot.util.Resources;
 
 /**
  * Loads an object hierarchy from an XML document.
- * <p>
- * IMPORTANT This class currently uses reflection to dynamically load the Java
- * scripting engine classes because Java 6 is not universally supported on
- * Mac OSX yet. Dynamic loading allows developers targeting other platforms
- * to take advantage of Pivot's scripting features without breaking
- * compatibility with OSX for non-scripted applications. The original version
- * of this class has been preserved in WTKXSerializer.java.orig. When Java 6 is
- * fully supported on OSX, this version will be replaced by the original
- * version. In the interim, ANY UPDATES made to this file that do not affect
- * the reflection code MUST also be made to the original class.
  *
  * @author gbrown
  */
@@ -69,13 +60,15 @@ public class WTKXSerializer implements Serializer<Object> {
         }
 
         public final Element parent;
+        public final String tagName;
         public final Type type;
         public final List<Attribute> attributes;
 
         public Object value;
 
-        public Element(Element parent, Type type, List<Attribute> attributes, Object value) {
+        public Element(Element parent, String tagName, Type type, List<Attribute> attributes, Object value) {
             this.parent = parent;
+            this.tagName = tagName;
             this.type = type;
             this.attributes = attributes;
             this.value = value;
@@ -172,6 +165,7 @@ public class WTKXSerializer implements Serializer<Object> {
         // Parse the XML stream
         Element element = null;
         XMLInputFactory factory = XMLInputFactory.newInstance();
+        factory.setProperty("javax.xml.stream.isCoalescing", true);
 
         try {
             XMLStreamReader reader = factory.createXMLStreamReader(inputStream);
@@ -180,6 +174,44 @@ public class WTKXSerializer implements Serializer<Object> {
                 int event = reader.next();
 
                 switch (event) {
+                    case XMLStreamConstants.CHARACTERS: {
+                        if (!reader.isWhiteSpace()) {
+                            String text = reader.getText();
+
+                            if (text.length() > 0) {
+                                switch (element.type) {
+                                    case INSTANCE: {
+                                        if (element.value instanceof Sequence) {
+                                            Sequence sequence = (Sequence<?>)element.value;
+
+                                            try {
+                                                Method addMethod = sequence.getClass().getMethod("add",
+                                                    new Class<?>[] {String.class});
+                                                addMethod.invoke(sequence, new Object[] {text});
+                                            } catch(NoSuchMethodException exception) {
+                                                throw new SerializationException("Text content cannot be added to "
+                                                    + sequence.getClass().getName() + ".", exception);
+                                            } catch(InvocationTargetException exception) {
+                                                throw new SerializationException(exception);
+                                            } catch(IllegalAccessException exception) {
+                                                throw new SerializationException(exception);
+                                            }
+                                        }
+
+                                        break;
+                                    }
+
+                                    case WRITABLE_PROPERTY: {
+                                        element.value = text;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+
                     case XMLStreamConstants.START_ELEMENT: {
                         String namespaceURI = reader.getNamespaceURI();
                         String prefix = reader.getPrefix();
@@ -251,7 +283,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                     value = serializer.readObject(new URL(location, src));
                                 }
 
-                                element = new Element(element, Element.Type.INCLUDE, attributes, value);
+                                element = new Element(element, localName, Element.Type.INCLUDE, attributes, value);
                             } else if (localName.equals(SCRIPT_TAG)) {
                             	if (scriptEngineManagerClass == null) {
                             		throw new SerializationException("Scripting is not supported on this platform.");
@@ -325,7 +357,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                 	throw new SerializationException(exception);
                                 }
 
-                                element = new Element(element, Element.Type.SCRIPT, null, null);
+                                element = new Element(element, localName, Element.Type.SCRIPT, null, null);
                             } else {
                                 throw new SerializationException(prefix + ":" + localName
                                     + " is not a valid tag.");
@@ -365,7 +397,7 @@ public class WTKXSerializer implements Serializer<Object> {
 
                                 try {
                                     Class<?> type = Class.forName(className);
-                                    element = new Element(element, Element.Type.INSTANCE, attributes, type.newInstance());
+                                    element = new Element(element, localName, Element.Type.INSTANCE, attributes, type.newInstance());
                                 } catch(Exception exception) {
                                     throw new SerializationException(exception);
                                 }
@@ -380,13 +412,13 @@ public class WTKXSerializer implements Serializer<Object> {
                                 if (propertyDictionary.isReadOnly(localName)) {
                                     Object value = propertyDictionary.get(localName);
                                     assert (value != null) : "Read-only properties cannot be null.";
-                                    element = new Element(element, Element.Type.READ_ONLY_PROPERTY, attributes, value);
+                                    element = new Element(element, localName, Element.Type.READ_ONLY_PROPERTY, attributes, value);
                                 } else {
                                     if (attributes.getLength() > 0) {
                                         throw new SerializationException("Writable property elements cannot have attributes.");
                                     }
 
-                                    element = new Element(element, Element.Type.WRITABLE_PROPERTY, null, null);
+                                    element = new Element(element, localName, Element.Type.WRITABLE_PROPERTY, null, null);
                                 }
                             }
                         }
@@ -396,7 +428,7 @@ public class WTKXSerializer implements Serializer<Object> {
                             case INSTANCE: {
                                 if (element.parent != null
                                     && element.parent.value instanceof Sequence) {
-                                    Sequence sequence = (Sequence<Object>)element.parent.value;
+                                    Sequence sequence = (Sequence<?>)element.parent.value;
                                     sequence.add(element.value);
                                 }
 
