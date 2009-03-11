@@ -31,7 +31,7 @@ public class ChangeCellRenderer extends TableViewNumberCellRenderer {
 
         if (!rowSelected) {
             StockQuote stockQuote = (StockQuote)value;
-            float change = stockQuote.getValue();
+            float change = stockQuote.getChange();
             getStyles().put("color", change < 0 ? DOWN_COLOR : UP_COLOR);
         }
     }
