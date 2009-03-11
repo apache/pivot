@@ -15,16 +15,37 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Sequence;
+
 /**
- * List view selection listener interface.
+ * List view selection detail listener interface.
  *
  * @author gbrown
  */
 public interface ListViewSelectionListener {
     /**
-     * Called when a list view's selection state has changed.
+     * Called when a range has been added to a list view's selection.
      *
      * @param listView
+     * @param rangeStart
+     * @param rangeEnd
      */
-    public void selectionChanged(ListView listView);
+    public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd);
+
+    /**
+     * Called when a range has been removed from a list view's selection.
+     *
+     * @param listView
+     * @param rangeStart
+     * @param rangeEnd
+     */
+    public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd);
+
+    /**
+     * Called when a list view's selection state has been reset.
+     *
+     * @param listView
+     * @param previousSelectedRanges
+     */
+    public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges);
 }

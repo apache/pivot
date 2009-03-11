@@ -16,10 +16,12 @@
 package pivot.demos.tables;
 
 import pivot.collections.Dictionary;
+import pivot.collections.Sequence;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
 import pivot.wtk.SortDirection;
+import pivot.wtk.Span;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TableViewSelectionListener;
@@ -28,6 +30,7 @@ import pivot.wtkx.WTKXSerializer;
 
 public class FixedColumnTable implements Application {
     private Window window = null;
+    private boolean synchronizingSelection = false;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
@@ -49,19 +52,53 @@ public class FixedColumnTable implements Application {
 
         // Keep selection state in sync
         primaryTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
-            public void selectionChanged(TableView tableView) {
-                int selectedIndex = tableView.getSelectedIndex();
-                if (fixedTableView.getSelectedIndex() != selectedIndex) {
-                    fixedTableView.setSelectedIndex(selectedIndex);
+            public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
+                if (!synchronizingSelection) {
+                    synchronizingSelection = true;
+                    fixedTableView.addSelectedRange(rangeStart, rangeEnd);
+                    synchronizingSelection = false;
+                }
+            }
+
+            public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
+                if (!synchronizingSelection) {
+                    synchronizingSelection = true;
+                    fixedTableView.removeSelectedRange(rangeStart, rangeEnd);
+                    synchronizingSelection = false;
+                }
+            }
+
+            public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
+                if (!synchronizingSelection) {
+                    synchronizingSelection = true;
+                    fixedTableView.setSelectedRanges(tableView.getSelectedRanges());
+                    synchronizingSelection = false;
                 }
             }
         });
 
         fixedTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
-            public void selectionChanged(TableView tableView) {
-                int selectedIndex = tableView.getSelectedIndex();
-                if (primaryTableView.getSelectedIndex() != selectedIndex) {
-                    primaryTableView.setSelectedIndex(selectedIndex);
+            public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
+                if (!synchronizingSelection) {
+                    synchronizingSelection = true;
+                    primaryTableView.addSelectedRange(rangeStart, rangeEnd);
+                    synchronizingSelection = false;
+                }
+            }
+
+            public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
+                if (!synchronizingSelection) {
+                    synchronizingSelection = true;
+                    primaryTableView.removeSelectedRange(rangeStart, rangeEnd);
+                    synchronizingSelection = false;
+                }
+            }
+
+            public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
+                if (!synchronizingSelection) {
+                    synchronizingSelection = true;
+                    primaryTableView.setSelectedRanges(tableView.getSelectedRanges());
+                    synchronizingSelection = false;
                 }
             }
         });

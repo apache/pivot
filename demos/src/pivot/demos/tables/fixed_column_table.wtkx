@@ -22,7 +22,7 @@ limitations under the License.
     <content>
         <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
             <view>
-                <TableView wtkx:id="primaryTableView" selectMode="single"
+                <TableView wtkx:id="primaryTableView" selectMode="multi"
                     styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
                         selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
                         showHighlight:false}">
@@ -49,7 +49,7 @@ limitations under the License.
                 <TableViewHeader wtkx:id="primaryTableViewHeader" tableView="$primaryTableView"/>
             </columnHeader>
             <rowHeader>
-                <TableView wtkx:id="fixedTableView" tableData="$tableData" selectMode="single"
+                <TableView wtkx:id="fixedTableView" tableData="$tableData" selectMode="multi"
                     styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
                         selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
                         showHighlight:false, includeTrailingVerticalGridLine:true}">

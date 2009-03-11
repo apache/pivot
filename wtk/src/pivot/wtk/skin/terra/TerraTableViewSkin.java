@@ -36,7 +36,7 @@ import pivot.wtk.TableViewListener;
 import pivot.wtk.TableViewColumnListener;
 import pivot.wtk.TableViewRowListener;
 import pivot.wtk.TableViewRowStateListener;
-import pivot.wtk.TableViewSelectionDetailListener;
+import pivot.wtk.TableViewSelectionListener;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
 
@@ -53,7 +53,7 @@ import pivot.wtk.skin.ComponentSkin;
  */
 public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     TableViewListener, TableViewColumnListener, TableViewRowListener,
-    TableViewRowStateListener, TableViewSelectionDetailListener {
+    TableViewRowStateListener, TableViewSelectionListener {
     private Font font;
     private Color color;
     private Color disabledColor;
@@ -99,7 +99,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         tableView.getTableViewColumnListeners().add(this);
         tableView.getTableViewRowListeners().add(this);
         tableView.getTableViewRowStateListeners().add(this);
-        tableView.getTableViewSelectionDetailListeners().add(this);
+        tableView.getTableViewSelectionListeners().add(this);
     }
 
     public void uninstall() {
@@ -108,7 +108,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         tableView.getTableViewColumnListeners().remove(this);
         tableView.getTableViewRowListeners().remove(this);
         tableView.getTableViewRowStateListeners().remove(this);
-        tableView.getTableViewSelectionDetailListeners().remove(this);
+        tableView.getTableViewSelectionListeners().remove(this);
 
         super.uninstall();
     }
@@ -1035,7 +1035,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             getWidth(), (rangeEnd - rangeStart + 1) * rowHeight);
     }
 
-    public void selectionReset(TableView tableView, Sequence<Span> previousSelectedRanges) {
+    public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
         // TODO Repaint only the area that changed (intersection of previous
         // and new selection)
         repaintComponent();

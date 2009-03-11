@@ -42,7 +42,19 @@ public class ListViews implements Application {
 
         ListView listView = (ListView)wtkxSerializer.getObjectByName("listView");
         listView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
-            public void selectionChanged(ListView listView) {
+            public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
+                updateSelection(listView);
+            }
+
+            public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
+                updateSelection(listView);
+            }
+
+            public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+                updateSelection(listView);
+            }
+
+            private void updateSelection(ListView listView) {
                 String selectionText = "";
 
                 Sequence<Span> selectedRanges = listView.getSelectedRanges();

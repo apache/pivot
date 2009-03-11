@@ -232,14 +232,14 @@ public interface Sequence<T> {
         }
 
         /**
-         * Tells whether or not the path represented by the second argument is
+         * Determines whether the path represented by the second argument is
          * a descendant of the path represented by the first argument.
          *
-         * @param ancestor
-         * The alleged ancestor path.
+         * @param ancestorPath
+         * The ancestor path to test.
          *
-         * @param descendant
-         * The alleged descendant path.
+         * @param descendantPath
+         * The descendant path to test.
          */
         public static boolean isDescendant(Sequence<Integer> ancestorPath,
             Sequence<Integer> descendantPath) {

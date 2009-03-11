@@ -24,7 +24,6 @@ import java.util.Locale;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.serialization.CSVSerializer;
@@ -108,7 +107,15 @@ public class StockTracker implements Application {
         // Wire up event handlers
         stocksTableView = (TableView)wtkxSerializer.getObjectByName("stocksTableView");
         stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
-            public void selectionChanged(TableView tableView) {
+            public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
+                // No-op
+            }
+
+            public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
+                // No-op
+            }
+
+            public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
                 refreshDetail();
             }
         });
@@ -307,14 +314,12 @@ public class StockTracker implements Application {
                     Form.setFlag(detailChangeLabel, new Form.Flag(MessageType.ERROR));
                 }
             }
+        } else {
+            stockQuote = new StockQuote();
         }
 
-        if (stockQuote == null) {
-            detailRootPane.load(new HashMap<String, Object>());
-        } else {
-            StockQuoteView stockQuoteView = new StockQuoteView(stockQuote);
-            detailRootPane.load(stockQuoteView);
-        }
+        StockQuoteView stockQuoteView = new StockQuoteView(stockQuote);
+        detailRootPane.load(stockQuoteView);
     }
 
     @SuppressWarnings("unchecked")
@@ -346,5 +351,9 @@ public class StockTracker implements Application {
         }
 
         stocksTableView.setSelectedIndex(selectedIndex);
+
+        if (selectedIndex == -1) {
+            refreshDetail();
+        }
     }
 }

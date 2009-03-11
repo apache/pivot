@@ -18,6 +18,7 @@ package pivot.wtk.test;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
+import pivot.collections.Sequence;
 import pivot.wtk.Application;
 import pivot.wtk.Display;
 import pivot.wtk.ListView;
@@ -114,7 +115,15 @@ public class ListViewSelectionTest implements Application {
         verifySelection(4);
 
         listView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
-            public void selectionChanged(ListView listView) {
+            public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
+                // No-op
+            }
+
+            public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
+                // No-op
+            }
+
+            public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
                 System.out.println("Selection changed");
             }
         });

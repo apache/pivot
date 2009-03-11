@@ -594,15 +594,12 @@ public class TableView extends Component {
      */
     private class ListHandler implements ListListener<Object> {
         public void itemInserted(List<Object> list, int index) {
-            int m = selectedRanges.insertIndex(index);
+            selectedRanges.insertIndex(index);
+
+            // TODO Update disabled indexes
 
             // Notify listeners that items were inserted
             tableViewRowListeners.rowInserted(TableView.this, index);
-
-            // If any spans were modified, notify listeners of selection change
-            if (m > 0) {
-                tableViewSelectionListeners.selectionChanged(TableView.this);
-            }
         }
 
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
@@ -610,23 +607,19 @@ public class TableView extends Component {
                 // All items were removed; clear the selection and notify
                 // listeners
                 selectedRanges.clear();
+
+                // TODO Clear disabled indexes
+
                 tableViewRowListeners.rowsRemoved(TableView.this, index, -1);
-                tableViewSelectionListeners.selectionChanged(TableView.this);
             } else {
                 int count = items.getLength();
 
-                int s = selectedRanges.getLength();
-                int m = selectedRanges.removeIndexes(index, count);
+                selectedRanges.removeIndexes(index, count);
+
+                // TODO Update disabled indexes
 
                 // Notify listeners that items were removed
                 tableViewRowListeners.rowsRemoved(TableView.this, index, count);
-
-                // If any selection values were removed or any spans were modified,
-                // notify listeners of selection change
-                if (s != selectedRanges.getLength()
-                    || m > 0) {
-                    tableViewSelectionListeners.selectionChanged(TableView.this);
-                }
             }
         }
 
@@ -637,14 +630,11 @@ public class TableView extends Component {
         public void comparatorChanged(List<Object> list,
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
-                int s = selectedRanges.getLength();
                 selectedRanges.clear();
 
-                tableViewRowListeners.rowsSorted(TableView.this);
+                // TODO Clear disabled indexes
 
-                if (s > 0) {
-                    tableViewSelectionListeners.selectionChanged(TableView.this);
-                }
+                tableViewRowListeners.rowsSorted(TableView.this);
             }
         }
     }
@@ -773,41 +763,27 @@ public class TableView extends Component {
     }
 
     /**
-     * Table view selection listener list.
+     * Table view selection detail listener list.
      *
      * @author gbrown
      */
     private static class TableViewSelectionListenerList extends ListenerList<TableViewSelectionListener>
         implements TableViewSelectionListener {
-        public void selectionChanged(TableView tableView) {
-            for (TableViewSelectionListener listener : this) {
-                listener.selectionChanged(tableView);
-            }
-        }
-    }
-
-    /**
-     * Table view selection detail listener list.
-     *
-     * @author gbrown
-     */
-    private static class TableViewSelectionDetailListenerList extends ListenerList<TableViewSelectionDetailListener>
-        implements TableViewSelectionDetailListener {
         public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
-            for (TableViewSelectionDetailListener listener : this) {
+            for (TableViewSelectionListener listener : this) {
                 listener.selectedRangeAdded(tableView, rangeStart, rangeEnd);
             }
         }
 
         public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
-            for (TableViewSelectionDetailListener listener : this) {
+            for (TableViewSelectionListener listener : this) {
                 listener.selectedRangeRemoved(tableView, rangeStart, rangeEnd);
             }
         }
 
-        public void selectionReset(TableView tableView, Sequence<Span> previousSelection) {
-            for (TableViewSelectionDetailListener listener : this) {
-                listener.selectionReset(tableView, previousSelection);
+        public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelection) {
+            for (TableViewSelectionListener listener : this) {
+                listener.selectedRangesChanged(tableView, previousSelection);
             }
         }
     }
@@ -831,8 +807,6 @@ public class TableView extends Component {
         new TableViewRowStateListenerList();
     private TableViewSelectionListenerList tableViewSelectionListeners
         = new TableViewSelectionListenerList();
-    private TableViewSelectionDetailListenerList tableViewSelectionDetailListeners
-        = new TableViewSelectionDetailListenerList();
 
     /**
      * Creates a new table view populated with an empty array list.
@@ -1025,8 +999,7 @@ public class TableView extends Component {
         this.selectedRanges = ranges;
 
         // Notify listeners
-        tableViewSelectionDetailListeners.selectionReset(this, previousSelectedRanges);
-        tableViewSelectionListeners.selectionChanged(this);
+        tableViewSelectionListeners.selectedRangesChanged(this, previousSelectedRanges);
     }
 
     /**
@@ -1095,9 +1068,8 @@ public class TableView extends Component {
 
         selectedRanges.add(range);
 
-        tableViewSelectionDetailListeners.selectedRangeAdded(this,
-            range.getStart(), range.getEnd());
-        tableViewSelectionListeners.selectionChanged(this);
+        tableViewSelectionListeners.selectedRangeAdded(this, range.getStart(),
+            range.getEnd());
     }
 
     /**
@@ -1144,9 +1116,8 @@ public class TableView extends Component {
 
         selectedRanges.remove(range);
 
-        tableViewSelectionDetailListeners.selectedRangeRemoved(this,
-            range.getStart(), range.getEnd());
-        tableViewSelectionListeners.selectionChanged(this);
+        tableViewSelectionListeners.selectedRangeRemoved(this, range.getStart(),
+            range.getEnd());
     }
 
     /**
@@ -1157,8 +1128,7 @@ public class TableView extends Component {
             SpanSequence previousSelectedSpans = this.selectedRanges;
             selectedRanges = new SpanSequence();
 
-            tableViewSelectionDetailListeners.selectionReset(this, previousSelectedSpans);
-            tableViewSelectionListeners.selectionChanged(this);
+            tableViewSelectionListeners.selectedRangesChanged(this, previousSelectedSpans);
         }
     }
 
@@ -1451,13 +1421,5 @@ public class TableView extends Component {
 
     public void setTableViewSelectionListener(TableViewSelectionListener listener) {
         tableViewSelectionListeners.add(listener);
-    }
-
-    public ListenerList<TableViewSelectionDetailListener> getTableViewSelectionDetailListeners() {
-        return tableViewSelectionDetailListeners;
-    }
-
-    public void setTableViewSelectionDetailListener(TableViewSelectionDetailListener listener) {
-        tableViewSelectionDetailListeners.add(listener);
     }
 }

@@ -23,6 +23,7 @@ import com.google.gdata.data.extensions.PostalAddress;
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
+import pivot.collections.Sequence;
 import pivot.collections.adapter.ListAdapter;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
@@ -38,6 +39,7 @@ import pivot.wtk.ListViewSelectionListener;
 import pivot.wtk.Orientation;
 import pivot.wtk.Sheet;
 import pivot.wtk.SheetCloseListener;
+import pivot.wtk.Span;
 import pivot.wtk.Window;
 import pivot.wtk.effects.ShadeDecorator;
 import pivot.wtk.media.Image;
@@ -128,7 +130,15 @@ public class ContactsApplication implements Application {
 		window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("contacts.wtkx")));
 		contactListView = (ListView)wtkxSerializer.getObjectByName("contactListView");
 		contactListView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
-			public void selectionChanged(ListView listView) {
+            public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
+                // No-op
+            }
+
+            public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
+                // No-op
+            }
+
+			public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
 				refreshContactDetail();
 			}
 		});

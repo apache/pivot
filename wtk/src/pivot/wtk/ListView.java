@@ -102,15 +102,12 @@ public class ListView extends Component {
      */
     private class ListHandler implements ListListener<Object> {
         public void itemInserted(List<Object> list, int index) {
-            int m = selectedRanges.insertIndex(index);
+            selectedRanges.insertIndex(index);
+
+            // TODO Update checked and disabled indexes
 
             // Notify listeners that items were inserted
             listViewItemListeners.itemInserted(ListView.this, index);
-
-            // If any spans were modified, notify listeners of selection change
-            if (m > 0) {
-                listViewSelectionListeners.selectionChanged(ListView.this);
-            }
         }
 
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
@@ -118,23 +115,19 @@ public class ListView extends Component {
                 // All items were removed; clear the selection and notify
                 // listeners
                 selectedRanges.clear();
+
+                // TODO Clear checked and disabled indexes
+
                 listViewItemListeners.itemsRemoved(ListView.this, index, -1);
-                listViewSelectionListeners.selectionChanged(ListView.this);
             } else {
                 int count = items.getLength();
 
-                int s = selectedRanges.getLength();
-                int m = selectedRanges.removeIndexes(index, count);
+                selectedRanges.removeIndexes(index, count);
+
+                // TODO Update checked and disabled indexes
 
                 // Notify listeners that items were removed
                 listViewItemListeners.itemsRemoved(ListView.this, index, count);
-
-                // If any selection values were removed or any spans were modified,
-                // notify listeners of selection change
-                if (s != selectedRanges.getLength()
-                    || m > 0) {
-                    listViewSelectionListeners.selectionChanged(ListView.this);
-                }
             }
         }
 
@@ -145,14 +138,11 @@ public class ListView extends Component {
         public void comparatorChanged(List<Object> list,
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
-                int s = selectedRanges.getLength();
                 selectedRanges.clear();
 
-                listViewItemListeners.itemsSorted(ListView.this);
+                // TODO Clear checked and disabled indexes
 
-                if (s > 0) {
-                    listViewSelectionListeners.selectionChanged(ListView.this);
-                }
+                listViewItemListeners.itemsSorted(ListView.this);
             }
         }
     }
@@ -256,41 +246,27 @@ public class ListView extends Component {
     }
 
     /**
-     * List view selection listener list.
+     * List view selection detail listener list.
      *
      * @author gbrown
      */
     private static class ListViewSelectionListenerList extends ListenerList<ListViewSelectionListener>
         implements ListViewSelectionListener {
-        public void selectionChanged(ListView listView) {
-            for (ListViewSelectionListener listener : this) {
-                listener.selectionChanged(listView);
-            }
-        }
-    }
-
-    /**
-     * List view selection detail listener list.
-     *
-     * @author gbrown
-     */
-    private static class ListViewSelectionDetailListenerList extends ListenerList<ListViewSelectionDetailListener>
-        implements ListViewSelectionDetailListener {
         public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
-            for (ListViewSelectionDetailListener listener : this) {
+            for (ListViewSelectionListener listener : this) {
                 listener.selectedRangeAdded(listView, rangeStart, rangeEnd);
             }
         }
 
         public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
-            for (ListViewSelectionDetailListener listener : this) {
+            for (ListViewSelectionListener listener : this) {
                 listener.selectedRangeRemoved(listView, rangeStart, rangeEnd);
             }
         }
 
-        public void selectionReset(ListView listView, Sequence<Span> previousSelection) {
-            for (ListViewSelectionDetailListener listener : this) {
-                listener.selectionReset(listView, previousSelection);
+        public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelection) {
+            for (ListViewSelectionListener listener : this) {
+                listener.selectedRangesChanged(listView, previousSelection);
             }
         }
     }
@@ -317,8 +293,6 @@ public class ListView extends Component {
         new ListViewItemStateListenerList();
     private ListViewSelectionListenerList listViewSelectionListeners =
         new ListViewSelectionListenerList();
-    private ListViewSelectionDetailListenerList listViewSelectionDetailListeners =
-        new ListViewSelectionDetailListenerList();
 
     private static final ItemRenderer DEFAULT_ITEM_RENDERER = new ListViewItemRenderer();
 
@@ -368,7 +342,9 @@ public class ListView extends Component {
         if (previousListData != listData) {
             if (previousListData != null) {
                 // Clear any existing selection
-                clearSelection();
+                selectedRanges.clear();
+
+                // TODO Update checked and disabled indexes
 
                 ((List<Object>)previousListData).getListListeners().remove(listDataHandler);
             }
@@ -529,8 +505,7 @@ public class ListView extends Component {
         this.selectedRanges = ranges;
 
         // Notify listeners
-        listViewSelectionDetailListeners.selectionReset(this, previousSelectedRanges);
-        listViewSelectionListeners.selectionChanged(this);
+        listViewSelectionListeners.selectedRangesChanged(this, previousSelectedRanges);
     }
 
     /**
@@ -599,9 +574,8 @@ public class ListView extends Component {
 
         selectedRanges.add(range);
 
-        listViewSelectionDetailListeners.selectedRangeAdded(this,
-            range.getStart(), range.getEnd());
-        listViewSelectionListeners.selectionChanged(this);
+        listViewSelectionListeners.selectedRangeAdded(this, range.getStart(),
+            range.getEnd());
     }
 
     /**
@@ -648,9 +622,8 @@ public class ListView extends Component {
 
         selectedRanges.remove(range);
 
-        listViewSelectionDetailListeners.selectedRangeRemoved(this,
-            range.getStart(), range.getEnd());
-        listViewSelectionListeners.selectionChanged(this);
+        listViewSelectionListeners.selectedRangeRemoved(this, range.getStart(),
+            range.getEnd());
     }
 
     /**
@@ -661,8 +634,8 @@ public class ListView extends Component {
             SpanSequence previousSelectedSpans = this.selectedRanges;
             selectedRanges = new SpanSequence();
 
-            listViewSelectionDetailListeners.selectionReset(this, previousSelectedSpans);
-            listViewSelectionListeners.selectionChanged(this);
+            listViewSelectionListeners.selectedRangesChanged(this,
+                previousSelectedSpans);
         }
     }
 
@@ -1088,25 +1061,10 @@ public class ListView extends Component {
     }
 
     /**
-     * Returns the list view selection listener list.
+     * Returns the list view selection detail listener list.
      */
     public ListenerList<ListViewSelectionListener> getListViewSelectionListeners() {
         return listViewSelectionListeners;
-    }
-
-    /**
-     * Adds a listener to the list view selection listener list.
-     * @param listener
-     */
-    public void setListViewSelectionListener(ListViewSelectionListener listener) {
-        listViewSelectionListeners.add(listener);
-    }
-
-    /**
-     * Returns the list view selection detail listener list.
-     */
-    public ListenerList<ListViewSelectionDetailListener> getListViewSelectionDetailListeners() {
-        return listViewSelectionDetailListeners;
     }
 
     /**
@@ -1114,7 +1072,7 @@ public class ListView extends Component {
      *
      * @param listener
      */
-    public void setListViewSelectionDetailListener(ListViewSelectionDetailListener listener) {
-        listViewSelectionDetailListeners.add(listener);
+    public void setListViewSelectionListener(ListViewSelectionListener listener) {
+        listViewSelectionListeners.add(listener);
     }
 }

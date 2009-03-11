@@ -32,7 +32,7 @@ import pivot.wtk.ListView;
 import pivot.wtk.ListViewItemStateListener;
 import pivot.wtk.ListViewListener;
 import pivot.wtk.ListViewItemListener;
-import pivot.wtk.ListViewSelectionDetailListener;
+import pivot.wtk.ListViewSelectionListener;
 import pivot.wtk.Mouse;
 import pivot.wtk.Bounds;
 import pivot.wtk.Span;
@@ -48,7 +48,7 @@ import pivot.wtk.skin.ComponentSkin;
  */
 public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     ListViewListener, ListViewItemListener, ListViewItemStateListener,
-    ListViewSelectionDetailListener {
+    ListViewSelectionListener {
     private Font font;
     private Color color;
     private Color disabledColor;
@@ -92,7 +92,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         listView.getListViewListeners().add(this);
         listView.getListViewItemListeners().add(this);
         listView.getListViewItemStateListeners().add(this);
-        listView.getListViewSelectionDetailListeners().add(this);
+        listView.getListViewSelectionListeners().add(this);
     }
 
     public void uninstall() {
@@ -100,7 +100,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         listView.getListViewListeners().remove(this);
         listView.getListViewItemListeners().remove(this);
         listView.getListViewItemStateListeners().remove(this);
-        listView.getListViewSelectionDetailListeners().remove(this);
+        listView.getListViewSelectionListeners().remove(this);
 
         super.uninstall();
     }
@@ -784,7 +784,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             getWidth(), (rangeEnd - rangeStart + 1) * itemHeight);
     }
 
-    public void selectionReset(ListView listView, Sequence<Span> previousSelectedRanges) {
+    public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
         // TODO Repaint only the area that changed (intersection of previous
         // and new selection)
         repaintComponent();
