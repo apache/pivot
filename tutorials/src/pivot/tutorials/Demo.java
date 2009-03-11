@@ -113,7 +113,7 @@ public class Demo implements Application {
             armed = (popup == null
                 && path != null
                 && Keyboard.getModifiers() == 0
-                && editableTreeView.isPathSelected(path)
+                && editableTreeView.isNodeSelected(path)
                 && x >= getNodeLabelOffset());
 
             return false;

@@ -34,7 +34,7 @@ public class FileBrowserTest implements Application {
 
         TreeView folderTreeView = (TreeView)wtkxSerializer.getObjectByName("folderTreeView");
 
-        String pathname = System.getProperty("user.home");
+        String pathname = "/";
         folderTreeView.setTreeData(new Folder(pathname));
 
         frame.setTitle("File Browser Test");

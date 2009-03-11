@@ -48,9 +48,9 @@ public interface TreeViewListener {
     public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode);
 
     /**
-     * Called when a tree view's check enabled flag has changed.
+     * Called when a tree view's checkmarks enabled flag has changed.
      *
      * @param treeView
      */
-    public void checkEnabledChanged(TreeView treeView);
+    public void checkmarksEnabledChanged(TreeView treeView);
 }

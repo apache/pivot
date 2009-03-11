@@ -77,9 +77,9 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
         return preferredHeight;
     }
 
-    @SuppressWarnings("unchecked")
     public void render(Object node, TreeView treeView, boolean expanded,
-        boolean selected, boolean highlighted, boolean disabled) {
+        boolean selected, TreeView.NodeCheckState checkState,
+        boolean highlighted, boolean disabled) {
         File file = (File)node;
 
         // Update the image view

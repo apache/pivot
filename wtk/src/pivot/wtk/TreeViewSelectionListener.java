@@ -15,16 +15,36 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Sequence;
+
 /**
- * Tree view selection listener interface.
+ * Tree view selection listener.
  *
  * @author gbrown
  */
 public interface TreeViewSelectionListener {
     /**
-     * Called when a tree view's selection has changed.
+     * Called when a selected path has been added to a tree view.
      *
      * @param treeView
+     * @param path
      */
-    public void selectionChanged(TreeView treeView);
+    public void selectedPathAdded(TreeView treeView, Sequence<Integer> path);
+
+    /**
+     * Called when a selected path has been removed from a tree view.
+     *
+     * @param treeView
+     * @param path
+     */
+    public void selectedPathRemoved(TreeView treeView, Sequence<Integer> path);
+
+    /**
+     * Called when a tree view's selection state has been reset.
+     *
+     * @param treeView
+     * @param previousSelectedPaths
+     */
+    public void selectedPathsChanged(TreeView treeView,
+        Sequence<Sequence<Integer>> previousSelectedPaths);
 }

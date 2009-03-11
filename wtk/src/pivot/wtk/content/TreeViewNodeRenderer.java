@@ -61,9 +61,9 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
         validate();
     }
 
-    @SuppressWarnings("unchecked")
     public void render(Object node, TreeView treeView, boolean expanded,
-        boolean selected, boolean highlighted, boolean disabled) {
+        boolean selected, TreeView.NodeCheckState checkState,
+        boolean highlighted, boolean disabled) {
         Image icon = null;
         String text = null;
 

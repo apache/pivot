@@ -37,7 +37,7 @@ import pivot.wtk.TreeViewListener;
 import pivot.wtk.TreeViewBranchListener;
 import pivot.wtk.TreeViewNodeListener;
 import pivot.wtk.TreeViewNodeStateListener;
-import pivot.wtk.TreeViewSelectionDetailListener;
+import pivot.wtk.TreeViewSelectionListener;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -47,7 +47,7 @@ import pivot.wtk.skin.ComponentSkin;
  */
 public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     TreeViewListener, TreeViewBranchListener, TreeViewNodeListener,
-    TreeViewNodeStateListener, TreeViewSelectionDetailListener{
+    TreeViewNodeStateListener, TreeViewSelectionListener{
 
     /**
      * An internal data structure that keeps track of skin-related metadata
@@ -187,7 +187,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         treeView.getTreeViewBranchListeners().add(this);
         treeView.getTreeViewNodeListeners().add(this);
         treeView.getTreeViewNodeStateListeners().add(this);
-        treeView.getTreeViewSelectionDetailListeners().add(this);
+        treeView.getTreeViewSelectionListeners().add(this);
 
         treeDataChanged(treeView, null);
     }
@@ -198,7 +198,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         treeView.getTreeViewBranchListeners().remove(this);
         treeView.getTreeViewNodeListeners().remove(this);
         treeView.getTreeViewNodeStateListeners().remove(this);
-        treeView.getTreeViewSelectionDetailListeners().remove(this);
+        treeView.getTreeViewSelectionListeners().remove(this);
 
         super.uninstall();
     }
@@ -218,11 +218,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 nodeWidth += indent + spacing;
             }
 
-            if (treeView.isCheckEnabled()) {
+            if (treeView.getCheckmarksEnabled()) {
                 nodeWidth += indent + spacing;
             }
 
-            nodeRenderer.render(nodeInfo.data, treeView, false, false, false, false);
+            nodeRenderer.render(nodeInfo.data, treeView, false, false,
+                TreeView.NodeCheckState.UNCHECKED, false, false);
             nodeWidth += nodeRenderer.getPreferredWidth(-1);
 
             preferredWidth = Math.max(preferredWidth, nodeWidth);
@@ -361,7 +362,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             }
 
             // Paint the checkbox
-            if (treeView.isCheckEnabled()) {
+            if (treeView.getCheckmarksEnabled()) {
                 // TODO Paint the checkbox
 
                 nodeX += indent + spacing;
@@ -373,7 +374,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             Graphics2D rendererGraphics = (Graphics2D)graphics.create(nodeX, nodeY,
                 nodeWidth, nodeHeight);
             nodeRenderer.render(nodeInfo.data, treeView, expanded, selected,
-                highlighted, disabled);
+                TreeView.NodeCheckState.UNCHECKED, highlighted, disabled);
             nodeRenderer.setSize(nodeWidth, nodeHeight);
             nodeRenderer.paint(rendererGraphics);
             rendererGraphics.dispose();
@@ -1069,7 +1070,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 // See if the user clicked on a checkbox. If so, update the
                 // check state of the node
                 if (!handled
-                    && treeView.isCheckEnabled()) {
+                    && treeView.getCheckmarksEnabled()) {
                     // TODO Update node check state
                 }
 
@@ -1079,12 +1080,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     TreeView.SelectMode selectMode = treeView.getSelectMode();
 
                     if (selectMode == TreeView.SelectMode.SINGLE) {
-                        if (!treeView.isPathSelected(path)) {
+                        if (!treeView.isNodeSelected(path)) {
                             treeView.setSelectedPath(path);
                         }
                     } else if (selectMode == TreeView.SelectMode.MULTI) {
                         if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                            if (treeView.isPathSelected(path)) {
+                            if (treeView.isNodeSelected(path)) {
                                 treeView.removeSelectedPath(path);
                             } else {
                                 treeView.addSelectedPath(path);
@@ -1277,7 +1278,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             nodeOffset += indent + spacing;
         }
 
-        if (treeView.isCheckEnabled()) {
+        if (treeView.getCheckmarksEnabled()) {
             nodeOffset += indent + spacing;
         }
 
@@ -1311,7 +1312,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         // No-op
     }
 
-    public void checkEnabledChanged(TreeView treeView) {
+    public void checkmarksEnabledChanged(TreeView treeView) {
         invalidateComponent();
     }
 
@@ -1408,7 +1409,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         repaintNode(nodeInfo);
     }
 
-    // TreeViewSelectionDetailListener methods
+    // TreeViewSelectionListener methods
 
     public void selectedPathAdded(TreeView treeView, Sequence<Integer> path) {
         NodeInfo nodeInfo = getNodeInfoAt(path);
@@ -1424,7 +1425,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         repaintNode(nodeInfo);
     }
 
-    public void selectionReset(TreeView treeView,
+    public void selectedPathsChanged(TreeView treeView,
         Sequence<Sequence<Integer>> previousSelectedPaths) {
 
         // Un-select the previous selected paths

@@ -23,7 +23,8 @@ import pivot.wtk.TreeView;
 
 public class NodeAdapterRenderer extends Label implements TreeView.NodeRenderer {
     public void render(Object node, TreeView treeView, boolean expanded,
-        boolean selected, boolean highlighted, boolean disabled) {
+        boolean selected, TreeView.NodeCheckState checkState,
+        boolean highlighted, boolean disabled) {
         NodeAdapter nodeAdapter = (NodeAdapter)node;
         setText(nodeAdapter.getText());
 

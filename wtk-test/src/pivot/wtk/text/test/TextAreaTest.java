@@ -85,7 +85,16 @@ public class TextAreaTest implements Application {
 
         treeView = (TreeView)wtkxSerializer.getObjectByName("treeView");
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
-            public void selectionChanged(TreeView treeView) {
+            public void selectedPathAdded(TreeView treeView, Sequence<Integer> path) {
+                // No-op
+            }
+
+            public void selectedPathRemoved(TreeView treeView, Sequence<Integer> path) {
+                // No-op
+            }
+
+            public void selectedPathsChanged(TreeView treeView,
+                Sequence<Sequence<Integer>> previousSelectedPaths) {
                 Sequence<Integer> selectedPath = treeView.getSelectedPath();
 
                 if (selectedNode != null) {

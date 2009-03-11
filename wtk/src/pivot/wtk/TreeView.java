@@ -28,7 +28,7 @@ import pivot.wtk.content.TreeViewNodeRenderer;
  * Class that displays a hierarchical data structure, allowing a user to select
  * one or more paths.
  * <p>
- * TODO Add is/setNodeChecked(); is/setNodeDisabled() methods; add events to
+ * TODO Add is/setNodeChecked(); methods; add events to
  * TreeViewNodeListener
  *
  * @author gbrown
@@ -93,7 +93,8 @@ public class TreeView extends Component {
      */
     public interface NodeRenderer extends Renderer {
         public void render(Object node, TreeView treeView, boolean expanded,
-            boolean selected, boolean highlighted, boolean disabled);
+            boolean selected, NodeCheckState checkState, boolean highlighted,
+            boolean disabled);
     }
 
     /**
@@ -134,9 +135,9 @@ public class TreeView extends Component {
             }
         }
 
-        public void checkEnabledChanged(TreeView treeView) {
+        public void checkmarksEnabledChanged(TreeView treeView) {
             for (TreeViewListener listener : this) {
-                listener.checkEnabledChanged(treeView);
+                listener.checkmarksEnabledChanged(treeView);
             }
         }
     }
@@ -217,37 +218,22 @@ public class TreeView extends Component {
     private static class TreeViewSelectionListenerList
         extends ListenerList<TreeViewSelectionListener>
         implements TreeViewSelectionListener {
-        public void selectionChanged(TreeView treeView) {
-            for (TreeViewSelectionListener listener : this) {
-                listener.selectionChanged(treeView);
-            }
-        }
-    }
-
-    /**
-     * Tree view selection detail listener list.
-     *
-     * @author tvolkert
-     */
-    private static class TreeViewSelectionDetailListenerList
-        extends ListenerList<TreeViewSelectionDetailListener>
-        implements TreeViewSelectionDetailListener {
         public void selectedPathAdded(TreeView treeView, Sequence<Integer> path) {
-            for (TreeViewSelectionDetailListener listener : this) {
+            for (TreeViewSelectionListener listener : this) {
                 listener.selectedPathAdded(treeView, path);
             }
         }
 
         public void selectedPathRemoved(TreeView treeView, Sequence<Integer> path) {
-            for (TreeViewSelectionDetailListener listener : this) {
+            for (TreeViewSelectionListener listener : this) {
                 listener.selectedPathRemoved(treeView, path);
             }
         }
 
-        public void selectionReset(TreeView treeView,
+        public void selectedPathsChanged(TreeView treeView,
             Sequence<Sequence<Integer>> previousSelectedPaths) {
-            for (TreeViewSelectionDetailListener listener : this) {
-                listener.selectionReset(treeView, previousSelectedPaths);
+            for (TreeViewSelectionListener listener : this) {
+                listener.selectedPathsChanged(treeView, previousSelectedPaths);
             }
         }
     }
@@ -278,20 +264,21 @@ public class TreeView extends Component {
     }
 
     /**
-     * Nested class that tracks node check state and notifies the tree of
-     * nested <tt>ListListener</tt> events that occur on the tree data.
+     * Notifies the tree of nested <tt>ListListener</tt> events that occur on
+     * the tree data.
      *
      * @author tvolkert
      */
-    private class BranchInfo implements ListListener<Object> {
-        private BranchInfo parent;
-        private List<BranchInfo> childBranches = new ArrayList<BranchInfo>();
+    private class BranchHandler implements ListListener<Object> {
+        private BranchHandler parentBranch;
+        private List<BranchHandler> childBranches = new ArrayList<BranchHandler>();
+
+        // The backing data structure
         private List<?> branchData;
-        // TODO Add check state data structure
 
         @SuppressWarnings("unchecked")
-        public BranchInfo(BranchInfo parent, List<?> branchData) {
-            this.parent = parent;
+        public BranchHandler(BranchHandler parentBranch, List<?> branchData) {
+            this.parentBranch = parentBranch;
             this.branchData = branchData;
 
             ((List<Object>)branchData).getListListeners().add(this);
@@ -299,13 +286,13 @@ public class TreeView extends Component {
             for (int i = 0, n = branchData.getLength(); i < n; i++) {
                 Object childData = branchData.get(i);
 
-                BranchInfo branchInfo = null;
+                BranchHandler branchHandler = null;
 
                 if (childData instanceof List) {
-                    branchInfo = new BranchInfo(this, (List<?>)childData);
+                    branchHandler = new BranchHandler(this, (List<?>)childData);
                 }
 
-                childBranches.add(branchInfo);
+                childBranches.add(branchHandler);
             }
         }
 
@@ -313,29 +300,25 @@ public class TreeView extends Component {
         public Sequence<Integer> getPath() {
             Sequence<Integer> path = new ArrayList<Integer>();
 
-            BranchInfo branch = this;
+            BranchHandler branch = this;
 
-            while (branch.parent != null) {
-                int index = ((List<Object>)branch.parent.branchData).indexOf(branch.branchData);
+            while (branch.parentBranch != null) {
+                int index = ((List<Object>)branch.parentBranch.branchData).indexOf(branch.branchData);
                 path.insert(index, 0);
 
-                branch = branch.parent;
+                branch = branch.parentBranch;
             }
 
             return path;
         }
 
-        public Object getBranchData(int index) {
-            return branchData.get(index);
-        }
-
         /**
-         * Unregisters this branch info's interest in ListListener events. This
+         * Unregisters this branch handler's interest in ListListener events. This
          * must be done to release references from the tree data to our
-         * internal BranchInfo data structures. Failure to do so would mean
-         * that our BranchInfo objects would remain in scope as long as the
+         * internal BranchHandler data structures. Failure to do so would mean
+         * that our BranchHandler objects would remain in scope as long as the
          * tree data remained in scope, even if  we were no longer using the
-         * BranchInfo objects.
+         * BranchHandler objects.
          */
         @SuppressWarnings("unchecked")
         private void unregisterListListeners() {
@@ -343,33 +326,60 @@ public class TreeView extends Component {
 
             // Recursively have all child branches unregister interest
             for (int i = 0, n = childBranches.getLength(); i < n; i++) {
-                BranchInfo branchInfo = childBranches.get(i);
-                if (branchInfo != null) {
-                    branchInfo.unregisterListListeners();
+                BranchHandler branchHandler = childBranches.get(i);
+                if (branchHandler != null) {
+                    branchHandler.unregisterListListeners();
                 }
             }
         }
 
         public void comparatorChanged(List<Object> list,
             Comparator<Object> previousComparator) {
-            // TODO Remove selected child nodes
+            if (list.getComparator() != null) {
+                Sequence<Integer> path = getPath();
 
-            treeViewNodeListeners.nodesSorted(TreeView.this, getPath());
+                // Find first descendant in selected paths list, if it exists
+                int index = Sequence.Search.binarySearch(selectedPaths, path, PATH_COMPARATOR);
+                index = (index < 0 ? -index - 1 : index + 1);
+
+                // Remove all descendants from the selection
+                for (int i = index, n = selectedPaths.getLength(); i < n; i++) {
+                    Sequence<Integer> selectedPath = selectedPaths.get(index);
+
+                    if (!Sequence.Tree.isDescendant(path, selectedPath)) {
+                        break;
+                    }
+
+                    selectedPaths.remove(index, 1);
+                }
+
+                treeViewNodeListeners.nodesSorted(TreeView.this, path);
+            }
         }
 
         @SuppressWarnings("unchecked")
         public void itemInserted(List<Object> list, int index) {
+            Sequence<Integer> path = getPath();
+
+            // Update our children BranchHandler
+            BranchHandler branchHandler = null;
+
             Object childData = list.get(index);
-
-            BranchInfo branchInfo = null;
-
             if (childData instanceof List) {
-                branchInfo = new BranchInfo(this, (List<Object>)childData);
+                branchHandler = new BranchHandler(this, (List<Object>)childData);
             }
 
-            childBranches.insert(branchInfo, index);
+            childBranches.insert(branchHandler, index);
 
-            insertNode(getPath(), index);
+            // Calculate the child's path
+            Sequence<Integer> childPath = new ArrayList<Integer>(path);
+            childPath.add(index);
+
+            pathInserted(expandedPaths, childPath);
+            pathInserted(disabledPaths, childPath);
+            pathInserted(selectedPaths, childPath);
+
+            treeViewNodeListeners.nodeInserted(TreeView.this, path, index);
         }
 
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
@@ -377,40 +387,38 @@ public class TreeView extends Component {
 
             int n = (items == null) ? childBranches.getLength() : items.getLength();
             for (int i = 0; i < n; i++) {
-                BranchInfo branchInfo = childBranches.update(index + i, null);
+                BranchHandler branchHandler = childBranches.update(index + i, null);
 
-                if (branchInfo != null) {
-                    branchInfo.unregisterListListeners();
+                if (branchHandler != null) {
+                    branchHandler.unregisterListListeners();
                 }
             }
 
-            removeNodes(getPath(), index, (items == null) ? -1 : items.getLength());
+            treeViewNodeListeners.nodesRemoved(TreeView.this, getPath(), index,
+                (items == null) ? -1 : items.getLength());
         }
 
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
-            invalidateNode(getPath(), index);
+            treeViewNodeListeners.nodeUpdated(TreeView.this, getPath(), index);
         }
     }
 
-    private static final Comparator<Sequence<Integer>> PATH_COMPARATOR =
-        new TreeViewPathComparator();
-
-    /**
-     * Tree data.
-     */
     private List<?> treeData = null;
 
-    private List<Sequence<Integer>> expandedPaths =
+    private ArrayList<Sequence<Integer>> expandedPaths =
         new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
-    private List<Sequence<Integer>> selectedPaths =
+    private ArrayList<Sequence<Integer>> selectedPaths =
         new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
-    private List<Sequence<Integer>> disabledPaths =
+    private ArrayList<Sequence<Integer>> disabledPaths =
+        new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
+    private ArrayList<Sequence<Integer>> checkedPaths =
         new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
 
     private SelectMode selectMode = SelectMode.SINGLE;
-    private boolean checkEnabled = false;
+    private boolean checkmarksEnabled = false;
+    private boolean showMixedCheckmarkState = false;
 
-    private BranchInfo rootBranchInfo;
+    private BranchHandler rootBranchHandler;
 
     private NodeRenderer nodeRenderer = DEFAULT_NODE_RENDERER;
 
@@ -423,10 +431,11 @@ public class TreeView extends Component {
         new TreeViewNodeStateListenerList();
     private TreeViewSelectionListenerList treeViewSelectionListeners =
         new TreeViewSelectionListenerList();
-    private TreeViewSelectionDetailListenerList treeViewSelectionDetailListeners =
-        new TreeViewSelectionDetailListenerList();
 
     private static final NodeRenderer DEFAULT_NODE_RENDERER = new TreeViewNodeRenderer();
+
+    private static final Comparator<Sequence<Integer>> PATH_COMPARATOR =
+        new TreeViewPathComparator();
 
     public TreeView() {
         this(new ArrayList<Object>());
@@ -462,7 +471,7 @@ public class TreeView extends Component {
      * Returns the tree data.
      */
     public List<?> getTreeData() {
-        return this.treeData;
+        return treeData;
     }
 
     /**
@@ -482,13 +491,15 @@ public class TreeView extends Component {
 
         if (previousTreeData != treeData) {
             if (previousTreeData != null) {
-                // Clear any existing selection
-                clearSelection();
+                expandedPaths.clear();
+                selectedPaths.clear();
+                disabledPaths.clear();
+                checkedPaths.clear();
 
-                rootBranchInfo.unregisterListListeners();
+                rootBranchHandler.unregisterListListeners();
             }
 
-            rootBranchInfo = new BranchInfo(null, treeData);
+            rootBranchHandler = new BranchHandler(null, treeData);
 
             // Update the tree data and fire change event
             this.treeData = treeData;
@@ -536,7 +547,7 @@ public class TreeView extends Component {
 
         if (selectMode != previousSelectMode) {
             // Clear any current selection
-            clearSelection();
+            selectedPaths.clear();
 
             // Update the selection mode
             this.selectMode = selectMode;
@@ -555,7 +566,8 @@ public class TreeView extends Component {
     }
 
     public Sequence<Sequence<Integer>> getSelectedPaths() {
-        Sequence<Sequence<Integer>> selectedPaths = new ArrayList<Sequence<Integer>>();
+        Sequence<Sequence<Integer>> selectedPaths =
+            new ArrayList<Sequence<Integer>>(this.selectedPaths.getLength());
 
         // Deep copy the selected paths into a new list
         for (int i = 0, n = this.selectedPaths.getLength(); i < n; i++) {
@@ -591,8 +603,7 @@ public class TreeView extends Component {
         }
 
         // Notify listeners
-        treeViewSelectionDetailListeners.selectionReset(this, previousSelectedPaths);
-        treeViewSelectionListeners.selectionChanged(this);
+        treeViewSelectionListeners.selectedPathsChanged(this, previousSelectedPaths);
     }
 
     /**
@@ -645,10 +656,21 @@ public class TreeView extends Component {
     }
 
     public void setSelectedPath(Sequence<Integer> path) {
-        Sequence<Sequence<Integer>> selectedPaths = new ArrayList<Sequence<Integer>>(0);
-        selectedPaths.add(path);
+        Sequence<Sequence<Integer>> selectedPaths = new ArrayList<Sequence<Integer>>(1);
+        selectedPaths.add(new ArrayList<Integer>(path));
 
         setSelectedPaths(selectedPaths);
+    }
+
+    public Object getSelectedNode() {
+        Sequence<Integer> path = getSelectedPath();
+        Object node = null;
+
+        if (path != null) {
+            node = Sequence.Tree.get(treeData, path);
+        }
+
+        return node;
     }
 
     public void addSelectedPath(Sequence<Integer> path) {
@@ -656,9 +678,11 @@ public class TreeView extends Component {
             throw new IllegalStateException("Tree view is not in multi-select mode.");
         }
 
-        selectedPaths.add(new ArrayList<Integer>(path));
+        if (selectedPaths.indexOf(path) < 0) {
+            selectedPaths.add(new ArrayList<Integer>(path));
 
-        treeViewSelectionDetailListeners.selectedPathAdded(this, path);
+            treeViewSelectionListeners.selectedPathAdded(this, path);
+        }
     }
 
     public void removeSelectedPath(Sequence<Integer> path) {
@@ -666,9 +690,13 @@ public class TreeView extends Component {
             throw new IllegalStateException("Tree view is not in multi-select mode.");
         }
 
-        selectedPaths.remove(path);
+        int index = selectedPaths.indexOf(path);
 
-        treeViewSelectionDetailListeners.selectedPathRemoved(this, path);
+        if (index >= 0) {
+            selectedPaths.remove(index, 1);
+
+            treeViewSelectionListeners.selectedPathRemoved(this, path);
+        }
     }
 
     public void clearSelection() {
@@ -677,12 +705,11 @@ public class TreeView extends Component {
 
             selectedPaths = new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
 
-            treeViewSelectionDetailListeners.selectionReset(this, previousSelectedPaths);
-            treeViewSelectionListeners.selectionChanged(this);
+            treeViewSelectionListeners.selectedPathsChanged(this, previousSelectedPaths);
         }
     }
 
-    public boolean isPathSelected(Sequence<Integer> path) {
+    public boolean isNodeSelected(Sequence<Integer> path) {
         return (selectedPaths.indexOf(path) >= 0);
     }
 
@@ -725,7 +752,8 @@ public class TreeView extends Component {
     }
 
     public Sequence<Sequence<Integer>> getDisabledPaths() {
-        Sequence<Sequence<Integer>> disabledPaths = new ArrayList<Sequence<Integer>>();
+        Sequence<Sequence<Integer>> disabledPaths =
+            new ArrayList<Sequence<Integer>>(this.disabledPaths.getLength());
 
         // Deep copy the disabled paths into a new list
         for (int i = 0, n = this.disabledPaths.getLength(); i < n; i++) {
@@ -736,10 +764,30 @@ public class TreeView extends Component {
         return disabledPaths;
     }
 
-    public boolean isCheckEnabled() {
-        return checkEnabled;
+    public boolean getCheckmarksEnabled() {
+        return checkmarksEnabled;
     }
 
+    /**
+     * Enables or disabled checkmarks. Clears the check state if the check
+     * mode has changed (but does not fire any check state change events).
+     *
+     * @param checkmarksEnabled
+     */
+    public void setCheckmarksEnabled(boolean checkmarksEnabled) {
+        if (this.checkmarksEnabled != checkmarksEnabled) {
+            // Clear any current check state
+            checkedPaths.clear();
+
+            // Update the check mode
+            this.checkmarksEnabled = checkmarksEnabled;
+
+            // Fire checkmarks enabled change event
+            treeViewListeners.checkmarksEnabledChanged(this);
+        }
+    }
+
+    // TODO Load branch handler
     public void setBranchExpanded(Sequence<Integer> path, boolean expanded) {
         int index = expandedPaths.indexOf(path);
 
@@ -783,16 +831,62 @@ public class TreeView extends Component {
         return treeViewSkin.getNodeOffset(path);
     }
 
-    protected void insertNode(Sequence<Integer> path, int index) {
-        treeViewNodeListeners.nodeInserted(this, path, index);
+    /**
+     * Updates the paths within the specified sequence in response to a tree
+     * data path insertion.  For instance, if <tt>paths</tt> is
+     * <tt>[[3, 0], [5, 0]]</tt>, and <tt>path</tt> is <tt>[4]</tt>, then
+     * <tt>paths</tt> will be updated to <tt>[[3, 0], [6, 0]]</tt>. No events
+     * are fired.
+     *
+     * @param paths
+     * Sequence of paths guaranteed to be sorted according to
+     * <tt>TreeViewPathComparator</tt>.
+     *
+     * @param path
+     * The path that was inserted into the tree data.
+     *
+     * @return
+     * <tt>true</tt> if an only if updates were made to <tt>paths</tt>.
+     */
+    private boolean pathInserted(Sequence<Sequence<Integer>> paths, Sequence<Integer> path) {
+        if (path == null || path.getLength() == 0) {
+            throw new IllegalArgumentException("path must not be null or empty.");
+        }
+
+        boolean result = false;
+
+        // Calculate the parent of the inserted path. Only descendants of this
+        // parent path who occur after the inserted path will be affected by
+        // the insertion
+        Sequence<Integer> parentPath = new ArrayList<Integer>(path);
+        parentPath.remove(parentPath.getLength() - 1, 1);
+
+        // Find the inserted path's place in our sorted paths sequence
+        int i = Sequence.Search.binarySearch(paths, path, PATH_COMPARATOR);
+        if (i < 0) {
+            i = -i - 1;
+        }
+
+        // Update all affected paths by incrementing the appropriate path element
+        for (int depth = path.getLength() - 1, n = paths.getLength(); i < n; i++) {
+            Sequence<Integer> affectedPath = paths.get(i);
+
+            if (!Sequence.Tree.isDescendant(parentPath, affectedPath)) {
+                // All paths from here forward are guaranteed to be unaffected
+                break;
+            }
+
+            result = true;
+
+            affectedPath.update(depth, affectedPath.get(depth) + 1);
+        }
+
+        return result;
     }
 
-    protected void removeNodes(Sequence<Integer> path, int index, int count) {
-        treeViewNodeListeners.nodesRemoved(this, path, index, count);
-    }
-
-    protected void invalidateNode(Sequence<Integer> path, int index) {
-        treeViewNodeListeners.nodeUpdated(this, path, index);
+    private boolean pathRemoved(Sequence<Sequence<Integer>> paths, Sequence<Integer> path) {
+        // TODO
+        return false;
     }
 
     public ListenerList<TreeViewListener> getTreeViewListeners() {
@@ -833,13 +927,5 @@ public class TreeView extends Component {
 
     public void setTreeViewSelectionListener(TreeViewSelectionListener listener) {
         treeViewSelectionListeners.add(listener);
-    }
-
-    public ListenerList<TreeViewSelectionDetailListener> getTreeViewSelectionDetailListeners() {
-        return treeViewSelectionDetailListeners;
-    }
-
-    public void setTreeViewSelectionDetailListener(TreeViewSelectionDetailListener listener) {
-        treeViewSelectionDetailListeners.add(listener);
     }
 }
