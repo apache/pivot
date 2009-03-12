@@ -33,7 +33,8 @@ import pivot.wtk.content.TreeViewNodeRenderer;
  */
 public class TreeView extends Component {
     /**
-     * Enumeration defining supported selection modes.
+     * Enumeration defining supported selection modes. <tt>TreeView</tt>
+     * defaults to single select mode.
      */
     public enum SelectMode {
         /**
@@ -57,24 +58,30 @@ public class TreeView extends Component {
     }
 
     /**
-     * Enumeration defining node check states.
+     * Enumeration defining node check states. Note that <tt>TreeView</tt> does
+     * not involve itself in the propagation of checkmarks (either up or down
+     * the tree). Developers who wish to propagate checkmarks may do so by
+     * registering a {@link TreeViewNodeStateListener} and setting the desired
+     * checkmark states manually.
      */
     public enum NodeCheckState {
         /**
-         * The node is checked, meaning that all of its descendants are
-         * also checked.
+         * The node is checked.
          */
         CHECKED,
 
         /**
-         * The node is unchecked, meaning that all of its descendants are also
-         * unchecked.
+         * The node is unchecked. If <tt>showMixedCheckmarkState</tt> is true,
+         * this implies that all of the node's descendants are unchecked as
+         * well.
          */
         UNCHECKED,
 
         /**
-         * The node's check state is mixed, meaning that some of its
-         * descendants are checked and some are not.
+         * The node's check state is mixed, meaning that it is not checked,
+         * but at least one of its descendants is checked. This state will only
+         * be reported if <tt>showMixedCheckmarkState</tt> is true. Otherwise,
+         * the node will be reported as {@link #UNCHECKED}.
          */
         MIXED;
 
@@ -100,9 +107,43 @@ public class TreeView extends Component {
      * @author tvolkert
      */
     public interface Skin {
+        /**
+         * Gets the path to the node found at the specified y-coordinate
+         * (relative to the tree view).
+         *
+         * @param y
+         * The y-coordinate in pixels.
+         *
+         * @return
+         * The path to the node, or <tt>null</tt> if there is no node being
+         * painted at the specified y-coordinate.
+         */
         public Sequence<Integer> getNodeAt(int y);
+
+        /**
+         * Gets the bounds of the node at the specified path relative to the
+         * tree view. Note that all nodes are left aligned with the tree; to
+         * get the pixel value of a node's indent, use
+         * {@link #getNodeIndent(Sequence<Integer>)}.
+         *
+         * @param path
+         * The path to the node.
+         *
+         * @return
+         * The bounds, or <tt>null</tt> if the node is not currently visible.
+         */
         public Bounds getNodeBounds(Sequence<Integer> path);
-        public int getNodeOffset(Sequence<Integer> path);
+
+        /**
+         * Gets the pixel indent of the node at the specified path.
+         *
+         * @param path
+         * The path to the node.
+         *
+         * @return
+         * The indent
+         */
+        public int getNodeIndent(Sequence<Integer> path);
     }
 
     /**
@@ -1130,19 +1171,51 @@ public class TreeView extends Component {
         }
     }
 
+    /**
+     * Gets the path to the node found at the specified y-coordinate
+     * (relative to the tree view).
+     *
+     * @param y
+     * The y-coordinate in pixels.
+     *
+     * @return
+     * The path to the node, or <tt>null</tt> if there is no node being
+     * painted at the specified y-coordinate.
+     */
     public Sequence<Integer> getNodeAt(int y) {
         TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
         return treeViewSkin.getNodeAt(y);
     }
 
+    /**
+     * Gets the bounds of the node at the specified path relative to the
+     * tree view. Note that all nodes are left aligned with the tree; to
+     * get the pixel value of a node's indent, use
+     * {@link #getNodeIndent(Sequence<Integer>)}.
+     *
+     * @param path
+     * The path to the node.
+     *
+     * @return
+     * The bounds, or <tt>null</tt> if the node is not currently visible.
+     */
     public Bounds getNodeBounds(Sequence<Integer> path) {
         TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
         return treeViewSkin.getNodeBounds(path);
     }
 
-    public int getNodeOffset(Sequence<Integer> path) {
+    /**
+     * Gets the pixel indent of the node at the specified path.
+     *
+     * @param path
+     * The path to the node.
+     *
+     * @return
+     * The indent
+     */
+    public int getNodeIndent(Sequence<Integer> path) {
         TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
-        return treeViewSkin.getNodeOffset(path);
+        return treeViewSkin.getNodeIndent(path);
     }
 
     public ListenerList<TreeViewListener> getTreeViewListeners() {

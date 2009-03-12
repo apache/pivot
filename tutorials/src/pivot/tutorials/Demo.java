@@ -93,19 +93,19 @@ public class Demo implements Application {
         boolean armed = false;
         Popup popup = null;
 
-        private int getNodeLabelOffset() {
-            int nodeLabelOffset = editableTreeView.getNodeOffset(path);
+        private int getNodeLabelIndent() {
+            int nodeLabelIndent = editableTreeView.getNodeIndent(path);
 
             TreeViewNodeRenderer nodeRenderer =
                 (TreeViewNodeRenderer)editableTreeView.getNodeRenderer();
 
-            nodeLabelOffset += ((Insets)nodeRenderer.getStyles().get("padding")).left;
+            nodeLabelIndent += ((Insets)nodeRenderer.getStyles().get("padding")).left;
             if (nodeRenderer.getShowIcon()) {
-                nodeLabelOffset += nodeRenderer.getIconWidth();
-                nodeLabelOffset += (Integer)nodeRenderer.getStyles().get("spacing");
+                nodeLabelIndent += nodeRenderer.getIconWidth();
+                nodeLabelIndent += (Integer)nodeRenderer.getStyles().get("spacing");
             }
 
-            return nodeLabelOffset;
+            return nodeLabelIndent;
         }
 
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
@@ -119,7 +119,7 @@ public class Demo implements Application {
                 && path != null
                 && Keyboard.getModifiers() == 0
                 && editableTreeView.isNodeSelected(path)
-                && x >= getNodeLabelOffset());
+                && x >= getNodeLabelIndent());
 
             return false;
         }
@@ -133,9 +133,9 @@ public class Demo implements Application {
                 TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
 
                 Bounds nodeLabelBounds = editableTreeView.getNodeBounds(path);
-                int nodeLabelOffset = getNodeLabelOffset();
-                nodeLabelBounds.x += nodeLabelOffset;
-                nodeLabelBounds.width -= nodeLabelOffset;
+                int nodeLabelIndent = getNodeLabelIndent();
+                nodeLabelBounds.x += nodeLabelIndent;
+                nodeLabelBounds.width -= nodeLabelIndent;
 
                 Bounds viewportBounds = editableTreeViewScrollPane.getViewportBounds();
 

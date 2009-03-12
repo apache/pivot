@@ -1285,22 +1285,22 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         return getNodeBounds(nodeInfo);
     }
 
-    public int getNodeOffset(Sequence<Integer> path) {
+    public int getNodeIndent(Sequence<Integer> path) {
         TreeView treeView = (TreeView)getComponent();
 
         NodeInfo nodeInfo = getNodeInfoAt(path);
 
-        int nodeOffset = (nodeInfo.depth - 1) * (indent + spacing);
+        int nodeIndent = (nodeInfo.depth - 1) * (indent + spacing);
 
         if (showBranchControls) {
-            nodeOffset += indent + spacing;
+            nodeIndent += indent + spacing;
         }
 
         if (treeView.getCheckmarksEnabled()) {
-            nodeOffset += indent + spacing;
+            nodeIndent += indent + spacing;
         }
 
-        return nodeOffset;
+        return nodeIndent;
     }
 
     // TreeViewListener methods
