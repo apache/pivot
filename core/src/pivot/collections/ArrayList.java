@@ -52,9 +52,13 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public ArrayList(Sequence<T> sequence) {
-        arrayList = new java.util.ArrayList<T>(sequence.getLength());
+        this(sequence, 0, sequence.getLength());
+    }
 
-        for (int i = 0, n = sequence.getLength(); i < n; i++) {
+    public ArrayList(Sequence<T> sequence, int index, int count) {
+        arrayList = new java.util.ArrayList<T>(count);
+
+        for (int i = index, n = index + count; i < n; i++) {
             T item = sequence.get(i);
             arrayList.add(item);
         }
