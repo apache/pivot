@@ -835,7 +835,7 @@ public class ListView extends Component {
 
         if (previousSelectMode != selectMode) {
             // Clear any current selection
-        	selectedRanges = new SpanSequence();
+            selectedRanges = new SpanSequence();
 
             // Update the selection mode
             this.selectMode = selectMode;
@@ -864,7 +864,7 @@ public class ListView extends Component {
      * Returns the current check mode.
      */
     public boolean getCheckmarksEnabled() {
-    	return checkmarksEnabled;
+      return checkmarksEnabled;
     }
 
     /**
@@ -876,7 +876,7 @@ public class ListView extends Component {
     public void setCheckmarksEnabled(boolean checkmarksEnabled) {
         if (this.checkmarksEnabled != checkmarksEnabled) {
             // Clear any current check state
-        	checkedIndexes.clear();
+            checkedIndexes.clear();
 
             // Update the check mode
             this.checkmarksEnabled = checkmarksEnabled;
@@ -902,18 +902,18 @@ public class ListView extends Component {
      * @param checked
      */
     public void setItemChecked(int index, boolean checked) {
-    	if (!checkmarksEnabled) {
-    		throw new IllegalStateException("Checkmarks are not enabled.");
-    	}
+        if (!checkmarksEnabled) {
+            throw new IllegalStateException("Checkmarks are not enabled.");
+        }
 
         int i = Sequence.Search.binarySearch(checkedIndexes, index);
 
         if ((i < 0 && checked)
             || (i >= 0 && !checked)) {
             if (checked) {
-            	checkedIndexes.insert(index, -(i + 1));
+               checkedIndexes.insert(index, -(i + 1));
             } else {
-            	checkedIndexes.remove(i, 1);
+               checkedIndexes.remove(i, 1);
             }
 
             listViewItemStateListeners.itemCheckedChanged(this, index);
@@ -927,7 +927,7 @@ public class ListView extends Component {
         ArrayList<Integer> checkedIndexes = new ArrayList<Integer>();
 
         for (int i = 0, n = this.checkedIndexes.getLength(); i < n; i++) {
-        	checkedIndexes.add(this.checkedIndexes.get(i));
+            checkedIndexes.add(this.checkedIndexes.get(i));
         }
 
         return checkedIndexes;
