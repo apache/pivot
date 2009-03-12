@@ -111,15 +111,25 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * @author tvolkert
      */
     protected static class BranchInfo extends NodeInfo {
-        public Sequence<NodeInfo> children = new ArrayList<NodeInfo>();
+        public Sequence<NodeInfo> children = null;
         public boolean expanded = false;
 
         public BranchInfo(BranchInfo parent, List<Object> data) {
             super(parent, data);
+        }
 
-            for (int i = 0, n = data.getLength(); i <  n; i++) {
-                Object nodeData = data.get(i);
-                children.add(NodeInfo.createNew(this, nodeData));
+        @SuppressWarnings("unchecked")
+        public void loadChildren() {
+            if (children == null) {
+                List<Object> data = (List<Object>)this.data;
+                int count = data.getLength();
+
+                children = new ArrayList<NodeInfo>(count);
+
+                for (int i = 0; i < count; i++) {
+                    Object nodeData = data.get(i);
+                    children.add(NodeInfo.createNew(this, nodeData));
+                }
             }
         }
     }
@@ -811,6 +821,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             BranchInfo branchInfo = rootBranchInfo;
 
             for (int i = 0; i < n - 1; i++) {
+                branchInfo.loadChildren();
                 NodeInfo nodeInfo = branchInfo.children.get(path.get(i));
 
                 assert(nodeInfo instanceof BranchInfo) : "Invalid path";
@@ -818,6 +829,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 branchInfo = (BranchInfo)nodeInfo;
             }
 
+            branchInfo.loadChildren();
             result = branchInfo.children.get(path.get(n - 1));
         }
 
@@ -864,6 +876,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
             // The parent branch's children are the baseline nodes to make
             // visible
+            parentBranchInfo.loadChildren();
             for (int i = 0, n = parentBranchInfo.children.getLength(); i < n; i++) {
                 nodes.add(parentBranchInfo.children.get(i));
             }
@@ -880,6 +893,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     BranchInfo branchInfo = (BranchInfo)nodeInfo;
 
                     if (branchInfo.expanded) {
+                        branchInfo.loadChildren();
                         for (int i = 0, n = branchInfo.children.getLength(); i < n; i++) {
                             nodes.insert(branchInfo.children.get(i), i);
                         }
@@ -896,6 +910,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * list.
      */
     private void addVisibleNode(BranchInfo parentBranchInfo, int index) {
+        parentBranchInfo.loadChildren();
+
         assert(index >= 0) : "Index is too small";
         assert(index < parentBranchInfo.children.getLength()) : "Index is too large";
 
@@ -948,6 +964,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * child nodes from the visible nodes sequence
      */
     private void removeVisibleNodes(BranchInfo parentBranchInfo, int index, int count) {
+        parentBranchInfo.loadChildren();
+
         if (count == -1) {
             assert(index == 0) : "Non-zero index with 'remove all' count";
             count = parentBranchInfo.children.getLength();
@@ -1316,6 +1334,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         invalidateComponent();
     }
 
+    public void showMixedCheckmarkStateChanged(TreeView treeView) {
+        if (treeView.getCheckmarksEnabled()) {
+            // TODO update internal data model?
+            repaintComponent();
+        }
+    }
+
     // TreeViewBranchListener methods
 
     public void branchExpanded(TreeView treeView, Sequence<Integer> path) {
@@ -1340,12 +1365,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         List<Object> branchData = (List<Object>)branchInfo.data;
 
         // Update our internal branch info
-        NodeInfo nodeInfo = NodeInfo.createNew(branchInfo, branchData.get(index));
-        branchInfo.children.insert(nodeInfo, index);
+        if (branchInfo.children != null) {
+            NodeInfo nodeInfo = NodeInfo.createNew(branchInfo, branchData.get(index));
+            branchInfo.children.insert(nodeInfo, index);
+        }
 
         // Add the node to the visible nodes list
         addVisibleNode(branchInfo, index);
 
+        branchInfo.loadChildren();
         if (showBranchControls
             && branchInfo.children.getLength() == 1) {
             // The branch went from having no children to having one
@@ -1361,9 +1389,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         removeVisibleNodes(branchInfo, index, count);
 
         // Update our internal branch info
-        branchInfo.children.remove(index,
-            (count >= 0) ? count : branchInfo.children.getLength());
+        if (branchInfo.children != null) {
+            branchInfo.children.remove(index,
+                (count >= 0) ? count : branchInfo.children.getLength());
+        }
 
+        branchInfo.loadChildren();
         if (showBranchControls
             && branchInfo.children.getLength() == 0) {
             // The branch went from having children to having none
@@ -1376,6 +1407,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         BranchInfo branchInfo = (BranchInfo)getNodeInfoAt(path);
         List<Object> branchData = (List<Object>)branchInfo.data;
 
+        branchInfo.loadChildren();
         NodeInfo nodeInfo = branchInfo.children.get(index);
 
         Object previousNodeData = nodeInfo.data;
@@ -1401,12 +1433,18 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         // TODO
     }
 
-    // Tree view node state events
+    // TreeViewNodeStateListener methods
+
     public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {
         NodeInfo nodeInfo = getNodeInfoAt(path);
 
         nodeInfo.disabled = treeView.isNodeDisabled(path);
         repaintNode(nodeInfo);
+    }
+
+    public void nodeCheckStateChanged(TreeView treeView, Sequence<Integer> path,
+        TreeView.NodeCheckState previousCheckState) {
+        // TODO
     }
 
     // TreeViewSelectionListener methods

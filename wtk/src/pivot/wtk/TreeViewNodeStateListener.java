@@ -31,4 +31,14 @@ public interface TreeViewNodeStateListener {
      * @param path
      */
     public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path);
+
+    /**
+     * Called when a node's checked state has changed.
+     *
+     * @param treeView
+     * @param path
+     * @param previousCheckState
+     */
+    public void nodeCheckStateChanged(TreeView treeView, Sequence<Integer> path,
+        TreeView.NodeCheckState previousCheckState);
 }

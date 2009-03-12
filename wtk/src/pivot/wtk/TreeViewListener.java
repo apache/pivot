@@ -21,6 +21,7 @@ import pivot.collections.List;
  * Tree view listener interface.
  *
  * @author gbrown
+ * @author tvolkert
  */
 public interface TreeViewListener {
     /**
@@ -53,4 +54,11 @@ public interface TreeViewListener {
      * @param treeView
      */
     public void checkmarksEnabledChanged(TreeView treeView);
+
+    /**
+     * Called when a tree view's "show mixed checkmark state" flag has changed.
+     *
+     * @param treeView
+     */
+    public void showMixedCheckmarkStateChanged(TreeView treeView);
 }
