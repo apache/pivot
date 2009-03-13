@@ -16,12 +16,9 @@
 package pivot.tutorials;
 
 import java.awt.Color;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
@@ -30,7 +27,6 @@ import pivot.collections.Map;
 import pivot.collections.Sequence;
 import pivot.serialization.JSONSerializer;
 import pivot.util.CalendarDate;
-import pivot.util.Version;
 import pivot.util.Vote;
 import pivot.wtk.Action;
 import pivot.wtk.Alert;
@@ -47,7 +43,6 @@ import pivot.wtk.DropTarget;
 import pivot.wtk.ImageView;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
-import pivot.wtk.Label;
 import pivot.wtk.ListView;
 import pivot.wtk.LocalManifest;
 import pivot.wtk.Manifest;
@@ -246,21 +241,6 @@ public class Demo implements Application {
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
-
-        // Version
-        URL codeLocation = getClass().getProtectionDomain().getCodeSource().getLocation();
-        File codeFile = new File(codeLocation.toURI());
-        if (codeFile.isFile()) {
-            JarFile codeJarFile = new JarFile(codeFile);
-            java.util.jar.Manifest codeManifest = codeJarFile.getManifest();
-            Attributes mainAttributes = codeManifest.getMainAttributes();
-            String implementationVersion = (String)mainAttributes.get(Attributes.Name.IMPLEMENTATION_VERSION);
-            if (implementationVersion != null) {
-                Version version = Version.decode(implementationVersion);
-                Label versionLabel = (Label)wtkxSerializer.getObjectByName("versionLabel");
-                versionLabel.setText(version.toString());
-            }
-        }
 
         // Text
         PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
