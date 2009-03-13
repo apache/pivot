@@ -28,7 +28,6 @@ import pivot.wtk.content.TreeViewNodeRenderer;
  * Class that displays a hierarchical data structure, allowing a user to select
  * one or more paths.
  *
- * @author gbrown
  * @author tvolkert
  */
 public class TreeView extends Component {
@@ -124,7 +123,7 @@ public class TreeView extends Component {
          * Gets the bounds of the node at the specified path relative to the
          * tree view. Note that all nodes are left aligned with the tree; to
          * get the pixel value of a node's indent, use
-         * {@link #getNodeIndent(Sequence<Integer>)}.
+         * {@link #getNodeIndent(int)}.
          *
          * @param path
          * The path to the node.
@@ -135,15 +134,18 @@ public class TreeView extends Component {
         public Bounds getNodeBounds(Sequence<Integer> path);
 
         /**
-         * Gets the pixel indent of the node at the specified path.
+         * Gets the pixel indent of nodes at the specified depth. Depth is
+         * measured in generations away from the tree view's "root" node, which
+         * is represented by the {@link #getTreeData() tree data}.
          *
-         * @param path
-         * The path to the node.
+         * @param depth
+         * The depth, where the first child of the root has depth 1, the child
+         * of that branch has depth 2, etc.
          *
          * @return
-         * The indent
+         * The indent in pixels.
          */
-        public int getNodeIndent(Sequence<Integer> path);
+        public int getNodeIndent(int depth);
     }
 
     /**
@@ -490,7 +492,7 @@ public class TreeView extends Component {
             // Find the child path's place in our sorted paths sequence
             int i = Sequence.Search.binarySearch(paths, childPath, PATH_COMPARATOR);
             if (i < 0) {
-                i = -i - 1;
+                i = -(i + 1);
             }
 
             // Update all affected paths by incrementing the appropriate path element
@@ -541,7 +543,7 @@ public class TreeView extends Component {
         private void clearPaths(Sequence<Sequence<Integer>> paths, Sequence<Integer> basePath) {
             // Find first descendant in paths list, if it exists
             int index = Sequence.Search.binarySearch(paths, basePath, PATH_COMPARATOR);
-            index = (index < 0 ? -index - 1 : index + 1);
+            index = (index < 0 ? -(index + 1) : index + 1);
 
             // Remove all descendants from the paths list
             for (int i = index, n = paths.getLength(); i < n; i++) {
@@ -556,8 +558,10 @@ public class TreeView extends Component {
         }
     }
 
+    // Core data model
     private List<?> treeData = null;
 
+    // Ancillary data models
     private ArrayList<Sequence<Integer>> expandedPaths =
         new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
     private ArrayList<Sequence<Integer>> selectedPaths =
@@ -567,14 +571,18 @@ public class TreeView extends Component {
     private ArrayList<Sequence<Integer>> checkedPaths =
         new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
 
+    // Properties
     private SelectMode selectMode = SelectMode.SINGLE;
     private boolean checkmarksEnabled = false;
     private boolean showMixedCheckmarkState = false;
 
+    // Handlers
     private BranchHandler rootBranchHandler;
 
+    // Renderer
     private NodeRenderer nodeRenderer = DEFAULT_NODE_RENDERER;
 
+    // Listener lists
     private TreeViewListenerList treeViewListeners = new TreeViewListenerList();
     private TreeViewBranchListenerList treeViewBranchListeners =
         new TreeViewBranchListenerList();
@@ -590,18 +598,21 @@ public class TreeView extends Component {
     private static final Comparator<Sequence<Integer>> PATH_COMPARATOR =
         new TreeViewPathComparator();
 
+    /**
+     * Creates a new <tt>TreeView</tt> with empty tree data.
+     */
     public TreeView() {
         this(new ArrayList<Object>());
     }
 
     /**
-     * TreeView constructor.
+     * Creates a new <tt>TreeView</tt> with the specified tree data.
      *
      * @param treeData
      * Default data set to be used with the tree. This list represents the root
-     * set of items displayed by the tree. Sub-items that also implement the
-     * <tt>List</tt> interface are considered branches; other items are
-     * considered leaves.
+     * set of items displayed by the tree and will never itself be painted.
+     * Sub-items that also implement the <tt>List</tt> interface are considered
+     * branches; other items are considered leaves.
      *
      * @see #setTreeData(List)
      */
@@ -610,6 +621,13 @@ public class TreeView extends Component {
         installSkin(TreeView.class);
     }
 
+    /**
+     * Sets the skin, replacing any previous skin. This ensures that the skin
+     * being set implements the {@link TreeView.Skin} interface.
+     *
+     * @param skin
+     * The new skin.
+     */
     @Override
     protected void setSkin(pivot.wtk.Skin skin) {
         if (!(skin instanceof TreeView.Skin)) {
@@ -621,19 +639,36 @@ public class TreeView extends Component {
     }
 
     /**
-     * Returns the tree data.
+     * Returns the tree view's data model. This list represents the root
+     * set of items displayed by the tree and will never itself be painted.
+     * Sub-items that also implement the <tt>List</tt> interface are considered
+     * branches; other items are considered leaves.
+     * <p>
+     * For instance, a tree view that displays a single root branch would be
+     * backed by list with one child (also a list).
+     *
+     * @return
+     * The tree view's data model.
      */
     public List<?> getTreeData() {
         return treeData;
     }
 
     /**
-     * Sets the tree data.
+     * Sets the tree data. Note that it is the responsibility of the
+     * caller to ensure that the current tree node renderer is capable of
+     * displaying the contents of the tree structure. By default, an instance
+     * of {@link TreeViewNodeRenderer} is used.
+     * <p>
+     * When the tree data is changed, the state of all nodes (expansion,
+     * selection, disabled, and checked) will be cleared since the nodes
+     * themselves are being replaced. Note that corresponding events will
+     * <b>not</b> be fired, since these actions are implied by the
+     * {@link TreeViewListener#treeDataChanged(TreeView,List) treeDataChanged}
+     * event.
      *
      * @param treeData
-     * The data to be presented by the tree. It is the responsibility of the
-     * caller to ensure that the current tree node renderer is capable of
-     * displaying the contents of the tree structure.
+     * The data to be presented by the tree.
      */
     public void setTreeData(List<?> treeData) {
         if (treeData == null) {
@@ -665,10 +700,28 @@ public class TreeView extends Component {
         }
     }
 
+    /**
+     * Gets the tree view's node renderer, which is responsible for the
+     * appearance of the node data. As such, note that there is an implied
+     * coordination between the node renderer and the data model. The default
+     * node renderer used is an instance of <tt>TreeViewNodeRenderer</tt>.
+     *
+     * @return
+     * The current node renderer.
+     *
+     * @see TreeViewNodeRenderer
+     */
     public NodeRenderer getNodeRenderer() {
         return nodeRenderer;
     }
 
+    /**
+     * Sets the tree view's node renderer, which is responsible for the
+     * appearance of the node data.
+     *
+     * @param nodeRenderer
+     * The new node renderer.
+     */
     public void setNodeRenderer(NodeRenderer nodeRenderer) {
         if (nodeRenderer == null) {
             throw new IllegalArgumentException("nodeRenderer is null.");
@@ -685,6 +738,9 @@ public class TreeView extends Component {
 
     /**
      * Returns the current selection mode.
+     *
+     * @return
+     * The current selection mode.
      */
     public SelectMode getSelectMode() {
         return selectMode;
@@ -692,9 +748,19 @@ public class TreeView extends Component {
 
     /**
      * Sets the selection mode. Clears the selection if the mode has changed.
+     * Note that if the selection is cleared, selection listeners will not
+     * be notified, as the clearing of the selection is implied by the
+     * {@link TreeViewListener#selectModeChanged(TreeView,TreeView.SelectMode)
+     * selectModeChanged} event.
      *
      * @param selectMode
      * The new selection mode.
+     *
+     * @see
+     * TreeViewListener
+     *
+     * @see
+     * TreeViewSelectionListener
      */
     public void setSelectMode(SelectMode selectMode) {
         if (selectMode == null) {
@@ -715,7 +781,16 @@ public class TreeView extends Component {
         }
     }
 
-    public void setSelectMode(String selectMode) {
+    /**
+     * Sets the selection mode.
+     *
+     * @param selectMode
+     * The new selection mode.
+     *
+     * @see
+     * #setSelectMode(SelectMode)
+     */
+    public final void setSelectMode(String selectMode) {
         if (selectMode == null) {
             throw new IllegalArgumentException("selectMode is null.");
         }
@@ -723,26 +798,35 @@ public class TreeView extends Component {
         setSelectMode(SelectMode.decode(selectMode));
     }
 
+    /**
+     *
+     */
     public Sequence<Sequence<Integer>> getSelectedPaths() {
-        Sequence<Sequence<Integer>> selectedPaths =
-            new ArrayList<Sequence<Integer>>(this.selectedPaths.getLength());
+        int count = selectedPaths.getLength();
+
+        Sequence<Sequence<Integer>> selectedPaths = new ArrayList<Sequence<Integer>>(count);
 
         // Deep copy the selected paths into a new list
-        for (int i = 0, n = this.selectedPaths.getLength(); i < n; i++) {
-            Sequence<Integer> selectedPath = new ArrayList<Integer>(this.selectedPaths.get(i));
-            selectedPaths.add(selectedPath);
+        for (int i = 0; i < count; i++) {
+            selectedPaths.add(new ArrayList<Integer>(this.selectedPaths.get(i)));
         }
 
         return selectedPaths;
     }
 
+    /**
+     *
+     *
+     * @throws IllegalStateException
+     * If selection has been disabled (select mode <tt>NONE</tt>).
+     */
     public void setSelectedPaths(Sequence<Sequence<Integer>> selectedPaths) {
         if (selectedPaths == null) {
             throw new IllegalArgumentException("selectedPaths is null.");
         }
 
         if (selectMode == SelectMode.NONE) {
-            throw new IllegalArgumentException("Selection is not enabled.");
+            throw new IllegalStateException("Selection is not enabled.");
         }
 
         if (selectMode == SelectMode.SINGLE
@@ -752,20 +836,22 @@ public class TreeView extends Component {
 
         Sequence<Sequence<Integer>> previousSelectedPaths = this.selectedPaths;
 
-        this.selectedPaths = new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
+        if (selectedPaths != previousSelectedPaths) {
+            this.selectedPaths = new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
 
-        for (int i = 0, n = selectedPaths.getLength(); i < n; i++) {
-            Sequence<Integer> path = selectedPaths.get(i);
+            for (int i = 0, n = selectedPaths.getLength(); i < n; i++) {
+                Sequence<Integer> path = selectedPaths.get(i);
 
-            // Monitor the path's parent
-            monitorBranch(new ArrayList<Integer>(path, 0, path.getLength() - 1));
+                // Monitor the path's parent
+                monitorBranch(new ArrayList<Integer>(path, 0, path.getLength() - 1));
 
-            // Update the selection
-            this.selectedPaths.add(new ArrayList<Integer>(path));
+                // Update the selection
+                this.selectedPaths.add(new ArrayList<Integer>(path));
+            }
+
+            // Notify listeners
+            treeViewSelectionListeners.selectedPathsChanged(this, previousSelectedPaths);
         }
-
-        // Notify listeners
-        treeViewSelectionListeners.selectedPathsChanged(this, previousSelectedPaths);
     }
 
     /**
@@ -803,6 +889,15 @@ public class TreeView extends Component {
         return selectedPath;
     }
 
+    /**
+     *
+     *
+     * @return
+     * The selected path, or <tt>null</tt> if nothing is selected.
+     *
+     * @throws IllegalStateException
+     * If the tree view is not in single-select mode.
+     */
     public Sequence<Integer> getSelectedPath() {
         if (selectMode != SelectMode.SINGLE) {
             throw new IllegalStateException("Tree view is not in single-select mode.");
@@ -817,7 +912,10 @@ public class TreeView extends Component {
         return selectedPath;
     }
 
-    public final void setSelectedPath(Sequence<Integer> path) {
+    /**
+     *
+     */
+    public void setSelectedPath(Sequence<Integer> path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -828,6 +926,15 @@ public class TreeView extends Component {
         setSelectedPaths(selectedPaths);
     }
 
+    /**
+     *
+     *
+     * @return
+     * The selected object, or <tt>null</tt> if nothing is selected. Note that
+     * technically, the selected path could be backed by a <tt>null</tt> data
+     * value. If the caller wishes to distinguish between these cases, they can
+     * use <tt>getSelectedPath()</tt> instead.
+     */
     public Object getSelectedNode() {
         Sequence<Integer> path = getSelectedPath();
         Object node = null;
@@ -839,6 +946,12 @@ public class TreeView extends Component {
         return node;
     }
 
+    /**
+     *
+     *
+     * @throws IllegalStateException
+     * If multi-select is not enabled.
+     */
     public void addSelectedPath(Sequence<Integer> path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
@@ -860,6 +973,12 @@ public class TreeView extends Component {
         }
     }
 
+    /**
+     *
+     *
+     * @throws IllegalStateException
+     * If multi-select is not enabled.
+     */
     public void removeSelectedPath(Sequence<Integer> path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
@@ -880,6 +999,9 @@ public class TreeView extends Component {
         }
     }
 
+    /**
+     *
+     */
     public void clearSelection() {
         if (selectedPaths.getLength() > 0) {
             Sequence<Sequence<Integer>> previousSelectedPaths = selectedPaths;
@@ -892,6 +1014,9 @@ public class TreeView extends Component {
         }
     }
 
+    /**
+     *
+     */
     public boolean isNodeSelected(Sequence<Integer> path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
@@ -919,13 +1044,16 @@ public class TreeView extends Component {
     }
 
     /**
-     * Sets the disabled state of a node.
+     * Sets the disabled state of a node. A disabled node is not interactive to
+     * the user. Note, however, that disabled nodes may still be expanded,
+     * selected, and checked <i>programatically</i>. Disabling a node does
+     * <b>not</b> disable its children.
      *
      * @param path
-     * The path to the node whose disabled state is to be set
+     * The path to the node.
      *
      * @param disabled
-     * <tt>true</tt> to disable the node; <tt>false</tt>, otherwise
+     * <tt>true</tt> to disable the node; <tt>false</tt> to enable it.
      */
     public void setNodeDisabled(Sequence<Integer> path, boolean disabled) {
         if (path == null) {
@@ -952,28 +1080,39 @@ public class TreeView extends Component {
         }
     }
 
+    /**
+     *
+     */
     public Sequence<Sequence<Integer>> getDisabledPaths() {
-        Sequence<Sequence<Integer>> disabledPaths =
-            new ArrayList<Sequence<Integer>>(this.disabledPaths.getLength());
+        int count = disabledPaths.getLength();
+
+        Sequence<Sequence<Integer>> disabledPaths = new ArrayList<Sequence<Integer>>(count);
 
         // Deep copy the disabled paths into a new list
-        for (int i = 0, n = this.disabledPaths.getLength(); i < n; i++) {
-            Sequence<Integer> disabledPath = new ArrayList<Integer>(this.disabledPaths.get(i));
-            disabledPaths.add(disabledPath);
+        for (int i = 0; i < count; i++) {
+            disabledPaths.add(new ArrayList<Integer>(this.disabledPaths.get(i)));
         }
 
         return disabledPaths;
     }
 
+    /**
+     *
+     */
     public boolean getCheckmarksEnabled() {
         return checkmarksEnabled;
     }
 
     /**
-     * Enables or disabled checkmarks. Clears the check state if the check
-     * mode has changed (but does not fire any check state change events).
+     * Enables or disables checkmarks. If checkmarks are being disabled, all
+     * checked nodes will be automatically unchecked. Note that the
+     * corresponding event will <b>not</b> be fired, since the clearing of
+     * existing checkmarks is implied by the
+     * {@link TreeViewListener#checkmarksEnabledChanged(TreeView)
+     * checkmarksEnabledChanged} event.
      *
      * @param checkmarksEnabled
+     * <tt>true</tt> to enable checkmarks; <tt>false</tt> to disable them.
      */
     public void setCheckmarksEnabled(boolean checkmarksEnabled) {
         if (this.checkmarksEnabled != checkmarksEnabled) {
@@ -988,10 +1127,45 @@ public class TreeView extends Component {
         }
     }
 
+    /**
+     * Tells whether or not the mixed check state will be reported by this
+     * tree view. This state is a derived state meaning "the node is not
+     * checked, but one or more of its descendants are." When this state is
+     * configured to not be shown, such nodes will simply be reported as
+     * unchecked.
+     *
+     * @return
+     * <tt>true</tt> if the tree view will report so-called mixed nodes as
+     * mixed; <tt>false</tt> if it will report them as unchecked.
+     *
+     * @see
+     * NodeCheckState#MIXED
+     */
     public boolean getShowMixedCheckmarkState() {
         return showMixedCheckmarkState;
     }
 
+    /**
+     * Sets whether or not the "mixed" check state will be reported by this
+     * tree view. This state is a derived state meaning "the node is not
+     * checked, but one or more of its descendants are." When this state is
+     * configured to not be shown, such nodes will simply be reported as
+     * unchecked.
+     * <p>
+     * Changing this flag may result in some nodes changing their reported
+     * check state. Note that the corresponding <tt>nodeCheckStateChanged</tt>
+     * events will <b>not</b> be fired, since the possibility of such a change
+     * in check state is implied by the
+     * {@link TreeViewListener#showMixedCheckmarkStateChanged(TreeView)
+     * showMixedCheckmarkStateChanged} event.
+     *
+     * @param showMixedCheckmarkState
+     * <tt>true</tt> to show the derived mixed state; <tt>false</tt> to report
+     * so-called "mixed" nodes as unchecked.
+     *
+     * @see
+     * NodeCheckState#MIXED
+     */
     public void setShowMixedCheckmarkState(boolean showMixedCheckmarkState) {
         if (this.showMixedCheckmarkState != showMixedCheckmarkState) {
             // Update the flag
@@ -1002,6 +1176,20 @@ public class TreeView extends Component {
         }
     }
 
+    /**
+     * Tells whether or not the node at the specified path is checked. If
+     * checkmarks are not enabled, this is guaranteed to be <tt>false</tt>. So
+     * called mixed nodes will always be reported as unchecked in this method.
+     *
+     * @param path
+     * The path to the node.
+     *
+     * @return
+     * <tt>true</tt> if the node is explicitly checked; <tt>false</tt> otherwise.
+     *
+     * @see
+     * #getCheckmarksEnabled()
+     */
     public boolean isNodeChecked(Sequence<Integer> path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
@@ -1010,6 +1198,27 @@ public class TreeView extends Component {
         return (checkedPaths.indexOf(path) >= 0);
     }
 
+    /**
+     * Returns the checkmark state of the node at the specified path. If
+     * checkmarks are not enabled, this is guaranteed to be <tt>UNCHECKED</tt>.
+     * <p>
+     * Note that the <tt>MIXED</tt> check state (meaning "the node is not
+     * checked, but one or more of its descendants are") is only reported when
+     * the tree view is configured as such. Otherwise, such nodes will be
+     * reported as <tt>UNCHECKED</tt>.
+     *
+     * @param path
+     * The path to the node.
+     *
+     * @return
+     * The checkmark state of the specified node.
+     *
+     * @see
+     * #getCheckmarksEnabled()
+     *
+     * @see
+     * #setShowMixedCheckmarkState(boolean)
+     */
     public NodeCheckState getNodeCheckState(Sequence<Integer> path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
@@ -1017,19 +1226,21 @@ public class TreeView extends Component {
 
         NodeCheckState checkState = NodeCheckState.UNCHECKED;
 
-        int index = Sequence.Search.binarySearch(checkedPaths, path, PATH_COMPARATOR);
+        if (checkmarksEnabled) {
+            int index = Sequence.Search.binarySearch(checkedPaths, path, PATH_COMPARATOR);
 
-        if (index >= 0) {
-            checkState = NodeCheckState.CHECKED;
-        } else if (showMixedCheckmarkState) {
-            // Translate to the insertion index
-            index = -index - 1;
+            if (index >= 0) {
+                checkState = NodeCheckState.CHECKED;
+            } else if (showMixedCheckmarkState) {
+                // Translate to the insertion index
+                index = -(index + 1);
 
-            if (index < checkedPaths.getLength()) {
-                Sequence<Integer> nextCheckedPath = checkedPaths.get(index);
+                if (index < checkedPaths.getLength()) {
+                    Sequence<Integer> nextCheckedPath = checkedPaths.get(index);
 
-                if (Sequence.Tree.isDescendant(path, nextCheckedPath)) {
-                    checkState = NodeCheckState.MIXED;
+                    if (Sequence.Tree.isDescendant(path, nextCheckedPath)) {
+                        checkState = NodeCheckState.MIXED;
+                    }
                 }
             }
         }
@@ -1037,16 +1248,58 @@ public class TreeView extends Component {
         return checkState;
     }
 
+    /**
+     * Sets the check state of the node at the specified path. If the node
+     * already has the specified check state, nothing happens.
+     * <p>
+     * Note that it is impossible to set the check state of a node to
+     * <tt>MIXED</tt>. This is because the mixed check state is a derived state
+     * meaning "the node is not checked, but one or more of its descendants
+     * are."
+     *
+     * @param path
+     * The path to the node.
+     *
+     * @param checked
+     * <tt>true</tt> to check the node; <tt>false</tt> to uncheck it.
+     *
+     * @throws IllegalStateException
+     * If checkmarks are not enabled (see {@link #getCheckmarksEnabled()}).
+     *
+     * @see
+     * NodeCheckState#MIXED
+     */
     public void setNodeChecked(Sequence<Integer> path, boolean checked) {
+        if (path == null) {
+            throw new IllegalArgumentException("path is null.");
+        }
+
         if (!checkmarksEnabled) {
             throw new IllegalStateException("Checkmarks are not enabled.");
         }
 
-        int index = Sequence.Search.binarySearch(checkedPaths, path, PATH_COMPARATOR);
+        int index = checkedPaths.indexOf(path);
 
         if ((index < 0 && checked)
             || (index >= 0 && !checked)) {
             NodeCheckState previousCheckState = getNodeCheckState(path);
+
+            Sequence<NodeCheckState> ancestorCheckStates = null;
+
+            if (showMixedCheckmarkState) {
+                // Record the check states of our ancestors before we change
+                // anything so we know which events to fire after we're done
+                ancestorCheckStates = new ArrayList<NodeCheckState>(path.getLength() - 1);
+
+                Sequence<Integer> ancestorPath = new ArrayList<Integer>
+                    (path, 0, path.getLength() - 1);
+
+                for (int i = ancestorPath.getLength() - 1; i >= 0; i--) {
+                    ancestorCheckStates.insert(getNodeCheckState(ancestorPath), 0);
+
+                    ancestorPath.remove(i, 1);
+                }
+            }
 
             if (checked) {
                 // Monitor the path's parent
@@ -1063,25 +1316,61 @@ public class TreeView extends Component {
             treeViewNodeStateListeners.nodeCheckStateChanged(this, path, previousCheckState);
 
             if (showMixedCheckmarkState) {
-                // TODO scan up hierarchy, seeing if this changed any of our
-                // ancestors' check state
+                // Notify listeners of any changes to our ancestors' check states
+                Sequence<Integer> ancestorPath = new ArrayList<Integer>
+                    (path, 0, path.getLength() - 1);
+
+                for (int i = ancestorPath.getLength() - 1; i >= 0; i--) {
+                    NodeCheckState ancestorPreviousCheckState = ancestorCheckStates.get(i);
+                    NodeCheckState ancestorCheckState = getNodeCheckState(ancestorPath);
+
+                    if (ancestorCheckState != ancestorPreviousCheckState) {
+                        treeViewNodeStateListeners.nodeCheckStateChanged
+                            (this, ancestorPath, ancestorPreviousCheckState);
+                    }
+
+                    ancestorPath.remove(i, 1);
+                }
             }
         }
     }
 
+    /**
+     * Gets the sequence of node paths that are checked. If checkmarks are not
+     * enabled (see {@link #getCheckmarksEnabled()}), this is guaranteed to
+     * return an empty sequence.
+     * <p>
+     * Note that if the tree view is configured to show mixed checkmark states
+     * (see {@link #getShowMixedCheckmarkState()}), this will still only return
+     * the nodes that are fully checked.
+     *
+     * @return
+     * The paths to the checked nodes in the tree, guaranteed to be
+     * non-<tt>null</tt>.
+     */
     public Sequence<Sequence<Integer>> getCheckedPaths() {
-        Sequence<Sequence<Integer>> checkedPaths =
-            new ArrayList<Sequence<Integer>>(this.checkedPaths.getLength());
+        int count = checkedPaths.getLength();
+
+        Sequence<Sequence<Integer>> checkedPaths = new ArrayList<Sequence<Integer>>(count);
 
         // Deep copy the checked paths into a new list
-        for (int i = 0, n = this.checkedPaths.getLength(); i < n; i++) {
-            Sequence<Integer> checkedPath = new ArrayList<Integer>(this.checkedPaths.get(i));
-            checkedPaths.add(checkedPath);
+        for (int i = 0; i < count; i++) {
+            checkedPaths.add(new ArrayList<Integer>(this.checkedPaths.get(i)));
         }
 
         return checkedPaths;
     }
 
+    /**
+     * Sets the expansion state of the specified branch. If the branch already
+     * has the specified expansion state, nothing happens.
+     *
+     * @param path
+     * The path to the branch node.
+     *
+     * @param expanded
+     * <tt>true</tt> to expand the branch; <tt>false</tt> to collapse it.
+     */
     public void setBranchExpanded(Sequence<Integer> path, boolean expanded) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
@@ -1089,28 +1378,33 @@ public class TreeView extends Component {
 
         int index = expandedPaths.indexOf(path);
 
-        if (expanded) {
-            if (index < 0) {
-                // Monitor the branch
-                monitorBranch(path);
+        if (expanded && index < 0) {
+            // Monitor the branch
+            monitorBranch(path);
 
-                // Update the expanded paths
-                expandedPaths.add(new ArrayList<Integer>(path));
+            // Update the expanded paths
+            expandedPaths.add(new ArrayList<Integer>(path));
 
-                // Notify listeners
-                treeViewBranchListeners.branchExpanded(this, path);
-            }
-        } else {
-            if (index >= 0) {
-                // Update the expanded paths
-                expandedPaths.remove(index, 1);
+            // Notify listeners
+            treeViewBranchListeners.branchExpanded(this, path);
+        } else if (!expanded && index >= 0) {
+            // Update the expanded paths
+            expandedPaths.remove(index, 1);
 
-                // Notify listeners
-                treeViewBranchListeners.branchCollapsed(this, path);
-            }
+            // Notify listeners
+            treeViewBranchListeners.branchCollapsed(this, path);
         }
     }
 
+    /**
+     * Tells whether or not the specified branch is expanded.
+     *
+     * @param path
+     * The path to the branch node.
+     *
+     * @return
+     * <tt>true</tt> if the branch is expanded; <tt>false</tt> otherwise.
+     */
     public boolean isBranchExpanded(Sequence<Integer> path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
@@ -1119,10 +1413,24 @@ public class TreeView extends Component {
         return (expandedPaths.indexOf(path) >= 0);
     }
 
+    /**
+     * Expands the branch at the specified path. If the branch is already
+     * expanded, nothing happens.
+     *
+     * @param path
+     * The path to the branch node.
+     */
     public final void expandBranch(Sequence<Integer> path) {
         setBranchExpanded(path, true);
     }
 
+    /**
+     * Collapses the branch at the specified path. If the branch is already
+     * collapsed, nothing happens.
+     *
+     * @param path
+     * The path to the branch node.
+     */
     public final void collapseBranch(Sequence<Integer> path) {
         setBranchExpanded(path, false);
     }
@@ -1191,7 +1499,7 @@ public class TreeView extends Component {
      * Gets the bounds of the node at the specified path relative to the
      * tree view. Note that all nodes are left aligned with the tree; to
      * get the pixel value of a node's indent, use
-     * {@link #getNodeIndent(Sequence<Integer>)}.
+     * {@link #getNodeIndent(int)}.
      *
      * @param path
      * The path to the node.
@@ -1205,35 +1513,78 @@ public class TreeView extends Component {
     }
 
     /**
-     * Gets the pixel indent of the node at the specified path.
+     * Gets the pixel indent of nodes at the specified depth. Depth is measured
+     * in generations away from the tree view's "root" node, which is
+     * represented by the {@link #getTreeData() tree data}.
      *
-     * @param path
-     * The path to the node.
+     * @param depth
+     * The depth, where the first child of the root has depth 1, the child of
+     * that branch has depth 2, etc.
      *
      * @return
-     * The indent
+     * The indent in pixels.
      */
-    public int getNodeIndent(Sequence<Integer> path) {
+    public int getNodeIndent(int depth) {
         TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
-        return treeViewSkin.getNodeIndent(path);
+        return treeViewSkin.getNodeIndent(depth);
     }
 
+    /**
+     * Gets the <tt>TreeViewListener</tt>s. Developers interested in these
+     * events can register for notification on these events by adding
+     * themselves to the listener list.
+     *
+     * @return
+     * The tree view listeners.
+     */
     public ListenerList<TreeViewListener> getTreeViewListeners() {
         return treeViewListeners;
     }
 
+    /**
+     * Gets the <tt>TreeViewBranchListener</tt>s. Developers interested in
+     * these events can register for notification on these events by adding
+     * themselves to the listener list.
+     *
+     * @return
+     * The tree view branch listeners.
+     */
     public ListenerList<TreeViewBranchListener> getTreeViewBranchListeners() {
         return treeViewBranchListeners;
     }
 
+    /**
+     * Gets the <tt>TreeViewNodeListener</tt>s. Developers interested in these
+     * events can register for notification on these events by adding
+     * themselves to the listener list.
+     *
+     * @return
+     * The tree view node listeners.
+     */
     public ListenerList<TreeViewNodeListener> getTreeViewNodeListeners() {
         return treeViewNodeListeners;
     }
 
+    /**
+     * Gets the <tt>TreeViewNodeStateListener</tt>s. Developers interested in
+     * these events can register for notification on these events by adding
+     * themselves to the listener list.
+     *
+     * @return
+     * The tree view node state listeners.
+     */
     public ListenerList<TreeViewNodeStateListener> getTreeViewNodeStateListeners() {
         return treeViewNodeStateListeners;
     }
 
+    /**
+     * Gets the <tt>TreeViewSelectionListener</tt>s. Developers interested in
+     * these events can register for notification on these events by adding
+     * themselves to the listener list.
+     *
+     * @return
+     * The tree view selection listeners.
+     */
     public ListenerList<TreeViewSelectionListener> getTreeViewSelectionListeners() {
         return treeViewSelectionListeners;
     }

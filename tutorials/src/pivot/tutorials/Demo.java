@@ -89,7 +89,7 @@ public class Demo implements Application {
         Popup popup = null;
 
         private int getNodeLabelIndent() {
-            int nodeLabelIndent = editableTreeView.getNodeIndent(path);
+            int nodeLabelIndent = editableTreeView.getNodeIndent(path.getLength());
 
             TreeViewNodeRenderer nodeRenderer =
                 (TreeViewNodeRenderer)editableTreeView.getNodeRenderer();

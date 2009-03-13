@@ -28,7 +28,9 @@ import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
 
 /**
- * Default tree node renderer.
+ * Default tree node renderer, which knows how to render instances of
+ * {@link TreeNode} and {@link Image}. Anything else will be rendered as a
+ * string (by calling <tt>node.toString()</tt>.
  *
  * @author gbrown
  */
