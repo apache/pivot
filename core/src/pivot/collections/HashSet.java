@@ -99,8 +99,4 @@ public class HashSet<E> implements Set<E>, Serializable {
     public ListenerList<SetListener<E>> getSetListeners() {
         return setListeners;
     }
-
-    public void setSetListener(SetListener<E> listener) {
-        setListeners.add(listener);
-    }
 }

@@ -1222,39 +1222,19 @@ public class TreeView extends Component {
         return treeViewListeners;
     }
 
-    public void setTreeViewListener(TreeViewListener listener) {
-        treeViewListeners.add(listener);
-    }
-
     public ListenerList<TreeViewBranchListener> getTreeViewBranchListeners() {
         return treeViewBranchListeners;
-    }
-
-    public void setTreeViewBranchListeners(TreeViewBranchListener listener) {
-        treeViewBranchListeners.add(listener);
     }
 
     public ListenerList<TreeViewNodeListener> getTreeViewNodeListeners() {
         return treeViewNodeListeners;
     }
 
-    public void setTreeViewNodeListener(TreeViewNodeListener listener) {
-        treeViewNodeListeners.add(listener);
-    }
-
     public ListenerList<TreeViewNodeStateListener> getTreeViewNodeStateListeners() {
         return treeViewNodeStateListeners;
     }
 
-    public void setTreeViewNodeStateListener(TreeViewNodeStateListener listener) {
-        treeViewNodeStateListeners.add(listener);
-    }
-
     public ListenerList<TreeViewSelectionListener> getTreeViewSelectionListeners() {
         return treeViewSelectionListeners;
-    }
-
-    public void setTreeViewSelectionListener(TreeViewSelectionListener listener) {
-        treeViewSelectionListeners.add(listener);
     }
 }

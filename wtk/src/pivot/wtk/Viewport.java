@@ -145,8 +145,4 @@ public abstract class Viewport extends Container {
     public ListenerList<ViewportListener> getViewportListeners() {
         return viewportListeners;
     }
-
-    public void setViewportListener(ViewportListener listener) {
-        viewportListeners.add(listener);
-    }
 }

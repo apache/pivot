@@ -342,13 +342,4 @@ public class Request extends IOTask<Response> {
     public ListenerList<RequestListener> getRequestListeners() {
         return httpRequestListeners;
     }
-
-    /**
-     * Adds a listener to the HTTP request listener list.
-     *
-     * @param listener
-     */
-    public void setRequestListener(RequestListener listener) {
-        httpRequestListeners.add(listener);
-    }
 }

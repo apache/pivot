@@ -497,13 +497,4 @@ public abstract class Query<V> extends IOTask<V> {
     public ListenerList<QueryListener<V>> getQueryListeners() {
         return queryListeners;
     }
-
-    /**
-     * Adds a listener to the query listener list.
-     *
-     * @param listener
-     */
-    public void setQueryListener(QueryListener<V> listener) {
-        queryListeners.add(listener);
-    }
 }

@@ -559,7 +559,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     nodeView.validate();
 
                     if (index < getLength()) {
-                        ApplicationContext.setTimeout(this, 0);
+                        ApplicationContext.queueCallback(this);
                     } else {
                         validateCallback = null;
                         invalidateComponent();
@@ -658,12 +658,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                     updateSelectionBounds();
                 } else {
                     if (start != -1) {
-                        if (validateCallback != null) {
-                            validateCallback.abort();
-                        }
+                        abortValidateCallback();
 
                         validateCallback = new ValidateCallback(start);
-                        ApplicationContext.setTimeout(validateCallback, 0);
+                        ApplicationContext.queueCallback(validateCallback);
                     }
                 }
             }
@@ -685,6 +683,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             remove(index, nodes.getLength());
 
             super.nodesRemoved(element, index, nodes);
+        }
+
+        protected void abortValidateCallback() {
+            if (validateCallback != null) {
+                validateCallback.abort();
+                validateCallback = null;
+            }
         }
     }
 
@@ -710,7 +715,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 ArrayList<ArrayList<NodeView>> rows = new ArrayList<ArrayList<NodeView>>();
 
                 // Break the views into multiple rows
-                int breakWidth = getBreakWidth() - PARAGRAPH_TERMINATOR_WIDTH;
+                int breakWidth = Math.max(getBreakWidth() - PARAGRAPH_TERMINATOR_WIDTH, 0);
 
                 ArrayList<NodeView> row = new ArrayList<NodeView>();
                 int rowWidth = 0;
@@ -718,7 +723,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 for (Node node : paragraph) {
                     NodeView nodeView = createNodeView(node);
 
-                    nodeView.setBreakWidth(breakWidth - rowWidth);
+                    nodeView.setBreakWidth(Math.max(breakWidth - rowWidth, 0));
                     nodeView.validate();
 
                     int nodeViewWidth = nodeView.getWidth();
@@ -1166,6 +1171,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
         }
     }
 
+
     private DocumentView documentView = null;
 
     private FontRenderContext fontRenderContext = new FontRenderContext(null, true, true);
@@ -1270,6 +1276,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     public void layout() {
         if (documentView != null) {
+            documentView.abortValidateCallback();
+
             // TODO Here is where we would resize/reposition form components
             // (i.e. components attached to ComponentNodeViews); we'd probably
             // want a top-level list of ComponentNodeViews so we wouldn't have

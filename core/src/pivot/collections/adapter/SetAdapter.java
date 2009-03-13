@@ -86,10 +86,6 @@ public class SetAdapter<E> implements Set<E> {
         return setListeners;
     }
 
-    public void setSetListener(SetListener<E> listener) {
-        setListeners.add(listener);
-    }
-
     public String toString() {
         return set.toString();
     }

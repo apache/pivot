@@ -168,8 +168,4 @@ public class Folder extends File implements List<File> {
     public ListenerList<ListListener<File>> getListListeners() {
         return listListeners;
     }
-
-    public void setListListener(ListListener<File> listener) {
-        listListeners.add(listener);
-    }
 }

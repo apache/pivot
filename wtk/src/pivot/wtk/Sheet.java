@@ -231,8 +231,4 @@ public class Sheet extends Window {
     public ListenerList<SheetStateListener> getSheetStateListeners() {
         return sheetStateListeners;
     }
-
-    public void setSheetStateListener(SheetStateListener listener) {
-        sheetStateListeners.add(listener);
-    }
 }

@@ -106,10 +106,6 @@ public class MenuBar extends Container {
         public ListenerList<ItemListener> getItemListeners() {
             return itemListeners;
         }
-
-        public void setItemListener(ItemListener listener) {
-            itemListeners.add(listener);
-        }
     }
 
     /**
@@ -258,9 +254,5 @@ public class MenuBar extends Container {
 
     public ListenerList<MenuBarListener> getMenuBarListeners() {
         return menuBarListeners;
-    }
-
-    public void setMenuBarListener(MenuBarListener listener) {
-        menuBarListeners.add(listener);
     }
 }

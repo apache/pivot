@@ -58,8 +58,4 @@ public class Separator extends Component {
     public ListenerList<SeparatorListener> getSeparatorListeners() {
         return separatorListeners;
     }
-
-    public void setSeparatorListener(SeparatorListener listener) {
-        separatorListeners.add(listener);
-    }
 }

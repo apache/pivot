@@ -123,10 +123,6 @@ public class Prompt extends Sheet {
         return promptListeners;
     }
 
-    public void setPromptListener(PromptListener listener) {
-        promptListeners.add(listener);
-    }
-
     public static void prompt(String message, Window owner) {
         prompt(MessageType.INFO, message, owner, null);
     }

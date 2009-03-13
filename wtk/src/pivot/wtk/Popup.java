@@ -124,8 +124,4 @@ public class Popup extends Window {
     public ListenerList<PopupListener> getPopupListeners() {
         return popupListeners;
     }
-
-    public void setPopupListener(PopupListener listener) {
-        popupListeners.add(listener);
-    }
 }

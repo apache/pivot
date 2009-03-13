@@ -941,23 +941,11 @@ public class Window extends Container {
         return windowListeners;
     }
 
-    public void setWindowListener(WindowListener listener) {
-        windowListeners.add(listener);
-    }
-
     public ListenerList<WindowStateListener> getWindowStateListeners() {
         return windowStateListeners;
     }
 
-    public void setWindowStateListener(WindowStateListener listener) {
-        windowStateListeners.add(listener);
-    }
-
     public static ListenerList<WindowClassListener> getWindowClassListeners() {
         return windowClassListeners;
-    }
-
-    public static void setWindowClassListener(WindowClassListener listener) {
-        windowClassListeners.add(listener);
     }
 }

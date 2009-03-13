@@ -580,28 +580,10 @@ public class TextInput extends Component {
     }
 
     /**
-     * Adds a listener to the text input listener list.
-     *
-     * @param listener
-     */
-    public void setTextInputListener(TextInputListener listener) {
-        textInputListeners.add(listener);
-    }
-
-    /**
      * Returns the text input text listener list.
      */
     public ListenerList<TextInputTextListener> getTextInputTextListeners() {
         return textInputTextListeners;
-    }
-
-    /**
-     * Adds a listener to the text input text listener list.
-     *
-     * @param listener
-     */
-    public void setTextInputTextListener(TextInputTextListener listener) {
-        textInputTextListeners.add(listener);
     }
 
     /**
@@ -612,27 +594,9 @@ public class TextInput extends Component {
     }
 
     /**
-     * Adds a listener to the text input selection listener list.
-     *
-     * @param listener
-     */
-    public void setTextInputSelectionListener(TextInputSelectionListener listener) {
-        textInputSelectionListeners.add(listener);
-    }
-
-    /**
      * Returns the text input character listener list.
      */
     public ListenerList<TextInputCharacterListener> getTextInputCharacterListeners() {
         return textInputCharacterListeners;
-    }
-
-    /**
-     * Adds a listener to the text input character listener list.
-     *
-     * @param listener
-     */
-    public void setTextInputCharacterListener(TextInputCharacterListener listener) {
-        textInputCharacterListeners.add(listener);
     }
 }

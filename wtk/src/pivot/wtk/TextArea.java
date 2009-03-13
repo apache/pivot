@@ -229,7 +229,7 @@ public class TextArea extends Component {
             try {
                 PlainTextSerializer serializer = new PlainTextSerializer();
                 StringReader reader = new StringReader(text);
-                document = (Document)serializer.readObject(reader);
+                document = serializer.readObject(reader);
             } catch(SerializationException exception) {
             } catch(IOException exception) {
             }
@@ -497,16 +497,8 @@ public class TextArea extends Component {
         } else {
             int offset = selectionStart;
 
-            switch (direction) {
-                case FORWARD: {
-                    offset++;
-                    break;
-                }
-
-                case BACKWARD: {
-                    offset--;
-                    break;
-                }
+            if (direction == Direction.BACKWARD) {
+                offset--;
             }
 
             if (offset >= 0

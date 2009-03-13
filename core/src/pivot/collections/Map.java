@@ -99,11 +99,4 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
      * Returns the map listener collection.
      */
     public ListenerList<MapListener<K, V>> getMapListeners();
-
-    /**
-     * Adds a listener to the map listener list.
-     *
-     * @param listener
-     */
-    public void setMapListener(MapListener<K, V> listener);
 }

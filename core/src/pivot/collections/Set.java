@@ -80,11 +80,4 @@ public interface Set<E> extends Group<E>, Collection<E> {
      * Returns the set listener collection.
      */
     public ListenerList<SetListener<E>> getSetListeners();
-
-    /**
-     * Adds a listener to the set listener list.
-     *
-     * @param listener
-     */
-    public void setSetListener(SetListener<E> listener);
 }

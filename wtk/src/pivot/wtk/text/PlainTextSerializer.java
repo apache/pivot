@@ -30,17 +30,12 @@ import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
 
 /**
- * Implementation of the {@link Serializer} interface that reads data from
- * and writes data to a plain text file.
- * <p>
- * TODO Add support for serializing elements/text nodes. This implies that
- * the return value of readObject() should be a Document, not a String; the
- * inverse applies to writeObject(). Be sure to update the test app, which
- * currently assumes Strings.
+ * Implementation of the {@link Serializer} interface that reads and writes
+ * a plain text document.
  *
  * @author gbrown
  */
-public class PlainTextSerializer implements Serializer {
+public class PlainTextSerializer implements Serializer<Document> {
     private Charset charset = null;
 
     public static final String MIME_TYPE = "text/plain";
@@ -62,15 +57,15 @@ public class PlainTextSerializer implements Serializer {
         this.charset = charset;
     }
 
-    public Object readObject(InputStream inputStream) throws IOException,
+    public Document readObject(InputStream inputStream) throws IOException,
         SerializationException {
         Reader reader = new InputStreamReader(inputStream, charset);
-        Object object = readObject(reader);
+        Document document = readObject(reader);
 
-        return object;
+        return document;
     }
 
-    public Object readObject(Reader reader)
+    public Document readObject(Reader reader)
         throws IOException, SerializationException {
         Document document = new Document();
 
@@ -85,13 +80,18 @@ public class PlainTextSerializer implements Serializer {
         return document;
     }
 
-    public void writeObject(Object object, OutputStream outputStream)
+    public void writeObject(Document document, OutputStream outputStream)
         throws IOException, SerializationException {
         Writer writer = new OutputStreamWriter(outputStream, charset);
-        writeObject(object, writer);
+        writeObject(document, writer);
     }
 
-    public void writeObject(Object object, Writer writer)
+    public void writeObject(Document document, Writer writer)
+        throws IOException, SerializationException {
+        writeValue(document, writer);
+    }
+
+    private void writeValue(Object object, Writer writer)
         throws IOException, SerializationException {
         if (writer == null) {
             throw new IllegalArgumentException("writer is null.");
@@ -103,7 +103,7 @@ public class PlainTextSerializer implements Serializer {
             Element element = (Element)object;
 
             for (Node node : element) {
-                writeObject(node, writer);
+                writeValue(node, writer);
             }
 
             if (element instanceof Paragraph) {
@@ -125,7 +125,7 @@ public class PlainTextSerializer implements Serializer {
         bufferedWriter.flush();
     }
 
-    public String getMIMEType(Object object) {
+    public String getMIMEType(Document document) {
         return MIME_TYPE + "; charset=" + charset.name();
     }
 }

@@ -1407,39 +1407,19 @@ public class TableView extends Component {
         return tableViewListeners;
     }
 
-    public void setTableViewListeners(TableViewListener listener) {
-        tableViewListeners.add(listener);
-    }
-
     public ListenerList<TableViewColumnListener> getTableViewColumnListeners() {
         return tableViewColumnListeners;
-    }
-
-    public void setTableViewColumnListener(TableViewColumnListener listener) {
-        tableViewColumnListeners.add(listener);
     }
 
     public ListenerList<TableViewRowListener> getTableViewRowListeners() {
         return tableViewRowListeners;
     }
 
-    public void setTableViewRowListener(TableViewRowListener listener) {
-        tableViewRowListeners.add(listener);
-    }
-
     public ListenerList<TableViewRowStateListener> getTableViewRowStateListeners() {
         return tableViewRowStateListeners;
     }
 
-    public void setTableViewRowStateListener(TableViewRowStateListener listener) {
-        tableViewRowStateListeners.add(listener);
-    }
-
     public ListenerList<TableViewSelectionListener> getTableViewSelectionListeners() {
         return tableViewSelectionListeners;
-    }
-
-    public void setTableViewSelectionListener(TableViewSelectionListener listener) {
-        tableViewSelectionListeners.add(listener);
     }
 }

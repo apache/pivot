@@ -345,8 +345,4 @@ public class SplitPane extends Container {
     public ListenerList<SplitPaneListener> getSplitPaneListeners() {
         return splitPaneListeners;
     }
-
-    public void setSplitPaneListener(SplitPaneListener listener) {
-        splitPaneListeners.add(listener);
-    }
 }

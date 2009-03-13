@@ -287,27 +287,9 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Adds a listener to the calendar button listener list.
-     *
-     * @param listener
-     */
-    public void setCalendarButtonListener(CalendarButtonListener listener) {
-        calendarButtonListeners.add(listener);
-    }
-
-    /**
      * Returns the calendar button selection listener list.
      */
     public ListenerList<CalendarButtonSelectionListener> getCalendarButtonSelectionListeners() {
         return calendarButtonSelectionListeners;
-    }
-
-    /**
-     * Adds a listener to the calendar button selection listener list.
-     *
-     * @param listener
-     */
-    public void setCalendarButtonSelectionListener(CalendarButtonSelectionListener listener) {
-        calendarButtonSelectionListeners.add(listener);
     }
 }

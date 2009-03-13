@@ -110,8 +110,4 @@ public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
     public ListenerList<MapListener<K, V>> getMapListeners() {
         return mapListeners;
     }
-
-    public void setMapListener(MapListener<K, V> listener) {
-        mapListeners.add(listener);
-    }
 }

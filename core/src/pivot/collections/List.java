@@ -131,11 +131,4 @@ public interface List<T> extends Sequence<T>, Collection<T> {
      * Returns the list listener list.
      */
     public ListenerList<ListListener<T>> getListListeners();
-
-    /**
-     * Adds a listener to the list listener list.
-     *
-     * @param listener
-     */
-    public void setListListener(ListListener<T> listener);
 }

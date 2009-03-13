@@ -41,10 +41,6 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
         return setListeners;
     }
 
-    public void setSetListener(SetListener<E> listener) {
-        setListeners.add(listener);
-    }
-
     public Comparator<E> getComparator() {
         return null;
     }

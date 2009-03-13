@@ -102,10 +102,6 @@ public class MapAdapter<K, V> implements Map<K, V> {
         return mapListeners;
     }
 
-    public void setMapListener(MapListener<K, V> listener) {
-        mapListeners.add(listener);
-    }
-
     public String toString() {
         return map.toString();
     }

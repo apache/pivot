@@ -90,8 +90,4 @@ public class MenuPopup extends Popup {
     public ListenerList<MenuPopupListener> getMenuPopupListeners() {
         return menuPopupListeners;
     }
-
-    public void setMenuPopupListener(MenuPopupListener listener) {
-        menuPopupListeners.add(listener);
-    }
 }

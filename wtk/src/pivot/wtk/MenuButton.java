@@ -95,8 +95,4 @@ public class MenuButton extends Button {
     public ListenerList<MenuButtonListener> getMenuButtonListeners() {
         return menuButtonListeners;
     }
-
-    public void setMenuButtonListener(MenuButtonListener listener) {
-        menuButtonListeners.add(listener);
-    }
 }

@@ -149,10 +149,6 @@ public class ElementAdapter extends NodeAdapter implements List<NodeAdapter> {
         return listListeners;
     }
 
-    public void setListListener(ListListener<NodeAdapter> listener) {
-        listListeners.add(listener);
-    }
-
     public Iterator<NodeAdapter> iterator() {
         return new ImmutableIterator<NodeAdapter>(nodeAdapters.iterator());
     }

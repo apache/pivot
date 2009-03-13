@@ -219,8 +219,4 @@ public class NumericSpinnerData implements List<Integer> {
     public ListenerList<ListListener<Integer>> getListListeners() {
         return listListeners;
     }
-
-    public void setListListener(ListListener<Integer> listener) {
-        listListeners.add(listener);
-    }
 }

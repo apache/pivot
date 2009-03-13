@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 VMware, Inc.
+ * Copyright (c) 2009 VMware, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.serialization.Serializer;
 import pivot.serialization.SerializationException;
+import pivot.util.ListenerList;
 import pivot.util.Resources;
 
 /**
@@ -182,7 +183,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                 switch (element.type) {
                                     case INSTANCE: {
                                         if (element.value instanceof Sequence) {
-                                            Sequence sequence = (Sequence<?>)element.value;
+                                            Sequence<Object> sequence = (Sequence<Object>)element.value;
 
                                             try {
                                                 Method addMethod = sequence.getClass().getMethod("add",
@@ -426,10 +427,18 @@ public class WTKXSerializer implements Serializer<Object> {
                         switch (element.type) {
                             case INCLUDE:
                             case INSTANCE: {
-                                if (element.parent != null
-                                    && element.parent.value instanceof Sequence) {
-                                    Sequence sequence = (Sequence<?>)element.parent.value;
-                                    sequence.add(element.value);
+                                // If the element's parent is a sequence or a listener list, add
+                                // the element value to it
+                                if (element.parent != null) {
+                                    if (element.parent.value instanceof Sequence) {
+                                        Sequence<Object> sequence = (Sequence<Object>)element.parent.value;
+                                        sequence.add(element.value);
+                                    } else {
+                                        if (element.parent.value instanceof ListenerList) {
+                                            ListenerList<Object> listenerList = (ListenerList<Object>)element.parent.value;
+                                            listenerList.add(element.value);
+                                        }
+                                    }
                                 }
 
                                 // If an ID was specified, add the value to the named object map
@@ -470,6 +479,7 @@ public class WTKXSerializer implements Serializer<Object> {
 
                             default: {
                                 if (element.value instanceof Dictionary) {
+                                    // The element is an untyped object
                                     Dictionary<String, Object> dictionary = (Dictionary<String, Object>)element.value;
 
                                     for (Attribute attribute : element.attributes) {
@@ -486,10 +496,33 @@ public class WTKXSerializer implements Serializer<Object> {
 
                                     for (Attribute attribute : element.attributes) {
                                         if (Character.isUpperCase(attribute.localName.charAt(0))) {
+                                            // The property represents an attached value
                                             setStaticProperty(attribute, element.value);
                                         } else {
-                                            valueDictionary.put(attribute.localName,
-                                                resolve(attribute.value, valueDictionary.getType(attribute.localName)));
+                                            Class<?> type = valueDictionary.getType(attribute.localName);
+
+                                            if (ListenerList.class.isAssignableFrom(type)) {
+                                                // The property represents a listener list
+                                                ListenerList<Object> listenerList = (ListenerList<Object>)valueDictionary.get(attribute.localName);
+
+                                                // The attribute value is a comma-separated list of listener IDs
+                                                String[] listenerIDs = attribute.value.split(",");
+
+                                                for (int i = 0, n = listenerIDs.length; i < n; i++) {
+                                                    String listenerID = listenerIDs[i].trim();
+
+                                                    if (listenerID.length() > 0) {
+                                                        listenerID = listenerID.substring(1);
+
+                                                        if (listenerID.length() > 0) {
+                                                            listenerList.add(getObjectByID(listenerID));
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                valueDictionary.put(attribute.localName,
+                                                    resolve(attribute.value, valueDictionary.getType(attribute.localName)));
+                                            }
                                         }
                                     }
                                 }

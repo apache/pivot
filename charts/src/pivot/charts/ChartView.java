@@ -486,24 +486,12 @@ public abstract class ChartView extends Component {
         return chartViewListeners;
     }
 
-    public void setChartViewListener(ChartViewListener listener) {
-        chartViewListeners.add(listener);
-    }
-
     public ListenerList<ChartViewCategoryListener> getChartViewCategoryListeners() {
         return chartViewCategoryListeners;
     }
 
-    public void setChartViewCategoryListener(ChartViewCategoryListener listener) {
-        chartViewCategoryListeners.add(listener);
-    }
-
     public ListenerList<ChartViewSeriesListener> getChartViewSeriesListeners() {
         return chartViewSeriesListeners;
-    }
-
-    public void setChartViewSeriesListener(ChartViewSeriesListener listener) {
-        chartViewSeriesListeners.add(listener);
     }
 }
 

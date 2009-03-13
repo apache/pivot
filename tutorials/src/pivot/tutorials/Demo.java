@@ -268,7 +268,7 @@ public class Demo implements Application {
 
         Document document = null;
         try {
-            document = (Document)plainTextSerializer.readObject(inputStream);
+            document = plainTextSerializer.readObject(inputStream);
         } catch(Exception exception) {
             System.out.println(exception);
         }

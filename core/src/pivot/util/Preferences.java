@@ -105,8 +105,4 @@ public class Preferences implements Dictionary<String, Object>, Iterable<String>
     public ListenerList<PreferencesListener> getPreferencesListeners() {
         return preferencesListeners;
     }
-
-    public void setPreferencesListener(PreferencesListener listener) {
-        preferencesListeners.add(listener);
-    }
 }

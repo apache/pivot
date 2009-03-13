@@ -92,8 +92,4 @@ public class LinkedList<T> implements List<T>, Serializable {
         // TODO Auto-generated method stub
         return null;
     }
-
-    public void setListListener(ListListener<T> listener) {
-        // TODO
-    }
 }

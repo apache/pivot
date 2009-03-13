@@ -968,28 +968,10 @@ public class TablePane extends Container {
     }
 
     /**
-     * Adds a listener to the table pane listener list.
-     *
-     * @param listener
-     */
-    public void setTablePaneListener(TablePaneListener listener) {
-        tablePaneListeners.add(listener);
-    }
-
-    /**
      * Returns the table pane attribute listener list.
      */
     public ListenerList<TablePaneAttributeListener> getTablePaneAttributeListeners() {
         return tablePaneAttributeListeners;
-    }
-
-    /**
-     * Adds a listener to the table pane attribute listener list.
-     *
-     * @param listener
-     */
-    public void setTablePaneAttributeListener(TablePaneAttributeListener listener) {
-        tablePaneAttributeListeners.add(listener);
     }
 
     public static int getRowSpan(Component component) {

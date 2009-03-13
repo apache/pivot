@@ -68,8 +68,4 @@ public class Tooltip extends Window {
     public ListenerList<TooltipListener> getTooltipListeners() {
         return tooltipListeners;
     }
-
-    public void setTooltipListener(TooltipListener listener) {
-        tooltipListeners.add(listener);
-    }
 }

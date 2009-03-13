@@ -321,27 +321,9 @@ public class Calendar extends Container {
     }
 
     /**
-     * Adds a listener to the calendar listener list.
-     *
-     * @param listener
-     */
-    public void setCalendarListener(CalendarListener listener) {
-        calendarListeners.add(listener);
-    }
-
-    /**
      * Returns the calendar selection listener list.
      */
     public ListenerList<CalendarSelectionListener> getCalendarSelectionListeners() {
         return calendarSelectionListeners;
-    }
-
-    /**
-     * Adds a listener to the calendar selection listener list.
-     *
-     * @param listener
-     */
-    public void setCalendarSelectionListener(CalendarSelectionListener listener) {
-        calendarSelectionListeners.add(listener);
     }
 }

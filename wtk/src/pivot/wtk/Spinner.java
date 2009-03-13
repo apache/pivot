@@ -450,15 +450,6 @@ public class Spinner extends Container {
     }
 
     /**
-     * Adds a listener to the spinner listener list.
-     *
-     * @param listener
-     */
-    public void setSpinnerListener(SpinnerListener listener) {
-        spinnerListeners.add(listener);
-    }
-
-    /**
      * Returns the spinner item listener list.
      */
     public ListenerList<SpinnerItemListener> getSpinnerItemListeners() {
@@ -466,27 +457,9 @@ public class Spinner extends Container {
     }
 
     /**
-     * Adds a listener to the spinner item listener list.
-     *
-     * @param listener
-     */
-    public void setSpinnerItemListener(SpinnerItemListener listener) {
-        spinnerItemListeners.add(listener);
-    }
-
-    /**
      * Returns the spinner selection listener list.
      */
     public ListenerList<SpinnerSelectionListener> getSpinnerSelectionListeners() {
         return spinnerSelectionListeners;
-    }
-
-    /**
-     * Adds a listener to the spinner selection listener list.
-     *
-     * @param listener
-     */
-    public void setSpinnerSelectionListener(SpinnerSelectionListener listener) {
-        spinnerSelectionListeners.add(listener);
     }
 }

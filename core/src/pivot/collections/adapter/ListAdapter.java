@@ -165,10 +165,6 @@ public class ListAdapter<T> implements List<T> {
         return listListeners;
     }
 
-    public void setListListener(ListListener<T> listener) {
-        listListeners.add(listener);
-    }
-
     public String toString() {
         return list.toString();
     }

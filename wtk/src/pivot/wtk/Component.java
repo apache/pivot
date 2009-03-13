@@ -2252,87 +2252,43 @@ public abstract class Component implements ConstrainedVisual {
         return componentListeners;
     }
 
-    public void setComponentListener(ComponentListener listener) {
-        componentListeners.add(listener);
-    }
-
     public ListenerList<ComponentLayoutListener> getComponentLayoutListeners() {
         return componentLayoutListeners;
-    }
-
-    public void setComponentLayoutListener(ComponentLayoutListener listener) {
-        componentLayoutListeners.add(listener);
     }
 
     public ListenerList<ComponentStateListener> getComponentStateListeners() {
         return componentStateListeners;
     }
 
-    public void setComponentStateListener(ComponentStateListener listener) {
-        componentStateListeners.add(listener);
-    }
-
     public ListenerList<ComponentDecoratorListener> getComponentDecoratorListeners() {
         return componentDecoratorListeners;
-    }
-
-    public void setComponentDecoratorListener(ComponentDecoratorListener listener) {
-        componentDecoratorListeners.add(listener);
     }
 
     public ListenerList<ComponentMouseListener> getComponentMouseListeners() {
         return componentMouseListeners;
     }
 
-    public void setComponentMouseListener(ComponentMouseListener listener) {
-        componentMouseListeners.add(listener);
-    }
-
     public ListenerList<ComponentMouseButtonListener> getComponentMouseButtonListeners() {
         return componentMouseButtonListeners;
-    }
-
-    public void setComponentMouseButtonListener(ComponentMouseButtonListener listener) {
-        componentMouseButtonListeners.add(listener);
     }
 
     public ListenerList<ComponentMouseWheelListener> getComponentMouseWheelListeners() {
         return componentMouseWheelListeners;
     }
 
-    public void setComponentMouseWheelListener(ComponentMouseWheelListener listener) {
-        componentMouseWheelListeners.add(listener);
-    }
-
     public ListenerList<ComponentKeyListener> getComponentKeyListeners() {
         return componentKeyListeners;
-    }
-
-    public void setComponentKeyListener(ComponentKeyListener listener) {
-        componentKeyListeners.add(listener);
     }
 
     public ListenerList<ComponentDragDropListener> getComponentDragDropListeners() {
         return componentDragDropListeners;
     }
 
-    public void setComponentDragDropListener(ComponentDragDropListener listener) {
-        componentDragDropListeners.add(listener);
-    }
-
     public ListenerList<ComponentDataListener> getComponentDataListeners() {
         return componentDataListeners;
     }
 
-    public void setComponentDataListener(ComponentDataListener listener) {
-        componentDataListeners.add(listener);
-    }
-
     public static ListenerList<ComponentClassListener> getComponentClassListeners() {
         return componentClassListeners;
-    }
-
-    public static void setComponentClassListener(ComponentClassListener listener) {
-        componentClassListeners.add(listener);
     }
 }

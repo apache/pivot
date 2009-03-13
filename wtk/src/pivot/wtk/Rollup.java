@@ -98,8 +98,4 @@ public class Rollup extends pivot.wtk.Container {
     public ListenerList<RollupListener> getRollupListeners() {
         return rollupListeners;
     }
-
-    public void setRollupListener(RollupListener listener) {
-        rollupListeners.add(listener);
-    }
 }

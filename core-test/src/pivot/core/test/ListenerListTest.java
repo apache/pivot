@@ -35,7 +35,7 @@ public class ListenerListTest {
 
         final TestSource testSource = new TestSource();
         testSource.getTestListeners().add(listener1);
-        testSource.setTestListener(listener2);
+        testSource.getTestListeners().add(listener2);
         testSource.getTestListeners().add(listener3);
         testSource.getTestListeners().add(listener4);
         testSource.getTestListeners().add(listener3);
@@ -72,9 +72,5 @@ class TestSource {
 
     public ListenerList<TestListener> getTestListeners() {
         return testListeners;
-    }
-
-    public void setTestListener(TestListener listener) {
-        testListeners.add(listener);
     }
 }
