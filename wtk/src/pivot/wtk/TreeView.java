@@ -557,52 +557,26 @@ public class TreeView extends Component {
             Sequence<Integer> basePath, int index, int count) {
             int depth = basePath.getLength();
 
-            // Calculate the first removed child's path
-            Sequence<Integer> childPath = new ArrayList<Integer>(basePath);
-            childPath.add(index);
+            // Find the index of the first path to clear (inclusive)
+            Sequence<Integer> testPath = new ArrayList<Integer>(basePath);
+            testPath.add(index);
 
-            // Find the first removed child's place in our sorted paths sequence
-            int start = Sequence.Search.binarySearch(paths, childPath, PATH_COMPARATOR);
+            int start = Sequence.Search.binarySearch(paths, testPath, PATH_COMPARATOR);
             if (start < 0) {
                 start = -(start + 1);
             }
 
-            int end = start;
+            // Find the index of the last path to clear (exclusive)
+            testPath.update(depth, index + count);
 
-            // See if our start index points to a path that needs to be cleared
-            if (start < paths.getLength()) {
-                Sequence<Integer> testPath = paths.get(start);
-                int testIndex = (depth < testPath.getLength() ? testPath.get(depth) : -1);
+            int end = Sequence.Search.binarySearch(paths, testPath, PATH_COMPARATOR);
+            if (end < 0) {
+                end = -(end + 1);
+            }
 
-                if (testIndex >= index
-                    && testIndex < index + count
-                    && Sequence.Tree.isDescendant(basePath, testPath)) {
-                    // Confirmed: we will need to clear at least one path
-                    childPath.remove(depth, 1);
-                    childPath.add(index + count - 1);
-
-                    end = Sequence.Search.binarySearch(paths, childPath, PATH_COMPARATOR);
-                    if (end < 0) {
-                        end = -(end + 1);
-                    }
-
-                    assert (end >= start) : "end < start";
-
-                    // Scan forward to find the index of the last path to clear
-                    for (int n = paths.getLength(); end < n; end++) {
-                        testPath = paths.get(end);
-                        testIndex = (depth < testPath.getLength() ? testPath.get(depth) : -1);
-
-                        if (!(testIndex >= index
-                              && testIndex < index + count
-                              && Sequence.Tree.isDescendant(basePath, testPath))) {
-                            break;
-                        }
-                    }
-
-                    // Clear all paths within [start, end>
-                    paths.remove(start, end - start);
-                }
+            // Clear affected paths
+            if (end > start) {
+                paths.remove(start, end - start);
             }
 
             // Decrement paths as necessary
