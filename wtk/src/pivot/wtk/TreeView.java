@@ -446,8 +446,20 @@ public class TreeView extends Component {
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
             Sequence<Integer> path = getPath();
 
-            // TODO update child handler and tree view data structures
+            // Release child handler
+            BranchHandler handler = update(index, null);
 
+            if (handler != null) {
+                handler.release();
+            }
+
+            // Update our data structures
+            clearPaths(expandedPaths, path, index);
+            clearPaths(selectedPaths, path, index);
+            clearPaths(disabledPaths, path, index);
+            clearPaths(checkedPaths, path, index);
+
+            // Notify listeners
             treeViewNodeListeners.nodeUpdated(TreeView.this, path, index);
         }
 
@@ -455,6 +467,19 @@ public class TreeView extends Component {
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
                 Sequence<Integer> path = getPath();
+
+                // Release all child handlers. This is safe because of the
+                // calls to clearPaths(). Failure to do this would result in
+                // the indices of our child handlers not matching those of the
+                // backing data structures, which would yield very hard to find
+                // bugs
+                for (int i = 0, n = getLength(); i < n; i++) {
+                    BranchHandler handler = update(i, null);
+
+                    if (handler != null) {
+                        handler.release();
+                    }
+                }
 
                 // Update our data structures
                 clearPaths(expandedPaths, path);
@@ -520,25 +545,132 @@ public class TreeView extends Component {
          * Sequence of paths guaranteed to be sorted by "row order".
          *
          * @param basePath
-         * The path to the parent of the inserted item.
+         * The path to the parent of the removed items.
+         *
+         * @param index
+         * The index of the first removed item within the base.
+         *
+         * @param count
+         * The number of items removed.
          */
         private void clearAndDecrementPaths(Sequence<Sequence<Integer>> paths,
             Sequence<Integer> basePath, int index, int count) {
-            // TODO
+            int depth = basePath.getLength();
+
+            // Calculate the first removed child's path
+            Sequence<Integer> childPath = new ArrayList<Integer>(basePath);
+            childPath.add(index);
+
+            // Find the first removed child's place in our sorted paths sequence
+            int start = Sequence.Search.binarySearch(paths, childPath, PATH_COMPARATOR);
+            if (start < 0) {
+                start = -(start + 1);
+            }
+
+            int end = start;
+
+            // See if our start index points to a path that needs to be cleared
+            if (start < paths.getLength()) {
+                Sequence<Integer> testPath = paths.get(start);
+                int testIndex = (depth < testPath.getLength() ? testPath.get(depth) : -1);
+
+                if (testIndex >= index
+                    && testIndex < index + count
+                    && Sequence.Tree.isDescendant(basePath, testPath)) {
+                    // Confirmed: we will need to clear at least one path
+                    childPath.remove(depth, 1);
+                    childPath.add(index + count - 1);
+
+                    end = Sequence.Search.binarySearch(paths, childPath, PATH_COMPARATOR);
+                    if (end < 0) {
+                        end = -(end + 1);
+                    }
+
+                    assert (end >= start) : "end < start";
+
+                    // Scan forward to find the index of the last path to clear
+                    for (int n = paths.getLength(); end < n; end++) {
+                        testPath = paths.get(end);
+                        testIndex = (depth < testPath.getLength() ? testPath.get(depth) : -1);
+
+                        if (!(testIndex >= index
+                              && testIndex < index + count
+                              && Sequence.Tree.isDescendant(basePath, testPath))) {
+                            break;
+                        }
+                    }
+
+                    // Clear all paths within [start, end>
+                    paths.remove(start, end - start);
+                }
+            }
+
+            // Decrement paths as necessary
+            for (int i = start, n = paths.getLength(); i < n; i++) {
+                Sequence<Integer> affectedPath = paths.get(i);
+
+                if (!Sequence.Tree.isDescendant(basePath, affectedPath)) {
+                    // All paths from here forward are guaranteed to be unaffected
+                    break;
+                }
+
+                affectedPath.update(depth, affectedPath.get(depth) - count);
+            }
         }
 
         /**
          * Removes affected paths from within the specified sequence in response
-         * to a base path having been sorted.  For instance, if <tt>paths</tt>
-         * is <tt>[[3, 0], [3, 1], [5, 0]]</tt> and <tt>basePath</tt> is
-         * <tt>[3]</tt>, then <tt>paths</tt> will be updated to
-         * <tt>[[5, 0]]</tt>. No events are fired.
+         * to an item having been updated in the base path.  For instance, if
+         * <tt>paths</tt> is <tt>[[3], [3, 0], [3, 1], [5, 0]]</tt>,
+         * <tt>basePath</tt> is <tt>[3]</tt>, and <tt>index</tt> is <tt>0</tt>,
+         * then <tt>paths</tt> will be updated to
+         * <tt>[[3], [3, 1], [5, 0]]</tt>. No events are fired.
          *
          * @param paths
          * Sequence of paths guaranteed to be sorted by "row order".
          *
          * @param basePath
-         * The path to the parent of the inserted item.
+         * The path to the parent of the updated item.
+         *
+         * @param index
+         * The index of the updated item within its parent.
+         */
+        private void clearPaths(Sequence<Sequence<Integer>> paths,
+            Sequence<Integer> basePath, int index) {
+            // Calculate the child's path
+            Sequence<Integer> childPath = new ArrayList<Integer>(basePath);
+            childPath.add(index);
+
+            // Find the child path's place in our sorted paths sequence
+            int clearIndex = Sequence.Search.binarySearch(paths, childPath, PATH_COMPARATOR);
+            if (clearIndex < 0) {
+                clearIndex = -(clearIndex + 1);
+            }
+
+            // Remove the child and all descendants from the paths list
+            for (int i = clearIndex, n = paths.getLength(); i < n; i++) {
+                Sequence<Integer> affectedPath = paths.get(clearIndex);
+
+                if (!Sequence.Tree.isDescendant(childPath, affectedPath)) {
+                    break;
+                }
+
+                paths.remove(clearIndex, 1);
+            }
+        }
+
+        /**
+         * Removes affected paths from within the specified sequence in response
+         * to a base path having been sorted.  For instance, if <tt>paths</tt>
+         * is <tt>[[3], [3, 0], [3, 1], [5, 0]]</tt> and <tt>basePath</tt> is
+         * <tt>[3]</tt>, then <tt>paths</tt> will be updated to
+         * <tt>[[3], [5, 0]]</tt>. No events are fired.
+         *
+         * @param paths
+         * Sequence of paths guaranteed to be sorted by "row order".
+         *
+         * @param basePath
+         * The path whose children were sorted.
          */
         private void clearPaths(Sequence<Sequence<Integer>> paths, Sequence<Integer> basePath) {
             // Find first descendant in paths list, if it exists
