@@ -712,6 +712,9 @@
         <copy file="${tutorials}/${ant.project.name}-tutorials.jar" todir="${deploy}"/>
         <signjar jar="${deploy}/${ant.project.name}-tutorials.jar" signedjar="${deploy}/${ant.project.name}-tutorials.signed.jar"
             keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <copy file="${tutorials}/${ant.project.name}-stocktracker.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-stocktracker.jar" signedjar="${deploy}/${ant.project.name}-stocktracker.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
     </target>
 
     <!-- Remove trailing white space in all source files -->
