@@ -26,6 +26,8 @@ import java.awt.geom.GeneralPath;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.wtk.Button;
+import pivot.wtk.Checkbox;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
@@ -59,12 +61,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * @author tvolkert
      */
     protected static class NodeInfo {
-        public BranchInfo parent;
+        private BranchInfo parent;
+
         public Object data;
         public int depth;
         public boolean selected = false;
         public boolean highlighted = false;
         public boolean disabled = false;
+        public TreeView.NodeCheckState checkState = TreeView.NodeCheckState.UNCHECKED;
 
         public NodeInfo(BranchInfo parent, Object data) {
             this.parent = parent;
@@ -134,10 +138,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         }
     }
 
-    private static final int BRANCH_CONTROL_IMAGE_WIDTH = 8;
-    private static final int BRANCH_CONTROL_IMAGE_HEIGHT = 8;
-    private static final int VERTICAL_SPACING = 1;
-
     private BranchInfo rootBranchInfo = null;
     private List<NodeInfo> visibleNodes = new ArrayList<NodeInfo>();
 
@@ -163,6 +163,16 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     private Color branchControlInactiveSelectionColor;
     private Color gridColor;
     private boolean showGridLines;
+
+    private static final int BRANCH_CONTROL_IMAGE_WIDTH = 8;
+    private static final int BRANCH_CONTROL_IMAGE_HEIGHT = 8;
+    private static final int VERTICAL_SPACING = 1;
+
+    private static final Checkbox CHECKBOX = new Checkbox();
+
+    static {
+    	CHECKBOX.setSize(CHECKBOX.getPreferredSize());
+    }
 
     public TerraTreeViewSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -243,15 +253,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public int getPreferredHeight(int width) {
-        TreeView treeView = (TreeView)getComponent();
-        TreeView.NodeRenderer nodeRenderer = treeView.getNodeRenderer();
-
-        int preferredHeight = 0;
-
-        int nodeHeight = nodeRenderer.getPreferredHeight(-1);
+        int nodeHeight = getNodeHeight();
         int visibleNodeCount = visibleNodes.getLength();
 
-        preferredHeight = nodeHeight * visibleNodeCount;
+        int preferredHeight = nodeHeight * visibleNodeCount;
 
         if (visibleNodeCount > 1) {
             preferredHeight += VERTICAL_SPACING * (visibleNodeCount - 1);
@@ -281,6 +286,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         graphics.setPaint(backgroundColor);
         graphics.fillRect(0, 0, width, height);
 
+        // nodeStart and nodeEnd are both inclusive
         int nodeStart = 0;
         int nodeEnd = visibleNodes.getLength() - 1;
 
@@ -372,8 +378,30 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             }
 
             // Paint the checkbox
+            TreeView.NodeCheckState checkState = TreeView.NodeCheckState.UNCHECKED;
             if (treeView.getCheckmarksEnabled()) {
-                // TODO Paint the checkbox
+                checkState = nodeInfo.checkState;
+
+                int checkboxY = (nodeHeight - CHECKBOX.getHeight()) / 2;
+            	Graphics2D checkboxGraphics = (Graphics2D)graphics.create(nodeX,
+        			nodeY + checkboxY, CHECKBOX.getWidth(), CHECKBOX.getHeight());
+
+                Button.State state;
+                switch (checkState) {
+                case CHECKED:
+                    state = Button.State.SELECTED;
+                    break;
+                case MIXED:
+                    state = Button.State.MIXED;
+                    break;
+                default:
+                    state = Button.State.UNSELECTED;
+                    break;
+                }
+
+            	CHECKBOX.setState(state);
+            	CHECKBOX.paint(checkboxGraphics);
+            	checkboxGraphics.dispose();
 
                 nodeX += indent + spacing;
             }
@@ -384,7 +412,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             Graphics2D rendererGraphics = (Graphics2D)graphics.create(nodeX, nodeY,
                 nodeWidth, nodeHeight);
             nodeRenderer.render(nodeInfo.data, treeView, expanded, selected,
-                TreeView.NodeCheckState.UNCHECKED, highlighted, disabled);
+                checkState, highlighted, disabled);
             nodeRenderer.setSize(nodeWidth, nodeHeight);
             nodeRenderer.paint(rendererGraphics);
             rendererGraphics.dispose();
