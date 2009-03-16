@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2008 VMware, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Border xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
+    <content>
+        <FlowPane styles="{padding:4, spacing:10}">
+            <FlowPane orientation="vertical">
+                <Label text="Simple" styles="{fontBold:true}"/>
+                <Border styles="{padding:0, color:10}">
+                    <content>
+                        <ScrollPane preferredWidth="160" preferredHeight="240"
+                            horizontalScrollBarPolicy="fillToCapacity"
+                            styles="{backgroundColor:null}">
+                            <view>
+                                <TreeView>
+                                    <treeData>
+                                        <content:TreeBranch>
+                                            <content:TreeBranch text="Numbers">
+                                                <content:TreeNode text="0"/>
+                                                <content:TreeNode text="1"/>
+                                                <content:TreeNode text="2"/>
+                                                <content:TreeNode text="3"/>
+                                                <content:TreeNode text="4"/>
+                                                <content:TreeNode text="5"/>
+                                                <content:TreeNode text="6"/>
+                                                <content:TreeNode text="7"/>
+                                                <content:TreeNode text="8"/>
+                                                <content:TreeNode text="9"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Letters">
+                                                <content:TreeNode text="A"/>
+                                                <content:TreeNode text="B"/>
+                                                <content:TreeNode text="C"/>
+                                                <content:TreeNode text="D"/>
+                                                <content:TreeNode text="E"/>
+                                                <content:TreeNode text="F"/>
+                                                <content:TreeNode text="G"/>
+                                                <content:TreeNode text="H"/>
+                                                <content:TreeNode text="I"/>
+                                                <content:TreeNode text="J"/>
+                                                <content:TreeNode text="K"/>
+                                                <content:TreeNode text="L"/>
+                                                <content:TreeNode text="M"/>
+                                                <content:TreeNode text="N"/>
+                                                <content:TreeNode text="O"/>
+                                                <content:TreeNode text="P"/>
+                                                <content:TreeNode text="Q"/>
+                                                <content:TreeNode text="R"/>
+                                                <content:TreeNode text="S"/>
+                                                <content:TreeNode text="T"/>
+                                                <content:TreeNode text="U"/>
+                                                <content:TreeNode text="V"/>
+                                                <content:TreeNode text="W"/>
+                                                <content:TreeNode text="X"/>
+                                                <content:TreeNode text="Y"/>
+                                                <content:TreeNode text="Z"/>
+                                            </content:TreeBranch>
+                                        </content:TreeBranch>
+                                    </treeData>
+                                    <nodeRenderer>
+                                        <content:TreeViewNodeRenderer showIcon="false"/>
+                                    </nodeRenderer>
+                                </TreeView>
+                            </view>
+                        </ScrollPane>
+                    </content>
+                </Border>
+            </FlowPane>
+
+            <FlowPane orientation="vertical">
+                <Label text="Editable" styles="{fontBold:true}"/>
+                <Border styles="{padding:0, color:10}">
+                    <content>
+                        <ScrollPane wtkx:id="editableTreeViewScrollPane" preferredWidth="160" preferredHeight="240"
+                            horizontalScrollBarPolicy="fillToCapacity"
+                            styles="{backgroundColor:null}">
+                            <view>
+                                <TreeView wtkx:id="editableTreeView">
+                                    <treeData>
+                                        <content:TreeBranch>
+                                            <content:TreeBranch text="Activity" icon="@folder.png">
+                                                <content:TreeBranch text="Games" icon="@folder.png">
+                                                    <content:TreeNode text="A very long game name that just serves to show how a wide tree node behaves" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Air Hockey" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Foosball" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Ping Pong" icon="@page_white.png"/>
+                                                </content:TreeBranch>
+                                                <content:TreeBranch text="Sports" icon="@folder.png">
+                                                    <content:TreeNode text="Baseball" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Basketball" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Football" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Ice Hockey" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Soccer" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Softball" icon="@page_white.png"/>
+                                                </content:TreeBranch>
+                                                <content:TreeNode text="Camping" icon="@page_white.png"/>
+                                                <content:TreeNode text="Skiing" icon="@page_white.png"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Occasion" icon="@folder.png">
+                                                <content:TreeBranch text="Holidays" icon="@folder.png">
+                                                    <content:TreeNode text="Christmas" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Independence Day" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Labor Day" icon="@page_white.png"/>
+                                                    <content:TreeNode text="New Year's Day" icon="@page_white.png"/>
+                                                    <content:TreeNode text="President's Day" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Thanksgiving" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Valentine's Day" icon="@page_white.png"/>
+                                                    <content:TreeNode text="Veteran's Day" icon="@page_white.png"/>
+                                                </content:TreeBranch>
+                                                <content:TreeNode text="Anniversary" icon="@page_white.png"/>
+                                                <content:TreeNode text="Birthday" icon="@page_white.png"/>
+                                                <content:TreeNode text="Wedding" icon="@page_white.png"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Location" icon="@folder.png">
+                                                <content:TreeNode text="Africa" icon="@folder.png"/>
+                                                <content:TreeNode text="Antarctica" icon="@folder.png"/>
+                                                <content:TreeNode text="Asia" icon="@folder.png"/>
+                                                <content:TreeNode text="Australia" icon="@folder.png"/>
+                                                <content:TreeNode text="Europe" icon="@folder.png"/>
+                                                <content:TreeNode text="North America" icon="@folder.png"/>
+                                                <content:TreeBranch text="South America" icon="@folder.png">
+                                                    <content:TreeNode text="Peru" icon="@page_white.png"/>
+                                                </content:TreeBranch>
+                                            </content:TreeBranch>
+                                        </content:TreeBranch>
+                                    </treeData>
+                                    <nodeRenderer>
+                                        <content:TreeViewNodeRenderer showIcon="true"/>
+                                    </nodeRenderer>
+                                </TreeView>
+                            </view>
+                        </ScrollPane>
+                    </content>
+                </Border>
+            </FlowPane>
+
+            <FlowPane orientation="vertical">
+                <Label text="Multi-Select" styles="{fontBold:true}"/>
+                <Border styles="{padding:0, color:10}">
+                    <content>
+                        <ScrollPane preferredWidth="160" preferredHeight="240"
+                            horizontalScrollBarPolicy="fillToCapacity"
+                            styles="{backgroundColor:null}">
+                            <view>
+                                <TreeView selectMode="multi">
+                                    <treeData>
+                                        <content:TreeBranch>
+                                            <content:TreeBranch text="Africa" icon="@folder.png"/>
+                                            <content:TreeBranch text="Antarctica" icon="@folder.png"/>
+                                            <content:TreeBranch text="Asia" icon="@folder.png"/>
+                                            <content:TreeBranch text="Australia" icon="@folder.png"/>
+                                            <content:TreeBranch text="Europe" icon="@folder.png">
+                                                <content:TreeNode text="Albania" icon="@page_white.png"/>
+                                                <content:TreeNode text="Andorra" icon="@page_white.png"/>
+                                                <content:TreeNode text="Armenia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Austria" icon="@page_white.png"/>
+                                                <content:TreeNode text="Azerbaijan" icon="@page_white.png"/>
+                                                <content:TreeNode text="Belarus" icon="@page_white.png"/>
+                                                <content:TreeNode text="Belgium" icon="@page_white.png"/>
+                                                <content:TreeNode text="Bosnia and Herzegovina" icon="@page_white.png"/>
+                                                <content:TreeNode text="Bulgaria" icon="@page_white.png"/>
+                                                <content:TreeNode text="Croatia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Cyprus" icon="@page_white.png"/>
+                                                <content:TreeNode text="Czech Republic" icon="@page_white.png"/>
+                                                <content:TreeNode text="Denmark" icon="@page_white.png"/>
+                                                <content:TreeNode text="Estonia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Finland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Former Yugoslav Republic of Macedonia" icon="@page_white.png"/>
+                                                <content:TreeNode text="France" icon="@page_white.png"/>
+                                                <content:TreeNode text="Georgia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Germany" icon="@page_white.png"/>
+                                                <content:TreeNode text="Greece" icon="@page_white.png"/>
+                                                <content:TreeNode text="Hungary" icon="@page_white.png"/>
+                                                <content:TreeNode text="Iceland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Ireland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Italy" icon="@page_white.png"/>
+                                                <content:TreeNode text="Latvia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Liechtenstein" icon="@page_white.png"/>
+                                                <content:TreeNode text="Lithuania" icon="@page_white.png"/>
+                                                <content:TreeNode text="Luxembourg" icon="@page_white.png"/>
+                                                <content:TreeNode text="Malta" icon="@page_white.png"/>
+                                                <content:TreeNode text="Moldova" icon="@page_white.png"/>
+                                                <content:TreeNode text="Monaco" icon="@page_white.png"/>
+                                                <content:TreeNode text="Montenegro" icon="@page_white.png"/>
+                                                <content:TreeNode text="Netherlands" icon="@page_white.png"/>
+                                                <content:TreeNode text="Norway" icon="@page_white.png"/>
+                                                <content:TreeNode text="Poland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Portugal" icon="@page_white.png"/>
+                                                <content:TreeNode text="Romania" icon="@page_white.png"/>
+                                                <content:TreeNode text="Russia" icon="@page_white.png"/>
+                                                <content:TreeNode text="San Marino" icon="@page_white.png"/>
+                                                <content:TreeNode text="Serbia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Slovakia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Slovenia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Spain" icon="@page_white.png"/>
+                                                <content:TreeNode text="Sweden" icon="@page_white.png"/>
+                                                <content:TreeNode text="Switzerland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Turkey" icon="@page_white.png"/>
+                                                <content:TreeNode text="Ukraine" icon="@page_white.png"/>
+                                                <content:TreeNode text="United Kingdom" icon="@page_white.png"/>
+                                                <content:TreeNode text="Vatican City State" icon="@page_white.png"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="North America" icon="@folder.png">
+                                                <content:TreeNode text="Alabama" icon="@page_white.png"/>
+                                                <content:TreeNode text="Alaska" icon="@page_white.png"/>
+                                                <content:TreeNode text="Arizona" icon="@page_white.png"/>
+                                                <content:TreeNode text="Arkansas" icon="@page_white.png"/>
+                                                <content:TreeNode text="California" icon="@page_white.png"/>
+                                                <content:TreeNode text="Colorado" icon="@page_white.png"/>
+                                                <content:TreeNode text="Connecticut" icon="@page_white.png"/>
+                                                <content:TreeNode text="Delaware" icon="@page_white.png"/>
+                                                <content:TreeNode text="District of Columbia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Florida" icon="@page_white.png"/>
+                                                <content:TreeNode text="Georgia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Hawaii" icon="@page_white.png"/>
+                                                <content:TreeNode text="Idaho" icon="@page_white.png"/>
+                                                <content:TreeNode text="Illinois" icon="@page_white.png"/>
+                                                <content:TreeNode text="Indiana" icon="@page_white.png"/>
+                                                <content:TreeNode text="Iowa" icon="@page_white.png"/>
+                                                <content:TreeNode text="Kansas" icon="@page_white.png"/>
+                                                <content:TreeNode text="Kentucky" icon="@page_white.png"/>
+                                                <content:TreeNode text="Louisiana" icon="@page_white.png"/>
+                                                <content:TreeNode text="Maine" icon="@page_white.png"/>
+                                                <content:TreeNode text="Maryland" icon="@page_white.png"/>
+                                                <content:TreeNode text="Massachusetts" icon="@page_white.png"/>
+                                                <content:TreeNode text="Michigan" icon="@page_white.png"/>
+                                                <content:TreeNode text="Minnesota" icon="@page_white.png"/>
+                                                <content:TreeNode text="Mississippi" icon="@page_white.png"/>
+                                                <content:TreeNode text="Missouri" icon="@page_white.png"/>
+                                                <content:TreeNode text="Montana" icon="@page_white.png"/>
+                                                <content:TreeNode text="Nebraska" icon="@page_white.png"/>
+                                                <content:TreeNode text="Nevada" icon="@page_white.png"/>
+                                                <content:TreeNode text="New Hampshire" icon="@page_white.png"/>
+                                                <content:TreeNode text="New Jersey" icon="@page_white.png"/>
+                                                <content:TreeNode text="New Mexico" icon="@page_white.png"/>
+                                                <content:TreeNode text="New York" icon="@page_white.png"/>
+                                                <content:TreeNode text="North Carolina" icon="@page_white.png"/>
+                                                <content:TreeNode text="North Dakota" icon="@page_white.png"/>
+                                                <content:TreeNode text="Ohio" icon="@page_white.png"/>
+                                                <content:TreeNode text="Oklahoma" icon="@page_white.png"/>
+                                                <content:TreeNode text="Oregon" icon="@page_white.png"/>
+                                                <content:TreeNode text="Pennsylvania" icon="@page_white.png"/>
+                                                <content:TreeNode text="Rhode Island" icon="@page_white.png"/>
+                                                <content:TreeNode text="South Carolina" icon="@page_white.png"/>
+                                                <content:TreeNode text="South Dakota" icon="@page_white.png"/>
+                                                <content:TreeNode text="Tennessee" icon="@page_white.png"/>
+                                                <content:TreeNode text="Texas" icon="@page_white.png"/>
+                                                <content:TreeNode text="Utah" icon="@page_white.png"/>
+                                                <content:TreeNode text="Vermont" icon="@page_white.png"/>
+                                                <content:TreeNode text="Virginia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Washington" icon="@page_white.png"/>
+                                                <content:TreeNode text="West Virginia" icon="@page_white.png"/>
+                                                <content:TreeNode text="Wisconsin" icon="@page_white.png"/>
+                                                <content:TreeNode text="Wyoming" icon="@page_white.png"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="South America" icon="@folder.png"/>
+                                        </content:TreeBranch>
+                                    </treeData>
+                                </TreeView>
+                            </view>
+                        </ScrollPane>
+                    </content>
+                </Border>
+            </FlowPane>
+        </FlowPane>
+    </content>
+</Border>

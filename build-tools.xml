@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="pivot" default="build">
+    <property name="src" value="src"/>
+    <property name="bin" value="ant-bin"/>
+    <property name="tools" value="tools"/>
+
+    <!-- Compiler properties -->
+    <property name="compiler.optimize" value="true"/>
+    <property name="compiler.deprecation" value="true"/>
+    <property name="compiler.debug" value="true"/>
+
+    <!-- Build tools library -->
+    <target name="build">
+        <mkdir dir="${tools}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${tools}/${src}"
+            destDir="${tools}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="core/pivot-core.jar"/>
+                <pathelement location="web/pivot-web.jar"/>
+                <pathelement location="wtk/pivot-wtk.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${tools}/${ant.project.name}-tools.jar"/>
+        <jar jarfile="${tools}/${ant.project.name}-tools.jar">
+            <fileset dir="${tools}/${bin}"/>
+            <fileset dir="${tools}/${src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Clean the tools classes -->
+    <target name="clean">
+        <delete dir="${tools}/${bin}"/>
+        <delete file="${tools}/${ant.project.name}-tools.jar"/>
+    </target>
+</project>

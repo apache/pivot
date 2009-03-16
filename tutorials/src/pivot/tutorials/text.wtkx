@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2008 VMware, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<FlowPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    <Border>
+        <content>
+            <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:12, right:4}}">
+                <Label text="Text Input" styles="{fontBold:true}"/>
+                <Form>
+                    <sections>
+                        <Form.Section>
+	                        <TextInput Form.name="Basic" text="Pivot" textSize="12"/>
+	                        <TextInput Form.name="Password"
+	                            Form.flag="{messageType:'info', message:'This field has a maximum length of 12 characters.'}"
+	                            password="true" text="pivot" textSize="12" maximumLength="12" />
+                        </Form.Section>
+                    </sections>
+                </Form>
+            </FlowPane>
+        </content>
+    </Border>
+
+    <Border>
+        <content>
+            <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:8, right:4}}">
+                <Label text="Label Wrapping" styles="{fontBold:true}"/>
+                <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,  sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+                    preferredWidth="320" styles="{font:'Times New Roman 13', wrapText:true}"/>
+            </FlowPane>
+        </content>
+    </Border>
+</FlowPane>

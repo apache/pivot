@@ -1,0 +1,14 @@
+
+{
+    "glossary": {
+		"GlossDiv": {
+			"GlossList": {
+                "GlossEntry": {
+					"Acronym": "XSGML",
+					"GlossTerm": "eXtra Standard Generalized Markup Language"
+                }
+            }
+        }
+    }
+
+}

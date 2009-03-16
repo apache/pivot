@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2008 VMware, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<FlowPane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008"
+    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
+    <Border>
+        <content>
+            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+                <FlowPane orientation="vertical">
+                    <Label text="Basic Push Buttons" styles="{fontBold:true}"/>
+                    <FlowPane>
+                        <PushButton buttonData="One"/>
+                        <PushButton buttonData="Two"/>
+                        <PushButton buttonData="Three" enabled="false"/>
+                    </FlowPane>
+                </FlowPane>
+
+                <FlowPane orientation="vertical">
+                    <Label text="Ungrouped Toggle Buttons" styles="{fontBold:true}"/>
+                    <FlowPane>
+                        <PushButton buttonData="One" toggleButton="true"/>
+                        <PushButton buttonData="Two" toggleButton="true"/>
+                        <PushButton buttonData="Three" toggleButton="true" enabled="false"/>
+                    </FlowPane>
+                </FlowPane>
+
+                <FlowPane orientation="vertical">
+                    <Label text="Grouped Toggle Buttons" styles="{fontBold:true}"/>
+                    <FlowPane>
+                        <PushButton buttonData="One" toggleButton="true" group="toggleButtons"/>
+                        <PushButton buttonData="Two" toggleButton="true" group="toggleButtons"/>
+                        <PushButton buttonData="Three" toggleButton="true" group="toggleButtons" selected="true" enabled="false"/>
+                    </FlowPane>
+                </FlowPane>
+
+                <FlowPane orientation="vertical">
+                    <Label text="Image Buttons" styles="{fontBold:true}"/>
+                    <FlowPane>
+                        <PushButton>
+                            <buttonData>
+                                <content:ButtonData icon="@bell.png" text="Bell"/>
+                            </buttonData>
+                        </PushButton>
+                        <PushButton>
+                            <buttonData>
+                                <content:ButtonData icon="@clock.png" text="Clock"/>
+                            </buttonData>
+                            <dataRenderer>
+                                <content:ButtonDataRenderer orientation="vertical"/>
+                            </dataRenderer>
+                        </PushButton>
+                        <PushButton enabled="false">
+                            <buttonData>
+                                <content:ButtonData icon="@house.png" text="House"/>
+                            </buttonData>
+                        </PushButton>
+                    </FlowPane>
+                </FlowPane>
+
+                <FlowPane orientation="vertical">
+                    <Label text="Toolbar Buttons" styles="{fontBold:true}"/>
+                    <FlowPane>
+                        <PushButton styles="{toolbar:true}">
+                            <buttonData>
+                                <content:ButtonData icon="@bell.png"/>
+                            </buttonData>
+                        </PushButton>
+                        <PushButton styles="{toolbar:true}">
+                            <buttonData>
+                                <content:ButtonData icon="@clock.png"/>
+                            </buttonData>
+                        </PushButton>
+                        <PushButton enabled="false" styles="{toolbar:true}">
+                            <buttonData>
+                                <content:ButtonData icon="@house.png"/>
+                            </buttonData>
+                        </PushButton>
+                    </FlowPane>
+                </FlowPane>
+            </FlowPane>
+        </content>
+    </Border>
+
+    <Border>
+        <content>
+            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+                <FlowPane orientation="vertical">
+                    <Label text="Basic Radio Buttons" styles="{fontBold:true}"/>
+                    <FlowPane>
+                        <RadioButton buttonData="One" group="radioButtons"/>
+                        <RadioButton buttonData="Two" group="radioButtons"/>
+                        <RadioButton buttonData="Three" group="radioButtons" selected="true" enabled="false"/>
+                    </FlowPane>
+                </FlowPane>
+
+                <FlowPane orientation="vertical">
+                    <Label text="Image Radio Buttons" styles="{fontBold:true}"/>
+                    <FlowPane orientation="vertical">
+                        <RadioButton group="imageRadioButtons">
+                            <buttonData>
+                                <content:ButtonData icon="@bell.png" text="Bell"/>
+                            </buttonData>
+                        </RadioButton>
+                        <RadioButton group="imageRadioButtons">
+                            <buttonData>
+                                <content:ButtonData icon="@clock.png" text="Clock"/>
+                            </buttonData>
+                        </RadioButton>
+                        <RadioButton group="imageRadioButtons" selected="true" enabled="false">
+                            <buttonData>
+                                <content:ButtonData icon="@house.png" text="House"/>
+                            </buttonData>
+                        </RadioButton>
+                    </FlowPane>
+                </FlowPane>
+            </FlowPane>
+        </content>
+    </Border>
+
+    <Border>
+        <content>
+            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+                <FlowPane orientation="vertical">
+                    <Label text="Basic Checkboxes" styles="{fontBold:true}"/>
+                    <FlowPane>
+                        <Checkbox buttonData="One"/>
+                        <Checkbox buttonData="Two"/>
+                        <Checkbox buttonData="Three" selected="true" enabled="false"/>
+                    </FlowPane>
+                </FlowPane>
+
+                <FlowPane orientation="vertical">
+                    <Label text="Image Checkboxes" styles="{fontBold:true}"/>
+                    <FlowPane orientation="vertical">
+                        <Checkbox>
+                            <buttonData>
+                                <content:ButtonData icon="@clock.png" text="Clock"/>
+                            </buttonData>
+                        </Checkbox>
+                        <Checkbox>
+                            <buttonData>
+                                <content:ButtonData icon="@bell.png" text="Bell"/>
+                            </buttonData>
+                        </Checkbox>
+                        <Checkbox selected="true" enabled="false">
+                            <buttonData>
+                                <content:ButtonData icon="@house.png" text="House"/>
+                            </buttonData>
+                        </Checkbox>
+                    </FlowPane>
+                </FlowPane>
+
+                <FlowPane orientation="vertical">
+                    <Label text="Tri-state Checkboxes" styles="{fontBold:true}"/>
+                    <FlowPane orientation="vertical">
+                        <Checkbox buttonData="Read" triState="true" state="selected"/>
+                        <Checkbox buttonData="Write" triState="true" state="unselected"/>
+                        <Checkbox buttonData="Execute" triState="true" state="mixed" enabled="false"/>
+                    </FlowPane>
+                </FlowPane>
+            </FlowPane>
+        </content>
+    </Border>
+
+    <Border>
+        <content>
+            <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+                <FlowPane orientation="vertical">
+                    <Label text="Basic Link Buttons" styles="{fontBold:true}"/>
+                    <FlowPane>
+                        <LinkButton buttonData="One"/>
+                        <LinkButton buttonData="Two"/>
+                        <LinkButton buttonData="Three" enabled="false"/>
+                    </FlowPane>
+                </FlowPane>
+
+                <FlowPane orientation="vertical">
+                    <Label text="Image Link Buttons" styles="{fontBold:true}"/>
+                    <FlowPane orientation="vertical">
+                        <LinkButton>
+                            <buttonData>
+                                <content:ButtonData icon="@bell.png" text="Bell"/>
+                            </buttonData>
+                        </LinkButton>
+                        <LinkButton>
+                            <buttonData>
+                                <content:ButtonData icon="@clock.png" text="Clock"/>
+                            </buttonData>
+                        </LinkButton>
+                        <LinkButton enabled="false">
+                            <buttonData>
+                                <content:ButtonData icon="@house.png" text="House"/>
+                            </buttonData>
+                        </LinkButton>
+                    </FlowPane>
+                </FlowPane>
+            </FlowPane>
+        </content>
+    </Border>
+</FlowPane>
+
