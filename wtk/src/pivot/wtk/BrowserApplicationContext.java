@@ -21,6 +21,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 
+import netscape.javascript.JSObject;
+
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
@@ -184,6 +186,14 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         private static final long serialVersionUID = 0;
 
+        public HostApplet() {
+            hostApplet = this;
+        }
+
+        public Application getApplication() {
+            return application;
+        }
+
         @Override
         public void init() {
             InitCallback initCallback = new InitCallback();
@@ -231,6 +241,24 @@ public final class BrowserApplicationContext extends ApplicationContext {
         @Override
         public void update(Graphics graphics) {
             paint(graphics);
+        }
+    }
+
+    private static HostApplet hostApplet = null;
+
+    /**
+     * Evaluates the specified script in the browser's JavaScript page
+     * context and returns the result.
+     * <p>
+     * NOTE This feature requires that the applet run in its own JVM; see JDK
+     * documentation on the <tt>separate_jvm</tt> applet parameter.
+     */
+    public static Object eval(String script) {
+        try {
+            JSObject window = JSObject.getWindow(hostApplet);
+            return window.eval(script);
+        } catch (Throwable throwable) {
+            throw new UnsupportedOperationException(throwable);
         }
     }
 }

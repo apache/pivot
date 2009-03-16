@@ -15,12 +15,21 @@
  */
 package pivot.wtk;
 
+import pivot.wtk.text.TextNode;
+
 /**
  * Text input listener interface.
  *
  * @author gbrown
  */
 public interface TextInputListener {
+    /**
+     * Called when a text input's text node has changed.
+     * @param textInput
+     * @param previousTextNode
+     */
+    public void textNodeChanged(TextInput textInput, TextNode previousTextNode);
+
     /**
      * Called when a text input's text size has changed.
      *

@@ -90,6 +90,21 @@ public class TextArea extends Component {
         }
     }
 
+    private static class TextAreaCharacterListenerList extends ListenerList<TextAreaCharacterListener>
+        implements TextAreaCharacterListener {
+        public void charactersInserted(TextArea textArea, int index, int count) {
+            for (TextAreaCharacterListener listener : this) {
+                listener.charactersInserted(textArea, index, count);
+            }
+        }
+
+        public void charactersRemoved(TextArea textArea, int index, int count) {
+            for (TextAreaCharacterListener listener : this) {
+                listener.charactersRemoved(textArea, index, count);
+            }
+        }
+    }
+
     private static class TextAreaSelectionListenerList extends ListenerList<TextAreaSelectionListener>
         implements TextAreaSelectionListener {
         public void selectionChanged(TextArea textArea,
@@ -115,9 +130,6 @@ public class TextArea extends Component {
         }
 
         public void rangeInserted(Node node, int offset, int characterCount) {
-            int previousSelectionStart = selectionStart;
-            int previousSelectionLength = selectionLength;
-
             if (selectionStart + selectionLength > offset) {
                 if (selectionStart > offset) {
                     selectionStart += characterCount;
@@ -126,17 +138,10 @@ public class TextArea extends Component {
                 }
             }
 
-            if (previousSelectionStart != selectionStart
-                || previousSelectionLength != selectionLength) {
-                textAreaSelectionListeners.selectionChanged(TextArea.this,
-                    previousSelectionStart, previousSelectionLength);
-            }
+            textAreaCharacterListeners.charactersInserted(TextArea.this, offset, characterCount);
         }
 
         public void rangeRemoved(Node node, int offset, int characterCount) {
-            int previousSelectionStart = selectionStart;
-            int previousSelectionLength = selectionLength;
-
             if (selectionStart + selectionLength > offset) {
                 if (selectionStart > offset) {
                     selectionStart -= characterCount;
@@ -145,15 +150,12 @@ public class TextArea extends Component {
                 }
             }
 
-            if (previousSelectionStart != selectionStart
-                || previousSelectionLength != selectionLength) {
-                textAreaSelectionListeners.selectionChanged(TextArea.this,
-                    previousSelectionStart, previousSelectionLength);
-            }
+            textAreaCharacterListeners.charactersRemoved(TextArea.this, offset, characterCount);
         }
     };
 
     private TextAreaListenerList textAreaListeners = new TextAreaListenerList();
+    private TextAreaCharacterListenerList textAreaCharacterListeners = new TextAreaCharacterListenerList();
     private TextAreaSelectionListenerList textAreaSelectionListeners = new TextAreaSelectionListenerList();
 
     public TextArea() {
@@ -240,8 +242,6 @@ public class TextArea extends Component {
 
     /**
      * Returns the text area's editable flag.
-     *
-     * @return
      */
     public boolean isEditable() {
         return editable;
@@ -251,8 +251,6 @@ public class TextArea extends Component {
      * Sets the text area's editable flag.
      *
      * @param editable
-     *
-     * @return
      */
     public void setEditable(boolean editable) {
         if (this.editable != editable) {
@@ -563,6 +561,10 @@ public class TextArea extends Component {
 
     public ListenerList<TextAreaListener> getTextAreaListeners() {
         return textAreaListeners;
+    }
+
+    public ListenerList<TextAreaCharacterListener> getTextAreaCharacterListeners() {
+        return textAreaCharacterListeners;
     }
 
     public ListenerList<TextAreaSelectionListener> getTextAreaSelectionListeners() {

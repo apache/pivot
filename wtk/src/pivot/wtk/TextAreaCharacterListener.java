@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 VMware, Inc.
+ * Copyright (c) 2009 VMware, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,26 @@
 package pivot.wtk;
 
 /**
- * Text area selection listener interface.
+ * Text area character listener interface.
  *
  * @author gbrown
  */
-public interface TextAreaSelectionListener {
+public interface TextAreaCharacterListener {
     /**
-     * Called when a text area's selection state has changed.
+     * Called when characters have been inserted into a text area.
      *
      * @param textArea
-     * @param previousSelectionStart
-     * @param previousSelectionLength
+     * @param index
+     * @param count
      */
-    public void selectionChanged(TextArea textArea,
-        int previousSelectionStart, int previousSelectionLength);
+    public void charactersInserted(TextArea textArea, int index, int count);
+
+    /**
+     * Called when characters have been removed from a text area.
+     *
+     * @param textArea
+     * @param index
+     * @param count
+     */
+    public void charactersRemoved(TextArea textArea, int index, int count);
 }

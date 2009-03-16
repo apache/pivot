@@ -41,7 +41,7 @@ public interface TextAreaListener {
     /**
      * Called when a text area's text key has changed.
      *
-     * @param textInput
+     * @param textArea
      * @param previousTextKey
      */
     public void textKeyChanged(TextArea textArea, String previousTextKey);

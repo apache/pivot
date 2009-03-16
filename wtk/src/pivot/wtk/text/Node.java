@@ -96,8 +96,6 @@ public abstract class Node {
 
     /**
      * Returns the node's offset within the document.
-     *
-     * @return
      */
     public int getDocumentOffset() {
         Element parent = getParent();

@@ -96,10 +96,8 @@ public class Text implements Application {
         TextInput stateTextInput =
             (TextInput)wtkxSerializer.getObjectByName("stateTextInput");
 
-        stateTextInput.getTextInputCharacterListeners().add(new
-            TextInputCharacterListener() {
-            public void charactersInserted(TextInput textInput,
-                int index, int count) {
+        stateTextInput.getTextInputCharacterListeners().add(new TextInputCharacterListener() {
+            public void charactersInserted(TextInput textInput, int index, int count) {
                 String text = textInput.getText();
 
                 int i = Sequence.Search.binarySearch(states, text,
@@ -127,11 +125,7 @@ public class Text implements Application {
                 }
             }
 
-            public void charactersRemoved(TextInput textInput, int index,
-                String characters) {
-            }
-
-            public void charactersReset(TextInput textInput) {
+            public void charactersRemoved(TextInput textInput, int index, int count) {
             }
         });
 

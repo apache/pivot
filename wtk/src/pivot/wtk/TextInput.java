@@ -15,8 +15,14 @@
  */
 package pivot.wtk;
 
+import java.io.IOException;
+
 import pivot.collections.Dictionary;
 import pivot.util.ListenerList;
+import pivot.wtk.text.Element;
+import pivot.wtk.text.Node;
+import pivot.wtk.text.NodeListener;
+import pivot.wtk.text.TextNode;
 
 /**
  * A component that allows a user to enter a single line of unformatted text.
@@ -31,6 +37,11 @@ public class TextInput extends Component {
      */
     private static class TextInputListenerList extends ListenerList<TextInputListener>
         implements TextInputListener {
+        public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
+            for (TextInputListener listener : this) {
+                listener.textNodeChanged(textInput, previousTextNode);
+            }
+        }
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
             for (TextInputListener listener : this) {
                 listener.textSizeChanged(textInput, previousTextSize);
@@ -89,15 +100,9 @@ public class TextInput extends Component {
             }
         }
 
-        public void charactersRemoved(TextInput textInput, int index, String characters) {
+        public void charactersRemoved(TextInput textInput, int index, int count) {
             for (TextInputCharacterListener listener : this) {
-                listener.charactersRemoved(textInput, index, characters);
-            }
-        }
-
-        public void charactersReset(TextInput textInput) {
-            for (TextInputCharacterListener listener : this) {
-                listener.charactersReset(textInput);
+                listener.charactersRemoved(textInput, index, count);
             }
         }
     }
@@ -118,7 +123,8 @@ public class TextInput extends Component {
         }
     }
 
-    private StringBuilder textBuilder = new StringBuilder();
+    private TextNode textNode = null;
+
     private int selectionStart = 0;
     private int selectionLength = 0;
     private int textSize = DEFAULT_TEXT_SIZE;
@@ -127,6 +133,40 @@ public class TextInput extends Component {
     private String prompt = null;
     private String textKey = null;
 
+    private NodeListener textNodeListener = new NodeListener() {
+        public void parentChanged(Node node, Element previousParent) {
+        }
+
+        public void offsetChanged(Node node, int previousOffset) {
+        }
+
+        public void rangeInserted(Node node, int offset, int characterCount) {
+            if (selectionStart + selectionLength > offset) {
+                if (selectionStart > offset) {
+                    selectionStart += characterCount;
+                } else {
+                    selectionLength += characterCount;
+                }
+            }
+
+            textInputCharacterListeners.charactersInserted(TextInput.this, offset, characterCount);
+            textInputTextListeners.textChanged(TextInput.this);
+        }
+
+        public void rangeRemoved(Node node, int offset, int characterCount) {
+            if (selectionStart + selectionLength > offset) {
+                if (selectionStart > offset) {
+                    selectionStart -= characterCount;
+                } else {
+                    selectionLength -= characterCount;
+                }
+            }
+
+            textInputCharacterListeners.charactersRemoved(TextInput.this, offset, characterCount);
+            textInputTextListeners.textChanged(TextInput.this);
+        }
+    };
+
     private TextInputListenerList textInputListeners = new TextInputListenerList();
     private TextInputTextListenerList textInputTextListeners = new TextInputTextListenerList();
     private TextInputCharacterListenerList textInputCharacterListeners = new TextInputCharacterListenerList();
@@ -134,55 +174,56 @@ public class TextInput extends Component {
 
     private static final int DEFAULT_TEXT_SIZE = 20;
 
-    /**
-     * Creates a text input that is initially empty.
-     */
     public TextInput() {
-        this("");
-    }
-
-    /**
-     * Creates a text input that is initialized with the given text.
-     *
-     * @param text
-     * The initial text content of the text input.
-     */
-    public TextInput(String text) {
-        setText(text);
+        setTextNode(new TextNode());
         installSkin(TextInput.class);
     }
 
-    /**
-     * Returns the text content of the text input.
-     *
-     * @return
-     * A new string containing a copy of the text input's content.
-     */
-    public String getText() {
-        return textBuilder.toString();
+    public TextNode getTextNode() {
+        return textNode;
     }
 
-    /**
-     * Sets the text content of the text input. Clears any existing selection.
-     *
-     * param text
-     * The new content of the text input.
-     */
+    public void setTextNode(TextNode textNode) {
+        if (textNode == null) {
+            throw new IllegalArgumentException("textNode is null.");
+        }
+
+        if (textNode.getCharacterCount() > maximumLength) {
+            throw new IllegalArgumentException("Text length is greater than maximum length.");
+        }
+
+        TextNode previousTextNode = this.textNode;
+
+        if (previousTextNode != textNode) {
+            if (previousTextNode != null) {
+                previousTextNode.getNodeListeners().remove(textNodeListener);
+            }
+
+            if (textNode != null) {
+                textNode.getNodeListeners().add(textNodeListener);
+            }
+
+            // Clear the selection
+            selectionStart = 0;
+            selectionLength = 0;
+
+            this.textNode = textNode;
+
+            textInputListeners.textNodeChanged(this, previousTextNode);
+            textInputTextListeners.textChanged(this);
+        }
+    }
+
+    public String getText() {
+        return textNode.getText();
+    }
+
     public void setText(String text) {
         if (text == null) {
             throw new IllegalArgumentException("text is null.");
         }
 
-        if (text.length() > maximumLength) {
-            throw new IllegalArgumentException("text length is greater than maximum length.");
-        }
-
-        setSelection(0, 0);
-
-        textBuilder = new StringBuilder(text);
-
-        textInputCharacterListeners.charactersReset(this);
-        textInputTextListeners.textChanged(this);
+        setTextNode(new TextNode(text));
     }
 
     /**
@@ -213,121 +254,108 @@ public class TextInput extends Component {
      */
     public void insertText(String text, int index) {
         if (index < 0
-            || index > textBuilder.length()) {
+            || index > textNode.getCharacterCount()) {
             throw new IndexOutOfBoundsException();
         }
 
-        if (textBuilder.length() + text.length() > maximumLength) {
+        if (textNode.getCharacterCount() + text.length() > maximumLength) {
             throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
         }
 
-        // Insert the text
-        textBuilder.insert(index, text);
+        if (selectionLength > 0) {
+            // TODO Make this part of the undoable action (for all such
+            // actions)
+            textNode.removeRange(selectionStart, selectionLength);
+        }
 
-        // Update the selection
-        int previousSelectionStart = selectionStart;
-        int previousSelectionLength = selectionLength;
+        // Insert the text and update the selection
+        textNode.insertText(text, index);
+        setSelection(selectionStart + text.length(), selectionLength);
+    }
 
-        int count = text.length();
+    public void delete(Direction direction) {
+        if (direction == null) {
+            throw new IllegalArgumentException("direction is null.");
+        }
 
-        if (selectionStart + selectionLength >= index) {
-            if (selectionStart >= index) {
-                selectionStart += count;
-            } else {
-                selectionLength += count;
+        if (selectionLength > 0) {
+            // TODO Make this part of the undoable action (for all such
+            // actions)
+            textNode.removeRange(selectionStart, selectionLength);
+        } else {
+            int offset = selectionStart;
+
+            if (direction == Direction.BACKWARD) {
+                offset--;
+            }
+
+            if (offset >= 0
+                && offset < textNode.getCharacterCount()) {
+                textNode.removeRange(offset, 1);
             }
         }
+    }
 
-        // Notify listeners
-        textInputCharacterListeners.charactersInserted(this, index, count);
-        textInputTextListeners.textChanged(this);
+    public void cut() {
+        // Delete any selected text and put it on the clipboard
+        if (selectionLength > 0) {
+            TextNode removedRange =
+                (TextNode)textNode.removeRange(selectionStart, selectionLength);
 
-        if (previousSelectionStart != selectionStart
-            || previousSelectionLength != selectionLength) {
-            textInputSelectionListeners.selectionChanged(this,
-                previousSelectionStart, previousSelectionLength);
+            LocalManifest clipboardContent = new LocalManifest();
+            clipboardContent.putText(removedRange.getText());
+            Clipboard.setContent(clipboardContent);
         }
     }
 
-    /**
-     * Removes a range of characters from the text input's content.
-     *
-     * @param index
-     * The index of the first character to remove.
-     *
-     * @param count
-     * The number of characters to remove.
-     *
-     * @return
-     * A string containing the text that was removed.
-     */
-    public String removeText(int index, int count) {
-        if (index < 0
-            || index + count > textBuilder.length()) {
-            throw new IndexOutOfBoundsException();
+    public void copy() {
+        // Copy selection to clipboard
+        String selectedText = getSelectedText();
+
+        if (selectedText != null) {
+            LocalManifest clipboardContent = new LocalManifest();
+            clipboardContent.putText(selectedText);
+            Clipboard.setContent(clipboardContent);
         }
-
-        // Determine the range of indexes to remove; the interval is defined
-        // as [start, end)
-        int start = index;
-        int end = index + count;
-
-        String removed = textBuilder.substring(start, end);
-        textBuilder.delete(start, end);
-
-        // Update selection
-        int previousSelectionStart = selectionStart;
-        int previousSelectionLength = selectionLength;
-
-        // The selection interval is defined as [selectionStart, selectionEnd]
-        int selectionEnd = selectionStart + selectionLength - 1;
-
-        if (selectionEnd >= start) {
-            selectionStart = Math.min(start, selectionStart);
-            selectionEnd = Math.max(end - 1, selectionEnd) - count;
-
-            selectionLength = selectionEnd - selectionStart + 1;
-        }
-
-        textInputCharacterListeners.charactersRemoved(this, index, removed);
-        textInputTextListeners.textChanged(this);
-
-        if (previousSelectionStart != selectionStart
-            || previousSelectionLength != selectionLength) {
-            textInputSelectionListeners.selectionChanged(this,
-                previousSelectionStart, previousSelectionLength);
-        }
-
-        return removed;
     }
 
-    /**
-     * Returns the character at the given index.
-     *
-     * @param index
-     * The index of the character to return.
-     *
-     * @return
-     * The character at the given index.
-     */
-    public char getCharacter(int index) {
-        if (index < 0
-            || index >= textBuilder.length()) {
-            throw new IndexOutOfBoundsException();
-        }
+    public void paste() {
+        Manifest clipboardContent = Clipboard.getContent();
 
-        return textBuilder.charAt(index);
+        if (clipboardContent != null
+            && clipboardContent.containsText()) {
+            // Paste the string representation of the content
+            String text = null;
+            try {
+                text = clipboardContent.getText();
+            } catch(IOException exception) {
+                // No-op
+            }
+
+            if (text != null) {
+                if ((text.length() + textNode.getCharacterCount()) > maximumLength) {
+                    ApplicationContext.beep();
+                } else {
+                    // Remove any existing selection
+                    if (selectionLength > 0) {
+                        // TODO Make this part of the undoable action (for all such
+                        // actions)
+                        textNode.removeRange(selectionStart, selectionLength);
+                    }
+
+                    // Insert the clipboard contents
+                    insertText(text, selectionStart);
+                }
+            }
+        }
     }
 
-    /**
-     * Returns the total number of characters in the text input's text
-     * content.
-     *
-     * @return
-     * The length of the text input's content.
-     */
-    public int getCharacterCount() {
-        return textBuilder.length();
+    public void undo() {
+        // TODO
+    }
+
+    public void redo() {
+        // TODO
     }
 
     /**
@@ -366,7 +394,7 @@ public class TextInput extends Component {
         }
 
         if (selectionStart < 0
-            || selectionStart + selectionLength > textBuilder.length()) {
+            || selectionStart + selectionLength > textNode.getCharacterCount()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -406,8 +434,9 @@ public class TextInput extends Component {
         String selectedText = null;
 
         if (selectionLength > 0) {
-            selectedText = textBuilder.substring(selectionStart,
+            TextNode selectedRange = (TextNode)textNode.getRange(selectionStart,
                 selectionStart + selectionLength);
+            selectedText = selectedRange.getText();
         }
 
         return selectedText;
@@ -467,8 +496,9 @@ public class TextInput extends Component {
 
         if (previousMaximumLength != maximumLength) {
             // Truncate the text, if necessary
-            if (textBuilder.length() > maximumLength) {
-                removeText(maximumLength, textBuilder.length() - maximumLength);
+            int characterCount = textNode.getCharacterCount();
+            if (characterCount > maximumLength) {
+                textNode.removeText(maximumLength, characterCount - maximumLength);
             }
 
             this.maximumLength = maximumLength;
@@ -587,16 +617,16 @@ public class TextInput extends Component {
     }
 
     /**
-     * Returns the text input selection listener list.
-     */
-    public ListenerList<TextInputSelectionListener> getTextInputSelectionListeners() {
-        return textInputSelectionListeners;
-    }
-
-    /**
      * Returns the text input character listener list.
      */
     public ListenerList<TextInputCharacterListener> getTextInputCharacterListeners() {
         return textInputCharacterListeners;
+    }
+
+    /**
+     * Returns the text input selection listener list.
+     */
+    public ListenerList<TextInputSelectionListener> getTextInputSelectionListeners() {
+        return textInputSelectionListeners;
     }
 }

@@ -50,6 +50,7 @@ import pivot.wtk.TaskAdapter;
 import pivot.wtk.TextInput;
 import pivot.wtk.TextInputTextListener;
 import pivot.wtk.Window;
+import pivot.wtk.text.TextNode;
 import pivot.wtkx.WTKXSerializer;
 
 public class StockTracker implements Application {
@@ -141,7 +142,8 @@ public class StockTracker implements Application {
         symbolTextInput = (TextInput)wtkxSerializer.getObjectByName("symbolTextInput");
         symbolTextInput.getTextInputTextListeners().add(new TextInputTextListener() {
             public void textChanged(TextInput textInput) {
-                addSymbolButton.setEnabled(textInput.getCharacterCount() > 0);
+                TextNode textNode = textInput.getTextNode();
+                addSymbolButton.setEnabled(textNode.getCharacterCount() > 0);
             }
         });
 

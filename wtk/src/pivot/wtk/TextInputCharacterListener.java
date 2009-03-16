@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 VMware, Inc.
+ * Copyright (c) 2009 VMware, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,14 +35,7 @@ public interface TextInputCharacterListener {
      *
      * @param textInput
      * @param index
-     * @param characters
+     * @param count
      */
-    public void charactersRemoved(TextInput textInput, int index, String characters);
-
-    /**
-     * Called when a text input's character state has been reset.
-     *
-     * @param textInput
-     */
-    public void charactersReset(TextInput textInput);
+    public void charactersRemoved(TextInput textInput, int index, int count);
 }
