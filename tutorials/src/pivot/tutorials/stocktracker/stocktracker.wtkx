@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Copyright (c) 2008 VMware, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+
+<TablePane styles="{padding:8, horizontalSpacing:6, verticalSpacing:6}"
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+    xmlns:content="pivot.wtk.content"
+    xmlns:stocktracker="pivot.tutorials.stocktracker"
+    xmlns="pivot.wtk">
+    <columns>
+        <TablePane.Column width="244" />
+        <TablePane.Column width="1*" />
+    </columns>
+
+    <rows>
+        <TablePane.Row height="-1">
+            <Label text="%stockTracker"
+                styles="{fontBold:true, fontSize:14, verticalAlignment:'center'}" />
+        </TablePane.Row>
+
+        <TablePane.Row height="1*">
+            <Border styles="{padding:0, color:10}">
+                <content>
+                    <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
+                        verticalScrollBarPolicy="fillToCapacity">
+                        <view>
+                            <TableView wtkx:id="stocksTableView" selectMode="multi"
+                                styles="{showHorizontalGridLines:false}">
+                                <columns>
+                                    <TableView.Column name="symbol"
+                                        headerData="%symbol" width="80" />
+                                    <TableView.Column name="value" headerData="%value" width="80">
+                                        <cellRenderer>
+                                            <content:TableViewNumberCellRenderer styles="{horizontalAlignment:'right'}"
+                                                numberFormat="$$0.00"/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                    <TableView.Column name="change" headerData="%change" width="80">
+                                        <cellRenderer>
+                                            <stocktracker:ChangeCellRenderer styles="{horizontalAlignment:'right'}"
+                                                numberFormat="+0.00;-0.00"/>
+                                        </cellRenderer>
+                                    </TableView.Column>
+                                </columns>
+                            </TableView>
+                        </view>
+
+                        <columnHeader>
+                            <TableViewHeader tableView="$stocksTableView" />
+                        </columnHeader>
+                    </ScrollPane>
+                </content>
+            </Border>
+
+            <Border styles="{padding:6, color:10}">
+                <content>
+                    <wtkx:include namespace="detail" src="stocktracker.detail.wtkx" />
+                </content>
+            </Border>
+        </TablePane.Row>
+
+        <TablePane.Row height="-1">
+            <FlowPane
+                styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
+                <Label text="%symbol" styles="{fontBold:true}" />
+                <TextInput wtkx:id="symbolTextInput" textSize="10"
+                    maximumLength="8" />
+                <LinkButton wtkx:id="addSymbolButton" enabled="false"
+                    tooltipText="%addSymbol">
+                    <buttonData>
+                        <content:ButtonData icon="@add.png" />
+                    </buttonData>
+                </LinkButton>
+                <LinkButton wtkx:id="removeSymbolsButton" enabled="false"
+                    tooltipText="%removeSymbol">
+                    <buttonData>
+                        <content:ButtonData icon="@delete.png" />
+                    </buttonData>
+                </LinkButton>
+            </FlowPane>
+        </TablePane.Row>
+
+        <TablePane.Row height="-1">
+            <Label wtkx:id="lastUpdateLabel"
+                styles="{fontItalic:true, fontSize:10}" />
+            <FlowPane styles="{horizontalAlignment:'right'}">
+                <Label text="%dataProvidedBy" />
+                <LinkButton wtkx:id="yahooFinanceButton"
+                    buttonData="%yahooFinance" />
+            </FlowPane>
+        </TablePane.Row>
+    </rows>
+</TablePane>
