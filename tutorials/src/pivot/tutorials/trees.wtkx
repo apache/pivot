@@ -20,69 +20,6 @@ limitations under the License.
     <content>
         <FlowPane styles="{padding:4, spacing:10}">
             <FlowPane orientation="vertical">
-                <Label text="Simple" styles="{fontBold:true}"/>
-                <Border styles="{padding:0, color:10}">
-                    <content>
-                        <ScrollPane preferredWidth="160" preferredHeight="240"
-                            horizontalScrollBarPolicy="fillToCapacity"
-                            styles="{backgroundColor:null}">
-                            <view>
-                                <TreeView>
-                                    <treeData>
-                                        <content:TreeBranch>
-                                            <content:TreeBranch text="Numbers">
-                                                <content:TreeNode text="0"/>
-                                                <content:TreeNode text="1"/>
-                                                <content:TreeNode text="2"/>
-                                                <content:TreeNode text="3"/>
-                                                <content:TreeNode text="4"/>
-                                                <content:TreeNode text="5"/>
-                                                <content:TreeNode text="6"/>
-                                                <content:TreeNode text="7"/>
-                                                <content:TreeNode text="8"/>
-                                                <content:TreeNode text="9"/>
-                                            </content:TreeBranch>
-                                            <content:TreeBranch text="Letters">
-                                                <content:TreeNode text="A"/>
-                                                <content:TreeNode text="B"/>
-                                                <content:TreeNode text="C"/>
-                                                <content:TreeNode text="D"/>
-                                                <content:TreeNode text="E"/>
-                                                <content:TreeNode text="F"/>
-                                                <content:TreeNode text="G"/>
-                                                <content:TreeNode text="H"/>
-                                                <content:TreeNode text="I"/>
-                                                <content:TreeNode text="J"/>
-                                                <content:TreeNode text="K"/>
-                                                <content:TreeNode text="L"/>
-                                                <content:TreeNode text="M"/>
-                                                <content:TreeNode text="N"/>
-                                                <content:TreeNode text="O"/>
-                                                <content:TreeNode text="P"/>
-                                                <content:TreeNode text="Q"/>
-                                                <content:TreeNode text="R"/>
-                                                <content:TreeNode text="S"/>
-                                                <content:TreeNode text="T"/>
-                                                <content:TreeNode text="U"/>
-                                                <content:TreeNode text="V"/>
-                                                <content:TreeNode text="W"/>
-                                                <content:TreeNode text="X"/>
-                                                <content:TreeNode text="Y"/>
-                                                <content:TreeNode text="Z"/>
-                                            </content:TreeBranch>
-                                        </content:TreeBranch>
-                                    </treeData>
-                                    <nodeRenderer>
-                                        <content:TreeViewNodeRenderer showIcon="false"/>
-                                    </nodeRenderer>
-                                </TreeView>
-                            </view>
-                        </ScrollPane>
-                    </content>
-                </Border>
-            </FlowPane>
-
-            <FlowPane orientation="vertical">
                 <Label text="Editable" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
@@ -271,6 +208,69 @@ limitations under the License.
                                             <content:TreeBranch text="South America" icon="@folder.png"/>
                                         </content:TreeBranch>
                                     </treeData>
+                                </TreeView>
+                            </view>
+                        </ScrollPane>
+                    </content>
+                </Border>
+            </FlowPane>
+
+            <FlowPane orientation="vertical">
+                <Label text="Checked" styles="{fontBold:true}"/>
+                <Border styles="{padding:0, color:10}">
+                    <content>
+                        <ScrollPane preferredWidth="160" preferredHeight="240"
+                            horizontalScrollBarPolicy="fillToCapacity"
+                            styles="{backgroundColor:null}">
+                            <view>
+                                <TreeView checkmarksEnabled="true" showMixedCheckmarkState="true">
+                                    <treeData>
+                                        <content:TreeBranch>
+                                            <content:TreeBranch text="Numbers">
+                                                <content:TreeNode text="0"/>
+                                                <content:TreeNode text="1"/>
+                                                <content:TreeNode text="2"/>
+                                                <content:TreeNode text="3"/>
+                                                <content:TreeNode text="4"/>
+                                                <content:TreeNode text="5"/>
+                                                <content:TreeNode text="6"/>
+                                                <content:TreeNode text="7"/>
+                                                <content:TreeNode text="8"/>
+                                                <content:TreeNode text="9"/>
+                                            </content:TreeBranch>
+                                            <content:TreeBranch text="Letters">
+                                                <content:TreeNode text="A"/>
+                                                <content:TreeNode text="B"/>
+                                                <content:TreeNode text="C"/>
+                                                <content:TreeNode text="D"/>
+                                                <content:TreeNode text="E"/>
+                                                <content:TreeNode text="F"/>
+                                                <content:TreeNode text="G"/>
+                                                <content:TreeNode text="H"/>
+                                                <content:TreeNode text="I"/>
+                                                <content:TreeNode text="J"/>
+                                                <content:TreeNode text="K"/>
+                                                <content:TreeNode text="L"/>
+                                                <content:TreeNode text="M"/>
+                                                <content:TreeNode text="N"/>
+                                                <content:TreeNode text="O"/>
+                                                <content:TreeNode text="P"/>
+                                                <content:TreeNode text="Q"/>
+                                                <content:TreeNode text="R"/>
+                                                <content:TreeNode text="S"/>
+                                                <content:TreeNode text="T"/>
+                                                <content:TreeNode text="U"/>
+                                                <content:TreeNode text="V"/>
+                                                <content:TreeNode text="W"/>
+                                                <content:TreeNode text="X"/>
+                                                <content:TreeNode text="Y"/>
+                                                <content:TreeNode text="Z"/>
+                                            </content:TreeBranch>
+                                        </content:TreeBranch>
+                                    </treeData>
+                                    <nodeRenderer>
+                                        <content:TreeViewNodeRenderer showIcon="false"/>
+                                    </nodeRenderer>
                                 </TreeView>
                             </view>
                         </ScrollPane>
