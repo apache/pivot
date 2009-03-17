@@ -254,6 +254,10 @@ public final class BrowserApplicationContext extends ApplicationContext {
      * documentation on the <tt>separate_jvm</tt> applet parameter.
      */
     public static Object eval(String script) {
+        if (hostApplet == null) {
+            throw new IllegalStateException("Application is not running in a web browser.");
+        }
+
         try {
             JSObject window = JSObject.getWindow(hostApplet);
             return window.eval(script);
