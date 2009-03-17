@@ -67,26 +67,15 @@ public class Spinner extends Container {
      */
     private class ListHandler implements ListListener<Object> {
         public void itemInserted(List<Object> list, int index) {
-            int previousSelectedIndex = selectedIndex;
-
             if (index <= selectedIndex) {
                 selectedIndex++;
             }
 
             // Notify listeners that items were inserted
             spinnerItemListeners.itemInserted(Spinner.this, index);
-
-            // If the selection was modified, notify listeners of selection
-            // change
-            if (previousSelectedIndex != selectedIndex) {
-                spinnerSelectionListeners.selectedIndexChanged(Spinner.this,
-                    previousSelectedIndex);
-            }
         }
 
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
-            int previousSelectedIndex = selectedIndex;
-
             if (items == null) {
                 // All items were removed; clear the selection and notify
                 // listeners
@@ -104,12 +93,6 @@ public class Spinner extends Container {
                 // Notify listeners that items were removed
                 spinnerItemListeners.itemsRemoved(Spinner.this, index, count);
             }
-
-            // Notify listeners of selection change if necessary
-            if (previousSelectedIndex != selectedIndex) {
-                spinnerSelectionListeners.selectedIndexChanged(Spinner.this,
-                    previousSelectedIndex);
-            }
         }
 
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
@@ -119,15 +102,8 @@ public class Spinner extends Container {
         public void comparatorChanged(List<Object> list,
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
-                int previousSelectedIndex = selectedIndex;
-
                 selectedIndex = -1;
                 spinnerItemListeners.itemsSorted(Spinner.this);
-
-                if (previousSelectedIndex != selectedIndex) {
-                    spinnerSelectionListeners.selectedIndexChanged(Spinner.this,
-                        previousSelectedIndex);
-                }
             }
         }
     }

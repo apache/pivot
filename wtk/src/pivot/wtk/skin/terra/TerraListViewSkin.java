@@ -256,8 +256,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         ListView.ItemRenderer renderer = listView.getItemRenderer();
 
         int itemHeight = renderer.getPreferredHeight(-1);
-		itemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
-			+ checkboxPadding.bottom), itemHeight);
+        if (listView.getCheckmarksEnabled()) {
+    		itemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
+    			+ checkboxPadding.bottom), itemHeight);
+        }
 
 		return itemHeight;
     }

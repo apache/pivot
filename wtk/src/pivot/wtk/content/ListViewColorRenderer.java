@@ -27,6 +27,11 @@ import pivot.wtk.media.Image;
  * @author gbrown
  */
 public class ListViewColorRenderer extends ListViewItemRenderer {
+    /**
+     * Internal image class for rendering color swatches.
+     *
+     * @author gbrown
+     */
     public static class ColorBadge extends Image {
         private Color color = Color.BLACK;
         public static final int SIZE = 14;

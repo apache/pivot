@@ -17,6 +17,11 @@ package pivot.wtk.content;
 
 import java.awt.Color;
 
+/**
+ * List item representing a color.
+ *
+ * @author gbrown
+ */
 public class ColorItem {
 	private Color color;
 	private String name;
