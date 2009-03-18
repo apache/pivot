@@ -27,8 +27,6 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentMouseListener;
-import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
@@ -203,101 +201,6 @@ public class TerraFrameSkin extends WindowSkin {
         }
     }
 
-    private class MoveMouseHandler implements ComponentMouseListener, ComponentMouseButtonListener {
-        public boolean mouseMove(Component component, int x, int y) {
-            Display display = (Display)component;
-
-            // Pretend that the mouse can't move off screen (off the display)
-            x = Math.min(Math.max(x, 0), display.getWidth() - 1);
-            y = Math.min(Math.max(y, 0), display.getHeight() - 1);
-
-            // Calculate the would-be new window location
-            int windowX = x - dragOffset.x;
-            int windowY = y - dragOffset.y;
-
-            Window window = (Window)getComponent();
-            window.setLocation(windowX, windowY);
-
-            return false;
-        }
-
-        public void mouseOver(Component component) {
-        }
-
-        public void mouseOut(Component component) {
-        }
-
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            assert (component instanceof Display);
-            component.getComponentMouseListeners().remove(this);
-            component.getComponentMouseButtonListeners().remove(this);
-
-            return false;
-        }
-
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
-            int count) {
-            return false;
-        }
-    }
-
-    private class ResizeMouseHandler implements ComponentMouseListener, ComponentMouseButtonListener {
-        public boolean mouseMove(Component component, int x, int y) {
-            Display display = (Display)component;
-
-            // Pretend that the mouse can't move off screen (off the display)
-            x = Math.min(Math.max(x, 0), display.getWidth() - 1);
-            y = Math.min(Math.max(y, 0), display.getHeight() - 1);
-
-            // Calculate the would-be new window size
-            Window window = (Window)getComponent();
-
-            int preferredWidth = -1;
-            int preferredHeight = -1;
-
-            if (window.isPreferredWidthSet()) {
-                preferredWidth = Math.max(x - window.getX() + dragOffset.x,
-                    titleBarFlowPane.getPreferredWidth(-1) + 2);
-            }
-
-            if (window.isPreferredHeightSet()) {
-                preferredHeight = Math.max(y - window.getY() + dragOffset.y,
-                    titleBarFlowPane.getHeight() + resizeHandle.getHeight() + 7);
-            }
-
-            window.setPreferredSize(preferredWidth, preferredHeight);
-
-            return false;
-        }
-
-        public void mouseOver(Component component) {
-        }
-
-        public void mouseOut(Component component) {
-        }
-
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            assert (component instanceof Display);
-            component.getComponentMouseListeners().remove(this);
-            component.getComponentMouseButtonListeners().remove(this);
-
-            return false;
-        }
-
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
-            int count) {
-            return false;
-        }
-    }
-
     private Image minimizeImage = new MinimizeImage();
     private Image maximizeImage = new MaximizeImage();
     private Image restoreImage = new RestoreImage();
@@ -319,8 +222,7 @@ public class TerraFrameSkin extends WindowSkin {
     private DropShadowDecorator dropShadowDecorator = null;
 
     private Point dragOffset = null;
-    private MoveMouseHandler moveMouseHandler = new MoveMouseHandler();
-    private ResizeMouseHandler resizeMouseHandler = new ResizeMouseHandler();
+    private Point resizeOffset = null;
 
     private Point restoreLocation = null;
 
@@ -707,6 +609,47 @@ public class TerraFrameSkin extends WindowSkin {
     }
 
     @Override
+    public boolean mouseMove(Component component, int x, int y) {
+        boolean consumed = super.mouseMove(component, x, y);
+
+        if (Mouse.getCapturer() == component) {
+            Window window = (Window)getComponent();
+            Display display = window.getDisplay();
+
+            Point location = window.mapPointToAncestor(display, x, y);
+
+            // Pretend that the mouse can't move off screen (off the display)
+            location.x = Math.min(Math.max(location.x, 0), display.getWidth() - 1);
+            location.y = Math.min(Math.max(location.y, 0), display.getHeight() - 1);
+
+            if (dragOffset != null) {
+                // Move the window
+                window.setLocation(location.x - dragOffset.x, location.y - dragOffset.y);
+            } else {
+                if (resizeOffset != null) {
+                    // Resize the window
+                    int preferredWidth = -1;
+                    int preferredHeight = -1;
+
+                    if (window.isPreferredWidthSet()) {
+                        preferredWidth = Math.max(location.x - window.getX() + resizeOffset.x,
+                            titleBarFlowPane.getPreferredWidth(-1) + 2);
+                    }
+
+                    if (window.isPreferredHeightSet()) {
+                        preferredHeight = Math.max(location.y - window.getY() + resizeOffset.y,
+                            titleBarFlowPane.getHeight() + resizeHandle.getHeight() + 7);
+                    }
+
+                    window.setPreferredSize(preferredWidth, preferredHeight);
+                }
+            }
+        }
+
+        return consumed;
+    }
+
+    @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
@@ -719,21 +662,28 @@ public class TerraFrameSkin extends WindowSkin {
 
             if (titleBarBounds.contains(x, y)) {
                 dragOffset = new Point(x, y);
-
-                Display display = window.getDisplay();
-                display.getComponentMouseListeners().add(moveMouseHandler);
-                display.getComponentMouseButtonListeners().add(moveMouseHandler);
+                Mouse.capture(component);
             } else {
                 Bounds resizeHandleBounds = resizeHandle.getBounds();
 
                 if (resizeHandleBounds.contains(x, y)) {
-                    dragOffset = new Point(getWidth() - x, getHeight() - y);
-
-                    Display display = window.getDisplay();
-                    display.getComponentMouseListeners().add(resizeMouseHandler);
-                    display.getComponentMouseButtonListeners().add(resizeMouseHandler);
+                    resizeOffset = new Point(getWidth() - x, getHeight() - y);
+                    Mouse.capture(component);
                 }
             }
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
+
+        if (Mouse.getCapturer() == component) {
+            dragOffset = null;
+            resizeOffset = null;
+            Mouse.release();
         }
 
         return consumed;

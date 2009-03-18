@@ -134,7 +134,13 @@ public final class Mouse {
             Display display = applicationContext.getDisplay();
             Component descendant = display.getDescendantAt(location.x, location.y);
 
-            if (descendant != capturer) {
+            while (descendant != null
+                && descendant != capturer) {
+                descendant = descendant.getParent();
+            }
+
+            if (descendant == null) {
+                // The mouse is no longer over the capturer
                 capturer.mouseOut();
                 display.mouseMove(location.x, location.y);
             }
@@ -346,14 +352,16 @@ public final class Mouse {
             throw new IllegalArgumentException("component is null.");
         }
 
-        Cursor cursor = null;
-        while (cursor == null
-            && component != null) {
-            cursor = component.getCursor();
-            component = component.getParent();
-        }
+        if (applicationContext != null) {
+            Cursor cursor = null;
+            while (cursor == null
+                && component != null) {
+                cursor = component.getCursor();
+                component = component.getParent();
+            }
 
-        setCursor((cursor == null) ? Cursor.DEFAULT : cursor);
+            setCursor((cursor == null) ? Cursor.DEFAULT : cursor);
+        }
     }
 
     protected static void setApplicationContext(ApplicationContext applicationContext) {

@@ -682,23 +682,34 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 consumed = true;
                 break;
             }
-
-            case Keyboard.KeyCode.SPACE: {
-        		if (listView.getCheckmarksEnabled()
-    				&& listView.getSelectMode() == ListView.SelectMode.SINGLE) {
-        			int selectedIndex = listView.getSelectedIndex();
-        			listView.setItemChecked(selectedIndex, !listView.isItemChecked(selectedIndex));
-            		consumed = true;
-        		}
-
-        		break;
-        	}
         }
 
         // Clear the highlight
         if (highlightedIndex != -1) {
             highlightedIndex = -1;
             repaintComponent(getItemBounds(highlightedIndex));
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyReleased(component, keyCode, keyLocation);
+
+        ListView listView = (ListView)getComponent();
+
+        switch (keyCode) {
+            case Keyboard.KeyCode.SPACE: {
+                if (listView.getCheckmarksEnabled()
+                    && listView.getSelectMode() == ListView.SelectMode.SINGLE) {
+                    int selectedIndex = listView.getSelectedIndex();
+                    listView.setItemChecked(selectedIndex, !listView.isItemChecked(selectedIndex));
+                    consumed = true;
+                }
+
+                break;
+            }
         }
 
         return consumed;

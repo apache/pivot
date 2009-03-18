@@ -31,12 +31,9 @@ import java.text.AttributedCharacterIterator;
 import pivot.collections.Dictionary;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentMouseButtonListener;
-import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
-import pivot.wtk.Display;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
@@ -56,122 +53,6 @@ import pivot.wtk.text.TextNode;
  */
 public class TerraTextInputSkin extends ComponentSkin
     implements TextInputListener, TextInputCharacterListener, TextInputSelectionListener {
-    private class MouseSelectionHandler
-        implements ComponentMouseListener, ComponentMouseButtonListener {
-        private class ScrollSelectionCallback implements Runnable {
-            private int x = 0;
-
-            public void run() {
-                TextInput textInput = (TextInput)getComponent();
-                TextNode textNode = textInput.getTextNode();
-
-                int selectionStart = textInput.getSelectionStart();
-                int selectionLength = textInput.getSelectionLength();
-
-                if (x < 0) {
-                    // Add the previous character to the selection
-                    if (selectionStart > 0) {
-                        selectionStart--;
-                        selectionLength++;
-                    }
-                } else {
-                    // Add the next character to the selection
-                    if (selectionStart + selectionLength < textNode.getCharacterCount()) {
-                        selectionLength++;
-                    }
-                }
-
-                textInput.setSelection(selectionStart, selectionLength);
-            }
-        }
-
-        private ScrollSelectionCallback scrollSelectionCallback = new ScrollSelectionCallback();
-        private int scrollSelectionIntervalID = -1;
-
-        private static final int SCROLL_RATE = 50;
-
-        public boolean mouseMove(Component component, int x, int y) {
-            String text = getText();
-
-            if (text.length() > 0) {
-                Display display = (Display)component;
-
-                TextInput textInput = (TextInput)getComponent();
-                x = textInput.mapPointFromAncestor(display, x, 0).x;
-
-                if (x >= 0
-                    && x < textInput.getWidth()) {
-                    // Stop the scroll selection timer
-                    if (scrollSelectionIntervalID != -1) {
-                        ApplicationContext.clearInterval(scrollSelectionIntervalID);
-                        scrollSelectionIntervalID = -1;
-                    }
-
-                    // Get the current selection
-                    int selectionStart = textInput.getSelectionStart();
-                    int selectionLength = textInput.getSelectionLength();
-
-                    // Get the insertion index
-                    int index = getInsertionIndex(text, x);
-
-                    if (index < selectionStart) {
-                        selectionLength += (selectionStart - index);
-                        selectionStart = index;
-                    } else {
-                        if (index > selectionStart + selectionLength) {
-                            selectionLength = index - selectionStart;
-                        }
-                    }
-
-                    textInput.setSelection(selectionStart, selectionLength);
-                } else {
-                    scrollSelectionCallback.x = x;
-
-                    if (scrollSelectionIntervalID == -1) {
-                        scrollSelectionIntervalID =
-                            ApplicationContext.setInterval(scrollSelectionCallback, SCROLL_RATE);
-
-                        // Run the callback once now to scroll the selection immediately
-                        scrollSelectionCallback.run();
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public void mouseOver(Component component) {
-        }
-
-        public void mouseOut(Component component) {
-        }
-
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            // Stop the scroll selection timer
-            if (scrollSelectionIntervalID != -1) {
-                ApplicationContext.clearInterval(scrollSelectionIntervalID);
-                scrollSelectionIntervalID = -1;
-            }
-
-            // Remove the display mouse listeners
-            assert (component instanceof Display);
-            component.getComponentMouseListeners().remove(this);
-            component.getComponentMouseButtonListeners().remove(this);
-
-            mouseSelectionHandler = null;
-
-            return false;
-        }
-
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            return false;
-        }
-    }
-
     /**
      * TODO This class will be used to optimize rendering of text, so we don't
      * need to get a copy of the string via {@link TextInput#getText()}.
@@ -304,6 +185,34 @@ public class TerraTextInputSkin extends ComponentSkin
         }
     }
 
+    private class ScrollSelectionCallback implements Runnable {
+        private int x = 0;
+
+        public void run() {
+            TextInput textInput = (TextInput)getComponent();
+            TextNode textNode = textInput.getTextNode();
+
+            int selectionStart = textInput.getSelectionStart();
+            int selectionLength = textInput.getSelectionLength();
+
+            if (x < 0) {
+                // Add the previous character to the selection
+                if (selectionStart > 0) {
+                    selectionStart--;
+                    selectionLength++;
+                }
+            } else {
+                // Add the next character to the selection
+                if (selectionStart + selectionLength < textNode.getCharacterCount()) {
+                    selectionLength++;
+                }
+            }
+
+            textInput.setSelection(selectionStart, selectionLength);
+        }
+    }
+
+
     protected FontRenderContext fontRenderContext = new FontRenderContext(null, true, false);
 
     private boolean caretOn = true;
@@ -315,7 +224,8 @@ public class TerraTextInputSkin extends ComponentSkin
     private BlinkCursorCallback blinkCursorCallback = new BlinkCursorCallback();
     private int blinkCursorIntervalID = -1;
 
-    private MouseSelectionHandler mouseSelectionHandler = null;
+    private ScrollSelectionCallback scrollSelectionCallback = new ScrollSelectionCallback();
+    private int scrollSelectionIntervalID = -1;
 
     private Font font;
     private Color color;
@@ -335,6 +245,8 @@ public class TerraTextInputSkin extends ComponentSkin
     // Derived colors
     private Color bevelColor;
     private Color disabledBevelColor;
+
+    private static final int SCROLL_RATE = 50;
 
     public TerraTextInputSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -914,6 +826,58 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
     @Override
+    public boolean mouseMove(Component component, int x, int y) {
+        boolean consumed = super.mouseMove(component, x, y);
+
+        if (Mouse.getCapturer() == component) {
+            String text = getText();
+
+            if (text.length() > 0) {
+                TextInput textInput = (TextInput)getComponent();
+
+                if (x >= 0
+                    && x < textInput.getWidth()) {
+                    // Stop the scroll selection timer
+                    if (scrollSelectionIntervalID != -1) {
+                        ApplicationContext.clearInterval(scrollSelectionIntervalID);
+                        scrollSelectionIntervalID = -1;
+                    }
+
+                    // Get the current selection
+                    int selectionStart = textInput.getSelectionStart();
+                    int selectionLength = textInput.getSelectionLength();
+
+                    // Get the insertion index
+                    int index = getInsertionIndex(text, x);
+
+                    if (index < selectionStart) {
+                        selectionLength += (selectionStart - index);
+                        selectionStart = index;
+                    } else {
+                        if (index > selectionStart + selectionLength) {
+                            selectionLength = index - selectionStart;
+                        }
+                    }
+
+                    textInput.setSelection(selectionStart, selectionLength);
+                } else {
+                    scrollSelectionCallback.x = x;
+
+                    if (scrollSelectionIntervalID == -1) {
+                        scrollSelectionIntervalID =
+                            ApplicationContext.setInterval(scrollSelectionCallback, SCROLL_RATE);
+
+                        // Run the callback once now to scroll the selection immediately
+                        scrollSelectionCallback.run();
+                    }
+                }
+            }
+        }
+
+        return consumed;
+    }
+
+    @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         if (button == Mouse.Button.LEFT) {
             // Move the caret to the insertion point
@@ -925,18 +889,31 @@ public class TerraTextInputSkin extends ComponentSkin
                 textInput.setSelection(index, 0);
             }
 
-            // Begin selecting text
-            mouseSelectionHandler = new MouseSelectionHandler();
-
-            Display display = textInput.getDisplay();
-            display.getComponentMouseListeners().add(mouseSelectionHandler);
-            display.getComponentMouseButtonListeners().add(mouseSelectionHandler);
-
             // Set focus to the text input
             textInput.requestFocus();
+
+            // Capture the mouse so we can select text
+            Mouse.capture(component);
         }
 
         return super.mouseDown(component, button, x, y);
+    }
+
+    @Override
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
+
+        if (Mouse.getCapturer() == component) {
+            // Stop the scroll selection timer
+            if (scrollSelectionIntervalID != -1) {
+                ApplicationContext.clearInterval(scrollSelectionIntervalID);
+                scrollSelectionIntervalID = -1;
+            }
+
+            Mouse.release();
+        }
+
+        return consumed;
     }
 
     @Override
@@ -1094,7 +1071,7 @@ public class TerraTextInputSkin extends ComponentSkin
             showCaret(textInput.getSelectionLength() == 0);
 
             if (!temporary
-                && mouseSelectionHandler == null) {
+                && Mouse.getCapturer() != component) {
                 textInput.setSelection(0, textNode.getCharacterCount());
             }
         } else {

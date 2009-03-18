@@ -21,10 +21,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 
 import pivot.wtk.Component;
-import pivot.wtk.ComponentMouseButtonListener;
-import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Display;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.Slider;
@@ -101,6 +98,39 @@ public class TerraSliderSkin extends SliderSkin {
         }
 
         @Override
+        public boolean mouseMove(Component component, int x, int y) {
+            boolean consumed = super.mouseMove(component, x, y);
+
+            if (Mouse.getCapturer() == component) {
+                Slider slider = (Slider)TerraSliderSkin.this.getComponent();
+                int sliderWidth = slider.getWidth();
+                int thumbWidth = thumb.getWidth();
+
+                Point sliderCoordinates = thumb.mapPointToAncestor(slider, x, y);
+
+                int minX = dragOffset.x;
+                if (sliderCoordinates.x < minX) {
+                    sliderCoordinates.x = minX;
+                }
+
+                int maxX = (sliderWidth - thumbWidth) + dragOffset.x;
+                if (sliderCoordinates.x > maxX) {
+                    sliderCoordinates.x = maxX;
+                }
+
+                float ratio = (float)(sliderCoordinates.x - dragOffset.x) / (sliderWidth - thumbWidth);
+
+                int minimum = slider.getMinimum();
+                int maximum = slider.getMaximum();
+
+                int value = (int)(minimum + (float)(maximum - minimum) * ratio);
+                slider.setValue(value);
+            }
+
+            return consumed;
+        }
+
+        @Override
 	    public void mouseOver(Component component) {
 			super.mouseOver(component);
 
@@ -121,14 +151,8 @@ public class TerraSliderSkin extends SliderSkin {
 	        boolean consumed = super.mouseDown(component, button, x, y);
 
 	        if (button == Mouse.Button.LEFT) {
-		        Thumb thumb = (Thumb)getComponent();
-
 		        dragOffset = new Point(x, y);
-
-                Display display = thumb.getDisplay();
-                display.getComponentMouseListeners().add(thumbDragHandler);
-                display.getComponentMouseButtonListeners().add(thumbDragHandler);
-
+		        Mouse.capture(component);
                 repaintComponent();
 
                 consumed = true;
@@ -136,70 +160,22 @@ public class TerraSliderSkin extends SliderSkin {
 
 	        return consumed;
 	    }
+
+	    @Override
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseUp(component, button, x, y);
+
+            if (Mouse.getCapturer() == component) {
+                dragOffset = null;
+                Mouse.release();
+                repaintComponent();
+            }
+
+            return consumed;
+	    }
 	}
 
-    private class ThumbDragHandler implements ComponentMouseListener,
-    	ComponentMouseButtonListener {
-        public boolean mouseMove(Component component, int x, int y) {
-            Display display = (Display)component;
-
-            Slider slider = (Slider)getComponent();
-            int sliderWidth = slider.getWidth();
-            int thumbWidth = thumb.getWidth();
-
-            Point sliderCoordinates = slider.mapPointFromAncestor(display, x, y);
-
-            int minX = dragOffset.x;
-            if (sliderCoordinates.x < minX) {
-            	sliderCoordinates.x = minX;
-            }
-
-            int maxX = (sliderWidth - thumbWidth) + dragOffset.x;
-            if (sliderCoordinates.x > maxX) {
-            	sliderCoordinates.x = maxX;
-            }
-
-            float ratio = (float)(sliderCoordinates.x - dragOffset.x) / (sliderWidth - thumbWidth);
-
-            int minimum = slider.getMinimum();
-            int maximum = slider.getMaximum();
-
-            int value = (int)(minimum + (float)(maximum - minimum) * ratio);
-            slider.setValue(value);
-
-            return false;
-        }
-
-        public void mouseOver(Component component) {
-        }
-
-        public void mouseOut(Component component) {
-        }
-
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            assert (component instanceof Display);
-            component.getComponentMouseListeners().remove(this);
-            component.getComponentMouseButtonListeners().remove(this);
-
-            dragOffset = null;
-
-            repaintComponent();
-
-            return true;
-        }
-
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
-            int count) {
-            return false;
-        }
-    }
-
 	private Thumb thumb = new Thumb();
-    private ThumbDragHandler thumbDragHandler = new ThumbDragHandler();
     Point dragOffset = null;
 
     private Color trackColor;
