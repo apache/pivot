@@ -1714,6 +1714,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         branchInfo.setExpanded(true);
         addVisibleNodes(branchInfo);
+
+        repaintNode(branchInfo);
     }
 
     public void branchCollapsed(TreeView treeView, Sequence<Integer> path) {
@@ -1721,6 +1723,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         branchInfo.setExpanded(false);
         removeVisibleNodes(branchInfo, 0, -1);
+
+        repaintNode(branchInfo);
     }
 
     // TreeViewNodeListener methods
