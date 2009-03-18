@@ -627,7 +627,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             } else {
                 int headerIndex = getHeaderAt(x);
 
-                Cursor cursor = tableViewHeader.getCursor();
                 if (headerIndex != -1
                     && columnsResizable) {
                     Bounds headerBounds = getHeaderBounds(headerIndex);
@@ -635,11 +634,13 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                     if (!column.isRelative()
                         && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
-                        cursor = Cursor.RESIZE_EAST;
+                        Mouse.setCursor(Cursor.RESIZE_EAST);
+                    } else {
+                        Mouse.setCursor(tableViewHeader);
                     }
+                } else {
+                    Mouse.setCursor(tableViewHeader);
                 }
-
-                Mouse.setCursor(cursor);
             }
         }
 
