@@ -509,7 +509,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * The cursor that is displayed over the component.
      */
-    private Cursor cursor = Cursor.DEFAULT;
+    private Cursor cursor = null;
 
     /**
      * The tooltip text.
@@ -701,13 +701,6 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     protected void setParent(Container parent) {
-        // If the mouse is currently over this component, set the cursor
-        // to the default
-        if (mouseOver) {
-            Mouse.setCursor(Cursor.DEFAULT);
-            mouseOver = false;
-        }
-
         // If this component is being removed from the component hierarchy
         // and is currently focused, clear the focus
         if (parent == null
@@ -1736,13 +1729,10 @@ public abstract class Component implements ConstrainedVisual {
      * this component.
      *
      * @param cursor
-     * The cursor to display over the component.
+     * The cursor to display over the component, or <tt>null</tt> to inherit
+     * the cursor of the parent container.
      */
     public void setCursor(Cursor cursor) {
-        if (cursor == null) {
-            throw new IllegalArgumentException("cursor is null.");
-        }
-
         Cursor previousCursor = this.cursor;
 
         if (previousCursor != cursor) {
@@ -1752,11 +1742,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     public final void setCursor(String cursor) {
-        if (cursor == null) {
-            throw new IllegalArgumentException("cursor is null.");
-        }
-
-        setCursor(Cursor.decode(cursor));
+        setCursor((cursor == null) ? null : Cursor.decode(cursor));
     }
 
     /**
@@ -2137,10 +2123,6 @@ public abstract class Component implements ConstrainedVisual {
 
     protected void mouseOver() {
         if (enabled) {
-            if (Mouse.getButtons() == 0) {
-                Mouse.setCursor(cursor);
-            }
-
             mouseOver = true;
             componentMouseListeners.mouseOver(this);
         }
@@ -2148,11 +2130,6 @@ public abstract class Component implements ConstrainedVisual {
 
     protected void mouseOut() {
         if (enabled) {
-            if (Mouse.getButtons() == 0) {
-                Mouse.setCursor((parent == null) ?
-                    Cursor.DEFAULT : parent.getCursor());
-            }
-
             mouseOver = false;
             componentMouseListeners.mouseOut(this);
         }

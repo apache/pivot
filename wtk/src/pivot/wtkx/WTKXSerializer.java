@@ -501,7 +501,8 @@ public class WTKXSerializer implements Serializer<Object> {
                                         } else {
                                             Class<?> type = valueDictionary.getType(attribute.localName);
 
-                                            if (ListenerList.class.isAssignableFrom(type)) {
+                                            if (type != null
+                                                && ListenerList.class.isAssignableFrom(type)) {
                                                 // The property represents a listener list
                                                 ListenerList<Object> listenerList = (ListenerList<Object>)valueDictionary.get(attribute.localName);
 

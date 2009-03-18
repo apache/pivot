@@ -192,8 +192,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
             Object rowData = tableData.get(rowIndex);
             boolean rowHighlighted = (rowIndex == highlightedIndex
-                && tableView.getSelectMode() != TableView.SelectMode.NONE
-                && Mouse.getButtons() == 0);
+                && tableView.getSelectMode() != TableView.SelectMode.NONE);
             boolean rowSelected = tableView.isRowSelected(rowIndex);
             boolean rowDisabled = tableView.isRowDisabled(rowIndex);
 

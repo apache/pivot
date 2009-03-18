@@ -174,6 +174,11 @@ public abstract class Container extends Component
         // formerly occupied by the components
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             Component component = removed.get(i);
+            if (component == mouseOverComponent) {
+                mouseOverComponent = null;
+                Mouse.setCursor(this);
+            }
+
             repaint(component.getDecoratedBounds());
             component.setParent(null);
         }
@@ -569,7 +574,10 @@ public abstract class Container extends Component
 
                 mouseOverComponent = component;
 
-                if (mouseOverComponent != null) {
+                if (mouseOverComponent == null) {
+                    Mouse.setCursor(this);
+                } else {
+                    Mouse.setCursor(mouseOverComponent);
                     mouseOverComponent.mouseOver();
                 }
             }

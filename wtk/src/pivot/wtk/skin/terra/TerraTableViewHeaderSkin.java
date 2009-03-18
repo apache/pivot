@@ -26,13 +26,9 @@ import java.awt.geom.Line2D;
 
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentMouseListener;
-import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Display;
 import pivot.wtk.Mouse;
-import pivot.wtk.Point;
 import pivot.wtk.Bounds;
 import pivot.wtk.SortDirection;
 import pivot.wtk.TableView;
@@ -101,57 +97,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
     }
 
-    private class ResizeHandler
-        implements ComponentMouseListener, ComponentMouseButtonListener {
-        TableView.Column column = null;
-        int headerX = 0;
-        int offset = 0;
-
-        public static final int MINIMUM_COLUMN_WIDTH = 2;
-
-        public ResizeHandler(TableView.Column column, int headerX, int offset) {
-            assert (!column.isRelative()) : "Relative width columns cannot be resized.";
-
-            this.column = column;
-            this.headerX = headerX;
-            this.offset = offset;
-        }
-
-        public boolean mouseMove(Component component, int x, int y) {
-            int columnWidth = Math.max(x - headerX + offset, MINIMUM_COLUMN_WIDTH);
-            column.setWidth(columnWidth, false);
-
-            return false;
-        }
-
-        public void mouseOver(Component component) {
-        }
-
-        public void mouseOut(Component component) {
-        }
-
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            Mouse.setCursor(component.getCursor());
-
-            assert (component instanceof Display);
-            component.getComponentMouseListeners().remove(this);
-            component.getComponentMouseButtonListeners().remove(this);
-
-            resizing = false;
-            Mouse.setCursor(getComponent().getCursor());
-
-            return false;
-        }
-
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            return false;
-        }
-    }
-
     private Font font;
     private Color color;
     private Color disabledColor;
@@ -169,10 +114,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     private Color disabledBevelColor;
 
     private int pressedHeaderIndex = -1;
-    private boolean resizing = false;
+    private int resizeHeaderIndex = -1;
 
     private static final int SORT_INDICATOR_PADDING = 2;
     private static final int RESIZE_HANDLE_SIZE = 6;
+    public static final int MINIMUM_COLUMN_WIDTH = 2;
 
     protected SortIndicatorImage sortAscendingImage = new SortIndicatorImage(SortDirection.ASCENDING);
     protected SortIndicatorImage sortDescendingImage = new SortIndicatorImage(SortDirection.DESCENDING);
@@ -662,19 +608,23 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         super.enabledChanged(component);
 
         pressedHeaderIndex = -1;
+        resizeHeaderIndex = -1;
         repaintComponent();
     }
 
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
+        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableView tableView = tableViewHeader.getTableView();
 
-        if (!resizing
-            && Mouse.getButtons() == 0) {
-            TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
-            TableView tableView = tableViewHeader.getTableView();
-
-            if (tableView != null) {
+        if (tableView != null) {
+            if (Mouse.getCapturer() == tableViewHeader) {
+                TableView.Column column = tableView.getColumns().get(resizeHeaderIndex);
+                Bounds headerBounds = getHeaderBounds(resizeHeaderIndex);
+                int columnWidth = Math.max(x - headerBounds.x, MINIMUM_COLUMN_WIDTH);
+                column.setWidth(columnWidth, false);
+            } else {
                 int headerIndex = getHeaderAt(x);
 
                 Cursor cursor = tableViewHeader.getCursor();
@@ -702,8 +652,9 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
         if (pressedHeaderIndex != -1) {
             repaintComponent(getHeaderBounds(pressedHeaderIndex));
-            pressedHeaderIndex = -1;
         }
+
+        pressedHeaderIndex = -1;
     }
 
     @Override
@@ -723,18 +674,9 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 if (columnsResizable
                     && !column.isRelative()
                     && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
-                    // Begin drag
-                    Display display = tableViewHeader.getDisplay();
-                    Point headerCoordinates = tableViewHeader.mapPointToAncestor(display,
-                        headerBounds.x, 0);
-                    ResizeHandler dragHandler = new ResizeHandler(column, headerCoordinates.x,
-                        headerBounds.x + headerBounds.width - x);
-
-                    display.getComponentMouseListeners().add(dragHandler);
-                    display.getComponentMouseButtonListeners().add(dragHandler);
-
-                    resizing = true;
+                    resizeHeaderIndex = headerIndex;
                     Mouse.setCursor(Cursor.RESIZE_EAST);
+                    Mouse.capture(tableViewHeader);
                 } else if (headersPressable) {
                     pressedHeaderIndex = headerIndex;
                     repaintComponent(getHeaderBounds(pressedHeaderIndex));
@@ -749,8 +691,12 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
 
-        if (pressedHeaderIndex != -1) {
-            repaintComponent(getHeaderBounds(pressedHeaderIndex));
+        if (Mouse.getCapturer() == component) {
+            Mouse.release();
+        } else {
+            if (pressedHeaderIndex != -1) {
+                repaintComponent(getHeaderBounds(pressedHeaderIndex));
+            }
         }
 
         return consumed;

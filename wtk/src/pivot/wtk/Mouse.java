@@ -57,7 +57,8 @@ public final class Mouse {
     }
 
     private static int buttons = 0;
-    private static ApplicationContext.DisplayHost displayHost = null;
+    private static Component capturer = null;
+    private static ApplicationContext applicationContext = null;
 
     /**
      * Returns a bitfield representing the mouse buttons that are currently
@@ -91,15 +92,79 @@ public final class Mouse {
     }
 
     /**
+     * "Captures" the mouse, causing all mouse input to be delegated to the
+     * given component rather than propagating down the component hierarchy.
+     *
+     * @param capturer
+     * The component that wants to capture the mouse. The mouse pointer must
+     * currently be over the component.
+     */
+    public static void capture(Component capturer) {
+        if (applicationContext == null) {
+            throw new IllegalStateException("Mouse pointer is not currently over display host.");
+        }
+
+        if (!capturer.isMouseOver()) {
+            throw new IllegalArgumentException("Mouse pointer is not currently over capturer.");
+        }
+
+        if (Mouse.capturer != null) {
+            throw new IllegalStateException("Mouse is already captured.");
+        }
+
+        Mouse.capturer = capturer;
+    }
+
+    /**
+     * Releases mouse capture, causing mouse input to resume propagation down
+     * the component hierarchy.
+     */
+    public static void release() {
+        if (capturer == null) {
+            throw new IllegalStateException("Mouse is not currently captured.");
+        }
+
+        if (applicationContext == null) {
+            // The mouse is no longer over the display host
+            capturer.mouseOut();
+        } else {
+            ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
+            Point location = displayHost.getMouseLocation();
+
+            Display display = applicationContext.getDisplay();
+            Component descendant = display.getDescendantAt(location.x, location.y);
+
+            if (descendant != capturer) {
+                capturer.mouseOut();
+                display.mouseMove(location.x, location.y);
+            }
+        }
+
+        capturer = null;
+    }
+
+    /**
+     * Returns the mouse capturer.
+     *
+     * @return
+     * The component that has captured the mouse, or <tt>null</tt> if the mouse
+     * is not currently captured.
+     */
+    public static Component getCapturer() {
+        return capturer;
+    }
+
+    /**
      * Returns the system cursor.
      */
     public static Cursor getCursor() {
-        if (displayHost == null) {
-            throw new IllegalStateException();
+        if (applicationContext == null) {
+            throw new IllegalStateException("Mouse pointer is not currently over display host.");
         }
 
         Cursor cursor = null;
 
+        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
         int cursorID = displayHost.getCursor().getType();
         switch (cursorID) {
             case java.awt.Cursor.DEFAULT_CURSOR: {
@@ -190,8 +255,8 @@ public final class Mouse {
             throw new IllegalArgumentException("cursor is null.");
         }
 
-        if (displayHost == null) {
-            throw new IllegalStateException();
+        if (applicationContext == null) {
+            throw new IllegalStateException("Mouse pointer is not currently over display host.");
         }
 
         int cursorID = -1;
@@ -272,10 +337,26 @@ public final class Mouse {
             }
         }
 
+        ApplicationContext.DisplayHost displayHost = applicationContext.getDisplayHost();
         displayHost.setCursor(new java.awt.Cursor(cursorID));
     }
 
-    protected static void setDisplayHost(ApplicationContext.DisplayHost displayHost) {
-        Mouse.displayHost = displayHost;
+    public static void setCursor(Component component) {
+        if (component == null) {
+            throw new IllegalArgumentException("component is null.");
+        }
+
+        Cursor cursor = null;
+        while (cursor == null
+            && component != null) {
+            cursor = component.getCursor();
+            component = component.getParent();
+        }
+
+        setCursor((cursor == null) ? Cursor.DEFAULT : cursor);
+    }
+
+    protected static void setApplicationContext(ApplicationContext applicationContext) {
+        Mouse.applicationContext = applicationContext;
     }
 }
