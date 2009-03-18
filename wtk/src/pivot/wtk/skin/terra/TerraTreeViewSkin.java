@@ -70,18 +70,22 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     protected static class NodeInfo {
         // Core skin metadata
         private BranchInfo parent;
-        public Object data;
-        public int depth;
-        public boolean highlighted = false;
+
+        protected Object data;
+        protected int depth;
 
         // Cached fields. Note that this is maintained as a bitmask in favor of
         // separate properties because it allows us to easily clear any cached
         // field for all nodes in one common method. See #clearField(byte)
-        protected byte fieldCache = 0;
+        protected byte fields = 0;
 
-        public static final byte SELECTED_MASK = 1 << 0;
-        public static final byte DISABLED_MASK = 1 << 1;
-        public static final byte CHECK_STATE_MASK = 3 << 2;
+        public static final byte HIGHLIGHTED_MASK = 1 << 0;
+        public static final byte SELECTED_MASK = 1 << 1;
+        public static final byte DISABLED_MASK = 1 << 2;
+        public static final byte CHECK_STATE_CHECKED_MASK = 1 << 3;
+        public static final byte CHECK_STATE_MIXED_MASK = 1 << 4;
+
+        public static final byte CHECK_STATE_MASK = CHECK_STATE_CHECKED_MASK | CHECK_STATE_MIXED_MASK;
 
         public NodeInfo(BranchInfo parent, Object data) {
             this.parent = parent;
@@ -120,64 +124,79 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             return path;
         }
 
+        public boolean isHighlighted() {
+            return ((fields & HIGHLIGHTED_MASK) != 0);
+        }
+
+        public void setHighlighted(boolean highlighted) {
+            if (highlighted) {
+                fields |= HIGHLIGHTED_MASK;
+            } else {
+                fields &= ~HIGHLIGHTED_MASK;
+            }
+        }
+
         public boolean isSelected() {
-            return ((fieldCache & SELECTED_MASK) != 0);
+            return ((fields & SELECTED_MASK) != 0);
         }
 
         public void setSelected(boolean selected) {
             if (selected) {
-                fieldCache |= SELECTED_MASK;
+                fields |= SELECTED_MASK;
             } else {
-                fieldCache &= ~SELECTED_MASK;
+                fields &= ~SELECTED_MASK;
             }
         }
 
         public boolean isDisabled() {
-            return ((fieldCache & DISABLED_MASK) != 0);
+            return ((fields & DISABLED_MASK) != 0);
         }
 
         public void setDisabled(boolean disabled) {
             if (disabled) {
-                fieldCache |= DISABLED_MASK;
+                fields |= DISABLED_MASK;
             } else {
-                fieldCache &= ~DISABLED_MASK;
+                fields &= ~DISABLED_MASK;
             }
         }
 
         public TreeView.NodeCheckState getCheckState() {
             TreeView.NodeCheckState checkState;
 
-            int checkStateBits = (fieldCache & CHECK_STATE_MASK) >> 2;
-            switch (checkStateBits) {
-            case 0:
-                checkState = TreeView.NodeCheckState.UNCHECKED;
-                break;
-            case 1:
+            switch (fields & CHECK_STATE_MASK) {
+            case CHECK_STATE_CHECKED_MASK:
                 checkState = TreeView.NodeCheckState.CHECKED;
                 break;
-            default:
+            case CHECK_STATE_MIXED_MASK:
                 checkState = TreeView.NodeCheckState.MIXED;
+                break;
+            default:
+                checkState = TreeView.NodeCheckState.UNCHECKED;
                 break;
             }
 
             return checkState;
         }
 
+        public boolean isChecked() {
+            return ((fields & CHECK_STATE_CHECKED_MASK) != 0);
+        }
+
         public void setCheckState(TreeView.NodeCheckState checkState) {
-            fieldCache &= ~CHECK_STATE_MASK;
+            fields &= ~CHECK_STATE_MASK;
 
             switch (checkState) {
             case CHECKED:
-                fieldCache |= (1 << 2);
+                fields |= CHECK_STATE_CHECKED_MASK;
                 break;
             case MIXED:
-                fieldCache |= (1 << 3);
+                fields |= CHECK_STATE_MIXED_MASK;
                 break;
             }
         }
 
         public void clearField(byte mask) {
-            fieldCache &= ~mask;
+            fields &= ~mask;
         }
     }
 
@@ -191,7 +210,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         // Core skin metadata
         public Sequence<NodeInfo> children = null;
 
-        public static final byte EXPANDED_MASK = 1 << 4;
+        public static final byte EXPANDED_MASK = 1 << 5;
 
         public BranchInfo(BranchInfo parent, List<Object> data) {
             super(parent, data);
@@ -221,14 +240,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         }
 
         public boolean isExpanded() {
-            return ((fieldCache & EXPANDED_MASK) != 0);
+            return ((fields & EXPANDED_MASK) != 0);
         }
 
         public void setExpanded(boolean expanded) {
             if (expanded) {
-                fieldCache |= EXPANDED_MASK;
+                fields |= EXPANDED_MASK;
             } else {
-                fieldCache &= ~EXPANDED_MASK;
+                fields &= ~EXPANDED_MASK;
             }
         }
     }
@@ -405,7 +424,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             NodeInfo nodeInfo = visibleNodes.get(i);
 
             boolean expanded = false;
-            boolean highlighted = nodeInfo.highlighted;
+            boolean highlighted = nodeInfo.isHighlighted();
             boolean selected = nodeInfo.isSelected();
             boolean disabled = nodeInfo.isDisabled();
 
@@ -1230,7 +1249,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      */
     protected void clearHighlightedNode() {
         if (highlightedNode != null) {
-            highlightedNode.highlighted = false;
+            highlightedNode.setHighlighted(false);
             repaintNode(highlightedNode);
 
             highlightedNode = null;
@@ -1244,7 +1263,25 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * The bitmask specifying which field to clear.
      */
     private void clearFields(byte mask) {
-        // TODO
+        Sequence<NodeInfo> nodes = new ArrayList<NodeInfo>();
+        nodes.add(rootBranchInfo);
+
+        while (nodes.getLength() > 0) {
+            NodeInfo nodeInfo = nodes.get(0);
+            nodes.remove(0, 1);
+
+            nodeInfo.clearField(mask);
+
+            if (nodeInfo instanceof BranchInfo) {
+                BranchInfo branchInfo = (BranchInfo)nodeInfo;
+
+                if (branchInfo.children != null) {
+                    for (int i = 0, n = branchInfo.children.getLength(); i < n; i++) {
+                        nodes.insert(branchInfo.children.get(i), i);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -1260,12 +1297,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
             if (highlightedNode != previousHighlightedNode) {
                 if (previousHighlightedNode != null) {
-                    previousHighlightedNode.highlighted = false;
+                    previousHighlightedNode.setHighlighted(false);
                     repaintNode(previousHighlightedNode);
                 }
 
                 if (highlightedNode != null) {
-                    highlightedNode.highlighted = true;
+                    highlightedNode.setHighlighted(true);
                     repaintNode(highlightedNode);
                 }
             }
@@ -1298,7 +1335,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 int baseNodeX = (nodeInfo.depth - 1) * (indent + spacing);
 
                 int nodeX = baseNodeX + (showBranchControls ? indent + spacing : 0);
-                int nodeY = (y / nodeHeight) * nodeHeight;
+                int nodeY = (y / (nodeHeight + VERTICAL_SPACING)) * (nodeHeight + VERTICAL_SPACING);
 
                 int checkboxWidth = CHECKBOX.getWidth();
                 int checkboxHeight = CHECKBOX.getHeight();
@@ -1332,12 +1369,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                         TreeView.SelectMode selectMode = treeView.getSelectMode();
 
                         if (selectMode == TreeView.SelectMode.SINGLE) {
-                            if (!treeView.isNodeSelected(path)) {
+                            if (!nodeInfo.isSelected()) {
                                 treeView.setSelectedPath(path);
                             }
                         } else if (selectMode == TreeView.SelectMode.MULTI) {
                             if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                                if (treeView.isNodeSelected(path)) {
+                                if (nodeInfo.isSelected()) {
                                     treeView.removeSelectedPath(path);
                                 } else {
                                     treeView.addSelectedPath(path);
@@ -1371,7 +1408,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 int baseNodeX = (nodeInfo.depth - 1) * (indent + spacing);
 
                 int nodeX = baseNodeX + (showBranchControls ? indent + spacing : 0);
-                int nodeY = (y / nodeHeight) * nodeHeight;
+                int nodeY = (y / (nodeHeight + VERTICAL_SPACING)) * (nodeHeight + VERTICAL_SPACING);
 
                 int checkboxWidth = CHECKBOX.getWidth();
                 int checkboxHeight = CHECKBOX.getHeight();
@@ -1385,7 +1422,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     && y >= nodeY + checkboxY
                     && y < nodeY + checkboxY + checkboxHeight) {
                     Sequence<Integer> path = nodeInfo.getPath();
-                    treeView.setNodeChecked(path, !treeView.isNodeChecked(path));
+                    treeView.setNodeChecked(path, !nodeInfo.isChecked());
                 }
             }
         }
@@ -1406,7 +1443,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
+        boolean consumed = false;
 
         TreeView treeView = (TreeView)getComponent();
         TreeView.SelectMode selectMode = treeView.getSelectMode();
@@ -1516,9 +1553,35 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
             break;
         }
+
+        default:
+            consumed = super.keyPressed(component, keyCode, keyLocation);
+            break;
         }
 
         clearHighlightedNode();
+
+        return consumed;
+    }
+
+    @Override
+    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = false;
+
+        TreeView treeView = (TreeView)getComponent();
+
+        if (keyCode == Keyboard.KeyCode.SPACE) {
+            if (treeView.getCheckmarksEnabled()
+                && treeView.getSelectMode() == TreeView.SelectMode.SINGLE) {
+                Sequence<Integer> selectedPath = treeView.getSelectedPath();
+
+                if (selectedPath != null) {
+                    treeView.setNodeChecked(selectedPath, !treeView.isNodeChecked(selectedPath));
+                }
+            }
+        } else {
+            consumed = super.keyReleased(component, keyCode, keyLocation);
+        }
 
         return consumed;
     }
@@ -1600,6 +1663,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         TreeView.SelectMode previousSelectMode) {
         // The selection has implicitly been cleared
         clearFields(NodeInfo.SELECTED_MASK);
+
+        repaintComponent();
     }
 
     public void checkmarksEnabledChanged(TreeView treeView) {
@@ -1611,7 +1676,32 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     public void showMixedCheckmarkStateChanged(TreeView treeView) {
         if (treeView.getCheckmarksEnabled()) {
-            // TODO update check state of all NodeInfo structures
+            // The check state of all *branch* nodes may have changed, so we
+            // need to update the cached check state of all BranchNode
+            // instances in our hierarchy
+            Sequence<NodeInfo> nodes = new ArrayList<NodeInfo>();
+            nodes.add(rootBranchInfo);
+
+            while (nodes.getLength() > 0) {
+                NodeInfo nodeInfo = nodes.get(0);
+                nodes.remove(0, 1);
+
+                // Only branch nodes can be affected by this event
+                if (nodeInfo instanceof BranchInfo) {
+                    BranchInfo branchInfo = (BranchInfo)nodeInfo;
+
+                    // Update the cached entry for this branch
+                    Sequence<Integer> path = branchInfo.getPath();
+                    branchInfo.setCheckState(treeView.getNodeCheckState(path));
+
+                    // Add the branch's children to the queue
+                    if (branchInfo.children != null) {
+                        for (int i = 0, n = branchInfo.children.getLength(); i < n; i++) {
+                            nodes.insert(branchInfo.children.get(i), i);
+                        }
+                    }
+                }
+            }
 
             repaintComponent();
         }
