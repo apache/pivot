@@ -297,8 +297,7 @@ public class TreeView extends Component {
      *
      * @author tvolkert
      */
-    private static class TreeViewPathComparator
-        implements Comparator<Sequence<Integer>> {
+    public static final class PathComparator implements Comparator<Sequence<Integer>> {
         public int compare(Sequence<Integer> path1, Sequence<Integer> path2) {
             int path1Length = path1.getLength();
             int path2Length = path2.getLength();
@@ -702,7 +701,7 @@ public class TreeView extends Component {
     private static final NodeRenderer DEFAULT_NODE_RENDERER = new TreeViewNodeRenderer();
 
     private static final Comparator<Sequence<Integer>> PATH_COMPARATOR =
-        new TreeViewPathComparator();
+        new PathComparator();
 
     /**
      * Creates a new <tt>TreeView</tt> with empty tree data.
