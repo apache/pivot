@@ -730,26 +730,26 @@ public class WTKXSerializer implements Serializer<Object> {
             }
         } else {
             if (attributeValue.charAt(0) == URL_PREFIX) {
-                if (location == null) {
-                    throw new IllegalStateException("Base location is undefined.");
-                }
-
                 if (attributeValue.length() > 1) {
                     if (attributeValue.charAt(1) == URL_PREFIX) {
                         resolvedValue = attributeValue.substring(1);
                     } else {
+                        if (location == null) {
+                            throw new IllegalStateException("Base location is undefined.");
+                        }
+
                         resolvedValue = new URL(location, attributeValue.substring(1));
                     }
                 }
             } else if (attributeValue.charAt(0) == RESOURCE_KEY_PREFIX) {
-                if (resources == null) {
-                    throw new IllegalStateException("Resource dictionary is undefined.");
-                }
-
                 if (attributeValue.length() > 1) {
                     if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
                         resolvedValue = attributeValue.substring(1);
                     } else {
+                        if (resources == null) {
+                            throw new IllegalStateException("Resource dictionary is undefined.");
+                        }
+
                         resolvedValue = resources.get(attributeValue.substring(1));
                     }
                 }

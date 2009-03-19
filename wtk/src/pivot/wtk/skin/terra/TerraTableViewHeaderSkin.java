@@ -634,12 +634,12 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                     if (!column.isRelative()
                         && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
-                        Mouse.setCursor(Cursor.RESIZE_EAST);
+                        tableViewHeader.setCursor(Cursor.RESIZE_EAST);
                     } else {
-                        Mouse.setCursor(tableViewHeader);
+                        tableViewHeader.setCursor((Cursor)null);
                     }
                 } else {
-                    Mouse.setCursor(tableViewHeader);
+                    tableViewHeader.setCursor((Cursor)null);
                 }
             }
         }
@@ -676,7 +676,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                     && !column.isRelative()
                     && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
                     resizeHeaderIndex = headerIndex;
-                    Mouse.setCursor(Cursor.RESIZE_EAST);
                     Mouse.capture(tableViewHeader);
                 } else if (headersPressable) {
                     pressedHeaderIndex = headerIndex;

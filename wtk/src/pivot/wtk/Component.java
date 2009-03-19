@@ -726,8 +726,14 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     public Display getDisplay() {
-        Window window = getWindow();
-        return (Display)((window == null) ? null : window.getParent());
+        Component component = this;
+
+        while (component != null
+            && !(component instanceof Display)) {
+            component = component.getParent();
+        }
+
+        return (Display)component;
     }
 
     public int getWidth() {
@@ -1737,6 +1743,11 @@ public abstract class Component implements ConstrainedVisual {
 
         if (previousCursor != cursor) {
             this.cursor = cursor;
+
+            if (mouseOver) {
+                Mouse.setCursor(this);
+            }
+
             componentListeners.cursorChanged(this, previousCursor);
         }
     }

@@ -124,9 +124,6 @@ public abstract class ApplicationContext {
                     throw new IllegalStateException("Local drag already in progress.");
                 }
 
-                // Set display host
-                Mouse.setApplicationContext(ApplicationContext.this);
-
                 java.awt.Point location = event.getLocation();
                 mouseLocation = new Point(location.x, location.y);
 
@@ -155,8 +152,7 @@ public abstract class ApplicationContext {
             }
 
             public void dragExit(DropTargetEvent event) {
-                // Clear display host
-                Mouse.setApplicationContext(null);
+                // Clear mouse location
                 mouseLocation = null;
 
                 // Clear drag state
@@ -680,7 +676,6 @@ public abstract class ApplicationContext {
                 || eventID == MouseEvent.MOUSE_EXITED) {
                 switch(eventID) {
                     case MouseEvent.MOUSE_ENTERED: {
-                        Mouse.setApplicationContext(ApplicationContext.this);
                         mouseLocation = new Point(x, y);
                         display.mouseOver();
                         break;
@@ -689,7 +684,6 @@ public abstract class ApplicationContext {
                     case MouseEvent.MOUSE_EXITED: {
                         display.mouseOut();
                         mouseLocation = null;
-                        Mouse.setApplicationContext(null);
                         break;
                     }
                 }

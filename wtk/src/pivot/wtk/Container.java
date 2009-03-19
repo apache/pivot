@@ -175,7 +175,12 @@ public abstract class Container extends Component
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             Component component = removed.get(i);
             if (component == mouseOverComponent) {
+                if (mouseOverComponent.isMouseOver()) {
+                    mouseOverComponent.mouseOut();
+                }
+
                 mouseOverComponent = null;
+
                 Mouse.setCursor(this);
             }
 
@@ -557,10 +562,11 @@ public abstract class Container extends Component
             // Notify container listeners
             containerMouseListeners.mouseMove(this, x, y);
 
-            // Clear the mouse over component if its visibility or enabled
-            // state has changed
+            // Clear the mouse over component if its mouse-over state has
+            // changed (e.g. if its enabled or visible properties have
+            // changed)
             if (mouseOverComponent != null
-                && !(mouseOverComponent.isEnabled() && mouseOverComponent.isVisible())) {
+                && !mouseOverComponent.isMouseOver()) {
                 mouseOverComponent = null;
             }
 
@@ -577,8 +583,8 @@ public abstract class Container extends Component
                 if (mouseOverComponent == null) {
                     Mouse.setCursor(this);
                 } else {
-                    Mouse.setCursor(mouseOverComponent);
                     mouseOverComponent.mouseOver();
+                    Mouse.setCursor(mouseOverComponent);
                 }
             }
 
@@ -600,10 +606,12 @@ public abstract class Container extends Component
     @Override
     protected void mouseOut() {
         // Ensure that mouse out is called on descendant components
-        if (mouseOverComponent != null) {
+        if (mouseOverComponent != null
+            && mouseOverComponent.isMouseOver()) {
             mouseOverComponent.mouseOut();
-            mouseOverComponent = null;
         }
+
+        mouseOverComponent = null;
 
         super.mouseOut();
     }
