@@ -108,6 +108,7 @@ public class ListView extends Component {
     public interface Skin {
         public int getItemAt(int y);
         public Bounds getItemBounds(int index);
+        public int getItemIndent();
     }
 
     /**

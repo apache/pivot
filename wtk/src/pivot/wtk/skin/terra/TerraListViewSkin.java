@@ -247,16 +247,19 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public Bounds getItemBounds(int index) {
-        ListView listView = (ListView)getComponent();
         int itemHeight = getItemHeight();
+        return new Bounds(0, index * itemHeight, getWidth(), itemHeight);
+    }
 
-        Bounds itemBounds = new Bounds(0, index * itemHeight, getWidth(), itemHeight);
+    public int getItemIndent() {
+        int itemIndent = 0;
+
+        ListView listView = (ListView)getComponent();
         if (listView.getCheckmarksEnabled()) {
-            itemBounds.x = CHECKBOX.getWidth() + checkboxPadding.left + checkboxPadding.right;
-            itemBounds.width -= itemBounds.x;
+            itemIndent = CHECKBOX.getWidth() + checkboxPadding.left + checkboxPadding.right;
         }
 
-        return itemBounds;
+        return itemIndent;
     }
 
     public int getItemHeight() {
