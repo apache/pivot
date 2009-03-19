@@ -40,6 +40,14 @@ public interface ListViewListener {
     public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer);
 
     /**
+     * Called when a list view's item editor has changed.
+     *
+     * @param listView
+     * @param previousItemEditor
+     */
+    public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor);
+
+    /**
      * Called when a list view's select mode has changed.
      *
      * @param listView

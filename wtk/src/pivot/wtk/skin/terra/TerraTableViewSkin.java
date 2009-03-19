@@ -71,6 +71,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private boolean includeTrailingVerticalGridLine;
 
     private int highlightedIndex = -1;
+    private int editIndex = -1;
 
     public TerraTableViewSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -804,6 +805,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         highlightedIndex = -1;
+        editIndex = -1;
     }
 
     @Override
@@ -850,14 +852,35 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     tableView.addSelectedIndex(rowIndex);
                 }
             } else {
-                // Select the row
-                if ((selectMode == TableView.SelectMode.SINGLE
-                        && tableView.getSelectedIndex() != rowIndex)
-                    || selectMode == TableView.SelectMode.MULTI) {
+                if (tableView.isRowSelected(rowIndex)) {
+                    // Edit the row
+                    editIndex = rowIndex;
+                } else {
+                    // Select the row
                     tableView.setSelectedIndex(rowIndex);
                 }
             }
         }
+
+        return consumed;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
+
+        TableView tableView = (TableView)getComponent();
+        if (editIndex != -1
+            && count == 1) {
+            TableView.RowEditor rowEditor = tableView.getRowEditor();
+
+            if (rowEditor != null) {
+                rowEditor.edit(tableView, editIndex, getColumnAt(x));
+            }
+        }
+
+        editIndex = -1;
 
         return consumed;
     }
@@ -957,6 +980,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     // Table view events
     public void tableDataChanged(TableView tableView, List<?> previousTableData) {
         invalidateComponent();
+    }
+
+    public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
+        // No-op
     }
 
     public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode) {

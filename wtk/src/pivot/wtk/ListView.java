@@ -85,6 +85,21 @@ public class ListView extends Component {
     }
 
     /**
+     * List item editor interface.
+     *
+     * @author gbrown
+     */
+    public interface ItemEditor {
+        /**
+         * Notifies the editor that editing should begin.
+         *
+         * @param listView
+         * @param index
+         */
+        public void edit(ListView listView, int index);
+    }
+
+    /**
      * List view skin interface. List view skins are required to implement
      * this.
      *
@@ -217,6 +232,13 @@ public class ListView extends Component {
             }
         }
 
+        public void itemEditorChanged(ListView listView,
+            ListView.ItemEditor previousItemEditor) {
+            for (ListViewListener listener : this) {
+                listener.itemEditorChanged(listView, previousItemEditor);
+            }
+        }
+
         public void selectModeChanged(ListView listView,
             ListView.SelectMode previousSelectMode) {
             for (ListViewListener listener : this) {
@@ -325,6 +347,7 @@ public class ListView extends Component {
     private ListHandler listDataHandler = new ListHandler();
 
     private ItemRenderer itemRenderer = null;
+    private ItemEditor itemEditor = null;
 
     private SpanSequence selectedRanges = new SpanSequence();
     private SelectMode selectMode = SelectMode.SINGLE;
@@ -454,6 +477,31 @@ public class ListView extends Component {
         if (previousItemRenderer != itemRenderer) {
             this.itemRenderer = itemRenderer;
             listViewListeners.itemRendererChanged(this, previousItemRenderer);
+        }
+    }
+
+    /**
+     * Returns the editor used to edit items in this list.
+     *
+     * @return
+     * The item editor, or <tt>null</tt> if no editor is installed.
+     */
+    public ItemEditor getItemEditor() {
+        return itemEditor;
+    }
+
+    /**
+     * Sets the editor used to edit items in this list.
+     *
+     * @param itemEditor
+     * The item editor for the list.
+     */
+    public void setItemEditor(ItemEditor itemEditor) {
+        ItemEditor previousItemEditor = this.itemEditor;
+
+        if (previousItemEditor != itemEditor) {
+            this.itemEditor = itemEditor;
+            listViewListeners.itemEditorChanged(this, previousItemEditor);
         }
     }
 

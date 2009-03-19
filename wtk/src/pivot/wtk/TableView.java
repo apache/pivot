@@ -434,6 +434,15 @@ public class TableView extends Component {
     }
 
     /**
+     * Table row editor interface.
+     *
+     * gbrown
+     */
+    public interface RowEditor {
+        public void edit(TableView tableView, int rowIndex, int columnIndex);
+    }
+
+    /**
      * Table view skin interface. Table view skins must implement this.
      *
      * @author gbrown
@@ -672,6 +681,13 @@ public class TableView extends Component {
             }
         }
 
+        public void rowEditorChanged(TableView tableView,
+            TableView.RowEditor previousRowEditor) {
+            for (TableViewListener listener : this) {
+                listener.rowEditorChanged(tableView, previousRowEditor);
+            }
+        }
+
         public void selectModeChanged(TableView tableView, SelectMode previousSelectMode) {
             for (TableViewListener listener : this) {
                 listener.selectModeChanged(tableView, previousSelectMode);
@@ -819,6 +835,8 @@ public class TableView extends Component {
 
     private ArrayList<Integer> disabledIndexes = new ArrayList<Integer>();
 
+    private RowEditor rowEditor = null;
+
     private TableViewListenerList tableViewListeners = new TableViewListenerList();
     private TableViewColumnListenerList tableViewColumnListeners =
         new TableViewColumnListenerList();
@@ -918,6 +936,31 @@ public class TableView extends Component {
         }
 
         setTableData(JSONSerializer.parseList(tableData));
+    }
+
+    /**
+     * Returns the editor used to edit rows in this table.
+     *
+     * @return
+     * The row editor, or <tt>null</tt> if no editor is installed.
+     */
+    public RowEditor getRowEditor() {
+        return rowEditor;
+    }
+
+    /**
+     * Sets the editor used to edit rows in this table.
+     *
+     * @param rowEditor
+     * The row editor for the list.
+     */
+    public void setRowEditor(RowEditor rowEditor) {
+        RowEditor previousRowEditor = this.rowEditor;
+
+        if (previousRowEditor != rowEditor) {
+            this.rowEditor = rowEditor;
+            tableViewListeners.rowEditorChanged(this, previousRowEditor);
+        }
     }
 
     /**

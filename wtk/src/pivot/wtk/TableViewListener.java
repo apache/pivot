@@ -32,6 +32,14 @@ public interface TableViewListener {
     public void tableDataChanged(TableView tableView, List<?> previousTableData);
 
     /**
+     * Called when a table view's row editor has changed.
+     *
+     * @param tableView
+     * @param previousRowEditor
+     */
+    public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor);
+
+    /**
      * Called when a table view's select mode has changed.
      *
      * @param tableView

@@ -37,6 +37,9 @@ limitations under the License.
                                             <content:ListItem text="Purple"/>
                                         </collections:ArrayList>
                                     </listData>
+                                    <itemEditor>
+                                        <content:ListViewItemEditor/>
+                                    </itemEditor>
                                 </ListView>
                             </view>
                         </ScrollPane>

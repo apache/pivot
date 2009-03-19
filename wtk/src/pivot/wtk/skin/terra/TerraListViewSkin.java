@@ -63,6 +63,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     private Insets checkboxPadding = new Insets(2, 2, 2, 0);
 
     private int highlightedIndex = -1;
+    private int editIndex = -1;
 
     private static final Checkbox CHECKBOX = new Checkbox();
 
@@ -246,8 +247,16 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public Bounds getItemBounds(int index) {
+        ListView listView = (ListView)getComponent();
         int itemHeight = getItemHeight();
-        return new Bounds(0, index * itemHeight, getWidth(), itemHeight);
+
+        Bounds itemBounds = new Bounds(0, index * itemHeight, getWidth(), itemHeight);
+        if (listView.getCheckmarksEnabled()) {
+            itemBounds.x = CHECKBOX.getWidth() + checkboxPadding.left + checkboxPadding.right;
+            itemBounds.width -= itemBounds.x;
+        }
+
+        return itemBounds;
     }
 
     public int getItemHeight() {
@@ -519,6 +528,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         highlightedIndex = -1;
+        editIndex = -1;
     }
 
     @Override
@@ -575,10 +585,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         listView.addSelectedIndex(itemIndex);
                     }
                 } else {
-                    // Select the item
-                    if ((selectMode == ListView.SelectMode.SINGLE
-                            && listView.getSelectedIndex() != itemIndex)
-                        || selectMode == ListView.SelectMode.MULTI) {
+                    if (listView.isItemSelected(itemIndex)) {
+                        // Edit the item
+                        editIndex = itemIndex;
+                    } else {
+                        // Select the item
                         listView.setSelectedIndex(itemIndex);
                     }
                 }
@@ -610,6 +621,17 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 && y > itemY + checkboxPadding.top
                 && y < itemY + checkboxPadding.top + CHECKBOX.getHeight()) {
                 listView.setItemChecked(itemIndex, !listView.isItemChecked(itemIndex));
+            } else {
+                if (editIndex != -1
+                    && count == 1) {
+                    ListView.ItemEditor itemEditor = listView.getItemEditor();
+
+                    if (itemEditor != null) {
+                        itemEditor.edit(listView, editIndex);
+                    }
+                }
+
+                editIndex = -1;
             }
         }
 
@@ -737,6 +759,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
         invalidateComponent();
+    }
+
+    public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
+        // No-op
     }
 
     public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
