@@ -203,6 +203,9 @@ public class TextArea extends Component {
 
             this.document = document;
 
+            selectionStart = 0;
+            selectionLength = 0;
+
             textAreaListeners.documentChanged(this, previousDocument);
         }
     }
@@ -228,7 +231,8 @@ public class TextArea extends Component {
     public void setText(String text) {
         Document document = null;
 
-        if (text != null) {
+        if (text != null
+            && text.length() > 0) {
             try {
                 PlainTextSerializer serializer = new PlainTextSerializer();
                 StringReader reader = new StringReader(text);
@@ -236,6 +240,9 @@ public class TextArea extends Component {
             } catch(SerializationException exception) {
             } catch(IOException exception) {
             }
+        } else {
+            document = new Document();
+            document.add(new Paragraph(""));
         }
 
         setDocument(document);

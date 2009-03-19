@@ -588,12 +588,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         listView.addSelectedIndex(itemIndex);
                     }
                 } else {
-                    if (listView.isItemSelected(itemIndex)) {
-                        // Edit the item
-                        editIndex = itemIndex;
-                    } else {
-                        // Select the item
-                        listView.setSelectedIndex(itemIndex);
+                    if (selectMode != ListView.SelectMode.NONE) {
+                        if (listView.isItemSelected(itemIndex)) {
+                            // Edit the item
+                            editIndex = itemIndex;
+                        } else {
+                            // Select the item
+                            listView.setSelectedIndex(itemIndex);
+                        }
                     }
                 }
         	}
