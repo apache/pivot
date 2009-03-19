@@ -256,6 +256,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     private List<NodeInfo> visibleNodes = new ArrayList<NodeInfo>();
 
     private NodeInfo highlightedNode = null;
+    private NodeInfo editNode = null;
 
     // Styles
     private Font font;
@@ -1316,14 +1317,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         super.mouseOut(component);
 
         clearHighlightedNode();
+        editNode = null;
     }
 
     @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        if (!consumed
-            && button == Mouse.Button.LEFT) {
+        if (!consumed) {
             TreeView treeView = (TreeView)getComponent();
             treeView.requestFocus();
 
@@ -1369,7 +1370,11 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                         TreeView.SelectMode selectMode = treeView.getSelectMode();
 
                         if (selectMode == TreeView.SelectMode.SINGLE) {
-                            if (!nodeInfo.isSelected()) {
+                            if (nodeInfo.isSelected()) {
+                                // Edit the node
+                                editNode = nodeInfo;
+                            } else {
+                                // Select the node
                                 treeView.setSelectedPath(path);
                             }
                         } else if (selectMode == TreeView.SelectMode.MULTI) {
@@ -1396,8 +1401,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
-        if (!consumed
-            && button == Mouse.Button.LEFT) {
+        if (!consumed) {
             TreeView treeView = (TreeView)getComponent();
 
             NodeInfo nodeInfo = getNodeInfoAt(y);
@@ -1423,6 +1427,17 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     && y < nodeY + checkboxY + checkboxHeight) {
                     Sequence<Integer> path = nodeInfo.getPath();
                     treeView.setNodeChecked(path, !nodeInfo.isChecked());
+                } else {
+                    if (editNode != null
+                        && count == 1) {
+                        TreeView.NodeEditor nodeEditor = treeView.getNodeEditor();
+
+                        if (nodeEditor != null) {
+                            nodeEditor.edit(treeView, nodeInfo.getPath());
+                        }
+                    }
+
+                    editNode = null;
                 }
             }
         }
@@ -1638,6 +1653,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     // TreeViewListener methods
+
     @SuppressWarnings("unchecked")
     public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
         List<Object> treeData = (List<Object>)treeView.getTreeData();
@@ -1654,9 +1670,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         invalidateComponent();
     }
 
-    public void nodeRendererChanged(TreeView treeView,
-        TreeView.NodeRenderer previousNodeRenderer) {
+    public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer) {
         invalidateComponent();
+    }
+
+    public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
+        // No-op
     }
 
     public void selectModeChanged(TreeView treeView,
