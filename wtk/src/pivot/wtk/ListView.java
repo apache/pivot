@@ -1006,7 +1006,7 @@ public class ListView extends Component {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void load(Dictionary<String, Object> context) {
+    public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
             && context.containsKey(selectedItemKey)) {
             Object item = context.get(selectedItemKey);
@@ -1021,15 +1021,16 @@ public class ListView extends Component {
     }
 
     @Override
-    public void store(Dictionary<String, Object> context) {
+    @SuppressWarnings("unchecked")
+    public void store(Dictionary<String, ?> context) {
         if (selectedItemKey != null) {
             Object item = getSelectedItem();
-            context.put(selectedItemKey, item);
+            ((Dictionary<String, Object>)context).put(selectedItemKey, item);
         }
 
         if (selectedItemsKey != null) {
             Sequence<Object> items = getSelectedItems();
-            context.put(selectedItemsKey, items);
+            ((Dictionary<String, Sequence<Object>>)context).put(selectedItemsKey, items);
         }
     }
 

@@ -553,7 +553,7 @@ public abstract class Button extends Component {
     }
 
     @Override
-    public void load(Dictionary<String, Object> context) {
+    public void load(Dictionary<String, ?> context) {
         if (selectedKey != null
             && context.containsKey(selectedKey)) {
             Object value = context.get(selectedKey);
@@ -583,13 +583,14 @@ public abstract class Button extends Component {
     }
 
     @Override
-    public void store(Dictionary<String, Object> context) {
+    @SuppressWarnings("unchecked")
+    public void store(Dictionary<String, ?> context) {
         if (selectedKey != null) {
-            context.put(selectedKey, isSelected());
+            ((Dictionary<String, Boolean>)context).put(selectedKey, isSelected());
         }
 
         if (stateKey != null) {
-            context.put(stateKey, state);
+            ((Dictionary<String, State>)context).put(stateKey, state);
         }
     }
 

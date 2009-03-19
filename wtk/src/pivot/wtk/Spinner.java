@@ -390,7 +390,7 @@ public class Spinner extends Container {
     }
 
     @Override
-    public void load(Dictionary<String, Object> context) {
+    public void load(Dictionary<String, ?> context) {
         if (selectedItemKey != null
             && context.containsKey(selectedItemKey)) {
             Object item = context.get(selectedItemKey);
@@ -399,10 +399,11 @@ public class Spinner extends Container {
     }
 
     @Override
-    public void store(Dictionary<String, Object> context) {
+    @SuppressWarnings("unchecked")
+    public void store(Dictionary<String, ?> context) {
         if (selectedItemKey != null) {
             Object item = getSelectedItem();
-            context.put(selectedItemKey, item);
+            ((Dictionary<String, Object>)context).put(selectedItemKey, item);
         }
     }
 

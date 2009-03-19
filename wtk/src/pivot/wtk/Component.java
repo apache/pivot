@@ -1977,7 +1977,7 @@ public abstract class Component implements ConstrainedVisual {
      *
      * @param context
      */
-    public void load(Dictionary<String, Object> context) {
+    public void load(Dictionary<String, ?> context) {
     }
 
     /**
@@ -1987,7 +1987,7 @@ public abstract class Component implements ConstrainedVisual {
      *
      * @param context
      */
-    public void store(Dictionary<String, Object> context) {
+    public void store(Dictionary<String, ?> context) {
     }
 
     public DragSource getDragSource() {

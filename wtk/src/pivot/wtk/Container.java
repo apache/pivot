@@ -495,7 +495,7 @@ public abstract class Container extends Component
      * @param context
      */
     @SuppressWarnings("unchecked")
-    public void load(Dictionary<String, Object> context) {
+    public void load(Dictionary<String, ?> context) {
         if (contextKey != null
             && context.containsKey(contextKey)) {
         	Object value = context.get(contextKey);
@@ -528,7 +528,7 @@ public abstract class Container extends Component
      * @param context
      */
     @SuppressWarnings("unchecked")
-    public void store(Dictionary<String, Object> context) {
+    public void store(Dictionary<String, ?> context) {
         if (contextKey != null) {
             // Bound value is expected to be a sub-context
         	Object value = context.get(contextKey);

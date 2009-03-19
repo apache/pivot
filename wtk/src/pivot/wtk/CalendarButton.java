@@ -248,7 +248,7 @@ public class CalendarButton extends Button {
      * picker button's bind key, if one is set.
      */
     @Override
-    public void load(Dictionary<String, Object> context) {
+    public void load(Dictionary<String, ?> context) {
         String selectedDateKey = getSelectedDateKey();
 
         if (selectedDateKey != null
@@ -271,11 +271,12 @@ public class CalendarButton extends Button {
      * picker button's bind key, if one is set.
      */
     @Override
-    public void store(Dictionary<String, Object> context) {
+    @SuppressWarnings("unchecked")
+    public void store(Dictionary<String, ?> context) {
         String selectedDateKey = getSelectedDateKey();
 
         if (selectedDateKey != null) {
-            context.put(selectedDateKey, getSelectedDate());
+            ((Dictionary<String, CalendarDate>)context).put(selectedDateKey, getSelectedDate());
         }
     }
 

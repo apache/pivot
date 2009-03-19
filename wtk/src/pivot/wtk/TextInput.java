@@ -583,7 +583,7 @@ public class TextInput extends Component {
     }
 
     @Override
-    public void load(Dictionary<String, Object> context) {
+    public void load(Dictionary<String, ?> context) {
         if (textKey != null
             && context.containsKey(textKey)) {
             Object value = context.get(textKey);
@@ -596,9 +596,10 @@ public class TextInput extends Component {
     }
 
     @Override
-    public void store(Dictionary<String, Object> context) {
+    @SuppressWarnings("unchecked")
+    public void store(Dictionary<String, ?> context) {
         if (textKey != null) {
-            context.put(textKey, getText());
+            ((Dictionary<String, String>)context).put(textKey, getText());
         }
     }
 

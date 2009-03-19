@@ -286,7 +286,7 @@ public class Calendar extends Container {
      * picker's bind key, if one is set.
      */
     @Override
-    public void load(Dictionary<String, Object> context) {
+    public void load(Dictionary<String, ?> context) {
         if (selectedDateKey != null
             && context.containsKey(selectedDateKey)) {
             Object value = context.get(selectedDateKey);
@@ -307,9 +307,10 @@ public class Calendar extends Container {
      * picker's bind key, if one is set.
      */
     @Override
-    public void store(Dictionary<String, Object> context) {
+    @SuppressWarnings("unchecked")
+    public void store(Dictionary<String, ?> context) {
         if (selectedDateKey != null) {
-            context.put(selectedDateKey, selectedDate);
+            ((Dictionary<String, CalendarDate>)context).put(selectedDateKey, selectedDate);
         }
     }
 
