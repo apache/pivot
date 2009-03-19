@@ -77,8 +77,8 @@ public abstract class Theme {
         return componentSkinMap.get(componentClass);
     }
 
-    public abstract void install();
-    public abstract void uninstall();
+    protected abstract void install();
+    protected abstract void uninstall();
 
     public abstract Font getFont();
     public abstract Image getMessageIcon(MessageType messageType);

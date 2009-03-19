@@ -17,11 +17,14 @@ package pivot.wtk.skin.terra;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.InputStream;
+import java.io.IOException;
 import java.net.URL;
 
 import pivot.collections.List;
+import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
-import pivot.util.Resources;
+import pivot.serialization.SerializationException;
 import pivot.wtk.Accordion;
 import pivot.wtk.Alert;
 import pivot.wtk.ApplicationContext;
@@ -68,29 +71,74 @@ import pivot.wtk.TreeView;
 import pivot.wtk.media.Image;
 
 /**
- * Terra theme.
+ * Terra theme. The default color palette is shown below:
+ * <p>
+ *   <a name="palette"/>
+ *   <img src="doc-files/palette.png" border="0"/>
+ *   <br/>
+ *   <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+ *     <i>The default color palette</i>
+ *   </font>
+ * </p>
  *
  * @author gbrown
  * @author tvolkert
  */
 public final class TerraTheme extends Theme {
-    private String scheme;
-
-    private Resources resources = null;
-
     private Font font = null;
     private Color[] colors = null;
 
+    /**
+     * Creates a new theme using the default font and color palette.
+     */
     public TerraTheme() {
-        this("default");
+        this(TerraTheme.class.getResource("TerraTheme_default.json"));
     }
 
-    public TerraTheme(String scheme) {
-        if (scheme == null) {
-            throw new IllegalArgumentException("scheme is null.");
+    /**
+     * Constructs a theme, pulling the font and color palette from a JSON file
+     * at the specified location. The JSON file should represent a <tt>Map</tt>
+     * containing the following properties:
+     * <p>
+     * <table border="1" cellpadding="5">
+     *   <tr>
+     *     <th nowrap="nowrap">Property:</th>
+     *     <th nowrap="nowrap">Type:</th>
+     *     <th nowrap="nowrap">Description:</th>
+     *   </tr>
+     *   <tr valign="top">
+     *     <td><tt>font</tt></td>
+     *     <td><tt>String</tt></td>
+     *     <td>
+     *       The default theme font; must be understandable by
+     *       <tt>java.awt.Font.decode()</tt>.
+     *     </td>
+     *   </tr>
+     *   <tr valign="top">
+     *     <td><tt>colors</tt></td>
+     *     <td><tt>List&lt;String&gt;</tt></td>
+     *     <td>
+     *       This list should contain 8 colors in a form understandable by
+     *       <tt>java.awt.Color.decode()</tt>. This list represents the theme's
+     *       "base color palette", from which the full color palette is
+     *       derived. Each of these 8 colors will be expanded to comprise 3
+     *       colors in the final palette: a darker version, the color itself,
+     *       and a lighter version. Thus, the final color palette will contain
+     *       24 colors. For instance, in the <a href="#palette">default color
+     *       palette</a> the "base palette" colors are the colors in the middle
+     *       column.
+     *     </td>
+     *   </tr>
+     * </table>
+     *
+     * @param location
+     * The location of the JSON file that defines the theme's font and colors.
+     */
+    @SuppressWarnings("unchecked")
+    public TerraTheme(URL location) {
+        if (location == null) {
+            throw new IllegalArgumentException("location is null.");
         }
-
-        this.scheme = scheme;
 
         componentSkinMap.put(Accordion.class, TerraAccordionSkin.class);
         componentSkinMap.put(Alert.class, TerraAlertSkin.class);
@@ -148,44 +196,65 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TerraSplitPaneSkin.Splitter.class, TerraSplitPaneSkin.SplitterSkin.class);
         componentSkinMap.put(TerraSplitPaneSkin.SplitterShadow.class, TerraSplitPaneSkin.SplitterShadowSkin.class);
         componentSkinMap.put(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
-    }
 
-    @SuppressWarnings("unchecked")
-    public void install() {
         try {
-            String baseName = getClass().getName() + "_" + scheme;
-            resources = new Resources(baseName);
-        } catch(Exception exception) {
-            throw new RuntimeException(exception);
-        }
+            InputStream inputStream = location.openStream();
 
-        font = Font.decode(JSONSerializer.getString(resources, "font"));
+            try {
+                JSONSerializer serializer = new JSONSerializer();
+                Map<String, ?> properties = (Map<String, ?>)serializer.readObject(inputStream);
 
-        List<String> colorCodes = (List<String>)JSONSerializer.getList(resources, "colors");
-        colors = new Color[colorCodes.getLength() * 3];
+                font = Font.decode((String)properties.get("font"));
 
-        for (int i = 0, n = colorCodes.getLength(); i < n; i++) {
-            int baseIndex = i * 3 + 1;
-            Color baseColor = Color.decode(colorCodes.get(i));
+                List<String> colorCodes = (List<String>)properties.get("colors");
+                colors = new Color[colorCodes.getLength() * 3];
 
-            colors[baseIndex] = baseColor;
-            colors[baseIndex - 1] = darken(baseColor);
-            colors[baseIndex + 1] = brighten(baseColor);
+                for (int i = 0, n = colorCodes.getLength(); i < n; i++) {
+                    int baseIndex = i * 3 + 1;
+                    Color baseColor = Color.decode(colorCodes.get(i));
+
+                    colors[baseIndex] = baseColor;
+                    colors[baseIndex - 1] = darken(baseColor);
+                    colors[baseIndex + 1] = brighten(baseColor);
+                }
+            } finally {
+                inputStream.close();
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        } catch (SerializationException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
-    public void uninstall() {
-        resources = null;
+    protected void install() {
     }
 
+    protected void uninstall() {
+    }
+
+    /**
+     * Gets the theme's font.
+     */
     public Font getFont() {
         return font;
     }
 
+    /**
+     * Gets the color found at the specified index in the theme's color
+     * palette.
+     *
+     * @param index
+     * A color palette index, from 0 to 23.
+     */
     public Color getColor(int index) {
         return colors[index];
     }
 
+    /**
+     * Gets the image that this theme uses to represent messages of the
+     * specified type.
+     */
     public Image getMessageIcon(MessageType messageType) {
         String messageIconName;
 
@@ -235,6 +304,10 @@ public final class TerraTheme extends Theme {
         return messageIcon;
     }
 
+    /**
+     * Gets the "small" image that this theme uses to represent messages of the
+     * specified type.
+     */
     public Image getSmallMessageIcon(MessageType messageType) {
         String smallMessageIconName;
 
@@ -284,14 +357,18 @@ public final class TerraTheme extends Theme {
         return smallMessageIcon;
     }
 
-    public Resources getResources() {
-        return resources;
-    }
-
+    /**
+     * Returns a brighter version of the specified color. Specifically, it
+     * increases the brightness (in the HSB color model) by <tt>0.1</tt>.
+     */
     public static Color brighten(Color color) {
         return adjustBrightness(color, 0.1f);
     }
 
+    /**
+     * Returns a darker version of the specified color. Specifically, it
+     * decreases the brightness (in the HSB color model) by <tt>0.1</tt>.
+     */
     public static Color darken(Color color) {
         return adjustBrightness(color, -0.1f);
     }

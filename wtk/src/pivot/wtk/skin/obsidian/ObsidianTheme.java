@@ -21,10 +21,10 @@ public final class ObsidianTheme extends Theme {
         componentSkinMap.put(RadioButton.class, ObsidianRadioButtonSkin.class);
     }
 
-    public void install() {
+    protected void install() {
     }
 
-    public void uninstall() {
+    protected void uninstall() {
     }
 
     public Font getFont() {
