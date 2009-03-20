@@ -23,6 +23,7 @@ import java.net.URLDecoder;
 
 import netscape.javascript.JSObject;
 
+import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 
@@ -70,10 +71,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
                URL codeBase = getCodeBase();
                if (codeBase != null) {
                   try {
-                     System.out.println("Code base: " + codeBase);
                      origin = new URL(codeBase.getProtocol(), codeBase.getHost(),
                         codeBase.getPort(), "");
-                     System.out.println("Origin: " + origin);
                   } catch(Exception exception) {
                      System.out.print("Unable to determine application origin: "
                         + exception);
@@ -106,7 +105,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                                } catch(UnsupportedEncodingException exception) {
                                }
                            } else {
-                               System.out.println(argument + " is not a valid startup property.");
+                               System.err.println(argument + " is not a valid startup property.");
                            }
                        }
                    }
@@ -138,6 +137,12 @@ public final class BrowserApplicationContext extends ApplicationContext {
                         exception.printStackTrace();
                     }
                 }
+
+                if (hostApplets.getLength() == 0) {
+                    createTimer();
+                }
+
+                hostApplets.add(HostApplet.this);
             }
         }
 
@@ -173,7 +178,11 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         private class DestroyCallback implements Runnable {
             public void run() {
-                // No-op
+                hostApplets.remove(HostApplet.this);
+
+                if (hostApplets.getLength() == 0) {
+                    destroyTimer();
+                }
             }
         }
 
@@ -185,10 +194,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
         public static final String APPLICATION_CLASS_NAME_PARAMETER = "applicationClassName";
 
         private static final long serialVersionUID = 0;
-
-        public HostApplet() {
-            hostApplet = this;
-        }
 
         public Application getApplication() {
             return application;
@@ -244,22 +249,55 @@ public final class BrowserApplicationContext extends ApplicationContext {
         }
     }
 
-    private static HostApplet hostApplet = null;
+    private static ArrayList<HostApplet> hostApplets = new ArrayList<HostApplet>();
 
     /**
-     * Evaluates the specified script in the browser's JavaScript page
-     * context and returns the result.
-     * <p>
-     * NOTE This feature requires that the applet run in its own JVM; see JDK
-     * documentation on the <tt>separate_jvm</tt> applet parameter.
+     * Retrieves a named application.
+     *
+     * @param name
+     * The name of the applet hosting the application.
      */
-    public static Object eval(String script) {
-        if (hostApplet == null) {
-            throw new IllegalStateException("Application is not running in a web browser.");
+    public static Application getApplication(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("name is null.");
+        }
+
+        Application application = null;
+        for (HostApplet hostApplet : hostApplets) {
+            if (hostApplet.getName().equals(name)) {
+                application = hostApplet.getApplication();
+                break;
+            }
+        }
+
+        return application;
+    }
+
+    /**
+     * Evaluates a script in the page context and returns the result.
+     *
+     * @param script
+     * @param application
+     */
+    public static Object eval(String script, Application application) {
+        if (application == null) {
+            throw new IllegalArgumentException("application is null.");
+        }
+
+        HostApplet applicationHostApplet = null;
+        for (HostApplet hostApplet : hostApplets) {
+            if (hostApplet.getApplication() == application) {
+                applicationHostApplet = hostApplet;
+                break;
+            }
+        }
+
+        if (applicationHostApplet == null) {
+            throw new IllegalArgumentException("No applet is hosting the given application.");
         }
 
         try {
-            JSObject window = JSObject.getWindow(hostApplet);
+            JSObject window = JSObject.getWindow(applicationHostApplet);
             return window.eval(script);
         } catch (Throwable throwable) {
             throw new UnsupportedOperationException(throwable);

@@ -41,7 +41,7 @@ public class DOMTest implements Application {
 
         helloButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                BrowserApplicationContext.eval("sayHello(\"Hello from Java!\")");
+                BrowserApplicationContext.eval("sayHello(\"Hello from Java!\")", DOMTest.this);
             }
         });
 

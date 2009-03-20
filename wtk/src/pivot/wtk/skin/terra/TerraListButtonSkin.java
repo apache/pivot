@@ -123,7 +123,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
     private static final int TRIGGER_WIDTH = 14;
 
-    private static final int CLOSE_TRANSITION_DURATION = 150;
+    private static final int CLOSE_TRANSITION_DURATION = 250;
     private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraListButtonSkin() {

@@ -62,6 +62,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 case WindowEvent.WINDOW_OPENED: {
                     applicationContext.getDisplayHost().requestFocus();
 
+                    createTimer();
+
                     try {
                         application.startup(applicationContext.getDisplay(),
                             new ImmutableMap<String, String>(properties));
@@ -90,6 +92,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     }
 
                     if (shutdown) {
+                        destroyTimer();
+
                         java.awt.Window window = event.getWindow();
                         window.setVisible(false);
                         window.dispose();
@@ -197,7 +201,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         properties.put(key, value);
                     }
                 } else {
-                    System.out.println(arg + " is not a valid startup property.");
+                    System.err.println(arg + " is not a valid startup property.");
                 }
             }
         }
@@ -207,7 +211,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Load the application
         if (applicationClassName == null) {
-            System.out.println("Application class name is required.");
+            System.err.println("Application class name is required.");
         } else {
             Class<?> applicationClass = Class.forName(applicationClassName);
             application = (Application)applicationClass.newInstance();

@@ -66,7 +66,7 @@ public abstract class Component implements ConstrainedVisual {
                 customStyles.add(key);
                 componentListeners.styleUpdated(Component.this, key, previousValue);
             } catch(PropertyNotFoundException exception) {
-                System.out.println("\"" + key + "\" is not a valid style for "
+                System.err.println("\"" + key + "\" is not a valid style for "
                     + Component.this);
             }
 

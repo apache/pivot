@@ -308,7 +308,7 @@ public abstract class ApplicationContext {
                         }
                     }
                 } catch (RuntimeException exception) {
-                    System.out.println("Exception thrown during paint(): " + exception);
+                    System.err.println("Exception thrown during paint(): " + exception);
                     throw exception;
                 }
             }
@@ -1081,8 +1081,7 @@ public abstract class ApplicationContext {
     private static HashMap<URL, Object> resourceCache = new HashMap<URL, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
-    // TODO Create/destroy this in subclass
-    protected static Timer timer = new Timer();
+    private static Timer timer = null;
 
     private static final String DEFAULT_THEME_CLASS_NAME = "pivot.wtk.skin.terra.TerraTheme";
 
@@ -1098,7 +1097,7 @@ public abstract class ApplicationContext {
         } catch (Exception exception) {
             // No-op; assume that a custom theme will be installed later
             // by the caller
-            System.out.println("Warning: Unable to load default theme.");
+            System.err.println("Warning: Unable to load default theme.");
         }
     }
 
@@ -1139,7 +1138,7 @@ public abstract class ApplicationContext {
             Object desktop = getDesktopMethod.invoke(null, (Object[]) null);
             browseMethod.invoke(desktop, location.toURI());
         } catch (Exception exception) {
-            System.out.println("Unable to open URL in default browser.");
+            System.err.println("Unable to open URL in default browser.");
         }
     }
 
@@ -1154,7 +1153,7 @@ public abstract class ApplicationContext {
      * Schedules a task for one-time execution. The task will be executed on
      * the UI thread.
      *
-     * @param runnable
+     * @param callback
      * The task to execute.
      *
      * @param delay
@@ -1171,7 +1170,7 @@ public abstract class ApplicationContext {
      * Schedules a task for repeated execution. The task will be executed on the
      * UI thread and will begin executing immediately.
      *
-     * @param runnable
+     * @param callback
      * The task to execute.
      *
      * @param period
@@ -1185,7 +1184,7 @@ public abstract class ApplicationContext {
      * Schedules a task for repeated execution. The task will be executed on the
      * UI thread.
      *
-     * @param runnable
+     * @param callback
      * The task to execute.
      *
      * @param delay
@@ -1205,34 +1204,43 @@ public abstract class ApplicationContext {
      * Queues a task to execute after all pending events have been processed and
      * returns without waiting for the task to complete.
      *
-     * @param runnable
-     * The runnable to execute.
+     * @param callback
+     * The task to execute.
      */
-    public static void queueCallback(Runnable runnable) {
-        queueCallback(runnable, false);
+    public static void queueCallback(Runnable callback) {
+        queueCallback(callback, false);
     }
 
     /**
      * Queues a task to execute after all pending events have been processed and
      * optionally waits for the task to complete.
      *
-     * @param runnable
-     * The runnable to execute.
+     * @param callback
+     * The task to execute.
      *
      * @param wait
-     * If <tt>true</tt>, does not return until the runnable has executed.
+     * If <tt>true</tt>, does not return until the task has executed.
      * Otherwise, returns immediately.
      */
-    public static void queueCallback(Runnable runnable, boolean wait) {
+    public static void queueCallback(Runnable callback, boolean wait) {
         if (wait) {
             try {
-                java.awt.EventQueue.invokeAndWait(runnable);
+                java.awt.EventQueue.invokeAndWait(callback);
             } catch (InvocationTargetException exception) {
             } catch (InterruptedException exception) {
             }
         } else {
-            java.awt.EventQueue.invokeLater(runnable);
+            java.awt.EventQueue.invokeLater(callback);
         }
+    }
+
+    protected static void createTimer() {
+        timer = new Timer();
+    }
+
+    protected static void destroyTimer() {
+        timer.cancel();
+        timer = null;
     }
 
     private static DropAction getUserDropAction(InputEvent event) {

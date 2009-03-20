@@ -665,7 +665,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
             if (++i > 4) {
                 // Infinite loop protection
-                System.out.println("Breaking out of potential infinite loop");
+                System.err.println("Breaking out of potential infinite loop");
                 break;
             }
         } while (viewWidth != previousViewWidth
