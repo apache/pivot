@@ -106,13 +106,12 @@ public class Accordion extends Container {
             // Attach the attributes
             panel.setAttributes(new AccordionAttributes());
 
-            accordionListeners.panelInserted(Accordion.this, index);
-
-            // If the selected panel's index changed as a result of
-            // this insertion, update it
+            // Update the selection
             if (selectedIndex >= index) {
-                setSelectedIndex(selectedIndex + 1);
+                selectedIndex++;
             }
+
+            accordionListeners.panelInserted(Accordion.this, index);
         }
 
         public Component update(int index, Component panel) {
@@ -129,18 +128,21 @@ public class Accordion extends Container {
         }
 
         public Sequence<Component> remove(int index, int count) {
-            // If the selected panel is being removed, clear the selection
-            if (selectedIndex >= index
-                && selectedIndex < index + count) {
-                setSelectedIndex(-1);
-            }
-
             // Remove the panels from the panel list
             Sequence<Component> removed = panels.remove(index, count);
 
             // Detach the attributes
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 removed.get(i).setAttributes(null);
+            }
+
+            // Update the selection
+            if (selectedIndex >= index) {
+                if (selectedIndex < index + count) {
+                    selectedIndex = -1;
+                } else {
+                    selectedIndex -= count;
+                }
             }
 
             accordionListeners.panelsRemoved(Accordion.this, index, removed);

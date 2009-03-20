@@ -128,26 +128,26 @@ public class CardPane extends Container {
 
     @Override
     public void insert(Component component, int index) {
-        super.insert(component, index);
-
-        // If the selected component's index changed as a result of
-        // this insertion, update it
+        // Update the selection
         if (selectedIndex >= index) {
-            setSelectedIndex(selectedIndex + 1);
+            selectedIndex++;
         }
+
+        super.insert(component, index);
     }
 
     @Override
     public Sequence<Component> remove(int index, int count) {
-        Sequence<Component> removed = super.remove(index, count);
-
-        // If the selected component was removed, clear the selection
-        if (selectedIndex >= index
-            && selectedIndex < index + count) {
-            setSelectedIndex(-1);
+        // Update the selection
+        if (selectedIndex >= index) {
+            if (selectedIndex < index + count) {
+                selectedIndex = -1;
+            } else {
+                selectedIndex -= count;
+            }
         }
 
-        return removed;
+        return super.remove(index, count);
     }
 
     public ListenerList<CardPaneListener> getCardPaneListeners() {

@@ -105,13 +105,12 @@ public class TabPane extends Container {
             // Attach the attributes
             tab.setAttributes(new TabPaneAttributes());
 
-            tabPaneListeners.tabInserted(TabPane.this, index);
-
-            // If the selected tab's index changed as a result of
-            // this insertion, update it
+            // Update the selection
             if (selectedIndex >= index) {
-                setSelectedIndex(selectedIndex + 1);
+                selectedIndex++;
             }
+
+            tabPaneListeners.tabInserted(TabPane.this, index);
         }
 
         public Component update(int index, Component tab) {
@@ -128,18 +127,21 @@ public class TabPane extends Container {
         }
 
         public Sequence<Component> remove(int index, int count) {
-            // If the selected tab is being removed, clear the selection
-            if (selectedIndex >= index
-                && selectedIndex < index + count) {
-                setSelectedIndex(-1);
-            }
-
             // Remove the tabs from the tab list
             Sequence<Component> removed = tabs.remove(index, count);
 
             // Detach the attributes
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 removed.get(i).setAttributes(null);
+            }
+
+            // Update the selection
+            if (selectedIndex >= index) {
+                if (selectedIndex < index + count) {
+                    selectedIndex = -1;
+                } else {
+                    selectedIndex -= count;
+                }
             }
 
             tabPaneListeners.tabsRemoved(TabPane.this, index, removed);
