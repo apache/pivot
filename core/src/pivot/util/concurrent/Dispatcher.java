@@ -28,6 +28,11 @@ import pivot.collections.concurrent.SynchronizedQueue;
  * currently dispatched as soon as they are added to the queue. Need to complete
  * the pooling implementation.
  * <p>
+ * TODO Add a flag that allows the monitor thread to run as a non-daemon, and
+ * define a shutdown() or cancel() method that will stop the thread. This will
+ * allow ApplicationContext to control the dispatcher lifecycle and prevent
+ * the thread from being randomly killed by applets.
+ * <p>
  * TODO Is there a way to throw an AbortException when an item is removed
  * from the queue, without having to rely on methods like abort()?
  *

@@ -70,7 +70,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     private int height = 0;
 
     private ShowTooltipCallback showTooltipCallback = new ShowTooltipCallback();
-    private int showTooltipTimeoutID = -1;
+    private ApplicationContext.ScheduledCallback scheduledShowTooltipCallback = null;
 
     public static final int SHOW_TOOLTIP_TIMEOUT = 1000;
 
@@ -182,14 +182,14 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     // Component mouse events
     public boolean mouseMove(Component component, int x, int y) {
-        if (showTooltipTimeoutID != -1) {
-            ApplicationContext.clearTimeout(showTooltipTimeoutID);
-            showTooltipTimeoutID = -1;
+        if (scheduledShowTooltipCallback != null) {
+            scheduledShowTooltipCallback.cancel();
+            scheduledShowTooltipCallback = null;
         }
 
         if (getComponent().getTooltipText() != null) {
-            showTooltipTimeoutID = ApplicationContext.setTimeout(showTooltipCallback,
-                SHOW_TOOLTIP_TIMEOUT);
+            scheduledShowTooltipCallback =
+                ApplicationContext.scheduleCallback(showTooltipCallback, SHOW_TOOLTIP_TIMEOUT);
         }
 
         return false;
@@ -199,9 +199,9 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     public void mouseOut(Component component) {
-        if (showTooltipTimeoutID != -1) {
-            ApplicationContext.clearTimeout(showTooltipTimeoutID);
-            showTooltipTimeoutID = -1;
+        if (scheduledShowTooltipCallback != null) {
+            scheduledShowTooltipCallback.cancel();
+            scheduledShowTooltipCallback = null;
         }
     }
 

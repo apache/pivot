@@ -203,7 +203,7 @@ public class StockTracker implements Application {
 
         refreshTable();
 
-        ApplicationContext.setInterval(new Runnable() {
+        ApplicationContext.scheduleRecurringCallback(new Runnable() {
             public void run() {
                 refreshTable();
             }

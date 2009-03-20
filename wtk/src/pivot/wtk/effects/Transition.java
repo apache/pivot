@@ -33,19 +33,13 @@ public abstract class Transition {
 
     private long startTime = 0;
     private long currentTime = 0;
-    private int intervalID = -1;
+    private ApplicationContext.ScheduledCallback transitionCallback = null;
 
     public static final int DEFAULT_DURATION = 0;
     public static final int DEFAULT_RATE = 15;
 
     private final Runnable updateCallback = new Runnable() {
         public void run() {
-            if (intervalID == -1) {
-                // TODO Figure out why this is happening
-                // System.out.println("Interval task executed after it was canceled.");
-                return;
-            }
-
             currentTime = System.currentTimeMillis();
 
             long endTime = startTime + duration;
@@ -117,7 +111,7 @@ public abstract class Transition {
             throw new IllegalArgumentException("duration is negative.");
         }
 
-        if (intervalID != -1) {
+        if (transitionCallback != null) {
             throw new IllegalStateException("Transition is currently running.");
         }
 
@@ -148,7 +142,7 @@ public abstract class Transition {
             throw new IllegalArgumentException("rate is negative.");
         }
 
-        if (intervalID != -1) {
+        if (transitionCallback != null) {
             throw new IllegalStateException("Transition is currently running.");
         }
 
@@ -216,7 +210,7 @@ public abstract class Transition {
      * it is not
      */
     public boolean isRunning() {
-        return (intervalID != -1);
+        return (transitionCallback != null);
     }
 
     /**
@@ -240,7 +234,7 @@ public abstract class Transition {
      * <tt>null</tt> if no notification is necessary
      */
     public void start(TransitionListener transitionListener) {
-        if (intervalID != -1) {
+        if (transitionCallback != null) {
             throw new IllegalStateException("Transition is currently running.");
         }
 
@@ -249,7 +243,8 @@ public abstract class Transition {
         startTime = System.currentTimeMillis();
         currentTime = startTime;
 
-        intervalID = ApplicationContext.setInterval(updateCallback, getInterval());
+        transitionCallback = ApplicationContext.scheduleRecurringCallback(updateCallback,
+            getInterval());
 
         update();
     }
@@ -259,10 +254,11 @@ public abstract class Transition {
      * {@link TransitionListener#transitionCompleted(Transition)} event.
      */
     public void stop() {
-        if (intervalID != -1) {
-            ApplicationContext.clearInterval(intervalID);
-            intervalID = -1;
+        if (transitionCallback != null) {
+            transitionCallback.cancel();
         }
+
+        transitionCallback = null;
     }
 
     /**
@@ -270,7 +266,7 @@ public abstract class Transition {
      * {@link TransitionListener#transitionCompleted(Transition)} event.
      */
     public void end() {
-    	if (intervalID != -1) {
+    	if (transitionCallback != null) {
         	currentTime = startTime + duration;
         	stop();
         	update();

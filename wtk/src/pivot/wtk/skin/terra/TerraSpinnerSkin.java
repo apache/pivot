@@ -51,8 +51,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         public Spinner spinner;
         public int direction;
 
-        private int timeoutID = -1;
-        private int intervalID = -1;
+        private ApplicationContext.ScheduledCallback scheduledSpinnerCallback = null;
 
         /**
          * Starts spinning the specified spinner.
@@ -71,26 +70,19 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         public void start(Spinner spinner, int direction) {
             assert(direction != 0) : "Direction must be positive or negative";
 
-            if (timeoutID != -1
-                || intervalID != -1) {
+            if (scheduledSpinnerCallback != null) {
                 throw new IllegalStateException("Already running");
             }
 
             this.spinner = spinner;
             this.direction = direction;
 
-            // Wait a timeout period, then begin repidly spinning
-            timeoutID = ApplicationContext.setTimeout(new Runnable() {
+            // Wait a timeout period, then begin rapidly spinning
+            scheduledSpinnerCallback = ApplicationContext.scheduleRecurringCallback(new Runnable() {
                 public void run() {
-                    intervalID = ApplicationContext.setInterval(new Runnable() {
-                        public void run() {
-                            spin();
-                        }
-                    }, 30);
-
-                    timeoutID = -1;
+                    spin();
                 }
-            }, 400);
+            }, 400, 30);
 
             // We initially spin once to register that we've started
             spin();
@@ -124,14 +116,9 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
          * Stops any automatic spinning in progress.
          */
         public void stop() {
-            if (timeoutID != -1) {
-                ApplicationContext.clearTimeout(timeoutID);
-                timeoutID = -1;
-            }
-
-            if (intervalID != -1) {
-                ApplicationContext.clearInterval(intervalID);
-                intervalID = -1;
+            if (scheduledSpinnerCallback != null) {
+                scheduledSpinnerCallback.cancel();
+                scheduledSpinnerCallback = null;
             }
         }
     }

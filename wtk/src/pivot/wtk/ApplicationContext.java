@@ -67,39 +67,7 @@ import pivot.wtk.effects.Decorator;
  */
 public abstract class ApplicationContext {
     /**
-     * Resource cache dictionary implementation.
-     *
-     * @author gbrown
-     */
-    public static final class ResourceCacheDictionary
-        implements Dictionary<URL, Object>, Iterable<URL> {
-        public Object get(URL key) {
-            return resourceCache.get(key);
-        }
-
-        public Object put(URL key, Object value) {
-            return resourceCache.put(key, value);
-        }
-
-        public Object remove(URL key) {
-            return resourceCache.remove(key);
-        }
-
-        public boolean containsKey(URL key) {
-            return resourceCache.containsKey(key);
-        }
-
-        public boolean isEmpty() {
-            return resourceCache.isEmpty();
-        }
-
-        public Iterator<URL> iterator() {
-            return new ImmutableIterator<URL>(resourceCache.iterator());
-        }
-    }
-
-    /**
-     * Native AWT display host.
+     * Native display host.
      *
      * @author gbrown
      */
@@ -1061,30 +1029,47 @@ public abstract class ApplicationContext {
         }
     }
 
-    private static class IntervalTask extends TimerTask {
+    /**
+     * Resource cache dictionary implementation.
+     *
+     * @author gbrown
+     */
+    public static final class ResourceCacheDictionary
+        implements Dictionary<URL, Object>, Iterable<URL> {
+        public Object get(URL key) {
+            return resourceCache.get(key);
+        }
+
+        public Object put(URL key, Object value) {
+            return resourceCache.put(key, value);
+        }
+
+        public Object remove(URL key) {
+            return resourceCache.remove(key);
+        }
+
+        public boolean containsKey(URL key) {
+            return resourceCache.containsKey(key);
+        }
+
+        public boolean isEmpty() {
+            return resourceCache.isEmpty();
+        }
+
+        public Iterator<URL> iterator() {
+            return new ImmutableIterator<URL>(resourceCache.iterator());
+        }
+    }
+
+    public static class ScheduledCallback extends TimerTask {
         private Runnable runnable = null;
 
-        public IntervalTask(Runnable runnable) {
+        private ScheduledCallback(Runnable runnable) {
             this.runnable = runnable;
         }
 
         public void run() {
             queueCallback(runnable);
-        }
-    }
-
-    private static class TimeoutTask extends TimerTask {
-        private Runnable runnable = null;
-        int timeoutID = -1;
-
-        public TimeoutTask(Runnable runnable, int timeoutID) {
-            this.runnable = runnable;
-            this.timeoutID = timeoutID;
-        }
-
-        public void run() {
-            queueCallback(runnable, true);
-            clearTimeout(timeoutID);
         }
     }
 
@@ -1096,9 +1081,8 @@ public abstract class ApplicationContext {
     private static HashMap<URL, Object> resourceCache = new HashMap<URL, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
-    private static Timer timer = new Timer(true);
-    private static HashMap<Integer, TimerTask> timerTaskMap = new HashMap<Integer, TimerTask>();
-    private static int nextTimerTaskID = 0;
+    // TODO Create/destroy this in subclass
+    protected static Timer timer = new Timer();
 
     private static final String DEFAULT_THEME_CLASS_NAME = "pivot.wtk.skin.terra.TerraTheme";
 
@@ -1167,102 +1151,54 @@ public abstract class ApplicationContext {
     }
 
     /**
+     * Schedules a task for one-time execution. The task will be executed on
+     * the UI thread.
+     *
+     * @param runnable
+     * The task to execute.
+     *
+     * @param delay
+     * The length of time to wait before executing the task.
+     */
+    public static ScheduledCallback scheduleCallback(Runnable callback, long delay) {
+        ScheduledCallback scheduledCallback = new ScheduledCallback(callback);
+        timer.schedule(scheduledCallback, delay);
+
+        return scheduledCallback;
+    }
+
+    /**
+     * Schedules a task for repeated execution. The task will be executed on the
+     * UI thread and will begin executing immediately.
+     *
+     * @param runnable
+     * The task to execute.
+     *
+     * @param period
+     * The interval at which the task will be repeated.
+     */
+    public static ScheduledCallback scheduleRecurringCallback(Runnable callback, long period) {
+        return scheduleRecurringCallback(callback, 0, period);
+    }
+
+    /**
      * Schedules a task for repeated execution. The task will be executed on the
      * UI thread.
      *
      * @param runnable
      * The task to execute.
      *
+     * @param delay
+     * The length of time to wait before the first execution of the task
+     *
      * @param period
-     * The interval at which the task should be executed.
-     *
-     * @return An integer ID that can be used to cancel execution of the task.
+     * The interval at which the task will be repeated.
      */
-    public static int setInterval(Runnable runnable, long period) {
-        int intervalID = nextTimerTaskID++;
+    public static ScheduledCallback scheduleRecurringCallback(Runnable callback, long delay, long period) {
+        ScheduledCallback scheduledCallback = new ScheduledCallback(callback);
+        timer.schedule(scheduledCallback, delay, period);
 
-        IntervalTask intervalTask = new IntervalTask(runnable);
-        timerTaskMap.put(intervalID, intervalTask);
-
-        try {
-            timer.schedule(intervalTask, 0, period);
-        } catch (IllegalStateException exception) {
-            System.out.println(exception.getMessage());
-
-            // TODO This is a workaround for an apparent bug in the Mac OSX
-            // Java Plugin, which appears to prematurely kill the timer thread.
-            // Remove this when the issue is fixed.
-            timer = new Timer(true);
-            timerTaskMap.clear();
-            timerTaskMap.put(intervalID, intervalTask);
-            timer.schedule(intervalTask, 0, period);
-        }
-
-        return intervalID;
-    }
-
-    /**
-     * Cancels execution of a scheduled task.
-     *
-     * @param intervalID
-     * The ID of the task to cancel.
-     */
-    public static void clearInterval(int intervalID) {
-        clearTimerTask(intervalID);
-    }
-
-    /**
-     * Schedules a task for execution after an elapsed time.
-     *
-     * @param runnable
-     * The task to execute.
-     *
-     * @param timeout
-     * The time after which the task should begin executing.
-     */
-    public static int setTimeout(Runnable runnable, long timeout) {
-        int timeoutID = nextTimerTaskID++;
-
-        TimeoutTask timeoutTask = new TimeoutTask(runnable, timeoutID);
-        timerTaskMap.put(timeoutID, timeoutTask);
-
-        try {
-            timer.schedule(timeoutTask, timeout);
-        } catch (IllegalStateException exception) {
-            System.out.println(exception.getMessage());
-
-            // TODO This is a workaround for an apparent bug in the Mac OSX
-            // Java Plugin, which appears to prematurely kill the timer thread.
-            // Remove this when the issue is fixed.
-            timer = new Timer(true);
-            timerTaskMap.clear();
-            timerTaskMap.put(timeoutID, timeoutTask);
-            timer.schedule(timeoutTask, timeout);
-        }
-
-        return timeoutID;
-    }
-
-    /**
-     * Cancels execution of a scheduled task.
-     *
-     * @param timeoutID
-     * The ID of the task to cancel.
-     */
-    public static void clearTimeout(int timeoutID) {
-        clearTimerTask(timeoutID);
-    }
-
-    /**
-     * Cancels execution of a timer task.
-     *
-     * @param timerTaskID
-     */
-    private static void clearTimerTask(int timerTaskID) {
-        TimerTask timerTask = timerTaskMap.remove(timerTaskID);
-        if (timerTask != null) {
-            timerTask.cancel();
-        }
+        return scheduledCallback;
     }
 
     /**

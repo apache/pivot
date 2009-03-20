@@ -1180,7 +1180,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     private Rectangle caret = new Rectangle();
     private boolean caretOn = false;
     private BlinkCursorCallback blinkCursorCallback = new BlinkCursorCallback();
-    private int blinkCursorIntervalID = -1;
+    private ApplicationContext.ScheduledCallback scheduledBlinkCursorCallback = null;
 
     private Font font;
     private Color color;
@@ -1312,17 +1312,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
     private void showCaret(boolean show) {
         if (show) {
-            if (blinkCursorIntervalID == -1) {
-                blinkCursorIntervalID = ApplicationContext.setInterval(blinkCursorCallback,
-                    Platform.getCursorBlinkRate());
+            if (scheduledBlinkCursorCallback == null) {
+                scheduledBlinkCursorCallback =
+                    ApplicationContext.scheduleRecurringCallback(blinkCursorCallback,
+                        Platform.getCursorBlinkRate());
 
                 // Run the callback once now to show the cursor immediately
                 blinkCursorCallback.run();
             }
         } else {
-            if (blinkCursorIntervalID != -1) {
-                ApplicationContext.clearInterval(blinkCursorIntervalID);
-                blinkCursorIntervalID = -1;
+            if (scheduledBlinkCursorCallback != null) {
+                scheduledBlinkCursorCallback.cancel();
+                scheduledBlinkCursorCallback = null;
             }
         }
     }

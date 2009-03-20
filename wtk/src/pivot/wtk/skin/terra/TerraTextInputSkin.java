@@ -224,10 +224,10 @@ public class TerraTextInputSkin extends ComponentSkin
     private int scrollLeft = 0;
 
     private BlinkCursorCallback blinkCursorCallback = new BlinkCursorCallback();
-    private int blinkCursorIntervalID = -1;
+    private ApplicationContext.ScheduledCallback scheduledBlinkCursorCallback = null;
 
     private ScrollSelectionCallback scrollSelectionCallback = new ScrollSelectionCallback();
-    private int scrollSelectionIntervalID = -1;
+    private ApplicationContext.ScheduledCallback scheduledScrollSelectionCallback = null;
 
     private Font font;
     private Color color;
@@ -470,17 +470,18 @@ public class TerraTextInputSkin extends ComponentSkin
 
     public void showCaret(boolean show) {
         if (show) {
-            if (blinkCursorIntervalID == -1) {
-                blinkCursorIntervalID = ApplicationContext.setInterval(blinkCursorCallback,
-                    Platform.getCursorBlinkRate());
+            if (scheduledBlinkCursorCallback == null) {
+                scheduledBlinkCursorCallback =
+                    ApplicationContext.scheduleRecurringCallback(blinkCursorCallback,
+                        Platform.getCursorBlinkRate());
 
                 // Run the callback once now to show the cursor immediately
                 blinkCursorCallback.run();
             }
         } else {
-            if (blinkCursorIntervalID != -1) {
-                ApplicationContext.clearInterval(blinkCursorIntervalID);
-                blinkCursorIntervalID = -1;
+            if (scheduledBlinkCursorCallback != null) {
+                scheduledBlinkCursorCallback.cancel();
+                scheduledBlinkCursorCallback = null;
             }
         }
     }
@@ -840,9 +841,9 @@ public class TerraTextInputSkin extends ComponentSkin
                 if (x >= 0
                     && x < textInput.getWidth()) {
                     // Stop the scroll selection timer
-                    if (scrollSelectionIntervalID != -1) {
-                        ApplicationContext.clearInterval(scrollSelectionIntervalID);
-                        scrollSelectionIntervalID = -1;
+                    if (scheduledScrollSelectionCallback != null) {
+                        scheduledScrollSelectionCallback.cancel();
+                        scheduledScrollSelectionCallback = null;
                     }
 
                     // Get the current selection
@@ -865,9 +866,10 @@ public class TerraTextInputSkin extends ComponentSkin
                 } else {
                     scrollSelectionCallback.x = x;
 
-                    if (scrollSelectionIntervalID == -1) {
-                        scrollSelectionIntervalID =
-                            ApplicationContext.setInterval(scrollSelectionCallback, SCROLL_RATE);
+                    if (scheduledScrollSelectionCallback == null) {
+                        scheduledScrollSelectionCallback =
+                            ApplicationContext.scheduleRecurringCallback(scrollSelectionCallback,
+                                SCROLL_RATE);
 
                         // Run the callback once now to scroll the selection immediately
                         scrollSelectionCallback.run();
@@ -907,9 +909,9 @@ public class TerraTextInputSkin extends ComponentSkin
 
         if (Mouse.getCapturer() == component) {
             // Stop the scroll selection timer
-            if (scrollSelectionIntervalID != -1) {
-                ApplicationContext.clearInterval(scrollSelectionIntervalID);
-                scrollSelectionIntervalID = -1;
+            if (scheduledScrollSelectionCallback != null) {
+                scheduledScrollSelectionCallback.cancel();
+                scheduledScrollSelectionCallback = null;
             }
 
             Mouse.release();

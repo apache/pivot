@@ -166,8 +166,10 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
             if (northButton.isMouseOver()) {
                 int scrollTop = Math.max(panorama.getScrollTop()
                     - (int)scrollDistance, 0);
-                if (scrollTop == 0) {
-                    ApplicationContext.clearInterval(scrollIntervalID);
+                if (scrollTop == 0
+                    && scheduledScrollCallback != null) {
+                    scheduledScrollCallback.cancel();
+                    scheduledScrollCallback = null;
                 }
 
                 panorama.setScrollTop(scrollTop);
@@ -175,8 +177,10 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
                 int maxScrollTop = getMaxScrollTop();
                 int scrollTop = Math.min(panorama.getScrollTop()
                     + (int)scrollDistance, maxScrollTop);
-                if (scrollTop == maxScrollTop) {
-                    ApplicationContext.clearInterval(scrollIntervalID);
+                if (scrollTop == maxScrollTop
+                    && scheduledScrollCallback != null) {
+                    scheduledScrollCallback.cancel();
+                    scheduledScrollCallback = null;
                 }
 
                 panorama.setScrollTop(scrollTop);
@@ -185,8 +189,10 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
                 int maxScrollLeft = getMaxScrollLeft();
                 int scrollLeft = Math.min(panorama.getScrollLeft()
                     + (int)scrollDistance, maxScrollLeft);
-                if (scrollLeft == maxScrollLeft) {
-                    ApplicationContext.clearInterval(scrollIntervalID);
+                if (scrollLeft == maxScrollLeft
+                    && scheduledScrollCallback != null) {
+                    scheduledScrollCallback.cancel();
+                    scheduledScrollCallback = null;
                 }
 
                 System.out.println(scrollLeft + ", " + maxScrollLeft);
@@ -194,8 +200,10 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
             } else if (westButton.isMouseOver()) {
                 int scrollLeft = Math.max(panorama.getScrollLeft()
                     - (int)scrollDistance, 0);
-                if (scrollLeft == 0) {
-                    ApplicationContext.clearInterval(scrollIntervalID);
+                if (scrollLeft == 0
+                    && scheduledScrollCallback != null) {
+                    scheduledScrollCallback.cancel();
+                    scheduledScrollCallback = null;
                 }
 
                 System.out.println(scrollLeft);
@@ -234,18 +242,22 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         public void mouseOver(Component component) {
             // Start scroll timer
             scrollDistance = INITIAL_SCROLL_DISTANCE;
-            scrollIntervalID = ApplicationContext.setInterval(scrollCallback, SCROLL_RATE);
+            scheduledScrollCallback =
+                ApplicationContext.scheduleRecurringCallback(scrollCallback, SCROLL_RATE);
         }
 
         public void mouseOut(Component component) {
             // Stop scroll timer
-            ApplicationContext.clearInterval(scrollIntervalID);
+            if (scheduledScrollCallback != null) {
+                scheduledScrollCallback.cancel();
+                scheduledScrollCallback = null;
+            }
         }
     };
 
     private float scrollDistance = 0;
     private ScrollCallback scrollCallback = new ScrollCallback();
-    private int scrollIntervalID = -1;
+    private ApplicationContext.ScheduledCallback scheduledScrollCallback = null;
 
     private static final int SCROLL_RATE = 50;
     private static final float INITIAL_SCROLL_DISTANCE = 10;

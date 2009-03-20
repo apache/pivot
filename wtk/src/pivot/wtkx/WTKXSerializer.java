@@ -91,7 +91,7 @@ public class WTKXSerializer implements Serializer<Object> {
     }
 
     private URL location = null;
-    private Dictionary<String, Object> resources = null;
+    private Resources resources = null;
 
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
@@ -120,7 +120,7 @@ public class WTKXSerializer implements Serializer<Object> {
         this(null);
     }
 
-    public WTKXSerializer(Dictionary<String, Object> resources) {
+    public WTKXSerializer(Resources resources) {
         this.resources = resources;
 
         try {
@@ -232,7 +232,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                 String src = null;
                                 String namespace = null;
 
-                                Dictionary<String, Object> includeResources = resources;
+                                Resources includeResources = resources;
 
                                 ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 

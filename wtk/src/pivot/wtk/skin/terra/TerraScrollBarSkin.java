@@ -70,8 +70,7 @@ public class TerraScrollBarSkin extends ContainerSkin
         public IncrementType incrementType;
         public int stopValue;
 
-        private int timeoutID = -1;
-        private int intervalID = -1;
+        private ApplicationContext.ScheduledCallback scheduledScrollCallback = null;
 
         /**
          * Starts scrolling the specified scroll bar with no stop value.
@@ -113,8 +112,7 @@ public class TerraScrollBarSkin extends ContainerSkin
          * Only one scroll bar may be automatically scrolled at one time
          */
         public void start(int direction, IncrementType incrementType, int stopValue) {
-            if (timeoutID != -1
-                || intervalID != -1) {
+            if (scheduledScrollCallback != null) {
                 throw new IllegalStateException("Already running");
             }
 
@@ -122,18 +120,12 @@ public class TerraScrollBarSkin extends ContainerSkin
             this.incrementType = incrementType;
             this.stopValue = stopValue;
 
-            // Wait a timeout period, then begin repidly scrolling
-            timeoutID = ApplicationContext.setTimeout(new Runnable() {
+            // Wait a timeout period, then begin rapidly scrolling
+            scheduledScrollCallback = ApplicationContext.scheduleRecurringCallback(new Runnable() {
                 public void run() {
-                    intervalID = ApplicationContext.setInterval(new Runnable() {
-                        public void run() {
-                            scroll();
-                        }
-                    }, 30);
-
-                    timeoutID = -1;
+                    scroll();
                 }
-            }, 400);
+            }, 400, 30);
 
             // We initially scroll once to register that we've started
             scroll();
@@ -143,14 +135,9 @@ public class TerraScrollBarSkin extends ContainerSkin
          * Stops any automatic scrolling in progress.
          */
         public void stop() {
-            if (timeoutID != -1) {
-                ApplicationContext.clearTimeout(timeoutID);
-                timeoutID = -1;
-            }
-
-            if (intervalID != -1) {
-                ApplicationContext.clearInterval(intervalID);
-                intervalID = -1;
+            if (scheduledScrollCallback != null) {
+                scheduledScrollCallback.cancel();
+                scheduledScrollCallback = null;
             }
         }
 

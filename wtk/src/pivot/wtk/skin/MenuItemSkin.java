@@ -34,8 +34,9 @@ import pivot.wtk.Point;
 public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListener {
     protected MenuPopup menuPopup = new MenuPopup();
 
-    protected int buttonPressTimeoutID = -1;
     protected int buttonPressInterval = 200;
+
+    protected ApplicationContext.ScheduledCallback buttonPressCallback = null;
 
     @Override
     public void install(Component component) {
@@ -62,11 +63,14 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     public void mouseOver(Component component) {
         super.mouseOver(component);
 
-        ApplicationContext.clearInterval(buttonPressTimeoutID);
+        if (buttonPressCallback != null) {
+            buttonPressCallback.cancel();
+            buttonPressCallback = null;
+        }
 
         final Menu.Item menuItem = (Menu.Item)getComponent();
         if (menuItem.getMenu() != null) {
-            buttonPressTimeoutID = ApplicationContext.setTimeout(new Runnable() {
+            buttonPressCallback = ApplicationContext.scheduleCallback(new Runnable() {
                 public void run() {
                     menuItem.press();
                 }
@@ -79,13 +83,21 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     @Override
     public void mouseOut(Component component) {
         super.mouseOut(component);
-        ApplicationContext.clearInterval(buttonPressTimeoutID);
+
+        if (buttonPressCallback != null) {
+            buttonPressCallback.cancel();
+            buttonPressCallback = null;
+        }
     }
 
     @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
-        ApplicationContext.clearInterval(buttonPressTimeoutID);
+
+        if (buttonPressCallback != null) {
+            buttonPressCallback.cancel();
+            buttonPressCallback = null;
+        }
 
         return consumed;
     }
@@ -104,7 +116,10 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        ApplicationContext.clearInterval(buttonPressTimeoutID);
+        if (buttonPressCallback != null) {
+            buttonPressCallback.cancel();
+            buttonPressCallback = null;
+        }
 
         Menu.Item menuItem = (Menu.Item)getComponent();
         Menu menu = menuItem.getMenu();
