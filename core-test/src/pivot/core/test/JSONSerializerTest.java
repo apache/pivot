@@ -16,7 +16,7 @@
 package pivot.core.test;
 
 import java.io.InputStream;
-import java.io.OutputStream;
+// import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 

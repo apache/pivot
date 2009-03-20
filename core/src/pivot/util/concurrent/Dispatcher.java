@@ -15,10 +15,8 @@
  */
 package pivot.util.concurrent;
 
-import pivot.collections.ArrayList;
 import pivot.collections.ArrayQueue;
 import pivot.collections.Queue;
-import pivot.collections.List;
 import pivot.collections.concurrent.SynchronizedQueue;
 
 /**
@@ -64,11 +62,13 @@ public class Dispatcher {
         }
     }
 
+    private Queue<Runnable> pendingQueue = null;
+
+    /*
     private int minimumThreadCount = 0;
     private int maximumThreadCount = 0;
-
-    private Queue<Runnable> pendingQueue = null;
     private List<Thread> threadPool = null;
+    */
 
     private Thread queueMonitorThread = null;
 
@@ -77,14 +77,17 @@ public class Dispatcher {
     }
 
     public Dispatcher(int minimumThreadCount, int maximumThreadCount) {
-        this.minimumThreadCount = minimumThreadCount;
-        this.maximumThreadCount = maximumThreadCount;
-
         // TODO Use a linked queue for performance
         pendingQueue = new SynchronizedQueue<Runnable>(new ArrayQueue<Runnable>());
 
+        // TODO
+        /*
+        this.minimumThreadCount = minimumThreadCount;
+        this.maximumThreadCount = maximumThreadCount;
+
         // TODO Start minimum number of pool threads
         threadPool = new ArrayList<Thread>(maximumThreadCount);
+        */
     }
 
     /**

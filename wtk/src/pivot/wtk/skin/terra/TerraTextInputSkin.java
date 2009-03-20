@@ -26,7 +26,7 @@ import java.awt.font.LineMetrics;
 import java.awt.font.TextHitInfo;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
-import java.text.AttributedCharacterIterator;
+// import java.text.AttributedCharacterIterator;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.ApplicationContext;
@@ -63,6 +63,7 @@ public class TerraTextInputSkin extends ComponentSkin
      *
      * @author gbrown
      */
+    /*
     private static class TextInputCharacterIterator implements AttributedCharacterIterator {
         public TextInputCharacterIterator(TextInput textInput) {
             // TODO Need index arguments
@@ -163,6 +164,7 @@ public class TerraTextInputSkin extends ComponentSkin
             return null;
         }
     }
+    */
 
     private class BlinkCursorCallback implements Runnable {
         public void run() {
