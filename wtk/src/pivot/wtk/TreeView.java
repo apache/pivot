@@ -101,6 +101,24 @@ public class TreeView extends Component {
     }
 
     /**
+     * Tree view node editor interface.
+     *
+     * @author tvolkert
+     */
+    public interface NodeEditor {
+        /**
+         * Notifies the editor that editing should begin.
+         *
+         * @param treeView
+         * The tree view containing the node to be edited.
+         *
+         * @param path
+         * The path to the node to edit.
+         */
+        public void edit(TreeView treeView, Sequence<Integer> path);
+    }
+
+    /**
      * Tree view skin interface. Tree view skins must implement this.
      *
      * @author tvolkert
@@ -169,6 +187,12 @@ public class TreeView extends Component {
             }
         }
 
+        public void nodeEditorChanged(TreeView treeView,
+            TreeView.NodeEditor previousNodeEditor) {
+            for (TreeViewListener listener : this) {
+                listener.nodeEditorChanged(treeView, previousNodeEditor);
+            }
+        }
         public void selectModeChanged(TreeView treeView, SelectMode previousSelectMode) {
             for (TreeViewListener listener : this) {
                 listener.selectModeChanged(treeView, previousSelectMode);
@@ -684,8 +708,9 @@ public class TreeView extends Component {
     // Handlers
     private BranchHandler rootBranchHandler;
 
-    // Renderer
+    // Renderer & editor
     private NodeRenderer nodeRenderer = DEFAULT_NODE_RENDERER;
+    private NodeEditor nodeEditor = null;
 
     // Listener lists
     private TreeViewListenerList treeViewListeners = new TreeViewListenerList();
@@ -838,6 +863,31 @@ public class TreeView extends Component {
             this.nodeRenderer = nodeRenderer;
 
             treeViewListeners.nodeRendererChanged(this, previousNodeRenderer);
+        }
+    }
+
+    /**
+     * Returns the editor used to edit nodes in this tree.
+     *
+     * @return
+     * The node editor, or <tt>null</tt> if no editor is installed.
+     */
+    public NodeEditor getNodeEditor() {
+        return nodeEditor;
+    }
+
+    /**
+     * Sets the editor used to edit nodes in this tree.
+     *
+     * @param nodeEditor
+     * The node editor for the tree.
+     */
+    public void setNodeEditor(NodeEditor nodeEditor) {
+        NodeEditor previousNodeEditor = this.nodeEditor;
+
+        if (previousNodeEditor != nodeEditor) {
+            this.nodeEditor = nodeEditor;
+            treeViewListeners.nodeEditorChanged(this, previousNodeEditor);
         }
     }
 

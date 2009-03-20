@@ -41,6 +41,14 @@ public interface TreeViewListener {
     public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer);
 
     /**
+     * Called when a tree view's node editor has changed.
+     *
+     * @param treeView
+     * @param previousNodeEditor
+     */
+    public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor);
+
+    /**
      * Called when a tree view's select mode has changed.
      *
      * @param treeView
