@@ -282,12 +282,20 @@ public final class Mouse {
             throw new IllegalArgumentException("component is null.");
         }
 
-        Cursor cursor;
-        do {
+        if (!component.isVisible()) {
+            throw new IllegalArgumentException("component is not visible.");
+        }
+
+        Cursor cursor = null;
+
+        if (component.isEnabled()) {
             cursor = component.getCursor();
-            component = component.getParent();
-        } while(cursor == null
-            && !(component instanceof Display));
+            while (cursor == null
+                && !(component instanceof Display)) {
+                component = component.getParent();
+                cursor = component.getCursor();
+            }
+        }
 
         Display display = component.getDisplay();
         ApplicationContext.DisplayHost displayHost = display.getDisplayHost();

@@ -180,7 +180,6 @@ public abstract class Container extends Component
                 }
 
                 mouseOverComponent = null;
-
                 Mouse.setCursor(this);
             }
 
@@ -198,6 +197,22 @@ public abstract class Container extends Component
 
     public final Sequence<Component> removeAll() {
         return remove(0, getLength());
+    }
+
+    // TODO Does this method belong here or in Display?
+    protected void move(int from, int to) {
+        if (from != to) {
+            if (to > from) {
+                to--;
+            }
+
+            Sequence<Component> removed = components.remove(from, 1);
+            Component component = removed.get(0);
+            components.insert(component, to);
+
+            // Repaint the area occupied by the component
+            repaint(component.getDecoratedBounds());
+        }
     }
 
     public Component get(int index) {

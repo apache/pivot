@@ -768,8 +768,7 @@ public class Window extends Container {
                 int i = display.indexOf(window);
 
                 if (i < display.getLength() - 1) {
-                    display.remove(i, 1);
-                    display.add(window);
+                    display.move(i, display.getLength() - 1);
                 }
             }
 
@@ -837,8 +836,7 @@ public class Window extends Container {
             int i = display.indexOf(window);
 
             if (i > 0) {
-                display.remove(i, 1);
-                display.insert(window, 0);
+                display.move(i, 0);
             }
 
             window = window.getOwner();

@@ -329,7 +329,6 @@ public class TerraFrameSkin extends WindowSkin {
         activeChanged(window);
 
         updateMaximizedState();
-        updateResizeHandleCursor();
     }
 
     @Override
@@ -644,6 +643,28 @@ public class TerraFrameSkin extends WindowSkin {
                     window.setPreferredSize(preferredWidth, preferredHeight);
                 }
             }
+        } else {
+            Cursor cursor = null;
+            if (x > resizeHandle.getX()
+                && y > resizeHandle.getY()) {
+                boolean preferredWidthSet = component.isPreferredWidthSet();
+                boolean preferredHeightSet = component.isPreferredHeightSet();
+
+                if (preferredWidthSet
+                    && preferredHeightSet) {
+                    cursor = Cursor.RESIZE_SOUTH_EAST;
+                } else if (preferredWidthSet) {
+                    cursor = Cursor.RESIZE_EAST;
+                } else if (preferredHeightSet) {
+                    cursor = Cursor.RESIZE_SOUTH;
+                } else {
+                    cursor = null;
+                }
+            } else {
+                cursor = null;
+            }
+
+            component.setCursor(cursor);
         }
 
         return consumed;
@@ -728,35 +749,9 @@ public class TerraFrameSkin extends WindowSkin {
             titleBarBorderColor : inactiveTitleBarBorderColor);
     }
 
-    private void updateResizeHandleCursor() {
-        Window window = (Window)getComponent();
-
-        Cursor cursor = Cursor.DEFAULT;
-
-        boolean preferredWidthSet = window.isPreferredWidthSet();
-        boolean preferredHeightSet = window.isPreferredHeightSet();
-
-        if (preferredWidthSet
-            && preferredHeightSet) {
-            cursor = Cursor.RESIZE_SOUTH_EAST;
-        } else if (preferredWidthSet) {
-            cursor = Cursor.RESIZE_EAST;
-        } else if (preferredHeightSet) {
-            cursor = Cursor.RESIZE_SOUTH;
-        }
-
-        resizeHandle.setCursor(cursor);
-    }
-
     @Override
     public void maximizedChanged(Window window) {
         updateMaximizedState();
-    }
-
-    @Override
-    public void preferredSizeChanged(Component component,
-        int previousPreferredWidth, int previousPreferredHeight) {
-        updateResizeHandleCursor();
     }
 
     @Override
