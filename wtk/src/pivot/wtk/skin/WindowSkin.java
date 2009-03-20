@@ -174,6 +174,10 @@ public class WindowSkin extends ContainerSkin
         // No-op
     }
 
+    public void windowMoved(Window window, int from, int to) {
+        // No-op
+    }
+
     // Window state events
     public Vote previewWindowOpen(Window window, Display display) {
         return Vote.APPROVE;

@@ -27,8 +27,6 @@ import pivot.wtk.Bounds;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentMouseButtonListener;
-import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
@@ -79,50 +77,6 @@ public class TerraPaletteSkin extends WindowSkin {
         }
     }
 
-    private class MoveMouseHandler implements ComponentMouseListener, ComponentMouseButtonListener {
-        public boolean mouseMove(Component component, int x, int y) {
-            Display display = (Display)component;
-
-            // Pretend that the mouse can't move off screen (off the display)
-            x = Math.min(Math.max(x, 0), display.getWidth() - 1);
-            y = Math.min(Math.max(y, 0), display.getHeight() - 1);
-
-            // Calculate the would-be new window location
-            int windowX = x - dragOffset.x;
-            int windowY = y - dragOffset.y;
-
-            Window window = (Window)getComponent();
-            window.setLocation(windowX, windowY);
-
-            return false;
-        }
-
-        public void mouseOver(Component component) {
-            // No-op
-        }
-
-        public void mouseOut(Component component) {
-            // No-op
-        }
-
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            assert (component instanceof Display);
-            component.getComponentMouseListeners().remove(this);
-            component.getComponentMouseButtonListeners().remove(this);
-
-            return false;
-        }
-
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
-            int count) {
-            return false;
-        }
-    }
-
     private Image closeImage = new CloseImage();
 
     private FlowPane titleBarFlowPane = new FlowPane();
@@ -135,7 +89,6 @@ public class TerraPaletteSkin extends WindowSkin {
     private DropShadowDecorator dropShadowDecorator = null;
 
     private Point dragOffset = null;
-    private MoveMouseHandler moveMouseHandler = new MoveMouseHandler();
 
     private Insets padding = new Insets(4);
 
@@ -161,6 +114,10 @@ public class TerraPaletteSkin extends WindowSkin {
         }
 
         public void maximizedChanged(Window window) {
+            // No-op
+        }
+
+        public void windowMoved(Window window, int from, int to) {
             // No-op
         }
     };
@@ -424,6 +381,29 @@ public class TerraPaletteSkin extends WindowSkin {
     }
 
     @Override
+    public boolean mouseMove(Component component, int x, int y) {
+        boolean consumed = super.mouseMove(component, x, y);
+
+        if (Mouse.getCapturer() == component) {
+            Window window = (Window)getComponent();
+            Display display = window.getDisplay();
+
+            Point location = window.mapPointToAncestor(display, x, y);
+
+            // Pretend that the mouse can't move off screen (off the display)
+            location.x = Math.min(Math.max(location.x, 0), display.getWidth() - 1);
+            location.y = Math.min(Math.max(location.y, 0), display.getHeight() - 1);
+
+            if (dragOffset != null) {
+                // Move the window
+                window.setLocation(location.x - dragOffset.x, location.y - dragOffset.y);
+            }
+        }
+
+        return consumed;
+    }
+
+    @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
@@ -436,11 +416,20 @@ public class TerraPaletteSkin extends WindowSkin {
 
             if (titleBarBounds.contains(x, y)) {
                 dragOffset = new Point(x, y);
-
-                Display display = window.getDisplay();
-                display.getComponentMouseListeners().add(moveMouseHandler);
-                display.getComponentMouseButtonListeners().add(moveMouseHandler);
+                Mouse.capture(component);
             }
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
+
+        if (Mouse.getCapturer() == component) {
+            dragOffset = null;
+            Mouse.release();
         }
 
         return consumed;

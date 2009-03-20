@@ -93,6 +93,12 @@ public class Window extends Container {
             }
         }
 
+        public void windowMoved(Window window, int from, int to) {
+            for (WindowListener listener : this) {
+                listener.windowMoved(window, from, to);
+            }
+        }
+
         public void ownerChanged(Window window, Window previousOwner) {
             for (WindowListener listener : this) {
                 listener.ownerChanged(window, previousOwner);
@@ -768,7 +774,9 @@ public class Window extends Container {
                 int i = display.indexOf(window);
 
                 if (i < display.getLength() - 1) {
-                    display.move(i, display.getLength() - 1);
+                    int k = display.getLength() - 1;
+                    display.move(i, k);
+                    window.windowListeners.windowMoved(window, i, k);
                 }
             }
 
@@ -837,6 +845,7 @@ public class Window extends Container {
 
             if (i > 0) {
                 display.move(i, 0);
+                window.windowListeners.windowMoved(window, i, 0);
             }
 
             window = window.getOwner();

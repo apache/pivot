@@ -68,4 +68,13 @@ public interface WindowListener {
      * @param window
      */
     public void maximizedChanged(Window window);
+
+    /**
+     * Called when a window's position has changed.
+     *
+     * @param window
+     * @param from
+     * @param to
+     */
+    public void windowMoved(Window window, int from, int to);
 }

@@ -199,13 +199,17 @@ public abstract class Container extends Component
         return remove(0, getLength());
     }
 
-    // TODO Does this method belong here or in Display?
+    /**
+     * Moves a component within the component sequence. This method does not
+     * fire any events; it is the caller's responsibility to ensure that
+     * appropriate events are fired (see
+     * {@link WindowListener#windowMoved(Window, int, int)} as an example).
+     *
+     * @param from
+     * @param to
+     */
     protected void move(int from, int to) {
         if (from != to) {
-            if (to > from) {
-                to--;
-            }
-
             Sequence<Component> removed = components.remove(from, 1);
             Component component = removed.get(0);
             components.insert(component, to);

@@ -989,7 +989,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode) {
-        // No-op
+        repaintComponent();
     }
 
     // Table view column events
@@ -1014,7 +1014,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void columnSortDirectionChanged(TableView.Column column, SortDirection previousSortDirection) {
-        // No-op
         // TODO Repaint; paint a "selection" color for the sorted column
     }
 
