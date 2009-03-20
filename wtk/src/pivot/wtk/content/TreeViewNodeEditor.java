@@ -153,7 +153,11 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
     /**
      * Responsible for closing the popup whenever the user clicks outside the
-     * bounds of the popup.
+     * bounds of the popup. This is required because the popup affiliates
+     * itself with the tree view, meaning that the popup won't close itself
+     * automatically when the user clicks on the tree view. Further, we don't
+     * want to register a mouse button listener on the tree view, because we
+     * want to intercept the mouse event during the tunneling phase.
      *
      * @author tvolkert
      */
@@ -168,8 +172,9 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
-            if (window == null
-                || !popup.isOwningAncestorOf(window)) {
+            if (popup != null
+                && (window == null
+                || !popup.isOwningAncestorOf(window))) {
                 popup.close();
             }
         }
