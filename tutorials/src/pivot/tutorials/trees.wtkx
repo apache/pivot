@@ -79,6 +79,9 @@ limitations under the License.
                                     <nodeRenderer>
                                         <content:TreeViewNodeRenderer showIcon="true"/>
                                     </nodeRenderer>
+                                    <nodeEditor>
+                                        <content:TreeViewNodeEditor/>
+                                    </nodeEditor>
                                 </TreeView>
                             </view>
                         </ScrollPane>

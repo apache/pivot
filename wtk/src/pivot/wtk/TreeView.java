@@ -469,18 +469,20 @@ public class TreeView extends Component {
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
             Sequence<Integer> path = getPath();
 
-            // Release child handler
-            BranchHandler handler = update(index, null);
+            if (list.get(index) != previousItem) {
+                // Release child handler
+                BranchHandler handler = update(index, null);
 
-            if (handler != null) {
-                handler.release();
+                if (handler != null) {
+                    handler.release();
+                }
+
+                // Update our data structures
+                clearPaths(expandedPaths, path, index);
+                clearPaths(selectedPaths, path, index);
+                clearPaths(disabledPaths, path, index);
+                clearPaths(checkedPaths, path, index);
             }
-
-            // Update our data structures
-            clearPaths(expandedPaths, path, index);
-            clearPaths(selectedPaths, path, index);
-            clearPaths(disabledPaths, path, index);
-            clearPaths(checkedPaths, path, index);
 
             // Notify listeners
             treeViewNodeListeners.nodeUpdated(TreeView.this, path, index);

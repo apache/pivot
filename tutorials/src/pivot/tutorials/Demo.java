@@ -24,10 +24,8 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Map;
-import pivot.collections.Sequence;
 import pivot.serialization.JSONSerializer;
 import pivot.util.CalendarDate;
-import pivot.util.Vote;
 import pivot.wtk.Action;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
@@ -35,14 +33,11 @@ import pivot.wtk.ApplicationContext;
 import pivot.wtk.Border;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
-import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
 import pivot.wtk.DropTarget;
 import pivot.wtk.ImageView;
-import pivot.wtk.Insets;
-import pivot.wtk.Keyboard;
 import pivot.wtk.ListView;
 import pivot.wtk.LocalManifest;
 import pivot.wtk.Manifest;
@@ -51,30 +46,22 @@ import pivot.wtk.MenuPopup;
 import pivot.wtk.MessageType;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
-import pivot.wtk.Popup;
 import pivot.wtk.Prompt;
 import pivot.wtk.PushButton;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
-import pivot.wtk.Bounds;
-import pivot.wtk.ScrollPane;
 import pivot.wtk.Slider;
 import pivot.wtk.SliderValueListener;
 import pivot.wtk.Spinner;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TextArea;
-import pivot.wtk.TextInput;
-import pivot.wtk.TreeView;
 import pivot.wtk.Visual;
 import pivot.wtk.Window;
-import pivot.wtk.WindowStateListener;
 import pivot.wtk.content.CalendarDateSpinnerData;
 import pivot.wtk.content.NumericSpinnerData;
 import pivot.wtk.content.TableRow;
 import pivot.wtk.content.TableViewHeaderData;
-import pivot.wtk.content.TreeNode;
-import pivot.wtk.content.TreeViewNodeRenderer;
 import pivot.wtk.effects.ReflectionDecorator;
 import pivot.wtk.media.Image;
 import pivot.wtk.text.Document;
@@ -82,140 +69,6 @@ import pivot.wtk.text.PlainTextSerializer;
 import pivot.wtkx.WTKXSerializer;
 
 public class Demo implements Application {
-    private class TreeViewEditHandler
-        implements ComponentMouseButtonListener, ComponentKeyListener {
-        Sequence<Integer> path = null;
-        boolean armed = false;
-        Popup popup = null;
-
-        private int getNodeLabelIndent() {
-            int nodeLabelIndent = editableTreeView.getNodeIndent(path.getLength());
-
-            TreeViewNodeRenderer nodeRenderer =
-                (TreeViewNodeRenderer)editableTreeView.getNodeRenderer();
-
-            nodeLabelIndent += ((Insets)nodeRenderer.getStyles().get("padding")).left;
-            if (nodeRenderer.getShowIcon()) {
-                nodeLabelIndent += nodeRenderer.getIconWidth();
-                nodeLabelIndent += (Integer)nodeRenderer.getStyles().get("spacing");
-            }
-
-            return nodeLabelIndent;
-        }
-
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            path = editableTreeView.getNodeAt(y);
-
-            armed = (popup == null
-                && path != null
-                && Keyboard.getModifiers() == 0
-                && editableTreeView.isNodeSelected(path)
-                && x >= getNodeLabelIndent());
-
-            return false;
-        }
-
-        @SuppressWarnings("unchecked")
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
-            int count) {
-            if (armed
-                && count == 1) {
-                List<Object> treeData = (List<Object>)editableTreeView.getTreeData();
-                TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
-
-                Bounds nodeLabelBounds = editableTreeView.getNodeBounds(path);
-                int nodeLabelIndent = getNodeLabelIndent();
-                nodeLabelBounds.x += nodeLabelIndent;
-                nodeLabelBounds.width -= nodeLabelIndent;
-
-                Bounds viewportBounds = editableTreeViewScrollPane.getViewportBounds();
-
-                TextInput textInput = new TextInput();
-                textInput.setText(nodeData.getText());
-                textInput.setPreferredWidth(Math.min(nodeLabelBounds.width,
-                    viewportBounds.width - nodeLabelBounds.x));
-                textInput.getComponentKeyListeners().add(this);
-
-                Point treeViewCoordinates =
-                    editableTreeView.mapPointToAncestor(window.getDisplay(), 0, 0);
-
-                popup = new Popup(textInput);
-                popup.setLocation(treeViewCoordinates.x + nodeLabelBounds.x,
-                    treeViewCoordinates.y + nodeLabelBounds.y
-                    + (nodeLabelBounds.height - textInput.getPreferredHeight(-1)) / 2);
-
-                // Ensure that we clear the popup reference
-                popup.getWindowStateListeners().add(new WindowStateListener() {
-                    public Vote previewWindowOpen(Window window, Display display) {
-                        return Vote.APPROVE;
-                    }
-
-                    public void windowOpenVetoed(Window window, Vote reason) {
-                    }
-
-                    public void windowOpened(Window window) {
-                    }
-
-                    public Vote previewWindowClose(Window window) {
-                        return Vote.APPROVE;
-                    }
-
-                    public void windowCloseVetoed(Window window, Vote reason) {
-                    }
-
-                    public void windowClosed(Window window, Display display) {
-                        popup = null;
-                    }
-                });
-
-                popup.open(editableTreeView);
-
-                textInput.requestFocus();
-            }
-
-            armed = false;
-
-            return false;
-        }
-
-        public boolean keyTyped(Component component, char character) {
-            return false;
-        }
-
-        @SuppressWarnings("unchecked")
-        public boolean keyPressed(Component component, int keyCode,
-            Keyboard.KeyLocation keyLocation) {
-            if (keyCode == Keyboard.KeyCode.ENTER) {
-                List<Object> treeData = (List<Object>)editableTreeView.getTreeData();
-                TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
-
-                TextInput textInput = (TextInput)component;
-                String text = textInput.getText();
-
-                nodeData.setText(text);
-
-                popup.close();
-                editableTreeView.requestFocus();
-            }
-
-            if (keyCode == Keyboard.KeyCode.ESCAPE) {
-                popup.close();
-                editableTreeView.requestFocus();
-            }
-
-            return false;
-        }
-
-        public boolean keyReleased(Component component, int keyCode,
-            Keyboard.KeyLocation keyLocation) {
-            return false;
-        }
-    }
-
     private MenuPopup menuPopup = null;
     private ImageView menuImageView = null;
 
@@ -227,9 +80,6 @@ public class Demo implements Application {
     private TableView sortableTableView = null;
     private TableView customTableView = null;
     private TableViewHeader sortableTableViewHeader = null;
-
-    private TreeView editableTreeView = null;
-    private ScrollPane editableTreeViewScrollPane = null;
 
     private PushButton alertButton = null;
     private PushButton promptButton = null;
@@ -321,11 +171,11 @@ public class Demo implements Application {
 
         // Sliders
         SliderValueListener sliderValueListener = new SliderValueListener() {
-        	public void valueChanged(Slider slider, int previousValue) {
-        		Color color = new Color(redSlider.getValue(), greenSlider.getValue(),
-    				blueSlider.getValue());
-        		colorBorder.getStyles().put("backgroundColor", color);
-        	}
+            public void valueChanged(Slider slider, int previousValue) {
+                Color color = new Color(redSlider.getValue(), greenSlider.getValue(),
+                    blueSlider.getValue());
+                colorBorder.getStyles().put("backgroundColor", color);
+            }
         };
 
         redSlider = (Slider)wtkxSerializer.getObjectByName("spinners.redSlider");
@@ -337,19 +187,15 @@ public class Demo implements Application {
         blueSlider = (Slider)wtkxSerializer.getObjectByName("spinners.blueSlider");
         blueSlider.getSliderValueListeners().add(sliderValueListener);
 
-    	Color color = new Color(redSlider.getValue(), greenSlider.getValue(),
-			blueSlider.getValue());
+        Color color = new Color(redSlider.getValue(), greenSlider.getValue(),
+            blueSlider.getValue());
         colorBorder = (Border)wtkxSerializer.getObjectByName("spinners.colorBorder");
-		colorBorder.getStyles().put("backgroundColor", color);
+        colorBorder.getStyles().put("backgroundColor", color);
 
         sortableTableView = (TableView)wtkxSerializer.getObjectByName("tables.sortableTableView");
         sortableTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("tables.sortableTableViewHeader");
         customTableView = (TableView)wtkxSerializer.getObjectByName("tables.customTableView");
         initializeTableViews();
-
-        editableTreeView = (TreeView)wtkxSerializer.getObjectByName("trees.editableTreeView");
-        editableTreeViewScrollPane = (ScrollPane)wtkxSerializer.getObjectByName("trees.editableTreeViewScrollPane");
-        initializeEditableTreeView();
 
         DragSource imageDragSource = new DragSource() {
             private Image image = null;
@@ -511,36 +357,31 @@ public class Demo implements Application {
 
         customTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
             public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            	return false;
+               return false;
             }
 
             public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            	return false;
+               return false;
             }
 
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            	if (button == Mouse.Button.LEFT) {
-            	    List<CustomTableRow> customTableData =
-            	        (List<CustomTableRow>)customTableView.getTableData();
+               if (button == Mouse.Button.LEFT) {
+                   List<CustomTableRow> customTableData =
+                       (List<CustomTableRow>)customTableView.getTableData();
 
-            		int columnIndex = customTableView.getColumnAt(x);
-            		if (columnIndex == 0) {
-            			int rowIndex = customTableView.getRowAt(y);
-            			CustomTableRow row = customTableData.get(rowIndex);
+                  int columnIndex = customTableView.getColumnAt(x);
+                  if (columnIndex == 0) {
+                     int rowIndex = customTableView.getRowAt(y);
+                     CustomTableRow row = customTableData.get(rowIndex);
 
-            			row.setA(!row.getA());
-            			customTableData.update(rowIndex, row);
-            		}
-            	}
+                     row.setA(!row.getA());
+                     customTableData.update(rowIndex, row);
+                  }
+               }
 
-            	return false;
+               return false;
             }
         });
-    }
-
-    private void initializeEditableTreeView() {
-        TreeViewEditHandler treeViewEditHandler = new TreeViewEditHandler();
-        editableTreeView.getComponentMouseButtonListeners().add(treeViewEditHandler);
     }
 
     private void initializeNumericSpinner(Spinner numericSpinner) {

@@ -1512,6 +1512,47 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
+     * Alters the specified bounds such that they fit within the viewport of
+     * all <tt>Viewport</tt> ancestors of this component.
+     */
+    public void constrainToViewportBounds(Bounds area) {
+        // TODO
+        /*
+        Component component = this;
+
+        int top = area.y;
+        int left = area.x;
+        int bottom = area.y + area.height - 1;
+        int right = area.x + area.width - 1;
+
+        while (component != null) {
+            int minTop = 0;
+            int minLeft = 0;
+            int maxBottom = component.getHeight() - 1;
+            int maxRight = component.getWidth() - 1;
+
+            if (component instanceof Viewport) {
+                Viewport viewport = (Viewport)component;
+                Bounds viewportBounds = viewport.getViewportBounds();
+
+                // Adjust constraints per the viewport bounds
+                minTop = viewportBounds.y;
+                minLeft = viewportBounds.x;
+                maxBottom = viewportBounds.y + viewportBounds.height - 1;
+                maxRight = viewportBounds.x + viewportBounds.width - 1;
+            }
+
+            top = component.y + Math.max(top, minTop);
+            left = component.x + Math.max(left, minLeft);
+            bottom = component.y + Math.max(Math.min(bottom, maxBottom), -1);
+            right = component.x + Math.max(Math.min(right, maxRight), -1);
+
+            component = component.getParent();
+        }
+        */
+    }
+
+    /**
      * Returns the component's valid state.
      *
      * @return
