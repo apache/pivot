@@ -24,13 +24,9 @@ import java.awt.geom.GeneralPath;
 
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
-import pivot.wtk.ComponentMouseListener;
-import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Display;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
-import pivot.wtk.Point;
 import pivot.wtk.ScrollBar;
 import pivot.wtk.ScrollBarListener;
 import pivot.wtk.ScrollBarValueListener;
@@ -73,26 +69,7 @@ public class TerraScrollBarSkin extends ContainerSkin
         private ApplicationContext.ScheduledCallback scheduledScrollCallback = null;
 
         /**
-         * Starts scrolling the specified scroll bar with no stop value.
-         *
-         * @param direction
-         * <tt>1</tt> to adjust the scroll bar's value larger; <tt>-1</tt> to
-         * adjust it smaller
-         *
-         * @param incrementType
-         * Determines whether we'll use the scroll bar's unit increment or the
-         * block increment when scrolling
-         *
-         * @exception IllegalStateException
-         * If automatic scrolling of any scroll bar is already in progress.
-         * Only one scroll bar may be automatically scrolled at one time
-         */
-        public void start(int direction, IncrementType incrementType) {
-            start(direction, incrementType, -1);
-        }
-
-        /**
-         * Starts scrolling the specified scroll bar, stopping the scroll when
+         * Starts scrolling this skin's scroll bar, stopping the scroll when
          * the specified value has been reached.
          *
          * @param direction
@@ -336,8 +313,7 @@ public class TerraScrollBarSkin extends ContainerSkin
 
                 // Start the automatic scroller. It'll be stopped when we
                 // mouse up or mouse out
-                automaticScroller.start(scrollButton.getDirection(),
-                    IncrementType.UNIT);
+                automaticScroller.start(scrollButton.getDirection(), IncrementType.UNIT, -1);
 
                 pressed = true;
                 repaintComponent();
@@ -436,13 +412,13 @@ public class TerraScrollBarSkin extends ContainerSkin
     }
 
     /**
-     * Scroll bar scroll handle component.
+     * Scroll bar handle component.
      *
      * @author tvolkert
      */
-    protected class ScrollHandle extends Component {
-        public ScrollHandle() {
-            setSkin(new ScrollHandleSkin());
+    protected class Handle extends Component {
+        public Handle() {
+            setSkin(new HandleSkin());
         }
     }
 
@@ -451,34 +427,8 @@ public class TerraScrollBarSkin extends ContainerSkin
      *
      * @author tvolkert
      */
-    protected class ScrollHandleSkin extends ComponentSkin {
-        private class DisplayMouseHandler
-            implements ComponentMouseButtonListener {
-            public boolean mouseDown(Component component, Mouse.Button button,
-                int x, int y) {
-                return false;
-            }
-
-            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-                if (button == Mouse.Button.LEFT) {
-                    assert (component instanceof Display);
-                    component.getComponentMouseButtonListeners().remove(this);
-
-                    highlighted = false;
-                    repaintComponent();
-                }
-
-                return false;
-            }
-
-            public boolean mouseClick(Component component, Mouse.Button button,
-                int x, int y, int count) {
-                return false;
-            }
-        }
-
-        private DisplayMouseHandler displayMouseHandler = new DisplayMouseHandler();
-
+    protected class HandleSkin extends ComponentSkin {
+        private int dragOffset;
         private boolean highlighted = false;
 
         @Override
@@ -494,6 +444,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Dimensions getPreferredSize() {
             throw new UnsupportedOperationException();
         }
@@ -560,89 +511,74 @@ public class TerraScrollBarSkin extends ContainerSkin
         public void mouseOver(Component component) {
             super.mouseOver(component);
 
-            if (highlighted) {
-                // If the handle is already highlighted when the mouse enters
-                // it, it means that the handle is "grabbed", meaning that we
-                // have registered our display mouse handler.  Unregister it
-                // here so as to not register multiple times as we move our
-                // mouse in and out of the handle
-                Display display = component.getDisplay();
-                display.getComponentMouseButtonListeners().remove(displayMouseHandler);
-            } else {
-                // The handle is highlighted as long as the mouse is over it or
-                // we're dragging it
-                highlighted = true;
-                repaintComponent();
-            }
+            highlighted = true;
+            repaintComponent();
         }
 
         @Override
         public void mouseOut(Component component) {
             super.mouseOut(component);
 
-            if (Mouse.isPressed(Mouse.Button.LEFT)) {
-                // The user is currently dragging the handle.  We don't
-                // un-highlight it until the user releases the left mouse
-                // button.  NOTE the code that actually sets the scroll bar's
-                // value during the drag operation is handled by ScrollBarSkin
-                // since it needs access to scroll bar layout information
-                Display display = component.getDisplay();
-                display.getComponentMouseButtonListeners().add(displayMouseHandler);
-            } else {
-                // If we're not dragging the handle, then we un-highlight it
-                // as soon as the mouse exits
-                highlighted = false;
-                repaintComponent();
-            }
+            highlighted = false;
+            repaintComponent();
         }
-    }
 
-    private class DisplayMouseHandler
-        implements ComponentMouseListener, ComponentMouseButtonListener {
+        @Override
         public boolean mouseMove(Component component, int x, int y) {
-            ScrollBar scrollBar = (ScrollBar)getComponent();
+            boolean consumed = super.mouseMove(component, x, y);
 
-            int pixelValue;
+            if (Mouse.getCapturer() == component) {
+                ScrollBar scrollBar = (ScrollBar)TerraScrollBarSkin.this.getComponent();
+                Orientation orientation = scrollBar.getOrientation();
 
-            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-                pixelValue = x - dragOffset.x - scrollUpButton.getWidth() + 1;
-            } else {
-                pixelValue = y - dragOffset.y - scrollUpButton.getHeight() + 1;
+                // Calculate the new scroll bar value
+                int pixelValue;
+                if (orientation == Orientation.HORIZONTAL) {
+                    pixelValue = component.getX() - scrollUpButton.getWidth() + x - dragOffset;
+                } else {
+                    pixelValue = component.getY() - scrollUpButton.getHeight() + y - dragOffset;
+                }
+
+                int realValue = (int)((float)pixelValue / getValueScale());
+
+                // Bound the value
+                int rangeEnd = scrollBar.getRangeEnd();
+                int extent = scrollBar.getExtent();
+                realValue = Math.min(Math.max(realValue, 0), rangeEnd - extent);
+
+                // Update the scroll bar
+                scrollBar.setValue(realValue);
             }
 
-            int realValue = (int)((float)pixelValue / getValueScale());
-
-            int rangeEnd = scrollBar.getRangeEnd();
-            int extent = scrollBar.getExtent();
-
-            scrollBar.setValue(Math.min(Math.max(realValue, 0), rangeEnd - extent));
-
-            return false;
+            return consumed;
         }
 
-        public void mouseOver(Component component) {
-        }
-
-        public void mouseOut(Component component) {
-        }
-
+        @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
+            boolean consumed = super.mouseDown(component, button, x, y);
 
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             if (button == Mouse.Button.LEFT) {
-                assert (component instanceof Display);
-                component.getComponentMouseListeners().remove(this);
-                component.getComponentMouseButtonListeners().remove(this);
+                ScrollBar scrollBar = (ScrollBar)TerraScrollBarSkin.this.getComponent();
+                Orientation orientation = scrollBar.getOrientation();
+
+                dragOffset = (orientation == Orientation.HORIZONTAL ? x : y);
+                Mouse.capture(component);
+                consumed = true;
             }
 
-            return false;
+            return consumed;
         }
 
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
-            int count) {
-            return false;
+        @Override
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseUp(component, button, x, y);
+
+            if (button == Mouse.Button.LEFT
+                && Mouse.getCapturer() == component) {
+                Mouse.release();
+            }
+
+            return consumed;
         }
     }
 
@@ -651,12 +587,9 @@ public class TerraScrollBarSkin extends ContainerSkin
 
     private AutomaticScroller automaticScroller = new AutomaticScroller();
 
-    private DisplayMouseHandler displayMouseHandler = new DisplayMouseHandler();
-    private Point dragOffset = null;
-
     private ScrollButton scrollUpButton = new ScrollButton(-1, new ScrollUpImage());
     private ScrollButton scrollDownButton = new ScrollButton(1, new ScrollDownImage());
-    private ScrollHandle scrollHandle = new ScrollHandle();
+    private Handle handle = new Handle();
 
     private int minimumHandleLength;
     private Color borderColor;
@@ -687,10 +620,9 @@ public class TerraScrollBarSkin extends ContainerSkin
 
         scrollBar.add(scrollUpButton);
         scrollBar.add(scrollDownButton);
-        scrollBar.add(scrollHandle);
+        scrollBar.add(handle);
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setBackgroundColor(theme.getColor(9));
+        setBackgroundColor(9);
 
         enabledChanged(scrollBar);
     }
@@ -703,7 +635,7 @@ public class TerraScrollBarSkin extends ContainerSkin
 
         scrollBar.remove(scrollUpButton);
         scrollBar.remove(scrollDownButton);
-        scrollBar.remove(scrollHandle);
+        scrollBar.remove(handle);
 
         super.uninstall();
     }
@@ -736,6 +668,7 @@ public class TerraScrollBarSkin extends ContainerSkin
         return preferredHeight;
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         ScrollBar scrollBar = (ScrollBar)getComponent();
 
@@ -794,15 +727,15 @@ public class TerraScrollBarSkin extends ContainerSkin
 
                 if (handleWidth > availableWidth) {
                     // If we can't fit the handle, we hide it
-                    scrollHandle.setVisible(false);
+                    handle.setVisible(false);
                 } else {
-                    scrollHandle.setVisible(true);
+                    handle.setVisible(true);
 
-                    scrollHandle.setSize(handleWidth, height);
-                    scrollHandle.setLocation(handleX, 0);
+                    handle.setSize(handleWidth, height);
+                    handle.setLocation(handleX, 0);
                 }
             } else {
-                scrollHandle.setVisible(false);
+                handle.setVisible(false);
             }
         } else {
             scrollUpButton.setSize(width, scrollUpButton.getPreferredHeight(-1));
@@ -830,15 +763,15 @@ public class TerraScrollBarSkin extends ContainerSkin
 
                 if (handleHeight > availableHeight) {
                     // If we can't fit the handle, we hide it
-                    scrollHandle.setVisible(false);
+                    handle.setVisible(false);
                 } else {
-                    scrollHandle.setVisible(true);
+                    handle.setVisible(true);
 
-                    scrollHandle.setSize(width, handleHeight);
-                    scrollHandle.setLocation(0, handleY);
+                    handle.setSize(width, handleHeight);
+                    handle.setLocation(0, handleY);
                 }
             } else {
-                scrollHandle.setVisible(false);
+                handle.setVisible(false);
             }
         }
     }
@@ -893,6 +826,11 @@ public class TerraScrollBarSkin extends ContainerSkin
         setBackgroundPaint(gradientPaint);
     }
 
+    public final void setBackgroundColor(int backgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(backgroundColor));
+    }
+
     public int getMinimumHandleLength() {
         return minimumHandleLength;
     }
@@ -909,6 +847,10 @@ public class TerraScrollBarSkin extends ContainerSkin
     }
 
     public void setBorderColor(Color borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null");
+        }
+
         this.borderColor = borderColor;
         repaintComponent();
     }
@@ -921,11 +863,20 @@ public class TerraScrollBarSkin extends ContainerSkin
         setBorderColor(decodeColor(borderColor));
     }
 
+    public final void setBorderColor(int borderColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBorderColor(theme.getColor(borderColor));
+    }
+
     public Color getScrollButtonImageColor() {
         return scrollButtonImageColor;
     }
 
     public void setScrollButtonImageColor(Color scrollButtonImageColor) {
+        if (scrollButtonImageColor == null) {
+            throw new IllegalArgumentException("scrollButtonImageColor is null");
+        }
+
         this.scrollButtonImageColor = scrollButtonImageColor;
         repaintComponent();
     }
@@ -938,11 +889,20 @@ public class TerraScrollBarSkin extends ContainerSkin
         setScrollButtonImageColor(decodeColor(scrollButtonImageColor));
     }
 
+    public final void setScrollButtonImageColor(int scrollButtonImageColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setScrollButtonImageColor(theme.getColor(scrollButtonImageColor));
+    }
+
     public Color getScrollButtonBackgroundColor() {
         return scrollButtonBackgroundColor;
     }
 
     public void setScrollButtonBackgroundColor(Color scrollButtonBackgroundColor) {
+        if (scrollButtonBackgroundColor == null) {
+            throw new IllegalArgumentException("scrollButtonBackgroundColor is null");
+        }
+
         this.scrollButtonBackgroundColor = scrollButtonBackgroundColor;
         repaintComponent();
     }
@@ -955,11 +915,20 @@ public class TerraScrollBarSkin extends ContainerSkin
         setScrollButtonBackgroundColor(decodeColor(scrollButtonBackgroundColor));
     }
 
+    public final void setScrollButtonBackgroundColor(int scrollButtonBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setScrollButtonBackgroundColor(theme.getColor(scrollButtonBackgroundColor));
+    }
+
     public Color getScrollButtonDisabledBackgroundColor() {
         return scrollButtonDisabledBackgroundColor;
     }
 
     public void setScrollButtonDisabledBackgroundColor(Color scrollButtonDisabledBackgroundColor) {
+        if (scrollButtonDisabledBackgroundColor == null) {
+            throw new IllegalArgumentException("scrollButtonDisabledBackgroundColor is null");
+        }
+
         this.scrollButtonDisabledBackgroundColor = scrollButtonDisabledBackgroundColor;
         repaintComponent();
     }
@@ -972,11 +941,20 @@ public class TerraScrollBarSkin extends ContainerSkin
         setScrollButtonDisabledBackgroundColor(decodeColor(scrollButtonDisabledBackgroundColor));
     }
 
+    public final void setScrollButtonDisabledBackgroundColor(int scrollButtonDisabledBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setScrollButtonDisabledBackgroundColor(theme.getColor(scrollButtonDisabledBackgroundColor));
+    }
+
     public Color getScrollButtonPressedBackgroundColor() {
         return scrollButtonPressedBackgroundColor;
     }
 
     public void setScrollButtonPressedBackgroundColor(Color scrollButtonPressedBackgroundColor) {
+        if (scrollButtonPressedBackgroundColor == null) {
+            throw new IllegalArgumentException("scrollButtonPressedBackgroundColor is null");
+        }
+
         this.scrollButtonPressedBackgroundColor = scrollButtonPressedBackgroundColor;
         repaintComponent();
     }
@@ -989,11 +967,20 @@ public class TerraScrollBarSkin extends ContainerSkin
         setScrollButtonPressedBackgroundColor(decodeColor(scrollButtonPressedBackgroundColor));
     }
 
+    public final void setScrollButtonPressedBackgroundColor(int scrollButtonPressedBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setScrollButtonPressedBackgroundColor(theme.getColor(scrollButtonPressedBackgroundColor));
+    }
+
     public Color getScrollButtonHighlightedBackgroundColor() {
         return scrollButtonHighlightedBackgroundColor;
     }
 
     public void setScrollButtonHighlightedBackgroundColor(Color scrollButtonHighlightedBackgroundColor) {
+        if (scrollButtonHighlightedBackgroundColor == null) {
+            throw new IllegalArgumentException("scrollButtonHighlightedBackgroundColor is null");
+        }
+
         this.scrollButtonHighlightedBackgroundColor = scrollButtonHighlightedBackgroundColor;
         repaintComponent();
     }
@@ -1006,72 +993,9 @@ public class TerraScrollBarSkin extends ContainerSkin
         setScrollButtonHighlightedBackgroundColor(decodeColor(scrollButtonHighlightedBackgroundColor));
     }
 
-    @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseDown(component, button, x, y);
-
-        if (scrollHandle.isVisible()
-            && button == Mouse.Button.LEFT) {
-            ScrollBar scrollBar = (ScrollBar)getComponent();
-
-            Component mouseDownComponent = scrollBar.getComponentAt(x, y);
-
-            if (mouseDownComponent == scrollHandle) {
-                // Begin dragging the scroll handle. Register our display
-                // mouse handler to do the actual work
-                Display display = scrollBar.getDisplay();
-
-                dragOffset = scrollBar.mapPointToAncestor(display, x, y);
-                dragOffset.translate(-scrollHandle.getX(), -scrollHandle.getY());
-
-                display.getComponentMouseListeners().add(displayMouseHandler);
-                display.getComponentMouseButtonListeners().add(displayMouseHandler);
-            } else if (mouseDownComponent == null) {
-                // Begin automatic block scrolling. Calculate the direction of
-                // the scroll by checking to see if the user pressed the mouse
-                // in the area "before" the handle or "after" it.
-
-                int direction;
-                int realStopValue;
-
-                if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-                    direction = x < scrollHandle.getX() ? -1 : 1;
-
-                    int pixelStopValue = x - scrollUpButton.getWidth() + 1;
-
-                    if (direction == 1) {
-                        // If we're scrolling down, account for the width of the
-                        // handle in our pixel stop value so that we stop as soon
-                        // as the *bottom* of the handle reaches our click point
-                        pixelStopValue -= scrollHandle.getWidth();
-                    }
-
-                    realStopValue = (int)((float)pixelStopValue / getValueScale());
-                } else {
-                    direction = y < scrollHandle.getY() ? -1 : 1;
-
-                    int pixelStopValue = y - scrollUpButton.getHeight() + 1;
-
-                    if (direction == 1) {
-                        // If we're scrolling down, account for the height of the
-                        // handle in our pixel stop value so that we stop as soon
-                        // as the *bottom* of the handle reaches our click point
-                        pixelStopValue -= scrollHandle.getHeight();
-                    }
-
-                    realStopValue = (int)((float)pixelStopValue / getValueScale());
-                }
-
-                // Start the automatic scroller; we'll stop it upon mouse out or
-                // mouse up
-                automaticScroller.start(direction,
-                    IncrementType.BLOCK, realStopValue);
-            }
-
-            consumed = true;
-        }
-
-        return consumed;
+    public final void setScrollButtonHighlightedBackgroundColor(int scrollButtonHighlightedBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setScrollButtonHighlightedBackgroundColor(theme.getColor(scrollButtonHighlightedBackgroundColor));
     }
 
     @Override
@@ -1081,6 +1005,88 @@ public class TerraScrollBarSkin extends ContainerSkin
         automaticScroller.stop();
     }
 
+    /**
+     * Initiates automatic block scrolling. This only happens if the handle is
+     * visible since whether the user clicked before or after the handle
+     * determines the direction of the scrolling.
+     *
+     * @param component
+     * The scroll bar.
+     *
+     * @param button
+     * The button that was pressed.
+     *
+     * @param x
+     * The x-coordinate of the event in the scroll bar's coordinate space.
+     *
+     * @param y
+     * The y-coordinate of the event in the scroll bar's coordinate space.
+     */
+    @Override
+    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseDown(component, button, x, y);
+
+        if (button == Mouse.Button.LEFT
+            && handle.isVisible()) {
+            ScrollBar scrollBar = (ScrollBar)getComponent();
+
+            // Begin automatic block scrolling. Calculate the direction of
+            // the scroll by checking to see if the user pressed the mouse
+            // in the area "before" the handle or "after" it.
+            int direction;
+            int realStopValue;
+
+            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
+                direction = x < handle.getX() ? -1 : 1;
+
+                int pixelStopValue = x - scrollUpButton.getWidth() + 1;
+
+                if (direction == 1) {
+                    // If we're scrolling down, account for the width of the
+                    // handle in our pixel stop value so that we stop as soon
+                    // as the *bottom* of the handle reaches our click point
+                    pixelStopValue -= handle.getWidth();
+                }
+
+                realStopValue = (int)((float)pixelStopValue / getValueScale());
+            } else {
+                direction = y < handle.getY() ? -1 : 1;
+
+                int pixelStopValue = y - scrollUpButton.getHeight() + 1;
+
+                if (direction == 1) {
+                    // If we're scrolling down, account for the height of the
+                    // handle in our pixel stop value so that we stop as soon
+                    // as the *bottom* of the handle reaches our click point
+                    pixelStopValue -= handle.getHeight();
+                }
+
+                realStopValue = (int)((float)pixelStopValue / getValueScale());
+            }
+
+            // Start the automatic scroller
+            automaticScroller.start(direction, IncrementType.BLOCK, realStopValue);
+            consumed = true;
+        }
+
+        return consumed;
+    }
+
+    /**
+     * Cancels automatic block scrolling.
+     *
+     * @param component
+     * The scroll bar.
+     *
+     * @param button
+     * The button that was released.
+     *
+     * @param x
+     * The x-coordinate of the event in the scroll bar's coordinate space.
+     *
+     * @param y
+     * The y-coordinate of the event in the scroll bar's coordinate space.
+     */
     @Override
     public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
@@ -1092,6 +1098,28 @@ public class TerraScrollBarSkin extends ContainerSkin
         return consumed;
     }
 
+    /**
+     * Updates the scroll bar's value.
+     *
+     * @param component
+     * The scroll bar.
+     *
+     * @param scrollType
+     * Unit or block scrolling.
+     *
+     * @param scrollAmount
+     * The amount of scrolling.
+     *
+     * @param wheelRotation
+     * <tt>-1</tt> or <tt>1</tt> for backward or forward scrolling,
+     * respectively.
+     *
+     * @param x
+     * The x-coordinate of the event in the scroll bar's coordinate space.
+     *
+     * @param y
+     * The y-coordinate of the event in the scroll bar's coordinate space.
+     */
     @Override
     public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
@@ -1128,7 +1156,7 @@ public class TerraScrollBarSkin extends ContainerSkin
      * bar values and vice versa. This assumes that the range of pixels spans
      * from the last pixel of <tt>scrollUpButton</tt> to the first pixel of
      * <tt>scrollDownButton</tt> and excludes the pixels taken up by
-     * <tt>scrollHandle</tt>.
+     * <tt>handle</tt>.
      * <p>
      * To map from scroll bar values (<i>real values</i>) to pixel values, you
      * multiply by the value scale. To map from pixel values back to real
@@ -1153,11 +1181,11 @@ public class TerraScrollBarSkin extends ContainerSkin
         if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
             int availableWidth = getWidth() - scrollUpButton.getWidth() -
                 scrollDownButton.getWidth() + 2;
-            numLegalPixelValues = availableWidth - scrollHandle.getWidth() + 1;
+            numLegalPixelValues = availableWidth - handle.getWidth() + 1;
         } else {
             int availableHeight = getHeight() - scrollUpButton.getHeight() -
                 scrollDownButton.getHeight() + 2;
-            numLegalPixelValues = availableHeight - scrollHandle.getHeight() + 1;
+            numLegalPixelValues = availableHeight - handle.getHeight() + 1;
         }
 
         valueScale = (float)numLegalPixelValues / (float)numLegalRealValues;
@@ -1165,6 +1193,12 @@ public class TerraScrollBarSkin extends ContainerSkin
         return valueScale;
     }
 
+    /**
+     * Propagates the scroll bar's enabled state to the scroll buttons.
+     *
+     * @param component
+     * The scroll bar.
+     */
     @Override
     public void enabledChanged(Component component) {
         boolean enabled = component.isEnabled();
@@ -1197,19 +1231,22 @@ public class TerraScrollBarSkin extends ContainerSkin
     // ScrollBarValueListener methods
 
     public void valueChanged(ScrollBar scrollBar, int previousValue) {
-        if (scrollHandle.isVisible()) {
+        // Invalidating the component would yield the correct behavior but
+        // would be overkill. If all that has changed is the value, we can just
+        // update the handle's location and save the work of full invalidation.
+        if (handle.isVisible()) {
            int value = scrollBar.getValue();
 
            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
               int handleX = (int)((float)value * getValueScale()) +
                  scrollUpButton.getWidth() - 1;
 
-              scrollHandle.setLocation(handleX, 0);
+              handle.setLocation(handleX, 0);
            } else {
               int handleY = (int)((float)value * getValueScale()) +
                  scrollUpButton.getHeight() - 1;
 
-              scrollHandle.setLocation(0, handleY);
+              handle.setLocation(0, handleY);
            }
         }
     }
