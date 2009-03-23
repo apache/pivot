@@ -390,6 +390,8 @@ public class TerraTextInputSkin extends ComponentSkin
             }
         }
 
+        boolean textValid = textInput.isTextValid();
+
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         int ascent = Math.round(lm.getAscent());
 
@@ -411,7 +413,7 @@ public class TerraTextInputSkin extends ComponentSkin
             if (textInput.isEnabled()) {
                 if (prompt) {
                     color = promptColor;
-                } else if (!textInput.isTextValid()) {
+                } else if (!textValid) {
                     color = invalidColor;
                 } else {
                     color = this.color;
@@ -453,7 +455,14 @@ public class TerraTextInputSkin extends ComponentSkin
         if (textInput.getSelectionLength() == 0
             && textInput.isFocused()
             && caretOn) {
-            graphics.setPaint(Color.BLACK);
+            Color color;
+            if (!textValid) {
+                color = invalidColor;
+            } else {
+                color = this.color;
+            }
+
+            graphics.setPaint(color);
             graphics.draw(caretShapes[0]);
         }
     }
