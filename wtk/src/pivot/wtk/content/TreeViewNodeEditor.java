@@ -65,10 +65,6 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         }
 
         public void windowOpened(Window window) {
-            // Add this as a container mouse listener on display
-            Display display = window.getDisplay();
-            display.getContainerMouseListeners().add(displayMouseHandler);
-
             treeView.getTreeViewListeners().add(treeViewHandler);
             treeView.getTreeViewBranchListeners().add(treeViewHandler);
             treeView.getTreeViewNodeListeners().add(treeViewHandler);
@@ -85,7 +81,6 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
         public void windowClosed(Window window, Display display) {
             // Clean up
-            display.getContainerMouseListeners().remove(displayMouseHandler);
             treeView.getTreeViewListeners().remove(treeViewHandler);
             treeView.getTreeViewBranchListeners().remove(treeViewHandler);
             treeView.getTreeViewNodeListeners().remove(treeViewHandler);
@@ -148,44 +143,6 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
         public boolean keyTyped(Component component, char character) {
             return false;
-        }
-    };
-
-    /**
-     * Responsible for closing the popup whenever the user clicks outside the
-     * bounds of the popup. This is required because the popup affiliates
-     * itself with the tree view, meaning that the popup won't close itself
-     * automatically when the user clicks on the tree view. Further, we don't
-     * want to register a mouse button listener on the tree view, because we
-     * want to intercept the mouse event during the tunneling phase.
-     *
-     * @author tvolkert
-     */
-    private ContainerMouseListener displayMouseHandler = new ContainerMouseListener() {
-        public void mouseMove(Container container, int x, int y) {
-            // No-op
-        }
-
-        public void mouseDown(Container container, Mouse.Button button, int x, int y) {
-            // If the event did not occur within a window that is owned by
-            // this popup, close the popup
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
-
-            if (popup != null
-                && (window == null
-                || !popup.isOwningAncestorOf(window))) {
-                popup.close();
-            }
-        }
-
-        public void mouseUp(Container container, Mouse.Button button, int x, int y) {
-            // No-op
-        }
-
-        public void mouseWheel(Container container, Mouse.ScrollType scrollType,
-            int scrollAmount, int wheelRotation, int x, int y) {
-            // No-op
         }
     };
 
@@ -324,6 +281,13 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         textBounds.x += textIndent;
         textBounds.width -= textIndent;
 
+        // Scroll to make the text as visible as possible
+        nodeRenderer.render(nodeData, treeView, false, false,
+            TreeView.NodeCheckState.UNCHECKED, false, false);
+        Component textComponent = nodeRenderer.get(1);
+        int textWidth = textComponent.getPreferredWidth(-1);
+        treeView.scrollAreaToVisible(textBounds.x, textBounds.y, textWidth + 3, textBounds.height);
+
         // Constrain the bounds by what is visible through Viewport ancestors
         treeView.constrainToViewportBounds(textBounds);
 
@@ -337,7 +301,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         popup.setLocation(displayCoordinates.x + textBounds.x, displayCoordinates.y +
             textBounds.y + (textBounds.height - textInput.getPreferredHeight(-1)) / 2);
         popup.getWindowStateListeners().add(popupStateHandler);
-        popup.open(treeView);
+        popup.open(treeView.getWindow());
 
         textInput.requestFocus();
     }
