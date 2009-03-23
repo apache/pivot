@@ -236,7 +236,8 @@ public class TerraTextInputSkin extends ComponentSkin
     private Color promptColor;
     private Color backgroundColor;
     private Color disabledBackgroundColor;
-    private Color invalidTextBackgroundColor;
+    private Color invalidColor;
+    private Color invalidBackgroundColor;
     private Color borderColor;
     private Color disabledBorderColor;
     private Insets padding;
@@ -249,6 +250,7 @@ public class TerraTextInputSkin extends ComponentSkin
     // Derived colors
     private Color bevelColor;
     private Color disabledBevelColor;
+    private Color invalidBevelColor;
 
     private static final int SCROLL_RATE = 50;
 
@@ -260,7 +262,8 @@ public class TerraTextInputSkin extends ComponentSkin
         disabledColor = theme.getColor(7);
         backgroundColor = theme.getColor(11);
         disabledBackgroundColor = theme.getColor(10);
-        invalidTextBackgroundColor = theme.getColor(25);
+        invalidColor = theme.getColor(4);
+        invalidBackgroundColor = theme.getColor(22);
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
         padding = new Insets(2);
@@ -273,6 +276,7 @@ public class TerraTextInputSkin extends ComponentSkin
         // Set the derived colors
         bevelColor = TerraTheme.darken(backgroundColor);
         disabledBevelColor = disabledBackgroundColor;
+        invalidBevelColor = TerraTheme.darken(invalidBackgroundColor);
     }
 
     @Override
@@ -342,17 +346,19 @@ public class TerraTextInputSkin extends ComponentSkin
         Color bevelColor;
 
         if (textInput.isEnabled()) {
-            backgroundColor = this.backgroundColor;
+            if (textInput.isTextValid()) {
+                backgroundColor = this.backgroundColor;
+                bevelColor = this.bevelColor;
+            } else {
+                backgroundColor = invalidBackgroundColor;
+                bevelColor = invalidBevelColor;
+            }
+
             borderColor = this.borderColor;
-            bevelColor = this.bevelColor;
         } else {
             backgroundColor = disabledBackgroundColor;
-            borderColor = this.disabledBorderColor;
+            borderColor = disabledBorderColor;
             bevelColor = disabledBevelColor;
-        }
-
-        if (!textInput.isTextValid()) {
-            backgroundColor = invalidTextBackgroundColor;
         }
 
         graphics.setStroke(new BasicStroke());
@@ -403,7 +409,13 @@ public class TerraTextInputSkin extends ComponentSkin
 
             Color color;
             if (textInput.isEnabled()) {
-               color = prompt ? promptColor : this.color;
+                if (prompt) {
+                    color = promptColor;
+                } else if (!textInput.isTextValid()) {
+                    color = invalidColor;
+                } else {
+                    color = this.color;
+                }
             } else {
                color = disabledColor;
             }
@@ -618,30 +630,57 @@ public class TerraTextInputSkin extends ComponentSkin
         setBackgroundColor(theme.getColor(color));
     }
 
-    public Color getInvalidTextBackgroundColor() {
-        return invalidTextBackgroundColor;
+    public Color getInvalidColor() {
+        return invalidColor;
     }
 
-    public void setInvalidTextBackgroundColor(Color color) {
-        if (invalidTextBackgroundColor == null) {
-            throw new IllegalArgumentException("invalidTextBackgroundColor is null.");
+    public void setInvalidColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
         }
 
-        this.invalidTextBackgroundColor = color;
+        this.invalidColor = color;
         repaintComponent();
     }
 
-    public final void setInvalidTextBackgroundColor(String color) {
+    public final void setInvalidColor(String color) {
         if (color == null) {
-            throw new IllegalArgumentException("invalidTextBackgroundColor is null.");
+            throw new IllegalArgumentException("color is null.");
         }
 
-        setInvalidTextBackgroundColor(decodeColor(color));
+        setInvalidColor(decodeColor(color));
     }
 
-    public final void setInvalidTextBackgroundColor(int color) {
+    public final void setInvalidColor(int color) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setInvalidTextBackgroundColor(theme.getColor(color));
+        setInvalidColor(theme.getColor(color));
+    }
+
+    public Color getInvalidBackgroundColor() {
+        return invalidBackgroundColor;
+    }
+
+    public void setInvalidBackgroundColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.invalidBackgroundColor = color;
+        invalidBevelColor = TerraTheme.darken(color);
+        repaintComponent();
+    }
+
+    public final void setInvalidBackgroundColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("invalidBackgroundColor is null.");
+        }
+
+        setInvalidBackgroundColor(decodeColor(color));
+    }
+
+    public final void setInvalidBackgroundColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInvalidBackgroundColor(theme.getColor(color));
     }
 
     public Color getDisabledBackgroundColor() {
