@@ -16,6 +16,7 @@
 package pivot.wtk;
 
 import pivot.wtk.text.TextNode;
+import pivot.wtk.text.validation.Validator;
 
 /**
  * Text input listener interface.
@@ -68,4 +69,19 @@ public interface TextInputListener {
      * @param previousTextKey
      */
     public void textKeyChanged(TextInput textInput, String previousTextKey);
+
+    /**
+     * Called when the text changes validity.
+     *
+     * @param textInput
+     */
+    public void textValidChanged(TextInput textInput);
+
+    /**
+     * Called when the validator changes.
+     *
+     * @param textInput
+     * @param previousValidator
+     */
+    public void textValidatorChanged(TextInput textInput, Validator previousValidator);
 }

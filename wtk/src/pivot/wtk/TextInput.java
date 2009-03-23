@@ -23,6 +23,7 @@ import pivot.wtk.text.Element;
 import pivot.wtk.text.Node;
 import pivot.wtk.text.NodeListener;
 import pivot.wtk.text.TextNode;
+import pivot.wtk.text.validation.Validator;
 
 /**
  * A component that allows a user to enter a single line of unformatted text.
@@ -42,6 +43,7 @@ public class TextInput extends Component {
                 listener.textNodeChanged(textInput, previousTextNode);
             }
         }
+
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
             for (TextInputListener listener : this) {
                 listener.textSizeChanged(textInput, previousTextSize);
@@ -61,14 +63,26 @@ public class TextInput extends Component {
         }
 
         public void promptChanged(TextInput textInput, String previousPrompt) {
-        	for (TextInputListener listener : this) {
-        		listener.promptChanged(textInput, previousPrompt);
-        	}
+            for (TextInputListener listener : this) {
+                listener.promptChanged(textInput, previousPrompt);
+            }
         }
 
         public void textKeyChanged(TextInput textInput, String previousTextKey) {
             for (TextInputListener listener : this) {
                 listener.textKeyChanged(textInput, previousTextKey);
+            }
+        }
+
+        public void textValidChanged(TextInput textInput) {
+            for (TextInputListener listener : this) {
+                listener.textValidChanged(textInput);
+            }
+        }
+
+        public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
+            for (TextInputListener listener : this) {
+                listener.textValidatorChanged(textInput, previousValidator);
             }
         }
     }
@@ -132,6 +146,8 @@ public class TextInput extends Component {
     private boolean password = false;
     private String prompt = null;
     private String textKey = null;
+    private Validator validator = null;
+    private boolean textValid = true;
 
     private NodeListener textNodeListener = new NodeListener() {
         public void parentChanged(Node node, Element previousParent) {
@@ -151,6 +167,7 @@ public class TextInput extends Component {
 
             textInputCharacterListeners.charactersInserted(TextInput.this, offset, characterCount);
             textInputTextListeners.textChanged(TextInput.this);
+            updateTextValid();
         }
 
         public void rangeRemoved(Node node, int offset, int characterCount) {
@@ -164,6 +181,7 @@ public class TextInput extends Component {
 
             textInputCharacterListeners.charactersRemoved(TextInput.this, offset, characterCount);
             textInputTextListeners.textChanged(TextInput.this);
+            updateTextValid();
         }
     };
 
@@ -211,6 +229,7 @@ public class TextInput extends Component {
 
             textInputListeners.textNodeChanged(this, previousTextNode);
             textInputTextListeners.textChanged(this);
+            updateTextValid();
         }
     }
 
@@ -536,7 +555,7 @@ public class TextInput extends Component {
      * Returns the text input's prompt.
      */
     public String getPrompt() {
-    	return prompt;
+      return prompt;
     }
 
     /**
@@ -546,12 +565,12 @@ public class TextInput extends Component {
      * The prompt text, or <tt>null</tt> for no prompt.
      */
     public void setPrompt(String prompt) {
-    	String previousPrompt = this.prompt;
+      String previousPrompt = this.prompt;
 
-    	if (previousPrompt != prompt) {
-    		this.prompt = prompt;
-    		textInputListeners.promptChanged(this, previousPrompt);
-    	}
+      if (previousPrompt != prompt) {
+         this.prompt = prompt;
+         textInputListeners.promptChanged(this, previousPrompt);
+      }
     }
 
     /**
@@ -588,10 +607,10 @@ public class TextInput extends Component {
             && context.containsKey(textKey)) {
             Object value = context.get(textKey);
             if (value != null) {
-            	value = value.toString();
+               value = value.toString();
             }
 
-        	setText((String)value);
+         setText((String)value);
         }
     }
 
@@ -600,6 +619,52 @@ public class TextInput extends Component {
     public void store(Dictionary<String, ?> context) {
         if (textKey != null) {
             ((Dictionary<String, String>)context).put(textKey, getText());
+        }
+    }
+
+    /**
+     * Tells whether or not this text input's text is currently valid as
+     * defined by its validator. If there is no validator associated with this
+     * text input, the text is assumed to always be valid.
+     */
+    public boolean isTextValid() {
+        return textValid;
+    }
+
+    /**
+     * Updates the <tt>textValid</tt> flag and notifies listeners if the flag's
+     * value has changed. It is the responsibility of methods to call this
+     * method when the validity of the text may have changed.
+     */
+    private void updateTextValid() {
+        boolean textValid = (validator == null ? true : validator.isValid(getText()));
+
+        if (textValid != this.textValid) {
+            this.textValid = textValid;
+            textInputListeners.textValidChanged(this);
+        }
+    }
+
+    /**
+     * Gets the validator associated with this text input.
+     */
+    public Validator getValidator() {
+        return validator;
+    }
+
+    /**
+     * Sets the validator associated with this text input.
+     *
+     * @param validator
+     * The validator to use, or <tt>null</tt> to use no validator.
+     */
+    public void setValidator(Validator validator) {
+        Validator previousValidator = this.validator;
+
+        if (validator != previousValidator) {
+            this.validator = validator;
+            textInputListeners.textValidatorChanged(this, previousValidator);
+            updateTextValid();
         }
     }
 

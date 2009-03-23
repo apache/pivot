@@ -39,12 +39,13 @@ import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Platform;
 import pivot.wtk.TextInput;
-import pivot.wtk.TextInputListener;
 import pivot.wtk.TextInputCharacterListener;
+import pivot.wtk.TextInputListener;
 import pivot.wtk.TextInputSelectionListener;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.text.TextNode;
+import pivot.wtk.text.validation.Validator;
 
 /**
  * Text input skin.
@@ -235,6 +236,7 @@ public class TerraTextInputSkin extends ComponentSkin
     private Color promptColor;
     private Color backgroundColor;
     private Color disabledBackgroundColor;
+    private Color invalidTextBackgroundColor;
     private Color borderColor;
     private Color disabledBorderColor;
     private Insets padding;
@@ -258,6 +260,7 @@ public class TerraTextInputSkin extends ComponentSkin
         disabledColor = theme.getColor(7);
         backgroundColor = theme.getColor(11);
         disabledBackgroundColor = theme.getColor(10);
+        invalidTextBackgroundColor = theme.getColor(25);
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
         padding = new Insets(2);
@@ -342,11 +345,14 @@ public class TerraTextInputSkin extends ComponentSkin
             backgroundColor = this.backgroundColor;
             borderColor = this.borderColor;
             bevelColor = this.bevelColor;
-        }
-        else {
+        } else {
             backgroundColor = disabledBackgroundColor;
             borderColor = this.disabledBorderColor;
             bevelColor = disabledBevelColor;
+        }
+
+        if (!textInput.isTextValid()) {
+            backgroundColor = invalidTextBackgroundColor;
         }
 
         graphics.setStroke(new BasicStroke());
@@ -368,14 +374,14 @@ public class TerraTextInputSkin extends ComponentSkin
 
         boolean prompt = false;
         if (text.length() == 0
-    		&& !textInput.isFocused()) {
-        	text = textInput.getPrompt();
+            && !textInput.isFocused()) {
+            text = textInput.getPrompt();
 
-        	if (text == null) {
-        		text = "";
-        	} else {
-        		prompt = true;
-        	}
+            if (text == null) {
+                text = "";
+            } else {
+                prompt = true;
+            }
         }
 
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
@@ -397,9 +403,9 @@ public class TerraTextInputSkin extends ComponentSkin
 
             Color color;
             if (textInput.isEnabled()) {
-            	color = prompt ? promptColor : this.color;
+               color = prompt ? promptColor : this.color;
             } else {
-            	color = disabledColor;
+               color = disabledColor;
             }
 
             graphics.setFont(font);
@@ -610,6 +616,32 @@ public class TerraTextInputSkin extends ComponentSkin
     public final void setBackgroundColor(int color) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBackgroundColor(theme.getColor(color));
+    }
+
+    public Color getInvalidTextBackgroundColor() {
+        return invalidTextBackgroundColor;
+    }
+
+    public void setInvalidTextBackgroundColor(Color color) {
+        if (invalidTextBackgroundColor == null) {
+            throw new IllegalArgumentException("invalidTextBackgroundColor is null.");
+        }
+
+        this.invalidTextBackgroundColor = color;
+        repaintComponent();
+    }
+
+    public final void setInvalidTextBackgroundColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("invalidTextBackgroundColor is null.");
+        }
+
+        setInvalidTextBackgroundColor(decodeColor(color));
+    }
+
+    public final void setInvalidTextBackgroundColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInvalidTextBackgroundColor(theme.getColor(color));
     }
 
     public Color getDisabledBackgroundColor() {
@@ -1108,10 +1140,18 @@ public class TerraTextInputSkin extends ComponentSkin
     }
 
     public void promptChanged(TextInput textInput, String previousPrompt) {
-    	repaintComponent();
+      repaintComponent();
     }
 
     public void textKeyChanged(TextInput textInput, String previousTextKey) {
+        // No-op
+    }
+
+    public void textValidChanged(TextInput textInput) {
+        repaintComponent();
+    }
+
+    public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
         // No-op
     }
 
