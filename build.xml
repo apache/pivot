@@ -50,6 +50,20 @@
             <packageset dir="${core}/${src}" includes="**/*"/>
             <packageset dir="${web}/${src}" includes="**/*"/>
             <packageset dir="${wtk}/${src}" includes="**/*"/>
+            <header>
+              <![CDATA[
+                 <script type="text/javascript">
+                   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                   document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+                 </script>
+                 <script type="text/javascript">
+                   try {
+                     var pageTracker = _gat._getTracker("UA-7977275-1");
+                     pageTracker._trackPageview();
+                   } catch(err) {}
+                 </script>
+              ]]>
+            </header>
         </javadoc>
 
         <delete file="${ant.project.name}_${version}-${doc}.zip"/>
