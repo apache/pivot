@@ -262,19 +262,19 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         this.treeView = treeView;
         this.editPath = path;
 
-        TreeViewNodeRenderer nodeRenderer = (TreeViewNodeRenderer)treeView.getNodeRenderer();
-
         // Get the data being edited
         List<?> treeData = treeView.getTreeData();
         TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
 
+        // Render the data, enabling us to query the renderer for layout info
+        TreeViewNodeRenderer nodeRenderer = (TreeViewNodeRenderer)treeView.getNodeRenderer();
+        Component textComponent = nodeRenderer.get(1);
+        nodeRenderer.render(nodeData, treeView, false, false,
+            TreeView.NodeCheckState.UNCHECKED, false, false);
+
         // Calculate the indent to the node's text
         int textIndent = treeView.getNodeIndent(path.getLength());
-        textIndent += ((Insets)nodeRenderer.getStyles().get("padding")).left;
-        if (nodeRenderer.getShowIcon()) {
-            textIndent += nodeRenderer.getIconWidth();
-            textIndent += (Integer)nodeRenderer.getStyles().get("spacing");
-        }
+        textIndent += textComponent.getX();
 
         // Calculate the bounds of the node's text
         Bounds textBounds = treeView.getNodeBounds(path);
@@ -282,11 +282,8 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         textBounds.width -= textIndent;
 
         // Scroll to make the text as visible as possible
-        nodeRenderer.render(nodeData, treeView, false, false,
-            TreeView.NodeCheckState.UNCHECKED, false, false);
-        Component textComponent = nodeRenderer.get(1);
         int textWidth = textComponent.getPreferredWidth(-1);
-        treeView.scrollAreaToVisible(textBounds.x, textBounds.y, textWidth + 3, textBounds.height);
+        treeView.scrollAreaToVisible(textBounds.x, textBounds.y, textWidth, textBounds.height);
 
         // Constrain the bounds by what is visible through Viewport ancestors
         treeView.constrainToViewportBounds(textBounds);
