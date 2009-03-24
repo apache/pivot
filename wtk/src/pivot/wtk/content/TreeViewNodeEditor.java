@@ -242,10 +242,11 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
             // Scroll to make the text as visible as possible
             treeView.scrollAreaToVisible(editBounds.x, editBounds.y,
-                textBounds.width, editBounds.height);
+                textBounds.width + padding.left + 1, editBounds.height);
 
             // Constrain the bounds by what is visible through Viewport ancestors
-            treeView.constrainToViewportBounds(editBounds);
+            editBounds = treeView.constrainToViewportBounds(editBounds.x, editBounds.y,
+                editBounds.width, editBounds.height);
 
             textInput.setText(nodeData.getText());
             textInput.setPreferredWidth(editBounds.width);

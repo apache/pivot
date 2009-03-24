@@ -216,10 +216,11 @@ public class ListViewItemEditor implements ListView.ItemEditor {
 
             // Scroll to make the text as visible as possible
             listView.scrollAreaToVisible(editBounds.x, editBounds.y,
-                textBounds.width, editBounds.height);
+                textBounds.width + padding.left + 1, editBounds.height);
 
             // Constrain the bounds by what is visible through Viewport ancestors
-            listView.constrainToViewportBounds(editBounds);
+            editBounds = listView.constrainToViewportBounds(editBounds.x, editBounds.y,
+                editBounds.width, editBounds.height);
 
             textInput.setText(listItem.getText());
             textInput.setPreferredWidth(editBounds.width);
