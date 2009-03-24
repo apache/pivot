@@ -39,6 +39,8 @@ public class Tooltip extends Window {
     private TooltipListenerList tooltipListeners = new TooltipListenerList();
 
     public Tooltip(String text) {
+        super(true);
+
         setText(text);
         installSkin(Tooltip.class);
     }
@@ -54,15 +56,6 @@ public class Tooltip extends Window {
             this.text = text;
             tooltipListeners.textChanged(this, previousText);
         }
-    }
-
-    /**
-     * @return
-     * <tt>true</tt>; by default, tooltips are auxilliary windows.
-     */
-    @Override
-    public boolean isAuxilliary() {
-        return true;
     }
 
     public ListenerList<TooltipListener> getTooltipListeners() {

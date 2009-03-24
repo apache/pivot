@@ -103,7 +103,7 @@ public class Sheet extends Window {
      * The sheet's content component.
      */
     public Sheet(Component content) {
-        super(content);
+        super(content, true);
 
         installSkin(Sheet.class);
     }
@@ -117,15 +117,6 @@ public class Sheet extends Window {
                 alignToOwnerContent();
             }
         });
-    }
-
-    /**
-     * @return
-     * <tt>true</tt>; by default, sheets are auxilliary windows.
-     */
-    @Override
-    public boolean isAuxilliary() {
-        return true;
     }
 
     @Override

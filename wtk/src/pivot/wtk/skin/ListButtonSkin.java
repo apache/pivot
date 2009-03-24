@@ -17,10 +17,13 @@ package pivot.wtk.skin;
 
 import pivot.collections.ArrayList;
 import pivot.collections.List;
+import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
+import pivot.wtk.Container;
+import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.Display;
@@ -31,7 +34,8 @@ import pivot.wtk.ListButtonSelectionListener;
 import pivot.wtk.ListView;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
-import pivot.wtk.Popup;
+import pivot.wtk.Window;
+import pivot.wtk.WindowStateListener;
 
 /**
  * Abstract base class for list button skins.
@@ -47,7 +51,31 @@ import pivot.wtk.Popup;
 public abstract class ListButtonSkin extends ButtonSkin
     implements ListButtonListener, ListButtonSelectionListener {
     protected ListView listView;
-    protected Popup listViewPopup;
+    protected Window listViewPopup;
+
+    private ComponentMouseButtonListener listViewPopupMouseButtonListener = new ComponentMouseButtonListener() {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
+        }
+
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            return false;
+        }
+
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            ListButton listButton = (ListButton)getComponent();
+
+            int index = listView.getSelectedIndex();
+
+            listView.clearSelection();
+            listButton.setSelectedIndex(index);
+
+            listViewPopup.close();
+            getComponent().requestFocus();
+
+            return true;
+        }
+    };
 
     private ComponentKeyListener listViewPopupKeyListener = new ComponentKeyListener() {
         public boolean keyTyped(Component component, char character) {
@@ -93,27 +121,58 @@ public abstract class ListButtonSkin extends ButtonSkin
         }
     };
 
-    private ComponentMouseButtonListener listViewPopupMouseListener = new ComponentMouseButtonListener() {
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
+    private WindowStateListener listViewPopupWindowStateListener = new WindowStateListener() {
+        public Vote previewWindowOpen(Window window, Display display) {
+            return Vote.APPROVE;
         }
 
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            return false;
+        public void windowOpenVetoed(Window window, Vote reason) {
+            // No-op
         }
 
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            ListButton listButton = (ListButton)getComponent();
+        public void windowOpened(Window window) {
+            Display display = window.getDisplay();
+            display.getContainerMouseListeners().add(displayMouseListener);
+        }
 
-            int index = listView.getSelectedIndex();
+        public Vote previewWindowClose(Window window) {
+            return Vote.APPROVE;
+        }
 
-            listView.clearSelection();
-            listButton.setSelectedIndex(index);
+        public void windowCloseVetoed(Window window, Vote reason) {
+            // No-op
+        }
 
-            listViewPopup.close();
-            getComponent().requestFocus();
+        public void windowClosed(Window window, Display display) {
+            display.getContainerMouseListeners().remove(displayMouseListener);
+        }
+    };
 
-            return true;
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
+        public void mouseMove(Container container, int x, int y) {
+        }
+
+        public void mouseDown(Container container, Mouse.Button button, int x, int y) {
+            Display display = (Display)container;
+            Component descendant = display.getDescendantAt(x, y);
+
+            if (!listViewPopup.isAncestor(descendant)
+                && descendant != ListButtonSkin.this.getComponent()) {
+                listViewPopup.close();
+            }
+        }
+
+        public void mouseUp(Container container, Mouse.Button button, int x, int y) {
+        }
+
+        public void mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            Display display = (Display)container;
+            Window window = (Window)display.getComponentAt(x, y);
+
+            if (window != listViewPopup) {
+                listViewPopup.close();
+            }
         }
     };
 
@@ -122,9 +181,10 @@ public abstract class ListButtonSkin extends ButtonSkin
     public ListButtonSkin() {
         listView = new ListView();
 
-        listViewPopup = new Popup();
-        listViewPopup.getComponentMouseButtonListeners().add(listViewPopupMouseListener);
+        listViewPopup = new Window(true);
+        listViewPopup.getComponentMouseButtonListeners().add(listViewPopupMouseButtonListener);
         listViewPopup.getComponentKeyListeners().add(listViewPopupKeyListener);
+        listViewPopup.getWindowStateListeners().add(listViewPopupWindowStateListener);
     }
 
     @Override
@@ -312,7 +372,7 @@ public abstract class ListButtonSkin extends ButtonSkin
 
                     listViewPopup.setLocation(x, y);
                     listViewPopup.setPreferredSize(popupSize);
-                    listViewPopup.open(listButton);
+                    listViewPopup.open(listButton.getWindow());
 
                     if (listView.getFirstSelectedIndex() == -1
                         && listView.getListData().getLength() > 0) {

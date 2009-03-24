@@ -15,9 +15,12 @@
  */
 package pivot.wtk.skin;
 
+import pivot.util.Vote;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
+import pivot.wtk.Container;
+import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Direction;
 import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
@@ -25,6 +28,8 @@ import pivot.wtk.Menu;
 import pivot.wtk.MenuPopup;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
+import pivot.wtk.Window;
+import pivot.wtk.WindowStateListener;
 
 /**
  * Abstract base class for menu item skins.
@@ -35,8 +40,75 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     protected MenuPopup menuPopup = new MenuPopup();
 
     protected int buttonPressInterval = 200;
-
     protected ApplicationContext.ScheduledCallback buttonPressCallback = null;
+
+    private WindowStateListener menuPopupWindowListener = new WindowStateListener() {
+        public Vote previewWindowOpen(Window window, Display display) {
+            return Vote.APPROVE;
+        }
+
+        public void windowOpenVetoed(Window window, Vote reason) {
+            // No-op
+        }
+
+        public void windowOpened(Window window) {
+            Display display = window.getDisplay();
+            display.getContainerMouseListeners().add(displayMouseListener);
+        }
+
+        public Vote previewWindowClose(Window window) {
+            return Vote.APPROVE;
+        }
+
+        public void windowCloseVetoed(Window window, Vote reason) {
+            // No-op
+        }
+
+        public void windowClosed(Window window, Display display) {
+            display.getContainerMouseListeners().remove(displayMouseListener);
+
+            Menu.Item menuItem = (Menu.Item)getComponent();
+            if (menuItem.isFocused()) {
+                Component.clearFocus();
+            } else {
+                repaintComponent();
+            }
+        }
+    };
+
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
+        public void mouseMove(Container container, int x, int y) {
+        }
+
+        public void mouseDown(Container container, Mouse.Button button, int x, int y) {
+            Display display = (Display)container;
+            Component descendant = display.getDescendantAt(x, y);
+
+            if (!menuPopup.isAncestor(descendant)
+                && !menuPopup.isOwner(descendant.getWindow())
+                && descendant != MenuItemSkin.this.getComponent()) {
+                menuPopup.close();
+            }
+        }
+
+        public void mouseUp(Container container, Mouse.Button button, int x, int y) {
+        }
+
+        public void mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            Display display = (Display)container;
+            Window window = (Window)display.getComponentAt(x, y);
+
+            if (window != menuPopup
+                && !menuPopup.isOwner(window)) {
+                menuPopup.close();
+            }
+        }
+    };
+
+    public MenuItemSkin() {
+        menuPopup.getWindowStateListeners().add(menuPopupWindowListener);
+    }
 
     @Override
     public void install(Component component) {

@@ -34,8 +34,9 @@ public class Frame extends Window {
     }
 
     public Frame(String title, Component content) {
-        super(title, content);
+        super(content, false);
 
+        setTitle(title);
         installSkin(Frame.class);
     }
 }

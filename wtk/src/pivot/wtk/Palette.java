@@ -22,32 +22,23 @@ package pivot.wtk;
  * @author gbrown
  */
 public class Palette extends Window {
-    /**
-     * Creates a new palette.
-     */
     public Palette() {
-        this(null);
+        this(null, null);
     }
 
-    /**
-     * Creates a new palette with an initial content component.
-     *
-     * @param content
-     * The sheet's content component.
-     */
+    public Palette(String title) {
+        this(title, null);
+    }
+
     public Palette(Component content) {
-        super(content);
-
-        installSkin(Palette.class);
+        this(null, content);
     }
 
-    /**
-     * @return
-     * <tt>true</tt>; by default, palettes are auxilliary windows.
-     */
-    @Override
-    public boolean isAuxilliary() {
-        return true;
+    public Palette(String title, Component content) {
+        super(content, true);
+
+        setTitle(title);
+        installSkin(Palette.class);
     }
 
     @Override

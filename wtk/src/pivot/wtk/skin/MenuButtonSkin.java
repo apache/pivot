@@ -18,6 +18,8 @@ package pivot.wtk.skin;
 import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
+import pivot.wtk.Container;
+import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
@@ -40,38 +42,73 @@ public abstract class MenuButtonSkin extends ButtonSkin
     protected boolean pressed = false;
     protected MenuPopup menuPopup = new MenuPopup();
 
+    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener() {
+        public Vote previewWindowOpen(Window window, Display display) {
+            return Vote.APPROVE;
+        }
+
+        public void windowOpenVetoed(Window window, Vote reason) {
+            // No-op
+        }
+
+        public void windowOpened(Window window) {
+            Display display = window.getDisplay();
+            display.getContainerMouseListeners().add(displayMouseListener);
+        }
+
+        public Vote previewWindowClose(Window window) {
+            return Vote.APPROVE;
+        }
+
+        public void windowCloseVetoed(Window window, Vote reason) {
+            // No-op
+        }
+
+        public void windowClosed(Window window, Display display) {
+            display.getContainerMouseListeners().remove(displayMouseListener);
+
+            MenuButton menuButton = (MenuButton)getComponent();
+
+            if (menuButton.isFocusable()) {
+                menuButton.requestFocus();
+            }
+
+            repaintComponent();
+        }
+    };
+
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
+        public void mouseMove(Container container, int x, int y) {
+        }
+
+        public void mouseDown(Container container, Mouse.Button button, int x, int y) {
+            Display display = (Display)container;
+            Component descendant = display.getDescendantAt(x, y);
+
+            if (!menuPopup.isAncestor(descendant)
+                && !menuPopup.isOwner(descendant.getWindow())
+                && descendant != MenuButtonSkin.this.getComponent()) {
+                menuPopup.close();
+            }
+        }
+
+        public void mouseUp(Container container, Mouse.Button button, int x, int y) {
+        }
+
+        public void mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            Display display = (Display)container;
+            Window window = (Window)display.getComponentAt(x, y);
+
+            if (window != menuPopup
+                && !menuPopup.isOwner(window)) {
+                menuPopup.close();
+            }
+        }
+    };
+
     public MenuButtonSkin() {
-        menuPopup.getWindowStateListeners().add(new WindowStateListener() {
-            public Vote previewWindowOpen(Window window, Display display) {
-                return Vote.APPROVE;
-            }
-
-            public void windowOpenVetoed(Window window, Vote reason) {
-                // No-op
-            }
-
-            public void windowOpened(Window window) {
-                // No-op
-            }
-
-            public Vote previewWindowClose(Window window) {
-                return Vote.APPROVE;
-            }
-
-            public void windowCloseVetoed(Window window, Vote reason) {
-                // No-op
-            }
-
-            public void windowClosed(Window window, Display display) {
-                MenuButton menuButton = (MenuButton)getComponent();
-
-                if (menuButton.isFocusable()) {
-                    menuButton.requestFocus();
-                }
-
-                repaintComponent();
-            }
-        });
+        menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
     }
 
     @Override

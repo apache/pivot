@@ -19,6 +19,8 @@ import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
+import pivot.wtk.Container;
+import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Direction;
 import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
@@ -38,42 +40,77 @@ import pivot.wtk.WindowStateListener;
 public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.ItemListener {
     protected MenuPopup menuPopup = new MenuPopup();
 
+    private WindowStateListener menuPopupWindowListener = new WindowStateListener() {
+        public Vote previewWindowOpen(Window window, Display display) {
+            return Vote.APPROVE;
+        }
+
+        public void windowOpenVetoed(Window window, Vote reason) {
+            // No-op
+        }
+
+        public void windowOpened(Window window) {
+            Display display = window.getDisplay();
+            display.getContainerMouseListeners().add(displayMouseListener);
+        }
+
+        public Vote previewWindowClose(Window window) {
+            return Vote.APPROVE;
+        }
+
+        public void windowCloseVetoed(Window window, Vote reason) {
+            // No-op
+        }
+
+        public void windowClosed(Window window, Display display) {
+            display.getContainerMouseListeners().remove(displayMouseListener);
+
+            MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+            if (menuBarItem.isFocused()) {
+                Component.clearFocus();
+            } else {
+                repaintComponent();
+            }
+
+            MenuBar menuBar = menuBarItem.getMenuBar();
+            if (!menuBar.containsFocus()) {
+                menuBar.setActive(false);
+            }
+        }
+    };
+
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
+        public void mouseMove(Container container, int x, int y) {
+        }
+
+        public void mouseDown(Container container, Mouse.Button button, int x, int y) {
+            Display display = (Display)container;
+            Component descendant = display.getDescendantAt(x, y);
+
+            if (!menuPopup.isAncestor(descendant)
+                && !menuPopup.isOwner(descendant.getWindow())
+                && descendant != MenuBarItemSkin.this.getComponent()) {
+                menuPopup.close();
+            }
+        }
+
+        public void mouseUp(Container container, Mouse.Button button, int x, int y) {
+        }
+
+        public void mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            Display display = (Display)container;
+            Window window = (Window)display.getComponentAt(x, y);
+
+            if (window != menuPopup
+                && !menuPopup.isOwner(window)) {
+                menuPopup.close();
+            }
+        }
+    };
+
     public MenuBarItemSkin() {
-        menuPopup.getWindowStateListeners().add(new WindowStateListener() {
-            public Vote previewWindowOpen(Window window, Display display) {
-                return Vote.APPROVE;
-            }
-
-            public void windowOpenVetoed(Window window, Vote reason) {
-                // No-op
-            }
-
-            public void windowOpened(Window window) {
-                // No-op
-            }
-
-            public Vote previewWindowClose(Window window) {
-                return Vote.APPROVE;
-            }
-
-            public void windowCloseVetoed(Window window, Vote reason) {
-                // No-op
-            }
-
-            public void windowClosed(Window window, Display display) {
-                MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-                if (menuBarItem.isFocused()) {
-                    Component.clearFocus();
-                } else {
-                    repaintComponent();
-                }
-
-                MenuBar menuBar = menuBarItem.getMenuBar();
-                if (!menuBar.containsFocus()) {
-                    menuBar.setActive(false);
-                }
-            }
-        });
+        menuPopup.getWindowStateListeners().add(menuPopupWindowListener);
     }
 
     @Override

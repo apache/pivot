@@ -185,6 +185,8 @@ public class Window extends Container {
         }
     }
 
+    private boolean auxilliary;
+
     private Window owner = null;
     private ArrayList<Window> ownedWindows = new ArrayList<Window>();
 
@@ -208,19 +210,20 @@ public class Window extends Container {
     private static Window activeWindow = null;
 
     public Window() {
-        this(null, null);
+        this(null, false);
     }
 
-    public Window(String title) {
-        this(title, null);
+    public Window(boolean auxilliary) {
+        this(null, auxilliary);
     }
 
     public Window(Component content) {
-        this(null, content);
+        this(content, false);
     }
 
-    public Window(String title, Component content) {
-        setTitle(title);
+    public Window(Component content, boolean auxilliary) {
+        this.auxilliary = auxilliary;
+
         setContent(content);
         installSkin(Window.class);
     }
@@ -347,8 +350,22 @@ public class Window extends Container {
         return ownedWindows.getLength();
     }
 
-    public boolean isOwningAncestorOf(Window window) {
-        Window owner = window;
+    /**
+     * Tests whether this window is an owning ancestor of a given window. A
+     * window is not considered an owner of itself.
+     *
+     * @param window
+     *
+     * @return
+     * <tt>true</tt> if this window is an owning ancestor of the given window;
+     * <tt>false</tt>, otherwise.
+     */
+    public boolean isOwner(Window window) {
+        if (window == null) {
+            throw new IllegalArgumentException("window is null.");
+        }
+
+        Window owner = window.getOwner();
 
         while (owner != null
             && owner != this) {
@@ -616,14 +633,14 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the window's auxilliary state. Auxilliary windows must have an
+     * Returns the window's auxilliary flag. Auxilliary windows must have an
      * owner, can't become active, and can only own other auxilliary windows.
      *
      * @return
      * <tt>true</tt> if this is an auxilliary window; <tt>false</tt>, otherwise.
      */
     public boolean isAuxilliary() {
-        return false;
+        return auxilliary;
     }
 
     /**

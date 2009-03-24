@@ -22,14 +22,9 @@ import pivot.util.Vote;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
-import pivot.wtk.Container;
-import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Display;
-import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
-import pivot.wtk.Mouse;
 import pivot.wtk.Point;
-import pivot.wtk.Popup;
 import pivot.wtk.TextInput;
 import pivot.wtk.TreeView;
 import pivot.wtk.TreeViewListener;
@@ -250,7 +245,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
     private TreeView treeView = null;
     private Sequence<Integer> editPath = null;
-    private Popup popup = null;
+    private Window popup = null;
 
     private TreeViewHandler treeViewHandler = new TreeViewHandler();
 
@@ -293,7 +288,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         textInput.setPreferredWidth(textBounds.width);
         textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
-        popup = new Popup(textInput);
+        popup = new Window(textInput, true);
         Point displayCoordinates = treeView.mapPointToAncestor(treeView.getDisplay(), 0, 0);
         popup.setLocation(displayCoordinates.x + textBounds.x, displayCoordinates.y +
             textBounds.y + (textBounds.height - textInput.getPreferredHeight(-1)) / 2);

@@ -18,6 +18,7 @@ package pivot.wtk.skin;
 import java.util.Locale;
 
 import pivot.util.CalendarDate;
+import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.Calendar;
 import pivot.wtk.CalendarButton;
@@ -26,13 +27,16 @@ import pivot.wtk.CalendarButtonSelectionListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
+import pivot.wtk.Container;
+import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
 import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
-import pivot.wtk.Popup;
+import pivot.wtk.Window;
+import pivot.wtk.WindowStateListener;
 
 /**
  * Abstract base class for calendar button skins.
@@ -48,9 +52,31 @@ import pivot.wtk.Popup;
 public abstract class CalendarButtonSkin extends ButtonSkin
     implements CalendarButtonListener, CalendarButtonSelectionListener {
     protected Calendar calendar;
-    protected Popup calendarPopup;
+    protected Window calendarPopup;
 
     protected boolean pressed = false;
+
+    private ComponentMouseButtonListener calendarPopupMouseButtonListener = new ComponentMouseButtonListener() {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
+        }
+
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            return false;
+        }
+
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            CalendarButton calendarButton = (CalendarButton)getComponent();
+
+            CalendarDate date = calendar.getSelectedDate();
+            calendarButton.setSelectedDate(date);
+
+            calendarPopup.close();
+            getComponent().requestFocus();
+
+            return true;
+        }
+    };
 
     private ComponentKeyListener calendarPopupKeyListener = new ComponentKeyListener() {
         public boolean keyTyped(Component component, char character) {
@@ -96,34 +122,68 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         }
     };
 
-    private ComponentMouseButtonListener calendarPopupMouseListener = new ComponentMouseButtonListener() {
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
+    private WindowStateListener calendarPopupWindowStateListener = new WindowStateListener() {
+        public Vote previewWindowOpen(Window window, Display display) {
+            return Vote.APPROVE;
         }
 
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            return false;
+        public void windowOpenVetoed(Window window, Vote reason) {
+            // No-op
         }
 
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            CalendarButton calendarButton = (CalendarButton)getComponent();
+        public void windowOpened(Window window) {
+            Display display = window.getDisplay();
+            display.getContainerMouseListeners().add(displayMouseListener);
+        }
 
-            CalendarDate date = calendar.getSelectedDate();
-            calendarButton.setSelectedDate(date);
+        public Vote previewWindowClose(Window window) {
+            return Vote.APPROVE;
+        }
 
-            calendarPopup.close();
-            getComponent().requestFocus();
+        public void windowCloseVetoed(Window window, Vote reason) {
+            // No-op
+        }
 
-            return true;
+        public void windowClosed(Window window, Display display) {
+            display.getContainerMouseListeners().remove(displayMouseListener);
+        }
+    };
+
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
+        public void mouseMove(Container container, int x, int y) {
+        }
+
+        public void mouseDown(Container container, Mouse.Button button, int x, int y) {
+            Display display = (Display)container;
+            Component descendant = display.getDescendantAt(x, y);
+
+            if (!calendarPopup.isAncestor(descendant)
+                && descendant != CalendarButtonSkin.this.getComponent()) {
+                calendarPopup.close();
+            }
+        }
+
+        public void mouseUp(Container container, Mouse.Button button, int x, int y) {
+        }
+
+        public void mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            Display display = (Display)container;
+            Window window = (Window)display.getComponentAt(x, y);
+
+            if (window != calendarPopup) {
+                calendarPopup.close();
+            }
         }
     };
 
     public CalendarButtonSkin() {
         calendar = new Calendar();
 
-        calendarPopup = new Popup();
-        calendarPopup.getComponentMouseButtonListeners().add(calendarPopupMouseListener);
+        calendarPopup = new Window(true);
+        calendarPopup.getComponentMouseButtonListeners().add(calendarPopupMouseButtonListener);
         calendarPopup.getComponentKeyListeners().add(calendarPopupKeyListener);
+        calendarPopup.getWindowStateListeners().add(calendarPopupWindowStateListener);
     }
 
     @Override
@@ -293,7 +353,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
                 calendarPopup.setLocation(x, y);
                 calendarPopup.setPreferredSize(popupSize);
-                calendarPopup.open(calendarButton);
+                calendarPopup.open(calendarButton.getWindow());
 
                 calendar.requestFocus();
             }

@@ -33,14 +33,14 @@ import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
-import pivot.wtk.skin.PopupSkin;
+import pivot.wtk.skin.WindowSkin;
 
 /**
  * Menu popup skin.
  *
  * @author gbrown
  */
-public class TerraMenuPopupSkin extends PopupSkin
+public class TerraMenuPopupSkin extends WindowSkin
     implements MenuPopupListener, ComponentClassListener {
     private Panorama panorama;
     private Border border;
@@ -216,9 +216,13 @@ public class TerraMenuPopupSkin extends PopupSkin
             Component focusedComponent = Component.getFocusedComponent();
 
             if (focusedComponent != null
-                && focusedComponent != affiliate
-                && !menuPopup.isOwningAncestorOf(focusedComponent.getWindow())) {
-                menuPopup.close();
+                && focusedComponent != affiliate) {
+                Window window = focusedComponent.getWindow();
+
+                if (window != menuPopup
+                    && !menuPopup.isOwner(window)) {
+                    menuPopup.close();
+                }
             }
         }
     }

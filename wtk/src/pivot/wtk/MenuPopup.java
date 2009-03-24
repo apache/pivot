@@ -22,7 +22,7 @@ import pivot.util.ListenerList;
  *
  * @author gbrown
  */
-public class MenuPopup extends Popup {
+public class MenuPopup extends Window {
     private class MenuPopupListenerList extends ListenerList<MenuPopupListener>
         implements MenuPopupListener {
         public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
@@ -33,6 +33,7 @@ public class MenuPopup extends Popup {
     }
 
     private Menu menu;
+    private Component affiliate = null;
 
     private MenuPopupListenerList menuPopupListeners = new MenuPopupListenerList();
 
@@ -41,8 +42,9 @@ public class MenuPopup extends Popup {
     }
 
     public MenuPopup(Menu menu) {
-        setMenu(menu);
+        super(true);
 
+        setMenu(menu);
         installSkin(MenuPopup.class);
     }
 
@@ -57,6 +59,10 @@ public class MenuPopup extends Popup {
             this.menu = menu;
             menuPopupListeners.menuChanged(this, previousMenu);
         }
+    }
+
+    public Component getAffiliate() {
+        return affiliate;
     }
 
     public void open(Display display, int x, int y) {
@@ -85,6 +91,36 @@ public class MenuPopup extends Popup {
         }
 
         open(owner, location.x, location.y);
+    }
+
+    /**
+     * Opens the popup.
+     *
+     * @param affiliate
+     * The component with which the popup is affiliated.
+     */
+    public void open(Component affiliate) {
+        if (affiliate == null) {
+            throw new IllegalArgumentException("affiliate is null.");
+        }
+
+        if (isOpen()
+            && getAffiliate() != affiliate) {
+            throw new IllegalStateException("Popup is already open with a different affiliate.");
+        }
+
+        this.affiliate = affiliate;
+
+        open(affiliate.getWindow());
+    }
+
+    @Override
+    public void close() {
+        super.close();
+
+        if (isClosed()) {
+            affiliate = null;
+        }
     }
 
     public ListenerList<MenuPopupListener> getMenuPopupListeners() {
