@@ -89,7 +89,7 @@ public class ListView extends Component {
      *
      * @author gbrown
      */
-    public interface ItemEditor {
+    public interface ItemEditor extends Editor {
         /**
          * Notifies the editor that editing should begin.
          *
@@ -1110,6 +1110,17 @@ public class ListView extends Component {
     public Bounds getItemBounds(int index) {
         ListView.Skin listViewSkin = (ListView.Skin)getSkin();
         return listViewSkin.getItemBounds(index);
+    }
+
+    /**
+     * Returns the item indent.
+     *
+     * @return
+     * The horizontal space preceding items in the list.
+     */
+    public int getItemIndent() {
+        ListView.Skin listViewSkin = (ListView.Skin)getSkin();
+        return listViewSkin.getItemIndent();
     }
 
     /**

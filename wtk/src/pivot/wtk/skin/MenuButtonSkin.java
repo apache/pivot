@@ -85,9 +85,11 @@ public abstract class MenuButtonSkin extends ButtonSkin
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             Display display = (Display)container;
             Component descendant = display.getDescendantAt(x, y);
+            Window window = descendant.getWindow();
 
             if (!menuPopup.isAncestor(descendant)
-                && !menuPopup.isOwner(descendant.getWindow())
+                && (window == null
+                    || !menuPopup.isOwner(window))
                 && descendant != MenuButtonSkin.this.getComponent()) {
                 menuPopup.close();
             }
@@ -107,7 +109,8 @@ public abstract class MenuButtonSkin extends ButtonSkin
             Window window = (Window)display.getComponentAt(x, y);
 
             if (window != menuPopup
-                && !menuPopup.isOwner(window)) {
+                && (window == null
+                    || !menuPopup.isOwner(window))) {
                 consumed = true;
             }
 

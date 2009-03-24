@@ -18,6 +18,7 @@ package pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Font;
 
+import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
@@ -154,5 +155,16 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
 
     public void setShowIcon(boolean showIcon) {
         imageView.setDisplayable(showIcon);
+    }
+
+    /**
+     * Gets the bounds of the text that is rendered by this renderer.
+     *
+     * @return
+     * The bounds of the rendered text, or <tt>null</tt> if this renderer did
+     * not render any text.
+     */
+    public Bounds getTextBounds() {
+        return (label.isVisible() ? label.getBounds() : null);
     }
 }
