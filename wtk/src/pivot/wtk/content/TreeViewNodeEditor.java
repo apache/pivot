@@ -22,8 +22,12 @@ import pivot.util.Vote;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
+import pivot.wtk.Container;
+import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Display;
+import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
+import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.TextInput;
 import pivot.wtk.TreeView;
@@ -60,6 +64,10 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         }
 
         public void windowOpened(Window window) {
+            // Add this as a container mouse listener on display
+            Display display = window.getDisplay();
+            display.getContainerMouseListeners().add(displayMouseHandler);
+
             treeView.getTreeViewListeners().add(treeViewHandler);
             treeView.getTreeViewBranchListeners().add(treeViewHandler);
             treeView.getTreeViewNodeListeners().add(treeViewHandler);
@@ -76,6 +84,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
         public void windowClosed(Window window, Display display) {
             // Clean up
+            display.getContainerMouseListeners().remove(displayMouseHandler);
             treeView.getTreeViewListeners().remove(treeViewHandler);
             treeView.getTreeViewBranchListeners().remove(treeViewHandler);
             treeView.getTreeViewNodeListeners().remove(treeViewHandler);
@@ -138,6 +147,47 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
         public boolean keyTyped(Component component, char character) {
             return false;
+        }
+    };
+
+    /**
+     * Responsible for closing the popup whenever the user clicks outside the
+     * bounds of the popup.
+     *
+     * @author tvolkert
+     */
+    private ContainerMouseListener displayMouseHandler = new ContainerMouseListener() {
+        public void mouseMove(Container container, int x, int y) {
+        }
+
+        public void mouseDown(Container container, Mouse.Button button, int x, int y) {
+            // If the event did not occur within a window that is owned by
+            // this popup, close the popup
+            Display display = (Display)container;
+            Window window = (Window)display.getComponentAt(x, y);
+
+            if (popup != null
+                && (window == null
+                || !popup.isOwner(window))) {
+                popup.close();
+            }
+        }
+
+        public void mouseUp(Container container, Mouse.Button button, int x, int y) {
+        }
+
+        public void mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            // If the event did not occur within a window that is owned by
+            // this popup, close the popup
+            Display display = (Display)container;
+            Window window = (Window)display.getComponentAt(x, y);
+
+            if (popup != null
+                && (window == null
+                || !popup.isOwner(window))) {
+                popup.close();
+            }
         }
     };
 
@@ -261,40 +311,47 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         List<?> treeData = treeView.getTreeData();
         TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
 
+        // Calculate the bounds of the renderer within the tree view
+        Bounds rendererBounds = treeView.getNodeBounds(path);
+        int nodeIndent = treeView.getNodeIndent(path.getLength());
+        rendererBounds.x += nodeIndent;
+        rendererBounds.width -= nodeIndent;
+
         // Render the data, enabling us to query the renderer for layout info
         TreeViewNodeRenderer nodeRenderer = (TreeViewNodeRenderer)treeView.getNodeRenderer();
-        Component textComponent = nodeRenderer.get(1);
         nodeRenderer.render(nodeData, treeView, false, false,
             TreeView.NodeCheckState.UNCHECKED, false, false);
+        nodeRenderer.setSize(rendererBounds.width, rendererBounds.height);
 
-        // Calculate the indent to the node's text
-        int textIndent = treeView.getNodeIndent(path.getLength());
-        textIndent += textComponent.getX();
+        // Calculate the bounds of the text within the renderer
+        Bounds rendererTextBounds = nodeRenderer.getTextBounds();
 
-        // Calculate the bounds of the node's text
-        Bounds textBounds = treeView.getNodeBounds(path);
-        textBounds.x += textIndent;
-        textBounds.width -= textIndent;
+        if (rendererTextBounds != null) {
+            // Calculate the bounds of what we're editing
+            Bounds editBounds = new Bounds(rendererBounds);
+            editBounds.x += rendererTextBounds.x;
+            editBounds.width -= rendererTextBounds.x;
 
-        // Scroll to make the text as visible as possible
-        int textWidth = textComponent.getPreferredWidth(-1);
-        treeView.scrollAreaToVisible(textBounds.x, textBounds.y, textWidth, textBounds.height);
+            // Scroll to make the text as visible as possible
+            treeView.scrollAreaToVisible(editBounds.x, editBounds.y,
+                rendererTextBounds.width, editBounds.height);
 
-        // Constrain the bounds by what is visible through Viewport ancestors
-        treeView.constrainToViewportBounds(textBounds);
+            // Constrain the bounds by what is visible through Viewport ancestors
+            treeView.constrainToViewportBounds(editBounds);
 
-        TextInput textInput = new TextInput();
-        textInput.setText(nodeData.getText());
-        textInput.setPreferredWidth(textBounds.width);
-        textInput.getComponentKeyListeners().add(textInputKeyHandler);
+            TextInput textInput = new TextInput();
+            textInput.setText(nodeData.getText());
+            textInput.setPreferredWidth(editBounds.width);
+            textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
-        popup = new Window(textInput, true);
-        Point displayCoordinates = treeView.mapPointToAncestor(treeView.getDisplay(), 0, 0);
-        popup.setLocation(displayCoordinates.x + textBounds.x, displayCoordinates.y +
-            textBounds.y + (textBounds.height - textInput.getPreferredHeight(-1)) / 2);
-        popup.getWindowStateListeners().add(popupStateHandler);
-        popup.open(treeView.getWindow());
+            popup = new Window(textInput);
+            Point displayCoordinates = treeView.mapPointToAncestor(treeView.getDisplay(), 0, 0);
+            popup.setLocation(displayCoordinates.x + editBounds.x, displayCoordinates.y +
+                              editBounds.y + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
+            popup.getWindowStateListeners().add(popupStateHandler);
+            popup.open(treeView.getWindow());
 
-        textInput.requestFocus();
+            textInput.requestFocus();
+        }
     }
 }
