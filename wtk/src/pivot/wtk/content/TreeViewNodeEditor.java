@@ -25,7 +25,6 @@ import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Display;
-import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
