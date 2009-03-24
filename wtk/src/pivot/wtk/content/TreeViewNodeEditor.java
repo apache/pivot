@@ -25,16 +25,14 @@ import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Display;
+import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Point;
 import pivot.wtk.TextInput;
 import pivot.wtk.TreeView;
 import pivot.wtk.TreeViewListener;
-import pivot.wtk.TreeViewBranchListener;
 import pivot.wtk.TreeViewNodeListener;
-import pivot.wtk.TreeViewNodeStateListener;
-import pivot.wtk.TreeViewSelectionListener;
 import pivot.wtk.Window;
 import pivot.wtk.WindowStateListener;
 import pivot.wtk.content.TreeNode;
@@ -63,15 +61,11 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         }
 
         public void windowOpened(Window window) {
-            // Add this as a container mouse listener on display
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseHandler);
 
             treeView.getTreeViewListeners().add(treeViewHandler);
-            treeView.getTreeViewBranchListeners().add(treeViewHandler);
             treeView.getTreeViewNodeListeners().add(treeViewHandler);
-            treeView.getTreeViewNodeStateListeners().add(treeViewHandler);
-            treeView.getTreeViewSelectionListeners().add(treeViewHandler);
         }
 
         public Vote previewWindowClose(Window window) {
@@ -84,18 +78,17 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         public void windowClosed(Window window, Display display) {
             // Clean up
             display.getContainerMouseListeners().remove(displayMouseHandler);
+
             treeView.getTreeViewListeners().remove(treeViewHandler);
-            treeView.getTreeViewBranchListeners().remove(treeViewHandler);
             treeView.getTreeViewNodeListeners().remove(treeViewHandler);
-            treeView.getTreeViewNodeStateListeners().remove(treeViewHandler);
-            treeView.getTreeViewSelectionListeners().remove(treeViewHandler);
 
             // Restore focus to the tree view
             treeView.requestFocus();
 
             // Free memory
             treeView = null;
-            editPath = null;
+            path = null;
+            textInput = null;
             popup = null;
         }
     };
@@ -107,34 +100,11 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      * @author tvolkert
      */
     private ComponentKeyListener textInputKeyHandler = new ComponentKeyListener() {
-        @SuppressWarnings("unchecked")
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
-                List<?> treeData = treeView.getTreeData();
-                TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, editPath);
-
-                // Update the node data
-                TextInput textInput = (TextInput)component;
-                String text = textInput.getText();
-                nodeData.setText(text);
-
-                // Notify the tree branch that the child was updated. Our
-                // treeViewHandler will be notified of this edit and close
-                // the popup for us.
-                int n = editPath.getLength();
-                if (n == 1) {
-                    // Base case
-                    int index = editPath.get(0);
-                    ((List<TreeNode>)treeData).update(index, nodeData);
-                } else {
-                    Sequence<Integer> parentPath = new ArrayList<Integer>(editPath, 0, n - 1);
-                    TreeBranch parentData = (TreeBranch)Sequence.Tree.get(treeData, parentPath);
-                    int index = editPath.get(n - 1);
-                    parentData.update(index, nodeData);
-                }
+                save();
             } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-                // Close the popup without saving (cancel)
-                popup.close();
+                cancel();
             }
 
             return false;
@@ -166,8 +136,8 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
-            if (popup != null && window != popup) {
-                popup.close();
+            if (popup != window) {
+                save();
             }
 
             return false;
@@ -179,18 +149,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
-            boolean consumed = false;
-
-            // If the event did not occur within a window that is owned by
-            // this popup, close the popup
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
-
-            if (popup != null && window != popup) {
-                consumed = true;
-            }
-
-            return consumed;
+            return true;
         }
     };
 
@@ -198,163 +157,148 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      * Responsible for cancelling the edit if any relevant changes are made to
      * the tree view while we're editing.
      */
-    private class TreeViewHandler implements
-        TreeViewListener, TreeViewBranchListener, TreeViewNodeListener,
-        TreeViewNodeStateListener, TreeViewSelectionListener {
-        private TreeView.PathComparator pathComparator = new TreeView.PathComparator();
-
+    private class TreeViewHandler implements TreeViewListener, TreeViewNodeListener {
         public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
-            popup.close();
+            cancel();
         }
 
         public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer) {
-            popup.close();
         }
 
         public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
-            popup.close();
+            cancel();
         }
 
         public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode) {
-            popup.close();
         }
 
         public void checkmarksEnabledChanged(TreeView treeView) {
-            popup.close();
         }
 
         public void showMixedCheckmarkStateChanged(TreeView treeView) {
         }
 
-        public void branchExpanded(TreeView treeView, Sequence<Integer> path) {
-            if (pathComparator.compare(path, editPath) < 0) {
-                popup.close();
-            }
-        }
-
-        public void branchCollapsed(TreeView treeView, Sequence<Integer> path) {
-            if (pathComparator.compare(path, editPath) < 0) {
-                popup.close();
-            }
-        }
-
         public void nodeInserted(TreeView treeView, Sequence<Integer> path, int index) {
-            Sequence<Integer> childPath = new ArrayList<Integer>(path);
-            childPath.add(index);
-
-            if (pathComparator.compare(childPath, editPath) <= 0) {
-                popup.close();
-            }
+            cancel();
         }
 
         public void nodesRemoved(TreeView treeView, Sequence<Integer> path, int index, int count) {
-            Sequence<Integer> childPath = new ArrayList<Integer>(path);
-            childPath.add(index);
-
-            if (pathComparator.compare(childPath, editPath) <= 0) {
-                popup.close();
-            }
+            cancel();
         }
 
         public void nodeUpdated(TreeView treeView, Sequence<Integer> path, int index) {
-            Sequence<Integer> childPath = new ArrayList<Integer>(path);
-            childPath.add(index);
-
-            if (pathComparator.compare(childPath, editPath) <= 0) {
-                popup.close();
-            }
+            cancel();
         }
 
         public void nodesSorted(TreeView treeView, Sequence<Integer> path) {
-            if (Sequence.Tree.isDescendant(path, editPath)) {
-                popup.close();
-            }
-        }
-
-        public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {
-            if (pathComparator.compare(path, editPath) == 0) {
-                popup.close();
-            }
-        }
-
-        public void nodeCheckStateChanged(TreeView treeView, Sequence<Integer> path,
-            TreeView.NodeCheckState previousCheckState) {
-        }
-
-        public void selectedPathAdded(TreeView treeView, Sequence<Integer> path) {
-        }
-
-        public void selectedPathRemoved(TreeView treeView, Sequence<Integer> path) {
-            if (pathComparator.compare(path, editPath) == 0) {
-                popup.close();
-            }
-        }
-
-        public void selectedPathsChanged(TreeView treeView,
-            Sequence<Sequence<Integer>> previousSelectedPaths) {
-            popup.close();
+            cancel();
         }
     }
 
     private TreeView treeView = null;
-    private Sequence<Integer> editPath = null;
+    private Sequence<Integer> path = null;
+
     private Window popup = null;
+    private TextInput textInput = null;
 
     private TreeViewHandler treeViewHandler = new TreeViewHandler();
 
     public void edit(TreeView treeView, Sequence<Integer> path) {
-        if (this.treeView != null) {
-            throw new IllegalStateException("Currently editing.");
+        if (isEditing()) {
+            throw new IllegalStateException();
         }
 
         this.treeView = treeView;
-        this.editPath = path;
+        this.path = path;
 
         // Get the data being edited
         List<?> treeData = treeView.getTreeData();
         TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
 
-        // Calculate the bounds of the renderer within the tree view
-        Bounds rendererBounds = treeView.getNodeBounds(path);
+        // Get the node bounds
+        Bounds nodeBounds = treeView.getNodeBounds(path);
         int nodeIndent = treeView.getNodeIndent(path.getLength());
-        rendererBounds.x += nodeIndent;
-        rendererBounds.width -= nodeIndent;
+        nodeBounds.x += nodeIndent;
+        nodeBounds.width -= nodeIndent;
 
-        // Render the data, enabling us to query the renderer for layout info
+        // Render the node data
         TreeViewNodeRenderer nodeRenderer = (TreeViewNodeRenderer)treeView.getNodeRenderer();
         nodeRenderer.render(nodeData, treeView, false, false,
             TreeView.NodeCheckState.UNCHECKED, false, false);
-        nodeRenderer.setSize(rendererBounds.width, rendererBounds.height);
+        nodeRenderer.setSize(nodeBounds.width, nodeBounds.height);
 
-        // Calculate the bounds of the text within the renderer
-        Bounds rendererTextBounds = nodeRenderer.getTextBounds();
+        // Get the text bounds
+        Bounds textBounds = nodeRenderer.getTextBounds();
 
-        if (rendererTextBounds != null) {
+        if (textBounds != null) {
+            textInput = new TextInput();
+            Insets padding = (Insets)textInput.getStyles().get("padding");
+
             // Calculate the bounds of what we're editing
-            Bounds editBounds = new Bounds(rendererBounds);
-            editBounds.x += rendererTextBounds.x;
-            editBounds.width -= rendererTextBounds.x;
+            Bounds editBounds = new Bounds(nodeBounds);
+            editBounds.x += textBounds.x - (padding.left + 1);
+            editBounds.width -= textBounds.x;
+            editBounds.width += (padding.left + 1);
 
             // Scroll to make the text as visible as possible
             treeView.scrollAreaToVisible(editBounds.x, editBounds.y,
-                rendererTextBounds.width, editBounds.height);
+                textBounds.width, editBounds.height);
 
             // Constrain the bounds by what is visible through Viewport ancestors
             treeView.constrainToViewportBounds(editBounds);
 
-            TextInput textInput = new TextInput();
             textInput.setText(nodeData.getText());
             textInput.setPreferredWidth(editBounds.width);
             textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
             popup = new Window(textInput);
-            Point displayCoordinates = treeView.mapPointToAncestor(treeView.getDisplay(), 0, 0);
-            popup.setLocation(displayCoordinates.x + editBounds.x, displayCoordinates.y +
-                              editBounds.y + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
             popup.getWindowStateListeners().add(popupStateHandler);
+
+            Point location = treeView.mapPointToAncestor(treeView.getDisplay(), 0, 0);
+            popup.setLocation(location.x + editBounds.x, location.y +
+                editBounds.y + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
             popup.open(treeView.getWindow());
 
             textInput.requestFocus();
         }
+    }
+
+    public boolean isEditing() {
+        return (treeView != null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void save() {
+        if (!isEditing()) {
+            throw new IllegalStateException();
+        }
+
+        List<?> treeData = treeView.getTreeData();
+        TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
+
+        // Update the node data
+        String text = textInput.getText();
+        nodeData.setText(text);
+
+        // Notifying the parent will close the popup
+        int n = path.getLength();
+        if (n == 1) {
+            // Base case
+            int index = path.get(0);
+            ((List<TreeNode>)treeData).update(index, nodeData);
+        } else {
+            Sequence<Integer> parentPath = new ArrayList<Integer>(path, 0, n - 1);
+            TreeBranch parentData = (TreeBranch)Sequence.Tree.get(treeData, parentPath);
+            int index = path.get(n - 1);
+            parentData.update(index, nodeData);
+        }
+    }
+
+    public void cancel() {
+        if (!isEditing()) {
+            throw new IllegalStateException();
+        }
+
+        popup.close();
     }
 }

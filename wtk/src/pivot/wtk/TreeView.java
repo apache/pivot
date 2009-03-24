@@ -105,7 +105,7 @@ public class TreeView extends Component {
      *
      * @author tvolkert
      */
-    public interface NodeEditor {
+    public interface NodeEditor extends Editor {
         /**
          * Notifies the editor that editing should begin.
          *
