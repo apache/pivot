@@ -76,29 +76,45 @@ public abstract class Container extends Component
 
     private static class ContainerMouseListenerList extends ListenerList<ContainerMouseListener>
         implements ContainerMouseListener {
-        public void mouseMove(Container container, int x, int y) {
+        public boolean mouseMove(Container container, int x, int y) {
+            boolean consumed = false;
+
             for (ContainerMouseListener listener : this) {
-                listener.mouseMove(container, x, y);
+                consumed |= listener.mouseMove(container, x, y);
             }
+
+            return consumed;
         }
 
-        public void mouseDown(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            boolean consumed = false;
+
             for (ContainerMouseListener listener : this) {
-                listener.mouseDown(container, button, x, y);
+                consumed |= listener.mouseDown(container, button, x, y);
             }
+
+            return consumed;
         }
 
-        public void mouseUp(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+            boolean consumed = false;
+
             for (ContainerMouseListener listener : this) {
-                listener.mouseUp(container, button, x, y);
+                consumed |= listener.mouseUp(container, button, x, y);
             }
+
+            return consumed;
         }
 
-        public void mouseWheel(Container container, Mouse.ScrollType scrollType,
+        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
+            boolean consumed = false;
+
             for (ContainerMouseListener listener : this) {
-                listener.mouseWheel(container, scrollType, scrollAmount, wheelRotation, x, y);
+                consumed |= listener.mouseWheel(container, scrollType, scrollAmount, wheelRotation, x, y);
             }
+
+            return consumed;
         }
     }
 
@@ -579,43 +595,45 @@ public abstract class Container extends Component
 
         if (isEnabled()) {
             // Notify container listeners
-            containerMouseListeners.mouseMove(this, x, y);
+            consumed = containerMouseListeners.mouseMove(this, x, y);
 
-            // Clear the mouse over component if its mouse-over state has
-            // changed (e.g. if its enabled or visible properties have
-            // changed)
-            if (mouseOverComponent != null
-                && !mouseOverComponent.isMouseOver()) {
-                mouseOverComponent = null;
-            }
-
-            // Synthesize mouse over/out events
-            Component component = getComponentAt(x, y);
-
-            if (mouseOverComponent != component) {
-                if (mouseOverComponent != null) {
-                    mouseOverComponent.mouseOut();
-                }
-
-                mouseOverComponent = component;
-
-                if (mouseOverComponent == null) {
-                    Mouse.setCursor(this);
-                } else {
-                    mouseOverComponent.mouseOver();
-                    Mouse.setCursor(mouseOverComponent);
-                }
-            }
-
-            // Propagate event to subcomponents
-            if (component != null) {
-                consumed = component.mouseMove(x - component.getX(),
-                    y - component.getY());
-            }
-
-            // Notify the base class
             if (!consumed) {
-                consumed = super.mouseMove(x, y);
+                // Clear the mouse over component if its mouse-over state has
+                // changed (e.g. if its enabled or visible properties have
+                // changed)
+                if (mouseOverComponent != null
+                    && !mouseOverComponent.isMouseOver()) {
+                    mouseOverComponent = null;
+                }
+
+                // Synthesize mouse over/out events
+                Component component = getComponentAt(x, y);
+
+                if (mouseOverComponent != component) {
+                    if (mouseOverComponent != null) {
+                        mouseOverComponent.mouseOut();
+                    }
+
+                    mouseOverComponent = component;
+
+                    if (mouseOverComponent == null) {
+                        Mouse.setCursor(this);
+                    } else {
+                        mouseOverComponent.mouseOver();
+                        Mouse.setCursor(mouseOverComponent);
+                    }
+                }
+
+                // Propagate event to subcomponents
+                if (component != null) {
+                    consumed = component.mouseMove(x - component.getX(),
+                        y - component.getY());
+                }
+
+                // Notify the base class
+                if (!consumed) {
+                    consumed = super.mouseMove(x, y);
+                }
             }
         }
 
@@ -641,32 +659,34 @@ public abstract class Container extends Component
 
         if (isEnabled()) {
             // Notify container listeners
-            containerMouseListeners.mouseDown(this, button, x, y);
+            consumed = containerMouseListeners.mouseDown(this, button, x, y);
 
-            // Synthesize mouse click event
-            Component component = getComponentAt(x, y);
-
-            long currentTime = System.currentTimeMillis();
-            int multiClickInterval = Platform.getMultiClickInterval();
-            if (mouseDownComponent == component
-                && currentTime - mouseDownTime < multiClickInterval) {
-                mouseClickCount++;
-            } else {
-                mouseDownTime = System.currentTimeMillis();
-                mouseClickCount = 1;
-            }
-
-            mouseDownComponent = component;
-
-            // Propagate event to subcomponents
-            if (component != null) {
-                consumed = component.mouseDown(button, x - component.getX(),
-                    y - component.getY());
-            }
-
-            // Notify the base class
             if (!consumed) {
-                consumed = super.mouseDown(button, x, y);
+                // Synthesize mouse click event
+                Component component = getComponentAt(x, y);
+
+                long currentTime = System.currentTimeMillis();
+                int multiClickInterval = Platform.getMultiClickInterval();
+                if (mouseDownComponent == component
+                    && currentTime - mouseDownTime < multiClickInterval) {
+                    mouseClickCount++;
+                } else {
+                    mouseDownTime = System.currentTimeMillis();
+                    mouseClickCount = 1;
+                }
+
+                mouseDownComponent = component;
+
+                // Propagate event to subcomponents
+                if (component != null) {
+                    consumed = component.mouseDown(button, x - component.getX(),
+                        y - component.getY());
+                }
+
+                // Notify the base class
+                if (!consumed) {
+                    consumed = super.mouseDown(button, x, y);
+                }
             }
         }
 
@@ -679,28 +699,30 @@ public abstract class Container extends Component
 
         if (isEnabled()) {
             // Notify container listeners
-            containerMouseListeners.mouseUp(this, button, x, y);
+            consumed = containerMouseListeners.mouseUp(this, button, x, y);
 
-            // Propagate event to subcomponents
-            Component component = getComponentAt(x, y);
-
-            if (component != null) {
-                consumed = component.mouseUp(button, x - component.getX(),
-                    y - component.getY());
-            }
-
-            // Notify the base class
             if (!consumed) {
-                consumed = super.mouseUp(button, x, y);
-            }
+                // Propagate event to subcomponents
+                Component component = getComponentAt(x, y);
 
-            // Synthesize mouse click event
-            if (component != null
-                && component == mouseDownComponent
-                && mouseDownComponent.isEnabled()
-                && mouseDownComponent.isVisible()) {
-                mouseClickConsumed = component.mouseClick(button, x - component.getX(),
-                    y - component.getY(), mouseClickCount);
+                if (component != null) {
+                    consumed = component.mouseUp(button, x - component.getX(),
+                        y - component.getY());
+                }
+
+                // Notify the base class
+                if (!consumed) {
+                    consumed = super.mouseUp(button, x, y);
+                }
+
+                // Synthesize mouse click event
+                if (component != null
+                    && component == mouseDownComponent
+                    && mouseDownComponent.isEnabled()
+                    && mouseDownComponent.isVisible()) {
+                    mouseClickConsumed = component.mouseClick(button, x - component.getX(),
+                        y - component.getY(), mouseClickCount);
+                }
             }
         }
 
@@ -726,20 +748,22 @@ public abstract class Container extends Component
 
         if (isEnabled()) {
             // Notify container listeners
-            containerMouseListeners.mouseWheel(this, scrollType, scrollAmount,
+            consumed = containerMouseListeners.mouseWheel(this, scrollType, scrollAmount,
                 wheelRotation, x, y);
 
-            // Propagate event to subcomponents
-            Component component = getComponentAt(x, y);
-
-            if (component != null) {
-                consumed = component.mouseWheel(scrollType, scrollAmount, wheelRotation,
-                    x - component.getX(), y - component.getY());
-            }
-
-            // Notify the base class
             if (!consumed) {
-                consumed = super.mouseWheel(scrollType, scrollAmount, wheelRotation, x, y);
+                // Propagate event to subcomponents
+                Component component = getComponentAt(x, y);
+
+                if (component != null) {
+                    consumed = component.mouseWheel(scrollType, scrollAmount, wheelRotation,
+                        x - component.getX(), y - component.getY());
+                }
+
+                // Notify the base class
+                if (!consumed) {
+                    consumed = super.mouseWheel(scrollType, scrollAmount, wheelRotation, x, y);
+                }
             }
         }
 

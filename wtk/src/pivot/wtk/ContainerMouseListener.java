@@ -28,8 +28,12 @@ public interface ContainerMouseListener {
      * @param container
      * @param x
      * @param y
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void mouseMove(Container container, int x, int y);
+    public boolean mouseMove(Container container, int x, int y);
 
     /**
      * Called when the mouse is pressed over a container.
@@ -38,8 +42,12 @@ public interface ContainerMouseListener {
      * @param button
      * @param x
      * @param y
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void mouseDown(Container container, Mouse.Button button, int x, int y);
+    public boolean mouseDown(Container container, Mouse.Button button, int x, int y);
 
     /**
      * Called when the mouse is released over a container.
@@ -48,8 +56,12 @@ public interface ContainerMouseListener {
      * @param button
      * @param x
      * @param y
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void mouseUp(Container container, Mouse.Button button, int x, int y);
+    public boolean mouseUp(Container container, Mouse.Button button, int x, int y);
 
     /**
      * Called when the mouse wheel is scrolled over a container.
@@ -60,7 +72,11 @@ public interface ContainerMouseListener {
      * @param wheelRotation
      * @param x
      * @param y
+     *
+     * @return
+     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * propagate.
      */
-    public void mouseWheel(Container container, Mouse.ScrollType scrollType,
+    public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
         int scrollAmount, int wheelRotation, int x, int y);
 }

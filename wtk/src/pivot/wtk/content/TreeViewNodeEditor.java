@@ -156,37 +156,41 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      * @author tvolkert
      */
     private ContainerMouseListener displayMouseHandler = new ContainerMouseListener() {
-        public void mouseMove(Container container, int x, int y) {
+        public boolean mouseMove(Container container, int x, int y) {
+            return false;
         }
 
-        public void mouseDown(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             // If the event did not occur within a window that is owned by
             // this popup, close the popup
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
-            if (popup != null
-                && (window == null
-                || !popup.isOwner(window))) {
+            if (popup != null && window != popup) {
                 popup.close();
             }
+
+            return false;
         }
 
-        public void mouseUp(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseWheel(Container container, Mouse.ScrollType scrollType,
+        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
+            boolean consumed = false;
+
             // If the event did not occur within a window that is owned by
             // this popup, close the popup
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
-            if (popup != null
-                && (window == null
-                || !popup.isOwner(window))) {
-                popup.close();
+            if (popup != null && window != popup) {
+                consumed = true;
             }
+
+            return consumed;
         }
     };
 

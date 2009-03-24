@@ -80,10 +80,11 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     };
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
-        public void mouseMove(Container container, int x, int y) {
+        public boolean mouseMove(Container container, int x, int y) {
+            return false;
         }
 
-        public void mouseDown(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             Display display = (Display)container;
             Component descendant = display.getDescendantAt(x, y);
 
@@ -92,20 +93,27 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
                 && descendant != MenuBarItemSkin.this.getComponent()) {
                 menuPopup.close();
             }
+
+            return false;
         }
 
-        public void mouseUp(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseWheel(Container container, Mouse.ScrollType scrollType,
+        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
+            boolean consumed = false;
+
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
             if (window != menuPopup
                 && !menuPopup.isOwner(window)) {
-                menuPopup.close();
+                consumed = true;
             }
+
+            return consumed;
         }
     };
 

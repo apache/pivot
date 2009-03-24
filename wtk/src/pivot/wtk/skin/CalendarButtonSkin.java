@@ -150,10 +150,11 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     };
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
-        public void mouseMove(Container container, int x, int y) {
+        public boolean mouseMove(Container container, int x, int y) {
+            return false;
         }
 
-        public void mouseDown(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             Display display = (Display)container;
             Component descendant = display.getDescendantAt(x, y);
 
@@ -161,19 +162,26 @@ public abstract class CalendarButtonSkin extends ButtonSkin
                 && descendant != CalendarButtonSkin.this.getComponent()) {
                 calendarPopup.close();
             }
+
+            return false;
         }
 
-        public void mouseUp(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+            return false;
         }
 
-        public void mouseWheel(Container container, Mouse.ScrollType scrollType,
+        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
+            boolean consumed = false;
+
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
             if (window != calendarPopup) {
-                calendarPopup.close();
+                consumed = true;
             }
+
+            return consumed;
         }
     };
 
