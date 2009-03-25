@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2008 VMware, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Border styles="{padding:6}" preferredWidth="260"
+	xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
+	<content>
+		<TablePane styles="{verticalSpacing:6}">
+			<columns>
+				<TablePane.Column width="1*" />
+			</columns>
+			<rows>
+				<TablePane.Row height="-1">
+				    <FlowPane styles="{verticalAlignment:'center'}">
+				        <ImageView image="@contacts.gif"/>
+                        <Label text="Login" styles="{fontBold:true, fontSize:12}" />
+				    </FlowPane>
+				</TablePane.Row>
+				<TablePane.Row height="-1">
+					<Separator styles="{padding:{bottom:4}}" />
+				</TablePane.Row>
+				<TablePane.Row height="1*">
+					<Form wtkx:id="userCredentialsForm" styles="{fieldAlignment:'justify'}">
+						<sections>
+							<Form.Section>
+								<TextInput wtkx:id="usernameTextInput"
+									Form.name="Username" />
+								<TextInput wtkx:id="passwordTextInput"
+									Form.name="Password" password="true" />
+								<Label wtkx:id="errorMessageLabel" styles="{color:'#ff0000', wrapText:true}"/>
+							</Form.Section>
+						</sections>
+					</Form>
+				</TablePane.Row>
+				<TablePane.Row height="-1">
+					<FlowPane styles="{horizontalAlignment:'right'}">
+						<PushButton wtkx:id="okButton" buttonData="OK"
+							styles="{color:4, backgroundColor:16, borderColor:13, preferredAspectRatio:3}" />
+						<PushButton wtkx:id="cancelButton"
+							buttonData="Cancel"
+							styles="{color:4, backgroundColor:16, borderColor:13, preferredAspectRatio:3}" />
+					</FlowPane>
+				</TablePane.Row>
+			</rows>
+		</TablePane>
+	</content>
+</Border>

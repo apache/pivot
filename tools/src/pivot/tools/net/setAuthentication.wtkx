@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Copyright (c) 2008 VMware, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+
+<Sheet preferredWidth="400"
+       styles="{padding:0}"
+       xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+       xmlns="pivot.wtk">
+  <content>
+    <TablePane styles="{padding:8, verticalSpacing:8}">
+      <columns>
+        <TablePane.Column width="1*"/>
+      </columns>
+      <rows>
+        <TablePane.Row height="1*">
+          <Border styles="{padding:10}">
+            <content>
+              <!-- Payload -->
+              <Form>
+                <sections>
+                  <Form.Section>
+                    <TextInput wtkx:id="username" Form.name="Username" />
+                    <TextInput wtkx:id="password" Form.name="Password" password="true" />
+                  </Form.Section>
+                </sections>
+              </Form>
+            </content>
+          </Border>
+        </TablePane.Row>
+        <TablePane.Row height="24">
+          <FlowPane styles="{horizontalAlignment:'justify'}">
+            <FlowPane styles="{spacing:6,horizontalAlignment:'right'}">
+              <PushButton wtkx:id="okButton" buttonData="OK" preferredWidth="72" preferredHeight="24" styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}"/>
+              <PushButton wtkx:id="cancelButton" buttonData="Cancel" preferredWidth="72" preferredHeight="24" styles="{backgroundColor:16, borderColor:13, color:4, fontBold:true}"/>
+            </FlowPane>
+          </FlowPane>
+        </TablePane.Row>
+      </rows>
+    </TablePane>
+  </content>
+</Sheet>

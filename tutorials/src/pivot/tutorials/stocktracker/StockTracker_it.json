@@ -1,0 +1,15 @@
+{   stockTracker:   "Pivot Stock Tracker",
+    symbol:         "Simbolo",
+    companyName:    "Azienda",
+    value:          "Valore",
+    openingValue:   "Apertura",
+    highValue:      "Alto",
+    lowValue:       "Basso",
+    change:         "Variazione",
+    volume:         "Volume",
+    addSymbol:      "Aggiungi simbolo",
+    removeSymbol:   "Rimuovi simboli selezionati",
+    lastUpdate:     "Ultimo Aggiornamento",
+    dataProvidedBy: "Dati forniti da",
+    yahooFinance:   "Yahoo! Finance"
+}

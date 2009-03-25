@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="pivot" default="build">
+    <property name="src" value="src"/>
+    <property name="bin" value="ant-bin"/>
+    <property name="lib" value="lib"/>
+
+    <property name="doc" value="doc"/>
+    <property name="charts" value="charts"/>
+    <property name="chartstest" value="charts-test"/>
+    <property name="core" value="core"/>
+    <property name="coretest" value="core-test"/>
+    <property name="web" value="web"/>
+    <property name="webtest" value="web-test"/>
+    <property name="wtk" value="wtk"/>
+    <property name="wtktest" value="wtk-test"/>
+
+    <property name="demos" value="demos"/>
+    <property name="tutorials" value="tutorials"/>
+    <property name="tools" value="tools"/>
+
+    <property name="keystore" value="${user.home}/myKeystore"/>
+    <property name="storepass" value="keystore"/>
+    <property name="alias" value="myself"/>
+
+    <property name="deploy" value="${user.home}/${ant.project.name}-deploy"/>
+
+    <tstamp/>
+    <property file="build.properties"/>
+
+    <!-- Compiler properties -->
+    <property name="compiler.optimize" value="true"/>
+    <property name="compiler.deprecation" value="true"/>
+    <property name="compiler.debug" value="false"/>
+
+    <target name="build" depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
+    <target name="clean" depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, demos-clean, tutorials-clean, tools-clean"/>
+
+    <target name="doc">
+        <javadoc packagenames="pivot.*" destdir="${doc}" author="true" version="true" use="true">
+            <classpath>
+                <pathelement location="${charts}/lib/jcommon-1.0.12.jar"/>
+                <pathelement location="${charts}/lib/jfreechart-1.0.9.jar"/>
+                <pathelement location="${web}/lib/servlet-api.jar"/>
+                <pathelement location="${wtk}/lib/stax-api-1.0.jar"/>
+                <pathelement location="${wtk}/lib/stax-1.2.0.jar"/>
+                <pathelement location="${wtk}/lib/plugin.jar"/>
+                <fileset dir="${web}/${lib}" includes="**/*.jar"/>
+            </classpath>
+            <packageset dir="${charts}/${src}" includes="**/*"/>
+            <packageset dir="${core}/${src}" includes="**/*"/>
+            <packageset dir="${web}/${src}" includes="**/*"/>
+            <packageset dir="${wtk}/${src}" includes="**/*"/>
+            <header>
+              <![CDATA[
+                 <script type="text/javascript">
+                   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                   document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+                 </script>
+                 <script type="text/javascript">
+                   try {
+                     var pageTracker = _gat._getTracker("UA-7977275-1");
+                     pageTracker._trackPageview();
+                   } catch(err) {}
+                 </script>
+              ]]>
+            </header>
+        </javadoc>
+
+        <delete file="${ant.project.name}_${version}-${doc}.zip"/>
+        <zip destfile="${ant.project.name}_${version}-${doc}.zip" basedir="doc"/>
+    </target>
+
+    <!-- Build charts library -->
+    <target name="charts" depends="core, wtk">
+        <mkdir dir="${charts}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${charts}/${src}"
+            destDir="${charts}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="${core}/${ant.project.name}-core.jar"/>
+                <pathelement location="${wtk}/${ant.project.name}-wtk.jar"/>
+                <pathelement location="${charts}/lib/jcommon-1.0.12.jar"/>
+                <pathelement location="${charts}/lib/jfreechart-1.0.9.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${charts}/${ant.project.name}-charts.jar"/>
+        <jar jarfile="${charts}/${ant.project.name}-charts.jar">
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="${charts}/${bin}"/>
+            <fileset dir="${charts}/${src}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="charts-clean">
+        <delete dir="${charts}/${bin}"/>
+        <delete file="${charts}/${ant.project.name}-charts.jar"/>
+    </target>
+
+    <!-- Charts Test -->
+    <target name="charts-test" depends="charts, core, wtk">
+        <mkdir dir="${chartstest}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${chartstest}/${src}"
+            destDir="${chartstest}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="charts/pivot-charts.jar"/>
+                <pathelement location="core/pivot-core.jar"/>
+                <pathelement location="wtk/pivot-wtk.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${chartstest}/${ant.project.name}-charts.test.jar"/>
+        <jar jarfile="${chartstest}/${ant.project.name}-charts.test.jar">
+            <fileset dir="${chartstest}/${bin}"/>
+            <fileset dir="${chartstest}/${src}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="charts-test-clean">
+        <delete dir="${chartstest}/${bin}"/>
+        <delete file="${chartstest}/${ant.project.name}-charts.test.jar"/>
+    </target>
+
+    <!-- Core -->
+    <target name="core">
+        <mkdir dir="${core}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${core}/${src}"
+            destDir="${core}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${core}/${ant.project.name}-core.jar"/>
+        <jar jarfile="${core}/${ant.project.name}-core.jar">
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="${core}/${bin}"/>
+            <fileset dir="${core}/${src}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="core-clean">
+        <delete dir="${core}/${bin}"/>
+        <delete file="${core}/${ant.project.name}-core.jar"/>
+    </target>
+
+    <!-- Core Test -->
+    <target name="core-test" depends="core">
+        <mkdir dir="${coretest}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${coretest}/${src}"
+            destDir="${coretest}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true"
+            classpath="${core}/${ant.project.name}-core.jar:junit.jar">
+            <compilerarg value="-Xlint"/>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${coretest}/${ant.project.name}-core.test.jar"/>
+        <jar jarfile="${coretest}/${ant.project.name}-core.test.jar">
+            <fileset dir="${coretest}/${bin}"/>
+            <fileset dir="${coretest}/${src}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="core-test-clean">
+        <delete dir="${coretest}/${bin}"/>
+        <delete file="${coretest}/${ant.project.name}-core.test.jar"/>
+    </target>
+
+    <!-- Web -->
+    <target name="web" depends="core">
+        <mkdir dir="${web}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${web}/${src}"
+            destDir="${web}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="${core}/${ant.project.name}-core.jar"/>
+                <fileset dir="${web}/${lib}" includes="**/*.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR files -->
+        <delete file="${web}/${ant.project.name}-web.jar"/>
+        <jar jarfile="${web}/${ant.project.name}-web.jar">
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="${web}/${bin}">
+                <exclude name="pivot/web/server/**"/>
+            </fileset>
+            <fileset dir="${web}/${src}">
+                <exclude name="pivot/web/server/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+
+        <delete file="${web}/${ant.project.name}-web.server.jar"/>
+        <jar jarfile="${web}/${ant.project.name}-web.server.jar">
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="${web}/${bin}">
+                <include name="pivot/web/server/*"/>
+            </fileset>
+            <fileset dir="${web}/${src}">
+                <include name="pivot/web/server/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="web-clean">
+        <delete dir="${web}/${bin}"/>
+        <delete file="${web}/${ant.project.name}-web.jar"/>
+        <delete file="${web}/${ant.project.name}-web.server.jar"/>
+    </target>
+
+    <!-- Web Test -->
+    <target name="web-test" depends="web, wtk">
+        <mkdir dir="${webtest}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${webtest}/${src}"
+            destDir="${webtest}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="${core}/${ant.project.name}-core.jar"/>
+                <pathelement location="${web}/${ant.project.name}-web.jar"/>
+                <pathelement location="${wtk}/${ant.project.name}-wtk.jar"/>
+                <fileset dir="${web}/${lib}" includes="**/*.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the client JAR file -->
+        <delete file="${webtest}/${ant.project.name}-web.test.jar"/>
+        <jar jarfile="${webtest}/${ant.project.name}-web.test.jar">
+            <fileset dir="${webtest}/${bin}">
+                <exclude name="pivot/web/test/server/**"/>
+            </fileset>
+            <fileset dir="${webtest}/${src}">
+                <exclude name="pivot/web/test/server/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+
+        <!-- Rebuild the server WAR file -->
+        <delete dir="${webtest}/www/${lib}" includes="*.jar"/>
+        <copy file="${core}/${ant.project.name}-core.jar" todir="${webtest}/www/${lib}"/>
+        <copy file="${web}/${ant.project.name}-web.jar" todir="${webtest}/www/${lib}"/>
+        <copy file="${wtk}/${ant.project.name}-wtk.jar" todir="${webtest}/www/${lib}"/>
+        <copy file="${wtk}/${ant.project.name}-wtk.terra.jar" todir="${webtest}/www/${lib}"/>
+        <copy file="${wtk}/lib/stax-api-1.0.jar" todir="${webtest}/www/${lib}"/>
+        <copy file="${wtk}/lib/stax-1.2.0.jar" todir="${webtest}/www/${lib}"/>
+        <copy file="${webtest}/${ant.project.name}-web.test.jar" todir="${webtest}/www/${lib}"/>
+
+        <mkdir dir="${webtest}/${lib}"/>
+        <copy file="${core}/${ant.project.name}-core.jar" todir="${webtest}/${lib}"/>
+        <copy file="${web}/${ant.project.name}-web.server.jar" todir="${webtest}/${lib}"/>
+        <delete file="${webtest}/${ant.project.name}_web_test.war"/>
+
+        <war destfile="${webtest}/${ant.project.name}_web_test.war" webxml="${webtest}/web.xml">
+            <fileset dir="${webtest}/www"/>
+            <classes dir="${webtest}/${bin}">
+                <include name="pivot/web/test/server/**"/>
+            </classes>
+            <classes dir="${webtest}/${src}">
+                <include name="pivot/web/test/server/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </classes>
+            <lib dir="${webtest}/${lib}"/>
+        </war>
+    </target>
+    <target name="web-test-clean">
+        <delete dir="${webtest}/www/${lib}" includes="*.jar"/>
+        <delete dir="${webtest}/${bin}"/>
+        <delete dir="${webtest}/${lib}"/>
+        <delete file="${webtest}/${ant.project.name}-web.test.jar"/>
+        <delete file="${webtest}/${ant.project.name}_web_test.war"/>
+    </target>
+
+    <!-- WTK -->
+    <target name="wtk" depends="core">
+        <mkdir dir="${wtk}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${wtk}/${src}"
+            destDir="${wtk}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="${core}/${ant.project.name}-core.jar"/>
+                <pathelement location="${wtk}/lib/stax-api-1.0.jar"/>
+                <pathelement location="${wtk}/lib/stax-1.2.0.jar"/>
+                <pathelement location="${wtk}/lib/plugin.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${wtk}/${ant.project.name}-wtk.jar"/>
+        <jar jarfile="${wtk}/${ant.project.name}-wtk.jar">
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="${wtk}/${bin}">
+                <exclude name="pivot/wtk/skin/terra/**"/>
+                <exclude name="pivot/wtk/skin/obsidian/**"/>
+            </fileset>
+            <fileset dir="${wtk}/${src}">
+                <exclude name="pivot/wtk/skin/terra/**"/>
+                <exclude name="pivot/wtk/skin/obsidian/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+
+        <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
+        <jar jarfile="${wtk}/${ant.project.name}-wtk.terra.jar">
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="${wtk}/${bin}">
+                <include name="pivot/wtk/skin/terra/**"/>
+            </fileset>
+            <fileset dir="${wtk}/${src}">
+                <include name="pivot/wtk/skin/terra/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+
+        <delete file="${wtk}/${ant.project.name}-wtk.obsidian.jar"/>
+        <jar jarfile="${wtk}/${ant.project.name}-wtk.obsidian.jar">
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="${wtk}/${bin}">
+                <include name="pivot/wtk/skin/obsidian/**"/>
+            </fileset>
+            <fileset dir="${wtk}/${src}">
+                <include name="pivot/wtk/skin/obsidian/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="wtk-clean">
+        <delete dir="${wtk}/${bin}"/>
+        <delete file="${wtk}/${ant.project.name}-wtk.jar"/>
+        <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
+        <delete file="${wtk}/${ant.project.name}-wtk.obsidian.jar"/>
+    </target>
+
+    <!-- WTK Test -->
+    <target name="wtk-test" depends="core, wtk">
+        <mkdir dir="${wtktest}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${wtktest}/${src}"
+            destDir="${wtktest}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="${core}/${ant.project.name}-core.jar"/>
+                <pathelement location="${wtk}/${ant.project.name}-wtk.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${wtktest}/${ant.project.name}-wtk.test.jar"/>
+        <jar jarfile="${wtktest}/${ant.project.name}-wtk.test.jar">
+            <fileset dir="${wtktest}/${bin}"/>
+            <fileset dir="${wtktest}/${src}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="wtk-test-clean">
+        <delete dir="${wtktest}/${bin}"/>
+        <delete file="${wtktest}/${ant.project.name}-wtk.test.jar"/>
+    </target>
+
+    <!-- Build demos library -->
+    <target name="demos" depends="core, wtk, web, charts">
+        <mkdir dir="${demos}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${demos}/${src}"
+            destDir="${demos}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="core/pivot-core.jar"/>
+                <pathelement location="web/pivot-web.jar"/>
+                <pathelement location="wtk/pivot-wtk.jar"/>
+                <pathelement location="demos/lib/flex-messaging-common.jar"/>
+                <pathelement location="demos/lib/flex-messaging-core.jar"/>
+                <pathelement location="demos/lib/gdata-base-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-client-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-client-meta-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-contacts-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-contacts-meta-1.0.jar"/>
+                <pathelement location="demos/lib/gdata-core-1.0.jar"/>
+                <pathelement location="demos/lib/smack.jar"/>
+                <pathelement location="demos/lib/smackx.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${demos}/${ant.project.name}-demos.jar"/>
+        <jar jarfile="${demos}/${ant.project.name}-demos.jar">
+            <manifest>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="${demos}/${bin}"/>
+            <fileset dir="${demos}/${src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Clean the demos classes -->
+    <target name="demos-clean">
+        <delete dir="${demos}/${bin}"/>
+        <delete file="${demos}/${ant.project.name}-demos.jar"/>
+    </target>
+
+    <!-- Build tutorials library -->
+    <target name="tutorials" depends="core, wtk, web, charts">
+        <mkdir dir="${tutorials}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${tutorials}/${src}"
+            destDir="${tutorials}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="core/pivot-core.jar"/>
+                <pathelement location="web/pivot-web.jar"/>
+                <pathelement location="wtk/pivot-wtk.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR files -->
+        <delete file="${tutorials}/${ant.project.name}-tutorials.jar"/>
+        <jar jarfile="${tutorials}/${ant.project.name}-tutorials.jar">
+            <manifest>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="${tutorials}/${bin}">
+                <exclude name="pivot/tutorials/stocktracker/**"/>
+            </fileset>
+            <fileset dir="${tutorials}/${src}">
+                <exclude name="**/*.java"/>
+                <exclude name="pivot/tutorials/stocktracker/**"/>
+            </fileset>
+        </jar>
+
+        <delete file="${tutorials}/${ant.project.name}-stocktracker.jar"/>
+        <jar jarfile="${tutorials}/${ant.project.name}-stocktracker.jar">
+            <manifest>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="${tutorials}/${bin}">
+                <include name="pivot/tutorials/stocktracker/*"/>
+            </fileset>
+            <fileset dir="${tutorials}/${src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Clean the tutorial classes -->
+    <target name="tutorials-clean">
+        <delete dir="${tutorials}/${bin}"/>
+        <delete file="${tutorials}/${ant.project.name}-tutorials.jar"/>
+        <delete file="${tutorials}/${ant.project.name}-stocktracker.jar"/>
+    </target>
+
+    <!-- Build tools library -->
+    <target name="tools" depends="core, wtk, web">
+        <mkdir dir="${tools}/${bin}"/>
+
+        <!-- Compile source files -->
+        <javac srcdir="${tools}/${src}"
+            destDir="${tools}/${bin}"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="1.5"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <pathelement location="core/pivot-core.jar"/>
+                <pathelement location="web/pivot-web.jar"/>
+                <pathelement location="wtk/pivot-wtk.jar"/>
+            </classpath>
+        </javac>
+
+        <!-- Rebuild the JAR file -->
+        <delete file="${tools}/${ant.project.name}-tools.jar"/>
+        <jar jarfile="${tools}/${ant.project.name}-tools.jar">
+            <manifest>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="${tools}/${bin}"/>
+            <fileset dir="${tools}/${src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Clean the tools classes -->
+    <target name="tools-clean">
+        <delete dir="${tools}/${bin}"/>
+        <delete file="${tools}/${ant.project.name}-tools.jar"/>
+    </target>
+
+    <!-- Package all binaries and source -->
+    <target name="package" depends="trim-whitespace, clean, build, doc">
+        <delete file="${ant.project.name}_${version}.zip"/>
+        <zip destfile="${ant.project.name}_${version}.zip">
+            <fileset dir=".">
+                <include name="pivot.sh"/>
+                <include name="pivot.bat"/>
+            </fileset>
+            <fileset dir="${charts}">
+                <include name="${ant.project.name}-charts.jar"/>
+            </fileset>
+            <fileset dir="${core}">
+                <include name="${ant.project.name}-core.jar"/>
+            </fileset>
+            <fileset dir="${web}">
+                <include name="${ant.project.name}-web.jar"/>
+                <include name="${ant.project.name}-web.server.jar"/>
+            </fileset>
+            <fileset dir="${wtk}">
+                <include name="${ant.project.name}-wtk.jar"/>
+                <include name="${ant.project.name}-wtk.terra.jar"/>
+            </fileset>
+            <fileset dir="${tools}">
+                <include name="${ant.project.name}-tools.jar"/>
+            </fileset>
+        </zip>
+
+        <!-- Package source -->
+        <delete file="${ant.project.name}_${version}-src.zip"/>
+        <zip destfile="${ant.project.name}_${version}-src.zip">
+            <fileset dir="${charts}/${src}"/>
+            <fileset dir="${core}/${src}"/>
+            <fileset dir="${web}/${src}"/>
+            <fileset dir="${wtk}/${src}"/>
+        </zip>
+    </target>
+
+    <!-- Generate deployment files for online demos and tutorials -->
+    <target name="deploy" depends="package">
+        <delete dir="${deploy}"/>
+        <mkdir dir="${deploy}"/>
+
+        <!-- Platform -->
+        <copy file="${charts}/${ant.project.name}-charts.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-charts.jar" signedjar="${deploy}/${ant.project.name}-charts.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${core}/${ant.project.name}-core.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-core.jar" signedjar="${deploy}/${ant.project.name}-core.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${web}/${ant.project.name}-web.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-web.jar" signedjar="${deploy}/${ant.project.name}-web.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${wtk}/${ant.project.name}-wtk.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-wtk.jar" signedjar="${deploy}/${ant.project.name}-wtk.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${wtk}/${ant.project.name}-wtk.terra.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-wtk.terra.jar" signedjar="${deploy}/${ant.project.name}-wtk.terra.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- StAX -->
+        <copy file="${wtk}/lib/stax-api-1.0.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/stax-api-1.0.jar" signedjar="${deploy}/stax-api-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${wtk}/lib/stax-1.2.0.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/stax-1.2.0.jar" signedjar="${deploy}/stax-1.2.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- JFree -->
+        <copy file="${charts}/lib/jcommon-1.0.12.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/jcommon-1.0.12.jar" signedjar="${deploy}/jcommon-1.0.12.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${charts}/lib/jfreechart-1.0.9.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/jfreechart-1.0.9.jar" signedjar="${deploy}/jfreechart-1.0.9.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- Google Data -->
+        <signjar jar="${demos}/${lib}/gdata-base-1.0.jar" signedjar="${deploy}/gdata-base-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-client-1.0.jar" signedjar="${deploy}/gdata-client-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-client-meta-1.0.jar" signedjar="${deploy}/gdata-client-meta-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-contacts-1.0.jar" signedjar="${deploy}/gdata-contacts-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-contacts-meta-1.0.jar" signedjar="${deploy}/gdata-contacts-meta-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-core-1.0.jar" signedjar="${deploy}/gdata-core-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/gdata-media-1.0.jar" signedjar="${deploy}/gdata-media-1.0.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- Smack -->
+        <signjar jar="${demos}/${lib}/smack.jar" signedjar="${deploy}/smack.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <signjar jar="${demos}/${lib}/smackx.jar" signedjar="${deploy}/smackx.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- Demos -->
+        <copy file="${chartstest}/${ant.project.name}-charts.test.jar" todir="${deploy}"/>
+        <copy file="${demos}/${ant.project.name}-demos.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-demos.jar" signedjar="${deploy}/${ant.project.name}-demos.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <!-- Tutorials -->
+        <copy file="${tutorials}/${ant.project.name}-tutorials.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-tutorials.jar" signedjar="${deploy}/${ant.project.name}-tutorials.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+        <copy file="${tutorials}/${ant.project.name}-stocktracker.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-stocktracker.jar" signedjar="${deploy}/${ant.project.name}-stocktracker.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+    </target>
+
+    <!-- Remove trailing white space in all source files -->
+    <target name="trim-whitespace">
+        <replaceregexp match="[\t ]+$" replace="" flags="gm" byline="true">
+            <fileset dir=".">
+                <include name="**/*.java"/>
+                <include name="**/*.html"/>
+                <include name="**/*.txt"/>
+                <include name="**/*.properties"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.wtkx"/>
+                <include name="**/*.json"/>
+            </fileset>
+        </replaceregexp>
+    </target>
+</project>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2008 VMware, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<FlowPane wtkx:id="rootPane" orientation="vertical"
+    styles="{horizontalAlignment:'justify'}"
+    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
+    <Label textKey="companyName" styles="{fontBold:true, fontSize:12}" />
+    <Separator />
+    <Form styles="{rightAlignLabels:true, fieldAlignment:'right'}">
+        <sections>
+            <Form.Section>
+	            <Label Form.name="%value" textKey="value" />
+	            <Label wtkx:id="changeLabel" Form.name="%change" textKey="change" />
+	            <Label Form.name="%openingValue" textKey="openingValue" />
+	            <Label Form.name="%highValue" textKey="highValue" />
+	            <Label Form.name="%lowValue" textKey="lowValue" />
+	            <Label Form.name="%volume" textKey="volume" />
+            </Form.Section>
+        </sections>
+    </Form>
+</FlowPane>

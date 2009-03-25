@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2008 VMware, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<TablePane xmlns:wtkx="http://pivot.dev.java.net/wtkx/2008" xmlns="pivot.wtk">
+    <columns>
+        <TablePane.Column width="1*"/>
+    </columns>
+    <rows>
+        <TablePane.Row height="-1">
+            <FlowPane>
+                <PushButton buttonData="320x240" toggleButton="true" group="sizeGroup"/>
+                <PushButton buttonData="640x480" toggleButton="true" group="sizeGroup"/>
+                <PushButton buttonData="800x600" toggleButton="true" group="sizeGroup"/>
+            </FlowPane>
+        </TablePane.Row>
+        <TablePane.Row height="1*">
+            <CardPane wtkx:id="cardPane" orientation="horizontal" styles="{matchSelectedCardSize:true}">
+                <Label text="320x240" preferredWidth="320" preferredHeight="240"
+                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                <Label text="640x480" preferredWidth="640" preferredHeight="480"
+                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                <Label text="800x600" preferredWidth="800" preferredHeight="600"
+                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+            </CardPane>
+        </TablePane.Row>
+    </rows>
+</TablePane>
