@@ -136,7 +136,7 @@ public class WTKXSerializer implements Serializer<Object> {
         }
     }
 
-    public Dictionary<String, Object> getResources() {
+    public Resources getResources() {
         return resources;
     }
 
