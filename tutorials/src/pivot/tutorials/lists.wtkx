@@ -24,7 +24,7 @@ limitations under the License.
                 <Label text="Editable" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
-                        <ScrollPane preferredHeight="80">
+                        <ScrollPane preferredWidth="62" preferredHeight="80" horizontalScrollBarPolicy="fill">
                             <view>
                                 <ListView selectMode="single" selectedIndex="0">
                                     <listData>

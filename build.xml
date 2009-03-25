@@ -376,9 +376,6 @@
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
-            <metainf dir="${wtk}">
-                <include name="services/**"/>
-            </metainf>
             <fileset dir="${wtk}/${bin}">
                 <exclude name="pivot/wtk/skin/terra/**"/>
                 <exclude name="pivot/wtk/skin/obsidian/**"/>
@@ -389,6 +386,18 @@
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
+        </jar>
+
+        <delete file="${wtk}/${ant.project.name}-wtk.stax.jar"/>
+        <jar jarfile="${wtk}/${ant.project.name}-wtk.stax.jar">
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <metainf dir="${wtk}">
+                <include name="services/**"/>
+            </metainf>
         </jar>
 
         <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
@@ -620,9 +629,12 @@
     <target name="package" depends="trim-whitespace, clean, build, doc">
         <delete file="${ant.project.name}_${version}.zip"/>
         <zip destfile="${ant.project.name}_${version}.zip">
+            <fileset dir=".">
+                <include name="pivot.sh"/>
+                <include name="pivot.bat"/>
+            </fileset>
             <fileset dir="${charts}">
                 <include name="${ant.project.name}-charts.jar"/>
-                <include name="${ant.project.name}-charts.signed.jar"/>
             </fileset>
             <fileset dir="${core}">
                 <include name="${ant.project.name}-core.jar"/>
@@ -633,6 +645,7 @@
             </fileset>
             <fileset dir="${wtk}">
                 <include name="${ant.project.name}-wtk.jar"/>
+                <include name="${ant.project.name}-wtk.stax.jar"/>
                 <include name="${ant.project.name}-wtk.terra.jar"/>
             </fileset>
             <fileset dir="${tools}">
@@ -670,6 +683,10 @@
 
         <copy file="${wtk}/${ant.project.name}-wtk.jar" todir="${deploy}"/>
         <signjar jar="${deploy}/${ant.project.name}-wtk.jar" signedjar="${deploy}/${ant.project.name}-wtk.signed.jar"
+            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
+
+        <copy file="${wtk}/${ant.project.name}-wtk.stax.jar" todir="${deploy}"/>
+        <signjar jar="${deploy}/${ant.project.name}-wtk.stax.jar" signedjar="${deploy}/${ant.project.name}-wtk.stax.signed.jar"
             keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
 
         <copy file="${wtk}/${ant.project.name}-wtk.terra.jar" todir="${deploy}"/>

@@ -96,6 +96,7 @@ public class WTKXSerializer implements Serializer<Object> {
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
 
+    private XMLInputFactory xmlInputFactory;
     private Object scriptEngineManager;
     private Class<?> scriptEngineManagerClass;
 
@@ -122,6 +123,9 @@ public class WTKXSerializer implements Serializer<Object> {
 
     public WTKXSerializer(Resources resources) {
         this.resources = resources;
+
+        xmlInputFactory = XMLInputFactory.newInstance();
+        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
 
         try {
         	scriptEngineManagerClass = Class.forName("javax.script.ScriptEngineManager");
@@ -165,11 +169,8 @@ public class WTKXSerializer implements Serializer<Object> {
 
         // Parse the XML stream
         Element element = null;
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        factory.setProperty("javax.xml.stream.isCoalescing", true);
-
         try {
-            XMLStreamReader reader = factory.createXMLStreamReader(inputStream);
+            XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(inputStream);
 
             while (reader.hasNext()) {
                 int event = reader.next();
