@@ -16,6 +16,7 @@
 package pivot.tutorials;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -34,6 +35,7 @@ import pivot.wtk.Border;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ComponentMouseButtonListener;
+import pivot.wtk.ComponentStateListener;
 import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
 import pivot.wtk.DropTarget;
@@ -63,6 +65,7 @@ import pivot.wtk.content.NumericSpinnerData;
 import pivot.wtk.content.TableRow;
 import pivot.wtk.content.TableViewHeaderData;
 import pivot.wtk.effects.ReflectionDecorator;
+import pivot.wtk.effects.WatermarkDecorator;
 import pivot.wtk.media.Image;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.PlainTextSerializer;
@@ -105,6 +108,23 @@ public class Demo implements Application {
 
         TextArea textArea = (TextArea)wtkxSerializer.getObjectByName("text.textArea");
         textArea.setDocument(document);
+
+        final WatermarkDecorator watermarkDecorator = new WatermarkDecorator("Preview");
+        watermarkDecorator.setOpacity(0.1f);
+        watermarkDecorator.setFont(watermarkDecorator.getFont().deriveFont(Font.BOLD, 24));
+
+        textArea.getDecorators().add(watermarkDecorator);
+
+        textArea.getComponentStateListeners().add(new ComponentStateListener() {
+            public void enabledChanged(Component component) {
+                // No-op
+            }
+
+            public void focusedChanged(Component component, boolean temporary) {
+                component.getDecorators().remove(watermarkDecorator);
+                component.getComponentStateListeners().remove(this);
+            }
+        });
 
         new Action("selectImageAction") {
             public String getDescription() {

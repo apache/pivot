@@ -1329,27 +1329,30 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Determines the visible bounds of a component (the intersection of the
-     * component's area with the visible area of its ancestors).
+     * Determines the visible area of a component. The visible area is defined
+     * as the intersection of the component's area with the visible area of its
+     * ancestors, or, in the case of a Viewport, the viewport bounds.
      *
      * @return
-     * The visible bounds of the component in display coordinates,
-     * or <tt>null</tt> if the component is either not showing (see
-     * {@link #isShowing()}) or not part of the container hierarchy.
+     * The visible area of the component in display coordinates, or
+     * <tt>null</tt> if the component is either not showing or not part of the
+     * component hierarchy.
      */
     public Bounds getVisibleArea() {
         return getVisibleArea(0, 0, getWidth(), getHeight());
     }
 
     /**
-     * Determines the visible bounds of an area within a component (the
-     * intersection of the area with the visible area of the component
-     * and its ancestors).
+     * Determines the visible area of a component. The visible area is defined
+     * as the intersection of the component's area with the visible area of its
+     * ancestors, or, in the case of a Viewport, the viewport bounds.
+     *
+     * @param area
      *
      * @return
-     * The visible bounds of the given area in display coordinates,
-     * or <tt>null</tt> if the component is either not showing (see
-     * {@link #isShowing()}) or not part of the container hierarchy.
+     * The visible area of the component in display coordinates, or
+     * <tt>null</tt> if the component is either not showing or not part of the
+     * component hierarchy.
      */
     public Bounds getVisibleArea(Bounds area) {
         if (area == null) {
@@ -1360,9 +1363,9 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Determines the visible bounds of an area within a component (the
-     * intersection of the area with the visible area of the component
-     * and its ancestors).
+     * Determines the visible area of a component. The visible area is defined
+     * as the intersection of the component's area with the visible area of its
+     * ancestors, or, in the case of a Viewport, the viewport bounds.
      *
      * @param x
      * @param y
@@ -1370,9 +1373,9 @@ public abstract class Component implements ConstrainedVisual {
      * @param height
      *
      * @return
-     * The visible bounds of the given area in display coordinates,
-     * or <tt>null</tt> if the component is either not showing (see
-     * {@link #isShowing()}) or not part of the container hierarchy.
+     * The visible area of the component in display coordinates, or
+     * <tt>null</tt> if the component is either not showing or not part of the
+     * component hierarchy.
      */
     public Bounds getVisibleArea(int x, int y, int width, int height) {
         Bounds visibleArea = null;
@@ -1386,10 +1389,20 @@ public abstract class Component implements ConstrainedVisual {
 
         while (component != null
             && component.isVisible()) {
-            top = component.y + Math.max(top, 0);
-            left = component.x + Math.max(left, 0);
-            bottom = component.y + Math.max(Math.min(bottom, component.getHeight() - 1), -1);
-            right = component.x + Math.max(Math.min(right, component.getWidth() - 1), -1);
+            Bounds bounds;
+            if (component instanceof Viewport) {
+                Viewport viewport = (Viewport)component;
+                bounds = viewport.getViewportBounds();
+                bounds.x += viewport.getX();
+                bounds.y += viewport.getY();
+            } else {
+                bounds = component.getBounds();
+            }
+
+            top = bounds.y + Math.max(top, 0);
+            left = bounds.x + Math.max(left, 0);
+            bottom = bounds.y + Math.max(Math.min(bottom, bounds.height - 1), -1);
+            right = bounds.x + Math.max(Math.min(right, bounds.width - 1), -1);
 
             if (component instanceof Display) {
                 visibleArea = new Bounds(left, top, right - left + 1, bottom - top + 1);
@@ -1509,50 +1522,6 @@ public abstract class Component implements ConstrainedVisual {
 
             component = component.getParent();
         }
-    }
-
-    /**
-     * Constrains the specified bounds such that they fit within the bounds of
-     * all <tt>Viewport</tt> ancestors of this component. For
-     * non-<tt>Viewport</tt> ancestors, it will constrain to the component
-     * bounds of the ancestor.
-     *
-     * @return
-     * The constrained bounds, in this component's coordinate space.
-     */
-    public Bounds constrainToViewportBounds(int x, int y, int width, int height) {
-        Component component = this;
-
-        int xOffset = 0;
-        int yOffset = 0;
-
-        while (component != null) {
-            int viewportWidth = component.getWidth();
-            int viewportHeight = component.getHeight();
-
-            if (component instanceof Viewport) {
-                Viewport viewport = (Viewport)component;
-                Bounds viewportBounds = viewport.getViewportBounds();
-
-                xOffset += viewportBounds.x;
-                yOffset += viewportBounds.y;
-
-                viewportWidth = viewportBounds.width;
-                viewportHeight = viewportBounds.height;
-            }
-
-            x = Math.max(x, xOffset);
-            y = Math.max(y, yOffset);
-            width = Math.min(width, xOffset + viewportWidth - x);
-            height = Math.min(height, yOffset + viewportHeight - y);
-
-            xOffset -= component.getX();
-            yOffset -= component.getY();
-
-            component = component.getParent();
-        }
-
-        return new Bounds(x, y, width, height);
     }
 
     /**

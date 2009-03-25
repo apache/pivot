@@ -29,7 +29,6 @@ import pivot.wtk.ListView;
 import pivot.wtk.ListViewItemListener;
 import pivot.wtk.ListViewListener;
 import pivot.wtk.Mouse;
-import pivot.wtk.Point;
 import pivot.wtk.TextInput;
 import pivot.wtk.Window;
 import pivot.wtk.WindowStateListener;
@@ -219,7 +218,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
                 textBounds.width + padding.left + 1, editBounds.height);
 
             // Constrain the bounds by what is visible through Viewport ancestors
-            editBounds = listView.constrainToViewportBounds(editBounds.x, editBounds.y,
+            editBounds = listView.getVisibleArea(editBounds.x, editBounds.y,
                 editBounds.width, editBounds.height);
 
             textInput.setText(listItem.getText());
@@ -230,9 +229,8 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             popup = new Window(textInput);
             popup.getWindowStateListeners().add(popupWindowStateHandler);
 
-            Point location = listView.mapPointToAncestor(listView.getDisplay(), 0, 0);
-            popup.setLocation(location.x + editBounds.x,
-                location.y + editBounds.y + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
+            popup.setLocation(editBounds.x, editBounds.y
+                + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
             popup.open(listView.getWindow());
 
             textInput.requestFocus();

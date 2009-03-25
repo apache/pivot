@@ -21,7 +21,7 @@ limitations under the License.
     <content>
         <FlowPane styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
             <FlowPane orientation="vertical" styles="{spacing:6}">
-                <Label text="Basic" styles="{fontBold:true}"/>
+                <Label text="Editable" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
                         <ScrollPane preferredHeight="80">

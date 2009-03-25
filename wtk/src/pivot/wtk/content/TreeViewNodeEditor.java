@@ -28,7 +28,6 @@ import pivot.wtk.Display;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
-import pivot.wtk.Point;
 import pivot.wtk.TextInput;
 import pivot.wtk.TreeView;
 import pivot.wtk.TreeViewListener;
@@ -245,7 +244,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
                 textBounds.width + padding.left + 1, editBounds.height);
 
             // Constrain the bounds by what is visible through Viewport ancestors
-            editBounds = treeView.constrainToViewportBounds(editBounds.x, editBounds.y,
+            editBounds = treeView.getVisibleArea(editBounds.x, editBounds.y,
                 editBounds.width, editBounds.height);
 
             textInput.setText(nodeData.getText());
@@ -255,9 +254,8 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             popup = new Window(textInput);
             popup.getWindowStateListeners().add(popupStateHandler);
 
-            Point location = treeView.mapPointToAncestor(treeView.getDisplay(), 0, 0);
-            popup.setLocation(location.x + editBounds.x, location.y +
-                editBounds.y + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
+            popup.setLocation(editBounds.x, editBounds.y
+                + (editBounds.height - textInput.getPreferredHeight(-1)) / 2);
             popup.open(treeView.getWindow());
 
             textInput.requestFocus();
