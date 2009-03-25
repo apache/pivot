@@ -540,11 +540,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         boolean consumed = super.mouseDown(component, button, x, y);
 
         ListView listView = (ListView)getComponent();
-
-        if (isFocusable()) {
-            listView.requestFocus();
-        }
-
         List<Object> listData = (List<Object>)listView.getListData();
 
         int itemHeight = getItemHeight();
@@ -589,7 +584,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     }
                 } else {
                     if (selectMode != ListView.SelectMode.NONE) {
-                        if (listView.isItemSelected(itemIndex)) {
+                        if (listView.isItemSelected(itemIndex)
+                            && listView.isFocused()) {
                             // Edit the item
                             editIndex = itemIndex;
                         } else {
@@ -600,6 +596,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 }
         	}
         }
+
+        listView.requestFocus();
 
         return consumed;
     }

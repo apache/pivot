@@ -1326,8 +1326,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         if (!consumed) {
             TreeView treeView = (TreeView)getComponent();
-            treeView.requestFocus();
-
             NodeInfo nodeInfo = getNodeInfoAt(y);
 
             if (nodeInfo != null
@@ -1370,7 +1368,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                         TreeView.SelectMode selectMode = treeView.getSelectMode();
 
                         if (selectMode == TreeView.SelectMode.SINGLE) {
-                            if (nodeInfo.isSelected()) {
+                            if (nodeInfo.isSelected()
+                                && treeView.isFocused()) {
                                 // Edit the node
                                 editNode = nodeInfo;
                             } else {
@@ -1392,6 +1391,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     }
                 }
             }
+
+            treeView.requestFocus();
         }
 
         return consumed;

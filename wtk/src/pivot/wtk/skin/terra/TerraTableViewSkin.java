@@ -813,11 +813,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         boolean consumed = super.mouseDown(component, button, x, y);
 
         TableView tableView = (TableView)getComponent();
-
-        if (isFocusable()) {
-            tableView.requestFocus();
-        }
-
         int rowIndex = getRowAt(y);
 
         if (rowIndex >= 0
@@ -853,7 +848,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 }
             } else {
                 if (selectMode != TableView.SelectMode.NONE) {
-                    if (tableView.isRowSelected(rowIndex)) {
+                    if (tableView.isRowSelected(rowIndex)
+                        && tableView.isFocused()) {
                         // Edit the row
                         editIndex = rowIndex;
                     } else {
@@ -863,6 +859,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 }
             }
         }
+
+        tableView.requestFocus();
 
         return consumed;
     }
