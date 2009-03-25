@@ -388,18 +388,6 @@
             </fileset>
         </jar>
 
-        <delete file="${wtk}/${ant.project.name}-wtk.stax.jar"/>
-        <jar jarfile="${wtk}/${ant.project.name}-wtk.stax.jar">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
-            <metainf dir="${wtk}">
-                <include name="services/**"/>
-            </metainf>
-        </jar>
-
         <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
         <jar jarfile="${wtk}/${ant.project.name}-wtk.terra.jar">
             <manifest>
@@ -438,7 +426,6 @@
     <target name="wtk-clean">
         <delete dir="${wtk}/${bin}"/>
         <delete file="${wtk}/${ant.project.name}-wtk.jar"/>
-        <delete file="${wtk}/${ant.project.name}-wtk.stax.jar"/>
         <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
         <delete file="${wtk}/${ant.project.name}-wtk.obsidian.jar"/>
     </target>
@@ -646,7 +633,6 @@
             </fileset>
             <fileset dir="${wtk}">
                 <include name="${ant.project.name}-wtk.jar"/>
-                <include name="${ant.project.name}-wtk.stax.jar"/>
                 <include name="${ant.project.name}-wtk.terra.jar"/>
             </fileset>
             <fileset dir="${tools}">
@@ -684,10 +670,6 @@
 
         <copy file="${wtk}/${ant.project.name}-wtk.jar" todir="${deploy}"/>
         <signjar jar="${deploy}/${ant.project.name}-wtk.jar" signedjar="${deploy}/${ant.project.name}-wtk.signed.jar"
-            keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
-
-        <copy file="${wtk}/${ant.project.name}-wtk.stax.jar" todir="${deploy}"/>
-        <signjar jar="${deploy}/${ant.project.name}-wtk.stax.jar" signedjar="${deploy}/${ant.project.name}-wtk.stax.signed.jar"
             keystore="${keystore}" storepass="${storepass}" alias="${alias}"/>
 
         <copy file="${wtk}/${ant.project.name}-wtk.terra.jar" todir="${deploy}"/>
