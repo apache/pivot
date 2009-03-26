@@ -14,14 +14,36 @@
 package pivot.wtk.text.validation;
 
 /**
+ * A validator for a double value limited to a range.
  *
  * @author Noel Grandin
  */
 public class DoubleRangeValidator extends DoubleValidator {
-    private final double minValue, maxValue;
+    private double minValue, maxValue;
+
+    public DoubleRangeValidator() {
+        this.minValue = 0;
+        this.maxValue = 1;
+    }
 
     public DoubleRangeValidator(double minValue, double maxValue) {
         this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+
+    public double getMinimum() {
+        return minValue;
+    }
+
+    public void setMinimum(double minValue) {
+        this.minValue = minValue;
+    }
+
+    public double getMaximum() {
+        return maxValue;
+    }
+
+    public void setMaximum(double maxValue) {
         this.maxValue = maxValue;
     }
 

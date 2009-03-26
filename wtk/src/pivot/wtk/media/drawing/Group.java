@@ -21,40 +21,27 @@ import java.util.Iterator;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
-import pivot.wtk.Bounds;
 
 /**
  * Shape representing a collection of other shapes.
- * <p>
- * TODO Throw in setStroke() and setFill()?
+ *
+ * @author gbrown
  */
 public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     private ArrayList<Shape> shapes = new ArrayList<Shape>();
 
-    public Bounds getUntransformedBounds() {
+    public int getWidth() {
         // TODO
-        return null;
+        return 0;
+    }
+
+    public int getHeight() {
+        // TODO
+        return 0;
     }
 
     public void paint(Graphics2D graphics) {
-        for (Shape shape : this) {
-            Graphics2D shapeGraphics = (Graphics2D)graphics.create();
-
-            // TODO Translate to origin, then apply transform to graphics
-
-            // TODO Only paint if shape bounds intersects clip bounds
-
-            shape.paint(shapeGraphics);
-            shapeGraphics.dispose();
-        }
-    }
-
-    public void fill(Graphics2D graphics) {
-        // No-op
-    }
-
-    public void stroke(Graphics2D graphics) {
-        // No-op
+        // TODO
     }
 
     public int add(Shape shape) {

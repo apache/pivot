@@ -14,14 +14,36 @@
 package pivot.wtk.text.validation;
 
 /**
+ * A validator for an int value limited to a range.
  *
  * @author Noel Grandin
  */
 public class IntRangeValidator extends IntValidator {
-    private final int minValue, maxValue;
+    private int minValue, maxValue;
+
+    public IntRangeValidator() {
+        this.minValue = 0;
+        this.maxValue = 1;
+    }
 
     public IntRangeValidator(int minValue, int maxValue) {
         this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+
+    public int getMinimum() {
+        return minValue;
+    }
+
+    public void setMinimum(int minValue) {
+        this.minValue = minValue;
+    }
+
+    public int getMaximum() {
+        return maxValue;
+    }
+
+    public void setMaximum(int maxValue) {
         this.maxValue = maxValue;
     }
 

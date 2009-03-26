@@ -14,6 +14,7 @@
 package pivot.wtk.text.validation;
 
 /**
+ * A validator for a float value.
  *
  * @author Noel Grandin
  */

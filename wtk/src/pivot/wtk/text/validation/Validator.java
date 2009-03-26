@@ -14,11 +14,24 @@
 package pivot.wtk.text.validation;
 
 /**
- * Validation interface for TextInput widget.
+ * Validation interface for text components. Allows the programmer to specify
+ * constraints on text data.
+ * <p>
+ * This is indicated visually to the user (a red background would be typical),
+ * and events are fired by the TextInput if the programmer wishes to take
+ * further action.
  *
  * @author Noel Grandin
  */
 public interface Validator {
-    /** Is the text value valid? */
+    /**
+     * Determines if a text value is valid based on the rules of the
+     * validator.
+     *
+     * @param text
+     *
+     * @return
+     * <tt>true</tt> if the value is valid; <tt>false</tt>, otherwise.
+     */
     public boolean isValid(String text);
 }

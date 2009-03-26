@@ -62,7 +62,11 @@ public class StockQuote {
     }
 
     public void setOpeningValue(String openingValue) {
-        setOpeningValue(Float.parseFloat(openingValue));
+        try {
+            setOpeningValue(Float.parseFloat(openingValue));
+        } catch(NumberFormatException exception) {
+            setOpeningValue(Float.NaN);
+        }
     }
 
     public float getHighValue() {
@@ -74,7 +78,11 @@ public class StockQuote {
     }
 
     public void setHighValue(String highValue) {
-        setHighValue(Float.parseFloat(highValue));
+        try {
+            setHighValue(Float.parseFloat(highValue));
+        } catch(NumberFormatException exception) {
+            setHighValue(Float.NaN);
+        }
     }
 
     public float getLowValue() {
@@ -86,7 +94,11 @@ public class StockQuote {
     }
 
     public void setLowValue(String lowValue) {
-        setLowValue(Float.parseFloat(lowValue));
+        try {
+            setLowValue(Float.parseFloat(lowValue));
+        } catch(NumberFormatException exception) {
+            setLowValue(Float.NaN);
+        }
     }
 
     public float getChange() {

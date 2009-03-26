@@ -46,7 +46,12 @@ public class StockQuoteView extends BeanDictionary {
                 || key.equals("highValue")
                 || key.equals("lowValue")) {
                 try {
-                    value = valueFormat.format((Number)value);
+                    Float floatValue = (Float)value;
+                    if (floatValue.isNaN()) {
+                        value = "n/a";
+                    } else {
+                        value = valueFormat.format(floatValue);
+                    }
                 } catch(Exception exception) {
                     value = "";
                 }

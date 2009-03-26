@@ -15,75 +15,20 @@
  */
 package pivot.wtk.media.drawing;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.util.Iterator;
+import java.awt.geom.AffineTransform;
 
-import pivot.collections.Sequence;
 import pivot.wtk.Bounds;
 import pivot.wtk.Point;
+import pivot.wtk.Visual;
 
 /**
  * Abstract base class for shapes.
  *
  * @author gbrown
  */
-public abstract class Shape {
-    public static final class TransformSequence extends Transform
-        implements Sequence<Transform>, Iterable<Transform> {
-        public float[][] getMatrix() {
-            // TODO
-            return null;
-        }
-
-        public int add(Transform item) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public void insert(Transform item, int index) {
-            // TODO Auto-generated method stub
-
-        }
-
-        public Transform update(int index, Transform item) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        public int remove(Transform item) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public Sequence<Transform> remove(int index, int count) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        public Transform get(int index) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        public int indexOf(Transform item) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public int getLength() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public Iterator<Transform> iterator() {
-            // TODO
-            return null;
-        }
-    }
-
+public abstract class Shape implements Visual {
     private Group parent = null;
 
     private int x = 0;
@@ -93,7 +38,11 @@ public abstract class Shape {
     private Paint stroke = Color.BLACK;
     private int strokeThickness = 1;
 
-    private TransformSequence transform = new TransformSequence();
+    private double rotation = 0;
+    private double scaleX = 0;
+    private double scaleY = 0;
+    private double translateX = 0;
+    private double translateY = 0;
 
     public Group getParent() {
         return parent;
@@ -136,6 +85,18 @@ public abstract class Shape {
         setOrigin(origin.x, origin.y);
     }
 
+    public Bounds getBounds() {
+        // TODO Transform untransformed bounds
+        return null;
+    }
+
+    public AffineTransform getTransform() {
+        // TODO
+        return null;
+    }
+
+    public abstract boolean contains(int x, int y);
+
     public Paint getFill() {
         return fill;
     }
@@ -172,32 +133,51 @@ public abstract class Shape {
         setStroke(Color.decode(stroke));
     }
 
-    public Bounds getBounds() {
-        // TODO Transform untransformed bounds
-        return null;
+    public int getStrokeThickness() {
+        return strokeThickness;
     }
 
-    public abstract Bounds getUntransformedBounds();
-
-    public TransformSequence getTransform() {
-        return transform;
+    public void setStrokeThickness(int strokeThickness) {
+        this.strokeThickness = strokeThickness;
     }
 
-    public void paint(Graphics2D graphics) {
-        if (fill != null) {
-            graphics.setPaint(fill);
-            fill(graphics);
-        }
-
-        if (stroke != null) {
-            graphics.setPaint(stroke);
-            graphics.setStroke(new BasicStroke(strokeThickness));
-            stroke(graphics);
-        }
+    public double getRotation() {
+        return rotation;
     }
 
-    public abstract void fill(Graphics2D graphics);
-    public abstract void stroke(Graphics2D graphics);
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+    }
 
-    public abstract boolean contains(int x, int y);
+    public double getScaleX() {
+        return scaleX;
+    }
+
+    public void setScaleX(double scaleX) {
+        this.scaleX = scaleX;
+    }
+
+    public double getScaleY() {
+        return scaleY;
+    }
+
+    public void setScaleY(double scaleY) {
+        this.scaleY = scaleY;
+    }
+
+    public double getTranslateX() {
+        return translateX;
+    }
+
+    public void setTranslateX(double translateX) {
+        this.translateX = translateX;
+    }
+
+    public double getTranslateY() {
+        return translateY;
+    }
+
+    public void setTranslateY(double translateY) {
+        this.translateY = translateY;
+    }
 }

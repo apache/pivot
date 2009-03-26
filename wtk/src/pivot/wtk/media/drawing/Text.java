@@ -18,8 +18,6 @@ package pivot.wtk.media.drawing;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import pivot.wtk.Bounds;
-
 /**
  * Shape representing a block of text.
  * <p>
@@ -61,22 +59,18 @@ public class Text extends Shape {
         this.wrapWidth = wrapWidth;
     }
 
-    @Override
-    public Bounds getUntransformedBounds() {
-        // TODO Apply font as needed
-        // TODO Wrap text as needed
-
-        return null;
+    public int getWidth() {
+        // TODO
+        return 0;
     }
 
-    @Override
-    public void fill(Graphics2D graphics) {
-        // TODO Auto-generated method stub
+    public int getHeight() {
+        // TODO
+        return 0;
     }
 
-    @Override
-    public void stroke(Graphics2D graphics) {
-        // TODO Auto-generated method stub
+    public void paint(Graphics2D graphics) {
+        // TODO
     }
 
     @Override
