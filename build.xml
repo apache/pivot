@@ -3,6 +3,8 @@
     <property name="src" value="src"/>
     <property name="bin" value="ant-bin"/>
     <property name="lib" value="lib"/>
+    <property name="dist" value="dist"/>
+    <property name="deploy" value="deploy"/>
 
     <property name="doc" value="doc"/>
     <property name="charts" value="charts"/>
@@ -22,10 +24,9 @@
     <property name="storepass" value="keystore"/>
     <property name="alias" value="myself"/>
 
-    <property name="deploy" value="${user.home}/${ant.project.name}-deploy"/>
-
     <tstamp/>
     <property file="build.properties"/>
+    <property name="release" value="apache-${ant.project.name}-${version}-incubating"/>
 
     <!-- Compiler properties -->
     <property name="compiler.optimize" value="true"/>
@@ -65,9 +66,6 @@
               ]]>
             </header>
         </javadoc>
-
-        <delete file="${ant.project.name}_${version}-${doc}.zip"/>
-        <zip destfile="${ant.project.name}_${version}-${doc}.zip" basedir="doc"/>
     </target>
 
     <!-- Build charts library -->
@@ -126,9 +124,9 @@
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
-                <pathelement location="charts/pivot-charts.jar"/>
-                <pathelement location="core/pivot-core.jar"/>
-                <pathelement location="wtk/pivot-wtk.jar"/>
+                <pathelement location="charts/${bin}"/>
+                <pathelement location="core/${bin}"/>
+                <pathelement location="wtk/${bin}"/>
             </classpath>
         </javac>
 
@@ -479,9 +477,9 @@
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
-                <pathelement location="core/pivot-core.jar"/>
-                <pathelement location="web/pivot-web.jar"/>
-                <pathelement location="wtk/pivot-wtk.jar"/>
+                <pathelement location="core/${bin}"/>
+                <pathelement location="web/${bin}"/>
+                <pathelement location="wtk/${bin}"/>
                 <pathelement location="demos/lib/flex-messaging-common.jar"/>
                 <pathelement location="demos/lib/flex-messaging-core.jar"/>
                 <pathelement location="demos/lib/gdata-base-1.0.jar"/>
@@ -529,9 +527,9 @@
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
-                <pathelement location="core/pivot-core.jar"/>
-                <pathelement location="web/pivot-web.jar"/>
-                <pathelement location="wtk/pivot-wtk.jar"/>
+                <pathelement location="core/${bin}"/>
+                <pathelement location="web/${bin}"/>
+                <pathelement location="wtk/${bin}"/>
             </classpath>
         </javac>
 
@@ -587,9 +585,9 @@
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
-                <pathelement location="core/pivot-core.jar"/>
-                <pathelement location="web/pivot-web.jar"/>
-                <pathelement location="wtk/pivot-wtk.jar"/>
+                <pathelement location="core/${bin}"/>
+                <pathelement location="web/${bin}"/>
+                <pathelement location="wtk/${bin}"/>
             </classpath>
         </javac>
 
@@ -615,39 +613,89 @@
 
     <!-- Package all binaries and source -->
     <target name="package" depends="trim-whitespace, clean, build, doc">
-        <delete file="${ant.project.name}_${version}.zip"/>
-        <zip destfile="${ant.project.name}_${version}.zip">
-            <fileset dir=".">
-                <include name="pivot.sh"/>
-                <include name="pivot.bat"/>
-            </fileset>
-            <fileset dir="${charts}">
-                <include name="${ant.project.name}-charts.jar"/>
-            </fileset>
-            <fileset dir="${core}">
-                <include name="${ant.project.name}-core.jar"/>
-            </fileset>
-            <fileset dir="${web}">
-                <include name="${ant.project.name}-web.jar"/>
-                <include name="${ant.project.name}-web.server.jar"/>
-            </fileset>
-            <fileset dir="${wtk}">
-                <include name="${ant.project.name}-wtk.jar"/>
-                <include name="${ant.project.name}-wtk.terra.jar"/>
-            </fileset>
-            <fileset dir="${tools}">
-                <include name="${ant.project.name}-tools.jar"/>
-            </fileset>
+        <delete dir="${dist}/${release}"/>
+        <mkdir dir="${dist}/${release}"/>
+
+        <!-- Package binaries -->
+        <fileset dir="." id="bin">
+            <include name="pivot.sh"/>
+            <include name="pivot.bat"/>
+        </fileset>
+        <fileset dir="${charts}" id="charts">
+            <include name="${ant.project.name}-charts.jar"/>
+        </fileset>
+        <fileset dir="${core}" id="core">
+            <include name="${ant.project.name}-core.jar"/>
+        </fileset>
+        <fileset dir="${web}" id="web">
+            <include name="${ant.project.name}-web.jar"/>
+            <include name="${ant.project.name}-web.server.jar"/>
+        </fileset>
+        <fileset dir="${wtk}" id="wtk">
+            <include name="${ant.project.name}-wtk.jar"/>
+            <include name="${ant.project.name}-wtk.terra.jar"/>
+        </fileset>
+        <fileset dir="${tools}" id="tools">
+            <include name="${ant.project.name}-tools.jar"/>
+        </fileset>
+
+        <zip destfile="${dist}/${release}/${release}.zip">
+            <fileset refid="bin"/>
+            <fileset refid="charts"/>
+            <fileset refid="core"/>
+            <fileset refid="web"/>
+            <fileset refid="wtk"/>
+            <fileset refid="tools"/>
         </zip>
+        <checksum file="${dist}/${release}/${release}.zip" algorithm="md5"/>
+
+        <tar destfile="${dist}/${release}/${release}.tar">
+            <fileset refid="bin"/>
+            <fileset refid="charts"/>
+            <fileset refid="core"/>
+            <fileset refid="web"/>
+            <fileset refid="wtk"/>
+            <fileset refid="tools"/>
+        </tar>
+        <gzip src="${dist}/${release}/${release}.tar" destfile="${dist}/${release}/${release}.tar.gz"/>
+        <delete file="${dist}/${release}/${release}.tar"/>
+        <checksum file="${dist}/${release}/${release}.tar.gz" algorithm="md5"/>
 
         <!-- Package source -->
-        <delete file="${ant.project.name}_${version}-src.zip"/>
-        <zip destfile="${ant.project.name}_${version}-src.zip">
-            <fileset dir="${charts}/${src}"/>
-            <fileset dir="${core}/${src}"/>
-            <fileset dir="${web}/${src}"/>
-            <fileset dir="${wtk}/${src}"/>
+        <fileset dir="${charts}/${src}" id="charts-src"/>
+        <fileset dir="${core}/${src}" id="core-src"/>
+        <fileset dir="${web}/${src}" id="web-src"/>
+        <fileset dir="${wtk}/${src}" id="wtk-src"/>
+        <fileset dir="${tools}/${src}" id="tools-src"/>
+
+        <zip destfile="${dist}/${release}/${release}-src.zip">
+            <fileset refid="charts-src"/>
+            <fileset refid="core-src"/>
+            <fileset refid="web-src"/>
+            <fileset refid="wtk-src"/>
+            <fileset refid="tools-src"/>
         </zip>
+        <checksum file="${dist}/${release}/${release}-src.zip" algorithm="md5"/>
+
+        <tar destfile="${dist}/${release}/${release}-src.tar">
+            <fileset refid="charts-src"/>
+            <fileset refid="core-src"/>
+            <fileset refid="web-src"/>
+            <fileset refid="wtk-src"/>
+            <fileset refid="tools-src"/>
+        </tar>
+        <gzip src="${dist}/${release}/${release}-src.tar" destfile="${dist}/${release}/${release}-src.tar.gz"/>
+        <delete file="${dist}/${release}/${release}-src.tar"/>
+        <checksum file="${dist}/${release}/${release}-src.tar.gz" algorithm="md5"/>
+
+        <!-- Package Javadoc -->
+        <zip destfile="${dist}/${release}/${release}-doc.zip" basedir="doc"/>
+        <checksum file="${dist}/${release}/${release}-doc.zip" algorithm="md5"/>
+
+        <tar destfile="${dist}/${release}/${release}-doc.tar" basedir="doc"/>
+        <gzip src="${dist}/${release}/${release}-doc.tar" destfile="${dist}/${release}/${release}-doc.tar.gz"/>
+        <delete file="${dist}/${release}/${release}-doc.tar"/>
+        <checksum file="${dist}/${release}/${release}-doc.tar.gz" algorithm="md5"/>
     </target>
 
     <!-- Generate deployment files for online demos and tutorials -->
