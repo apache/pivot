@@ -620,6 +620,12 @@
         <fileset dir="." id="bin">
             <include name="pivot.sh"/>
             <include name="pivot.bat"/>
+            <include name="README"/>
+            <include name="RELEASE-NOTES"/>
+        </fileset>
+        <fileset dir="." id="legal">
+            <include name="LICENSE"/>
+            <include name="NOTICE"/>
         </fileset>
         <fileset dir="${charts}" id="charts">
             <include name="${ant.project.name}-charts.jar"/>
@@ -641,6 +647,7 @@
 
         <zip destfile="${dist}/${release}/${release}.zip">
             <fileset refid="bin"/>
+            <fileset refid="legal"/>
             <fileset refid="charts"/>
             <fileset refid="core"/>
             <fileset refid="web"/>
@@ -651,6 +658,7 @@
 
         <tar destfile="${dist}/${release}/${release}.tar">
             <fileset refid="bin"/>
+            <fileset refid="legal"/>
             <fileset refid="charts"/>
             <fileset refid="core"/>
             <fileset refid="web"/>
@@ -669,6 +677,7 @@
         <fileset dir="${tools}/${src}" id="tools-src"/>
 
         <zip destfile="${dist}/${release}/${release}-src.zip">
+            <fileset refid="legal"/>
             <fileset refid="charts-src"/>
             <fileset refid="core-src"/>
             <fileset refid="web-src"/>
@@ -678,6 +687,7 @@
         <checksum file="${dist}/${release}/${release}-src.zip" algorithm="md5"/>
 
         <tar destfile="${dist}/${release}/${release}-src.tar">
+            <fileset refid="legal"/>
             <fileset refid="charts-src"/>
             <fileset refid="core-src"/>
             <fileset refid="web-src"/>
