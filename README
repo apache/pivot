@@ -1,0 +1,17 @@
+Apache Pivot is a platform for building rich internet applications in Java. It combines the enhanced productivity and usability features of a modern RIA toolkit with the robustness of the industry-standard Java platform.
+
+Like most modern development platforms, Pivot provides a comprehensive set of foundation classes that together comprise a "framework". These classes form the building blocks upon which more complex and sophisticated applications can be built. Pivot classes are grouped into the following categories and distributed in their associated libraries:
+
+* Core (pivot-core.jar) - A set of common, non-UI classes.
+
+* WTK (pivot-wtk.jar, pivot-wtk.terra.jar) - Classes for user interface development, including windows, dialogs, buttons, lists, text input, layout, drag and drop, XML markup, etc. 
+
+* Web (pivot-web.jar, pivot-web.server.jar) - Classes to facilitate communicate with and implementation of remote data services.
+
+* Charting (pivot-charts.jar) - Classes for adding interactive charting capabilities to Pivot applications.
+
+* Tools (pivot-tools.jar) - Development tools and utility applications.
+
+To begin developing with Pivot, simply include the necessary libraries on your project classpath.
+
+Pivot requires Java 5 or greater. WTKX support in Java 5 requires StAX 1.2, available from http://stax.codehaus.org. Charting requires JFreeChart 1.0.9 and JCommon 1.0.12, available from http://www.jfree.org. Later releases may also work, but have not been tested.
