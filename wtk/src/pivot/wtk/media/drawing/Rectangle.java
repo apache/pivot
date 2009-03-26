@@ -17,7 +17,6 @@ package pivot.wtk.media.drawing;
 
 import java.awt.Graphics2D;
 
-import pivot.wtk.Bounds;
 import pivot.wtk.Dimensions;
 
 /**
@@ -70,19 +69,8 @@ public class Rectangle extends Shape {
         setSize(size.width, size.height);
     }
 
-    @Override
-    public Bounds getUntransformedBounds() {
-        return new Bounds(getX(), getY(), width, height);
-    }
-
-    @Override
-    public void fill(Graphics2D graphics) {
-        graphics.fillRect(getX(), getY(), width, height);
-    }
-
-    @Override
-    public void stroke(Graphics2D graphics) {
-        graphics.drawRect(getX(), getY(), width, height);
+    public void paint(Graphics2D graphics) {
+        // TODO
     }
 
     @Override
