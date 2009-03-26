@@ -418,7 +418,9 @@ public abstract class Query<V> extends IOTask<V> {
             }
 
             // Set the request headers
-            connection.setRequestProperty("Content-Type", serializer.getMIMEType(value));
+            if (method == Method.POST || method == Method.PUT) {
+                connection.setRequestProperty("Content-Type", serializer.getMIMEType(value));
+            }
             for (String key : requestProperties) {
                 connection.setRequestProperty(key, requestProperties.get(key));
             }
