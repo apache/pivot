@@ -14,6 +14,7 @@
 package pivot.wtk.text.validation;
 
 /**
+ * A validator for an int value.
  *
  * @author Noel Grandin
  */

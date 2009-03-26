@@ -14,14 +14,36 @@
 package pivot.wtk.text.validation;
 
 /**
+ * A validator for a float value limited to a range.
  *
  * @author Noel Grandin
  */
 public class FloatRangeValidator extends FloatValidator {
-    private final float minValue, maxValue;
+    private float minValue, maxValue;
+
+    public FloatRangeValidator() {
+        this.minValue = 0;
+        this.maxValue = 1;
+    }
 
     public FloatRangeValidator(float minValue, float maxValue) {
         this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+
+    public float getMinimum() {
+        return minValue;
+    }
+
+    public void setMinimum(float minValue) {
+        this.minValue = minValue;
+    }
+
+    public float getMaximum() {
+        return maxValue;
+    }
+
+    public void setMaximum(float maxValue) {
         this.maxValue = maxValue;
     }
 

@@ -18,10 +18,12 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 /**
+ * A validator for decimal values.
  *
  * @author Noel Grandin
  */
 public abstract class DecimalValidator extends FormattedValidator<NumberFormat> {
+
     protected DecimalValidator(DecimalFormat format) {
         super(format);
     }

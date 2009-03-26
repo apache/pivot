@@ -15,7 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008" xmlns="pivot.wtk">
+<FlowPane xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+    xmlns:validation="pivot.wtk.text.validation"
+    xmlns="pivot.wtk">
     <Border>
         <content>
             <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:12, right:4}}">
@@ -28,6 +30,14 @@ limitations under the License.
 	                        <TextInput Form.name="Password"
 	                            Form.flag="{messageType:'info', message:'This field has a maximum length of 12 characters.'}"
 	                            password="true" text="pivot" textSize="12" maximumLength="12" />
+                            <TextInput Form.name="Password" Form.flag="{messageType:'info', message:'This field only accepts numeric values from 0 through 9.'}"
+                                text="5" textSize="12" maximumLength="6">
+                                <validator>
+                                    <validation:RegexTextValidator>
+                                        <pattern><![CDATA[[0-9]]]></pattern>
+                                    </validation:RegexTextValidator>
+                                </validator>
+                            </TextInput>
                         </Form.Section>
                     </sections>
                 </Form>

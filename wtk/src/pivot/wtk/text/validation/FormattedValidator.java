@@ -13,16 +13,20 @@
  */
 package pivot.wtk.text.validation;
 
+import java.text.Format;
 import java.text.ParsePosition;
 
 /**
+ * A validator for a {@link java.text.Format}'ed value.
+ * <p>
+ * This class is mostly intended to be a base-class for other validators.
  *
  * @author Noel Grandin
  */
-public abstract class FormattedValidator<TFormat extends java.text.Format> implements Validator {
-    protected final TFormat format;
+public abstract class FormattedValidator<F extends Format> implements Validator {
+    protected final F format;
 
-    protected FormattedValidator(TFormat format) {
+    protected FormattedValidator(F format) {
         this.format = format;
     }
 
