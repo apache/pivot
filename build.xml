@@ -40,6 +40,7 @@
         depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, demos-clean, tutorials-clean, tools-clean">
         <delete dir="${dist}"/>
         <delete dir="${deploy}"/>
+        <delete dir="${doc}"/>
     </target>
 
     <target name="doc" description="Generates API documentation for all packages">
