@@ -33,10 +33,12 @@
     <property name="compiler.deprecation" value="true"/>
     <property name="compiler.debug" value="false"/>
 
-    <target name="build" depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
-    <target name="clean" depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, demos-clean, tutorials-clean, tools-clean"/>
+    <target name="build" description="Compiles all packages"
+        depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
+    <target name="clean" description="Removes all build artifacts"
+        depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, demos-clean, tutorials-clean, tools-clean"/>
 
-    <target name="doc">
+    <target name="doc" description="Generates API documentation for all packages">
         <javadoc packagenames="pivot.*" destdir="${doc}" author="true" version="true" use="true">
             <classpath>
                 <pathelement location="${charts}/lib/jcommon-1.0.12.jar"/>
@@ -612,7 +614,8 @@
     </target>
 
     <!-- Package all binaries and source -->
-    <target name="package" depends="trim-whitespace, clean, build, doc">
+    <target name="package" description="Generates release artifacts"
+        depends="trim-whitespace, clean, build, doc">
         <delete dir="${dist}/${release}"/>
         <mkdir dir="${dist}/${release}"/>
 
@@ -709,7 +712,8 @@
     </target>
 
     <!-- Generate deployment files for online demos and tutorials -->
-    <target name="deploy" depends="package">
+    <target name="deploy" description="Generates deployment files for online demos and tutorials"
+        depends="package">
         <delete dir="${deploy}"/>
         <mkdir dir="${deploy}"/>
 
