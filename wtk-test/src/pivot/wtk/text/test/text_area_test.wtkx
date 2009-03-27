@@ -16,7 +16,7 @@ limitations under the License.
 -->
 
 <SplitPane splitLocation="420"
-    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns:test="pivot.wtk.text.test" xmlns="pivot.wtk">
     <left>
         <TablePane styles="{verticalSpacing:8}">

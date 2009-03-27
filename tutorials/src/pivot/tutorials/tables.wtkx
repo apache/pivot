@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+<Border xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns:collections="pivot.collections"
     xmlns:content="pivot.wtk.content"
     xmlns:tutorials="pivot.tutorials"

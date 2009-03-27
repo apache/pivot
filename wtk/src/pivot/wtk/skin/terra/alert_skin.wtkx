@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright (c) 2008 VMware, Inc.
+Copyright (c) 2009 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ limitations under the License.
 
 <FlowPane orientation="vertical" styles="{spacing:8, horizontalAlignment:'justify'}"
     preferredWidth="300"
-    xmlns:wtkx="http://pivot-toolkit.org/wtkx/2008"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns:collections="pivot.collections"
     xmlns="pivot.wtk">
     <Border styles="{padding:12, backgroundColor:10, color:7}">
