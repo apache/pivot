@@ -17,7 +17,6 @@ limitations under the License.
 
 <Border styles="{color:10, padding:0}"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:collections="pivot.collections"
     xmlns:content="pivot.wtk.content"
     xmlns="pivot.wtk">
 	<content>
