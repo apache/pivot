@@ -33,12 +33,6 @@
     <property name="compiler.deprecation" value="true"/>
     <property name="compiler.debug" value="false"/>
 
-    <fileset dir="." id="legal">
-        <include name="DISCLAIMER"/>
-        <include name="LICENSE"/>
-        <include name="NOTICE"/>
-    </fileset>
-
     <target name="build" description="Compiles all packages"
         depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
     <target name="clean" description="Removes all build artifacts"
@@ -100,7 +94,6 @@
         <!-- Rebuild the JAR file -->
         <delete file="${charts}/${ant.project.name}-charts.jar"/>
         <jar jarfile="${charts}/${ant.project.name}-charts.jar">
-            <metainf refid="legal"/>
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -173,7 +166,6 @@
         <!-- Rebuild the JAR file -->
         <delete file="${core}/${ant.project.name}-core.jar"/>
         <jar jarfile="${core}/${ant.project.name}-core.jar">
-            <metainf refid="legal"/>
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -246,7 +238,6 @@
         <!-- Rebuild the JAR files -->
         <delete file="${web}/${ant.project.name}-web.jar"/>
         <jar jarfile="${web}/${ant.project.name}-web.jar">
-            <metainf refid="legal"/>
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -264,7 +255,6 @@
 
         <delete file="${web}/${ant.project.name}-web.server.jar"/>
         <jar jarfile="${web}/${ant.project.name}-web.server.jar">
-            <metainf refid="legal"/>
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -381,7 +371,6 @@
         <!-- Rebuild the JAR file -->
         <delete file="${wtk}/${ant.project.name}-wtk.jar"/>
         <jar jarfile="${wtk}/${ant.project.name}-wtk.jar">
-            <metainf refid="legal"/>
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -401,7 +390,6 @@
 
         <delete file="${wtk}/${ant.project.name}-wtk.terra.jar"/>
         <jar jarfile="${wtk}/${ant.project.name}-wtk.terra.jar">
-            <metainf refid="legal"/>
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -419,7 +407,6 @@
 
         <delete file="${wtk}/${ant.project.name}-wtk.obsidian.jar"/>
         <jar jarfile="${wtk}/${ant.project.name}-wtk.obsidian.jar">
-            <metainf refid="legal"/>
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -511,7 +498,6 @@
         <!-- Rebuild the JAR file -->
         <delete file="${demos}/${ant.project.name}-demos.jar"/>
         <jar jarfile="${demos}/${ant.project.name}-demos.jar">
-            <metainf refid="legal"/>
             <manifest>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Version" value="${version}"/>
@@ -552,7 +538,6 @@
         <!-- Rebuild the JAR files -->
         <delete file="${tutorials}/${ant.project.name}-tutorials.jar"/>
         <jar jarfile="${tutorials}/${ant.project.name}-tutorials.jar">
-            <metainf refid="legal"/>
             <manifest>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Version" value="${version}"/>
@@ -568,7 +553,6 @@
 
         <delete file="${tutorials}/${ant.project.name}-stocktracker.jar"/>
         <jar jarfile="${tutorials}/${ant.project.name}-stocktracker.jar">
-            <metainf refid="legal"/>
             <manifest>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Version" value="${version}"/>
@@ -612,7 +596,6 @@
         <!-- Rebuild the JAR file -->
         <delete file="${tools}/${ant.project.name}-tools.jar"/>
         <jar jarfile="${tools}/${ant.project.name}-tools.jar">
-            <metainf refid="legal"/>
             <manifest>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Version" value="${version}"/>
@@ -643,6 +626,11 @@
         </fileset>
         <fileset dir="." id="source">
             <include name="BUILD"/>
+        </fileset>
+        <fileset dir="." id="legal">
+            <include name="DISCLAIMER"/>
+            <include name="LICENSE"/>
+            <include name="NOTICE"/>
         </fileset>
         <fileset dir="${charts}" id="charts">
             <include name="${ant.project.name}-charts.jar"/>
