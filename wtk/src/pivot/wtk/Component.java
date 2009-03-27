@@ -1389,20 +1389,24 @@ public abstract class Component implements ConstrainedVisual {
 
         while (component != null
             && component.isVisible()) {
-            Bounds bounds;
+            int minTop = 0;
+            int minLeft = 0;
+            int maxBottom = component.getHeight() - 1;
+            int maxRight = component.getWidth() - 1;
+
             if (component instanceof Viewport) {
                 Viewport viewport = (Viewport)component;
-                bounds = viewport.getViewportBounds();
-                bounds.x += viewport.getX();
-                bounds.y += viewport.getY();
-            } else {
-                bounds = component.getBounds();
+                Bounds bounds = viewport.getViewportBounds();
+                minTop = bounds.y;
+                minLeft = bounds.x;
+                maxBottom = bounds.y + bounds.height - 1;
+                maxRight = bounds.x + bounds.width - 1;
             }
 
-            top = bounds.y + Math.max(top, 0);
-            left = bounds.x + Math.max(left, 0);
-            bottom = bounds.y + Math.max(Math.min(bottom, bounds.height - 1), -1);
-            right = bounds.x + Math.max(Math.min(right, bounds.width - 1), -1);
+            top = component.y + Math.max(top, minTop);
+            left = component.x + Math.max(left, minLeft);
+            bottom = component.y + Math.max(Math.min(bottom, maxBottom), -1);
+            right = component.x + Math.max(Math.min(right, maxRight), -1);
 
             if (component instanceof Display) {
                 visibleArea = new Bounds(left, top, right - left + 1, bottom - top + 1);
