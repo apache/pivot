@@ -20,9 +20,9 @@
     <property name="tutorials" value="tutorials"/>
     <property name="tools" value="tools"/>
 
-    <property name="keystore" value="${user.home}/myKeystore"/>
-    <property name="storepass" value="keystore"/>
-    <property name="alias" value="myself"/>
+    <property name="keystore" value="etc/pivot.keystore"/>
+    <property name="alias" value="pivot"/>
+    <property name="storepass" value="apache"/>
 
     <tstamp/>
     <property file="build.properties"/>
