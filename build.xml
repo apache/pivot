@@ -33,10 +33,12 @@
     <property name="compiler.deprecation" value="true"/>
     <property name="compiler.debug" value="false"/>
 
-    <target name="build" depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
-    <target name="clean" depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, demos-clean, tutorials-clean, tools-clean"/>
+    <target name="build" description="Compiles all packages"
+        depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
+    <target name="clean" description="Removes all build artifacts"
+        depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, demos-clean, tutorials-clean, tools-clean"/>
 
-    <target name="doc">
+    <target name="doc" description="Generates API documentation for all packages">
         <javadoc packagenames="pivot.*" destdir="${doc}" author="true" version="true" use="true">
             <classpath>
                 <pathelement location="${charts}/lib/jcommon-1.0.12.jar"/>
@@ -612,18 +614,21 @@
     </target>
 
     <!-- Package all binaries and source -->
-    <target name="package" depends="trim-whitespace, clean, build, doc">
-        <delete dir="${dist}/${release}"/>
-        <mkdir dir="${dist}/${release}"/>
+    <target name="dist" description="Generates release artifacts"
+        depends="trim-whitespace, clean, build, doc">
+        <delete dir="${dist}/${version}"/>
+        <mkdir dir="${dist}/${version}"/>
 
         <!-- Package binaries -->
-        <fileset dir="." id="bin">
-            <include name="pivot.sh"/>
-            <include name="pivot.bat"/>
+        <fileset dir="." id="binaries">
             <include name="README"/>
             <include name="RELEASE-NOTES"/>
         </fileset>
+        <fileset dir="." id="source">
+            <include name="BUILD"/>
+        </fileset>
         <fileset dir="." id="legal">
+            <include name="DISCLAIMER"/>
             <include name="LICENSE"/>
             <include name="NOTICE"/>
         </fileset>
@@ -645,8 +650,8 @@
             <include name="${ant.project.name}-tools.jar"/>
         </fileset>
 
-        <zip destfile="${dist}/${release}/${release}.zip">
-            <fileset refid="bin"/>
+        <zip destfile="${dist}/${version}/${release}.zip">
+            <fileset refid="binaries"/>
             <fileset refid="legal"/>
             <fileset refid="charts"/>
             <fileset refid="core"/>
@@ -654,10 +659,10 @@
             <fileset refid="wtk"/>
             <fileset refid="tools"/>
         </zip>
-        <checksum file="${dist}/${release}/${release}.zip" algorithm="md5"/>
+        <checksum file="${dist}/${version}/${release}.zip" algorithm="md5"/>
 
-        <tar destfile="${dist}/${release}/${release}.tar">
-            <fileset refid="bin"/>
+        <tar destfile="${dist}/${version}/${release}.tar">
+            <fileset refid="binaries"/>
             <fileset refid="legal"/>
             <fileset refid="charts"/>
             <fileset refid="core"/>
@@ -665,9 +670,9 @@
             <fileset refid="wtk"/>
             <fileset refid="tools"/>
         </tar>
-        <gzip src="${dist}/${release}/${release}.tar" destfile="${dist}/${release}/${release}.tar.gz"/>
-        <delete file="${dist}/${release}/${release}.tar"/>
-        <checksum file="${dist}/${release}/${release}.tar.gz" algorithm="md5"/>
+        <gzip src="${dist}/${version}/${release}.tar" destfile="${dist}/${version}/${release}.tar.gz"/>
+        <delete file="${dist}/${version}/${release}.tar"/>
+        <checksum file="${dist}/${version}/${release}.tar.gz" algorithm="md5"/>
 
         <!-- Package source -->
         <fileset dir="${charts}/${src}" id="charts-src"/>
@@ -676,7 +681,8 @@
         <fileset dir="${wtk}/${src}" id="wtk-src"/>
         <fileset dir="${tools}/${src}" id="tools-src"/>
 
-        <zip destfile="${dist}/${release}/${release}-src.zip">
+        <zip destfile="${dist}/${version}/${release}-src.zip">
+            <fileset refid="source"/>
             <fileset refid="legal"/>
             <fileset refid="charts-src"/>
             <fileset refid="core-src"/>
@@ -684,9 +690,10 @@
             <fileset refid="wtk-src"/>
             <fileset refid="tools-src"/>
         </zip>
-        <checksum file="${dist}/${release}/${release}-src.zip" algorithm="md5"/>
+        <checksum file="${dist}/${version}/${release}-src.zip" algorithm="md5"/>
 
-        <tar destfile="${dist}/${release}/${release}-src.tar">
+        <tar destfile="${dist}/${version}/${release}-src.tar">
+            <fileset refid="source"/>
             <fileset refid="legal"/>
             <fileset refid="charts-src"/>
             <fileset refid="core-src"/>
@@ -694,22 +701,23 @@
             <fileset refid="wtk-src"/>
             <fileset refid="tools-src"/>
         </tar>
-        <gzip src="${dist}/${release}/${release}-src.tar" destfile="${dist}/${release}/${release}-src.tar.gz"/>
-        <delete file="${dist}/${release}/${release}-src.tar"/>
-        <checksum file="${dist}/${release}/${release}-src.tar.gz" algorithm="md5"/>
+        <gzip src="${dist}/${version}/${release}-src.tar" destfile="${dist}/${version}/${release}-src.tar.gz"/>
+        <delete file="${dist}/${version}/${release}-src.tar"/>
+        <checksum file="${dist}/${version}/${release}-src.tar.gz" algorithm="md5"/>
 
         <!-- Package Javadoc -->
-        <zip destfile="${dist}/${release}/${release}-doc.zip" basedir="doc"/>
-        <checksum file="${dist}/${release}/${release}-doc.zip" algorithm="md5"/>
+        <zip destfile="${dist}/${version}/${release}-doc.zip" basedir="doc"/>
+        <checksum file="${dist}/${version}/${release}-doc.zip" algorithm="md5"/>
 
-        <tar destfile="${dist}/${release}/${release}-doc.tar" basedir="doc"/>
-        <gzip src="${dist}/${release}/${release}-doc.tar" destfile="${dist}/${release}/${release}-doc.tar.gz"/>
-        <delete file="${dist}/${release}/${release}-doc.tar"/>
-        <checksum file="${dist}/${release}/${release}-doc.tar.gz" algorithm="md5"/>
+        <tar destfile="${dist}/${version}/${release}-doc.tar" basedir="doc"/>
+        <gzip src="${dist}/${version}/${release}-doc.tar" destfile="${dist}/${version}/${release}-doc.tar.gz"/>
+        <delete file="${dist}/${version}/${release}-doc.tar"/>
+        <checksum file="${dist}/${version}/${release}-doc.tar.gz" algorithm="md5"/>
     </target>
 
     <!-- Generate deployment files for online demos and tutorials -->
-    <target name="deploy" depends="package">
+    <target name="deploy" description="Generates deployment files for online demos and tutorials"
+        depends="dist">
         <delete dir="${deploy}"/>
         <mkdir dir="${deploy}"/>
 

@@ -15,8 +15,55 @@
   limitations under the License.
 ================================================================================
 
-Release notes for Apache Pivot 1.1:
+Major enhancements in Pivot 1.1 include:
 
-- Although the TextArea component is included in this release, it is not completely functional. It works reliably in read-only mode, but editing support is incomplete.
+- New/updated components: 
+  - Accordion - provides navigation capabilities similar to a tab pane, but 
+    arranged vertically
+  - Calendar - basic date picker; both standalone and drop-down versions are 
+    supported
+  - Slider - allows a user to select one of a range of values by moving a 
+    draggable "thumb"
+  - Color Picker - presents a list of selectable color swatches to the user
+  - Support for checkboxes in tree and list views, including mixed state 
+    checkboxes in tree view
+  - Framework support for list, table, and tree view editors
 
-- Stub APIs for vector drawing are included but are non-functional. Full support for vector graphics will come in a later release.
+- Improved drag/drop and clipboard support. Pivot applications can now interact 
+  with the desktop just like native apps, with full access to the system 
+  clipboard and drag/drop facilities.
+
+- File browser support. Pivot now provides out-of-the-box support for browsing 
+  the local file system. Combined with the new drag/drop support, this makes 
+  Pivot an ideal choice for web-based file management applications.
+
+- Input validation framework. Pivot 1.1 includes an extensible framework for 
+  validating user input, allowing applications to provide instant and obvious 
+  feedback when invalid data has been entered.
+  
+- Support for scripting languages in WTKX. In addition to Java, the new 
+  <wtkx:script> tag allows developers to easily create Pivot applications using 
+  a variety of JVM languages including JavaScript, Groovy, and others.
+
+- Enhanced support for DOM interaction. Pivot now supports bi-directional 
+  communication between an application and the web page that contains it. 
+  Multiple applications on the same page can also communicate with each other.
+
+- Additional effects and more pervasive animations. All of Pivot's navigation 
+  components now use animated transitions; menus, list button popups, and sheets 
+  use a translucent background; and menus and list buttons fade when closed, 
+  providing a more enriching user experience.
+
+- Improved font rendering. Pivot now uses the default system setting for font 
+  smoothing, producing more natural-looking user interfaces.
+
+- Numerous bug fixes and performance improvements.
+
+Additional notes:
+
+- Although the TextArea component is included in this release, it is not 
+  completely functional. It works reliably in read-only mode, but editing 
+  support is incomplete.
+
+- Stub APIs for vector drawing are included but are non-functional. Full 
+  support for vector graphics will come in a later release.
