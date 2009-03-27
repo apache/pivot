@@ -32,7 +32,6 @@ import pivot.collections.HashMap;
  *
  * @author gbrown
  */
-@SuppressWarnings("deprecation")
 public final class BrowserApplicationContext extends ApplicationContext {
     /**
      * Applet used to host applications in a web browser.

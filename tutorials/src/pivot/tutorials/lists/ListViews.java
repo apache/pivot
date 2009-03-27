@@ -30,7 +30,6 @@ import pivot.wtkx.WTKXSerializer;
 public class ListViews implements Application {
     private Window window = null;
 
-    @SuppressWarnings("unchecked")
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();

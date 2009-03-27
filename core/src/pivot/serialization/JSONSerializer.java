@@ -811,7 +811,6 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @see #getValue(Object, String)
      */
-    @SuppressWarnings("unchecked")
     public static List<?> getList(Object root, String path) {
         return (List<?>)getValue(root, path);
     }
@@ -838,7 +837,6 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * A {@link List} instance containing the parsed JSON data.
      */
-    @SuppressWarnings("unchecked")
     public static List<?> parseList(String string) {
         List<?> list = null;
         JSONSerializer jsonSerializer = new JSONSerializer();

@@ -62,7 +62,6 @@ public class PostQuery extends Query<URL> {
      * not return a location.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public URL execute() throws QueryException {
         URL valueLocation = null;
 

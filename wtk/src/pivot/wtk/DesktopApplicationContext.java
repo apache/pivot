@@ -30,7 +30,6 @@ import pivot.wtk.media.Picture;
  *
  * @author gbrown
  */
-@SuppressWarnings("deprecation")
 public final class DesktopApplicationContext extends ApplicationContext {
     private static class HostFrame extends java.awt.Frame {
         private static final long serialVersionUID = 0;

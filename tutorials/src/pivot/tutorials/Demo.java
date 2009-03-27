@@ -420,7 +420,6 @@ public class Demo implements Application {
         dateSpinner.setSelectedItem(today);
     }
 
-    @SuppressWarnings("unchecked")
     private void initializeAlertButtons() {
         alertButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

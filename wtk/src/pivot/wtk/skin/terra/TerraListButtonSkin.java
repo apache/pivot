@@ -159,7 +159,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
         listViewPopup.setContent(listViewBorder);
     }
 
-    @SuppressWarnings("unchecked")
     public int getPreferredWidth(int height) {
         ListButton listButton = (ListButton)getComponent();
         List<?> listData = listButton.getListData();

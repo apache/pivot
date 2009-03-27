@@ -61,7 +61,6 @@ public class MenuItemDataRenderer extends FlowPane implements Button.DataRendere
         validate();
     }
 
-    @SuppressWarnings("unchecked")
     public void render(Object data, Button button, boolean highlighted) {
         Image icon = null;
         String text = null;

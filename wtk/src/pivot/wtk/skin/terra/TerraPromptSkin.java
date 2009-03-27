@@ -45,7 +45,6 @@ public class TerraPromptSkin extends TerraSheetSkin
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void install(Component component) {
         super.install(component);
 

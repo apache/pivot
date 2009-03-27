@@ -31,7 +31,6 @@ import pivot.wtkx.WTKXSerializer;
 public class ListButtons implements Application {
     private class ListButtonSelectionHandler
         implements ListButtonSelectionListener {
-        @SuppressWarnings("unchecked")
         public void selectedIndexChanged(ListButton listButton, int previousIndex) {
             int index = listButton.getSelectedIndex();
 

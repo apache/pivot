@@ -151,7 +151,6 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         calendarPopup.setContent(calendarBorder);
     }
 
-    @SuppressWarnings("unchecked")
     public int getPreferredWidth(int height) {
         CalendarButton calendarButton = (CalendarButton)getComponent();
 

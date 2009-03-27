@@ -1605,7 +1605,6 @@ public class TreeView extends Component {
      * @throws IllegalArgumentException
      * If the path contains any leaf nodes.
      */
-    @SuppressWarnings("unchecked")
     private void monitorBranch(Sequence<Integer> path) {
         BranchHandler parent = rootBranchHandler;
 

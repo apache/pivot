@@ -94,7 +94,6 @@ public class ListViewItemEditor implements ListView.ItemEditor {
     };
 
     private ComponentKeyListener textInputKeyHandler = new ComponentKeyListener() {
-        @SuppressWarnings("unchecked")
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
                 save();

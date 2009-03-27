@@ -131,7 +131,6 @@ public class ArrayList<T> implements List<T>, Serializable {
         return index;
     }
 
-    @SuppressWarnings("unchecked")
     public Sequence<T> remove(int index, int count) {
         ArrayList<T> removed = new ArrayList<T>();
 

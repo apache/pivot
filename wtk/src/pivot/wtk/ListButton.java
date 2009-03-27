@@ -146,7 +146,6 @@ public class ListButton extends Button {
      * @param listData
      * The list data to be presented by the list button.
      */
-    @SuppressWarnings("unchecked")
     public void setListData(List<?> listData) {
         if (listData == null) {
             throw new IllegalArgumentException("listData is null.");
