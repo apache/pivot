@@ -627,6 +627,7 @@
         <!-- Construct the release hierarchy -->
         <copy todir="${dist}/${release}">
             <fileset dir=".">
+                <include name="BUILD"/>
                 <include name="DISCLAIMER"/>
                 <include name="LICENSE"/>
                 <include name="NOTICE"/>
@@ -634,6 +635,8 @@
                 <include name="RELEASE-NOTES"/>
             </fileset>
         </copy>
+
+        <copy tofile="${dist}/${release}/build.xml" file="build.xml.DIST" />
 
         <copy todir="${dist}/${release}/${lib}">
             <fileset dir="${charts}">
@@ -660,7 +663,6 @@
         </copy>
 
         <copy todir="${dist}/${release}/${src}">
-            <fileset dir="." includes="BUILD"/>
             <fileset dir="${charts}/${src}"/>
             <fileset dir="${core}/${src}"/>
             <fileset dir="${web}/${src}"/>
