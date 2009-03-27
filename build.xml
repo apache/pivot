@@ -35,8 +35,12 @@
 
     <target name="build" description="Compiles all packages"
         depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
+
     <target name="clean" description="Removes all build artifacts"
-        depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, demos-clean, tutorials-clean, tools-clean"/>
+        depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, demos-clean, tutorials-clean, tools-clean">
+        <delete dir="${dist}"/>
+        <delete dir="${deploy}"/>
+    </target>
 
     <target name="doc" description="Generates API documentation for all packages">
         <javadoc packagenames="pivot.*" destdir="${doc}" author="true" version="true" use="true">
@@ -616,103 +620,67 @@
     <!-- Package all binaries and source -->
     <target name="dist" description="Generates release artifacts"
         depends="trim-whitespace, clean, build, doc">
-        <delete dir="${dist}/${version}"/>
-        <mkdir dir="${dist}/${version}"/>
+        <mkdir dir="${dist}/${release}/${doc}"/>
+        <mkdir dir="${dist}/${release}/${lib}"/>
+        <mkdir dir="${dist}/${release}/${src}"/>
 
-        <!-- Package binaries -->
-        <fileset dir="." id="binaries">
-            <include name="README"/>
-            <include name="RELEASE-NOTES"/>
-        </fileset>
-        <fileset dir="." id="source">
-            <include name="BUILD"/>
-        </fileset>
-        <fileset dir="." id="legal">
-            <include name="DISCLAIMER"/>
-            <include name="LICENSE"/>
-            <include name="NOTICE"/>
-        </fileset>
-        <fileset dir="${charts}" id="charts">
-            <include name="${ant.project.name}-charts.jar"/>
-        </fileset>
-        <fileset dir="${core}" id="core">
-            <include name="${ant.project.name}-core.jar"/>
-        </fileset>
-        <fileset dir="${web}" id="web">
-            <include name="${ant.project.name}-web.jar"/>
-            <include name="${ant.project.name}-web.server.jar"/>
-        </fileset>
-        <fileset dir="${wtk}" id="wtk">
-            <include name="${ant.project.name}-wtk.jar"/>
-            <include name="${ant.project.name}-wtk.terra.jar"/>
-        </fileset>
-        <fileset dir="${tools}" id="tools">
-            <include name="${ant.project.name}-tools.jar"/>
-        </fileset>
+        <!-- Construct the release hierarchy -->
+        <copy todir="${dist}/${release}">
+            <fileset dir=".">
+                <include name="DISCLAIMER"/>
+                <include name="LICENSE"/>
+                <include name="NOTICE"/>
+                <include name="README"/>
+                <include name="RELEASE-NOTES"/>
+            </fileset>
+        </copy>
 
-        <zip destfile="${dist}/${version}/${release}.zip">
-            <fileset refid="binaries"/>
-            <fileset refid="legal"/>
-            <fileset refid="charts"/>
-            <fileset refid="core"/>
-            <fileset refid="web"/>
-            <fileset refid="wtk"/>
-            <fileset refid="tools"/>
+        <copy todir="${dist}/${release}/${lib}">
+            <fileset dir="${charts}">
+                <include name="${ant.project.name}-charts.jar"/>
+            </fileset>
+            <fileset dir="${core}">
+                <include name="${ant.project.name}-core.jar"/>
+            </fileset>
+            <fileset dir="${web}">
+                <include name="${ant.project.name}-web.jar"/>
+                <include name="${ant.project.name}-web.server.jar"/>
+            </fileset>
+            <fileset dir="${wtk}">
+                <include name="${ant.project.name}-wtk.jar"/>
+                <include name="${ant.project.name}-wtk.terra.jar"/>
+            </fileset>
+            <fileset dir="${tools}">
+                <include name="${ant.project.name}-tools.jar"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${dist}/${release}/${doc}">
+            <fileset dir="${doc}"/>
+        </copy>
+
+        <copy todir="${dist}/${release}/${src}">
+            <fileset dir="." includes="BUILD"/>
+            <fileset dir="${charts}/${src}"/>
+            <fileset dir="${core}/${src}"/>
+            <fileset dir="${web}/${src}"/>
+            <fileset dir="${wtk}/${src}"/>
+            <fileset dir="${tools}/${src}"/>
+        </copy>
+
+        <!-- Create the .zip archive -->
+        <zip destfile="${dist}/${release}.zip" level="9">
+            <fileset dir="${dist}" includes="${release}/**"/>
         </zip>
-        <checksum file="${dist}/${version}/${release}.zip" algorithm="md5"/>
+        <checksum file="${dist}/${release}.zip" algorithm="md5"/>
 
-        <tar destfile="${dist}/${version}/${release}.tar">
-            <fileset refid="binaries"/>
-            <fileset refid="legal"/>
-            <fileset refid="charts"/>
-            <fileset refid="core"/>
-            <fileset refid="web"/>
-            <fileset refid="wtk"/>
-            <fileset refid="tools"/>
+        <!-- Create the .tar.gz archive -->
+        <tar destfile="${dist}/${release}.tar" longfile="gnu">
+            <fileset dir="${dist}" includes="${release}/**"/>
         </tar>
-        <gzip src="${dist}/${version}/${release}.tar" destfile="${dist}/${version}/${release}.tar.gz"/>
-        <delete file="${dist}/${version}/${release}.tar"/>
-        <checksum file="${dist}/${version}/${release}.tar.gz" algorithm="md5"/>
-
-        <!-- Package source -->
-        <fileset dir="${charts}/${src}" id="charts-src"/>
-        <fileset dir="${core}/${src}" id="core-src"/>
-        <fileset dir="${web}/${src}" id="web-src"/>
-        <fileset dir="${wtk}/${src}" id="wtk-src"/>
-        <fileset dir="${tools}/${src}" id="tools-src"/>
-
-        <zip destfile="${dist}/${version}/${release}-src.zip">
-            <fileset refid="source"/>
-            <fileset refid="legal"/>
-            <fileset refid="charts-src"/>
-            <fileset refid="core-src"/>
-            <fileset refid="web-src"/>
-            <fileset refid="wtk-src"/>
-            <fileset refid="tools-src"/>
-        </zip>
-        <checksum file="${dist}/${version}/${release}-src.zip" algorithm="md5"/>
-
-        <tar destfile="${dist}/${version}/${release}-src.tar">
-            <fileset refid="source"/>
-            <fileset refid="legal"/>
-            <fileset refid="charts-src"/>
-            <fileset refid="core-src"/>
-            <fileset refid="web-src"/>
-            <fileset refid="wtk-src"/>
-            <fileset refid="tools-src"/>
-        </tar>
-        <gzip src="${dist}/${version}/${release}-src.tar" destfile="${dist}/${version}/${release}-src.tar.gz"/>
-        <delete file="${dist}/${version}/${release}-src.tar"/>
-        <checksum file="${dist}/${version}/${release}-src.tar.gz" algorithm="md5"/>
-
-        <!-- Package Javadoc -->
-        <zip destfile="${dist}/${version}/${release}-doc.zip" basedir="doc"/>
-        <checksum file="${dist}/${version}/${release}-doc.zip" algorithm="md5"/>
-
-        <tar destfile="${dist}/${version}/${release}-doc.tar" basedir="doc"/>
-        <gzip src="${dist}/${version}/${release}-doc.tar" destfile="${dist}/${version}/${release}-doc.tar.gz"/>
-        <delete file="${dist}/${version}/${release}-doc.tar"/>
-        <checksum file="${dist}/${version}/${release}-doc.tar.gz" algorithm="md5"/>
+        <gzip src="${dist}/${release}.tar" destfile="${dist}/${release}.tar.gz"/>
+        <delete file="${dist}/${release}.tar"/>
+        <checksum file="${dist}/${release}.tar.gz" algorithm="md5"/>
     </target>
 
     <!-- Generate deployment files for online demos and tutorials -->
