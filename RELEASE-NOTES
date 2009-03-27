@@ -17,6 +17,6 @@
 
 Release notes for Apache Pivot 1.1:
 
-- Though the TextArea component is included in this release, it is not completely functional. It works reliably in a read-only mode, but support for editing is incomplete.
+- Although the TextArea component is included in this release, it is not completely functional. It works reliably in read-only mode, but editing support is incomplete.
 
-- Stub APIs for vector drawing are also included and are non-functional. Full support for vector graphics will come in a later release.
+- Stub APIs for vector drawing are included but are non-functional. Full support for vector graphics will come in a later release.
