@@ -636,7 +636,7 @@
             </fileset>
         </copy>
 
-        <copy tofile="${dist}/${release}/build.xml" file="build.xml.DIST" />
+        <copy tofile="${dist}/${release}/build.xml" file="build-dist.xml" />
 
         <copy todir="${dist}/${release}/${lib}">
             <fileset dir="${charts}">
@@ -675,6 +675,7 @@
             <fileset dir="${dist}" includes="${release}/**"/>
         </zip>
         <checksum file="${dist}/${release}.zip" algorithm="md5"/>
+        <checksum file="${dist}/${release}.zip" algorithm="sha"/>
 
         <!-- Create the .tar.gz archive -->
         <tar destfile="${dist}/${release}.tar" longfile="gnu">
@@ -683,6 +684,7 @@
         <gzip src="${dist}/${release}.tar" destfile="${dist}/${release}.tar.gz"/>
         <delete file="${dist}/${release}.tar"/>
         <checksum file="${dist}/${release}.tar.gz" algorithm="md5"/>
+        <checksum file="${dist}/${release}.tar.gz" algorithm="sha"/>
     </target>
 
     <!-- Generate deployment files for online demos and tutorials -->
