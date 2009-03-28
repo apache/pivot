@@ -637,7 +637,7 @@
             </fileset>
         </copy>
 
-        <copy tofile="${dist}/${release}/build.xml" file="build.xml.DIST" />
+        <copy tofile="${dist}/${release}/build.xml" file="build-dist.xml" />
 
         <copy todir="${dist}/${release}/${lib}">
             <fileset dir="${charts}">
