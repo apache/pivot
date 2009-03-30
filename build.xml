@@ -637,27 +637,22 @@
             </fileset>
         </copy>
 
-        <copy tofile="${dist}/${release}/build.xml" file="build-dist.xml" />
+        <copy tofile="${dist}/${release}/build.xml" file="build-dist.xml"/>
 
-        <copy todir="${dist}/${release}/${lib}">
-            <fileset dir="${charts}">
-                <include name="${ant.project.name}-charts.jar"/>
-            </fileset>
-            <fileset dir="${core}">
-                <include name="${ant.project.name}-core.jar"/>
-            </fileset>
-            <fileset dir="${web}">
-                <include name="${ant.project.name}-web.jar"/>
-                <include name="${ant.project.name}-web.server.jar"/>
-            </fileset>
-            <fileset dir="${wtk}">
-                <include name="${ant.project.name}-wtk.jar"/>
-                <include name="${ant.project.name}-wtk.terra.jar"/>
-            </fileset>
-            <fileset dir="${tools}">
-                <include name="${ant.project.name}-tools.jar"/>
-            </fileset>
-        </copy>
+        <copy file="${charts}/${ant.project.name}-charts.jar"
+            tofile="${dist}/${release}/${lib}/${ant.project.name}-charts-incubating.jar"/>
+        <copy file="${core}/${ant.project.name}-core.jar"
+            tofile="${dist}/${release}/${lib}/${ant.project.name}-core-incubating.jar"/>
+        <copy file="${web}/${ant.project.name}-web.jar"
+            tofile="${dist}/${release}/${lib}/${ant.project.name}-web-incubating.jar"/>
+        <copy file="${web}/${ant.project.name}-web.server.jar"
+            tofile="${dist}/${release}/${lib}/${ant.project.name}-web-incubating.server.jar"/>
+        <copy file="${wtk}/${ant.project.name}-wtk.jar"
+            tofile="${dist}/${release}/${lib}/${ant.project.name}-wtk-incubating.jar"/>
+        <copy file="${wtk}/${ant.project.name}-wtk.terra.jar"
+            tofile="${dist}/${release}/${lib}/${ant.project.name}-wtk-incubating.terra.jar"/>
+        <copy file="${tools}/${ant.project.name}-tools.jar"
+            tofile="${dist}/${release}/${lib}/${ant.project.name}-tools-incubating.jar"/>
 
         <copy todir="${dist}/${release}/${doc}">
             <fileset dir="${doc}"/>
