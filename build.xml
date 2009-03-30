@@ -35,8 +35,8 @@
     <target name="build" description="Compiles all packages"
         depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
 
-    <target name="jars"
-        depends="charts-jar, charts-test-jar, core-jar, core-test-jar, web-jar, web-test-jar, wtk-jar, wtk-test-jar, demos-jar, tutorials-jar, tools-jar"/>
+    <target name="package"
+        depends="charts-package, charts-test-package, core-package, core-test-package, web-package, web-test-package, wtk-package, wtk-test-package, demos-package, tutorials-package, tools-package"/>
 
     <target name="clean" description="Removes all build artifacts"
         depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, demos-clean, tutorials-clean, tools-clean">
@@ -93,7 +93,7 @@
         </javac>
     </target>
 
-    <target name="charts-jar" depends="charts">
+    <target name="charts-package" depends="charts">
         <jar jarfile="${charts}/${ant.project.name}-charts.jar">
             <manifest>
                 <attribute name="Sealed" value="true"/>
@@ -132,7 +132,7 @@
         </javac>
     </target>
 
-    <target name="charts-test-jar" depends="charts-test">
+    <target name="charts-test-package" depends="charts-test">
         <jar jarfile="${chartstest}/${ant.project.name}-charts.test.jar">
             <fileset dir="${chartstest}/${bin}"/>
             <fileset dir="${chartstest}/${src}">
@@ -161,7 +161,7 @@
         </javac>
     </target>
 
-    <target name="core-jar" depends="core">
+    <target name="core-package" depends="core">
         <jar jarfile="${core}/${ant.project.name}-core.jar">
             <manifest>
                 <attribute name="Sealed" value="true"/>
@@ -198,7 +198,7 @@
         </javac>
     </target>
 
-    <target name="core-test-jar" depends="core-test">
+    <target name="core-test-package" depends="core-test">
         <jar jarfile="${coretest}/${ant.project.name}-core.test.jar">
             <fileset dir="${coretest}/${bin}"/>
             <fileset dir="${coretest}/${src}">
@@ -231,7 +231,7 @@
         </javac>
     </target>
 
-    <target name="web-jar" depends="web">
+    <target name="web-package" depends="web">
         <jar jarfile="${web}/${ant.project.name}-web.jar">
             <manifest>
                 <attribute name="Sealed" value="true"/>
@@ -287,7 +287,7 @@
         </javac>
     </target>
 
-    <target name="web-test-jar" depends="web-test">
+    <target name="web-test-package" depends="web-test">
         <jar jarfile="${webtest}/${ant.project.name}-web.test.jar">
             <fileset dir="${webtest}/${bin}" excludes="pivot/web/test/server/**"/>
             <fileset dir="${webtest}/${src}">
@@ -298,7 +298,7 @@
         </jar>
     </target>
 
-    <target name="web-test-war" depends="core-jar, web-jar, wtk-jar, web-test-jar">
+    <target name="web-test-war" depends="core-package, web-package, wtk-package, web-test-package">
         <copy todir="${webtest}/www/${lib}">
             <fileset dir="${core}" includes="${ant.project.name}-core.jar"/>
             <fileset dir="${web}" includes="${ant.project.name}-web.jar"/>
@@ -354,7 +354,7 @@
         </javac>
     </target>
 
-    <target name="wtk-jar" depends="wtk">
+    <target name="wtk-package" depends="wtk">
         <jar jarfile="${wtk}/${ant.project.name}-wtk.jar">
             <manifest>
                 <attribute name="Sealed" value="true"/>
@@ -427,7 +427,7 @@
         </javac>
     </target>
 
-    <target name="wtk-test-jar" depends="wtk-test">
+    <target name="wtk-test-package" depends="wtk-test">
         <jar jarfile="${wtktest}/${ant.project.name}-wtk.test.jar">
             <fileset dir="${wtktest}/${bin}"/>
             <fileset dir="${wtktest}/${src}">
@@ -462,7 +462,7 @@
         </javac>
     </target>
 
-    <target name="demos-jar" depends="demos">
+    <target name="demos-package" depends="demos">
         <jar jarfile="${demos}/${ant.project.name}-demos.jar">
             <manifest>
                 <attribute name="Sealed" value="true"/>
@@ -501,7 +501,7 @@
         </javac>
     </target>
 
-    <target name="tutorials-jar" depends="tutorials">
+    <target name="tutorials-package" depends="tutorials">
         <jar jarfile="${tutorials}/${ant.project.name}-tutorials.jar">
             <manifest>
                 <attribute name="Sealed" value="true"/>
@@ -553,7 +553,7 @@
         </javac>
     </target>
 
-    <target name="tools-jar" depends="tools">
+    <target name="tools-package" depends="tools">
         <jar jarfile="${tools}/${ant.project.name}-tools.jar">
             <manifest>
                 <attribute name="Sealed" value="true"/>
@@ -574,7 +574,7 @@
 
     <!-- Package all binaries and source -->
     <target name="dist" description="Generates release artifacts"
-        depends="trim-whitespace, clean, jars, doc">
+        depends="trim-whitespace, clean, package, doc">
         <property name="release" value="apache-${ant.project.name}-${version}-incubating"/>
 
         <mkdir dir="${dist}/${release}/${doc}"/>
@@ -644,7 +644,7 @@
 
     <!-- Generate deployment files for online demos and tutorials -->
     <target name="deploy" description="Generates deployment files for online demos and tutorials"
-        depends="jars">
+        depends="package">
         <delete dir="${deploy}"/>
         <mkdir dir="${deploy}"/>
 
