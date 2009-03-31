@@ -6,6 +6,8 @@ Dependencies
 
 * CLASSPATH must contain the following entries:
 
+  * junit.jar (version 4), available from http://www.junit.org
+
   * jcommon-1.0.12.jar and jfreechart-1.0.9.jar, available from
     http://www.jfree.org
 
