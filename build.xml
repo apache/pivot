@@ -594,8 +594,6 @@
             </fileset>
         </copy>
 
-        <copy file="build-dist.xml" tofile="${dist}/${release}/build.xml" />
-
         <!-- Copy lib -->
         <copy file="${charts}/${ant.project.name}-charts.jar"
             tofile="${dist}/${release}/${lib}/${ant.project.name}-charts-incubating.jar"/>
@@ -619,11 +617,19 @@
 
         <!-- Copr src -->
         <copy todir="${dist}/${release}/${src}">
-            <fileset dir="${charts}/${src}"/>
-            <fileset dir="${core}/${src}"/>
-            <fileset dir="${web}/${src}"/>
-            <fileset dir="${wtk}/${src}"/>
-            <fileset dir="${tools}/${src}"/>
+            <fileset dir=".">
+                <include name="build.*"/>
+                <include name="*.jar"/>
+                <include name="*/src/**"/>
+                <include name="*/lib/**"/>
+                <exclude name=".*"/>
+
+                <!-- Exclude specific demos -->
+                <exclude name="demos/src/pivot/demos/amf/**"/>
+                <exclude name="demos/lib/flex*"/>
+                <exclude name="demos/src/pivot/demos/google/**"/>
+                <exclude name="demos/lib/gdata*"/>
+            </fileset>
         </copy>
 
         <!-- Create the .zip archive -->
