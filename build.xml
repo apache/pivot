@@ -194,6 +194,7 @@
             <compilerarg value="-Xlint"/>
             <classpath>
                 <pathelement location="${core}/${bin}"/>
+                <pathelement location="junit.jar"/>
             </classpath>
         </javac>
     </target>
