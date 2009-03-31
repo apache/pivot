@@ -4,23 +4,22 @@ Dependencies
 
 * JDK 1.5 or greater
 
-* CLASSPATH must contain the following entries:
 
-  * junit.jar (version 4), available from http://www.junit.org
+Building Pivot (using Ant: http://ant.apache.org/)
+==================================================
 
-  * jcommon-1.0.12.jar and jfreechart-1.0.9.jar, available from
-    http://www.jfree.org
+* To compile all Pivot source files into binary class files:
 
-  * plugin.jar, availble from the installed JDK
+  $ cd src
+  $ ant
 
-  * servlet-api.jar (version 2.4), availble from http://java.sun.com/javaee
+* To regenerate the JAR files in the lib folder:
 
-  * stax-1.2.0.jar, available from http://stax.codehaus.org
-    (this is only needed if compiling with a JDK 1.5 compiler)
+  $ rm -rf lib
+  $ cd src
+  $ ant -Dfolder.lib=../lib package
 
+* To generate Javadoc
 
-Building Pivot
-==============
-
-Execute Ant (http://ant.apache.org/) from the current directory. This will
-create a "bin" directory containing the Pivot binaries.
+  $ cd src
+  $ ant -Dfolder.doc=<path> doc
