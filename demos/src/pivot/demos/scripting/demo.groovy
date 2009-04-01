@@ -19,13 +19,21 @@ import pivot.wtk.*
 
 foo = "ABCDE"
 
-public class MyButtonPressListener implements ButtonPressListener {
+public class MyButtonPressListener1 implements ButtonPressListener {
     public void buttonPressed(Button button) {
         Alert.alert("You clicked me!", button.getWindow())
     }
 }
 
-buttonPressListener = new MyButtonPressListener()
+buttonPressListener1 = new MyButtonPressListener1()
+
+public class MyButtonPressListener2 implements ButtonPressListener {
+    public void buttonPressed(Button button) {
+        System.out.println("[Groovy] A button was clicked.");
+    }
+}
+
+buttonPressListener2 = new MyButtonPressListener2()
 
 listData = []
 listData << "One"
