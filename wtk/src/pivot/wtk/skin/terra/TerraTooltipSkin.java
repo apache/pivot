@@ -34,6 +34,7 @@ import pivot.wtk.Tooltip;
 import pivot.wtk.TooltipListener;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
+import pivot.wtk.effects.FadeTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.WindowSkin;

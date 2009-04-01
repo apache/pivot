@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk.skin.terra;
+package pivot.wtk.effects;
 
 import pivot.wtk.Component;
-import pivot.wtk.effects.FadeDecorator;
-import pivot.wtk.effects.Transition;
-import pivot.wtk.effects.TransitionListener;
 
 /**
  * Fade transition class.

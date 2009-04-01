@@ -38,6 +38,7 @@ import pivot.wtk.Bounds;
 import pivot.wtk.Theme;
 import pivot.wtk.Window;
 import pivot.wtk.WindowStateListener;
+import pivot.wtk.effects.FadeTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.ListButtonSkin;
@@ -159,7 +160,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
         listViewPopup.setContent(listViewBorder);
     }
 
-    @SuppressWarnings("unchecked")
     public int getPreferredWidth(int height) {
         ListButton listButton = (ListButton)getComponent();
         List<?> listData = listButton.getListData();

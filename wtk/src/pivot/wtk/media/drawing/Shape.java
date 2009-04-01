@@ -90,11 +90,14 @@ public abstract class Shape implements Visual {
         return null;
     }
 
-    public AffineTransform getTransform() {
-        // TODO
-        return null;
-    }
-
+    /**
+     * TODO Subclasses should override this method to perform an inverse
+     * transformation and map to the untransformed coordinate space.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public abstract boolean contains(int x, int y);
 
     public Paint getFill() {
@@ -179,5 +182,10 @@ public abstract class Shape implements Visual {
 
     public void setTranslateY(double translateY) {
         this.translateY = translateY;
+    }
+
+    public AffineTransform getTransform() {
+        // TODO
+        return null;
     }
 }

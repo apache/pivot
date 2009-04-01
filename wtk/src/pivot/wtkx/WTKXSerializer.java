@@ -142,6 +142,10 @@ public class WTKXSerializer implements Serializer<Object> {
 
     public Object readObject(String resourceName) throws IOException,
         SerializationException {
+        if (resourceName == null) {
+            throw new IllegalArgumentException("resourceName is null.");
+        }
+
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL location = classLoader.getResource(resourceName);
 
@@ -154,6 +158,10 @@ public class WTKXSerializer implements Serializer<Object> {
     }
 
     public Object readObject(URL location) throws IOException, SerializationException {
+        if (location == null) {
+            throw new IllegalArgumentException("location is null.");
+        }
+
         this.location = location;
         return readObject(new BufferedInputStream(location.openStream()));
     }
@@ -161,6 +169,10 @@ public class WTKXSerializer implements Serializer<Object> {
     @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
+        if (inputStream == null) {
+            throw new IllegalArgumentException("inputStream is null.");
+        }
+
         Object object = null;
 
         // Clear any previous named objects and include serializers
