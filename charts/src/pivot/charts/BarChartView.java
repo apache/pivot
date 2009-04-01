@@ -16,8 +16,6 @@
  */
 package pivot.charts;
 
-import pivot.charts.skin.BarChartViewSkin;
-
 /**
  * Presents chart data using a bar plot.
  *
@@ -25,6 +23,6 @@ import pivot.charts.skin.BarChartViewSkin;
  */
 public class BarChartView extends ChartView {
     public BarChartView() {
-        setSkin(new BarChartViewSkin());
+        installChartSkin(BarChartView.class);
     }
 }

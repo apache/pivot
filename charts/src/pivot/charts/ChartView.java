@@ -16,6 +16,10 @@
  */
 package pivot.charts;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Comparator;
 
 import pivot.collections.ArrayList;
@@ -372,6 +376,67 @@ public abstract class ChartView extends Component {
     private ChartViewSeriesListenerList chartViewSeriesListeners = new ChartViewSeriesListenerList();
 
     public static final String DEFAULT_SERIES_NAME_KEY = "name";
+    public static final String PROVIDER_PROPERTY_NAME = "pivot.charts.Provider";
+
+    private static Provider provider = null;
+
+    static {
+        // Load the chart provider; first look for a system property
+        String providerClassName = System.getProperty(PROVIDER_PROPERTY_NAME);
+
+        // Next look for a service descriptor on the classpath
+        if (providerClassName == null) {
+            String serviceName = "META-INF/services/" + PROVIDER_PROPERTY_NAME;
+
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            InputStream serviceInputStream = classLoader.getResourceAsStream(serviceName);
+
+            if (serviceInputStream != null) {
+                try {
+                    BufferedReader reader = null;
+                    try {
+                        reader = new BufferedReader(new InputStreamReader(serviceInputStream, "UTF-8"));
+                        providerClassName = reader.readLine();
+                    } finally {
+                        if (reader != null) {
+                            reader.close();
+                        }
+                    }
+                } catch(IOException exception) {
+                    // No-op
+                }
+            }
+        }
+
+        // Try to load the provider class
+        Class<?> providerClass = null;
+
+        if (providerClassName != null) {
+            try {
+                providerClass = Class.forName(providerClassName);
+            } catch(ClassNotFoundException exception) {
+                // The specified class could not be found
+            }
+
+            if (providerClass != null
+                && !Provider.class.isAssignableFrom(providerClass)) {
+                // The specified class does not implement the Provider interface
+                providerClass = null;
+            }
+        }
+
+        if (providerClass == null) {
+            throw new ProviderNotFoundException();
+        }
+
+        try {
+            provider = (Provider)providerClass.newInstance();
+        } catch(InstantiationException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch(IllegalAccessException exception) {
+            throw new IllegalArgumentException(exception);
+        }
+    }
 
     public ChartView() {
         this(DEFAULT_SERIES_NAME_KEY, new ArrayList<Object>());
@@ -382,6 +447,23 @@ public abstract class ChartView extends Component {
         setTitle(title);
         setChartData(chartData);
         setShowLegend(showLegend);
+    }
+
+    @Override
+    protected void installSkin(Class<? extends Component> componentClass) {
+        throw new UnsupportedOperationException();
+    }
+
+    protected void installChartSkin(Class<? extends ChartView> chartViewClass) {
+        Class<? extends pivot.wtk.Skin> skinClass = provider.getSkinClass(chartViewClass);
+
+        try {
+            setSkin(skinClass.newInstance());
+        } catch(InstantiationException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch(IllegalAccessException exception) {
+            throw new IllegalArgumentException(exception);
+        }
     }
 
     public CategorySequence getCategories() {
