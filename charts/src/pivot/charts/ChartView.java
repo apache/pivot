@@ -381,8 +381,15 @@ public abstract class ChartView extends Component {
     private static Provider provider = null;
 
     static {
-        // Load the chart provider; first look for a system property
-        String providerClassName = System.getProperty(PROVIDER_PROPERTY_NAME);
+        // Load the chart provider
+        String providerClassName = null;
+
+        // First look for a system property
+        try {
+            providerClassName = System.getProperty(PROVIDER_PROPERTY_NAME);
+        } catch(SecurityException exception) {
+            // No-op
+        }
 
         // Next look for a service descriptor on the classpath
         if (providerClassName == null) {
