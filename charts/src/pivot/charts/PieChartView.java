@@ -16,8 +16,6 @@
  */
 package pivot.charts;
 
-import pivot.charts.skin.PieChartViewSkin;
-
 /**
  * Presents chart data using a pie plot.
  *
@@ -25,6 +23,6 @@ import pivot.charts.skin.PieChartViewSkin;
  */
 public class PieChartView extends ChartView {
     public PieChartView() {
-        setSkin(new PieChartViewSkin());
+        installChartSkin(PieChartView.class);
     }
 }

@@ -16,8 +16,6 @@
  */
 package pivot.charts;
 
-import pivot.charts.skin.HighLowChartViewSkin;
-
 /**
  * Presents chart data using "open/high/low/close" plot.
  *
@@ -25,6 +23,6 @@ import pivot.charts.skin.HighLowChartViewSkin;
  */
 public class HighLowChartView extends ChartView {
     public HighLowChartView() {
-        setSkin(new HighLowChartViewSkin());
+        installChartSkin(HighLowChartView.class);
     }
 }
