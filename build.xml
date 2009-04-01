@@ -5,6 +5,7 @@
     <property name="folder.bin" value="ant-bin"/>
     <property name="folder.lib" value="lib"/>
     <property name="folder.dist" value="dist"/>
+    <property name="folder.install" value="install"/>
     <property name="folder.deploy" value="deploy"/>
     <property name="folder.doc" value="doc"/>
 
@@ -21,6 +22,7 @@
     <!-- Dynamic properties -->
     <tstamp/>
     <property file="build.properties"/>
+    <property name="folder.release" value="apache-${ant.project.name}-${version}"/>
 
     <target name="build" description="Compiles all packages"
         depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
@@ -33,11 +35,12 @@
         <delete dir="${folder.dist}"/>
         <delete dir="${folder.deploy}"/>
         <delete dir="${folder.doc}"/>
+        <delete dir="${folder.install}"/>
         <delete dir="${folder.lib}"/>
     </target>
 
     <!-- Javadoc -->
-    <target name="doc" description="Generates API documentation for all packages">
+    <target name="doc" description="Generates API documentation in ${folder.doc}">
         <javadoc packagenames="pivot.*" destdir="${folder.doc}" author="true" version="true" use="true">
             <classpath>
                 <fileset dir="charts/lib" includes="**/*.jar"/>
@@ -600,66 +603,18 @@
         <delete file="${folder.lib}/${ant.project.name}-tools.jar"/>
     </target>
 
-    <!-- Package all binaries and source -->
-    <target name="dist" description="Generates release artifacts"
-        depends="trim-whitespace, clean, package, doc">
-        <property name="folder.release" value="apache-${ant.project.name}-${version}"/>
-
-        <mkdir dir="${folder.dist}/${folder.release}/${folder.doc}"/>
-        <mkdir dir="${folder.dist}/${folder.release}/${folder.lib}"/>
-
-        <!-- Binary release -->
-        <copy todir="${folder.dist}/${folder.release}">
-            <fileset dir=".">
-                <include name="DISCLAIMER"/>
-                <include name="LICENSE"/>
-                <include name="NOTICE"/>
-                <include name="README"/>
-                <include name="RELEASE-NOTES"/>
-            </fileset>
-        </copy>
-
-        <copy file="${folder.lib}/${ant.project.name}-charts.jar"
-            tofile="${folder.dist}/${folder.release}/${folder.lib}/${ant.project.name}-charts-incubating.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-core.jar"
-            tofile="${folder.dist}/${folder.release}/${folder.lib}/${ant.project.name}-core-incubating.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-web.jar"
-            tofile="${folder.dist}/${folder.release}/${folder.lib}/${ant.project.name}-web-incubating.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-web.server.jar"
-            tofile="${folder.dist}/${folder.release}/${folder.lib}/${ant.project.name}-web-incubating.server.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-wtk.jar"
-            tofile="${folder.dist}/${folder.release}/${folder.lib}/${ant.project.name}-wtk-incubating.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-wtk.terra.jar"
-            tofile="${folder.dist}/${folder.release}/${folder.lib}/${ant.project.name}-wtk-incubating.terra.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-tools.jar"
-            tofile="${folder.dist}/${folder.release}/${folder.lib}/${ant.project.name}-tools-incubating.jar"/>
-
-        <copy todir="${folder.dist}/${folder.release}/${folder.doc}">
-            <fileset dir="${folder.doc}"/>
-        </copy>
-
-        <zip destfile="${folder.dist}/${folder.release}.zip" level="9">
-            <fileset dir="${folder.dist}" includes="${folder.release}/**"/>
-        </zip>
-        <checksum file="${folder.dist}/${folder.release}.zip" algorithm="md5"/>
-        <checksum file="${folder.dist}/${folder.release}.zip" algorithm="sha"/>
-
-        <tar destfile="${folder.dist}/${folder.release}.tar" longfile="gnu">
-            <fileset dir="${folder.dist}" includes="${folder.release}/**"/>
-        </tar>
-        <gzip src="${folder.dist}/${folder.release}.tar" destfile="${folder.dist}/${folder.release}.tar.gz"/>
-        <delete file="${folder.dist}/${folder.release}.tar"/>
-        <checksum file="${folder.dist}/${folder.release}.tar.gz" algorithm="md5"/>
-        <checksum file="${folder.dist}/${folder.release}.tar.gz" algorithm="sha"/>
-
-        <!-- Source release -->
+    <!-- Package source distribution -->
+    <target name="dist" description="Generates source release in ${folder.dist}"
+        depends="trim-whitespace">
         <mkdir dir="${folder.dist}/${folder.release}-src"/>
+
+        <!-- Copy the source files to the release folder -->
         <copy todir="${folder.dist}/${folder.release}-src">
             <fileset dir=".">
                 <include name="**/*"/>
 
-                <!-- Exclude hidden files and folders -->
-                <exclude name="**/.*/**"/>
+                <!-- Exclude Subversion files and folders -->
+                <exclude name="**/.svn/**"/>
 
                 <!-- Exclude folders containing compilation artifacts -->
                 <exclude name="**/${folder.bin}/**"/>
@@ -689,12 +644,14 @@
             </fileset>
         </copy>
 
+        <!-- Create .zip archive -->
         <zip destfile="${folder.dist}/${folder.release}-src.zip" level="9">
             <fileset dir="${folder.dist}" includes="${folder.release}-src/**"/>
         </zip>
         <checksum file="${folder.dist}/${folder.release}-src.zip" algorithm="md5"/>
         <checksum file="${folder.dist}/${folder.release}-src.zip" algorithm="sha"/>
 
+        <!-- Create .tar.gz archive -->
         <tar destfile="${folder.dist}/${folder.release}-src.tar" longfile="gnu">
             <fileset dir="${folder.dist}" includes="${folder.release}-src/**"/>
         </tar>
@@ -704,8 +661,63 @@
         <checksum file="${folder.dist}/${folder.release}-src.tar.gz" algorithm="sha"/>
     </target>
 
+    <!-- Package binary distribution -->
+    <target name="install" description="Generates binary release in ${folder.install}"
+        depends="clean, package, doc">
+        <mkdir dir="${folder.install}/${folder.release}/${folder.doc}"/>
+        <mkdir dir="${folder.install}/${folder.release}/${folder.lib}"/>
+
+        <!-- Copy base files to the install folder -->
+        <copy todir="${folder.install}/${folder.release}">
+            <fileset dir=".">
+                <include name="DISCLAIMER"/>
+                <include name="LICENSE"/>
+                <include name="NOTICE"/>
+                <include name="README"/>
+                <include name="RELEASE-NOTES"/>
+            </fileset>
+        </copy>
+
+        <!-- Copy release binaries -->
+        <copy file="${folder.lib}/${ant.project.name}-charts.jar"
+            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-charts-incubating.jar"/>
+        <copy file="${folder.lib}/${ant.project.name}-core.jar"
+            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-core-incubating.jar"/>
+        <copy file="${folder.lib}/${ant.project.name}-web.jar"
+            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-web-incubating.jar"/>
+        <copy file="${folder.lib}/${ant.project.name}-web.server.jar"
+            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-web-incubating.server.jar"/>
+        <copy file="${folder.lib}/${ant.project.name}-wtk.jar"
+            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-wtk-incubating.jar"/>
+        <copy file="${folder.lib}/${ant.project.name}-wtk.terra.jar"
+            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-wtk-incubating.terra.jar"/>
+        <copy file="${folder.lib}/${ant.project.name}-tools.jar"
+            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-tools-incubating.jar"/>
+
+        <!-- Copy documentation -->
+        <copy todir="${folder.install}/${folder.release}/${folder.doc}">
+            <fileset dir="${folder.doc}"/>
+        </copy>
+
+        <!-- Create .zip archive -->
+        <zip destfile="${folder.install}/${folder.release}.zip" level="9">
+            <fileset dir="${folder.install}" includes="${folder.release}/**"/>
+        </zip>
+        <checksum file="${folder.install}/${folder.release}.zip" algorithm="md5"/>
+        <checksum file="${folder.install}/${folder.release}.zip" algorithm="sha"/>
+
+        <!-- Create .tar.gz archive -->
+        <tar destfile="${folder.install}/${folder.release}.tar" longfile="gnu">
+            <fileset dir="${folder.install}" includes="${folder.release}/**"/>
+        </tar>
+        <gzip src="${folder.install}/${folder.release}.tar" destfile="${folder.install}/${folder.release}.tar.gz"/>
+        <delete file="${folder.install}/${folder.release}.tar"/>
+        <checksum file="${folder.install}/${folder.release}.tar.gz" algorithm="md5"/>
+        <checksum file="${folder.install}/${folder.release}.tar.gz" algorithm="sha"/>
+    </target>
+
     <!-- Generate deployment files for online demos and tutorials -->
-    <target name="deploy" description="Generates deployment files for online demos and tutorials"
+    <target name="deploy"
         depends="package">
         <delete dir="${folder.deploy}"/>
         <mkdir dir="${folder.deploy}"/>
