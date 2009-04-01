@@ -725,6 +725,8 @@
         <!-- Demos -->
         <copy file="${folder.lib}/${ant.project.name}-charts.test.jar" todir="${folder.deploy}"/>
         <copy file="${folder.lib}/${ant.project.name}-demos.jar" todir="${folder.deploy}"/>
+        <copy file="demos/src/pivot/demos/dom/dom_test.html" todir="${folder.deploy}"/>
+        <copy file="demos/src/pivot/demos/dom/im_client.html" todir="${folder.deploy}"/>
         <signjar jar="${folder.deploy}/${ant.project.name}-demos.jar" signedjar="${folder.deploy}/${ant.project.name}-demos.signed.jar"
             keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
 
