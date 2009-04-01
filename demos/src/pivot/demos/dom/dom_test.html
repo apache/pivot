@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>DOM Test</title>
+<script>
+// This function will be called by Pivot
+function sayHello(helloText) {
+    alert(helloText);
+}
+
+// This function will call into Pivot
+function onHelloButtonClick() {
+    var domTestApplet = document.getElementById("domTestApplet");
+    domTestApplet.getApplication().sayHello("Hello from JavaScript!");
+}
+</script>
+</head>
+
+<body>
+<table>
+<tr>
+<td style="text-align:center; border:solid 1px #999999">
+<applet id="domTestApplet"
+    code="pivot.wtk.BrowserApplicationContext$HostApplet"
+    archive="pivot-core.jar,pivot-wtk.jar,pivot-wtk.terra.jar,pivot-demos.jar,stax-api-1.0.jar,stax-1.2.0.jar"
+    width="380" height="240">
+    <param name="applicationClassName" value="pivot.demos.dom.DOMTest">
+    <param name="image" value="">
+</applet>
+</td>
+</tr>
+<tr>
+<td style="text-align:center; border:solid 1px #999999">
+<button onclick="onHelloButtonClick()">Say Hello</button>
+</td>
+</tr>
+</table>
+</body>
+</html>

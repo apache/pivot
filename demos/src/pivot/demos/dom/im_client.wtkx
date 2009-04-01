@@ -34,7 +34,7 @@ limitations under the License.
                 </sections>
             </Form>
 
-            <Border title="Messages" styles="{padding:4}">
+            <Border title="Messages" styles="{padding:4, color:10}">
                 <content>
                     <Label wtkx:id="messageLabel" styles="{horizontalAlignment:'center', verticalAlignment:'center', wrapText:true}"/>
                 </content>
