@@ -92,8 +92,30 @@
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
-            <fileset dir="charts/${folder.bin}"/>
+            <fileset dir="charts/${folder.bin}">
+                <exclude name="**/pivot/charts/skin/**"/>
+            </fileset>
+
             <fileset dir="charts/src">
+                <exclude name="**/pivot/charts/skin/**"/>
+                <exclude name="**/META-INF/**"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+
+        <jar jarfile="${folder.lib}/${ant.project.name}-charts.jfree.jar">
+            <manifest>
+                <attribute name="Sealed" value="true"/>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="charts/${folder.bin}">
+                <include name="**/pivot/charts/skin/**"/>
+            </fileset>
+            <fileset dir="charts/src">
+                <include name="**/pivot/charts/skin/**"/>
+                <include name="**/META-INF/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
@@ -621,7 +643,7 @@
             <fileset dir="${folder.doc}"/>
         </copy>
 
-        <!-- Copr src -->
+        <!-- Copy src -->
         <copy todir="${folder.dist}/${folder.release}/${folder.src}">
             <fileset dir=".">
                 <include name="build.*"/>
@@ -631,10 +653,14 @@
                 <exclude name=".*"/>
 
                 <!-- Exclude specific demos -->
+                <exclude name="charts/src/pivot/charts/skin/**"/>
+                <exclude name="charts/src/META-INF/**"/>
+                <exclude name="charts/lib/jfreechart*.jar"/>
+                <exclude name="charts/lib/jcommon*.jar"/>
                 <exclude name="demos/src/pivot/demos/amf/**"/>
-                <exclude name="demos/lib/flex*"/>
+                <exclude name="demos/lib/flex*.jar"/>
                 <exclude name="demos/src/pivot/demos/google/**"/>
-                <exclude name="demos/lib/gdata*"/>
+                <exclude name="demos/lib/gdata*.jar"/>
             </fileset>
         </copy>
 
@@ -664,6 +690,10 @@
         <!-- Platform -->
         <copy file="${folder.lib}/${ant.project.name}-charts.jar" todir="${folder.deploy}"/>
         <signjar jar="${folder.deploy}/${ant.project.name}-charts.jar" signedjar="${folder.deploy}/${ant.project.name}-charts.signed.jar"
+            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
+
+        <copy file="${folder.lib}/${ant.project.name}-charts.jfree.jar" todir="${folder.deploy}"/>
+        <signjar jar="${folder.deploy}/${ant.project.name}-charts.jfree.jar" signedjar="${folder.deploy}/${ant.project.name}-charts.jfree.signed.jar"
             keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
 
         <copy file="${folder.lib}/${ant.project.name}-core.jar" todir="${folder.deploy}"/>
