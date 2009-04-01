@@ -56,7 +56,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ======================================================================
 
-pivot.wtkx.WTKXSerializer is built and runs using The Streaming API for
+pivot.wtkx.WTKXSerializer is built using The Streaming API for
 XML (StAX), which is licensed under The Apache License 2.0.
 
 http://stax.codehaus.org/
@@ -71,7 +71,7 @@ http://sourceforge.net/projects/junit/
 
 ======================================================================
 
-Pivot's DOM interaction is built and runs against Sun's LiveConnect API,
+Pivot's DOM interaction is built using Sun's LiveConnect API,
 which is licensed under the BSD license:
 
 http://developers.sun.com/license/berkeley_license.html
