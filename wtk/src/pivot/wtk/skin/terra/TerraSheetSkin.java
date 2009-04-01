@@ -32,6 +32,7 @@ import pivot.wtk.SheetStateListener;
 import pivot.wtk.Theme;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
+import pivot.wtk.effects.SlideTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.WindowSkin;

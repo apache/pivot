@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk.skin.terra;
+package pivot.wtk.effects;
 
 import pivot.wtk.Component;
 import pivot.wtk.Container;
-import pivot.wtk.effects.Transition;
-import pivot.wtk.effects.TransitionListener;
-import pivot.wtk.effects.TranslationDecorator;
 import pivot.wtk.effects.easing.Easing;
 import pivot.wtk.effects.easing.Quadratic;
 
