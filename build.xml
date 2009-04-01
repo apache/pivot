@@ -93,12 +93,11 @@
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="charts/${folder.bin}">
-                <exclude name="**/pivot/charts/skin/**"/>
+                <exclude name="pivot/charts/skin/**"/>
             </fileset>
-
             <fileset dir="charts/src">
-                <exclude name="**/pivot/charts/skin/**"/>
-                <exclude name="**/META-INF/**"/>
+                <exclude name="pivot/charts/skin/**"/>
+                <exclude name="META-INF/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
@@ -111,11 +110,11 @@
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="charts/${folder.bin}">
-                <include name="**/pivot/charts/skin/**"/>
+                <include name="pivot/charts/skin/**"/>
             </fileset>
             <fileset dir="charts/src">
-                <include name="**/pivot/charts/skin/**"/>
-                <include name="**/META-INF/**"/>
+                <include name="pivot/charts/skin/**"/>
+                <include name="META-INF/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
@@ -604,16 +603,14 @@
     <!-- Package all binaries and source -->
     <target name="dist" description="Generates release artifacts"
         depends="trim-whitespace, clean, package, doc">
-        <property name="folder.release" value="apache-${ant.project.name}-${version}-incubating"/>
+        <property name="folder.release" value="apache-${ant.project.name}-${version}"/>
 
         <mkdir dir="${folder.dist}/${folder.release}/${folder.doc}"/>
         <mkdir dir="${folder.dist}/${folder.release}/${folder.lib}"/>
-        <mkdir dir="${folder.dist}/${folder.release}/${folder.src}"/>
 
-        <!-- Construct the release hierarchy -->
+        <!-- Binary release -->
         <copy todir="${folder.dist}/${folder.release}">
             <fileset dir=".">
-                <include name="BUILD"/>
                 <include name="DISCLAIMER"/>
                 <include name="LICENSE"/>
                 <include name="NOTICE"/>
@@ -622,7 +619,6 @@
             </fileset>
         </copy>
 
-        <!-- Copy lib -->
         <copy file="${folder.lib}/${ant.project.name}-charts.jar"
             tofile="${folder.dist}/${folder.release}/${folder.lib}/${ant.project.name}-charts-incubating.jar"/>
         <copy file="${folder.lib}/${ant.project.name}-core.jar"
@@ -638,40 +634,16 @@
         <copy file="${folder.lib}/${ant.project.name}-tools.jar"
             tofile="${folder.dist}/${folder.release}/${folder.lib}/${ant.project.name}-tools-incubating.jar"/>
 
-        <!-- Copy doc -->
         <copy todir="${folder.dist}/${folder.release}/${folder.doc}">
             <fileset dir="${folder.doc}"/>
         </copy>
 
-        <!-- Copy src -->
-        <copy todir="${folder.dist}/${folder.release}/${folder.src}">
-            <fileset dir=".">
-                <include name="build.*"/>
-                <include name="*.jar"/>
-                <include name="*/src/**"/>
-                <include name="*/lib/**"/>
-                <exclude name=".*"/>
-
-                <!-- Exclude specific demos -->
-                <exclude name="charts/src/pivot/charts/skin/**"/>
-                <exclude name="charts/src/META-INF/**"/>
-                <exclude name="charts/lib/jfreechart*.jar"/>
-                <exclude name="charts/lib/jcommon*.jar"/>
-                <exclude name="demos/src/pivot/demos/amf/**"/>
-                <exclude name="demos/lib/flex*.jar"/>
-                <exclude name="demos/src/pivot/demos/google/**"/>
-                <exclude name="demos/lib/gdata*.jar"/>
-            </fileset>
-        </copy>
-
-        <!-- Create the .zip archive -->
         <zip destfile="${folder.dist}/${folder.release}.zip" level="9">
             <fileset dir="${folder.dist}" includes="${folder.release}/**"/>
         </zip>
         <checksum file="${folder.dist}/${folder.release}.zip" algorithm="md5"/>
         <checksum file="${folder.dist}/${folder.release}.zip" algorithm="sha"/>
 
-        <!-- Create the .tar.gz archive -->
         <tar destfile="${folder.dist}/${folder.release}.tar" longfile="gnu">
             <fileset dir="${folder.dist}" includes="${folder.release}/**"/>
         </tar>
@@ -679,6 +651,57 @@
         <delete file="${folder.dist}/${folder.release}.tar"/>
         <checksum file="${folder.dist}/${folder.release}.tar.gz" algorithm="md5"/>
         <checksum file="${folder.dist}/${folder.release}.tar.gz" algorithm="sha"/>
+
+        <!-- Source release -->
+        <mkdir dir="${folder.dist}/${folder.release}-src"/>
+        <copy todir="${folder.dist}/${folder.release}-src">
+            <fileset dir=".">
+                <include name="**/*"/>
+
+                <!-- Exclude hidden files and folders -->
+                <exclude name="**/.*/**"/>
+
+                <!-- Exclude folders containing compilation artifacts -->
+                <exclude name="**/${folder.bin}/**"/>
+                <exclude name="${folder.dist}/**"/>
+                <exclude name="${folder.doc}/**"/>
+                <exclude name="${folder.lib}/**"/>
+
+                <!-- Exclude JFree dependencies -->
+                <exclude name="charts/src/pivot/charts/skin/**"/>
+                <exclude name="charts/src/META-INF/**"/>
+                <exclude name="charts/lib/jcommon*.jar"/>
+                <exclude name="charts/lib/jfreechart*.jar"/>
+
+                <!-- Exclude Flex demo -->
+                <exclude name="demos/classes/**"/>
+                <exclude name="demos/src/pivot/demos/amf/**"/>
+                <exclude name="demos/lib/flex*.jar"/>
+
+                <!-- Exclude Google Talk demo -->
+                <exclude name="demos/src/pivot/demos/google/**"/>
+                <exclude name="demos/lib/gdata*.jar"/>
+
+                <!-- Exclude scripting engines -->
+                <exclude name="demos/lib/js*.jar"/>
+                <exclude name="demos/lib/groovy*.jar"/>
+                <exclude name="wtk-test/lib/js*.jar"/>
+            </fileset>
+        </copy>
+
+        <zip destfile="${folder.dist}/${folder.release}-src.zip" level="9">
+            <fileset dir="${folder.dist}" includes="${folder.release}-src/**"/>
+        </zip>
+        <checksum file="${folder.dist}/${folder.release}-src.zip" algorithm="md5"/>
+        <checksum file="${folder.dist}/${folder.release}-src.zip" algorithm="sha"/>
+
+        <tar destfile="${folder.dist}/${folder.release}-src.tar" longfile="gnu">
+            <fileset dir="${folder.dist}" includes="${folder.release}-src/**"/>
+        </tar>
+        <gzip src="${folder.dist}/${folder.release}-src.tar" destfile="${folder.dist}/${folder.release}-src.tar.gz"/>
+        <delete file="${folder.dist}/${folder.release}-src.tar"/>
+        <checksum file="${folder.dist}/${folder.release}-src.tar.gz" algorithm="md5"/>
+        <checksum file="${folder.dist}/${folder.release}-src.tar.gz" algorithm="sha"/>
     </target>
 
     <!-- Generate deployment files for online demos and tutorials -->
@@ -687,86 +710,39 @@
         <delete dir="${folder.deploy}"/>
         <mkdir dir="${folder.deploy}"/>
 
-        <!-- Platform -->
-        <copy file="${folder.lib}/${ant.project.name}-charts.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/${ant.project.name}-charts.jar" signedjar="${folder.deploy}/${ant.project.name}-charts.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
+        <!-- Copy JARs to deployment directory -->
+        <copy todir="${folder.deploy}">
+            <fileset dir="${folder.lib}" includes="*.jar"/>
+            <fileset dir="charts/lib" includes="*.jar"/>
+            <fileset dir="demos/lib" includes="*.jar"/>
+            <fileset dir="wtk/lib" includes="*.jar"/>
+        </copy>
 
-        <copy file="${folder.lib}/${ant.project.name}-charts.jfree.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/${ant.project.name}-charts.jfree.jar" signedjar="${folder.deploy}/${ant.project.name}-charts.jfree.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-
-        <copy file="${folder.lib}/${ant.project.name}-core.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/${ant.project.name}-core.jar" signedjar="${folder.deploy}/${ant.project.name}-core.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-
-        <copy file="${folder.lib}/${ant.project.name}-web.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/${ant.project.name}-web.jar" signedjar="${folder.deploy}/${ant.project.name}-web.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-
-        <copy file="${folder.lib}/${ant.project.name}-wtk.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/${ant.project.name}-wtk.jar" signedjar="${folder.deploy}/${ant.project.name}-wtk.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-
-        <copy file="${folder.lib}/${ant.project.name}-wtk.terra.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/${ant.project.name}-wtk.terra.jar" signedjar="${folder.deploy}/${ant.project.name}-wtk.terra.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-
-        <!-- StAX -->
-        <copy file="wtk/lib/stax-api-1.0.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/stax-api-1.0.jar" signedjar="${folder.deploy}/stax-api-1.0.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-
-        <copy file="wtk/lib/stax-1.2.0.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/stax-1.2.0.jar" signedjar="${folder.deploy}/stax-1.2.0.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-
-        <!-- JFree -->
-        <copy file="charts/lib/jcommon-1.0.12.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/jcommon-1.0.12.jar" signedjar="${folder.deploy}/jcommon-1.0.12.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-
-        <copy file="charts/lib/jfreechart-1.0.9.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/jfreechart-1.0.9.jar" signedjar="${folder.deploy}/jfreechart-1.0.9.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-
-        <!-- Google Data -->
-        <signjar jar="demos/lib/gdata-base-1.0.jar" signedjar="${folder.deploy}/gdata-base-1.0.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-        <signjar jar="demos/lib/gdata-client-1.0.jar" signedjar="${folder.deploy}/gdata-client-1.0.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-        <signjar jar="demos/lib/gdata-client-meta-1.0.jar" signedjar="${folder.deploy}/gdata-client-meta-1.0.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-        <signjar jar="demos/lib/gdata-contacts-1.0.jar" signedjar="${folder.deploy}/gdata-contacts-1.0.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-        <signjar jar="demos/lib/gdata-contacts-meta-1.0.jar" signedjar="${folder.deploy}/gdata-contacts-meta-1.0.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-        <signjar jar="demos/lib/gdata-core-1.0.jar" signedjar="${folder.deploy}/gdata-core-1.0.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-        <signjar jar="demos/lib/gdata-media-1.0.jar" signedjar="${folder.deploy}/gdata-media-1.0.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-
-        <!-- Smack -->
-        <signjar jar="demos/lib/smack.jar" signedjar="${folder.deploy}/smack.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-        <signjar jar="demos/lib/smackx.jar" signedjar="${folder.deploy}/smackx.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-
-        <!-- Demos -->
-        <copy file="${folder.lib}/${ant.project.name}-charts.test.jar" todir="${folder.deploy}"/>
-        <copy file="${folder.lib}/${ant.project.name}-demos.jar" todir="${folder.deploy}"/>
+        <!-- Copy HTML files to deployment directory -->
         <copy file="demos/src/pivot/demos/dom/dom_test.html" todir="${folder.deploy}"/>
         <copy file="demos/src/pivot/demos/dom/im_client.html" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/${ant.project.name}-demos.jar" signedjar="${folder.deploy}/${ant.project.name}-demos.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
 
-        <!-- Tutorials -->
-        <copy file="${folder.lib}/${ant.project.name}-tutorials.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/${ant.project.name}-tutorials.jar" signedjar="${folder.deploy}/${ant.project.name}-tutorials.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
-        <copy file="${folder.lib}/${ant.project.name}-stocktracker.jar" todir="${folder.deploy}"/>
-        <signjar jar="${folder.deploy}/${ant.project.name}-stocktracker.jar" signedjar="${folder.deploy}/${ant.project.name}-stocktracker.signed.jar"
-            keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"/>
+        <!-- Sign JARS -->
+        <mkdir dir="${folder.deploy}/signed"/>
+        <copy todir="${folder.deploy}/signed">
+            <fileset dir="${folder.deploy}" includes="*.jar" />
+        </copy>
+
+        <signjar keystore="${keystore.location}" storepass="${keystore.passwd}" alias="${keystore.alias}"
+            preservelastmodified="true" lazy="true">
+            <path>
+                <fileset dir="${folder.deploy}/signed" includes="*.jar" />
+            </path>
+        </signjar>
+
+        <!-- Rename signed JARs to *.signed.jar and copy to deployment directory -->
+        <copy todir="${folder.deploy}">
+            <fileset dir="${folder.deploy}/signed" includes="*.jar" />
+            <mapper type="glob" from="*.jar" to="*.signed.jar"/>
+        </copy>
+
+        <!-- Clean up -->
+        <delete dir="${folder.deploy}/signed"/>
     </target>
 
     <!-- Remove trailing white space in all source files -->
