@@ -16,21 +16,21 @@ in their associated libraries:
 Distribution JARs
 =================
 
-* Core (pivot-core.jar):
+* Core (pivot-core-incubating.jar):
   A set of common, non-UI-specific classes.
 
-* WTK (pivot-wtk.jar, pivot-wtk.terra.jar):
+* WTK (pivot-wtk-incubating.jar, pivot-wtk-incubating.terra.jar):
   Classes for user interface development, including windows, dialogs, buttons,
-  lists, text input, layout, drag and drop, XML markup, etc. 
+  lists, text input, layout, drag and drop, XML markup, etc.
 
-* Web (pivot-web.jar, pivot-web.server.jar):
+* Web (pivot-web-incubating.jar, pivot-web-incubating.server.jar):
   Classes to facilitate communication with and implementation of remote data
   services.
 
-* Charting (pivot-charts.jar):
+* Charting (pivot-charts-incubating.jar):
   Classes for adding interactive charting capabilities to Pivot applications.
 
-* Tools (pivot-tools.jar):
+* Tools (pivot-tools-incubating.jar):
   Development tools and utility applications.
 
 To begin developing with Pivot, simply include the necessary libraries on your
@@ -42,20 +42,20 @@ Dependencies
 
 Pivot requires Java 5 or greater.
 
-WTKX support in Java 5 requires StAX 1.2, available from 
-http://stax.codehaus.org.
+* WTKX support in Java 5 requires StAX 1.2, available from
+  http://stax.codehaus.org.
 
-Pivot's charting components require a compatible chart provider. An 
-implementation based on JFreeChart is available here: 
+* Pivot's charting components require a compatible chart provider. An
+  implementation based on JFreeChart is available here:
 
-http://pivot.googlecode.com/files/pivot-charts.jfree.jar
+  http://pivot.googlecode.com/files/pivot-charts.jfree.jar
 
-This provider requires JFreeChart 1.0.9 and JCommon 1.0.12, available from 
-http://www.jfree.org. Later releases may also work, but have not been tested.
+  This provider requires JFreeChart 1.0.9 and JCommon 1.0.12, available from
+  http://www.jfree.org. Later releases may also work, but have not been tested.
 
-Groovy support requires Groovy 1.5.6 or greater, available from 
-http://groovy.codehaus.org. Later releases may also work, but have not been
-tested.
+* Groovy support requires Groovy 1.5.6 or greater, available from
+  http://groovy.codehaus.org. Later releases may also work, but have not been
+  tested.
 
 
 Documentation
