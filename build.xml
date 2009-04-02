@@ -47,7 +47,8 @@
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
                 <fileset dir="web/lib" includes="**/*.jar"/>
             </classpath>
-            <packageset dir="charts/src" includes="**/*"/>
+            <packageset dir="charts/src" includes="**/*"
+                excludes="**/pivot/charts/skin/**"/>
             <packageset dir="core/src" includes="**/*"/>
             <packageset dir="web/src" includes="**/*"/>
             <packageset dir="wtk/src" includes="**/*"/>
