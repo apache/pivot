@@ -53,7 +53,7 @@ Pivot requires Java 5 or greater.
   This provider requires JFreeChart 1.0.9 and JCommon 1.0.12, available from
   http://www.jfree.org. Later releases may also work, but have not been tested.
 
-* Groovy support requires Groovy 1.5.6 or greater, available from
+* Groovy support requires Groovy 1.5.6, available from
   http://groovy.codehaus.org. Later releases may also work, but have not been
   tested.
 
