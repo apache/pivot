@@ -118,3 +118,11 @@ http://www.igniterealtime.org/projects/smack/index.jsp
 
 Pivot's servlets (pivot.web.server) are built against the J2EE servlet
 spec.
+
+======================================================================
+
+The drop shadow decorator (pivot.wtk.effects.DropShadowDecorator) uses
+code included in the Filthy Rich Clients demos, which are licensed under
+the Berkeley Software Distribution (BSD) License.
+
+https://filthyrichclients.dev.java.net/
