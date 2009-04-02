@@ -13,14 +13,14 @@ Building Pivot
 
   $ ant
 
-* To regenerate the JAR files in the lib folder:
-
-  $ ant package
-
 * To generate Javadoc
 
   $ ant doc
 
-* To generate the Pivot distribution
+* To generate the Pivot source distribution
 
   $ ant dist
+
+* To generate the Pivot binary distribution
+
+  $ ant install
