@@ -45,13 +45,13 @@ Pivot requires Java 5 or greater.
 * WTKX support in Java 5 requires StAX 1.2, available from
   http://stax.codehaus.org.
 
-* Pivot's charting components require a compatible chart provider. An
-  implementation based on JFreeChart is available here:
+* Pivot's charting components require a compatible chart provider. No such
+  provider is included in this release, but one is available here:
 
-  http://pivot.googlecode.com/files/pivot-charts.jfree.jar
+  http://pivot.googlecode.com/files/pivot-charts.jfree-1.0.jar
 
-  This provider requires JFreeChart 1.0.9 and JCommon 1.0.12, available from
-  http://www.jfree.org. Later releases may also work, but have not been tested.
+  Please note that this provider has a dependency on JFreeChart, which is
+  licensed under LGPL.
 
 * Groovy support requires Groovy 1.5.6, available from
   http://groovy.codehaus.org. Later releases may also work, but have not been
