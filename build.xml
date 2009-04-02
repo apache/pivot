@@ -94,6 +94,9 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="Apache Pivot Charts"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="charts/${folder.bin}">
@@ -111,7 +114,8 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Implementation-Version" value="${version}"/>
+                <attribute name="Implementation-Title" value="Apache Pivot JFree Chart Provider"/>
+                <attribute name="Implementation-Version" value="1.0"/>
             </manifest>
             <fileset dir="charts/${folder.bin}">
                 <include name="pivot/charts/skin/**"/>
@@ -185,6 +189,9 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="Apache Pivot Core"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="core/${folder.bin}"/>
@@ -258,6 +265,9 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="Apache Pivot Web Queries"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="web/${folder.bin}" excludes="pivot/web/server/**"/>
@@ -272,6 +282,9 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="Apache Pivot Web Queries Server"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="web/${folder.bin}" includes="pivot/web/server/*"/>
@@ -387,6 +400,9 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="Apache Pivot WTK"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="wtk/${folder.bin}">
@@ -405,6 +421,9 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="Apache Pivot WTK Terra Theme"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="wtk/${folder.bin}" includes="pivot/wtk/skin/terra/**"/>
@@ -419,6 +438,9 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="Apache Pivot WTK Obsidian Theme"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="wtk/${folder.bin}" includes="pivot/wtk/skin/obsidian/**"/>
@@ -497,6 +519,9 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="Apache Pivot Demos"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="demos/${folder.bin}"/>
@@ -537,6 +562,9 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="Apache Pivot Tutorials"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="tutorials/${folder.bin}" excludes="pivot/tutorials/stocktracker/**"/>
@@ -550,6 +578,9 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="Apache Pivot Stock Tracker Demo"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="tutorials/${folder.bin}" includes="pivot/tutorials/stocktracker/*"/>
@@ -590,6 +621,9 @@
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="Apache Pivot Tools"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="tools/${folder.bin}"/>
