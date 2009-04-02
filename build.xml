@@ -620,6 +620,7 @@
                 <exclude name="**/${folder.bin}/**"/>
                 <exclude name="${folder.dist}/**"/>
                 <exclude name="${folder.doc}/**"/>
+                <exclude name="${folder.install}/**"/>
                 <exclude name="${folder.lib}/**"/>
 
                 <!-- Exclude JFree dependencies -->
