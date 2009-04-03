@@ -16,12 +16,19 @@
  */
 package pivot.util;
 
-import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.Iterator;
 
 import pivot.collections.Dictionary;
-import pivot.serialization.SerializationException;
+import pivot.collections.HashMap;
+import pivot.collections.Map;
+import pivot.serialization.JSONSerializer;
+import pivot.util.concurrent.Dispatcher;
+import pivot.util.concurrent.Task;
+import pivot.util.concurrent.TaskExecutionException;
+import pivot.util.concurrent.TaskListener;
 
 /**
  * Provides access to application preference data. Preferences are modeled as
@@ -34,6 +41,99 @@ import pivot.serialization.SerializationException;
  * @author gbrown
  */
 public class Preferences implements Dictionary<String, Object>, Iterable<String> {
+    /**
+     * Task that loads a set of user preferences.
+     *
+     * @author gbrown
+     */
+    public static class LoadTask extends Task<Preferences> {
+        private URL url;
+
+        public LoadTask(URL url) {
+            this(url, DEFAULT_DISPATCHER);
+        }
+
+        public LoadTask(URL url, Dispatcher dispatcher) {
+            super(dispatcher);
+
+            if (url == null) {
+                throw new IllegalArgumentException();
+            }
+
+            this.url = url;
+        }
+
+        @Override
+        public Preferences execute() throws TaskExecutionException {
+            Preferences preferences = null;
+
+            try {
+                InputStream inputStream = null;
+
+                try {
+                    // TODO Load the preferences
+                } finally {
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                }
+            } catch(Exception exception) {
+                throw new TaskExecutionException(exception);
+            }
+
+            return preferences;
+        }
+    }
+
+    /**
+     * Task that saves a set of user preferences.
+     *
+     * @author gbrown
+     */
+    public static class SaveTask extends Task<Void> {
+        private URL url;
+        private Preferences preferences;
+
+        public SaveTask(Preferences preferences, URL url) {
+            this(preferences, url, DEFAULT_DISPATCHER);
+        }
+
+        public SaveTask(Preferences preferences, URL url, Dispatcher dispatcher) {
+            super(dispatcher);
+
+            if (url == null) {
+                throw new IllegalArgumentException();
+            }
+
+            this.url = url;
+            this.preferences = preferences;
+        }
+
+        @Override
+        public Void execute() throws TaskExecutionException {
+            try {
+                OutputStream outputStream = null;
+
+                try {
+                    // TODO Save the preferences
+                } finally {
+                    if (outputStream != null) {
+                        outputStream.close();
+                    }
+                }
+            } catch(Exception exception) {
+                throw new TaskExecutionException(exception);
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * Preferences listener list.
+     *
+     * @author gbrown
+     */
     private static class PreferencesListenerList extends ListenerList<PreferencesListener>
         implements PreferencesListener {
         public void valueAdded(Preferences preferences, String key) {
@@ -55,55 +155,182 @@ public class Preferences implements Dictionary<String, Object>, Iterable<String>
         }
     }
 
+    private HashMap<String, Object> preferencesMap;
     private PreferencesListenerList preferencesListeners = new PreferencesListenerList();
 
+    private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
+
     /**
-     * Creates a preferences object that provides access to the preferences for
-     * a given URL.
+     * Constructs an empty preferences object.
+     */
+    public Preferences() {
+        this(null);
+    }
+
+    /**
+     * Constructs a preferences object with a set of default values.
      *
-     * @param url
      * @param defaults
      */
-    public Preferences(URL url, Dictionary<String, Object> defaults)
-        throws IOException, SerializationException {
-        // TODO
+    public Preferences(Map<String, Object> defaults) {
+        preferencesMap = new HashMap<String, Object>(defaults);
     }
 
+    /**
+     * Retrieves the preference value for the given key.
+     *
+     * @param key
+     * The key whose value is to be returned.
+     */
     public Object get(String key) {
-        // TODO Auto-generated method stub
-        return null;
+        return JSONSerializer.get(preferencesMap, key);
     }
 
+    /**
+     * Sets the preference value of the given key, creating a new entry or
+     * replacing the existing value.
+     *
+     * @param key
+     * The key whose value is to be set.
+     *
+     * @param value
+     * The value to be associated with the given key.
+     */
     public Object put(String key, Object value) {
-        // TODO Auto-generated method stub
-        return null;
+        boolean update = JSONSerializer.containsKey(preferencesMap, key);
+        Object previousValue = JSONSerializer.put(preferencesMap, key, value);
+
+        if (update) {
+            preferencesListeners.valueUpdated(this, key, previousValue);
+        }
+        else {
+            preferencesListeners.valueAdded(this, key);
+        }
+
+        return previousValue;
     }
 
+    /**
+     * Removes a key/value pair from the map.
+     *
+     * @param key
+     * The key whose mapping is to be removed.
+     *
+     * @return
+     * The value that was removed.
+     */
     public Object remove(String key) {
-        // TODO Auto-generated method stub
-        return null;
+        Object value = null;
+
+        if (JSONSerializer.containsKey(preferencesMap, key)) {
+            value = JSONSerializer.remove(preferencesMap, key);
+            preferencesListeners.valueRemoved(this, key, value);
+        }
+
+        return value;
     }
 
+    /**
+     * Tests the existence of a preference value.
+     *
+     * @param key
+     * The key of the value whose presence is to be tested.
+     *
+     * @return
+     * <tt>true</tt> if the preference value exists; <tt>false</tt>, otherwise.
+     */
     public boolean containsKey(String key) {
-        // TODO Auto-generated method stub
-        return false;
+        return JSONSerializer.containsKey(preferencesMap, key);
     }
 
+    /**
+     * Tests the emptiness of the preferences collection.
+     *
+     * @return
+     * <tt>true</tt> if the dictionary contains no keys; <tt>false</tt>,
+     * otherwise.
+     */
     public boolean isEmpty() {
-        // TODO Auto-generated method stub
-        return false;
+        return preferencesMap.isEmpty();
     }
 
-    public void save() throws IOException, SerializationException {
-        // TODO
-    }
-
+    /**
+     * Returns an iterator on the preference keys.
+     */
     public Iterator<String> iterator() {
-        // TODO
-        return null;
+        return new ImmutableIterator<String>(preferencesMap.iterator());
     }
 
+    /**
+     * Returns the preferences listener list.
+     */
     public ListenerList<PreferencesListener> getPreferencesListeners() {
         return preferencesListeners;
+    }
+
+    /**
+     * Loads a set of user preferences.
+     *
+     * @param url
+     */
+    public static Preferences load(URL url) {
+        LoadTask loadTask = new LoadTask(url);
+
+        Preferences preferences = null;
+        try {
+            preferences = loadTask.execute();
+        } catch(TaskExecutionException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        return preferences;
+    }
+
+    /**
+     * Loads a set of user preferences asynchronously.
+     *
+     * @param url
+     * @param loadListener
+     *
+     * @return
+     * The load task that was created.
+     */
+    public static Preferences.LoadTask load(URL url, TaskListener<Preferences> loadListener) {
+        LoadTask loadTask = new LoadTask(url);
+        loadTask.execute(loadListener);
+        return loadTask;
+    }
+
+    /**
+     * Saves a set of user preferences.
+     *
+     * @param preferences
+     * @param url
+     */
+    public static void save(Preferences preferences, URL url) {
+        SaveTask saveTask = new SaveTask(preferences, url);
+
+        try {
+            saveTask.execute();
+        } catch(TaskExecutionException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    /**
+     * Saves a set of user preferences asynchronously.
+     *
+     * @param preferences
+     * @param url
+     * @param saveListener
+     *
+     * @return
+     * The save task that was created.
+     */
+    public static Preferences.SaveTask save(Preferences preferences, URL url,
+        TaskListener<Void> saveListener) {
+        SaveTask saveTask = new SaveTask(preferences, url);
+        saveTask.execute(saveListener);
+        return saveTask;
     }
 }

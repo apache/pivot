@@ -44,6 +44,9 @@ public interface Dictionary<K, V> {
      *
      * @param value
      * The value to be associated with the given key.
+     *
+     * @return
+     * The value previously associated with the key.
      */
     public V put(K key, V value);
 

@@ -143,7 +143,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     public Object get(String key) {
-        return JSONSerializer.getValue(resourceMap, key);
+        return JSONSerializer.get(resourceMap, key);
     }
 
     public Object put(String key, Object value) {

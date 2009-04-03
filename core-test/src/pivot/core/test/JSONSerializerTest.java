@@ -59,10 +59,11 @@ public class JSONSerializerTest {
     };
 
     public static void main(String[] args) {
-        test0();
+        // test0();
         // test1();
         // test2();
-    	test3();
+    	// test3();
+        test4();
     }
 
     public static void test0() {
@@ -163,7 +164,7 @@ public class JSONSerializerTest {
         JSONSerializer jsonSerializer = new JSONSerializer();
 
         try {
-            jsonSerializer.writeObject(JSONSerializer.getValue(JSONSerializer.parseList(list), path),
+            jsonSerializer.writeObject(JSONSerializer.get(JSONSerializer.parseList(list), path),
                 System.out);
             System.out.println();
         } catch(Exception exception) {
@@ -175,11 +176,35 @@ public class JSONSerializerTest {
         JSONSerializer jsonSerializer = new JSONSerializer();
 
         try {
-            jsonSerializer.writeObject(JSONSerializer.getValue(JSONSerializer.parseMap(map), path),
+            jsonSerializer.writeObject(JSONSerializer.get(JSONSerializer.parseMap(map), path),
                 System.out);
             System.out.println();
         } catch(Exception exception) {
             System.out.println(exception);
         }
+    }
+
+    public static void test4() {
+        Object root = JSONSerializer.parse("{a:{b:{c:'hello', d:'world'}, e:[1, 2, 3], f:false}, h:null}");
+        testGet(root, "a");
+        testGet(root, "a.b");
+        testGet(root, "a.b.c");
+        testGet(root, "a.b.d");
+        testGet(root, "a['e']");
+        testGet(root, "a['e'][1]");
+        testGet(root, "a['f']");
+        testGet(root, "a['h']");
+
+        JSONSerializer.put(root, "a['h']", 100);
+        testGet(root, "a['h']");
+
+        JSONSerializer.remove(root, "a['h']");
+
+        System.out.println("a['h'] exists: " + JSONSerializer.containsKey(root, "a['h']"));
+    }
+
+    private static void testGet(Object root, String path) {
+        Object value = JSONSerializer.get(root, path);
+        System.out.println(path + ": " + value);
     }
 }

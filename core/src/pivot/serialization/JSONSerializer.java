@@ -29,7 +29,6 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.collections.List;
 import pivot.collections.Map;
@@ -579,10 +578,311 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @return
      * The value at the given path.
+     *
+     * @deprecated
+     * This method is deprecated; use {@link #get(Object, String)} instead.
+     */
+    @Deprecated
+    public static Object getValue(Object root, String path) {
+        return get(root, path);
+    }
+
+    /**
+     * Returns the value at the given path.
+     *
+     * @param root
+     * The root object; must be an instance of {@link pivot.collections.Map}
+     * or {@link pivot.collections.List}.
+     *
+     * @param path
+     * The path to the value, in JavaScript path notation.
+     *
+     * @return
+     * The value at the given path.
+     */
+    public static Object get(Object root, String path) {
+        if (root == null) {
+            throw new IllegalArgumentException("root is null.");
+        }
+
+        if (path == null) {
+            throw new IllegalArgumentException("path is null.");
+        }
+
+        return get(root, split(path));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Object get(Object root, Sequence<String> keys) {
+        Object value = root;
+
+        for (int i = 0, n = keys.getLength(); i < n; i++) {
+            String key = keys.get(i);
+
+            if (value instanceof Map) {
+                Map<String, Object> map = (Map<String, Object>)value;
+                value = map.get(key);
+            } else if (value instanceof Sequence) {
+                 List<Object> list = (List<Object>)value;
+                 value = list.get(Integer.parseInt(key));
+            } else {
+                throw new IllegalArgumentException("Invalid path.");
+            }
+        }
+
+        return value;
+    }
+
+    /**
+     * Returns the value at the given path as a string.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
+    public static String getString(Object root, String path) {
+        return (String)get(root, path);
+    }
+
+    /**
+     * Returns the value at the given path as a number.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
+    public static Number getNumber(Object root, String path) {
+        return (Number)get(root, path);
+    }
+
+    /**
+     * Returns the value at the given path as a short.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
+    public static Short getShort(Object root, String path) {
+        return (Short)get(root, path);
+    }
+
+    /**
+     * Returns the value at the given path as an integer.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
+    public static Integer getInteger(Object root, String path) {
+        return (Integer)get(root, path);
+    }
+
+    /**
+     * Returns the value at the given path as a long.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
+    public static Long getLong(Object root, String path) {
+        return (Long)get(root, path);
+    }
+
+    /**
+     * Returns the value at the given path as a float.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
+    public static Float getFloat(Object root, String path) {
+        return (Float)get(root, path);
+    }
+
+    /**
+     * Returns the value at the given path as a double.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
+    public static Double getDouble(Object root, String path) {
+        return (Double)get(root, path);
+    }
+
+    /**
+     * Returns the value at the given path as a boolean.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
+    public static Boolean getBoolean(Object root, String path) {
+        return (Boolean)get(root, path);
+    }
+
+    /**
+     * Returns the value at the given path as a list.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
+     */
+    public static List<?> getList(Object root, String path) {
+        return (List<?>)get(root, path);
+    }
+
+    /**
+     * Returns the value at the given path as a map.
+     *
+     * @param root
+     * @param path
+     *
+     * @see #getValue(Object, String)
      */
     @SuppressWarnings("unchecked")
-    public static Object getValue(Object root, String path) {
-        Object value = root;
+    public static Map<String, ?> getMap(Object root, String path) {
+        return (Map<String, ?>)get(root, path);
+    }
+
+    /**
+     * Sets the value at the given path.
+     *
+     * @param root
+     * @param path
+     * @param value
+     *
+     * @return
+     * The value previously associated with the path.
+     */
+    @SuppressWarnings("unchecked")
+    public static Object put(Object root, String path, Object value) {
+        if (root == null) {
+            throw new IllegalArgumentException("root is null.");
+        }
+
+        if (path == null) {
+            throw new IllegalArgumentException("path is null.");
+        }
+
+        Object previousValue;
+
+        Sequence<String> keys = split(path);
+        if (keys.getLength() == 0) {
+            throw new IllegalArgumentException("Bad path.");
+        }
+
+        String key = keys.remove(keys.getLength() - 1, 1).get(0);
+
+        Object parent = get(root, keys);
+        if (parent instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>)parent;
+            previousValue = map.put(key, value);
+        } else if (parent instanceof Sequence) {
+             List<Object> list = (List<Object>)parent;
+             previousValue = list.update(Integer.parseInt(key), value);
+        } else {
+            throw new IllegalArgumentException("Invalid path.");
+        }
+
+        return previousValue;
+    }
+
+    /**
+     * Removes the value at the given path.
+     *
+     * @param root
+     * @param path
+     *
+     * @return
+     * The value that was removed.
+     */
+    @SuppressWarnings("unchecked")
+    public static Object remove(Object root, String path) {
+        if (root == null) {
+            throw new IllegalArgumentException("root is null.");
+        }
+
+        if (path == null) {
+            throw new IllegalArgumentException("path is null.");
+        }
+
+        Object previousValue;
+
+        Sequence<String> keys = split(path);
+        if (keys.getLength() == 0) {
+            throw new IllegalArgumentException("Bad path.");
+        }
+
+        String key = keys.remove(keys.getLength() - 1, 1).get(0);
+
+        Object parent = get(root, keys);
+        if (parent instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>)parent;
+            previousValue = map.remove(key);
+        } else if (parent instanceof Sequence) {
+             List<Object> list = (List<Object>)parent;
+             previousValue = list.remove(Integer.parseInt(key), 1).get(0);
+        } else {
+            throw new IllegalArgumentException("Invalid path.");
+        }
+
+        return previousValue;
+    }
+
+    /**
+     * Tests the existence of a path in a given object.
+     *
+     * @param root
+     * @param path
+     *
+     * @return
+     * <tt>true</tt> if the path exists; <tt>false</tt>, otherwise.
+     */
+    @SuppressWarnings("unchecked")
+    public static boolean containsKey(Object root, String path) {
+        if (root == null) {
+            throw new IllegalArgumentException("root is null.");
+        }
+
+        if (path == null) {
+            throw new IllegalArgumentException("path is null.");
+        }
+
+        boolean containsKey;
+
+        Sequence<String> keys = split(path);
+        if (keys.getLength() == 0) {
+            throw new IllegalArgumentException("Bad path.");
+        }
+
+        String key = keys.remove(keys.getLength() - 1, 1).get(0);
+
+        Object parent = get(root, keys);
+        if (parent instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>)parent;
+            containsKey = map.containsKey(key);
+        } else if (parent instanceof Sequence) {
+             List<Object> list = (List<Object>)parent;
+             containsKey = (list.getLength() > Integer.parseInt(key));
+        } else {
+            throw new IllegalArgumentException("Invalid path.");
+        }
+
+        return containsKey;
+    }
+
+    private static Sequence<String> split(String path) {
+        ArrayList<String> keys = new ArrayList<String>();
 
         int i = 0;
         int n = path.length();
@@ -590,7 +890,6 @@ public class JSONSerializer implements Serializer<Object> {
         while (i < n) {
             char c = path.charAt(i++);
 
-            boolean keyed = true;
             StringBuilder identifierBuilder = new StringBuilder();
 
             boolean bracketed = (c == '[');
@@ -607,8 +906,6 @@ public class JSONSerializer implements Serializer<Object> {
                     quote = c;
                     c = path.charAt(i++);
                 }
-
-                keyed = quoted;
 
                 while (i <= n
                     && bracketed) {
@@ -652,8 +949,6 @@ public class JSONSerializer implements Serializer<Object> {
                     }
                 }
             } else {
-                keyed = true;
-
                 while(i <= n
                     && c != '.'
                     && c != '[') {
@@ -684,199 +979,162 @@ public class JSONSerializer implements Serializer<Object> {
                 throw new IllegalArgumentException("Missing identifier.");
             }
 
-            String identifier = identifierBuilder.toString();
-
-            if (keyed) {
-                if (!(value instanceof Dictionary<?, ?>)){
-                    throw new IllegalArgumentException("Invalid path.");
-                }
-
-                String key = identifier;
-                Dictionary<String, Object> dictionary = (Dictionary<String, Object>)value;
-                value = dictionary.get(key);
-            } else {
-                if (!(value instanceof Sequence<?>)){
-                    throw new IllegalArgumentException("Invalid path.");
-                }
-
-                int index = Integer.parseInt(identifier);
-                Sequence<Object> sequence = (Sequence<Object>)value;
-                value = sequence.get(index);
-            }
+            keys.add(identifierBuilder.toString());
         }
 
-        return value;
+        return keys;
     }
 
     /**
-     * Returns the value at the given path as a string.
+     * Converts a JSON value to a Java object.
      *
-     * @param root
-     * @param path
-     *
-     * @see #getValue(Object, String)
-     */
-    public static String getString(Object root, String path) {
-        return (String)getValue(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a number.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #getValue(Object, String)
-     */
-    public static Number getNumber(Object root, String path) {
-        return (Number)getValue(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a short.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #getValue(Object, String)
-     */
-    public static Short getShort(Object root, String path) {
-        return (Short)getValue(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as an integer.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #getValue(Object, String)
-     */
-    public static Integer getInteger(Object root, String path) {
-        return (Integer)getValue(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a long.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #getValue(Object, String)
-     */
-    public static Long getLong(Object root, String path) {
-        return (Long)getValue(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a float.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #getValue(Object, String)
-     */
-    public static Float getFloat(Object root, String path) {
-        return (Float)getValue(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a double.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #getValue(Object, String)
-     */
-    public static Double getDouble(Object root, String path) {
-        return (Double)getValue(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a boolean.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #getValue(Object, String)
-     */
-    public static Boolean getBoolean(Object root, String path) {
-        return (Boolean)getValue(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a list.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #getValue(Object, String)
-     */
-    public static List<?> getList(Object root, String path) {
-        return (List<?>)getValue(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a map.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #getValue(Object, String)
-     */
-    @SuppressWarnings("unchecked")
-    public static Map<String, ?> getMap(Object root, String path) {
-        return (Map<String, ?>)getValue(root, path);
-    }
-
-    /**
-     * Parses a JSON-formatted array value into a list.
-     *
-     * @param string
-     * A string containing a JSON array (e.g. "[1, 2, 3]").
+     * @param json
+     * The JSON value.
      *
      * @return
-     * A {@link List} instance containing the parsed JSON data.
+     * The parsed object.
      */
-    public static List<?> parseList(String string) {
-        List<?> list = null;
+    public static Object parse(String json) {
         JSONSerializer jsonSerializer = new JSONSerializer();
 
-        Object object = null;
+        Object object;
         try {
-            object = jsonSerializer.readObject(new StringReader(string));
+            object = jsonSerializer.readObject(new StringReader(json));
         } catch(Exception exception) {
             throw new RuntimeException(exception);
         }
 
-        list = (List<?>)object;
-
-        return list;
+        return object;
     }
 
     /**
-     * Parses a JSON-formatted object value into a map.
+     * Converts a JSON value to a string.
      *
-     * @param string
-     * A string containing a JSON object (e.g. "{a:1, b:2, c:3}").
+     * @param json
+     * The JSON value.
      *
      * @return
-     * A {@link Map} instance containing the parsed JSON data.
+     * The parsed string.
+     */
+    public static String parseString(String json) {
+        return (String)parse(json);
+    }
+
+    /**
+     * Converts a JSON value to a number.
+     *
+     * @param json
+     * The JSON value.
+     *
+     * @return
+     * The parsed number.
+     */
+    public static Number parseNumber(String json) {
+        return (Number)parse(json);
+    }
+
+    /**
+     * Converts a JSON value to a short.
+     *
+     * @param json
+     * The JSON value.
+     *
+     * @return
+     * The parsed short.
+     */
+    public static Short parseShort(String json) {
+        return (Short)parse(json);
+    }
+
+    /**
+     * Converts a JSON value to a integer.
+     *
+     * @param json
+     * The JSON value.
+     *
+     * @return
+     * The parsed integer.
+     */
+    public static Integer parseInteger(String json) {
+        return (Integer)parse(json);
+    }
+
+    /**
+     * Converts a JSON value to a long.
+     *
+     * @param json
+     * The JSON value.
+     *
+     * @return
+     * The parsed number.
+     */
+    public static Long parseLong(String json) {
+        return (Long)parse(json);
+    }
+
+    /**
+     * Converts a JSON value to a float.
+     *
+     * @param json
+     * The JSON value.
+     *
+     * @return
+     * The parsed float.
+     */
+    public static Float parseFloat(String json) {
+        return (Float)parse(json);
+    }
+
+    /**
+     * Converts a JSON value to a double.
+     *
+     * @param json
+     * The JSON value.
+     *
+     * @return
+     * The parsed double.
+     */
+    public static Double parseDouble(String json) {
+        return (Double)parse(json);
+    }
+
+    /**
+     * Converts a JSON value to a boolean.
+     *
+     * @param json
+     * The JSON value.
+     *
+     * @return
+     * The parsed boolean.
+     */
+    public static Boolean parseBoolean(String json) {
+        return (Boolean)parse(json);
+    }
+
+    /**
+     * Converts a JSON value to a list.
+     *
+     * @param json
+     * The JSON value.
+     *
+     * @return
+     * The parsed list.
+     */
+    public static List<?> parseList(String json) {
+        return (List<?>)parse(json);
+    }
+
+    /**
+     * Converts a JSON value to a map.
+     *
+     * @param json
+     * The JSON value.
+     *
+     * @return
+     * The parsed map.
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, ?> parseMap(String string) {
-        Map<String, ?> map = null;
-        JSONSerializer jsonSerializer = new JSONSerializer();
-
-        Object object = null;
-        try {
-            object = jsonSerializer.readObject(new StringReader(string));
-        } catch(Exception exception) {
-            throw new RuntimeException(exception);
-        }
-
-        map = (Map<String, ?>)object;
-
-        return map;
+    public static Map<String, ?> parseMap(String json) {
+        return (Map<String, ?>)parse(json);
     }
 }
