@@ -429,6 +429,7 @@ limitations under the License.
             <fileset dir="wtk/src">
                 <exclude name="pivot/wtk/skin/terra/**"/>
                 <exclude name="pivot/wtk/skin/obsidian/**"/>
+                <exclude name="META-INF/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
@@ -446,6 +447,7 @@ limitations under the License.
             <fileset dir="wtk/${folder.bin}" includes="pivot/wtk/skin/terra/**"/>
             <fileset dir="wtk/src">
                 <include name="pivot/wtk/skin/terra/**"/>
+                <include name="META-INF/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>

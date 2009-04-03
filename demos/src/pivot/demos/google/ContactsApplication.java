@@ -139,6 +139,7 @@ public class ContactsApplication implements Application {
 		// Create the XMPP connection
 		ConnectionConfiguration connectionConfiguration =
 			new ConnectionConfiguration("talk.google.com", 5222, "gmail.com");
+		connectionConfiguration.setSASLAuthenticationEnabled(false);
 		xmppConnection = new XMPPConnection(connectionConfiguration);
 
 		// Load the main contacts UI
