@@ -665,8 +665,8 @@ limitations under the License.
             <fileset dir=".">
                 <include name="**/*"/>
 
-                <!-- Exclude Subversion files and folders -->
-                <exclude name="**/.svn/**"/>
+                <!-- Exclude hidden files and folders -->
+                <exclude name="**/.*/**"/>
 
                 <!-- Exclude folders containing compilation artifacts -->
                 <exclude name="**/${folder.bin}/**"/>
