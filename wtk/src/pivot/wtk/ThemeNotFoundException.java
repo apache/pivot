@@ -14,15 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.charts;
-
-import pivot.wtk.Skin;
+package pivot.wtk;
 
 /**
- * Provides a mapping from concrete chart component classes to chart skins.
+ * Thrown when a suitable theme cannot be located.
  *
  * @author gbrown
  */
-public interface Provider {
-    public abstract Class<? extends Skin> getSkinClass(Class<? extends ChartView> chartViewClass);
+public class ThemeNotFoundException extends RuntimeException {
+    private static final long serialVersionUID = 0;
+
+    public ThemeNotFoundException() {
+        super("A theme could not be located.");
+    }
 }

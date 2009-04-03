@@ -26,7 +26,6 @@ import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Orientation;
 import pivot.wtk.RadioButton;
-import pivot.wtk.Theme;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
@@ -47,13 +46,6 @@ public class FlowPanes implements Application, ButtonStateListener {
     private Window window = null;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        String themeClassName = properties.get("themeClassName");
-
-        if (themeClassName != null) {
-            Class<?> themeClass = Class.forName(themeClassName);
-            Theme.setTheme((Theme)themeClass.newInstance());
-        }
-
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content =
             (Component)wtkxSerializer.readObject("pivot/tutorials/layout/flowpanes.wtkx");

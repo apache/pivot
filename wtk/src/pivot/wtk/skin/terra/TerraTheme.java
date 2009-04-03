@@ -135,7 +135,6 @@ public final class TerraTheme extends Theme {
      * @param location
      * The location of the JSON file that defines the theme's font and colors.
      */
-    @SuppressWarnings("unchecked")
     public TerraTheme(URL location) {
         if (location == null) {
             throw new IllegalArgumentException("location is null.");
@@ -198,6 +197,11 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TerraSplitPaneSkin.SplitterShadow.class, TerraSplitPaneSkin.SplitterShadowSkin.class);
         componentSkinMap.put(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
 
+        loadScheme(location);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void loadScheme(URL location) {
         try {
             InputStream inputStream = location.openStream();
 

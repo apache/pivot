@@ -1084,22 +1084,10 @@ public abstract class ApplicationContext {
 
     private static Timer timer = null;
 
-    private static final String DEFAULT_THEME_CLASS_NAME = "pivot.wtk.skin.terra.TerraTheme";
-
     protected ApplicationContext() {
         // Create the display host and display
         displayHost = new DisplayHost();
         display = new Display(displayHost);
-
-        try {
-            // Load and instantiate the default theme, if possible
-            Class<?> themeClass = Class.forName(DEFAULT_THEME_CLASS_NAME);
-            Theme.setTheme((Theme)themeClass.newInstance());
-        } catch (Exception exception) {
-            // No-op; assume that a custom theme will be installed later
-            // by the caller
-            System.err.println("Warning: Unable to load default theme.");
-        }
     }
 
     protected DisplayHost getDisplayHost() {

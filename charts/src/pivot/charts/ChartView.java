@@ -16,10 +16,6 @@
  */
 package pivot.charts;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Comparator;
 
 import pivot.collections.ArrayList;
@@ -27,6 +23,7 @@ import pivot.collections.List;
 import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
+import pivot.util.Service;
 import pivot.wtk.Component;
 
 /**
@@ -376,72 +373,15 @@ public abstract class ChartView extends Component {
     private ChartViewSeriesListenerList chartViewSeriesListeners = new ChartViewSeriesListenerList();
 
     public static final String DEFAULT_SERIES_NAME_KEY = "name";
-    public static final String PROVIDER_PROPERTY_NAME = "pivot.charts.Provider";
+    public static final String PROVIDER_NAME = "pivot.charts.Provider";
 
     private static Provider provider = null;
 
     static {
-        // Load the chart provider
-        String providerClassName = null;
+        provider = (Provider)Service.getProvider(PROVIDER_NAME);
 
-        // First look for a system property
-        try {
-            providerClassName = System.getProperty(PROVIDER_PROPERTY_NAME);
-        } catch(SecurityException exception) {
-            // No-op
-        }
-
-        // Next look for a service descriptor on the classpath
-        if (providerClassName == null) {
-            String serviceName = "META-INF/services/" + PROVIDER_PROPERTY_NAME;
-
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            InputStream serviceInputStream = classLoader.getResourceAsStream(serviceName);
-
-            if (serviceInputStream != null) {
-                try {
-                    BufferedReader reader = null;
-                    try {
-                        reader = new BufferedReader(new InputStreamReader(serviceInputStream, "UTF-8"));
-                        providerClassName = reader.readLine();
-                    } finally {
-                        if (reader != null) {
-                            reader.close();
-                        }
-                    }
-                } catch(IOException exception) {
-                    // No-op
-                }
-            }
-        }
-
-        // Try to load the provider class
-        Class<?> providerClass = null;
-
-        if (providerClassName != null) {
-            try {
-                providerClass = Class.forName(providerClassName);
-            } catch(ClassNotFoundException exception) {
-                // The specified class could not be found
-            }
-
-            if (providerClass != null
-                && !Provider.class.isAssignableFrom(providerClass)) {
-                // The specified class does not implement the Provider interface
-                providerClass = null;
-            }
-        }
-
-        if (providerClass == null) {
+        if (provider == null) {
             throw new ProviderNotFoundException();
-        }
-
-        try {
-            provider = (Provider)providerClass.newInstance();
-        } catch(InstantiationException exception) {
-            throw new IllegalArgumentException(exception);
-        } catch(IllegalAccessException exception) {
-            throw new IllegalArgumentException(exception);
         }
     }
 

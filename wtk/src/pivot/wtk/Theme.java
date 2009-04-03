@@ -21,6 +21,7 @@ import java.lang.reflect.Modifier;
 
 import pivot.collections.ArrayList;
 import pivot.collections.HashMap;
+import pivot.util.Service;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.BorderSkin;
 import pivot.wtk.skin.CardPaneSkin;
@@ -50,12 +51,18 @@ public abstract class Theme {
     protected HashMap<Class<? extends Component>, Class<? extends Skin>> componentSkinMap =
         new HashMap<Class<? extends Component>, Class<? extends Skin>>();
 
+    public static final String PROVIDER_NAME = "pivot.wtk.Theme";
+
     private static Theme theme = null;
-    private static final Package DEFAULT_SKIN_PACKAGE;
 
     static {
-        DEFAULT_SKIN_PACKAGE = Package.getPackage("pivot.wtk.skin");
-        assert (DEFAULT_SKIN_PACKAGE != null) : "Default skin package not found.";
+        Theme theme = (Theme)Service.getProvider(PROVIDER_NAME);
+
+        if (theme == null) {
+            throw new ThemeNotFoundException();
+        }
+
+        setTheme(theme);
     }
 
     public Theme() {

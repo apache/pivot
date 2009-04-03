@@ -59,6 +59,7 @@ import pivot.wtk.Spinner;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TextArea;
+import pivot.wtk.Theme;
 import pivot.wtk.Visual;
 import pivot.wtk.Window;
 import pivot.wtk.content.CalendarDateSpinnerData;
@@ -68,6 +69,7 @@ import pivot.wtk.content.TableViewHeaderData;
 import pivot.wtk.effects.ReflectionDecorator;
 import pivot.wtk.effects.WatermarkDecorator;
 import pivot.wtk.media.Image;
+import pivot.wtk.skin.terra.TerraTheme;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.PlainTextSerializer;
 import pivot.wtkx.WTKXSerializer;
@@ -91,7 +93,9 @@ public class Demo implements Application {
     private Window window = null;
 
     public void startup(final Display display, Dictionary<String, String> properties) throws Exception {
-        // pivot.wtk.Theme.setTheme(new pivot.wtk.skin.terra.TerraTheme("test"));
+        TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
+        URL schemeLocation = TerraTheme.class.getResource("TerraTheme_default.json");
+        terraTheme.loadScheme(schemeLocation);
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
