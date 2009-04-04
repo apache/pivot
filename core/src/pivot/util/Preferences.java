@@ -129,34 +129,7 @@ public class Preferences implements Dictionary<String, Object>, Iterable<String>
         }
     }
 
-    /**
-     * Preferences listener list.
-     *
-     * @author gbrown
-     */
-    private static class PreferencesListenerList extends ListenerList<PreferencesListener>
-        implements PreferencesListener {
-        public void valueAdded(Preferences preferences, String key) {
-            for (PreferencesListener listener : this) {
-                listener.valueAdded(preferences, key);
-            }
-        }
-
-        public void valueUpdated(Preferences preferences, String key, Object previousValue) {
-            for (PreferencesListener listener : this) {
-                listener.valueUpdated(preferences, key, previousValue);
-            }
-        }
-
-        public void valueRemoved(Preferences preferences, String key, Object value) {
-            for (PreferencesListener listener : this) {
-                listener.valueRemoved(preferences, key, value);
-            }
-        }
-    }
-
     private HashMap<String, Object> preferencesMap;
-    private PreferencesListenerList preferencesListeners = new PreferencesListenerList();
 
     private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
 
@@ -197,17 +170,7 @@ public class Preferences implements Dictionary<String, Object>, Iterable<String>
      * The value to be associated with the given key.
      */
     public Object put(String key, Object value) {
-        boolean update = JSONSerializer.containsKey(preferencesMap, key);
-        Object previousValue = JSONSerializer.put(preferencesMap, key, value);
-
-        if (update) {
-            preferencesListeners.valueUpdated(this, key, previousValue);
-        }
-        else {
-            preferencesListeners.valueAdded(this, key);
-        }
-
-        return previousValue;
+        return JSONSerializer.put(preferencesMap, key, value);
     }
 
     /**
@@ -220,14 +183,7 @@ public class Preferences implements Dictionary<String, Object>, Iterable<String>
      * The value that was removed.
      */
     public Object remove(String key) {
-        Object value = null;
-
-        if (JSONSerializer.containsKey(preferencesMap, key)) {
-            value = JSONSerializer.remove(preferencesMap, key);
-            preferencesListeners.valueRemoved(this, key, value);
-        }
-
-        return value;
+        return JSONSerializer.remove(preferencesMap, key);
     }
 
     /**
@@ -259,13 +215,6 @@ public class Preferences implements Dictionary<String, Object>, Iterable<String>
      */
     public Iterator<String> iterator() {
         return new ImmutableIterator<String>(preferencesMap.iterator());
-    }
-
-    /**
-     * Returns the preferences listener list.
-     */
-    public ListenerList<PreferencesListener> getPreferencesListeners() {
-        return preferencesListeners;
     }
 
     /**
