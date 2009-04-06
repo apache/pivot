@@ -439,7 +439,7 @@ public class TableView extends Component {
      *
      * gbrown
      */
-    public interface RowEditor {
+    public interface RowEditor extends Editor {
         public void edit(TableView tableView, int rowIndex, int columnIndex);
     }
 

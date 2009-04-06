@@ -872,7 +872,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         TableView tableView = (TableView)getComponent();
         if (editIndex != -1
-            && count == 1) {
+            && count == 2) {
             TableView.RowEditor rowEditor = tableView.getRowEditor();
 
             if (rowEditor != null) {
