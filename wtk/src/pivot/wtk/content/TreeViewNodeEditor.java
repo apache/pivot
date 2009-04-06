@@ -16,6 +16,8 @@
  */
 package pivot.wtk.content;
 
+import java.util.Comparator;
+
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
@@ -280,17 +282,33 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         String text = textInput.getText();
         nodeData.setText(text);
 
-        // Notifying the parent will close the popup
+        // Get a reference to the parent of the node data
         int n = path.getLength();
+        List<TreeNode> parentData;
+
         if (n == 1) {
-            // Base case
-            int index = path.get(0);
-            ((List<TreeNode>)treeData).update(index, nodeData);
+            parentData = (List<TreeNode>)treeData;
         } else {
             Sequence<Integer> parentPath = new ArrayList<Integer>(path, 0, n - 1);
-            TreeBranch parentData = (TreeBranch)Sequence.Tree.get(treeData, parentPath);
-            int index = path.get(n - 1);
-            parentData.update(index, nodeData);
+            parentData = (List<TreeNode>)Sequence.Tree.get(treeData, parentPath);
+        }
+
+        // Save local reference to members variables before they get cleared
+        TreeView treeView = this.treeView;
+        Sequence<Integer> path = this.path;
+
+        // Notifying the parent will close the popup
+        Comparator<TreeNode> comparator = parentData.getComparator();
+        parentData.setComparator(null);
+        parentData.update(path.get(n - 1), nodeData);
+        parentData.setComparator(comparator);
+
+        if (comparator != null) {
+            // Re-select the node, and make sure it's visible
+            Sequence<Integer> newPath = new ArrayList<Integer>(path, 0, n - 1);
+            newPath.add(parentData.indexOf(nodeData));
+            treeView.setSelectedPath(newPath);
+            treeView.scrollAreaToVisible(treeView.getNodeBounds(newPath));
         }
     }
 

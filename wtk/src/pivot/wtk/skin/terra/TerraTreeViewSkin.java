@@ -209,7 +209,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      */
     protected static class BranchInfo extends NodeInfo {
         // Core skin metadata
-        public Sequence<NodeInfo> children = null;
+        protected Sequence<NodeInfo> children = null;
 
         public static final byte EXPANDED_MASK = 1 << 5;
 
@@ -1821,7 +1821,17 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public void nodesSorted(TreeView treeView, Sequence<Integer> path) {
-        // TODO
+        BranchInfo branchInfo = (BranchInfo)getNodeInfoAt(path);
+
+        // Remove the child nodes from the visible nodes list
+        removeVisibleNodes(branchInfo, 0, -1);
+
+        // Re-load the branch's children to get the correct sort order
+        branchInfo.children = null;
+        branchInfo.loadChildren();
+
+        // Add the child nodes back to the visible nodes list
+        addVisibleNodes(branchInfo);
     }
 
     // TreeViewNodeStateListener methods
