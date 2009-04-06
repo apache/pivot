@@ -16,6 +16,8 @@
  */
 package pivot.wtk.content;
 
+import java.util.Comparator;
+
 import pivot.collections.List;
 import pivot.util.Vote;
 import pivot.wtk.Bounds;
@@ -254,8 +256,21 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         String text = textInput.getText();
         listItem.setText(text);
 
+        // Save local reference to members variables before they get cleared
+        ListView listView = this.listView;
+
         // Notifying the parent will close the popup
+        Comparator<Object> comparator = listData.getComparator();
+        listData.setComparator(null);
         listData.update(index, listItem);
+        listData.setComparator(comparator);
+
+        if (comparator != null) {
+            // Re-select the item, and make sure it's visible
+            int newIndex = listData.indexOf(listItem);
+            listView.setSelectedIndex(newIndex);
+            listView.scrollAreaToVisible(listView.getItemBounds(newIndex));
+        }
     }
 
     public void cancel() {
