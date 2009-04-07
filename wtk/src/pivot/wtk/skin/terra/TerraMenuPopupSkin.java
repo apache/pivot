@@ -156,7 +156,8 @@ public class TerraMenuPopupSkin extends WindowSkin
             MenuPopup menuPopup = (MenuPopup)getComponent();
             Component affiliate = menuPopup.getAffiliate();
             if (affiliate != null
-                && affiliate.isFocusable()) {
+                && affiliate.isFocusable()
+                && affiliate.isShowing()) {
                 affiliate.requestFocus();
             }
 

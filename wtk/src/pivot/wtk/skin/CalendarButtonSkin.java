@@ -73,7 +73,9 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             calendarButton.setSelectedDate(date);
 
             calendarPopup.close();
-            getComponent().requestFocus();
+            if (calendarButton.isShowing()) {
+                calendarButton.requestFocus();
+            }
 
             return true;
         }
@@ -85,16 +87,19 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         }
 
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            CalendarButton calendarButton = (CalendarButton)getComponent();
+
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
                     calendarPopup.close();
-                    getComponent().requestFocus();
+                    if (calendarButton.isShowing()) {
+                        calendarButton.requestFocus();
+                    }
                     break;
                 }
 
                 case Keyboard.KeyCode.TAB:
                 case Keyboard.KeyCode.ENTER: {
-                    CalendarButton calendarButton = (CalendarButton)getComponent();
 
                     CalendarDate date = calendar.getSelectedDate();
 
@@ -107,7 +112,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
                         Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                             Direction.BACKWARD : Direction.FORWARD;
                         calendarButton.transferFocus(direction);
-                    } else {
+                    } else if (calendarButton.isShowing()) {
                         calendarButton.requestFocus();
                     }
 

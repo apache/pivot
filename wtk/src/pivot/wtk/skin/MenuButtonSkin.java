@@ -70,7 +70,8 @@ public abstract class MenuButtonSkin extends ButtonSkin
 
             MenuButton menuButton = (MenuButton)getComponent();
 
-            if (menuButton.isFocusable()) {
+            if (menuButton.isFocusable()
+                && menuButton.isShowing()) {
                 menuButton.requestFocus();
             }
 

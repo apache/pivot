@@ -84,16 +84,19 @@ public abstract class ListButtonSkin extends ButtonSkin
         }
 
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            ListButton listButton = (ListButton)getComponent();
+
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
                     listViewPopup.close();
-                    getComponent().requestFocus();
+                    if (listButton.isShowing()) {
+                        listButton.requestFocus();
+                    }
                     break;
                 }
 
                 case Keyboard.KeyCode.TAB:
                 case Keyboard.KeyCode.ENTER: {
-                    ListButton listButton = (ListButton)getComponent();
 
                     int index = listView.getSelectedIndex();
 
@@ -106,7 +109,7 @@ public abstract class ListButtonSkin extends ButtonSkin
                         Direction direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                             Direction.BACKWARD : Direction.FORWARD;
                         listButton.transferFocus(direction);
-                    } else {
+                    } else if (listButton.isShowing()) {
                         listButton.requestFocus();
                     }
 

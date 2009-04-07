@@ -99,7 +99,10 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         public void windowClosed(Window window, Display display) {
             closeTransition = null;
             if (focusButtonOnClose) {
-                getComponent().requestFocus();
+                CalendarButton calendarButton = (CalendarButton)getComponent();
+                if (calendarButton.isShowing()) {
+                    calendarButton.requestFocus();
+                }
             }
         }
     };
