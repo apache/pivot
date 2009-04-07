@@ -17,6 +17,7 @@
 package pivot.collections;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -41,7 +42,7 @@ public class EnumList implements List<Enum> {
     private ListListenerList<Enum> listListeners = null;
 
     public EnumList() {
-        this.enumClass = enumClass;
+        this.enumClass = Enum.class;
         elements = new Enum[0];
     }
 
@@ -55,6 +56,10 @@ public class EnumList implements List<Enum> {
     }
 
     public void setEnumClass(Class<? extends Enum> enumClass) {
+        if (enumClass.getEnumConstants() == null) {
+            throw new ClassCastException();
+        }
+
         Class <? extends Enum> previousEnumClass = this.enumClass;
 
         if (enumClass != previousEnumClass) {
@@ -73,7 +78,7 @@ public class EnumList implements List<Enum> {
 
             // Sort if necessary
             if (comparator != null) {
-                java.util.Arrays.sort(elements, comparator);
+                Arrays.sort(elements, comparator);
             }
 
             // Notify listeners of the new elements
@@ -172,7 +177,7 @@ public class EnumList implements List<Enum> {
 
             // Perform the sort
             if (comparator != null) {
-                java.util.Arrays.sort(elements, comparator);
+                Arrays.sort(elements, comparator);
             }
 
             // Notify listeners
