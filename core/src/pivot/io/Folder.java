@@ -44,7 +44,7 @@ public class Folder extends File implements List<File> {
             String path1 = file1.getPath();
             String path2 = file2.getPath();
 
-            return path2.compareToIgnoreCase(path1);
+            return path1.compareToIgnoreCase(path2);
         }
     }
 
@@ -52,8 +52,6 @@ public class Folder extends File implements List<File> {
 
     private ArrayList<File> files;
     private FileFilter fileFilter;
-
-    private Comparator<File> comparator;
 
     private transient ListListenerList<File> listListeners = new ListListenerList<File>();
 
@@ -136,23 +134,32 @@ public class Folder extends File implements List<File> {
     }
 
     public int indexOf(File file) {
-        int index = -1;
-        if (comparator == null) {
-            index = files.indexOf(file);
-        }
-        else {
-            // Perform a binary search to find the index
-            index = Search.binarySearch(this, file, comparator);
-            if (index < 0) {
-                index = -1;
-            }
-        }
-
-        return index;
+        return files.indexOf(file);
     }
 
     public int getLength() {
         return files.getLength();
+    }
+
+    public Comparator<File> getComparator() {
+        return files.getComparator();
+    }
+
+    public void setComparator(Comparator<File> comparator) {
+        Comparator<File> previousComparator = files.getComparator();
+        files.setComparator(comparator);
+
+        // Recursively apply comparator change
+        for (int i = 0, n = files.getLength(); i < n; i++) {
+            File file = files.get(i);
+
+            if (file instanceof Folder) {
+                Folder folder = (Folder)file;
+                folder.setComparator(comparator);
+            }
+        }
+
+        listListeners.comparatorChanged(this, previousComparator);
     }
 
     /**
@@ -179,54 +186,14 @@ public class Folder extends File implements List<File> {
                 if (!file.isHidden()) {
                     if (file.isDirectory()) {
                         Folder folder = new Folder(file.getPath(), fileFilter);
-                        folder.setComparator(comparator);
+                        folder.setComparator(files.getComparator());
                         file = folder;
                     }
 
-                    int index = -1;
-                    if (comparator == null) {
-                        index = getLength();
-                    }
-                    else {
-                        // Perform a binary search to find the insertion point
-                        index = Search.binarySearch(this, file, comparator);
-                        if (index < 0) {
-                            index = -(index + 1);
-                        }
-                    }
-
-                    files.insert(file, index);
-                    listListeners.itemInserted(this, files.getLength() - 1);
+                    int index = files.add(file);
+                    listListeners.itemInserted(this, index);
                 }
             }
-        }
-    }
-
-    public Comparator<File> getComparator() {
-        return comparator;
-    }
-
-    public void setComparator(Comparator<File> comparator) {
-        Comparator<File> previousComparator = this.comparator;
-
-        if (previousComparator != comparator) {
-            if (comparator != null) {
-                Sequence.Sort.quickSort(files, comparator);
-            }
-
-            // Recursively apply comparator change
-            for (int i = 0, n = files.getLength(); i < n; i++) {
-                File file = files.get(i);
-
-                if (file instanceof Folder) {
-                    Folder folder = (Folder)file;
-                    folder.setComparator(comparator);
-                }
-            }
-
-            this.comparator = comparator;
-
-            listListeners.comparatorChanged(this, previousComparator);
         }
     }
 

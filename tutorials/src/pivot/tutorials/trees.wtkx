@@ -33,13 +33,10 @@ limitations under the License.
                                         <content:TreeBranch>
                                             <content:TreeBranch text="Activity" icon="@folder.png">
                                                 <content:TreeBranch text="Games" icon="@folder.png">
-                                                    <content:TreeNode text="A very long game name that just serves to show how a wide tree node behaves" icon="@page_white.png"/>
-                                                    <content:TreeNode text="Air Hockey" icon="@page_white.png"/>
                                                     <content:TreeNode text="Foosball" icon="@page_white.png"/>
+                                                    <content:TreeNode text="A very long game name that just serves to show how a wide tree node behaves" icon="@page_white.png"/>
                                                     <content:TreeNode text="Ping Pong" icon="@page_white.png"/>
-                                                    <comparator>
-                                                        <tutorials:TreeNodeComparator/>
-                                                    </comparator>
+                                                    <content:TreeNode text="Air Hockey" icon="@page_white.png"/>
                                                 </content:TreeBranch>
                                                 <content:TreeBranch text="Sports" icon="@folder.png">
                                                     <content:TreeNode text="Baseball" icon="@page_white.png"/>
@@ -48,15 +45,9 @@ limitations under the License.
                                                     <content:TreeNode text="Ice Hockey" icon="@page_white.png"/>
                                                     <content:TreeNode text="Soccer" icon="@page_white.png"/>
                                                     <content:TreeNode text="Softball" icon="@page_white.png"/>
-                                                    <comparator>
-                                                        <tutorials:TreeNodeComparator/>
-                                                    </comparator>
                                                 </content:TreeBranch>
                                                 <content:TreeNode text="Camping" icon="@page_white.png"/>
                                                 <content:TreeNode text="Skiing" icon="@page_white.png"/>
-                                                <comparator>
-                                                    <tutorials:TreeNodeComparator/>
-                                                </comparator>
                                             </content:TreeBranch>
                                             <content:TreeBranch text="Occasion" icon="@folder.png">
                                                 <content:TreeBranch text="Holidays" icon="@folder.png">
@@ -68,16 +59,10 @@ limitations under the License.
                                                     <content:TreeNode text="Thanksgiving" icon="@page_white.png"/>
                                                     <content:TreeNode text="Valentine's Day" icon="@page_white.png"/>
                                                     <content:TreeNode text="Veteran's Day" icon="@page_white.png"/>
-                                                    <comparator>
-                                                        <tutorials:TreeNodeComparator/>
-                                                    </comparator>
                                                 </content:TreeBranch>
                                                 <content:TreeNode text="Anniversary" icon="@page_white.png"/>
                                                 <content:TreeNode text="Birthday" icon="@page_white.png"/>
                                                 <content:TreeNode text="Wedding" icon="@page_white.png"/>
-                                                <comparator>
-                                                    <tutorials:TreeNodeComparator/>
-                                                </comparator>
                                             </content:TreeBranch>
                                             <content:TreeBranch text="Location" icon="@folder.png">
                                                 <content:TreeNode text="Africa" icon="@folder.png"/>
@@ -89,13 +74,7 @@ limitations under the License.
                                                 <content:TreeBranch text="South America" icon="@folder.png">
                                                     <content:TreeNode text="Peru" icon="@page_white.png"/>
                                                 </content:TreeBranch>
-                                                <comparator>
-                                                    <tutorials:TreeNodeComparator/>
-                                                </comparator>
                                             </content:TreeBranch>
-                                            <comparator>
-                                                <tutorials:TreeNodeComparator/>
-                                            </comparator>
                                         </content:TreeBranch>
                                     </treeData>
                                     <nodeRenderer>

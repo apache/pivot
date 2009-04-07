@@ -27,7 +27,7 @@ limitations under the License.
                     <content>
                         <ScrollPane preferredWidth="62" preferredHeight="80" horizontalScrollBarPolicy="fill">
                             <view>
-                                <ListView selectMode="single" selectedIndex="0">
+                                <ListView wtkx:id="editableListView" selectMode="single" selectedIndex="0">
                                     <listData>
                                         <collections:ArrayList>
                                             <content:ListItem text="Red"/>

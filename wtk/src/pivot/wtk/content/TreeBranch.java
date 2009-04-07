@@ -35,7 +35,7 @@ import pivot.wtk.media.Image;
 public class TreeBranch extends TreeNode implements List<TreeNode> {
     private Image expandedIcon = null;
 
-    private ArrayList<TreeNode> nodes = new ArrayList<TreeNode>();
+    private ArrayList<TreeNode> treeNodes = new ArrayList<TreeNode>();
     private ListListenerList<TreeNode> listListeners = new ListListenerList<TreeNode>();
 
     public TreeBranch() {
@@ -69,26 +69,26 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     }
 
     public int add(TreeNode treeNode) {
-        int index = nodes.getLength();
-        insert(treeNode, index);
+        int index = treeNodes.add(treeNode);
+        listListeners.itemInserted(this, index);
 
         return index;
     }
 
     public void insert(TreeNode treeNode, int index) {
-        nodes.insert(treeNode, index);
+        treeNodes.insert(treeNode, index);
         listListeners.itemInserted(this, index);
     }
 
     public TreeNode update(int index, TreeNode treeNode) {
-        TreeNode previousTreeNode = nodes.update(index, treeNode);
+        TreeNode previousTreeNode = treeNodes.update(index, treeNode);
         listListeners.itemUpdated(this, index, previousTreeNode);
 
         return previousTreeNode;
     }
 
     public int remove(TreeNode treeNode) {
-        int index = nodes.indexOf(treeNode);
+        int index = treeNodes.indexOf(treeNode);
         if (index != -1) {
             remove(index, 1);
         }
@@ -97,41 +97,52 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     }
 
     public Sequence<TreeNode> remove(int index, int count) {
-        Sequence<TreeNode> removed = nodes.remove(index, count);
+        Sequence<TreeNode> removed = treeNodes.remove(index, count);
         listListeners.itemsRemoved(this, index, removed);
 
         return removed;
     }
 
     public void clear() {
-        nodes.clear();
+        treeNodes.clear();
         listListeners.itemsRemoved(this, 0, null);
     }
 
     public TreeNode get(int index) {
-        return nodes.get(index);
+        return treeNodes.get(index);
     }
 
     public int indexOf(TreeNode treeNode) {
-        return nodes.indexOf(treeNode);
+        return treeNodes.indexOf(treeNode);
     }
 
     public int getLength() {
-        return nodes.getLength();
+        return treeNodes.getLength();
     }
 
     public Comparator<TreeNode> getComparator() {
-        return nodes.getComparator();
+        return treeNodes.getComparator();
     }
 
     public void setComparator(Comparator<TreeNode> comparator) {
-        Comparator<TreeNode> previousComparator = nodes.getComparator();
-        nodes.setComparator(comparator);
+        Comparator<TreeNode> previousComparator = treeNodes.getComparator();
+        treeNodes.setComparator(comparator);
+
+        // Recursively apply comparator change
+        for (int i = 0, n = treeNodes.getLength(); i < n; i++) {
+            TreeNode treeNode = treeNodes.get(i);
+
+            if (treeNode instanceof TreeBranch) {
+                TreeBranch treeBranch = (TreeBranch)treeNode;
+                treeBranch.setComparator(comparator);
+            }
+        }
+
         listListeners.comparatorChanged(this, previousComparator);
     }
 
     public Iterator<TreeNode> iterator() {
-        return new ImmutableIterator<TreeNode>(nodes.iterator());
+        return new ImmutableIterator<TreeNode>(treeNodes.iterator());
     }
 
     public ListenerList<ListListener<TreeNode>> getListListeners() {

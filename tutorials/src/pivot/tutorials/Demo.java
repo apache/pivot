@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Comparator;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
@@ -60,12 +61,15 @@ import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TextArea;
 import pivot.wtk.Theme;
+import pivot.wtk.TreeView;
 import pivot.wtk.Visual;
 import pivot.wtk.Window;
 import pivot.wtk.content.CalendarDateSpinnerData;
+import pivot.wtk.content.ListItem;
 import pivot.wtk.content.NumericSpinnerData;
 import pivot.wtk.content.TableRow;
 import pivot.wtk.content.TableViewHeaderData;
+import pivot.wtk.content.TreeBranch;
 import pivot.wtk.effects.ReflectionDecorator;
 import pivot.wtk.effects.WatermarkDecorator;
 import pivot.wtk.media.Image;
@@ -92,6 +96,7 @@ public class Demo implements Application {
 
     private Window window = null;
 
+    @SuppressWarnings("unchecked")
     public void startup(final Display display, Dictionary<String, String> properties) throws Exception {
         TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
         URL schemeLocation = TerraTheme.class.getResource("TerraTheme_default.json");
@@ -99,6 +104,16 @@ public class Demo implements Application {
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
+
+        ListView editableListView = (ListView)wtkxSerializer.getObjectByName("lists.editableListView");
+        List<ListItem> listData = (List<ListItem>)editableListView.getListData();
+        listData.setComparator(new Comparator<ListItem>() {
+            public int compare(ListItem listItem1, ListItem listItem2) {
+                String text1 = listItem1.getText();
+                String text2 = listItem2.getText();
+                return text1.compareToIgnoreCase(text2);
+            }
+        });
 
         // Text
         PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
@@ -221,6 +236,10 @@ public class Demo implements Application {
         sortableTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("tables.sortableTableViewHeader");
         customTableView = (TableView)wtkxSerializer.getObjectByName("tables.customTableView");
         initializeTableViews();
+
+        TreeView editableTreeView = (TreeView)wtkxSerializer.getObjectByName("trees.editableTreeView");
+        TreeBranch treeData = (TreeBranch)editableTreeView.getTreeData();
+        treeData.setComparator(new TreeNodeComparator());
 
         DragSource imageDragSource = new DragSource() {
             private Image image = null;
