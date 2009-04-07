@@ -33,58 +33,57 @@ import pivot.util.ListenerList;
  *
  * @author tvolkert
  */
-public class EnumList implements List<Enum> {
-    private Enum[] elements;
+public class EnumList<E extends Enum<E>> implements List<E> {
+    private E[] elements;
+    private Class<E> enumClass;
 
-    private Class<? extends Enum> enumClass = null;
-
-    private Comparator<Enum> comparator = null;
-    private ListListenerList<Enum> listListeners = null;
+    private Comparator<E> comparator = null;
+    private ListListenerList<E> listListeners = null;
 
     public EnumList() {
-        this.enumClass = Enum.class;
-        elements = new Enum[0];
+        this.enumClass = null;
+        elements = null;
     }
 
-    public EnumList(Class<? extends Enum> enumClass) {
+    public EnumList(Class<E> enumClass) {
         this.enumClass = enumClass;
         elements = enumClass.getEnumConstants();
     }
 
-    public Class<? extends Enum> getEnumClass() {
+    public Class<E> getEnumClass() {
         return enumClass;
     }
 
-    public void setEnumClass(Class<? extends Enum> enumClass) {
-        if (enumClass.getEnumConstants() == null) {
-            throw new ClassCastException();
-        }
-
-        Class <? extends Enum> previousEnumClass = this.enumClass;
+    public void setEnumClass(Class<E> enumClass) {
+        Class <E> previousEnumClass = this.enumClass;
 
         if (enumClass != previousEnumClass) {
             this.enumClass = enumClass;
 
             // Clear old elements
-            elements = new Enum[0];
+            if (elements != null) {
+                elements = null;
 
-            // Notify listeners
-            if (listListeners != null) {
-                listListeners.itemsRemoved(this, 0, null);
+                // Notify listeners
+                if (listListeners != null) {
+                    listListeners.itemsRemoved(this, 0, null);
+                }
             }
 
             // Add new elements
             elements = enumClass.getEnumConstants();
 
-            // Sort if necessary
-            if (comparator != null) {
-                Arrays.sort(elements, comparator);
-            }
+            if (elements != null) {
+                // Sort if necessary
+                if (comparator != null) {
+                    Arrays.sort(elements, comparator);
+                }
 
-            // Notify listeners of the new elements
-            if (listListeners != null) {
-                for (int i = 0, n = elements.length; i < n; i++) {
-                    listListeners.itemInserted(this, i);
+                // Notify listeners of the new elements
+                if (listListeners != null) {
+                    for (int i = 0, n = elements.length; i < n; i++) {
+                        listListeners.itemInserted(this, i);
+                    }
                 }
             }
         }
@@ -93,29 +92,29 @@ public class EnumList implements List<Enum> {
     @SuppressWarnings("unchecked")
     public final void setEnumClass(String enumClass) {
         try {
-            setEnumClass((Class<? extends Enum>)Class.forName(enumClass));
+            setEnumClass((Class<E>)Class.forName(enumClass));
         } catch (ClassNotFoundException ex) {
             throw new IllegalArgumentException(ex);
         }
     }
 
-    public int add(Enum item) {
+    public int add(E item) {
         throw new UnsupportedOperationException();
     }
 
-    public void insert(Enum item, int index) {
+    public void insert(E item, int index) {
         throw new UnsupportedOperationException();
     }
 
-    public Enum update(int index, Enum item) {
+    public E update(int index, E item) {
         throw new UnsupportedOperationException();
     }
 
-    public int remove(Enum item) {
+    public int remove(E item) {
         throw new UnsupportedOperationException();
     }
 
-    public Sequence<Enum> remove(int index, int count) {
+    public Sequence<E> remove(int index, int count) {
         throw new UnsupportedOperationException();
     }
 
@@ -123,24 +122,26 @@ public class EnumList implements List<Enum> {
         throw new UnsupportedOperationException();
     }
 
-    public Enum get(int index) {
-        return elements[index];
+    public E get(int index) {
+        return (elements != null ? elements[index] : null);
     }
 
-    public int indexOf(Enum item) {
+    public int indexOf(E item) {
         int index = -1;
 
-        if (comparator == null) {
-            for (int i = 0, n = elements.length; i < n && index == -1; i++) {
-                if (elements[i] == item) {
-                    index = i;
+        if (elements != null) {
+            if (comparator == null) {
+                for (int i = 0, n = elements.length; i < n && index == -1; i++) {
+                    if (elements[i] == item) {
+                        index = i;
+                    }
                 }
-            }
-        } else {
-            // Perform a binary search to find the index
-            index = Search.binarySearch(this, item, comparator);
-            if (index < 0) {
-                index = -1;
+            } else {
+                // Perform a binary search to find the index
+                index = Search.binarySearch(this, item, comparator);
+                if (index < 0) {
+                    index = -1;
+                }
             }
         }
 
@@ -148,35 +149,37 @@ public class EnumList implements List<Enum> {
     }
 
     public int getLength() {
-        return elements.length;
+        return (elements != null ? elements.length : 0);
     }
 
     @SuppressWarnings("unchecked")
-    public Enum[] toArray() {
-        Enum[] array = null;
+    public E[] toArray() {
+        E[] array = null;
 
-        int n = elements.length;
-        if (n > 0) {
-            Class<?> type = elements[0].getClass();
-            array = (Enum[])Array.newInstance(type, n);
-            System.arraycopy(elements, 0, array, 0, n);
+        if (elements != null) {
+            int n = elements.length;
+            if (n > 0) {
+                Class<?> type = elements[0].getClass();
+                array = (E[])Array.newInstance(type, n);
+                System.arraycopy(elements, 0, array, 0, n);
+            }
         }
 
         return array;
     }
 
-    public Comparator<Enum> getComparator() {
+    public Comparator<E> getComparator() {
         return comparator;
     }
 
-    public void setComparator(Comparator<Enum> comparator) {
-        Comparator<Enum> previousComparator = this.comparator;
+    public void setComparator(Comparator<E> comparator) {
+        Comparator<E> previousComparator = this.comparator;
 
         if (previousComparator != comparator) {
             this.comparator = comparator;
 
             // Perform the sort
-            if (comparator != null) {
+            if (comparator != null && elements != null) {
                 Arrays.sort(elements, comparator);
             }
 
@@ -187,16 +190,16 @@ public class EnumList implements List<Enum> {
         }
     }
 
-    public Iterator<Enum> iterator() {
-        return new Iterator<Enum>() {
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
             private int i = 0;
 
             public boolean hasNext() {
-                return (i < elements.length);
+                return (elements != null && i < elements.length);
             }
 
-            public Enum next() {
-                if (i >= elements.length) {
+            public E next() {
+                if (elements == null || i >= elements.length) {
                     throw new NoSuchElementException();
                 }
 
@@ -209,9 +212,9 @@ public class EnumList implements List<Enum> {
         };
     }
 
-    public ListenerList<ListListener<Enum>> getListListeners() {
+    public ListenerList<ListListener<E>> getListListeners() {
         if (listListeners == null) {
-            listListeners = new ListListenerList<Enum>();
+            listListeners = new ListListenerList<E>();
         }
 
         return listListeners;
