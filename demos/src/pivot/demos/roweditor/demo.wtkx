@@ -24,7 +24,7 @@ limitations under the License.
     xmlns:demo="pivot.demos.roweditor"
     xmlns="pivot.wtk">
     <content>
-        <TablePane>
+        <TablePane styles="{verticalSpacing:1, showHorizontalGridLines:true}">
             <columns>
                 <TablePane.Column width="1*"/>
             </columns>
