@@ -21,6 +21,8 @@ import java.text.NumberFormat;
 
 import pivot.beans.BeanDictionary;
 import pivot.collections.Dictionary;
+import pivot.wtk.HorizontalAlignment;
+import pivot.wtk.Insets;
 import pivot.wtk.TableView;
 
 /**
@@ -33,6 +35,11 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
     private NumberFormat numberFormat = DEFAULT_NUMBER_FORMAT;
 
     public static final NumberFormat DEFAULT_NUMBER_FORMAT = NumberFormat.getNumberInstance();
+
+    public TableViewNumberCellRenderer() {
+        getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+        getStyles().put("padding", new Insets(2, 2, 2, 6));
+    }
 
     public NumberFormat getNumberFormat() {
         return numberFormat;
