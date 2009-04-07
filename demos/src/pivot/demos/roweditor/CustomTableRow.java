@@ -20,6 +20,12 @@ import pivot.beans.BeanDictionary;
 import pivot.collections.Dictionary;
 import pivot.util.CalendarDate;
 
+/**
+ * Custom table row data.  It implements the <tt>Dictionary</tt> interface so
+ * we can bind to it.
+ *
+ * @author tvolkert
+ */
 public class CustomTableRow implements Dictionary<String, Object> {
     private CalendarDate calendarDate = null;
     private ExpenseType type = null;

@@ -43,7 +43,7 @@ limitations under the License.
                                     <TableView.Column name="type" width="125" headerData="Type"/>
                                     <TableView.Column name="amount" width="75" headerData="Amount">
                                         <cellRenderer>
-                                            <content:TableViewCurrencyCellRenderer styles="{horizontalAlignment:'right'}" />
+                                            <content:TableViewNumberCellRenderer numberFormat="¤#,###.00"/>
                                         </cellRenderer>
                                     </TableView.Column>
                                     <TableView.Column name="description" width="1*" headerData="Description"/>

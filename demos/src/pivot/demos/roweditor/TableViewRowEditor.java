@@ -53,6 +53,7 @@ import pivot.wtk.ViewportListener;
 import pivot.wtk.Window;
 import pivot.wtk.WindowStateListener;
 import pivot.wtk.content.CalendarDateSpinnerData;
+import pivot.wtk.effects.FlipTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.media.Image;
