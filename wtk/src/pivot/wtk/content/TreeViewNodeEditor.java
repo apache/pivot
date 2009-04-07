@@ -16,8 +16,6 @@
  */
 package pivot.wtk.content;
 
-import java.util.Comparator;
-
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;

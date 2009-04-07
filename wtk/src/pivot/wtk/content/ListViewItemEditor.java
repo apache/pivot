@@ -16,8 +16,6 @@
  */
 package pivot.wtk.content;
 
-import java.util.Comparator;
-
 import pivot.collections.List;
 import pivot.util.Vote;
 import pivot.wtk.Bounds;
@@ -257,7 +255,6 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         listItem.setText(text);
 
         // Notifying the parent will close the popup
-        Comparator<Object> comparator = listData.getComparator();
         if (listData.getComparator() == null) {
             listData.update(index, listItem);
         } else {
