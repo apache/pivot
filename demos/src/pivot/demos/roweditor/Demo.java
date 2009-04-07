@@ -27,12 +27,12 @@ import pivot.wtkx.WTKXSerializer;
  *
  * @author tvolkert
  */
-public class RowEditorDemo implements Application {
+public class Demo implements Application {
     private Window window = null;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(getClass().getResource("application.wtkx"));
+        window = (Window)wtkxSerializer.readObject(getClass().getResource("demo.wtkx"));
         window.open(display);
     }
 

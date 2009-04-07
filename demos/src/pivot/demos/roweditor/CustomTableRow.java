@@ -16,23 +16,18 @@
  */
 package pivot.demos.roweditor;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.Dictionary;
 import pivot.util.CalendarDate;
 
 /**
- * Custom table row data.  It implements the <tt>Dictionary</tt> interface so
- * we can bind to it.
+ * Custom table row data.
  *
  * @author tvolkert
  */
-public class CustomTableRow implements Dictionary<String, Object> {
+public class CustomTableRow {
     private CalendarDate calendarDate = null;
     private ExpenseType type = null;
     private double amount = 0;
     private String description = null;
-
-    private BeanDictionary beanDictionary = new BeanDictionary(this);
 
     public CalendarDate getDate() {
         return calendarDate;
@@ -67,7 +62,11 @@ public class CustomTableRow implements Dictionary<String, Object> {
     }
 
     public final void setAmount(String amount) {
-        setAmount(Double.parseDouble(amount));
+        if (amount == null || amount.length() == 0) {
+            setAmount(0);
+        } else {
+            setAmount(Double.parseDouble(amount));
+        }
     }
 
     public String getDescription() {
@@ -76,25 +75,5 @@ public class CustomTableRow implements Dictionary<String, Object> {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Object get(String key) {
-        return beanDictionary.get(key);
-    }
-
-    public Object put(String key, Object value) {
-        return beanDictionary.put(key, value);
-    }
-
-    public Object remove(String key) {
-        return beanDictionary.remove(key);
-    }
-
-    public boolean containsKey(String key) {
-        return beanDictionary.containsKey(key);
-    }
-
-    public boolean isEmpty() {
-        return beanDictionary.isEmpty();
     }
 }

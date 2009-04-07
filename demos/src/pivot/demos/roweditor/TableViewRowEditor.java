@@ -128,8 +128,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * @author tvolkert
      */
     private WindowStateListener popupStateHandler = new WindowStateListener() {
-        private boolean transitionStarted = false;
-        private boolean transitionComplete = false;
+        private boolean closeTransitionStarted = false;
+        private boolean closeTransitionComplete = false;
 
         public Vote previewWindowOpen(Window window, Display display) {
             return Vote.APPROVE;
@@ -163,10 +163,13 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         public Vote previewWindowClose(Window window) {
-            Vote vote = transitionComplete ? Vote.APPROVE : Vote.DEFER;
+            Vote vote = closeTransitionComplete ? Vote.APPROVE : Vote.DEFER;
 
-            if (!transitionStarted) {
-                transitionStarted = true;
+            if (!closeTransitionStarted) {
+                closeTransitionStarted = true;
+
+                // Restore focus to the table view
+                tableView.requestFocus();
 
                 int duration = FLIP_DURATION;
                 double beginTheta = Math.PI;
@@ -184,7 +187,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
                 flipTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
-                        transitionComplete = true;
+                        closeTransitionComplete = true;
                         popup.close();
                     }
                 });
@@ -203,10 +206,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
             tableView.getTableViewListeners().remove(tableViewHandler);
             tableView.getTableViewRowListeners().remove(tableViewRowHandler);
 
-            transitionStarted = false;
-
-            // Restore focus to the table view
-            tableView.requestFocus();
+            closeTransitionStarted = false;
+            closeTransitionComplete = false;
 
             // Free memory
             tableView = null;
@@ -382,7 +383,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
         this.columnIndex = columnIndex;
 
         // Create the editor popup
-        popup = new Window();
+        popup = new Window(true);
         popup.getWindowStateListeners().add(popupStateHandler);
         popup.getComponentKeyListeners().add(popupKeyHandler);
 
@@ -390,7 +391,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
         wtkxSerializer = new WTKXSerializer();
 
         try {
-            popup.setContent((Component)wtkxSerializer.readObject(getClass().getResource("editor.wtkx")));
+            popup.setContent((Component)wtkxSerializer.readObject
+                (getClass().getResource("tableViewRowEditor.wtkx")));
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

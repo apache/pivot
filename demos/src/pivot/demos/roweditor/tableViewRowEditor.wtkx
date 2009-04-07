@@ -36,22 +36,22 @@ limitations under the License.
                 </columns>
                 <rows>
                     <TablePane.Row height="1*">
-                        <Spinner wtkx:id="date" selectedItemKey="date">
+                        <Spinner selectedItemKey="date">
                             <spinnerData>
                                 <content:CalendarDateSpinnerData/>
                             </spinnerData>
                         </Spinner>
-                        <ListButton wtkx:id="type" selectedItemKey="type">
+                        <ListButton selectedItemKey="type">
                             <listData>
                                 <collections:EnumList enumClass="pivot.demos.roweditor.ExpenseType"/>
                             </listData>
                         </ListButton>
-                        <TextInput wtkx:id="amount" textKey="amount">
+                        <TextInput textKey="amount" styles="{strictValidation:true}">
                             <validator>
                                 <demo:CurrencyValidator/>
                             </validator>
                         </TextInput>
-                        <TextInput wtkx:id="description" textKey="description"/>
+                        <TextInput textKey="description"/>
                     </TablePane.Row>
                 </rows>
             </TablePane>
