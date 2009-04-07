@@ -51,7 +51,6 @@ import pivot.wtkx.WTKXSerializer;
  *
  * @author tvolkert
  */
-@SuppressWarnings("unchecked")
 public class TableViewRowEditor implements TableView.RowEditor {
     /**
      * Paints the row being edited.
@@ -382,10 +381,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
         this.rowIndex = rowIndex;
         this.columnIndex = columnIndex;
 
-        // Get the data being edited
-        List<CustomTableRow> tableData = (List<CustomTableRow>)tableView.getTableData();
-        CustomTableRow tableRow = tableData.get(rowIndex);
-
         // Create the editor popup
         popup = new Window();
         popup.getWindowStateListeners().add(popupStateHandler);
@@ -418,6 +413,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
         ScrollPane scrollPane = (ScrollPane)wtkxSerializer.getObjectByName("scrollPane");
         scrollPane.getViewportListeners().add(viewportHandler);
 
+        // Load the data into the editor
+        CustomTableRow tableRow = (CustomTableRow)tableView.getTableData().get(rowIndex);
         tablePane.load(tableRow);
 
         // Set the editor's table row image
@@ -439,6 +436,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
         return (tableView != null);
     }
 
+    @SuppressWarnings("unchecked")
     public void save() {
         if (!isEditing()) {
             throw new IllegalStateException();
