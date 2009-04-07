@@ -17,9 +17,11 @@
 package pivot.demos.filebrowser;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.net.MalformedURLException;
 
 import pivot.collections.Dictionary;
+import pivot.collections.Sequence;
 import pivot.io.Folder;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
@@ -30,6 +32,7 @@ import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.TreeView;
+import pivot.wtk.TreeViewBranchListener;
 import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
@@ -45,7 +48,27 @@ public class FileBrowserDemo implements Application {
         folderTreeView = (TreeView)wtkxSerializer.getObjectByName("folderTreeView");
 
         String pathname = System.getProperty("user.home");
-        folderTreeView.setTreeData(new Folder(pathname));
+        FileFilter fileFilter = new FileFilter() {
+            public boolean accept(File file) {
+                return true; // (file.isDirectory());
+            }
+        };
+
+        final Folder rootFolder = new Folder(pathname, fileFilter);
+        rootFolder.setComparator(new Folder.FileNameComparator());
+        rootFolder.refresh();
+        folderTreeView.setTreeData(rootFolder);
+
+        folderTreeView.getTreeViewBranchListeners().add(new TreeViewBranchListener() {
+            public void branchExpanded(TreeView treeView, Sequence<Integer> path) {
+                Folder folder = (Folder)Sequence.Tree.get(rootFolder, path);
+                folder.refresh();
+            }
+
+            public void branchCollapsed(TreeView treeView, Sequence<Integer> path) {
+                // No-op
+            }
+        });
 
         folderTreeView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
             public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {

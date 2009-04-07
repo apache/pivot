@@ -17,6 +17,7 @@
 package pivot.io;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -29,75 +30,117 @@ import pivot.util.ListenerList;
 
 /**
  * Class representing a folder in the file system.
+ * <p>
+ * NOTE Because Java does not provide any way to monitor the file system for
+ * changes, instances of this class must be refreshed periodically to reflect
+ * updates. Instances must also be refreshed to perform initial population
+ * immediately after construction. See {@link #refresh()}.
  *
  * @author gbrown
  */
 public class Folder extends File implements List<File> {
-    private static final long serialVersionUID = 0;
+    public static class FileNameComparator implements Comparator<File> {
+        public int compare(File file1, File file2) {
+            String path1 = file1.getPath();
+            String path2 = file2.getPath();
 
-    private ArrayList<File> files = null;
-
-    private Comparator<File> comparator = null;
-    private transient ListListenerList<File> listListeners = new ListListenerList<File>();
-
-    public Folder() {
-        super("");
-
-        refresh();
-    }
-
-    public Folder(String pathname) {
-        super(pathname);
-
-        if (!isDirectory()) {
-            throw new IllegalArgumentException(pathname + " is not a directory.");
+            return path1.compareToIgnoreCase(path2);
         }
     }
 
-    public int add(File item) {
+    private static final long serialVersionUID = 0;
+
+    private ArrayList<File> files;
+    private FileFilter fileFilter;
+
+    private Comparator<File> comparator = null;
+
+    private transient ListListenerList<File> listListeners = new ListListenerList<File>();
+
+    public Folder() {
+        this("", null);
+    }
+
+    public Folder(FileFilter fileFilter) {
+        this("", fileFilter);
+    }
+
+    public Folder(String pathname) {
+        this(pathname, null);
+    }
+
+    public Folder(String pathname, FileFilter fileFilter) {
+        super(pathname);
+
+        if (!isDirectory()) {
+            throw new IllegalArgumentException(this + " is not a directory.");
+        }
+
+        files = new ArrayList<File>();
+        this.fileFilter = fileFilter;
+    }
+
+    /**
+     * Returns the file filter that is applied to this folder.
+     */
+    public FileFilter getFileFilter() {
+        return fileFilter;
+    }
+
+    /**
+     * This method is not supported.
+     */
+    public int add(File file) {
         throw new UnsupportedOperationException();
     }
 
-    public void insert(File item, int index) {
+    /**
+     * This method is not supported.
+     */
+    public void insert(File file, int index) {
         throw new UnsupportedOperationException();
     }
 
-    public File update(int index, File item) {
+    /**
+     * This method is not supported.
+     */
+    public File update(int index, File file) {
         throw new UnsupportedOperationException();
     }
 
-    public int remove(File item) {
+    /**
+     * This method is not supported.
+     */
+    public int remove(File file) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * This method is not supported.
+     */
     public Sequence<File> remove(int index, int count) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * This method is not supported.
+     */
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
     public File get(int index) {
-        if (files == null) {
-            refresh();
-        }
-
         return files.get(index);
     }
 
-    public int indexOf(File item) {
-        if (files == null) {
-            refresh();
-        }
-
+    public int indexOf(File file) {
         int index = -1;
         if (comparator == null) {
-            index = files.indexOf(item);
+            index = files.indexOf(file);
         }
         else {
             // Perform a binary search to find the index
-            index = Search.binarySearch(this, item, comparator);
+            index = Search.binarySearch(this, file, comparator);
             if (index < 0) {
                 index = -1;
             }
@@ -107,21 +150,24 @@ public class Folder extends File implements List<File> {
     }
 
     public int getLength() {
-        if (files == null) {
-            refresh();
-        }
-
         return files.getLength();
     }
 
+    /**
+     * Refreshes the file list by requerying the file system for the current
+     * contents.
+     */
     public void refresh() {
-        files = new ArrayList<File>();
+        // Clear the list contents
+        files.clear();
+        listListeners.itemsRemoved(this, 0, null);
 
+        // Refresh list and fire an insert event for each file
         File[] fileList;
         if (getPath().length() == 0) {
             fileList = listRoots();
         } else {
-            fileList = listFiles();
+            fileList = listFiles(fileFilter);
         }
 
         if (fileList != null) {
@@ -130,10 +176,23 @@ public class Folder extends File implements List<File> {
 
                 if (!file.isHidden()) {
                     if (file.isDirectory()) {
-                        files.add(new Folder(file.getPath()));
-                    } else {
-                        files.add(file);
+                        file = new Folder(file.getPath(), fileFilter);
                     }
+
+                    int index = -1;
+                    if (comparator == null) {
+                        index = getLength();
+                    }
+                    else {
+                        // Perform a binary search to find the insertion point
+                        index = Search.binarySearch(this, file, comparator);
+                        if (index < 0) {
+                            index = -(index + 1);
+                        }
+                    }
+
+                    files.insert(file, index);
+                    listListeners.itemInserted(this, files.getLength() - 1);
                 }
             }
         }
@@ -147,8 +206,7 @@ public class Folder extends File implements List<File> {
         Comparator<File> previousComparator = this.comparator;
 
         if (previousComparator != comparator) {
-            if (comparator != null
-                && files != null) {
+            if (comparator != null) {
                 Sequence.Sort.quickSort(files, comparator);
             }
 
@@ -159,10 +217,6 @@ public class Folder extends File implements List<File> {
     }
 
     public Iterator<File> iterator() {
-        if (files == null) {
-            refresh();
-        }
-
         return new ImmutableIterator<File>(files.iterator());
     }
 
