@@ -534,27 +534,17 @@ public abstract class Container extends Component
     public void load(Dictionary<String, ?> context) {
         if (contextKey != null
             && context.containsKey(contextKey)) {
-        	Object value = context.get(contextKey);
-        	if (value instanceof Dictionary<?, ?>) {
+            Object value = context.get(contextKey);
+            if (value instanceof Dictionary<?, ?>) {
                 context = (Map<String, Object>)value;
-        	} else {
+            } else {
                 context = new BeanDictionary(value);
-        	}
+            }
         }
 
         for (Component component : components) {
             component.load(context);
         }
-    }
-
-    /**
-     * Propagates binding to subcomponents by converting the given context
-     * to a bean dictionary.
-     *
-     * @param context
-     */
-    public void load(Object context) {
-    	load(new BeanDictionary(context));
     }
 
     /**
@@ -567,27 +557,17 @@ public abstract class Container extends Component
     public void store(Dictionary<String, ?> context) {
         if (contextKey != null) {
             // Bound value is expected to be a sub-context
-        	Object value = context.get(contextKey);
-        	if (value instanceof Dictionary<?, ?>) {
+            Object value = context.get(contextKey);
+            if (value instanceof Dictionary<?, ?>) {
                 context = (Map<String, Object>)value;
-        	} else {
+            } else {
                 context = new BeanDictionary(value);
-        	}
+            }
         }
 
         for (Component component : components) {
             component.store(context);
         }
-    }
-
-    /**
-     * Propagates binding to subcomponents by converting the given context
-     * to a bean dictionary.
-     *
-     * @param context
-     */
-    public void store(Object context) {
-    	store(new BeanDictionary(context));
     }
 
     @Override
