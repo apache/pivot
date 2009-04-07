@@ -55,7 +55,6 @@ public class FileBrowserDemo implements Application {
         };
 
         final Folder rootFolder = new Folder(pathname, fileFilter);
-        rootFolder.setComparator(new Folder.FileNameComparator());
         rootFolder.refresh();
         folderTreeView.setTreeData(rootFolder);
 
