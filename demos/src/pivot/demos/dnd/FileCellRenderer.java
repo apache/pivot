@@ -38,7 +38,6 @@ public class FileCellRenderer extends Label implements TableView.CellRenderer {
         getStyles().put("padding", new Insets(2));
     }
 
-    @SuppressWarnings("unchecked")
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
         File file = (File)value;

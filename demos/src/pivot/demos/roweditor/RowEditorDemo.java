@@ -23,7 +23,7 @@ import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
 /**
- * Demonstrates a "family feud effect" used to initiate a table view row editor.
+ * Demonstrates a flip transition used to initiate a table view row editor.
  *
  * @author tvolkert
  */
@@ -42,7 +42,6 @@ public class RowEditorDemo implements Application {
         }
 
         window = null;
-
         return true;
     }
 
