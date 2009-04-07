@@ -14,15 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.demos.roweditor;
+package pivot.wtk.effects;
 
 import pivot.wtk.CardPane;
-import pivot.wtk.effects.ScaleDecorator;
-import pivot.wtk.effects.Transition;
-import pivot.wtk.effects.TransitionListener;
 
 /**
- *
+ * Transition that appears to "flip" a single card over. It does this by using
+ * a <tt>CardPane</tt> with two cards in it; at the halfway point of the
+ * transition, it changes the selected card to give the illusion that the
+ * visual element has flipped over.
+ * <p>
+ * This class uses theta values from zero to <tt>&#960;</tt> to represent the
+ * flip progress. Zero represents the first card being fully visible,
+ * <tt>&#960;</tt> represents the second card being fully visible, and
+ * <tt>&#960;/2</tt> represents the halfway point. This class allows the caller
+ * to specify the begin and end theta to enable partial flips. Partial flips
+ * are useful when reversing a flip that is currently in progress.
+ * <p>
+ * When in progress, this transition assumes that the card pane has at least
+ * two cards and will only use the card pane's irst two cards. If the card
+ * pane has less than two cards when the transition is in progress, a runtime
+ * exception will be thrown.
  *
  * @author tvolkert
  */
@@ -50,12 +62,20 @@ public class FlipTransition extends Transition {
         this.endTheta = endTheta;
     }
 
+    public double getBeginTheta() {
+        return beginTheta;
+    }
+
     public void setBeginTheta(double beginTheta) {
         if (isRunning()) {
             throw new IllegalStateException("Transition is currently running.");
         }
 
         this.beginTheta = beginTheta;
+    }
+
+    public double getEndTheta() {
+        return endTheta;
     }
 
     public void setEndTheta(double endTheta) {
