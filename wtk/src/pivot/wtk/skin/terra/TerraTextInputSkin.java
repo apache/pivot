@@ -242,6 +242,7 @@ public class TerraTextInputSkin extends ComponentSkin
     private Color borderColor;
     private Color disabledBorderColor;
     private Insets padding;
+    private boolean strictValidation;
 
     private Color selectionColor;
     private Color selectionBackgroundColor;
@@ -268,6 +269,7 @@ public class TerraTextInputSkin extends ComponentSkin
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
         padding = new Insets(2);
+        strictValidation = false;
 
         selectionColor = theme.getColor(4);
         selectionBackgroundColor = theme.getColor(19);
@@ -909,6 +911,14 @@ public class TerraTextInputSkin extends ComponentSkin
         setPadding(padding.intValue());
     }
 
+    public boolean getStrictValidation() {
+        return strictValidation;
+    }
+
+    public void setStrictValidation(boolean strictValidation) {
+        this.strictValidation = strictValidation;
+    }
+
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -1025,7 +1035,22 @@ public class TerraTextInputSkin extends ComponentSkin
             TextNode textNode = textInput.getTextNode();
 
             if (textNode.getCharacterCount() < textInput.getMaximumLength()) {
-                textInput.insertText(character, textInput.getSelectionStart());
+                int index = textInput.getSelectionStart();
+                Validator validator = textInput.getValidator();
+
+                if (validator != null
+                    && strictValidation) {
+                    StringBuilder buf = new StringBuilder(textNode.getText());
+                    buf.insert(index, character);
+
+                    if (validator.isValid(buf.toString())) {
+                        textInput.insertText(character, index);
+                    } else {
+                        ApplicationContext.beep();
+                    }
+                } else {
+                    textInput.insertText(character, index);
+                }
             } else {
                 ApplicationContext.beep();
             }
@@ -1041,10 +1066,40 @@ public class TerraTextInputSkin extends ComponentSkin
         TextInput textInput = (TextInput)getComponent();
         TextNode textNode = textInput.getTextNode();
 
-        if (keyCode == Keyboard.KeyCode.DELETE) {
-            textInput.delete(Direction.FORWARD);
-        } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
-            textInput.delete(Direction.BACKWARD);
+        if (keyCode == Keyboard.KeyCode.DELETE
+            || keyCode == Keyboard.KeyCode.BACKSPACE) {
+            Direction direction = (keyCode == Keyboard.KeyCode.DELETE ?
+                Direction.FORWARD : Direction.BACKWARD);
+
+            Validator validator = textInput.getValidator();
+
+            if (validator != null
+                && strictValidation) {
+                StringBuilder buf = new StringBuilder(textNode.getText());
+                int index = textInput.getSelectionStart();
+                int count = textInput.getSelectionLength();
+
+                if (count > 0) {
+                    buf.delete(index, index + count);
+                } else {
+                    if (direction == Direction.BACKWARD) {
+                        index--;
+                    }
+
+                    if (index >= 0
+                        && index < textNode.getCharacterCount()) {
+                        buf.deleteCharAt(index);
+                    }
+                }
+
+                if (validator.isValid(buf.toString())) {
+                    textInput.delete(direction);
+                } else {
+                    ApplicationContext.beep();
+                }
+            } else {
+                textInput.delete(direction);
+            }
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
