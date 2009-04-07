@@ -228,7 +228,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
             // Create and open the popup
-            popup = new Window(textInput);
+            popup = new Window(textInput, true);
             popup.getWindowStateListeners().add(popupWindowStateHandler);
 
             popup.setLocation(editBounds.x, editBounds.y
@@ -256,20 +256,21 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         String text = textInput.getText();
         listItem.setText(text);
 
-        // Save local reference to members variables before they get cleared
-        ListView listView = this.listView;
-
         // Notifying the parent will close the popup
         Comparator<Object> comparator = listData.getComparator();
-        listData.setComparator(null);
-        listData.update(index, listItem);
-        listData.setComparator(comparator);
+        if (listData.getComparator() == null) {
+            listData.update(index, listItem);
+        } else {
+            // Save local reference to members variables before they get cleared
+            ListView listView = this.listView;
 
-        if (comparator != null) {
+            listData.remove(index, 1);
+            listData.add(listItem);
+
             // Re-select the item, and make sure it's visible
-            int newIndex = listData.indexOf(listItem);
-            listView.setSelectedIndex(newIndex);
-            listView.scrollAreaToVisible(listView.getItemBounds(newIndex));
+            index = listData.indexOf(listItem);
+            listView.setSelectedIndex(index);
+            listView.scrollAreaToVisible(listView.getItemBounds(index));
         }
     }
 

@@ -254,7 +254,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             textInput.setPreferredWidth(editBounds.width);
             textInput.getComponentKeyListeners().add(textInputKeyHandler);
 
-            popup = new Window(textInput);
+            popup = new Window(textInput, true);
             popup.getWindowStateListeners().add(popupStateHandler);
 
             popup.setLocation(editBounds.x, editBounds.y
@@ -276,11 +276,11 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         }
 
         List<?> treeData = treeView.getTreeData();
-        TreeNode nodeData = (TreeNode)Sequence.Tree.get(treeData, path);
+        TreeNode treeNode = (TreeNode)Sequence.Tree.get(treeData, path);
 
         // Update the node data
         String text = textInput.getText();
-        nodeData.setText(text);
+        treeNode.setText(text);
 
         // Get a reference to the parent of the node data
         int n = path.getLength();
@@ -293,20 +293,20 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             parentData = (List<TreeNode>)Sequence.Tree.get(treeData, parentPath);
         }
 
-        // Save local reference to members variables before they get cleared
-        TreeView treeView = this.treeView;
-        Sequence<Integer> path = this.path;
-
         // Notifying the parent will close the popup
-        Comparator<TreeNode> comparator = parentData.getComparator();
-        parentData.setComparator(null);
-        parentData.update(path.get(n - 1), nodeData);
-        parentData.setComparator(comparator);
+        if (parentData.getComparator() == null) {
+            parentData.update(path.get(n - 1), treeNode);
+        } else {
+            // Save local reference to members variables before they get cleared
+            TreeView treeView = this.treeView;
+            Sequence<Integer> path = this.path;
 
-        if (comparator != null) {
+            parentData.remove(path.get(n - 1), 1);
+            parentData.add(treeNode);
+
             // Re-select the node, and make sure it's visible
             Sequence<Integer> newPath = new ArrayList<Integer>(path, 0, n - 1);
-            newPath.add(parentData.indexOf(nodeData));
+            newPath.add(parentData.indexOf(treeNode));
             treeView.setSelectedPath(newPath);
             treeView.scrollAreaToVisible(treeView.getNodeBounds(newPath));
         }
