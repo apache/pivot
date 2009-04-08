@@ -22,13 +22,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Comparator;
-
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
+import pivot.serialization.SerializationException;
 import pivot.util.CalendarDate;
+import pivot.util.Vote;
 import pivot.wtk.Action;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
@@ -54,6 +55,8 @@ import pivot.wtk.Prompt;
 import pivot.wtk.PushButton;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
+import pivot.wtk.Rollup;
+import pivot.wtk.RollupListener;
 import pivot.wtk.Slider;
 import pivot.wtk.SliderValueListener;
 import pivot.wtk.Spinner;
@@ -79,6 +82,48 @@ import pivot.wtk.text.PlainTextSerializer;
 import pivot.wtkx.WTKXSerializer;
 
 public class Demo implements Application {
+    private abstract class RollupHandler implements RollupListener {
+        private String resourceName;
+        private Component component = null;
+
+        public RollupHandler(String resourceName) {
+            this.resourceName = resourceName;
+        }
+
+        public Vote previewExpandedChange(Rollup rollup) {
+            if (component == null) {
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+
+                try {
+                    component = (Component)wtkxSerializer.readObject(resourceName);
+
+                    // TODO This is a hack; it shows knowledge that rollup adds
+                    // an internal component to handle expand/collapse
+                    rollup.remove(2, 1);
+                    rollup.add(component);
+                    initialize(wtkxSerializer);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                }
+            }
+
+            return Vote.APPROVE;
+        }
+
+        public void expandedChangeVetoed(Rollup rollup, Vote reason) {
+            // No-op
+        }
+
+        public void expandedChanged(Rollup rollup) {
+            // No-op
+        }
+
+        protected abstract void initialize(WTKXSerializer wtkxSerializer)
+            throws SerializationException, IOException;
+    }
+
     private MenuPopup menuPopup = null;
     private ImageView menuImageView = null;
 
@@ -105,44 +150,98 @@ public class Demo implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
 
-        ListView editableListView = (ListView)wtkxSerializer.getObjectByName("lists.editableListView");
-        List<ListItem> listData = (List<ListItem>)editableListView.getListData();
-        listData.setComparator(new Comparator<ListItem>() {
-            public int compare(ListItem listItem1, ListItem listItem2) {
-                String text1 = listItem1.getText();
-                String text2 = listItem2.getText();
-                return text1.compareToIgnoreCase(text2);
+        Rollup buttonsRollup = (Rollup)wtkxSerializer.getObjectByName("buttonsRollup");
+        buttonsRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/buttons.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
+                // No-op
             }
         });
 
-        // Text
-        PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
-        InputStream inputStream = getClass().getResourceAsStream("text_area.txt");
+        buttonsRollup.setExpanded(true);
 
-        Document document = null;
-        try {
-            document = plainTextSerializer.readObject(inputStream);
-        } catch(Exception exception) {
-            System.out.println(exception);
-        }
+        Rollup listsRollup = (Rollup)wtkxSerializer.getObjectByName("listsRollup");
+        listsRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/lists.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
+                ListView editableListView = (ListView)wtkxSerializer.getObjectByName("editableListView");
+                List<ListItem> listData = (List<ListItem>)editableListView.getListData();
+                listData.setComparator(new Comparator<ListItem>() {
+                    public int compare(ListItem listItem1, ListItem listItem2) {
+                        String text1 = listItem1.getText();
+                        String text2 = listItem2.getText();
+                        return text1.compareToIgnoreCase(text2);
+                    }
+                });
 
-        TextArea textArea = (TextArea)wtkxSerializer.getObjectByName("text.textArea");
-        textArea.setDocument(document);
+                ListView iconListView = (ListView)wtkxSerializer.getObjectByName("iconListView");
+                iconListView.setItemDisabled(3, true);
+                iconListView.setItemDisabled(4, true);
 
-        final WatermarkDecorator watermarkDecorator = new WatermarkDecorator("Preview");
-        watermarkDecorator.setOpacity(0.1f);
-        watermarkDecorator.setFont(watermarkDecorator.getFont().deriveFont(Font.BOLD, 24));
+                ListView checkedListView = (ListView)wtkxSerializer.getObjectByName("checkedListView");
+                checkedListView.setItemChecked(0, true);
+                checkedListView.setItemChecked(2, true);
+                checkedListView.setItemChecked(3, true);
+            }
+        });
 
-        textArea.getDecorators().add(watermarkDecorator);
+        Rollup textRollup = (Rollup)wtkxSerializer.getObjectByName("textRollup");
+        textRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/text.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
+                PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
+                InputStream inputStream = getClass().getResourceAsStream("text_area.txt");
 
-        textArea.getComponentStateListeners().add(new ComponentStateListener() {
-            public void enabledChanged(Component component) {
+                Document document = null;
+                try {
+                    document = plainTextSerializer.readObject(inputStream);
+                } catch(Exception exception) {
+                    System.out.println(exception);
+                }
+
+                TextArea textArea = (TextArea)wtkxSerializer.getObjectByName("textArea");
+                textArea.setDocument(document);
+
+                final WatermarkDecorator watermarkDecorator = new WatermarkDecorator("Preview");
+                watermarkDecorator.setOpacity(0.1f);
+                watermarkDecorator.setFont(watermarkDecorator.getFont().deriveFont(Font.BOLD, 24));
+
+                textArea.getDecorators().add(watermarkDecorator);
+
+                textArea.getComponentStateListeners().add(new ComponentStateListener() {
+                    public void enabledChanged(Component component) {
+                        // No-op
+                    }
+
+                    public void focusedChanged(Component component, boolean temporary) {
+                        component.getDecorators().remove(watermarkDecorator);
+                        component.getComponentStateListeners().remove(this);
+                    }
+                });
+            }
+        });
+
+        Rollup calendarsRollup = (Rollup)wtkxSerializer.getObjectByName("calendarsRollup");
+        calendarsRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/calendars.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
             }
+        });
 
-            public void focusedChanged(Component component, boolean temporary) {
-                component.getDecorators().remove(watermarkDecorator);
-                component.getComponentStateListeners().remove(this);
+        Rollup navigationRollup = (Rollup)wtkxSerializer.getObjectByName("navigationRollup");
+        navigationRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/navigation.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
+                // No-op
+            }
+        });
+
+        Rollup splittersRollup = (Rollup)wtkxSerializer.getObjectByName("splittersRollup");
+        splittersRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/splitters.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
+                // No-op
             }
         });
 
@@ -174,192 +273,225 @@ public class Demo implements Application {
             }
         };
 
-        ListView iconListView = (ListView)wtkxSerializer.getObjectByName("lists.iconListView");
-        iconListView.setItemDisabled(3, true);
-        iconListView.setItemDisabled(4, true);
+        Rollup menusRollup = (Rollup)wtkxSerializer.getObjectByName("menusRollup");
+        menusRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/menus.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) throws SerializationException, IOException {
+                menuImageView = (ImageView)wtkxSerializer.getObjectByName("imageView");
+                menuImageView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
+                    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+                        if (button == Mouse.Button.RIGHT) {
+                            menuPopup.open(display, component.mapPointToAncestor(display, x, y));
+                        }
 
-        ListView checkedListView = (ListView)wtkxSerializer.getObjectByName("lists.checkedListView");
-        checkedListView.setItemChecked(0, true);
-        checkedListView.setItemChecked(2, true);
-        checkedListView.setItemChecked(3, true);
+                        return false;
+                    }
 
-        menuImageView = (ImageView)wtkxSerializer.getObjectByName("menus.imageView");
-        menuImageView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
-            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-                if (button == Mouse.Button.RIGHT) {
-                    menuPopup.open(display, component.mapPointToAncestor(display, x, y));
-                }
+                    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+                        return false;
+                    }
 
-                return false;
-            }
+                    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+                        return false;
+                    }
+                });
 
-            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-                return false;
-            }
-
-            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-                return false;
+                menuPopup = new MenuPopup((Menu)wtkxSerializer.readObject("pivot/tutorials/menu_popup.wtkx"));
             }
         });
 
-        // Spinners
-        Spinner numericSpinner = (Spinner)wtkxSerializer.getObjectByName("spinners.numericSpinner");
-        initializeNumericSpinner(numericSpinner);
+        Rollup metersRollup = (Rollup)wtkxSerializer.getObjectByName("metersRollup");
+        metersRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/meters.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
+                // No-op
+            }
+        });
 
-        Spinner dateSpinner = (Spinner)wtkxSerializer.getObjectByName("spinners.dateSpinner");
-        initializeDateSpinner(dateSpinner);
+        Rollup spinnersRollup = (Rollup)wtkxSerializer.getObjectByName("spinnersRollup");
+        spinnersRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/spinners.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
+                Spinner numericSpinner = (Spinner)wtkxSerializer.getObjectByName("numericSpinner");
+                initializeNumericSpinner(numericSpinner);
 
-        // Sliders
-        SliderValueListener sliderValueListener = new SliderValueListener() {
-            public void valueChanged(Slider slider, int previousValue) {
+                Spinner dateSpinner = (Spinner)wtkxSerializer.getObjectByName("dateSpinner");
+                initializeDateSpinner(dateSpinner);
+
+                SliderValueListener sliderValueListener = new SliderValueListener() {
+                    public void valueChanged(Slider slider, int previousValue) {
+                        Color color = new Color(redSlider.getValue(), greenSlider.getValue(),
+                            blueSlider.getValue());
+                        colorBorder.getStyles().put("backgroundColor", color);
+                    }
+                };
+
+                redSlider = (Slider)wtkxSerializer.getObjectByName("redSlider");
+                redSlider.getSliderValueListeners().add(sliderValueListener);
+
+                greenSlider = (Slider)wtkxSerializer.getObjectByName("greenSlider");
+                greenSlider.getSliderValueListeners().add(sliderValueListener);
+
+                blueSlider = (Slider)wtkxSerializer.getObjectByName("blueSlider");
+                blueSlider.getSliderValueListeners().add(sliderValueListener);
+
                 Color color = new Color(redSlider.getValue(), greenSlider.getValue(),
                     blueSlider.getValue());
+                colorBorder = (Border)wtkxSerializer.getObjectByName("colorBorder");
                 colorBorder.getStyles().put("backgroundColor", color);
             }
-        };
+        });
 
-        redSlider = (Slider)wtkxSerializer.getObjectByName("spinners.redSlider");
-        redSlider.getSliderValueListeners().add(sliderValueListener);
-
-        greenSlider = (Slider)wtkxSerializer.getObjectByName("spinners.greenSlider");
-        greenSlider.getSliderValueListeners().add(sliderValueListener);
-
-        blueSlider = (Slider)wtkxSerializer.getObjectByName("spinners.blueSlider");
-        blueSlider.getSliderValueListeners().add(sliderValueListener);
-
-        Color color = new Color(redSlider.getValue(), greenSlider.getValue(),
-            blueSlider.getValue());
-        colorBorder = (Border)wtkxSerializer.getObjectByName("spinners.colorBorder");
-        colorBorder.getStyles().put("backgroundColor", color);
-
-        sortableTableView = (TableView)wtkxSerializer.getObjectByName("tables.sortableTableView");
-        sortableTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("tables.sortableTableViewHeader");
-        customTableView = (TableView)wtkxSerializer.getObjectByName("tables.customTableView");
-        initializeTableViews();
-
-        TreeView editableTreeView = (TreeView)wtkxSerializer.getObjectByName("trees.editableTreeView");
-        TreeBranch treeData = (TreeBranch)editableTreeView.getTreeData();
-        treeData.setComparator(new TreeNodeComparator());
-
-        DragSource imageDragSource = new DragSource() {
-            private Image image = null;
-            private Point offset = null;
-            private LocalManifest content = null;
-
-            public boolean beginDrag(Component component, int x, int y) {
-                ImageView imageView = (ImageView)component;
-                image = imageView.getImage();
-
-                if (image != null) {
-                    imageView.setImage((Image)null);
-                    content = new LocalManifest();
-                    content.putImage(image);
-                    offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2,
-                        y - (imageView.getHeight() - image.getHeight()) / 2);
-                }
-
-                return (image != null);
+        Rollup tablesRollup = (Rollup)wtkxSerializer.getObjectByName("tablesRollup");
+        tablesRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/tables.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
+                sortableTableView = (TableView)wtkxSerializer.getObjectByName("sortableTableView");
+                sortableTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("sortableTableViewHeader");
+                customTableView = (TableView)wtkxSerializer.getObjectByName("customTableView");
+                initializeTableViews();
             }
+        });
 
-            public void endDrag(Component component, DropAction dropAction) {
-                if (dropAction == null) {
-                    ImageView imageView = (ImageView)component;
-                    imageView.setImage(image);
-                }
-
-                image = null;
-                offset = null;
-                content = null;
+        Rollup treesRollup = (Rollup)wtkxSerializer.getObjectByName("treesRollup");
+        treesRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/trees.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
+                TreeView editableTreeView = (TreeView)wtkxSerializer.getObjectByName("editableTreeView");
+                TreeBranch treeData = (TreeBranch)editableTreeView.getTreeData();
+                treeData.setComparator(new TreeNodeComparator());
             }
+        });
 
-            public boolean isNative() {
-                return false;
-            }
+        Rollup dragDropRollup = (Rollup)wtkxSerializer.getObjectByName("dragDropRollup");
+        dragDropRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/dragdrop.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
+                DragSource imageDragSource = new DragSource() {
+                    private Image image = null;
+                    private Point offset = null;
+                    private LocalManifest content = null;
 
-            public LocalManifest getContent() {
-                return content;
-            }
+                    public boolean beginDrag(Component component, int x, int y) {
+                        ImageView imageView = (ImageView)component;
+                        image = imageView.getImage();
 
-            public Visual getRepresentation() {
-                return image;
-            }
+                        if (image != null) {
+                            imageView.setImage((Image)null);
+                            content = new LocalManifest();
+                            content.putImage(image);
+                            offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2,
+                                y - (imageView.getHeight() - image.getHeight()) / 2);
+                        }
 
-            public Point getOffset() {
-                return offset;
-            }
-
-            public int getSupportedDropActions() {
-                return DropAction.MOVE.getMask();
-            }
-        };
-
-        DropTarget imageDropTarget = new DropTarget() {
-            public DropAction dragEnter(Component component, Manifest dragContent,
-                int supportedDropActions, DropAction userDropAction) {
-                DropAction dropAction = null;
-
-                ImageView imageView = (ImageView)component;
-                if (imageView.getImage() == null
-                    && dragContent.containsImage()
-                    && DropAction.MOVE.isSelected(supportedDropActions)) {
-                    dropAction = DropAction.MOVE;
-                    component.getStyles().put("backgroundColor", "#f0e68c");
-                }
-
-                return dropAction;
-            }
-
-            public void dragExit(Component component) {
-                component.getStyles().put("backgroundColor", null);
-            }
-
-            public DropAction dragMove(Component component, Manifest dragContent,
-                int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (dragContent.containsImage() ? DropAction.MOVE : null);
-            }
-
-            public DropAction userDropActionChange(Component component, Manifest dragContent,
-                int supportedDropActions, int x, int y, DropAction userDropAction) {
-                return (dragContent.containsImage() ? DropAction.MOVE : null);
-            }
-
-            public DropAction drop(Component component, Manifest dragContent,
-                int supportedDropActions, int x, int y, DropAction userDropAction) {
-                DropAction dropAction = null;
-
-                if (dragContent.containsImage()) {
-                    ImageView imageView = (ImageView)component;
-                    try {
-                        imageView.setImage(dragContent.getImage());
-                        dropAction = DropAction.MOVE;
-                    } catch(IOException exception) {
-                        System.err.println(exception);
+                        return (image != null);
                     }
-                }
 
-                dragExit(component);
+                    public void endDrag(Component component, DropAction dropAction) {
+                        if (dropAction == null) {
+                            ImageView imageView = (ImageView)component;
+                            imageView.setImage(image);
+                        }
 
-                return dropAction;
+                        image = null;
+                        offset = null;
+                        content = null;
+                    }
+
+                    public boolean isNative() {
+                        return false;
+                    }
+
+                    public LocalManifest getContent() {
+                        return content;
+                    }
+
+                    public Visual getRepresentation() {
+                        return image;
+                    }
+
+                    public Point getOffset() {
+                        return offset;
+                    }
+
+                    public int getSupportedDropActions() {
+                        return DropAction.MOVE.getMask();
+                    }
+                };
+
+                DropTarget imageDropTarget = new DropTarget() {
+                    public DropAction dragEnter(Component component, Manifest dragContent,
+                        int supportedDropActions, DropAction userDropAction) {
+                        DropAction dropAction = null;
+
+                        ImageView imageView = (ImageView)component;
+                        if (imageView.getImage() == null
+                            && dragContent.containsImage()
+                            && DropAction.MOVE.isSelected(supportedDropActions)) {
+                            dropAction = DropAction.MOVE;
+                            component.getStyles().put("backgroundColor", "#f0e68c");
+                        }
+
+                        return dropAction;
+                    }
+
+                    public void dragExit(Component component) {
+                        component.getStyles().put("backgroundColor", null);
+                    }
+
+                    public DropAction dragMove(Component component, Manifest dragContent,
+                        int supportedDropActions, int x, int y, DropAction userDropAction) {
+                        return (dragContent.containsImage() ? DropAction.MOVE : null);
+                    }
+
+                    public DropAction userDropActionChange(Component component, Manifest dragContent,
+                        int supportedDropActions, int x, int y, DropAction userDropAction) {
+                        return (dragContent.containsImage() ? DropAction.MOVE : null);
+                    }
+
+                    public DropAction drop(Component component, Manifest dragContent,
+                        int supportedDropActions, int x, int y, DropAction userDropAction) {
+                        DropAction dropAction = null;
+
+                        if (dragContent.containsImage()) {
+                            ImageView imageView = (ImageView)component;
+                            try {
+                                imageView.setImage(dragContent.getImage());
+                                dropAction = DropAction.MOVE;
+                            } catch(IOException exception) {
+                                System.err.println(exception);
+                            }
+                        }
+
+                        dragExit(component);
+
+                        return dropAction;
+                    }
+                };
+
+                ImageView imageView1 = (ImageView)wtkxSerializer.getObjectByName("imageView1");
+                imageView1.setDragSource(imageDragSource);
+                imageView1.setDropTarget(imageDropTarget);
+
+                ImageView imageView2 = (ImageView)wtkxSerializer.getObjectByName("imageView2");
+                imageView2.setDragSource(imageDragSource);
+                imageView2.setDropTarget(imageDropTarget);
+
+                ImageView imageView3 = (ImageView)wtkxSerializer.getObjectByName("imageView3");
+                imageView3.setDragSource(imageDragSource);
+                imageView3.setDropTarget(imageDropTarget);
             }
-        };
+        });
 
-        ImageView imageView1 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView1");
-        imageView1.setDragSource(imageDragSource);
-        imageView1.setDropTarget(imageDropTarget);
-
-        ImageView imageView2 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView2");
-        imageView2.setDragSource(imageDragSource);
-        imageView2.setDropTarget(imageDropTarget);
-
-        ImageView imageView3 = (ImageView)wtkxSerializer.getObjectByName("dragdrop.imageView3");
-        imageView3.setDragSource(imageDragSource);
-        imageView3.setDropTarget(imageDropTarget);
-
-        alertButton = (PushButton)wtkxSerializer.getObjectByName("alerts.alertButton");
-        promptButton = (PushButton)wtkxSerializer.getObjectByName("alerts.promptButton");
-        initializeAlertButtons();
-
-        menuPopup = new MenuPopup((Menu)wtkxSerializer.readObject("pivot/tutorials/menu_popup.wtkx"));
+        Rollup alertsRollup = (Rollup)wtkxSerializer.getObjectByName("alertsRollup");
+        alertsRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/alerts.wtkx") {
+            @Override
+            protected void initialize(WTKXSerializer wtkxSerializer) {
+                alertButton = (PushButton)wtkxSerializer.getObjectByName("alertButton");
+                promptButton = (PushButton)wtkxSerializer.getObjectByName("promptButton");
+                initializeAlertButtons();
+            }
+        });
 
         window = new Window();
         window.setTitle("Pivot Demo");
