@@ -60,23 +60,13 @@ public class Text extends Shape {
         this.wrapWidth = wrapWidth;
     }
 
-    public int getWidth() {
-        // TODO
-        return 0;
-    }
-
-    public int getHeight() {
-        // TODO
-        return 0;
-    }
-
-    public void paint(Graphics2D graphics) {
-        // TODO
-    }
-
     @Override
     public boolean contains(int x, int y) {
         // TODO
         return false;
+    }
+
+    public void paint(Graphics2D graphics) {
+        // TODO
     }
 }

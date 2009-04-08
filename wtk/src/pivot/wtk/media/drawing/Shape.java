@@ -34,6 +34,8 @@ public abstract class Shape implements Visual {
 
     private int x = 0;
     private int y = 0;
+    private int width = 0;
+    private int height = 0;
 
     private Paint fill = null;
     private Paint stroke = Color.BLACK;
@@ -86,7 +88,25 @@ public abstract class Shape implements Visual {
         setOrigin(origin.x, origin.y);
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    protected void setSize(int width, int height) {
+        // TODO
+        this.width = width;
+        this.height = height;
+    }
+
     public Bounds getBounds() {
+        return getBounds(true);
+    }
+
+    protected Bounds getBounds(boolean validate) {
         // TODO Transform untransformed bounds
         return null;
     }
@@ -187,5 +207,17 @@ public abstract class Shape implements Visual {
     public AffineTransform getTransform() {
         // TODO
         return null;
+    }
+
+    protected void invalidateRegion() {
+        if (parent != null) {
+            parent.invalidateRegion(this);
+        }
+    }
+
+    protected void invalidateBounds() {
+        if (parent != null) {
+            parent.invalidateBounds(this);
+        }
     }
 }

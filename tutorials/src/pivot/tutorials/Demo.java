@@ -63,7 +63,7 @@ import pivot.wtk.Spinner;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TextArea;
-import pivot.wtk.Theme;
+// import pivot.wtk.Theme;
 import pivot.wtk.TreeView;
 import pivot.wtk.Visual;
 import pivot.wtk.Window;
@@ -76,7 +76,7 @@ import pivot.wtk.content.TreeBranch;
 import pivot.wtk.effects.ReflectionDecorator;
 import pivot.wtk.effects.WatermarkDecorator;
 import pivot.wtk.media.Image;
-import pivot.wtk.skin.terra.TerraTheme;
+// import pivot.wtk.skin.terra.TerraTheme;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.PlainTextSerializer;
 import pivot.wtkx.WTKXSerializer;
@@ -143,22 +143,24 @@ public class Demo implements Application {
 
     @SuppressWarnings("unchecked")
     public void startup(final Display display, Dictionary<String, String> properties) throws Exception {
+        // NOTE This is commented out because it takes a non-negligible amount
+        // of time to execute
+        /*
         TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
         URL schemeLocation = TerraTheme.class.getResource("TerraTheme_default.json");
         terraTheme.loadScheme(schemeLocation);
+        */
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
 
-        Rollup buttonsRollup = (Rollup)wtkxSerializer.getObjectByName("buttonsRollup");
+        final Rollup buttonsRollup = (Rollup)wtkxSerializer.getObjectByName("buttonsRollup");
         buttonsRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/buttons.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
             }
         });
-
-        buttonsRollup.setExpanded(true);
 
         Rollup listsRollup = (Rollup)wtkxSerializer.getObjectByName("listsRollup");
         listsRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/lists.wtkx") {
@@ -499,6 +501,12 @@ public class Demo implements Application {
         window.setContent(content);
 
         window.open(display);
+
+        ApplicationContext.scheduleCallback(new Runnable() {
+            public void run() {
+                buttonsRollup.setExpanded(true);
+            }
+        }, 0);
     }
 
     @SuppressWarnings("unchecked")

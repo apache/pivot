@@ -18,10 +18,10 @@ package pivot.wtk.media.drawing;
 
 import java.awt.Graphics2D;
 import java.util.Iterator;
-
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
+import pivot.wtk.Bounds;
 
 /**
  * Shape representing a collection of other shapes.
@@ -118,5 +118,21 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
 
     public Iterator<Shape> iterator() {
         return new ImmutableIterator<Shape>(shapes.iterator());
+    }
+
+    protected void invalidateRegion(Shape shape) {
+        invalidateRegion(shape.getBounds());
+    }
+
+    protected void invalidateRegion(Bounds bounds) {
+        invalidateRegion(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+
+    protected void invalidateRegion(int x, int y, int width, int height) {
+        // TODO
+    }
+
+    protected void invalidateBounds(Shape shape) {
+        // TODO
     }
 }
