@@ -457,6 +457,11 @@ public class WTKXSerializer implements Serializer<Object> {
 
                                 // If an ID was specified, add the value to the named object map
                                 if (id != null) {
+                                    if (id.length() == 0) {
+                                        throw new IllegalArgumentException(WTKX_PREFIX + ":" + ID_ATTRIBUTE
+                                            + " must not be null.");
+                                    }
+
                                     namedObjects.put(id, element.value);
 
                                     if (scriptEngineManager != null) {
@@ -743,37 +748,41 @@ public class WTKXSerializer implements Serializer<Object> {
                 resolvedValue = attributeValue;
             }
         } else {
-            if (attributeValue.charAt(0) == URL_PREFIX) {
-                if (attributeValue.length() > 1) {
-                    if (attributeValue.charAt(1) == URL_PREFIX) {
-                        resolvedValue = attributeValue.substring(1);
-                    } else {
-                        if (location == null) {
-                            throw new IllegalStateException("Base location is undefined.");
-                        }
+            if (attributeValue.length() > 0) {
+                if (attributeValue.charAt(0) == URL_PREFIX) {
+                    if (attributeValue.length() > 1) {
+                        if (attributeValue.charAt(1) == URL_PREFIX) {
+                            resolvedValue = attributeValue.substring(1);
+                        } else {
+                            if (location == null) {
+                                throw new IllegalStateException("Base location is undefined.");
+                            }
 
-                        resolvedValue = new URL(location, attributeValue.substring(1));
-                    }
-                }
-            } else if (attributeValue.charAt(0) == RESOURCE_KEY_PREFIX) {
-                if (attributeValue.length() > 1) {
-                    if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
-                        resolvedValue = attributeValue.substring(1);
-                    } else {
-                        if (resources == null) {
-                            throw new IllegalStateException("Resource dictionary is undefined.");
+                            resolvedValue = new URL(location, attributeValue.substring(1));
                         }
+                    }
+                } else if (attributeValue.charAt(0) == RESOURCE_KEY_PREFIX) {
+                    if (attributeValue.length() > 1) {
+                        if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
+                            resolvedValue = attributeValue.substring(1);
+                        } else {
+                            if (resources == null) {
+                                throw new IllegalStateException("Resource dictionary is undefined.");
+                            }
 
-                        resolvedValue = resources.get(attributeValue.substring(1));
+                            resolvedValue = resources.get(attributeValue.substring(1));
+                        }
                     }
-                }
-            } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {
-                if (attributeValue.length() > 1) {
-                    if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
-                        resolvedValue = attributeValue.substring(1);
-                    } else {
-                        resolvedValue = getObjectByID(attributeValue.substring(1));
+                } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {
+                    if (attributeValue.length() > 1) {
+                        if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
+                            resolvedValue = attributeValue.substring(1);
+                        } else {
+                            resolvedValue = getObjectByID(attributeValue.substring(1));
+                        }
                     }
+                } else {
+                    resolvedValue = attributeValue;
                 }
             } else {
                 resolvedValue = attributeValue;

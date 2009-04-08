@@ -229,9 +229,15 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
         try {
             setterMethod.invoke(bean, new Object[] {value});
         } catch(IllegalAccessException exception) {
-            throw new IllegalArgumentException(exception);
+            throw new RuntimeException(exception);
         } catch(InvocationTargetException exception) {
-            throw new IllegalArgumentException(exception);
+            Throwable cause = exception.getCause();
+
+            if (cause instanceof RuntimeException) {
+                throw (RuntimeException)cause;
+            } else {
+                throw new RuntimeException(cause);
+            }
         }
 
         return null;

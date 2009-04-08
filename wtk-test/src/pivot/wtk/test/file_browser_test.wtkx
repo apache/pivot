@@ -29,11 +29,6 @@ limitations under the License.
                     <nodeRenderer>
                         <content:TreeViewFileRenderer/>
                     </nodeRenderer>
-                    <!--
-                    <treeData>
-                        <io:Folder/>
-                    </treeData>
-                    -->
                 </TreeView>
             </view>
         </ScrollPane>
