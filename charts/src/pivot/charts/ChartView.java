@@ -396,11 +396,6 @@ public abstract class ChartView extends Component {
         setShowLegend(showLegend);
     }
 
-    @Override
-    protected void installSkin(Class<? extends Component> componentClass) {
-        throw new UnsupportedOperationException();
-    }
-
     protected void installChartSkin(Class<? extends ChartView> chartViewClass) {
         Class<? extends pivot.wtk.Skin> skinClass = provider.getSkinClass(chartViewClass);
 

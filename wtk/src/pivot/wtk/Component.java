@@ -647,7 +647,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param componentClass
      */
     @SuppressWarnings("unchecked")
-    protected void installSkin(Class<? extends Component> componentClass) {
+    protected final void installSkin(Class<? extends Component> componentClass) {
         // Walk up component hierarchy from this type; if we find a match
         // and the super class equals the given component class, install
         // the skin. Otherwise, ignore - it will be installed later by a
@@ -2070,7 +2070,7 @@ public abstract class Component implements ConstrainedVisual {
      * implementation. It allows callers to modify the properties of the skin
      * without directly obtaining a reference to the skin.
      */
-    public StyleDictionary getStyles() {
+    public final StyleDictionary getStyles() {
         return styleDictionary;
     }
 
