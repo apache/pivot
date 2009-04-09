@@ -1393,7 +1393,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 }
             }
 
-            treeView.requestFocus();
+            if (treeView.isFocusable()) {
+                treeView.requestFocus();
+            }
         }
 
         return consumed;
@@ -1601,6 +1603,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         }
 
         return consumed;
+    }
+
+    @Override
+    public boolean isFocusable() {
+        TreeView treeView = (TreeView)getComponent();
+        return (treeView.getSelectMode() != TreeView.SelectMode.NONE);
     }
 
     // Component state events
