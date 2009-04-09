@@ -1563,7 +1563,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Flags the entire component as needing to be repainted.
      */
-    public void repaint() {
+    public final void repaint() {
         repaint(false);
     }
 
@@ -1572,7 +1572,7 @@ public abstract class Component implements ConstrainedVisual {
      *
      * @param immediate
      */
-    public void repaint(boolean immediate) {
+    public final void repaint(boolean immediate) {
         repaint(0, 0, getWidth(), getHeight(), immediate);
     }
 
