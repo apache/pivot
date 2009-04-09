@@ -51,6 +51,22 @@ public class TagDecorator implements Decorator {
     public TagDecorator(Visual tag,
         HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment,
         int xOffset, int yOffset) {
+        if (horizontalAlignment == null) {
+            throw new IllegalArgumentException("horizontalAlignment is null.");
+        }
+
+        if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
+            throw new IllegalArgumentException("JUSTIFY is not supported");
+        }
+
+        if (verticalAlignment == null) {
+            throw new IllegalArgumentException("verticalAlignment is null.");
+        }
+
+        if (verticalAlignment == VerticalAlignment.JUSTIFY) {
+            throw new IllegalArgumentException("JUSTIFY is not supported");
+        }
+
         this.tag = tag;
         this.horizontalAlignment = horizontalAlignment;
         this.verticalAlignment = verticalAlignment;
@@ -75,6 +91,10 @@ public class TagDecorator implements Decorator {
             throw new IllegalArgumentException("horizontalAlignment is null.");
         }
 
+        if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
+            throw new IllegalArgumentException("JUSTIFY is not supported");
+        }
+
         this.horizontalAlignment = horizontalAlignment;
     }
 
@@ -85,6 +105,10 @@ public class TagDecorator implements Decorator {
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
         if (verticalAlignment == null) {
             throw new IllegalArgumentException("verticalAlignment is null.");
+        }
+
+        if (verticalAlignment == VerticalAlignment.JUSTIFY) {
+            throw new IllegalArgumentException("JUSTIFY is not supported");
         }
 
         this.verticalAlignment = verticalAlignment;

@@ -25,6 +25,10 @@ public enum HorizontalAlignment {
     RIGHT,
     LEFT,
     CENTER,
+
+    /**
+     * Stretch the contents to fill the available space.
+     */
     JUSTIFY;
 
     public static HorizontalAlignment decode(String value) {

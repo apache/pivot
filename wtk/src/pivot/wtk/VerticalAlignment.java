@@ -25,6 +25,10 @@ public enum VerticalAlignment {
     TOP,
     BOTTOM,
     CENTER,
+
+    /**
+     * Stretch the contents to fill the available space.
+     */
     JUSTIFY;
 
     public static VerticalAlignment decode(String value) {

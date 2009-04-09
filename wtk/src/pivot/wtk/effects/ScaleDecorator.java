@@ -179,6 +179,10 @@ public class ScaleDecorator implements Decorator {
             throw new IllegalArgumentException("horizontalAlignment is null.");
         }
 
+        if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
+            throw new IllegalArgumentException("JUSTIFY is not supported");
+        }
+
         this.horizontalAlignment = horizontalAlignment;
     }
 
@@ -230,6 +234,10 @@ public class ScaleDecorator implements Decorator {
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
         if (verticalAlignment == null) {
             throw new IllegalArgumentException("verticalAlignment is null.");
+        }
+
+        if (verticalAlignment == VerticalAlignment.JUSTIFY) {
+            throw new IllegalArgumentException("JUSTIFY is not supported");
         }
 
         this.verticalAlignment = verticalAlignment;
