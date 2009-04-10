@@ -176,7 +176,7 @@ public class ObsidianPushButtonSkin extends PushButtonSkin {
         // Paint the focus state
         if (pushButton.isFocused()) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+                BasicStroke.JOIN_ROUND, 1.0f, new float[] {1.0f, 1.0f}, 0.0f);
 
             graphics.setColor(highlightedGradientStartColor);
             graphics.setStroke(dashStroke);
