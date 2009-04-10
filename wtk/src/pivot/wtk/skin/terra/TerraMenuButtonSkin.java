@@ -195,20 +195,17 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
         // Paint the focus state
         if (menuButton.isFocused()) {
-            BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
+            BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] {1.0f, 1.0f}, 0.0f);
 
             graphics.setStroke(dashStroke);
             graphics.setColor(borderColor);
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+                RenderingHints.VALUE_ANTIALIAS_OFF);
 
             graphics.drawRect(2, 2, Math.max(width - 5, 0),
                 Math.max(height - 5, 0));
-
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_OFF);
         }
     }
 
