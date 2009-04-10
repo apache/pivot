@@ -1062,15 +1062,28 @@ public abstract class ApplicationContext {
         }
     }
 
-    public static class ScheduledCallback extends TimerTask {
+    public static final class ScheduledCallback extends TimerTask {
         private Runnable runnable = null;
+        private volatile boolean cancelled = false;
 
-        private ScheduledCallback(Runnable runnable) {
-            this.runnable = runnable;
+        private ScheduledCallback(final Runnable runnable) {
+            this.runnable = new Runnable() {
+                public void run() {
+                    if (!cancelled) {
+                        runnable.run();
+                    }
+                }
+            };
         }
 
         public void run() {
             queueCallback(runnable);
+        }
+
+        @Override
+        public boolean cancel() {
+            cancelled = true;
+            return super.cancel();
         }
     }
 
