@@ -16,10 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border title="Border Title" styles="{thickness:5, cornerRadii:10, padding:5}"
+<Border styles="{color:'#ff0000', thickness:10, cornerRadii:0, padding:5}"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
     <content>
-        <Label text="Some very long text...fill in more here to reproduce fill in more here to reproduce fill in more here to reproduce"
-            styles="{wrapText:true, horizontalAlignment:'center'}" />
+        <Label text="Some very long text...fill in more here to reproduce."
+            styles="{wrapText:true, horizontalAlignment:'center', verticalAlignment:'center'}" />
     </content>
 </Border>
