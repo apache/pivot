@@ -263,6 +263,8 @@ public class BorderSkin extends ContainerSkin
             if (cornerRadius > 0) {
                 graphics.drawRoundRect(x, y, width, height, cornerRadius, cornerRadius);
             } else {
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_OFF);
                 graphics.drawRect(x, y, width, height);
             }
         }

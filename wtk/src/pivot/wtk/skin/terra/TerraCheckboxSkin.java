@@ -197,7 +197,9 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         int buttonHeight = CHECKBOX_SIZE - 1;
 
         graphics.setPaint(new GradientPaint(buttonWidth / 2, 0, buttonBevelColor,
-    		buttonWidth / 2, buttonHeight, buttonColor));
+            buttonWidth / 2, buttonHeight, buttonColor));
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_OFF);
         graphics.fillRect(0, 0, buttonWidth, buttonHeight);
 
         // Paint the border
