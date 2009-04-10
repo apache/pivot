@@ -219,7 +219,12 @@ public class BorderSkin extends ContainerSkin
         Color backgroundColor = getBackgroundColor();
         if (backgroundColor != null) {
             graphics.setPaint(backgroundColor);
-            graphics.fillRoundRect(x, y, width, height, cornerRadius, cornerRadius);
+
+            if (cornerRadius > 0) {
+                graphics.fillRoundRect(x, y, width, height, cornerRadius, cornerRadius);
+            } else {
+                graphics.fillRect(x, y, width, height);
+            }
         }
 
         // Draw the title
@@ -254,7 +259,12 @@ public class BorderSkin extends ContainerSkin
         if (thickness > 0) {
             graphics.setPaint(color);
             graphics.setStroke(new BasicStroke(thickness));
-            graphics.drawRoundRect(x, y, width, height, cornerRadius, cornerRadius);
+
+            if (cornerRadius > 0) {
+                graphics.drawRoundRect(x, y, width, height, cornerRadius, cornerRadius);
+            } else {
+                graphics.drawRect(x, y, width, height);
+            }
         }
     }
 
