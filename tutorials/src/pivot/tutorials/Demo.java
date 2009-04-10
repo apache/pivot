@@ -56,7 +56,7 @@ import pivot.wtk.PushButton;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
 import pivot.wtk.Rollup;
-import pivot.wtk.RollupListener;
+import pivot.wtk.RollupStateListener;
 import pivot.wtk.Slider;
 import pivot.wtk.SliderValueListener;
 import pivot.wtk.Spinner;
@@ -82,11 +82,11 @@ import pivot.wtk.text.PlainTextSerializer;
 import pivot.wtkx.WTKXSerializer;
 
 public class Demo implements Application {
-    private abstract class RollupHandler implements RollupListener {
+    private abstract class RollupStateHandler implements RollupStateListener {
         private String resourceName;
         private Component component = null;
 
-        public RollupHandler(String resourceName) {
+        public RollupStateHandler(String resourceName) {
             this.resourceName = resourceName;
         }
 
@@ -96,11 +96,7 @@ public class Demo implements Application {
 
                 try {
                     component = (Component)wtkxSerializer.readObject(resourceName);
-
-                    // TODO This is a hack; it shows knowledge that rollup adds
-                    // an internal component to handle expand/collapse
-                    rollup.remove(2, 1);
-                    rollup.add(component);
+                    rollup.setContent(component);
                     initialize(wtkxSerializer);
                 } catch(SerializationException exception) {
                     throw new RuntimeException(exception);
@@ -155,7 +151,7 @@ public class Demo implements Application {
         Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
 
         final Rollup buttonsRollup = (Rollup)wtkxSerializer.getObjectByName("buttonsRollup");
-        buttonsRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/buttons.wtkx") {
+        buttonsRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/buttons.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
@@ -163,7 +159,7 @@ public class Demo implements Application {
         });
 
         Rollup listsRollup = (Rollup)wtkxSerializer.getObjectByName("listsRollup");
-        listsRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/lists.wtkx") {
+        listsRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/lists.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 ListView editableListView = (ListView)wtkxSerializer.getObjectByName("editableListView");
@@ -188,7 +184,7 @@ public class Demo implements Application {
         });
 
         Rollup textRollup = (Rollup)wtkxSerializer.getObjectByName("textRollup");
-        textRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/text.wtkx") {
+        textRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/text.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
@@ -224,7 +220,7 @@ public class Demo implements Application {
         });
 
         Rollup calendarsRollup = (Rollup)wtkxSerializer.getObjectByName("calendarsRollup");
-        calendarsRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/calendars.wtkx") {
+        calendarsRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/calendars.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
@@ -232,7 +228,7 @@ public class Demo implements Application {
         });
 
         Rollup navigationRollup = (Rollup)wtkxSerializer.getObjectByName("navigationRollup");
-        navigationRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/navigation.wtkx") {
+        navigationRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/navigation.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
@@ -240,7 +236,7 @@ public class Demo implements Application {
         });
 
         Rollup splittersRollup = (Rollup)wtkxSerializer.getObjectByName("splittersRollup");
-        splittersRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/splitters.wtkx") {
+        splittersRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/splitters.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
@@ -276,7 +272,7 @@ public class Demo implements Application {
         };
 
         Rollup menusRollup = (Rollup)wtkxSerializer.getObjectByName("menusRollup");
-        menusRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/menus.wtkx") {
+        menusRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/menus.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) throws SerializationException, IOException {
                 menuImageView = (ImageView)wtkxSerializer.getObjectByName("imageView");
@@ -303,7 +299,7 @@ public class Demo implements Application {
         });
 
         Rollup metersRollup = (Rollup)wtkxSerializer.getObjectByName("metersRollup");
-        metersRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/meters.wtkx") {
+        metersRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/meters.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
@@ -311,7 +307,7 @@ public class Demo implements Application {
         });
 
         Rollup spinnersRollup = (Rollup)wtkxSerializer.getObjectByName("spinnersRollup");
-        spinnersRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/spinners.wtkx") {
+        spinnersRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/spinners.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 Spinner numericSpinner = (Spinner)wtkxSerializer.getObjectByName("numericSpinner");
@@ -345,7 +341,7 @@ public class Demo implements Application {
         });
 
         Rollup tablesRollup = (Rollup)wtkxSerializer.getObjectByName("tablesRollup");
-        tablesRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/tables.wtkx") {
+        tablesRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/tables.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 sortableTableView = (TableView)wtkxSerializer.getObjectByName("sortableTableView");
@@ -356,7 +352,7 @@ public class Demo implements Application {
         });
 
         Rollup treesRollup = (Rollup)wtkxSerializer.getObjectByName("treesRollup");
-        treesRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/trees.wtkx") {
+        treesRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/trees.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 TreeView editableTreeView = (TreeView)wtkxSerializer.getObjectByName("editableTreeView");
@@ -366,7 +362,7 @@ public class Demo implements Application {
         });
 
         Rollup dragDropRollup = (Rollup)wtkxSerializer.getObjectByName("dragDropRollup");
-        dragDropRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/dragdrop.wtkx") {
+        dragDropRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/dragdrop.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 DragSource imageDragSource = new DragSource() {
@@ -486,7 +482,7 @@ public class Demo implements Application {
         });
 
         Rollup alertsRollup = (Rollup)wtkxSerializer.getObjectByName("alertsRollup");
-        alertsRollup.getRollupListeners().add(new RollupHandler("pivot/tutorials/alerts.wtkx") {
+        alertsRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/alerts.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 alertButton = (PushButton)wtkxSerializer.getObjectByName("alertButton");

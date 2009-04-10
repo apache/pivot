@@ -16,25 +16,40 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.util.Vote;
 
 /**
  * Container that can be expanded or collapsed to respectively show or hide its
- * children. When expanded, the rollup's children are displayed vertically like
- * a vertical flow pane. When collapsed, only the rollup's first child is
- * displayed.
+ * content. A rollup has a heading component that is always visible, and when
+ * the user expands the rollup, its content component will be shown beneath the
+ * heading.
  *
- * @author gbrown
  * @author tvolkert
  */
-public class Rollup extends pivot.wtk.Container {
+public class Rollup extends Container {
     private static class RollupListenerList extends ListenerList<RollupListener>
         implements RollupListener {
+        public void headingChanged(Rollup rollup, Component previousHeading) {
+            for (RollupListener listener : this) {
+                listener.headingChanged(rollup, previousHeading);
+            }
+        }
+
+        public void contentChanged(Rollup rollup, Component previousContent) {
+            for (RollupListener listener : this) {
+                listener.contentChanged(rollup, previousContent);
+            }
+        }
+    }
+
+    private static class RollupStateListenerList extends ListenerList<RollupStateListener>
+        implements RollupStateListener {
         public Vote previewExpandedChange(Rollup rollup) {
             Vote vote = Vote.APPROVE;
 
-            for (RollupListener listener : this) {
+            for (RollupStateListener listener : this) {
                 vote = vote.tally(listener.previewExpandedChange(rollup));
             }
 
@@ -42,20 +57,25 @@ public class Rollup extends pivot.wtk.Container {
         }
 
         public void expandedChangeVetoed(Rollup rollup, Vote reason) {
-            for (RollupListener listener : this) {
+            for (RollupStateListener listener : this) {
                 listener.expandedChangeVetoed(rollup, reason);
             }
         }
 
         public void expandedChanged(Rollup rollup) {
-            for (RollupListener listener : this) {
+            for (RollupStateListener listener : this) {
                 listener.expandedChanged(rollup);
             }
         }
     }
 
     private boolean expanded = true;
+
+    private Component heading = null;
+    private Component content = null;
+
     private RollupListenerList rollupListeners = new RollupListenerList();
+    private RollupStateListenerList rollupStateListeners = new RollupStateListenerList();
 
     public Rollup() {
         this(false, null);
@@ -65,17 +85,17 @@ public class Rollup extends pivot.wtk.Container {
         this(expanded, null);
     }
 
-    public Rollup(Component firstChild) {
-        this(false, firstChild);
+    public Rollup(Component content) {
+        this(false, content);
     }
 
-    public Rollup(boolean expanded, Component firstChild) {
+    public Rollup(boolean expanded, Component content) {
         this.expanded = expanded;
 
         installSkin(Rollup.class);
 
-        if (firstChild != null) {
-            add(firstChild);
+        if (content != null) {
+            setContent(content);
         }
     }
 
@@ -85,18 +105,88 @@ public class Rollup extends pivot.wtk.Container {
 
     public void setExpanded(boolean expanded) {
         if (expanded != this.expanded) {
-            Vote vote = rollupListeners.previewExpandedChange(this);
+            Vote vote = rollupStateListeners.previewExpandedChange(this);
 
             if (vote == Vote.APPROVE) {
                 this.expanded = expanded;
-                rollupListeners.expandedChanged(this);
+                rollupStateListeners.expandedChanged(this);
             } else {
-                rollupListeners.expandedChangeVetoed(this, vote);
+                rollupStateListeners.expandedChangeVetoed(this, vote);
             }
         }
     }
 
+    public Component getHeading() {
+        return heading;
+    }
+
+    public void setHeading(Component heading) {
+       Component previousHeading = this.heading;
+
+        if (heading != previousHeading) {
+            // Remove any previous heading component
+            this.heading = null;
+
+            if (previousHeading != null) {
+                remove(previousHeading);
+            }
+
+            // Set the new heading component
+            if (heading != null) {
+                add(heading);
+            }
+
+            this.heading = heading;
+
+            rollupListeners.headingChanged(this, previousHeading);
+        }
+    }
+
+    public Component getContent() {
+        return content;
+    }
+
+    public void setContent(Component content) {
+       Component previousContent = this.content;
+
+        if (content != previousContent) {
+            // Remove any previous content component
+            this.content = null;
+
+            if (previousContent != null) {
+                remove(previousContent);
+            }
+
+            // Set the new content component
+            if (content != null) {
+                add(content);
+            }
+
+            this.content = content;
+
+            rollupListeners.contentChanged(this, previousContent);
+        }
+    }
+
+    @Override
+    public Sequence<Component> remove(int index, int count) {
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = get(i);
+            if (component == heading
+                || component == content) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        // Call the base method to remove the components
+        return super.remove(index, count);
+    }
+
     public ListenerList<RollupListener> getRollupListeners() {
         return rollupListeners;
+    }
+
+    public ListenerList<RollupStateListener> getRollupStateListeners() {
+        return rollupStateListeners;
     }
 }

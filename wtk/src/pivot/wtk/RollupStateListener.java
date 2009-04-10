@@ -19,26 +19,32 @@ package pivot.wtk;
 import pivot.util.Vote;
 
 /**
- * Defines event listener methods that pertain to rollups. Developers
+ * Defines event listener methods that pertain to rollup state. Developers
  * register for such events by adding themselves to a rollup's list of "rollup
- * listeners" (see {@link Rollup#getRollupListeners()}).
+ * state listeners" (see {@link Rollup#getRollupStateListeners()}).
  *
  * @author tvolkert
  */
-public interface RollupListener {
+public interface RollupStateListener {
     /**
-     * Called when a rollup's heading component changed.
+     * Called to preview a rollup expansion event.
      *
      * @param rollup
-     * @param previousHeading
      */
-    public void headingChanged(Rollup rollup, Component previousHeading);
+    public Vote previewExpandedChange(Rollup rollup);
 
     /**
-     * Called when a rollup's content component changed.
+     * Called when a rollup expansion event has been vetoed.
      *
      * @param rollup
-     * @param previousContent
+     * @param reason
      */
-    public void contentChanged(Rollup rollup, Component previousContent);
+    public void expandedChangeVetoed(Rollup rollup, Vote reason);
+
+    /**
+     * Called when a rollup's expanded state changed.
+     *
+     * @param rollup
+     */
+    public void expandedChanged(Rollup rollup);
 }

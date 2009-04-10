@@ -25,7 +25,6 @@ import java.awt.geom.RoundRectangle2D;
 import pivot.collections.Sequence;
 import pivot.util.Vote;
 import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Container;
@@ -34,26 +33,26 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Mouse;
 import pivot.wtk.PushButton;
 import pivot.wtk.Rollup;
-import pivot.wtk.RollupListener;
 import pivot.wtk.Theme;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.effects.easing.Easing;
 import pivot.wtk.effects.easing.Quadratic;
 import pivot.wtk.media.Image;
-import pivot.wtk.skin.ButtonSkin;
-import pivot.wtk.skin.ContainerSkin;
+import pivot.wtk.skin.ComponentSkin;
+import pivot.wtk.skin.RollupSkin;
 
 /**
- * Rollup skin.
- * <p>
- * TODO Optimize this class by performing preferred size calculation in one
- * pass.
+ * Terra theme's rollup skin.
  *
  * @author tvolkert
  */
-public class TerraRollupSkin extends ContainerSkin
-    implements RollupListener, ButtonPressListener {
+public class TerraRollupSkin extends RollupSkin {
+    /**
+     * Provides expand/collapse animation.
+     *
+     * @author tvolkert
+     */
     private class ExpansionTransition extends Transition {
         private int height1;
         private int height2;
@@ -108,124 +107,93 @@ public class TerraRollupSkin extends ContainerSkin
                     height = (int)easing.easeOut(elapsedTime, height1, height2 - height1, duration);
                 }
 
-                Rollup rollup = (Rollup)getComponent();
-                rollup.setPreferredHeight(height);
+                getComponent().setPreferredHeight(height);
             }
         }
     }
 
-    protected class RollupButton extends PushButton {
+    /**
+     * Component that allows the user to expand and collapse the Rollup.
+     *
+     * @author tvolkert
+     */
+    protected class RollupButton extends Component {
         public RollupButton() {
-            super(null);
             setSkin(new RollupButtonSkin());
         }
     }
 
-    protected class RollupButtonSkin extends ButtonSkin {
+    /**
+     * Skin for the rollup button.
+     *
+     * @author tvolkert
+     */
+    protected class RollupButtonSkin extends ComponentSkin {
         @Override
         public boolean isFocusable() {
             return false;
         }
 
         public int getPreferredWidth(int height) {
-            RollupButton rollupButton = (RollupButton)getComponent();
-            Button.DataRenderer dataRenderer = rollupButton.getDataRenderer();
-            dataRenderer.render(rollupButton.getButtonData(), rollupButton, false);
-            return dataRenderer.getPreferredWidth(height);
+            return 7;
         }
 
         public int getPreferredHeight(int width) {
-            RollupButton rollupButton = (RollupButton)getComponent();
-            Button.DataRenderer dataRenderer = rollupButton.getDataRenderer();
-            dataRenderer.render(rollupButton.getButtonData(), rollupButton, false);
-            return dataRenderer.getPreferredHeight(width);
+            return 7;
         }
 
         public Dimensions getPreferredSize() {
-            RollupButton rollupButton = (RollupButton)getComponent();
-            Button.DataRenderer dataRenderer = rollupButton.getDataRenderer();
-            dataRenderer.render(rollupButton.getButtonData(), rollupButton, false);
-            Dimensions contentSize = dataRenderer.getPreferredSize();
-            return new Dimensions(contentSize.width, contentSize.height);
+            return new Dimensions(7, 7);
+        }
+
+        public void layout() {
+            // No-op
         }
 
         public void paint(Graphics2D graphics) {
-            RollupButton rollupButton = (RollupButton)getComponent();
+            Rollup rollup = (Rollup)TerraRollupSkin.this.getComponent();
 
-            // Paint the content
-            Button.DataRenderer dataRenderer = rollupButton.getDataRenderer();
-            dataRenderer.render(rollupButton.getButtonData(), rollupButton, false);
+            graphics.setStroke(new BasicStroke(0));
+            graphics.setPaint(buttonColor);
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
-            Dimensions contentSize = dataRenderer.getPreferredSize();
-            dataRenderer.setSize(contentSize.width, contentSize.height);
-            dataRenderer.paint(graphics);
+            if (rollup.getContent() == null && useBullet) {
+                // Paint the bullet
+                RoundRectangle2D.Double shape = new RoundRectangle2D.Double(1, 1, 4, 4, 2, 2);
+                graphics.draw(shape);
+                graphics.fill(shape);
+            } else if (rollup.isExpanded()) {
+                // Paint the collapse image
+                int[] xPoints = {0, 3, 6};
+                int[] yPoints = {0, 6, 0};
+                graphics.fillPolygon(xPoints, yPoints, 3);
+                graphics.drawPolygon(xPoints, yPoints, 3);
+            } else {
+                // Paint the expand image
+                int[] xPoints = {0, 6, 0};
+                int[] yPoints = {0, 3, 6};
+                graphics.fillPolygon(xPoints, yPoints, 3);
+                graphics.drawPolygon(xPoints, yPoints, 3);
+            }
         }
 
         @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            PushButton pushButton = (PushButton)getComponent();
-            pushButton.press();
+            Rollup rollup = (Rollup)TerraRollupSkin.this.getComponent();
+            rollup.setExpanded(!rollup.isExpanded());
             return true;
         }
     }
 
-    protected abstract class ButtonImage extends Image {
-        public int getWidth() {
-            return 7;
-        }
-
-        public int getHeight() {
-            return 7;
-        }
-    }
-
-    protected class ExpandImage extends ButtonImage {
-        public void paint(Graphics2D graphics) {
-            graphics.setStroke(new BasicStroke(0));
-            graphics.setPaint(buttonColor);
-
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
-
-            int[] xPoints = {0, 6, 0};
-            int[] yPoints = {0, 3, 6};
-            graphics.fillPolygon(xPoints, yPoints, 3);
-            graphics.drawPolygon(xPoints, yPoints, 3);
-        }
-    }
-
-    protected class CollapseImage extends ButtonImage {
-        public void paint(Graphics2D graphics) {
-            graphics.setStroke(new BasicStroke(0));
-            graphics.setPaint(buttonColor);
-
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
-
-            int[] xPoints = {0, 3, 6};
-            int[] yPoints = {0, 6, 0};
-            graphics.fillPolygon(xPoints, yPoints, 3);
-            graphics.drawPolygon(xPoints, yPoints, 3);
-        }
-    }
-
-    protected class BulletImage extends ButtonImage {
-        public void paint(Graphics2D graphics) {
-            graphics.setStroke(new BasicStroke(0));
-            graphics.setPaint(buttonColor);
-
-            RoundRectangle2D.Double shape = new RoundRectangle2D.Double(1, 1, 4, 4, 2, 2);
-
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-            graphics.draw(shape);
-            graphics.fill(shape);
-        }
-    }
-
-    private class ToggleComponentMouseHandler
-        implements ComponentMouseButtonListener {
+    /**
+     * Responsible for expanding and collapsing the rollup when the user clicks
+     * on the heading component. This only applies if <tt>headingToggles</tt>
+     * is <tt>true</tt>.
+     *
+     * @author tvolkert
+     */
+    private class HeadingMouseButtonHandler implements ComponentMouseButtonListener {
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             return false;
         }
@@ -235,39 +203,48 @@ public class TerraRollupSkin extends ContainerSkin
         }
 
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            Rollup rollup = (Rollup)getComponent();
-            rollup.setExpanded(!rollup.isExpanded());
-            return true;
+            boolean consumed = false;
+
+            if (headingToggles) {
+                Rollup rollup = (Rollup)getComponent();
+                rollup.setExpanded(!rollup.isExpanded());
+                consumed = true;
+            }
+
+            return consumed;
         }
     }
 
+    // Skin components
     private RollupButton rollupButton = null;
-    private Component toggleComponent = null;
-    private ToggleComponentMouseHandler toggleComponentMouseHandler =
-        new ToggleComponentMouseHandler();
-    private ExpandImage expandImage = new ExpandImage();
-    private CollapseImage collapseImage = new CollapseImage();
-    private BulletImage bulletImage = new BulletImage();
 
+    // Internal handlers
+    private HeadingMouseButtonHandler headingMouseButtonHandler = new HeadingMouseButtonHandler();
+
+    // Animation support
     private ExpansionTransition expandTransition = null;
     private ExpansionTransition collapseTransition = null;
 
+    // Styles
     private Color buttonColor;
     private int spacing;
     private int buffer;
     private boolean justify;
-    private boolean firstChildToggles;
+    private boolean headingToggles;
+    private boolean useBullet;
 
     private static final int EXPANSION_DURATION = 250;
     private static final int EXPANSION_RATE = 30;
 
     public TerraRollupSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
+
         buttonColor = theme.getColor(9);
         spacing = 4;
         buffer = 4;
         justify = false;
-        firstChildToggles = true;
+        headingToggles = true;
+        useBullet = false;
     }
 
     @Override
@@ -275,29 +252,29 @@ public class TerraRollupSkin extends ContainerSkin
         super.install(component);
 
         Rollup rollup = (Rollup)component;
-        rollup.getRollupListeners().add(this);
 
-        updateToggleComponent();
-
+        // Add the rollup button
         rollupButton = new RollupButton();
-        updateRollupButton();
         rollup.add(rollupButton);
-        rollupButton.getButtonPressListeners().add(this);
+
+        // Initialize state
+        headingChanged(rollup, null);
+        contentChanged(rollup, null);
     }
 
     @Override
     public void uninstall() {
         Rollup rollup = (Rollup)getComponent();
-        rollup.getRollupListeners().remove(this);
 
-        rollupButton.getButtonPressListeners().remove(this);
+        // Uninitialize state
+        Component heading = rollup.getHeading();
+        if (heading != null) {
+            heading.getComponentMouseButtonListeners().remove(headingMouseButtonHandler);
+        }
+
+        // Remove the rollup button
         rollup.remove(rollupButton);
         rollupButton = null;
-
-        if (toggleComponent != null) {
-            toggleComponent.getComponentMouseButtonListeners().remove(toggleComponentMouseHandler);
-            toggleComponent = null;
-        }
 
         super.uninstall();
     }
@@ -306,28 +283,17 @@ public class TerraRollupSkin extends ContainerSkin
     public int getPreferredWidth(int height) {
         Rollup rollup = (Rollup)getComponent();
 
+        Component heading = rollup.getHeading();
+        Component content = rollup.getContent();
+
         int preferredWidth = 0;
 
-        // Preferred width is the max of our childrens' preferred widths, plus
-        // the button width, buffer, and padding. If we're collapsed, we only
-        // look at the first child.
-        for (int i = 0, n = rollup.getLength(); i < n; i++) {
-            Component component = rollup.get(i);
+        if (heading != null) {
+            preferredWidth = heading.getPreferredWidth(-1);
+        }
 
-            if (component == rollupButton) {
-                // Ignore "private" component
-                continue;
-            }
-
-            if (component.isDisplayable()) {
-                int componentPreferredWidth = component.getPreferredWidth(-1);
-                preferredWidth = Math.max(preferredWidth, componentPreferredWidth);
-            }
-
-            if (!rollup.isExpanded()) {
-                // If we're collapsed, we only look at the first child.
-                break;
-            }
+        if (rollup.isExpanded() && content != null) {
+            preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(-1));
         }
 
         preferredWidth += rollupButton.getPreferredWidth(-1) + buffer;
@@ -341,106 +307,99 @@ public class TerraRollupSkin extends ContainerSkin
         return getPreferredHeight(width, rollup.isExpanded());
     }
 
+    /**
+     * Gets the preferred height of the rollup assuming the specified expansion
+     * state. We use this to transition from one expansion state to another
+     * because it allows us to have foreknowledge of the height value to which
+     * we are transitioning.
+     *
+     * @param width
+     * The width constraint.
+     *
+     * @param expanded
+     * The supposed expansion state.
+     */
     private int getPreferredHeight(int width, boolean expanded) {
         Rollup rollup = (Rollup)getComponent();
 
-        // Preferred height is the sum of our childrens' preferred heights,
-        // plus spacing and padding.
-        Dimensions rollupButtonPreferredSize = rollupButton.getPreferredSize();
+        Component heading = rollup.getHeading();
+        Component content = rollup.getContent();
 
-        if (justify
-            && width != -1) {
-            width = Math.max(width - rollupButtonPreferredSize.width - buffer, 0);
+        int preferredHeight = 0;
+
+        // Calculate our internal width constraint
+        if (justify && width >= 0) {
+            width = Math.max(width - rollupButton.getPreferredWidth(-1) - buffer, 0);
         } else {
             width = -1;
         }
 
-        int preferredHeight = 0;
-
-        int displayableComponentCount = 0;
-        for (int i = 0, n = rollup.getLength(); i < n; i++) {
-            Component component = rollup.get(i);
-
-            if (component == rollupButton) {
-                // Ignore "private" component
-                continue;
-            }
-
-            if (component.isDisplayable()) {
-                preferredHeight += component.getPreferredHeight(width);
-                displayableComponentCount++;
-            }
-
-            if (!expanded) {
-                // If we're collapsed, we only look at the first child.
-                break;
-            }
+        if (heading != null) {
+            preferredHeight += heading.getPreferredHeight(width);
         }
 
-        if (displayableComponentCount > 0) {
-            preferredHeight += (displayableComponentCount - 1) * spacing;
+        if (expanded && content != null) {
+            preferredHeight += spacing + content.getPreferredHeight(width);
         }
 
-        preferredHeight = Math.max(preferredHeight,
-            rollupButtonPreferredSize.height);
+        preferredHeight = Math.max(preferredHeight, rollupButton.getPreferredHeight(-1));
 
         return preferredHeight;
     }
 
     public void layout() {
         Rollup rollup = (Rollup)getComponent();
+
+        Component heading = rollup.getHeading();
+        Component content = rollup.getContent();
+
         Dimensions rollupButtonSize = rollupButton.getPreferredSize();
-        rollupButton.setSize(rollupButtonSize);
+        rollupButton.setSize(rollupButtonSize.width, rollupButtonSize.height);
 
         int x = rollupButtonSize.width + buffer;
         int y = 0;
         int justifiedWidth = Math.max(getWidth() - rollupButtonSize.width - buffer, 0);
 
-        Component firstComponent = null;
-
-        for (int i = 0, n = rollup.getLength(); i < n; i++) {
-            Component component = rollup.get(i);
-
-            if (component == rollupButton) {
-                // Ignore "private" component
-                continue;
+        if (heading != null) {
+            int headingWidth, headingHeight;
+            if (justify) {
+                headingWidth = justifiedWidth;
+                headingHeight = heading.getPreferredHeight(headingWidth);
+            } else {
+                Dimensions headingPreferredSize = heading.getPreferredSize();
+                headingWidth = headingPreferredSize.width;
+                headingHeight = headingPreferredSize.height;
             }
 
-            if (firstComponent == null) {
-                firstComponent = component;
-            }
+            heading.setVisible(true);
+            heading.setLocation(x, y);
+            heading.setSize(headingWidth, headingHeight);
 
-            if ((component == firstComponent
-                || rollup.isExpanded())
-                && component.isDisplayable()) {
-                // We lay this child out and make sure it's painted.
-                component.setVisible(true);
+            y += headingHeight + spacing;
+        }
 
-                int componentWidth, componentHeight;
+        if (content != null) {
+            if (rollup.isExpanded()) {
+                int contentWidth, contentHeight;
                 if (justify) {
-                    componentWidth = justifiedWidth;
-                    componentHeight = component.getPreferredHeight(componentWidth);
+                    contentWidth = justifiedWidth;
+                    contentHeight = content.getPreferredHeight(contentWidth);
                 } else {
-                    Dimensions componentPreferredSize = component.getPreferredSize();
-                    componentWidth = componentPreferredSize.width;
-                    componentHeight = componentPreferredSize.height;
+                    Dimensions contentPreferredSize = content.getPreferredSize();
+                    contentWidth = contentPreferredSize.width;
+                    contentHeight = contentPreferredSize.height;
                 }
 
-                component.setLocation(x, y);
-                component.setSize(componentWidth, componentHeight);
-
-                y += componentHeight + spacing;
+                content.setVisible(true);
+                content.setLocation(x, y);
+                content.setSize(contentWidth, contentHeight);
             } else {
-                // We make sure this child doesn't get painted.  There's also
-                // no need to lay the child out.
-                component.setVisible(false);
+                content.setVisible(false);
             }
         }
 
-        int rollupButtonY = (firstComponent == null) ?
-            0 : (firstComponent.getHeight() - rollupButtonSize.height) / 2 + 1;
-
-        rollupButton.setLocation(0, rollupButtonY);
+        y = (heading == null ? 0 : (heading.getHeight() - rollupButtonSize.height) / 2 + 1);
+        rollupButton.setLocation(0, y);
     }
 
     public Color getButtonColor() {
@@ -448,8 +407,12 @@ public class TerraRollupSkin extends ContainerSkin
     }
 
     public void setButtonColor(Color buttonColor) {
+        if (buttonColor == null) {
+            throw new IllegalArgumentException("buttonColor is null.");
+        }
+
         this.buttonColor = buttonColor;
-        repaintComponent();
+        rollupButton.repaint();
     }
 
     public final void setButtonColor(String buttonColor) {
@@ -466,7 +429,11 @@ public class TerraRollupSkin extends ContainerSkin
 
     public void setSpacing(int spacing) {
         this.spacing = spacing;
-        invalidateComponent();
+
+        Rollup rollup = (Rollup)getComponent();
+        if (rollup.isExpanded()) {
+            invalidateComponent();
+        }
     }
 
     public int getBuffer() {
@@ -487,89 +454,62 @@ public class TerraRollupSkin extends ContainerSkin
         invalidateComponent();
     }
 
-    public boolean getFirstChildToggles() {
-        return firstChildToggles;
+    public boolean getHeadingToggles() {
+        return headingToggles;
     }
 
-    public void setFirstChildToggles(boolean firstChildToggles) {
-        this.firstChildToggles = firstChildToggles;
-        updateToggleComponent();
+    public void setHeadingToggles(boolean headingToggles) {
+        this.headingToggles = headingToggles;
     }
 
-    private void updateRollupButton() {
+    public boolean getUseBullet() {
+        return useBullet;
+    }
+
+    public void setUseBullet(boolean useBullet) {
+        this.useBullet = useBullet;
+
         Rollup rollup = (Rollup)getComponent();
-
-        Image buttonData = null;
-        Cursor cursor = Cursor.HAND;
-
-        // Make sure to account for rollupButton
-        if (rollup.getLength() == 2) {
-            buttonData = bulletImage;
-            cursor = Cursor.DEFAULT;
-        } else if (rollup.isExpanded()) {
-            buttonData = collapseImage;
-        } else {
-            buttonData = expandImage;
+        if (rollup.getContent() == null) {
+            rollupButton.repaint();
         }
-
-        rollupButton.setButtonData(buttonData);
-        rollupButton.setCursor(cursor);
-    }
-
-    private void updateToggleComponent() {
-        Rollup rollup = (Rollup)getComponent();
-        Component previousToggleComponent = toggleComponent;
-
-        toggleComponent = null;
-        if (firstChildToggles) {
-            for (int i = 0, n = rollup.getLength(); i < n; i++) {
-                Component child = rollup.get(i);
-                if (child != rollupButton) {
-                    toggleComponent = child;
-                    break;
-                }
-            }
-        }
-
-        if (toggleComponent != null
-            && rollup.getLength() > 2) {
-            // TODO Record original cursor
-            toggleComponent.setCursor(Cursor.HAND);
-        }
-
-        if (toggleComponent != previousToggleComponent) {
-            if (previousToggleComponent != null) {
-                // TODO Restore original cursor
-                previousToggleComponent.setCursor(Cursor.DEFAULT);
-
-                previousToggleComponent.getComponentMouseButtonListeners().remove(toggleComponentMouseHandler);
-            }
-
-            if (toggleComponent != null) {
-                toggleComponent.getComponentMouseButtonListeners().add(toggleComponentMouseHandler);
-            }
-        }
-    }
-
-    // Container events
-    @Override
-    public void componentInserted(Container container, int index) {
-        super.componentInserted(container, index);
-
-        updateRollupButton();
-        updateToggleComponent();
-    }
-
-    @Override
-    public void componentsRemoved(Container container, int index, Sequence<Component> components) {
-        super.componentsRemoved(container, index, components);
-
-        updateRollupButton();
-        updateToggleComponent();
     }
 
     // RollupListener methods
 
+    @Override
+    public void headingChanged(Rollup rollup, Component previousHeading) {
+        if (previousHeading != null) {
+            previousHeading.getComponentMouseButtonListeners().remove(headingMouseButtonHandler);
+        }
+
+        Component heading = rollup.getHeading();
+
+        if (heading != null) {
+            heading.getComponentMouseButtonListeners().add(headingMouseButtonHandler);
+        }
+
+        invalidateComponent();
+    }
+
+    @Override
+    public void contentChanged(Rollup rollup, Component previousContent) {
+        if (rollup.getContent() == null && useBullet) {
+            rollupButton.setCursor(Cursor.DEFAULT);
+        } else {
+            rollupButton.setCursor(Cursor.HAND);
+        }
+
+        rollupButton.repaint();
+
+        if (rollup.isExpanded()) {
+            invalidateComponent();
+        }
+    }
+
+    // RollupStateListener methods
+
+    @Override
     public Vote previewExpandedChange(final Rollup rollup) {
         Vote vote = Vote.APPROVE;
 
@@ -615,6 +555,7 @@ public class TerraRollupSkin extends ContainerSkin
         return vote;
     }
 
+    @Override
     public void expandedChangeVetoed(Rollup rollup, Vote reason) {
         if (reason == Vote.DENY
             && collapseTransition != null) {
@@ -623,8 +564,8 @@ public class TerraRollupSkin extends ContainerSkin
         }
     }
 
+    @Override
     public void expandedChanged(Rollup rollup) {
-        updateRollupButton();
         invalidateComponent();
 
         if (rollup.getDisplay() != null) {
@@ -642,12 +583,5 @@ public class TerraRollupSkin extends ContainerSkin
                 });
             }
         }
-    }
-
-    // ButtonPressListener methods
-
-    public void buttonPressed(Button button) {
-        Rollup rollup = (Rollup)getComponent();
-        rollup.setExpanded(!rollup.isExpanded());
     }
 }

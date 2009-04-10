@@ -158,55 +158,73 @@ limitations under the License.
             <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
                 <Label text="Rollups" styles="{fontBold:true}"/>
                 <Rollup>
-                    <Label text="Colors"/>
-                    <Label text="Red" styles="{color:'#ff0000'}"/>
-                    <Label text="Orange" styles="{color:'#ffa500'}"/>
-                    <Label text="Yellow" styles="{color:'#ffff00'}"/>
-                    <Label text="Green" styles="{color:'#00ff00'}"/>
-                    <Label text="Blue" styles="{color:'#0000ff'}"/>
-                    <Label text="Purple" styles="{color:'#800080'}"/>
+                    <heading>
+                        <Label text="Colors"/>
+                    </heading>
+                    <content>
+                        <FlowPane orientation="vertical">
+                            <Label text="Red" styles="{color:'#ff0000'}"/>
+                            <Label text="Orange" styles="{color:'#ffa500'}"/>
+                            <Label text="Yellow" styles="{color:'#ffff00'}"/>
+                            <Label text="Green" styles="{color:'#00ff00'}"/>
+                            <Label text="Blue" styles="{color:'#0000ff'}"/>
+                            <Label text="Purple" styles="{color:'#800080'}"/>
+                        </FlowPane>
+                    </content>
                 </Rollup>
                 <Rollup expanded="true">
-                    <Label text="Shapes"/>
-                    <Checkbox buttonData="Circle"/>
-                    <Checkbox buttonData="Ellipse" selected="true"/>
-                    <Checkbox buttonData="Square" selected="true"/>
-                    <Checkbox buttonData="Rectangle"/>
-                    <Checkbox buttonData="Hexagon"/>
-                    <Checkbox buttonData="Octagon" selected="true"/>
+                    <heading>
+                        <Label text="Shapes"/>
+                    </heading>
+                    <content>
+                        <FlowPane orientation="vertical">
+                            <Checkbox buttonData="Circle"/>
+                            <Checkbox buttonData="Ellipse" selected="true"/>
+                            <Checkbox buttonData="Square" selected="true"/>
+                            <Checkbox buttonData="Rectangle"/>
+                            <Checkbox buttonData="Hexagon"/>
+                            <Checkbox buttonData="Octagon" selected="true"/>
+                        </FlowPane>
+                    </content>
                 </Rollup>
                 <Rollup>
-                    <Label text="Images"/>
-                    <RadioButton group="images" selected="true">
-                        <buttonData>
-                            <content:ButtonData text="Anchor" icon="@anchor.png"/>
-                        </buttonData>
-                    </RadioButton>
-                    <RadioButton group="images" selected="true">
-                        <buttonData>
-                            <content:ButtonData text="Bell" icon="@bell.png"/>
-                        </buttonData>
-                    </RadioButton>
-                    <RadioButton group="images" selected="true">
-                        <buttonData>
-                            <content:ButtonData text="Clock" icon="@clock.png"/>
-                        </buttonData>
-                    </RadioButton>
-                    <RadioButton group="images" selected="true">
-                        <buttonData>
-                            <content:ButtonData text="Cup" icon="@cup.png"/>
-                        </buttonData>
-                    </RadioButton>
-                    <RadioButton group="images" selected="true">
-                        <buttonData>
-                            <content:ButtonData text="House" icon="@house.png"/>
-                        </buttonData>
-                    </RadioButton>
-                    <RadioButton group="images" selected="true">
-                        <buttonData>
-                            <content:ButtonData text="Star" icon="@star.png"/>
-                        </buttonData>
-                    </RadioButton>
+                    <heading>
+                        <Label text="Images"/>
+                    </heading>
+                    <content>
+                        <FlowPane orientation="vertical">
+                            <RadioButton group="images" selected="true">
+                                <buttonData>
+                                    <content:ButtonData text="Anchor" icon="@anchor.png"/>
+                                </buttonData>
+                            </RadioButton>
+                            <RadioButton group="images" selected="true">
+                                <buttonData>
+                                    <content:ButtonData text="Bell" icon="@bell.png"/>
+                                </buttonData>
+                            </RadioButton>
+                            <RadioButton group="images" selected="true">
+                                <buttonData>
+                                    <content:ButtonData text="Clock" icon="@clock.png"/>
+                                </buttonData>
+                            </RadioButton>
+                            <RadioButton group="images" selected="true">
+                                <buttonData>
+                                    <content:ButtonData text="Cup" icon="@cup.png"/>
+                                </buttonData>
+                            </RadioButton>
+                            <RadioButton group="images" selected="true">
+                                <buttonData>
+                                    <content:ButtonData text="House" icon="@house.png"/>
+                                </buttonData>
+                            </RadioButton>
+                            <RadioButton group="images" selected="true">
+                                <buttonData>
+                                    <content:ButtonData text="Star" icon="@star.png"/>
+                                </buttonData>
+                            </RadioButton>
+                        </FlowPane>
+                    </content>
                 </Rollup>
             </FlowPane>
         </content>
