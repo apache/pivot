@@ -25,6 +25,22 @@ import pivot.collections.List;
  */
 public interface TableViewListener {
     /**
+     * Adapts the <tt>TableViewListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TableViewListener {
+        public void tableDataChanged(TableView tableView, List<?> previousTableData) {
+        }
+
+        public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
+        }
+
+        public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode) {
+        }
+    }
+
+    /**
      * Called when a table view's table data has changed.
      *
      * @param tableView

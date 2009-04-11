@@ -24,6 +24,30 @@ package pivot.wtk;
  */
 public interface ContainerMouseListener {
     /**
+     * Adapts the <tt>ContainerMouseListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ContainerMouseListener {
+        public boolean mouseMove(Container container, int x, int y) {
+            return false;
+        }
+
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            return false;
+        }
+
+        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+            return false;
+        }
+
+        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            return false;
+        }
+    }
+
+    /**
      * Called when the mouse is moved over a container.
      *
      * @param container
