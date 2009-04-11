@@ -25,6 +25,22 @@ import pivot.collections.Sequence;
  */
 public interface ListViewSelectionListener {
     /**
+     * Adapts the <tt>ListViewSelectionListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ListViewSelectionListener {
+        public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
+        }
+
+        public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
+        }
+
+        public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+        }
+    }
+
+    /**
      * Called when a range has been added to a list view's selection.
      *
      * @param listView

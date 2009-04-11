@@ -23,6 +23,25 @@ package pivot.wtk;
  */
 public interface TableViewRowListener {
     /**
+     * Adapts the <tt>TableViewRowListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TableViewRowListener {
+        public void rowInserted(TableView tableView, int index) {
+        }
+
+        public void rowsRemoved(TableView tableView, int index, int count) {
+        }
+
+        public void rowUpdated(TableView tableView, int index) {
+        }
+
+        public void rowsSorted(TableView tableView) {
+        }
+    }
+
+    /**
      * Called when a row has been inserted into the table view.
      *
      * @param tableView

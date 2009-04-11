@@ -23,6 +23,25 @@ package pivot.wtk;
  */
 public interface ListViewItemListener {
     /**
+     * Adapts the <tt>ListViewItemListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ListViewItemListener {
+        public void itemInserted(ListView listView, int index) {
+        }
+
+        public void itemsRemoved(ListView listView, int index, int count) {
+        }
+
+        public void itemUpdated(ListView listView, int index) {
+        }
+
+        public void itemsSorted(ListView listView) {
+        }
+    }
+
+    /**
      * Called when an item has been inserted into the list view.
      *
      * @param listView

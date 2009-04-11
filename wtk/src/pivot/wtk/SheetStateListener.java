@@ -25,6 +25,23 @@ import pivot.util.Vote;
  */
 public interface SheetStateListener extends SheetCloseListener {
     /**
+     * Adapts the <tt>SheetStateListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements SheetStateListener {
+        public Vote previewSheetClose(Sheet sheet, boolean result) {
+            return Vote.APPROVE;
+        }
+
+        public void sheetCloseVetoed(Sheet sheet, Vote reason) {
+        }
+
+        public void sheetClosed(Sheet sheet) {
+        }
+    }
+
+    /**
      * Called to preview a sheet close event.
      *
      * @param sheet

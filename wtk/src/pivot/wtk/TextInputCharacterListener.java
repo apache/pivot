@@ -23,6 +23,22 @@ package pivot.wtk;
  */
 public interface TextInputCharacterListener {
     /**
+     * Adapts the <tt>TextInputCharacterListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TextInputCharacterListener {
+        public void charactersInserted(TextInput textInput, int index, int count) {
+        }
+
+        public void charactersRemoved(TextInput textInput, int index, int count) {
+        }
+
+        public void charactersReset(TextInput textInput) {
+        }
+    }
+
+    /**
      * Called when characters have been inserted into a text input.
      *
      * @param textInput

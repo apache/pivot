@@ -26,6 +26,23 @@ import pivot.util.Vote;
  */
 public interface DialogStateListener extends DialogCloseListener {
     /**
+     * Adapts the <tt>DialogStateListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements DialogStateListener {
+        public Vote previewDialogClose(Dialog dialog, boolean result) {
+            return Vote.APPROVE;
+        }
+
+        public void dialogCloseVetoed(Dialog dialog, Vote reason) {
+        }
+
+        public void dialogClosed(Dialog dialog) {
+        }
+    }
+
+    /**
      * Called to preview a dialog close event.
      *
      * @param dialog

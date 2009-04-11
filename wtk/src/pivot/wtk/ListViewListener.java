@@ -25,6 +25,34 @@ import pivot.collections.List;
  */
 public interface ListViewListener {
     /**
+     * Adapts the <tt>ListViewListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ListViewListener {
+        public void listDataChanged(ListView listView, List<?> previousListData) {
+        }
+
+        public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
+        }
+
+        public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
+        }
+
+        public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
+        }
+
+        public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
+        }
+
+        public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
+        }
+
+        public void checkmarksEnabledChanged(ListView listView) {
+        }
+    }
+
+    /**
      * Called when a list view's list data has changed.
      *
      * @param listView

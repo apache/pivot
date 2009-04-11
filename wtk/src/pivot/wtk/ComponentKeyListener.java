@@ -23,6 +23,25 @@ package pivot.wtk;
  */
 public interface ComponentKeyListener {
     /**
+     * Adapts the <tt>ComponentKeyListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ComponentKeyListener {
+        public boolean keyTyped(Component component, char character) {
+            return false;
+        }
+
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            return false;
+        }
+
+        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            return false;
+        }
+    }
+
+    /**
      * Called when a key has been typed.
      *
      * @param component

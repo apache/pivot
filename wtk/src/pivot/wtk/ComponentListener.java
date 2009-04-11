@@ -23,6 +23,34 @@ package pivot.wtk;
  */
 public interface ComponentListener {
     /**
+     * Adapts the <tt>ComponentListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ComponentListener {
+        public void parentChanged(Component component, Container previousParent) {
+        }
+
+        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+        }
+
+        public void locationChanged(Component component, int previousX, int previousY) {
+        }
+
+        public void visibleChanged(Component component) {
+        }
+
+        public void styleUpdated(Component component, String styleKey, Object previousValue) {
+        }
+
+        public void cursorChanged(Component component, Cursor previousCursor) {
+        }
+
+        public void tooltipTextChanged(Component component, String previousTooltipText) {
+        }
+    }
+
+    /**
      * Called when a component's parent has changed (when the component is
      * either added to or removed from a container).
      *

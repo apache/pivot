@@ -24,6 +24,23 @@ import pivot.util.Vote;
  * @author gbrown
  */
 public interface TabPaneSelectionListener {
+    /**
+     * Adapts the <tt>TabPaneSelectionListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TabPaneSelectionListener {
+        public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
+            return Vote.APPROVE;
+        }
+
+        public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
+        }
+
+        public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
+        }
+    }
+
 	/**
 	 * Called to preview a selected index change.
 	 *

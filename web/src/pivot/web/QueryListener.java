@@ -29,6 +29,25 @@ package pivot.web;
  */
 public interface QueryListener<V> {
     /**
+     * Adapts the <tt>QueryListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter<V> implements QueryListener<V> {
+        public void connected(Query<V> query) {
+        }
+
+        public void requestSent(Query<V> query) {
+        }
+
+        public void responseReceived(Query<V> query) {
+        }
+
+        public void failed(Query<V> query) {
+        }
+    }
+
+    /**
      * Called when a query has connected to the server but the request has not
      * yet been sent.
      *

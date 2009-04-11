@@ -25,6 +25,25 @@ import java.util.Comparator;
  */
 public interface ListListener<T> {
     /**
+     * Adapts the <tt>ListListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter<T> implements ListListener<T> {
+        public void itemInserted(List<T> list, int index) {
+        }
+
+        public void itemsRemoved(List<T> list, int index, Sequence<T> items) {
+        }
+
+        public void itemUpdated(List<T> list, int index, T previousItem) {
+        }
+
+        public void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
+        }
+    }
+
+    /**
      * Called when an item has been inserted into a list.
      *
      * @param list

@@ -23,6 +23,25 @@ package pivot.wtk;
  */
 public interface ComponentMouseButtonListener {
     /**
+     * Adapts the <tt>ComponentMouseButtonListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ComponentMouseButtonListener {
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            return false;
+        }
+
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            return false;
+        }
+
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            return false;
+        }
+    }
+
+    /**
      * Called when a mouse button is pressed over a component.
      *
      * @param component

@@ -23,6 +23,22 @@ package pivot.wtk;
  */
 public interface ViewportListener {
     /**
+     * Adapts the <tt>ViewportListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ViewportListener {
+        public void scrollTopChanged(Viewport scrollPane, int previousScrollTop) {
+        }
+
+        public void scrollLeftChanged(Viewport scrollPane, int previousScrollLeft) {
+        }
+
+        public void viewChanged(Viewport scrollPane, Component previousView) {
+        }
+    }
+
+    /**
      * Called when a viewport's scroll top has changed.
      *
      * @param scrollPane

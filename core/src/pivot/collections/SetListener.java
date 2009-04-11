@@ -25,6 +25,25 @@ import java.util.Comparator;
  */
 public interface SetListener<E> {
     /**
+     * Adapts the <tt>SetListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter<E> implements SetListener<E> {
+        public void elementAdded(Set<E> set, E element) {
+        }
+
+        public void elementRemoved(Set<E> set, E element) {
+        }
+
+        public void setCleared(Set<E> set) {
+        }
+
+        public void comparatorChanged(Set<E> set, Comparator<E> previousComparator) {
+        }
+    }
+
+    /**
      * Called when an element is added to a set.
      *
      * @param set

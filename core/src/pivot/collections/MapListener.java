@@ -25,6 +25,28 @@ import java.util.Comparator;
  */
 public interface MapListener<K, V> {
     /**
+     * Adapts the <tt>MapListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter<K, V> implements MapListener<K, V> {
+        public void valueAdded(Map<K, V> map, K key) {
+        }
+
+        public void valueUpdated(Map<K, V> map, K key, V previousValue) {
+        }
+
+        public void valueRemoved(Map<K, V> map, K key, V value) {
+        }
+
+        public void mapCleared(Map<K, V> map) {
+        }
+
+        public void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator) {
+        }
+    }
+
+    /**
      * Called when a key/value pair has been added to a map.
      *
      * @param map
@@ -82,4 +104,3 @@ public interface MapListener<K, V> {
      */
     public void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator);
 }
-

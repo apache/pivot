@@ -26,6 +26,33 @@ import pivot.util.Vote;
  */
 public interface WindowStateListener {
     /**
+     * Adapts the <tt>WindowStateListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements WindowStateListener {
+        public Vote previewWindowOpen(Window window, Display display) {
+            return Vote.APPROVE;
+        }
+
+        public void windowOpenVetoed(Window window, Vote reason) {
+        }
+
+        public void windowOpened(Window window) {
+        }
+
+        public Vote previewWindowClose(Window window) {
+            return Vote.APPROVE;
+        }
+
+        public void windowCloseVetoed(Window window, Vote reason) {
+        }
+
+        public void windowClosed(Window window, Display display) {
+        }
+    }
+
+    /**
      * Called to preview a window open event.
      *
      * @param window
