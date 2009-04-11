@@ -22,23 +22,18 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 
-import pivot.collections.Sequence;
 import pivot.util.Vote;
-import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
-import pivot.wtk.Container;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Mouse;
-import pivot.wtk.PushButton;
 import pivot.wtk.Rollup;
 import pivot.wtk.Theme;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.effects.easing.Easing;
 import pivot.wtk.effects.easing.Quadratic;
-import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.RollupSkin;
 
