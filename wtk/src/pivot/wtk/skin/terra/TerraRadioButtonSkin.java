@@ -23,6 +23,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
@@ -136,18 +137,18 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
         // Paint the focus state
         if (radioButton.isFocused()) {
-            BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {1.0f, 1.0f}, 0.0f);
+            BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
             graphics.setStroke(dashStroke);
             graphics.setColor(buttonBorderColor);
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_OFF);
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.drawRect(BUTTON_DIAMETER + 1, 0,
+            graphics.draw(new Rectangle2D.Double(BUTTON_DIAMETER + 1, 0.5,
                 dataRenderer.getWidth() + spacing * 2 - 2,
-                dataRenderer.getHeight() - 1);
+                dataRenderer.getHeight() - 1));
         }
     }
 

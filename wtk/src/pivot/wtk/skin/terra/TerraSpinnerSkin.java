@@ -212,14 +212,14 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
             // Paint the focus state
             if (spinnerContent.isFocused()) {
-                BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
-                    BasicStroke.JOIN_ROUND, 1.0f, new float[] {1.0f, 1.0f}, 0.0f);
+                BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
+                    BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
                 graphics.setStroke(dashStroke);
                 graphics.setColor(borderColor);
 
                 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_OFF);
+                    RenderingHints.VALUE_ANTIALIAS_ON);
 
                 graphics.drawRect(1, 1, Math.max(width - 3, 0),
                     Math.max(height - 3, 0));
