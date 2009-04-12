@@ -45,10 +45,10 @@ limitations under the License.
         depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
 
     <target name="package"
-        depends="charts-package, charts-test-package, core-package, web-package, web-test-package, wtk-package, demos-package, tutorials-package, tools-package"/>
+        depends="charts-package, core-package, web-package, web-test-package, wtk-package, demos-package, tutorials-package, tools-package"/>
 
     <target name="clean" description="Removes all build artifacts"
-        depends="charts-clean, charts-test-clean, core-clean, web-clean, web-test-clean, wtk-clean, demos-clean, tutorials-clean, tools-clean">
+        depends="charts-clean, core-clean, web-clean, web-test-clean, wtk-clean, demos-clean, tutorials-clean, tools-clean">
         <delete dir="${folder.dist}"/>
         <delete dir="${folder.deploy}"/>
         <delete dir="${folder.doc}"/>
@@ -153,9 +153,9 @@ limitations under the License.
 
     <!-- Charts Test -->
     <target name="charts-test" depends="charts, core, wtk">
-        <mkdir dir="charts-test/${folder.bin}"/>
-        <javac srcdir="charts-test/src"
-            destDir="charts-test/${folder.bin}"
+        <mkdir dir="charts/${folder.bin}"/>
+        <javac srcdir="charts/test"
+            destDir="charts/${folder.bin}"
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
@@ -168,22 +168,6 @@ limitations under the License.
                 <pathelement location="wtk/${folder.bin}"/>
             </classpath>
         </javac>
-    </target>
-
-    <target name="charts-test-package" depends="charts-test">
-        <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-charts.test.jar">
-            <fileset dir="charts-test/${folder.bin}"/>
-            <fileset dir="charts-test/src">
-                <exclude name="**/*.java"/>
-                <exclude name="**/package.html"/>
-            </fileset>
-        </jar>
-    </target>
-
-    <target name="charts-test-clean">
-        <delete dir="charts-test/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}-charts.test.jar"/>
     </target>
 
     <!-- Core -->
