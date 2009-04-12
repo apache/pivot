@@ -45,10 +45,10 @@ limitations under the License.
         depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
 
     <target name="package"
-        depends="charts-package, charts-test-package, core-package, core-test-package, web-package, web-test-package, wtk-package, wtk-test-package, demos-package, tutorials-package, tools-package"/>
+        depends="charts-package, charts-test-package, core-package, core-test-package, web-package, web-test-package, wtk-package, demos-package, tutorials-package, tools-package"/>
 
     <target name="clean" description="Removes all build artifacts"
-        depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, wtk-test-clean, demos-clean, tutorials-clean, tools-clean">
+        depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, demos-clean, tutorials-clean, tools-clean">
         <delete dir="${folder.dist}"/>
         <delete dir="${folder.deploy}"/>
         <delete dir="${folder.doc}"/>
@@ -480,9 +480,9 @@ limitations under the License.
 
     <!-- WTK Test -->
     <target name="wtk-test" depends="core, wtk">
-        <mkdir dir="wtk-test/${folder.bin}"/>
-        <javac srcdir="wtk-test/src"
-            destDir="wtk-test/${folder.bin}"
+        <mkdir dir="wtk/${folder.bin}"/>
+        <javac srcdir="wtk/test"
+            destDir="wtk/${folder.bin}"
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
@@ -494,22 +494,6 @@ limitations under the License.
                 <pathelement location="wtk/${folder.bin}"/>
             </classpath>
         </javac>
-    </target>
-
-    <target name="wtk-test-package" depends="wtk-test">
-        <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-wtk.test.jar">
-            <fileset dir="wtk-test/${folder.bin}"/>
-            <fileset dir="wtk-test/src">
-                <exclude name="**/*.java"/>
-                <exclude name="**/package.html"/>
-            </fileset>
-        </jar>
-    </target>
-
-    <target name="wtk-test-clean">
-        <delete dir="wtk-test/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}-wtk.test.jar"/>
     </target>
 
     <!-- Demos -->
@@ -695,7 +679,7 @@ limitations under the License.
                 <!-- Exclude scripting engines -->
                 <exclude name="demos/lib/js*.jar"/>
                 <exclude name="demos/lib/groovy*.jar"/>
-                <exclude name="wtk-test/lib/js*.jar"/>
+                <exclude name="wtk/lib/js*.jar"/>
             </fileset>
         </copy>
 
