@@ -168,7 +168,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         public void nodesSorted(TreeView treeView, Sequence<Integer> path) {
             cancel();
         }
-    }
+    };
 
     private TreeView treeView = null;
     private Sequence<Integer> path = null;
