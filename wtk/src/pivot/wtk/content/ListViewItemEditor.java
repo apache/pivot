@@ -46,55 +46,42 @@ public class ListViewItemEditor implements ListView.ItemEditor {
     private TextInput textInput = null;
     private Window popup = null;
 
-    private ListViewListener listViewListener = new ListViewListener() {
+    private ListViewListener listViewListener = new ListViewListener.Adapter() {
+        @Override
         public void listDataChanged(ListView listView, List<?> previousListData) {
             cancel();
         }
 
-        public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
-            // No-op
-        }
-
+        @Override
         public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
             cancel();
         }
-
-        public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
-            // No-op
-        }
-
-        public void checkmarksEnabledChanged(ListView listView) {
-            // No-op
-        }
-
-        public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
-            // No-op
-        }
-
-        public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
-            // No-op
-        }
     };
 
-    private ListViewItemListener listViewItemListener = new ListViewItemListener() {
+    private ListViewItemListener listViewItemListener = new ListViewItemListener.Adapter() {
+        @Override
         public void itemInserted(ListView listView, int index) {
             cancel();
         }
 
+        @Override
         public void itemsRemoved(ListView listView, int index, int count) {
             cancel();
         }
 
+        @Override
         public void itemUpdated(ListView listView, int index) {
             cancel();
         }
 
+        @Override
         public void itemsSorted(ListView listView) {
             cancel();
         }
     };
 
-    private ComponentKeyListener textInputKeyHandler = new ComponentKeyListener() {
+    private ComponentKeyListener textInputKeyHandler = new ComponentKeyListener.Adapter() {
+        @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
                 save();
@@ -104,24 +91,10 @@ public class ListViewItemEditor implements ListView.ItemEditor {
 
             return false;
         }
-
-        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            return false;
-        }
-
-        public boolean keyTyped(Component component, char character) {
-            return false;
-        }
     };
 
-    private WindowStateListener popupWindowStateHandler = new WindowStateListener() {
-        public Vote previewWindowOpen(Window window, Display display) {
-            return Vote.APPROVE;
-        }
-
-        public void windowOpenVetoed(Window window, Vote reason) {
-        }
-
+    private WindowStateListener popupWindowStateHandler = new WindowStateListener.Adapter() {
+        @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseHandler);
@@ -130,13 +103,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             listView.getListViewItemListeners().add(listViewItemListener);
         }
 
-        public Vote previewWindowClose(Window window) {
-            return Vote.APPROVE;
-        }
-
-        public void windowCloseVetoed(Window window, Vote reason) {
-        }
-
+        @Override
         public void windowClosed(Window window, Display display) {
             display.getContainerMouseListeners().remove(displayMouseHandler);
 
@@ -152,11 +119,8 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         }
     };
 
-    private ContainerMouseListener displayMouseHandler = new ContainerMouseListener() {
-        public boolean mouseMove(Container container, int x, int y) {
-            return false;
-        }
-
+    private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
+        @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
@@ -167,10 +131,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             return false;
         }
 
-        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
+        @Override
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
             return true;

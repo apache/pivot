@@ -52,35 +52,23 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      *
      * @author tvolkert
      */
-    private WindowStateListener popupStateHandler = new WindowStateListener() {
-        public Vote previewWindowOpen(Window window, Display display) {
-            return Vote.APPROVE;
-        }
-
-        public void windowOpenVetoed(Window window, Vote reason) {
-        }
-
+    private WindowStateListener popupStateHandler = new WindowStateListener.Adapter() {
+        @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseHandler);
 
             treeView.getTreeViewListeners().add(treeViewHandler);
-            treeView.getTreeViewNodeListeners().add(treeViewHandler);
+            treeView.getTreeViewNodeListeners().add(treeViewNodeHandler);
         }
 
-        public Vote previewWindowClose(Window window) {
-            return Vote.APPROVE;
-        }
-
-        public void windowCloseVetoed(Window window, Vote reason) {
-        }
-
+        @Override
         public void windowClosed(Window window, Display display) {
             // Clean up
             display.getContainerMouseListeners().remove(displayMouseHandler);
 
             treeView.getTreeViewListeners().remove(treeViewHandler);
-            treeView.getTreeViewNodeListeners().remove(treeViewHandler);
+            treeView.getTreeViewNodeListeners().remove(treeViewNodeHandler);
 
             // Restore focus to the tree view
             treeView.requestFocus();
@@ -99,7 +87,8 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      *
      * @author tvolkert
      */
-    private ComponentKeyListener textInputKeyHandler = new ComponentKeyListener() {
+    private ComponentKeyListener textInputKeyHandler = new ComponentKeyListener.Adapter() {
+        @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
                 save();
@@ -107,14 +96,6 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
                 cancel();
             }
 
-            return false;
-        }
-
-        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            return false;
-        }
-
-        public boolean keyTyped(Component component, char character) {
             return false;
         }
     };
@@ -125,11 +106,8 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      *
      * @author tvolkert
      */
-    private ContainerMouseListener displayMouseHandler = new ContainerMouseListener() {
-        public boolean mouseMove(Container container, int x, int y) {
-            return false;
-        }
-
+    private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
+        @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             // If the event did not occur within a window that is owned by
             // this popup, close the popup
@@ -143,10 +121,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             return false;
         }
 
-        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
+        @Override
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
             return true;
@@ -157,39 +132,39 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      * Responsible for cancelling the edit if any relevant changes are made to
      * the tree view while we're editing.
      */
-    private class TreeViewHandler implements TreeViewListener, TreeViewNodeListener {
+    private TreeViewListener treeViewHandler = new TreeViewListener.Adapter() {
+        @Override
         public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
             cancel();
         }
 
-        public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer) {
-        }
-
+        @Override
         public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
             cancel();
         }
+    };
 
-        public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode) {
-        }
-
-        public void checkmarksEnabledChanged(TreeView treeView) {
-        }
-
-        public void showMixedCheckmarkStateChanged(TreeView treeView) {
-        }
-
+    /**
+     * Responsible for cancelling the edit if any changes are made to
+     * the tree data while we're editing.
+     */
+    private TreeViewNodeListener treeViewNodeHandler = new TreeViewNodeListener.Adapter() {
+        @Override
         public void nodeInserted(TreeView treeView, Sequence<Integer> path, int index) {
             cancel();
         }
 
+        @Override
         public void nodesRemoved(TreeView treeView, Sequence<Integer> path, int index, int count) {
             cancel();
         }
 
+        @Override
         public void nodeUpdated(TreeView treeView, Sequence<Integer> path, int index) {
             cancel();
         }
 
+        @Override
         public void nodesSorted(TreeView treeView, Sequence<Integer> path) {
             cancel();
         }
@@ -200,8 +175,6 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
 
     private Window popup = null;
     private TextInput textInput = null;
-
-    private TreeViewHandler treeViewHandler = new TreeViewHandler();
 
     public void edit(TreeView treeView, Sequence<Integer> path) {
         if (isEditing()) {
