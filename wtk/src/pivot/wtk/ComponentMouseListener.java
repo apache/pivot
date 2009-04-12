@@ -24,6 +24,23 @@ package pivot.wtk;
  */
 public interface ComponentMouseListener {
     /**
+     * Adapts the <tt>ComponentMouseListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ComponentMouseListener {
+        public boolean mouseMove(Component component, int x, int y) {
+            return false;
+        }
+
+        public void mouseOver(Component component) {
+        }
+
+        public void mouseOut(Component component) {
+        }
+    }
+
+    /**
      * Called when the mouse is moved over a component.
      *
      * @param component

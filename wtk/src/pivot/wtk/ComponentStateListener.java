@@ -24,6 +24,19 @@ package pivot.wtk;
  */
 public interface ComponentStateListener {
     /**
+     * Adapts the <tt>ComponentStateListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ComponentStateListener {
+        public void enabledChanged(Component component) {
+        }
+
+        public void focusedChanged(Component component, boolean temporary) {
+        }
+    }
+
+    /**
      * Called when a component's enabled state has changed.
      *
      * @param component

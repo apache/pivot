@@ -25,6 +25,29 @@ import pivot.util.Vote;
  */
 public interface ExpanderListener {
     /**
+     * Adapts the <tt>ExpanderListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ExpanderListener {
+        public void titleChanged(Expander expander, String previousTitle) {
+        }
+
+        public Vote previewExpandedChange(Expander expander) {
+            return Vote.APPROVE;
+        }
+
+        public void expandedChangeVetoed(Expander expander, Vote reason) {
+        }
+
+        public void expandedChanged(Expander expander) {
+        }
+
+        public void contentChanged(Expander expander, Component previousContent) {
+        }
+    }
+
+    /**
      * Called when an expander's title has changed.
      *
      * @param expander

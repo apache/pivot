@@ -25,6 +25,25 @@ import pivot.collections.List;
  */
 public interface SpinnerListener {
     /**
+     * Adapts the <tt>SpinnerListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements SpinnerListener {
+        public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
+        }
+
+        public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer) {
+        }
+
+        public void circularChanged(Spinner spinner) {
+        }
+
+        public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
+        }
+    }
+
+    /**
      * Called when a spinner's data has changed.
      *
      * @param spinner

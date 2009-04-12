@@ -23,6 +23,37 @@ package pivot.wtk;
  */
 public interface ButtonListener {
     /**
+     * Adapts the <tt>ButtonListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ButtonListener {
+        public void buttonDataChanged(Button button, Object previousButtonData) {
+        }
+
+        public void dataRendererChanged(Button button, Button.DataRenderer previousDataRenderer) {
+        }
+
+        public void actionChanged(Button button, Action previousAction) {
+        }
+
+        public void toggleButtonChanged(Button button) {
+        }
+
+        public void triStateChanged(Button button) {
+        }
+
+        public void groupChanged(Button button, Button.Group previousGroup) {
+        }
+
+        public void selectedKeyChanged(Button button, String previousSelectedKey) {
+        }
+
+        public void stateKeyChanged(Button button, String previousStateKey) {
+        }
+    }
+
+    /**
      * Called when a button's data has changed.
      *
      * @param button

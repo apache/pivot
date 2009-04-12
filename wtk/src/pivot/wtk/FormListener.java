@@ -25,6 +25,28 @@ import pivot.collections.Sequence;
  */
 public interface FormListener {
     /**
+     * Adapts the <tt>FormListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements FormListener {
+        public void sectionInserted(Form form, int index) {
+        }
+
+        public void sectionsRemoved(Form form, int index, Sequence<Form.Section> removed) {
+        }
+
+        public void sectionHeadingChanged(Form.Section section) {
+        }
+
+        public void fieldInserted(Form.Section section, int index) {
+        }
+
+        public void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields) {
+        }
+    }
+
+    /**
      * Called when a form section has been inserted.
      *
      * @param form

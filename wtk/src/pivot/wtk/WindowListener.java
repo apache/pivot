@@ -25,6 +25,34 @@ import pivot.wtk.media.Image;
  */
 public interface WindowListener {
     /**
+     * Adapts the <tt>WindowListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements WindowListener {
+        public void titleChanged(Window window, String previousTitle) {
+        }
+
+        public void iconChanged(Window window, Image previousIcon) {
+        }
+
+        public void contentChanged(Window window, Component previousContent) {
+        }
+
+        public void ownerChanged(Window window, Window previousOwner) {
+        }
+
+        public void activeChanged(Window window) {
+        }
+
+        public void maximizedChanged(Window window) {
+        }
+
+        public void windowMoved(Window window, int from, int to) {
+        }
+    }
+
+    /**
      * Called when a window's title has changed.
      *
      * @param window

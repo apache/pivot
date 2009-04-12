@@ -26,6 +26,20 @@ import pivot.collections.Sequence;
  */
 public interface TreeViewNodeStateListener {
     /**
+     * Adapts the <tt>TreeViewNodeStateListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TreeViewNodeStateListener {
+        public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {
+        }
+
+        public void nodeCheckStateChanged(TreeView treeView, Sequence<Integer> path,
+            TreeView.NodeCheckState previousCheckState) {
+        }
+    }
+
+    /**
      * Called when a node's disabled state has changed.
      *
      * @param treeView

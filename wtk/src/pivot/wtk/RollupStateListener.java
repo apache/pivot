@@ -27,6 +27,23 @@ import pivot.util.Vote;
  */
 public interface RollupStateListener {
     /**
+     * Adapts the <tt>RollupStateListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements RollupStateListener {
+        public Vote previewExpandedChange(Rollup rollup) {
+            return Vote.APPROVE;
+        }
+
+        public void expandedChangeVetoed(Rollup rollup, Vote reason) {
+        }
+
+        public void expandedChanged(Rollup rollup) {
+        }
+    }
+
+    /**
      * Called to preview a rollup expansion event.
      *
      * @param rollup

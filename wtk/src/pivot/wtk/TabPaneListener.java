@@ -25,6 +25,28 @@ import pivot.collections.Sequence;
  */
 public interface TabPaneListener {
     /**
+     * Adapts the <tt>TabPaneListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TabPaneListener {
+        public void tabOrientationChanged(TabPane tabPane) {
+        }
+
+        public void collapsibleChanged(TabPane tabPane) {
+        }
+
+        public void tabInserted(TabPane tabPane, int index) {
+        }
+
+        public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
+        }
+
+        public void cornerChanged(TabPane tabPane, Component previousCorner) {
+        }
+    }
+
+    /**
      * Called when a tab pane's orientation has changed.
      *
      * @param tabPane

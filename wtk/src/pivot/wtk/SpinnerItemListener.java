@@ -23,6 +23,25 @@ package pivot.wtk;
  */
 public interface SpinnerItemListener {
     /**
+     * Adapts the <tt>SpinnerItemListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements SpinnerItemListener {
+        public void itemInserted(Spinner spinner, int index) {
+        }
+
+        public void itemsRemoved(Spinner spinner, int index, int count) {
+        }
+
+        public void itemUpdated(Spinner spinner, int index) {
+        }
+
+        public void itemsSorted(Spinner spinner) {
+        }
+    }
+
+    /**
      * Called when an item is inserted into the spinner data.
      *
      * @param spinner

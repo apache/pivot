@@ -26,6 +26,37 @@ import pivot.wtk.text.validation.Validator;
  */
 public interface TextInputListener {
     /**
+     * Adapts the <tt>TextInputListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TextInputListener {
+        public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
+        }
+
+        public void textSizeChanged(TextInput textInput, int previousTextSize) {
+        }
+
+        public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
+        }
+
+        public void passwordChanged(TextInput textInput) {
+        }
+
+        public void promptChanged(TextInput textInput, String previousPrompt) {
+        }
+
+        public void textKeyChanged(TextInput textInput, String previousTextKey) {
+        }
+
+        public void textValidChanged(TextInput textInput) {
+        }
+
+        public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
+        }
+    }
+
+    /**
      * Called when a text input's text node has changed.
      * @param textInput
      * @param previousTextNode

@@ -25,6 +25,22 @@ import pivot.collections.Sequence;
  */
 public interface TableViewSelectionListener {
     /**
+     * Adapts the <tt>TableViewSelectionListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TableViewSelectionListener {
+        public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
+        }
+
+        public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
+        }
+
+        public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
+        }
+    }
+
+    /**
      * Called when a range has been added to a table view's selection.
      *
      * @param tableView

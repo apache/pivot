@@ -25,6 +25,52 @@ import pivot.collections.Sequence;
  */
 public interface TablePaneListener {
     /**
+     * Adapts the <tt>TablePaneListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TablePaneListener {
+        public void rowInserted(TablePane tablePane, int index) {
+        }
+
+        public void rowsRemoved(TablePane tablePane, int index,
+            Sequence<TablePane.Row> rows) {
+        }
+
+        public void rowHeightChanged(TablePane.Row row, int previousHeight,
+            boolean previousRelative) {
+        }
+
+        public void rowSelectedChanged(TablePane.Row row) {
+        }
+
+        public void columnInserted(TablePane tablePane, int index) {
+        }
+
+        public void columnsRemoved(TablePane tablePane, int index,
+            Sequence<TablePane.Column> columns) {
+        }
+
+        public void columnWidthChanged(TablePane.Column column, int previousWidth,
+            boolean previousRelative) {
+        }
+
+        public void columnSelectedChanged(TablePane.Column column) {
+        }
+
+        public void cellInserted(TablePane.Row row, int column) {
+        }
+
+        public void cellsRemoved(TablePane.Row row, int column,
+            Sequence<Component> removed) {
+        }
+
+        public void cellUpdated(TablePane.Row row, int column,
+            Component previousComponent) {
+        }
+    }
+
+    /**
      * Called when a row has been inserted into a table pane.
      *
      * @param tablePane

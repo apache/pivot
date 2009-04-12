@@ -25,6 +25,19 @@ import pivot.collections.Sequence;
  */
 public interface TreeViewBranchListener {
     /**
+     * Adapts the <tt>TreeViewBranchListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TreeViewBranchListener {
+        public void branchExpanded(TreeView treeView, Sequence<Integer> path) {
+        }
+
+        public void branchCollapsed(TreeView treeView, Sequence<Integer> path) {
+        }
+    }
+
+    /**
      * Called when a tree node is expanded. This event can be used to perform
      * lazy loading of tree node data.
      *

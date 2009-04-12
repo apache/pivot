@@ -24,6 +24,19 @@ package pivot.wtk;
  */
 public interface BorderListener {
     /**
+     * Adapts the <tt>BorderListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements BorderListener {
+        public void titleChanged(Border border, String previousTitle) {
+        }
+
+        public void contentChanged(Border border, Component previousContent) {
+        }
+    }
+
+    /**
      * Called when a border's title has changed.
      *
      * @param border

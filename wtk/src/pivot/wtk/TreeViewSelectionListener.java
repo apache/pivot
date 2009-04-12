@@ -25,6 +25,23 @@ import pivot.collections.Sequence;
  */
 public interface TreeViewSelectionListener {
     /**
+     * Adapts the <tt>TreeViewSelectionListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TreeViewSelectionListener {
+        public void selectedPathAdded(TreeView treeView, Sequence<Integer> path) {
+        }
+
+        public void selectedPathRemoved(TreeView treeView, Sequence<Integer> path) {
+        }
+
+        public void selectedPathsChanged(TreeView treeView,
+            Sequence<Sequence<Integer>> previousSelectedPaths) {
+        }
+    }
+
+    /**
      * Called when a selected path has been added to a tree view.
      *
      * @param treeView

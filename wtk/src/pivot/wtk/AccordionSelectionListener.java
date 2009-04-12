@@ -24,6 +24,23 @@ import pivot.util.Vote;
  * @author gbrown
  */
 public interface AccordionSelectionListener {
+    /**
+     * Adapts the <tt>AccordionSelectionListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements AccordionSelectionListener {
+        public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
+            return Vote.APPROVE;
+        }
+
+        public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
+        }
+
+        public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
+        }
+    }
+
 	/**
 	 * Called to preview a selected index change.
 	 *

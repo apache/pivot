@@ -25,6 +25,26 @@ import java.util.Locale;
  */
 public interface CalendarListener {
     /**
+     * Adapts the <tt>CalendarListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements CalendarListener {
+        public void yearChanged(Calendar calendar, int previousYear) {
+        }
+
+        public void monthChanged(Calendar calendar, int previousMonth) {
+        }
+
+        public void selectedDateKeyChanged(Calendar calendar,
+            String previousSelectedDateKey) {
+        }
+
+        public void localeChanged(Calendar calendar, Locale previousLocale) {
+        }
+    }
+
+    /**
      * Called when a calendar's year value has changed.
      *
      * @param calendar

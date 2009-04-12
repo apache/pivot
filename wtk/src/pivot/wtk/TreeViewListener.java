@@ -26,6 +26,31 @@ import pivot.collections.List;
  */
 public interface TreeViewListener {
     /**
+     * Adapts the <tt>TreeViewListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TreeViewListener {
+        public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
+        }
+
+        public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer) {
+        }
+
+        public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
+        }
+
+        public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode) {
+        }
+
+        public void checkmarksEnabledChanged(TreeView treeView) {
+        }
+
+        public void showMixedCheckmarkStateChanged(TreeView treeView) {
+        }
+    }
+
+    /**
      * Called when a tree view's data has changed.
      *
      * @param treeView

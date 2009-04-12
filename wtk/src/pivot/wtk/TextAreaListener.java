@@ -25,6 +25,22 @@ import pivot.wtk.text.Document;
  */
 public interface TextAreaListener {
     /**
+     * Adapts the <tt>TextAreaListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TextAreaListener {
+        public void documentChanged(TextArea textArea, Document previousDocument) {
+        }
+
+        public void editableChanged(TextArea textArea) {
+        }
+
+        public void textKeyChanged(TextArea textArea, String previousTextKey) {
+        }
+    }
+
+    /**
      * Called when a text area's document has changed.
      *
      * @param textArea

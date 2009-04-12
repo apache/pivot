@@ -25,6 +25,25 @@ import pivot.collections.Sequence;
  */
 public interface TreeViewNodeListener {
     /**
+     * Adapts the <tt>TreeViewNodeListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TreeViewNodeListener {
+        public void nodeInserted(TreeView treeView, Sequence<Integer> path, int index) {
+        }
+
+        public void nodesRemoved(TreeView treeView, Sequence<Integer> path, int index, int count) {
+        }
+
+        public void nodeUpdated(TreeView treeView, Sequence<Integer> path, int index) {
+        }
+
+        public void nodesSorted(TreeView treeView, Sequence<Integer> path) {
+        }
+    }
+
+    /**
      * Called when a node has been inserted into the tree view.
      *
      * @param treeView

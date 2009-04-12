@@ -25,6 +25,19 @@ import pivot.collections.Sequence;
  */
 public interface AccordionListener {
     /**
+     * Adapts the <tt>AccordionListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements AccordionListener {
+        public void panelInserted(Accordion accordion, int index) {
+        }
+
+        public void panelsRemoved(Accordion accordion, int index, Sequence<Component> panels) {
+        }
+    }
+
+    /**
      * Called when a panel has been inserted into a accordion's panel sequence.
      *
      * @param accordion

@@ -25,6 +25,26 @@ import pivot.util.Vote;
  */
 public interface CardPaneListener {
     /**
+     * Adapts the <tt>CardPaneListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements CardPaneListener {
+        public void orientationChanged(CardPane cardPane, Orientation previousOrientation) {
+        }
+
+        public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
+            return Vote.APPROVE;
+        }
+
+        public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
+        }
+
+        public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+        }
+    }
+
+    /**
      * Called when a card pane's orientation has changed.
      *
      * @param cardPane

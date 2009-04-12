@@ -23,6 +23,19 @@ package pivot.wtk;
  */
 public interface TextAreaCharacterListener {
     /**
+     * Adapts the <tt>TextAreaCharacterListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements TextAreaCharacterListener {
+        public void charactersInserted(TextArea textArea, int index, int count) {
+        }
+
+        public void charactersRemoved(TextArea textArea, int index, int count) {
+        }
+    }
+
+    /**
      * Called when characters have been inserted into a text area.
      *
      * @param textArea

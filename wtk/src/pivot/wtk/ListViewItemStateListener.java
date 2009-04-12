@@ -24,6 +24,19 @@ package pivot.wtk;
  */
 public interface ListViewItemStateListener {
     /**
+     * Adapts the <tt>ListViewItemStateListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements ListViewItemStateListener {
+        public void itemDisabledChanged(ListView listView, int index) {
+        }
+
+        public void itemCheckedChanged(ListView listView, int index) {
+        }
+    }
+
+    /**
      * Called when an item's disabled state has changed.
      *
      * @param listView
