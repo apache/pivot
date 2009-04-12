@@ -395,14 +395,6 @@ public class FlowPaneSkin extends ContainerSkin
                     int componentHeight = 0;
                     int componentX = 0;
 
-                    if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
-                        componentX = padding.left;
-                        componentWidth = Math.max(width - (padding.left
-                            + padding.right), 0);
-                        componentHeight = component.getPreferredHeight(componentWidth);
-                    } else {
-                    }
-
                     // If the contents are vertically justified, scale the
                     // component's height to match the available space
                     if (verticalAlignment == VerticalAlignment.JUSTIFY) {

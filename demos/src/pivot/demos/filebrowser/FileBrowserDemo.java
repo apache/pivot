@@ -69,15 +69,8 @@ public class FileBrowserDemo implements Application {
             }
         });
 
-        folderTreeView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
-            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-                return false;
-            }
-
-            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-                return false;
-            }
-
+        folderTreeView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+            @Override
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
                 if (count == 2) {
                     openSelectedFile();

@@ -30,8 +30,8 @@ import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Display;
-import pivot.wtk.Frame;
 import pivot.wtk.Mouse;
+import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
 public class ChartsTest implements Application {
@@ -74,21 +74,21 @@ public class ChartsTest implements Application {
                 String seriesNameKey = chartView.getSeriesNameKey();
 
                 Alert.alert("You clicked element " + elementLabel + " in \""
-                    + seriesDictionary.get(seriesNameKey) + "\".", frame);
+                    + seriesDictionary.get(seriesNameKey) + "\".", window);
             }
 
             return false;
         }
     }
 
-    private Frame frame = null;
+    private Window window = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
 
-        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("charts_test.wtkx")));
-        frame.setTitle("Charts Test");
+        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("charts_test.wtkx")));
+        window.setTitle("Charts Test");
 
         ChartViewMouseButtonHandler chartViewMouseButtonHandler = new ChartViewMouseButtonHandler();
 
@@ -116,12 +116,15 @@ public class ChartsTest implements Application {
         HighLowChartView highLowChartView = (HighLowChartView)wtkxSerializer.getObjectByName("highLowCharts.highLowChartView");
         highLowChartView.getComponentMouseButtonListeners().add(chartViewMouseButtonHandler);
 
-        frame.setPreferredSize(640, 480);
-        frame.open(display);
+        window.setMaximized(true);
+        window.open(display);
     }
 
     public boolean shutdown(boolean optional) throws Exception {
-        frame.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 

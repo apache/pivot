@@ -417,15 +417,7 @@ public class TerraCalendarSkin extends CalendarSkin
         });
 
         // Attach a listener to consume mouse clicks
-        ComponentMouseButtonListener spinnerMouseButtonListener = new ComponentMouseButtonListener() {
-            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-                return false;
-            }
-
-            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-                return false;
-            }
-
+        ComponentMouseButtonListener spinnerMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
                 return true;
             }

@@ -17,7 +17,6 @@
 package pivot.wtk.content;
 
 import pivot.collections.List;
-import pivot.util.Vote;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;

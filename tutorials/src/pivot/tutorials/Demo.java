@@ -276,20 +276,13 @@ public class Demo implements Application {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) throws SerializationException, IOException {
                 menuImageView = (ImageView)wtkxSerializer.getObjectByName("imageView");
-                menuImageView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
+                menuImageView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+                    @Override
                     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
                         if (button == Mouse.Button.RIGHT) {
                             menuPopup.open(display, component.mapPointToAncestor(display, x, y));
                         }
 
-                        return false;
-                    }
-
-                    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-                        return false;
-                    }
-
-                    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
                         return false;
                     }
                 });
@@ -535,15 +528,8 @@ public class Demo implements Application {
         // Install header press listener
         sortableTableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler());
 
-        customTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
-            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-               return false;
-            }
-
-            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-               return false;
-            }
-
+        customTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+            @Override
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
                if (button == Mouse.Button.LEFT) {
                    List<CustomTableRow> customTableData =

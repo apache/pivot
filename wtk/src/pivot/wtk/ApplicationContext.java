@@ -476,7 +476,7 @@ public abstract class ApplicationContext {
                 {   appendEvent(mouseEvent);
                 }
 
-                public int getSourceActions() {
+                public synchronized int getSourceActions() {
                     int awtSourceActions = 0;
 
                     if (DropAction.COPY.isSelected(supportedDropActions)) {

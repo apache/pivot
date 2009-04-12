@@ -328,15 +328,7 @@ public class HTTPClient implements Application {
         window.open(display);
 
         TableView tableView = (TableView)serializer.getObjectByName("log.tableView");
-        tableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
-            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-                return false;
-            }
-
-            public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-                return false;
-            }
-
+        tableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
                 boolean consumed = false;
 

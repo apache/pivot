@@ -58,7 +58,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private SlideTransition closeTransition = null;
 
     private ComponentMouseButtonListener ownerMouseButtonListener =
-        new ComponentMouseButtonListener() {
+        new ComponentMouseButtonListener.Adapter() {
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             Window owner = (Window)component;
             Component ownerContent = owner.getContent();
@@ -69,14 +69,6 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                 ApplicationContext.beep();
             }
 
-            return false;
-        }
-
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             return false;
         }
     };

@@ -54,15 +54,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     protected ListView listView;
     protected Window listViewPopup;
 
-    private ComponentMouseButtonListener listViewPopupMouseButtonListener = new ComponentMouseButtonListener() {
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            return false;
-        }
-
+    private ComponentMouseButtonListener listViewPopupMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             ListButton listButton = (ListButton)getComponent();
 

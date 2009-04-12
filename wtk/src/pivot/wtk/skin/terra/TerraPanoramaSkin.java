@@ -247,11 +247,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         buttonPadding = 4;
     }
 
-    private ComponentMouseListener buttonMouseListener = new ComponentMouseListener() {
-        public boolean mouseMove(Component component, int x, int y) {
-            return false;
-        }
-
+    private ComponentMouseListener buttonMouseListener = new ComponentMouseListener.Adapter() {
         public void mouseOver(Component component) {
             // Start scroll timer
             scrollDistance = INITIAL_SCROLL_DISTANCE;

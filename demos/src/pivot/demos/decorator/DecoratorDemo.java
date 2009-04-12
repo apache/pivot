@@ -49,11 +49,7 @@ public class DecoratorDemo implements Application {
         final FadeDecorator fadeDecorator = new FadeDecorator();
         fadeFrame.getDecorators().insert(fadeDecorator, 0);
 
-        fadeFrame.getComponentMouseListeners().add(new ComponentMouseListener() {
-            public boolean mouseMove(Component component, int x, int y) {
-                return false;
-            }
-
+        fadeFrame.getComponentMouseListeners().add(new ComponentMouseListener.Adapter() {
             public void mouseOver(Component component) {
                 fadeDecorator.setOpacity(0.9f);
                 component.repaint();
