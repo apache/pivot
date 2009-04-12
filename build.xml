@@ -45,10 +45,10 @@ limitations under the License.
         depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
 
     <target name="package"
-        depends="charts-package, charts-test-package, core-package, core-test-package, web-package, web-test-package, wtk-package, demos-package, tutorials-package, tools-package"/>
+        depends="charts-package, charts-test-package, core-package, web-package, web-test-package, wtk-package, demos-package, tutorials-package, tools-package"/>
 
     <target name="clean" description="Removes all build artifacts"
-        depends="charts-clean, charts-test-clean, core-clean, core-test-clean, web-clean, web-test-clean, wtk-clean, demos-clean, tutorials-clean, tools-clean">
+        depends="charts-clean, charts-test-clean, core-clean, web-clean, web-test-clean, wtk-clean, demos-clean, tutorials-clean, tools-clean">
         <delete dir="${folder.dist}"/>
         <delete dir="${folder.deploy}"/>
         <delete dir="${folder.doc}"/>
@@ -226,9 +226,9 @@ limitations under the License.
 
     <!-- Core Test -->
     <target name="core-test" depends="core">
-        <mkdir dir="core-test/${folder.bin}"/>
-        <javac srcdir="core-test/src"
-            destDir="core-test/${folder.bin}"
+        <mkdir dir="core/${folder.bin}"/>
+        <javac srcdir="core/test"
+            destDir="core/${folder.bin}"
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
@@ -240,22 +240,6 @@ limitations under the License.
                 <pathelement location="junit.jar"/>
             </classpath>
         </javac>
-    </target>
-
-    <target name="core-test-package" depends="core-test">
-        <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-core.test.jar">
-            <fileset dir="core-test/${folder.bin}"/>
-            <fileset dir="core-test/src">
-                <exclude name="**/*.java"/>
-                <exclude name="**/package.html"/>
-            </fileset>
-        </jar>
-    </target>
-
-    <target name="core-test-clean">
-        <delete dir="core-test/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}-core.test.jar"/>
     </target>
 
     <!-- Web -->
