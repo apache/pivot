@@ -276,8 +276,8 @@ public abstract class ApplicationContext {
         public void setScale(int scale) {
             if (scale != this.scale) {
                 this.scale = scale;
-                display.setSize(Math.max((int)Math.ceil(getWidth() / (float)scale), 0),
-                    Math.max((int)Math.ceil(getHeight() / (float)scale), 0));
+                display.setSize(Math.max(Math.round(getWidth() / (float)scale), 0),
+                    Math.max(Math.round(getHeight() / (float)scale), 0));
             }
         }
 
@@ -575,8 +575,8 @@ public abstract class ApplicationContext {
                     if (scale == 1) {
                         display.setSize(getWidth(), getHeight());
                     } else {
-                        display.setSize(Math.max((int)Math.ceil(getWidth() / (float)scale), 0),
-                            Math.max((int)Math.ceil(getHeight() / (float)scale), 0));
+                        display.setSize(Math.max(Math.round(getWidth() / (float)scale), 0),
+                            Math.max(Math.round(getHeight() / (float)scale), 0));
                     }
                     break;
                 }

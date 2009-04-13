@@ -20,6 +20,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
@@ -592,7 +593,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                 for (int i = 1; i < rowCount; i++) {
                     int gridY = Math.max(rowY - (int)Math.ceil(verticalSpacing * 0.5f), 0);
                     int gridWidth = Math.max(width - (padding.left + padding.right), 0);
-                    gridGraphics.drawLine(padding.left, gridY, gridWidth - 1, gridY);
+                    gridGraphics.draw(new Line2D.Double(padding.left + 0.5, gridY + 0.5,
+                        gridWidth - 1.5, gridY + 0.5));
 
                     rowY += (rowHeights[i] + verticalSpacing);
                 }
@@ -605,7 +607,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                 for (int j = 1; j < columnCount; j++) {
                     int gridX = Math.max(columnX - (int)Math.ceil(horizontalSpacing * 0.5), 0);
                     int gridHeight = Math.max(height - (padding.top + padding.bottom), 0);
-                    gridGraphics.drawLine(gridX, padding.top, gridX, gridHeight - 1);
+                    gridGraphics.draw(new Line2D.Double(gridX + 0.5, padding.top + 0.5,
+                        gridX + 0.5, gridHeight - 1.5));
 
                     columnX += (columnWidths[j] + horizontalSpacing);
                 }
