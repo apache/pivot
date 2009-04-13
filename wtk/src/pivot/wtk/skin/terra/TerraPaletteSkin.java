@@ -75,8 +75,8 @@ public class TerraPaletteSkin extends WindowSkin {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.drawLine(new Line2D.Double(0.5, 0.5, 5.5, 5.5));
-            graphics.drawLine(new Line2D.Double(0.5, 5.5, 5.5, 0.5));
+            graphics.draw(new Line2D.Double(0.5, 0.5, 5.5, 5.5));
+            graphics.draw(new Line2D.Double(0.5, 5.5, 5.5, 0.5));
         }
     }
 
