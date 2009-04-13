@@ -87,7 +87,7 @@ public abstract class ApplicationContext {
         private DropAction userDropAction = null;
         private Component dropDescendant = null;
 
-        private double scale = 1;
+        private int scale = 1;
 
         private DropTargetListener dropTargetListener = new DropTargetListener() {
             public void dragEnter(DropTargetDragEvent event) {
@@ -269,15 +269,15 @@ public abstract class ApplicationContext {
             setFocusTraversalKeysEnabled(false);
         }
 
-        public double getScale() {
+        public int getScale() {
             return scale;
         }
 
-        public void setScale(double scale) {
+        public void setScale(int scale) {
             if (scale != this.scale) {
                 this.scale = scale;
-                display.setSize(Math.max((int)Math.ceil(getWidth() / scale), 0),
-                    Math.max((int)Math.ceil(getHeight() / scale), 0));
+                display.setSize(Math.max((int)Math.ceil(getWidth() / (float)scale), 0),
+                    Math.max((int)Math.ceil(getHeight() / (float)scale), 0));
             }
         }
 
@@ -306,8 +306,7 @@ public abstract class ApplicationContext {
                 if (scale == 1) {
                     super.repaint(x, y, width, height);
                 } else {
-                    super.repaint((int)Math.floor(x * scale), (int)Math.floor(y * scale),
-                        (int)Math.ceil(width * scale) + 1, (int)Math.ceil(height * scale) + 1);
+                    super.repaint(x * scale, y * scale, width * scale + 1, height * scale + 1);
                 }
             }
         }
@@ -576,8 +575,8 @@ public abstract class ApplicationContext {
                     if (scale == 1) {
                         display.setSize(getWidth(), getHeight());
                     } else {
-                        display.setSize(Math.max((int)Math.ceil(getWidth() / scale), 0),
-                            Math.max((int)Math.ceil(getHeight() / scale), 0));
+                        display.setSize(Math.max((int)Math.ceil(getWidth() / (float)scale), 0),
+                            Math.max((int)Math.ceil(getHeight() / (float)scale), 0));
                     }
                     break;
                 }
@@ -627,8 +626,8 @@ public abstract class ApplicationContext {
         protected void processMouseEvent(MouseEvent event) {
             super.processMouseEvent(event);
 
-            int x = (int)Math.round(event.getX() / scale);
-            int y = (int)Math.round(event.getY() / scale);
+            int x = Math.round(event.getX() / (float)scale);
+            int y = Math.round(event.getY() / (float)scale);
 
             // Set the mouse button state
             int mouseButtons = 0x00;
@@ -747,8 +746,8 @@ public abstract class ApplicationContext {
         protected void processMouseMotionEvent(MouseEvent event) {
             super.processMouseMotionEvent(event);
 
-            int x = (int)Math.round(event.getX() / scale);
-            int y = (int)Math.round(event.getY() / scale);
+            int x = Math.round(event.getX() / (float)scale);
+            int y = Math.round(event.getY() / (float)scale);
 
             // Set the mouse location
             mouseLocation = new Point(x, y);
@@ -885,8 +884,8 @@ public abstract class ApplicationContext {
             super.processMouseWheelEvent(event);
 
             // Get the event coordinates
-            int x = (int)Math.round(event.getX() / scale);
-            int y = (int)Math.round(event.getY() / scale);
+            int x = Math.round(event.getX() / (float)scale);
+            int y = Math.round(event.getY() / (float)scale);
 
             // Get the scroll type
             Mouse.ScrollType scrollType = null;
@@ -907,7 +906,7 @@ public abstract class ApplicationContext {
                 case MouseEvent.MOUSE_WHEEL: {
                     if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
                         && Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        setScale(Math.min(Math.max(scale - event.getWheelRotation() * 0.1, 1), 8));
+                        setScale(Math.min(Math.max(scale - event.getWheelRotation(), 1), 8));
                     } else if (dragDescendant == null) {
                         // Determine the mouse owner
                         Component mouseOwner;
