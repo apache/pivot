@@ -34,7 +34,7 @@ import pivot.wtk.Mouse;
 import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
-public class ChartsTest implements Application {
+public class ChartsDemo implements Application {
     private class ChartViewMouseButtonHandler implements ComponentMouseButtonListener {
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             return false;
@@ -87,8 +87,8 @@ public class ChartsTest implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
 
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("charts_test.wtkx")));
-        window.setTitle("Charts Test");
+        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("charts_demo.wtkx")));
+        window.setTitle("Charts Demo");
 
         ChartViewMouseButtonHandler chartViewMouseButtonHandler = new ChartViewMouseButtonHandler();
 
