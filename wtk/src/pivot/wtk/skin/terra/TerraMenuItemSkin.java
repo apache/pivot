@@ -111,10 +111,8 @@ public class TerraMenuItemSkin extends MenuItemSkin {
 
         Dimensions preferredSize = dataRenderer.getPreferredSize();
 
-        preferredSize.width += EXPANDER_SIZE;
-        preferredSize.height = Math.max(preferredSize.height, EXPANDER_SIZE);
-
-        return preferredSize;
+        return new Dimensions(preferredSize.width + EXPANDER_SIZE,
+            Math.max(preferredSize.height, EXPANDER_SIZE));
     }
 
     public void layout() {

@@ -1261,18 +1261,20 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
     }
 
     public Dimensions getPreferredSize() {
-        Dimensions preferredSize;
+        int preferredWidth;
+        int preferredHeight;
 
         if (documentView == null) {
-            preferredSize = new Dimensions(0, 0);
+            preferredWidth = 0;
+            preferredHeight = 0;
         } else {
             documentView.setBreakWidth(Integer.MAX_VALUE);
-            preferredSize = documentView.getSize();
-            preferredSize.width += margin.left + margin.right;
-            preferredSize.height += margin.top + margin.bottom;
+            Dimensions preferredSize = documentView.getSize();
+            preferredWidth = preferredSize.width + (margin.left + margin.right);
+            preferredHeight = preferredSize.height + (margin.top + margin.bottom);
         }
 
-        return preferredSize;
+        return new Dimensions(preferredWidth, preferredHeight);
     }
 
     public void layout() {

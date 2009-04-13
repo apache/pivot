@@ -339,6 +339,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
                 Dimensions displaySize = display.getSize();
                 Dimensions popupSize = content.getPreferredSize();
+                int popupHeight = popupSize.height;
 
                 int x = buttonLocation.x;
                 if (popupSize.width > width
@@ -351,14 +352,14 @@ public abstract class CalendarButtonSkin extends ButtonSkin
                     if (buttonLocation.y - popupSize.height > 0) {
                         y = buttonLocation.y - popupSize.height + 1;
                     } else {
-                        popupSize.height = displaySize.height - y;
+                        popupHeight = displaySize.height - y;
                     }
                 } else {
-                    popupSize.height = -1;
+                    popupHeight = -1;
                 }
 
                 calendarPopup.setLocation(x, y);
-                calendarPopup.setPreferredSize(popupSize);
+                calendarPopup.setPreferredSize(popupSize.width, popupHeight);
                 calendarPopup.open(calendarButton.getWindow());
 
                 calendar.requestFocus();

@@ -23,14 +23,15 @@ import pivot.collections.Dictionary;
  *
  * @author gbrown
  */
-public class Dimensions {
-    public int width = 0;
-    public int height = 0;
+public final class Dimensions {
+    public final int width;
+    public final int height;
 
     public static final String WIDTH_KEY = "width";
     public static final String HEIGHT_KEY = "height";
 
     public Dimensions() {
+        this(0, 0);
     }
 
     public Dimensions(Dictionary<String, ?> dimensions) {
@@ -40,10 +41,14 @@ public class Dimensions {
 
         if (dimensions.containsKey(WIDTH_KEY)) {
             width = (Integer)dimensions.get(WIDTH_KEY);
+        } else {
+            width = 0;
         }
 
         if (dimensions.containsKey(HEIGHT_KEY)) {
             height = (Integer)dimensions.get(HEIGHT_KEY);
+        } else {
+            height = 0;
         }
     }
 
@@ -71,6 +76,12 @@ public class Dimensions {
         }
 
         return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        // TODO This may not be the most optimal hashing function
+        return width * height;
     }
 
     public String toString() {

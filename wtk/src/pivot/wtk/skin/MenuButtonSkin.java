@@ -271,6 +271,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
 
                 Dimensions displaySize = display.getSize();
                 Dimensions popupSize = content.getPreferredSize();
+                int popupHeight = popupSize.height;
 
                 int x = buttonLocation.x;
                 if (popupSize.width > width
@@ -283,14 +284,14 @@ public abstract class MenuButtonSkin extends ButtonSkin
                     if (buttonLocation.y - popupSize.height > 0) {
                         y = buttonLocation.y - popupSize.height + 1;
                     } else {
-                        popupSize.height = displaySize.height - y;
+                        popupHeight = displaySize.height - y;
                     }
                 } else {
-                    popupSize.height = -1;
+                    popupHeight = -1;
                 }
 
                 menuPopup.setLocation(x, y);
-                menuPopup.setPreferredSize(popupSize);
+                menuPopup.setPreferredSize(popupSize.width, popupHeight);
                 menuPopup.open(menuButton);
 
                 menuPopup.requestFocus();

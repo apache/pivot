@@ -259,7 +259,9 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     preferredSize = selectedCard.getPreferredSize();
                 }
             } else {
-                preferredSize = new Dimensions(0, 0);
+                int preferredWidth = 0;
+                int preferredHeight = 0;
+
                 Orientation orientation = cardPane.getOrientation();
 
                 int selectedIndex = cardPane.getSelectedIndex();
@@ -268,14 +270,16 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
                     if (selectedIndex != -1
                         || orientation == Orientation.HORIZONTAL) {
-                        preferredSize.width = Math.max(cardSize.width, preferredSize.width);
+                        preferredWidth = Math.max(cardSize.width, preferredWidth);
                     }
 
                     if (selectedIndex != -1
                         || orientation == Orientation.VERTICAL) {
-                        preferredSize.height = Math.max(cardSize.height, preferredSize.height);
+                        preferredHeight = Math.max(cardSize.height, preferredHeight);
                     }
                 }
+
+                preferredSize = new Dimensions(preferredWidth, preferredHeight);
             }
         } else {
             float percentComplete = selectionChangeTransition.getPercentComplete();

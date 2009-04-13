@@ -356,6 +356,7 @@ public abstract class ListButtonSkin extends ButtonSkin
 
                     Dimensions displaySize = display.getSize();
                     Dimensions popupSize = content.getPreferredSize();
+                    int popupHeight = popupSize.height;
 
                     int x = buttonLocation.x;
                     if (popupSize.width > width
@@ -368,14 +369,14 @@ public abstract class ListButtonSkin extends ButtonSkin
                         if (buttonLocation.y - popupSize.height > 0) {
                             y = buttonLocation.y - popupSize.height + 1;
                         } else {
-                            popupSize.height = displaySize.height - y;
+                            popupHeight = displaySize.height - y;
                         }
                     } else {
-                        popupSize.height = -1;
+                        popupHeight = -1;
                     }
 
                     listViewPopup.setLocation(x, y);
-                    listViewPopup.setPreferredSize(popupSize);
+                    listViewPopup.setPreferredSize(popupSize.width, popupHeight);
                     listViewPopup.open(listButton.getWindow());
 
                     if (listView.getFirstSelectedIndex() == -1

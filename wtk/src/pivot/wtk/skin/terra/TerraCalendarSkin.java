@@ -127,10 +127,8 @@ public class TerraCalendarSkin extends CalendarSkin
 
             Dimensions preferredSize = dataRenderer.getPreferredSize();
 
-            preferredSize.width += padding * 2;
-            preferredSize.height += padding * 2;
-
-            return preferredSize;
+            return new Dimensions(preferredSize.width + padding * 2,
+                preferredSize.height + padding * 2);
         }
 
         public void paint(Graphics2D graphics) {
