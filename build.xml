@@ -465,7 +465,7 @@ limitations under the License.
     </target>
 
     <!-- Demos -->
-    <target name="demos" depends="core, web, wtk">
+    <target name="demos" depends="core, web, wtk, charts">
         <mkdir dir="demos/${folder.bin}"/>
         <javac srcdir="demos/src"
             destDir="demos/${folder.bin}"
@@ -479,6 +479,7 @@ limitations under the License.
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="web/${folder.bin}"/>
                 <pathelement location="wtk/${folder.bin}"/>
+                <pathelement location="charts/${folder.bin}"/>
                 <fileset dir="demos/lib" includes="**/*.jar"/>
             </classpath>
         </javac>

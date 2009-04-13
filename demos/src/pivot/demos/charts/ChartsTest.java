@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.charts.test;
+package pivot.demos.charts;
 
 import pivot.beans.BeanDictionary;
 import pivot.charts.AreaChartView;
