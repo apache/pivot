@@ -35,6 +35,7 @@ limitations under the License.
     <property name="compiler.optimize" value="true"/>
     <property name="compiler.deprecation" value="true"/>
     <property name="compiler.debug" value="false"/>
+    <property name="compiler.target" value="1.5"/>
 
     <!-- Dynamic properties -->
     <tstamp/>
@@ -94,7 +95,7 @@ limitations under the License.
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
-            target="1.5"
+            target="${compiler.target}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -159,7 +160,7 @@ limitations under the License.
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
-            target="1.5"
+            target="${compiler.target}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -178,7 +179,7 @@ limitations under the License.
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
-            target="1.5"
+            target="${compiler.target}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
         </javac>
@@ -216,7 +217,7 @@ limitations under the License.
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
-            target="1.5"
+            target="${compiler.target}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -234,7 +235,7 @@ limitations under the License.
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
-            target="1.5"
+            target="${compiler.target}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -295,7 +296,7 @@ limitations under the License.
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
-            target="1.5"
+            target="${compiler.target}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -369,7 +370,7 @@ limitations under the License.
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
-            target="1.5"
+            target="${compiler.target}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -454,7 +455,7 @@ limitations under the License.
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
-            target="1.5"
+            target="${compiler.target}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -472,7 +473,7 @@ limitations under the License.
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
-            target="1.5"
+            target="${compiler.target}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -517,7 +518,7 @@ limitations under the License.
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
-            target="1.5"
+            target="${compiler.target}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -576,7 +577,7 @@ limitations under the License.
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
-            target="1.5"
+            target="${compiler.target}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
