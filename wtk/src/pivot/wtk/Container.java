@@ -353,7 +353,7 @@ public abstract class Container extends Component
         Bounds paintBounds = new Bounds(0, 0, getWidth(), getHeight());
         Rectangle clipBounds = graphics.getClipBounds();
         if (clipBounds != null) {
-            paintBounds.intersect(new Bounds(clipBounds));
+            paintBounds = paintBounds.intersect(new Bounds(clipBounds));
         }
 
         for (Component component : this) {

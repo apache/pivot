@@ -152,8 +152,8 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         // Get the item bounds
         Bounds itemBounds = listView.getItemBounds(index);
         int itemIndent = listView.getItemIndent();
-        itemBounds.x += itemIndent;
-        itemBounds.width -= itemIndent;
+        itemBounds = new Bounds(itemBounds.x + itemIndent, itemBounds.y,
+            itemBounds.width - itemIndent, itemBounds.height);
 
         // Render the item data
         ListViewItemRenderer itemRenderer = (ListViewItemRenderer)listView.getItemRenderer();
@@ -168,10 +168,9 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             Insets padding = (Insets)textInput.getStyles().get("padding");
 
             // Calculate the bounds of what we're editing
-            Bounds editBounds = new Bounds(itemBounds);
-            editBounds.x += textBounds.x - (padding.left + 1);
-            editBounds.width -= textBounds.x;
-            editBounds.width += (padding.left + 1);
+            Bounds editBounds = new Bounds(itemBounds.x + textBounds.x - (padding.left + 1),
+                itemBounds.y, itemBounds.width - textBounds.x + (padding.left + 1),
+                itemBounds.height);
 
             // Scroll to make the text as visible as possible
             listView.scrollAreaToVisible(editBounds.x, editBounds.y,

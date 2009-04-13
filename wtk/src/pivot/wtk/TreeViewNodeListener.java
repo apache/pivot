@@ -16,7 +16,6 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Sequence;
 import pivot.collections.Sequence.Tree.Path;
 
 /**

@@ -92,7 +92,7 @@ public class TagDecorator implements Decorator {
         }
 
         if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
-            throw new IllegalArgumentException("JUSTIFY is not supported");
+            throw new IllegalArgumentException(HorizontalAlignment.JUSTIFY + " is not supported");
         }
 
         this.horizontalAlignment = horizontalAlignment;
@@ -108,7 +108,7 @@ public class TagDecorator implements Decorator {
         }
 
         if (verticalAlignment == VerticalAlignment.JUSTIFY) {
-            throw new IllegalArgumentException("JUSTIFY is not supported");
+            throw new IllegalArgumentException(VerticalAlignment.JUSTIFY + " is not supported");
         }
 
         this.verticalAlignment = verticalAlignment;
@@ -152,44 +152,51 @@ public class TagDecorator implements Decorator {
         if (tag == null) {
             bounds = null;
         } else {
-            bounds = new Bounds();
+            int x, y;
 
             switch (horizontalAlignment) {
                 case LEFT: {
-                    bounds.x = xOffset;
+                    x = xOffset;
                     break;
                 }
 
                 case RIGHT: {
-                    bounds.x = component.getWidth() - tag.getWidth() + xOffset;
+                    x = component.getWidth() - tag.getWidth() + xOffset;
                     break;
                 }
 
                 case CENTER: {
-                    bounds.x = (component.getWidth() - tag.getWidth()) / 2 + xOffset;
+                    x = (component.getWidth() - tag.getWidth()) / 2 + xOffset;
                     break;
+                }
+
+                default: {
+                    throw new UnsupportedOperationException();
                 }
             }
 
             switch (verticalAlignment) {
                 case TOP: {
-                    bounds.y = yOffset;
+                    y = yOffset;
                     break;
                 }
 
                 case BOTTOM: {
-                    bounds.y = component.getHeight() - tag.getHeight() + yOffset;
+                    y = component.getHeight() - tag.getHeight() + yOffset;
                     break;
                 }
 
                 case CENTER: {
-                    bounds.y = (component.getHeight() - tag.getHeight()) / 2 + yOffset;
+                    y = (component.getHeight() - tag.getHeight()) / 2 + yOffset;
                     break;
+                }
+
+                default: {
+                    throw new UnsupportedOperationException();
                 }
             }
 
-            bounds.width = tag.getWidth();
-            bounds.height = tag.getHeight();
+            bounds = new Bounds(x, y, tag.getWidth(), tag.getHeight());
         }
 
         return bounds;

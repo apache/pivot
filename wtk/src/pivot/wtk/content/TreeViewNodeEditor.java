@@ -16,7 +16,6 @@
  */
 package pivot.wtk.content;
 
-import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.collections.Sequence.Tree.Path;
@@ -191,8 +190,8 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         // Get the node bounds
         Bounds nodeBounds = treeView.getNodeBounds(path);
         int nodeIndent = treeView.getNodeIndent(path.getLength());
-        nodeBounds.x += nodeIndent;
-        nodeBounds.width -= nodeIndent;
+        nodeBounds = new Bounds(nodeBounds.x + nodeIndent, nodeBounds.y,
+            nodeBounds.width - nodeIndent, nodeBounds.height);
 
         // Render the node data
         TreeViewNodeRenderer nodeRenderer = (TreeViewNodeRenderer)treeView.getNodeRenderer();
@@ -208,10 +207,9 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             Insets padding = (Insets)textInput.getStyles().get("padding");
 
             // Calculate the bounds of what we're editing
-            Bounds editBounds = new Bounds(nodeBounds);
-            editBounds.x += textBounds.x - (padding.left + 1);
-            editBounds.width -= textBounds.x;
-            editBounds.width += (padding.left + 1);
+            Bounds editBounds = new Bounds(nodeBounds.x + textBounds.x - (padding.left + 1),
+                nodeBounds.y, nodeBounds.width - textBounds.x + (padding.left + 1),
+                nodeBounds.height);
 
             // Scroll to make the text as visible as possible
             treeView.scrollAreaToVisible(editBounds.x, editBounds.y,

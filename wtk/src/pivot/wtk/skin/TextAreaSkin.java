@@ -432,7 +432,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             Bounds paintBounds = new Bounds(0, 0, getWidth(), getHeight());
             Rectangle clipBounds = graphics.getClipBounds();
             if (clipBounds != null) {
-                paintBounds.intersect(new Bounds(clipBounds));
+                paintBounds = paintBounds.intersect(new Bounds(clipBounds));
             }
 
             for (NodeView nodeView : nodeViews) {
@@ -520,9 +520,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
                 offset -= nodeView.getOffset();
                 bounds = nodeView.getCharacterBounds(offset);
-
-                bounds.x += nodeView.getX();
-                bounds.y += nodeView.getY();
+                bounds = bounds.translate(nodeView.getX(), nodeView.getY());
             }
 
             return bounds;
@@ -805,9 +803,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
                 int n = getLength();
                 if (n > 0) {
                     NodeView lastNodeView = get(n - 1);
-
-                    terminatorBounds.x = lastNodeView.getX() + lastNodeView.getWidth();
-                    terminatorBounds.y = lastNodeView.getY();
+                    terminatorBounds = new Bounds(lastNodeView.getX() + lastNodeView.getWidth(),
+                        lastNodeView.getY(), terminatorBounds.width, terminatorBounds.height);
                 }
 
                 // Ensure that the paragraph is at least as large as the

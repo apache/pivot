@@ -99,7 +99,7 @@ public class TranslationDecorator implements Decorator {
         Bounds bounds = new Bounds(x, y, component.getWidth(), component.getHeight());
 
         if (clip) {
-            bounds.intersect(component.getBounds());
+            bounds = bounds.intersect(component.getBounds());
         }
 
         return bounds;

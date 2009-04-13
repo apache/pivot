@@ -404,31 +404,34 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     public Bounds getViewportBounds() {
-        Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
+        int x = 0;
+        int y = 0;
+        int width = getWidth();
+        int height = getHeight();
 
         if (buttonBackgroundColor != null) {
             if (northButton.isVisible()) {
                 int northButtonHeight = northButton.getHeight();
-                bounds.y += northButtonHeight;
-                bounds.height -= northButtonHeight;
+                y += northButtonHeight;
+                height -= northButtonHeight;
             }
 
             if (southButton.isVisible()) {
-                bounds.height -= southButton.getHeight();
+                height -= southButton.getHeight();
             }
 
             if (eastButton.isVisible()) {
-                bounds.width -= eastButton.getWidth();
+                width -= eastButton.getWidth();
             }
 
             if (westButton.isVisible()) {
                 int westButtonWidth = westButton.getWidth();
-                bounds.x += westButtonWidth;
-                bounds.width -= westButtonWidth;
+                x += westButtonWidth;
+                width -= westButtonWidth;
             }
         }
 
-        return bounds;
+        return new Bounds(x, y, width, height);
     }
 
     @Override

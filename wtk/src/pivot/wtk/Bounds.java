@@ -23,11 +23,11 @@ import pivot.collections.Dictionary;
  *
  * @author gbrown
  */
-public class Bounds {
-    public int x = 0;
-    public int y = 0;
-    public int width = 0;
-    public int height = 0;
+public final class Bounds {
+    public final int x;
+    public final int y;
+    public final int width;
+    public final int height;
 
     public static final String X_KEY = "x";
     public static final String Y_KEY = "y";
@@ -35,6 +35,7 @@ public class Bounds {
     public static final String HEIGHT_KEY = "height";
 
     public Bounds() {
+        this(0, 0, 0, 0);
     }
 
     public Bounds(Dictionary<String, ?> bounds) {
@@ -44,18 +45,26 @@ public class Bounds {
 
         if (bounds.containsKey(X_KEY)) {
             x = (Integer)bounds.get(X_KEY);
+        } else {
+            x = 0;
         }
 
         if (bounds.containsKey(Y_KEY)) {
             y = (Integer)bounds.get(Y_KEY);
+        } else {
+            y = 0;
         }
 
         if (bounds.containsKey(WIDTH_KEY)) {
             width = (Integer)bounds.get(WIDTH_KEY);
+        } else {
+            width = 0;
         }
 
         if (bounds.containsKey(HEIGHT_KEY)) {
             height = (Integer)bounds.get(HEIGHT_KEY);
+        } else {
+            height = 0;
         }
     }
 
@@ -111,33 +120,26 @@ public class Bounds {
         return new Dimensions(width, height);
     }
 
-    public void union(Bounds bounds) {
+    public Bounds union(Bounds bounds) {
         int x1 = Math.min(x, bounds.x);
         int y1 = Math.min(y, bounds.y);
         int x2 = Math.max(x + width, bounds.x + bounds.width);
         int y2 = Math.max(y + height, bounds.y + bounds.height);
 
-        this.x = x1;
-        this.y = y1;
-        this.width = x2 - x1;
-        this.height = y2 - y1;
+        return new Bounds(x1, y1, x2 - x1, y2 - y1);
     }
 
-    public void intersect(Bounds bounds) {
+    public Bounds intersect(Bounds bounds) {
         int x1 = Math.max(x, bounds.x);
         int y1 = Math.max(y, bounds.y);
         int x2 = Math.min(x + width, bounds.x + bounds.width);
         int y2 = Math.min(y + height, bounds.y + bounds.height);
 
-        this.x = x1;
-        this.y = y1;
-        this.width = x2 - x1;
-        this.height = y2 - y1;
+        return new Bounds(x1, y1, x2 - x1, y2 - y1);
     }
 
-    public void translate(int dx, int dy) {
-        this.x += dx;
-        this.y += dy;
+    public Bounds translate(int dx, int dy) {
+        return new Bounds(x + dx, y + dy, width, height);
     }
 
     public boolean contains(Point point) {
@@ -204,6 +206,12 @@ public class Bounds {
         }
 
         return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        // TODO This may not be the most optimal hashing function
+        return (x * y) ^ (width * height);
     }
 
     public java.awt.Rectangle toRectangle() {

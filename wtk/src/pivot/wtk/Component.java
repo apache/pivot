@@ -1107,13 +1107,11 @@ public abstract class Component implements ConstrainedVisual {
         Bounds decoratedBounds = new Bounds(0, 0, getWidth(), getHeight());
 
         for (Decorator decorator : decorators) {
-            decoratedBounds.union(decorator.getBounds(this));
+            decoratedBounds = decoratedBounds.union(decorator.getBounds(this));
         }
 
-        decoratedBounds.x += x;
-        decoratedBounds.y += y;
-
-        return decoratedBounds;
+        return new Bounds(decoratedBounds.x + x, decoratedBounds.y + y,
+            decoratedBounds.width, decoratedBounds.height);
     }
 
     /**
@@ -1650,7 +1648,7 @@ public abstract class Component implements ConstrainedVisual {
                         Bounds tranformedBounds = new Bounds(transformedShape.getBounds());
 
                         // Limit the transformed area to the decorator's bounds
-                        tranformedBounds.intersect(decorator.getBounds(this));
+                        tranformedBounds = tranformedBounds.intersect(decorator.getBounds(this));
 
                         // Add the bounded area to the repaint region
                         parent.repaint(tranformedBounds.x + this.x, tranformedBounds.y + this.y,
