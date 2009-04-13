@@ -46,7 +46,7 @@ limitations under the License.
         depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
 
     <target name="package"
-        depends="charts-package, core-package, web-package, web-test-package, wtk-package, demos-package, tutorials-package, tools-package"/>
+        depends="charts-package, core-package, web-package, wtk-package, demos-package, tutorials-package, tools-package"/>
 
     <target name="clean" description="Removes all build artifacts"
         depends="charts-clean, core-clean, web-clean, web-test-clean, wtk-clean, demos-clean, tutorials-clean, tools-clean">
@@ -290,9 +290,9 @@ limitations under the License.
 
     <!-- Web Test -->
     <target name="web-test" depends="core, web, wtk">
-        <mkdir dir="web-test/${folder.bin}"/>
-        <javac srcdir="web-test/src"
-            destDir="web-test/${folder.bin}"
+        <mkdir dir="web/${folder.bin}"/>
+        <javac srcdir="web/test"
+            destDir="web/${folder.bin}"
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
@@ -308,57 +308,46 @@ limitations under the License.
         </javac>
     </target>
 
-    <target name="web-test-package" depends="web-test">
-        <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-web.test.jar">
-            <fileset dir="web-test/${folder.bin}" excludes="pivot/web/test/server/**"/>
-            <fileset dir="web-test/src">
+    <target name="web-test-war" depends="core-package, web-package, wtk-package, web-test">
+        <jar jarfile="web/www/lib/${ant.project.name}-web.test.jar">
+            <fileset dir="web/${folder.bin}" includes="pivot/web/test/**" excludes="pivot/web/test/server/**"/>
+            <fileset dir="web/test">
                 <exclude name="pivot/web/test/server/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
         </jar>
-    </target>
 
-    <target name="web-test-war" depends="core-package, web-package, wtk-package, web-test-package">
-        <copy todir="web-test/www/lib">
+        <copy todir="web/www/lib">
             <fileset dir="${folder.lib}">
                 <include name="${ant.project.name}-core.jar"/>
                 <include name="${ant.project.name}-web.jar"/>
                 <include name="${ant.project.name}-wtk.jar"/>
                 <include name="${ant.project.name}-wtk.terra.jar"/>
-                <include name="${ant.project.name}-web.test.jar"/>
             </fileset>
             <fileset dir="wtk/lib" includes="*.jar"/>
         </copy>
 
-        <mkdir dir="web-test/lib"/>
-        <copy todir="web-test/lib">
-            <fileset dir="${folder.lib}">
-                <include name="${ant.project.name}-core.jar"/>
-                <include name="${ant.project.name}-web.server.jar"/>
-            </fileset>
-        </copy>
-
-        <war destfile="${folder.lib}/${ant.project.name}_web_test.war" webxml="web-test/web.xml">
-            <fileset dir="web-test/www"/>
-            <classes dir="web-test/${folder.bin}">
+        <war destfile="${folder.lib}/${ant.project.name}_web_test.war" webxml="web/web.xml">
+            <fileset dir="web/www"/>
+            <classes dir="web/${folder.bin}">
                 <include name="pivot/web/test/server/**"/>
             </classes>
-            <classes dir="web-test/src">
+            <classes dir="web/test">
                 <include name="pivot/web/test/server/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </classes>
-            <lib dir="web-test/lib"/>
+            <lib dir="${folder.lib}">
+                <include name="${ant.project.name}-core.jar"/>
+                <include name="${ant.project.name}-web.server.jar"/>
+            </lib>
         </war>
     </target>
 
     <target name="web-test-clean">
-        <delete dir="web-test/www/lib" includes="*.jar"/>
-        <delete dir="web-test/${folder.bin}"/>
-        <delete dir="web-test/lib"/>
-        <delete file="${folder.lib}/${ant.project.name}-web.test.jar"/>
+        <delete dir="web/www/lib" includes="*.jar"/>
+        <delete dir="web/${folder.bin}"/>
         <delete file="${folder.lib}/${ant.project.name}_web_test.war"/>
     </target>
 
