@@ -205,7 +205,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
         // Paint the border
         graphics.setPaint(buttonBorderColor);
-        graphics.drawRect(0, 0, buttonWidth, buttonHeight);
+        graphics.draw(new Rectangle2D.Double(0.5, 0.5, buttonWidth, buttonHeight));
 
         // Paint the checkmark
         Button.State state = checkbox.getState();

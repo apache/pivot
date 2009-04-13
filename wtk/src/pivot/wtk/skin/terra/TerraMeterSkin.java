@@ -20,6 +20,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
@@ -107,7 +108,7 @@ public class TerraMeterSkin extends ComponentSkin
         graphics.fillRect(0, 0, meterStop - 1, height - 1);
 
         graphics.setPaint(gridColor);
-        graphics.drawRect(0, 0, width - 1, height - 1);
+        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
 
         int nLines = (int)Math.ceil(1 / gridFrequency) - 1;
         float gridSeparation = width * gridFrequency;

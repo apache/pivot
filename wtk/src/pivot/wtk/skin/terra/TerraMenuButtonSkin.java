@@ -23,6 +23,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Bounds;
@@ -152,7 +153,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         // Paint the border
         if (borderColor != null) {
             graphics.setPaint(borderColor);
-            graphics.drawRect(0, 0, width - 1, height - 1);
+            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
         }
 
         Bounds contentBounds = new Bounds(padding.left + 1, padding.top + 1,
@@ -204,8 +205,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.drawRect(2, 2, Math.max(width - 5, 0),
-                Math.max(height - 5, 0));
+            graphics.draw(new Rectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0),
+                Math.max(height - 5, 0)));
         }
     }
 

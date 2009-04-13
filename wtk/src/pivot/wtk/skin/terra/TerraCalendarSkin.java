@@ -20,6 +20,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -154,13 +156,14 @@ public class TerraCalendarSkin extends CalendarSkin
             CalendarDate date = (CalendarDate)dateButton.getButtonData();
             if (date.equals(today)) {
                 graphics.setColor(dividerColor);
-                graphics.drawRect(0, 0, width - 1, height - 1);
+                graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
             }
 
             // Paint the content
             Button.DataRenderer dataRenderer = dateButton.getDataRenderer();
             dataRenderer.render(date, dateButton, highlighted);
-            dataRenderer.setSize(width - padding * 2, height - padding * 2);
+            dataRenderer.setSize(Math.max(width - padding * 2, 0),
+                Math.max(height - padding * 2, 0));
 
             graphics.translate(padding, padding);
             dataRenderer.paint(graphics);
@@ -546,7 +549,7 @@ public class TerraCalendarSkin extends CalendarSkin
 
         graphics.setColor(dividerColor);
         int dividerY = labelRowBounds.y + labelRowBounds.height - 2;
-        graphics.drawLine(2, dividerY, Math.max(0, width - 3), dividerY);
+        graphics.draw(new Line2D.Double(2.5, dividerY + 0.5, Math.max(0, width - 2.5), dividerY + 0.5));
     }
 
     private void updateLabels() {

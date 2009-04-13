@@ -22,6 +22,8 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
 import pivot.collections.List;
 import pivot.wtk.ApplicationContext;
@@ -221,8 +223,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
                 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
 
-                graphics.drawRect(1, 1, Math.max(width - 3, 0),
-                    Math.max(height - 3, 0));
+                graphics.draw(new Rectangle2D.Double(1, 1.5, Math.max(width - 2.5, 0),
+                    Math.max(height - 3, 0)));
             }
         }
 
@@ -611,13 +613,13 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     		buttonX + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
         graphics.fillRect(buttonX, 0, buttonWidth, height);
 
-        graphics.setStroke(new BasicStroke(0));
+        graphics.setStroke(new BasicStroke());
         graphics.setPaint(borderColor);
-        graphics.drawRect(0, 0, width - 1, height - 1);
-        graphics.drawLine(width - buttonWidth - 2, 0,
-            width - buttonWidth - 2, height - 1);
-        graphics.drawLine(width - buttonWidth - 2, buttonHeight + 1,
-            width - 1, buttonHeight + 1);
+        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+        graphics.draw(new Line2D.Double(width - buttonWidth - 1.5, 0,
+            width - buttonWidth - 1.5, height - 1));
+        graphics.draw(new Line2D.Double(width - buttonWidth - 1.5, buttonHeight + 0.5,
+            width - 0.5, buttonHeight + 0.5));
     }
 
     @Override

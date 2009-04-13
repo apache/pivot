@@ -22,6 +22,7 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Button;
@@ -205,7 +206,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         // Paint the border
         if (borderColor != null) {
             graphics.setPaint(borderColor);
-            graphics.drawRect(0, 0, width - 1, height - 1);
+            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
         }
 
         // Paint the content
@@ -231,8 +232,8 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.drawRect(2, 2, Math.max(width - 5, 0),
-                Math.max(height - 5, 0));
+            graphics.draw(new Rectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0),
+                Math.max(height - 5, 0)));
         }
     }
 

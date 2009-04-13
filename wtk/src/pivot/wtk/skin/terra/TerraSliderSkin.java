@@ -20,6 +20,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
@@ -85,9 +86,9 @@ public class TerraSliderSkin extends SliderSkin {
         	graphics.setPaint(new Color(0, 0, 0, alpha));
             graphics.fillRect(0, 0, width, height);
 
-            graphics.setStroke(new BasicStroke(0));
+            graphics.setStroke(new BasicStroke());
             graphics.setPaint(buttonBorderColor);
-            graphics.drawRect(0, 0, width - 1, height - 1);
+            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
 		}
 
         @Override

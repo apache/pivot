@@ -25,6 +25,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Border;
@@ -261,11 +262,13 @@ public class BorderSkin extends ContainerSkin
             graphics.setStroke(new BasicStroke(thickness));
 
             if (cornerRadius > 0) {
-                graphics.drawRoundRect(x, y, width, height, cornerRadius, cornerRadius);
+                graphics.draw(new RoundRectangle2D.Double(x + 0.5 * thickness, y + 0.5 * thickness,
+                    width, height, cornerRadius, cornerRadius));
             } else {
                 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_OFF);
-                graphics.drawRect(x, y, width, height);
+                graphics.draw(new Rectangle2D.Double(x + 0.5 * thickness, y + 0.5 * thickness,
+                    width, height));
             }
         }
     }

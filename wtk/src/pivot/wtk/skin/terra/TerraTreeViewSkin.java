@@ -23,6 +23,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Line2D;
 
 import pivot.collections.ArrayList;
 import pivot.collections.List;
@@ -546,7 +547,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 graphics.setStroke(gridStroke);
                 graphics.setPaint(gridColor);
 
-                graphics.drawLine(0, nodeY + nodeHeight, width, nodeY + nodeHeight);
+                graphics.draw(new Line2D.Double(0.5, nodeY + nodeHeight + 0.5,
+                    width - 0.5, nodeY + nodeHeight + 0.5));
             }
 
             nodeY += nodeHeight + VERTICAL_SPACING;

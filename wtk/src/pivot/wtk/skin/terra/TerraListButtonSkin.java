@@ -23,6 +23,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.collections.List;
@@ -246,11 +247,13 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         Bounds contentBounds = new Bounds(0, 0,
             Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(height - 1, 0));
-        graphics.drawRect(contentBounds.x, contentBounds.y, contentBounds.width, contentBounds.height);
+        graphics.draw(new Rectangle2D.Double(contentBounds.x + 0.5, contentBounds.y + 0.5,
+            contentBounds.width, contentBounds.height));
 
         Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
             TRIGGER_WIDTH, Math.max(height - 1, 0));
-        graphics.drawRect(triggerBounds.x, triggerBounds.y, triggerBounds.width, triggerBounds.height);
+        graphics.draw(new Rectangle2D.Double(triggerBounds.x + 0.5, triggerBounds.y + 0.5,
+            triggerBounds.width, triggerBounds.height));
 
         // Paint the content
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
@@ -275,8 +278,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.drawRect(2, 2, Math.max(contentBounds.width - 4, 0),
-                Math.max(contentBounds.height - 4, 0));
+            graphics.draw(new Rectangle2D.Double(2.5, 2.5, Math.max(contentBounds.width - 4, 0),
+                Math.max(contentBounds.height - 4, 0)));
         }
 
         // Paint the trigger

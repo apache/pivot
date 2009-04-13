@@ -22,6 +22,8 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
@@ -258,7 +260,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             // Paint the border
             graphics.setPaint(borderColor);
             graphics.setStroke(new BasicStroke());
-            graphics.drawRect(0, 0, width - 1, height - 1);
+            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
 
             // Determine the button image size
             ScrollButtonImage buttonImage = scrollButton.getButtonImage();
@@ -482,7 +484,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             // Paint the border
             graphics.setPaint(borderColor);
             graphics.setStroke(new BasicStroke());
-            graphics.drawRect(0, 0, width - 1, height - 1);
+            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
 
             // Paint the hash marks
             if (orientation == Orientation.HORIZONTAL) {
@@ -794,18 +796,18 @@ public class TerraScrollBarSkin extends ContainerSkin
             int scrollUpButtonWidth = scrollUpButton.getWidth();
             int scrollDownButtonWidth = scrollDownButton.getWidth();
 
-            graphics.drawLine(scrollUpButtonWidth, 0,
-                width - scrollDownButtonWidth - 1, 0);
-            graphics.drawLine(scrollUpButtonWidth, height - 1,
-                width - scrollDownButtonWidth - 1, height - 1);
+            graphics.draw(new Line2D.Double(scrollUpButtonWidth + 0.5, 0.5,
+                width - scrollDownButtonWidth - 0.5, 0.5));
+            graphics.draw(new Line2D.Double(scrollUpButtonWidth + 0.5, height - 0.5,
+                width - scrollDownButtonWidth - 0.5, height - 0.5));
         } else {
             int scrollUpButtonHeight = scrollUpButton.getHeight();
             int scrollDownButtonHeight = scrollDownButton.getHeight();
 
-            graphics.drawLine(0, scrollUpButtonHeight, 0,
-                height - scrollDownButtonHeight - 1);
-            graphics.drawLine(width - 1, scrollUpButtonHeight, width - 1,
-                height - scrollDownButtonHeight - 1);
+            graphics.draw(new Line2D.Double(0.5, scrollUpButtonHeight + 0.5, 0.5,
+                height - scrollDownButtonHeight - 0.5));
+            graphics.draw(new Line2D.Double(width - 0.5, scrollUpButtonHeight + 0.5, width - 0.5,
+                height - scrollDownButtonHeight - 0.5));
         }
     }
 

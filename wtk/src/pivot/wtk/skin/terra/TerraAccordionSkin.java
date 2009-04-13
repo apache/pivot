@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
@@ -176,7 +177,7 @@ public class TerraAccordionSkin extends ContainerSkin
             // Paint the border
             graphics.setStroke(new BasicStroke());
             graphics.setPaint(borderColor);
-            graphics.drawRect(0, 0, width - 1, height - 1);
+            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
 
             // Paint the content
             Button.DataRenderer dataRenderer = panelHeader.getDataRenderer();
@@ -428,15 +429,15 @@ public class TerraAccordionSkin extends ContainerSkin
         if (selectionChangeTransition == null) {
             panelHeight = height;
             for (PanelHeader panelHeader : panelHeaders) {
-            	panelHeader.setSize(width, panelHeader.getPreferredHeight(width));
-            	panelHeight -= (panelHeader.getHeight() - 1);
+                panelHeader.setSize(width, panelHeader.getPreferredHeight(width));
+                panelHeight -= (panelHeader.getHeight() - 1);
             }
 
             panelHeight = Math.max(panelHeight - 1, 0);
             contentHeight = Math.max(panelHeight - (padding.top + padding.bottom), 0);
         } else {
-        	panelHeight = selectionChangeTransition.selectedPanel.getHeight()
-        		+ (padding.top + padding.bottom);
+            panelHeight = selectionChangeTransition.selectedPanel.getHeight()
+                + (padding.top + padding.bottom);
         }
 
         // Lay out the components
@@ -444,56 +445,56 @@ public class TerraAccordionSkin extends ContainerSkin
 
         int panelY = 0;
         for (int i = 0, n = panels.getLength(); i < n; i++) {
-        	Component panel = panels.get(i);
+            Component panel = panels.get(i);
 
-        	PanelHeader panelHeader = panelHeaders.get(i);
-        	panelHeader.setLocation(0, panelY);
-        	panelY += (panelHeader.getHeight() - 1);
+            PanelHeader panelHeader = panelHeaders.get(i);
+            panelHeader.setLocation(0, panelY);
+            panelY += (panelHeader.getHeight() - 1);
 
-        	if (selectionChangeTransition == null) {
+            if (selectionChangeTransition == null) {
                 Component selectedPanel = accordion.getSelectedPanel();
 
                 if (panel == selectedPanel) {
                     panel.setVisible(true);
 
-            		panel.setSize(contentWidth, contentHeight);
+                    panel.setSize(contentWidth, contentHeight);
                     panel.setLocation(padding.left + 1, panelY + padding.top);
 
                     panelY += panelHeight;
                 } else {
                     panel.setVisible(false);
                 }
-        	} else {
-        		Component previousSelectedPanel = selectionChangeTransition.previousSelectedPanel;
-        		Component selectedPanel = selectionChangeTransition.selectedPanel;
+            } else {
+                Component previousSelectedPanel = selectionChangeTransition.previousSelectedPanel;
+                Component selectedPanel = selectionChangeTransition.selectedPanel;
 
-        		if (selectionChangeTransition.isRunning()) {
-            		if (panel == previousSelectedPanel) {
+                if (selectionChangeTransition.isRunning()) {
+                    if (panel == previousSelectedPanel) {
                         panel.setLocation(padding.left + 1, panelY + padding.top);
 
                         int previousSelectedPanelHeight = Math.round((float)panelHeight * (1.0f
-                    		- selectionChangeTransition.getEasedPercentComplete()));
-            			selectionChangeTransition.previousSelectedPanelClipDecorator.setWidth(contentWidth);
+                            - selectionChangeTransition.getEasedPercentComplete()));
+                        selectionChangeTransition.previousSelectedPanelClipDecorator.setWidth(contentWidth);
                         selectionChangeTransition.previousSelectedPanelClipDecorator.setHeight(previousSelectedPanelHeight);
 
                         panelY += previousSelectedPanelHeight;
-            		}
+                    }
 
-            		if (panel == selectedPanel) {
+                    if (panel == selectedPanel) {
                         panel.setLocation(padding.left + 1, panelY + padding.top);
 
-            			int selectedPanelHeight = Math.round((float)panelHeight
-        					* selectionChangeTransition.getEasedPercentComplete());
-            			selectionChangeTransition.selectedPanelClipDecorator.setWidth(contentWidth);
+                        int selectedPanelHeight = Math.round((float)panelHeight
+                            * selectionChangeTransition.getEasedPercentComplete());
+                        selectionChangeTransition.selectedPanelClipDecorator.setWidth(contentWidth);
                         selectionChangeTransition.selectedPanelClipDecorator.setHeight(selectedPanelHeight);
 
-            			panelY += selectedPanelHeight;
-            		}
-        		} else {
-        			selectedPanel.setSize(previousSelectedPanel.getSize());
-        			selectedPanel.setVisible(true);
-        		}
-        	}
+                        panelY += selectedPanelHeight;
+                    }
+                } else {
+                    selectedPanel.setSize(previousSelectedPanel.getSize());
+                    selectedPanel.setVisible(true);
+                }
+            }
         }
     }
 
@@ -508,7 +509,7 @@ public class TerraAccordionSkin extends ContainerSkin
 
         graphics.setStroke(new BasicStroke());
         graphics.setPaint(borderColor);
-        graphics.drawRect(0, 0, width - 1, height - 1);
+        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
     }
 
     public Color getBorderColor() {
@@ -637,12 +638,12 @@ public class TerraAccordionSkin extends ContainerSkin
 
     // Accordion events
     public void panelInserted(Accordion accordion, int index) {
-		if (selectionChangeTransition != null) {
-			selectionChangeTransition.stop();
-			selectionChangeTransition = null;
-		}
+        if (selectionChangeTransition != null) {
+            selectionChangeTransition.stop();
+            selectionChangeTransition = null;
+        }
 
-		// Create a new button for the panel
+        // Create a new button for the panel
         Component panel = accordion.getPanels().get(index);
         PanelHeader panelHeader = new PanelHeader(new ButtonData(Accordion.getIcon(panel),
             Accordion.getName(panel)));
@@ -655,12 +656,12 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     public void panelsRemoved(Accordion accordion, int index, Sequence<Component> panels) {
-		if (selectionChangeTransition != null) {
-			selectionChangeTransition.stop();
-			selectionChangeTransition = null;
-		}
+        if (selectionChangeTransition != null) {
+            selectionChangeTransition.stop();
+            selectionChangeTransition = null;
+        }
 
-		// Remove the buttons
+        // Remove the buttons
         Sequence<PanelHeader> removed = panelHeaders.remove(index, panels.getLength());
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
@@ -673,53 +674,53 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     // Accordion selection events
-	public Vote previewSelectedIndexChange(final Accordion accordion, final int selectedIndex) {
-		Vote vote = Vote.APPROVE;
+    public Vote previewSelectedIndexChange(final Accordion accordion, final int selectedIndex) {
+        Vote vote = Vote.APPROVE;
 
-		if (accordion.isShowing()) {
-			if (selectionChangeTransition == null) {
-	    		int previousSelectedIndex = accordion.getSelectedIndex();
+        if (accordion.isShowing()) {
+            if (selectionChangeTransition == null) {
+                int previousSelectedIndex = accordion.getSelectedIndex();
 
-	    		if (selectedIndex != -1
-					&& previousSelectedIndex != -1) {
-	    			Component previousSelectedPanel = accordion.getPanels().get(previousSelectedIndex);
-	    			Component selectedPanel = accordion.getPanels().get(selectedIndex);
+                if (selectedIndex != -1
+                    && previousSelectedIndex != -1) {
+                    Component previousSelectedPanel = accordion.getPanels().get(previousSelectedIndex);
+                    Component selectedPanel = accordion.getPanels().get(selectedIndex);
 
-	        		selectionChangeTransition = new SelectionChangeTransition(previousSelectedPanel, selectedPanel,
-	    				SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE);
+                    selectionChangeTransition = new SelectionChangeTransition(previousSelectedPanel,
+                        selectedPanel, SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE);
 
-	        		layout();
-	        		selectionChangeTransition.start(new TransitionListener() {
-	        			public void transitionCompleted(Transition transition) {
-	        				accordion.setSelectedIndex(selectedIndex);
-	        				selectionChangeTransition = null;
+                    layout();
+                    selectionChangeTransition.start(new TransitionListener() {
+                        public void transitionCompleted(Transition transition) {
+                            accordion.setSelectedIndex(selectedIndex);
+                            selectionChangeTransition = null;
 
-	        				invalidateComponent();
-	        			}
-	        		});
+                            invalidateComponent();
+                        }
+                    });
 
-	        		vote = Vote.DEFER;
-	    		}
-			} else {
-	    		if (selectionChangeTransition.isRunning()) {
-	    			vote = Vote.DEFER;
-	    		}
-			}
-		}
+                    vote = Vote.DEFER;
+                }
+            } else {
+                if (selectionChangeTransition.isRunning()) {
+                    vote = Vote.DEFER;
+                }
+            }
+        }
 
-		return vote;
-	}
+        return vote;
+    }
 
-	public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
-    	if (reason == Vote.DENY
-			&& selectionChangeTransition != null) {
-    		selectionChangeTransition.stop();
-    		selectionChangeTransition = null;
-    		invalidateComponent();
-    	}
-	}
+    public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
+        if (reason == Vote.DENY
+            && selectionChangeTransition != null) {
+            selectionChangeTransition.stop();
+            selectionChangeTransition = null;
+            invalidateComponent();
+        }
+    }
 
-	public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
+    public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
         int selectedIndex = accordion.getSelectedIndex();
 
         if (selectedIndex == -1) {

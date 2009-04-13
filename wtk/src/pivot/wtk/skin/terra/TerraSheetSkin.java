@@ -18,6 +18,8 @@ package pivot.wtk.skin.terra;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.util.Vote;
@@ -214,10 +216,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         int height = getHeight();
 
         graphics.setPaint(borderColor);
-        graphics.drawRect(0, 0, width - 1, height - 1);
+        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
 
         graphics.setPaint(bevelColor);
-        graphics.drawLine(1, height - 2, width - 2, height - 2);
+        graphics.draw(new Line2D.Double(1.5, height - 1.5, width - 1.5, height - 1.5));
     }
 
     @Override

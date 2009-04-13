@@ -21,6 +21,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
@@ -214,7 +216,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             Orientation tabOrientation = tabPane.getTabOrientation();
 
             Color backgroundColor = (tabButton.isSelected()
-        		|| tabButton.active) ?
+                || tabButton.active) ?
                 activeTabColor : inactiveTabColor;
 
             int width = getWidth();
@@ -231,39 +233,39 @@ public class TerraTabPaneSkin extends ContainerSkin
                 width / 2, GRADIENT_BEVEL_THICKNESS, backgroundColor));
 
             switch(tabOrientation) {
-	            case HORIZONTAL: {
-	                graphics.fillRect(1, 1, width - 2, GRADIENT_BEVEL_THICKNESS);
-	                break;
-	            }
+                case HORIZONTAL: {
+                    graphics.fillRect(1, 1, width - 2, GRADIENT_BEVEL_THICKNESS);
+                    break;
+                }
 
-	            case VERTICAL: {
-	            	graphics.fillRect(1, 1, width - 1, GRADIENT_BEVEL_THICKNESS);
-	                break;
-	            }
-	        }
+                case VERTICAL: {
+                    graphics.fillRect(1, 1, width - 1, GRADIENT_BEVEL_THICKNESS);
+                    break;
+                }
+            }
 
             // Draw the border
             graphics.setPaint(borderColor);
 
             if (tabButton.isSelected()
-        		|| tabButton.active) {
+                || tabButton.active) {
                 switch(tabOrientation) {
-		            case HORIZONTAL: {
-		                graphics.drawLine(0, height - 1, 0, 0);
-		                graphics.drawLine(0, 0, width - 1, 0);
-		                graphics.drawLine(width - 1, 0, width - 1, height - 1);
-		                break;
-		            }
+                    case HORIZONTAL: {
+                        graphics.draw(new Line2D.Double(0.5, height - 0.5, 0.5, 0.5));
+                        graphics.draw(new Line2D.Double(0.5, 0.5, width - 0.5, 0.5));
+                        graphics.draw(new Line2D.Double(width - 0.5, 0.5, width - 0.5, height - 0.5));
+                        break;
+                    }
 
-		            case VERTICAL: {
-		                graphics.drawLine(width, 0, 0, 0);
-		                graphics.drawLine(0, 0, 0, height - 1);
-		                graphics.drawLine(0, height - 1, width - 1, height - 1);
-		                break;
-		            }
-	            }
+                    case VERTICAL: {
+                        graphics.draw(new Line2D.Double(width - 0.5, 0.5, 0.5, 0.5));
+                        graphics.draw(new Line2D.Double(0.5, 0.5, 0.5, height - 0.5));
+                        graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5, height - 0.5));
+                        break;
+                    }
+                }
             } else {
-            	graphics.drawRect(0, 0, width - 1, height - 1);
+                graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
             }
 
             // Paint the content
@@ -870,9 +872,9 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             // Draw the border
             graphics.setPaint(borderColor);
-            graphics.drawRect(contentBounds.x, contentBounds.y,
+            graphics.draw(new Rectangle2D.Double(contentBounds.x + 0.5, contentBounds.y + 0.5,
                 Math.max(contentBounds.width - 1, 0),
-                Math.max(contentBounds.height - 1, 0));
+                Math.max(contentBounds.height - 1, 0)));
 
             // Draw the bevel for vertical tabs
             if (tabOrientation == Orientation.VERTICAL) {

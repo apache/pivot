@@ -166,8 +166,8 @@ public class TerraFrameSkin extends WindowSkin {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.draw(new Line2D.Double(0, 0, 7, 7));
-            graphics.draw(new Line2D.Double(0, 7, 7, 0));
+            graphics.draw(new Line2D.Double(0.5, 0.5, 7.5, 7.5));
+            graphics.draw(new Line2D.Double(0.5, 7.5, 7.5, 0.5));
         }
     }
 
@@ -500,17 +500,17 @@ public class TerraFrameSkin extends WindowSkin {
 
         // Draw the border
         graphics.setPaint(titleBarBorderColor);
-        graphics.drawRect(0, 0, width - 1, titleBarHeight + 1);
+        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, titleBarHeight + 1));
 
         // Draw the content area
         Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2,
             width - 1, height - (titleBarHeight + 3));
         graphics.setPaint(contentBorderColor);
-        graphics.drawRect(contentAreaRectangle.x, contentAreaRectangle.y,
-            contentAreaRectangle.width, contentAreaRectangle.height);
+        graphics.draw(new Rectangle2D.Double(contentAreaRectangle.x + 0.5, contentAreaRectangle.y + 0.5,
+            contentAreaRectangle.width, contentAreaRectangle.height));
 
-        Line2D contentAreaBevelLine = new Line2D.Double(contentAreaRectangle.x + 1, contentAreaRectangle.y + 1,
-            contentAreaRectangle.width - 1, contentAreaRectangle.y + 1);
+        Line2D contentAreaBevelLine = new Line2D.Double(contentAreaRectangle.x + 1.5,
+            contentAreaRectangle.y + 1.5, contentAreaRectangle.width - 0.5, contentAreaRectangle.y + 1.5);
         graphics.setPaint(contentBevelColor);
         graphics.draw(contentAreaBevelLine);
     }

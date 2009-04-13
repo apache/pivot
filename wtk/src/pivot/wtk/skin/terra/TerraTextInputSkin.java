@@ -26,6 +26,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.font.TextHitInfo;
 import java.awt.font.TextLayout;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 // import java.text.AttributedCharacterIterator;
 
@@ -372,11 +373,11 @@ public class TerraTextInputSkin extends ComponentSkin
 
         // Paint the bevel
         graphics.setPaint(bevelColor);
-        graphics.drawLine(1, 1, width - 2, 1);
+        graphics.draw(new Line2D.Double(1.5, 1.5, width - 1.5, 1.5));
 
         // Paint the border
         graphics.setPaint(borderColor);
-        graphics.drawRect(0, 0, width - 1, height - 1);
+        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
 
         // Paint the content
         String text = getText();

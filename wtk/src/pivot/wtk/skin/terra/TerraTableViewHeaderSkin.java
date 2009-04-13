@@ -256,7 +256,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
         // Paint the border
         graphics.setPaint(borderColor);
-        graphics.drawLine(0, height - 1, width, height - 1);
+        graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5, height - 0.5));
 
         // Paint the content
         TableView tableView = tableViewHeader.getTableView();
@@ -325,7 +325,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 // Draw the divider
                 cellX += columnWidth;
 
-                Line2D dividerLine = new Line2D.Double(cellX, 0, cellX, height - 1);
+                Line2D dividerLine = new Line2D.Double(cellX + 0.5, 0.5, cellX + 0.5, height - 0.5);
                 graphics.setPaint(borderColor);
                 graphics.draw(dividerLine);
 

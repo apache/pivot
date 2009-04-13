@@ -22,6 +22,8 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.util.Vote;
@@ -440,7 +442,7 @@ public class TerraExpanderSkin extends ContainerSkin
             int titleBarHeight = titleBarFlowPane.getPreferredHeight(-1);
 
             graphics.setPaint(titleBarBorderColor);
-            graphics.drawLine(0, 1 + titleBarHeight, width - 1, 1 + titleBarHeight);
+            graphics.draw(new Line2D.Double(0.5, 1.5 + titleBarHeight, width - 0.5, 1.5 + titleBarHeight));
         }
 
         int titleBarX = titleBarFlowPane.getX();
@@ -453,7 +455,7 @@ public class TerraExpanderSkin extends ContainerSkin
         graphics.fillRect(titleBarX, titleBarY, titleBarWidth, titleBarHeight);
 
         graphics.setPaint(borderColor);
-        graphics.drawRect(0, 0, width - 1, height - 1);
+        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
     }
 
     public Font getTitleBarFont() {

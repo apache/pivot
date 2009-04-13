@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
 
 import pivot.collections.ArrayList;
 import pivot.collections.List;
@@ -258,7 +259,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 columnIndex < columnCount; columnIndex++) {
                 gridX += columnWidths.get(columnIndex);
 
-                graphics.drawLine(gridX, 0, gridX, height);
+                graphics.draw(new Line2D.Double(gridX + 0.5, 0.5, gridX + 0.5, height - 0.5));
                 gridX++;
             }
         }
@@ -268,7 +269,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
                 if (rowIndex > 0) {
                     int gridY = rowIndex * rowHeight;
-                    graphics.drawLine(0, gridY, width, gridY);
+                    graphics.draw(new Line2D.Double(0.5, gridY + 0.5, width - 0.5, gridY + 0.5));
                 }
             }
         }
