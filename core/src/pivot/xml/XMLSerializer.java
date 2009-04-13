@@ -14,40 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.xml.dom;
+package pivot.xml;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.w3c.dom.Document;
-
-import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
 
 /**
- * Implementation of the {@link Serializer} interface that reads data from
- * and writes data to a W3C DOM {@link org.w3c.dom.Document}.
+ * Serializer that reads and writes an XML DOM using instances of
+ * {@link Element}.
  * <p>
  * NOTE This class is incomplete.
  *
  * @author gbrown
  */
-public class DOMSerializer implements Serializer<Document> {
+public class XMLSerializer implements Serializer<Element> {
     public static final String MIME_TYPE = "text/xml";
 
-    public Document readObject(InputStream inputStream)
-        throws IOException, SerializationException {
+    public Element readObject(InputStream inputStream) {
         // TODO
         return null;
     }
 
-    public void writeObject(Document object, OutputStream outputStream)
-        throws IOException, SerializationException {
+    public void writeObject(Element element, OutputStream outputStream) {
         // TODO
     }
 
-    public String getMIMEType(Document object) {
+    public String getMIMEType(Element element) {
         return MIME_TYPE;
     }
 }

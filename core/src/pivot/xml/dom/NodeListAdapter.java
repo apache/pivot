@@ -29,6 +29,8 @@ import pivot.util.ListenerList;
 
 /**
  * Wraps a W3C DOM {@link org.w3c.dom.NodeList} in a list collection.
+ * <p>
+ * NOTE This class is incomplete.
  *
  * @author gbrown
  */
