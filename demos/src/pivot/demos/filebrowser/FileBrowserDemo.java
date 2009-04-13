@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
+import pivot.collections.Sequence.Tree.Path;
 import pivot.io.Folder;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
@@ -59,12 +60,12 @@ public class FileBrowserDemo implements Application {
         folderTreeView.setTreeData(rootFolder);
 
         folderTreeView.getTreeViewBranchListeners().add(new TreeViewBranchListener() {
-            public void branchExpanded(TreeView treeView, Sequence<Integer> path) {
+            public void branchExpanded(TreeView treeView, Path path) {
                 Folder folder = (Folder)Sequence.Tree.get(rootFolder, path);
                 folder.refresh();
             }
 
-            public void branchCollapsed(TreeView treeView, Sequence<Integer> path) {
+            public void branchCollapsed(TreeView treeView, Path path) {
                 // No-op
             }
         });

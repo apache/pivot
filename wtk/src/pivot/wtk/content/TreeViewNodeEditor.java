@@ -19,6 +19,7 @@ package pivot.wtk.content;
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.collections.Sequence.Tree.Path;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
@@ -149,33 +150,33 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      */
     private TreeViewNodeListener treeViewNodeHandler = new TreeViewNodeListener.Adapter() {
         @Override
-        public void nodeInserted(TreeView treeView, Sequence<Integer> path, int index) {
+        public void nodeInserted(TreeView treeView, Path path, int index) {
             cancel();
         }
 
         @Override
-        public void nodesRemoved(TreeView treeView, Sequence<Integer> path, int index, int count) {
+        public void nodesRemoved(TreeView treeView, Path path, int index, int count) {
             cancel();
         }
 
         @Override
-        public void nodeUpdated(TreeView treeView, Sequence<Integer> path, int index) {
+        public void nodeUpdated(TreeView treeView, Path path, int index) {
             cancel();
         }
 
         @Override
-        public void nodesSorted(TreeView treeView, Sequence<Integer> path) {
+        public void nodesSorted(TreeView treeView, Path path) {
             cancel();
         }
     };
 
     private TreeView treeView = null;
-    private Sequence<Integer> path = null;
+    private Path path = null;
 
     private Window popup = null;
     private TextInput textInput = null;
 
-    public void edit(TreeView treeView, Sequence<Integer> path) {
+    public void edit(TreeView treeView, Path path) {
         if (isEditing()) {
             throw new IllegalStateException();
         }
@@ -259,7 +260,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         if (n == 1) {
             parentData = (List<TreeNode>)treeData;
         } else {
-            Sequence<Integer> parentPath = new ArrayList<Integer>(path, 0, n - 1);
+            Path parentPath = new Path(path, 0, n - 1);
             parentData = (List<TreeNode>)Sequence.Tree.get(treeData, parentPath);
         }
 
@@ -269,13 +270,13 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         } else {
             // Save local reference to members variables before they get cleared
             TreeView treeView = this.treeView;
-            Sequence<Integer> path = this.path;
+            Path path = this.path;
 
             parentData.remove(path.get(n - 1), 1);
             parentData.add(treeNode);
 
             // Re-select the node, and make sure it's visible
-            Sequence<Integer> newPath = new ArrayList<Integer>(path, 0, n - 1);
+            Path newPath = new Path(path, 0, n - 1);
             newPath.add(parentData.indexOf(treeNode));
             treeView.setSelectedPath(newPath);
             treeView.scrollAreaToVisible(treeView.getNodeBounds(newPath));

@@ -18,6 +18,7 @@ package pivot.wtk.text.test;
 
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
+import pivot.collections.Sequence.Tree.Path;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Display;
@@ -86,17 +87,17 @@ public class TextAreaTest implements Application {
 
         treeView = (TreeView)wtkxSerializer.getObjectByName("treeView");
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
-            public void selectedPathAdded(TreeView treeView, Sequence<Integer> path) {
+            public void selectedPathAdded(TreeView treeView, Path path) {
                 // No-op
             }
 
-            public void selectedPathRemoved(TreeView treeView, Sequence<Integer> path) {
+            public void selectedPathRemoved(TreeView treeView, Path path) {
                 // No-op
             }
 
             public void selectedPathsChanged(TreeView treeView,
-                Sequence<Sequence<Integer>> previousSelectedPaths) {
-                Sequence<Integer> selectedPath = treeView.getSelectedPath();
+                Sequence<Path> previousSelectedPaths) {
+                Path selectedPath = treeView.getSelectedPath();
 
                 if (selectedNode != null) {
                     selectedNode.getNodeListeners().remove(selectedNodeListener);

@@ -17,6 +17,7 @@
 package pivot.wtk;
 
 import pivot.collections.Sequence;
+import pivot.collections.Sequence.Tree.Path;
 
 /**
  * Tree view node state listener interface.
@@ -31,10 +32,10 @@ public interface TreeViewNodeStateListener {
      * @author tvolkert
      */
     public static class Adapter implements TreeViewNodeStateListener {
-        public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {
+        public void nodeDisabledChanged(TreeView treeView, Path path) {
         }
 
-        public void nodeCheckStateChanged(TreeView treeView, Sequence<Integer> path,
+        public void nodeCheckStateChanged(TreeView treeView, Path path,
             TreeView.NodeCheckState previousCheckState) {
         }
     }
@@ -45,7 +46,7 @@ public interface TreeViewNodeStateListener {
      * @param treeView
      * @param path
      */
-    public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path);
+    public void nodeDisabledChanged(TreeView treeView, Path path);
 
     /**
      * Called when a node's checked state has changed.
@@ -54,6 +55,6 @@ public interface TreeViewNodeStateListener {
      * @param path
      * @param previousCheckState
      */
-    public void nodeCheckStateChanged(TreeView treeView, Sequence<Integer> path,
+    public void nodeCheckStateChanged(TreeView treeView, Path path,
         TreeView.NodeCheckState previousCheckState);
 }

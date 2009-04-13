@@ -17,6 +17,7 @@
 package pivot.wtk;
 
 import pivot.collections.Sequence;
+import pivot.collections.Sequence.Tree.Path;
 
 /**
  * Tree view selection listener.
@@ -30,14 +31,13 @@ public interface TreeViewSelectionListener {
      * @author tvolkert
      */
     public static class Adapter implements TreeViewSelectionListener {
-        public void selectedPathAdded(TreeView treeView, Sequence<Integer> path) {
+        public void selectedPathAdded(TreeView treeView, Path path) {
         }
 
-        public void selectedPathRemoved(TreeView treeView, Sequence<Integer> path) {
+        public void selectedPathRemoved(TreeView treeView, Path path) {
         }
 
-        public void selectedPathsChanged(TreeView treeView,
-            Sequence<Sequence<Integer>> previousSelectedPaths) {
+        public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
         }
     }
 
@@ -47,7 +47,7 @@ public interface TreeViewSelectionListener {
      * @param treeView
      * @param path
      */
-    public void selectedPathAdded(TreeView treeView, Sequence<Integer> path);
+    public void selectedPathAdded(TreeView treeView, Path path);
 
     /**
      * Called when a selected path has been removed from a tree view.
@@ -55,7 +55,7 @@ public interface TreeViewSelectionListener {
      * @param treeView
      * @param path
      */
-    public void selectedPathRemoved(TreeView treeView, Sequence<Integer> path);
+    public void selectedPathRemoved(TreeView treeView, Path path);
 
     /**
      * Called when a tree view's selection state has been reset.
@@ -63,6 +63,5 @@ public interface TreeViewSelectionListener {
      * @param treeView
      * @param previousSelectedPaths
      */
-    public void selectedPathsChanged(TreeView treeView,
-        Sequence<Sequence<Integer>> previousSelectedPaths);
+    public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths);
 }

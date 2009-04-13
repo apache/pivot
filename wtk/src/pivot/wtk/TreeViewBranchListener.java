@@ -17,6 +17,7 @@
 package pivot.wtk;
 
 import pivot.collections.Sequence;
+import pivot.collections.Sequence.Tree.Path;
 
 /**
  * Tree view branch listener interface.
@@ -30,10 +31,10 @@ public interface TreeViewBranchListener {
      * @author tvolkert
      */
     public static class Adapter implements TreeViewBranchListener {
-        public void branchExpanded(TreeView treeView, Sequence<Integer> path) {
+        public void branchExpanded(TreeView treeView, Path path) {
         }
 
-        public void branchCollapsed(TreeView treeView, Sequence<Integer> path) {
+        public void branchCollapsed(TreeView treeView, Path path) {
         }
     }
 
@@ -47,7 +48,7 @@ public interface TreeViewBranchListener {
      * @param path
      * The path of the node that was shown.
      */
-    public void branchExpanded(TreeView treeView, Sequence<Integer> path);
+    public void branchExpanded(TreeView treeView, Path path);
 
     /**
      * Called when a tree node is collapsed.
@@ -58,5 +59,5 @@ public interface TreeViewBranchListener {
      * @param path
      * The path of the node that was collapsed.
      */
-    public void branchCollapsed(TreeView treeView, Sequence<Integer> path);
+    public void branchCollapsed(TreeView treeView, Path path);
 }

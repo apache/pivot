@@ -17,6 +17,7 @@
 package pivot.wtk;
 
 import pivot.collections.Sequence;
+import pivot.collections.Sequence.Tree.Path;
 
 /**
  * Tree view node listener interface.
@@ -30,16 +31,16 @@ public interface TreeViewNodeListener {
      * @author tvolkert
      */
     public static class Adapter implements TreeViewNodeListener {
-        public void nodeInserted(TreeView treeView, Sequence<Integer> path, int index) {
+        public void nodeInserted(TreeView treeView, Path path, int index) {
         }
 
-        public void nodesRemoved(TreeView treeView, Sequence<Integer> path, int index, int count) {
+        public void nodesRemoved(TreeView treeView, Path path, int index, int count) {
         }
 
-        public void nodeUpdated(TreeView treeView, Sequence<Integer> path, int index) {
+        public void nodeUpdated(TreeView treeView, Path path, int index) {
         }
 
-        public void nodesSorted(TreeView treeView, Sequence<Integer> path) {
+        public void nodesSorted(TreeView treeView, Path path) {
         }
     }
 
@@ -50,7 +51,7 @@ public interface TreeViewNodeListener {
      * @param path
      * @param index
      */
-    public void nodeInserted(TreeView treeView, Sequence<Integer> path, int index);
+    public void nodeInserted(TreeView treeView, Path path, int index);
 
     /**
      * Called when nodes have been removed from the tree view.
@@ -62,7 +63,7 @@ public interface TreeViewNodeListener {
      * The number of nodes that were removed, or <tt>-1</tt> if all nodes
      * were removed.
      */
-    public void nodesRemoved(TreeView treeView, Sequence<Integer> path, int index, int count);
+    public void nodesRemoved(TreeView treeView, Path path, int index, int count);
 
     /**
      * Called when a node in the tree view has been updated.
@@ -71,7 +72,7 @@ public interface TreeViewNodeListener {
      * @param path
      * @param index
      */
-    public void nodeUpdated(TreeView treeView, Sequence<Integer> path, int index);
+    public void nodeUpdated(TreeView treeView, Path path, int index);
 
     /**
      * Called when the nodes in a branch have been sorted.
@@ -79,5 +80,5 @@ public interface TreeViewNodeListener {
      * @param treeView
      * @param path
      */
-    public void nodesSorted(TreeView treeView, Sequence<Integer> path);
+    public void nodesSorted(TreeView treeView, Path path);
 }

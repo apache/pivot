@@ -22,6 +22,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.ListListener;
 import pivot.collections.Sequence;
+import pivot.collections.Sequence.Tree.Path;
 import pivot.util.ListenerList;
 import pivot.wtk.content.TreeViewNodeRenderer;
 
@@ -116,7 +117,7 @@ public class TreeView extends Component {
          * @param path
          * The path to the node to edit.
          */
-        public void edit(TreeView treeView, Sequence<Integer> path);
+        public void edit(TreeView treeView, Path path);
     }
 
     /**
@@ -136,7 +137,7 @@ public class TreeView extends Component {
          * The path to the node, or <tt>null</tt> if there is no node being
          * painted at the specified y-coordinate.
          */
-        public Sequence<Integer> getNodeAt(int y);
+        public Path getNodeAt(int y);
 
         /**
          * Gets the bounds of the node at the specified path relative to the
@@ -150,7 +151,7 @@ public class TreeView extends Component {
          * @return
          * The bounds, or <tt>null</tt> if the node is not currently visible.
          */
-        public Bounds getNodeBounds(Sequence<Integer> path);
+        public Bounds getNodeBounds(Path path);
 
         /**
          * Gets the pixel indent of nodes at the specified depth. Depth is
@@ -220,13 +221,13 @@ public class TreeView extends Component {
      */
     private static class TreeViewBranchListenerList extends ListenerList<TreeViewBranchListener>
         implements TreeViewBranchListener {
-        public void branchExpanded(TreeView treeView, Sequence<Integer> path) {
+        public void branchExpanded(TreeView treeView, Path path) {
             for (TreeViewBranchListener listener : this) {
                 listener.branchExpanded(treeView, path);
             }
         }
 
-        public void branchCollapsed(TreeView treeView, Sequence<Integer> path) {
+        public void branchCollapsed(TreeView treeView, Path path) {
             for (TreeViewBranchListener listener : this) {
                 listener.branchCollapsed(treeView, path);
             }
@@ -240,26 +241,26 @@ public class TreeView extends Component {
      */
     private static class TreeViewNodeListenerList extends ListenerList<TreeViewNodeListener>
         implements TreeViewNodeListener {
-        public void nodeInserted(TreeView treeView, Sequence<Integer> path, int index) {
+        public void nodeInserted(TreeView treeView, Path path, int index) {
             for (TreeViewNodeListener listener : this) {
                 listener.nodeInserted(treeView, path, index);
             }
         }
 
-        public void nodesRemoved(TreeView treeView, Sequence<Integer> path, int index,
+        public void nodesRemoved(TreeView treeView, Path path, int index,
             int count) {
             for (TreeViewNodeListener listener : this) {
                 listener.nodesRemoved(treeView, path, index, count);
             }
         }
 
-        public void nodeUpdated(TreeView treeView, Sequence<Integer> path, int index) {
+        public void nodeUpdated(TreeView treeView, Path path, int index) {
             for (TreeViewNodeListener listener : this) {
                 listener.nodeUpdated(treeView, path, index);
             }
         }
 
-        public void nodesSorted(TreeView treeView, Sequence<Integer> path) {
+        public void nodesSorted(TreeView treeView, Path path) {
             for (TreeViewNodeListener listener : this) {
                 listener.nodesSorted(treeView, path);
             }
@@ -274,13 +275,13 @@ public class TreeView extends Component {
     private static class TreeViewNodeStateListenerList
         extends ListenerList<TreeViewNodeStateListener>
         implements TreeViewNodeStateListener {
-        public void nodeDisabledChanged(TreeView treeView, Sequence<Integer> path) {
+        public void nodeDisabledChanged(TreeView treeView, Path path) {
             for (TreeViewNodeStateListener listener : this) {
                 listener.nodeDisabledChanged(treeView, path);
             }
         }
 
-        public void nodeCheckStateChanged(TreeView treeView, Sequence<Integer> path,
+        public void nodeCheckStateChanged(TreeView treeView, Path path,
             TreeView.NodeCheckState previousCheckState) {
             for (TreeViewNodeStateListener listener : this) {
                 listener.nodeCheckStateChanged(treeView, path, previousCheckState);
@@ -296,20 +297,20 @@ public class TreeView extends Component {
     private static class TreeViewSelectionListenerList
         extends ListenerList<TreeViewSelectionListener>
         implements TreeViewSelectionListener {
-        public void selectedPathAdded(TreeView treeView, Sequence<Integer> path) {
+        public void selectedPathAdded(TreeView treeView, Path path) {
             for (TreeViewSelectionListener listener : this) {
                 listener.selectedPathAdded(treeView, path);
             }
         }
 
-        public void selectedPathRemoved(TreeView treeView, Sequence<Integer> path) {
+        public void selectedPathRemoved(TreeView treeView, Path path) {
             for (TreeViewSelectionListener listener : this) {
                 listener.selectedPathRemoved(treeView, path);
             }
         }
 
         public void selectedPathsChanged(TreeView treeView,
-            Sequence<Sequence<Integer>> previousSelectedPaths) {
+            Sequence<Path> previousSelectedPaths) {
             for (TreeViewSelectionListener listener : this) {
                 listener.selectedPathsChanged(treeView, previousSelectedPaths);
             }
@@ -322,8 +323,8 @@ public class TreeView extends Component {
      *
      * @author tvolkert
      */
-    public static final class PathComparator implements Comparator<Sequence<Integer>> {
-        public int compare(Sequence<Integer> path1, Sequence<Integer> path2) {
+    public static final class PathComparator implements Comparator<Path> {
+        public int compare(Path path1, Path path2) {
             int path1Length = path1.getLength();
             int path2Length = path2.getLength();
 
@@ -409,8 +410,8 @@ public class TreeView extends Component {
          * empty sequence.
          */
         @SuppressWarnings("unchecked")
-        private Sequence<Integer> getPath() {
-            Sequence<Integer> path = new ArrayList<Integer>();
+        private Path getPath() {
+            Path path = new Path();
 
             BranchHandler handler = this;
 
@@ -425,7 +426,7 @@ public class TreeView extends Component {
         }
 
         public void itemInserted(List<Object> list, int index) {
-            Sequence<Integer> path = getPath();
+            Path path = getPath();
 
             // Insert child handler placeholder (lazily loaded)
             insert(null, index);
@@ -441,7 +442,7 @@ public class TreeView extends Component {
         }
 
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
-            Sequence<Integer> path = getPath();
+            Path path = getPath();
 
             // Remove child handlers
             int count = (items == null) ? getLength() : items.getLength();
@@ -468,7 +469,7 @@ public class TreeView extends Component {
         }
 
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
-            Sequence<Integer> path = getPath();
+            Path path = getPath();
 
             if (list.get(index) != previousItem) {
                 // Release child handler
@@ -492,7 +493,7 @@ public class TreeView extends Component {
         public void comparatorChanged(List<Object> list,
             Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
-                Sequence<Integer> path = getPath();
+                Path path = getPath();
 
                 // Release all child handlers. This is safe because of the
                 // calls to clearPaths(). Failure to do this would result in
@@ -534,10 +535,9 @@ public class TreeView extends Component {
          * @param index
          * The index of the inserted item within its parent.
          */
-        private void incrementPaths(Sequence<Sequence<Integer>> paths,
-            Sequence<Integer> basePath, int index) {
+        private void incrementPaths(Sequence<Path> paths, Path basePath, int index) {
             // Calculate the child's path
-            Sequence<Integer> childPath = new ArrayList<Integer>(basePath);
+            Path childPath = new Path(basePath);
             childPath.add(index);
 
             // Find the child path's place in our sorted paths sequence
@@ -548,7 +548,7 @@ public class TreeView extends Component {
 
             // Update all affected paths by incrementing the appropriate path element
             for (int depth = basePath.getLength(), n = paths.getLength(); i < n; i++) {
-                Sequence<Integer> affectedPath = paths.get(i);
+                Path affectedPath = paths.get(i);
 
                 if (!Sequence.Tree.isDescendant(basePath, affectedPath)) {
                     // All paths from here forward are guaranteed to be unaffected
@@ -579,12 +579,11 @@ public class TreeView extends Component {
          * @param count
          * The number of items removed.
          */
-        private void clearAndDecrementPaths(Sequence<Sequence<Integer>> paths,
-            Sequence<Integer> basePath, int index, int count) {
+        private void clearAndDecrementPaths(Sequence<Path> paths, Path basePath, int index, int count) {
             int depth = basePath.getLength();
 
             // Find the index of the first path to clear (inclusive)
-            Sequence<Integer> testPath = new ArrayList<Integer>(basePath);
+            Path testPath = new Path(basePath);
             testPath.add(index);
 
             int start = Sequence.Search.binarySearch(paths, testPath, PATH_COMPARATOR);
@@ -607,7 +606,7 @@ public class TreeView extends Component {
 
             // Decrement paths as necessary
             for (int i = start, n = paths.getLength(); i < n; i++) {
-                Sequence<Integer> affectedPath = paths.get(i);
+                Path affectedPath = paths.get(i);
 
                 if (!Sequence.Tree.isDescendant(basePath, affectedPath)) {
                     // All paths from here forward are guaranteed to be unaffected
@@ -635,10 +634,9 @@ public class TreeView extends Component {
          * @param index
          * The index of the updated item within its parent.
          */
-        private void clearPaths(Sequence<Sequence<Integer>> paths,
-            Sequence<Integer> basePath, int index) {
+        private void clearPaths(Sequence<Path> paths, Path basePath, int index) {
             // Calculate the child's path
-            Sequence<Integer> childPath = new ArrayList<Integer>(basePath);
+            Path childPath = new Path(basePath);
             childPath.add(index);
 
             // Find the child path's place in our sorted paths sequence
@@ -649,7 +647,7 @@ public class TreeView extends Component {
 
             // Remove the child and all descendants from the paths list
             for (int i = clearIndex, n = paths.getLength(); i < n; i++) {
-                Sequence<Integer> affectedPath = paths.get(clearIndex);
+                Path affectedPath = paths.get(clearIndex);
 
                 if (!Sequence.Tree.isDescendant(childPath, affectedPath)) {
                     break;
@@ -672,14 +670,14 @@ public class TreeView extends Component {
          * @param basePath
          * The path whose children were sorted.
          */
-        private void clearPaths(Sequence<Sequence<Integer>> paths, Sequence<Integer> basePath) {
+        private void clearPaths(Sequence<Path> paths, Path basePath) {
             // Find first descendant in paths list, if it exists
             int index = Sequence.Search.binarySearch(paths, basePath, PATH_COMPARATOR);
             index = (index < 0 ? -(index + 1) : index + 1);
 
             // Remove all descendants from the paths list
             for (int i = index, n = paths.getLength(); i < n; i++) {
-                Sequence<Integer> affectedPath = paths.get(index);
+                Path affectedPath = paths.get(index);
 
                 if (!Sequence.Tree.isDescendant(basePath, affectedPath)) {
                     break;
@@ -694,14 +692,10 @@ public class TreeView extends Component {
     private List<?> treeData = null;
 
     // Ancillary data models
-    private ArrayList<Sequence<Integer>> expandedPaths =
-        new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
-    private ArrayList<Sequence<Integer>> selectedPaths =
-        new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
-    private ArrayList<Sequence<Integer>> disabledPaths =
-        new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
-    private ArrayList<Sequence<Integer>> checkedPaths =
-        new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
+    private ArrayList<Path> expandedPaths = new ArrayList<Path>(PATH_COMPARATOR);
+    private ArrayList<Path> selectedPaths = new ArrayList<Path>(PATH_COMPARATOR);
+    private ArrayList<Path> disabledPaths = new ArrayList<Path>(PATH_COMPARATOR);
+    private ArrayList<Path> checkedPaths = new ArrayList<Path>(PATH_COMPARATOR);
 
     // Properties
     private SelectMode selectMode = SelectMode.SINGLE;
@@ -728,8 +722,7 @@ public class TreeView extends Component {
 
     private static final NodeRenderer DEFAULT_NODE_RENDERER = new TreeViewNodeRenderer();
 
-    private static final Comparator<Sequence<Integer>> PATH_COMPARATOR =
-        new PathComparator();
+    private static final Comparator<Path> PATH_COMPARATOR = new PathComparator();
 
     /**
      * Creates a new <tt>TreeView</tt> with empty tree data.
@@ -959,14 +952,14 @@ public class TreeView extends Component {
     /**
      *
      */
-    public Sequence<Sequence<Integer>> getSelectedPaths() {
+    public Sequence<Path> getSelectedPaths() {
         int count = selectedPaths.getLength();
 
-        Sequence<Sequence<Integer>> selectedPaths = new ArrayList<Sequence<Integer>>(count);
+        Sequence<Path> selectedPaths = new ArrayList<Path>(count);
 
         // Deep copy the selected paths into a new list
         for (int i = 0; i < count; i++) {
-            selectedPaths.add(new ArrayList<Integer>(this.selectedPaths.get(i)));
+            selectedPaths.add(new Path(this.selectedPaths.get(i)));
         }
 
         return selectedPaths;
@@ -978,7 +971,7 @@ public class TreeView extends Component {
      * @throws IllegalStateException
      * If selection has been disabled (select mode <tt>NONE</tt>).
      */
-    public void setSelectedPaths(Sequence<Sequence<Integer>> selectedPaths) {
+    public void setSelectedPaths(Sequence<Path> selectedPaths) {
         if (selectedPaths == null) {
             throw new IllegalArgumentException("selectedPaths is null.");
         }
@@ -992,19 +985,19 @@ public class TreeView extends Component {
             throw new IllegalArgumentException("Selection length is greater than 1.");
         }
 
-        Sequence<Sequence<Integer>> previousSelectedPaths = this.selectedPaths;
+        Sequence<Path> previousSelectedPaths = this.selectedPaths;
 
         if (selectedPaths != previousSelectedPaths) {
-            this.selectedPaths = new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
+            this.selectedPaths = new ArrayList<Path>(PATH_COMPARATOR);
 
             for (int i = 0, n = selectedPaths.getLength(); i < n; i++) {
-                Sequence<Integer> path = selectedPaths.get(i);
+                Path path = selectedPaths.get(i);
 
                 // Monitor the path's parent
-                monitorBranch(new ArrayList<Integer>(path, 0, path.getLength() - 1));
+                monitorBranch(new Path(path, 0, path.getLength() - 1));
 
                 // Update the selection
-                this.selectedPaths.add(new ArrayList<Integer>(path));
+                this.selectedPaths.add(new Path(path));
             }
 
             // Notify listeners
@@ -1019,11 +1012,11 @@ public class TreeView extends Component {
      * @return
      * The first selected path, or <tt>null</tt> if nothing is selected.
      */
-    public Sequence<Integer> getFirstSelectedPath() {
-        Sequence<Integer> selectedPath = null;
+    public Path getFirstSelectedPath() {
+        Path selectedPath = null;
 
         if (selectedPaths.getLength() > 0) {
-            selectedPath = new ArrayList<Integer>(selectedPaths.get(0));
+            selectedPath = new Path(selectedPaths.get(0));
         }
 
         return selectedPath;
@@ -1036,12 +1029,11 @@ public class TreeView extends Component {
      * @return
      * The last selected path, or <tt>null</tt> if nothing is selected.
      */
-    public Sequence<Integer> getLastSelectedPath() {
-        Sequence<Integer> selectedPath = null;
+    public Path getLastSelectedPath() {
+        Path selectedPath = null;
 
         if (selectedPaths.getLength() > 0) {
-            selectedPath = new ArrayList<Integer>
-                (selectedPaths.get(selectedPaths.getLength() - 1));
+            selectedPath = new Path(selectedPaths.get(selectedPaths.getLength() - 1));
         }
 
         return selectedPath;
@@ -1056,15 +1048,15 @@ public class TreeView extends Component {
      * @throws IllegalStateException
      * If the tree view is not in single-select mode.
      */
-    public Sequence<Integer> getSelectedPath() {
+    public Path getSelectedPath() {
         if (selectMode != SelectMode.SINGLE) {
             throw new IllegalStateException("Tree view is not in single-select mode.");
         }
 
-        Sequence<Integer> selectedPath = null;
+        Path selectedPath = null;
 
         if (selectedPaths.getLength() > 0) {
-            selectedPath = new ArrayList<Integer>(selectedPaths.get(0));
+            selectedPath = new Path(selectedPaths.get(0));
         }
 
         return selectedPath;
@@ -1073,13 +1065,13 @@ public class TreeView extends Component {
     /**
      *
      */
-    public void setSelectedPath(Sequence<Integer> path) {
+    public void setSelectedPath(Path path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
 
-        Sequence<Sequence<Integer>> selectedPaths = new ArrayList<Sequence<Integer>>(1);
-        selectedPaths.add(new ArrayList<Integer>(path));
+        Sequence<Path> selectedPaths = new ArrayList<Path>(1);
+        selectedPaths.add(new Path(path));
 
         setSelectedPaths(selectedPaths);
     }
@@ -1094,7 +1086,7 @@ public class TreeView extends Component {
      * use <tt>getSelectedPath()</tt> instead.
      */
     public Object getSelectedNode() {
-        Sequence<Integer> path = getSelectedPath();
+        Path path = getSelectedPath();
         Object node = null;
 
         if (path != null) {
@@ -1110,7 +1102,7 @@ public class TreeView extends Component {
      * @throws IllegalStateException
      * If multi-select is not enabled.
      */
-    public void addSelectedPath(Sequence<Integer> path) {
+    public void addSelectedPath(Path path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -1121,10 +1113,10 @@ public class TreeView extends Component {
 
         if (selectedPaths.indexOf(path) < 0) {
             // Monitor the path's parent
-            monitorBranch(new ArrayList<Integer>(path, 0, path.getLength() - 1));
+            monitorBranch(new Path(path, 0, path.getLength() - 1));
 
             // Update the selection
-            selectedPaths.add(new ArrayList<Integer>(path));
+            selectedPaths.add(new Path(path));
 
             // Notify listeners
             treeViewSelectionListeners.selectedPathAdded(this, path);
@@ -1137,7 +1129,7 @@ public class TreeView extends Component {
      * @throws IllegalStateException
      * If multi-select is not enabled.
      */
-    public void removeSelectedPath(Sequence<Integer> path) {
+    public void removeSelectedPath(Path path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -1162,10 +1154,10 @@ public class TreeView extends Component {
      */
     public void clearSelection() {
         if (selectedPaths.getLength() > 0) {
-            Sequence<Sequence<Integer>> previousSelectedPaths = selectedPaths;
+            Sequence<Path> previousSelectedPaths = selectedPaths;
 
             // Update the selection
-            selectedPaths = new ArrayList<Sequence<Integer>>(PATH_COMPARATOR);
+            selectedPaths = new ArrayList<Path>(PATH_COMPARATOR);
 
             // Notify listeners
             treeViewSelectionListeners.selectedPathsChanged(this, previousSelectedPaths);
@@ -1175,7 +1167,7 @@ public class TreeView extends Component {
     /**
      *
      */
-    public boolean isNodeSelected(Sequence<Integer> path) {
+    public boolean isNodeSelected(Path path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -1193,7 +1185,7 @@ public class TreeView extends Component {
      * <tt>true</tt> if the node is disabled; <tt>false</tt>,
      * otherwise
      */
-    public boolean isNodeDisabled(Sequence<Integer> path) {
+    public boolean isNodeDisabled(Path path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -1213,7 +1205,7 @@ public class TreeView extends Component {
      * @param disabled
      * <tt>true</tt> to disable the node; <tt>false</tt> to enable it.
      */
-    public void setNodeDisabled(Sequence<Integer> path, boolean disabled) {
+    public void setNodeDisabled(Path path, boolean disabled) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -1224,10 +1216,10 @@ public class TreeView extends Component {
             || (index >= 0 && !disabled)) {
             if (disabled) {
                 // Monitor the path's parent
-                monitorBranch(new ArrayList<Integer>(path, 0, path.getLength() - 1));
+                monitorBranch(new Path(path, 0, path.getLength() - 1));
 
                 // Update the disabled paths
-                disabledPaths.add(new ArrayList<Integer>(path));
+                disabledPaths.add(new Path(path));
             } else {
                 // Update the disabled paths
                 disabledPaths.remove(index, 1);
@@ -1241,14 +1233,14 @@ public class TreeView extends Component {
     /**
      *
      */
-    public Sequence<Sequence<Integer>> getDisabledPaths() {
+    public Sequence<Path> getDisabledPaths() {
         int count = disabledPaths.getLength();
 
-        Sequence<Sequence<Integer>> disabledPaths = new ArrayList<Sequence<Integer>>(count);
+        Sequence<Path> disabledPaths = new ArrayList<Path>(count);
 
         // Deep copy the disabled paths into a new list
         for (int i = 0; i < count; i++) {
-            disabledPaths.add(new ArrayList<Integer>(this.disabledPaths.get(i)));
+            disabledPaths.add(new Path(this.disabledPaths.get(i)));
         }
 
         return disabledPaths;
@@ -1348,7 +1340,7 @@ public class TreeView extends Component {
      * @see
      * #getCheckmarksEnabled()
      */
-    public boolean isNodeChecked(Sequence<Integer> path) {
+    public boolean isNodeChecked(Path path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -1377,7 +1369,7 @@ public class TreeView extends Component {
      * @see
      * #setShowMixedCheckmarkState(boolean)
      */
-    public NodeCheckState getNodeCheckState(Sequence<Integer> path) {
+    public NodeCheckState getNodeCheckState(Path path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -1394,7 +1386,7 @@ public class TreeView extends Component {
                 index = -(index + 1);
 
                 if (index < checkedPaths.getLength()) {
-                    Sequence<Integer> nextCheckedPath = checkedPaths.get(index);
+                    Path nextCheckedPath = checkedPaths.get(index);
 
                     if (Sequence.Tree.isDescendant(path, nextCheckedPath)) {
                         checkState = NodeCheckState.MIXED;
@@ -1427,7 +1419,7 @@ public class TreeView extends Component {
      * @see
      * NodeCheckState#MIXED
      */
-    public void setNodeChecked(Sequence<Integer> path, boolean checked) {
+    public void setNodeChecked(Path path, boolean checked) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -1449,8 +1441,7 @@ public class TreeView extends Component {
                 // anything so we know which events to fire after we're done
                 ancestorCheckStates = new ArrayList<NodeCheckState>(path.getLength() - 1);
 
-                Sequence<Integer> ancestorPath = new ArrayList<Integer>
-                    (path, 0, path.getLength() - 1);
+                Path ancestorPath = new Path(path, 0, path.getLength() - 1);
 
                 for (int i = ancestorPath.getLength() - 1; i >= 0; i--) {
                     ancestorCheckStates.insert(getNodeCheckState(ancestorPath), 0);
@@ -1461,10 +1452,10 @@ public class TreeView extends Component {
 
             if (checked) {
                 // Monitor the path's parent
-                monitorBranch(new ArrayList<Integer>(path, 0, path.getLength() - 1));
+                monitorBranch(new Path(path, 0, path.getLength() - 1));
 
                 // Update the checked paths
-                checkedPaths.add(new ArrayList<Integer>(path));
+                checkedPaths.add(new Path(path));
             } else {
                 // Update the checked paths
                 checkedPaths.remove(index, 1);
@@ -1475,8 +1466,7 @@ public class TreeView extends Component {
 
             if (showMixedCheckmarkState) {
                 // Notify listeners of any changes to our ancestors' check states
-                Sequence<Integer> ancestorPath = new ArrayList<Integer>
-                    (path, 0, path.getLength() - 1);
+                Path ancestorPath = new Path(path, 0, path.getLength() - 1);
 
                 for (int i = ancestorPath.getLength() - 1; i >= 0; i--) {
                     NodeCheckState ancestorPreviousCheckState = ancestorCheckStates.get(i);
@@ -1506,14 +1496,14 @@ public class TreeView extends Component {
      * The paths to the checked nodes in the tree, guaranteed to be
      * non-<tt>null</tt>.
      */
-    public Sequence<Sequence<Integer>> getCheckedPaths() {
+    public Sequence<Path> getCheckedPaths() {
         int count = checkedPaths.getLength();
 
-        Sequence<Sequence<Integer>> checkedPaths = new ArrayList<Sequence<Integer>>(count);
+        Sequence<Path> checkedPaths = new ArrayList<Path>(count);
 
         // Deep copy the checked paths into a new list
         for (int i = 0; i < count; i++) {
-            checkedPaths.add(new ArrayList<Integer>(this.checkedPaths.get(i)));
+            checkedPaths.add(new Path(this.checkedPaths.get(i)));
         }
 
         return checkedPaths;
@@ -1529,7 +1519,7 @@ public class TreeView extends Component {
      * @param expanded
      * <tt>true</tt> to expand the branch; <tt>false</tt> to collapse it.
      */
-    public void setBranchExpanded(Sequence<Integer> path, boolean expanded) {
+    public void setBranchExpanded(Path path, boolean expanded) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -1541,7 +1531,7 @@ public class TreeView extends Component {
             monitorBranch(path);
 
             // Update the expanded paths
-            expandedPaths.add(new ArrayList<Integer>(path));
+            expandedPaths.add(new Path(path));
 
             // Notify listeners
             treeViewBranchListeners.branchExpanded(this, path);
@@ -1563,7 +1553,7 @@ public class TreeView extends Component {
      * @return
      * <tt>true</tt> if the branch is expanded; <tt>false</tt> otherwise.
      */
-    public boolean isBranchExpanded(Sequence<Integer> path) {
+    public boolean isBranchExpanded(Path path) {
         if (path == null) {
             throw new IllegalArgumentException("path is null.");
         }
@@ -1578,7 +1568,7 @@ public class TreeView extends Component {
      * @param path
      * The path to the branch node.
      */
-    public final void expandBranch(Sequence<Integer> path) {
+    public final void expandBranch(Path path) {
         setBranchExpanded(path, true);
     }
 
@@ -1589,7 +1579,7 @@ public class TreeView extends Component {
      * @param path
      * The path to the branch node.
      */
-    public final void collapseBranch(Sequence<Integer> path) {
+    public final void collapseBranch(Path path) {
         setBranchExpanded(path, false);
     }
 
@@ -1606,7 +1596,7 @@ public class TreeView extends Component {
      * @throws IllegalArgumentException
      * If the path contains any leaf nodes.
      */
-    private void monitorBranch(Sequence<Integer> path) {
+    private void monitorBranch(Path path) {
         BranchHandler parent = rootBranchHandler;
 
         for (int i = 0, n = path.getLength(); i < n; i++) {
@@ -1647,7 +1637,7 @@ public class TreeView extends Component {
      * The path to the node, or <tt>null</tt> if there is no node being
      * painted at the specified y-coordinate.
      */
-    public Sequence<Integer> getNodeAt(int y) {
+    public Path getNodeAt(int y) {
         TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
         return treeViewSkin.getNodeAt(y);
     }
@@ -1664,7 +1654,7 @@ public class TreeView extends Component {
      * @return
      * The bounds, or <tt>null</tt> if the node is not currently visible.
      */
-    public Bounds getNodeBounds(Sequence<Integer> path) {
+    public Bounds getNodeBounds(Path path) {
         TreeView.Skin treeViewSkin = (TreeView.Skin)getSkin();
         return treeViewSkin.getNodeBounds(path);
     }
