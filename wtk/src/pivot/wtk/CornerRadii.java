@@ -23,44 +23,19 @@ import pivot.collections.Dictionary;
  *
  * @author gbrown
  */
-public class CornerRadii {
-    public int topLeft = 0;
-    public int topRight = 0;
-    public int bottomLeft = 0;
-    public int bottomRight = 0;
+public final class CornerRadii {
+    public final int topLeft;
+    public final int topRight;
+    public final int bottomLeft;
+    public final int bottomRight;
 
     public static final String TOP_LEFT_KEY = "topLeft";
     public static final String TOP_RIGHT_KEY = "topRight";
     public static final String BOTTOM_LEFT_KEY = "bottomLeft";
     public static final String BOTTOM_RIGHT_KEY = "bottomRight";
 
-    public CornerRadii() {
-    }
-
     public CornerRadii(int radius) {
         this(radius, radius, radius, radius);
-    }
-
-    public CornerRadii(Dictionary<String, ?> cornerRadii) {
-        if (cornerRadii == null) {
-            throw new IllegalArgumentException("cornerRadii is null.");
-        }
-
-        if (cornerRadii.containsKey(TOP_LEFT_KEY)) {
-            topLeft = (Integer)cornerRadii.get(TOP_LEFT_KEY);
-        }
-
-        if (cornerRadii.containsKey(TOP_RIGHT_KEY)) {
-            topRight = (Integer)cornerRadii.get(TOP_RIGHT_KEY);
-        }
-
-        if (cornerRadii.containsKey(BOTTOM_LEFT_KEY)) {
-            bottomLeft = (Integer)cornerRadii.get(BOTTOM_LEFT_KEY);
-        }
-
-        if (cornerRadii.containsKey(BOTTOM_RIGHT_KEY)) {
-            bottomRight = (Integer)cornerRadii.get(BOTTOM_RIGHT_KEY);
-        }
     }
 
     public CornerRadii(CornerRadii cornerRadii) {
@@ -81,6 +56,37 @@ public class CornerRadii {
         this.bottomRight = bottomRight;
     }
 
+    public CornerRadii(Dictionary<String, ?> cornerRadii) {
+        if (cornerRadii == null) {
+            throw new IllegalArgumentException("cornerRadii is null.");
+        }
+
+        if (cornerRadii.containsKey(TOP_LEFT_KEY)) {
+            topLeft = (Integer)cornerRadii.get(TOP_LEFT_KEY);
+        } else {
+            topLeft = 0;
+        }
+
+        if (cornerRadii.containsKey(TOP_RIGHT_KEY)) {
+            topRight = (Integer)cornerRadii.get(TOP_RIGHT_KEY);
+        } else {
+            topRight = 0;
+        }
+
+        if (cornerRadii.containsKey(BOTTOM_LEFT_KEY)) {
+            bottomLeft = (Integer)cornerRadii.get(BOTTOM_LEFT_KEY);
+        } else {
+            bottomLeft = 0;
+        }
+
+        if (cornerRadii.containsKey(BOTTOM_RIGHT_KEY)) {
+            bottomRight = (Integer)cornerRadii.get(BOTTOM_RIGHT_KEY);
+        } else {
+            bottomRight = 0;
+        }
+    }
+
+    @Override
     public boolean equals(Object object) {
         boolean equals = false;
 
@@ -93,6 +99,12 @@ public class CornerRadii {
         }
 
         return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        // TODO This may not be the most optimal hashing function
+        return (topLeft * topRight) ^ (bottomLeft * bottomRight);
     }
 
     public String toString() {

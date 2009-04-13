@@ -107,19 +107,20 @@ public class TerraSliderSkin extends SliderSkin {
                 int sliderWidth = slider.getWidth();
                 int thumbWidth = thumb.getWidth();
 
-                Point sliderCoordinates = thumb.mapPointToAncestor(slider, x, y);
+                Point sliderLocation = thumb.mapPointToAncestor(slider, x, y);
+                int sliderX = sliderLocation.x;
 
                 int minX = dragOffset.x;
-                if (sliderCoordinates.x < minX) {
-                    sliderCoordinates.x = minX;
+                if (sliderX < minX) {
+                    sliderX = minX;
                 }
 
                 int maxX = (sliderWidth - thumbWidth) + dragOffset.x;
-                if (sliderCoordinates.x > maxX) {
-                    sliderCoordinates.x = maxX;
+                if (sliderX > maxX) {
+                    sliderX = maxX;
                 }
 
-                float ratio = (float)(sliderCoordinates.x - dragOffset.x) / (sliderWidth - thumbWidth);
+                float ratio = (float)(sliderX - dragOffset.x) / (sliderWidth - thumbWidth);
 
                 int minimum = slider.getMinimum();
                 int maximum = slider.getMaximum();

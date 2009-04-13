@@ -30,8 +30,18 @@ public final class Dimensions {
     public static final String WIDTH_KEY = "width";
     public static final String HEIGHT_KEY = "height";
 
-    public Dimensions() {
-        this(0, 0);
+    public Dimensions(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public Dimensions(Dimensions dimensions) {
+        if (dimensions == null) {
+            throw new IllegalArgumentException("dimensions is null.");
+        }
+
+        this.width = dimensions.width;
+        this.height = dimensions.height;
     }
 
     public Dimensions(Dictionary<String, ?> dimensions) {
@@ -52,20 +62,7 @@ public final class Dimensions {
         }
     }
 
-    public Dimensions(int width, int height) {
-        this.width = width;
-        this.height = height;
-    }
-
-    public Dimensions(Dimensions dimensions) {
-        if (dimensions == null) {
-            throw new IllegalArgumentException("dimensions is null.");
-        }
-
-        this.width = dimensions.width;
-        this.height = dimensions.height;
-    }
-
+    @Override
     public boolean equals(Object object) {
         boolean equals = false;
 

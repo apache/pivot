@@ -212,6 +212,7 @@ public class Span {
             Math.max(end, span.end));
     }
 
+    @Override
     public boolean equals(Object o) {
         boolean equal = false;
 
@@ -222,6 +223,12 @@ public class Span {
         }
 
         return equal;
+    }
+
+    @Override
+    public int hashCode() {
+        // TODO This may not be the most optimal hashing function
+        return (start * end);
     }
 
     public String toString() {

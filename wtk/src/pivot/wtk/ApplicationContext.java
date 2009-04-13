@@ -751,12 +751,7 @@ public abstract class ApplicationContext {
             int y = (int)Math.round(event.getY() / scale);
 
             // Set the mouse location
-            if (mouseLocation == null) {
-                mouseLocation = new Point();
-            }
-
-            mouseLocation.x = x;
-            mouseLocation.y = y;
+            mouseLocation = new Point(x, y);
 
             // Process the event
             switch (event.getID()) {
@@ -821,9 +816,7 @@ public abstract class ApplicationContext {
                                             userDropAction = getUserDropAction(event);
 
                                             // Repaint the drag visual
-                                            dragLocation.x = x;
-                                            dragLocation.y = y;
-
+                                            dragLocation = new Point(x, y);
                                             repaintDragRepresentation();
                                         }
                                     } else {
@@ -877,9 +870,7 @@ public abstract class ApplicationContext {
                             // Repaint the drag visual
                             repaintDragRepresentation();
 
-                            dragLocation.x = x;
-                            dragLocation.y = y;
-
+                            dragLocation = new Point(x, y);
                             repaintDragRepresentation();
                         }
                     }

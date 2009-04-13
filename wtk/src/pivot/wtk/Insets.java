@@ -23,47 +23,22 @@ import pivot.collections.Dictionary;
  *
  * @author gbrown
  */
-public class Insets {
-    public int top = 0;
-    public int left = 0;
-    public int bottom = 0;
-    public int right = 0;
+public final class Insets {
+    public final int top;
+    public final int left;
+    public final int bottom;
+    public final int right;
 
     public static final String TOP_KEY = "top";
     public static final String LEFT_KEY = "left";
     public static final String BOTTOM_KEY = "bottom";
     public static final String RIGHT_KEY = "right";
 
-    public Insets() {
-    }
-
     public Insets(int inset) {
         top = inset;
         left = inset;
         bottom = inset;
         right = inset;
-    }
-
-    public Insets(Dictionary<String, ?> insets) {
-        if (insets == null) {
-            throw new IllegalArgumentException("insets is null.");
-        }
-
-        if (insets.containsKey(TOP_KEY)) {
-            top = ((Number)insets.get(TOP_KEY)).intValue();
-        }
-
-        if (insets.containsKey(LEFT_KEY)) {
-            left = ((Number)insets.get(LEFT_KEY)).intValue();
-        }
-
-        if (insets.containsKey(BOTTOM_KEY)) {
-            bottom = ((Number)insets.get(BOTTOM_KEY)).intValue();
-        }
-
-        if (insets.containsKey(RIGHT_KEY)) {
-            right = ((Number)insets.get(RIGHT_KEY)).intValue();
-        }
     }
 
     public Insets(int top, int left, int bottom, int right) {
@@ -84,6 +59,37 @@ public class Insets {
         this.right = insets.right;
     }
 
+    public Insets(Dictionary<String, ?> insets) {
+        if (insets == null) {
+            throw new IllegalArgumentException("insets is null.");
+        }
+
+        if (insets.containsKey(TOP_KEY)) {
+            top = ((Number)insets.get(TOP_KEY)).intValue();
+        } else {
+            top = 0;
+        }
+
+        if (insets.containsKey(LEFT_KEY)) {
+            left = ((Number)insets.get(LEFT_KEY)).intValue();
+        } else {
+            left = 0;
+        }
+
+        if (insets.containsKey(BOTTOM_KEY)) {
+            bottom = ((Number)insets.get(BOTTOM_KEY)).intValue();
+        } else {
+            bottom = 0;
+        }
+
+        if (insets.containsKey(RIGHT_KEY)) {
+            right = ((Number)insets.get(RIGHT_KEY)).intValue();
+        } else {
+            right = 0;
+        }
+    }
+
+    @Override
     public boolean equals(Object object) {
         boolean equals = false;
 
@@ -96,6 +102,12 @@ public class Insets {
         }
 
         return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        // TODO This may not be the most optimal hashing function
+        return (top * left) ^ (bottom * right);
     }
 
     public String toString() {

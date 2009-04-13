@@ -619,8 +619,8 @@ public class TerraFrameSkin extends WindowSkin {
             Point location = window.mapPointToAncestor(display, x, y);
 
             // Pretend that the mouse can't move off screen (off the display)
-            location.x = Math.min(Math.max(location.x, 0), display.getWidth() - 1);
-            location.y = Math.min(Math.max(location.y, 0), display.getHeight() - 1);
+            location = new Point(Math.min(Math.max(location.x, 0), display.getWidth() - 1),
+                Math.min(Math.max(location.y, 0), display.getHeight() - 1));
 
             if (dragOffset != null) {
                 // Move the window

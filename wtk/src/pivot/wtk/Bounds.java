@@ -34,40 +34,6 @@ public final class Bounds {
     public static final String WIDTH_KEY = "width";
     public static final String HEIGHT_KEY = "height";
 
-    public Bounds() {
-        this(0, 0, 0, 0);
-    }
-
-    public Bounds(Dictionary<String, ?> bounds) {
-        if (bounds == null) {
-            throw new IllegalArgumentException("bounds is null.");
-        }
-
-        if (bounds.containsKey(X_KEY)) {
-            x = (Integer)bounds.get(X_KEY);
-        } else {
-            x = 0;
-        }
-
-        if (bounds.containsKey(Y_KEY)) {
-            y = (Integer)bounds.get(Y_KEY);
-        } else {
-            y = 0;
-        }
-
-        if (bounds.containsKey(WIDTH_KEY)) {
-            width = (Integer)bounds.get(WIDTH_KEY);
-        } else {
-            width = 0;
-        }
-
-        if (bounds.containsKey(HEIGHT_KEY)) {
-            height = (Integer)bounds.get(HEIGHT_KEY);
-        } else {
-            height = 0;
-        }
-    }
-
     public Bounds(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
@@ -99,6 +65,36 @@ public final class Bounds {
         y = bounds.y;
         width = bounds.width;
         height = bounds.height;
+    }
+
+    public Bounds(Dictionary<String, ?> bounds) {
+        if (bounds == null) {
+            throw new IllegalArgumentException("bounds is null.");
+        }
+
+        if (bounds.containsKey(X_KEY)) {
+            x = (Integer)bounds.get(X_KEY);
+        } else {
+            x = 0;
+        }
+
+        if (bounds.containsKey(Y_KEY)) {
+            y = (Integer)bounds.get(Y_KEY);
+        } else {
+            y = 0;
+        }
+
+        if (bounds.containsKey(WIDTH_KEY)) {
+            width = (Integer)bounds.get(WIDTH_KEY);
+        } else {
+            width = 0;
+        }
+
+        if (bounds.containsKey(HEIGHT_KEY)) {
+            height = (Integer)bounds.get(HEIGHT_KEY);
+        } else {
+            height = 0;
+        }
     }
 
     public Bounds(java.awt.Rectangle rectangle) {
@@ -194,6 +190,7 @@ public final class Bounds {
             || height <= 0);
     }
 
+    @Override
     public boolean equals(Object object) {
         boolean equals = false;
 

@@ -23,29 +23,12 @@ import pivot.collections.Dictionary;
  *
  * @author gbrown
  */
-public class Point {
-    public int x = 0;
-    public int y = 0;
+public final class Point {
+    public final int x;
+    public final int y;
 
     public static final String X_KEY = "x";
     public static final String Y_KEY = "y";
-
-    public Point() {
-    }
-
-    public Point(Dictionary<String, ?> point) {
-        if (point == null) {
-            throw new IllegalArgumentException("point is null.");
-        }
-
-        if (point.containsKey(X_KEY)) {
-            x = (Integer)point.get(X_KEY);
-        }
-
-        if (point.containsKey(Y_KEY)) {
-            y = (Integer)point.get(Y_KEY);
-        }
-    }
 
     public Point(int x, int y) {
         this.x = x;
@@ -61,11 +44,29 @@ public class Point {
         this.y = point.y;
     }
 
-    public void translate(int dx, int dy) {
-        this.x += dx;
-        this.y += dy;
+    public Point(Dictionary<String, ?> point) {
+        if (point == null) {
+            throw new IllegalArgumentException("point is null.");
+        }
+
+        if (point.containsKey(X_KEY)) {
+            x = (Integer)point.get(X_KEY);
+        } else {
+            x = 0;
+        }
+
+        if (point.containsKey(Y_KEY)) {
+            y = (Integer)point.get(Y_KEY);
+        } else {
+            y = 0;
+        }
     }
 
+    public Point translate(int dx, int dy) {
+        return new Point(x + dx, y + dy);
+    }
+
+    @Override
     public boolean equals(Object object) {
         boolean equals = false;
 
@@ -76,6 +77,12 @@ public class Point {
         }
 
         return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        // TODO This may not be the most optimal hashing function
+        return x * y;
     }
 
     public String toString() {
