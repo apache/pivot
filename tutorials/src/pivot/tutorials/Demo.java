@@ -280,7 +280,7 @@ public class Demo implements Application {
                     @Override
                     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
                         if (button == Mouse.Button.RIGHT) {
-                            menuPopup.open(display, component.mapPointToAncestor(display, x, y));
+                            menuPopup.open(window, component.mapPointToAncestor(display, x, y));
                         }
 
                         return false;

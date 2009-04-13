@@ -16,7 +16,6 @@
  */
 package pivot.wtk.effects;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -43,9 +42,7 @@ public class DropShadowDecorator implements Decorator {
     private Color shadowColor = Color.BLACK;
     private float shadowOpacity = 0.33f;
 
-    private Graphics2D graphics = null;
-    private BufferedImage componentImage = null;
-    private Graphics2D componentImageGraphics = null;
+    private BufferedImage shadowImage = null;
 
     public DropShadowDecorator() {
         this(5, 5, 5);
@@ -172,42 +169,29 @@ public class DropShadowDecorator implements Decorator {
     }
 
     public Graphics2D prepare(Component component, Graphics2D graphics) {
-        this.graphics = graphics;
-
         int width = component.getWidth();
         int height = component.getHeight();
 
-        if (width > 0
-            && height > 0) {
-            if (componentImage == null
-                || componentImage.getWidth() != width
-                || componentImage.getHeight() != height) {
-                componentImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            }
+        if (shadowImage == null
+            || shadowImage.getWidth() != width + 2 * blurRadius
+            || shadowImage.getHeight() != height + 2 * blurRadius) {
+            // Recreate the shadow
+            BufferedImage rectangleImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D rectangleImageGraphics = rectangleImage.createGraphics();
+            rectangleImageGraphics.setColor(Color.BLACK);
+            rectangleImageGraphics.fillRect(0, 0, width, height);
+            rectangleImageGraphics.dispose();
 
-            componentImageGraphics = componentImage.createGraphics();
-            componentImageGraphics.setClip(graphics.getClip());
-
-            componentImageGraphics.setComposite(AlphaComposite.Clear);
-            componentImageGraphics.fillRect(0, 0, componentImage.getWidth(), componentImage.getHeight());
-
-            componentImageGraphics.setComposite(AlphaComposite.SrcOver);
-
-            graphics = componentImageGraphics;
+            shadowImage = createShadow(rectangleImage);
         }
+
+        graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
 
         return graphics;
     }
 
     public void update() {
-        if (componentImage != null) {
-            componentImageGraphics.dispose();
-
-            BufferedImage shadowImage = createShadow(componentImage);
-
-            graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
-            graphics.drawImage(componentImage, 0, 0, null);
-        }
+        // No-op
     }
 
     public Bounds getBounds(Component component) {
