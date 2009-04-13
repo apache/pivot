@@ -80,6 +80,12 @@ public final class Display extends Container {
     public void repaint(int x, int y, int width, int height, boolean immediate) {
         if (immediate) {
             Graphics2D graphics = (Graphics2D)displayHost.getGraphics();
+
+            double scale = displayHost.getScale();
+            if (scale != 1) {
+                graphics.scale(scale, scale);
+            }
+
             graphics.clipRect(x, y, width, height);
             paint(graphics);
             graphics.dispose();
