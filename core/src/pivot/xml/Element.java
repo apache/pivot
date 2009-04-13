@@ -29,13 +29,39 @@ import pivot.util.ListenerList;
  * Class representing an XML element.
  * <p>
  * NOTE This class is incomplete.
+ * <p>
+ * TODO Adding or updating a child element should throw if the element's
+ * namespace is not defined.
  *
  * @author gbrown
  */
 public class Element implements List<Element>, Dictionary<String, String> {
-    // TODO Add a NamespaceDictionary that maps namespace prefix to namespace
-    // URI; add()/insert() should throw when elements are added or updated to
-    // refer to a non-existent namespace
+    public class NamespaceDictionary implements Dictionary<String, String> {
+        public String get(String prefix) {
+            // TODO
+            return null;
+        }
+
+        public String put(String prefix, String uri) {
+            // TODO
+            return null;
+        }
+
+        public String remove(String prefix) {
+            // TODO
+            return null;
+        }
+
+        public boolean containsKey(String prefix) {
+            // TODO
+            return false;
+        }
+
+        public boolean isEmpty() {
+            // TODO
+            return true;
+        }
+    }
 
     public static class Name {
         public String getNamespacePrefix() {
@@ -49,6 +75,7 @@ public class Element implements List<Element>, Dictionary<String, String> {
         }
     }
 
+
     public Name getName() {
         // TODO
         return null;
@@ -56,6 +83,20 @@ public class Element implements List<Element>, Dictionary<String, String> {
 
     public void setName(Name name) {
         // TODO
+    }
+
+    public Element getParent() {
+        // TODO
+        return null;
+    }
+
+    protected void setParent(Element element) {
+        // TODO
+    }
+
+    public NamespaceDictionary getNamespaces() {
+        // TODO
+        return null;
     }
 
     public int add(Element element) {
@@ -124,6 +165,16 @@ public class Element implements List<Element>, Dictionary<String, String> {
     public boolean isEmpty() {
         // TODO
         return true;
+    }
+
+    public String getAttribute(int index) {
+        // TODO
+        return null;
+    }
+
+    public int getAttributeCount() {
+        // TODO
+        return 0;
     }
 
     public Comparator<Element> getComparator() {
