@@ -115,6 +115,20 @@ public class MenuPopup extends Window {
         open(affiliate.getWindow());
     }
 
+    public void open(Component affiliate, int x, int y) {
+        // TODO Determine x, y and width, height
+        setLocation(x, y);
+        open(affiliate);
+    }
+
+    public void open(Component affiliate, Point location) {
+        if (location == null) {
+            throw new IllegalArgumentException("location is null.");
+        }
+
+        open(affiliate, location.x, location.y);
+    }
+
     @Override
     public void close() {
         super.close();

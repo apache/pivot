@@ -43,6 +43,7 @@ import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
 import pivot.wtk.DropTarget;
 import pivot.wtk.ImageView;
+import pivot.wtk.Keyboard;
 import pivot.wtk.ListView;
 import pivot.wtk.LocalManifest;
 import pivot.wtk.Manifest;
@@ -279,7 +280,9 @@ public class Demo implements Application {
                 menuImageView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
                     @Override
                     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-                        if (button == Mouse.Button.RIGHT) {
+                        if (button == Mouse.Button.RIGHT
+                            || (button == Mouse.Button.LEFT
+                                && Keyboard.isPressed(Keyboard.Modifier.CTRL))) {
                             menuPopup.open(window, component.mapPointToAncestor(display, x, y));
                         }
 

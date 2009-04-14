@@ -22,12 +22,15 @@ import pivot.util.Vote;
 import pivot.wtk.Border;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentClassListener;
+import pivot.wtk.Container;
+import pivot.wtk.ContainerMouseListener;
 import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Menu;
 import pivot.wtk.MenuItemSelectionListener;
 import pivot.wtk.MenuPopup;
 import pivot.wtk.MenuPopupListener;
+import pivot.wtk.Mouse;
 import pivot.wtk.Panorama;
 import pivot.wtk.Theme;
 import pivot.wtk.Window;
@@ -50,8 +53,40 @@ public class TerraMenuPopupSkin extends WindowSkin
     private DropShadowDecorator dropShadowDecorator = null;
     private Transition closeTransition = null;
 
-    private static final int CLOSE_TRANSITION_DURATION = 150;
-    private static final int CLOSE_TRANSITION_RATE = 30;
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            Display display = (Display)container;
+            Component descendant = display.getDescendantAt(x, y);
+            Window window = descendant.getWindow();
+
+            MenuPopup menuPopup = (MenuPopup)getComponent();
+            if (!menuPopup.isAncestor(descendant)
+                && (window == null
+                    || !menuPopup.isOwner(window))
+                && descendant != menuPopup.getAffiliate()) {
+                menuPopup.close();
+            }
+
+            return false;
+        }
+
+        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            boolean consumed = false;
+
+            Display display = (Display)container;
+            Window window = (Window)display.getComponentAt(x, y);
+
+            MenuPopup menuPopup = (MenuPopup)getComponent();
+            if (window != menuPopup
+                && (window == null
+                    || !menuPopup.isOwner(window))) {
+                consumed = true;
+            }
+
+            return consumed;
+        }
+    };
 
     private MenuItemSelectionListener menuItemPressListener = new MenuItemSelectionListener() {
         public void itemSelected(Menu.Item item) {
@@ -69,6 +104,9 @@ public class TerraMenuPopupSkin extends WindowSkin
             menuPopup.close();
         }
     };
+
+    private static final int CLOSE_TRANSITION_DURATION = 150;
+    private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraMenuPopupSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -170,6 +208,10 @@ public class TerraMenuPopupSkin extends WindowSkin
     @Override
     public void windowOpened(Window window) {
         super.windowOpened(window);
+
+        Display display = window.getDisplay();
+        display.getContainerMouseListeners().add(displayMouseListener);
+
         Component.getComponentClassListeners().add(this);
     }
 
@@ -193,6 +235,9 @@ public class TerraMenuPopupSkin extends WindowSkin
     @Override
     public void windowClosed(Window window, Display display) {
         super.windowClosed(window, display);
+
+        display.getContainerMouseListeners().remove(displayMouseListener);
+
         Component.getComponentClassListeners().remove(this);
 
         closeTransition = null;
