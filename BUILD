@@ -2,12 +2,24 @@
 System Requirements
 ===================
 
-* Java SE JDK 5 or greater (http://java.sun.com/)
+* JDK 1.6 or greater (http://java.sun.com/)
 * Ant 1.7 or greater (http://ant.apache.org/)
+* JUnit 4 or greater (http://www.junit.org/)
 
 
 Building Pivot
 ==============
+
+* Ensure that JUnit is on your Ant classpath:
+  http://ant.apache.org/manual/OptionalTasks/junit.html
+
+* Ensure that the LiveConnect APIs are on your classpath:
+
+  Windows and Linux:
+  http://java.sun.com/javase/6/webnotes/6u10/plugin2/liveconnect/
+
+  Mac OSX:
+  http://developer.apple.com/qa/qa2004/qa1364.html
 
 * To compile all Pivot source files into binary class files:
 

@@ -53,9 +53,10 @@ Pivot requires Java 5 or greater.
   Please note that this provider has a dependency on JFreeChart, which is
   licensed under LGPL.
 
-* Groovy support requires Groovy 1.5.6, available from
-  http://groovy.codehaus.org. Later releases may also work, but have not been
-  tested.
+* Scripting support requires a compatible script engine. See 
+  http://jcp.org/en/jsr/detail?id=223 or
+  http://java.sun.com/javase/6/docs/technotes/guides/scripting/index.html
+  for more information.
 
 
 Documentation
