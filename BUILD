@@ -16,7 +16,7 @@ Building Pivot
 * Ensure that the LiveConnect APIs are on your classpath:
 
   Windows and Linux:
-  http://java.sun.com/javase/6/webnotes/6u10/plugin2/liveconnect/
+  http://java.sun.com/javase/6/webnotes/6u10/plugin2/liveconnect/#COMPILING
 
   Mac OSX:
   http://developer.apple.com/qa/qa2004/qa1364.html
