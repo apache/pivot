@@ -213,6 +213,14 @@ limitations under the License.
 
     <!-- Core Test -->
     <target name="core-test" depends="core">
+        <fail message="JUnit not found. Please see the BUILD file for more information.">
+            <condition>
+                <not>
+                    <available classname="junit.framework.TestCase"/>
+                </not>
+            </condition>
+        </fail>
+
         <mkdir dir="core/${folder.bin}"/>
         <javac srcdir="core/test"
             destDir="core/${folder.bin}"
@@ -354,6 +362,14 @@ limitations under the License.
 
     <!-- WTK -->
     <target name="wtk" depends="core">
+        <fail message="LiveConnect not found. Please see the BUILD file for more information.">
+            <condition>
+                <not>
+                    <available classname="netscape.javascript.JSObject"/>
+                </not>
+            </condition>
+        </fail>
+
         <mkdir dir="wtk/${folder.bin}"/>
         <javac srcdir="wtk/src"
             destDir="wtk/${folder.bin}"
