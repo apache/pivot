@@ -28,14 +28,7 @@ http://www.robertpenner.com/easing_terms_of_use.html
 
 ======================================================================
 
-pivot.wtkx.WTKXSerializer is built using The Streaming API for
-XML (StAX), which is licensed under The Apache License 2.0.
-
-http://stax.codehaus.org/
-
-======================================================================
-
-Pivot's unit tests are build using JUnit, which is licensed under the
+Pivot's unit tests are built using JUnit, which is licensed under the
 Common Public License 1.0.
 
 http://www.junit.org/
@@ -58,7 +51,7 @@ http://java.sun.com/products/servlet/
 ======================================================================
 
 The drop shadow decorator (pivot.wtk.effects.DropShadowDecorator) uses
-code included in the Filthy Rich Clients demos, which are licensed under
-the Berkeley Software Distribution (BSD) License.
+code from "Filthy Rich Clients" by Chet Haase and Romain Guy, which is
+licensed under the Berkeley Software Distribution (BSD) License.
 
 https://filthyrichclients.dev.java.net/

@@ -2,7 +2,7 @@
 System Requirements
 ===================
 
-* Java SE JDK 5 or greater (http://java.sun.com/)
+* JDK 1.6 or greater (http://java.sun.com/)
 * Ant 1.7 or greater (http://ant.apache.org/)
 
 
