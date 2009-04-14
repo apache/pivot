@@ -28,14 +28,6 @@ http://www.robertpenner.com/easing_terms_of_use.html
 
 ======================================================================
 
-Pivot's unit tests are built using JUnit, which is licensed under the
-Common Public License 1.0.
-
-http://www.junit.org/
-http://sourceforge.net/projects/junit/
-
-======================================================================
-
 Pivot's IM client demo uses the Smack API, which is licensed under The
 Apache License 2.0.
 

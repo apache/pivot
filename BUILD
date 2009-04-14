@@ -4,6 +4,7 @@ System Requirements
 
 * JDK 1.6 or greater (http://java.sun.com/)
 * Ant 1.7 or greater (http://ant.apache.org/)
+* JUnit 4 or greater (http://www.junit.org/)
 
 
 Building Pivot

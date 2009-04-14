@@ -57,11 +57,14 @@ Pivot requires Java 5 or greater.
   http://groovy.codehaus.org. Later releases may also work, but have not been
   tested.
 
+* JavaScript support in Java 5 or in Mac OSX requires a JavaScript engine
+  (such as Rhino, available from http://www.mozilla.org/rhino/).
+
 
 Documentation
 =============
 
 Pivot home page: http://incubator.apache.org/pivot
-Demos: http://cwiki.apache.org/PIVOT/demos.html
-Tutorials: http://cwiki.apache.org/PIVOT/tutorial.html
-Javadoc: http://incubator.apache.org/pivot/1.1/docs/api/index.html
+Demos:           http://cwiki.apache.org/PIVOT/demos.html
+Tutorials:       http://cwiki.apache.org/PIVOT/tutorial.html
+Javadoc:         http://incubator.apache.org/pivot/1.1/docs/api/index.html
