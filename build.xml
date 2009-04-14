@@ -58,7 +58,9 @@ limitations under the License.
 
     <!-- Javadoc -->
     <target name="doc" description="Generates API documentation in ${folder.doc}">
-        <javadoc packagenames="pivot.*" destdir="${folder.doc}" author="true" version="true" use="true">
+        <javadoc packagenames="pivot.*" destdir="${folder.doc}"
+            author="true" version="true" use="true"
+            classpath="${java.class.path}">
             <classpath>
                 <fileset dir="charts/lib" includes="**/*.jar"/>
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
