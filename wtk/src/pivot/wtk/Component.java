@@ -447,109 +447,68 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    /**
-     * The component's handle.
-     */
+    // The component's handle
     private final Integer handle;
 
-    /**
-     * The currently installed skin, or null if no skin is installed.
-     */
+    // The currently installed skin, or null if no skin is installed
     private pivot.wtk.Skin skin = null;
 
-    /**
-     * The component's explicitly-set preferred width and height.
-     */
+    // Preferred width and height values explicitly set by the user
     private int preferredWidth = -1;
     private int preferredHeight = -1;
 
-    /**
-     * The preferred size reported by the skin.
-     */
+    // Calculated preferred size value
     private Dimensions preferredSize = null;
 
-    /**
-     * The component's parent container, or null if the component does not have
-     * a parent.
-     */
+    // The component's parent container, or null if the component does not have
+    // a parent
     private Container parent = null;
 
-    /**
-     * The component's location. These coordinates are relative to the origin of
-     * the component's parent.
-     */
+    // The component's location, relative to the parent's origin
     private int x = 0;
     private int y = 0;
 
-    /**
-     * The component's visible flag.
-     */
+    // The component's visible flag
     private boolean visible = true;
 
-    /**
-     * The component's displayable flag.
-     */
+    // The component's displayable flag
     private boolean displayable = true;
 
-    /**
-     * The component's decorators.
-     */
+    // The component's decorators
     private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
     private DecoratorSequence decoratorSequence = new DecoratorSequence();
 
-    /**
-     * The component's enabled flag.
-     */
+    // The component's enabled flag
     private boolean enabled = true;
 
-    /**
-     * The component's mouse-over flag.
-     */
+    // The component's mouse-over flag
     private boolean mouseOver = false;
 
-    /**
-     * The cursor that is displayed over the component.
-     */
+    // The cursor that is displayed over the component
     private Cursor cursor = null;
 
-    /**
-     * The tooltip text.
-     */
+    // The tooltip text
     private String tooltipText = null;
 
-    /**
-     * The component's drag source.
-     */
+    // The component's drag source
     private DragSource dragSource = null;
 
-    /**
-     * The component's drop target.
-     */
+    // The component's drop target
     private DropTarget dropTarget = null;
 
-    /**
-     * User data.
-     */
+    // User data
     private Object userData = null;
 
-    /**
-     * Proxy class for getting/setting style properties on the skin.
-     */
+    // Proxy class for getting/setting style properties on the skin
     private StyleDictionary styleDictionary = null;
 
-    /**
-     * Custom style keys.
-     */
+    // Custom style keys
     private HashSet<String> customStyles = new HashSet<String>();
 
-    /**
-     * Attached properties.
-     */
+    // Attached properties
     private Attributes attributes = null;
 
-    /**
-     * Instance event listener lists.
-     */
+    // Event listener lists.
     private ComponentListenerList componentListeners = new ComponentListenerList();
     private ComponentLayoutListenerList componentLayoutListeners = new ComponentLayoutListenerList();
     private ComponentStateListenerList componentStateListeners = new ComponentStateListenerList();
@@ -561,25 +520,17 @@ public abstract class Component implements ConstrainedVisual {
     private ComponentDragDropListenerList componentDragDropListeners = new ComponentDragDropListenerList();
     private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
 
-    /**
-     * The component that currently has the focus.
-     */
+    // The component that currently has the focus
     private static Component focusedComponent = null;
 
-    /**
-     * The next available component handle.
-     */
+    // The next available component handle
     private static int nextHandle = 0;
 
-    /**
-     * Static map of all components by handle.
-     */
+    // Map of all components by handle
     private static HashMap<Integer, Component> components = new HashMap<Integer, Component>(true);
     private static ComponentDictionary componentDictionary = new ComponentDictionary();
 
-    /**
-     * Class event listener list.
-     */
+    // Class event listeners
     private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
 
     /**
@@ -801,10 +752,23 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
+    /**
+     * Returns the component's unconstrained preferred width.
+     */
     public int getPreferredWidth() {
         return getPreferredWidth(-1);
     }
 
+    /**
+     * Returns the component's constrained preferred width.
+     *
+     * @param height
+     * The height value by which the preferred width should be constrained, or
+     * <tt>-1</tt> for no constraint.
+     *
+     * @return
+     * The constrained preferred width.
+     */
     public int getPreferredWidth(int height) {
         int preferredWidth;
 
@@ -858,10 +822,23 @@ public abstract class Component implements ConstrainedVisual {
         return (preferredWidth != -1);
     }
 
+    /**
+     * Returns the component's unconstrained preferred height.
+     */
     public int getPreferredHeight() {
         return getPreferredHeight(-1);
     }
 
+    /**
+     * Returns the component's constrained preferred height.
+     *
+     * @param height
+     * The width value by which the preferred height should be constrained, or
+     * <tt>-1</tt> for no constraint.
+     *
+     * @return
+     * The constrained preferred height.
+     */
     public int getPreferredHeight(int width) {
         int preferredHeight;
 

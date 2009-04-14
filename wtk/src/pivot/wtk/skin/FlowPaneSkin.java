@@ -28,6 +28,9 @@ import pivot.wtk.VerticalAlignment;
 
 /**
  * Flow pane skin.
+ * <p>
+ * TODO Cache preferred component sizes when alignment is justified, so we
+ * don't need to recalculate them during layout.
  *
  * @author gbrown
  */
@@ -219,8 +222,66 @@ public class FlowPaneSkin extends ContainerSkin
     }
 
     public Dimensions getPreferredSize() {
-        // TODO Optimize by performing calculations here?
-        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+        int preferredWidth = 0;
+        int preferredHeight = 0;
+
+        FlowPane flowPane = (FlowPane)getComponent();
+
+        switch (flowPane.getOrientation()) {
+            case HORIZONTAL: {
+                // Preferred width is the sum of the preferred widths of all
+                // components, plus spacing and padding
+                int displayableComponentCount = 0;
+
+                for (int i = 0, n = flowPane.getLength(); i < n; i++) {
+                    Component component = flowPane.get(i);
+
+                    if (component.isDisplayable()) {
+                        Dimensions preferredSize = component.getPreferredSize();
+                        preferredWidth += preferredSize.width;
+                        preferredHeight = Math.max(preferredSize.height, preferredHeight);
+                        displayableComponentCount++;
+                    }
+                }
+
+                // Include spacing
+                if (displayableComponentCount > 1) {
+                    preferredWidth += spacing * (displayableComponentCount - 1);
+                }
+
+                break;
+            }
+
+            case VERTICAL: {
+                // Preferred height is the sum of the preferred heights of all
+                // components, plus spacing and padding
+                int displayableComponentCount = 0;
+
+                for (int i = 0, n = flowPane.getLength(); i < n; i++) {
+                    Component component = flowPane.get(i);
+
+                    if (component.isDisplayable()) {
+                        Dimensions preferredSize = component.getPreferredSize();
+                        preferredWidth = Math.max(preferredSize.width, preferredWidth);
+                        preferredHeight += preferredSize.height;
+                        displayableComponentCount++;
+                    }
+                }
+
+                // Include spacing
+                if (displayableComponentCount > 1) {
+                    preferredHeight += spacing * (displayableComponentCount - 1);
+                }
+
+                break;
+            }
+        }
+
+        // Include padding
+        preferredWidth += padding.left + padding.right;
+        preferredHeight += padding.top + padding.bottom;
+
+        return new Dimensions(preferredWidth, preferredHeight);
     }
 
     public void layout() {
