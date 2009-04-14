@@ -35,10 +35,11 @@ http://www.igniterealtime.org/projects/smack/index.jsp
 
 ======================================================================
 
-Pivot's servlets (pivot.web.server) are built using the J2EE servlet
-specification.
+Pivot's servlets (pivot.web.server) are built using Apache Tomcat's
+implementation of the Servlet 2.5 specification, which is licensed under
+the Apache License 2.0.
 
-http://java.sun.com/products/servlet/
+http://tomcat.apache.org/
 
 ======================================================================
 
