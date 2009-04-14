@@ -237,7 +237,6 @@ limitations under the License.
             <compilerarg value="-Xlint"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
-                <pathelement location="junit.jar"/>
             </classpath>
         </javac>
     </target>
@@ -691,9 +690,7 @@ limitations under the License.
                 <exclude name="demos/lib/gdata*.jar"/>
 
                 <!-- Exclude scripting engines -->
-                <exclude name="demos/lib/js*.jar"/>
                 <exclude name="demos/lib/groovy*.jar"/>
-                <exclude name="wtk-test/lib/js*.jar"/>
             </fileset>
         </copy>
 
