@@ -36,7 +36,7 @@ public class LayoutCacheTest implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(getClass().getResource("layoutCacheTest.wtkx"));
+        window = (Window)wtkxSerializer.readObject(getClass().getResource("layout_cache_test.wtkx"));
 
         ScrollPane scrollPane = (ScrollPane)wtkxSerializer.getObjectByName("scrollPane");
         scrollPane.getStyles().put("backgroundPaint", new GradientPaint(0, 0,
