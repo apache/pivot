@@ -47,15 +47,15 @@ public class NodeListAdapter implements List<Node> {
         this.nodeList = nodeList;
     }
 
-    public int add(Node item) {
+    public int add(Node node) {
         throw new UnsupportedOperationException();
     }
 
-    public void insert(Node item, int index) {
+    public void insert(Node node, int index) {
         throw new UnsupportedOperationException();
     }
 
-    public int remove(Node item) {
+    public int remove(Node node) {
         throw new UnsupportedOperationException();
     }
 
@@ -67,7 +67,7 @@ public class NodeListAdapter implements List<Node> {
         throw new UnsupportedOperationException();
     }
 
-    public Node update(int index, Node item) {
+    public Node update(int index, Node node) {
         throw new UnsupportedOperationException();
     }
 
@@ -75,7 +75,7 @@ public class NodeListAdapter implements List<Node> {
         return nodeList.item(index);
     }
 
-    public int indexOf(Node item) {
+    public int indexOf(Node node) {
         // TODO
         return -1;
     }
