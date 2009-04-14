@@ -832,7 +832,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Returns the component's constrained preferred height.
      *
-     * @param height
+     * @param width
      * The width value by which the preferred height should be constrained, or
      * <tt>-1</tt> for no constraint.
      *
