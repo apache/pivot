@@ -18,9 +18,7 @@ package pivot.wtk.content;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import pivot.io.Folder;
 import pivot.wtk.FlowPane;
@@ -30,8 +28,6 @@ import pivot.wtk.Label;
 import pivot.wtk.TreeView;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
-import pivot.wtk.media.Picture;
-import sun.awt.shell.ShellFolder;
 
 /**
  * Tree view renderer for displaying file system contents.
@@ -42,14 +38,12 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
     private ImageView imageView = new ImageView();
     private Label label = new Label();
 
-    private boolean useNativeIcons = true;
-
     public static final int ICON_WIDTH = 16;
     public static final int ICON_HEIGHT = 16;
 
-    private static final Image defaultFolderImage =
+    private static final Image folderImage =
         Image.load(TreeViewFileRenderer.class.getResource("folder.png"));
-    private static final Image defaultFileImage =
+    private static final Image fileImage =
         Image.load(TreeViewFileRenderer.class.getResource("page_white.png"));
 
     public TreeViewFileRenderer() {
@@ -84,29 +78,7 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
         File file = (File)node;
 
         // Update the image view
-        Image icon = null;
-
-        ShellFolder shellFolder = null;
-        try {
-            shellFolder = ShellFolder.getShellFolder(file);
-        } catch(FileNotFoundException exception) {
-        }
-
-        java.awt.Image image = null;
-        if (shellFolder != null) {
-            image = shellFolder.getIcon(false);
-        }
-
-        if (image instanceof BufferedImage
-            && useNativeIcons) {
-            icon = new Picture((BufferedImage)image);
-        } else {
-            if (file instanceof Folder) {
-                icon = defaultFolderImage;
-            } else {
-                icon = defaultFileImage;
-            }
-        }
+        Image icon = (file instanceof Folder) ? folderImage : fileImage;
 
         imageView.setImage(icon);
         imageView.getStyles().put("opacity",
@@ -138,13 +110,5 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
         if (color instanceof Color) {
             label.getStyles().put("color", color);
         }
-    }
-
-    public boolean getUseNativeIcons() {
-        return useNativeIcons;
-    }
-
-    public void setUseNativeIcons(boolean useNativeIcons) {
-        this.useNativeIcons = useNativeIcons;
     }
 }

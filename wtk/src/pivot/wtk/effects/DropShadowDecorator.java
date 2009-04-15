@@ -40,7 +40,7 @@ public class DropShadowDecorator implements Decorator {
     private int yOffset;
 
     private Color shadowColor = Color.BLACK;
-    private float shadowOpacity = 0.33f;
+    private float shadowOpacity = 0.25f;
 
     private BufferedImage shadowImage = null;
 
@@ -172,20 +172,25 @@ public class DropShadowDecorator implements Decorator {
         int width = component.getWidth();
         int height = component.getHeight();
 
-        if (shadowImage == null
-            || shadowImage.getWidth() != width + 2 * blurRadius
-            || shadowImage.getHeight() != height + 2 * blurRadius) {
-            // Recreate the shadow
-            BufferedImage rectangleImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D rectangleImageGraphics = rectangleImage.createGraphics();
-            rectangleImageGraphics.setColor(Color.BLACK);
-            rectangleImageGraphics.fillRect(0, 0, width, height);
-            rectangleImageGraphics.dispose();
+        if (width > 0
+            && height > 0) {
+            if (shadowImage == null
+                || shadowImage.getWidth() != width + 2 * blurRadius
+                || shadowImage.getHeight() != height + 2 * blurRadius) {
+                // Recreate the shadow
+                BufferedImage rectangleImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D rectangleImageGraphics = rectangleImage.createGraphics();
+                rectangleImageGraphics.setColor(Color.BLACK);
+                rectangleImageGraphics.fillRect(0, 0, width, height);
+                rectangleImageGraphics.dispose();
 
-            shadowImage = createShadow(rectangleImage);
+                shadowImage = createShadow(rectangleImage);
+            }
+
+            graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
+        } else {
+            shadowImage = null;
         }
-
-        graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
 
         return graphics;
     }

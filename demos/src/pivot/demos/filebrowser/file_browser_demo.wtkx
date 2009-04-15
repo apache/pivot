@@ -25,7 +25,7 @@ limitations under the License.
 	        <view>
 	           <TreeView wtkx:id="folderTreeView">
 	               <nodeRenderer>
-	                   <content:TreeViewFileRenderer useNativeIcons="false"/>
+	                   <content:TreeViewFileRenderer/>
 	               </nodeRenderer>
 	           </TreeView>
 	        </view>
