@@ -27,8 +27,10 @@ import java.awt.geom.Rectangle2D;
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Checkbox;
+import pivot.wtk.Orientation;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.CheckboxSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Terra checkbox skin.
@@ -199,13 +201,11 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
         graphics.setPaint(new GradientPaint(buttonWidth / 2, 0, buttonBevelColor,
             buttonWidth / 2, buttonHeight, buttonColor));
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_OFF);
         graphics.fillRect(0, 0, buttonWidth, buttonHeight);
 
         // Paint the border
         graphics.setPaint(buttonBorderColor);
-        graphics.draw(new Rectangle2D.Double(0.5, 0.5, buttonWidth, buttonHeight));
+        GraphicsUtilities.drawRect(graphics, 0, 0, buttonWidth, buttonHeight);
 
         // Paint the checkmark
         Button.State state = checkbox.getState();
@@ -239,16 +239,8 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         } else {
             if (state == Button.State.MIXED) {
                 graphics.setColor(buttonSelectionColor);
-                graphics.setStroke(new BasicStroke(3f));
-
-                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
-
-                int x0 = 4;
-                int x1 = CHECKBOX_SIZE - 5;
-                int y = CHECKBOX_SIZE / 2;
-
-                graphics.drawLine(x0, y, x1, y);
+                GraphicsUtilities.drawLine(graphics, 3, (CHECKBOX_SIZE - 3) / 2, CHECKBOX_SIZE - 7,
+                    Orientation.HORIZONTAL, 3);
             }
         }
     }

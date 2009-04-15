@@ -16,12 +16,10 @@
  */
 package pivot.wtk.skin.terra;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
@@ -49,6 +47,7 @@ import pivot.wtk.effects.easing.Quartic;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Accordion skin.
@@ -175,9 +174,8 @@ public class TerraAccordionSkin extends ContainerSkin
             graphics.fillRect(0, 0, width, height);
 
             // Paint the border
-            graphics.setStroke(new BasicStroke());
             graphics.setPaint(borderColor);
-            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 
             // Paint the content
             Button.DataRenderer dataRenderer = panelHeader.getDataRenderer();
@@ -507,9 +505,8 @@ public class TerraAccordionSkin extends ContainerSkin
         int width = getWidth();
         int height = getHeight();
 
-        graphics.setStroke(new BasicStroke());
         graphics.setPaint(borderColor);
-        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
     }
 
     public Color getBorderColor() {

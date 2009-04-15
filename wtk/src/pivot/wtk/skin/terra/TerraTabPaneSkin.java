@@ -16,13 +16,10 @@
  */
 package pivot.wtk.skin.terra;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
@@ -54,6 +51,7 @@ import pivot.wtk.effects.easing.Quadratic;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Tab pane skin.
@@ -222,8 +220,6 @@ public class TerraTabPaneSkin extends ContainerSkin
             int width = getWidth();
             int height = getHeight();
 
-            graphics.setStroke(new BasicStroke());
-
             // Draw the background
             graphics.setPaint(backgroundColor);
             graphics.fillRect(0, 0, width, height);
@@ -251,21 +247,21 @@ public class TerraTabPaneSkin extends ContainerSkin
                 || tabButton.active) {
                 switch(tabOrientation) {
                     case HORIZONTAL: {
-                        graphics.draw(new Line2D.Double(0.5, height - 0.5, 0.5, 0.5));
-                        graphics.draw(new Line2D.Double(0.5, 0.5, width - 0.5, 0.5));
-                        graphics.draw(new Line2D.Double(width - 0.5, 0.5, width - 0.5, height - 0.5));
+                        GraphicsUtilities.drawLine(graphics, 0, 0, height, Orientation.VERTICAL);
+                        GraphicsUtilities.drawLine(graphics, 0, 0, width, Orientation.HORIZONTAL);
+                        GraphicsUtilities.drawLine(graphics, width - 1, 0, height, Orientation.VERTICAL);
                         break;
                     }
 
                     case VERTICAL: {
-                        graphics.draw(new Line2D.Double(width - 0.5, 0.5, 0.5, 0.5));
-                        graphics.draw(new Line2D.Double(0.5, 0.5, 0.5, height - 0.5));
-                        graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5, height - 0.5));
+                        GraphicsUtilities.drawLine(graphics, 0, 0, width, Orientation.HORIZONTAL);
+                        GraphicsUtilities.drawLine(graphics, 0, 0, height, Orientation.VERTICAL);
+                        GraphicsUtilities.drawLine(graphics, 0, height - 1, width, Orientation.HORIZONTAL);
                         break;
                     }
                 }
             } else {
-                graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+                GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
             }
 
             // Paint the content
@@ -830,8 +826,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         // Call the base class to paint the background
         super.paint(graphics);
 
-        graphics.setStroke(new BasicStroke());
-
         // Paint the content background and border
         int x = 0;
         int y = 0;
@@ -872,9 +866,8 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             // Draw the border
             graphics.setPaint(borderColor);
-            graphics.draw(new Rectangle2D.Double(contentBounds.x + 0.5, contentBounds.y + 0.5,
-                Math.max(contentBounds.width - 1, 0),
-                Math.max(contentBounds.height - 1, 0)));
+            GraphicsUtilities.drawRect(graphics, contentBounds.x, contentBounds.y,
+                contentBounds.width, contentBounds.height);
 
             // Draw the bevel for vertical tabs
             if (tabOrientation == Orientation.VERTICAL) {

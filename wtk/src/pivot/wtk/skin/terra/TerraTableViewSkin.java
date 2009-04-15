@@ -21,16 +21,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.geom.Line2D;
 
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
+import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
-import pivot.wtk.Bounds;
+import pivot.wtk.Orientation;
 import pivot.wtk.SortDirection;
 import pivot.wtk.Span;
 import pivot.wtk.TableView;
@@ -41,6 +41,7 @@ import pivot.wtk.TableViewRowStateListener;
 import pivot.wtk.TableViewSelectionListener;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Table view skin.
@@ -248,7 +249,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         // Set the grid stroke and color
-        graphics.setStroke(new BasicStroke());
         graphics.setPaint(gridColor);
 
         // Paint the vertical grid lines
@@ -259,7 +259,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 columnIndex < columnCount; columnIndex++) {
                 gridX += columnWidths.get(columnIndex);
 
-                graphics.draw(new Line2D.Double(gridX + 0.5, 0.5, gridX + 0.5, height - 0.5));
+                GraphicsUtilities.drawLine(graphics, gridX, 0, height, Orientation.VERTICAL);
                 gridX++;
             }
         }
@@ -269,7 +269,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
                 if (rowIndex > 0) {
                     int gridY = rowIndex * rowHeight;
-                    graphics.draw(new Line2D.Double(0.5, gridY + 0.5, width - 0.5, gridY + 0.5));
+                    GraphicsUtilities.drawLine(graphics, 0, gridY, width, Orientation.HORIZONTAL);
                 }
             }
         }

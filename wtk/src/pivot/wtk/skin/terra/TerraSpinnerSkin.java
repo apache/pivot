@@ -22,16 +22,16 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import pivot.collections.List;
 import pivot.wtk.ApplicationContext;
+import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
-import pivot.wtk.Bounds;
+import pivot.wtk.Orientation;
 import pivot.wtk.Spinner;
 import pivot.wtk.SpinnerListener;
 import pivot.wtk.SpinnerSelectionListener;
@@ -39,6 +39,7 @@ import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Spinner skin.
@@ -613,13 +614,12 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     		buttonX + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
         graphics.fillRect(buttonX, 0, buttonWidth, height);
 
-        graphics.setStroke(new BasicStroke());
         graphics.setPaint(borderColor);
-        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
-        graphics.draw(new Line2D.Double(width - buttonWidth - 1.5, 0,
-            width - buttonWidth - 1.5, height - 1));
-        graphics.draw(new Line2D.Double(width - buttonWidth - 1.5, buttonHeight + 0.5,
-            width - 0.5, buttonHeight + 0.5));
+        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+        GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, 0,
+            height, Orientation.VERTICAL);
+        GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, buttonHeight,
+            buttonWidth + 1, Orientation.HORIZONTAL);
     }
 
     @Override

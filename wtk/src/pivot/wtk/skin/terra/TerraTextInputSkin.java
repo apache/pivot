@@ -26,7 +26,6 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.font.TextHitInfo;
 import java.awt.font.TextLayout;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 // import java.text.AttributedCharacterIterator;
 
@@ -39,6 +38,7 @@ import pivot.wtk.Direction;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
+import pivot.wtk.Orientation;
 import pivot.wtk.Platform;
 import pivot.wtk.TextInput;
 import pivot.wtk.TextInputCharacterListener;
@@ -46,6 +46,7 @@ import pivot.wtk.TextInputListener;
 import pivot.wtk.TextInputSelectionListener;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.text.TextNode;
 import pivot.wtk.text.validation.Validator;
 
@@ -373,11 +374,11 @@ public class TerraTextInputSkin extends ComponentSkin
 
         // Paint the bevel
         graphics.setPaint(bevelColor);
-        graphics.draw(new Line2D.Double(1.5, 1.5, width - 1.5, 1.5));
+        GraphicsUtilities.drawLine(graphics, 1, 1, width - 2, Orientation.HORIZONTAL);
 
         // Paint the border
         graphics.setPaint(borderColor);
-        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 
         // Paint the content
         String text = getText();

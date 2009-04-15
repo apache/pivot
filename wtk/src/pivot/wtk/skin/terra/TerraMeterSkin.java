@@ -16,18 +16,20 @@
  */
 package pivot.wtk.skin.terra;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Meter;
 import pivot.wtk.MeterListener;
+import pivot.wtk.Orientation;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Meter skin.
@@ -101,20 +103,20 @@ public class TerraMeterSkin extends ComponentSkin
         int height = getHeight();
         int meterStop = (int)(meter.getPercentage() * width);
 
-        graphics.setStroke(new BasicStroke());
-
         graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(color),
             0, height, TerraTheme.darken(color)));
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.fillRect(0, 0, meterStop - 1, height - 1);
 
         graphics.setPaint(gridColor);
-        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 
         int nLines = (int)Math.ceil(1 / gridFrequency) - 1;
         float gridSeparation = width * gridFrequency;
         for (int i = 0; i < nLines; i++) {
             int gridX = (int)((i + 1) * gridSeparation);
-            graphics.drawLine(gridX, 0, gridX, height - 1);
+            GraphicsUtilities.drawLine(graphics, gridX, 0, height, Orientation.VERTICAL);
         }
     }
 

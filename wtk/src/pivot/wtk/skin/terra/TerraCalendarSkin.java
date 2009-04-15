@@ -20,8 +20,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -42,6 +40,7 @@ import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Label;
 import pivot.wtk.Mouse;
+import pivot.wtk.Orientation;
 import pivot.wtk.Spinner;
 import pivot.wtk.SpinnerSelectionListener;
 import pivot.wtk.TablePane;
@@ -52,6 +51,7 @@ import pivot.wtk.content.NumericSpinnerData;
 import pivot.wtk.content.SpinnerItemRenderer;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.CalendarSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Terra calendar skin.
@@ -156,7 +156,7 @@ public class TerraCalendarSkin extends CalendarSkin
             CalendarDate date = (CalendarDate)dateButton.getButtonData();
             if (date.equals(today)) {
                 graphics.setColor(dividerColor);
-                graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+                GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
             }
 
             // Paint the content
@@ -549,7 +549,7 @@ public class TerraCalendarSkin extends CalendarSkin
 
         graphics.setColor(dividerColor);
         int dividerY = labelRowBounds.y + labelRowBounds.height - 2;
-        graphics.draw(new Line2D.Double(2.5, dividerY + 0.5, Math.max(0, width - 2.5), dividerY + 0.5));
+        GraphicsUtilities.drawLine(graphics, 2, dividerY, Math.max(0, width - 4), Orientation.HORIZONTAL);
     }
 
     private void updateLabels() {

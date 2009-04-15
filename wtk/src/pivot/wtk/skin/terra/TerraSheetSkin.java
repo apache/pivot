@@ -18,8 +18,6 @@ package pivot.wtk.skin.terra;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.util.Vote;
@@ -30,6 +28,7 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
+import pivot.wtk.Orientation;
 import pivot.wtk.Sheet;
 import pivot.wtk.SheetStateListener;
 import pivot.wtk.Theme;
@@ -38,6 +37,7 @@ import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.effects.SlideTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
+import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.WindowSkin;
 
 /**
@@ -216,10 +216,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         int height = getHeight();
 
         graphics.setPaint(borderColor);
-        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 
         graphics.setPaint(bevelColor);
-        graphics.draw(new Line2D.Double(1.5, height - 1.5, width - 1.5, height - 1.5));
+        GraphicsUtilities.drawLine(graphics, 1, height - 2, width - 2, Orientation.HORIZONTAL);
     }
 
     @Override

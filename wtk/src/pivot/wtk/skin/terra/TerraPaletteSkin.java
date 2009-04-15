@@ -23,7 +23,6 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Bounds;
@@ -38,6 +37,7 @@ import pivot.wtk.Insets;
 import pivot.wtk.Label;
 import pivot.wtk.LinkButton;
 import pivot.wtk.Mouse;
+import pivot.wtk.Orientation;
 import pivot.wtk.Palette;
 import pivot.wtk.Point;
 import pivot.wtk.Theme;
@@ -46,6 +46,7 @@ import pivot.wtk.Window;
 import pivot.wtk.WindowListener;
 import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.media.Image;
+import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.WindowSkin;
 
 /**
@@ -331,17 +332,17 @@ public class TerraPaletteSkin extends WindowSkin {
 
         // Draw the border
         graphics.setPaint(titleBarBorderColor);
-        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, titleBarHeight + 1));
+        GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 1);
         // Draw the content area
         Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2,
-            width - 1, height - (titleBarHeight + 3));
+            width, height - (titleBarHeight + 2));
         graphics.setPaint(contentBorderColor);
-        graphics.draw(new Rectangle2D.Double(contentAreaRectangle.x + 0.5, contentAreaRectangle.y + 0.5,
-            contentAreaRectangle.width, contentAreaRectangle.height));
+        GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
+            contentAreaRectangle.width, contentAreaRectangle.height);
 
         graphics.setPaint(contentBevelColor);
-        graphics.draw(new Line2D.Double(contentAreaRectangle.x + 1.5, contentAreaRectangle.y + 1.5,
-            contentAreaRectangle.width - 1.5, contentAreaRectangle.y + 1.5));
+        GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
+            contentAreaRectangle.y + 1, contentAreaRectangle.width - 2, Orientation.HORIZONTAL);
     }
 
     @Override

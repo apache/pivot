@@ -22,7 +22,6 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Button;
@@ -37,6 +36,7 @@ import pivot.wtk.ImageView;
 import pivot.wtk.Insets;
 import pivot.wtk.Label;
 import pivot.wtk.Mouse;
+import pivot.wtk.Orientation;
 import pivot.wtk.Point;
 import pivot.wtk.PushButton;
 import pivot.wtk.Bounds;
@@ -45,6 +45,7 @@ import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.media.Image;
+import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.WindowSkin;
 
 /**
@@ -113,7 +114,7 @@ public class TerraFrameSkin extends WindowSkin {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
             graphics.setPaint(window.isActive() ? titleBarColor : inactiveTitleBarColor);
-            graphics.fill(new Rectangle2D.Double(0, 6, 8, 2));
+            graphics.fillRect(0, 6, 8, 2);
         }
     }
 
@@ -126,10 +127,10 @@ public class TerraFrameSkin extends WindowSkin {
         public void paint(Graphics2D graphics) {
             Window window = (Window)getComponent();
             graphics.setPaint(window.isActive() ? titleBarColor : inactiveTitleBarColor);
-            graphics.fill(new Rectangle2D.Double(0, 0, 8, 8));
+            graphics.fillRect(0, 0, 8, 8);
 
             graphics.setPaint(window.isActive() ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
-            graphics.fill(new Rectangle2D.Double(2, 2, 4, 4));
+            graphics.fillRect(2, 2, 4, 4);
         }
     }
 
@@ -143,11 +144,11 @@ public class TerraFrameSkin extends WindowSkin {
             Window window = (Window)getComponent();
             graphics.setPaint(window.isActive() ?
                 titleBarColor : inactiveTitleBarColor);
-            graphics.fill(new Rectangle2D.Double(1, 1, 6, 6));
+            graphics.fillRect(1, 1, 6, 6);
 
             graphics.setPaint(window.isActive() ?
                 titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
-            graphics.fill(new Rectangle2D.Double(3, 3, 2, 2));
+            graphics.fillRect(3, 3, 2, 2);
         }
     }
 
@@ -484,8 +485,6 @@ public class TerraFrameSkin extends WindowSkin {
         int height = getHeight();
         int titleBarHeight = titleBarFlowPane.getHeight();
 
-        graphics.setStroke(new BasicStroke());
-
         // Draw the title area
         Color titleBarBackgroundColor = window.isActive() ?
             this.titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
@@ -500,19 +499,18 @@ public class TerraFrameSkin extends WindowSkin {
 
         // Draw the border
         graphics.setPaint(titleBarBorderColor);
-        graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, titleBarHeight + 1));
+        GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 2);
 
         // Draw the content area
         Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2,
-            width - 1, height - (titleBarHeight + 3));
+            width, height - (titleBarHeight + 2));
         graphics.setPaint(contentBorderColor);
-        graphics.draw(new Rectangle2D.Double(contentAreaRectangle.x + 0.5, contentAreaRectangle.y + 0.5,
-            contentAreaRectangle.width, contentAreaRectangle.height));
+        GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
+            contentAreaRectangle.width, contentAreaRectangle.height);
 
-        Line2D contentAreaBevelLine = new Line2D.Double(contentAreaRectangle.x + 1.5,
-            contentAreaRectangle.y + 1.5, contentAreaRectangle.width - 0.5, contentAreaRectangle.y + 1.5);
         graphics.setPaint(contentBevelColor);
-        graphics.draw(contentAreaBevelLine);
+        GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
+            contentAreaRectangle.y + 1, contentAreaRectangle.width - 2, Orientation.HORIZONTAL);
     }
 
     @Override

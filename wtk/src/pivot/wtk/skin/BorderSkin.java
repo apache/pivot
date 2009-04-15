@@ -211,10 +211,13 @@ public class BorderSkin extends ContainerSkin
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int x = thickness / 2;
-        int y = topThickness / 2;
-        int width = Math.max(getWidth() - thickness, 0);
-        int height = Math.max(getHeight() - (int)Math.ceil((topThickness + thickness) * 0.5), 0);
+        int width = getWidth();
+        int height = getHeight();
+
+        int strokeX = thickness / 2;
+        int strokeY = topThickness / 2;
+        int strokeWidth = Math.max(width - thickness, 0);
+        int strokeHeight = Math.max(height - (int)Math.ceil((topThickness + thickness) * 0.5), 0);
 
         // Draw the background
         Color backgroundColor = getBackgroundColor();
@@ -222,9 +225,9 @@ public class BorderSkin extends ContainerSkin
             graphics.setPaint(backgroundColor);
 
             if (cornerRadius > 0) {
-                graphics.fillRoundRect(x, y, width, height, cornerRadius, cornerRadius);
+                graphics.fillRoundRect(strokeX, strokeY, strokeWidth, strokeHeight, cornerRadius, cornerRadius);
             } else {
-                graphics.fillRect(x, y, width, height);
+                graphics.fillRect(strokeX, strokeY, strokeWidth, strokeHeight);
             }
         }
 
@@ -259,16 +262,16 @@ public class BorderSkin extends ContainerSkin
         // Draw the border
         if (thickness > 0) {
             graphics.setPaint(color);
-            graphics.setStroke(new BasicStroke(thickness));
 
             if (cornerRadius > 0) {
-                graphics.draw(new RoundRectangle2D.Double(x + 0.5 * thickness, y + 0.5 * thickness,
-                    width, height, cornerRadius, cornerRadius));
+                graphics.setStroke(new BasicStroke(thickness));
+                graphics.draw(new RoundRectangle2D.Double(0.5 * thickness, 0.5 * topThickness,
+                    strokeWidth, strokeHeight, cornerRadius, cornerRadius));
             } else {
                 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_OFF);
-                graphics.draw(new Rectangle2D.Double(x + 0.5 * thickness, y + 0.5 * thickness,
-                    width, height));
+                int y = (topThickness - thickness) / 2;
+                GraphicsUtilities.drawRect(graphics, 0, y, width, Math.max(height - y, 0), thickness);
             }
         }
     }

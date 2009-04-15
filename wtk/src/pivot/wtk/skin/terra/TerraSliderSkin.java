@@ -16,19 +16,20 @@
  */
 package pivot.wtk.skin.terra;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.RenderingHints;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Mouse;
+import pivot.wtk.Orientation;
 import pivot.wtk.Point;
 import pivot.wtk.Slider;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.SliderSkin;
 
 /**
@@ -86,9 +87,8 @@ public class TerraSliderSkin extends SliderSkin {
         	graphics.setPaint(new Color(0, 0, 0, alpha));
             graphics.fillRect(0, 0, width, height);
 
-            graphics.setStroke(new BasicStroke());
             graphics.setPaint(buttonBorderColor);
-            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 		}
 
         @Override
@@ -259,9 +259,11 @@ public class TerraSliderSkin extends SliderSkin {
 		int width = getWidth();
 		int height = getHeight();
 
-		graphics.setStroke(new BasicStroke(trackWidth));
 		graphics.setColor(trackColor);
-		graphics.drawLine(0, height / 2, width, height / 2);
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.drawLine(graphics, 0, (height - trackWidth) / 2,
+            width, Orientation.HORIZONTAL, trackWidth);
 	}
 
 	public Color getTrackColor() {

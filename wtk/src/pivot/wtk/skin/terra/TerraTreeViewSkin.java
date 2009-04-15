@@ -16,26 +16,25 @@
  */
 package pivot.wtk.skin.terra;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
 
 import pivot.collections.ArrayList;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.collections.Sequence.Tree.Path;
+import pivot.wtk.Bounds;
 import pivot.wtk.Button;
 import pivot.wtk.Checkbox;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
-import pivot.wtk.Bounds;
+import pivot.wtk.Orientation;
 import pivot.wtk.Theme;
 import pivot.wtk.TreeView;
 import pivot.wtk.TreeViewListener;
@@ -44,6 +43,7 @@ import pivot.wtk.TreeViewNodeListener;
 import pivot.wtk.TreeViewNodeStateListener;
 import pivot.wtk.TreeViewSelectionListener;
 import pivot.wtk.skin.ComponentSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Tree view skin.
@@ -420,8 +420,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 clipBounds.height) / (double)(nodeHeight + VERTICAL_SPACING)));
         }
 
-        BasicStroke gridStroke = new BasicStroke();
-
         int nodeY = nodeStart * (nodeHeight + VERTICAL_SPACING);
 
         for (int i = nodeStart; i <= nodeEnd; i++) {
@@ -544,11 +542,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
             // Paint the grid line
             if (showGridLines) {
-                graphics.setStroke(gridStroke);
                 graphics.setPaint(gridColor);
 
-                graphics.draw(new Line2D.Double(0.5, nodeY + nodeHeight + 0.5,
-                    width - 0.5, nodeY + nodeHeight + 0.5));
+                GraphicsUtilities.drawLine(graphics, 0, nodeY + nodeHeight, width, Orientation.HORIZONTAL);
             }
 
             nodeY += nodeHeight + VERTICAL_SPACING;

@@ -23,14 +23,14 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
 
 import pivot.collections.Sequence;
+import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Mouse;
-import pivot.wtk.Bounds;
+import pivot.wtk.Orientation;
 import pivot.wtk.SortDirection;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewColumnListener;
@@ -39,6 +39,7 @@ import pivot.wtk.TableViewHeaderListener;
 import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Table view header skin.
@@ -248,15 +249,13 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             borderColor = disabledBorderColor;
         }
 
-        graphics.setStroke(new BasicStroke());
-
         graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
             width / 2, height, backgroundColor));
         graphics.fillRect(0, 0, width, height);
 
         // Paint the border
         graphics.setPaint(borderColor);
-        graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5, height - 0.5));
+        GraphicsUtilities.drawLine(graphics, 0, height - 1, width, Orientation.HORIZONTAL);
 
         // Paint the content
         TableView tableView = tableViewHeader.getTableView();
@@ -325,9 +324,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 // Draw the divider
                 cellX += columnWidth;
 
-                Line2D dividerLine = new Line2D.Double(cellX + 0.5, 0.5, cellX + 0.5, height - 0.5);
                 graphics.setPaint(borderColor);
-                graphics.draw(dividerLine);
+                GraphicsUtilities.drawLine(graphics, cellX, 0, height, Orientation.VERTICAL);
 
                 cellX++;
             }

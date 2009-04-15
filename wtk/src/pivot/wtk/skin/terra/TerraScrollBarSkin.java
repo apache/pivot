@@ -37,6 +37,7 @@ import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Scroll bar skin.
@@ -259,8 +260,7 @@ public class TerraScrollBarSkin extends ContainerSkin
 
             // Paint the border
             graphics.setPaint(borderColor);
-            graphics.setStroke(new BasicStroke());
-            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 
             // Determine the button image size
             ScrollButtonImage buttonImage = scrollButton.getButtonImage();
@@ -484,7 +484,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             // Paint the border
             graphics.setPaint(borderColor);
             graphics.setStroke(new BasicStroke());
-            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 
             // Paint the hash marks
             if (orientation == Orientation.HORIZONTAL) {
@@ -788,7 +788,6 @@ public class TerraScrollBarSkin extends ContainerSkin
         int width = getWidth();
         int height = getHeight();
 
-        graphics.setStroke(new BasicStroke());
         graphics.setPaint(borderColor);
 
         // Paint the scroll bar border lines
@@ -796,18 +795,18 @@ public class TerraScrollBarSkin extends ContainerSkin
             int scrollUpButtonWidth = scrollUpButton.getWidth();
             int scrollDownButtonWidth = scrollDownButton.getWidth();
 
-            graphics.draw(new Line2D.Double(scrollUpButtonWidth + 0.5, 0.5,
-                width - scrollDownButtonWidth - 0.5, 0.5));
-            graphics.draw(new Line2D.Double(scrollUpButtonWidth + 0.5, height - 0.5,
-                width - scrollDownButtonWidth - 0.5, height - 0.5));
+            GraphicsUtilities.drawLine(graphics, scrollUpButtonWidth, 0,
+                width - scrollDownButtonWidth - scrollUpButtonWidth, Orientation.HORIZONTAL);
+            GraphicsUtilities.drawLine(graphics, scrollUpButtonWidth, height - 1,
+                width - scrollDownButtonWidth - scrollUpButtonWidth, Orientation.HORIZONTAL);
         } else {
             int scrollUpButtonHeight = scrollUpButton.getHeight();
             int scrollDownButtonHeight = scrollDownButton.getHeight();
 
-            graphics.draw(new Line2D.Double(0.5, scrollUpButtonHeight + 0.5, 0.5,
-                height - scrollDownButtonHeight - 0.5));
-            graphics.draw(new Line2D.Double(width - 0.5, scrollUpButtonHeight + 0.5, width - 0.5,
-                height - scrollDownButtonHeight - 0.5));
+            GraphicsUtilities.drawLine(graphics, 0, scrollUpButtonHeight,
+                height - scrollDownButtonHeight - scrollUpButtonHeight, Orientation.VERTICAL);
+            GraphicsUtilities.drawLine(graphics, width - 1, scrollUpButtonHeight,
+                height - scrollDownButtonHeight - scrollUpButtonHeight, Orientation.VERTICAL);
         }
     }
 

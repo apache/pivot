@@ -203,6 +203,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
             graphics.setFont(font);
             graphics.setPaint(color);
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
             float y = 0;
             switch (verticalAlignment) {

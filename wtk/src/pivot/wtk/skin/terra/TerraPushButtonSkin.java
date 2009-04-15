@@ -31,6 +31,7 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.PushButton;
 import pivot.wtk.Theme;
+import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.PushButtonSkin;
 
 /**
@@ -193,8 +194,6 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             }
         }
 
-        graphics.setStroke(new BasicStroke());
-
         // Paint the background
     	if (backgroundColor != null
 			&& bevelColor != null) {
@@ -206,7 +205,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         // Paint the border
         if (borderColor != null) {
             graphics.setPaint(borderColor);
-            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
         }
 
         // Paint the content

@@ -18,10 +18,10 @@ package pivot.wtk.content;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
 
 import pivot.wtk.ListView;
 import pivot.wtk.media.Image;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * List view renderer for displaying color swatches.
@@ -60,7 +60,7 @@ public class ListViewColorRenderer extends ListViewItemRenderer {
             graphics.setColor(color);
             graphics.fillRect(2, 2, SIZE - 4, SIZE - 4);
             graphics.setColor(Color.GRAY);
-            graphics.draw(new Rectangle2D.Double(0.5, 0.5, SIZE - 1, SIZE - 1));
+            GraphicsUtilities.drawRect(graphics, 0, 0, SIZE, SIZE);
         }
     }
 

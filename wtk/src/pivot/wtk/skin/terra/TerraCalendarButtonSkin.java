@@ -41,6 +41,7 @@ import pivot.wtk.effects.FadeTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.CalendarButtonSkin;
+import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Terra calendar button skin.
@@ -230,13 +231,13 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
         Bounds contentBounds = new Bounds(0, 0,
             Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(height - 1, 0));
-        graphics.draw(new Rectangle2D.Double(contentBounds.x + 0.5, contentBounds.y + 0.5,
-            contentBounds.width, contentBounds.height));
+        GraphicsUtilities.drawRect(graphics, contentBounds.x, contentBounds.y,
+            contentBounds.width + 1, contentBounds.height + 1);
 
         Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
             TRIGGER_WIDTH, Math.max(height - 1, 0));
-        graphics.draw(new Rectangle2D.Double(triggerBounds.x + 0.5, triggerBounds.y + 0.5,
-            triggerBounds.width, triggerBounds.height));
+        GraphicsUtilities.drawRect(graphics, triggerBounds.x, triggerBounds.y,
+            triggerBounds.width + 1, triggerBounds.height + 1);
 
         // Paint the content
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();

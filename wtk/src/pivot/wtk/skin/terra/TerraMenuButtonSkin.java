@@ -33,6 +33,7 @@ import pivot.wtk.Dimensions;
 import pivot.wtk.Insets;
 import pivot.wtk.MenuButton;
 import pivot.wtk.Theme;
+import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.MenuButtonSkin;
 
 /**
@@ -140,8 +141,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             }
         }
 
-        graphics.setStroke(new BasicStroke());
-
         // Paint the background
     	if (backgroundColor != null
 			&& bevelColor != null) {
@@ -153,7 +152,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         // Paint the border
         if (borderColor != null) {
             graphics.setPaint(borderColor);
-            graphics.draw(new Rectangle2D.Double(0.5, 0.5, width - 1, height - 1));
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
         }
 
         Bounds contentBounds = new Bounds(padding.left + 1, padding.top + 1,
