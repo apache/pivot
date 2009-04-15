@@ -451,7 +451,7 @@ public class TreeView extends Component {
             Path path = getPath();
 
             // Remove child handlers
-            int count = (items == null) ? getLength() : items.getLength();
+            int count = items.getLength();
             Sequence<BranchHandler> removed = remove(index, count);
 
             // Release each child handler that was removed
@@ -470,8 +470,7 @@ public class TreeView extends Component {
             clearAndDecrementPaths(checkedPaths, path, index, count);
 
             // Notify listeners
-            treeViewNodeListeners.nodesRemoved(TreeView.this, getPath(), index,
-                (items == null) ? -1 : items.getLength());
+            treeViewNodeListeners.nodesRemoved(TreeView.this, path, index, count);
         }
 
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
@@ -497,8 +496,28 @@ public class TreeView extends Component {
         }
 
         public void listCleared(List<Object> list) {
-            // TODO
-            itemsRemoved(list, 0, null);
+            Path path = getPath();
+
+            // Release each child handler
+            for (int i = 0, n = getLength(); i < n; i++) {
+                BranchHandler handler = get(i);
+
+                if (handler != null) {
+                    handler.release();
+                }
+            }
+
+            // Remove child handlers
+            clear();
+
+            // Update our data structures
+            clearPaths(expandedPaths, path);
+            clearPaths(selectedPaths, path);
+            clearPaths(disabledPaths, path);
+            clearPaths(checkedPaths, path);
+
+            // Notify listeners
+            treeViewNodeListeners.nodesCleared(TreeView.this, path);
         }
 
         public void comparatorChanged(List<Object> list,

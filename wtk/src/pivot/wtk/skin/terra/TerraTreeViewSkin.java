@@ -211,7 +211,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      */
     protected static class BranchInfo extends NodeInfo {
         // Core skin metadata
-        protected Sequence<NodeInfo> children = null;
+        protected List<NodeInfo> children = null;
 
         public static final byte EXPANDED_MASK = 1 << 5;
 
@@ -1770,13 +1770,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         // Add the node to the visible nodes list
         addVisibleNode(branchInfo, index);
-
-        branchInfo.loadChildren();
-        if (showBranchControls
-            && branchInfo.children.getLength() == 1) {
-            // The branch went from having no children to having one
-            repaintNode(branchInfo);
-        }
     }
 
     public void nodesRemoved(TreeView treeView, Path path, int index,
@@ -1788,15 +1781,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         // Update our internal branch info
         if (branchInfo.children != null) {
-            branchInfo.children.remove(index,
-                (count >= 0) ? count : branchInfo.children.getLength());
-        }
-
-        branchInfo.loadChildren();
-        if (showBranchControls
-            && branchInfo.children.getLength() == 0) {
-            // The branch went from having children to having none
-            repaintNode(branchInfo);
+            branchInfo.children.remove(index, count);
         }
     }
 
@@ -1828,7 +1813,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public void nodesCleared(TreeView treeView, Path path) {
-        // TODO
+        BranchInfo branchInfo = (BranchInfo)getNodeInfoAt(path);
+
+        // Remove the node from the visible nodes list
+        removeVisibleNodes(branchInfo, 0, -1);
+
+        // Update our internal branch info
+        if (branchInfo.children != null) {
+            branchInfo.children.clear();
+        }
     }
 
     public void nodesSorted(TreeView treeView, Path path) {
