@@ -7,13 +7,16 @@ System Requirements
 * JUnit 3 (http://www.junit.org/)
 
 
-Building Pivot
+Project Set-Up
 ==============
 
-* Ensure that JUnit is on your Ant classpath:
+* Ensure that JUnit is on your Ant classpath
+  (set the CLASSPATH environment variable accordingly):
+
   http://ant.apache.org/manual/OptionalTasks/junit.html
 
-* Ensure that the LiveConnect APIs are on your classpath:
+* Ensure that the LiveConnect APIs are on your classpath
+  (set the CLASSPATH environment variable accordingly):
 
   Windows and Linux:
   http://java.sun.com/javase/6/webnotes/6u10/plugin2/liveconnect/#COMPILING
@@ -23,6 +26,10 @@ Building Pivot
 
 * Ensure that the JNLP APIs are on your classpath; follow the same process as
   above, substituting javaws.jar for plugin.jar.
+
+
+Building Pivot
+==============
 
 * To compile all Pivot source files into binary class files:
 

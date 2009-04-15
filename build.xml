@@ -365,7 +365,14 @@ limitations under the License.
         <fail message="LiveConnect not found. Please see the BUILD file for more information.">
             <condition>
                 <not>
-                    <available classname="netscape.javascript.JSObject"/>
+                    <available classname="netscape.javascript.JSObject">
+                        <!--
+                        <classpath>
+                            <fileset dir="${java.home}/lib" includes="**/*.jar" erroronmissingdir="false"/>
+                            <fileset dir="/Library/Java/Home/lib" includes="**/*.jar" erroronmissingdir="false"/>
+                        </classpath>
+                        -->
+                    </available>
                 </not>
             </condition>
         </fail>
@@ -373,6 +380,7 @@ limitations under the License.
         <mkdir dir="wtk/${folder.bin}"/>
         <javac srcdir="wtk/src"
             destDir="wtk/${folder.bin}"
+            includejavaruntime="true"
             optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
@@ -382,6 +390,10 @@ limitations under the License.
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
+                <!--
+                <fileset dir="${java.home}/lib" includes="**/*.jar" erroronmissingdir="false"/>
+                <fileset dir="/Library/Java/Home/lib" includes="**/*.jar" erroronmissingdir="false"/>
+                -->
             </classpath>
         </javac>
     </target>
