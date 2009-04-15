@@ -279,6 +279,7 @@ public abstract class ApplicationContext {
                 this.scale = scale;
                 display.setSize(Math.max((int)Math.ceil(getWidth() / scale), 0),
                     Math.max((int)Math.ceil(getHeight() / scale), 0));
+                display.repaint();
             }
         }
 
