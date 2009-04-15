@@ -21,6 +21,9 @@ Building Pivot
   Mac OSX:
   http://developer.apple.com/qa/qa2004/qa1364.html
 
+* Ensure that the JNLP APIs are on your classpath; follow the same process as
+  above, substituting javaws.jar for plugin.jar.
+
 * To compile all Pivot source files into binary class files:
 
   $ ant
