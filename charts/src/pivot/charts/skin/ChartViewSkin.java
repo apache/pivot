@@ -196,6 +196,10 @@ public abstract class ChartViewSkin extends ComponentSkin
         repaintComponent();
     }
 
+    public void seriesCleared(ChartView chartView) {
+        repaintComponent();
+    }
+
     public void seriesSorted(ChartView chartView) {
         repaintComponent();
     }

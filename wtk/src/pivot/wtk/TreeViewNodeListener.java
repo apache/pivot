@@ -39,6 +39,9 @@ public interface TreeViewNodeListener {
         public void nodeUpdated(TreeView treeView, Path path, int index) {
         }
 
+        public void nodesCleared(TreeView treeView, Path path) {
+        }
+
         public void nodesSorted(TreeView treeView, Path path) {
         }
     }
@@ -72,6 +75,13 @@ public interface TreeViewNodeListener {
      * @param index
      */
     public void nodeUpdated(TreeView treeView, Path path, int index);
+
+    /**
+     * Called when the nodes in a branch have been cleared.
+     *
+     * @param treeView
+     */
+    public void nodesCleared(TreeView treeView, Path path);
 
     /**
      * Called when the nodes in a branch have been sorted.

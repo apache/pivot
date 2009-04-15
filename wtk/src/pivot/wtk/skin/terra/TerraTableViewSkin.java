@@ -1038,6 +1038,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         repaintComponent(getRowBounds(index));
     }
 
+    public void rowsCleared(TableView listView) {
+        repaintComponent();
+    }
+
     public void rowsSorted(TableView tableView) {
         repaintComponent();
     }

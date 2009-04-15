@@ -329,6 +329,10 @@ public class TableViewRowEditor implements TableView.RowEditor {
             cancel();
         }
 
+        public void rowsCleared(TableView tableView) {
+            cancel();
+        }
+
         public void rowUpdated(TableView tableView, int index) {
             cancel();
         }

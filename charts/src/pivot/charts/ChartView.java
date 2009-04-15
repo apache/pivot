@@ -225,24 +225,20 @@ public abstract class ChartView extends Component {
      */
     private class ListHandler implements ListListener<Object> {
         public void itemInserted(List<Object> list, int index) {
-            // Notify listeners that items were inserted
             chartViewSeriesListeners.seriesInserted(ChartView.this, index);
         }
 
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
-            if (items == null) {
-                // All items were removed; clear the selection and notify
-                // listeners
-                chartViewSeriesListeners.seriesRemoved(ChartView.this, index, -1);
-            } else {
-                // Notify listeners that items were removed
-                int count = items.getLength();
-                chartViewSeriesListeners.seriesRemoved(ChartView.this, index, count);
-            }
+            int count = items.getLength();
+            chartViewSeriesListeners.seriesRemoved(ChartView.this, index, count);
         }
 
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
             chartViewSeriesListeners.seriesUpdated(ChartView.this, index);
+        }
+
+        public void listCleared(List<Object> list) {
+            chartViewSeriesListeners.seriesCleared(ChartView.this);
         }
 
         public void comparatorChanged(List<Object> list,
@@ -345,6 +341,12 @@ public abstract class ChartView extends Component {
         public void seriesUpdated(ChartView chartView, int index) {
             for (ChartViewSeriesListener listener : this) {
                 listener.seriesUpdated(chartView, index);
+            }
+        }
+
+        public void seriesCleared(ChartView chartView) {
+            for (ChartViewSeriesListener listener : this) {
+                listener.seriesCleared(chartView);
             }
         }
 

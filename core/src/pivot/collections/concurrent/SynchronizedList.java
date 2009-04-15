@@ -57,6 +57,12 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
             }
         }
 
+        public synchronized void listCleared(List<T> list) {
+            for (ListListener<T> listener : this) {
+                listener.listCleared(SynchronizedList.this);
+            }
+        }
+
         public synchronized void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
             for (ListListener<T> listener : this) {
                 listener.comparatorChanged(SynchronizedList.this, previousComparator);

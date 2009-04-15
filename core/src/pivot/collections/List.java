@@ -50,6 +50,12 @@ public interface List<T> extends Sequence<T>, Collection<T> {
             }
         }
 
+        public void listCleared(List<T> list) {
+            for (ListListener<T> listener : this) {
+                listener.listCleared(list);
+            }
+        }
+
         public void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
             for (ListListener<T> listener : this) {
                 listener.comparatorChanged(list, previousComparator);

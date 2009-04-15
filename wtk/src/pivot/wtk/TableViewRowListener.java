@@ -37,6 +37,9 @@ public interface TableViewRowListener {
         public void rowUpdated(TableView tableView, int index) {
         }
 
+        public void rowsCleared(TableView tableView) {
+        }
+
         public void rowsSorted(TableView tableView) {
         }
     }
@@ -77,6 +80,13 @@ public interface TableViewRowListener {
      * The first index affected by the event.
      */
     public void rowUpdated(TableView tableView, int index);
+
+    /**
+     * Called when the rows in a table view have been cleared.
+     *
+     * @param tableView
+     */
+    public void rowsCleared(TableView tableView);
 
     /**
      * Called when the rows in a table have been sorted.

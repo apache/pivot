@@ -39,6 +39,9 @@ public interface ListListener<T> {
         public void itemUpdated(List<T> list, int index, T previousItem) {
         }
 
+        public void listCleared(List<T> list) {
+        }
+
         public void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
         }
     }
@@ -64,8 +67,7 @@ public interface ListListener<T> {
      * The starting index from which items have been removed.
      *
      * @param items
-     * The items that were removed from the list, or <tt>null</tt> if the list
-     * was cleared.
+     * The items that were removed from the list.
      */
     public void itemsRemoved(List<T> list, int index, Sequence<T> items);
 
@@ -82,6 +84,14 @@ public interface ListListener<T> {
      * The item that was previously stored at <tt>index</tt>.
      */
     public void itemUpdated(List<T> list, int index, T previousItem);
+
+    /**
+     * Called when list data has been reset.
+     *
+     * @param list
+     * The source of the list event.
+     */
+    public void listCleared(List<T> list);
 
     /**
      * Called when a list's comparator has changed.

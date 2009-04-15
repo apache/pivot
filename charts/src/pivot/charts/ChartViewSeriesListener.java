@@ -40,6 +40,13 @@ public interface ChartViewSeriesListener {
     public void seriesRemoved(ChartView chartView, int index, int count);
 
     /**
+     * Fired when a chart view's series data is cleared.
+     *
+     * @param chartView
+     */
+    public void seriesCleared(ChartView chartView);
+
+    /**
      * Fired when a series is updated in a chart view's data set.
      * @param chartView
      * @param index

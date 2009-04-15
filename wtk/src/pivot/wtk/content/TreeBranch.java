@@ -105,7 +105,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
 
     public void clear() {
         treeNodes.clear();
-        listListeners.itemsRemoved(this, 0, null);
+        listListeners.listCleared(this);
     }
 
     public TreeNode get(int index) {

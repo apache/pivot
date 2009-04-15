@@ -260,6 +260,12 @@ public class TreeView extends Component {
             }
         }
 
+        public void nodesCleared(TreeView treeView, Path path) {
+            for (TreeViewNodeListener listener : this) {
+                listener.nodesCleared(treeView, path);
+            }
+        }
+
         public void nodesSorted(TreeView treeView, Path path) {
             for (TreeViewNodeListener listener : this) {
                 listener.nodesSorted(treeView, path);
@@ -488,6 +494,11 @@ public class TreeView extends Component {
 
             // Notify listeners
             treeViewNodeListeners.nodeUpdated(TreeView.this, path, index);
+        }
+
+        public void listCleared(List<Object> list) {
+            // TODO
+            itemsRemoved(list, 0, null);
         }
 
         public void comparatorChanged(List<Object> list,

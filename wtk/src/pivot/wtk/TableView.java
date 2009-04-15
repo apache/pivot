@@ -624,38 +624,38 @@ public class TableView extends Component {
         }
 
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
-            if (items == null) {
-                // All items were removed; clear the selection and notify
-                // listeners
-                selectedRanges.clear();
-                disabledIndexes.clear();
+            int count = items.getLength();
 
-                tableViewRowListeners.rowsRemoved(TableView.this, index, -1);
-            } else {
-                int count = items.getLength();
+            // Decrement selected ranges
+            selectedRanges.removeIndexes(index, count);
 
-                // Decrement selected ranges
-                selectedRanges.removeIndexes(index, count);
-
-                // Decrement disabled indexes
-                int i = Sequence.Search.binarySearch(disabledIndexes, index);
-                if (i < 0) {
-                    i = -(i + 1);
-                }
-
-                int n = disabledIndexes.getLength();
-                while (i < n) {
-                    disabledIndexes.update(i, disabledIndexes.get(i) - count);
-                    i++;
-                }
-
-                // Notify listeners that items were removed
-                tableViewRowListeners.rowsRemoved(TableView.this, index, count);
+            // Decrement disabled indexes
+            int i = Sequence.Search.binarySearch(disabledIndexes, index);
+            if (i < 0) {
+                i = -(i + 1);
             }
+
+            int n = disabledIndexes.getLength();
+            while (i < n) {
+                disabledIndexes.update(i, disabledIndexes.get(i) - count);
+                i++;
+            }
+
+            // Notify listeners that items were removed
+            tableViewRowListeners.rowsRemoved(TableView.this, index, count);
         }
 
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
             tableViewRowListeners.rowUpdated(TableView.this, index);
+        }
+
+        public void listCleared(List<Object> list) {
+            // All items were removed; clear the selection and notify
+            // listeners
+            selectedRanges.clear();
+            disabledIndexes.clear();
+
+            tableViewRowListeners.rowsCleared(TableView.this);
         }
 
         public void comparatorChanged(List<Object> list,
@@ -774,6 +774,12 @@ public class TableView extends Component {
         public void rowUpdated(TableView tableView, int index) {
             for (TableViewRowListener listener : this) {
                 listener.rowUpdated(tableView, index);
+            }
+        }
+
+        public void rowsCleared(TableView tableView) {
+            for (TableViewRowListener listener : this) {
+                listener.rowsCleared(tableView);
             }
         }
 

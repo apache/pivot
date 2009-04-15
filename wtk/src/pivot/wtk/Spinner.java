@@ -77,27 +77,27 @@ public class Spinner extends Container {
         }
 
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
-            if (items == null) {
-                // All items were removed; clear the selection and notify
-                // listeners
+            int count = items.getLength();
+
+            if (index + count <= selectedIndex) {
+                selectedIndex--;
+            } else if (index <= selectedIndex) {
                 selectedIndex = -1;
-                spinnerItemListeners.itemsRemoved(Spinner.this, index, -1);
-            } else {
-                int count = items.getLength();
-
-                if (index + count <= selectedIndex) {
-                    selectedIndex--;
-                } else if (index <= selectedIndex) {
-                    selectedIndex = -1;
-                }
-
-                // Notify listeners that items were removed
-                spinnerItemListeners.itemsRemoved(Spinner.this, index, count);
             }
+
+            // Notify listeners that items were removed
+            spinnerItemListeners.itemsRemoved(Spinner.this, index, count);
         }
 
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
             spinnerItemListeners.itemUpdated(Spinner.this, index);
+        }
+
+        public void listCleared(List<Object> list) {
+            // All items were removed; clear the selection and notify
+            // listeners
+            selectedIndex = -1;
+            spinnerItemListeners.itemsCleared(Spinner.this);
         }
 
         public void comparatorChanged(List<Object> list,
@@ -164,6 +164,12 @@ public class Spinner extends Container {
         public void itemUpdated(Spinner spinner, int index) {
             for (SpinnerItemListener listener : this) {
                 listener.itemUpdated(spinner, index);
+            }
+        }
+
+        public void itemsCleared(Spinner spinner) {
+            for (SpinnerItemListener listener : this) {
+                listener.itemsCleared(spinner);
             }
         }
 

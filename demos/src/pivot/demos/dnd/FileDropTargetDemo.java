@@ -18,7 +18,6 @@ package pivot.demos.dnd;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Comparator;
 
 import pivot.collections.Dictionary;
 import pivot.collections.List;
@@ -61,7 +60,7 @@ public class FileDropTargetDemo implements Application {
         fileList = new FileList();
         fileTableView.setTableData(fileList);
 
-        fileList.getListListeners().add(new ListListener<File>() {
+        fileList.getListListeners().add(new ListListener.Adapter<File>() {
             public void itemInserted(List<File> list, int index) {
                 uploadButton.setEnabled(list.getLength() > 0);
             }
@@ -73,14 +72,6 @@ public class FileDropTargetDemo implements Application {
                     && index < list.getLength()) {
                     fileTableView.setSelectedIndex(index);
                 }
-            }
-
-            public void itemUpdated(List<File> list, int index, File previousFile) {
-                // No-op
-            }
-
-            public void comparatorChanged(List<File> fileList, Comparator<File> previousComparator) {
-                // No-op
             }
         });
 

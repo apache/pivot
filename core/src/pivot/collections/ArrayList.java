@@ -148,7 +148,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     public void clear() {
         arrayList.clear();
-        listListeners.itemsRemoved(this, 0, null);
+        listListeners.listCleared(this);
     }
 
     public T get(int index) {

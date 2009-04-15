@@ -37,6 +37,9 @@ public interface SpinnerItemListener {
         public void itemUpdated(Spinner spinner, int index) {
         }
 
+        public void itemsCleared(Spinner spinner) {
+        }
+
         public void itemsSorted(Spinner spinner) {
         }
     }
@@ -67,7 +70,14 @@ public interface SpinnerItemListener {
     public void itemUpdated(Spinner spinner, int index);
 
     /**
-     * Called when the spinner data is sorted
+     * Called when the spinner data has been cleared.
+     *
+     * @param listView
+     */
+    public void itemsCleared(Spinner spinner);
+
+    /**
+     * Called when the spinner data is sorted.
      *
      * @param spinner
      */

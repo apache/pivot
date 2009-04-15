@@ -37,6 +37,9 @@ public interface ListViewItemListener {
         public void itemUpdated(ListView listView, int index) {
         }
 
+        public void itemsCleared(ListView listView) {
+        }
+
         public void itemsSorted(ListView listView) {
         }
     }
@@ -79,7 +82,14 @@ public interface ListViewItemListener {
     public void itemUpdated(ListView listView, int index);
 
     /**
-     * Called when the items in a list have been sorted.
+     * Called when the items in a list view have been cleared.
+     *
+     * @param listView
+     */
+    public void itemsCleared(ListView listView);
+
+    /**
+     * Called when the items in a list view have been sorted.
      *
      * @param listView
      * The source of the event.

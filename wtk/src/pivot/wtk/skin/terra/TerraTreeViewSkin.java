@@ -1827,6 +1827,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         }
     }
 
+    public void nodesCleared(TreeView treeView, Path path) {
+        // TODO
+    }
+
     public void nodesSorted(TreeView treeView, Path path) {
         BranchInfo branchInfo = (BranchInfo)getNodeInfoAt(path);
 

@@ -800,6 +800,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         invalidateComponent();
     }
 
+    public void itemsCleared(ListView listView) {
+        repaintComponent();
+    }
+
     public void itemsSorted(ListView listView) {
         repaintComponent();
     }

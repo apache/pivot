@@ -125,7 +125,7 @@ public class ListAdapter<T> implements List<T> {
 
     public void clear() {
         list.clear();
-        listListeners.itemsRemoved(this, 0, null);
+        listListeners.listCleared(this);
     }
 
     public T get(int index) {
