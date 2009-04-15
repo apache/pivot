@@ -81,7 +81,7 @@ public final class Display extends Container {
         if (immediate) {
             Graphics2D graphics = (Graphics2D)displayHost.getGraphics();
 
-            int scale = displayHost.getScale();
+            double scale = displayHost.getScale();
             if (scale != 1) {
                 graphics.scale(scale, scale);
             }

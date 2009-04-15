@@ -20,6 +20,7 @@ import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.dnd.DnDConstants;
@@ -87,7 +88,7 @@ public abstract class ApplicationContext {
         private DropAction userDropAction = null;
         private Component dropDescendant = null;
 
-        private int scale = 1;
+        private double scale = 1;
 
         private DropTargetListener dropTargetListener = new DropTargetListener() {
             public void dragEnter(DropTargetDragEvent event) {
@@ -269,15 +270,15 @@ public abstract class ApplicationContext {
             setFocusTraversalKeysEnabled(false);
         }
 
-        public int getScale() {
+        public double getScale() {
             return scale;
         }
 
-        public void setScale(int scale) {
+        public void setScale(double scale) {
             if (scale != this.scale) {
                 this.scale = scale;
-                display.setSize(Math.max(Math.round(getWidth() / (float)scale), 0),
-                    Math.max(Math.round(getHeight() / (float)scale), 0));
+                display.setSize(Math.max((int)Math.ceil(getWidth() / scale), 0),
+                    Math.max((int)Math.ceil(getHeight() / scale), 0));
             }
         }
 
@@ -306,7 +307,8 @@ public abstract class ApplicationContext {
                 if (scale == 1) {
                     super.repaint(x, y, width, height);
                 } else {
-                    super.repaint(x * scale, y * scale, width * scale + 1, height * scale + 1);
+                    super.repaint((int)Math.floor(x * scale), (int)Math.floor(y * scale),
+                        (int)Math.ceil(width * scale) + 1, (int)Math.ceil(height * scale) + 1);
                 }
             }
         }
@@ -435,6 +437,8 @@ public abstract class ApplicationContext {
                 decoratedGraphics = decorator.prepare(display, decoratedGraphics);
             }
 
+            graphics.setRenderingHint(RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_SPEED);
             display.paint(graphics);
 
             for (int i = 0; i < n; i++) {
@@ -575,8 +579,8 @@ public abstract class ApplicationContext {
                     if (scale == 1) {
                         display.setSize(getWidth(), getHeight());
                     } else {
-                        display.setSize(Math.max(Math.round(getWidth() / (float)scale), 0),
-                            Math.max(Math.round(getHeight() / (float)scale), 0));
+                        display.setSize(Math.max((int)Math.ceil(getWidth() / scale), 0),
+                            Math.max((int)Math.ceil(getHeight() / scale), 0));
                     }
                     break;
                 }
@@ -626,8 +630,8 @@ public abstract class ApplicationContext {
         protected void processMouseEvent(MouseEvent event) {
             super.processMouseEvent(event);
 
-            int x = Math.round(event.getX() / (float)scale);
-            int y = Math.round(event.getY() / (float)scale);
+            int x = (int)Math.round(event.getX() / scale);
+            int y = (int)Math.round(event.getY() / scale);
 
             // Set the mouse button state
             int mouseButtons = 0x00;
@@ -746,8 +750,8 @@ public abstract class ApplicationContext {
         protected void processMouseMotionEvent(MouseEvent event) {
             super.processMouseMotionEvent(event);
 
-            int x = Math.round(event.getX() / (float)scale);
-            int y = Math.round(event.getY() / (float)scale);
+            int x = (int)Math.round(event.getX() / scale);
+            int y = (int)Math.round(event.getY() / scale);
 
             // Set the mouse location
             mouseLocation = new Point(x, y);
@@ -884,8 +888,8 @@ public abstract class ApplicationContext {
             super.processMouseWheelEvent(event);
 
             // Get the event coordinates
-            int x = Math.round(event.getX() / (float)scale);
-            int y = Math.round(event.getY() / (float)scale);
+            int x = (int)Math.round(event.getX() / scale);
+            int y = (int)Math.round(event.getY() / scale);
 
             // Get the scroll type
             Mouse.ScrollType scrollType = null;
@@ -906,7 +910,7 @@ public abstract class ApplicationContext {
                 case MouseEvent.MOUSE_WHEEL: {
                     if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
                         && Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        setScale(Math.min(Math.max(scale - event.getWheelRotation(), 1), 8));
+                        setScale(Math.min(Math.max(scale - event.getWheelRotation() * 0.1, 1), 16));
                     } else if (dragDescendant == null) {
                         // Determine the mouse owner
                         Component mouseOwner;
