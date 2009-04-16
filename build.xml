@@ -36,6 +36,7 @@ limitations under the License.
     <property name="compiler.deprecation" value="true"/>
     <property name="compiler.debug" value="false"/>
     <property name="compiler.target" value="1.5"/>
+    <property name="compiler.encoding" value="UTF-8"/>
 
     <!-- Dynamic properties -->
     <tstamp/>
@@ -98,6 +99,7 @@ limitations under the License.
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -163,6 +165,7 @@ limitations under the License.
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -182,6 +185,7 @@ limitations under the License.
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
         </javac>
@@ -228,6 +232,7 @@ limitations under the License.
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -245,6 +250,7 @@ limitations under the License.
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -306,6 +312,7 @@ limitations under the License.
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -382,6 +389,7 @@ limitations under the License.
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -468,6 +476,7 @@ limitations under the License.
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -486,6 +495,7 @@ limitations under the License.
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -531,6 +541,7 @@ limitations under the License.
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
@@ -590,6 +601,7 @@ limitations under the License.
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
