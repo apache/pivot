@@ -68,8 +68,7 @@ limitations under the License.
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
                 <fileset dir="web/lib" includes="**/*.jar"/>
             </classpath>
-            <packageset dir="charts/src" includes="**/*"
-                excludes="pivot/charts/skin/**"/>
+            <packageset dir="charts/src" includes="**/*"/>
             <packageset dir="core/src" includes="**/*"/>
             <packageset dir="web/src" includes="**/*"/>
             <packageset dir="wtk/src" includes="**/*"/>
@@ -105,7 +104,7 @@ limitations under the License.
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="wtk/${folder.bin}"/>
-                <fileset dir="charts/lib" includes="**.*.jar"/>
+                <fileset dir="charts/lib" includes="**/*.jar"/>
             </classpath>
         </javac>
     </target>
@@ -121,30 +120,8 @@ limitations under the License.
                 <attribute name="Implementation-Title" value="Apache Pivot Charts"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
-            <fileset dir="charts/${folder.bin}">
-                <exclude name="pivot/charts/skin/**"/>
-            </fileset>
+            <fileset dir="charts/${folder.bin}"/>
             <fileset dir="charts/src">
-                <exclude name="pivot/charts/skin/**"/>
-                <exclude name="META-INF/**"/>
-                <exclude name="**/*.java"/>
-                <exclude name="**/package.html"/>
-            </fileset>
-        </jar>
-
-        <jar jarfile="${folder.lib}/${ant.project.name}-charts.jfree.jar">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Implementation-Title" value="Apache Pivot JFree Chart Provider"/>
-                <attribute name="Implementation-Version" value="1.0"/>
-            </manifest>
-            <fileset dir="charts/${folder.bin}">
-                <include name="pivot/charts/skin/**"/>
-            </fileset>
-            <fileset dir="charts/src">
-                <include name="pivot/charts/skin/**"/>
-                <include name="META-INF/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
@@ -608,12 +585,6 @@ limitations under the License.
                 <exclude name="${folder.doc}/**"/>
                 <exclude name="${folder.install}/**"/>
                 <exclude name="${folder.lib}/**"/>
-
-                <!-- Exclude JFree dependencies -->
-                <exclude name="charts/src/pivot/charts/skin/**"/>
-                <exclude name="charts/src/META-INF/**"/>
-                <exclude name="charts/lib/jcommon*.jar"/>
-                <exclude name="charts/lib/jfreechart*.jar"/>
             </fileset>
         </copy>
 
