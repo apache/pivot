@@ -911,7 +911,22 @@ public abstract class ApplicationContext {
                 case MouseEvent.MOUSE_WHEEL: {
                     if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
                         && Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        setScale(Math.min(Math.max(scale - event.getWheelRotation() * 0.1, 1), 16));
+                        int direction = event.getWheelRotation();
+
+                        double newScale;
+                        if (scale == 1) {
+                            newScale = (direction < 0 ? 1.25 : 1);
+                        } else if (scale == 1.25) {
+                            newScale = (direction < 0 ? 1.5 : 1);
+                        } else if (scale == 1.5) {
+                            newScale = (direction < 0 ? 2 : 1.25);
+                        } else if (scale == 2) {
+                            newScale = (direction < 0 ? 3 : 1.5);
+                        } else {
+                            newScale = scale - direction;
+                        }
+
+                        setScale(Math.min(newScale, 12));
                     } else if (dragDescendant == null) {
                         // Determine the mouse owner
                         Component mouseOwner;
