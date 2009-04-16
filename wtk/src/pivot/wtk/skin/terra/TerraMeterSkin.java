@@ -106,7 +106,7 @@ public class TerraMeterSkin extends ComponentSkin
             0, height, TerraTheme.darken(color)));
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
-        graphics.fillRect(0, 0, meterStop - 1, height - 1);
+        graphics.fillRect(0, 0, meterStop, height);
 
         graphics.setPaint(gridColor);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
