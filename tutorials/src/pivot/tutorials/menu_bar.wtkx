@@ -165,7 +165,7 @@ limitations under the License.
                                     <content:ButtonData text="Search" icon="@magnifier.png"/>
                                 </buttonData>
                             </Menu.Item>
-                            <Menu.Item>
+                            <Menu.Item wtkx:id="helpAboutMenuItem">
                                 <buttonData>
                                     <content:ButtonData text="About" icon="@application.png"/>
                                 </buttonData>

@@ -248,8 +248,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
         }
 
-        System.out.println("Origin: " + origin);
-
         // Create the application context
         applicationContext = new DesktopApplicationContext();
 

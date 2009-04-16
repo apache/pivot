@@ -97,9 +97,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                    }
                }
 
-               System.out.println("Origin: " + origin);
-
-                // Create the application context
+               // Create the application context
                applicationContext = new BrowserApplicationContext();
 
                 // Load properties specified on the query string
