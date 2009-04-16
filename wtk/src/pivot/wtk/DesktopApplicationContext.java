@@ -20,12 +20,9 @@ import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import javax.jnlp.BasicService;
-import javax.jnlp.ServiceManager;
-import javax.jnlp.UnavailableServiceException;
 
 import pivot.collections.HashMap;
 import pivot.collections.immutable.ImmutableMap;
@@ -218,23 +215,22 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         // Set the origin
-        BasicService basicService = null;
         try {
-            basicService = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
-        } catch(UnavailableServiceException exception) {
-            // No-op
-        }
+            // Load the JNLP classes dynamically because they are only available
+            // when run via javaws
+            Class<?> serviceManagerClass = Class.forName("javax.jnlp.ServiceManager");
+            Method lookupMethod = serviceManagerClass.getMethod("lookup", new Class<?>[] {String.class});
+            Object basicService = lookupMethod.invoke(null, "javax.jnlp.BasicService");
 
-        if (basicService != null) {
-            URL codeBase = basicService.getCodeBase();
+            Class<?> basicServiceClass = Class.forName("javax.jnlp.BasicService");
+            Method getCodeBaseMethod = basicServiceClass.getMethod("getCodeBase", new Class<?>[] {});
+            URL codeBase = (URL)getCodeBaseMethod.invoke(basicService);
 
             if (codeBase != null) {
-                try {
-                    origin = new URL(codeBase.getProtocol(), codeBase.getHost(), codeBase.getPort(), "");
-                } catch(MalformedURLException exception) {
-                    // No-op
-                }
+                origin = new URL(codeBase.getProtocol(), codeBase.getHost(), codeBase.getPort(), "");
             }
+        } catch (Exception exception) {
+            // No-op
         }
 
         if (origin == null) {
