@@ -44,13 +44,13 @@ limitations under the License.
     <property name="folder.release" value="apache-${ant.project.name}-${version}"/>
 
     <target name="build" description="Compiles all packages"
-        depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, demos, tutorials, tools"/>
+        depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, tutorials, tools"/>
 
     <target name="package"
-        depends="charts-package, core-package, web-package, wtk-package, demos-package, tutorials-package, tools-package"/>
+        depends="charts-package, core-package, web-package, wtk-package, tutorials-package, tools-package"/>
 
     <target name="clean" description="Removes all build artifacts"
-        depends="charts-clean, core-clean, web-clean, web-test-clean, wtk-clean, demos-clean, tutorials-clean, tools-clean">
+        depends="charts-clean, core-clean, web-clean, web-test-clean, wtk-clean, tutorials-clean, tools-clean">
         <delete dir="${folder.dist}"/>
         <delete dir="${folder.deploy}"/>
         <delete dir="${folder.doc}"/>
@@ -486,52 +486,6 @@ limitations under the License.
         </javac>
     </target>
 
-    <!-- Demos -->
-    <target name="demos" depends="core, web, wtk, charts">
-        <mkdir dir="demos/${folder.bin}"/>
-        <javac srcdir="demos/src"
-            destDir="demos/${folder.bin}"
-            optimize="${compiler.optimize}"
-            deprecation="${compiler.deprecation}"
-            debug="${compiler.debug}"
-            target="${compiler.target}"
-            encoding="${compiler.encoding}"
-            failonerror="true">
-            <compilerarg value="-Xlint"/>
-            <classpath>
-                <pathelement location="core/${folder.bin}"/>
-                <pathelement location="web/${folder.bin}"/>
-                <pathelement location="wtk/${folder.bin}"/>
-                <pathelement location="charts/${folder.bin}"/>
-                <fileset dir="demos/lib" includes="**/*.jar"/>
-            </classpath>
-        </javac>
-    </target>
-
-    <target name="demos-package" depends="demos">
-        <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-demos.jar">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                <attribute name="Implementation-Title" value="Apache Pivot Demos"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
-            <fileset dir="demos/${folder.bin}"/>
-            <fileset dir="demos/src">
-                <exclude name="**/*.java"/>
-                <exclude name="**/package.html"/>
-            </fileset>
-        </jar>
-    </target>
-
-    <target name="demos-clean">
-        <delete dir="demos/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}-demos.jar"/>
-    </target>
-
     <!-- Tutorials -->
     <target name="tutorials" depends="core, wtk, web, charts">
         <mkdir dir="tutorials/${folder.bin}"/>
@@ -660,18 +614,6 @@ limitations under the License.
                 <exclude name="charts/src/META-INF/**"/>
                 <exclude name="charts/lib/jcommon*.jar"/>
                 <exclude name="charts/lib/jfreechart*.jar"/>
-
-                <!-- Exclude Flex demo -->
-                <exclude name="demos/classes/**"/>
-                <exclude name="demos/src/pivot/demos/amf/**"/>
-                <exclude name="demos/lib/flex*.jar"/>
-
-                <!-- Exclude Google Talk demo -->
-                <exclude name="demos/src/pivot/demos/google/**"/>
-                <exclude name="demos/lib/gdata*.jar"/>
-
-                <!-- Exclude scripting engines -->
-                <exclude name="demos/lib/groovy*.jar"/>
             </fileset>
         </copy>
 
@@ -750,20 +692,14 @@ limitations under the License.
     <!-- Generate deployment files for online demos and tutorials -->
     <target name="deploy"
         depends="package">
-        <delete dir="${folder.deploy}"/>
         <mkdir dir="${folder.deploy}"/>
 
         <!-- Copy JARs to deployment directory -->
         <copy todir="${folder.deploy}">
             <fileset dir="${folder.lib}" includes="*.jar"/>
             <fileset dir="charts/lib" includes="*.jar"/>
-            <fileset dir="demos/lib" includes="*.jar"/>
             <fileset dir="wtk/lib" includes="*.jar"/>
         </copy>
-
-        <!-- Copy HTML files to deployment directory -->
-        <copy file="demos/src/pivot/demos/dom/dom_test.html" todir="${folder.deploy}"/>
-        <copy file="demos/src/pivot/demos/dom/im_client.html" todir="${folder.deploy}"/>
 
         <!-- Sign JARS -->
         <mkdir dir="${folder.deploy}/signed"/>
