@@ -73,12 +73,19 @@ public final class BrowserApplicationContext extends ApplicationContext {
                URL codeBase = getCodeBase();
                if (codeBase != null) {
                    if (codeBase.getProtocol().equals("file")) {
-                       File userHome = new File(System.getProperty("user.home"));
-
+                       File userHome = null;
                        try {
-                           origin = userHome.toURI().toURL();
-                       } catch(MalformedURLException exception) {
+                           userHome = new File(System.getProperty("user.home"));
+                       } catch(SecurityException exception) {
                            // No-op
+                       }
+
+                       if (userHome != null) {
+                           try {
+                               origin = userHome.toURI().toURL();
+                           } catch(MalformedURLException exception) {
+                               // No-op
+                           }
                        }
                    } else {
                        try {
