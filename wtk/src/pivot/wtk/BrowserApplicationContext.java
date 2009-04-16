@@ -18,7 +18,9 @@ package pivot.wtk;
 
 import java.applet.Applet;
 import java.awt.Graphics;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 
@@ -69,17 +71,26 @@ public final class BrowserApplicationContext extends ApplicationContext {
             public void run() {
                // Set the origin
                URL codeBase = getCodeBase();
-
                if (codeBase != null) {
-                  try {
-                     origin = new URL(codeBase.getProtocol(), codeBase.getHost(),
-                        codeBase.getPort(), "");
-                     System.out.println("Origin: " + origin);
-                  } catch(Exception exception) {
-                     System.out.print("Unable to determine application origin: "
-                        + exception);
-                  }
+                   if (codeBase.getProtocol().equals("file")) {
+                       File userHome = new File(System.getProperty("user.home"));
+
+                       try {
+                           origin = userHome.toURI().toURL();
+                       } catch(MalformedURLException exception) {
+                           // No-op
+                       }
+                   } else {
+                       try {
+                           origin = new URL(codeBase.getProtocol(), codeBase.getHost(),
+                               codeBase.getPort(), "");
+                       } catch(MalformedURLException exception) {
+                           // No-op
+                       }
+                   }
                }
+
+               System.out.println("Origin: " + origin);
 
                 // Create the application context
                applicationContext = new BrowserApplicationContext();

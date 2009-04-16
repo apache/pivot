@@ -20,6 +20,7 @@ import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.jnlp.BasicService;
@@ -174,7 +175,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         System.exit(0);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         if (application != null) {
             throw new IllegalStateException();
         }
@@ -217,22 +218,34 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         // Set the origin
+        BasicService basicService = null;
         try {
-            // If a JNLP context is available, get the code base
-            BasicService basicService = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
+            basicService = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
+        } catch(UnavailableServiceException exception) {
+            // No-op
+        }
+
+        if (basicService != null) {
             URL codeBase = basicService.getCodeBase();
 
             if (codeBase != null) {
-                origin = new URL(codeBase.getProtocol(), codeBase.getHost(), codeBase.getPort(), "");
+                try {
+                    origin = new URL(codeBase.getProtocol(), codeBase.getHost(), codeBase.getPort(), "");
+                } catch(MalformedURLException exception) {
+                    // No-op
+                }
             }
-        } catch(UnavailableServiceException exception) {
-            // No-op
         }
 
         if (origin == null) {
             // Could not obtain origin from JNLP; use user's home directory
             File userHome = new File(System.getProperty("user.home"));
-            origin = userHome.toURI().toURL();
+
+            try {
+                origin = userHome.toURI().toURL();
+            } catch(MalformedURLException exception) {
+                // No-op
+            }
         }
 
         System.out.println("Origin: " + origin);
@@ -244,8 +257,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
         if (applicationClassName == null) {
             System.err.println("Application class name is required.");
         } else {
-            Class<?> applicationClass = Class.forName(applicationClassName);
-            application = (Application)applicationClass.newInstance();
+            try {
+                Class<?> applicationClass = Class.forName(applicationClassName);
+                application = (Application)applicationClass.newInstance();
+            } catch(Exception exception) {
+                Alert.alert(MessageType.ERROR, exception.getMessage(),
+                    applicationContext.getDisplay());
+                exception.printStackTrace();
+            }
         }
 
         // Create the host frame
