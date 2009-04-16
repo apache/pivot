@@ -115,7 +115,7 @@ public class LargeData implements Application {
             if (abort) {
                 status = "Aborted";
             } else if (fault != null) {
-                status = fault.getMessage();
+                status = fault.toString();
             } else {
                 status = "Read " + i + " rows in " + (t1 - t0) + "ms";
             }
