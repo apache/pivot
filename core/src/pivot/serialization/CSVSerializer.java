@@ -26,6 +26,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.NoSuchElementException;
 
 import pivot.beans.BeanDictionary;
 import pivot.collections.ArrayList;
@@ -77,6 +78,47 @@ public class CSVSerializer implements Serializer<List<?>> {
 
         public int getLength() {
             return keys.getLength();
+        }
+    }
+
+    /**
+     * Allows a caller to retrieve the contents of a CSV stream iteratively.
+     *
+     * @author gbrown
+     */
+    public class StreamIterator {
+        private Reader reader;
+
+        private StreamIterator(Reader reader) throws IOException {
+            this.reader = reader;
+
+            // Move to the first character
+            c = reader.read();
+        }
+
+        public boolean hasNext() {
+            return (c != -1);
+        }
+
+        public Object next() throws IOException, SerializationException {
+            if (c == -1) {
+                throw new NoSuchElementException();
+            }
+
+            Object item = readItem(reader);
+            if (item != null) {
+                // Move to next line
+                while (c != -1
+                    && (c == '\r' || c == '\n')) {
+                    c = reader.read();
+                }
+            }
+
+            return item;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -157,7 +199,10 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @param reader
      * The reader from which data will be read.
      *
-     * @see #readObject(Reader)
+     * @return
+     * A list containing the data read from the CSV file. The list items are
+     * instances of Dictionary<String, Object> populated by mapping columns in
+     * the CSV file to keys in the key sequence.
      */
     public List<?> readObject(Reader reader)
         throws IOException, SerializationException {
@@ -186,57 +231,32 @@ public class CSVSerializer implements Serializer<List<?>> {
     }
 
     /**
-     * Reads values from a comma-separated value stream and notifies a listener
-     * as items are processed.
+     * Reads values from a comma-separated value stream.
      *
      * @param inputStream
      * The input stream from which data will be read.
      *
-     * @param listener
-     * The listener to notify.
-     *
-     * @see #readObject(Reader, CSVSerializerListener)
+     * @see #getStreamIterator(Reader)
      */
-    public void readObject(InputStream inputStream, CSVSerializerListener listener)
-        throws IOException, SerializationException {
+    public StreamIterator getStreamIterator(InputStream inputStream) throws IOException {
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset),
             BUFFER_SIZE);
-        readObject(reader, listener);
+        return getStreamIterator(reader);
     }
 
     /**
-     * Reads values from a comma-separated value stream and notifies a listener
-     * as items are processed. Items are instances of Dictionary<String, Object>
-     * populated by mapping columns in the CSV file to keys in the key sequence.
+     * Reads values from a comma-separated value stream.
      *
      * @param reader
      * The reader from which data will be read.
      *
-     * @param listener
-     * The listener to notify.
+     * @return
+     * A stream iterator on the data read from the CSV file. The list items are
+     * instances of Dictionary<String, Object> populated by mapping columns in
+     * the CSV file to keys in the key sequence.
      */
-    public void readObject(Reader reader, CSVSerializerListener listener)
-        throws IOException, SerializationException {
-        // Move to the first character
-        c = reader.read();
-
-        while (c != -1) {
-            Object item = readItem(reader);
-            while (item != null) {
-                listener.itemRead(this, item);
-
-                // Move to next line
-                while (c != -1
-                    && (c == '\r' || c == '\n')) {
-                    c = reader.read();
-                }
-
-                // Read the next item
-                item = readItem(reader);
-            }
-        }
-
-        listener.allItemsRead(this);
+    public StreamIterator getStreamIterator(Reader reader) throws IOException {
+        return new StreamIterator(reader);
     }
 
     @SuppressWarnings("unchecked")

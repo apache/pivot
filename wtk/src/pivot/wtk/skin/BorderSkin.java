@@ -39,8 +39,6 @@ import pivot.wtk.Theme;
 
 /**
  * Border skin.
- * <p>
- * TODO Draw title.
  *
  * @author gbrown
  */
