@@ -19,6 +19,12 @@ package pivot.wtk;
 import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.net.URL;
+
+import javax.jnlp.BasicService;
+import javax.jnlp.ServiceManager;
+import javax.jnlp.UnavailableServiceException;
 
 import pivot.collections.HashMap;
 import pivot.collections.immutable.ImmutableMap;
@@ -169,6 +175,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     public static void main(String[] args) throws Exception {
+        if (application != null) {
+            throw new IllegalStateException();
+        }
+
         // Get the application class name and startup properties
         String applicationClassName = null;
         properties = new HashMap<String, String>();
@@ -205,6 +215,27 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 }
             }
         }
+
+        // Set the origin
+        try {
+            // If a JNLP context is available, get the code base
+            BasicService basicService = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
+            URL codeBase = basicService.getCodeBase();
+
+            if (codeBase != null) {
+                origin = new URL(codeBase.getProtocol(), codeBase.getHost(), codeBase.getPort(), "");
+            }
+        } catch(UnavailableServiceException exception) {
+            // No-op
+        }
+
+        if (origin == null) {
+            // Could not obtain origin from JNLP; use user's home directory
+            File userHome = new File(System.getProperty("user.home"));
+            origin = userHome.toURI().toURL();
+        }
+
+        System.out.println("Origin: " + origin);
 
         // Create the application context
         applicationContext = new DesktopApplicationContext();

@@ -69,10 +69,12 @@ public final class BrowserApplicationContext extends ApplicationContext {
             public void run() {
                // Set the origin
                URL codeBase = getCodeBase();
+
                if (codeBase != null) {
                   try {
                      origin = new URL(codeBase.getProtocol(), codeBase.getHost(),
                         codeBase.getPort(), "");
+                     System.out.println("Origin: " + origin);
                   } catch(Exception exception) {
                      System.out.print("Unable to determine application origin: "
                         + exception);

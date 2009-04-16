@@ -39,8 +39,6 @@ import pivot.collections.Sequence;
  * and writes data to a comma-separated value (CSV) file.
  * <p>
  * TODO Add "firstLineContainsKeys" flag.
- * <p>
- * TODO Add support for variable delimiters.
  *
  * @author gbrown
  */
@@ -159,10 +157,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @param reader
      * The reader from which data will be read.
      *
-     * @return
-     * A list containing the data read from the CSV file.
-     * The list items are instances of Dictionary<String, Object> populated by
-     * mapping columns in the CSV file to keys in the key sequence.
+     * @see #readObject(Reader)
      */
     public List<?> readObject(Reader reader)
         throws IOException, SerializationException {
@@ -188,6 +183,60 @@ public class CSVSerializer implements Serializer<List<?>> {
         }
 
         return items;
+    }
+
+    /**
+     * Reads values from a comma-separated value stream and notifies a listener
+     * as items are processed.
+     *
+     * @param inputStream
+     * The input stream from which data will be read.
+     *
+     * @param listener
+     * The listener to notify.
+     *
+     * @see #readObject(Reader, CSVSerializerListener)
+     */
+    public void readObject(InputStream inputStream, CSVSerializerListener listener)
+        throws IOException, SerializationException {
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset),
+            BUFFER_SIZE);
+        readObject(reader, listener);
+    }
+
+    /**
+     * Reads values from a comma-separated value stream and notifies a listener
+     * as items are processed. Items are instances of Dictionary<String, Object>
+     * populated by mapping columns in the CSV file to keys in the key sequence.
+     *
+     * @param reader
+     * The reader from which data will be read.
+     *
+     * @param listener
+     * The listener to notify.
+     */
+    public void readObject(Reader reader, CSVSerializerListener listener)
+        throws IOException, SerializationException {
+        // Move to the first character
+        c = reader.read();
+
+        while (c != -1) {
+            Object item = readItem(reader);
+            while (item != null) {
+                listener.itemRead(this, item);
+
+                // Move to next line
+                while (c != -1
+                    && (c == '\r' || c == '\n')) {
+                    c = reader.read();
+                }
+
+                // Read the next item
+                item = readItem(reader);
+            }
+        }
+
+        listener.allItemsRead(this);
     }
 
     @SuppressWarnings("unchecked")
