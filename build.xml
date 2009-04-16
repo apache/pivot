@@ -366,12 +366,9 @@ limitations under the License.
             <condition>
                 <not>
                     <available classname="netscape.javascript.JSObject">
-                        <!--
                         <classpath>
-                            <fileset dir="${java.home}/lib" includes="**/*.jar" erroronmissingdir="false"/>
-                            <fileset dir="/Library/Java/Home/lib" includes="**/*.jar" erroronmissingdir="false"/>
+                            <fileset dir="${java.home}/lib" includes="**/*.jar"/>
                         </classpath>
-                        -->
                     </available>
                 </not>
             </condition>
@@ -390,10 +387,7 @@ limitations under the License.
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
-                <!--
-                <fileset dir="${java.home}/lib" includes="**/*.jar" erroronmissingdir="false"/>
-                <fileset dir="/Library/Java/Home/lib" includes="**/*.jar" erroronmissingdir="false"/>
-                -->
+                <fileset dir="${java.home}/lib" includes="**/*.jar"/>
             </classpath>
         </javac>
     </target>
