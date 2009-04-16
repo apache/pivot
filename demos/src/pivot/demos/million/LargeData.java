@@ -16,14 +16,16 @@
  */
 package pivot.demos.million;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
+import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.serialization.CSVSerializer;
-import pivot.util.concurrent.Task;
-import pivot.util.concurrent.TaskListener;
-import pivot.web.GetQuery;
+import pivot.serialization.SerializationException;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
@@ -34,25 +36,117 @@ import pivot.wtk.ListButton;
 import pivot.wtk.PushButton;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
-import pivot.wtk.TaskAdapter;
 import pivot.wtk.Window;
 import pivot.wtkx.WTKXSerializer;
 
 public class LargeData implements Application {
+    private class LoadDataCallback implements Runnable {
+        private class AddRowsCallback implements Runnable {
+            private ArrayList<Object> page;
+
+            public AddRowsCallback(ArrayList<Object> page) {
+                this.page = page;
+            }
+
+            @SuppressWarnings("unchecked")
+            public void run() {
+                List<Object> tableData = (List<Object>)tableView.getTableData();
+                for (Object item : page) {
+                    tableData.add(item);
+                }
+            }
+        }
+
+        private URL fileURL;
+
+        public LoadDataCallback(URL fileURL) {
+            this.fileURL = fileURL;
+        }
+
+        public void run() {
+            Exception fault = null;
+
+            long t0 = System.currentTimeMillis();
+
+            int i = 0;
+            try {
+                InputStream inputStream = null;
+
+                try {
+                    inputStream = fileURL.openStream();
+
+                    CSVSerializer csvSerializer = new CSVSerializer("ISO-8859-1");
+                    csvSerializer.getKeys().add("c0");
+                    csvSerializer.getKeys().add("c1");
+                    csvSerializer.getKeys().add("c2");
+                    csvSerializer.getKeys().add("c3");
+
+                    CSVSerializer.StreamIterator streamIterator = csvSerializer.getStreamIterator(inputStream);
+
+                    ArrayList<Object> page = new ArrayList<Object>(PAGE_SIZE);
+                    while (streamIterator.hasNext()
+                        && !abort) {
+                        Object item = streamIterator.next();
+                        if (item != null) {
+                            page.add(item);
+                        }
+                        i++;
+
+                        if (!streamIterator.hasNext()
+                            || page.getLength() == PAGE_SIZE) {
+                            ApplicationContext.queueCallback(new AddRowsCallback(page));
+                            page = new ArrayList<Object>(PAGE_SIZE);
+                        }
+                    }
+                } finally {
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                }
+            } catch(IOException exception) {
+                fault = exception;
+            } catch(SerializationException exception) {
+                fault = exception;
+            }
+
+            long t1 = System.currentTimeMillis();
+
+            final String status;
+            if (abort) {
+                status = "Aborted";
+            } else if (fault != null) {
+                status = fault.getMessage();
+            } else {
+                status = "Read " + i + " rows in " + (t1 - t0) + "ms";
+            }
+
+            ApplicationContext.queueCallback(new Runnable() {
+                public void run() {
+                    statusLabel.setText(status);
+                    loadDataButton.setEnabled(true);
+                    cancelButton.setEnabled(false);
+                }
+            });
+        }
+    }
+
     private String basePath = null;
 
 	private Window window = null;
 
     private ListButton fileListButton = null;
     private PushButton loadDataButton = null;
+    private PushButton cancelButton = null;
     private Label statusLabel = null;
     private TableView tableView = null;
     private TableViewHeader tableViewHeader = null;
 
-    private GetQuery getQuery = null;
     private CSVSerializer csvSerializer;
 
+    private volatile boolean abort = false;
+
     private static final String BASE_PATH_KEY = "basePath";
+    private static final int PAGE_SIZE = 100;
 
     public LargeData() {
     	csvSerializer = new CSVSerializer("ISO-8859-1");
@@ -77,9 +171,21 @@ public class LargeData implements Application {
         loadDataButton = (PushButton)wtkxSerializer.getObjectByName("loadDataButton");
         loadDataButton.getButtonPressListeners().add(new ButtonPressListener() {
         	public void buttonPressed(Button button) {
-        		button.setEnabled(false);
+        	    loadDataButton.setEnabled(false);
+        		cancelButton.setEnabled(true);
+
         		loadData();
         	}
+        });
+
+        cancelButton = (PushButton)wtkxSerializer.getObjectByName("cancelButton");
+        cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                abort = true;
+
+                loadDataButton.setEnabled(true);
+                cancelButton.setEnabled(false);
+            }
         });
 
         statusLabel = (Label)wtkxSerializer.getObjectByName("statusLabel");
@@ -113,40 +219,28 @@ public class LargeData implements Application {
     }
 
     private void loadData() {
+        abort = false;
+        tableView.getTableData().clear();
+
     	String fileName = (String)fileListButton.getSelectedItem();
 
     	URL origin = ApplicationContext.getOrigin();
-    	System.out.println(origin);
 
-    	getQuery = new GetQuery(origin.getHost(), origin.getPort(), basePath + fileName, false);
-    	String location = getQuery.getLocation().toString();
-    	statusLabel.setText("Loading data from " + location);
-    	System.out.println(location);
+    	URL fileURL = null;
+    	try {
+    	    fileURL = new URL(origin, basePath + "/" + fileName);
+    	} catch(MalformedURLException exception) {
+    	    System.err.println(exception.getMessage());
+    	}
 
-    	getQuery.setSerializer(csvSerializer);
+    	if (fileURL != null) {
+    	    statusLabel.setText("Loading " + fileURL);
 
-    	final long startTime = System.currentTimeMillis();
-
-        getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
-            public void taskExecuted(Task<Object> task) {
-                if (task == getQuery) {
-                    long endTime = System.currentTimeMillis();
-                    statusLabel.setText("Data loaded in " + (endTime - startTime) + " ms.");
-
-                    tableView.setTableData((List<?>)task.getResult());
-
-                    getQuery = null;
-                    loadDataButton.setEnabled(true);
-                }
-            }
-
-            public void executeFailed(Task<Object> task) {
-                if (task == getQuery) {
-                	statusLabel.setText(task.getFault().getMessage());
-                    getQuery = null;
-                    loadDataButton.setEnabled(true);
-                }
-            }
-        }));
+    	    LoadDataCallback callback = new LoadDataCallback(fileURL);
+    	    Thread thread = new Thread(callback);
+    	    thread.setDaemon(true);
+    	    thread.setPriority(Thread.MIN_PRIORITY);
+    	    thread.start();
+    	}
     }
 }
