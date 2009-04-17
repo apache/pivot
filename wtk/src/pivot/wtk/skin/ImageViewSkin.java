@@ -165,6 +165,32 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         return false;
     }
 
+    /**
+     * An image view's opacity style dictates whether or not it's opaque.
+     *
+     * @return
+     * <tt>true</tt> if <tt>opacity</tt> is <tt>1</tt>; <tt>false</tt> otherwise.
+     */
+    @Override
+    public boolean isOpaque() {
+        boolean opaque = (backgroundColor != null);
+
+        if (!opaque) {
+            ImageView imageView = (ImageView)getComponent();
+            Image image = imageView.getImage();
+
+            if (image != null) {
+                if (image.getWidth() >= getWidth()
+                    && image.getHeight() >= getHeight()
+                    && opacity == 1) {
+                    opaque = true;
+                }
+            }
+        }
+
+        return opaque;
+    }
+
     public Color getBackgroundColor() {
         return backgroundColor;
     }

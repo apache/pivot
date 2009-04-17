@@ -81,4 +81,13 @@ public interface Skin extends ConstrainedVisual {
      * <tt>true</tt> if this skin is focusable; </tt>false</tt>, otherwise.
      */
     public boolean isFocusable();
+
+    /**
+     * Tells whether or not this skin is fully opaque when painted.
+     *
+     * @return
+     * <tt>true</tt> if this skin is opaque; </tt>false</tt> if any part of it
+     * is transparent or translucent.
+     */
+    public boolean isOpaque();
 }

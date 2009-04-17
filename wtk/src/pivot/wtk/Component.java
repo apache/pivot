@@ -1776,6 +1776,17 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
+     * Tells whether or not this component is fully opaque when painted.
+     *
+     * @return
+     * <tt>true</tt> if this component is opaque; </tt>false</tt> if any part
+     * of it is transparent or translucent.
+     */
+    public boolean isOpaque() {
+        return skin.isOpaque();
+    }
+
+    /**
      * Returns this component's focusability. A focusable component is capable
      * of receiving the focus.
      *

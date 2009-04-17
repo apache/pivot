@@ -170,6 +170,19 @@ public abstract class ContainerSkin extends ComponentSkin
         return false;
     }
 
+    /**
+     * By default, a container's opacity depends on its
+     * <tt>backgroundPaint</tt> style.
+     *
+     * @return
+     * <tt>true</tt> if <tt>backgroundPaint</tt> is non-<tt>null</tt>.  False
+     * otherwise.
+     */
+    @Override
+    public boolean isOpaque() {
+        return (backgroundPaint != null);
+    }
+
     public Paint getBackgroundPaint() {
         return backgroundPaint;
     }

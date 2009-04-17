@@ -304,6 +304,17 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         return false;
     }
 
+    /**
+     * Labels are never fully opaque.
+     *
+     * @return
+     * <tt>false</tt>.
+     */
+    @Override
+    public boolean isOpaque() {
+        return false;
+    }
+
     public Font getFont() {
         return font;
     }

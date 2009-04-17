@@ -129,6 +129,13 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         return true;
     }
 
+    /**
+     * By default, skins are assumed to be opaque.
+     */
+    public boolean isOpaque() {
+        return true;
+    }
+
     // Component events
     public void parentChanged(Component component, Container previousParent) {
         // No-op

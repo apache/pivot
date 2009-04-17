@@ -342,12 +342,7 @@ public abstract class Container extends Component
 
     @Override
     public void paint(Graphics2D graphics) {
-        // Give the base method a copy of the graphics context; otherwise,
-        // container skins can change the graphics state before it is passed
-        // to subcomponents
-        Graphics2D containerGraphics = (Graphics2D)graphics.create();
-        super.paint(containerGraphics);
-        containerGraphics.dispose();
+        int count = getLength();
 
         // Determine the paint bounds
         Bounds paintBounds = new Bounds(0, 0, getWidth(), getHeight());
@@ -356,7 +351,32 @@ public abstract class Container extends Component
             paintBounds = paintBounds.intersect(new Bounds(clipBounds));
         }
 
-        for (Component component : this) {
+        // Determine if we need to paint the container, or if it's completely
+        // obscured by a child component.
+        boolean paintContainer = true;
+        for (int i = 0; i < count; i++) {
+            Component component = get(i);
+
+            if (component.isVisible()
+                && component.isOpaque()
+                && component.getBounds().contains(paintBounds)) {
+                paintContainer = false;
+                break;
+            }
+        }
+
+        if (paintContainer) {
+            // Give the base method a copy of the graphics context; otherwise,
+            // container skins can change the graphics state before it is passed
+            // to subcomponents
+            Graphics2D containerGraphics = (Graphics2D)graphics.create();
+            super.paint(containerGraphics);
+            containerGraphics.dispose();
+        }
+
+        for (int i = 0; i < count; i++) {
+            Component component = get(i);
+
             // Calculate the decorated bounds
             Bounds decoratedBounds = component.getDecoratedBounds();
 
@@ -374,8 +394,8 @@ public abstract class Container extends Component
                 // Prepare the decorators
                 DecoratorSequence decorators = component.getDecorators();
                 int n = decorators.getLength();
-                for (int i = n - 1; i >= 0; i--) {
-                    Decorator decorator = decorators.get(i);
+                for (int j = n - 1; j >= 0; j--) {
+                    Decorator decorator = decorators.get(j);
                     decoratedGraphics = decorator.prepare(component, decoratedGraphics);
                 }
 
@@ -386,8 +406,8 @@ public abstract class Container extends Component
                 componentGraphics.dispose();
 
                 // Update the decorators
-                for (int i = 0; i < n; i++) {
-                    Decorator decorator = decorators.get(i);
+                for (int j = 0; j < n; j++) {
+                    Decorator decorator = decorators.get(j);
                     decorator.update();
                 }
             }
