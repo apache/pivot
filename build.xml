@@ -660,14 +660,14 @@ limitations under the License.
         <checksum file="${folder.install}/${folder.release}.tar.gz" algorithm="sha"/>
     </target>
 
-    <!-- Generate deployment files for online demos and tutorials -->
+    <!-- Generate deployment files for online tutorials -->
     <target name="deploy"
         depends="package">
         <mkdir dir="${folder.deploy}"/>
 
         <!-- Copy JARs to deployment directory -->
         <copy todir="${folder.deploy}">
-            <fileset dir="${folder.lib}" includes="*.jar"/>
+            <fileset dir="${folder.lib}" includes="*.jar" excludes="*.server.jar"/>
             <fileset dir="charts/lib" includes="*.jar"/>
             <fileset dir="wtk/lib" includes="*.jar"/>
         </copy>

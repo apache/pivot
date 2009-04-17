@@ -42,6 +42,7 @@ public class TabPane extends Container {
     protected static class TabPaneAttributes extends Attributes {
         private String name = null;
         private Image icon = null;
+        private boolean closeable = false;
 
         public String getName() {
             return name;
@@ -70,6 +71,18 @@ public class TabPane extends Container {
             TabPane tabPane = (TabPane)component.getParent();
             if (tabPane != null) {
                 tabPane.tabPaneAttributeListeners.iconChanged(tabPane, component, previousIcon);
+            }
+        }
+
+        public boolean isCloseable() {
+            return closeable;
+        }
+
+        public void setCloseable(boolean closeable) {
+            Component component = getComponent();
+            TabPane tabPane = (TabPane)component.getParent();
+            if (tabPane != null) {
+                tabPane.tabPaneAttributeListeners.closeableChanged(tabPane, component);
             }
         }
     }
@@ -242,6 +255,12 @@ public class TabPane extends Container {
         public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
             for (TabPaneAttributeListener listener : this) {
                 listener.iconChanged(tabPane, component, previousIcon);
+            }
+        }
+
+        public void closeableChanged(TabPane tabPane, Component component) {
+            for (TabPaneAttributeListener listener : this) {
+                listener.closeableChanged(tabPane, component);
             }
         }
     }
@@ -434,6 +453,20 @@ public class TabPane extends Container {
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         setIcon(component, classLoader.getResource(icon));
+    }
+
+    public static boolean isCloseable(Component component) {
+        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
+        return (tabPaneAttributes == null) ? null : tabPaneAttributes.isCloseable();
+    }
+
+    public static void setCloseable(Component component, boolean closeable) {
+        TabPaneAttributes tabPaneAttributes = (TabPaneAttributes)component.getAttributes();
+        if (tabPaneAttributes == null) {
+            throw new IllegalStateException();
+        }
+
+        tabPaneAttributes.setCloseable(closeable);
     }
 }
 

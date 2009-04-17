@@ -41,4 +41,12 @@ public interface TabPaneAttributeListener {
      * @param previousIcon
      */
     public void iconChanged(TabPane tabPane, Component component, Image previousIcon);
+
+    /**
+     * Called when a tab's closeable attribute has changed.
+     *
+     * @param tabPane
+     * @param component
+     */
+    public void closeableChanged(TabPane tabPane, Component component);
 }

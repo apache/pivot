@@ -48,7 +48,7 @@ Pivot requires Java 5 or greater.
 * Pivot's charting components require a compatible chart provider. No such
   provider is included in this release, but one is available here:
 
-  http://pivot-jfree.googlecode.com/files/pivot-jfree.jar
+  http://pivot-jfree.googlecode.com/files/pivot-charts.jfree-1.0.jar
 
   Please note that this provider has a dependency on JFreeChart, which is
   licensed under LGPL.

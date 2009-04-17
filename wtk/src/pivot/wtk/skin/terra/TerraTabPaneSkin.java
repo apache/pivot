@@ -1193,6 +1193,10 @@ public class TerraTabPaneSkin extends ContainerSkin
         updateButtonData(component);
     }
 
+    public void closeableChanged(TabPane tabPane, Component component) {
+        // TODO
+    }
+
     // Button group events
     public void selectionChanged(Group group, Button previousSelection) {
         Button button = tabButtonGroup.getSelection();
