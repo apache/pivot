@@ -187,6 +187,10 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     public void setOpacity(float opacity) {
+        if (opacity < 0 || opacity > 1) {
+            throw new IllegalArgumentException("Opacity out of range [0,1].");
+        }
+
         this.opacity = opacity;
         repaintComponent();
     }
