@@ -20,6 +20,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
+import java.awt.Transparency;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
@@ -166,26 +167,21 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     /**
-     * An image view's opacity style dictates whether or not it's opaque.
+     * An image view's background color dictates whether or not it's opaque. We
+     * can't rely on the <tt>opacity</tt> style because even if the skin's
+     * opacity is <tt>1</tt>, the actual image itself may contain transparent
+     * or translucent pixels.
      *
      * @return
      * <tt>true</tt> if <tt>opacity</tt> is <tt>1</tt>; <tt>false</tt> otherwise.
      */
     @Override
     public boolean isOpaque() {
-        boolean opaque = (backgroundColor != null);
+        boolean opaque = false;
 
-        if (!opaque) {
-            ImageView imageView = (ImageView)getComponent();
-            Image image = imageView.getImage();
-
-            if (image != null) {
-                if (image.getWidth() >= getWidth()
-                    && image.getHeight() >= getHeight()
-                    && opacity == 1) {
-                    opaque = true;
-                }
-            }
+        if (backgroundColor != null
+            && backgroundColor.getTransparency() == Transparency.OPAQUE) {
+            opaque = true;
         }
 
         return opaque;

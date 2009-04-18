@@ -19,6 +19,7 @@ package pivot.wtk.skin;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Transparency;
 
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
@@ -180,7 +181,14 @@ public abstract class ContainerSkin extends ComponentSkin
      */
     @Override
     public boolean isOpaque() {
-        return (backgroundPaint != null);
+        boolean opaque = false;
+
+        if (backgroundPaint != null
+            && backgroundPaint.getTransparency() == Transparency.OPAQUE) {
+            opaque = true;
+        }
+
+        return opaque;
     }
 
     public Paint getBackgroundPaint() {
