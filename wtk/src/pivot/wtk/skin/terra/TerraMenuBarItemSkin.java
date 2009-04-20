@@ -18,6 +18,7 @@ package pivot.wtk.skin.terra;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Transparency;
 
 import pivot.wtk.Button;
 import pivot.wtk.Component;
@@ -93,6 +94,23 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
         dataRenderer.setSize(width, height);
 
         dataRenderer.paint(graphics);
+    }
+
+    @Override
+    public boolean isOpaque() {
+        boolean opaque = false;
+
+        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        MenuBar menuBar = menuBarItem.getMenuBar();
+
+        boolean highlight = menuPopup.isOpen();
+
+        if (highlight) {
+            Color highlightBackgroundColor = (Color)menuBar.getStyles().get("highlightBackgroundColor");
+            opaque = (highlightBackgroundColor.getTransparency() == Transparency.OPAQUE);
+        }
+
+        return opaque;
     }
 
     public Color getPopupBorderColor() {
