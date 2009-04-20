@@ -90,6 +90,8 @@ public abstract class ApplicationContext {
 
         private double scale = 1;
 
+        private boolean debugRepaint = false;
+
         private DropTargetListener dropTargetListener = new DropTargetListener() {
             public void dragEnter(DropTargetDragEvent event) {
                 if (dragDescendant != null) {
@@ -264,6 +266,11 @@ public abstract class ApplicationContext {
             } catch (SecurityException exception) {
             }
 
+            try {
+                debugRepaint = Boolean.parseBoolean(System.getProperty("pivot.wtk.debugRepaint"));
+            } catch (Exception ex) {
+            }
+
             // Add native drop support
             new java.awt.dnd.DropTarget(this, dropTargetListener);
 
@@ -318,7 +325,7 @@ public abstract class ApplicationContext {
         public void paint(Graphics graphics) {
             // Intersect the clip region with the bounds of this component
             // (for some reason, AWT does not do this automatically)
-            ((Graphics2D)graphics).clip(new java.awt.Rectangle(0, 0, getWidth(), getHeight()));
+            graphics.clipRect(0, 0, getWidth(), getHeight());
 
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
             if (clipBounds != null
@@ -328,6 +335,12 @@ public abstract class ApplicationContext {
                         if (!paintBuffered((Graphics2D)graphics)) {
                             paintDisplay((Graphics2D)graphics);
                         }
+                    }
+
+                    if (debugRepaint) {
+                        graphics.setColor(new java.awt.Color((int)(Math.random() * 256),
+                            (int)(Math.random() * 256), (int)(Math.random() * 256), 75));
+                        graphics.fillRect(0, 0, getWidth(), getHeight());
                     }
                 } catch (RuntimeException exception) {
                     System.err.println("Exception thrown during paint(): " + exception);
