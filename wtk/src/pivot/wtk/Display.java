@@ -82,12 +82,14 @@ public final class Display extends Container {
             Graphics2D graphics = (Graphics2D)displayHost.getGraphics();
 
             double scale = displayHost.getScale();
-            if (scale != 1) {
-                graphics.scale(scale, scale);
+            if (scale == 1) {
+                graphics.clipRect(x, y, width, height);
+            } else {
+                graphics.clipRect((int)Math.floor(x * scale), (int)Math.floor(y * scale),
+                    (int)Math.ceil(width * scale) + 1, (int)Math.ceil(height * scale) + 1);
             }
 
-            graphics.clipRect(x, y, width, height);
-            paint(graphics);
+            displayHost.paint(graphics);
             graphics.dispose();
         } else {
             displayHost.repaint(x, y, width, height);
