@@ -951,7 +951,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
         if (optimize) {
             scrollPane.setConsumeRepaint(false);
-            scrollPane.repaint(blitX, deltaScrollTop > 0 ? blitHeight : columnHeaderHeight,
+            scrollPane.repaint(blitX, columnHeaderHeight + (deltaScrollTop > 0 ? blitHeight : 0),
                 blitWidth, Math.abs(deltaScrollTop), true);
         }
 
@@ -1014,7 +1014,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
         if (optimize) {
             scrollPane.setConsumeRepaint(false);
-            scrollPane.repaint(deltaScrollLeft > 0 ? blitWidth : rowHeaderWidth, blitY,
+            scrollPane.repaint(rowHeaderWidth + (deltaScrollLeft > 0 ? blitWidth : 0), blitY,
                 Math.abs(deltaScrollLeft), blitHeight, true);
         }
 
