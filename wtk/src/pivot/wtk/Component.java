@@ -1644,6 +1644,51 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
+     * Creates a graphics context for this component. This graphics context
+     * will not be double buffered. In other words, drawing operations on it
+     * will operate directly on the video RAM.
+     *
+     * @return
+     * A graphics context for this component, or <tt>null</tt> if this
+     * component is not showing.
+     *
+     * @see #isShowing()
+     */
+    public Graphics2D getGraphics() {
+        Graphics2D graphics = null;
+
+        int x = 0;
+        int y = 0;
+
+        Component component = this;
+
+        while (component != null
+            && component.isVisible()
+            && !(component instanceof Display)) {
+            x += component.x;
+            y += component.y;
+
+            component = component.getParent();
+        }
+
+        if (component != null
+            && component.isVisible()) {
+            Display display = (Display)component;
+            graphics = (Graphics2D)display.getDisplayHost().getGraphics();
+
+            double scale = display.getDisplayHost().getScale();
+            if (scale != 1) {
+                graphics.scale(scale, scale);
+            }
+
+            graphics.translate(x, y);
+            graphics.clipRect(0, 0, getWidth(), getHeight());
+        }
+
+        return graphics;
+    }
+
+    /**
      * Returns the component's enabled state.
      *
      * @return
