@@ -230,6 +230,11 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         }
 
         @Override
+        public boolean isOpaque() {
+            return false;
+        }
+
+        @Override
         public void enabledChanged(Component component) {
             super.enabledChanged(component);
 
@@ -314,11 +319,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         private boolean highlighted = false;
         private boolean pressed = false;
 
-        @Override
-        public boolean isFocusable() {
-            return false;
-        }
-
         public int getPreferredWidth(int height) {
             return BUTTON_IMAGE_SIZE + 6;
         }
@@ -339,15 +339,25 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             int height = getHeight();
 
             // Paint the background
-        	float alpha = pressed ? 0.5f : highlighted ? 0.25f : 0.0f;
-        	graphics.setPaint(new Color(0, 0, 0, alpha));
+            float alpha = pressed ? 0.5f : highlighted ? 0.25f : 0.0f;
+            graphics.setPaint(new Color(0, 0, 0, alpha));
             graphics.fillRect(0, 0, width, height);
 
             // Paint the image
             SpinButtonImage buttonImage = (SpinButtonImage)spinButton.getButtonImage();
             graphics.translate((width - BUTTON_IMAGE_SIZE) / 2,
-        		(height - BUTTON_IMAGE_SIZE) / 2);
+                (height - BUTTON_IMAGE_SIZE) / 2);
             buttonImage.paint(graphics);
+        }
+
+        @Override
+        public boolean isFocusable() {
+            return false;
+        }
+
+        @Override
+        public boolean isOpaque() {
+            return false;
         }
 
         @Override
@@ -575,12 +585,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         return preferredHeight;
     }
 
-    @Override
-    public Dimensions getPreferredSize() {
-        // TODO Optimize
-        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
-    }
-
     public void layout() {
         int width = getWidth();
         int height = getHeight();
@@ -611,14 +615,14 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         int buttonHeight = upButton.getHeight();
 
         graphics.setPaint(new GradientPaint(buttonX + buttonWidth / 2, 0, buttonBevelColor,
-    		buttonX + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
+            buttonX + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
         graphics.fillRect(buttonX, 0, buttonWidth, height);
 
         graphics.setPaint(borderColor);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
         GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, 0,
             height, Orientation.VERTICAL);
-        GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, buttonHeight,
+        GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, buttonHeight + 1,
             buttonWidth + 1, Orientation.HORIZONTAL);
     }
 
