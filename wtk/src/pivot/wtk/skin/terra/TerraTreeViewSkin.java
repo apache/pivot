@@ -1623,7 +1623,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     public void focusedChanged(Component component, boolean temporary) {
         super.focusedChanged(component, temporary);
 
-        repaintComponent(component.isFocused());
+        repaintComponent(!component.isFocused());
     }
 
     // TreeView.Skin methods
