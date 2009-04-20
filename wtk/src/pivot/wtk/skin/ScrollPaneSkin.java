@@ -16,6 +16,11 @@
  */
 package pivot.wtk.skin;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Transparency;
+
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
@@ -58,7 +63,7 @@ public class ScrollPaneSkin extends ContainerSkin
     private static final int DEFAULT_VERTICAL_INCREMENT = 10;
 
     public ScrollPaneSkin() {
-        super();
+        setBackgroundColor(Color.WHITE);
 
         horizontalScrollBar.setUnitIncrement(DEFAULT_HORIZONTAL_INCREMENT);
         verticalScrollBar.setUnitIncrement(DEFAULT_VERTICAL_INCREMENT);
@@ -896,18 +901,44 @@ public class ScrollPaneSkin extends ContainerSkin
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and row header. Invalidating would yield
         // the correct positioning, but it would do much more work than needed.
+        int width = getWidth();
+        int height = getHeight();
 
         ScrollPane scrollPane = (ScrollPane)viewport;
+        Graphics2D graphics = scrollPane.getGraphics();
 
         Component view = scrollPane.getView();
-        Component columnHeader = scrollPane.getColumnHeader();
         Component rowHeader = scrollPane.getRowHeader();
+        Component columnHeader = scrollPane.getColumnHeader();
 
         int scrollTop = scrollPane.getScrollTop();
+        int deltaScrollTop = scrollTop - previousScrollTop;
         int columnHeaderHeight = 0;
 
         if (columnHeader != null) {
             columnHeaderHeight = columnHeader.getHeight();
+        }
+
+        int blitX = 0;
+        int blitY = columnHeaderHeight + Math.max(deltaScrollTop, 0);
+        int blitWidth = width - verticalScrollBar.getWidth();
+        int blitHeight = height - horizontalScrollBar.getHeight() -
+            columnHeaderHeight - Math.abs(deltaScrollTop);
+
+        boolean optimize = isOpaque();
+
+        if (optimize) {
+            try {
+                graphics.copyArea(blitX, blitY, blitWidth, blitHeight, 0, -deltaScrollTop);
+            } catch (Throwable throwable) {
+                // Due to Sun bug #6293145, we cannot call copyArea if scaling is
+                // applied to the graphics context, so we fall back gracefully here
+                optimize = false;
+            }
+        }
+
+        if (optimize) {
+            scrollPane.setConsumeRepaint(true);
         }
 
         if (view != null) {
@@ -916,6 +947,12 @@ public class ScrollPaneSkin extends ContainerSkin
 
         if (rowHeader != null) {
             rowHeader.setLocation(0, columnHeaderHeight - scrollTop);
+        }
+
+        if (optimize) {
+            scrollPane.setConsumeRepaint(false);
+            scrollPane.repaint(blitX, deltaScrollTop > 0 ? blitHeight : columnHeaderHeight,
+                blitWidth, Math.abs(deltaScrollTop), true);
         }
 
         if (scrollTop >= 0 && scrollTop <= getMaxScrollTop()) {
@@ -927,18 +964,44 @@ public class ScrollPaneSkin extends ContainerSkin
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and column header. Invalidating would yield
         // the correct positioning, but it would do much more work than needed.
+        int width = getWidth();
+        int height = getHeight();
 
         ScrollPane scrollPane = (ScrollPane)viewport;
+        Graphics2D graphics = scrollPane.getGraphics();
 
         Component view = scrollPane.getView();
-        Component columnHeader = scrollPane.getColumnHeader();
         Component rowHeader = scrollPane.getRowHeader();
+        Component columnHeader = scrollPane.getColumnHeader();
 
         int scrollLeft = scrollPane.getScrollLeft();
+        int deltaScrollLeft = scrollLeft - previousScrollLeft;
         int rowHeaderWidth = 0;
 
         if (rowHeader != null) {
             rowHeaderWidth = rowHeader.getWidth();
+        }
+
+        int blitX = rowHeaderWidth + Math.max(deltaScrollLeft, 0);
+        int blitY = 0;
+        int blitWidth = width - verticalScrollBar.getWidth() -
+            rowHeaderWidth - Math.abs(deltaScrollLeft);
+        int blitHeight = height - horizontalScrollBar.getHeight();
+
+        boolean optimize = isOpaque();
+
+        if (optimize) {
+            try {
+                graphics.copyArea(blitX, blitY, blitWidth, blitHeight, -deltaScrollLeft, 0);
+            } catch (Throwable throwable) {
+                // Due to Sun bug #6293145, we cannot call copyArea if scaling is
+                // applied to the graphics context, so we fall back gracefully here
+                optimize = false;
+            }
+        }
+
+        if (optimize) {
+            scrollPane.setConsumeRepaint(true);
         }
 
         if (view != null) {
@@ -947,6 +1010,12 @@ public class ScrollPaneSkin extends ContainerSkin
 
         if (columnHeader != null) {
             columnHeader.setLocation(rowHeaderWidth - scrollLeft, 0);
+        }
+
+        if (optimize) {
+            scrollPane.setConsumeRepaint(false);
+            scrollPane.repaint(deltaScrollLeft > 0 ? blitWidth : rowHeaderWidth, blitY,
+                Math.abs(deltaScrollLeft), blitHeight, true);
         }
 
         if (scrollLeft >= 0 && scrollLeft <= getMaxScrollLeft()) {

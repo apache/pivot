@@ -61,6 +61,9 @@ public abstract class Viewport extends Container {
     private int scrollTop = 0;
     private int scrollLeft = 0;
     private Component view;
+
+    private boolean consumeRepaint = false;
+
     private ViewportListenerList viewportListeners = new ViewportListenerList();
 
     @Override
@@ -125,9 +128,44 @@ public abstract class Viewport extends Container {
         }
     }
 
+    /**
+     * Returns the <tt>consumeRepaint</tt> flag, which controls whether the
+     * viewport will propagate repaints to its parent or consume them.
+     * This flag enables skins to optimize viewport scrolling by blitting the
+     * display to reduce the required repaint area.
+     *
+     * @return
+     * <tt>true</tt> if this viewport will consume repaints that bubble up
+     * through it; <tt>false</tt> if it will propagate them up like normal.
+     */
+    public boolean isConsumeRepaint() {
+        return consumeRepaint;
+    }
+
+    /**
+     * Sets the <tt>consumeRepaint</tt> flag, which controls whether the
+     * viewport will propagate repaints to its parent or consume them.
+     * This flag enables skins to optimize viewport scrolling by blitting the
+     * display to reduce the required repaint area.
+     *
+     * @param consumeRepaint
+     * <tt>true</tt> to consume repaints that bubble up through this viewport;
+     * <tt>false</tt> to propagate them up like normal.
+     */
+    public void setConsumeRepaint(boolean consumeRepaint) {
+        this.consumeRepaint = consumeRepaint;
+    }
+
     public Bounds getViewportBounds() {
         Viewport.Skin viewportSkin = (Viewport.Skin)getSkin();
         return viewportSkin.getViewportBounds();
+    }
+
+    @Override
+    public void repaint(int x, int y, int width, int height, boolean immediate) {
+        if (!consumeRepaint) {
+            super.repaint(x, y, width, height, immediate);
+        }
     }
 
     @Override
