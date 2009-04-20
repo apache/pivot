@@ -976,7 +976,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public void focusedChanged(Component component, boolean temporary) {
         super.focusedChanged(component, temporary);
 
-        repaintComponent();
+        repaintComponent(component.isFocused());
     }
 
     // Table view events

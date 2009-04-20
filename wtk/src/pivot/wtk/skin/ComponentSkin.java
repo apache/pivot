@@ -269,8 +269,12 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     protected void repaintComponent() {
+        repaintComponent(false);
+    }
+
+    protected void repaintComponent(boolean immediate) {
         if (component != null) {
-            component.repaint();
+            component.repaint(immediate);
         }
     }
 

@@ -187,9 +187,9 @@ public class TerraCalendarSkin extends CalendarSkin
 
         @Override
         public void focusedChanged(Component component, boolean temporary) {
-            super.focusedChanged(component, temporary);
-
             highlighted = component.isFocused();
+
+            super.focusedChanged(component, temporary);
         }
 
         @Override
