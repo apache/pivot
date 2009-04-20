@@ -59,11 +59,13 @@ public class ScrollPaneSkin extends ContainerSkin
     private int cachedHorizontalScrollBarHeight = 0;
     private int cachedVerticalScrollBarWidth = 0;
 
+    private boolean optimizeScrolling = true;
+
     private static final int DEFAULT_HORIZONTAL_INCREMENT = 10;
     private static final int DEFAULT_VERTICAL_INCREMENT = 10;
 
     public ScrollPaneSkin() {
-        setBackgroundColor(Color.WHITE);
+        setBackgroundPaint(Color.WHITE);
 
         horizontalScrollBar.setUnitIncrement(DEFAULT_HORIZONTAL_INCREMENT);
         verticalScrollBar.setUnitIncrement(DEFAULT_VERTICAL_INCREMENT);
@@ -802,6 +804,14 @@ public class ScrollPaneSkin extends ContainerSkin
         verticalScrollBar.setBlockIncrement(Math.max(1, viewportHeight - verticalReveal));
     }
 
+    @Override
+    public void setBackgroundPaint(Paint backgroundPaint) {
+        super.setBackgroundPaint(backgroundPaint);
+
+        optimizeScrolling = (backgroundPaint instanceof Color &&
+            backgroundPaint.getTransparency() == Transparency.OPAQUE);
+    }
+
     public int getHorizontalIncrement() {
         return horizontalScrollBar.getUnitIncrement();
     }
@@ -925,19 +935,19 @@ public class ScrollPaneSkin extends ContainerSkin
         int blitHeight = height - horizontalScrollBar.getHeight() -
             columnHeaderHeight - Math.abs(deltaScrollTop);
 
-        boolean optimize = isOpaque();
+        boolean optimizeScrolling = this.optimizeScrolling;
 
-        if (optimize) {
+        if (optimizeScrolling) {
             try {
                 graphics.copyArea(blitX, blitY, blitWidth, blitHeight, 0, -deltaScrollTop);
             } catch (Throwable throwable) {
                 // Due to Sun bug #6293145, we cannot call copyArea if scaling is
                 // applied to the graphics context, so we fall back gracefully here
-                optimize = false;
+                optimizeScrolling = false;
             }
         }
 
-        if (optimize) {
+        if (optimizeScrolling) {
             scrollPane.setConsumeRepaint(true);
         }
 
@@ -949,7 +959,7 @@ public class ScrollPaneSkin extends ContainerSkin
             rowHeader.setLocation(0, columnHeaderHeight - scrollTop);
         }
 
-        if (optimize) {
+        if (optimizeScrolling) {
             scrollPane.setConsumeRepaint(false);
             scrollPane.repaint(blitX, columnHeaderHeight + (deltaScrollTop > 0 ? blitHeight : 0),
                 blitWidth, Math.abs(deltaScrollTop), true);
@@ -988,19 +998,19 @@ public class ScrollPaneSkin extends ContainerSkin
             rowHeaderWidth - Math.abs(deltaScrollLeft);
         int blitHeight = height - horizontalScrollBar.getHeight();
 
-        boolean optimize = isOpaque();
+        boolean optimizeScrolling = this.optimizeScrolling;
 
-        if (optimize) {
+        if (optimizeScrolling) {
             try {
                 graphics.copyArea(blitX, blitY, blitWidth, blitHeight, -deltaScrollLeft, 0);
             } catch (Throwable throwable) {
                 // Due to Sun bug #6293145, we cannot call copyArea if scaling is
                 // applied to the graphics context, so we fall back gracefully here
-                optimize = false;
+                optimizeScrolling = false;
             }
         }
 
-        if (optimize) {
+        if (optimizeScrolling) {
             scrollPane.setConsumeRepaint(true);
         }
 
@@ -1012,7 +1022,7 @@ public class ScrollPaneSkin extends ContainerSkin
             columnHeader.setLocation(rowHeaderWidth - scrollLeft, 0);
         }
 
-        if (optimize) {
+        if (optimizeScrolling) {
             scrollPane.setConsumeRepaint(false);
             scrollPane.repaint(rowHeaderWidth + (deltaScrollLeft > 0 ? blitWidth : 0), blitY,
                 Math.abs(deltaScrollLeft), blitHeight, true);
