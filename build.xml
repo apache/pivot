@@ -43,6 +43,12 @@ limitations under the License.
     <property file="build.properties"/>
     <property name="folder.release" value="apache-${ant.project.name}-${version}"/>
 
+    <condition property="echo.jdk" value="Using JDK ${ant.java.version} (OK)"
+        else="WARNING: Using JDK ${ant.java.version}">
+        <equals arg1="${ant.java.version}" arg2="1.6"/>
+    </condition>
+    <echo message="${echo.jdk}"/>
+
     <target name="build" description="Compiles all packages"
         depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, tutorials, tools"/>
 

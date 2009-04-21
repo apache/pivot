@@ -24,6 +24,9 @@ Project Set-Up
   Mac OSX:
   http://developer.apple.com/qa/qa2004/qa1364.html
 
+* Ensure that the JAVA_HOME environment variable is set correctly
+  to point to a Java 6 installation.
+
 * Ensure that the JNLP APIs are on your classpath; follow the same process as
   above, substituting javaws.jar for plugin.jar.
 
