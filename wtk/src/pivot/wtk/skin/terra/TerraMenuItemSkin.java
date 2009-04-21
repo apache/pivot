@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
 
 import pivot.wtk.Button;
 import pivot.wtk.Component;
@@ -162,6 +163,24 @@ public class TerraMenuItemSkin extends MenuItemSkin {
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
+    }
+
+    @Override
+    public boolean isOpaque() {
+        boolean opaque = false;
+
+        Menu.Item menuItem = (Menu.Item)getComponent();
+        Menu menu = menuItem.getSection().getMenu();
+
+        boolean highlight = (menuItem.isFocused()
+            || menuPopup.isOpen());
+
+        if (highlight) {
+            Color highlightBackgroundColor = (Color)menu.getStyles().get("highlightBackgroundColor");
+            opaque = (highlightBackgroundColor.getTransparency() == Transparency.OPAQUE);
+        }
+
+        return opaque;
     }
 
     public Image getCheckmarkImage() {
