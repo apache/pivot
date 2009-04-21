@@ -19,6 +19,7 @@ package pivot.xml;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import pivot.collections.List;
 import pivot.serialization.Serializer;
 
 /**
@@ -43,5 +44,23 @@ public class XMLSerializer implements Serializer<Element> {
 
     public String getMIMEType(Element element) {
         return MIME_TYPE;
+    }
+
+    public static Object get(Element root, String path) {
+        // TODO Return the value at the given path
+        return null;
+    }
+
+    public static Element getElement(Element root, String path) {
+        return (Element)get(root, path);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<Element> getElements(Element root, String path) {
+        return (List<Element>)get(root, path);
+    }
+
+    public static String getAttribute(Element root, String path) {
+        return (String)get(root, path);
     }
 }

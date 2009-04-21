@@ -22,5 +22,19 @@ package pivot.xml;
  * @author gbrown
  */
 public interface ElementListener {
+    /**
+     * Called when an element's parent has changed.
+     *
+     * @param element
+     * @param previousParent
+     */
+    public void parentChanged(Element element, Element previousParent);
+
+    /**
+     * Called when an element's name has changed.
+     *
+     * @param element
+     * @param previousName
+     */
     public void nameChanged(Element element, Element.Name previousName);
 }
