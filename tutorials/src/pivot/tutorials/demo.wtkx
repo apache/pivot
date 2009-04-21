@@ -24,8 +24,8 @@ limitations under the License.
         <Border styles="{padding:0}">
             <content>
                 <ScrollPane wtkx:id="scrollPane" styles="{backgroundColor:11}"
-                    horizontalScrollBarPolicy="fillToCapacity"
-                    verticalScrollBarPolicy="fillToCapacity">
+                    horizontalScrollBarPolicy="auto"
+                    verticalScrollBarPolicy="auto">
                     <view>
                         <FlowPane orientation="vertical" styles="{padding:6}">
                             <Rollup wtkx:id="buttonsRollup">
