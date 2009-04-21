@@ -923,7 +923,10 @@ public class ScrollPaneSkin extends ContainerSkin
 
         int scrollTop = scrollPane.getScrollTop();
         int deltaScrollTop = scrollTop - previousScrollTop;
+
         int columnHeaderHeight = 0;
+        int horizontalScrollBarHeight = horizontalScrollBar.isVisible() ?
+            horizontalScrollBar.getHeight() : 0;
 
         if (columnHeader != null) {
             columnHeaderHeight = columnHeader.getHeight();
@@ -932,7 +935,7 @@ public class ScrollPaneSkin extends ContainerSkin
         int blitX = 0;
         int blitY = columnHeaderHeight + Math.max(deltaScrollTop, 0);
         int blitWidth = width - verticalScrollBar.getWidth();
-        int blitHeight = height - horizontalScrollBar.getHeight() -
+        int blitHeight = height - horizontalScrollBarHeight -
             columnHeaderHeight - Math.abs(deltaScrollTop);
 
         boolean optimizeScrolling = this.optimizeScrolling;
@@ -986,7 +989,10 @@ public class ScrollPaneSkin extends ContainerSkin
 
         int scrollLeft = scrollPane.getScrollLeft();
         int deltaScrollLeft = scrollLeft - previousScrollLeft;
+
         int rowHeaderWidth = 0;
+        int verticalScrollBarWidth = verticalScrollBar.isVisible() ?
+            verticalScrollBar.getWidth() : 0;
 
         if (rowHeader != null) {
             rowHeaderWidth = rowHeader.getWidth();
@@ -994,7 +1000,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
         int blitX = rowHeaderWidth + Math.max(deltaScrollLeft, 0);
         int blitY = 0;
-        int blitWidth = width - verticalScrollBar.getWidth() -
+        int blitWidth = width - verticalScrollBarWidth -
             rowHeaderWidth - Math.abs(deltaScrollLeft);
         int blitHeight = height - horizontalScrollBar.getHeight();
 
