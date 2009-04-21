@@ -81,16 +81,20 @@ public final class Display extends Container {
         if (immediate) {
             Graphics2D graphics = (Graphics2D)displayHost.getGraphics();
 
-            double scale = displayHost.getScale();
-            if (scale == 1) {
-                graphics.clipRect(x, y, width, height);
-            } else {
-                graphics.clipRect((int)Math.floor(x * scale), (int)Math.floor(y * scale),
-                    (int)Math.ceil(width * scale) + 1, (int)Math.ceil(height * scale) + 1);
-            }
+            // If the display host has been made non-displayable (as will
+            // happen when the native peer closes), graphics will be null.
+            if (graphics != null) {
+                double scale = displayHost.getScale();
+                if (scale == 1) {
+                    graphics.clipRect(x, y, width, height);
+                } else {
+                    graphics.clipRect((int)Math.floor(x * scale), (int)Math.floor(y * scale),
+                        (int)Math.ceil(width * scale) + 1, (int)Math.ceil(height * scale) + 1);
+                }
 
-            displayHost.paint(graphics);
-            graphics.dispose();
+                displayHost.paint(graphics);
+                graphics.dispose();
+            }
         } else {
             displayHost.repaint(x, y, width, height);
             paintPending = true;
