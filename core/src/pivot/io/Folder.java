@@ -169,7 +169,7 @@ public class Folder extends File implements List<File> {
     public void refresh() {
         // Clear the list contents
         files.clear();
-        listListeners.itemsRemoved(this, 0, null);
+        listListeners.listCleared(this);
 
         // Refresh list and fire an insert event for each file
         File[] fileList;
