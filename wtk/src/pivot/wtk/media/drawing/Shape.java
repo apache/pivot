@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Paint;
 import java.awt.geom.AffineTransform;
 
+import pivot.util.ListenerList;
 import pivot.wtk.Bounds;
 import pivot.wtk.Point;
 import pivot.wtk.Visual;
@@ -30,6 +31,46 @@ import pivot.wtk.Visual;
  * @author gbrown
  */
 public abstract class Shape implements Visual {
+    private class ShapeListenerList extends ListenerList<ShapeListener>
+        implements ShapeListener {
+        public void originChanged(Shape shape, int previousX, int previousY) {
+            for (ShapeListener listener : this) {
+                listener.originChanged(shape, previousX, previousY);
+            }
+        }
+
+        public void boundsChanged(Shape shape, int previousX, int previousY,
+            int previousWidth, int previousHeight) {
+            for (ShapeListener listener : this) {
+                listener.boundsChanged(shape, previousX, previousY, previousWidth, previousHeight);
+            }
+        }
+
+        public void strokeChanged(Shape shape, Paint previousStroke) {
+            for (ShapeListener listener : this) {
+                listener.strokeChanged(shape, previousStroke);
+            }
+        }
+
+        public void strokeThicknessChanged(Shape shape, int previousStrokeThickness) {
+            for (ShapeListener listener : this) {
+                listener.strokeThicknessChanged(shape, previousStrokeThickness);
+            }
+        }
+
+        public void fillChanged(Shape shape, Paint previousFill) {
+            for (ShapeListener listener : this) {
+                listener.fillChanged(shape, previousFill);
+            }
+        }
+
+        public void regionInvalidated(Shape shape, int x, int y, int width, int height) {
+            for (ShapeListener listener : this) {
+                listener.regionInvalidated(shape, x, y, width, height);
+            }
+        }
+    }
+
     private Group parent = null;
 
     private int x = 0;
@@ -46,6 +87,8 @@ public abstract class Shape implements Visual {
     private double scaleY = 0;
     private double translateX = 0;
     private double translateY = 0;
+
+    private ShapeListenerList shapeListeners = new ShapeListenerList();
 
     public Group getParent() {
         return parent;
@@ -205,7 +248,7 @@ public abstract class Shape implements Visual {
     }
 
     public AffineTransform getTransform() {
-        // TODO
+        // TODO Calculate transform based on properties
         return null;
     }
 
@@ -213,11 +256,19 @@ public abstract class Shape implements Visual {
         if (parent != null) {
             parent.invalidateRegion(this);
         }
+
+        // TODO Fire event
     }
 
     protected void invalidateBounds() {
         if (parent != null) {
             parent.invalidateBounds(this);
         }
+
+        // TODO Fire event when bounds are set
+    }
+
+    public ListenerList<ShapeListener> getShapeListeners() {
+        return shapeListeners;
     }
 }

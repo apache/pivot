@@ -16,12 +16,91 @@
  */
 package pivot.wtk.media.drawing;
 
+import java.awt.Paint;
+
 /**
  * Shape listener interface.
  *
  * @author gbrown
  */
 public interface ShapeListener {
+    /**
+     * Shape listener adapter.
+     *
+     * @author gbrown
+     */
+    public static class Adapter implements ShapeListener {
+        public void originChanged(Shape shape, int previousX, int previousY) {
+        }
+
+        public void boundsChanged(Shape shape, int previousX, int previousY,
+            int previousWidth, int previousHeight) {
+        }
+
+        public void strokeChanged(Shape shape, Paint previousStroke) {
+        }
+
+        public void strokeThicknessChanged(Shape shape, int previousStrokeThickness) {
+        }
+
+        public void fillChanged(Shape shape, Paint previousFill) {
+        }
+
+        public void regionInvalidated(Shape shape, int x, int y, int width, int height) {
+        }
+    }
+
+    /**
+     * Called when a shape's origin has changed.
+     *
+     * @param shape
+     * @param previousX
+     * @param previousY
+     */
     public void originChanged(Shape shape, int previousX, int previousY);
-    public void sizeChanged(Shape shape, int previousWidth, int previousHeight);
+
+    /**
+     * Called when a shape's bounds have changed.
+     *
+     * @param shape
+     * @param previousWidth
+     * @param previousHeight
+     */
+    public void boundsChanged(Shape shape, int previousX, int previousY,
+        int previousWidth, int previousHeight);
+
+    /**
+     * Called when a shape's stroke has changed.
+     *
+     * @param shape
+     * @param previousStroke
+     */
+    public void strokeChanged(Shape shape, Paint previousStroke);
+
+    /**
+     * Called when a shape's stroke thickness has changed.
+     *
+     * @param shape
+     * @param previousStrokeThickness
+     */
+    public void strokeThicknessChanged(Shape shape, int previousStrokeThickness);
+
+    /**
+     * Called when a shape's fill has changed.
+     *
+     * @param shape
+     * @param previousFill
+     */
+    public void fillChanged(Shape shape, Paint previousFill);
+
+    /**
+     * Called when a region within a shape needs to be repainted.
+     *
+     * @param shape
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
+    public void regionInvalidated(Shape shape, int x, int y, int width, int height);
 }

@@ -42,7 +42,8 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     }
 
     public void paint(Graphics2D graphics) {
-        // TODO
+        // TODO Paint each sub-shape, first applying the transform based on
+        // the sub-shape's attributes
     }
 
     public int add(Shape shape) {
@@ -101,7 +102,8 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
 
     @Override
     public boolean contains(int x, int y) {
-        // TODO
+        // TODO Ask each shape if it contains the point (translate to sub-shape
+        // space first)
         return false;
     }
 

@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import pivot.io.IOTask;
+import pivot.util.ListenerList;
 import pivot.util.concurrent.Dispatcher;
 import pivot.util.concurrent.TaskListener;
 import pivot.util.concurrent.TaskExecutionException;
@@ -35,6 +36,21 @@ import pivot.wtk.Visual;
  * @author gbrown
  */
 public abstract class Image implements Visual {
+    protected class ImageListenerList extends ListenerList<ImageListener>
+        implements ImageListener {
+        public void sizeChanged(Image image, int previousWidth, int previousHeight) {
+            for (ImageListener listener : this) {
+                listener.sizeChanged(image, previousWidth, previousHeight);
+            }
+        }
+
+        public void regionInvalidated(Image image, int x, int y, int width, int height) {
+            for (ImageListener listener : this) {
+                listener.regionInvalidated(image, x, y, width, height);
+            }
+        }
+    }
+
     /**
      * Task that executes an image load operation.
      *
@@ -90,8 +106,14 @@ public abstract class Image implements Visual {
         }
     }
 
+    protected ImageListenerList imageListeners = new ImageListenerList();
+
     public Dimensions getSize() {
         return new Dimensions(getWidth(), getHeight());
+    }
+
+    public ListenerList<ImageListener> getImageListeners() {
+        return imageListeners;
     }
 
     public static Image load(URL url) {

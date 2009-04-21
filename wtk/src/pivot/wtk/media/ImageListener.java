@@ -16,40 +16,29 @@
  */
 package pivot.wtk.media;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 /**
- * Image representing a bitmapped picture.
- * <p>
- * TODO Add a resize() method that will scale the image?
+ * Image listener interface.
  *
  * @author gbrown
  */
-public class Picture extends Image {
-    private BufferedImage bufferedImage = null;
+public interface ImageListener {
+    /**
+     * Called when an image's size has changed.
+     *
+     * @param image
+     * @param previousWidth
+     * @param previousHeight
+     */
+    public void sizeChanged(Image image, int previousWidth, int previousHeight);
 
-    public Picture(BufferedImage bufferedImage) {
-        if (bufferedImage == null) {
-            throw new IllegalArgumentException("bufferedImage is null.");
-        }
-
-        this.bufferedImage = bufferedImage;
-    }
-
-    public int getWidth() {
-        return bufferedImage.getWidth();
-    }
-
-    public int getHeight() {
-        return bufferedImage.getHeight();
-    }
-
-    public void paint(Graphics2D graphics) {
-        graphics.drawImage(bufferedImage, 0, 0, null);
-    }
-
-    public BufferedImage getBufferedImage() {
-        return bufferedImage;
-    }
+    /**
+     * Called when a region within an image needs to be repainted.
+     *
+     * @param image
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
+    public void regionInvalidated(Image image, int x, int y, int width, int height);
 }
