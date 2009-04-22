@@ -542,6 +542,9 @@ limitations under the License.
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
+                <pathelement location="core/${folder.bin}"/>
+                <pathelement location="web/${folder.bin}"/>
+                <pathelement location="wtk/${folder.bin}"/>
                 <fileset dir="demos/lib" includes="**/*.jar"/>
             </classpath>
         </javac>
