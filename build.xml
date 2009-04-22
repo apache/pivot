@@ -552,7 +552,7 @@ limitations under the License.
 
     <target name="demos-package" depends="build">
         <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}.jar">
+        <jar jarfile="${folder.lib}/${ant.project.name}-demos.jar">
             <fileset dir="demos/${folder.bin}"/>
             <fileset dir="demos/src">
                 <exclude name="**/*.java"/>
@@ -563,8 +563,7 @@ limitations under the License.
 
     <target name="demos-clean">
         <delete dir="demos/${folder.bin}"/>
-        <delete dir="${folder.deploy}"/>
-        <delete dir="${folder.lib}"/>
+        <delete file="${folder.lib}/${ant.project.name}-demos.jar"/>
     </target>
 
     <!-- Tools -->
