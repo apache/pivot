@@ -705,7 +705,7 @@ limitations under the License.
 
     <!-- Generate deployment files for online tutorials -->
     <target name="deploy"
-        depends="package">
+        depends="clean, package">
         <mkdir dir="${folder.deploy}"/>
 
         <!-- Copy JARs to deployment directory -->
