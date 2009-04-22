@@ -66,7 +66,7 @@ public class EnumList<E extends Enum<E>> implements List<E> {
 
                 // Notify listeners
                 if (listListeners != null) {
-                    listListeners.itemsRemoved(this, 0, null);
+                    listListeners.listCleared(this);
                 }
             }
 
