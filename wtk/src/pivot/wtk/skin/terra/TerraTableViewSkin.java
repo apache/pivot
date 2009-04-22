@@ -290,6 +290,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         for (int i = 0, n = columns.getLength(); i < n; i++) {
             TableView.Column column = columns.get(i);
             TableView.CellRenderer cellRenderer = column.getCellRenderer();
+            cellRenderer.render(null, tableView, column, false, false, false);
 
             rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(-1));
         }

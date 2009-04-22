@@ -61,30 +61,32 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
     @SuppressWarnings("unchecked")
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        String formattedNumber = null;
-
-        // Get the row and cell data
-        String columnName = column.getName();
-        if (columnName != null) {
-            Dictionary<String, Object> rowData;
-            if (value instanceof Dictionary<?, ?>) {
-                rowData = (Dictionary<String, Object>)value;
-            } else {
-                rowData = new BeanDictionary(value);
-            }
-
-            Object cellData = rowData.get(columnName);
-
-            if (cellData instanceof Number) {
-                formattedNumber = numberFormat.format((Number)cellData);
-            } else {
-                System.err.println("Data for \"" + columnName + "\" is not an instance of "
-                    + Number.class.getName());
-            }
-        }
-
-        setText(formattedNumber);
-
         renderStyles(tableView, rowSelected, rowDisabled);
+
+        if (value != null) {
+            String formattedNumber = null;
+
+            // Get the row and cell data
+            String columnName = column.getName();
+            if (columnName != null) {
+                Dictionary<String, Object> rowData;
+                if (value instanceof Dictionary<?, ?>) {
+                    rowData = (Dictionary<String, Object>)value;
+                } else {
+                    rowData = new BeanDictionary(value);
+                }
+
+                Object cellData = rowData.get(columnName);
+
+                if (cellData instanceof Number) {
+                    formattedNumber = numberFormat.format((Number)cellData);
+                } else {
+                    System.err.println("Data for \"" + columnName + "\" is not an instance of "
+                        + Number.class.getName());
+                }
+            }
+
+            setText(formattedNumber);
+        }
     }
 }

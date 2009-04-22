@@ -42,24 +42,26 @@ public class TableViewCellRenderer extends Label
     @SuppressWarnings("unchecked")
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        Object cellData = null;
+        renderStyles(tableView, rowSelected, rowDisabled);
 
-        // Get the row and cell data
-        String columnName = column.getName();
-        if (columnName != null) {
-            Dictionary<String, Object> rowData;
-            if (value instanceof Dictionary<?, ?>) {
-            	rowData = (Dictionary<String, Object>)value;
-            } else {
-            	rowData = new BeanDictionary(value);
+        if (value != null) {
+            Object cellData = null;
+
+            // Get the row and cell data
+            String columnName = column.getName();
+            if (columnName != null) {
+                Dictionary<String, Object> rowData;
+                if (value instanceof Dictionary<?, ?>) {
+                    rowData = (Dictionary<String, Object>)value;
+                } else {
+                    rowData = new BeanDictionary(value);
+                }
+
+                cellData = rowData.get(columnName);
             }
 
-            cellData = rowData.get(columnName);
+            setText(cellData == null ? null : cellData.toString());
         }
-
-        setText(cellData == null ? null : cellData.toString());
-
-        renderStyles(tableView, rowSelected, rowDisabled);
     }
 
     protected void renderStyles(TableView tableView, boolean rowSelected, boolean rowDisabled) {

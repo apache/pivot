@@ -55,33 +55,35 @@ public class TableViewBooleanCellRenderer extends FlowPane
     @SuppressWarnings("unchecked")
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        boolean checkboxSelected = false;
+        if (value != null) {
+            boolean checkboxSelected = false;
 
-        // Get the row and cell data
-        String columnName = column.getName();
-        if (columnName != null) {
-            Dictionary<String, Object> rowData;
-            if (value instanceof Dictionary<?, ?>) {
-                rowData = (Dictionary<String, Object>)value;
-            } else {
-                rowData = new BeanDictionary(value);
+            // Get the row and cell data
+            String columnName = column.getName();
+            if (columnName != null) {
+                Dictionary<String, Object> rowData;
+                if (value instanceof Dictionary<?, ?>) {
+                    rowData = (Dictionary<String, Object>)value;
+                } else {
+                    rowData = new BeanDictionary(value);
+                }
+
+                Object cellData = rowData.get(columnName);
+
+                if (cellData instanceof String) {
+                    cellData = Boolean.parseBoolean((String)cellData);
+                }
+
+                if (cellData instanceof Boolean) {
+                    checkboxSelected = (Boolean)cellData;
+                } else {
+                    System.err.println("Data for \"" + columnName + "\" is not an instance of "
+                        + Boolean.class.getName());
+                }
             }
 
-            Object cellData = rowData.get(columnName);
-
-            if (cellData instanceof String) {
-                cellData = Boolean.parseBoolean((String)cellData);
-            }
-
-            if (cellData instanceof Boolean) {
-                checkboxSelected = (Boolean)cellData;
-            } else {
-                System.err.println("Data for \"" + columnName + "\" is not an instance of "
-                    + Boolean.class.getName());
-            }
+            checkbox.setSelected(checkboxSelected);
+            checkbox.setEnabled(tableView.isEnabled() && !rowDisabled);
         }
-
-        checkbox.setSelected(checkboxSelected);
-        checkbox.setEnabled(tableView.isEnabled() && !rowDisabled);
     }
 }

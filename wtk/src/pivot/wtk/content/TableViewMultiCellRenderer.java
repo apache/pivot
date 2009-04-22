@@ -298,34 +298,42 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     @SuppressWarnings("unchecked")
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        Object cellData = null;
+        if (value == null) {
+            for (Class<?> key : cellRenderers) {
+                TableView.CellRenderer renderer = cellRenderers.get(key);
+                renderer.render(null, tableView, column, rowSelected,
+                    rowHighlighted, rowDisabled);
+            }
+        } else {
+            Object cellData = null;
 
-        // Get the row and cell data
-        String columnName = column.getName();
-        if (columnName != null) {
-            Dictionary<String, Object> rowData;
-            if (value instanceof Dictionary<?, ?>) {
-            	rowData = (Dictionary<String, Object>)value;
-            } else {
-            	rowData = new BeanDictionary(value);
+            // Get the row and cell data
+            String columnName = column.getName();
+            if (columnName != null) {
+                Dictionary<String, Object> rowData;
+                if (value instanceof Dictionary<?, ?>) {
+                    rowData = (Dictionary<String, Object>)value;
+                } else {
+                    rowData = new BeanDictionary(value);
+                }
+
+                cellData = rowData.get(columnName);
             }
 
-            cellData = rowData.get(columnName);
+            Class<?> valueClass = (cellData == null ? null : cellData.getClass());
+            TableView.CellRenderer cellRenderer = cellRenderers.get(valueClass);
+
+            if (cellRenderer == null) {
+                cellRenderer = defaultRenderer;
+            }
+
+            if (cellRenderer != currentRenderer) {
+                currentRenderer = cellRenderer;
+                cellRenderer.setSize(width, height);
+            }
+
+            cellRenderer.render(value, tableView, column, rowSelected, rowHighlighted, rowDisabled);
         }
-
-        Class<?> valueClass = (cellData == null ? null : cellData.getClass());
-        TableView.CellRenderer cellRenderer = cellRenderers.get(valueClass);
-
-        if (cellRenderer == null) {
-            cellRenderer = defaultRenderer;
-        }
-
-        if (cellRenderer != currentRenderer) {
-            currentRenderer = cellRenderer;
-            cellRenderer.setSize(width, height);
-        }
-
-        cellRenderer.render(value, tableView, column, rowSelected, rowHighlighted, rowDisabled);
     }
 
     public TableView.CellRenderer getDefaultRenderer() {

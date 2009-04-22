@@ -58,28 +58,30 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
     @SuppressWarnings("unchecked")
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        Image image = null;
+        if (value != null) {
+            Image image = null;
 
-        // Get the row and cell data
-        String columnName = column.getName();
-        if (columnName != null) {
-            Dictionary<String, Object> rowData;
-            if (value instanceof Dictionary<?, ?>) {
-            	rowData = (Dictionary<String, Object>)value;
-            } else {
-            	rowData = new BeanDictionary(value);
+            // Get the row and cell data
+            String columnName = column.getName();
+            if (columnName != null) {
+                Dictionary<String, Object> rowData;
+                if (value instanceof Dictionary<?, ?>) {
+                    rowData = (Dictionary<String, Object>)value;
+                } else {
+                    rowData = new BeanDictionary(value);
+                }
+
+                Object cellData = rowData.get(columnName);
+
+                if (cellData instanceof Image) {
+                    image = (Image)cellData;
+                } else {
+                    System.err.println("Data for \"" + columnName + "\" is not an instance of "
+                        + Image.class.getName());
+                }
             }
 
-            Object cellData = rowData.get(columnName);
-
-            if (cellData instanceof Image) {
-                image = (Image)cellData;
-            } else {
-                System.err.println("Data for \"" + columnName + "\" is not an instance of "
-                    + Image.class.getName());
-            }
+            setImage(image);
         }
-
-        setImage(image);
     }
 }

@@ -75,18 +75,7 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
     public void render(Object node, TreeView treeView, boolean expanded,
         boolean selected, TreeView.NodeCheckState checkState,
         boolean highlighted, boolean disabled) {
-        File file = (File)node;
-
-        // Update the image view
-        Image icon = (file instanceof Folder) ? folderImage : fileImage;
-
-        imageView.setImage(icon);
-        imageView.getStyles().put("opacity",
-            (treeView.isEnabled() && !disabled) ? 1.0f : 0.5f);
-
-        // Update the label
-        label.setText(file.getName());
-
+        // Update styles
         Object labelFont = treeView.getStyles().get("font");
         if (labelFont instanceof Font) {
             label.getStyles().put("font", labelFont);
@@ -109,6 +98,20 @@ public class TreeViewFileRenderer extends FlowPane implements TreeView.NodeRende
 
         if (color instanceof Color) {
             label.getStyles().put("color", color);
+        }
+
+        if (node != null) {
+            File file = (File)node;
+
+            // Update the image view
+            Image icon = (file instanceof Folder) ? folderImage : fileImage;
+
+            imageView.setImage(icon);
+            imageView.getStyles().put("opacity",
+                (treeView.isEnabled() && !disabled) ? 1.0f : 0.5f);
+
+            // Update the label
+            label.setText(file.getName());
         }
     }
 }
