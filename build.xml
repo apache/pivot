@@ -534,11 +534,11 @@ limitations under the License.
         <mkdir dir="demos/${folder.bin}"/>
         <javac srcdir="demos/src"
             destDir="demos/${folder.bin}"
-            optimize="true"
-            deprecation="true"
-            debug="false"
-            target="1.5"
-            encoding="UTF-8"
+            optimize="${compiler.optimize}"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="${compiler.target}"
+            encoding="${compiler.encoding}"
             failonerror="true">
             <compilerarg value="-Xlint"/>
             <classpath>
