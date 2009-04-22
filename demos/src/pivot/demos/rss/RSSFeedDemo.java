@@ -96,34 +96,7 @@ public class RSSFeedDemo implements Application {
 
         public void render(Object item, ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled) {
-            Element itemElement = (Element)item;
-
-            try {
-                String title = (String)xpath.evaluate("title", itemElement, XPathConstants.STRING);
-                titleLabel.setText(title);
-
-                String categories = "";
-                NodeList categoryNodeList = (NodeList)xpath.evaluate("category", itemElement,
-                    XPathConstants.NODESET);
-                for (int j = 0; j < categoryNodeList.getLength(); j++) {
-                    Element categoryElement = (Element)categoryNodeList.item(j);
-                    String category = categoryElement.getTextContent();
-                    if (j > 0) {
-                        categories += ", ";
-                    }
-
-                    categories += category;
-                }
-
-                categoriesLabel.setText(categories);
-
-                String submitter = (String)xpath.evaluate("dz:submitter/dz:username", itemElement,
-                    XPathConstants.STRING);
-                submitterLabel.setText(submitter);
-            } catch(XPathExpressionException exception) {
-                System.err.println(exception);
-            }
-
+            // Render styles
             Font labelFont = (Font)listView.getStyles().get("font");
             Font largeFont = labelFont.deriveFont(Font.BOLD, 14);
             titleLabel.getStyles().put("font", largeFont);
@@ -151,6 +124,37 @@ public class RSSFeedDemo implements Application {
                 categoriesLabel.getStyles().put("color", color);
                 submitterHeadingLabel.getStyles().put("color", color);
                 submitterLabel.getStyles().put("color", color);
+            }
+
+            // Render data
+            if (item != null) {
+                Element itemElement = (Element)item;
+
+                try {
+                    String title = (String)xpath.evaluate("title", itemElement, XPathConstants.STRING);
+                    titleLabel.setText(title);
+
+                    String categories = "";
+                    NodeList categoryNodeList = (NodeList)xpath.evaluate("category", itemElement,
+                        XPathConstants.NODESET);
+                    for (int j = 0; j < categoryNodeList.getLength(); j++) {
+                        Element categoryElement = (Element)categoryNodeList.item(j);
+                        String category = categoryElement.getTextContent();
+                        if (j > 0) {
+                            categories += ", ";
+                        }
+
+                        categories += category;
+                    }
+
+                    categoriesLabel.setText(categories);
+
+                    String submitter = (String)xpath.evaluate("dz:submitter/dz:username", itemElement,
+                        XPathConstants.STRING);
+                    submitterLabel.setText(submitter);
+                } catch(XPathExpressionException exception) {
+                    System.err.println(exception);
+                }
             }
         }
     }
@@ -213,7 +217,7 @@ public class RSSFeedDemo implements Application {
             }
         });
 
-        // In a real app, we'd load this in a task so we don't bog down the UI
+        // TODO Load this in a task; it is not always fast
         InputSource inputSource = new InputSource(FEED_URI);
 
         NodeList itemNodeList = (NodeList)xpath.evaluate("/rss/channel/item",

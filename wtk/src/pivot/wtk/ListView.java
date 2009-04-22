@@ -68,7 +68,8 @@ public class ListView extends Component {
          * Prepares the renderer for layout or paint.
          *
          * @param item
-         * The item to render.
+         * The item to render, or <tt>null</tt> if called to calculate
+         * preferred size.
          *
          * @param listView
          * The host component.

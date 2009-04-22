@@ -266,6 +266,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public int getItemHeight() {
         ListView listView = (ListView)getComponent();
         ListView.ItemRenderer renderer = listView.getItemRenderer();
+        renderer.render(null, listView, false, false, false, false);
 
         int itemHeight = renderer.getPreferredHeight(-1);
         if (listView.getCheckmarksEnabled()) {
