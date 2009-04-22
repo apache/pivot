@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Border styles="{padding:8}"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
+    xmlns="pivot.wtk">
+    <content>
+        <CardPane wtkx:id="cardPane" orientation="horizontal" selectedIndex="0">
+            <Form wtkx:id="loginForm" styles="{fieldAlignment:'justify'}">
+                <sections>
+                    <Form.Section>
+                        <TextInput wtkx:id="usernameTextInput" Form.name="Username" />
+                        <TextInput wtkx:id="passwordTextInput" Form.name="Password" password="true" />
+                        <TextInput wtkx:id="domainTextInput" Form.name="Domain"/>
+                        <FlowPane>
+                            <PushButton wtkx:id="loginButton" buttonData="Login"/>
+                        </FlowPane>
+                        <Label wtkx:id="errorMessageLabel" styles="{color:'#ff0000', wrapText:true}"/>
+                    </Form.Section>
+                </sections>
+            </Form>
+
+            <Border title="Messages" styles="{padding:4, color:10}">
+                <content>
+                    <Label wtkx:id="messageLabel" styles="{horizontalAlignment:'center', verticalAlignment:'center', wrapText:true}"/>
+                </content>
+            </Border>
+        </CardPane>
+    </content>
+</Border>
