@@ -50,13 +50,13 @@ limitations under the License.
     <echo message="${echo.jdk}"/>
 
     <target name="build" description="Compiles all packages"
-        depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, tutorials, tools"/>
+        depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, tutorials, demos, tools"/>
 
     <target name="package"
-        depends="charts-package, core-package, web-package, wtk-package, tutorials-package, tools-package"/>
+        depends="charts-package, core-package, web-package, wtk-package, tutorials-package, demos-package, tools-package"/>
 
     <target name="clean" description="Removes all build artifacts"
-        depends="charts-clean, core-clean, web-clean, web-test-clean, wtk-clean, tutorials-clean, tools-clean">
+        depends="charts-clean, core-clean, web-clean, web-test-clean, wtk-clean, tutorials-clean, demos-clean, tools-clean">
         <delete dir="${folder.dist}"/>
         <delete dir="${folder.deploy}"/>
         <delete dir="${folder.doc}"/>
@@ -529,6 +529,41 @@ limitations under the License.
         <delete file="${folder.lib}/${ant.project.name}-stocktracker.jar"/>
     </target>
 
+    <!-- Demos -->
+    <target name="demos">
+        <mkdir dir="demos/${folder.bin}"/>
+        <javac srcdir="demos/src"
+            destDir="demos/${folder.bin}"
+            optimize="true"
+            deprecation="true"
+            debug="false"
+            target="1.5"
+            encoding="UTF-8"
+            failonerror="true">
+            <compilerarg value="-Xlint"/>
+            <classpath>
+                <fileset dir="demos/lib" includes="**/*.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="demos-package" depends="build">
+        <mkdir dir="${folder.lib}"/>
+        <jar jarfile="${folder.lib}/${ant.project.name}.jar">
+            <fileset dir="demos/${folder.bin}"/>
+            <fileset dir="demos/src">
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="demos-clean">
+        <delete dir="demos/${folder.bin}"/>
+        <delete dir="${folder.deploy}"/>
+        <delete dir="${folder.lib}"/>
+    </target>
+
     <!-- Tools -->
     <target name="tools" depends="core, wtk, web">
         <mkdir dir="tools/${folder.bin}"/>
@@ -675,6 +710,7 @@ limitations under the License.
         <copy todir="${folder.deploy}">
             <fileset dir="${folder.lib}" includes="*.jar" excludes="*.server.jar"/>
             <fileset dir="charts/lib" includes="*.jar"/>
+            <fileset dir="demos/lib" includes="*.jar"/>
             <fileset dir="wtk/lib" includes="*.jar"/>
         </copy>
 
