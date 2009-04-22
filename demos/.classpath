@@ -13,8 +13,6 @@
 	<classpathentry kind="lib" path="lib/gdata-core-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/smack.jar"/>
 	<classpathentry kind="lib" path="lib/smackx.jar"/>
-	<classpathentry kind="lib" path="lib/flex-messaging-core.jar"/>
-	<classpathentry kind="lib" path="lib/flex-messaging-common.jar"/>
 	<classpathentry kind="lib" path="classes"/>
 	<classpathentry kind="lib" path="lib/gdata-media-1.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/charts"/>
