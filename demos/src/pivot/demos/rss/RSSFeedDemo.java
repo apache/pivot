@@ -33,8 +33,13 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import pivot.collections.Dictionary;
+import pivot.io.IOTask;
+import pivot.util.concurrent.Task;
+import pivot.util.concurrent.TaskExecutionException;
+import pivot.util.concurrent.TaskListener;
 import pivot.wtk.Application;
 import pivot.wtk.BrowserApplicationContext;
+import pivot.wtk.CardPane;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Display;
@@ -53,11 +58,24 @@ import pivot.wtkx.WTKXSerializer;
  * @author gbrown
  */
 public class RSSFeedDemo implements Application {
-    /**
-     * Prepares an RSS feed news item for presentation in a list view.
-     *
-     * @author gbrown
-     */
+    // Loads the feed in the background so the UI doesn't block
+    private class LoadFeedTask extends IOTask<NodeList> {
+        public NodeList execute() throws TaskExecutionException {
+            NodeList itemNodeList = null;
+
+            try {
+                InputSource inputSource = new InputSource(FEED_URI);
+                itemNodeList = (NodeList)xpath.evaluate("/rss/channel/item",
+                    inputSource, XPathConstants.NODESET);
+            } catch(XPathExpressionException exception) {
+                // No-op
+            }
+
+            return itemNodeList;
+        }
+    }
+
+    // Prepares an RSS feed news item for presentation in a list view
     private class RSSItemRenderer extends FlowPane implements ListView.ItemRenderer {
         private Label titleLabel = new Label();
         private Label categoriesHeadingLabel = new Label("subject:");
@@ -159,14 +177,41 @@ public class RSSFeedDemo implements Application {
         }
     }
 
-    private Window window = null;
-    private ListView feedListView = null;
+    // Handles double-clicks on the list view
+    private class FeedViewMouseButtonHandler extends ComponentMouseButtonListener.Adapter {
+        private int index = -1;
+
+        @Override
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            if (count == 1) {
+                index = feedListView.getItemAt(y);
+            } else if (count == 2
+                && feedListView.getItemAt(y) == index) {
+                Element itemElement = (Element)feedListView.getListData().get(index);
+
+                try {
+                    String link = (String)xpath.evaluate("link", itemElement, XPathConstants.STRING);
+                    BrowserApplicationContext.open(new URL(link));
+                } catch(XPathExpressionException exception) {
+                    System.err.print(exception);
+                } catch(MalformedURLException exception) {
+                    System.err.print(exception);
+                }
+            }
+
+            return false;
+        }
+    };
 
     private XPath xpath = XPathFactory.newInstance().newXPath();
+
+    private Window window = null;
+    private ListView feedListView = null;
 
     public static final String FEED_URI = "http://feeds.dzone.com/javalobby/frontpage?format=xml";
 
     public RSSFeedDemo() {
+        // Set the namespace resolver
         xpath.setNamespaceContext(new NamespaceContext() {
             public String getNamespaceURI(String prefix) {
                 String namespaceURI;
@@ -196,33 +241,22 @@ public class RSSFeedDemo implements Application {
 
         feedListView = (ListView)wtkxSerializer.getObjectByName("feedListView");
         feedListView.setItemRenderer(new RSSItemRenderer());
+        feedListView.getComponentMouseButtonListeners().add(new FeedViewMouseButtonHandler());
 
-        feedListView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
-            @Override
-            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-                if (count == 2) {
-                    Element itemElement = (Element)feedListView.getListData().get(feedListView.getItemAt(y));
+        final CardPane cardPane = (CardPane)wtkxSerializer.getObjectByName("cardPane");
+        final Label statusLabel = (Label)wtkxSerializer.getObjectByName("statusLabel");
 
-                    try {
-                        String link = (String)xpath.evaluate("link", itemElement, XPathConstants.STRING);
-                        BrowserApplicationContext.open(new URL(link));
-                    } catch(XPathExpressionException exception) {
-                        System.err.print(exception);
-                    } catch(MalformedURLException exception) {
-                        System.err.print(exception);
-                    }
-                }
+        LoadFeedTask loadFeedTask = new LoadFeedTask();
+        loadFeedTask.execute(new TaskListener<NodeList>() {
+            public void taskExecuted(Task<NodeList> task) {
+                feedListView.setListData(new NodeListAdapter(task.getResult()));
+                cardPane.setSelectedIndex(1);
+            }
 
-                return false;
+            public void executeFailed(Task<NodeList> task) {
+                statusLabel.setText(task.getFault().toString());
             }
         });
-
-        // TODO Load this in a task; it is not always fast
-        InputSource inputSource = new InputSource(FEED_URI);
-
-        NodeList itemNodeList = (NodeList)xpath.evaluate("/rss/channel/item",
-            inputSource, XPathConstants.NODESET);
-        feedListView.setListData(new NodeListAdapter(itemNodeList));
 
         window.setMaximized(true);
         window.open(display);
