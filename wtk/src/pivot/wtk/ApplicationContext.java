@@ -410,11 +410,11 @@ public abstract class ApplicationContext {
             // If we have a valid volatile image, attempt to paint the
             // display to it
             if (volatileImage != null) {
-                int valid = volatileImage.validate(getGraphicsConfiguration());
+                int valid = volatileImage.validate(gc);
 
                 if (valid == java.awt.image.VolatileImage.IMAGE_OK
                     || valid == java.awt.image.VolatileImage.IMAGE_RESTORED) {
-                    Graphics2D volatileImageGraphics = (Graphics2D)volatileImage.getGraphics();
+                    Graphics2D volatileImageGraphics = volatileImage.createGraphics();
                     volatileImageGraphics.setClip(0, 0, clipBounds.width, clipBounds.height);
                     volatileImageGraphics.translate(-clipBounds.x, -clipBounds.y);
 

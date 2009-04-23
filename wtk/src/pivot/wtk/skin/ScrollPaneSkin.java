@@ -19,6 +19,7 @@ package pivot.wtk.skin;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Transparency;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
@@ -58,7 +59,7 @@ public class ScrollPaneSkin extends ContainerSkin
     private int cachedHorizontalScrollBarHeight = 0;
     private int cachedVerticalScrollBarWidth = 0;
 
-    private boolean optimizeScrolling = false;
+    private boolean optimizeScrolling = true;
 
     private static final int DEFAULT_HORIZONTAL_INCREMENT = 10;
     private static final int DEFAULT_VERTICAL_INCREMENT = 10;
@@ -807,11 +808,8 @@ public class ScrollPaneSkin extends ContainerSkin
     public void setBackgroundPaint(Paint backgroundPaint) {
         super.setBackgroundPaint(backgroundPaint);
 
-        // TODO
-        /*
         optimizeScrolling = (backgroundPaint instanceof Color &&
             backgroundPaint.getTransparency() == Transparency.OPAQUE);
-        */
     }
 
     public int getHorizontalIncrement() {
