@@ -40,33 +40,6 @@ public class FileCellRenderer extends Label implements TableView.CellRenderer {
 
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        File file = (File)value;
-        String columnName = column.getName();
-
-        String text;
-        if (columnName.equals(NAME_KEY)) {
-            text = file.getName();
-            getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-        } else if (columnName.equals(SIZE_KEY)) {
-            long length = file.length();
-
-            // TODO kB, MB, etc.
-            text = Long.toString(length);
-            getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
-        } else if (columnName.equals(LAST_MODIFIED_KEY)) {
-            long lastModified = file.lastModified();
-            Date lastModifiedDate = new Date(lastModified);
-
-            // TODO Use an appropriate format
-            DateFormat dateFormat = DateFormat.getDateInstance();
-            text = dateFormat.format(lastModifiedDate);
-            getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
-        } else {
-            text = null;
-        }
-
-        setText(text);
-
         // Update the styles
         Object font = tableView.getStyles().get("font");
 
@@ -92,6 +65,36 @@ public class FileCellRenderer extends Label implements TableView.CellRenderer {
 
         if (color instanceof Color) {
             getStyles().put("color", color);
+        }
+
+        // Update the data
+        if (value != null) {
+            File file = (File)value;
+            String columnName = column.getName();
+
+            String text;
+            if (columnName.equals(NAME_KEY)) {
+                text = file.getName();
+                getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+            } else if (columnName.equals(SIZE_KEY)) {
+                long length = file.length();
+
+                // TODO kB, MB, etc.
+                text = Long.toString(length);
+                getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+            } else if (columnName.equals(LAST_MODIFIED_KEY)) {
+                long lastModified = file.lastModified();
+                Date lastModifiedDate = new Date(lastModified);
+
+                // TODO Use an appropriate format
+                DateFormat dateFormat = DateFormat.getDateInstance();
+                text = dateFormat.format(lastModifiedDate);
+                getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+            } else {
+                text = null;
+            }
+
+            setText(text);
         }
     }
 }

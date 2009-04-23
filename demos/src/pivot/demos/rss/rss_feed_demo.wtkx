@@ -23,8 +23,9 @@ limitations under the License.
     xmlns="pivot.wtk">
     <content>
         <CardPane wtkx:id="cardPane" selectedIndex="0">
-            <Label wtkx:id="statusLabel" text="Loading..." styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-            <ScrollPane horizontalScrollBarPolicy="fill">
+            <Label wtkx:id="statusLabel" text="Loading..."
+                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+            <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
                 <view>
                     <ListView wtkx:id="feedListView"/>
                 </view>

@@ -203,7 +203,7 @@ public class RSSFeedDemo implements Application {
         }
     };
 
-    private XPath xpath = XPathFactory.newInstance().newXPath();
+    private XPath xpath;
 
     private Window window = null;
     private ListView feedListView = null;
@@ -211,6 +211,9 @@ public class RSSFeedDemo implements Application {
     public static final String FEED_URI = "http://feeds.dzone.com/javalobby/frontpage?format=xml";
 
     public RSSFeedDemo() {
+        // Create an XPath instance
+        xpath = XPathFactory.newInstance().newXPath();
+
         // Set the namespace resolver
         xpath.setNamespaceContext(new NamespaceContext() {
             public String getNamespaceURI(String prefix) {
