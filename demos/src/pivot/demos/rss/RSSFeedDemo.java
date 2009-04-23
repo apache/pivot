@@ -17,20 +17,25 @@ package pivot.demos.rss;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import pivot.collections.Dictionary;
 import pivot.io.IOTask;
@@ -63,10 +68,26 @@ public class RSSFeedDemo implements Application {
         public NodeList execute() throws TaskExecutionException {
             NodeList itemNodeList = null;
 
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder;
             try {
-                InputSource inputSource = new InputSource(FEED_URI);
+                documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            } catch(ParserConfigurationException exception) {
+                throw new TaskExecutionException(exception);
+            }
+
+            Document document;
+            try {
+                document = documentBuilder.parse(FEED_URI);
+            } catch(IOException exception) {
+                throw new TaskExecutionException(exception);
+            } catch(SAXException exception) {
+                throw new TaskExecutionException(exception);
+            }
+
+            try {
                 itemNodeList = (NodeList)xpath.evaluate("/rss/channel/item",
-                    inputSource, XPathConstants.NODESET);
+                    document, XPathConstants.NODESET);
             } catch(XPathExpressionException exception) {
                 // No-op
             }
