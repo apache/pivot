@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Comparator;
+
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
@@ -29,6 +30,7 @@ import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
 import pivot.util.CalendarDate;
+import pivot.util.ThreadUtilities;
 import pivot.util.Vote;
 import pivot.wtk.Action;
 import pivot.wtk.Alert;
@@ -255,7 +257,7 @@ public class Demo implements Application {
 
                 String imageName = (String)selectedItem.getUserData();
 
-                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                ClassLoader classLoader = ThreadUtilities.getClassLoader();
                 URL imageURL = classLoader.getResource(imageName);
 
                 // If the image has not been added to the resource cache yet,

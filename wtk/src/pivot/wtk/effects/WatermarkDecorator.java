@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.net.URL;
 
+import pivot.util.ThreadUtilities;
 import pivot.wtk.Component;
 import pivot.wtk.FlowPane;
 import pivot.wtk.ImageView;
@@ -200,7 +201,7 @@ public class WatermarkDecorator implements Decorator {
             throw new IllegalArgumentException("image is null.");
         }
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setImage(classLoader.getResource(image));
     }
 

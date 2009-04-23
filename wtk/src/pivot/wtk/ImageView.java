@@ -17,7 +17,9 @@
 package pivot.wtk;
 
 import java.net.URL;
+
 import pivot.util.ListenerList;
+import pivot.util.ThreadUtilities;
 import pivot.wtk.media.Image;
 
 /**
@@ -110,7 +112,7 @@ public class ImageView extends Component {
             throw new IllegalArgumentException("image is null.");
         }
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setImage(classLoader.getResource(image));
     }
 

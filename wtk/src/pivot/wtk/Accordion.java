@@ -23,6 +23,7 @@ import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
+import pivot.util.ThreadUtilities;
 import pivot.util.Vote;
 import pivot.wtk.media.Image;
 
@@ -342,7 +343,7 @@ public class Accordion extends Container {
             throw new IllegalArgumentException("icon is null.");
         }
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setIcon(component, classLoader.getResource(icon));
     }
 }

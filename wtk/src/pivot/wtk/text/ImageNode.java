@@ -18,6 +18,7 @@ package pivot.wtk.text;
 
 import java.net.URL;
 
+import pivot.util.ThreadUtilities;
 import pivot.util.ListenerList;
 import pivot.wtk.media.Image;
 
@@ -87,7 +88,7 @@ public class ImageNode extends Node {
             throw new IllegalArgumentException("image is null.");
         }
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setImage(classLoader.getResource(image));
     }
 

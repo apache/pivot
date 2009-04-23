@@ -24,6 +24,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
+import pivot.util.ThreadUtilities;
 import pivot.util.Vote;
 import pivot.wtk.media.Image;
 
@@ -603,7 +604,7 @@ public class Window extends Container {
             throw new IllegalArgumentException("icon is null.");
         }
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setIcon(classLoader.getResource(icon));
     }
 

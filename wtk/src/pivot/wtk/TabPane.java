@@ -18,10 +18,12 @@ package pivot.wtk;
 
 import java.net.URL;
 import java.util.Iterator;
+
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
+import pivot.util.ThreadUtilities;
 import pivot.util.Vote;
 import pivot.wtk.media.Image;
 
@@ -451,7 +453,7 @@ public class TabPane extends Container {
             throw new IllegalArgumentException("icon is null.");
         }
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setIcon(component, classLoader.getResource(icon));
     }
 

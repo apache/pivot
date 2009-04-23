@@ -18,6 +18,7 @@ package pivot.wtk.content;
 
 import java.net.URL;
 
+import pivot.util.ThreadUtilities;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.media.Image;
 
@@ -67,7 +68,7 @@ public class ButtonData {
     }
 
     public void setIcon(String iconName) {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = ThreadUtilities.getClassLoader();
         setIcon(classLoader.getResource(iconName));
     }
 

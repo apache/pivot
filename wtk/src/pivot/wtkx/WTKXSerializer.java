@@ -45,6 +45,7 @@ import pivot.serialization.Serializer;
 import pivot.serialization.SerializationException;
 import pivot.util.ListenerList;
 import pivot.util.Resources;
+import pivot.util.ThreadUtilities;
 
 /**
  * Loads an object hierarchy from an XML document.
@@ -147,7 +148,7 @@ public class WTKXSerializer implements Serializer<Object> {
             throw new IllegalArgumentException("resourceName is null.");
         }
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = ThreadUtilities.getClassLoader();
         URL location = classLoader.getResource(resourceName);
 
         if (location == null) {
@@ -349,7 +350,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                 }
 
                                 try {
-                                    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                                    ClassLoader classLoader = ThreadUtilities.getClassLoader();
                                 	URL scriptLocation;
 
                                 	if (src.charAt(0) == '/') {

@@ -18,6 +18,7 @@ package pivot.tutorials.lists;
 
 import java.net.URL;
 import pivot.collections.Dictionary;
+import pivot.util.ThreadUtilities;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
@@ -39,7 +40,7 @@ public class ListButtons implements Application {
                 String item = (String)listButton.getListData().get(index);
 
                 // Get the image URL for the selected item
-                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                ClassLoader classLoader = ThreadUtilities.getClassLoader();
                 URL imageURL = classLoader.getResource("pivot/tutorials/" + item);
 
                 // If the image has not been added to the resource cache yet,
