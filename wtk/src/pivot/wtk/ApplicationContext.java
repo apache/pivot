@@ -52,6 +52,7 @@ import java.util.TimerTask;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.util.ImmutableIterator;
+import pivot.util.Version;
 import pivot.wtk.Component.DecoratorSequence;
 import pivot.wtk.Manifest;
 import pivot.wtk.RemoteManifest;
@@ -1151,6 +1152,11 @@ public abstract class ApplicationContext {
 
     private static Timer timer = null;
 
+    private static Version jvmVersion = null;
+    static {
+        jvmVersion = Version.decode(System.getProperty("java.vm.version"));
+    }
+
     protected ApplicationContext() {
         // Create the display host and display
         displayHost = new DisplayHost();
@@ -1203,6 +1209,17 @@ public abstract class ApplicationContext {
      */
     public static void beep() {
         Toolkit.getDefaultToolkit().beep();
+    }
+
+    /**
+     * Returns the current JVM version.
+     *
+     * @return
+     * The current JVM version, or <tt>null</tt> if the version can't be
+     * determined.
+     */
+    public static Version getJVMVersion() {
+        return jvmVersion;
     }
 
     /**

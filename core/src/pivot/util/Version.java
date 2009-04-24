@@ -34,9 +34,15 @@ public class Version implements Comparable<Version>, Serializable {
     private byte minorRevision = 0;
     private byte maintenanceRevision = 0;
     private byte updateRevision = 0;
+    private String build = null;
 
     public Version(int majorRevision, int minorRevision, int maintenanceRevision,
         int updateRevision) {
+        this(majorRevision, minorRevision, maintenanceRevision, updateRevision, null);
+    }
+
+    public Version(int majorRevision, int minorRevision, int maintenanceRevision,
+        int updateRevision, String build) {
         if (majorRevision > 0x7f) {
             throw new IllegalArgumentException("majorRevision must be less than "
                 + 0x7f + ".");
@@ -61,6 +67,7 @@ public class Version implements Comparable<Version>, Serializable {
         this.minorRevision = (byte)minorRevision;
         this.maintenanceRevision = (byte)maintenanceRevision;
         this.updateRevision = (byte)updateRevision;
+        this.build = build;
     }
 
     public byte getMajorRevision() {
@@ -107,18 +114,34 @@ public class Version implements Comparable<Version>, Serializable {
         String string = majorRevision
             + "." + minorRevision
             + "." + maintenanceRevision
-            + "_" + updateRevision;
+            + "_" + String.format("%02d", updateRevision);
+
+        if (build != null) {
+            string += "-" + build;
+        }
 
         return string;
     }
 
     public static Version decode(String string) {
+        Version version = null;
+
         byte majorRevision = 0;
         byte minorRevision = 0;
         byte maintenanceRevision = 0;
         byte updateRevision = 0;
+        String build = null;
 
-        String[] revisionNumbers = string.split("\\.");
+        String revision;
+        int i = string.indexOf("-");
+        if (i == -1) {
+            revision = string;
+        } else {
+            revision = string.substring(0, i);
+            build = string.substring(i + 1);
+        }
+
+        String[] revisionNumbers = revision.split("\\.");
 
         if (revisionNumbers.length > 0) {
             majorRevision = Byte.parseByte(revisionNumbers[0]);
@@ -138,9 +161,11 @@ public class Version implements Comparable<Version>, Serializable {
                     }
                 }
             }
+
+            version = new Version(majorRevision, minorRevision, maintenanceRevision,
+                updateRevision, build);
         }
 
-        return new Version(majorRevision, minorRevision, maintenanceRevision,
-            updateRevision);
+        return version;
     }
 }

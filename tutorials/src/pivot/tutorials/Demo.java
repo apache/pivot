@@ -295,7 +295,10 @@ public class Demo implements Application {
                 Menu.Item helpAboutMenuItem = (Menu.Item)wtkxSerializer.getObjectByName("menubar.helpAboutMenuItem");
                 helpAboutMenuItem.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {
-                        Prompt.prompt("Application origin: " + ApplicationContext.getOrigin().toString(), window);
+                        String about = "Origin: " + ApplicationContext.getOrigin()
+                            + "; JVM version: " + ApplicationContext.getJVMVersion();
+
+                        Prompt.prompt(about, window);
                     }
                 });
 
