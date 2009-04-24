@@ -228,7 +228,9 @@ public class TerraCalendarSkin extends CalendarSkin
                 || keyCode == Keyboard.KeyCode.RIGHT) {
                 CalendarDate date = (CalendarDate)dateButton.getButtonData();
 
-                int cellIndex = getCellIndex(date.getYear(), date.getMonth(), date.getDay());
+                Calendar calendar = (Calendar)TerraCalendarSkin.this.getComponent();
+                int cellIndex = getCellIndex(date.getYear(), date.getMonth(), date.getDay(),
+                    calendar.getLocale());
                 int rowIndex = cellIndex / 7;
                 int columnIndex = cellIndex % 7;
 
@@ -647,7 +649,7 @@ public class TerraCalendarSkin extends CalendarSkin
                 int day = selectedDate.getDay();
 
                 // Update the button group
-                int cellIndex = getCellIndex(year, month, day);
+                int cellIndex = getCellIndex(year, month, day, calendar.getLocale());
                 int rowIndex = cellIndex / 7;
                 int columnIndex = cellIndex % 7;
 
@@ -662,10 +664,11 @@ public class TerraCalendarSkin extends CalendarSkin
         }
     }
 
-    private static int getCellIndex(int year, int month, int day) {
-        GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month, 1);
+    private static int getCellIndex(int year, int month, int day, Locale locale) {
+        GregorianCalendar gregorianCalendar = new GregorianCalendar(locale);
+        gregorianCalendar.set(year, month, 1);
         int firstDay = gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK)
-            - java.util.Calendar.SUNDAY;
+            - gregorianCalendar.getFirstDayOfWeek();
         int cellIndex = firstDay + day;
 
         return cellIndex;
