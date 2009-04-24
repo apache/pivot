@@ -579,9 +579,11 @@ public class TerraCalendarSkin extends CalendarSkin
         yearSpinner.setSelectedIndex(year);
 
         // Determine the first and last days of the month
-        GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month, 1);
+        Locale locale = calendar.getLocale();
+        GregorianCalendar gregorianCalendar = new GregorianCalendar(locale);
+        gregorianCalendar.set(year, month, 1);
         int firstIndex = gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK)
-            - java.util.Calendar.SUNDAY;
+            - gregorianCalendar.getFirstDayOfWeek();
         int lastIndex = firstIndex + gregorianCalendar.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
 
         // Determine the last day of last month
@@ -884,6 +886,7 @@ public class TerraCalendarSkin extends CalendarSkin
     public void localeChanged(Calendar calendar, Locale previousLocale) {
         super.localeChanged(calendar, previousLocale);
         updateLabels();
+        updateCalendar();
     }
 
     // Calendar selection events
