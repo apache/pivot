@@ -808,7 +808,11 @@ public class ScrollPaneSkin extends ContainerSkin
     public void setBackgroundPaint(Paint backgroundPaint) {
         super.setBackgroundPaint(backgroundPaint);
 
-        optimizeScrolling = (backgroundPaint instanceof Color &&
+        // TODO Remove check for Operating System once Apple fixes the
+        // paint artifact issue with Graphics#copyArea
+        String osName = System.getProperty("os.name");
+        optimizeScrolling = (!osName.equals("Mac OS X") &&
+            backgroundPaint instanceof Color &&
             backgroundPaint.getTransparency() == Transparency.OPAQUE);
     }
 
