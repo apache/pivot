@@ -630,6 +630,8 @@ public class TerraCalendarSkin extends CalendarSkin
         }
 
         today = new CalendarDate();
+
+        updateSelection(calendar.getSelectedDate());
     }
 
     private void updateSelection(CalendarDate selectedDate) {
@@ -869,14 +871,12 @@ public class TerraCalendarSkin extends CalendarSkin
     public void yearChanged(Calendar calendar, int previousYear) {
         yearSpinner.setSelectedIndex(calendar.getYear());
         updateCalendar();
-        updateSelection(calendar.getSelectedDate());
     }
 
     @Override
     public void monthChanged(Calendar calendar, int previousMonth) {
         monthSpinner.setSelectedIndex(calendar.getMonth());
         updateCalendar();
-        updateSelection(calendar.getSelectedDate());
     }
 
     @Override
@@ -890,7 +890,6 @@ public class TerraCalendarSkin extends CalendarSkin
         super.localeChanged(calendar, previousLocale);
         updateLabels();
         updateCalendar();
-        updateSelection(calendar.getSelectedDate());
     }
 
     // Calendar selection events
