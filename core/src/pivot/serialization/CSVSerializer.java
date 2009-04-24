@@ -188,6 +188,10 @@ public class CSVSerializer implements Serializer<List<?>> {
      */
     public List<?> readObject(InputStream inputStream)
         throws IOException, SerializationException {
+        if (inputStream == null) {
+            throw new IllegalArgumentException("inputStream is null.");
+        }
+
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset),
             BUFFER_SIZE);
         return readObject(reader);
@@ -206,6 +210,10 @@ public class CSVSerializer implements Serializer<List<?>> {
      */
     public List<?> readObject(Reader reader)
         throws IOException, SerializationException {
+        if (reader == null) {
+            throw new IllegalArgumentException("reader is null.");
+        }
+
         ArrayList<Object> items = new ArrayList<Object>();
 
         // Move to the first character
@@ -355,6 +363,14 @@ public class CSVSerializer implements Serializer<List<?>> {
      */
     public void writeObject(List<?> items, OutputStream outputStream)
         throws IOException, SerializationException {
+        if (items == null) {
+            throw new IllegalArgumentException("items is null.");
+        }
+
+        if (outputStream == null) {
+            throw new IllegalArgumentException("outputStream is null.");
+        }
+
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
             BUFFER_SIZE);
         writeObject(items, writer);
@@ -375,6 +391,10 @@ public class CSVSerializer implements Serializer<List<?>> {
     @SuppressWarnings("unchecked")
     public void writeObject(List<?> items, Writer writer)
         throws IOException, SerializationException {
+        if (items == null) {
+            throw new IllegalArgumentException("items is null.");
+        }
+
         if (writer == null) {
             throw new IllegalArgumentException("writer is null.");
         }

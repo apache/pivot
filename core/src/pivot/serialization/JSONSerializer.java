@@ -77,6 +77,10 @@ public class JSONSerializer implements Serializer<Object> {
      */
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
+        if (inputStream == null) {
+            throw new IllegalArgumentException("inputStream is null.");
+        }
+
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
         Object object = readObject(reader);
 
@@ -102,6 +106,10 @@ public class JSONSerializer implements Serializer<Object> {
      */
     public Object readObject(Reader reader)
         throws IOException, SerializationException {
+        if (reader == null) {
+            throw new IllegalArgumentException("reader is null.");
+        }
+
         // Move to the first character
         c = reader.read();
 
@@ -398,6 +406,10 @@ public class JSONSerializer implements Serializer<Object> {
      */
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {
+        if (outputStream == null) {
+            throw new IllegalArgumentException("outputStream is null.");
+        }
+
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
             BUFFER_SIZE);
         writeObject(object, writer);

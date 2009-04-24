@@ -29,7 +29,8 @@ public class ChangeCellRenderer extends TableViewNumberCellRenderer {
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
         super.render(value, tableView, column, rowSelected, rowHighlighted, rowDisabled);
 
-        if (!rowSelected) {
+        if (value != null
+            && !rowSelected) {
             StockQuote stockQuote = (StockQuote)value;
             float change = stockQuote.getChange();
             getStyles().put("color", change < 0 ? DOWN_COLOR : UP_COLOR);

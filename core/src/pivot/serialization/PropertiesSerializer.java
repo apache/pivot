@@ -70,6 +70,10 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
     @SuppressWarnings("unchecked")
     public void writeObject(Map<?, ?> object, OutputStream outputStream) throws IOException,
         SerializationException {
+        if (object == null) {
+            throw new IllegalArgumentException("object is null.");
+        }
+
         if (outputStream == null) {
             throw new IllegalArgumentException("outputStream is null.");
         }
