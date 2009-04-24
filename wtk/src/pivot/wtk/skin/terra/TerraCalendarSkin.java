@@ -890,6 +890,7 @@ public class TerraCalendarSkin extends CalendarSkin
         super.localeChanged(calendar, previousLocale);
         updateLabels();
         updateCalendar();
+        updateSelection(calendar.getSelectedDate());
     }
 
     // Calendar selection events
