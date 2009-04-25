@@ -18,14 +18,22 @@ package pivot.wtk.media.drawing;
 
 import java.awt.Graphics2D;
 
-public class Polygon extends Shape {
+/**
+ * Shape representing an arbitrary geometric path.
+ * <p>
+ * TODO This class will contain a collection of operations such as moveTo(),
+ * lineTo(), quadTo(), etc.
+ *
+ * @author gbrown
+ */
+public class Path extends Shape {
     @Override
     public boolean contains(int x, int y) {
         // TODO Auto-generated method stub
         return false;
     }
 
-    public void paint(Graphics2D graphics) {
+    public void draw(Graphics2D graphics) {
         // TODO Auto-generated method stub
     }
 }

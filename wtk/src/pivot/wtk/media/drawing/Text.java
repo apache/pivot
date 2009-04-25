@@ -21,13 +21,12 @@ import java.awt.Graphics2D;
 
 /**
  * Shape representing a block of text.
- * <p>
- * TODO We may need to specify a font here - otherwise, we won't be able to
- * calculate the bounds.
+ *
+ * @author gbrown
  */
 public class Text extends Shape {
     private String text = null;
-    private Font font = null;
+    private Font font = null; // TODO Need to specify a default
     private int wrapWidth = -1;
 
     public String getText() {
@@ -43,7 +42,10 @@ public class Text extends Shape {
     }
 
     public void setFont(Font font) {
-        // TODO We may need to throw if null
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
         this.font = font;
     }
 
@@ -66,7 +68,7 @@ public class Text extends Shape {
         return false;
     }
 
-    public void paint(Graphics2D graphics) {
+    public void draw(Graphics2D graphics) {
         // TODO
     }
 }

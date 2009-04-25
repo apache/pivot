@@ -14,14 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk.media.drawing;
+package pivot.wtk.media;
+
+import pivot.wtk.media.drawing.Group;
 
 /**
- * Group listener interface.
+ * Drawing listener interface.
  *
  * @author gbrown
  */
-public interface GroupListener {
-    public void regionInvalidated(Shape shape, int x, int y, int width, int height);
-    public void boundsInvalidated(Shape shape);
+public interface DrawingListener {
+    public void rootChanged(Drawing drawing, Group previousRoot);
 }

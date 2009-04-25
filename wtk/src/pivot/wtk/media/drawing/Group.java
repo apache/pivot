@@ -31,17 +31,14 @@ import pivot.wtk.Bounds;
 public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     private ArrayList<Shape> shapes = new ArrayList<Shape>();
 
-    public int getWidth() {
-        // TODO
-        return 0;
+    @Override
+    public Bounds getBounds() {
+        // TODO If invalid, recalcuate the bounds and call setBounds()
+
+        return super.getBounds();
     }
 
-    public int getHeight() {
-        // TODO
-        return 0;
-    }
-
-    public void paint(Graphics2D graphics) {
+    public void draw(Graphics2D graphics) {
         // TODO Paint each sub-shape, first applying the transform based on
         // the sub-shape's attributes
     }
@@ -57,14 +54,14 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         shapes.insert(shape, index);
 
         // TODO Set parent
-        // TODO Update bounds
+        // TODO Invalidate bounds
     }
 
     public Shape update(int index, Shape shape) {
         Shape previousShape = shapes.update(index, shape);
 
         // TODO Set parent
-        // TODO Update bounds
+        // TODO Invalidate bounds
 
         return previousShape;
     }
@@ -83,7 +80,7 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         Sequence<Shape> removed = shapes.remove(index, count);
 
         // TODO Clear parent
-        // TODO Update bounds
+        // TODO Invalidate bounds
 
         return removed;
     }
@@ -103,7 +100,7 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     @Override
     public boolean contains(int x, int y) {
         // TODO Ask each shape if it contains the point (translate to sub-shape
-        // space first)
+        // space first and apply inverse transform)
         return false;
     }
 
@@ -120,21 +117,5 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
 
     public Iterator<Shape> iterator() {
         return new ImmutableIterator<Shape>(shapes.iterator());
-    }
-
-    protected void invalidateRegion(Shape shape) {
-        invalidateRegion(shape.getBounds());
-    }
-
-    protected void invalidateRegion(Bounds bounds) {
-        invalidateRegion(bounds.x, bounds.y, bounds.width, bounds.height);
-    }
-
-    protected void invalidateRegion(int x, int y, int width, int height) {
-        // TODO
-    }
-
-    protected void invalidateBounds(Shape shape) {
-        // TODO
     }
 }

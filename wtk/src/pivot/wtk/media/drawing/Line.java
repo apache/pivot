@@ -17,38 +17,33 @@
 package pivot.wtk.media.drawing;
 
 import java.awt.Graphics2D;
+import java.awt.Paint;
 
 /**
- * Shape representing a rectangle.
+ * Shape representing a line.
  *
  * @author gbrown
  */
-public class Rectangle extends Shape {
+public class Line extends Shape {
     @Override
     public boolean contains(int x, int y) {
-        // TODO
+        // TODO Auto-generated method stub
         return false;
     }
 
+    @Override
+    public Paint getFill() {
+        return null;
+    }
+
+    @Override
+    public void setFill(Paint fill) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void draw(Graphics2D graphics) {
-        // TODO
-    }
+        // TODO Auto-generated method stub
 
-    public int getWidth() {
-        // TODO
-        return 0;
-    }
-
-    public int getHeight() {
-        // TODO
-        return 0;
-    }
-
-    public void setSize(int width, int height) {
-        // TODO Call invalidateBounds(); note that we need to call this
-        // instance's method and not just the parent because a transform
-        // may be applied and we'll need to recalculate the transformed bounds
-
-        // TODO Set internal width, height
     }
 }

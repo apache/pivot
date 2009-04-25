@@ -17,32 +17,26 @@
 package pivot.wtk.media.drawing;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.geom.AffineTransform;
 
 import pivot.util.ListenerList;
 import pivot.wtk.Bounds;
 import pivot.wtk.Point;
-import pivot.wtk.Visual;
 
 /**
  * Abstract base class for shapes.
  *
  * @author gbrown
  */
-public abstract class Shape implements Visual {
+public abstract class Shape {
+    // TODO Define a transform sequence; also add ShapeTransformListener
+
     private class ShapeListenerList extends ListenerList<ShapeListener>
         implements ShapeListener {
         public void originChanged(Shape shape, int previousX, int previousY) {
             for (ShapeListener listener : this) {
                 listener.originChanged(shape, previousX, previousY);
-            }
-        }
-
-        public void boundsChanged(Shape shape, int previousX, int previousY,
-            int previousWidth, int previousHeight) {
-            for (ShapeListener listener : this) {
-                listener.boundsChanged(shape, previousX, previousY, previousWidth, previousHeight);
             }
         }
 
@@ -75,18 +69,11 @@ public abstract class Shape implements Visual {
 
     private int x = 0;
     private int y = 0;
-    private int width = 0;
-    private int height = 0;
+    private Bounds bounds = new Bounds(0, 0, 0, 0);
 
     private Paint fill = null;
     private Paint stroke = Color.BLACK;
     private int strokeThickness = 1;
-
-    private double rotation = 0;
-    private double scaleX = 0;
-    private double scaleY = 0;
-    private double translateX = 0;
-    private double translateY = 0;
 
     private ShapeListenerList shapeListeners = new ShapeListenerList();
 
@@ -103,7 +90,7 @@ public abstract class Shape implements Visual {
     }
 
     public void setX(int x) {
-        this.x = x;
+        setOrigin(x, y);
     }
 
     public int getY() {
@@ -111,7 +98,7 @@ public abstract class Shape implements Visual {
     }
 
     public void setY(int y) {
-        this.y = y;
+        setOrigin(x, y);
     }
 
     public Point getOrigin() {
@@ -119,8 +106,14 @@ public abstract class Shape implements Visual {
     }
 
     public void setOrigin(int x, int y) {
-        setX(x);
-        setY(y);
+        // Repaint the region formerly occupied by this shape
+        invalidateRegion();
+
+        this.x = x;
+        this.y = y;
+
+        // Repaint the region currently occupied by this shape
+        invalidateRegion();
     }
 
     public void setOrigin(Point origin) {
@@ -131,44 +124,48 @@ public abstract class Shape implements Visual {
         setOrigin(origin.x, origin.y);
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    protected void setSize(int width, int height) {
-        // TODO
-        this.width = width;
-        this.height = height;
-    }
-
     public Bounds getBounds() {
-        return getBounds(true);
+        // TODO Make this public abstract
+        return bounds;
     }
 
-    protected Bounds getBounds(boolean validate) {
-        // TODO Transform untransformed bounds
+    public Bounds getTransformedBounds() {
+        // TODO Apply transform to bounds and return
         return null;
     }
 
     /**
-     * TODO Subclasses should override this method to perform an inverse
-     * transformation and map to the untransformed coordinate space.
+     * Determines if the shape contains the given point.
      *
      * @param x
+     * The x-coordinate of the point to test, in untransformed shape
+     * coordinates.
+     *
      * @param y
+     * The y-coordinate of the point to test, in untransformed shape
+     * coordinates.
+     *
+     * @return
+     * <tt>true</tt> if the shape contains the point; <tt>false</tt>, otherwise.
      */
     public abstract boolean contains(int x, int y);
 
     public Paint getFill() {
+        Paint fill = this.fill;
+        if (fill == null) {
+            if (fill == null) {
+                throw new IllegalStateException();
+            }
+
+            fill = parent.getFill();
+        }
+
         return fill;
     }
 
     public void setFill(Paint fill) {
         this.fill = fill;
+        invalidateRegion();
     }
 
     public void setFill(String fill) {
@@ -176,17 +173,25 @@ public abstract class Shape implements Visual {
             throw new IllegalArgumentException("fill is null.");
         }
 
-        // TODO Support an encoding for gradient paints
-
         setFill(Color.decode(fill));
     }
 
     public Paint getStroke() {
+        Paint stroke = this.stroke;
+        if (stroke == null) {
+            if (parent == null) {
+                throw new IllegalStateException();
+            }
+
+            stroke = parent.getStroke();
+        }
+
         return stroke;
     }
 
     public void setStroke(Paint stroke) {
         this.stroke = stroke;
+        invalidateRegion();
     }
 
     public void setStroke(String stroke) {
@@ -194,78 +199,55 @@ public abstract class Shape implements Visual {
             throw new IllegalArgumentException("stroke is null.");
         }
 
-        // TODO Support an encoding for gradient paints
-
         setStroke(Color.decode(stroke));
     }
 
     public int getStrokeThickness() {
+        int strokeThickness = this.strokeThickness;
+        if (strokeThickness == -1) {
+            if (parent == null) {
+                throw new IllegalStateException();
+            }
+
+            strokeThickness = parent.getStrokeThickness();
+        }
+
         return strokeThickness;
     }
 
     public void setStrokeThickness(int strokeThickness) {
-        this.strokeThickness = strokeThickness;
-    }
-
-    public double getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
-    }
-
-    public double getScaleX() {
-        return scaleX;
-    }
-
-    public void setScaleX(double scaleX) {
-        this.scaleX = scaleX;
-    }
-
-    public double getScaleY() {
-        return scaleY;
-    }
-
-    public void setScaleY(double scaleY) {
-        this.scaleY = scaleY;
-    }
-
-    public double getTranslateX() {
-        return translateX;
-    }
-
-    public void setTranslateX(double translateX) {
-        this.translateX = translateX;
-    }
-
-    public double getTranslateY() {
-        return translateY;
-    }
-
-    public void setTranslateY(double translateY) {
-        this.translateY = translateY;
-    }
-
-    public AffineTransform getTransform() {
-        // TODO Calculate transform based on properties
-        return null;
-    }
-
-    protected void invalidateRegion() {
-        if (parent != null) {
-            parent.invalidateRegion(this);
+        if (strokeThickness < -1) {
+            throw new IllegalArgumentException();
         }
 
-        // TODO Fire event
+        this.strokeThickness = strokeThickness;
+
+        invalidateRegion();
+    }
+
+    public abstract void draw(Graphics2D graphics);
+
+    protected void invalidateRegion() {
+        invalidateRegion(bounds);
+    }
+
+    protected void invalidateRegion(Bounds bounds) {
+        invalidateRegion(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+
+    protected void invalidateRegion(int x, int y, int width, int height) {
+        shapeListeners.regionInvalidated(this, x, y, width, height);
+
+        // TODO Transform region bounds
+
+        if (parent != null) {
+            parent.invalidateRegion(this.x + x, this.y + y, width, height);
+        }
     }
 
     protected void invalidateBounds() {
-        if (parent != null) {
-            parent.invalidateBounds(this);
-        }
-
-        // TODO Fire event when bounds are set
+        // TODO Clear transformedBounds; recalculate in getTransformedBounds()
+        // TODO If parent is non-null, propagate upwards
     }
 
     public ListenerList<ShapeListener> getShapeListeners() {

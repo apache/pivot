@@ -92,7 +92,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
                 case Keyboard.KeyCode.TAB:
                 case Keyboard.KeyCode.ENTER: {
-
                     CalendarDate date = calendar.getSelectedDate();
 
                     calendar.setSelectedDate((CalendarDate)null);

@@ -18,6 +18,11 @@ package pivot.wtk.media.drawing;
 
 import java.awt.Graphics2D;
 
+/**
+ * Shape representing an ellipse.
+ *
+ * @author gbrown
+ */
 public class Ellipse extends Shape {
     @Override
     public boolean contains(int x, int y) {
@@ -25,7 +30,7 @@ public class Ellipse extends Shape {
         return false;
     }
 
-    public void paint(Graphics2D graphics) {
+    public void draw(Graphics2D graphics) {
         // TODO Auto-generated method stub
     }
 }

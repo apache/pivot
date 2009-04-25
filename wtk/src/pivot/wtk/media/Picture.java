@@ -23,6 +23,9 @@ import java.awt.image.BufferedImage;
  * Image representing a bitmapped picture.
  * <p>
  * TODO Add a resize() method that will scale the image?
+ * <p>
+ * TODO Provide access to the raster data and fire regionInvalidated() when
+ * modified?
  *
  * @author gbrown
  */

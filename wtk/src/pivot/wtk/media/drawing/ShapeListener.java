@@ -33,10 +33,6 @@ public interface ShapeListener {
         public void originChanged(Shape shape, int previousX, int previousY) {
         }
 
-        public void boundsChanged(Shape shape, int previousX, int previousY,
-            int previousWidth, int previousHeight) {
-        }
-
         public void strokeChanged(Shape shape, Paint previousStroke) {
         }
 
@@ -58,16 +54,6 @@ public interface ShapeListener {
      * @param previousY
      */
     public void originChanged(Shape shape, int previousX, int previousY);
-
-    /**
-     * Called when a shape's bounds have changed.
-     *
-     * @param shape
-     * @param previousWidth
-     * @param previousHeight
-     */
-    public void boundsChanged(Shape shape, int previousX, int previousY,
-        int previousWidth, int previousHeight);
 
     /**
      * Called when a shape's stroke has changed.

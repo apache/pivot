@@ -17,6 +17,8 @@
 package pivot.wtk.media;
 
 import java.awt.Graphics2D;
+
+import pivot.util.ListenerList;
 import pivot.wtk.Bounds;
 import pivot.wtk.media.drawing.Group;
 import pivot.wtk.media.drawing.Shape;
@@ -24,57 +26,94 @@ import pivot.wtk.media.drawing.ShapeListener;
 
 /**
  * Image representing a vector drawing.
- * <p>
- * TODO If developer retains a reference to the root group but not the drawing,
- * the drawing will never be garbage collected. Do we need a way to decouple
- * it?
  *
  * @author gbrown
  */
 public class Drawing extends Image {
+    private static class DrawingListenerList extends ListenerList<DrawingListener>
+        implements DrawingListener {
+        public void rootChanged(Drawing drawing, Group previousRoot) {
+            for (DrawingListener listener : this) {
+                listener.rootChanged(drawing, previousRoot);
+            }
+        }
+    }
+
     private Group root;
+    private int width = 0;
+    private int height = 0;
+
     private ShapeListener rootListener = new ShapeListener.Adapter() {
         @Override
-        public void boundsChanged(Shape shape, int previousX, int previousY,
-            int previousWidth, int previousHeight) {
-            // TODO Need to clip this to 0, 0
-            imageListeners.sizeChanged(Drawing.this, previousWidth, previousHeight);
-        }
-
         public void regionInvalidated(Shape shape, int x, int y, int width, int height) {
-            // TODO Need to clip this to 0, 0
+            Bounds bounds = new Bounds(0, 0, Drawing.this.width, Drawing.this.height);
+            bounds = bounds.intersect(new Bounds(x, y, width, height));
             imageListeners.regionInvalidated(Drawing.this, x, y, width, height);
         }
     };
+
+    private DrawingListenerList drawingListeners = new DrawingListenerList();
 
     public Drawing() {
         this(new Group());
     }
 
     public Drawing(Group root) {
-        this.root = root;
-
-        root.getShapeListeners().add(rootListener);
+        setRoot(root);
     }
 
     public Group getRoot() {
         return root;
     }
 
+    public void setRoot(Group root) {
+        Group previousRoot = this.root;
+
+        if (previousRoot != root) {
+            this.root = root;
+
+            if (previousRoot != null) {
+                previousRoot.getShapeListeners().remove(rootListener);
+            }
+
+            if (root != null) {
+                root.getShapeListeners().add(rootListener);
+            }
+
+            drawingListeners.rootChanged(this, previousRoot);
+
+            imageListeners.regionInvalidated(this, 0, 0, width, height);
+        }
+    }
+
     public int getWidth() {
-        // TODO Need to clip this to 0, 0
-        Bounds bounds = root.getBounds();
-        return bounds.width + bounds.x;
+        return width;
     }
 
     public int getHeight() {
-        // TODO Need to clip this to 0, 0
-        Bounds bounds = root.getBounds();
-        return bounds.height + bounds.y;
+        return height;
+    }
+
+    public void setSize(int width, int height) {
+        int previousWidth = this.width;
+        int previousHeight = this.height;
+
+        this.width = width;
+        this.height = height;
+
+        imageListeners.sizeChanged(this, previousWidth, previousHeight);
     }
 
     public void paint(Graphics2D graphics) {
-        graphics.clipRect(0, 0, getWidth(), getHeight());
-        root.paint(graphics);
+        graphics.clipRect(0, 0, width, height);
+
+        if (root != null) {
+            // TODO Apply root transforms
+            root.draw(graphics);
+        }
+    }
+
+    public ListenerList<DrawingListener> getDrawingListeners() {
+        return drawingListeners;
     }
 }

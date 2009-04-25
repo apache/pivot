@@ -72,7 +72,7 @@ public interface SpinnerItemListener {
     /**
      * Called when the spinner data has been cleared.
      *
-     * @param listView
+     * @param spinner
      */
     public void itemsCleared(Spinner spinner);
 
