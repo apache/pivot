@@ -18,12 +18,20 @@ package pivot.wtk.media.drawing;
 
 import java.awt.Graphics2D;
 
+import pivot.wtk.Bounds;
+
 /**
  * Shape representing an arc.
  *
  * @author gbrown
  */
 public class Arc extends Shape {
+    @Override
+    public Bounds getBounds() {
+        // TODO
+        return null;
+    }
+
     @Override
     public boolean contains(int x, int y) {
         // TODO Auto-generated method stub

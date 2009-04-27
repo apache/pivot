@@ -16,44 +16,20 @@
  */
 package pivot.wtk.media.drawing;
 
-import java.awt.Graphics2D;
-import java.awt.Paint;
-
-import pivot.wtk.Bounds;
-
 /**
- * Shape representing a line.
+ * Canvas listener interface.
  *
  * @author gbrown
  */
-public class Line extends Shape {
-    @Override
-    public Bounds getBounds() {
-        // TODO
-        return null;
-    }
-
-    @Override
-    public boolean contains(int x, int y) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public Paint getFill() {
-        // Lines don't have a fill
-        return null;
-    }
-
-    @Override
-    public void setFill(Paint fill) {
-        // Lines can't have a fill
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void draw(Graphics2D graphics) {
-        // TODO Auto-generated method stub
-
-    }
+public interface CanvasListener {
+    /**
+     * Called when a region within a canvas needs to be repainted.
+     *
+     * @param canvas
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
+    public void regionUpdated(Canvas canvas, int x, int y, int width, int height);
 }

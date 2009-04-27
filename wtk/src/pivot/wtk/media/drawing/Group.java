@@ -33,9 +33,9 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
 
     @Override
     public Bounds getBounds() {
-        // TODO If invalid, recalcuate the bounds and call setBounds()
+        // TODO If invalid, recalcuate (and cache) the bounds
 
-        return super.getBounds();
+        return null;
     }
 
     public void draw(Graphics2D graphics) {

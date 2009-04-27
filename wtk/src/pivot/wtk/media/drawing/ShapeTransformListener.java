@@ -16,44 +16,28 @@
  */
 package pivot.wtk.media.drawing;
 
-import java.awt.Graphics2D;
-import java.awt.Paint;
-
-import pivot.wtk.Bounds;
-
 /**
- * Shape representing a line.
+ * Shape transform listener interface.
  *
  * @author gbrown
  */
-public class Line extends Shape {
-    @Override
-    public Bounds getBounds() {
-        // TODO
-        return null;
-    }
+public interface ShapeTransformListener {
+    /**
+     * Called when a transform has been inserted into a shape's transform
+     * sequence.
+     *
+     * @param shape
+     * @param index
+     */
+    public void transformInserted(Shape shape, int index);
 
-    @Override
-    public boolean contains(int x, int y) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public Paint getFill() {
-        // Lines don't have a fill
-        return null;
-    }
-
-    @Override
-    public void setFill(Paint fill) {
-        // Lines can't have a fill
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void draw(Graphics2D graphics) {
-        // TODO Auto-generated method stub
-
-    }
+    /**
+     * Called when a transform has been removed from a shape's transform
+     * sequence.
+     *
+     * @param shape
+     * @param index
+     * @param count
+     */
+    public void transformsRemoved(Shape shape, int index, int count);
 }

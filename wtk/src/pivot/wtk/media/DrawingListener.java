@@ -16,7 +16,7 @@
  */
 package pivot.wtk.media;
 
-import pivot.wtk.media.drawing.Group;
+import pivot.wtk.media.drawing.Canvas;
 
 /**
  * Drawing listener interface.
@@ -24,5 +24,5 @@ import pivot.wtk.media.drawing.Group;
  * @author gbrown
  */
 public interface DrawingListener {
-    public void rootChanged(Drawing drawing, Group previousRoot);
+    public void canvasChanged(Drawing drawing, Canvas previousCanvas);
 }

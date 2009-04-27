@@ -19,7 +19,11 @@ package pivot.wtk.media.drawing;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.geom.AffineTransform;
+import java.util.Iterator;
 
+import pivot.collections.ArrayList;
+import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.wtk.Bounds;
 import pivot.wtk.Point;
@@ -30,7 +34,65 @@ import pivot.wtk.Point;
  * @author gbrown
  */
 public abstract class Shape {
-    // TODO Define a transform sequence; also add ShapeTransformListener
+    /**
+     * Represents a sequence of affine transformations applied to this shape.
+     * <p>
+     * TODO These operations invalidate the shape.
+     * <p>
+     * TODO Fire ShapeTransform events as appropriate.
+     *
+     * @author gbrown
+     */
+    public class TransformSequence
+        implements Transform, Sequence<Transform>, Iterable<Transform> {
+        public int add(Transform transform) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        public Transform update(int index, Transform transform) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void insert(Transform transform, int index) {
+            // TODO Auto-generated method stub
+
+        }
+
+        public int remove(Transform transform) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        public Sequence<Transform> remove(int index, int count) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        public Transform get(int index) {
+            return transforms.get(index);
+        }
+
+        public int indexOf(Transform transform) {
+            return transforms.indexOf(transform);
+        }
+
+        public int getLength() {
+            return transforms.getLength();
+        }
+
+        public AffineTransform getAffineTransform() {
+            // TODO Invalidate this when the list is modified and lazily
+            // recalculate here when requested
+
+            return null;
+        }
+
+        public Iterator<Transform> iterator() {
+            // TODO
+            return null;
+        }
+    }
 
     private class ShapeListenerList extends ListenerList<ShapeListener>
         implements ShapeListener {
@@ -57,12 +119,6 @@ public abstract class Shape {
                 listener.fillChanged(shape, previousFill);
             }
         }
-
-        public void regionInvalidated(Shape shape, int x, int y, int width, int height) {
-            for (ShapeListener listener : this) {
-                listener.regionInvalidated(shape, x, y, width, height);
-            }
-        }
     }
 
     private Group parent = null;
@@ -74,6 +130,9 @@ public abstract class Shape {
     private Paint fill = null;
     private Paint stroke = Color.BLACK;
     private int strokeThickness = 1;
+
+    private ArrayList<Transform> transforms = new ArrayList<Transform>();
+    private TransformSequence transformSequence = new TransformSequence();
 
     private ShapeListenerList shapeListeners = new ShapeListenerList();
 
@@ -107,13 +166,13 @@ public abstract class Shape {
 
     public void setOrigin(int x, int y) {
         // Repaint the region formerly occupied by this shape
-        invalidateRegion();
+        update();
 
         this.x = x;
         this.y = y;
 
         // Repaint the region currently occupied by this shape
-        invalidateRegion();
+        update();
     }
 
     public void setOrigin(Point origin) {
@@ -124,10 +183,14 @@ public abstract class Shape {
         setOrigin(origin.x, origin.y);
     }
 
-    public Bounds getBounds() {
-        // TODO Make this public abstract
-        return bounds;
-    }
+    /**
+     * Returns the bounds of the component, including the stroke thickness.
+     *
+     * @return
+     * The component's bounding area. The x and y coordinates are relative to
+     * the parent group's origin.
+     */
+    public abstract Bounds getBounds();
 
     public Bounds getTransformedBounds() {
         // TODO Apply transform to bounds and return
@@ -165,7 +228,7 @@ public abstract class Shape {
 
     public void setFill(Paint fill) {
         this.fill = fill;
-        invalidateRegion();
+        update();
     }
 
     public void setFill(String fill) {
@@ -191,7 +254,7 @@ public abstract class Shape {
 
     public void setStroke(Paint stroke) {
         this.stroke = stroke;
-        invalidateRegion();
+        update();
     }
 
     public void setStroke(String stroke) {
@@ -222,32 +285,38 @@ public abstract class Shape {
 
         this.strokeThickness = strokeThickness;
 
-        invalidateRegion();
+        invalidate();
     }
 
     public abstract void draw(Graphics2D graphics);
 
-    protected void invalidateRegion() {
-        invalidateRegion(bounds);
+    public TransformSequence getTransforms() {
+        return transformSequence;
     }
 
-    protected void invalidateRegion(Bounds bounds) {
-        invalidateRegion(bounds.x, bounds.y, bounds.width, bounds.height);
+    protected void invalidate() {
+        // TODO Clear transformedBounds; recalculate in getTransformedBounds()
+        // TODO If parent is non-null, propagate upwards
     }
 
-    protected void invalidateRegion(int x, int y, int width, int height) {
-        shapeListeners.regionInvalidated(this, x, y, width, height);
+    protected void validate() {
+        // TODO Recalculate transformed bounds
+    }
 
+    protected final void update() {
+        update(bounds);
+    }
+
+    protected final void update(Bounds bounds) {
+        update(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+
+    protected void update(int x, int y, int width, int height) {
         // TODO Transform region bounds
 
         if (parent != null) {
-            parent.invalidateRegion(this.x + x, this.y + y, width, height);
+            parent.update(this.x + x, this.y + y, width, height);
         }
-    }
-
-    protected void invalidateBounds() {
-        // TODO Clear transformedBounds; recalculate in getTransformedBounds()
-        // TODO If parent is non-null, propagate upwards
     }
 
     public ListenerList<ShapeListener> getShapeListeners() {

@@ -16,44 +16,16 @@
  */
 package pivot.wtk.media.drawing;
 
-import java.awt.Graphics2D;
-import java.awt.Paint;
-
-import pivot.wtk.Bounds;
+import java.awt.geom.AffineTransform;
 
 /**
- * Shape representing a line.
+ * Represents a rotation transformation.
  *
  * @author gbrown
  */
-public class Line extends Shape {
-    @Override
-    public Bounds getBounds() {
-        // TODO
-        return null;
-    }
-
-    @Override
-    public boolean contains(int x, int y) {
+public class Rotation implements Transform {
+    public AffineTransform getAffineTransform() {
         // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public Paint getFill() {
-        // Lines don't have a fill
         return null;
-    }
-
-    @Override
-    public void setFill(Paint fill) {
-        // Lines can't have a fill
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void draw(Graphics2D graphics) {
-        // TODO Auto-generated method stub
-
     }
 }

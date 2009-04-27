@@ -16,44 +16,39 @@
  */
 package pivot.wtk.media.drawing;
 
-import java.awt.Graphics2D;
-import java.awt.Paint;
-
-import pivot.wtk.Bounds;
+import pivot.util.ListenerList;
 
 /**
- * Shape representing a line.
+ * Shape representing the root of a shape hierarchy.
  *
  * @author gbrown
  */
-public class Line extends Shape {
-    @Override
-    public Bounds getBounds() {
-        // TODO
-        return null;
+public class Canvas extends Group {
+    private class CanvasListenerList extends ListenerList<CanvasListener>
+        implements CanvasListener {
+        public void regionUpdated(Canvas canvas, int x, int y, int width, int height) {
+            for (CanvasListener listener : this) {
+                listener.regionUpdated(canvas, x, y, width, height);
+            }
+        }
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        // TODO Auto-generated method stub
-        return false;
+    protected void invalidate() {
+        super.invalidate();
+
+        // TODO Queue validate callback
     }
 
     @Override
-    public Paint getFill() {
-        // Lines don't have a fill
-        return null;
+    protected void update(int x, int y, int width, int height) {
+        super.update(x, y, width, height);
+        canvasListeners.regionUpdated(this, x, y, width, height);
     }
 
-    @Override
-    public void setFill(Paint fill) {
-        // Lines can't have a fill
-        throw new UnsupportedOperationException();
-    }
+    private CanvasListenerList canvasListeners = new CanvasListenerList();
 
-    @Override
-    public void draw(Graphics2D graphics) {
-        // TODO Auto-generated method stub
-
+    public ListenerList<CanvasListener> getCanvasListeners() {
+        return canvasListeners;
     }
 }

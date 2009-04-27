@@ -41,9 +41,6 @@ public interface ShapeListener {
 
         public void fillChanged(Shape shape, Paint previousFill) {
         }
-
-        public void regionInvalidated(Shape shape, int x, int y, int width, int height) {
-        }
     }
 
     /**
@@ -78,15 +75,4 @@ public interface ShapeListener {
      * @param previousFill
      */
     public void fillChanged(Shape shape, Paint previousFill);
-
-    /**
-     * Called when a region within a shape needs to be repainted.
-     *
-     * @param shape
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     */
-    public void regionInvalidated(Shape shape, int x, int y, int width, int height);
 }

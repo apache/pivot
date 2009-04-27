@@ -18,12 +18,20 @@ package pivot.wtk.media.drawing;
 
 import java.awt.Graphics2D;
 
+import pivot.wtk.Bounds;
+
 /**
  * Shape representing a rectangle.
  *
  * @author gbrown
  */
 public class Rectangle extends Shape {
+    @Override
+    public Bounds getBounds() {
+        // TODO
+        return null;
+    }
+
     @Override
     public boolean contains(int x, int y) {
         // TODO

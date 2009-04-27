@@ -20,9 +20,8 @@ import java.awt.Graphics2D;
 
 import pivot.util.ListenerList;
 import pivot.wtk.Bounds;
-import pivot.wtk.media.drawing.Group;
-import pivot.wtk.media.drawing.Shape;
-import pivot.wtk.media.drawing.ShapeListener;
+import pivot.wtk.media.drawing.Canvas;
+import pivot.wtk.media.drawing.CanvasListener;
 
 /**
  * Image representing a vector drawing.
@@ -32,20 +31,21 @@ import pivot.wtk.media.drawing.ShapeListener;
 public class Drawing extends Image {
     private static class DrawingListenerList extends ListenerList<DrawingListener>
         implements DrawingListener {
-        public void rootChanged(Drawing drawing, Group previousRoot) {
+        public void canvasChanged(Drawing drawing, Canvas previousCanvas) {
             for (DrawingListener listener : this) {
-                listener.rootChanged(drawing, previousRoot);
+                listener.canvasChanged(drawing, previousCanvas);
             }
         }
     }
 
-    private Group root;
+    private Canvas canvas;
     private int width = 0;
     private int height = 0;
 
-    private ShapeListener rootListener = new ShapeListener.Adapter() {
-        @Override
-        public void regionInvalidated(Shape shape, int x, int y, int width, int height) {
+    private CanvasListener canvasListener = new CanvasListener() {
+        public void regionUpdated(Canvas canvas, int x, int y, int width, int height) {
+            // TODO Apply root transforms before propagating up
+
             Bounds bounds = new Bounds(0, 0, Drawing.this.width, Drawing.this.height);
             bounds = bounds.intersect(new Bounds(x, y, width, height));
             imageListeners.regionInvalidated(Drawing.this, x, y, width, height);
@@ -55,32 +55,32 @@ public class Drawing extends Image {
     private DrawingListenerList drawingListeners = new DrawingListenerList();
 
     public Drawing() {
-        this(new Group());
+        this(new Canvas());
     }
 
-    public Drawing(Group root) {
-        setRoot(root);
+    public Drawing(Canvas canvas) {
+        setCanvas(canvas);
     }
 
-    public Group getRoot() {
-        return root;
+    public Canvas getCanvas() {
+        return canvas;
     }
 
-    public void setRoot(Group root) {
-        Group previousRoot = this.root;
+    public void setCanvas(Canvas canvas) {
+        Canvas previousCanvas = this.canvas;
 
-        if (previousRoot != root) {
-            this.root = root;
+        if (previousCanvas != canvas) {
+            this.canvas = canvas;
 
-            if (previousRoot != null) {
-                previousRoot.getShapeListeners().remove(rootListener);
+            if (previousCanvas != null) {
+                previousCanvas.getCanvasListeners().remove(canvasListener);
             }
 
-            if (root != null) {
-                root.getShapeListeners().add(rootListener);
+            if (canvas != null) {
+                canvas.getCanvasListeners().add(canvasListener);
             }
 
-            drawingListeners.rootChanged(this, previousRoot);
+            drawingListeners.canvasChanged(this, previousCanvas);
 
             imageListeners.regionInvalidated(this, 0, 0, width, height);
         }
@@ -107,9 +107,9 @@ public class Drawing extends Image {
     public void paint(Graphics2D graphics) {
         graphics.clipRect(0, 0, width, height);
 
-        if (root != null) {
+        if (canvas != null) {
             // TODO Apply root transforms
-            root.draw(graphics);
+            canvas.draw(graphics);
         }
     }
 
