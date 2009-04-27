@@ -37,7 +37,7 @@ limitations under the License.
                 <TablePane.Row height="1*">
                     <Border styles="{padding:0}">
                         <content>
-                            <ScrollPane wtkx:id="scrollPane" horizontalScrollBarPolicy="fillToCapacity" styles="{backgroundColor:4}">
+                            <ScrollPane horizontalScrollBarPolicy="fillToCapacity" styles="{backgroundColor:4}">
                                 <view>
                                     <TableView wtkx:id="tableView" selectMode="single">
                                         <columns>
@@ -50,9 +50,6 @@ limitations under the License.
                                             </TableView.Column>
                                             <TableView.Column name="description" width="1*" headerData="Description"/>
                                         </columns>
-                                        <rowEditor>
-                                            <demo:TableViewRowEditor tableViewScrollPane="$scrollPane"/>
-                                        </rowEditor>
                                         <tableData>
                                             <collections:ArrayList>
                                                 <demo:CustomTableRow date="2009-03-28" type="Travel" amount="1286.90" description="Ticket #145-XX-71903-09"/>
@@ -68,7 +65,7 @@ limitations under the License.
                                     </TableView>
                                 </view>
                                 <columnHeader>
-                                    <TableViewHeader wtkx:id="tableViewHeader" tableView="$tableView" styles="{headersPressable:false}"/>
+                                    <TableViewHeader tableView="$tableView" styles="{headersPressable:false}"/>
                                 </columnHeader>
                             </ScrollPane>
                         </content>

@@ -17,9 +17,16 @@
 package pivot.demos.roweditor;
 
 import pivot.collections.Dictionary;
+import pivot.collections.EnumList;
 import pivot.wtk.Application;
 import pivot.wtk.Display;
+import pivot.wtk.ListButton;
+import pivot.wtk.Spinner;
+import pivot.wtk.TableView;
+import pivot.wtk.TextInput;
 import pivot.wtk.Window;
+import pivot.wtk.content.CalendarDateSpinnerData;
+import pivot.wtk.content.TableViewRowEditor;
 import pivot.wtkx.WTKXSerializer;
 
 /**
@@ -34,6 +41,27 @@ public class Demo implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(getClass().getResource("demo.wtkx"));
         window.open(display);
+
+        TableView tableView = (TableView)wtkxSerializer.getObjectByName("tableView");
+        TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();
+        tableView.setRowEditor(tableViewRowEditor);
+
+        // Date uses a Spinner with a CalendarDateSpinnerData model
+        Spinner dateSpinner = new Spinner(new CalendarDateSpinnerData());
+        dateSpinner.setSelectedItemKey("date");
+        tableViewRowEditor.getCellEditors().put("date", dateSpinner);
+
+        // Expense type uses a ListButton that presents the expense types
+        ListButton typeListButton = new ListButton(new EnumList<ExpenseType>(ExpenseType.class));
+        typeListButton.setSelectedItemKey("type");
+        tableViewRowEditor.getCellEditors().put("type", typeListButton);
+
+        // Amount uses a TextInput with strict currency validation
+        TextInput amountTextInput = new TextInput();
+        amountTextInput.setValidator(new CurrencyValidator());
+        amountTextInput.getStyles().put("strictValidation", true);
+        amountTextInput.setTextKey("amount");
+        tableViewRowEditor.getCellEditors().put("amount", amountTextInput);
     }
 
     public boolean shutdown(boolean optional) throws Exception {
