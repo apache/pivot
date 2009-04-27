@@ -44,9 +44,9 @@ public abstract class Image implements Visual {
             }
         }
 
-        public void regionInvalidated(Image image, int x, int y, int width, int height) {
+        public void regionUpdated(Image image, int x, int y, int width, int height) {
             for (ImageListener listener : this) {
-                listener.regionInvalidated(image, x, y, width, height);
+                listener.regionUpdated(image, x, y, width, height);
             }
         }
     }

@@ -48,7 +48,7 @@ public class Drawing extends Image {
 
             Bounds bounds = new Bounds(0, 0, Drawing.this.width, Drawing.this.height);
             bounds = bounds.intersect(new Bounds(x, y, width, height));
-            imageListeners.regionInvalidated(Drawing.this, x, y, width, height);
+            imageListeners.regionUpdated(Drawing.this, x, y, width, height);
         }
     };
 
@@ -81,8 +81,7 @@ public class Drawing extends Image {
             }
 
             drawingListeners.canvasChanged(this, previousCanvas);
-
-            imageListeners.regionInvalidated(this, 0, 0, width, height);
+            imageListeners.regionUpdated(this, 0, 0, width, height);
         }
     }
 

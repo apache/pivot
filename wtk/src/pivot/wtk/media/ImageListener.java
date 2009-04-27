@@ -40,5 +40,5 @@ public interface ImageListener {
      * @param width
      * @param height
      */
-    public void regionInvalidated(Image image, int x, int y, int width, int height);
+    public void regionUpdated(Image image, int x, int y, int width, int height);
 }
