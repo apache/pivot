@@ -16,8 +16,10 @@
  */
 package pivot.wtk.media.drawing;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.Iterator;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
@@ -53,31 +55,6 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
 
     @Override
     public Bounds getBounds() {
-        return bounds;
-    }
-
-    public void draw(Graphics2D graphics) {
-        graphics.setColor(Color.LIGHT_GRAY);
-        graphics.draw(getBounds().toRectangle());
-
-        // Draw each sub-shape
-        for (Shape shape : shapes) {
-            graphics.translate(shape.getX(), shape.getY());
-
-            // TODO Transform graphics
-
-            shape.draw(graphics);
-        }
-    }
-
-    @Override
-    protected void invalidate() {
-        super.invalidate();
-        bounds = null;
-    }
-
-    @Override
-    protected void validate() {
         if (bounds == null) {
             int top = 0;
             int left = 0;
@@ -96,7 +73,35 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
             bounds = new Bounds(left,top, right - left + 1, bottom - top + 1);
         }
 
-        super.validate();
+        return bounds;
+    }
+
+    public void draw(Graphics2D graphics) {
+        // Draw each sub-shape
+        for (Shape shape : shapes) {
+            // TODO Only draw if transformed bounds intersects clip rect
+
+            Graphics2D shapeGraphics = (Graphics2D)graphics.create();
+            shapeGraphics.translate(shape.getX(), shape.getY());
+
+            // TODO Transform graphics
+
+            shape.draw(shapeGraphics);
+            shapeGraphics.dispose();
+        }
+
+        // Draw a debug rectangle
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics.setColor(Color.LIGHT_GRAY);
+        graphics.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND,
+            BasicStroke.JOIN_ROUND, 2.0f, new float[] {0.0f, 4.0f}, 0.0f));
+        graphics.draw(getBounds().toRectangle());
+    }
+
+    @Override
+    protected void invalidate() {
+        super.invalidate();
+        bounds = null;
     }
 
     public int add(Shape shape) {

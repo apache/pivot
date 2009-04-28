@@ -31,6 +31,8 @@ import pivot.wtk.Point;
 
 /**
  * Abstract base class for shapes.
+ * <p>
+ * TODO Add a stroke style property (solid, dashed, dotted, etc.).
  *
  * @author gbrown
  */
@@ -156,7 +158,7 @@ public abstract class Shape {
 
     private int x = 0;
     private int y = 0;
-    private Bounds transformedBounds = null;
+    private Bounds transformedBounds = new Bounds(0, 0, 0, 0);
 
     private Paint fill = null;
     private Paint stroke = Color.BLACK;
@@ -346,8 +348,15 @@ public abstract class Shape {
 
     protected void validate() {
         if (!valid) {
-            // TODO Apply transforms
+            // Repaint the region formerly occupied by this shape
+            update(transformedBounds);
+
             transformedBounds = getBounds();
+
+            // TODO Apply transforms to transformedBounds
+
+            // Repaint the region currently occupied by this shape
+            update(transformedBounds);
 
             valid = true;
         }

@@ -29,16 +29,26 @@ import pivot.wtk.Bounds;
  * @author gbrown
  */
 public class Rectangle extends Shape {
-    private Bounds bounds = new Bounds(0, 0, 0, 0);
+    private int width = 0;
+    private int height = 0;
+    private Bounds bounds = null;
     private Rectangle2D.Double rectangle2D = new Rectangle2D.Double();
 
     @Override
     public Bounds getBounds() {
+        if (bounds == null) {
+            int strokeThickness = getStrokeThickness();
+
+            bounds = new Bounds(-strokeThickness / 2, -strokeThickness / 2,
+                width + strokeThickness, height + strokeThickness);
+        }
+
         return bounds;
     }
 
     @Override
     public boolean contains(int x, int y) {
+        // TODO Bounds could be null
         return bounds.contains(x, y);
     }
 
@@ -55,17 +65,41 @@ public class Rectangle extends Shape {
     }
 
     public int getWidth() {
-        return bounds.width;
+        return width;
+    }
+
+    public void setWidth(int width) {
+        setSize(width, height);
     }
 
     public int getHeight() {
-        return bounds.height;
+        return height;
+    }
+
+    public void setHeight(int height) {
+        setSize(width, height);
     }
 
     public void setSize(int width, int height) {
-        bounds = new Bounds(0, 0, width, height);
-        rectangle2D.width = width;
-        rectangle2D.height = height;
-        invalidate();
+        int previousWidth = this.width;
+        int previousHeight = this.height;
+        if (previousWidth != width
+            || previousHeight != height) {
+            this.width = width;
+            this.height = height;
+
+            rectangle2D.width = width;
+            rectangle2D.height = height;
+
+            invalidate();
+
+            // TODO Fire size change event
+        }
+    }
+
+    @Override
+    protected void invalidate() {
+        super.invalidate();
+        bounds = null;
     }
 }

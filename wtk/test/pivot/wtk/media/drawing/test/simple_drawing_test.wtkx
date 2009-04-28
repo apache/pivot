@@ -16,16 +16,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ImageView xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
+<ImageView styles="{backgroundColor:'#999999'}"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns:media="pivot.wtk.media"
     xmlns:drawing="pivot.wtk.media.drawing"
     xmlns="pivot.wtk">
     <image>
-        <media:Drawing>
+        <media:Drawing width="480" height="360" background="#ffff00">
             <canvas>
                 <drawing:Canvas>
-                    <drawing:Rectangle width="320" height="240" fill="#ff0000"
-                        stroke="#0000ff" strokeThickness="4"/>
+                    <drawing:Rectangle x="10" y="10"
+                        width="320" height="240" fill="#ff0000"
+                        stroke="#0000ff" strokeThickness="6"/>
                 </drawing:Canvas>
             </canvas>
         </media:Drawing>

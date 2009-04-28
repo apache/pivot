@@ -16,6 +16,8 @@
  */
 package pivot.wtk.media;
 
+import java.awt.Paint;
+
 import pivot.wtk.media.drawing.Canvas;
 
 /**
@@ -24,5 +26,19 @@ import pivot.wtk.media.drawing.Canvas;
  * @author gbrown
  */
 public interface DrawingListener {
+    /**
+     * Called when a drawing's canvas has changed.
+     *
+     * @param drawing
+     * @param previousCanvas
+     */
     public void canvasChanged(Drawing drawing, Canvas previousCanvas);
+
+    /**
+     * Called when a drawing's background has changed.
+     *
+     * @param drawing
+     * @param previousBackground
+     */
+    public void backgroundChanged(Drawing drawing, Paint previousBackground);
 }

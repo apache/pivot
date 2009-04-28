@@ -16,7 +16,9 @@
  */
 package pivot.wtk.media;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 
 import pivot.util.ListenerList;
 import pivot.wtk.Bounds;
@@ -36,9 +38,16 @@ public class Drawing extends Image {
                 listener.canvasChanged(drawing, previousCanvas);
             }
         }
+
+        public void backgroundChanged(Drawing drawing, Paint previousBackground) {
+            for (DrawingListener listener : this) {
+                listener.backgroundChanged(drawing, previousBackground);
+            }
+        }
     }
 
     private Canvas canvas;
+    private Paint background = null;
     private int width = 0;
     private int height = 0;
 
@@ -87,22 +96,56 @@ public class Drawing extends Image {
         return width;
     }
 
+    public void setWidth(int width) {
+        setSize(width, height);
+    }
+
     public int getHeight() {
         return height;
+    }
+
+    public void setHeight(int height) {
+        setSize(width, height);
     }
 
     public void setSize(int width, int height) {
         int previousWidth = this.width;
         int previousHeight = this.height;
 
-        this.width = width;
-        this.height = height;
+        if (previousWidth != width
+            || previousHeight != height) {
+            this.width = width;
+            this.height = height;
+            imageListeners.sizeChanged(this, previousWidth, previousHeight);
+        }
+    }
 
-        imageListeners.sizeChanged(this, previousWidth, previousHeight);
+    public Paint getBackground() {
+        return background;
+    }
+
+    public void setBackground(Paint background) {
+        Paint previousBackground = this.background;
+        if (previousBackground != background) {
+            this.background = background;
+            imageListeners.regionUpdated(this, 0, 0, width, height);
+            drawingListeners.backgroundChanged(this, previousBackground);
+        }
+    }
+
+    public final void setBackground(String background) {
+        if (background == null) {
+            throw new IllegalArgumentException("background is null.");
+        }
+
+        setBackground(Color.decode(background));
     }
 
     public void paint(Graphics2D graphics) {
         graphics.clipRect(0, 0, width, height);
+
+        graphics.setPaint(background);
+        graphics.fillRect(0, 0, width, height);
 
         if (canvas != null) {
             canvas.draw(graphics);
