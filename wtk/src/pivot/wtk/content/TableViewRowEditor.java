@@ -318,23 +318,28 @@ public class TableViewRowEditor implements TableView.RowEditor {
      *
      * @author tvolkert
      */
-    private TableViewRowListener tableViewRowHandler = new TableViewRowListener() {
+    private TableViewRowListener tableViewRowHandler = new TableViewRowListener.Adapter() {
+        @Override
         public void rowInserted(TableView tableView, int index) {
             cancel();
         }
 
+        @Override
         public void rowsRemoved(TableView tableView, int index, int count) {
             cancel();
         }
 
+        @Override
         public void rowsSorted(TableView tableView) {
             cancel();
         }
 
+        @Override
         public void rowsCleared(TableView tableView) {
             cancel();
         }
 
+        @Override
         public void rowUpdated(TableView tableView, int index) {
             cancel();
         }
