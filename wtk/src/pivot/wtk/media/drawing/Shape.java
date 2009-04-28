@@ -24,6 +24,7 @@ import java.util.Iterator;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
+import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 import pivot.wtk.Bounds;
 import pivot.wtk.Point;
@@ -36,18 +37,18 @@ import pivot.wtk.Point;
 public abstract class Shape {
     /**
      * Represents a sequence of affine transformations applied to this shape.
-     * <p>
-     * TODO These operations invalidate the shape.
-     * <p>
-     * TODO Fire ShapeTransform events as appropriate.
      *
      * @author gbrown
      */
     public class TransformSequence
         implements Transform, Sequence<Transform>, Iterable<Transform> {
+        private AffineTransform affineTransform = null;
+
         public int add(Transform transform) {
-            // TODO Auto-generated method stub
-            return 0;
+            int index = transforms.getLength();
+            transforms.insert(transform, index);
+
+            return index;
         }
 
         public Transform update(int index, Transform transform) {
@@ -55,18 +56,30 @@ public abstract class Shape {
         }
 
         public void insert(Transform transform, int index) {
-            // TODO Auto-generated method stub
-
+            transforms.insert(transform, index);
+            invalidate();
+            affineTransform = null;
+            shapeTransformListeners.transformInserted(Shape.this, index);
         }
 
         public int remove(Transform transform) {
-            // TODO Auto-generated method stub
-            return 0;
+            int index = transforms.indexOf(transform);
+            if (index != -1) {
+                transforms.remove(index, 1);
+            }
+
+            return index;
         }
 
         public Sequence<Transform> remove(int index, int count) {
-            // TODO Auto-generated method stub
-            return null;
+            Sequence<Transform> removed = transforms.remove(index, count);
+            if (removed.getLength() > 0) {
+                invalidate();
+                affineTransform = null;
+                shapeTransformListeners.transformsRemoved(Shape.this, index, count);
+            }
+
+            return removed;
         }
 
         public Transform get(int index) {
@@ -82,19 +95,22 @@ public abstract class Shape {
         }
 
         public AffineTransform getAffineTransform() {
-            // TODO Invalidate this when the list is modified and lazily
-            // recalculate here when requested
+            if (affineTransform == null) {
+                affineTransform = new AffineTransform();
+                for (Transform transform : this) {
+                    affineTransform.concatenate(transform.getAffineTransform());
+                }
+            }
 
-            return null;
+            return affineTransform;
         }
 
         public Iterator<Transform> iterator() {
-            // TODO
-            return null;
+            return new ImmutableIterator<Transform>(transforms.iterator());
         }
     }
 
-    private class ShapeListenerList extends ListenerList<ShapeListener>
+    private static class ShapeListenerList extends ListenerList<ShapeListener>
         implements ShapeListener {
         public void originChanged(Shape shape, int previousX, int previousY) {
             for (ShapeListener listener : this) {
@@ -121,20 +137,38 @@ public abstract class Shape {
         }
     }
 
+    private static class ShapeTransformListenerList extends ListenerList<ShapeTransformListener>
+        implements ShapeTransformListener {
+        public void transformInserted(Shape shape, int index) {
+            for (ShapeTransformListener listener : this) {
+                listener.transformInserted(shape, index);
+            }
+        }
+
+        public void transformsRemoved(Shape shape, int index, int count) {
+            for (ShapeTransformListener listener : this) {
+                listener.transformsRemoved(shape, index, count);
+            }
+        }
+    }
+
     private Group parent = null;
 
     private int x = 0;
     private int y = 0;
-    private Bounds bounds = new Bounds(0, 0, 0, 0);
+    private Bounds transformedBounds = null;
 
     private Paint fill = null;
     private Paint stroke = Color.BLACK;
     private int strokeThickness = 1;
 
+    private boolean valid = false;
+
     private ArrayList<Transform> transforms = new ArrayList<Transform>();
     private TransformSequence transformSequence = new TransformSequence();
 
     private ShapeListenerList shapeListeners = new ShapeListenerList();
+    private ShapeTransformListenerList shapeTransformListeners = new ShapeTransformListenerList();
 
     public Group getParent() {
         return parent;
@@ -192,9 +226,15 @@ public abstract class Shape {
      */
     public abstract Bounds getBounds();
 
+    /**
+     * Returns the transformed bounds of the shape.
+     *
+     * @return
+     * The resulting bounds after all transforms have been applied.
+     */
     public Bounds getTransformedBounds() {
-        // TODO Apply transform to bounds and return
-        return null;
+        validate();
+        return transformedBounds;
     }
 
     /**
@@ -231,7 +271,7 @@ public abstract class Shape {
         update();
     }
 
-    public void setFill(String fill) {
+    public final void setFill(String fill) {
         if (fill == null) {
             throw new IllegalArgumentException("fill is null.");
         }
@@ -257,7 +297,7 @@ public abstract class Shape {
         update();
     }
 
-    public void setStroke(String stroke) {
+    public final void setStroke(String stroke) {
         if (stroke == null) {
             throw new IllegalArgumentException("stroke is null.");
         }
@@ -295,16 +335,30 @@ public abstract class Shape {
     }
 
     protected void invalidate() {
-        // TODO Clear transformedBounds; recalculate in getTransformedBounds()
-        // TODO If parent is non-null, propagate upwards
+        if (valid) {
+            valid = false;
+
+            if (parent != null) {
+                parent.invalidate();
+            }
+        }
     }
 
     protected void validate() {
-        // TODO Recalculate transformed bounds
+        if (!valid) {
+            // TODO Apply transforms
+            transformedBounds = getBounds();
+
+            valid = true;
+        }
+    }
+
+    protected boolean isValid() {
+        return valid;
     }
 
     protected final void update() {
-        update(bounds);
+        update(getBounds());
     }
 
     protected final void update(Bounds bounds) {
@@ -321,5 +375,9 @@ public abstract class Shape {
 
     public ListenerList<ShapeListener> getShapeListeners() {
         return shapeListeners;
+    }
+
+    public ListenerList<ShapeTransformListener> getShapeTransformListeners() {
+        return shapeTransformListeners;
     }
 }

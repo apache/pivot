@@ -29,6 +29,7 @@ import pivot.wtk.ImageView;
 import pivot.wtk.ImageViewListener;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.media.Image;
+import pivot.wtk.media.ImageListener;
 
 /**
  * Image view skin.
@@ -46,15 +47,35 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     private HorizontalAlignment horizontalAlignment = HorizontalAlignment.CENTER;
     private VerticalAlignment verticalAlignment = VerticalAlignment.CENTER;
 
+    private ImageListener imageListener = new ImageListener() {
+        public void sizeChanged(Image image, int previousWidth, int previousHeight) {
+            invalidateComponent();
+        }
+
+        public void regionUpdated(Image image, int x, int y, int width, int height) {
+            repaintComponent(x, y, width, height);
+        }
+    };
+
     public void install(Component component) {
         super.install(component);
 
         ImageView imageView = (ImageView)component;
         imageView.getImageViewListeners().add(this);
+
+        Image image = imageView.getImage();
+        if (image != null) {
+            image.getImageListeners().add(imageListener);
+        }
     }
 
     public void uninstall() {
         ImageView imageView = (ImageView)getComponent();
+        Image image = imageView.getImage();
+        if (image != null) {
+            image.getImageListeners().remove(imageListener);
+        }
+
         imageView.getImageViewListeners().remove(this);
 
         super.uninstall();

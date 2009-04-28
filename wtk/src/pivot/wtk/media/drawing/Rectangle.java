@@ -16,7 +16,10 @@
  */
 package pivot.wtk.media.drawing;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.geom.Rectangle2D;
 
 import pivot.wtk.Bounds;
 
@@ -26,37 +29,43 @@ import pivot.wtk.Bounds;
  * @author gbrown
  */
 public class Rectangle extends Shape {
+    private Bounds bounds = new Bounds(0, 0, 0, 0);
+    private Rectangle2D.Double rectangle2D = new Rectangle2D.Double();
+
     @Override
     public Bounds getBounds() {
-        // TODO
-        return null;
+        return bounds;
     }
 
     @Override
     public boolean contains(int x, int y) {
-        // TODO
-        return false;
+        return bounds.contains(x, y);
     }
 
     public void draw(Graphics2D graphics) {
-        // TODO
+        Paint fill = getFill();
+        graphics.setPaint(fill);
+        graphics.fill(rectangle2D);
+
+        Paint stroke = getStroke();
+        int strokeThickness = getStrokeThickness();
+        graphics.setPaint(stroke);
+        graphics.setStroke(new BasicStroke(strokeThickness));
+        graphics.draw(rectangle2D);
     }
 
     public int getWidth() {
-        // TODO
-        return 0;
+        return bounds.width;
     }
 
     public int getHeight() {
-        // TODO
-        return 0;
+        return bounds.height;
     }
 
     public void setSize(int width, int height) {
-        // TODO Call invalidateBounds(); note that we need to call this
-        // instance's method and not just the parent because a transform
-        // may be applied and we'll need to recalculate the transformed bounds
-
-        // TODO Set internal width, height
+        bounds = new Bounds(0, 0, width, height);
+        rectangle2D.width = width;
+        rectangle2D.height = height;
+        invalidate();
     }
 }

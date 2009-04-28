@@ -44,8 +44,6 @@ public class Drawing extends Image {
 
     private CanvasListener canvasListener = new CanvasListener() {
         public void regionUpdated(Canvas canvas, int x, int y, int width, int height) {
-            // TODO Apply root transforms before propagating up
-
             Bounds bounds = new Bounds(0, 0, Drawing.this.width, Drawing.this.height);
             bounds = bounds.intersect(new Bounds(x, y, width, height));
             imageListeners.regionUpdated(Drawing.this, x, y, width, height);
@@ -107,7 +105,6 @@ public class Drawing extends Image {
         graphics.clipRect(0, 0, width, height);
 
         if (canvas != null) {
-            // TODO Apply root transforms
             canvas.draw(graphics);
         }
     }
