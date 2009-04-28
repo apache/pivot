@@ -93,10 +93,19 @@ public class ListView extends Component {
      */
     public interface ItemEditor extends Editor {
         /**
-         * Notifies the editor that editing should begin.
+         * Notifies the editor that editing should begin. If the editor is
+         * currently installed on the list view, the skin may choose to call
+         * this method when the user executes the appropriate gesture (as
+         * defined by the skin).
          *
          * @param listView
+         * The list view
+         *
          * @param index
+         * The index of the item to edit
+         *
+         * @see
+         * #setItemEditor(ItemEditor)
          */
         public void edit(ListView listView, int index);
     }

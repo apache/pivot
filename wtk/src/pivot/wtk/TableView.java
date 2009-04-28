@@ -440,6 +440,24 @@ public class TableView extends Component {
      * gbrown
      */
     public interface RowEditor extends Editor {
+        /**
+         * Notifies the editor that editing should begin. If the editor is
+         * currently installed on the table view, the skin may choose to call
+         * this method when the user executes the appropriate gesture (as
+         * defined by the skin).
+         *
+         * @param tableView
+         * The table view
+         *
+         * @param rowIndex
+         * The row index of the cell to edit
+         *
+         * @param columnIndex
+         * The column index of the cell to edit
+         *
+         * @see
+         * #setRowEditor(RowEditor)
+         */
         public void edit(TableView tableView, int rowIndex, int columnIndex);
     }
 

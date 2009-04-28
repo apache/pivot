@@ -109,13 +109,19 @@ public class TreeView extends Component {
      */
     public interface NodeEditor extends Editor {
         /**
-         * Notifies the editor that editing should begin.
+         * Notifies the editor that editing should begin. If the editor is
+         * currently installed on the tree view, the skin may choose to
+         * call this method when the user executes the appropriate gesture
+         * (as defined by the skin).
          *
          * @param treeView
          * The tree view containing the node to be edited.
          *
          * @param path
          * The path to the node to edit.
+         *
+         * @see
+         * #setNodeEditor(NodeEditor)
          */
         public void edit(TreeView treeView, Path path);
     }

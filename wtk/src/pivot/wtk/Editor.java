@@ -22,7 +22,22 @@ package pivot.wtk;
  * @author gbrown
  */
 public interface Editor {
+    /**
+     * Tells whether or not an edit is currently in progress.
+     */
     public boolean isEditing();
+
+    /**
+     * Saves an edit that is in progress by updating the appropriate data
+     * object. It is up to subclasses to define the behavior when
+     * <tt>isEditing() == false</tt>.
+     */
     public void save();
+
+    /**
+     * Cancels an edit that is in progress by reverting any edits the user has
+     * made. It is up to subclasses to define the behavior when
+     * <tt>isEditing() == false</tt>.
+     */
     public void cancel();
 }
