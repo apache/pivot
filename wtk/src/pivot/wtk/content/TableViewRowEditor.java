@@ -139,8 +139,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
         public void windowOpened(Window window) {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseHandler);
-            display.getComponentListeners().add(displayHandler);
 
+            tableView.getComponentListeners().add(tableViewComponentHandler);
             tableView.getTableViewListeners().add(tableViewHandler);
             tableView.getTableViewRowListeners().add(tableViewRowHandler);
 
@@ -200,8 +200,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
         public void windowClosed(Window window, Display display) {
             // Clean up
             display.getContainerMouseListeners().remove(displayMouseHandler);
-            display.getComponentListeners().remove(displayHandler);
 
+            tableView.getComponentListeners().remove(tableViewComponentHandler);
             tableView.getTableViewListeners().remove(tableViewHandler);
             tableView.getTableViewRowListeners().remove(tableViewRowHandler);
 
@@ -283,11 +283,11 @@ public class TableViewRowEditor implements TableView.RowEditor {
     };
 
     /**
-     * Responsible for cancelling the edit if the display's size changes.
+     * Responsible for cancelling the edit if the table view's size changes.
      *
      * @author tvolkert
      */
-    private ComponentListener displayHandler = new ComponentListener.Adapter() {
+    private ComponentListener tableViewComponentHandler = new ComponentListener.Adapter() {
         @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
             cancel();
