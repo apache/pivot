@@ -60,6 +60,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Display;
 import pivot.wtk.Rollup;
 import pivot.wtk.RollupStateListener;
+import pivot.wtk.ScrollPane;
 import pivot.wtk.Slider;
 import pivot.wtk.SliderValueListener;
 import pivot.wtk.Spinner;
@@ -356,6 +357,10 @@ public class Demo implements Application {
                 sortableTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("sortableTableViewHeader");
                 customTableView = (TableView)wtkxSerializer.getObjectByName("customTableView");
                 initializeTableViews();
+
+                ScrollPane sortableScrollPane = (ScrollPane)wtkxSerializer.getObjectByName("sortableScrollPane");
+                sortableScrollPane.getStyles().put("verticalIncrement",
+                    sortableTableView.getStyles().get("rowHeight"));
             }
         });
 

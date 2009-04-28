@@ -27,7 +27,8 @@ limitations under the License.
                 <Label text="Sortable" styles="{fontBold:true}"/>
                 <Border styles="{padding:0, color:10}">
                     <content>
-                        <ScrollPane horizontalScrollBarPolicy="fillToCapacity" preferredWidth="276" preferredHeight="160">
+                        <ScrollPane wtkx:id="sortableScrollPane" horizontalScrollBarPolicy="fillToCapacity"
+                            preferredWidth="276" preferredHeight="160">
                             <view>
                                 <TableView wtkx:id="sortableTableView" selectMode="multi">
                                     <columns>
