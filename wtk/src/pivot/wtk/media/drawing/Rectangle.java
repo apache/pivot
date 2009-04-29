@@ -44,23 +44,6 @@ public class Rectangle extends Shape {
 
     private RectangleListenerList rectangleListeners = new RectangleListenerList();
 
-    @Override
-    public boolean contains(int x, int y) {
-        return rectangle2D.contains(x, y);
-    }
-
-    public void draw(Graphics2D graphics) {
-        Paint fill = getFill();
-        graphics.setPaint(fill);
-        graphics.fill(rectangle2D);
-
-        Paint stroke = getStroke();
-        int strokeThickness = getStrokeThickness();
-        graphics.setPaint(stroke);
-        graphics.setStroke(new BasicStroke(strokeThickness));
-        graphics.draw(rectangle2D);
-    }
-
     public int getWidth() {
         return (int)rectangle2D.width;
     }
@@ -87,6 +70,23 @@ public class Rectangle extends Shape {
             invalidate();
             rectangleListeners.sizeChanged(this, previousWidth, previousHeight);
         }
+    }
+
+    @Override
+    public boolean contains(int x, int y) {
+        return rectangle2D.contains(x, y);
+    }
+
+    public void draw(Graphics2D graphics) {
+        Paint fill = getFill();
+        graphics.setPaint(fill);
+        graphics.fill(rectangle2D);
+
+        Paint stroke = getStroke();
+        int strokeThickness = getStrokeThickness();
+        graphics.setPaint(stroke);
+        graphics.setStroke(new BasicStroke(strokeThickness));
+        graphics.draw(rectangle2D);
     }
 
     @Override
