@@ -275,7 +275,7 @@ public abstract class Shape {
     public Paint getFill() {
         Paint fill = this.fill;
         if (fill == null) {
-            if (fill == null) {
+            if (parent == null) {
                 throw new IllegalStateException();
             }
 

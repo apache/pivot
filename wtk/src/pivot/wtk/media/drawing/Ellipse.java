@@ -16,21 +16,92 @@
  */
 package pivot.wtk.media.drawing;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.RenderingHints;
+import java.awt.geom.Ellipse2D;
+
+import pivot.util.ListenerList;
 
 /**
  * Shape representing an ellipse.
  *
- * @author gbrown
+ * @author tvolkert
  */
 public class Ellipse extends Shape {
+    private static class EllipseListenerList extends ListenerList<EllipseListener>
+        implements EllipseListener {
+        public void sizeChanged(Ellipse ellipse, int previousWidth, int previousHeight) {
+            for (EllipseListener listener : this) {
+                listener.sizeChanged(ellipse, previousWidth, previousHeight);
+            }
+        }
+    }
+
+    private Ellipse2D.Double ellipse2D = new Ellipse2D.Double();
+
+    private EllipseListenerList ellipseListeners = new EllipseListenerList();
+
+    public int getWidth() {
+        return (int)ellipse2D.width;
+    }
+
+    public void setWidth(int width) {
+        setSize(width, (int)ellipse2D.height);
+    }
+
+    public int getHeight() {
+        return (int)ellipse2D.height;
+    }
+
+    public void setHeight(int height) {
+        setSize((int)ellipse2D.width, height);
+    }
+
+    public void setSize(int width, int height) {
+        int previousWidth = (int)ellipse2D.width;
+        int previousHeight = (int)ellipse2D.height;
+        if (previousWidth != width
+            || previousHeight != height) {
+            ellipse2D.width = width;
+            ellipse2D.height = height;
+            invalidate();
+            ellipseListeners.sizeChanged(this, previousWidth, previousHeight);
+        }
+    }
+
     @Override
     public boolean contains(int x, int y) {
-        // TODO Auto-generated method stub
-        return false;
+        return ellipse2D.contains(x, y);
     }
 
     public void draw(Graphics2D graphics) {
-        // TODO Auto-generated method stub
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
+
+        Paint fill = getFill();
+        graphics.setPaint(fill);
+        graphics.fill(ellipse2D);
+
+        Paint stroke = getStroke();
+        int strokeThickness = getStrokeThickness();
+        graphics.setPaint(stroke);
+        graphics.setStroke(new BasicStroke(strokeThickness));
+        graphics.draw(ellipse2D);
+    }
+
+    @Override
+    protected void validate() {
+        int strokeThickness = getStrokeThickness();
+        setBounds(-strokeThickness / 2, -strokeThickness / 2,
+            (int)ellipse2D.width + strokeThickness,
+            (int)ellipse2D.height + strokeThickness);
+
+        super.validate();
+    }
+
+    public ListenerList<EllipseListener> getEllipseListeners() {
+        return ellipseListeners;
     }
 }
