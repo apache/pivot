@@ -19,8 +19,6 @@ package pivot.wtk.media.drawing;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import pivot.wtk.Bounds;
-
 /**
  * Shape representing a block of text.
  *
@@ -30,12 +28,6 @@ public class Text extends Shape {
     private String text = null;
     private Font font = null; // TODO Need to specify a default
     private int wrapWidth = -1;
-
-    @Override
-    public Bounds getBounds() {
-        // TODO Recalculate width, height in validate()
-        return null;
-    }
 
     public String getText() {
         return text;
