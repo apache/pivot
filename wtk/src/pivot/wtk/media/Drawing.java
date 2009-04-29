@@ -148,6 +148,8 @@ public class Drawing extends Image {
         graphics.fillRect(0, 0, width, height);
 
         if (canvas != null) {
+            Bounds bounds = canvas.getBounds();
+            graphics.translate(bounds.x, bounds.y);
             canvas.draw(graphics);
         }
     }

@@ -53,6 +53,11 @@ public class Canvas extends Group {
     }
 
     @Override
+    public void setOrigin(int x, int y) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void setFill(Paint fill) {
         if (fill == null) {
             throw new IllegalArgumentException();

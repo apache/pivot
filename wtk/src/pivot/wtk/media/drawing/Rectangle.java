@@ -21,35 +21,32 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
 
-import pivot.wtk.Bounds;
+import pivot.util.ListenerList;
 
 /**
  * Shape representing a rectangle.
+ * <p>
+ * TODO Add a corner radii property.
  *
  * @author gbrown
  */
 public class Rectangle extends Shape {
-    private int width = 0;
-    private int height = 0;
-    private Bounds bounds = null;
+    private static class RectangleListenerList extends ListenerList<RectangleListener>
+        implements RectangleListener {
+        public void sizeChanged(Rectangle rectangle, int previousWidth, int previousHeight) {
+            for (RectangleListener listener : this) {
+                listener.sizeChanged(rectangle, previousWidth, previousHeight);
+            }
+        }
+    }
+
     private Rectangle2D.Double rectangle2D = new Rectangle2D.Double();
 
-    @Override
-    public Bounds getBounds() {
-        if (bounds == null) {
-            int strokeThickness = getStrokeThickness();
-
-            bounds = new Bounds(-strokeThickness / 2, -strokeThickness / 2,
-                width + strokeThickness, height + strokeThickness);
-        }
-
-        return bounds;
-    }
+    private RectangleListenerList rectangleListeners = new RectangleListenerList();
 
     @Override
     public boolean contains(int x, int y) {
-        // TODO Bounds could be null
-        return bounds.contains(x, y);
+        return rectangle2D.contains(x, y);
     }
 
     public void draw(Graphics2D graphics) {
@@ -65,41 +62,44 @@ public class Rectangle extends Shape {
     }
 
     public int getWidth() {
-        return width;
+        return (int)rectangle2D.width;
     }
 
     public void setWidth(int width) {
-        setSize(width, height);
+        setSize(width, (int)rectangle2D.height);
     }
 
     public int getHeight() {
-        return height;
+        return (int)rectangle2D.height;
     }
 
     public void setHeight(int height) {
-        setSize(width, height);
+        setSize((int)rectangle2D.width, height);
     }
 
     public void setSize(int width, int height) {
-        int previousWidth = this.width;
-        int previousHeight = this.height;
+        int previousWidth = (int)rectangle2D.width;
+        int previousHeight = (int)rectangle2D.height;
         if (previousWidth != width
             || previousHeight != height) {
-            this.width = width;
-            this.height = height;
-
             rectangle2D.width = width;
             rectangle2D.height = height;
-
             invalidate();
-
-            // TODO Fire size change event
+            rectangleListeners.sizeChanged(this, previousWidth, previousHeight);
         }
     }
 
     @Override
-    protected void invalidate() {
-        super.invalidate();
-        bounds = null;
+    protected void validate() {
+        int strokeThickness = getStrokeThickness();
+        setBounds(-strokeThickness / 2, -strokeThickness / 2,
+            (int)rectangle2D.width + strokeThickness,
+            (int)rectangle2D.height + strokeThickness);
+
+        super.validate();
+    }
+
+    public ListenerList<RectangleListener> getRectangleListeners() {
+        return rectangleListeners;
     }
 }

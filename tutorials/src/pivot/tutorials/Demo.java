@@ -60,14 +60,12 @@ import pivot.wtk.Component;
 import pivot.wtk.Display;
 import pivot.wtk.Rollup;
 import pivot.wtk.RollupStateListener;
-import pivot.wtk.ScrollPane;
 import pivot.wtk.Slider;
 import pivot.wtk.SliderValueListener;
 import pivot.wtk.Spinner;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TextArea;
-// import pivot.wtk.Theme;
 import pivot.wtk.TreeView;
 import pivot.wtk.Visual;
 import pivot.wtk.Window;
@@ -80,7 +78,6 @@ import pivot.wtk.content.TreeBranch;
 import pivot.wtk.effects.ReflectionDecorator;
 import pivot.wtk.effects.WatermarkDecorator;
 import pivot.wtk.media.Image;
-// import pivot.wtk.skin.terra.TerraTheme;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.PlainTextSerializer;
 import pivot.wtkx.WTKXSerializer;
@@ -358,9 +355,11 @@ public class Demo implements Application {
                 customTableView = (TableView)wtkxSerializer.getObjectByName("customTableView");
                 initializeTableViews();
 
+                /*
                 ScrollPane sortableScrollPane = (ScrollPane)wtkxSerializer.getObjectByName("sortableScrollPane");
                 sortableScrollPane.getStyles().put("verticalIncrement",
                     sortableTableView.getStyles().get("rowHeight"));
+                */
             }
         });
 

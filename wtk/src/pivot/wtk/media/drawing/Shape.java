@@ -32,7 +32,10 @@ import pivot.wtk.Point;
 /**
  * Abstract base class for shapes.
  * <p>
- * TODO Add a stroke style property (solid, dashed, dotted, etc.).
+ * TODO Add a visible property.
+ * <p>
+ * TODO Add a lineStyle property (solid, dashed, dotted, etc.)? Or support a
+ * strokeDashArray property?
  *
  * @author gbrown
  */
@@ -158,13 +161,14 @@ public abstract class Shape {
 
     private int x = 0;
     private int y = 0;
+    private Bounds bounds = new Bounds(0, 0, 0, 0);
     private Bounds transformedBounds = new Bounds(0, 0, 0, 0);
 
     private Paint fill = null;
     private Paint stroke = Color.BLACK;
     private int strokeThickness = 1;
 
-    private boolean valid = false;
+    private boolean valid = true;
 
     private ArrayList<Transform> transforms = new ArrayList<Transform>();
     private TransformSequence transformSequence = new TransformSequence();
@@ -220,13 +224,26 @@ public abstract class Shape {
     }
 
     /**
-     * Returns the bounds of the component, including the stroke thickness.
+     * Returns the bounds of the shape.
      *
      * @return
-     * The component's bounding area. The x and y coordinates are relative to
-     * the parent group's origin.
+     * The component's bounding area, including the stroke thickness. The x and
+     * y coordinates are relative to the parent group's origin.
      */
-    public abstract Bounds getBounds();
+    public Bounds getBounds() {
+        return bounds;
+    }
+
+    /**
+     * Sets the bounds of the shape.
+     *
+     * @param bounds
+     * The component's bounding area, including the stroke thickness. The x and
+     * y coordinates are relative to the parent group's origin.
+     */
+    protected void setBounds(int x, int y, int width, int height) {
+        bounds = new Bounds(x, y, width, height);
+    }
 
     /**
      * Returns the transformed bounds of the shape.
@@ -281,6 +298,10 @@ public abstract class Shape {
         setFill(Color.decode(fill));
     }
 
+    public boolean isFillSet() {
+        return (fill != null);
+    }
+
     public Paint getStroke() {
         Paint stroke = this.stroke;
         if (stroke == null) {
@@ -307,6 +328,10 @@ public abstract class Shape {
         setStroke(Color.decode(stroke));
     }
 
+    public boolean isStrokeSet() {
+        return (stroke != null);
+    }
+
     public int getStrokeThickness() {
         int strokeThickness = this.strokeThickness;
         if (strokeThickness == -1) {
@@ -330,6 +355,10 @@ public abstract class Shape {
         invalidate();
     }
 
+    public boolean isStrokeThicknessSet() {
+        return (strokeThickness != -1);
+    }
+
     public abstract void draw(Graphics2D graphics);
 
     public TransformSequence getTransforms() {
@@ -351,9 +380,8 @@ public abstract class Shape {
             // Repaint the region formerly occupied by this shape
             update(transformedBounds);
 
-            transformedBounds = getBounds();
-
             // TODO Apply transforms to transformedBounds
+            transformedBounds = new Bounds(bounds);
 
             // Repaint the region currently occupied by this shape
             update(transformedBounds);
@@ -367,7 +395,7 @@ public abstract class Shape {
     }
 
     protected final void update() {
-        update(getBounds());
+        update(bounds);
     }
 
     protected final void update(Bounds bounds) {

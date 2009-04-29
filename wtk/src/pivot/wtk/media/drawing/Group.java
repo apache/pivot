@@ -20,6 +20,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
@@ -48,33 +49,9 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         }
     }
 
-    private Bounds bounds = null;
     private ArrayList<Shape> shapes = new ArrayList<Shape>();
 
     private GroupListenerList groupListeners = new GroupListenerList();
-
-    @Override
-    public Bounds getBounds() {
-        if (bounds == null) {
-            int top = 0;
-            int left = 0;
-            int bottom = 0;
-            int right = 0;
-
-            // Recalculate bounds
-            for (Shape shape : shapes) {
-                Bounds shapeBounds = shape.getBounds();
-                top = Math.min(shapeBounds.y, top);
-                left = Math.min(shapeBounds.x, left);
-                bottom = Math.max(shapeBounds.y + shapeBounds.height - 1, bottom);
-                right = Math.max(shapeBounds.x + shapeBounds.width - 1, right);
-            }
-
-            bounds = new Bounds(left,top, right - left + 1, bottom - top + 1);
-        }
-
-        return bounds;
-    }
 
     public void draw(Graphics2D graphics) {
         // Draw each sub-shape
@@ -95,13 +72,43 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         graphics.setColor(Color.LIGHT_GRAY);
         graphics.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND,
             BasicStroke.JOIN_ROUND, 2.0f, new float[] {0.0f, 4.0f}, 0.0f));
-        graphics.draw(getBounds().toRectangle());
+
+        // TODO This may still be wrong
+        Bounds bounds = getBounds();
+        graphics.draw(new Rectangle2D.Double(bounds.x, bounds.y, bounds.width, bounds.height));
     }
 
     @Override
-    protected void invalidate() {
-        super.invalidate();
-        bounds = null;
+    protected void validate() {
+        // Recalculate bounds
+        int top = 0;
+        int left = 0;
+        int bottom = 0;
+        int right = 0;
+
+        for (int i = 0, n = shapes.getLength(); i < n; i++) {
+            Shape shape = shapes.get(i);
+            shape.validate();
+            int x = shape.getX();
+            int y = shape.getY();
+            Bounds bounds = shape.getBounds();
+
+            if (i == 0) {
+                top = y + bounds.y;
+                left = x + bounds.x;
+                bottom = y + bounds.y + bounds.height - 1;
+                right = x + bounds.x + bounds.width - 1;
+            } else {
+                top = Math.min(y + bounds.y, top);
+                left = Math.min(x + bounds.x, left);
+                bottom = Math.max(y + bounds.y + bounds.height - 1, bottom);
+                right = Math.max(x + bounds.x + bounds.width - 1, right);
+            }
+        }
+
+        setBounds(left, top, right - left + 1, bottom - top + 1);
+
+        super.validate();
     }
 
     public int add(Shape shape) {

@@ -19,7 +19,6 @@ package pivot.wtk.skin;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.Transparency;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
