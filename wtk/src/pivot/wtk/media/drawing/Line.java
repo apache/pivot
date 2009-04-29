@@ -123,6 +123,15 @@ public class Line extends Shape {
     }
 
     @Override
+    public void setStroke(Paint stroke) {
+        if (stroke == null) {
+            throw new IllegalArgumentException();
+        }
+
+        super.setStroke(stroke);
+    }
+
+    @Override
     public void draw(Graphics2D graphics) {
         Paint stroke = getStroke();
         int strokeThickness = getStrokeThickness();

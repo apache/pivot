@@ -19,7 +19,6 @@ package pivot.wtk.media.drawing;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 
 import pivot.util.ListenerList;
@@ -77,18 +76,19 @@ public class Ellipse extends Shape {
     }
 
     public void draw(Graphics2D graphics) {
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
-
         Paint fill = getFill();
-        graphics.setPaint(fill);
-        graphics.fill(ellipse2D);
+        if (fill != null) {
+            graphics.setPaint(fill);
+            graphics.fill(ellipse2D);
+        }
 
         Paint stroke = getStroke();
-        int strokeThickness = getStrokeThickness();
-        graphics.setPaint(stroke);
-        graphics.setStroke(new BasicStroke(strokeThickness));
-        graphics.draw(ellipse2D);
+        if (stroke != null) {
+            int strokeThickness = getStrokeThickness();
+            graphics.setPaint(stroke);
+            graphics.setStroke(new BasicStroke(strokeThickness));
+            graphics.draw(ellipse2D);
+        }
     }
 
     @Override

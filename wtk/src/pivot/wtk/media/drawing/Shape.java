@@ -273,15 +273,6 @@ public abstract class Shape {
     public abstract boolean contains(int x, int y);
 
     public Paint getFill() {
-        Paint fill = this.fill;
-        if (fill == null) {
-            if (parent == null) {
-                throw new IllegalStateException();
-            }
-
-            fill = parent.getFill();
-        }
-
         return fill;
     }
 
@@ -298,20 +289,7 @@ public abstract class Shape {
         setFill(Color.decode(fill));
     }
 
-    public boolean isFillSet() {
-        return (fill != null);
-    }
-
     public Paint getStroke() {
-        Paint stroke = this.stroke;
-        if (stroke == null) {
-            if (parent == null) {
-                throw new IllegalStateException();
-            }
-
-            stroke = parent.getStroke();
-        }
-
         return stroke;
     }
 
@@ -328,35 +306,18 @@ public abstract class Shape {
         setStroke(Color.decode(stroke));
     }
 
-    public boolean isStrokeSet() {
-        return (stroke != null);
-    }
-
     public int getStrokeThickness() {
-        int strokeThickness = this.strokeThickness;
-        if (strokeThickness == -1) {
-            if (parent == null) {
-                throw new IllegalStateException();
-            }
-
-            strokeThickness = parent.getStrokeThickness();
-        }
-
         return strokeThickness;
     }
 
     public void setStrokeThickness(int strokeThickness) {
-        if (strokeThickness < -1) {
+        if (strokeThickness < 0) {
             throw new IllegalArgumentException();
         }
 
         this.strokeThickness = strokeThickness;
 
         invalidate();
-    }
-
-    public boolean isStrokeThicknessSet() {
-        return (strokeThickness != -1);
     }
 
     public abstract void draw(Graphics2D graphics);

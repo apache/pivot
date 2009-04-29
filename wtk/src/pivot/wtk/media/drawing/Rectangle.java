@@ -79,14 +79,18 @@ public class Rectangle extends Shape {
 
     public void draw(Graphics2D graphics) {
         Paint fill = getFill();
-        graphics.setPaint(fill);
-        graphics.fill(rectangle2D);
+        if (fill != null) {
+            graphics.setPaint(fill);
+            graphics.fill(rectangle2D);
+        }
 
         Paint stroke = getStroke();
-        int strokeThickness = getStrokeThickness();
-        graphics.setPaint(stroke);
-        graphics.setStroke(new BasicStroke(strokeThickness));
-        graphics.draw(rectangle2D);
+        if (stroke != null) {
+            int strokeThickness = getStrokeThickness();
+            graphics.setPaint(stroke);
+            graphics.setStroke(new BasicStroke(strokeThickness));
+            graphics.draw(rectangle2D);
+        }
     }
 
     @Override

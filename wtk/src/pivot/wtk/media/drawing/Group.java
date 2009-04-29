@@ -19,6 +19,7 @@ package pivot.wtk.media.drawing;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
@@ -52,6 +53,21 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     private ArrayList<Shape> shapes = new ArrayList<Shape>();
 
     private GroupListenerList groupListeners = new GroupListenerList();
+
+    @Override
+    public void setFill(Paint fill) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setStroke(Paint stroke) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setStrokeThickness(int strokeThickness) {
+        throw new UnsupportedOperationException();
+    }
 
     public void draw(Graphics2D graphics) {
         // Draw each sub-shape

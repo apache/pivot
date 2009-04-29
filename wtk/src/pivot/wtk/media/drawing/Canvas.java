@@ -16,9 +16,6 @@
  */
 package pivot.wtk.media.drawing;
 
-import java.awt.Color;
-import java.awt.Paint;
-
 import pivot.util.ListenerList;
 import pivot.wtk.ApplicationContext;
 
@@ -46,42 +43,9 @@ public class Canvas extends Group {
 
     private ValidateCallback validateCallback = null;
 
-    public Canvas() {
-        setFill(Color.WHITE);
-        setStroke(Color.BLACK);
-        setStrokeThickness(1);
-    }
-
     @Override
     public void setOrigin(int x, int y) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setFill(Paint fill) {
-        if (fill == null) {
-            throw new IllegalArgumentException();
-        }
-
-        super.setFill(fill);
-    }
-
-    @Override
-    public void setStroke(Paint stroke) {
-        if (stroke == null) {
-            throw new IllegalArgumentException();
-        }
-
-        super.setStroke(stroke);
-    }
-
-    @Override
-    public void setStrokeThickness(int strokeThickness) {
-        if (strokeThickness == -1) {
-            throw new IllegalArgumentException();
-        }
-
-        super.setStrokeThickness(strokeThickness);
     }
 
     @Override

@@ -19,6 +19,7 @@ package pivot.wtk.media;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.RenderingHints;
 
 import pivot.util.ListenerList;
 import pivot.wtk.Bounds;
@@ -148,6 +149,10 @@ public class Drawing extends Image {
         graphics.fillRect(0, 0, width, height);
 
         if (canvas != null) {
+            // TODO Make this configurable?
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
             Bounds bounds = canvas.getBounds();
             graphics.translate(bounds.x, bounds.y);
             canvas.draw(graphics);
