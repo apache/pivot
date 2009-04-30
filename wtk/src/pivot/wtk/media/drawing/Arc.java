@@ -16,7 +16,10 @@
  */
 package pivot.wtk.media.drawing;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.geom.Arc2D;
 
 /**
  * Shape representing an arc.
@@ -24,6 +27,14 @@ import java.awt.Graphics2D;
  * @author gbrown
  */
 public class Arc extends Shape {
+    public enum ClosureType {
+        CHORD,
+        OPEN,
+        PIE
+    }
+
+    private Arc2D.Float arc2D = new Arc2D.Float();
+
     @Override
     public boolean contains(int x, int y) {
         // TODO Auto-generated method stub
@@ -32,7 +43,23 @@ public class Arc extends Shape {
 
     @Override
     public void draw(Graphics2D graphics) {
-        // TODO Auto-generated method stub
+        Paint fill = getFill();
+        if (fill != null) {
+            graphics.setPaint(fill);
+            graphics.fill(arc2D);
+        }
 
+        Paint stroke = getStroke();
+        if (stroke != null) {
+            int strokeThickness = getStrokeThickness();
+            graphics.setPaint(stroke);
+            graphics.setStroke(new BasicStroke(strokeThickness));
+            graphics.draw(arc2D);
+        }
+    }
+
+    @Override
+    protected void validate() {
+        // TODO
     }
 }

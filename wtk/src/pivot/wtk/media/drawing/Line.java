@@ -41,7 +41,7 @@ public class Line extends Shape {
         }
     }
 
-    private Line2D.Double line2D = new Line2D.Double();
+    private Line2D.Float line2D = new Line2D.Float();
 
     private LineListenerList lineListeners = new LineListenerList();
 

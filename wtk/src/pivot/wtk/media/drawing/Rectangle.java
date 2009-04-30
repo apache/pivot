@@ -40,7 +40,7 @@ public class Rectangle extends Shape {
         }
     }
 
-    private Rectangle2D.Double rectangle2D = new Rectangle2D.Double();
+    private Rectangle2D.Float rectangle2D = new Rectangle2D.Float();
 
     private RectangleListenerList rectangleListeners = new RectangleListenerList();
 

@@ -38,7 +38,7 @@ public class Ellipse extends Shape {
         }
     }
 
-    private Ellipse2D.Double ellipse2D = new Ellipse2D.Double();
+    private Ellipse2D.Float ellipse2D = new Ellipse2D.Float();
 
     private EllipseListenerList ellipseListeners = new EllipseListenerList();
 

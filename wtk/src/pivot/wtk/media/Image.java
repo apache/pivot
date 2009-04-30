@@ -28,6 +28,7 @@ import pivot.util.concurrent.TaskListener;
 import pivot.util.concurrent.TaskExecutionException;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Visual;
+import pivot.wtkx.WTKXSerializer;
 
 /**
  * Abstract base class for images. An image is either a bitmapped "picture"
@@ -83,16 +84,15 @@ public abstract class Image implements Visual {
                     // operation
                     inputStream = new BufferedInputStream(url.openStream());
 
-                    // TODO Need a way to identify the type of image to load
-                    // (picture or drawing) - an argument/property may be
-                    // appropriate. If the attribute is optional, we can try to
-                    // determine the type from the file extension in the URL, or
-                    // by looking at the first few bytes of the input stream.
-
-                    BufferedImageSerializer serializer = new BufferedImageSerializer();
-                    BufferedImage bufferedImage =
-                        serializer.readObject(new MonitoredInputStream(inputStream));
-                    image = new Picture(bufferedImage);
+                    if (url.getFile().endsWith("wtkd")) {
+                        WTKXSerializer serializer = new WTKXSerializer();
+                        image = (Drawing)serializer.readObject(inputStream);
+                    } else {
+                        BufferedImageSerializer serializer = new BufferedImageSerializer();
+                        BufferedImage bufferedImage =
+                            serializer.readObject(new MonitoredInputStream(inputStream));
+                        image = new Picture(bufferedImage);
+                    }
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();
