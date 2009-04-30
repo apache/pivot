@@ -16,6 +16,8 @@
  */
 package pivot.wtk.media.drawing;
 
+import pivot.collections.Sequence;
+
 /**
  * Path listener interface.
  *
@@ -29,4 +31,28 @@ public interface PathListener {
      * @param previousWindingRule
      */
     public void windingRuleChanged(Path path, Path.WindingRule previousWindingRule);
+
+    /**
+     * Called when an operation has been inserted into a path.
+     *
+     * @param path
+     * @param index
+     */
+    public void operationInserted(Path path, int index);
+
+    /**
+     * Called when operations have been removed from a path.
+     *
+     * @param path
+     * @param index
+     * @param removed
+     */
+    public void operationsRemoved(Path path, int index, Sequence<Path.Operation> removed);
+
+    /**
+     * Called when an operation has been updated.
+     *
+     * @param operation
+     */
+    public void operationUpdated(Path.Operation operation);
 }
