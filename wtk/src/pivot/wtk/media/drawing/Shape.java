@@ -67,8 +67,20 @@ public abstract class Shape {
      * @author gbrown
      */
     public static final class Rotate extends Transform {
-        private double angle = 0;
+        private double angle;
+        private double anchorX;
+        private double anchorY;
         private AffineTransform affineTransform = null;
+
+        public Rotate() {
+            this(0, 0, 0);
+        }
+
+        public Rotate(double angle, double anchorX, double anchorY) {
+            this.angle = angle;
+            this.anchorX = anchorX;
+            this.anchorY = anchorY;
+        }
 
         public double getAngle() {
             return angle;
@@ -82,6 +94,37 @@ public abstract class Shape {
                 Shape shape = getShape();
                 if (shape != null) {
                     shape.invalidate();
+                    shape.transformSequence.affineTransform = null;
+                    shape.shapeTransformListeners.transformUpdated(this);
+                }
+            }
+        }
+
+        public double getAnchorX() {
+            return anchorX;
+        }
+
+        public void setAnchorX(double anchorX) {
+            setAnchor(anchorX, anchorY);
+        }
+
+        public double getAnchorY() {
+            return anchorY;
+        }
+
+        public void setAnchorY(double anchorY) {
+            setAnchor(anchorX, anchorY);
+        }
+
+        public void setAnchor(double anchorX, double anchorY) {
+            if (this.anchorY != anchorY) {
+                this.anchorY = anchorY;
+                affineTransform = null;
+
+                Shape shape = getShape();
+                if (shape != null) {
+                    shape.invalidate();
+                    shape.transformSequence.affineTransform = null;
                     shape.shapeTransformListeners.transformUpdated(this);
                 }
             }
@@ -90,7 +133,7 @@ public abstract class Shape {
         public AffineTransform getAffineTransform() {
             if (affineTransform == null) {
                 double radians = (2 * Math.PI) / 360 * angle;
-                affineTransform = AffineTransform.getRotateInstance(radians);
+                affineTransform = AffineTransform.getRotateInstance(radians, anchorX, anchorY);
             }
 
             return affineTransform;
@@ -133,6 +176,7 @@ public abstract class Shape {
                 Shape shape = getShape();
                 if (shape != null) {
                     shape.invalidate();
+                    shape.transformSequence.affineTransform = null;
                     shape.shapeTransformListeners.transformUpdated(this);
                 }
             }
@@ -183,6 +227,7 @@ public abstract class Shape {
                 Shape shape = getShape();
                 if (shape != null) {
                     shape.invalidate();
+                    shape.transformSequence.affineTransform = null;
                     shape.shapeTransformListeners.transformUpdated(this);
                 }
             }
@@ -207,8 +252,8 @@ public abstract class Shape {
         private AffineTransform affineTransform = null;
 
         public int add(Transform transform) {
-            int index = transforms.getLength();
-            transforms.insert(transform, index);
+            int index = getLength();
+            insert(transform, index);
 
             return index;
         }
@@ -218,7 +263,8 @@ public abstract class Shape {
         }
 
         public void insert(Transform transform, int index) {
-            if (transform.getShape() != null) {
+            if (transform == null
+                || transform.getShape() != null) {
                 throw new IllegalArgumentException();
             }
 
@@ -232,9 +278,9 @@ public abstract class Shape {
         }
 
         public int remove(Transform transform) {
-            int index = transforms.indexOf(transform);
+            int index = indexOf(transform);
             if (index != -1) {
-                transforms.remove(index, 1);
+                remove(index, 1);
             }
 
             return index;

@@ -145,16 +145,16 @@ public class Drawing extends Image {
     public void paint(Graphics2D graphics) {
         graphics.clipRect(0, 0, width, height);
 
-        graphics.setPaint(background);
-        graphics.fillRect(0, 0, width, height);
+        if (background != null) {
+            graphics.setPaint(background);
+            graphics.fillRect(0, 0, width, height);
+        }
 
         if (canvas != null) {
             // TODO Make this configurable?
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            Bounds bounds = canvas.getBounds();
-            graphics.translate(bounds.x, bounds.y);
             canvas.draw(graphics);
         }
     }

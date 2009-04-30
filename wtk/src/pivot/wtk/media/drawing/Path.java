@@ -40,7 +40,7 @@ public class Path extends Shape {
      * @author tvolkert
      */
     public static abstract class Operation {
-        Path path = null;
+        private Path path = null;
 
         /**
          * Private constructor to prevent others from extending this class.
@@ -131,6 +131,7 @@ public class Path extends Shape {
             if (this.x != x) {
                 this.x = x;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
@@ -152,6 +153,7 @@ public class Path extends Shape {
             if (this.y != y) {
                 this.y = y;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
@@ -194,6 +196,7 @@ public class Path extends Shape {
             if (this.x != x) {
                 this.x = x;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
@@ -209,6 +212,7 @@ public class Path extends Shape {
             if (this.y != y) {
                 this.y = y;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
@@ -262,6 +266,7 @@ public class Path extends Shape {
             if (this.x1 != x1) {
                 this.x1 = x1;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
@@ -277,6 +282,7 @@ public class Path extends Shape {
             if (this.y1 != y1) {
                 this.y1 = y1;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
@@ -292,6 +298,7 @@ public class Path extends Shape {
             if (this.x2 != x2) {
                 this.x2 = x2;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
@@ -307,6 +314,7 @@ public class Path extends Shape {
             if (this.y2 != y2) {
                 this.y2 = y2;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
@@ -322,6 +330,7 @@ public class Path extends Shape {
             if (this.x3 != x3) {
                 this.x3 = x3;
 
+                Path path = getPath();
                 if (path != null) {
                     path.pathListeners.operationUpdated(this);
                     path.invalidate();
@@ -337,6 +346,7 @@ public class Path extends Shape {
             if (this.y3 != y3) {
                 this.y3 = y3;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
@@ -386,6 +396,7 @@ public class Path extends Shape {
             if (this.x1 != x1) {
                 this.x1 = x1;
 
+                Path path = getPath();
                 if (path != null) {
                     path.pathListeners.operationUpdated(this);
                     path.invalidate();
@@ -401,6 +412,7 @@ public class Path extends Shape {
             if (this.y1 != y1) {
                 this.y1 = y1;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
@@ -416,6 +428,7 @@ public class Path extends Shape {
             if (this.x2 != x2) {
                 this.x2 = x2;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
@@ -431,6 +444,7 @@ public class Path extends Shape {
             if (this.y2 != y2) {
                 this.y2 = y2;
 
+                Path path = getPath();
                 if (path != null) {
                     path.invalidate();
                     path.pathListeners.operationUpdated(this);
