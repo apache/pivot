@@ -41,7 +41,7 @@ public class TableView extends Component {
      *
      * @author gbrown
      */
-    public static class Column {
+    public static final class Column {
         private TableView tableView = null;
 
         private String name = null;
@@ -480,7 +480,7 @@ public class TableView extends Component {
      * <p>
      * TODO Allow a caller to sort on multiple columns.
      */
-    public static class RowComparator implements Comparator<Object> {
+    public static final class RowComparator implements Comparator<Object> {
         private String columnName = null;
         private SortDirection sortDirection = null;
 
