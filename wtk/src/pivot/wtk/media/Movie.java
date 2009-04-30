@@ -1,0 +1,126 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package pivot.wtk.media;
+
+import pivot.util.ListenerList;
+import pivot.wtk.ApplicationContext;
+import pivot.wtk.Dimensions;
+import pivot.wtk.Visual;
+
+/**
+ * Abstract base class for movies. A movie is either a bitmapped "video"
+ * or a vector "animation".
+ *
+ * @author tvolkert
+ */
+public abstract class Movie implements Visual {
+    private static class MovieListenerList extends ListenerList<MovieListener>
+        implements MovieListener {
+        public void currentFrameChanged(Movie movie, int previousFrame) {
+            for (MovieListener listener : this) {
+                listener.currentFrameChanged(movie, previousFrame);
+            }
+        }
+
+        public void movieStarted(Movie movie) {
+            for (MovieListener listener : this) {
+                listener.movieStarted(movie);
+            }
+        }
+
+        public void movieStopped(Movie movie) {
+            for (MovieListener listener : this) {
+                listener.movieStopped(movie);
+            }
+        }
+
+        public void regionUpdated(Movie movie, int x, int y, int width, int height) {
+            for (MovieListener listener : this) {
+                listener.regionUpdated(movie, x, y, width, height);
+            }
+        }
+    }
+
+    private int currentFrame = -1;
+    private int frameRate = 26;
+
+    private ApplicationContext.ScheduledCallback scheduledCallback = null;
+
+    protected MovieListenerList movieListeners = new MovieListenerList();
+
+    private final Runnable nextFrameCallback = new Runnable() {
+        public void run() {
+            if (currentFrame == getTotalFrames() - 1) {
+                stop();
+            } else {
+                setCurrentFrame(currentFrame + 1);
+            }
+        }
+    };
+
+    public Dimensions getSize() {
+        return new Dimensions(getWidth(), getHeight());
+    }
+
+    public abstract int getTotalFrames();
+
+    private int getFrameRate() {
+        return frameRate;
+    }
+
+    private void setFrameRate(int frameRate) {
+        this.frameRate = frameRate;
+    }
+
+    public int getCurrentFrame() {
+        return currentFrame;
+    }
+
+    public void setCurrentFrame(int currentFrame) {
+        int previousFrame = this.currentFrame;
+
+        if (previousFrame != currentFrame) {
+            this.currentFrame = currentFrame;
+            movieListeners.currentFrameChanged(this, previousFrame);
+        }
+    }
+
+    public void play() {
+        if (scheduledCallback != null) {
+            throw new IllegalStateException("Movie is already playing.");
+        }
+
+        scheduledCallback = ApplicationContext.scheduleRecurringCallback(nextFrameCallback,
+            (int)((1 / (double)frameRate) * 1000));
+
+        movieListeners.movieStarted(this);
+    }
+
+    public void stop() {
+        if (scheduledCallback != null) {
+            scheduledCallback.cancel();
+        }
+
+        scheduledCallback = null;
+
+        movieListeners.movieStopped(this);
+    }
+
+    public boolean isPlaying() {
+        return (scheduledCallback != null);
+    }
+}
