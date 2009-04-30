@@ -36,6 +36,12 @@ public abstract class Movie implements Visual {
             }
         }
 
+        public void loopingChanged(Movie movie) {
+            for (MovieListener listener : this) {
+                listener.loopingChanged(movie);
+            }
+        }
+
         public void movieStarted(Movie movie) {
             for (MovieListener listener : this) {
                 listener.movieStarted(movie);
@@ -57,6 +63,7 @@ public abstract class Movie implements Visual {
 
     private int currentFrame = -1;
     private int frameRate = 26;
+    private boolean looping = false;
 
     private ApplicationContext.ScheduledCallback scheduledCallback = null;
 
@@ -65,7 +72,11 @@ public abstract class Movie implements Visual {
     private final Runnable nextFrameCallback = new Runnable() {
         public void run() {
             if (currentFrame == getTotalFrames() - 1) {
-                stop();
+                if (looping) {
+                    setCurrentFrame(0);
+                } else {
+                    stop();
+                }
             } else {
                 setCurrentFrame(currentFrame + 1);
             }
@@ -78,14 +89,6 @@ public abstract class Movie implements Visual {
 
     public abstract int getTotalFrames();
 
-    private int getFrameRate() {
-        return frameRate;
-    }
-
-    private void setFrameRate(int frameRate) {
-        this.frameRate = frameRate;
-    }
-
     public int getCurrentFrame() {
         return currentFrame;
     }
@@ -96,6 +99,25 @@ public abstract class Movie implements Visual {
         if (previousFrame != currentFrame) {
             this.currentFrame = currentFrame;
             movieListeners.currentFrameChanged(this, previousFrame);
+        }
+    }
+
+    public int getFrameRate() {
+        return frameRate;
+    }
+
+    public void setFrameRate(int frameRate) {
+        this.frameRate = frameRate;
+    }
+
+    public boolean isLooping() {
+        return looping;
+    }
+
+    public void setLooping(boolean looping) {
+        if (this.looping != looping) {
+            this.looping = looping;
+            movieListeners.loopingChanged(this);
         }
     }
 
@@ -122,5 +144,9 @@ public abstract class Movie implements Visual {
 
     public boolean isPlaying() {
         return (scheduledCallback != null);
+    }
+
+    public ListenerList<MovieListener> getMovieListeners() {
+        return movieListeners;
     }
 }

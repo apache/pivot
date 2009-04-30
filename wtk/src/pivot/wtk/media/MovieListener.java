@@ -23,12 +23,41 @@ package pivot.wtk.media;
  */
 public interface MovieListener {
     /**
+     * Adapts the <tt>MovieListener</tt> interface.
+     *
+     * @author tvolkert
+     */
+    public static class Adapter implements MovieListener {
+        public void currentFrameChanged(Movie movie, int previousFrame) {
+        }
+
+        public void loopingChanged(Movie movie) {
+        }
+
+        public void movieStarted(Movie movie) {
+        }
+
+        public void movieStopped(Movie movie) {
+        }
+
+        public void regionUpdated(Movie movie, int x, int y, int width, int height) {
+        }
+    }
+
+    /**
      * Called when the movie's current frame changed.
      *
      * @param movie
      * @param previousFrame
      */
     public void currentFrameChanged(Movie movie, int previousFrame);
+
+    /**
+     * Called when the movie's looping property changed.
+     *
+     * @param movie
+     */
+    public void loopingChanged(Movie movie);
 
     /**
      * Called when the movie begins playing. The frame at which the movie is
