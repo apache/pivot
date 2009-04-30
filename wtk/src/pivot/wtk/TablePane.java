@@ -231,7 +231,7 @@ public class TablePane extends Container {
             if (previousComponent != null
                 && tablePane != null) {
                 // Detach the attributes
-                component.setAttributes(null);
+                previousComponent.setAttributes(null);
             }
 
             if (tablePane != null
