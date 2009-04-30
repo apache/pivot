@@ -74,10 +74,15 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         // Draw each sub-shape
         for (Shape shape : shapes) {
             if (shape.isVisible()) {
+                int x = shape.getX();
+                int y = shape.getY();
+
                 Bounds transformedBounds = shape.getTransformedBounds();
+                transformedBounds = transformedBounds.translate(x, y);
+
                 if (transformedBounds.intersects(clipBounds)) {
                     Graphics2D shapeGraphics = (Graphics2D)graphics.create();
-                    shapeGraphics.translate(shape.getX(), shape.getY());
+                    shapeGraphics.translate(x, y);
                     shapeGraphics.transform(shape.getTransforms().getAffineTransform());
                     shape.draw(shapeGraphics);
                     shapeGraphics.dispose();

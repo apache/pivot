@@ -53,7 +53,9 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         }
 
         public void regionUpdated(Image image, int x, int y, int width, int height) {
-            repaintComponent(x, y, width, height);
+            // TODO Offset this by the image location; scale by the image scale
+            // repaintComponent(x, y, width, height);
+            repaintComponent();
         }
     };
 
@@ -290,6 +292,15 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
     // Image view events
     public void imageChanged(ImageView imageView, Image previousImage) {
+        if (previousImage != null) {
+            previousImage.getImageListeners().remove(imageListener);
+        }
+
+        Image image = imageView.getImage();
+        if (image != null) {
+            image.getImageListeners().add(imageListener);
+        }
+
         invalidateComponent();
     }
 }

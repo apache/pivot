@@ -714,9 +714,10 @@ public class Path extends Shape {
             double radius = ((double)strokeThickness/Math.cos(Math.PI / 4)) / 2;
 
             Rectangle2D bounds = generalPath.getBounds2D();
-            setBounds((int)(bounds.getX() - radius), (int)(bounds.getY() - radius),
-                (int)(bounds.getWidth() + 2 * radius + 1),
-                (int)(bounds.getHeight() + 2 * radius + 1));
+            setBounds((int)Math.floor(bounds.getX() - radius),
+                (int)Math.floor(bounds.getY() - radius),
+                (int)Math.ceil(bounds.getWidth() + 2 * radius + 1),
+                (int)Math.ceil(bounds.getHeight() + 2 * radius + 1));
         }
 
         super.validate();

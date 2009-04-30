@@ -142,9 +142,10 @@ public class Line extends Shape {
             double bottom = Math.max(line2D.y1, line2D.y2);
             double right = Math.max(line2D.x1, line2D.x2);
 
-            setBounds((int)(left - radius), (int)(top - radius),
-                (int)(right - left + radius * 2 + 1),
-                (int)(bottom - top + radius * 2 + 1));
+            setBounds((int)Math.floor(left - radius),
+                (int)Math.floor(top - radius),
+                (int)Math.ceil(right - left + radius * 2 + 1),
+                (int)Math.ceil(bottom - top + radius * 2 + 1));
         }
 
         super.validate();

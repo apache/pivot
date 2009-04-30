@@ -63,6 +63,11 @@ limitations under the License.
                    visible="false"/>
 	            <Line x1="-10" y1="130" x2="30" y2="90" stroke="#cc00cc" strokeThickness="20"/>
             </Group>
+            
+            <Group x="240" y="240">
+                <QuadCurve x1="0" y1="0" x2="0" y2="50" controlX="50" controlY="25"
+                    strokeThickness="4" fill="#ff00ff"/>
+            </Group>
         </Canvas>
     </canvas>
 </Drawing>
