@@ -16,6 +16,8 @@
  */
 package pivot.wtk.media.drawing;
 
+import pivot.collections.Sequence;
+
 /**
  * Shape transform listener interface.
  *
@@ -32,22 +34,12 @@ public interface ShapeTransformListener {
     public void transformInserted(Shape shape, int index);
 
     /**
-     * Called when a transform has been updated in a shape's transform
-     * sequence.
-     *
-     * @param shape
-     * @param index
-     * @param previousTransform
-     */
-    public void transformUpdated(Shape shape, int index, Transform previousTransform);
-
-    /**
      * Called when transforms have been removed from a shape's transform
      * sequence.
      *
      * @param shape
      * @param index
-     * @param count
+     * @param transforms
      */
-    public void transformsRemoved(Shape shape, int index, int count);
+    public void transformsRemoved(Shape shape, int index, Sequence<Shape.Transform> transforms);
 }

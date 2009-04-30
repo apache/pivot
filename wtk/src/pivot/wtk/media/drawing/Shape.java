@@ -41,12 +41,70 @@ import pivot.wtk.Point;
  */
 public abstract class Shape {
     /**
+     * Interface encapsulating an affine transformation.
+     *
+     * @author gbrown
+     */
+    public static abstract class Transform {
+        private Shape shape = null;
+
+        private Transform() {
+        }
+
+        public Shape getShape() {
+            return shape;
+        }
+
+        private void setShape(Shape shape) {
+            this.shape = shape;
+        }
+
+        public abstract AffineTransform getAffineTransform();
+    }
+
+    /**
+     * Represents a rotation transformation.
+     *
+     * @author gbrown
+     */
+    public static final class Rotate extends Transform {
+        public AffineTransform getAffineTransform() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+    }
+
+    /**
+     * Reprensents a scale transformation.
+     *
+     * @author gbrown
+     */
+    public static final class Scale extends Transform {
+        public AffineTransform getAffineTransform() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+    }
+
+    /**
+     * Represents a translation transformation.
+     *
+     * @author gbrown
+     */
+    public static final class Translate extends Transform {
+        public AffineTransform getAffineTransform() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+    }
+
+    /**
      * Represents a sequence of affine transformations applied to this shape.
      *
      * @author gbrown
      */
-    public class TransformSequence
-        implements Transform, Sequence<Transform>, Iterable<Transform> {
+    public class TransformSequence extends Transform
+        implements Sequence<Transform>, Iterable<Transform> {
         private AffineTransform affineTransform = null;
 
         public int add(Transform transform) {
@@ -57,18 +115,20 @@ public abstract class Shape {
         }
 
         public Transform update(int index, Transform transform) {
-            Transform previousTransform = transforms.update(index, transform);
-            invalidate();
-            shapeTransformListeners.transformUpdated(Shape.this, index,
-                previousTransform);
-
-            return previousTransform;
+            throw new UnsupportedOperationException();
         }
 
         public void insert(Transform transform, int index) {
+            if (transform.getShape() != null) {
+                throw new IllegalArgumentException();
+            }
+
+            transform.setShape(Shape.this);
             transforms.insert(transform, index);
+
             invalidate();
             affineTransform = null;
+
             shapeTransformListeners.transformInserted(Shape.this, index);
         }
 
@@ -84,9 +144,15 @@ public abstract class Shape {
         public Sequence<Transform> remove(int index, int count) {
             Sequence<Transform> removed = transforms.remove(index, count);
             if (removed.getLength() > 0) {
+                for (int i = 0, n = removed.getLength(); i < n; i++) {
+                    Transform transform = removed.get(i);
+                    transform.setShape(null);
+                }
+
                 invalidate();
                 affineTransform = null;
-                shapeTransformListeners.transformsRemoved(Shape.this, index, count);
+
+                shapeTransformListeners.transformsRemoved(Shape.this, index, removed);
             }
 
             return removed;
@@ -155,15 +221,9 @@ public abstract class Shape {
             }
         }
 
-        public void transformUpdated(Shape shape, int index, Transform previousTransform) {
+        public void transformsRemoved(Shape shape, int index, Sequence<Transform> transforms) {
             for (ShapeTransformListener listener : this) {
-                listener.transformUpdated(shape, index, previousTransform);
-            }
-        }
-
-        public void transformsRemoved(Shape shape, int index, int count) {
-            for (ShapeTransformListener listener : this) {
-                listener.transformsRemoved(shape, index, count);
+                listener.transformsRemoved(shape, index, transforms);
             }
         }
     }
