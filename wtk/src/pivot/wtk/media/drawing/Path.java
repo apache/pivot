@@ -691,25 +691,27 @@ public class Path extends Shape {
      */
     @Override
     protected void validate() {
-        // Re-create our GeneralPath
-        int n = operations.getLength();
-        generalPath = new GeneralPath(windingRule.getConstantValue(), n);
+        if (!isValid()) {
+            // Re-create our GeneralPath
+            int n = operations.getLength();
+            generalPath = new GeneralPath(windingRule.getConstantValue(), n);
 
-        for (int i = 0; i < n; i++) {
-            Operation operation = operations.get(i);
-            operation.operate(generalPath);
+            for (int i = 0; i < n; i++) {
+                Operation operation = operations.get(i);
+                operation.operate(generalPath);
+            }
+
+            generalPath.closePath();
+
+            // Over-estimate the bounds to keep the logic simple
+            int strokeThickness = getStrokeThickness();
+            double radius = ((double)strokeThickness/Math.cos(Math.PI / 4)) / 2;
+
+            Rectangle2D bounds = generalPath.getBounds2D();
+            setBounds((int)(bounds.getX() - radius), (int)(bounds.getY() - radius),
+                (int)(bounds.getWidth() + 2 * radius + 1),
+                (int)(bounds.getHeight() + 2 * radius + 1));
         }
-
-        generalPath.closePath();
-
-        // Over-estimate the bounds to keep the logic simple
-        int strokeThickness = getStrokeThickness();
-        double radius = ((double)strokeThickness/Math.cos(Math.PI / 4)) / 2;
-
-        Rectangle2D bounds = generalPath.getBounds2D();
-        setBounds((int)(bounds.getX() - radius), (int)(bounds.getY() - radius),
-            (int)(bounds.getWidth() + 2 * radius + 1),
-            (int)(bounds.getHeight() + 2 * radius + 1));
 
         super.validate();
     }
