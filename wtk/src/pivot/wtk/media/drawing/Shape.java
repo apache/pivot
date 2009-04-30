@@ -57,7 +57,12 @@ public abstract class Shape {
         }
 
         public Transform update(int index, Transform transform) {
-            throw new UnsupportedOperationException();
+            Transform previousTransform = transforms.update(index, transform);
+            invalidate();
+            shapeTransformListeners.transformUpdated(Shape.this, index,
+                previousTransform);
+
+            return previousTransform;
         }
 
         public void insert(Transform transform, int index) {
@@ -147,6 +152,12 @@ public abstract class Shape {
         public void transformInserted(Shape shape, int index) {
             for (ShapeTransformListener listener : this) {
                 listener.transformInserted(shape, index);
+            }
+        }
+
+        public void transformUpdated(Shape shape, int index, Transform previousTransform) {
+            for (ShapeTransformListener listener : this) {
+                listener.transformUpdated(shape, index, previousTransform);
             }
         }
 

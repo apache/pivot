@@ -137,15 +137,18 @@ public class Line extends Shape {
 
     @Override
     protected void validate() {
-        // TODO We need to take the stroke thickness, line angle, and line
-        // end into account here
+        // Over-estimate the bounds to keep the logic simple
+        int strokeThickness = getStrokeThickness();
+        int radius = (int)((double)strokeThickness/Math.cos(Math.PI / 4)) / 2;
 
         double top = Math.min(line2D.y1, line2D.y2);
         double left = Math.min(line2D.x1, line2D.x2);
         double bottom = Math.max(line2D.y1, line2D.y2);
         double right = Math.max(line2D.x1, line2D.x2);
 
-        setBounds((int)left, (int)top, (int)(right - left + 1), (int)(bottom - top + 1));
+        setBounds((int)left - radius, (int)top - radius,
+            (int)(right - left + radius * 2 + 1),
+            (int)(bottom - top + radius * 2 + 1));
 
         super.validate();
     }

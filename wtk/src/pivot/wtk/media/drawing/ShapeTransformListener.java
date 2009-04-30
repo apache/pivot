@@ -32,6 +32,16 @@ public interface ShapeTransformListener {
     public void transformInserted(Shape shape, int index);
 
     /**
+     * Called when a transform has been updated in a shape's transform
+     * sequence.
+     *
+     * @param shape
+     * @param index
+     * @param previousTransform
+     */
+    public void transformUpdated(Shape shape, int index, Transform previousTransform);
+
+    /**
      * Called when transforms have been removed from a shape's transform
      * sequence.
      *

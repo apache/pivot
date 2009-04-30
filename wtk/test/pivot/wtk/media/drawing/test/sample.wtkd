@@ -49,10 +49,11 @@ limitations under the License.
 	            <Rectangle x="0" y="0"
 	                width="160" height="120" fill="#0000ff"
 	                stroke="#00ff00" strokeThickness="4"/>
-	            <Arc x="10" y="10" width="50" height="50" start="90.0" extent="90.0"
+	            <Arc x="-10" y="10" width="50" height="50" start="90.0" extent="90.0"
 	               fill="#ffff00" stroke="#ff0000" strokeThickness="4" type="pie"/>            
-                <Arc x="20" y="10" width="50" height="50" start="0.0" extent="90.0"
+                <Arc x="0" y="10" width="50" height="50" start="0.0" extent="90.0"
                    fill="#ffff00" stroke="#ff0000" strokeThickness="4" type="pie"/>            
+	            <Line x1="-10" y1="130" x2="30" y2="90" stroke="#cc00cc" strokeThickness="20"/>
             </Group>
         </Canvas>
     </canvas>
