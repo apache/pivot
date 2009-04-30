@@ -32,7 +32,7 @@ import pivot.wtk.Point;
 /**
  * Abstract base class for shapes.
  * <p>
- * TODO Add a visible property.
+ * TODO Add a visible property. Call update() when this changes.
  * <p>
  * TODO Add a lineStyle property (solid, dashed, dotted, etc.)? Or support a
  * strokeDashArray property?

@@ -16,8 +16,10 @@
  */
 package pivot.wtk.media.drawing;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 
 /**
  * Shape representing a block of text.
@@ -28,6 +30,11 @@ public class Text extends Shape {
     private String text = null;
     private Font font = null; // TODO Need to specify a default
     private int wrapWidth = -1;
+
+    public Text() {
+        super.setFill(Color.BLACK);
+        super.setStroke((Paint)null);
+    }
 
     public String getText() {
         return text;
@@ -69,6 +76,20 @@ public class Text extends Shape {
         return false;
     }
 
+    @Override
+    public void setFill(Paint fill) {
+        if (fill == null) {
+            // Text must have a fill
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void setStroke(Paint stroke) {
+        // Text cannot have a stroke
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void draw(Graphics2D graphics) {
         // TODO
     }

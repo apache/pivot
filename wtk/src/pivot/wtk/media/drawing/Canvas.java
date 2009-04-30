@@ -44,6 +44,11 @@ public class Canvas extends Group {
     private ValidateCallback validateCallback = null;
 
     @Override
+    protected void setParent(Group parent) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void setOrigin(int x, int y) {
         throw new UnsupportedOperationException();
     }

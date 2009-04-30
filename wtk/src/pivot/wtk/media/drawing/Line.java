@@ -111,12 +111,6 @@ public class Line extends Shape {
     }
 
     @Override
-    public Paint getFill() {
-        // Lines don't have a fill
-        return null;
-    }
-
-    @Override
     public void setFill(Paint fill) {
         // Lines can't have a fill
         throw new UnsupportedOperationException();
@@ -125,6 +119,7 @@ public class Line extends Shape {
     @Override
     public void setStroke(Paint stroke) {
         if (stroke == null) {
+            // Lines must have a stroke
             throw new IllegalArgumentException();
         }
 

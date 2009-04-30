@@ -22,5 +22,35 @@ package pivot.wtk.media.drawing;
  * @author gbrown
  */
 public interface ArcListener {
-    // TODO
+    /**
+     * Called when an arc's size has changed.
+     *
+     * @param arc
+     * @param previousWidth
+     * @param previousHeight
+     */
+    public void sizeChanged(Arc arc, int previousWidth, int previousHeight);
+
+    /**
+     * Called when an arc's start angle has changed.
+     * @param arc
+     * @param previousStart
+     */
+    public void startChanged(Arc arc, float previousStart);
+
+    /**
+     * Called when an arc's extent has changed.
+     *
+     * @param arc
+     * @param previousExtent
+     */
+    public void extentChanged(Arc arc, float previousExtent);
+
+    /**
+     * Called when an arc's closure type has changed.
+     *
+     * @param arc
+     * @param previousType
+     */
+    public void typeChanged(Arc arc, Arc.Type previousType);
 }
