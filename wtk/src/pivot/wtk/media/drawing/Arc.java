@@ -186,11 +186,6 @@ public class Arc extends Shape {
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        return arc2D.contains(x, y);
-    }
-
-    @Override
     public void draw(Graphics2D graphics) {
         Paint fill = getFill();
         if (fill != null) {
@@ -209,10 +204,12 @@ public class Arc extends Shape {
 
     @Override
     protected void validate() {
-        int strokeThickness = getStrokeThickness();
-        setBounds(-strokeThickness / 2, -strokeThickness / 2,
-            (int)arc2D.width + strokeThickness,
-            (int)arc2D.height + strokeThickness);
+        if (!isValid()) {
+            int strokeThickness = getStrokeThickness();
+            setBounds(-strokeThickness / 2, -strokeThickness / 2,
+                (int)arc2D.width + strokeThickness,
+                (int)arc2D.height + strokeThickness);
+        }
 
         super.validate();
     }

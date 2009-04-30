@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 import pivot.collections.ArrayList;
@@ -31,8 +32,6 @@ import pivot.wtk.Point;
 
 /**
  * Abstract base class for shapes.
- * <p>
- * TODO Add a visible property. Call update() when this changes.
  * <p>
  * TODO Add a lineStyle property (solid, dashed, dotted, etc.)? Or support a
  * strokeDashArray property?
@@ -68,9 +67,33 @@ public abstract class Shape {
      * @author gbrown
      */
     public static final class Rotate extends Transform {
+        private double angle = 0;
+        private AffineTransform affineTransform = null;
+
+        public double getAngle() {
+            return angle;
+        }
+
+        public void setAngle(double angle) {
+            if (this.angle != angle) {
+                this.angle = angle;
+                affineTransform = null;
+
+                Shape shape = getShape();
+                if (shape != null) {
+                    shape.invalidate();
+                    shape.shapeTransformListeners.transformUpdated(this);
+                }
+            }
+        }
+
         public AffineTransform getAffineTransform() {
-            // TODO Auto-generated method stub
-            return null;
+            if (affineTransform == null) {
+                double radians = (2 * Math.PI) / 360 * angle;
+                affineTransform = AffineTransform.getRotateInstance(radians);
+            }
+
+            return affineTransform;
         }
     }
 
@@ -80,9 +103,47 @@ public abstract class Shape {
      * @author gbrown
      */
     public static final class Scale extends Transform {
+        private double x = 0;
+        private double y = 0;
+        private AffineTransform affineTransform = null;
+
+        public double getX() {
+            return x;
+        }
+
+        public void setX(double x) {
+            setScale(x, y);
+        }
+
+        public double getY() {
+            return y;
+        }
+
+        public void setY(double y) {
+            setScale(x, y);
+        }
+
+        public void setScale(double x, double y) {
+            if (this.x != x
+                || this.y != y) {
+                this.x = x;
+                this.y = y;
+                affineTransform = null;
+
+                Shape shape = getShape();
+                if (shape != null) {
+                    shape.invalidate();
+                    shape.shapeTransformListeners.transformUpdated(this);
+                }
+            }
+        }
+
         public AffineTransform getAffineTransform() {
-            // TODO Auto-generated method stub
-            return null;
+            if (affineTransform == null) {
+                affineTransform = AffineTransform.getScaleInstance(x, y);
+            }
+
+            return affineTransform;
         }
     }
 
@@ -92,9 +153,47 @@ public abstract class Shape {
      * @author gbrown
      */
     public static final class Translate extends Transform {
+        private double x = 0;
+        private double y = 0;
+        private AffineTransform affineTransform = null;
+
+        public double getX() {
+            return x;
+        }
+
+        public void setX(double x) {
+            setTranslation(x, y);
+        }
+
+        public double getY() {
+            return y;
+        }
+
+        public void setY(double y) {
+            setTranslation(x, y);
+        }
+
+        public void setTranslation(double x, double y) {
+            if (this.x != x
+                || this.y != y) {
+                this.x = x;
+                this.y = y;
+                affineTransform = null;
+
+                Shape shape = getShape();
+                if (shape != null) {
+                    shape.invalidate();
+                    shape.shapeTransformListeners.transformUpdated(this);
+                }
+            }
+        }
+
         public AffineTransform getAffineTransform() {
-            // TODO Auto-generated method stub
-            return null;
+            if (affineTransform == null) {
+                affineTransform = AffineTransform.getTranslateInstance(x, y);
+            }
+
+            return affineTransform;
         }
     }
 
@@ -211,6 +310,12 @@ public abstract class Shape {
                 listener.fillChanged(shape, previousFill);
             }
         }
+
+        public void visibleChanged(Shape shape) {
+            for (ShapeListener listener : this) {
+                listener.visibleChanged(shape);
+            }
+        }
     }
 
     private static class ShapeTransformListenerList extends ListenerList<ShapeTransformListener>
@@ -226,6 +331,12 @@ public abstract class Shape {
                 listener.transformsRemoved(shape, index, transforms);
             }
         }
+
+        public void transformUpdated(Shape.Transform transform) {
+            for (ShapeTransformListener listener : this) {
+                listener.transformUpdated(transform);
+            }
+        }
     }
 
     private Group parent = null;
@@ -238,6 +349,8 @@ public abstract class Shape {
     private Paint fill = null;
     private Paint stroke = Color.BLACK;
     private int strokeThickness = 1;
+
+    private boolean visible = true;
 
     private boolean valid = true;
 
@@ -308,9 +421,10 @@ public abstract class Shape {
     /**
      * Sets the bounds of the shape.
      *
-     * @param bounds
-     * The component's bounding area, including the stroke thickness. The x and
-     * y coordinates are relative to the parent group's origin.
+     * @param x
+     * @param y
+     * @param width
+     * @param height
      */
     protected void setBounds(int x, int y, int width, int height) {
         bounds = new Bounds(x, y, width, height);
@@ -326,22 +440,6 @@ public abstract class Shape {
         validate();
         return transformedBounds;
     }
-
-    /**
-     * Determines if the shape contains the given point.
-     *
-     * @param x
-     * The x-coordinate of the point to test, in untransformed shape
-     * coordinates.
-     *
-     * @param y
-     * The y-coordinate of the point to test, in untransformed shape
-     * coordinates.
-     *
-     * @return
-     * <tt>true</tt> if the shape contains the point; <tt>false</tt>, otherwise.
-     */
-    public abstract boolean contains(int x, int y);
 
     public Paint getFill() {
         return fill;
@@ -391,6 +489,18 @@ public abstract class Shape {
         invalidate();
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        if (this.visible != visible) {
+            this.visible = visible;
+            invalidate();
+            shapeListeners.visibleChanged(this);
+        }
+    }
+
     public abstract void draw(Graphics2D graphics);
 
     public TransformSequence getTransforms() {
@@ -412,8 +522,8 @@ public abstract class Shape {
             // Repaint the region formerly occupied by this shape
             update(transformedBounds);
 
-            // TODO Apply transforms to transformedBounds
-            transformedBounds = new Bounds(bounds);
+            // Transform the current bounds
+            transformedBounds = transform(bounds);
 
             // Repaint the region currently occupied by this shape
             update(transformedBounds);
@@ -435,11 +545,32 @@ public abstract class Shape {
     }
 
     protected void update(int x, int y, int width, int height) {
-        // TODO Transform region bounds
+        Bounds bounds = transform(x, y, width, height);
 
         if (parent != null) {
-            parent.update(this.x + x, this.y + y, width, height);
+            parent.update(this.x + bounds.x, this.y + bounds.y,
+                bounds.width, bounds.height);
         }
+    }
+
+    private Bounds transform(Bounds bounds) {
+        return transform(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+
+    private Bounds transform(int x, int y, int width, int height) {
+        AffineTransform affineTransform = transformSequence.getAffineTransform();
+
+        Rectangle2D boundingRectangle = new Rectangle2D.Double(x, y, width, height);
+
+        java.awt.Shape transformedShape = affineTransform.createTransformedShape(boundingRectangle);
+        Rectangle2D transformedBoundingRectangle = transformedShape.getBounds2D();
+
+        Bounds transformedBounds = new Bounds((int)transformedBoundingRectangle.getX(),
+            (int)transformedBoundingRectangle.getY(),
+            (int)transformedBoundingRectangle.getWidth(),
+            (int)transformedBoundingRectangle.getHeight());
+
+        return transformedBounds;
     }
 
     public ListenerList<ShapeListener> getShapeListeners() {

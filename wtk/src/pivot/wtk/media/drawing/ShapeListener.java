@@ -25,25 +25,6 @@ import java.awt.Paint;
  */
 public interface ShapeListener {
     /**
-     * Shape listener adapter.
-     *
-     * @author gbrown
-     */
-    public static class Adapter implements ShapeListener {
-        public void originChanged(Shape shape, int previousX, int previousY) {
-        }
-
-        public void strokeChanged(Shape shape, Paint previousStroke) {
-        }
-
-        public void strokeThicknessChanged(Shape shape, int previousStrokeThickness) {
-        }
-
-        public void fillChanged(Shape shape, Paint previousFill) {
-        }
-    }
-
-    /**
      * Called when a shape's origin has changed.
      *
      * @param shape
@@ -75,4 +56,11 @@ public interface ShapeListener {
      * @param previousFill
      */
     public void fillChanged(Shape shape, Paint previousFill);
+
+    /**
+     * Called when a shape's visible flag has changed.
+     *
+     * @param shape
+     */
+    public void visibleChanged(Shape shape);
 }

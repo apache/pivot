@@ -70,11 +70,6 @@ public class Ellipse extends Shape {
         }
     }
 
-    @Override
-    public boolean contains(int x, int y) {
-        return ellipse2D.contains(x, y);
-    }
-
     public void draw(Graphics2D graphics) {
         Paint fill = getFill();
         if (fill != null) {
@@ -93,10 +88,12 @@ public class Ellipse extends Shape {
 
     @Override
     protected void validate() {
-        int strokeThickness = getStrokeThickness();
-        setBounds(-strokeThickness / 2, -strokeThickness / 2,
-            (int)ellipse2D.width + strokeThickness,
-            (int)ellipse2D.height + strokeThickness);
+        if (!isValid()) {
+            int strokeThickness = getStrokeThickness();
+            setBounds(-strokeThickness / 2, -strokeThickness / 2,
+                (int)ellipse2D.width + strokeThickness,
+                (int)ellipse2D.height + strokeThickness);
+        }
 
         super.validate();
     }

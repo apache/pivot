@@ -106,11 +106,6 @@ public class Line extends Shape {
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        return false;
-    }
-
-    @Override
     public void setFill(Paint fill) {
         // Lines can't have a fill
         throw new UnsupportedOperationException();
@@ -137,18 +132,20 @@ public class Line extends Shape {
 
     @Override
     protected void validate() {
-        // Over-estimate the bounds to keep the logic simple
-        int strokeThickness = getStrokeThickness();
-        int radius = (int)((double)strokeThickness/Math.cos(Math.PI / 4)) / 2;
+        if (!isValid()) {
+            // Over-estimate the bounds to keep the logic simple
+            int strokeThickness = getStrokeThickness();
+            double radius = ((double)strokeThickness/Math.cos(Math.PI / 4)) / 2;
 
-        double top = Math.min(line2D.y1, line2D.y2);
-        double left = Math.min(line2D.x1, line2D.x2);
-        double bottom = Math.max(line2D.y1, line2D.y2);
-        double right = Math.max(line2D.x1, line2D.x2);
+            double top = Math.min(line2D.y1, line2D.y2);
+            double left = Math.min(line2D.x1, line2D.x2);
+            double bottom = Math.max(line2D.y1, line2D.y2);
+            double right = Math.max(line2D.x1, line2D.x2);
 
-        setBounds((int)left - radius, (int)top - radius,
-            (int)(right - left + radius * 2 + 1),
-            (int)(bottom - top + radius * 2 + 1));
+            setBounds((int)(left - radius), (int)(top - radius),
+                (int)(right - left + radius * 2 + 1),
+                (int)(bottom - top + radius * 2 + 1));
+        }
 
         super.validate();
     }

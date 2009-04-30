@@ -20,7 +20,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import pivot.collections.ArrayList;
@@ -70,59 +69,66 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
     }
 
     public void draw(Graphics2D graphics) {
+        Bounds clipBounds = new Bounds(graphics.getClipBounds());
+
         // Draw each sub-shape
         for (Shape shape : shapes) {
-            // TODO Only draw if transformed bounds intersects clip rect
-
-            Graphics2D shapeGraphics = (Graphics2D)graphics.create();
-            shapeGraphics.translate(shape.getX(), shape.getY());
-
-            // TODO Transform graphics
-
-            shape.draw(shapeGraphics);
-            shapeGraphics.dispose();
+            if (shape.isVisible()) {
+                Bounds transformedBounds = shape.getTransformedBounds();
+                if (transformedBounds.intersects(clipBounds)) {
+                    Graphics2D shapeGraphics = (Graphics2D)graphics.create();
+                    shapeGraphics.translate(shape.getX(), shape.getY());
+                    shapeGraphics.transform(shape.getTransforms().getAffineTransform());
+                    shape.draw(shapeGraphics);
+                    shapeGraphics.dispose();
+                }
+            }
         }
 
         // Draw a debug rectangle
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        graphics.setColor(Color.LIGHT_GRAY);
-        graphics.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND,
-            BasicStroke.JOIN_ROUND, 2.0f, new float[] {0.0f, 4.0f}, 0.0f));
-
-        // TODO This may still be wrong
+        graphics.setColor(Color.DARK_GRAY);
+        graphics.setStroke(new BasicStroke(0));
         Bounds bounds = getBounds();
         graphics.draw(new Rectangle2D.Double(bounds.x, bounds.y, bounds.width, bounds.height));
     }
 
     @Override
     protected void validate() {
-        // Recalculate bounds
-        int top = 0;
-        int left = 0;
-        int bottom = 0;
-        int right = 0;
+        if (!isValid()) {
+            // Recalculate bounds
+            int top = 0;
+            int left = 0;
+            int bottom = 0;
+            int right = 0;
 
-        for (int i = 0, n = shapes.getLength(); i < n; i++) {
-            Shape shape = shapes.get(i);
-            shape.validate();
-            int x = shape.getX();
-            int y = shape.getY();
-            Bounds bounds = shape.getBounds();
+            for (int i = 0, n = shapes.getLength(); i < n; i++) {
+                Shape shape = shapes.get(i);
+                if (shape.isVisible()) {
+                    shape.validate();
+                    int x = shape.getX();
+                    int y = shape.getY();
+                    Bounds transformedBounds = shape.getTransformedBounds();
 
-            if (i == 0) {
-                top = y + bounds.y;
-                left = x + bounds.x;
-                bottom = y + bounds.y + bounds.height - 1;
-                right = x + bounds.x + bounds.width - 1;
-            } else {
-                top = Math.min(y + bounds.y, top);
-                left = Math.min(x + bounds.x, left);
-                bottom = Math.max(y + bounds.y + bounds.height - 1, bottom);
-                right = Math.max(x + bounds.x + bounds.width - 1, right);
+                    if (i == 0) {
+                        top = y + transformedBounds.y;
+                        left = x + transformedBounds.x;
+                        bottom = y + transformedBounds.y
+                            + transformedBounds.height - 1;
+                        right = x + transformedBounds.x
+                            + transformedBounds.width - 1;
+                    } else {
+                        top = Math.min(y + transformedBounds.y, top);
+                        left = Math.min(x + transformedBounds.x, left);
+                        bottom = Math.max(y + transformedBounds.y
+                            + transformedBounds.height - 1, bottom);
+                        right = Math.max(x + transformedBounds.x
+                            + transformedBounds.width - 1, right);
+                    }
+                }
             }
-        }
 
-        setBounds(left, top, right - left + 1, bottom - top + 1);
+            setBounds(left, top, right - left + 1, bottom - top + 1);
+        }
 
         super.validate();
     }
@@ -184,24 +190,6 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
 
     public int getLength() {
         return shapes.getLength();
-    }
-
-    @Override
-    public boolean contains(int x, int y) {
-        // TODO Ask each shape if it contains the point (translate to sub-shape
-        // space first and apply inverse transform)
-        return false;
-    }
-
-    public Shape getShapeAt(int x, int y) {
-        // TODO Walk shape list from top to bottom; if shape bounds contains
-        // x, y, call contains() on the shape
-        return null;
-    }
-
-    public Shape getDescendantAt(int x, int y) {
-        // TODO Mirror behavior of Container#getDescendantAt()
-        return null;
     }
 
     public Iterator<Shape> iterator() {

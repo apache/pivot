@@ -292,8 +292,8 @@ public abstract class Container extends Component
 
         if (component instanceof Container) {
             Container container = (Container)component;
-            component = container.getDescendantAt(x - component.getX(),
-                y - component.getY());
+            component = container.getDescendantAt(x - container.getX(),
+                y - container.getY());
         }
 
         if (component == null) {

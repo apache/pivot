@@ -72,11 +72,6 @@ public class Rectangle extends Shape {
         }
     }
 
-    @Override
-    public boolean contains(int x, int y) {
-        return rectangle2D.contains(x, y);
-    }
-
     public void draw(Graphics2D graphics) {
         Paint fill = getFill();
         if (fill != null) {
@@ -95,10 +90,12 @@ public class Rectangle extends Shape {
 
     @Override
     protected void validate() {
-        int strokeThickness = getStrokeThickness();
-        setBounds(-strokeThickness / 2, -strokeThickness / 2,
-            (int)rectangle2D.width + strokeThickness,
-            (int)rectangle2D.height + strokeThickness);
+        if (!isValid()) {
+            int strokeThickness = getStrokeThickness();
+            setBounds(-strokeThickness / 2, -strokeThickness / 2,
+                (int)rectangle2D.width + strokeThickness,
+                (int)rectangle2D.height + strokeThickness);
+        }
 
         super.validate();
     }

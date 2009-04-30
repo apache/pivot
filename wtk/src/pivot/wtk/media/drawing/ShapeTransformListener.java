@@ -42,4 +42,12 @@ public interface ShapeTransformListener {
      * @param transforms
      */
     public void transformsRemoved(Shape shape, int index, Sequence<Shape.Transform> transforms);
+
+    /**
+     * Called when a transform has been updated in a shape's transform
+     * sequence.
+     *
+     * @param transform
+     */
+    public void transformUpdated(Shape.Transform transform);
 }

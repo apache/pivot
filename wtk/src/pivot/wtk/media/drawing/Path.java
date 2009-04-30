@@ -27,8 +27,8 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
- * The <tt>Path</tt> shape represents a geometric path constructed from
- * straight lines, quadratic curves, and and cubic (B&eacute;zier) curves.
+ * A shape representing a geometric path constructed from straight lines,
+ * quadratic curves, and and cubic (B&eacute;zier) curves.
  *
  * @author tvolkert
  */
@@ -662,14 +662,6 @@ public class Path extends Shape {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public boolean contains(int x, int y) {
-        return generalPath.contains(x, y);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public void draw(Graphics2D graphics) {
         Paint fill = getFill();
         if (fill != null) {
@@ -717,9 +709,7 @@ public class Path extends Shape {
     }
 
     /**
-     * Gets the <tt>PathListener</tt>s. Developers interested in these events
-     * can register for notification on these events by adding themselves to
-     * the listener list.
+     * Returns the path listener list.
      *
      * @return
      * The path listeners.

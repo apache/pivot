@@ -19,7 +19,7 @@ package pivot.wtk.media.drawing;
 /**
  * Rectangle listener interface.
  *
- * @author greg
+ * @author gbrown
  */
 public interface RectangleListener {
     /**

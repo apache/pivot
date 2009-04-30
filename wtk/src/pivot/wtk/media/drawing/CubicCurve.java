@@ -26,12 +26,6 @@ import java.awt.Graphics2D;
 public class CubicCurve extends Shape {
 
     @Override
-    public boolean contains(int x, int y) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
     public void draw(Graphics2D graphics) {
         // TODO Auto-generated method stub
 

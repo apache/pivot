@@ -71,12 +71,6 @@ public class Text extends Shape {
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        // TODO
-        return false;
-    }
-
-    @Override
     public void setFill(Paint fill) {
         if (fill == null) {
             // Text must have a fill
