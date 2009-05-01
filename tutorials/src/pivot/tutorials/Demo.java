@@ -41,6 +41,7 @@ import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.ComponentStateListener;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
 import pivot.wtk.DropTarget;
@@ -137,6 +138,10 @@ public class Demo implements Application {
     private PushButton promptButton = null;
 
     private Window window = null;
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(Demo.class, args);
+    }
 
     @SuppressWarnings("unchecked")
     public void startup(final Display display, Dictionary<String, String> properties) throws Exception {

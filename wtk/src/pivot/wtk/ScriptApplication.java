@@ -30,6 +30,10 @@ public class ScriptApplication implements Application {
 	private static final String SRC_ARGUMENT = "src";
 	private static final String TITLE_ARGUMENT = "title";
 
+	public static void main(String[] args) {
+	    DesktopApplicationContext.main(ScriptApplication.class, args);
+	}
+
 	public void startup(Display display, Dictionary<String, String> properties)
 		throws Exception {
 		if (!properties.containsKey(SRC_ARGUMENT)) {
