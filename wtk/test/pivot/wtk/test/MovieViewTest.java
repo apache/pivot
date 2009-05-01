@@ -16,8 +16,8 @@
  */
 package pivot.wtk.test;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Calendar;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
@@ -25,86 +25,89 @@ import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.MovieView;
 import pivot.wtk.Window;
-import pivot.wtk.media.Drawing;
+import pivot.wtk.media.Image;
+import pivot.wtk.media.ImageListener;
 import pivot.wtk.media.Movie;
-import pivot.wtk.media.drawing.Line;
 import pivot.wtk.media.drawing.Shape;
+import pivot.wtkx.WTKXSerializer;
 
 public class MovieViewTest implements Application {
-    private Window window;
-
-    private Movie movie = new Movie() {
-        private int angle = 6;
-        private Drawing drawing = new Drawing();
-            private Shape.Rotate rotateTransform = new Shape.Rotate(0, 320, 240);
+    private class Clock extends Movie {
+        private Calendar calendar = Calendar.getInstance();
+        private WTKXSerializer wtkxSerializer;
+        private Image image = null;
 
         {
+            wtkxSerializer = new WTKXSerializer();
+            try {
+                image = (Image)wtkxSerializer.readObject(getClass().getResource("clock.wtkd"));
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+
+            image.getImageListeners().add(new ImageListener() {
+                public void sizeChanged(Image image, int previousWidth, int previousHeight) {
+                }
+
+                public void regionUpdated(Image image, int x, int y, int width, int height) {
+                    movieListeners.regionUpdated(Clock.this, 0, 0, width, height);
+                }
+            });
+
             setLooping(true);
             setFrameRate(1);
-
-            drawing.setSize(640, 480);
-
-            Line line = new Line();
-            line.setX1(220);
-            line.setY1(240);
-            line.setX2(220);
-            line.setY2(40);
-            /*
-            line.setOrigin(320, 240);
-            line.setX1(0);
-            line.setY1(0);
-            line.setX2(0);
-            line.setY2(-200);
-            */
-
-            line.setStroke(Color.BLACK);
-            line.setStrokeThickness(5);
-            line.getTransforms().add(rotateTransform);
-            drawing.getCanvas().add(line);
         }
 
         public void setCurrentFrame(int currentFrame) {
-            if (currentFrame == 0) {
-                System.out.println(currentFrame);
-            }
-            rotateTransform.setAngle(currentFrame * angle);
+            Shape.Rotate secondsRotation = (Shape.Rotate)wtkxSerializer.getObjectByName("secondsRotation");
+            Shape.Rotate minutesRotation = (Shape.Rotate)wtkxSerializer.getObjectByName("minutesRotation");
+            Shape.Rotate hoursRotation = (Shape.Rotate)wtkxSerializer.getObjectByName("hoursRotation");
 
-            movieListeners.regionUpdated(this, 0, 0, getWidth(), getHeight());
+            calendar.setTimeInMillis(System.currentTimeMillis());
+
+            int seconds = calendar.get(Calendar.SECOND);
+            int minutes = calendar.get(Calendar.MINUTE);
+            int hours = calendar.get(Calendar.HOUR) + 1;
+
+            secondsRotation.setAngle(seconds * 6);
+            minutesRotation.setAngle(minutes * 6 + seconds * (6d / 60));
+            hoursRotation.setAngle(hours * 30 + minutes * (6d / 12));
 
             super.setCurrentFrame(currentFrame);
         }
 
         public int getWidth() {
-            return drawing.getWidth();
+            return image.getWidth();
         }
 
         public int getHeight() {
-            return drawing.getHeight();
+            return image.getHeight();
         }
 
         public void paint(Graphics2D graphics) {
-            drawing.paint(graphics);
+            image.paint(graphics);
         }
 
         public int getTotalFrames() {
-            return (360 / angle);
+            return 60;
         }
-    };
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(MovieViewTest.class, args);
     }
 
+    private Window window;
+    private Clock clock = new Clock();
+
     public void startup(Display display, Dictionary<String, String> properties) {
-        window = new Window();
+        window = new Window(new MovieView(clock));
         window.setMaximized(true);
-        window.setContent(new MovieView(movie));
         window.open(display);
-        movie.play();
+        clock.play();
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -112,5 +115,9 @@ public class MovieViewTest implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(MovieViewTest.class, args);
     }
 }
