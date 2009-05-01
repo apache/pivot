@@ -50,7 +50,7 @@ public class MovieViewTest implements Application {
                 }
 
                 public void regionUpdated(Image image, int x, int y, int width, int height) {
-                    movieListeners.regionUpdated(Clock.this, 0, 0, width, height);
+                    movieListeners.regionUpdated(Clock.this, x, y, width, height);
                 }
             });
 
