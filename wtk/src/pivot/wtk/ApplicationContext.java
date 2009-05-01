@@ -41,6 +41,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -51,12 +53,17 @@ import java.util.TimerTask;
 
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
+import pivot.serialization.SerializationException;
 import pivot.util.ImmutableIterator;
 import pivot.util.Version;
 import pivot.wtk.Component.DecoratorSequence;
 import pivot.wtk.Manifest;
 import pivot.wtk.RemoteManifest;
 import pivot.wtk.effects.Decorator;
+import pivot.wtkx.Bind;
+import pivot.wtkx.BindException;
+import pivot.wtkx.Load;
+import pivot.wtkx.WTKXSerializer;
 
 /**
  * Base class for application contexts.
@@ -1314,6 +1321,83 @@ public abstract class ApplicationContext {
     protected static void destroyTimer() {
         timer.cancel();
         timer = null;
+    }
+
+    protected static void bind(Application application)
+        throws IOException, BindException  {
+        assert(application != null);
+
+        // Maps resource field name to the serializer that loaded the resource
+        HashMap<String, WTKXSerializer> wtkxSerializers = new HashMap<String, WTKXSerializer>();
+
+        // Walk field lists and resolve WTKX annotations
+        Class<?> applicationClass = application.getClass();
+        Field[] fields = applicationClass.getDeclaredFields();
+        for (int i = 0; i < fields.length; i++) {
+            Field field = fields[i];
+            Load loadAnnotation = field.getAnnotation(Load.class);
+
+            if (loadAnnotation != null) {
+                // Create a serializer for the resource
+                String fieldName = field.getName();
+                assert(!wtkxSerializers.containsKey(fieldName));
+
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                wtkxSerializers.put(fieldName, wtkxSerializer);
+
+                // Load the resource
+                URL location = applicationClass.getResource(loadAnnotation.name());
+                Object resource;
+                try {
+                    resource = wtkxSerializer.readObject(location);
+                } catch(SerializationException exception) {
+                    throw new BindException(exception);
+                }
+
+                // Set the resource into the field
+                field.setAccessible(true);
+
+                try {
+                    field.set(application, resource);
+                } catch(IllegalAccessException exception) {
+                    throw new BindException(exception);
+                }
+
+                field.setAccessible(false);
+            }
+
+            Bind bindAnnotation = field.getAnnotation(Bind.class);
+            if (bindAnnotation != null) {
+                if (loadAnnotation != null) {
+                    throw new BindException("Cannot combine " + Load.class.getName()
+                        + " and " + Bind.class.getName() + " annotations.");
+                }
+
+                // Bind to the value loaded by the field's serializer
+                String fieldName = bindAnnotation.resource();
+                WTKXSerializer wtkxSerializer = wtkxSerializers.get(fieldName);
+                if (wtkxSerializer == null) {
+                    throw new BindException("\"" + fieldName + "\" is not a valid resource name.");
+                }
+
+                String id = bindAnnotation.id();
+                Object value = wtkxSerializer.getObjectByName(id);
+                if (value == null) {
+                    throw new BindException("\"" + id + "\" does not exist.");
+                }
+
+                // Set the value into the field
+                field.setAccessible(true);
+
+                try {
+                    field.set(application, value);
+                } catch(IllegalAccessException exception) {
+                    throw new BindException(exception);
+                }
+
+                field.setAccessible(false);
+            }
+        }
     }
 
     private static DropAction getUserDropAction(InputEvent event) {

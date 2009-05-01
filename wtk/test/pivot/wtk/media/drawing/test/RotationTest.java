@@ -7,19 +7,22 @@ import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.ImageView;
 import pivot.wtk.Window;
-import pivot.wtk.media.Image;
+import pivot.wtk.media.Drawing;
 import pivot.wtk.media.drawing.Shape;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bind;
+import pivot.wtkx.Load;
 
 public class RotationTest implements Application {
+    @Load(name="rotate.wtkd")
+    private Drawing drawing = null;
+
+    @Bind(resource="drawing", id="rotation")
+    private Shape.Rotate rotation = null;
+
     private Window window = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception{
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Image image = (Image)wtkxSerializer.readObject(getClass().getResource("rotate.wtkd"));
-
-        final Shape.Rotate rotation = (Shape.Rotate)wtkxSerializer.getObjectByName("rotation");
         ApplicationContext.scheduleRecurringCallback(new Runnable() {
             public void run() {
                 int angle = (int)rotation.getAngle();
@@ -28,7 +31,7 @@ public class RotationTest implements Application {
             }
         }, 1000);
 
-        window = new Window(new ImageView(image));
+        window = new Window(new ImageView(drawing));
         window.setMaximized(true);
         window.open(display);
     }

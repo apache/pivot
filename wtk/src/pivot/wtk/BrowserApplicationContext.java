@@ -172,6 +172,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
                 if (application != null) {
                     try {
+                        bind(application);
                         application.startup(applicationContext.getDisplay(), propertyDictionary);
                     } catch(Exception exception) {
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
