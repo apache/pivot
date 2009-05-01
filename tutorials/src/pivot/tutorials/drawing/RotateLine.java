@@ -1,4 +1,4 @@
-package pivot.wtk.media.drawing.test;
+package pivot.tutorials.drawing;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
@@ -12,8 +12,8 @@ import pivot.wtk.media.drawing.Shape;
 import pivot.wtkx.Bind;
 import pivot.wtkx.Load;
 
-public class RotationTest implements Application {
-    @Load(name="rotate.wtkd")
+public class RotateLine implements Application {
+    @Load(name="rotate_line.wtkd")
     private Drawing drawing = null;
 
     @Bind(resource="drawing", id="rotation")
@@ -51,6 +51,6 @@ public class RotationTest implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(RotationTest.class, args);
+        DesktopApplicationContext.main(RotateLine.class, args);
     }
 }

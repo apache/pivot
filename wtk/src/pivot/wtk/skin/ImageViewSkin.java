@@ -65,7 +65,6 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
                 imageY + (int)Math.floor((float)y * scaleY),
                 (int)Math.ceil((float)width * scaleX) + 1,
                 (int)Math.ceil((float)height * scaleY) + 1);
-            System.out.println(bounds);
             repaintComponent(bounds);
         }
     };

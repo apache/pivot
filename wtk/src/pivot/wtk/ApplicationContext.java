@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
@@ -1355,7 +1356,9 @@ public abstract class ApplicationContext {
                 }
 
                 // Set the resource into the field
-                field.setAccessible(true);
+                if ((field.getModifiers() & Modifier.PUBLIC) == 0) {
+                    field.setAccessible(true);
+                }
 
                 try {
                     field.set(application, resource);
@@ -1363,7 +1366,9 @@ public abstract class ApplicationContext {
                     throw new BindException(exception);
                 }
 
-                field.setAccessible(false);
+                if ((field.getModifiers() & Modifier.PUBLIC) == 0) {
+                    field.setAccessible(false);
+                }
             }
 
             Bind bindAnnotation = field.getAnnotation(Bind.class);
@@ -1387,7 +1392,9 @@ public abstract class ApplicationContext {
                 }
 
                 // Set the value into the field
-                field.setAccessible(true);
+                if ((field.getModifiers() & Modifier.PUBLIC) == 0) {
+                    field.setAccessible(true);
+                }
 
                 try {
                     field.set(application, value);
@@ -1395,7 +1402,9 @@ public abstract class ApplicationContext {
                     throw new BindException(exception);
                 }
 
-                field.setAccessible(false);
+                if ((field.getModifiers() & Modifier.PUBLIC) == 0) {
+                    field.setAccessible(false);
+                }
             }
         }
     }
