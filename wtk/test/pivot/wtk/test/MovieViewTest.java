@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.MovieView;
 import pivot.wtk.Window;
@@ -35,7 +36,7 @@ public class MovieViewTest implements Application {
     private Movie movie = new Movie() {
         private int angle = 6;
         private Drawing drawing = new Drawing();
-            private Shape.Rotate rotateTransform = new Shape.Rotate();
+            private Shape.Rotate rotateTransform = new Shape.Rotate(0, 320, 240);
 
         {
             setLooping(true);
@@ -44,17 +45,17 @@ public class MovieViewTest implements Application {
             drawing.setSize(640, 480);
 
             Line line = new Line();
-            /*
             line.setX1(220);
             line.setY1(240);
             line.setX2(220);
             line.setY2(40);
-            */
+            /*
             line.setOrigin(320, 240);
             line.setX1(0);
             line.setY1(0);
             line.setX2(0);
             line.setY2(-200);
+            */
 
             line.setStroke(Color.BLACK);
             line.setStrokeThickness(5);
@@ -89,6 +90,10 @@ public class MovieViewTest implements Application {
             return (360 / angle);
         }
     };
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(MovieViewTest.class, args);
+    }
 
     public void startup(Display display, Dictionary<String, String> properties) {
         window = new Window();

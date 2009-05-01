@@ -17,7 +17,8 @@ limitations under the License.
 -->
 
 <Drawing width="640" height="480" background="#ffff00"
-    xmlns="pivot.wtk.media">
+    xmlns="pivot.wtk.media"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1">
     <canvas>
         <Canvas xmlns="pivot.wtk.media.drawing">
             <Rectangle x="10" y="20"
