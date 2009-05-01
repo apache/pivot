@@ -172,6 +172,26 @@ public final class DesktopApplicationContext extends ApplicationContext {
         System.exit(0);
     }
 
+    /**
+     * Utility method to make it easier to define main() entry-points in applications.
+     * <p>
+     * Then your main class looks like:
+     * <p>
+     * <pre>
+     *     public class MyApp implements Application {
+     *         public static void main(String[] args) throws Exception {
+     *             DesktopApplicationContext.main(MyApp.class, args);
+     *         }
+     *     }
+     * </pre>
+     */
+    public static void main(Class<? extends Application> applicationClass, String[] args) {
+        String [] newArgs = new String[args.length + 1];
+        System.arraycopy(args, 0, newArgs, 1, args.length);
+        newArgs[0] = applicationClass.getName();
+        main(newArgs);
+    }
+
     public static void main(String[] args) {
         if (application != null) {
             throw new IllegalStateException();
