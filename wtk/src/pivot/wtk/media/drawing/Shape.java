@@ -117,7 +117,9 @@ public abstract class Shape {
         }
 
         public void setAnchor(double anchorX, double anchorY) {
-            if (this.anchorY != anchorY) {
+            if (this.anchorX != anchorX
+                || this.anchorY != anchorY) {
+                this.anchorX = anchorX;
                 this.anchorY = anchorY;
                 affineTransform = null;
 
