@@ -60,8 +60,10 @@ public class Label extends Component {
 
     public void setText(String text) {
         String previousText = this.text;
-        this.text = text;
-        labelListeners.textChanged(this, previousText);
+        if (previousText != text) {
+            this.text = text;
+            labelListeners.textChanged(this, previousText);
+        }
     }
 
     /**

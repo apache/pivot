@@ -72,6 +72,11 @@ limitations under the License.
                     controlX1="12" controlY1="12" controlX2="25" controlY2="37"
                     strokeThickness="4" fill="#00ffff"/>
             </Group>
+            
+            <Group x="120" y="360">
+                <Text text="ABCDEF GHIJK" font="Arial 24" fontBold="true" width="80"
+                    alignment="left"/>
+            </Group>
         </Canvas>
     </canvas>
 </Drawing>

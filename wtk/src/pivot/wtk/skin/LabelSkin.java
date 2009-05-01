@@ -420,7 +420,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         }
 
         if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
-            throw new IllegalArgumentException("JUSTIFY is not supported");
+            throw new IllegalArgumentException(HorizontalAlignment.JUSTIFY + " is not supported");
         }
 
         this.horizontalAlignment = horizontalAlignment;
@@ -445,7 +445,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         }
 
         if (verticalAlignment == VerticalAlignment.JUSTIFY) {
-            throw new IllegalArgumentException("JUSTIFY is not supported");
+            throw new IllegalArgumentException(VerticalAlignment.JUSTIFY + " is not supported");
         }
 
         this.verticalAlignment = verticalAlignment;
