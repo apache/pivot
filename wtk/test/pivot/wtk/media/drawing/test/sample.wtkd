@@ -66,6 +66,12 @@ limitations under the License.
                 <QuadCurve x1="0" y1="0" x2="0" y2="50" controlX="50" controlY="25"
                     strokeThickness="4" fill="#ff00ff"/>
             </Group>
+
+            <Group x="360" y="240">
+                <CubicCurve x1="0" y1="0" x2="0" y2="50" 
+                    controlX1="12" controlY1="12" controlX2="25" controlY2="37"
+                    strokeThickness="4" fill="#00ffff"/>
+            </Group>
         </Canvas>
     </canvas>
 </Drawing>

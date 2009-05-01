@@ -589,11 +589,11 @@ public class Path extends Shape
         }
 
         operations.insert(operation, index);
-        operation.setPath(Path.this);
+        operation.setPath(this);
 
         invalidate();
 
-        pathListeners.operationInserted(Path.this, index);
+        pathListeners.operationInserted(this, index);
     }
 
     /**
@@ -628,7 +628,7 @@ public class Path extends Shape
 
             invalidate();
 
-            pathListeners.operationsRemoved(Path.this, index, removed);
+            pathListeners.operationsRemoved(this, index, removed);
         }
 
         return removed;
