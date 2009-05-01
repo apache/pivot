@@ -566,13 +566,16 @@ public abstract class Shape {
     protected void validate() {
         if (!valid) {
             // Repaint the region formerly occupied by this shape
-            update(transformedBounds);
+            update(transformedBounds.x, transformedBounds.y,
+                transformedBounds.width, transformedBounds.height, false);
 
             // Transform the current bounds
-            transformedBounds = transform(bounds);
+            transformedBounds = transform(bounds.x, bounds.y, bounds.width,
+                bounds.height);
 
             // Repaint the region currently occupied by this shape
-            update(transformedBounds);
+            update(transformedBounds.x, transformedBounds.y,
+                transformedBounds.width, transformedBounds.height, false);
 
             valid = true;
         }
@@ -591,16 +594,21 @@ public abstract class Shape {
     }
 
     protected void update(int x, int y, int width, int height) {
-        Bounds bounds = transform(x, y, width, height);
-
-        if (parent != null) {
-            parent.update(this.x + bounds.x, this.y + bounds.y,
-                bounds.width, bounds.height);
-        }
+        update(x, y, width, height, true);
     }
 
-    private Bounds transform(Bounds bounds) {
-        return transform(bounds.x, bounds.y, bounds.width, bounds.height);
+    private void update(int x, int y, int width, int height, boolean transform) {
+        if (transform) {
+            Bounds bounds = transform(x, y, width, height);
+            x = bounds.x;
+            y = bounds.y;
+            width = bounds.width;
+            height = bounds.height;
+        }
+
+        if (parent != null) {
+            parent.update(this.x + x, this.y + y, width, height);
+        }
     }
 
     private Bounds transform(int x, int y, int width, int height) {

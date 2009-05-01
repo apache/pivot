@@ -22,6 +22,7 @@ import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Transparency;
 
+import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.HorizontalAlignment;
@@ -47,15 +48,25 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     private HorizontalAlignment horizontalAlignment = HorizontalAlignment.CENTER;
     private VerticalAlignment verticalAlignment = VerticalAlignment.CENTER;
 
+    private int imageX = 0;
+    private int imageY = 0;
+    private float scaleX = 1;
+    private float scaleY = 1;
+
     private ImageListener imageListener = new ImageListener() {
         public void sizeChanged(Image image, int previousWidth, int previousHeight) {
             invalidateComponent();
         }
 
         public void regionUpdated(Image image, int x, int y, int width, int height) {
-            // TODO Offset this by the image location; scale by the image scale
-            // repaintComponent(x, y, width, height);
-            repaintComponent();
+            // TODO A rounding error is causing an off-by-one error; we're
+            // accounting for it here by adding 1 to width and height
+            Bounds bounds = new Bounds(imageX + (int)Math.floor(((float)x * scaleX)),
+                imageY + (int)Math.floor((float)y * scaleY),
+                (int)Math.ceil((float)width * scaleX) + 1,
+                (int)Math.ceil((float)height * scaleY) + 1);
+            System.out.println(bounds);
+            repaintComponent(bounds);
         }
     };
 
@@ -106,26 +117,14 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     public void layout() {
-        // No-op for component skins
-    }
-
-    public void paint(Graphics2D graphics) {
         ImageView imageView = (ImageView)getComponent();
         Image image = imageView.getImage();
 
-        int width = getWidth();
-        int height = getHeight();
-
-        if (backgroundColor != null) {
-            graphics.setPaint(backgroundColor);
-            graphics.fillRect(0, 0, width, height);
-        }
-
         if (image != null) {
-            Dimensions imageSize = image.getSize();
+            int width = getWidth();
+            int height = getHeight();
 
-            int imageX, imageY;
-            float scaleX, scaleY;
+            Dimensions imageSize = image.getSize();
 
             if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
                 imageX = 0;
@@ -156,7 +155,22 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
                     imageY = 0;
                 }
             }
+        }
+    }
 
+    public void paint(Graphics2D graphics) {
+        ImageView imageView = (ImageView)getComponent();
+        Image image = imageView.getImage();
+
+        int width = getWidth();
+        int height = getHeight();
+
+        if (backgroundColor != null) {
+            graphics.setPaint(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+        }
+
+        if (image != null) {
             Graphics2D imageGraphics = (Graphics2D)graphics.create();
             imageGraphics.translate(imageX, imageY);
             imageGraphics.scale(scaleX, scaleY);
@@ -258,6 +272,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         }
 
         this.horizontalAlignment = horizontalAlignment;
+        layout();
         repaintComponent();
     }
 
@@ -279,6 +294,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         }
 
         this.verticalAlignment = verticalAlignment;
+        layout();
         repaintComponent();
     }
 
