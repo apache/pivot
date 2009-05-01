@@ -492,6 +492,10 @@ public class Path extends Shape
         private int getConstantValue() {
             return constantValue;
         }
+
+        public static WindingRule decode(String value) {
+            return valueOf(value.toUpperCase());
+        }
     }
 
     /**
@@ -560,6 +564,10 @@ public class Path extends Shape
 
             pathListeners.windingRuleChanged(this, previousWindingRule);
         }
+    }
+
+    public final void setWindingRule(String windingRule) {
+        setWindingRule(WindingRule.decode(windingRule));
     }
 
     /**
