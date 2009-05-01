@@ -32,7 +32,8 @@ import pivot.util.ListenerList;
  *
  * @author tvolkert
  */
-public class Path extends Shape {
+public class Path extends Shape
+    implements Sequence<Path.Operation> {
     /**
      * Abstract base class for path operations. See the specific subclasses for
      * details.
@@ -454,106 +455,6 @@ public class Path extends Shape {
     }
 
     /**
-     * Operation sequence implementation.
-     *
-     * @author tvolkert
-     */
-    public final class OperationSequence implements Sequence<Operation> {
-        /**
-         * {@inheritDoc}
-         */
-        public int add(Operation operation) {
-            int i = getLength();
-            insert(operation, i);
-
-            return i;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public void insert(Operation operation, int index) {
-            if (operation == null) {
-                throw new IllegalArgumentException("operation is null.");
-            }
-
-            if (index < 0 || index > getLength()) {
-                throw new IndexOutOfBoundsException();
-            }
-
-            if (operation.getPath() != null) {
-                throw new IllegalArgumentException("operation is already in use by another path.");
-            }
-
-            operations.insert(operation, index);
-            operation.setPath(Path.this);
-
-            invalidate();
-
-            pathListeners.operationInserted(Path.this, index);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Operation update(int index, Operation operation) {
-            throw new UnsupportedOperationException();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public int remove(Operation operation) {
-            int index = indexOf(operation);
-            if (index != -1) {
-                remove(index, 1);
-            }
-
-            return index;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Sequence<Operation> remove(int index, int count) {
-            Sequence<Operation> removed = operations.remove(index, count);
-
-            if (count > 0) {
-                for (int i = 0, n = removed.getLength(); i < n; i++) {
-                    removed.get(i).setPath(null);
-                }
-
-                invalidate();
-
-                pathListeners.operationsRemoved(Path.this, index, removed);
-            }
-
-            return removed;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Operation get(int index) {
-            return operations.get(index);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public int indexOf(Operation operation) {
-            return operations.indexOf(operation);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public int getLength() {
-            return operations.getLength();
-        }
-    }
-
-    /**
      * The winding rule specifies how the interior of a path is determined.
      *
      * @author tvolkert
@@ -626,9 +527,7 @@ public class Path extends Shape {
     }
 
     private WindingRule windingRule = WindingRule.NON_ZERO;
-
     private ArrayList<Operation> operations = new ArrayList<Operation>();
-    private OperationSequence operationSequence = new OperationSequence();
 
     private GeneralPath generalPath = new GeneralPath();
 
@@ -664,13 +563,96 @@ public class Path extends Shape {
     }
 
     /**
-     * Returns the path operation sequence.
-     *
-     * @return
-     * The path operation sequence.
+     * {@inheritDoc}
      */
-    public OperationSequence getOperations() {
-        return operationSequence;
+    public int add(Operation operation) {
+        int i = getLength();
+        insert(operation, i);
+
+        return i;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void insert(Operation operation, int index) {
+        if (operation == null) {
+            throw new IllegalArgumentException("operation is null.");
+        }
+
+        if (index < 0 || index > getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (operation.getPath() != null) {
+            throw new IllegalArgumentException("operation is already in use by another path.");
+        }
+
+        operations.insert(operation, index);
+        operation.setPath(Path.this);
+
+        invalidate();
+
+        pathListeners.operationInserted(Path.this, index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Operation update(int index, Operation operation) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int remove(Operation operation) {
+        int index = indexOf(operation);
+        if (index != -1) {
+            remove(index, 1);
+        }
+
+        return index;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Sequence<Operation> remove(int index, int count) {
+        Sequence<Operation> removed = operations.remove(index, count);
+
+        if (count > 0) {
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
+                removed.get(i).setPath(null);
+            }
+
+            invalidate();
+
+            pathListeners.operationsRemoved(Path.this, index, removed);
+        }
+
+        return removed;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Operation get(int index) {
+        return operations.get(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int indexOf(Operation operation) {
+        return operations.indexOf(operation);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getLength() {
+        return operations.getLength();
     }
 
     /**

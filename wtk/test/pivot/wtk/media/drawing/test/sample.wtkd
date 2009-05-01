@@ -32,15 +32,13 @@ limitations under the License.
             <Line x1="140" y1="86" x2="200" y2="86"
                 stroke="#cc00cc" strokeThickness="10"/>
             <Path x="132" y="83" stroke="#0088ff" strokeThickness="2">
-                <operations>
-                    <Path.MoveTo x="20" y="70"/>
-                    <Path.LineTo x="30" y="20"/>
-                    <Path.QuadTo x1="40" y1="10" x2="50" y2="20"/>
-                    <Path.LineTo x="60" y="70"/>
-                    <Path.QuadTo x1="70" y1="80" x2="60" y2="80"/>
-                    <Path.LineTo x="20" y="80"/>
-                    <Path.QuadTo x1="10" y1="80" x2="20" y2="70"/>
-                </operations>
+                <Path.MoveTo x="20" y="70"/>
+                <Path.LineTo x="30" y="20"/>
+                <Path.QuadTo x1="40" y1="10" x2="50" y2="20"/>
+                <Path.LineTo x="60" y="70"/>
+                <Path.QuadTo x1="70" y1="80" x2="60" y2="80"/>
+                <Path.LineTo x="20" y="80"/>
+                <Path.QuadTo x1="10" y1="80" x2="20" y2="70"/>
             </Path>
             <Ellipse x="60" y="180"
                 width="220" height="60" fill="#000000"
