@@ -45,6 +45,11 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
 
     private MovieListener movieListener = new MovieListener.Adapter() {
         @Override
+        public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
+            invalidateComponent();
+        }
+
+        @Override
         public void regionUpdated(Movie movie, int x, int y, int width, int height) {
             repaintComponent(movieX + (int)Math.floor(x * scale),
                 movieY + (int)Math.floor(y * scale),

@@ -30,6 +30,12 @@ import pivot.wtk.Visual;
 public abstract class Movie implements Visual {
     protected static class MovieListenerList extends ListenerList<MovieListener>
         implements MovieListener {
+        public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
+            for (MovieListener listener : this) {
+                listener.sizeChanged(movie, previousWidth, previousHeight);
+            }
+        }
+
         public void currentFrameChanged(Movie movie, int previousFrame) {
             for (MovieListener listener : this) {
                 listener.currentFrameChanged(movie, previousFrame);

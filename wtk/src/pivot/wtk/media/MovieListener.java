@@ -28,6 +28,9 @@ public interface MovieListener {
      * @author tvolkert
      */
     public static class Adapter implements MovieListener {
+        public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
+        }
+
         public void currentFrameChanged(Movie movie, int previousFrame) {
         }
 
@@ -43,6 +46,15 @@ public interface MovieListener {
         public void regionUpdated(Movie movie, int x, int y, int width, int height) {
         }
     }
+
+    /**
+     * Called when a movie's size has changed.
+     *
+     * @param movie
+     * @param previousWidth
+     * @param previousHeight
+     */
+    public void sizeChanged(Movie movie, int previousWidth, int previousHeight);
 
     /**
      * Called when the movie's current frame changed.
