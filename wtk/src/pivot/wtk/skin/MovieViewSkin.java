@@ -36,14 +36,18 @@ import pivot.wtk.media.MovieListener;
  */
 public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     private Color backgroundColor = null;
+    private float scale = 1;
     private HorizontalAlignment horizontalAlignment = HorizontalAlignment.CENTER;
     private VerticalAlignment verticalAlignment = VerticalAlignment.CENTER;
+
+    private int movieX = 0;
+    private int movieY = 0;
 
     private MovieListener movieListener = new MovieListener.Adapter() {
         @Override
         public void regionUpdated(Movie movie, int x, int y, int width, int height) {
-            // TODO This is wrong, considering alignment values
-            repaintComponent(x, y, width, height);
+            // TODO Offset this by the movie location; scale by the movie scale
+            repaintComponent();
         }
     };
 
@@ -75,25 +79,58 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         MovieView movieView = (MovieView)getComponent();
         Movie movie = movieView.getMovie();
 
-        return (movie == null) ? 0 : movie.getWidth();
+        return (movie == null) ? 0 : Math.round(movie.getWidth() * scale);
     }
 
     public int getPreferredHeight(int width) {
         MovieView movieView = (MovieView)getComponent();
         Movie movie = movieView.getMovie();
 
-        return (movie == null) ? 0 : movie.getHeight();
+        return (movie == null) ? 0 : Math.round(movie.getHeight() * scale);
     }
 
+    @Override
     public Dimensions getPreferredSize() {
         MovieView movieView = (MovieView)getComponent();
         Movie movie = movieView.getMovie();
 
-        return (movie == null) ? new Dimensions(0, 0) : movie.getSize();
+        return (movie == null) ? new Dimensions(0, 0) : new Dimensions(
+            Math.round(movie.getWidth() * scale),
+            Math.round(movie.getHeight() * scale));
     }
 
     public void layout() {
-        // No-op for component skins
+        MovieView movieView = (MovieView)getComponent();
+        Movie movie = movieView.getMovie();
+
+        movieX = 0;
+        movieY = 0;
+
+        if (movie != null) {
+            int width = getWidth();
+            int height = getHeight();
+
+            int movieWidth = movie.getWidth();
+            int movieHeight = movie.getHeight();
+
+            switch (horizontalAlignment) {
+            case CENTER:
+                movieX = (width - movieWidth) / 2;
+                break;
+            case RIGHT:
+                movieX = width - movieWidth;
+                break;
+            }
+
+            switch (verticalAlignment) {
+            case CENTER:
+                movieY = (height - movieHeight) / 2;
+                break;
+            case BOTTOM:
+                movieY = height - movieHeight;
+                break;
+            }
+        }
     }
 
     public void paint(Graphics2D graphics) {
@@ -109,32 +146,8 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         }
 
         if (movie != null) {
-            Dimensions movieSize = movie.getSize();
-
-            int movieX, movieY;
-
-            switch (horizontalAlignment) {
-            case CENTER:
-                movieX = (width - movieSize.width) / 2;
-                break;
-            case RIGHT:
-                movieX = width - movieSize.width;
-                break;
-            default:
-                movieX = 0;
-                break;
-            }
-
-            switch (verticalAlignment) {
-            case CENTER:
-                movieY = (height - movieSize.height) / 2;
-                break;
-            case BOTTOM:
-                movieY = height - movieSize.height;
-                break;
-            default:
-                movieY = 0;
-                break;
+            if (scale != 1) {
+                graphics.scale(scale, scale);
             }
 
             graphics.translate(movieX, movieY);
@@ -183,6 +196,19 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         setBackgroundColor(decodeColor(backgroundColor));
     }
 
+    public float getScale() {
+        return scale;
+    }
+
+    public void setScale(float scale) {
+        if (scale <= 0) {
+            throw new IllegalArgumentException("scale must be positive.");
+        }
+
+        this.scale = scale;
+        invalidateComponent();
+    }
+
     public HorizontalAlignment getHorizontalAlignment() {
         return horizontalAlignment;
     }
@@ -193,11 +219,15 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         }
 
         if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {
-            throw new IllegalArgumentException("JUSTIFY alignment is not supported");
+            throw new IllegalArgumentException(HorizontalAlignment.JUSTIFY + " is not supported");
         }
 
-        this.horizontalAlignment = horizontalAlignment;
-        repaintComponent();
+        if (this.horizontalAlignment != horizontalAlignment) {
+            this.horizontalAlignment = horizontalAlignment;
+
+            layout();
+            repaintComponent();
+        }
     }
 
     public final void setHorizontalAlignment(String horizontalAlignment) {
@@ -218,11 +248,15 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         }
 
         if (verticalAlignment == VerticalAlignment.JUSTIFY) {
-            throw new IllegalArgumentException("JUSTIFY alignment is not supported");
+            throw new IllegalArgumentException(VerticalAlignment.JUSTIFY + " is not supported");
         }
 
-        this.verticalAlignment = verticalAlignment;
-        repaintComponent();
+        if (this.verticalAlignment != verticalAlignment) {
+            this.verticalAlignment = verticalAlignment;
+
+            layout();
+            repaintComponent();
+        }
     }
 
     public final void setVerticalAlignment(String verticalAlignment) {
