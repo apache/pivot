@@ -46,8 +46,10 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     private MovieListener movieListener = new MovieListener.Adapter() {
         @Override
         public void regionUpdated(Movie movie, int x, int y, int width, int height) {
-            // TODO Offset this by the movie location; scale by the movie scale
-            repaintComponent();
+            repaintComponent(movieX + (int)Math.floor(x * scale),
+                movieY + (int)Math.floor(y * scale),
+                (int)Math.ceil(width * scale) + 1,
+                (int)Math.ceil(height * scale) + 1);
         }
     };
 
@@ -94,17 +96,14 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         MovieView movieView = (MovieView)getComponent();
         Movie movie = movieView.getMovie();
 
-        return (movie == null) ? new Dimensions(0, 0) : new Dimensions(
-            Math.round(movie.getWidth() * scale),
+        return (movie == null) ? new Dimensions(0, 0) :
+            new Dimensions(Math.round(movie.getWidth() * scale),
             Math.round(movie.getHeight() * scale));
     }
 
     public void layout() {
         MovieView movieView = (MovieView)getComponent();
         Movie movie = movieView.getMovie();
-
-        movieX = 0;
-        movieY = 0;
 
         if (movie != null) {
             int width = getWidth();
@@ -120,6 +119,9 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
             case RIGHT:
                 movieX = width - movieWidth;
                 break;
+            default:
+                movieX = 0;
+                break;
             }
 
             switch (verticalAlignment) {
@@ -128,6 +130,9 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
                 break;
             case BOTTOM:
                 movieY = height - movieHeight;
+                break;
+            default:
+                movieY = 0;
                 break;
             }
         }
