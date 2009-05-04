@@ -159,7 +159,6 @@ public class WTKXSerializer implements Serializer<Object> {
         return readObject(location);
     }
 
-    @SuppressWarnings("unchecked")
     public Object readObject(URL location) throws IOException,
         SerializationException {
         if (location == null) {
