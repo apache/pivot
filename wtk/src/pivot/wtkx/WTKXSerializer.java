@@ -159,7 +159,9 @@ public class WTKXSerializer implements Serializer<Object> {
         return readObject(location);
     }
 
-    public Object readObject(URL location) throws IOException, SerializationException {
+    @SuppressWarnings("unchecked")
+    public Object readObject(URL location) throws IOException,
+        SerializationException {
         if (location == null) {
             throw new IllegalArgumentException("location is null.");
         }
@@ -623,6 +625,9 @@ public class WTKXSerializer implements Serializer<Object> {
     /**
      * Retrieves a named object.
      *
+     * @param <T>
+     * The type of the object to return.
+     *
      * @param name
      * The name of the object, relative to this loader. The values's name is the
      * concatentation of its parent namespaces and its ID, separated by periods
@@ -631,7 +636,8 @@ public class WTKXSerializer implements Serializer<Object> {
      * @return The named object, or <tt>null</tt> if an object with the given
      * name does not exist.
      */
-    public Object getObjectByName(String name) {
+    @SuppressWarnings("unchecked")
+    public <T> T getObjectByName(String name) {
         if (name == null) {
             throw new IllegalArgumentException("name is null.");
         }
@@ -651,7 +657,7 @@ public class WTKXSerializer implements Serializer<Object> {
         	object = serializer.getObjectByID(namespacePath[i]);
         }
 
-        return object;
+        return (T)object;
     }
 
     private Object getObjectByID(String id) {
@@ -922,5 +928,87 @@ public class WTKXSerializer implements Serializer<Object> {
         }
 
         return method;
+    }
+
+    /**
+     * Applies WTKX binding annotations to an object.
+     *
+     * @param object
+     */
+    public static void bind(Object object)
+        throws IOException, BindException  {
+        assert(object != null);
+
+        // Maps resource field name to the serializer that loaded the resource
+        HashMap<String, WTKXSerializer> wtkxSerializers = new HashMap<String, WTKXSerializer>();
+
+        // Walk field lists and resolve WTKX annotations
+        Class<?> type = object.getClass();
+        Field[] fields = type.getDeclaredFields();
+        for (int i = 0; i < fields.length; i++) {
+            Field field = fields[i];
+            Load loadAnnotation = field.getAnnotation(Load.class);
+
+            if (loadAnnotation != null) {
+                // Create a serializer for the resource
+                String fieldName = field.getName();
+                assert(!wtkxSerializers.containsKey(fieldName));
+
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                wtkxSerializers.put(fieldName, wtkxSerializer);
+
+                // Load the resource
+                URL location = type.getResource(loadAnnotation.name());
+                Object resource;
+                try {
+                    resource = wtkxSerializer.readObject(location);
+                } catch(SerializationException exception) {
+                    throw new BindException(exception);
+                }
+
+                // Set the resource into the field
+                if (!field.isAccessible()) {
+                    field.setAccessible(true);
+                }
+
+                try {
+                    field.set(object, resource);
+                } catch(IllegalAccessException exception) {
+                    throw new BindException(exception);
+                }
+            }
+
+            Bind bindAnnotation = field.getAnnotation(Bind.class);
+            if (bindAnnotation != null) {
+                if (loadAnnotation != null) {
+                    throw new BindException("Cannot combine " + Load.class.getName()
+                        + " and " + Bind.class.getName() + " annotations.");
+                }
+
+                // Bind to the value loaded by the field's serializer
+                String fieldName = bindAnnotation.resource();
+                WTKXSerializer wtkxSerializer = wtkxSerializers.get(fieldName);
+                if (wtkxSerializer == null) {
+                    throw new BindException("\"" + fieldName + "\" is not a valid resource name.");
+                }
+
+                String id = bindAnnotation.id();
+                Object value = wtkxSerializer.getObjectByName(id);
+                if (value == null) {
+                    throw new BindException("\"" + id + "\" does not exist.");
+                }
+
+                // Set the value into the field
+                if (!field.isAccessible()) {
+                    field.setAccessible(true);
+                }
+
+                try {
+                    field.set(object, value);
+                } catch(IllegalAccessException exception) {
+                    throw new BindException(exception);
+                }
+            }
+        }
     }
 }

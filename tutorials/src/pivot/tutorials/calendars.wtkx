@@ -25,7 +25,7 @@ limitations under the License.
                     <Label text="English (US)" styles="{fontBold:true}"/>
                     <Border styles="{padding:0}">
                         <content>
-                            <Calendar/>
+                            <Calendar locale="{language:'en', country:'us'}"/>
                         </content>
                     </Border>
                 </FlowPane>
@@ -34,7 +34,7 @@ limitations under the License.
                     <Label text="Français (FR)" styles="{fontBold:true}"/>
                     <Border styles="{padding:0}">
                         <content>
-                            <Calendar locale="{language:'fr'}"/>
+                            <Calendar locale="{language:'fr', country:'fr'}"/>
                         </content>
                     </Border>
                 </FlowPane>
@@ -44,10 +44,10 @@ limitations under the License.
                     <Form>
                         <sections>
                             <Form.Section>
-                                <CalendarButton Form.name="English (US)"/>
+                                <CalendarButton Form.name="English (US)" locale="{language:'en', country:'us'}"/>
                                 <CalendarButton Form.name="Españole (US)" locale="{language:'es', country:'us'}"/>
                                 <CalendarButton Form.name="Españole (ES)" locale="{language:'es', country:'es'}"/>
-                                <CalendarButton Form.name="Français (FR)" locale="{language:'fr'}"/>
+                                <CalendarButton Form.name="Français (FR)" locale="{language:'fr', country:'fr'}"/>
                                 <CalendarButton Form.name="Français (CA)" locale="{language:'fr', country:'ca'}"/>
                             </Form.Section>
                         </sections>

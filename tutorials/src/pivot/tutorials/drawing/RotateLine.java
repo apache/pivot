@@ -11,6 +11,7 @@ import pivot.wtk.media.Drawing;
 import pivot.wtk.media.drawing.Shape;
 import pivot.wtkx.Bind;
 import pivot.wtkx.Load;
+import pivot.wtkx.WTKXSerializer;
 
 public class RotateLine implements Application {
     @Load(name="rotate_line.wtkd")
@@ -23,6 +24,8 @@ public class RotateLine implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception{
+        WTKXSerializer.bind(this);
+
         ApplicationContext.scheduleRecurringCallback(new Runnable() {
             public void run() {
                 int angle = (int)rotation.getAngle();

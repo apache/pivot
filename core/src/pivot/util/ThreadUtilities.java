@@ -17,7 +17,7 @@
 package pivot.util;
 
 /**
- * Contains utility methods dealing with threads.
+ * Contains utility methods for dealing with threads.
  *
  * @author tvolkert
  */
@@ -36,10 +36,10 @@ public final class ThreadUtilities {
         // TODO This method is only necessary if the Pivot classes (and by
         // association, the application classes and resources) were loaded
         // from a different class loader than the UI thread's class loader.
-        // Curently, this case exists in the IcedTea plug-in and when we load
-        // the Pivot classes manully using a bootstrap applet. If these cases
+        // Currently, this case exists in the IcedTea plug-in and when we load
+        // the Pivot classes manually using a bootstrap applet. If these cases
         // ever cease to exist, then this method becomes superfluous and should
-        // be replaced with Thread.currentThread().getContextClassLoader()
+        // be replaced with Thread.currentThread().getContextClassLoader().
         ClassLoader classLoader;
 
         try {

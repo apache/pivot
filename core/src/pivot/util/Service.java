@@ -86,12 +86,14 @@ public class Service {
         }
 
         Object provider = null;
-        try {
-            provider = providerClass.newInstance();
-        } catch(InstantiationException exception) {
-            // No-op
-        } catch(IllegalAccessException exception) {
-            // No-op
+        if (providerClass != null) {
+            try {
+                provider = providerClass.newInstance();
+            } catch(InstantiationException exception) {
+                // No-op
+            } catch(IllegalAccessException exception) {
+                // No-op
+            }
         }
 
         return provider;
