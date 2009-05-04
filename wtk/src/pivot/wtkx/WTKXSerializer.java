@@ -967,7 +967,12 @@ public class WTKXSerializer implements Serializer<Object> {
 
                 // Set the resource into the field
                 if (!field.isAccessible()) {
-                    field.setAccessible(true);
+                    try {
+                        field.setAccessible(true);
+                    } catch (Exception ex) {
+                        // No-op; the callers might have used public fields, in
+                        // which case we don't need to make them accessible
+                    }
                 }
 
                 try {
@@ -999,7 +1004,12 @@ public class WTKXSerializer implements Serializer<Object> {
 
                 // Set the value into the field
                 if (!field.isAccessible()) {
-                    field.setAccessible(true);
+                    try {
+                        field.setAccessible(true);
+                    } catch (Exception ex) {
+                        // No-op; the callers might have used public fields, in
+                        // which case we don't need to make them accessible
+                    }
                 }
 
                 try {
