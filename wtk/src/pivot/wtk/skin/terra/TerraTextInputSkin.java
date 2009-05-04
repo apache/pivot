@@ -969,6 +969,11 @@ public class TerraTextInputSkin extends ComponentSkin
                     }
                 }
             }
+        } else {
+            if (Mouse.isPressed(Mouse.Button.LEFT)) {
+                // Capture the mouse so we can select text
+                Mouse.capture(component);
+            }
         }
 
         return consumed;
@@ -988,9 +993,6 @@ public class TerraTextInputSkin extends ComponentSkin
 
             // Set focus to the text input
             textInput.requestFocus();
-
-            // Capture the mouse so we can select text
-            Mouse.capture(component);
         }
 
         return super.mouseDown(component, button, x, y);
