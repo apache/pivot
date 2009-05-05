@@ -23,9 +23,9 @@ import java.lang.annotation.*;
  *
  * @author gbrown
  */
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.FIELD)
 public @interface Bind {
     public String resource();
-    public String id();
+    public String id() default "\0";
 }

@@ -29,29 +29,53 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
+import pivot.collections.ArrayList;
 import pivot.collections.ArrayStack;
 import pivot.collections.HashMap;
 
-//import com.sun.tools.javac.processing.JavacProcessingEnvironment;
-//import com.sun.tools.javac.code.Flags;
-//import com.sun.tools.javac.code.Symbol;
+import com.sun.tools.javac.processing.JavacProcessingEnvironment;
+import com.sun.tools.javac.parser.Parser;
+import com.sun.tools.javac.parser.Scanner;
 import com.sun.tools.javac.tree.JCTree;
-//import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.tree.TreeTranslator;
-//import com.sun.tools.javac.util.Context;
-//import com.sun.tools.javac.util.List;
-//import com.sun.tools.javac.util.Name;
+import com.sun.tools.javac.util.Context;
+import com.sun.tools.javac.util.List;
 import com.sun.source.util.Trees;
 
+/**
+ * Annotation processor that injects instance initializers into classes that
+ * use the <tt>@Load</tt> and <tt>@Bind</tt> annotations to perform the loading
+ * and binding.
+ *
+ * @author tvolkert
+ */
 @SupportedAnnotationTypes("pivot.wtkx.*")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class BindProcessor extends AbstractProcessor {
+    /**
+     *
+     * @author tvolkert
+     */
     private static class BindScope {
-        public HashMap<String, Load> loadAnnotations = null;
-        public HashMap<String, Bind> bindAnnotations = null;
+        public static class LoadGroup {
+            public JCTree.JCVariableDecl loadField = null;
+            public ArrayList<JCTree.JCVariableDecl> bindFields = null;
+
+            public LoadGroup(JCTree.JCVariableDecl loadField) {
+                this.loadField = loadField;
+            }
+        }
+
+        // Maps load field names to their corresponding load group
+        public HashMap<String, LoadGroup> loadGroups = null;
     }
 
-    private class BindTranslator extends TreeTranslator {
+    /**
+     * This actually does the work of instance initializer injection.
+     *
+     * @author tvolkert
+     */
+    private class BindInjector extends TreeTranslator {
         private ArrayStack<BindScope> bindScopeStack = new ArrayStack<BindScope>();
 
         @Override
@@ -62,32 +86,77 @@ public class BindProcessor extends AbstractProcessor {
             super.visitClassDef(tree);
             bindScopeStack.pop();
 
-            if (bindScope.loadAnnotations != null) {
-                for (String fieldName : bindScope.loadAnnotations) {
-                    Load loadAnnotation = bindScope.loadAnnotations.get(fieldName);
+            if (bindScope.loadGroups != null) {
+                StringBuilder sourceCode = new StringBuilder("{");
+
+                sourceCode.append("pivot.wtkx.WTKXSerializer wtkxSerializer;");
+                sourceCode.append("Object resource;");
+                sourceCode.append("Object value;");
+
+                for (String loadFieldName : bindScope.loadGroups) {
+                    BindScope.LoadGroup loadGroup = bindScope.loadGroups.get(loadFieldName);
+                    JCTree.JCVariableDecl loadField = loadGroup.loadField;
+                    Element loadElement = loadField.sym;
+                    Load loadAnnotation = loadElement.getAnnotation(Load.class);
 
                     if (DEBUG) {
                         processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
-                            String.format("Processing load(%s, %s#%s)", loadAnnotation.name(),
-                            tree.name.toString(), fieldName));
+                            String.format("Processing load(%s, %s#%s)", loadAnnotation.value(),
+                            tree.name.toString(), loadFieldName));
                     }
 
-                    // TODO
-                }
-            }
+                    // Load the WTKX resource
+                    sourceCode.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer();");
+                    sourceCode.append(String.format("java.net.URL location = getClass().getResource(\"%s\");", loadAnnotation.value()));
+                    sourceCode.append("try {");
+                    sourceCode.append("resource = wtkxSerializer.readObject(location);");
+                    sourceCode.append("} catch (Exception ex) {");
+                    sourceCode.append("throw new pivot.wtkx.BindException(ex);");
+                    sourceCode.append("}");
 
-            if (bindScope.bindAnnotations != null) {
-                for (String fieldName : bindScope.bindAnnotations) {
-                    Bind bindAnnotation = bindScope.bindAnnotations.get(fieldName);
+                    // Bind the resource to the field
+                    sourceCode.append(String.format("%s = (%s)resource;", loadFieldName, loadField.vartype.toString()));
 
-                    if (DEBUG) {
-                        processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
-                            String.format("Processing bind(%s.%s, %s#%s)", bindAnnotation.resource(),
-                                bindAnnotation.id(), tree.name.toString(), fieldName));
+                    // Bind the resource lookups to their corresponding fields
+                    if (loadGroup.bindFields != null) {
+                        for (JCTree.JCVariableDecl bindField : loadGroup.bindFields) {
+                            String bindFieldName = bindField.name.toString();
+                            Element bindElement = bindField.sym;
+                            Bind bindAnnotation = bindElement.getAnnotation(Bind.class);
+
+                            String bindID = bindAnnotation.id();
+                            if ("\0".equals(bindID)) {
+                                // The bind ID defaults to the field name
+                                bindID = bindFieldName;
+                            }
+
+                            if (DEBUG) {
+                                processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
+                                    String.format("Processing bind(%s.%s, %s#%s)", bindAnnotation.resource(),
+                                    bindID, tree.name.toString(), bindFieldName));
+                            }
+
+                            sourceCode.append(String.format("value = wtkxSerializer.getObjectByName(\"%s\");", bindID));
+                            sourceCode.append("if (value == null) {");
+                            sourceCode.append(String.format("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindID));
+                            sourceCode.append("}");
+                            sourceCode.append(String.format("%s = (%s)value;", bindFieldName, bindField.vartype.toString()));
+                        }
                     }
-
-                    // TODO
                 }
+
+                sourceCode.append("}");
+
+                // Parse our source code into a AST block
+                Scanner.Factory scannerFactory = Scanner.Factory.instance(context);
+                Parser.Factory parserFactory = Parser.Factory.instance(context);
+
+                Scanner scanner = scannerFactory.newScanner(sourceCode.toString());
+                Parser parser = parserFactory.newParser(scanner, false, false);
+                JCTree.JCBlock block = parser.block();
+
+                // Add the AST block (instance initializer) to the class
+                tree.defs = tree.defs.prepend(block);
             }
         }
 
@@ -95,89 +164,69 @@ public class BindProcessor extends AbstractProcessor {
         public void visitVarDef(JCTree.JCVariableDecl tree) {
             super.visitVarDef(tree);
 
-            Element element = tree.sym;
+            Load loadAnnotation = null;
+            Bind bindAnnotation = null;
 
+            Element element = tree.sym;
             if (element != null) {
+                loadAnnotation = element.getAnnotation(Load.class);
+                bindAnnotation = element.getAnnotation(Bind.class);
+            } else if (tree.mods != null
+                && tree.mods.annotations != null) {
+                List<JCTree.JCAnnotation> annotations = tree.mods.annotations;
+                // TODO
+            }
+
+            if (loadAnnotation != null
+                && bindAnnotation != null) {
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                    "Cannot combine " + Load.class.getName()
+                    + " and " + Bind.class.getName() + " annotations.", element);
+            } else if (loadAnnotation != null) {
+                BindScope bindScope = bindScopeStack.peek();
                 String fieldName = tree.name.toString();
 
-                Load loadAnnotation = element.getAnnotation(Load.class);
-                Bind bindAnnotation = element.getAnnotation(Bind.class);
+                if (bindScope.loadGroups == null) {
+                    bindScope.loadGroups = new HashMap<String, BindScope.LoadGroup>();
+                }
 
-                if (loadAnnotation != null
-                    && bindAnnotation != null) {
-                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        "Cannot combine " + Load.class.getName()
-                        + " and " + Bind.class.getName() + " annotations.", element);
-                } else if (loadAnnotation != null) {
-                    BindScope bindScope = bindScopeStack.peek();
+                bindScope.loadGroups.put(fieldName, new BindScope.LoadGroup(tree));
+                loadTally++;
+            } else if (bindAnnotation != null) {
+                BindScope bindScope = bindScopeStack.peek();
 
-                    if (bindScope.loadAnnotations == null) {
-                        bindScope.loadAnnotations = new HashMap<String, Load>();
+                if (bindScope.loadGroups != null
+                    && bindScope.loadGroups.containsKey(bindAnnotation.resource())) {
+                    BindScope.LoadGroup loadGroup = bindScope.loadGroups.get(bindAnnotation.resource());
+
+                    if (loadGroup.bindFields == null) {
+                        loadGroup.bindFields = new ArrayList<JCTree.JCVariableDecl>();
                     }
 
-                    bindScope.loadAnnotations.put(fieldName, loadAnnotation);
-                    loadTally++;
-                } else if (bindAnnotation != null) {
-                    BindScope bindScope = bindScopeStack.peek();
-
-                    if (bindScope.bindAnnotations == null) {
-                        bindScope.bindAnnotations = new HashMap<String, Bind>();
-                    }
-
-                    bindScope.bindAnnotations.put(fieldName, bindAnnotation);
+                    loadGroup.bindFields.add(tree);
                     bindTally++;
+                } else {
+                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                        "Resource not found: " + bindAnnotation.resource(), element);
                 }
             }
         }
-
-        // TODO remove.  This is reference code
-        /*
-        @Override
-        public void visitAssert(JCTree.JCAssert tree) {
-            super.visitAssert(tree);
-            JCTree.JCStatement newNode = makeIfThrowException(tree);
-            result = newNode;
-            //tally++;
-        }
-
-        private JCTree.JCStatement makeIfThrowException(JCTree.JCAssert node) {
-            // make: if (!(condition) throw new AssertionError(detail);
-            List<JCTree.JCExpression> args = (node.getDetail() == null
-                ? List.<JCTree.JCExpression> nil()
-                : List.of(node.detail));
-            JCTree.JCExpression expr = treeMaker.NewClass(null,
-                                              null,
-                                              treeMaker.Ident(names.fromString("AssertionError")),
-                                              args,
-                                              null);
-
-            return treeMaker.If(treeMaker.Unary(JCTree.NOT, node.cond),
-                           treeMaker.Throw(expr),
-                           null);
-
-        }
-        */
     }
 
-    private int loadTally;
-    private int bindTally;
+    private int loadTally = 0;
+    private int bindTally = 0;
 
     private Trees trees;
-    //private TreeMaker treeMaker;
-    //private Name.Table names;
+    private Context context;
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     @Override
-    public synchronized void init(ProcessingEnvironment env) {
-        super.init(env);
+    public synchronized void init(ProcessingEnvironment processingEnvironment) {
+        super.init(processingEnvironment);
 
-        trees = Trees.instance(env);
-        //Context context = ((JavacProcessingEnvironment)env).getContext();
-        //treeMaker = TreeMaker.instance(context);
-        //names = Name.Table.instance(context);
-        loadTally = 0;
-        bindTally = 0;
+        trees = Trees.instance(processingEnvironment);
+        context = ((JavacProcessingEnvironment)processingEnvironment).getContext();
     }
 
     @Override
@@ -187,13 +236,13 @@ public class BindProcessor extends AbstractProcessor {
         if (!roundEnvironment.processingOver()) {
             claimAnnotations = true;
 
-            BindTranslator bindTranslator = new BindTranslator();
+            BindInjector bindInjector = new BindInjector();
 
             for (Element rootElement : roundEnvironment.getRootElements()) {
                 if (rootElement.getKind() == ElementKind.CLASS) {
-                    // Visit each Class tree with our bindTranslator visitor
+                    // Visit each Class tree with our bindInjector visitor
                     JCTree tree = (JCTree)trees.getTree(rootElement);
-                    tree.accept(bindTranslator);
+                    tree.accept(bindInjector);
                 }
             }
         } else {

@@ -540,7 +540,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg value="-Xlint"/>
+            <compilerarg line="-Xlint -processor pivot.wtkx.BindProcessor"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="web/${folder.bin}"/>

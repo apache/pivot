@@ -81,6 +81,8 @@ import pivot.wtk.effects.WatermarkDecorator;
 import pivot.wtk.media.Image;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.PlainTextSerializer;
+import pivot.wtkx.Bind;
+import pivot.wtkx.Load;
 import pivot.wtkx.WTKXSerializer;
 
 public class Demo implements Application {
@@ -97,7 +99,7 @@ public class Demo implements Application {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
 
                 try {
-                    component = (Component)wtkxSerializer.readObject(resourceName);
+                    component = (Component)wtkxSerializer.readObject(getClass().getResource(resourceName));
                     rollup.setContent(component);
                     initialize(wtkxSerializer);
                 } catch(SerializationException exception) {
@@ -139,6 +141,21 @@ public class Demo implements Application {
 
     private Window window = null;
 
+    @Load("demo.wtkx") private Component content;
+    @Bind(resource="content") private Rollup buttonsRollup;
+    @Bind(resource="content") private Rollup listsRollup;
+    @Bind(resource="content") private Rollup textRollup;
+    @Bind(resource="content") private Rollup calendarsRollup;
+    @Bind(resource="content") private Rollup navigationRollup;
+    @Bind(resource="content") private Rollup splittersRollup;
+    @Bind(resource="content") private Rollup menusRollup;
+    @Bind(resource="content") private Rollup metersRollup;
+    @Bind(resource="content") private Rollup spinnersRollup;
+    @Bind(resource="content") private Rollup tablesRollup;
+    @Bind(resource="content") private Rollup treesRollup;
+    @Bind(resource="content") private Rollup dragDropRollup;
+    @Bind(resource="content") private Rollup alertsRollup;
+
     public static void main(String[] args) {
         DesktopApplicationContext.main(Demo.class, args);
     }
@@ -153,22 +170,17 @@ public class Demo implements Application {
         terraTheme.loadScheme(schemeLocation);
         */
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content = (Component)wtkxSerializer.readObject("pivot/tutorials/demo.wtkx");
-
-        final Rollup buttonsRollup = (Rollup)wtkxSerializer.getObjectByName("buttonsRollup");
-        buttonsRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/buttons.wtkx") {
+        buttonsRollup.getRollupStateListeners().add(new RollupStateHandler("buttons.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
             }
         });
 
-        Rollup listsRollup = (Rollup)wtkxSerializer.getObjectByName("listsRollup");
-        listsRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/lists.wtkx") {
+        listsRollup.getRollupStateListeners().add(new RollupStateHandler("lists.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
-                ListView editableListView = (ListView)wtkxSerializer.getObjectByName("editableListView");
+                ListView editableListView = wtkxSerializer.getObjectByName("editableListView");
                 List<ListItem> listData = (List<ListItem>)editableListView.getListData();
                 listData.setComparator(new Comparator<ListItem>() {
                     public int compare(ListItem listItem1, ListItem listItem2) {
@@ -178,19 +190,18 @@ public class Demo implements Application {
                     }
                 });
 
-                ListView iconListView = (ListView)wtkxSerializer.getObjectByName("iconListView");
+                ListView iconListView = wtkxSerializer.getObjectByName("iconListView");
                 iconListView.setItemDisabled(3, true);
                 iconListView.setItemDisabled(4, true);
 
-                ListView checkedListView = (ListView)wtkxSerializer.getObjectByName("checkedListView");
+                ListView checkedListView = wtkxSerializer.getObjectByName("checkedListView");
                 checkedListView.setItemChecked(0, true);
                 checkedListView.setItemChecked(2, true);
                 checkedListView.setItemChecked(3, true);
             }
         });
 
-        Rollup textRollup = (Rollup)wtkxSerializer.getObjectByName("textRollup");
-        textRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/text.wtkx") {
+        textRollup.getRollupStateListeners().add(new RollupStateHandler("text.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
@@ -203,7 +214,7 @@ public class Demo implements Application {
                     System.out.println(exception);
                 }
 
-                TextArea textArea = (TextArea)wtkxSerializer.getObjectByName("textArea");
+                TextArea textArea = wtkxSerializer.getObjectByName("textArea");
                 textArea.setDocument(document);
 
                 final WatermarkDecorator watermarkDecorator = new WatermarkDecorator("Preview");
@@ -225,24 +236,21 @@ public class Demo implements Application {
             }
         });
 
-        Rollup calendarsRollup = (Rollup)wtkxSerializer.getObjectByName("calendarsRollup");
-        calendarsRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/calendars.wtkx") {
+        calendarsRollup.getRollupStateListeners().add(new RollupStateHandler("calendars.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
             }
         });
 
-        Rollup navigationRollup = (Rollup)wtkxSerializer.getObjectByName("navigationRollup");
-        navigationRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/navigation.wtkx") {
+        navigationRollup.getRollupStateListeners().add(new RollupStateHandler("navigation.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
             }
         });
 
-        Rollup splittersRollup = (Rollup)wtkxSerializer.getObjectByName("splittersRollup");
-        splittersRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/splitters.wtkx") {
+        splittersRollup.getRollupStateListeners().add(new RollupStateHandler("splitters.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
@@ -277,11 +285,10 @@ public class Demo implements Application {
             }
         };
 
-        Rollup menusRollup = (Rollup)wtkxSerializer.getObjectByName("menusRollup");
-        menusRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/menus.wtkx") {
+        menusRollup.getRollupStateListeners().add(new RollupStateHandler("menus.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) throws SerializationException, IOException {
-                menuImageView = (ImageView)wtkxSerializer.getObjectByName("imageView");
+                menuImageView = wtkxSerializer.getObjectByName("imageView");
                 menuImageView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
                     @Override
                     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
@@ -295,7 +302,7 @@ public class Demo implements Application {
                     }
                 });
 
-                Menu.Item helpAboutMenuItem = (Menu.Item)wtkxSerializer.getObjectByName("menubar.helpAboutMenuItem");
+                Menu.Item helpAboutMenuItem = wtkxSerializer.getObjectByName("menubar.helpAboutMenuItem");
                 helpAboutMenuItem.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {
                         String about = "Origin: " + ApplicationContext.getOrigin()
@@ -309,22 +316,20 @@ public class Demo implements Application {
             }
         });
 
-        Rollup metersRollup = (Rollup)wtkxSerializer.getObjectByName("metersRollup");
-        metersRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/meters.wtkx") {
+        metersRollup.getRollupStateListeners().add(new RollupStateHandler("meters.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 // No-op
             }
         });
 
-        Rollup spinnersRollup = (Rollup)wtkxSerializer.getObjectByName("spinnersRollup");
-        spinnersRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/spinners.wtkx") {
+        spinnersRollup.getRollupStateListeners().add(new RollupStateHandler("spinners.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
-                Spinner numericSpinner = (Spinner)wtkxSerializer.getObjectByName("numericSpinner");
+                Spinner numericSpinner = wtkxSerializer.getObjectByName("numericSpinner");
                 initializeNumericSpinner(numericSpinner);
 
-                Spinner dateSpinner = (Spinner)wtkxSerializer.getObjectByName("dateSpinner");
+                Spinner dateSpinner = wtkxSerializer.getObjectByName("dateSpinner");
                 initializeDateSpinner(dateSpinner);
 
                 SliderValueListener sliderValueListener = new SliderValueListener() {
@@ -335,51 +340,48 @@ public class Demo implements Application {
                     }
                 };
 
-                redSlider = (Slider)wtkxSerializer.getObjectByName("redSlider");
+                redSlider = wtkxSerializer.getObjectByName("redSlider");
                 redSlider.getSliderValueListeners().add(sliderValueListener);
 
-                greenSlider = (Slider)wtkxSerializer.getObjectByName("greenSlider");
+                greenSlider = wtkxSerializer.getObjectByName("greenSlider");
                 greenSlider.getSliderValueListeners().add(sliderValueListener);
 
-                blueSlider = (Slider)wtkxSerializer.getObjectByName("blueSlider");
+                blueSlider = wtkxSerializer.getObjectByName("blueSlider");
                 blueSlider.getSliderValueListeners().add(sliderValueListener);
 
                 Color color = new Color(redSlider.getValue(), greenSlider.getValue(),
                     blueSlider.getValue());
-                colorBorder = (Border)wtkxSerializer.getObjectByName("colorBorder");
+                colorBorder = wtkxSerializer.getObjectByName("colorBorder");
                 colorBorder.getStyles().put("backgroundColor", color);
             }
         });
 
-        Rollup tablesRollup = (Rollup)wtkxSerializer.getObjectByName("tablesRollup");
-        tablesRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/tables.wtkx") {
+        tablesRollup.getRollupStateListeners().add(new RollupStateHandler("tables.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
-                sortableTableView = (TableView)wtkxSerializer.getObjectByName("sortableTableView");
-                sortableTableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("sortableTableViewHeader");
-                customTableView = (TableView)wtkxSerializer.getObjectByName("customTableView");
+                sortableTableView = wtkxSerializer.getObjectByName("sortableTableView");
+                sortableTableViewHeader = wtkxSerializer.getObjectByName("sortableTableViewHeader");
+                customTableView = wtkxSerializer.getObjectByName("customTableView");
                 initializeTableViews();
 
                 /*
-                ScrollPane sortableScrollPane = (ScrollPane)wtkxSerializer.getObjectByName("sortableScrollPane");
+                ScrollPane sortableScrollPane = wtkxSerializer.getObjectByName("sortableScrollPane");
                 sortableScrollPane.getStyles().put("verticalIncrement",
                     sortableTableView.getStyles().get("rowHeight"));
                 */
             }
         });
 
-        Rollup treesRollup = (Rollup)wtkxSerializer.getObjectByName("treesRollup");
-        treesRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/trees.wtkx") {
+        treesRollup.getRollupStateListeners().add(new RollupStateHandler("trees.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
-                TreeView editableTreeView = (TreeView)wtkxSerializer.getObjectByName("editableTreeView");
+                TreeView editableTreeView = wtkxSerializer.getObjectByName("editableTreeView");
                 TreeBranch treeData = (TreeBranch)editableTreeView.getTreeData();
                 treeData.setComparator(new TreeNodeComparator());
             }
         });
 
-        Rollup dragDropRollup = (Rollup)wtkxSerializer.getObjectByName("dragDropRollup");
-        dragDropRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/dragdrop.wtkx") {
+        dragDropRollup.getRollupStateListeners().add(new RollupStateHandler("dragdrop.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
                 DragSource imageDragSource = new DragSource() {
@@ -484,26 +486,25 @@ public class Demo implements Application {
                     }
                 };
 
-                ImageView imageView1 = (ImageView)wtkxSerializer.getObjectByName("imageView1");
+                ImageView imageView1 = wtkxSerializer.getObjectByName("imageView1");
                 imageView1.setDragSource(imageDragSource);
                 imageView1.setDropTarget(imageDropTarget);
 
-                ImageView imageView2 = (ImageView)wtkxSerializer.getObjectByName("imageView2");
+                ImageView imageView2 = wtkxSerializer.getObjectByName("imageView2");
                 imageView2.setDragSource(imageDragSource);
                 imageView2.setDropTarget(imageDropTarget);
 
-                ImageView imageView3 = (ImageView)wtkxSerializer.getObjectByName("imageView3");
+                ImageView imageView3 = wtkxSerializer.getObjectByName("imageView3");
                 imageView3.setDragSource(imageDragSource);
                 imageView3.setDropTarget(imageDropTarget);
             }
         });
 
-        Rollup alertsRollup = (Rollup)wtkxSerializer.getObjectByName("alertsRollup");
-        alertsRollup.getRollupStateListeners().add(new RollupStateHandler("pivot/tutorials/alerts.wtkx") {
+        alertsRollup.getRollupStateListeners().add(new RollupStateHandler("alerts.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
-                alertButton = (PushButton)wtkxSerializer.getObjectByName("alertButton");
-                promptButton = (PushButton)wtkxSerializer.getObjectByName("promptButton");
+                alertButton = wtkxSerializer.getObjectByName("alertButton");
+                promptButton = wtkxSerializer.getObjectByName("promptButton");
                 initializeAlertButtons();
             }
         });

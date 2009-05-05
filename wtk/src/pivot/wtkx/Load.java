@@ -23,8 +23,8 @@ import java.lang.annotation.*;
  *
  * @author gbrown
  */
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.FIELD)
 public @interface Load {
-    public String name();
+    public String value();
 }
