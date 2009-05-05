@@ -18,6 +18,9 @@ package pivot.wtk;
 
 import java.awt.AWTEvent;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.lang.reflect.Method;
@@ -43,9 +46,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
             enableEvents(AWTEvent.WINDOW_EVENT_MASK
                 | AWTEvent.WINDOW_STATE_EVENT_MASK);
 
-            // Add the display host
-            add(applicationContext.getDisplayHost());
-
             // Disable focus traversal keys
             setFocusTraversalKeysEnabled(false);
 
@@ -62,53 +62,56 @@ public final class DesktopApplicationContext extends ApplicationContext {
         public void processWindowEvent(WindowEvent event) {
             super.processWindowEvent(event);
 
-            switch(event.getID()) {
-                case WindowEvent.WINDOW_OPENED: {
-                    applicationContext.getDisplayHost().requestFocus();
+            if (this == windowedHostFrame) {
+                switch(event.getID()) {
+                    case WindowEvent.WINDOW_OPENED: {
+                        applicationContext.getDisplayHost().requestFocus();
 
-                    createTimer();
+                        createTimer();
 
-                    try {
-                        application.startup(applicationContext.getDisplay(),
-                            new ImmutableMap<String, String>(properties));
-                    } catch(Exception exception) {
-                        exception.printStackTrace();
-                        String message = exception.getMessage();
-                        if (message == null) {
-                            message = exception.getClass().getName();
+                        try {
+                            System.out.println("STARTUP");
+                            application.startup(applicationContext.getDisplay(),
+                                new ImmutableMap<String, String>(properties));
+                        } catch(Exception exception) {
+                            exception.printStackTrace();
+                            String message = exception.getMessage();
+                            if (message == null) {
+                                message = exception.getClass().getName();
+                            }
+
+                            Alert.alert(MessageType.ERROR, message, applicationContext.getDisplay());
                         }
 
-                        Alert.alert(MessageType.ERROR, message, applicationContext.getDisplay());
+                        break;
                     }
 
-                    break;
-                }
+                    case WindowEvent.WINDOW_CLOSING: {
+                        boolean shutdown = true;
 
-                case WindowEvent.WINDOW_CLOSING: {
-                    boolean shutdown = true;
+                        try {
+                            shutdown = application.shutdown(true);
+                        } catch(Exception exception) {
+                            exception.printStackTrace();
+                            Alert.alert(MessageType.ERROR, exception.getMessage(),
+                                applicationContext.getDisplay());
+                        }
 
-                    try {
-                        shutdown = application.shutdown(true);
-                    } catch(Exception exception) {
-                        exception.printStackTrace();
-                        Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            applicationContext.getDisplay());
+                        if (shutdown) {
+                            destroyTimer();
+
+                            java.awt.Window window = event.getWindow();
+                            window.setVisible(false);
+                            window.dispose();
+                        }
+
+                        break;
                     }
 
-                    if (shutdown) {
-                        destroyTimer();
-
-                        java.awt.Window window = event.getWindow();
-                        window.setVisible(false);
-                        window.dispose();
+                    case WindowEvent.WINDOW_CLOSED: {
+                        exit();
+                        break;
                     }
-
-                    break;
-                }
-
-                case WindowEvent.WINDOW_CLOSED: {
-                    exit();
-                    break;
                 }
             }
         }
@@ -117,29 +120,31 @@ public final class DesktopApplicationContext extends ApplicationContext {
         protected void processWindowStateEvent(WindowEvent event) {
             super.processWindowStateEvent(event);
 
-            switch(event.getID()) {
-                case WindowEvent.WINDOW_ICONIFIED: {
-                    try {
-                        application.suspend();
-                    } catch(Exception exception) {
-                        exception.printStackTrace();
-                        Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            applicationContext.getDisplay());
+            if (this == windowedHostFrame) {
+                switch(event.getID()) {
+                    case WindowEvent.WINDOW_ICONIFIED: {
+                        try {
+                            application.suspend();
+                        } catch(Exception exception) {
+                            exception.printStackTrace();
+                            Alert.alert(MessageType.ERROR, exception.getMessage(),
+                                applicationContext.getDisplay());
+                        }
+
+                        break;
                     }
 
-                    break;
-                }
+                    case WindowEvent.WINDOW_DEICONIFIED: {
+                        try {
+                            application.resume();
+                        } catch(Exception exception) {
+                            exception.printStackTrace();
+                            Alert.alert(MessageType.ERROR, exception.getMessage(),
+                                applicationContext.getDisplay());
+                        }
 
-                case WindowEvent.WINDOW_DEICONIFIED: {
-                    try {
-                        application.resume();
-                    } catch(Exception exception) {
-                        exception.printStackTrace();
-                        Alert.alert(MessageType.ERROR, exception.getMessage(),
-                            applicationContext.getDisplay());
+                        break;
                     }
-
-                    break;
                 }
             }
         }
@@ -148,6 +153,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static DesktopApplicationContext applicationContext = null;
     private static HashMap<String, String> properties = null;
     private static Application application = null;
+
+    private static HostFrame windowedHostFrame = null;
+    private static HostFrame fullScreenHostFrame = null;
 
     private static int x = 0;
     private static int y = 0;
@@ -261,22 +269,66 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
         }
 
-        // Create the host frame
-        final HostFrame hostFrame = new HostFrame();
-        hostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
+        final DisplayHost displayHost = applicationContext.getDisplayHost();
 
-        hostFrame.setSize(width, height);
-        hostFrame.setResizable(resizable);
+        // Create the windowed host frame
+        windowedHostFrame = new HostFrame();
+        windowedHostFrame.add(displayHost);
+
+        windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
+
+        windowedHostFrame.setSize(width, height);
+        windowedHostFrame.setResizable(resizable);
 
         if (center) {
             java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-            hostFrame.setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
+            windowedHostFrame.setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
         } else {
-            hostFrame.setLocation(x, y);
+            windowedHostFrame.setLocation(x, y);
         }
 
-        // Open the window and focus the display host
-        hostFrame.setVisible(true);
+        // Add a key listener to the display host to toggle between full-screen
+        // and windowed mode
+        displayHost.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == KeyEvent.VK_F
+                    && (keyEvent.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) > 0
+                    && (keyEvent.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) > 0) {
+                    GraphicsDevice graphicsDevice =
+                        windowedHostFrame.getGraphicsConfiguration().getDevice();
+
+                    if (windowedHostFrame.isVisible()) {
+                        // Go to full screen mode
+                        windowedHostFrame.remove(displayHost);
+                        windowedHostFrame.setVisible(false);
+
+                        fullScreenHostFrame.add(displayHost);
+                        fullScreenHostFrame.setVisible(true);
+
+                        graphicsDevice.setFullScreenWindow(fullScreenHostFrame);
+
+                    } else {
+                        // Go to windowed mode
+                        graphicsDevice.setFullScreenWindow(null);
+
+                        fullScreenHostFrame.remove(displayHost);
+                        fullScreenHostFrame.setVisible(false);
+
+                        windowedHostFrame.add(displayHost);
+                        windowedHostFrame.setVisible(true);
+                    }
+
+                    displayHost.requestFocus();
+                }
+            }
+        });
+
+        // Create the full-screen host frame
+        fullScreenHostFrame = new HostFrame();
+        fullScreenHostFrame.setUndecorated(true);
+
+        // Open the windowed host
+        windowedHostFrame.setVisible(true);
 
         Window.getWindowClassListeners().add(new WindowClassListener() {
             public void activeWindowChanged(Window previousActiveWindow) {
@@ -285,15 +337,15 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         Window activeWindow = Window.getActiveWindow();
 
                         if (activeWindow == null) {
-                            hostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
+                            windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
                         } else {
                             Window rootOwner = activeWindow.getRootOwner();
-                            hostFrame.setTitle(rootOwner.getTitle());
+                            windowedHostFrame.setTitle(rootOwner.getTitle());
 
                             Image rootIcon = rootOwner.getIcon();
                             if (rootIcon instanceof Picture) {
                                 Picture rootPicture = (Picture)rootIcon;
-                                hostFrame.setIconImage(rootPicture.getBufferedImage());
+                                windowedHostFrame.setIconImage(rootPicture.getBufferedImage());
                             }
                         }
                     }
