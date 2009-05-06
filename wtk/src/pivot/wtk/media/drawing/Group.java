@@ -16,11 +16,8 @@
  */
 package pivot.wtk.media.drawing;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import pivot.collections.ArrayList;
 import pivot.collections.Sequence;
@@ -91,10 +88,12 @@ public class Group extends Shape implements Sequence<Shape>, Iterable<Shape> {
         }
 
         // Draw a debug rectangle
+        /*
         graphics.setColor(Color.DARK_GRAY);
         graphics.setStroke(new BasicStroke(0));
         Bounds bounds = getBounds();
         graphics.draw(new Rectangle2D.Double(bounds.x, bounds.y, bounds.width, bounds.height));
+        */
     }
 
     @Override

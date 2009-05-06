@@ -28,8 +28,8 @@ import pivot.wtk.media.drawing.Shape;
 import pivot.wtkx.Bindable;
 
 public class RotateLine extends Bindable implements Application {
-    @Load("rotate_line.wtkd") private Drawing drawing;
-    @Bind(resource="drawing") private Shape.Rotate rotation;
+    @Load(name="rotate_line.wtkd") private Drawing drawing;
+    @Bind(property="drawing") private Shape.Rotate rotation;
 
     private Window window = null;
 

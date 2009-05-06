@@ -111,13 +111,13 @@ public class BindProcessor extends AbstractProcessor {
 
                     if (DEBUG) {
                         processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
-                            String.format("Processing load(%s, %s#%s)", loadAnnotation.value(),
+                            String.format("Processing load(%s, %s#%s)", loadAnnotation.name(),
                             tree.name.toString(), loadFieldName));
                     }
 
                     // Load the WTKX resource
                     sourceCode.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer();");
-                    sourceCode.append(String.format("java.net.URL location = getClass().getResource(\"%s\");", loadAnnotation.value()));
+                    sourceCode.append(String.format("java.net.URL location = getClass().getResource(\"%s\");", loadAnnotation.name()));
                     sourceCode.append("try {");
                     sourceCode.append("value = wtkxSerializer.readObject(location);");
                     sourceCode.append("} catch (Exception ex) {");
@@ -142,7 +142,7 @@ public class BindProcessor extends AbstractProcessor {
 
                             if (DEBUG) {
                                 processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
-                                    String.format("Processing bind(%s.%s, %s#%s)", bindAnnotation.resource(),
+                                    String.format("Processing bind(%s.%s, %s#%s)", bindAnnotation.property(),
                                     bindID, tree.name.toString(), bindFieldName));
                             }
 
@@ -224,8 +224,8 @@ public class BindProcessor extends AbstractProcessor {
                 BindScope bindScope = bindScopeStack.peek();
 
                 if (bindScope.loadGroups != null
-                    && bindScope.loadGroups.containsKey(bindAnnotation.resource())) {
-                    BindScope.LoadGroup loadGroup = bindScope.loadGroups.get(bindAnnotation.resource());
+                    && bindScope.loadGroups.containsKey(bindAnnotation.property())) {
+                    BindScope.LoadGroup loadGroup = bindScope.loadGroups.get(bindAnnotation.property());
 
                     if (loadGroup.bindFields == null) {
                         loadGroup.bindFields = new ArrayList<JCTree.JCVariableDecl>();
@@ -235,7 +235,7 @@ public class BindProcessor extends AbstractProcessor {
                     bindTally++;
                 } else {
                     processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        "Resource not found: " + bindAnnotation.resource(), element);
+                        "Resource not found: " + bindAnnotation.property(), element);
                 }
             }
         }

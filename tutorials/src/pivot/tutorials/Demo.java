@@ -140,20 +140,20 @@ public class Demo extends Bindable implements Application {
 
     private Window window = null;
 
-    @Load("demo.wtkx") private Component content;
-    @Bind(resource="content") private Rollup buttonsRollup;
-    @Bind(resource="content") private Rollup listsRollup;
-    @Bind(resource="content") private Rollup textRollup;
-    @Bind(resource="content") private Rollup calendarsRollup;
-    @Bind(resource="content") private Rollup navigationRollup;
-    @Bind(resource="content") private Rollup splittersRollup;
-    @Bind(resource="content") private Rollup menusRollup;
-    @Bind(resource="content") private Rollup metersRollup;
-    @Bind(resource="content") private Rollup spinnersRollup;
-    @Bind(resource="content") private Rollup tablesRollup;
-    @Bind(resource="content") private Rollup treesRollup;
-    @Bind(resource="content") private Rollup dragDropRollup;
-    @Bind(resource="content") private Rollup alertsRollup;
+    @Load(name="demo.wtkx") private Component content;
+    @Bind(property="content") private Rollup buttonsRollup;
+    @Bind(property="content") private Rollup listsRollup;
+    @Bind(property="content") private Rollup textRollup;
+    @Bind(property="content") private Rollup calendarsRollup;
+    @Bind(property="content") private Rollup navigationRollup;
+    @Bind(property="content") private Rollup splittersRollup;
+    @Bind(property="content") private Rollup menusRollup;
+    @Bind(property="content") private Rollup metersRollup;
+    @Bind(property="content") private Rollup spinnersRollup;
+    @Bind(property="content") private Rollup tablesRollup;
+    @Bind(property="content") private Rollup treesRollup;
+    @Bind(property="content") private Rollup dragDropRollup;
+    @Bind(property="content") private Rollup alertsRollup;
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(Demo.class, args);

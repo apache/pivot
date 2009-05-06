@@ -28,7 +28,6 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.serialization.CSVSerializer;
-import pivot.util.Resources;
 import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskListener;
 import pivot.web.GetQuery;
@@ -52,23 +51,25 @@ import pivot.wtk.TextInput;
 import pivot.wtk.TextInputTextListener;
 import pivot.wtk.Window;
 import pivot.wtk.text.TextNode;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class StockTracker implements Application {
-    private Locale locale = null;
-    private Resources resources = null;
-
+public class StockTracker extends Bindable implements Application {
     private ArrayList<String> symbols = new ArrayList<String>();
 
-    private Window window = null;
-    private TableView stocksTableView = null;
-    private TextInput symbolTextInput = null;
-    private Button addSymbolButton = null;
-    private Button removeSymbolsButton = null;
-    private Label lastUpdateLabel = null;
-    private Button yahooFinanceButton = null;
-    private Container detailRootPane = null;
-    private Label detailChangeLabel = null;
+    @Load(name="stocktracker.wtkx") private Window window;
+
+    @Bind(property="window") private TableView stocksTableView;
+    @Bind(property="window") private TextInput symbolTextInput;
+    @Bind(property="window") private Button addSymbolButton;
+    @Bind(property="window") private Button removeSymbolsButton;
+    @Bind(property="window") private Label lastUpdateLabel;
+    @Bind(property="window") private Button yahooFinanceButton;
+
+    @Bind(property="window", id="detail.rootPane")
+    private Container detailRootPane;
+
+    @Bind(property="window", id="detail.changeLabel")
+    private Label detailChangeLabel;
 
     private GetQuery getQuery = null;
 
@@ -98,16 +99,14 @@ public class StockTracker implements Application {
         throws Exception {
         // Set the locale
         String language = properties.get(LANGUAGE_PROPERTY_NAME);
-        locale = (language == null) ? Locale.getDefault() : new Locale(language);
-        resources = new Resources(getClass().getName(), locale, "UTF8");
+        if (language != null) {
+            Locale.setDefault(new Locale(language));
+        }
 
-        // Load the application's UI
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
-        Component content =
-            (Component)wtkxSerializer.readObject("pivot/tutorials/stocktracker/stocktracker.wtkx");
+        // Bind to the WTKX source
+        bind();
 
         // Wire up event handlers
-        stocksTableView = (TableView)wtkxSerializer.getObjectByName("stocksTableView");
         stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
             public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
                 // No-op
@@ -140,7 +139,6 @@ public class StockTracker implements Application {
             }
         });
 
-        symbolTextInput = (TextInput)wtkxSerializer.getObjectByName("symbolTextInput");
         symbolTextInput.getTextInputTextListeners().add(new TextInputTextListener() {
             public void textChanged(TextInput textInput) {
                 TextNode textNode = textInput.getTextNode();
@@ -166,23 +164,18 @@ public class StockTracker implements Application {
             }
         });
 
-        addSymbolButton = (Button)wtkxSerializer.getObjectByName("addSymbolButton");
         addSymbolButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 addSymbol();
             }
         });
 
-        removeSymbolsButton = (Button)wtkxSerializer.getObjectByName("removeSymbolsButton");
         removeSymbolsButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 removeSelectedSymbols();
             }
         });
 
-        lastUpdateLabel = (Label)wtkxSerializer.getObjectByName("lastUpdateLabel");
-
-        yahooFinanceButton = (Button)wtkxSerializer.getObjectByName("yahooFinanceButton");
         yahooFinanceButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 try {
@@ -192,14 +185,6 @@ public class StockTracker implements Application {
             }
         });
 
-        detailRootPane = (Container)wtkxSerializer.getObjectByName("detail.rootPane");
-
-        detailChangeLabel = (Label)wtkxSerializer.getObjectByName("detail.changeLabel");
-
-        window = new Window();
-        window.setTitle((String)resources.get("stockTracker"));
-        window.setContent(content);
-        window.setMaximized(true);
         window.open(display);
 
         refreshTable();
@@ -280,10 +265,8 @@ public class StockTracker implements Application {
                     }
 
                     DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
-                        DateFormat.MEDIUM, locale);
-                    String lastUpdateText = resources.get("lastUpdate")
-                        + ": " + dateFormat.format(new Date());
-                    lastUpdateLabel.setText(lastUpdateText);
+                        DateFormat.MEDIUM, Locale.getDefault());
+                    lastUpdateLabel.setText(dateFormat.format(new Date()));
 
                     getQuery = null;
                 }
