@@ -19,8 +19,11 @@ package pivot.wtk.skin;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Transparency;
 
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
@@ -807,17 +810,8 @@ public class ScrollPaneSkin extends ContainerSkin
     public void setBackgroundPaint(Paint backgroundPaint) {
         super.setBackgroundPaint(backgroundPaint);
 
-        // TODO Remove once the cause for the intermittent painting bugs has
-        // been identified
-        optimizeScrolling = false;
-        /*
-        // TODO Remove check for Operating System once Apple fixes the
-        // paint artifact issue with Graphics#copyArea
-        String osName = System.getProperty("os.name");
-        optimizeScrolling = (!osName.equals("Mac OS X") &&
-            backgroundPaint instanceof Color &&
-            backgroundPaint.getTransparency() == Transparency.OPAQUE);
-        */
+        optimizeScrolling = (backgroundPaint != null
+            && backgroundPaint.getTransparency() == Transparency.OPAQUE);
     }
 
     public int getHorizontalIncrement() {
@@ -915,6 +909,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
     // ViewportListener methods
 
+    @SuppressWarnings("deprecation")
     public void scrollTopChanged(Viewport viewport, int previousScrollTop) {
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and row header. Invalidating would yield
@@ -947,6 +942,19 @@ public class ScrollPaneSkin extends ContainerSkin
             columnHeaderHeight - Math.abs(deltaScrollTop);
 
         boolean optimizeScrolling = this.optimizeScrolling;
+
+        // TODO Remove this check when we can. Sun bug 4033851 causes paint
+        // artifacts while scrolling. For a full description of why this is,
+        // needed, see http://people.apache.org/~tvolkert/tests/scrolling/
+        // There seems to be no workaround, so we have to turn the optimization
+        // completely off if we're not sure that we're unobscured.
+        if (optimizeScrolling) {
+            ApplicationContext.DisplayHost displayHost = viewport.getDisplay().getDisplayHost();
+            ApplicationContext applicationContext = displayHost.getApplicationContext();
+
+            optimizeScrolling = (applicationContext instanceof DesktopApplicationContext ||
+                (displayHost.getPeer().canDetermineObscurity() && !displayHost.getPeer().isObscured())); 
+        }
 
         if (optimizeScrolling) {
             try {
@@ -981,6 +989,7 @@ public class ScrollPaneSkin extends ContainerSkin
         }
     }
 
+    @SuppressWarnings("deprecation")
     public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and column header. Invalidating would yield
@@ -1013,6 +1022,19 @@ public class ScrollPaneSkin extends ContainerSkin
         int blitHeight = height - horizontalScrollBar.getHeight();
 
         boolean optimizeScrolling = this.optimizeScrolling;
+
+        // TODO Remove this check when we can. Sun bug 4033851 causes paint
+        // artifacts while scrolling. For a full description of why this is,
+        // needed, see http://people.apache.org/~tvolkert/tests/scrolling/.
+        // There seems to be no workaround, so we have to turn the optimization
+        // completely off if we're not sure that we're unobscured.
+        if (optimizeScrolling) {
+            ApplicationContext.DisplayHost displayHost = viewport.getDisplay().getDisplayHost();
+            ApplicationContext applicationContext = displayHost.getApplicationContext();
+
+            optimizeScrolling = (applicationContext instanceof DesktopApplicationContext ||
+                (displayHost.getPeer().canDetermineObscurity() && !displayHost.getPeer().isObscured())); 
+        }
 
         if (optimizeScrolling) {
             try {

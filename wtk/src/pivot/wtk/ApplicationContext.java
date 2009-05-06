@@ -278,6 +278,10 @@ public abstract class ApplicationContext {
             setFocusTraversalKeysEnabled(false);
         }
 
+        public ApplicationContext getApplicationContext() {
+            return ApplicationContext.this;
+        }
+
         public double getScale() {
             return scale;
         }
