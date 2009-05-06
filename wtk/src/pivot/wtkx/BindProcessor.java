@@ -97,7 +97,7 @@ public class BindProcessor extends AbstractProcessor {
                     BindScope.LoadGroup loadGroup = bindScope.loadGroups.get(loadFieldName);
                     JCTree.JCVariableDecl loadField = loadGroup.loadField;
                     Element loadElement = loadField.sym;
-                    Load loadAnnotation = loadElement.getAnnotation(Load.class);
+                    Bindable.Load loadAnnotation = loadElement.getAnnotation(Bindable.Load.class);
 
                     if (DEBUG) {
                         processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
@@ -122,7 +122,7 @@ public class BindProcessor extends AbstractProcessor {
                         for (JCTree.JCVariableDecl bindField : loadGroup.bindFields) {
                             String bindFieldName = bindField.name.toString();
                             Element bindElement = bindField.sym;
-                            Bind bindAnnotation = bindElement.getAnnotation(Bind.class);
+                            Bindable.Bind bindAnnotation = bindElement.getAnnotation(Bindable.Bind.class);
 
                             String bindID = bindAnnotation.id();
                             if ("\0".equals(bindID)) {
@@ -164,13 +164,13 @@ public class BindProcessor extends AbstractProcessor {
         public void visitVarDef(JCTree.JCVariableDecl tree) {
             super.visitVarDef(tree);
 
-            Load loadAnnotation = null;
-            Bind bindAnnotation = null;
+            Bindable.Load loadAnnotation = null;
+            Bindable.Bind bindAnnotation = null;
 
             Element element = tree.sym;
             if (element != null) {
-                loadAnnotation = element.getAnnotation(Load.class);
-                bindAnnotation = element.getAnnotation(Bind.class);
+                loadAnnotation = element.getAnnotation(Bindable.Load.class);
+                bindAnnotation = element.getAnnotation(Bindable.Bind.class);
             } else if (tree.mods != null
                 && tree.mods.annotations != null) {
                 List<JCTree.JCAnnotation> annotations = tree.mods.annotations;
@@ -180,8 +180,8 @@ public class BindProcessor extends AbstractProcessor {
             if (loadAnnotation != null
                 && bindAnnotation != null) {
                 processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                    "Cannot combine " + Load.class.getName()
-                    + " and " + Bind.class.getName() + " annotations.", element);
+                    "Cannot combine " + Bindable.Load.class.getName()
+                    + " and " + Bindable.Bind.class.getName() + " annotations.", element);
             } else if (loadAnnotation != null) {
                 BindScope bindScope = bindScopeStack.peek();
                 String fieldName = tree.name.toString();

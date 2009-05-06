@@ -25,10 +25,9 @@ import pivot.wtk.ImageView;
 import pivot.wtk.Window;
 import pivot.wtk.media.Drawing;
 import pivot.wtk.media.drawing.Shape;
-import pivot.wtkx.Bind;
-import pivot.wtkx.Load;
+import pivot.wtkx.Bindable;
 
-public class RotateLine implements Application {
+public class RotateLine extends Bindable implements Application {
     @Load("rotate_line.wtkd") private Drawing drawing;
     @Bind(resource="drawing") private Shape.Rotate rotation;
 
@@ -36,6 +35,8 @@ public class RotateLine implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception{
+        bind();
+
         ApplicationContext.scheduleRecurringCallback(new Runnable() {
             public void run() {
                 int angle = (int)rotation.getAngle();

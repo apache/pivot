@@ -81,11 +81,10 @@ import pivot.wtk.effects.WatermarkDecorator;
 import pivot.wtk.media.Image;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.PlainTextSerializer;
-import pivot.wtkx.Bind;
-import pivot.wtkx.Load;
+import pivot.wtkx.Bindable;
 import pivot.wtkx.WTKXSerializer;
 
-public class Demo implements Application {
+public class Demo extends Bindable implements Application {
     private abstract class RollupStateHandler implements RollupStateListener {
         private String resourceName;
         private Component component = null;
@@ -169,6 +168,8 @@ public class Demo implements Application {
         URL schemeLocation = TerraTheme.class.getResource("TerraTheme_default.json");
         terraTheme.loadScheme(schemeLocation);
         */
+
+        bind();
 
         buttonsRollup.getRollupStateListeners().add(new RollupStateHandler("buttons.wtkx") {
             @Override
