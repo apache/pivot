@@ -52,9 +52,6 @@ import com.sun.source.util.Trees;
  * Annotation processor that injects <tt>bind()</tt> overrides into classes
  * that use the <tt>@Load</tt> and <tt>@Bind</tt> annotations to perform WTKX
  * loading and binding.
- * <p>
- * TODO Make base bind() final, and strip out that flag at compilation time
- * to allow us to extend it.
  *
  * @author tvolkert
  */
@@ -62,6 +59,11 @@ import com.sun.source.util.Trees;
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class BindProcessor extends AbstractProcessor {
     /**
+     * Holds pertinent information about a class' member variables that use
+     * the <tt>@Load</tt> and <tt>@Bind</tt> annotations. A bind scope object
+     * is pushed onto a stack before visiting a class and popped off the
+     * stack after visiting it, allowing us to know if any members variables
+     * contained in the class need bind processing as we're exiting the class.
      *
      * @author tvolkert
      */
@@ -80,13 +82,21 @@ public class BindProcessor extends AbstractProcessor {
     }
 
     /**
-     * This actually does the work of instance initializer injection.
+     * This actually does the work of bind method override injection.
      *
      * @author tvolkert
      */
     private class BindInjector extends TreeTranslator {
         private ArrayStack<BindScope> bindScopeStack = new ArrayStack<BindScope>();
 
+        /**
+         * Injects an override implementation of the <tt>bind()</tt> method
+         * into the specified class if any member variables are found to be
+         * annotated with the <tt>@Load</tt> or <tt>@Bind</tt> annotations.
+         *
+         * @param tree
+         * The AST class declaration node
+         */
         @Override
         public void visitClassDef(JCTree.JCClassDecl tree) {
             BindScope bindScope = new BindScope();
@@ -98,8 +108,11 @@ public class BindProcessor extends AbstractProcessor {
             if (bindScope.loadGroups != null) {
                 StringBuilder sourceCode = new StringBuilder("{");
 
-                // TODO Call super.bind() once impl stripping is being done
-                // on the base class' implementation
+                sourceCode.append("try {");
+                sourceCode.append("super.bind();");
+                sourceCode.append("} catch (Exception ex) {");
+                sourceCode.append("throw new pivot.wtkx.BindException(ex);");
+                sourceCode.append("}");
                 sourceCode.append("pivot.wtkx.WTKXSerializer wtkxSerializer;");
                 sourceCode.append("Object value;");
 
@@ -166,6 +179,8 @@ public class BindProcessor extends AbstractProcessor {
                 JCTree.JCBlock methodBody = parser.block();
 
                 // Create the bind() override AST method declaration
+                // TODO Declare it to throw IOException, then remove the
+                // try/catch from super.bind()
                 Type.MethodType methodType = new Type.MethodType(
                     List.<Type>nil(),             // Argument types
                     symbolTable.voidType,         // Return type
@@ -188,6 +203,44 @@ public class BindProcessor extends AbstractProcessor {
             }
         }
 
+        /**
+         * Checks for the <tt>@BindMethod</tt> annotation on a method
+         * (signalling the base class' implementation). When found, this strips
+         * the method of its body and the <tt>final</tt> keyword, thus clearing
+         * the way for us to override <tt>bind()</tt> in bindable subclasses
+         * with inline implementations that can safely call
+         * <tt>super.bind()</tt> without running the runtime bind
+         * implementation.
+         *
+         * @param tree
+         * The AST method declaration node
+         */
+        @Override
+        public void visitMethodDef(JCTree.JCMethodDecl tree) {
+            super.visitMethodDef(tree);
+
+            Element methodElement = tree.sym;
+            Bindable.BindMethod bindMethod = methodElement.getAnnotation(Bindable.BindMethod.class);
+
+            if (bindMethod != null) {
+                // Remove the 'final' flag so that we may extend the method
+                tree.sym.flags_field &= ~Flags.FINAL;
+                tree.mods.flags &= ~Flags.FINAL;
+
+                // Clear the method body so that it becomes a no-op
+                tree.body.stats = List.<JCTree.JCStatement>nil();
+            }
+        }
+
+        /**
+         * Looks for the <tt>@Load</tt> and <tt>@Bind</tt> annotations on
+         * member variable declarations. When found, it records pertinent
+         * information in the current bind scope, to be used before we exit
+         * the containing class.
+         *
+         * @param tree
+         * The AST variable declaration node
+         */
         @Override
         public void visitVarDef(JCTree.JCVariableDecl tree) {
             super.visitVarDef(tree);
@@ -269,7 +322,7 @@ public class BindProcessor extends AbstractProcessor {
         if (!roundEnvironment.processingOver()) {
             for (Element rootElement : roundEnvironment.getRootElements()) {
                 if (rootElement.getKind() == ElementKind.CLASS) {
-                    // Visit each Class tree with our bindInjector visitor
+                    // Visit each AST class node with our BindInjector visitor
                     JCTree tree = (JCTree)trees.getTree(rootElement);
                     tree.accept(bindInjector);
                 }
