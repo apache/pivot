@@ -119,6 +119,10 @@ public abstract class Bindable {
                 }
 
                 String id = bindAnnotation.id();
+                if ("\0".equals(id)) {
+                    id = field.getName();
+                }
+
                 Object value = wtkxSerializer.getObjectByName(id);
                 if (value == null) {
                     throw new BindException("\"" + id + "\" does not exist.");
