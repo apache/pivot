@@ -953,7 +953,7 @@ public class ScrollPaneSkin extends ContainerSkin
             ApplicationContext applicationContext = displayHost.getApplicationContext();
 
             optimizeScrolling = (applicationContext instanceof DesktopApplicationContext ||
-                (displayHost.getPeer().canDetermineObscurity() && !displayHost.getPeer().isObscured())); 
+                (displayHost.getPeer().canDetermineObscurity() && !displayHost.getPeer().isObscured()));
         }
 
         if (optimizeScrolling) {
@@ -1033,7 +1033,7 @@ public class ScrollPaneSkin extends ContainerSkin
             ApplicationContext applicationContext = displayHost.getApplicationContext();
 
             optimizeScrolling = (applicationContext instanceof DesktopApplicationContext ||
-                (displayHost.getPeer().canDetermineObscurity() && !displayHost.getPeer().isObscured())); 
+                (displayHost.getPeer().canDetermineObscurity() && !displayHost.getPeer().isObscured()));
         }
 
         if (optimizeScrolling) {

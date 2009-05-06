@@ -74,7 +74,7 @@ public abstract class ApplicationContext {
      *
      * @author gbrown
      */
-    public final class DisplayHost extends java.awt.Container {
+    public final class DisplayHost extends java.awt.Canvas {
         private static final long serialVersionUID = 0;
 
         private Point mouseLocation = null;
@@ -352,6 +352,11 @@ public abstract class ApplicationContext {
                     throw exception;
                 }
             }
+        }
+
+        @Override
+        public void update(Graphics graphics) {
+            paint(graphics);
         }
 
         /**
