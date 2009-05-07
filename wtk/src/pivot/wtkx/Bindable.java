@@ -76,13 +76,16 @@ public abstract class Bindable {
             type = type.getSuperclass();
         }
 
-        for (int i = typeHierarchy.getLength() - 1; i >= 0; i--) {
-            // Maps resource field name to the serializer that loaded the
-            // resource; we create it here so each subclass gets its own scope
-            HashMap<String, WTKXSerializer> wtkxSerializers = new HashMap<String, WTKXSerializer>();
+        // Maps field name to the serializer that loaded the property; public
+        // and protected serializers are retained for sub-types, but private
+        // serializers are removed at the end of the block
+        HashMap<String, WTKXSerializer> wtkxSerializers = new HashMap<String, WTKXSerializer>();
 
+        for (int i = typeHierarchy.getLength() - 1; i >= 0; i--) {
             type = typeHierarchy.get(i);
             Field[] fields = type.getDeclaredFields();
+
+            ArrayList<String> privateFieldNames = new ArrayList<String>();
 
             for (int j = 0, n = fields.length; j < n; j++) {
                 Field field = fields[j];
@@ -105,6 +108,10 @@ public abstract class Bindable {
                     }
 
                     assert(!wtkxSerializers.containsKey(fieldName));
+
+                    if ((fieldModifiers & Modifier.PRIVATE) > 0) {
+                        privateFieldNames.add(fieldName);
+                    }
 
                     // Get the name of the resource file to use
                     Resources resources = null;
@@ -200,6 +207,11 @@ public abstract class Bindable {
                         throw new BindException(exception);
                     }
                 }
+            }
+
+            // Remove the private field serializers
+            for (String privateFieldName : privateFieldNames) {
+                wtkxSerializers.remove(privateFieldName);
             }
         }
     }

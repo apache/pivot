@@ -70,7 +70,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         createTimer();
 
                         try {
-                            System.out.println("STARTUP");
                             application.startup(applicationContext.getDisplay(),
                                 new ImmutableMap<String, String>(properties));
                         } catch(Exception exception) {
