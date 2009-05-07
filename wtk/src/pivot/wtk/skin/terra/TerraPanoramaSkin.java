@@ -25,6 +25,7 @@ import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Panorama;
@@ -513,7 +514,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
             throw new IllegalArgumentException("buttonColor is null.");
         }
 
-        setButtonColor(decodeColor(buttonColor));
+        setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
     }
 
     public Color getButtonBackgroundColor() {
@@ -534,7 +535,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
             throw new IllegalArgumentException("buttonBackgroundColor is null.");
         }
 
-        setButtonBackgroundColor(decodeColor(buttonBackgroundColor));
+        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor));
     }
 
     public int getButtonPadding() {

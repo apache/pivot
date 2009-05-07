@@ -35,6 +35,7 @@ import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
@@ -51,7 +52,6 @@ import pivot.wtk.content.NumericSpinnerData;
 import pivot.wtk.content.SpinnerItemRenderer;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.CalendarSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Terra calendar skin.
@@ -715,7 +715,7 @@ public class TerraCalendarSkin extends CalendarSkin
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -736,7 +736,7 @@ public class TerraCalendarSkin extends CalendarSkin
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public Color getSelectionColor() {
@@ -757,7 +757,7 @@ public class TerraCalendarSkin extends CalendarSkin
             throw new IllegalArgumentException("selectionColor is null.");
         }
 
-        setSelectionColor(decodeColor(selectionColor));
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
     }
 
     public Color getSelectionBackgroundColor() {
@@ -779,7 +779,7 @@ public class TerraCalendarSkin extends CalendarSkin
             throw new IllegalArgumentException("selectionBackgroundColor is null.");
         }
 
-        setSelectionBackgroundColor(decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
     }
 
     public Color getHighlightColor() {
@@ -800,7 +800,7 @@ public class TerraCalendarSkin extends CalendarSkin
             throw new IllegalArgumentException("highlightColor is null.");
         }
 
-        setHighlightColor(decodeColor(highlightColor));
+        setHighlightColor(GraphicsUtilities.decodeColor(highlightColor));
     }
 
     public Color getHighlightBackgroundColor() {
@@ -821,7 +821,7 @@ public class TerraCalendarSkin extends CalendarSkin
             throw new IllegalArgumentException("highlightBackgroundColor is null.");
         }
 
-        setHighlightBackgroundColor(decodeColor(highlightBackgroundColor));
+        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
     }
 
     public Color getDividerColor() {
@@ -842,7 +842,7 @@ public class TerraCalendarSkin extends CalendarSkin
             throw new IllegalArgumentException("dividerColor is null.");
         }
 
-        setDividerColor(decodeColor(dividerColor));
+        setDividerColor(GraphicsUtilities.decodeColor(dividerColor));
     }
 
     public int getPadding() {

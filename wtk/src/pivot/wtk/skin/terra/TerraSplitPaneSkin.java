@@ -23,6 +23,7 @@ import java.awt.Graphics2D;
 import pivot.wtk.Component;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
 import pivot.wtk.Span;
@@ -409,7 +410,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("splitterHandlePrimaryColor is null.");
         }
 
-        setSplitterHandlePrimaryColor(decodeColor(splitterHandlePrimaryColor));
+        setSplitterHandlePrimaryColor(GraphicsUtilities.decodeColor(splitterHandlePrimaryColor));
     }
 
     public final void setSplitterHandlePrimaryColor(int splitterHandlePrimaryColor) {
@@ -435,7 +436,7 @@ public class TerraSplitPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("splitterHandleSecondaryColor is null.");
         }
 
-        setSplitterHandleSecondaryColor(decodeColor(splitterHandleSecondaryColor));
+        setSplitterHandleSecondaryColor(GraphicsUtilities.decodeColor(splitterHandleSecondaryColor));
     }
 
     public final void setSplitterHandleSecondaryColor(int splitterHandleSecondaryColor) {

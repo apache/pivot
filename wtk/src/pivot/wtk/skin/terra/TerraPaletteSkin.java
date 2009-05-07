@@ -32,6 +32,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
 import pivot.wtk.Label;
@@ -46,7 +47,6 @@ import pivot.wtk.Window;
 import pivot.wtk.WindowListener;
 import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.media.Image;
-import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.WindowSkin;
 
 /**

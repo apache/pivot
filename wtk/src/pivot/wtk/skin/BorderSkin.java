@@ -33,6 +33,7 @@ import pivot.wtk.BorderListener;
 import pivot.wtk.Component;
 import pivot.wtk.CornerRadii;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Insets;
 import pivot.wtk.Platform;
 import pivot.wtk.Theme;
@@ -313,7 +314,7 @@ public class BorderSkin extends ContainerSkin
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getTitleColor() {
@@ -334,7 +335,7 @@ public class BorderSkin extends ContainerSkin
             throw new IllegalArgumentException("titleColor is null.");
         }
 
-        setTitleColor(decodeColor(titleColor));
+        setTitleColor(GraphicsUtilities.decodeColor(titleColor));
     }
 
     public int getThickness() {

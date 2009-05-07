@@ -27,10 +27,10 @@ import java.awt.geom.Rectangle2D;
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Checkbox;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Orientation;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.CheckboxSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Terra checkbox skin.
@@ -284,7 +284,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -305,7 +305,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public int getSpacing() {

@@ -30,10 +30,10 @@ import pivot.wtk.Bounds;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Insets;
 import pivot.wtk.MenuButton;
 import pivot.wtk.Theme;
-import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.MenuButtonSkin;
 
 /**
@@ -253,7 +253,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -274,7 +274,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public Color getBackgroundColor() {
@@ -297,7 +297,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public Color getDisabledBackgroundColor() {
@@ -319,7 +319,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             throw new IllegalArgumentException("disabledBackgroundColor is null.");
         }
 
-        setDisabledBackgroundColor(decodeColor(disabledBackgroundColor));
+        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
     }
 
     public Color getBorderColor() {
@@ -341,7 +341,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public Color getDisabledBorderColor() {
@@ -362,7 +362,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             throw new IllegalArgumentException("disabledBorderColor is null.");
         }
 
-        setDisabledBorderColor(decodeColor(disabledBorderColor));
+        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
     }
 
     public Insets getPadding() {

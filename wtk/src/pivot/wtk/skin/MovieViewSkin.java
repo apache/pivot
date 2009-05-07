@@ -22,6 +22,7 @@ import java.awt.Transparency;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.MovieView;
 import pivot.wtk.MovieViewListener;
@@ -203,7 +204,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public float getScale() {

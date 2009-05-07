@@ -29,6 +29,7 @@ import java.awt.geom.Rectangle2D;
 import pivot.collections.Dictionary;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Insets;
 import pivot.wtk.Platform;
 import pivot.wtk.Separator;
@@ -206,7 +207,7 @@ public class SeparatorSkin extends ComponentSkin
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getHeadingColor() {
@@ -227,7 +228,7 @@ public class SeparatorSkin extends ComponentSkin
             throw new IllegalArgumentException("headingColor is null.");
         }
 
-        setHeadingColor(decodeColor(headingColor));
+        setHeadingColor(GraphicsUtilities.decodeColor(headingColor));
     }
 
     public int getThickness() {

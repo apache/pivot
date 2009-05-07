@@ -25,6 +25,7 @@ import java.awt.Transparency;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
 import pivot.wtk.ImageViewListener;
@@ -237,7 +238,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public float getOpacity() {

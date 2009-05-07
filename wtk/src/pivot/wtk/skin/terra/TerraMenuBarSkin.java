@@ -22,6 +22,7 @@ import java.awt.Font;
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.MenuBar;
 import pivot.wtk.MenuBarListener;
 import pivot.wtk.Theme;
@@ -194,7 +195,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
@@ -220,7 +221,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public final void setDisabledColor(int color) {
@@ -246,7 +247,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
             throw new IllegalArgumentException("highlightColor is null.");
         }
 
-        setHighlightColor(decodeColor(highlightColor));
+        setHighlightColor(GraphicsUtilities.decodeColor(highlightColor));
     }
 
     public final void setHighlightColor(int color) {
@@ -272,7 +273,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
             throw new IllegalArgumentException("highlightBackgroundColor is null.");
         }
 
-        setHighlightBackgroundColor(decodeColor(highlightBackgroundColor));
+        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
     }
 
     public final void setHighlightBackgroundColor(int color) {

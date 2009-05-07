@@ -23,13 +23,13 @@ import java.awt.RenderingHints;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
 import pivot.wtk.Point;
 import pivot.wtk.Slider;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.SliderSkin;
 
 /**
@@ -284,7 +284,7 @@ public class TerraSliderSkin extends SliderSkin {
             throw new IllegalArgumentException("trackColor is null");
         }
 
-        setTrackColor(decodeColor(trackColor));
+        setTrackColor(GraphicsUtilities.decodeColor(trackColor));
     }
 
     public int getTrackWidth() {
@@ -323,7 +323,7 @@ public class TerraSliderSkin extends SliderSkin {
             throw new IllegalArgumentException("buttonBackgroundColor is null");
         }
 
-        setButtonBackgroundColor(decodeColor(buttonBackgroundColor));
+        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor));
     }
 
 	public Color getButtonBorderColor() {
@@ -344,7 +344,7 @@ public class TerraSliderSkin extends SliderSkin {
 			throw new IllegalArgumentException("buttonBorderColor is null.");
 		}
 
-		setButtonBorderColor(decodeColor(buttonBorderColor));
+		setButtonBorderColor(GraphicsUtilities.decodeColor(buttonBorderColor));
 	}
 
 	public int getThumbWidth() {

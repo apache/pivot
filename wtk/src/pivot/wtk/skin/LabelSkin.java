@@ -34,6 +34,7 @@ import java.text.AttributedString;
 import pivot.collections.Dictionary;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
 import pivot.wtk.Label;
@@ -390,7 +391,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public TextDecoration getTextDecoration() {

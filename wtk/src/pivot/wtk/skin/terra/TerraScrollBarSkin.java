@@ -26,6 +26,7 @@ import java.awt.geom.GeneralPath;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
 import pivot.wtk.ScrollBar;
@@ -35,7 +36,6 @@ import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Scroll bar skin.
@@ -860,7 +860,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("borderColor is null");
         }
 
-        setBorderColor(decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public final void setBorderColor(int borderColor) {
@@ -886,7 +886,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("scrollButtonImageColor is null");
         }
 
-        setScrollButtonImageColor(decodeColor(scrollButtonImageColor));
+        setScrollButtonImageColor(GraphicsUtilities.decodeColor(scrollButtonImageColor));
     }
 
     public final void setScrollButtonImageColor(int scrollButtonImageColor) {
@@ -912,7 +912,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("scrollButtonBackgroundColor is null");
         }
 
-        setScrollButtonBackgroundColor(decodeColor(scrollButtonBackgroundColor));
+        setScrollButtonBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonBackgroundColor));
     }
 
     public final void setScrollButtonBackgroundColor(int scrollButtonBackgroundColor) {
@@ -938,7 +938,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("scrollButtonDisabledBackgroundColor is null");
         }
 
-        setScrollButtonDisabledBackgroundColor(decodeColor(scrollButtonDisabledBackgroundColor));
+        setScrollButtonDisabledBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonDisabledBackgroundColor));
     }
 
     public final void setScrollButtonDisabledBackgroundColor(int scrollButtonDisabledBackgroundColor) {
@@ -964,7 +964,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("scrollButtonPressedBackgroundColor is null");
         }
 
-        setScrollButtonPressedBackgroundColor(decodeColor(scrollButtonPressedBackgroundColor));
+        setScrollButtonPressedBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonPressedBackgroundColor));
     }
 
     public final void setScrollButtonPressedBackgroundColor(int scrollButtonPressedBackgroundColor) {
@@ -990,7 +990,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             throw new IllegalArgumentException("scrollButtonHighlightedBackgroundColor is null");
         }
 
-        setScrollButtonHighlightedBackgroundColor(decodeColor(scrollButtonHighlightedBackgroundColor));
+        setScrollButtonHighlightedBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonHighlightedBackgroundColor));
     }
 
     public final void setScrollButtonHighlightedBackgroundColor(int scrollButtonHighlightedBackgroundColor) {

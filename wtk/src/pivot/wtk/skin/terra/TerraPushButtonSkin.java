@@ -28,10 +28,10 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Insets;
 import pivot.wtk.PushButton;
 import pivot.wtk.Theme;
-import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.PushButtonSkin;
 
 /**
@@ -294,7 +294,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
@@ -320,7 +320,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public final void setDisabledColor(int disabledColor) {
@@ -348,7 +348,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
@@ -375,7 +375,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             throw new IllegalArgumentException("disabledBackgroundColor is null.");
         }
 
-        setDisabledBackgroundColor(decodeColor(disabledBackgroundColor));
+        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
@@ -401,7 +401,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public final void setBorderColor(int borderColor) {
@@ -427,7 +427,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             throw new IllegalArgumentException("disabledBorderColor is null.");
         }
 
-        setDisabledBorderColor(decodeColor(disabledBorderColor));
+        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {

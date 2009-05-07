@@ -28,6 +28,7 @@ import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
 import pivot.wtk.Mouse;
@@ -51,7 +52,6 @@ import pivot.wtk.effects.easing.Quadratic;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Tab pane skin.
@@ -897,7 +897,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("activeTabColor is null.");
         }
 
-        setActiveTabColor(decodeColor(activeTabColor));
+        setActiveTabColor(GraphicsUtilities.decodeColor(activeTabColor));
     }
 
     public Color getInactiveTabColor() {
@@ -919,7 +919,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("inactiveTabColor is null.");
         }
 
-        setInactiveTabColor(decodeColor(inactiveTabColor));
+        setInactiveTabColor(GraphicsUtilities.decodeColor(inactiveTabColor));
     }
 
     public Color getBorderColor() {
@@ -941,7 +941,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public Insets getPadding() {
@@ -1016,7 +1016,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("buttonColor is null.");
         }
 
-        setButtonColor(decodeColor(buttonColor));
+        setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
     }
 
     public Insets getButtonPadding() {

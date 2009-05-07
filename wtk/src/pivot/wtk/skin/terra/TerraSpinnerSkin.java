@@ -29,6 +29,7 @@ import pivot.wtk.ApplicationContext;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
@@ -39,7 +40,6 @@ import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
 import pivot.wtk.skin.ContainerSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Spinner skin.
@@ -656,7 +656,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -678,7 +678,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public Color getBorderColor() {
@@ -700,7 +700,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public Color getButtonColor() {
@@ -717,7 +717,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("buttonColor is null");
         }
 
-        setButtonImageColor(decodeColor(buttonColor));
+        setButtonImageColor(GraphicsUtilities.decodeColor(buttonColor));
     }
 
     public Color getButtonBackgroundColor() {
@@ -734,7 +734,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             throw new IllegalArgumentException("buttonBackgroundColor is null");
         }
 
-        setButtonBackgroundColor(decodeColor(buttonBackgroundColor));
+        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor));
     }
 
     public Font getFont() {

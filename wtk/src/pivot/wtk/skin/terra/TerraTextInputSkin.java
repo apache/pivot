@@ -35,6 +35,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Direction;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
@@ -46,7 +47,6 @@ import pivot.wtk.TextInputListener;
 import pivot.wtk.TextInputSelectionListener;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.text.TextNode;
 import pivot.wtk.text.validation.Validator;
 
@@ -557,7 +557,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
@@ -583,7 +583,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("promptColor is null.");
         }
 
-        setPromptColor(decodeColor(promptColor));
+        setPromptColor(GraphicsUtilities.decodeColor(promptColor));
     }
 
     public final void setPromptColor(int promptColor) {
@@ -609,7 +609,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public final void setDisabledColor(int disabledColor) {
@@ -636,7 +636,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public final void setBackgroundColor(int color) {
@@ -662,7 +662,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("color is null.");
         }
 
-        setInvalidColor(decodeColor(color));
+        setInvalidColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setInvalidColor(int color) {
@@ -689,7 +689,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("invalidBackgroundColor is null.");
         }
 
-        setInvalidBackgroundColor(decodeColor(color));
+        setInvalidBackgroundColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setInvalidBackgroundColor(int color) {
@@ -716,7 +716,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("disabledBackgroundColor is null.");
         }
 
-        setDisabledBackgroundColor(decodeColor(disabledBackgroundColor));
+        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
     }
 
     public final void setDisabledBackgroundColor(int color) {
@@ -742,7 +742,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public final void setBorderColor(int color) {
@@ -768,7 +768,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("disabledBorderColor is null.");
         }
 
-        setDisabledBorderColor(decodeColor(disabledBorderColor));
+        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
     }
 
     public final void setDisabledBorderColor(int color) {
@@ -794,7 +794,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("selectionColor is null.");
         }
 
-        setSelectionColor(decodeColor(selectionColor));
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
     }
 
     public final void setSelectionColor(int color) {
@@ -820,7 +820,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("selectionBackgroundColor is null.");
         }
 
-        setSelectionBackgroundColor(decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
     }
 
     public final void setSelectionBackgroundColor(int color) {
@@ -846,7 +846,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("inactiveSelectionColor is null.");
         }
 
-        setInactiveSelectionColor(decodeColor(inactiveSelectionColor));
+        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
     }
 
     public final void setInactiveSelectionColor(int color) {
@@ -872,7 +872,7 @@ public class TerraTextInputSkin extends ComponentSkin
             throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
         }
 
-        setInactiveSelectionBackgroundColor(decodeColor(inactiveSelectionBackgroundColor));
+        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
     }
 
     public final void setInactiveSelectionBackgroundColor(int color) {

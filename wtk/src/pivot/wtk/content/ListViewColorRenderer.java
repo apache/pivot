@@ -19,9 +19,9 @@ package pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.ListView;
 import pivot.wtk.media.Image;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * List view renderer for displaying color swatches.

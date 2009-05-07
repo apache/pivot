@@ -23,12 +23,12 @@ import java.awt.RenderingHints;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Meter;
 import pivot.wtk.MeterListener;
 import pivot.wtk.Orientation;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Meter skin.
@@ -133,7 +133,7 @@ public class TerraMeterSkin extends ComponentSkin
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getGridColor() {
@@ -150,7 +150,7 @@ public class TerraMeterSkin extends ComponentSkin
             throw new IllegalArgumentException("gridColor is null.");
         }
 
-        setGridColor(decodeColor(gridColor));
+        setGridColor(GraphicsUtilities.decodeColor(gridColor));
     }
 
     public float getGridFrequency() {

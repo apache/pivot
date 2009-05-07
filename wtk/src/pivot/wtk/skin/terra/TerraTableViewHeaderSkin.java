@@ -29,6 +29,7 @@ import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
 import pivot.wtk.SortDirection;
@@ -39,7 +40,6 @@ import pivot.wtk.TableViewHeaderListener;
 import pivot.wtk.Theme;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ComponentSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Table view header skin.
@@ -433,7 +433,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
@@ -459,7 +459,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public final void setDisabledColor(int disabledColor) {
@@ -487,7 +487,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
@@ -514,7 +514,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             throw new IllegalArgumentException("disabledBackgroundColor is null.");
         }
 
-        setDisabledBackgroundColor(decodeColor(disabledBackgroundColor));
+        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
@@ -540,7 +540,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public final void setBorderColor(int borderColor) {
@@ -566,7 +566,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             throw new IllegalArgumentException("disabledBorderColor is null.");
         }
 
-        setDisabledBorderColor(decodeColor(disabledBorderColor));
+        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {

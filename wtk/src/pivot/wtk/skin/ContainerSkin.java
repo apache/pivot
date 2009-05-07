@@ -26,6 +26,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerListener;
 import pivot.wtk.Direction;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.FocusTraversalPolicy;
 
 /**
@@ -217,7 +218,7 @@ public abstract class ContainerSkin extends ComponentSkin
             throw new IllegalArgumentException("backgroundColor is null");
         }
 
-        setBackgroundColor(decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     // Container events

@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.wtk.skin;
+package pivot.wtk;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 
@@ -135,5 +137,48 @@ public final class GraphicsUtilities {
         if (rectGraphics != graphics) {
             rectGraphics.dispose();
         }
+    }
+
+    public static Color decodeColor(String name) throws NumberFormatException {
+        if (name == null) {
+            throw new IllegalArgumentException();
+        }
+
+        name = name.toLowerCase();
+
+        int rgb;
+        float alpha;
+        if (name.startsWith("0x")) {
+            name = name.substring(2);
+            if (name.length() != 8) {
+                throw new IllegalArgumentException();
+            }
+
+            rgb = Integer.parseInt(name.substring(0, 6), 16);
+            alpha = (float)Integer.parseInt(name.substring(6, 8), 16) / 255f;
+        } else if (name.startsWith("#")) {
+            name = name.substring(1);
+            if (name.length() != 6) {
+                throw new IllegalArgumentException();
+            }
+
+            rgb = Integer.parseInt(name, 16);
+            alpha = 1.0f;
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        float red = ((rgb >> 16) & 0xff) / 255f;
+        float green = ((rgb >> 8) & 0xff) / 255f;
+        float blue = (rgb >> 0 & 0xff) / 255f;
+
+        Color color = new Color(red, green, blue, alpha);
+
+        return color;
+    }
+
+    public static Paint decodePaint(String name) {
+        // TODO
+        return null;
     }
 }

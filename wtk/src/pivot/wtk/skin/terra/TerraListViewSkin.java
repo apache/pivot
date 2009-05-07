@@ -27,6 +27,7 @@ import pivot.collections.Sequence;
 import pivot.wtk.Checkbox;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.ListView;
@@ -322,7 +323,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -343,7 +344,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public Color getBackgroundColor() {
@@ -364,7 +365,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
 
@@ -386,7 +387,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("selectionColor is null.");
         }
 
-        setSelectionColor(decodeColor(selectionColor));
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
     }
 
     public Color getSelectionBackgroundColor() {
@@ -407,7 +408,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("selectionBackgroundColor is null.");
         }
 
-        setSelectionBackgroundColor(decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
     }
 
     public Color getInactiveSelectionColor() {
@@ -428,7 +429,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("inactiveSelectionColor is null.");
         }
 
-        setInactiveSelectionColor(decodeColor(inactiveSelectionColor));
+        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
     }
 
     public Color getInactiveSelectionBackgroundColor() {
@@ -449,7 +450,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
         }
 
-        setInactiveSelectionBackgroundColor(decodeColor(inactiveSelectionBackgroundColor));
+        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
     }
 
     public Color getHighlightColor() {
@@ -470,7 +471,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("highlightColor is null.");
         }
 
-        setHighlightColor(decodeColor(highlightColor));
+        setHighlightColor(GraphicsUtilities.decodeColor(highlightColor));
     }
 
     public Color getHighlightBackgroundColor() {
@@ -491,7 +492,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("highlightBackgroundColor is null.");
         }
 
-        setHighlightBackgroundColor(decodeColor(highlightBackgroundColor));
+        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
     }
 
     public boolean getShowHighlight() {

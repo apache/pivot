@@ -28,6 +28,7 @@ import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
 import pivot.wtk.Mouse;
@@ -47,7 +48,6 @@ import pivot.wtk.effects.easing.Quartic;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ButtonSkin;
 import pivot.wtk.skin.ContainerSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Accordion skin.
@@ -527,7 +527,7 @@ public class TerraAccordionSkin extends ContainerSkin
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public Insets getPadding() {
@@ -602,7 +602,7 @@ public class TerraAccordionSkin extends ContainerSkin
             throw new IllegalArgumentException("buttonColor is null.");
         }
 
-        setButtonColor(decodeColor(buttonColor));
+        setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
     }
 
     public Insets getButtonPadding() {

@@ -27,6 +27,7 @@ import pivot.collections.Sequence;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
@@ -40,7 +41,6 @@ import pivot.wtk.TableViewRowStateListener;
 import pivot.wtk.TableViewSelectionListener;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.ComponentSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Table view skin.
@@ -503,7 +503,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
@@ -529,7 +529,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public final void setDisabledColor(int disabledColor) {
@@ -555,7 +555,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
@@ -581,7 +581,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("selectionColor is null.");
         }
 
-        setSelectionColor(decodeColor(selectionColor));
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
     }
 
     public final void setSelectionColor(int selectionColor) {
@@ -607,7 +607,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("selectionBackgroundColor is null.");
         }
 
-        setSelectionBackgroundColor(decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
     }
 
     public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
@@ -633,7 +633,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("inactiveSelectionColor is null.");
         }
 
-        setInactiveSelectionColor(decodeColor(inactiveSelectionColor));
+        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
     }
 
     public final void setInactiveSelectionColor(int inactiveSelectionColor) {
@@ -659,7 +659,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
         }
 
-        setInactiveSelectionBackgroundColor(decodeColor(inactiveSelectionBackgroundColor));
+        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
     }
 
     public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
@@ -685,7 +685,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("highlightBackgroundColor is null.");
         }
 
-        setHighlightBackgroundColor(decodeColor(highlightBackgroundColor));
+        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
@@ -707,7 +707,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("alternateRowColor is null.");
         }
 
-        setAlternateRowColor(decodeColor(alternateRowColor));
+        setAlternateRowColor(GraphicsUtilities.decodeColor(alternateRowColor));
     }
 
     public final void setAlternateRowColor(int alternateRowColor) {
@@ -733,7 +733,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("gridColor is null.");
         }
 
-        setGridColor(decodeColor(gridColor));
+        setGridColor(GraphicsUtilities.decodeColor(gridColor));
     }
 
     public final void setGridColor(int gridColor) {

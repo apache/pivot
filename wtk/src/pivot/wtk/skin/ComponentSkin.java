@@ -16,8 +16,6 @@
  */
 package pivot.wtk.skin;
 
-import java.awt.Color;
-
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
@@ -290,34 +288,5 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         if (component != null) {
             component.repaint(x, y, width, height);
         }
-    }
-
-    public static Color decodeColor(String name) throws NumberFormatException {
-        int numericIndex = 0;
-        if (name.startsWith("0x")
-            || name.startsWith("0X")) {
-            numericIndex += 2;
-        } else if (name.startsWith("#")) {
-            numericIndex++;
-        }
-
-        int rgb = Integer.decode(name);
-
-        Color color;
-
-        if (((rgb >> 24) & 0xff) > 0
-            || name.length() - numericIndex > 6) {
-            // Extract the alpha channel
-            float red = ((rgb >> 16) & 0xff) / 255f;
-            float green = ((rgb >> 8) & 0xff) / 255f;
-            float blue = (rgb & 0xff) / 255f;
-            float alpha = ((rgb >> 24) & 0xff) / 255f;
-
-            color = new Color(red, green, blue, alpha);
-        } else {
-            color = new Color((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff);
-        }
-
-        return color;
     }
 }

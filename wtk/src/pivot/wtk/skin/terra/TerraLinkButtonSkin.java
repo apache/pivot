@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.LinkButton;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.LinkButtonSkin;
@@ -121,7 +122,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -142,6 +143,6 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 }

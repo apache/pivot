@@ -25,6 +25,7 @@ import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
@@ -37,7 +38,6 @@ import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.effects.SlideTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
-import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.WindowSkin;
 
 /**
@@ -265,7 +265,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public Insets getPadding() {

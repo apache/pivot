@@ -32,6 +32,7 @@ import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Expander;
 import pivot.wtk.ExpanderListener;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
 import pivot.wtk.Label;
@@ -49,7 +50,6 @@ import pivot.wtk.effects.easing.Easing;
 import pivot.wtk.effects.easing.Quadratic;
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.ContainerSkin;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Expander skin.
@@ -484,7 +484,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("titleBarColor is null.");
         }
 
-        setTitleBarColor(decodeColor(titleBarColor));
+        setTitleBarColor(GraphicsUtilities.decodeColor(titleBarColor));
     }
 
     public Color getTitleBarBackgroundColor() {
@@ -502,7 +502,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("titleBarBackgroundColor is null.");
         }
 
-        setTitleBarBackgroundColor(decodeColor(titleBarBackgroundColor));
+        setTitleBarBackgroundColor(GraphicsUtilities.decodeColor(titleBarBackgroundColor));
     }
 
     public Color getTitleBarBorderColor() {
@@ -519,7 +519,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("titleBarBorderColor is null.");
         }
 
-        setTitleBarBorderColor(decodeColor(titleBarBorderColor));
+        setTitleBarBorderColor(GraphicsUtilities.decodeColor(titleBarBorderColor));
     }
 
     public Color getShadeButtonColor() {
@@ -536,7 +536,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("shadeButtonColor is null.");
         }
 
-        setShadeButtonColor(decodeColor(shadeButtonColor));
+        setShadeButtonColor(GraphicsUtilities.decodeColor(shadeButtonColor));
     }
 
     public Color getShadeButtonBackgroundColor() {
@@ -554,7 +554,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("shadeButtonBackgroundColor is null.");
         }
 
-        setShadeButtonBackgroundColor(decodeColor(shadeButtonBackgroundColor));
+        setShadeButtonBackgroundColor(GraphicsUtilities.decodeColor(shadeButtonBackgroundColor));
     }
 
     public Color getBorderColor() {
@@ -571,7 +571,7 @@ public class TerraExpanderSkin extends ContainerSkin
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public Insets getPadding() {

@@ -25,6 +25,7 @@ import java.awt.geom.Ellipse2D;
 
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.RadioButton;
 import pivot.wtk.skin.RadioButtonSkin;
 
@@ -219,7 +220,7 @@ public class ObsidianRadioButtonSkin extends RadioButtonSkin {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -240,7 +241,7 @@ public class ObsidianRadioButtonSkin extends RadioButtonSkin {
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public int getSpacing() {

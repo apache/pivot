@@ -28,12 +28,12 @@ import pivot.collections.Sequence;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Insets;
 import pivot.wtk.Orientation;
 import pivot.wtk.TablePane;
 import pivot.wtk.TablePaneListener;
 import pivot.wtk.TablePaneAttributeListener;
-import pivot.wtk.skin.GraphicsUtilities;
 
 /**
  * Table pane skin.
@@ -767,7 +767,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             throw new IllegalArgumentException("gridColor is null.");
         }
 
-        setGridColor(decodeColor(gridColor));
+        setGridColor(GraphicsUtilities.decodeColor(gridColor));
     }
 
     /**
@@ -797,7 +797,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
             throw new IllegalArgumentException("selectionBackgroundColor is null.");
         }
 
-        setSelectionBackgroundColor(decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
     }
 
     /**

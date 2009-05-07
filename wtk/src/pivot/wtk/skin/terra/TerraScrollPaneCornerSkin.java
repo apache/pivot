@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -78,7 +79,7 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public Color getColor() {
@@ -95,6 +96,6 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 }

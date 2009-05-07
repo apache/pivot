@@ -32,6 +32,7 @@ import pivot.wtk.Border;
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Display;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Insets;
 import pivot.wtk.ListButton;
 import pivot.wtk.ListView;
@@ -43,7 +44,6 @@ import pivot.wtk.WindowStateListener;
 import pivot.wtk.effects.FadeTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
-import pivot.wtk.skin.GraphicsUtilities;
 import pivot.wtk.skin.ListButtonSkin;
 
 /**
@@ -345,7 +345,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -366,7 +366,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public Color getBackgroundColor() {
@@ -389,7 +389,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("backgroundColor is null.");
         }
 
-        setBackgroundColor(decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public Color getDisabledBackgroundColor() {
@@ -411,7 +411,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("disabledBackgroundColor is null.");
         }
 
-        setDisabledBackgroundColor(decodeColor(disabledBackgroundColor));
+        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
     }
 
     public Color getBorderColor() {
@@ -433,7 +433,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("borderColor is null.");
         }
 
-        setBorderColor(decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public Color getDisabledBorderColor() {
@@ -454,7 +454,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             throw new IllegalArgumentException("disabledBorderColor is null.");
         }
 
-        setDisabledBorderColor(decodeColor(disabledBorderColor));
+        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
     }
 
     public Insets getPadding() {

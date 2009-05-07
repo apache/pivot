@@ -27,6 +27,7 @@ import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Cursor;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Mouse;
 import pivot.wtk.Rollup;
 import pivot.wtk.Theme;
@@ -415,7 +416,7 @@ public class TerraRollupSkin extends RollupSkin {
             throw new IllegalArgumentException("buttonColor is null.");
         }
 
-        setButtonColor(decodeColor(buttonColor));
+        setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
     }
 
     public int getSpacing() {

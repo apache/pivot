@@ -28,6 +28,7 @@ import pivot.collections.Sequence;
 import pivot.util.ImmutableIterator;
 import pivot.util.ListenerList;
 import pivot.wtk.Bounds;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Point;
 
 /**
@@ -503,7 +504,7 @@ public abstract class Shape {
             throw new IllegalArgumentException("fill is null.");
         }
 
-        setFill(Color.decode(fill));
+        setFill(GraphicsUtilities.decodeColor(fill));
     }
 
     public Paint getStroke() {
@@ -520,7 +521,7 @@ public abstract class Shape {
             throw new IllegalArgumentException("stroke is null.");
         }
 
-        setStroke(Color.decode(stroke));
+        setStroke(GraphicsUtilities.decodeColor(stroke));
     }
 
     public int getStrokeThickness() {

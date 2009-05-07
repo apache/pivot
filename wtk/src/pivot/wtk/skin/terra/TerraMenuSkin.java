@@ -23,6 +23,7 @@ import java.awt.Graphics2D;
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
+import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Menu;
 import pivot.wtk.MenuListener;
 import pivot.wtk.Theme;
@@ -244,7 +245,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
             throw new IllegalArgumentException("color is null.");
         }
 
-        setColor(decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public Color getDisabledColor() {
@@ -265,7 +266,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
             throw new IllegalArgumentException("disabledColor is null.");
         }
 
-        setDisabledColor(decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public Color getHighlightColor() {
@@ -286,7 +287,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
             throw new IllegalArgumentException("highlightColor is null.");
         }
 
-        setHighlightColor(decodeColor(highlightColor));
+        setHighlightColor(GraphicsUtilities.decodeColor(highlightColor));
     }
 
     public Color getHighlightBackgroundColor() {
@@ -307,7 +308,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener {
             throw new IllegalArgumentException("highlightBackgroundColor is null.");
         }
 
-        setHighlightBackgroundColor(decodeColor(highlightBackgroundColor));
+        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
     }
 
     public Color getMarginColor() {
