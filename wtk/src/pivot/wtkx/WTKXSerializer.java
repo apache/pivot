@@ -102,8 +102,6 @@ public class WTKXSerializer implements Serializer<Object> {
     private Object scriptEngineManager;
     private Class<?> scriptEngineManagerClass;
 
-    private static int tmpVariableCounter = 0;
-
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
     public static final char OBJECT_REFERENCE_PREFIX = '$';
@@ -662,7 +660,6 @@ public class WTKXSerializer implements Serializer<Object> {
             "new pivot.collections.HashMap<String, Object>();\n");
 
         // Parse the XML stream
-        Element element = null;
         try {
             XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(inputStream);
 

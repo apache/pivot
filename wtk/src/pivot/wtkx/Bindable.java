@@ -60,7 +60,7 @@ public abstract class Bindable {
     @Target(ElementType.FIELD)
     protected static @interface Bind {
         public String property();
-        public String id() default "\0";
+        public String name() default "\0";
     }
 
     /**
@@ -194,7 +194,7 @@ public abstract class Bindable {
                         throw new BindException("Property \"" + property + "\" has not been loaded.");
                     }
 
-                    String id = bindAnnotation.id();
+                    String id = bindAnnotation.name();
                     if (id.equals("\0")) {
                         id = field.getName();
                     }

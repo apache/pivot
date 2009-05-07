@@ -261,7 +261,7 @@ public class Demo extends Bindable implements Application {
             @Load(name="menus.wtkx") private Component component;
             @Bind(property="component") private ImageView menuImageView;
 
-            @Bind(property="component", id="menubar.helpAboutMenuItem")
+            @Bind(property="component", name="menubar.helpAboutMenuItem")
             private Menu.Item helpAboutMenuItem;
 
             @Load(name="menu_popup.wtkx") private MenuPopup menuPopup;

@@ -147,7 +147,7 @@ public class BindProcessor extends AbstractProcessor {
                             Element bindElement = bindField.sym;
                             Bindable.Bind bindAnnotation = bindElement.getAnnotation(Bindable.Bind.class);
 
-                            String bindID = bindAnnotation.id();
+                            String bindID = bindAnnotation.name();
                             if ("\0".equals(bindID)) {
                                 // The bind ID defaults to the field name
                                 bindID = bindFieldName;

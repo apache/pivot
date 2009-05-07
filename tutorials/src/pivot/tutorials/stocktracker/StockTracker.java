@@ -65,10 +65,10 @@ public class StockTracker extends Bindable implements Application {
     @Bind(property="window") private Label lastUpdateLabel;
     @Bind(property="window") private Button yahooFinanceButton;
 
-    @Bind(property="window", id="detail.rootPane")
+    @Bind(property="window", name="detail.rootPane")
     private Container detailRootPane;
 
-    @Bind(property="window", id="detail.changeLabel")
+    @Bind(property="window", name="detail.changeLabel")
     private Label detailChangeLabel;
 
     private GetQuery getQuery = null;
