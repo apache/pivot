@@ -81,7 +81,7 @@ public abstract class Bindable {
      * Applies WTKX binding annotations to this bindable object.
      */
     @BindMethod
-    protected final void bind() throws IOException, BindException {
+    protected void bind() throws IOException, BindException {
         // Walk fields and resolve annotations
         ArrayList<Class<?>> typeHierarchy = new ArrayList<Class<?>>();
         Class<?> type = getClass();

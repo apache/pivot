@@ -220,15 +220,17 @@ public class BindProcessor extends AbstractProcessor {
             super.visitMethodDef(tree);
 
             Element methodElement = tree.sym;
-            Bindable.BindMethod bindMethod = methodElement.getAnnotation(Bindable.BindMethod.class);
+            if (methodElement != null) {
+                Bindable.BindMethod bindMethod = methodElement.getAnnotation(Bindable.BindMethod.class);
 
-            if (bindMethod != null) {
-                // Remove the 'final' flag so that we may extend the method
-                tree.sym.flags_field &= ~Flags.FINAL;
-                tree.mods.flags &= ~Flags.FINAL;
+                if (bindMethod != null) {
+                    // Remove the 'final' flag so that we may extend the method
+                    tree.sym.flags_field &= ~Flags.FINAL;
+                    tree.mods.flags &= ~Flags.FINAL;
 
-                // Clear the method body so that it becomes a no-op
-                tree.body.stats = List.<JCTree.JCStatement>nil();
+                    // Clear the method body so that it becomes a no-op
+                    tree.body.stats = List.<JCTree.JCStatement>nil();
+                }
             }
         }
 

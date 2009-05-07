@@ -34,7 +34,7 @@ limitations under the License.
     <!-- Compiler properties -->
     <property name="compiler.optimize" value="true"/>
     <property name="compiler.deprecation" value="true"/>
-    <property name="compiler.debug" value="false"/>
+    <property name="compiler.debug" value="true"/>
     <property name="compiler.target" value="1.5"/>
     <property name="compiler.encoding" value="UTF-8"/>
 
@@ -374,7 +374,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg line="-Xlint -processor pivot.wtkx.BindProcessor"/>
+            <compilerarg line="-Xlint"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
