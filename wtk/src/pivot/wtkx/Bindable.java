@@ -67,7 +67,7 @@ public abstract class Bindable {
      * Applies WTKX binding annotations to this bindable object.
      */
     @BindMethodProcessor.BindMethod
-    protected final void bind() throws IOException, BindException {
+    protected final void bind() throws BindException {
         // Walk fields and resolve annotations
         ArrayList<Class<?>> typeHierarchy = new ArrayList<Class<?>>();
         Class<?> type = getClass();
@@ -135,6 +135,8 @@ public abstract class Bindable {
                     // Attmpt to load the resources
                     try {
                         resources = new Resources(baseName, locale, "UTF8");
+                    } catch(IOException exception) {
+                        throw new BindException(exception);
                     } catch(SerializationException exception) {
                         throw new BindException(exception);
                     } catch(MissingResourceException exception) {
@@ -151,6 +153,8 @@ public abstract class Bindable {
                     Object resource;
                     try {
                         resource = wtkxSerializer.readObject(location);
+                    } catch(IOException exception) {
+                        throw new BindException(exception);
                     } catch (SerializationException exception) {
                         throw new BindException(exception);
                     }

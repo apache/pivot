@@ -16,18 +16,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Menu xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
-    <sections>
-        <Menu.Section>
-            <Menu.Item buttonData="IMG_0725_2.jpg" toggleButton="true"
-                group="imageMenuGroup" userData="pivot/tutorials/IMG_0725_2.jpg"
-                action="selectImageAction"/>
-            <Menu.Item buttonData="IMG_0735_2.jpg" toggleButton="true"
-                group="imageMenuGroup" userData="pivot/tutorials/IMG_0735_2.jpg"
-                action="selectImageAction"/>
-            <Menu.Item buttonData="IMG_0767_2.jpg" toggleButton="true"
-                group="imageMenuGroup" userData="pivot/tutorials/IMG_0767_2.jpg"
-                action="selectImageAction"/>
-        </Menu.Section>
-    </sections>
-</Menu>
+<MenuPopup xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    <menu>
+		<Menu>
+		    <sections>
+		        <Menu.Section>
+		            <Menu.Item buttonData="IMG_0725_2.jpg" toggleButton="true"
+		                group="imageMenuGroup" userData="pivot/tutorials/IMG_0725_2.jpg"
+		                action="selectImageAction"/>
+		            <Menu.Item buttonData="IMG_0735_2.jpg" toggleButton="true"
+		                group="imageMenuGroup" userData="pivot/tutorials/IMG_0735_2.jpg"
+		                action="selectImageAction"/>
+		            <Menu.Item buttonData="IMG_0767_2.jpg" toggleButton="true"
+		                group="imageMenuGroup" userData="pivot/tutorials/IMG_0767_2.jpg"
+		                action="selectImageAction"/>
+		        </Menu.Section>
+		    </sections>
+		</Menu>
+	</menu>
+</MenuPopup>
