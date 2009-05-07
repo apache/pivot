@@ -33,19 +33,12 @@ import pivot.collections.ArrayList;
 import pivot.collections.ArrayStack;
 import pivot.collections.HashMap;
 
-import com.sun.tools.javac.code.Flags;
-import com.sun.tools.javac.code.Symbol;
-import com.sun.tools.javac.code.Symtab;
-import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.parser.Parser;
 import com.sun.tools.javac.parser.Scanner;
 import com.sun.tools.javac.tree.JCTree;
-import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.tree.TreeTranslator;
 import com.sun.tools.javac.util.Context;
-import com.sun.tools.javac.util.List;
-import com.sun.tools.javac.util.Name;
 import com.sun.source.util.Trees;
 
 /**
@@ -69,11 +62,11 @@ public class BindProcessor extends AbstractProcessor {
      */
     private static class BindScope {
         public static class LoadGroup {
-            public JCTree.JCVariableDecl loadField = null;
+            public JCTree.JCVariableDecl loadVariable = null;
             public ArrayList<JCTree.JCVariableDecl> bindFields = null;
 
-            public LoadGroup(JCTree.JCVariableDecl loadField) {
-                this.loadField = loadField;
+            public LoadGroup(JCTree.JCVariableDecl loadVariable) {
+                this.loadVariable = loadVariable;
             }
         }
 
@@ -106,31 +99,30 @@ public class BindProcessor extends AbstractProcessor {
             bindScopeStack.pop();
 
             if (bindScope.loadGroups != null) {
-                StringBuilder sourceCode = new StringBuilder("{");
+                StringBuilder sourceCode = new StringBuilder("class _A {");
 
-                sourceCode.append("try {");
-                sourceCode.append("super.bind();");
-                sourceCode.append("} catch (Exception ex) {");
-                sourceCode.append("throw new pivot.wtkx.BindException(ex);");
-                sourceCode.append("}");
+                sourceCode.append("protected void bind(pivot.collections.Map<String,Object> namedObjects) {");
+                sourceCode.append("super.bind(namedObjects);");
                 sourceCode.append("pivot.wtkx.WTKXSerializer wtkxSerializer;");
                 sourceCode.append("Object value;");
+                sourceCode.append("java.net.URL location;");
 
-                for (String loadFieldName : bindScope.loadGroups) {
-                    BindScope.LoadGroup loadGroup = bindScope.loadGroups.get(loadFieldName);
-                    JCTree.JCVariableDecl loadField = loadGroup.loadField;
-                    Element loadElement = loadField.sym;
-                    Bindable.Load loadAnnotation = loadElement.getAnnotation(Bindable.Load.class);
+                for (String loadVariableName : bindScope.loadGroups) {
+                    BindScope.LoadGroup loadGroup = bindScope.loadGroups.get(loadVariableName);
+                    JCTree.JCVariableDecl loadVariable = loadGroup.loadVariable;
+                    JCTree.JCAnnotation loadAnnotation = getLoadAnnotation(loadVariable);
+
+                    String loadName = getAnnotationProperty(loadAnnotation, "name");
 
                     if (DEBUG) {
                         processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
-                            String.format("Processing load(%s, %s#%s)", loadAnnotation.name(),
-                            tree.name.toString(), loadFieldName));
+                            String.format("Processing load(%s, %s#%s)", loadName,
+                            tree.name.toString(), loadVariableName));
                     }
 
                     // Load the WTKX resource
                     sourceCode.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer();");
-                    sourceCode.append(String.format("java.net.URL location = getClass().getResource(\"%s\");", loadAnnotation.name()));
+                    sourceCode.append(String.format("location = getClass().getResource(\"%s\");", loadName));
                     sourceCode.append("try {");
                     sourceCode.append("value = wtkxSerializer.readObject(location);");
                     sourceCode.append("} catch (Exception ex) {");
@@ -138,30 +130,30 @@ public class BindProcessor extends AbstractProcessor {
                     sourceCode.append("}");
 
                     // Bind the resource to the field
-                    sourceCode.append(String.format("%s = (%s)value;", loadFieldName, loadField.vartype.toString()));
+                    sourceCode.append(String.format("%s = (%s)value;", loadVariableName, loadVariable.vartype.toString()));
 
                     // Bind the resource lookups to their corresponding fields
                     if (loadGroup.bindFields != null) {
                         for (JCTree.JCVariableDecl bindField : loadGroup.bindFields) {
                             String bindFieldName = bindField.name.toString();
-                            Element bindElement = bindField.sym;
-                            Bindable.Bind bindAnnotation = bindElement.getAnnotation(Bindable.Bind.class);
+                            JCTree.JCAnnotation bindAnnotation = getBindAnnotation(bindField);
 
-                            String bindID = bindAnnotation.name();
-                            if ("\0".equals(bindID)) {
-                                // The bind ID defaults to the field name
-                                bindID = bindFieldName;
+                            String bindName = getAnnotationProperty(bindAnnotation, "name");
+                            if (bindName == null) {
+                                // The bind name defaults to the field name
+                                bindName = bindFieldName;
                             }
 
                             if (DEBUG) {
+                                String property = getAnnotationProperty(bindAnnotation, "property");
                                 processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
-                                    String.format("Processing bind(%s.%s, %s#%s)", bindAnnotation.property(),
-                                    bindID, tree.name.toString(), bindFieldName));
+                                    String.format("Processing bind(%s.%s, %s#%s)", property,
+                                    bindName, tree.name.toString(), bindFieldName));
                             }
 
-                            sourceCode.append(String.format("value = wtkxSerializer.getObjectByName(\"%s\");", bindID));
+                            sourceCode.append(String.format("value = wtkxSerializer.getObjectByName(\"%s\");", bindName));
                             sourceCode.append("if (value == null) {");
-                            sourceCode.append(String.format("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindID));
+                            sourceCode.append(String.format("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
                             sourceCode.append("}");
                             sourceCode.append(String.format("%s = (%s)value;", bindFieldName, bindField.vartype.toString()));
                         }
@@ -169,36 +161,16 @@ public class BindProcessor extends AbstractProcessor {
                 }
 
                 sourceCode.append("}");
+                sourceCode.append("}");
 
-                // Parse our source code into a AST block (bind() method body)
-                Scanner.Factory scannerFactory = Scanner.Factory.instance(context);
-                Parser.Factory parserFactory = Parser.Factory.instance(context);
-
+                // Parse the source code and extract the method declaration
                 Scanner scanner = scannerFactory.newScanner(sourceCode.toString());
                 Parser parser = parserFactory.newParser(scanner, false, false);
-                JCTree.JCBlock methodBody = parser.block();
+                JCTree.JCCompilationUnit compilationUnit = parser.compilationUnit();
+                JCTree.JCClassDecl classDeclaration = (JCTree.JCClassDecl)compilationUnit.defs.head;
+                JCTree.JCMethodDecl methodDeclaration = (JCTree.JCMethodDecl)classDeclaration.defs.head;
 
-                // Create the bind() override AST method declaration
-                // TODO Declare it to throw IOException, then remove the
-                // try/catch from super.bind()
-                Type.MethodType methodType = new Type.MethodType(
-                    List.<Type>nil(),             // Argument types
-                    symbolTable.voidType,         // Return type
-                    List.<Type>nil(),             // Throws types
-                    symbolTable.methodClass       // Type symbol
-                );
-                Symbol.MethodSymbol methodSymbol = new Symbol.MethodSymbol(
-                    Flags.PROTECTED,              // Flags
-                    nameTable.fromString("bind"), // Name
-                    methodType,                   // Type
-                    tree.sym                      // Owner
-                );
-                JCTree.JCMethodDecl methodDeclaration = make.MethodDef(
-                    methodSymbol,                 // Symbol
-                    methodBody                    // Body
-                );
-
-                // Add the AST method declaration to the class
+                // Add the AST method declaration to our class
                 tree.defs = tree.defs.prepend(methodDeclaration);
             }
         }
@@ -216,24 +188,14 @@ public class BindProcessor extends AbstractProcessor {
         public void visitVarDef(JCTree.JCVariableDecl tree) {
             super.visitVarDef(tree);
 
-            Bindable.Load loadAnnotation = null;
-            Bindable.Bind bindAnnotation = null;
-
-            Element element = tree.sym;
-            if (element != null) {
-                loadAnnotation = element.getAnnotation(Bindable.Load.class);
-                bindAnnotation = element.getAnnotation(Bindable.Bind.class);
-            } else if (tree.mods != null
-                && tree.mods.annotations != null) {
-                // TODO
-                //List<JCTree.JCAnnotation> annotations = tree.mods.annotations;
-            }
+            JCTree.JCAnnotation loadAnnotation = getLoadAnnotation(tree);
+            JCTree.JCAnnotation bindAnnotation = getBindAnnotation(tree);
 
             if (loadAnnotation != null
                 && bindAnnotation != null) {
                 processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
                     "Cannot combine " + Bindable.Load.class.getName()
-                    + " and " + Bindable.Bind.class.getName() + " annotations.", element);
+                    + " and " + Bindable.Bind.class.getName() + " annotations.");
             } else if (loadAnnotation != null) {
                 BindScope bindScope = bindScopeStack.peek();
                 String fieldName = tree.name.toString();
@@ -246,10 +208,11 @@ public class BindProcessor extends AbstractProcessor {
                 loadTally++;
             } else if (bindAnnotation != null) {
                 BindScope bindScope = bindScopeStack.peek();
+                String property = getAnnotationProperty(bindAnnotation, "property");
 
                 if (bindScope.loadGroups != null
-                    && bindScope.loadGroups.containsKey(bindAnnotation.property())) {
-                    BindScope.LoadGroup loadGroup = bindScope.loadGroups.get(bindAnnotation.property());
+                    && bindScope.loadGroups.containsKey(property)) {
+                    BindScope.LoadGroup loadGroup = bindScope.loadGroups.get(property);
 
                     if (loadGroup.bindFields == null) {
                         loadGroup.bindFields = new ArrayList<JCTree.JCVariableDecl>();
@@ -259,9 +222,52 @@ public class BindProcessor extends AbstractProcessor {
                     bindTally++;
                 } else {
                     processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        "Resource not found: " + bindAnnotation.property(), element);
+                        "Resource not found: " + property);
                 }
             }
+        }
+
+        private JCTree.JCAnnotation getLoadAnnotation(JCTree.JCVariableDecl variableDeclaration) {
+            return getAnnotation(variableDeclaration, Bindable.Load.class.getSimpleName());
+        }
+
+        private JCTree.JCAnnotation getBindAnnotation(JCTree.JCVariableDecl variableDeclaration) {
+            return getAnnotation(variableDeclaration, Bindable.Bind.class.getSimpleName());
+        }
+
+        private JCTree.JCAnnotation getAnnotation(JCTree.JCVariableDecl variableDeclaration, String name) {
+            JCTree.JCAnnotation result = null;
+
+            if (variableDeclaration.mods != null
+                && variableDeclaration.mods.annotations != null) {
+                for (JCTree.JCAnnotation annotation : variableDeclaration.mods.annotations) {
+                    JCTree.JCIdent identifier = (JCTree.JCIdent)annotation.annotationType;
+
+                    if (identifier.name.contentEquals(name)) {
+                        result = annotation;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private String getAnnotationProperty(JCTree.JCAnnotation annotation, String propertyName) {
+            String result = null;
+
+            for (JCTree.JCExpression arg : annotation.args) {
+                JCTree.JCAssign assign = (JCTree.JCAssign)arg;
+                JCTree.JCIdent key = (JCTree.JCIdent)assign.lhs;
+
+                if (key.name.contentEquals(propertyName)) {
+                    JCTree.JCLiteral value = (JCTree.JCLiteral)assign.rhs;
+                    result = (String)value.value;
+                    break;
+                }
+            }
+
+            return result;
         }
     }
 
@@ -270,9 +276,8 @@ public class BindProcessor extends AbstractProcessor {
 
     private Trees trees;
     private Context context;
-    private TreeMaker make;
-    private Name.Table nameTable;
-    private Symtab symbolTable;
+    private Scanner.Factory scannerFactory;
+    private Parser.Factory parserFactory;
     private BindInjector bindInjector = new BindInjector();
 
     private static final boolean DEBUG = false;
@@ -283,9 +288,8 @@ public class BindProcessor extends AbstractProcessor {
 
         trees = Trees.instance(processingEnvironment);
         context = ((JavacProcessingEnvironment)processingEnvironment).getContext();
-        make = TreeMaker.instance(context);
-        symbolTable = Symtab.instance(context);
-        nameTable = Name.Table.instance(context);
+        scannerFactory = Scanner.Factory.instance(context);
+        parserFactory = Parser.Factory.instance(context);
     }
 
     @Override

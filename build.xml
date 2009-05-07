@@ -369,6 +369,7 @@ limitations under the License.
             failonerror="true">
             <include name="pivot/wtkx/BindMethodProcessor.java"/>
             <classpath>
+                <pathelement location="core/${folder.bin}"/>
                 <fileset dir="${java.home}/lib" includes="**/*.jar"/>
             </classpath>
         </javac>
