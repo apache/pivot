@@ -27,6 +27,7 @@ import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
 import pivot.wtk.Accordion;
+import pivot.wtk.ActivityIndicator;
 import pivot.wtk.Alert;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Border;
@@ -141,6 +142,7 @@ public final class TerraTheme extends Theme {
         }
 
         componentSkinMap.put(Accordion.class, TerraAccordionSkin.class);
+        componentSkinMap.put(ActivityIndicator.class, TerraActivityIndicatorSkin.class);
         componentSkinMap.put(Alert.class, TerraAlertSkin.class);
         componentSkinMap.put(Border.class, TerraBorderSkin.class);
         componentSkinMap.put(Checkbox.class, TerraCheckboxSkin.class);
