@@ -64,24 +64,10 @@ public abstract class Bindable {
     }
 
     /**
-     * Flags the base implementation of the bind method. This cues the
-     * annotation processor to remove the <tt>final</tt> flag from the method
-     * so that it may be extended by the compiler and to remove the body of the
-     * method, making it a no-op at runtime (since the annotation processor
-     * inlines all WTKX binding).
-     *
-     * @author tvolkert
-     */
-    @Retention(RetentionPolicy.SOURCE)
-    @Target(ElementType.METHOD)
-    static @interface BindMethod {
-    }
-
-    /**
      * Applies WTKX binding annotations to this bindable object.
      */
-    @BindMethod
-    protected void bind() throws IOException, BindException {
+    @BindMethodProcessor.BindMethod
+    protected final void bind() throws IOException, BindException {
         // Walk fields and resolve annotations
         ArrayList<Class<?>> typeHierarchy = new ArrayList<Class<?>>();
         Class<?> type = getClass();

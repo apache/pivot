@@ -32,9 +32,8 @@ limitations under the License.
     <property name="keystore.passwd" value="apache"/>
 
     <!-- Compiler properties -->
-    <property name="compiler.optimize" value="true"/>
     <property name="compiler.deprecation" value="true"/>
-    <property name="compiler.debug" value="true"/>
+    <property name="compiler.debug" value="false"/>
     <property name="compiler.target" value="1.5"/>
     <property name="compiler.encoding" value="UTF-8"/>
 
@@ -100,7 +99,6 @@ limitations under the License.
         <mkdir dir="charts/${folder.bin}"/>
         <javac srcdir="charts/src"
             destDir="charts/${folder.bin}"
-            optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
@@ -144,7 +142,6 @@ limitations under the License.
         <mkdir dir="charts/${folder.bin}"/>
         <javac srcdir="charts/test"
             destDir="charts/${folder.bin}"
-            optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
@@ -164,7 +161,6 @@ limitations under the License.
         <mkdir dir="core/${folder.bin}"/>
         <javac srcdir="core/src"
             destDir="core/${folder.bin}"
-            optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
@@ -211,7 +207,6 @@ limitations under the License.
         <mkdir dir="core/${folder.bin}"/>
         <javac srcdir="core/test"
             destDir="core/${folder.bin}"
-            optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
@@ -229,7 +224,6 @@ limitations under the License.
         <mkdir dir="web/${folder.bin}"/>
         <javac srcdir="web/src"
             destDir="web/${folder.bin}"
-            optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
@@ -291,7 +285,6 @@ limitations under the License.
         <mkdir dir="web/${folder.bin}"/>
         <javac srcdir="web/test"
             destDir="web/${folder.bin}"
-            optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
@@ -365,16 +358,31 @@ limitations under the License.
         </fail>
 
         <mkdir dir="wtk/${folder.bin}"/>
+
         <javac srcdir="wtk/src"
             destDir="wtk/${folder.bin}"
             includejavaruntime="true"
-            optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg line="-Xlint"/>
+            <include name="pivot/wtkx/BindMethodProcessor.java"/>
+            <classpath>
+                <fileset dir="${java.home}/lib" includes="**/*.jar"/>
+            </classpath>
+        </javac>
+
+        <javac srcdir="wtk/src"
+            destDir="wtk/${folder.bin}"
+            includejavaruntime="true"
+            deprecation="${compiler.deprecation}"
+            debug="${compiler.debug}"
+            target="${compiler.target}"
+            encoding="${compiler.encoding}"
+            failonerror="true">
+            <exclude name="pivot/wtkx/BindMethodProcessor.java"/>
+            <compilerarg line="-Xlint -processor pivot.wtkx.BindMethodProcessor"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
@@ -455,7 +463,6 @@ limitations under the License.
         <mkdir dir="wtk/${folder.bin}"/>
         <javac srcdir="wtk/test"
             destDir="wtk/${folder.bin}"
-            optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
@@ -474,7 +481,6 @@ limitations under the License.
         <mkdir dir="tutorials/${folder.bin}"/>
         <javac srcdir="tutorials/src"
             destDir="tutorials/${folder.bin}"
-            optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
@@ -534,7 +540,6 @@ limitations under the License.
         <mkdir dir="demos/${folder.bin}"/>
         <javac srcdir="demos/src"
             destDir="demos/${folder.bin}"
-            optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"
@@ -571,7 +576,6 @@ limitations under the License.
         <mkdir dir="tools/${folder.bin}"/>
         <javac srcdir="tools/src"
             destDir="tools/${folder.bin}"
-            optimize="${compiler.optimize}"
             deprecation="${compiler.deprecation}"
             debug="${compiler.debug}"
             target="${compiler.target}"

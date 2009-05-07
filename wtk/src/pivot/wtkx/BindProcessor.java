@@ -204,37 +204,6 @@ public class BindProcessor extends AbstractProcessor {
         }
 
         /**
-         * Checks for the <tt>@BindMethod</tt> annotation on a method
-         * (signalling the base class' implementation). When found, this strips
-         * the method of its body and the <tt>final</tt> keyword, thus clearing
-         * the way for us to override <tt>bind()</tt> in bindable subclasses
-         * with inline implementations that can safely call
-         * <tt>super.bind()</tt> without running the runtime bind
-         * implementation.
-         *
-         * @param tree
-         * The AST method declaration node
-         */
-        @Override
-        public void visitMethodDef(JCTree.JCMethodDecl tree) {
-            super.visitMethodDef(tree);
-
-            Element methodElement = tree.sym;
-            if (methodElement != null) {
-                Bindable.BindMethod bindMethod = methodElement.getAnnotation(Bindable.BindMethod.class);
-
-                if (bindMethod != null) {
-                    // Remove the 'final' flag so that we may extend the method
-                    tree.sym.flags_field &= ~Flags.FINAL;
-                    tree.mods.flags &= ~Flags.FINAL;
-
-                    // Clear the method body so that it becomes a no-op
-                    tree.body.stats = List.<JCTree.JCStatement>nil();
-                }
-            }
-        }
-
-        /**
          * Looks for the <tt>@Load</tt> and <tt>@Bind</tt> annotations on
          * member variable declarations. When found, it records pertinent
          * information in the current bind scope, to be used before we exit
