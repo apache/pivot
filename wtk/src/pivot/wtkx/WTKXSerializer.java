@@ -102,6 +102,8 @@ public class WTKXSerializer implements Serializer<Object> {
     private Object scriptEngineManager;
     private Class<?> scriptEngineManagerClass;
 
+    private static int tmpVariableCounter = 0;
+
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
     public static final char OBJECT_REFERENCE_PREFIX = '$';
@@ -655,8 +657,44 @@ public class WTKXSerializer implements Serializer<Object> {
             throw new IllegalArgumentException("inputStream is null.");
         }
 
-        // TODO
-        return null;
+        StringBuilder buf = new StringBuilder();
+        buf.append("pivot.collections.Dictionary<String, Object> namedObjects = " +
+            "new pivot.collections.HashMap<String, Object>();\n");
+
+        // Parse the XML stream
+        Element element = null;
+        try {
+            XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(inputStream);
+
+            while (reader.hasNext()) {
+                int event = reader.next();
+
+                // TODO
+                switch (event) {
+                case XMLStreamConstants.CHARACTERS: {
+                    break;
+                }
+
+                case XMLStreamConstants.START_ELEMENT: {
+                    break;
+                }
+
+                case XMLStreamConstants.END_ELEMENT: {
+                    break;
+                }
+                }
+            }
+
+            reader.close();
+        } catch(XMLStreamException exception) {
+            throw new SerializationException(exception);
+        }
+
+        // Clear the location so the previous value won't be re-used in a
+        // subsequent call to this method
+        location = null;
+
+        return buf.toString();
     }
 
     /**
