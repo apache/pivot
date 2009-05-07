@@ -33,6 +33,7 @@ import pivot.util.CalendarDate;
 import pivot.util.ThreadUtilities;
 import pivot.util.Vote;
 import pivot.wtk.Action;
+import pivot.wtk.ActivityIndicator;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
@@ -320,7 +321,23 @@ public class Demo extends Bindable implements Application {
         metersRollup.getRollupStateListeners().add(new RollupStateHandler("meters.wtkx") {
             @Override
             protected void initialize(WTKXSerializer wtkxSerializer) {
-                // No-op
+                final ActivityIndicator activityIndicator1 = wtkxSerializer.getObjectByName("activityIndicator1");
+                final ActivityIndicator activityIndicator2 = wtkxSerializer.getObjectByName("activityIndicator2");
+
+                metersRollup.getRollupStateListeners().add(new RollupStateListener() {
+                    public Vote previewExpandedChange(Rollup rollup) {
+                        return Vote.APPROVE;
+                    }
+
+                    public void expandedChangeVetoed(Rollup rollup, Vote reason) {
+                        // No-op
+                    }
+
+                    public void expandedChanged(Rollup rollup) {
+                        activityIndicator1.setActive(rollup.isExpanded());
+                        activityIndicator2.setActive(rollup.isExpanded());
+                    }
+                });
             }
         });
 

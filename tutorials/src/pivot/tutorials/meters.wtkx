@@ -18,26 +18,37 @@ limitations under the License.
 
 <Border xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
     <content>
-        <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
-            <FlowPane styles="{spacing:6}">
-                <Meter percentage="0.4"/>
-                <Label text="40%"/>
+        <FlowPane>
+            <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
+                <Label text="Meters" styles="{fontBold:true}"/>
+                <FlowPane styles="{spacing:6}">
+                    <Meter percentage="0.4"/>
+                    <Label text="40%"/>
+                </FlowPane>
+                <FlowPane styles="{spacing:6}">
+                    <Meter percentage="0.4" styles="{gridFrequency:0.1}"/>
+                    <Label text="40%"/>
+                </FlowPane>
+                <FlowPane styles="{spacing:6}">
+                    <Meter percentage="0.75"/>
+                    <Label text="75%"/>
+                </FlowPane>
+                <FlowPane styles="{spacing:6}">
+                    <Meter percentage="0.75" styles="{gridFrequency:0.1}"/>
+                    <Label text="75%"/>
+                </FlowPane>
+                <FlowPane styles="{spacing:6}">
+                    <Meter percentage="0.95" styles="{color:'#aa0000', gridColor:'#aaaaaa'}"/>
+                    <Label text="Danger: 95%!"/>
+                </FlowPane>
             </FlowPane>
-            <FlowPane styles="{spacing:6}">
-                <Meter percentage="0.4" styles="{gridFrequency:0.1}"/>
-                <Label text="40%"/>
-            </FlowPane>
-            <FlowPane styles="{spacing:6}">
-                <Meter percentage="0.75"/>
-                <Label text="75%"/>
-            </FlowPane>
-            <FlowPane styles="{spacing:6}">
-                <Meter percentage="0.75" styles="{gridFrequency:0.1}"/>
-                <Label text="75%"/>
-            </FlowPane>
-            <FlowPane styles="{spacing:6}">
-                <Meter percentage="0.95" styles="{color:'#ff0000', gridColor:'#000000'}"/>
-                <Label text="Danger: 95%!"/>
+
+            <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
+                <Label text="Activity Indicators" styles="{fontBold:true}"/>
+                <ActivityIndicator wtkx:id="activityIndicator1"
+                    preferredWidth="32" preferredHeight="32"/>
+                <ActivityIndicator wtkx:id="activityIndicator2" styles="{color:16}"
+                    preferredWidth="64" preferredHeight="64"/>
             </FlowPane>
         </FlowPane>
     </content>

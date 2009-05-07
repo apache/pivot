@@ -65,7 +65,7 @@ limitations under the License.
                             </Rollup>
                             <Rollup wtkx:id="metersRollup">
                                 <heading>
-                                    <Label text="Meters" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                    <Label text="Meters &amp; Activity Indicators" styles="{fontBold:true, fontSize:12, color:13}"/>
                                 </heading>
                             </Rollup>
                             <Rollup wtkx:id="spinnersRollup">
