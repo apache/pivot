@@ -593,6 +593,73 @@ public class WTKXSerializer implements Serializer<Object> {
     }
 
     /**
+     * Interprets an object from the specified WTKX resource.
+     * <p>
+     * The name of a resource is a '/'-separated path name that identifies the
+     * resource. See {@link ClassLoader#getResource(String)} for more details.
+     *
+     * @param resourceName
+     * The resource name
+     *
+     * @return
+     * The interpreted Java source code
+     */
+    public String interpretObject(String resourceName) throws IOException,
+        SerializationException {
+        if (resourceName == null) {
+            throw new IllegalArgumentException("resourceName is null.");
+        }
+
+        ClassLoader classLoader = ThreadUtilities.getClassLoader();
+        URL location = classLoader.getResource(resourceName);
+
+        if (location == null) {
+            throw new SerializationException("Could not find resource named \""
+                + resourceName + "\".");
+        }
+
+        return interpretObject(location);
+    }
+
+    /**
+     * Interprets an object from a URL that points to a WTKX resource.
+     *
+     * @param location
+     * The location of the resource to be interpreted
+     *
+     * @return
+     * The interpreted Java source code
+     */
+    public String interpretObject(URL location) throws IOException,
+        SerializationException {
+        if (location == null) {
+            throw new IllegalArgumentException("location is null.");
+        }
+
+        this.location = location;
+        return interpretObject(new BufferedInputStream(location.openStream()));
+    }
+
+    /**
+     * Interprets an object from a WTKX input stream.
+     *
+     * @param inputStream
+     * The data stream from which the object will be interpreted
+     *
+     * @return
+     * The interpreted Java source code
+     */
+    public String interpretObject(InputStream inputStream) throws IOException,
+        SerializationException {
+        if (inputStream == null) {
+            throw new IllegalArgumentException("inputStream is null.");
+        }
+
+        // TODO
+        return null;
+    }
+
+    /**
      * Retrieves a included serializer by its namespace.
      *
      * @param name

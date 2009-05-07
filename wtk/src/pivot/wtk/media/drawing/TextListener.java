@@ -54,7 +54,7 @@ public interface TextListener {
      * Called when a text shape's horizontal alignment has changed.
      *
      * @param text
-     * @param previousHorizontalAlignment
+     * @param previousAlignment
      */
     public void alignmentChanged(Text text, HorizontalAlignment previousAlignment);
 }
