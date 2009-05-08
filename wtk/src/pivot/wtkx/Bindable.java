@@ -71,28 +71,32 @@ public abstract class Bindable {
      */
     @BindMethodProcessor.BindMethod
     protected final void bind() throws BindException {
+        ArrayList<Class<?>> typeHierarchy = new ArrayList<Class<?>>();
+        Class<?> type = getClass();
+        while (type != Bindable.class) {
+            typeHierarchy.add(type);
+            type = type.getSuperclass();
+        }
+
         Method bindOverload = null;
-        try {
-            bindOverload = getClass().getDeclaredMethod(BindMethodProcessor.BIND_OVERLOAD_NAME,
-                new Class<?>[] {Map.class});
-        } catch(NoSuchMethodException exception) {
-            // No-op
+        for (int i = typeHierarchy.getLength() - 2; i >= 0; i--) {
+            type = typeHierarchy.get(i);
+            try {
+                bindOverload = type.getDeclaredMethod(BindMethodProcessor.BIND_OVERLOAD_NAME,
+                    new Class<?>[] {Map.class});
+                break;
+            } catch(NoSuchMethodException exception) {
+                // No-op
+            }
         }
 
         if (bindOverload == null) {
-            // Walk fields and resolve annotations
-            ArrayList<Class<?>> typeHierarchy = new ArrayList<Class<?>>();
-            Class<?> type = getClass();
-            while (type != Bindable.class) {
-                typeHierarchy.add(type);
-                type = type.getSuperclass();
-            }
-
             // Maps field name to the serializer that loaded the property; public
             // and protected serializers are retained for sub-types, but private
             // serializers are removed at the end of the block
             HashMap<String, WTKXSerializer> wtkxSerializers = new HashMap<String, WTKXSerializer>();
 
+            // Walk fields and resolve annotations
             for (int i = typeHierarchy.getLength() - 1; i >= 0; i--) {
                 type = typeHierarchy.get(i);
                 Field[] fields = type.getDeclaredFields();
@@ -231,11 +235,20 @@ public abstract class Bindable {
                 }
             }
         } else {
+            Method baseOverload = null;
+            try {
+                baseOverload = Bindable.class.getDeclaredMethod(BindMethodProcessor.BIND_OVERLOAD_NAME,
+                    new Class<?>[] {Map.class});
+            } catch(NoSuchMethodException exception) {
+                // If bindOverload is non-null, the base overload must be there
+                throw new BindException(exception);
+            }
+
             // Invoke the bind overload
             HashMap<String, WTKXSerializer> namedSerializers = new HashMap<String, WTKXSerializer>();
 
             try {
-                bindOverload.invoke(this, new Object[] {namedSerializers});
+                baseOverload.invoke(this, new Object[] {namedSerializers});
             } catch(IllegalAccessException exception) {
                 throw new BindException(exception);
             } catch(InvocationTargetException exception) {
