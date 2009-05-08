@@ -55,10 +55,10 @@ public class Dialog extends Frame {
         private static final float GOLDEN_SECTION = 0.382f;
 
         public void run() {
-            Window owner = getOwner();
+            Component owner = getOwner();
 
             if (owner == null) {
-                throw new IllegalStateException("Dialog has no owner.");
+                owner = getDisplay();
             }
 
             int deltaWidth = owner.getWidth() - getWidth();
@@ -116,6 +116,8 @@ public class Dialog extends Frame {
         if (isOpen()) {
             this.dialogCloseListener = dialogCloseListener;
             this.modal = false;
+
+            ApplicationContext.queueCallback(new RepositionCallback());
         }
     }
 
@@ -198,9 +200,6 @@ public class Dialog extends Frame {
                 // and make it the active window
                 setEnabled(true);
                 setActiveWindow(this);
-
-                // Align the dialog with its owner
-                ApplicationContext.queueCallback(new RepositionCallback());
             }
         }
     }

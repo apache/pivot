@@ -27,10 +27,12 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import pivot.collections.ArrayList;
 import pivot.collections.HashMap;
 import pivot.collections.immutable.ImmutableMap;
 import pivot.wtk.media.Image;
 import pivot.wtk.media.Picture;
+import pivot.wtkx.WTKXSerializer;
 
 /**
  * Application context used to execute applications in a native frame
@@ -51,6 +53,44 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             // Clear the background
             setBackground(null);
+
+            // Hook into OSX application menu
+            if (System.getProperty("mrj.version") != null) {
+                new com.apple.eawt.Application() {
+                    {   addApplicationListener(new com.apple.eawt.ApplicationAdapter() {
+                            @Override
+                            public void handleAbout(com.apple.eawt.ApplicationEvent event) {
+                                // TODO i18n
+                                Display display = applicationContext.getDisplay();
+
+                                ArrayList<String> options = new ArrayList<String>();
+                                options.add("OK");
+
+                                Component body;
+                                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                                try {
+                                    body = (Component)wtkxSerializer.readObject(getClass().getResource("about.wtkx"));
+                                } catch(Exception exception) {
+                                    throw new RuntimeException(exception);
+                                }
+
+                                Alert alert = new Alert(MessageType.INFO, "About Apache Pivot", options, body);
+                                alert.setTitle("About");
+                                alert.setSelectedOption(0);
+
+                                alert.open(display);
+
+                                event.setHandled(true);
+                            }
+
+                            @Override
+                            public void handleQuit(com.apple.eawt.ApplicationEvent event) {
+                                exit();
+                            }
+                        });
+                    }
+                };
+            }
         }
 
         @Override
@@ -86,28 +126,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     }
 
                     case WindowEvent.WINDOW_CLOSING: {
-                        boolean shutdown = true;
-
-                        try {
-                            shutdown = application.shutdown(true);
-                        } catch(Exception exception) {
-                            exception.printStackTrace();
-                            Alert.alert(MessageType.ERROR, exception.getMessage(),
-                                applicationContext.getDisplay());
-                        }
-
-                        if (shutdown) {
-                            destroyTimer();
-
-                            java.awt.Window window = event.getWindow();
-                            window.setVisible(false);
-                            window.dispose();
-                        }
-
-                        break;
-                    }
-
-                    case WindowEvent.WINDOW_CLOSED: {
                         exit();
                         break;
                     }
@@ -176,7 +194,22 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * Terminates the application context.
      */
     public static void exit() {
-        System.exit(0);
+        boolean shutdown = true;
+
+        try {
+            shutdown = application.shutdown(true);
+        } catch(Exception exception) {
+            exception.printStackTrace();
+            Alert.alert(MessageType.ERROR, exception.getMessage(),
+                applicationContext.getDisplay());
+        }
+
+        if (shutdown) {
+            destroyTimer();
+            windowedHostFrame.dispose();
+            fullScreenHostFrame.dispose();
+            System.exit(0);
+        }
     }
 
     public static void main(String[] args) {
