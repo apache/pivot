@@ -23,7 +23,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -56,24 +58,45 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             // Hook into OSX application menu
             if (System.getProperty("mrj.version") != null) {
-                /*
-                new com.apple.eawt.Application() {
-                    {   addApplicationListener(new com.apple.eawt.ApplicationAdapter() {
-                            @Override
-                            public void handleAbout(com.apple.eawt.ApplicationEvent event) {
+                try {
+                    // Get the EAWT classes and methods
+                    Class<?> eawtApplicationClass = Class.forName("com.apple.eawt.Application");
+                    Class<?> eawtApplicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
+                    Class<?> eawtApplicationEventClass = Class.forName("com.apple.eawt.ApplicationEvent");
+
+                    Method addApplicationListenerMethod = eawtApplicationClass.getMethod("addApplicationListener",
+                        new Class<?>[] {eawtApplicationListenerClass});
+
+                    final Method setHandledMethod = eawtApplicationEventClass.getMethod("setHandled",
+                        new Class<?>[] {Boolean.TYPE});
+
+                    // Create the proxy handler
+                    InvocationHandler handler = new InvocationHandler() {
+                        public Object invoke(Object proxy, Method method, Object[] args)
+                            throws Throwable {
+                            String methodName = method.getName();
+                            if (methodName.equals("handleAbout"))  {
                                 showAboutDialog();
-                                event.setHandled(true);
+                            } else if (methodName.equals("handleQuit")) {
+                                exit();
                             }
 
-                            @Override
-                            public void handleQuit(com.apple.eawt.ApplicationEvent event) {
-                                exit();
-                                event.setHandled(true);
-                            }
-                        });
-                    }
-                };
-                */
+                            // Invoke setHandled(true)
+                            setHandledMethod.invoke(args[0], new Object[] {true});
+
+                            return null;
+                        }
+                    };
+
+                    Object eawtApplication = eawtApplicationClass.newInstance();
+                    Object eawtApplicationListener = Proxy.newProxyInstance(getClass().getClassLoader(),
+                        new Class[]{eawtApplicationListenerClass}, handler);
+
+                    // Invoke the addApplicationListener() method with the proxy listener
+                    addApplicationListenerMethod.invoke(eawtApplication, new Object[] {eawtApplicationListener});
+                } catch(Exception exception) {
+                    System.err.println(exception);
+                }
             }
         }
 
