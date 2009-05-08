@@ -79,7 +79,7 @@ public abstract class Bindable {
         }
 
         Method bindOverload = null;
-        for (int i = typeHierarchy.getLength() - 2; i >= 0; i--) {
+        for (int i = 0, n = typeHierarchy.getLength(); i < n; i++) {
             type = typeHierarchy.get(i);
             try {
                 bindOverload = type.getDeclaredMethod(BindMethodProcessor.BIND_OVERLOAD_NAME,

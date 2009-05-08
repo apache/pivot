@@ -31,8 +31,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 
-import pivot.collections.ArrayStack;
-
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.parser.Parser;
 import com.sun.tools.javac.parser.Scanner;
