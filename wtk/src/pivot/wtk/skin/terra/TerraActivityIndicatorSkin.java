@@ -35,7 +35,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
 
     public TerraActivityIndicatorSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setColor(theme.getColor(7));
+        setColor(theme.getColor(2));
         backgroundColor = null;
     }
 
@@ -80,7 +80,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
 
             for (int i = 0; i < 12; i++) {
                 graphics.setColor(colors[i]);
-                graphics.fillRect(32, -4, 32, 8);
+                graphics.fillRoundRect(24, -4, 32, 8, 8, 8);
 
                 graphics.rotate(increment);
             }

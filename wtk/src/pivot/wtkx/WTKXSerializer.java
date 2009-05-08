@@ -875,7 +875,7 @@ public class WTKXSerializer implements Serializer<Object> {
                             resolvedValue = attributeValue.substring(1);
                         } else {
                             if (resources == null) {
-                                throw new IllegalStateException("Resource dictionary is undefined.");
+                                throw new IllegalStateException("Resources is null.");
                             }
 
                             resolvedValue = resources.get(attributeValue.substring(1));

@@ -38,6 +38,7 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.Container;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Form;
 import pivot.wtk.Keyboard;
@@ -199,7 +200,10 @@ public class StockTracker extends Bindable implements Application {
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -341,5 +345,9 @@ public class StockTracker extends Bindable implements Application {
         if (selectedIndex == -1) {
             refreshDetail();
         }
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(StockTracker.class, args);
     }
 }

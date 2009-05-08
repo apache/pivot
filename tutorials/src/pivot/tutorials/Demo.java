@@ -328,6 +328,7 @@ public class Demo extends Bindable implements Application, Application.About {
             @Load(name="meters.wtkx") private Component component;
             @Bind(property="component") private ActivityIndicator activityIndicator1;
             @Bind(property="component") private ActivityIndicator activityIndicator2;
+            @Bind(property="component") private ActivityIndicator activityIndicator3;
 
             public Vote previewExpandedChange(Rollup rollup) {
                 if (component == null) {
@@ -346,6 +347,7 @@ public class Demo extends Bindable implements Application, Application.About {
                         public void expandedChanged(Rollup rollup) {
                             activityIndicator1.setActive(rollup.isExpanded());
                             activityIndicator2.setActive(rollup.isExpanded());
+                            activityIndicator3.setActive(rollup.isExpanded());
                         }
                     });
 }
