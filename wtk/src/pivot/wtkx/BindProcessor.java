@@ -279,16 +279,17 @@ public class BindProcessor extends AbstractProcessor {
                             }
                         }
 
+                        // Attempt to load the resources
+                        sourceCode.append("resources = null;");
                         if (baseName != null) {
-                            // Attempt to load the resources
                             if (language == null) {
                                 sourceCode.append("locale = java.util.Locale.getDefault();");
                             } else {
                                 sourceCode.append(String.format("locale = new java.util.Locale(\"%s\");", language));
                             }
-                            sourceCode.append("resources = null;");
                             sourceCode.append("try {");
-                            sourceCode.append(String.format("resources = new pivot.util.Resources(\"%s\", locale, \"UTF8\");", baseName));
+                            sourceCode.append(String.format("resources = new pivot.util.Resources(%s, locale, \"UTF8\");",
+                                defaultResources ? (baseName + ".class.getName()") : ("\"" + baseName + "\"")));
                             sourceCode.append("} catch(java.io.IOException ex) {");
                             sourceCode.append("throw new pivot.wtkx.BindException(ex);");
                             sourceCode.append("} catch (pivot.serialization.SerializationException ex) {");
@@ -301,11 +302,7 @@ public class BindProcessor extends AbstractProcessor {
                         }
 
                         // Load the WTKX resource
-                        if (baseName == null) {
-                            sourceCode.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer();");
-                        } else {
-                            sourceCode.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer(resources);");
-                        }
+                        sourceCode.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer(resources);");
                         sourceCode.append(String.format("location = getClass().getResource(\"%s\");", resourceName));
                         sourceCode.append("try {");
                         sourceCode.append("object = wtkxSerializer.readObject(location);");
