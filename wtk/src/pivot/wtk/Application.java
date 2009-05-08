@@ -25,6 +25,20 @@ import pivot.collections.Dictionary;
  */
 public interface Application {
     /**
+     * Optional interface that allows an application to present information
+     * about itself.
+     *
+     * @author gbrown
+     */
+    public interface About {
+        /**
+         * Called to notify the application that it should present it's
+         * "about" information.
+         */
+        public void handleAbout();
+    }
+
+    /**
      * Called when the application is starting up.
      *
      * @param display

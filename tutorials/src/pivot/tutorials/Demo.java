@@ -84,7 +84,7 @@ import pivot.wtk.text.PlainTextSerializer;
 import pivot.wtkx.Bindable;
 import pivot.wtkx.WTKXSerializer;
 
-public class Demo extends Bindable implements Application {
+public class Demo extends Bindable implements Application, Application.About {
     private abstract class RollupStateHandler extends Bindable
         implements RollupStateListener {
         public void expandedChangeVetoed(Rollup rollup, Vote reason) {
@@ -315,10 +315,7 @@ public class Demo extends Bindable implements Application {
 
                     helpAboutMenuItem.getButtonPressListeners().add(new ButtonPressListener() {
                         public void buttonPressed(Button button) {
-                            String about = "Origin: " + ApplicationContext.getOrigin()
-                                + "; JVM version: " + ApplicationContext.getJVMVersion();
-
-                            Prompt.prompt(about, window);
+                            handleAbout();
                         }
                     });
                 }
@@ -728,9 +725,16 @@ public class Demo extends Bindable implements Application {
         return true;
     }
 
-    public void suspend() throws Exception {
+    public void suspend() {
     }
 
-    public void resume() throws Exception {
+    public void resume() {
+    }
+
+    public void handleAbout() {
+        String about = "Origin: " + ApplicationContext.getOrigin()
+            + "; JVM version: " + ApplicationContext.getJVMVersion();
+
+        Prompt.prompt(about, window);
     }
 }

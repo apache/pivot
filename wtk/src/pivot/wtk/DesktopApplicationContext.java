@@ -29,12 +29,10 @@ import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import pivot.collections.ArrayList;
 import pivot.collections.HashMap;
 import pivot.collections.immutable.ImmutableMap;
 import pivot.wtk.media.Image;
 import pivot.wtk.media.Picture;
-import pivot.wtkx.WTKXSerializer;
 
 /**
  * Application context used to execute applications in a native frame
@@ -55,49 +53,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             // Clear the background
             setBackground(null);
-
-            // Hook into OSX application menu
-            if (System.getProperty("mrj.version") != null) {
-                try {
-                    // Get the EAWT classes and methods
-                    Class<?> eawtApplicationClass = Class.forName("com.apple.eawt.Application");
-                    Class<?> eawtApplicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
-                    Class<?> eawtApplicationEventClass = Class.forName("com.apple.eawt.ApplicationEvent");
-
-                    Method addApplicationListenerMethod = eawtApplicationClass.getMethod("addApplicationListener",
-                        new Class<?>[] {eawtApplicationListenerClass});
-
-                    final Method setHandledMethod = eawtApplicationEventClass.getMethod("setHandled",
-                        new Class<?>[] {Boolean.TYPE});
-
-                    // Create the proxy handler
-                    InvocationHandler handler = new InvocationHandler() {
-                        public Object invoke(Object proxy, Method method, Object[] args)
-                            throws Throwable {
-                            String methodName = method.getName();
-                            if (methodName.equals("handleAbout"))  {
-                                showAboutDialog();
-                            } else if (methodName.equals("handleQuit")) {
-                                exit();
-                            }
-
-                            // Invoke setHandled(true)
-                            setHandledMethod.invoke(args[0], new Object[] {true});
-
-                            return null;
-                        }
-                    };
-
-                    Object eawtApplication = eawtApplicationClass.newInstance();
-                    Object eawtApplicationListener = Proxy.newProxyInstance(getClass().getClassLoader(),
-                        new Class[]{eawtApplicationListenerClass}, handler);
-
-                    // Invoke the addApplicationListener() method with the proxy listener
-                    addApplicationListenerMethod.invoke(eawtApplication, new Object[] {eawtApplicationListener});
-                } catch(Exception exception) {
-                    System.err.println(exception);
-                }
-            }
         }
 
         @Override
@@ -181,16 +136,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static HostFrame windowedHostFrame = null;
     private static HostFrame fullScreenHostFrame = null;
 
-    private static Alert aboutDialog = null;
-
-    private static int x = 0;
-    private static int y = 0;
-    private static int width = 800;
-    private static int height = 600;
-    private static boolean center = false;
-    private static boolean resizable = true;
-
-    private static final String DEFAULT_HOST_FRAME_TITLE = "Pivot"; // TODO i18n
+    private static final String DEFAULT_HOST_FRAME_TITLE = "Pivot";
 
     private static final String X_ARGUMENT = "x";
     private static final String Y_ARGUMENT = "y";
@@ -198,6 +144,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static final String HEIGHT_ARGUMENT = "height";
     private static final String CENTER_ARGUMENT = "center";
     private static final String RESIZABLE_ARGUMENT = "resizable";
+
+    private static final String FULL_SCREEN_ARGUMENT = "fullScreen";
 
     /**
      * Terminates the application context.
@@ -221,6 +169,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
     }
 
+    /**
+     * Primary aplication entry point.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         if (application != null) {
             throw new IllegalStateException();
@@ -229,6 +182,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
         // Get the application class name and startup properties
         String applicationClassName = null;
         properties = new HashMap<String, String>();
+
+        int x = 0;
+        int y = 0;
+        int width = 800;
+        int height = 600;
+        boolean center = false;
+        boolean resizable = true;
+        boolean fullScreen = false;
 
         for (int i = 0, n = args.length; i < n; i++) {
             String arg = args[i];
@@ -254,6 +215,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         center = Boolean.parseBoolean(value);
                     } else if (key.equals(RESIZABLE_ARGUMENT)) {
                         resizable = Boolean.parseBoolean(value);
+                    } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
+                        fullScreen = Boolean.parseBoolean(value);
                     } else {
                         properties.put(key, value);
                     }
@@ -310,7 +273,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
         }
 
-        final DisplayHost displayHost = applicationContext.getDisplayHost();
+        DisplayHost displayHost = applicationContext.getDisplayHost();
 
         // Create the windowed host frame
         windowedHostFrame = new HostFrame();
@@ -335,31 +298,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_F
                     && (keyEvent.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) > 0
                     && (keyEvent.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) > 0) {
-                    GraphicsDevice graphicsDevice =
-                        windowedHostFrame.getGraphicsConfiguration().getDevice();
-
-                    if (windowedHostFrame.isVisible()) {
-                        // Go to full screen mode
-                        windowedHostFrame.remove(displayHost);
-                        windowedHostFrame.setVisible(false);
-
-                        fullScreenHostFrame.add(displayHost);
-                        fullScreenHostFrame.setVisible(true);
-
-                        graphicsDevice.setFullScreenWindow(fullScreenHostFrame);
-
-                    } else {
-                        // Go to windowed mode
-                        graphicsDevice.setFullScreenWindow(null);
-
-                        fullScreenHostFrame.remove(displayHost);
-                        fullScreenHostFrame.setVisible(false);
-
-                        windowedHostFrame.add(displayHost);
-                        windowedHostFrame.setVisible(true);
-                    }
-
-                    displayHost.requestFocus();
+                    setFullScreen(!isFullScreen());
                 }
             }
         });
@@ -367,6 +306,57 @@ public final class DesktopApplicationContext extends ApplicationContext {
         // Create the full-screen host frame
         fullScreenHostFrame = new HostFrame();
         fullScreenHostFrame.setUndecorated(true);
+
+        // Hook into OSX application menu
+        if (System.getProperty("mrj.version") != null) {
+            try {
+                // Get the EAWT classes and methods
+                Class<?> eawtApplicationClass = Class.forName("com.apple.eawt.Application");
+                Class<?> eawtApplicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
+                Class<?> eawtApplicationEventClass = Class.forName("com.apple.eawt.ApplicationEvent");
+
+                Method setEnabledAboutMenuMethod = eawtApplicationClass.getMethod("setEnabledAboutMenu",
+                    new Class<?>[] {Boolean.TYPE});
+
+                Method addApplicationListenerMethod = eawtApplicationClass.getMethod("addApplicationListener",
+                    new Class<?>[] {eawtApplicationListenerClass});
+
+                final Method setHandledMethod = eawtApplicationEventClass.getMethod("setHandled",
+                    new Class<?>[] {Boolean.TYPE});
+
+                // Create the proxy handler
+                InvocationHandler handler = new InvocationHandler() {
+                    public Object invoke(Object proxy, Method method, Object[] args)
+                        throws Throwable {
+                        String methodName = method.getName();
+                        if (methodName.equals("handleAbout"))  {
+                            handleAbout();
+                        } else if (methodName.equals("handleQuit")) {
+                            exit();
+                        }
+
+                        // Invoke setHandled(true)
+                        setHandledMethod.invoke(args[0], new Object[] {true});
+
+                        return null;
+                    }
+                };
+
+                Object eawtApplication = eawtApplicationClass.newInstance();
+
+                setEnabledAboutMenuMethod.invoke(eawtApplication,
+                    application instanceof Application.About);
+
+                Object eawtApplicationListener =
+                    Proxy.newProxyInstance(DesktopApplicationContext.class.getClassLoader(),
+                        new Class[]{eawtApplicationListenerClass}, handler);
+
+                // Invoke the addApplicationListener() method with the proxy listener
+                addApplicationListenerMethod.invoke(eawtApplication, new Object[] {eawtApplicationListener});
+            } catch(Exception exception) {
+                System.err.println(exception);
+            }
+        }
 
         // Open the windowed host
         windowedHostFrame.setVisible(true);
@@ -393,6 +383,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 });
             }
         });
+
+        // Go to full-screen mode, if requested
+        setFullScreen(fullScreen);
     }
 
     /**
@@ -410,7 +403,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * @param applicationClass
      * @param applicationArgs
      */
-    public static void main(Class<? extends Application> applicationClass,
+    public static final void main(Class<? extends Application> applicationClass,
         String[] applicationArgs) {
         String[] args = new String[applicationArgs.length + 1];
         System.arraycopy(applicationArgs, 0, args, 1, applicationArgs.length);
@@ -419,37 +412,57 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     /**
-     * Shows the platform "About" dialog.
+     * Invokes the application's about handler. The application must implement
+     * the {@link Application.About} interface.
      */
-    public static void showAboutDialog() {
-        if (aboutDialog == null) {
-            Display display = applicationContext.getDisplay();
+    public static void handleAbout() {
+        assert (application instanceof Application.About);
 
-            ArrayList<String> options = new ArrayList<String>();
-            options.add("OK");
+        Application.About aboutApplication = (Application.About)application;
+        aboutApplication.handleAbout();
+    }
 
-            Component body;
-            WTKXSerializer wtkxSerializer = new WTKXSerializer();
-            try {
-                // TODO i18n
-                body = (Component)wtkxSerializer.readObject(DesktopApplicationContext.class.getResource("about.wtkx"));
-            } catch(Exception exception) {
-                throw new RuntimeException(exception);
+    /**
+     * Returns the full-screen mode flag.
+     */
+    public static boolean isFullScreen() {
+        return (!windowedHostFrame.isVisible());
+    }
+
+    /**
+     * Sets the full-screen mode flag.
+     *
+     * @param fullScreen
+     */
+    public static void setFullScreen(boolean fullScreen) {
+        if (fullScreen != isFullScreen()) {
+            DisplayHost displayHost = applicationContext.getDisplayHost();
+
+            GraphicsDevice graphicsDevice =
+                windowedHostFrame.getGraphicsConfiguration().getDevice();
+
+            if (fullScreen) {
+                // Go to full screen mode
+                windowedHostFrame.remove(displayHost);
+                windowedHostFrame.setVisible(false);
+
+                fullScreenHostFrame.add(displayHost);
+                fullScreenHostFrame.setVisible(true);
+
+                graphicsDevice.setFullScreenWindow(fullScreenHostFrame);
+
+            } else {
+                // Go to windowed mode
+                graphicsDevice.setFullScreenWindow(null);
+
+                fullScreenHostFrame.remove(displayHost);
+                fullScreenHostFrame.setVisible(false);
+
+                windowedHostFrame.add(displayHost);
+                windowedHostFrame.setVisible(true);
             }
 
-            // TODO i18n
-            aboutDialog = new Alert(MessageType.INFO, "About Apache Pivot", options, body);
-            aboutDialog.setTitle("About");
-            aboutDialog.setSelectedOption(0);
-
-            aboutDialog.getWindowStateListeners().add(new WindowStateListener.Adapter() {
-                @Override
-                public void windowClosed(Window window, Display previousDisplay) {
-                    aboutDialog = null;
-                }
-            });
-
-            aboutDialog.open(display);
+            displayHost.requestFocus();
         }
     }
 }
