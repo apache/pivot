@@ -38,7 +38,7 @@ import pivot.collections.ArrayStack;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.parser.Parser;
 import com.sun.tools.javac.parser.Scanner;
-import com.sun.tools.javac.tree.JCTree;
+import com.sun.tools.javac.tree.JCTree.*;
 import com.sun.tools.javac.tree.TreeTranslator;
 import com.sun.tools.javac.util.Context;
 import com.sun.source.util.Trees;
@@ -46,14 +46,11 @@ import com.sun.source.util.Trees;
 /**
  * Annotation processor that re-writes the base {@link Bindable#bind()}
  * implementation such that it calls into a newly defined <tt>protected
- * void bind(Map)</tt> method, thus paving the way for {@link BindProcessor} to
- * process subclasses of <tt>Bindable</tt>.
+ * void __bind(Map)</tt> method, thus paving the way for {@link BindProcessor}
+ * to process subclasses of <tt>Bindable</tt>.
  * <p>
- * Note that this class works in close tandem with <tt>BindProcessor</tt> in
- * that they share a mutual contract. They are distinct because this processor
- * lives in the same sub-project that it must process, meaning that it gets
- * compiled separately, before any other classes in its project. However,
- * changes to one class should be coordinated with changes to the other.
+ * Note that this class works in close tandem with <tt>BindProcessor</tt> and
+ * <tt>Bindable</tt> in that they share a mutual contract.
  *
  * @author tvolkert
  */
@@ -71,23 +68,25 @@ public class BindMethodProcessor extends AbstractProcessor {
     static @interface BindMethod {
     }
 
+    static final String BIND_OVERLOAD_NAME = "__bind";
+
     /**
-     * This actually does the work of bind method re-writing.
+     * This actually does the work of overloaded bind method injection.
      *
      * @author tvolkert
      */
-    private class BindMethodRewriter extends TreeTranslator {
+    private class BindOverloadInjector extends TreeTranslator {
         private ArrayStack<Boolean> stack = new ArrayStack<Boolean>();
 
         /**
-         * Adds a bind overload signature (<tt>protected void bind(Map)</tt>)
+         * Adds a bind overload signature (<tt>protected void __bind(Map)</tt>)
          * to the class containing the base bind implementation.
          *
          * @param classDeclaration
          * The AST class declaration node
          */
         @Override
-        public void visitClassDef(JCTree.JCClassDecl classDeclaration) {
+        public void visitClassDef(JCClassDecl classDeclaration) {
             stack.push(false);
             super.visitClassDef(classDeclaration);
             boolean addOverload = stack.pop();
@@ -96,15 +95,17 @@ public class BindMethodProcessor extends AbstractProcessor {
                 // Create source code containing out bind overload
                 StringBuilder sourceCode = new StringBuilder();
                 sourceCode.append("class _A {");
-                sourceCode.append("protected void __bind__(pivot.collections.Map<String,pivot.wtkx.WTKXSerializer> m) {}");
+                sourceCode.append("protected void ");
+                sourceCode.append(BIND_OVERLOAD_NAME);
+                sourceCode.append("(pivot.collections.Map<String,pivot.wtkx.WTKXSerializer> m) {}");
                 sourceCode.append("}");
 
                 // Parse the source code and extract the method declaration
                 Scanner scanner = scannerFactory.newScanner(sourceCode.toString());
                 Parser parser = parserFactory.newParser(scanner, false, false);
-                JCTree.JCCompilationUnit parsedCompilationUnit = parser.compilationUnit();
-                JCTree.JCClassDecl parsedClassDeclaration = (JCTree.JCClassDecl)parsedCompilationUnit.defs.head;
-                JCTree.JCMethodDecl parsedMethodDeclaration = (JCTree.JCMethodDecl)parsedClassDeclaration.defs.head;
+                JCCompilationUnit parsedCompilationUnit = parser.compilationUnit();
+                JCClassDecl parsedClassDeclaration = (JCClassDecl)parsedCompilationUnit.defs.head;
+                JCMethodDecl parsedMethodDeclaration = (JCMethodDecl)parsedClassDeclaration.defs.head;
 
                 // Add the AST method declaration to our class
                 classDeclaration.defs = classDeclaration.defs.prepend(parsedMethodDeclaration);
@@ -113,42 +114,19 @@ public class BindMethodProcessor extends AbstractProcessor {
 
         /**
          * Checks for the <tt>@BindMethod</tt> annotation on a method
-         * (signalling the base class' implementation). When found, this
-         * re-writes the method's body such that it calls into the
-         * <tt>bind(Map)</tt> overload (which will be defined in
-         * <tt>visitClassDef</tt>), thus clearing the way for us to override
-         * <tt>bind(Map)</tt> in bindable subclasses with inline
-         * WTKX binding implementations.
+         * (signalling the base class' implementation), and marks the current
+         * stack frame when it finds the annotation.
          *
          * @param methodDeclaration
          * The AST method declaration node
          */
         @Override
-        public void visitMethodDef(JCTree.JCMethodDecl methodDeclaration) {
+        public void visitMethodDef(JCMethodDecl methodDeclaration) {
             super.visitMethodDef(methodDeclaration);
 
             Element methodElement = methodDeclaration.sym;
             if (methodElement != null) {
-                BindMethod bindMethod = methodElement.getAnnotation(BindMethod.class);
-
-                if (bindMethod != null) {
-                    // Generate the re-written source code for bind()
-                    StringBuilder sourceCode = new StringBuilder("{");
-                    sourceCode.append("pivot.collections.HashMap<String,pivot.wtkx.WTKXSerializer> m = ");
-                    sourceCode.append("new pivot.collections.HashMap<String,pivot.wtkx.WTKXSerializer>();");
-                    sourceCode.append("__bind__(m);");
-                    sourceCode.append("}");
-
-                    // Parse the source code into a AST block
-                    Scanner scanner = scannerFactory.newScanner(sourceCode.toString());
-                    Parser parser = parserFactory.newParser(scanner, false, false);
-                    JCTree.JCBlock parsedMethodBody = parser.block();
-
-                    // Set the AST block as the body of the bind() method
-                    methodDeclaration.body = parsedMethodBody;
-
-                    // Notify the stack that this is the correct level to add
-                    // our bind overload
+                if (methodElement.getAnnotation(BindMethod.class) != null) {
                     stack.poke(true);
                 }
             }
@@ -159,7 +137,7 @@ public class BindMethodProcessor extends AbstractProcessor {
     private Context context;
     private Scanner.Factory scannerFactory;
     private Parser.Factory parserFactory;
-    private BindMethodRewriter bindMethodRewriter = new BindMethodRewriter();
+    private BindOverloadInjector bindOverloadInjector = new BindOverloadInjector();
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
@@ -191,9 +169,9 @@ public class BindMethodProcessor extends AbstractProcessor {
             }
 
             for (Element classElement : classElements) {
-                // Visit the AST class node with our BindMethodRewriter visitor
-                JCTree tree = (JCTree)trees.getTree(classElement);
-                tree.accept(bindMethodRewriter);
+                // Visit the AST class node with our BindOverloadInjector visitor
+                JCClassDecl classDeclaration = (JCClassDecl)trees.getTree(classElement);
+                classDeclaration.accept(bindOverloadInjector);
             }
         }
 

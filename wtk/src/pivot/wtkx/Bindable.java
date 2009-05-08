@@ -73,7 +73,8 @@ public abstract class Bindable {
     protected final void bind() throws BindException {
         Method bindOverload = null;
         try {
-            bindOverload = getClass().getDeclaredMethod("__bind__", new Class<?>[] {Map.class});
+            bindOverload = getClass().getDeclaredMethod(BindMethodProcessor.BIND_OVERLOAD_NAME,
+                new Class<?>[] {Map.class});
         } catch(NoSuchMethodException exception) {
             // No-op
         }

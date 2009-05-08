@@ -16,8 +16,6 @@
  */
 package pivot.wtkx;
 
-import java.util.Set;
-
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -45,7 +43,7 @@ import com.sun.tools.javac.util.Context;
 import com.sun.source.util.Trees;
 
 /**
- * Annotation processor that injects <tt>__bind__(Map)</tt> overrides into
+ * Annotation processor that injects overridden bind overload methods into
  * classes that use the <tt>@Load</tt> and <tt>@Bind</tt> annotations to
  * perform WTKX loading and binding.
  *
@@ -105,7 +103,7 @@ public class BindProcessor extends AbstractProcessor {
          * list. After <tt>reconcile</tt> has been called, any bind fields that
          * remain in the stranded list are assumed to be bound to
          * <tt>public</tt> or <tt>protected</tt> load fields in a superclass.
-         * It is up to the <tt>__bind__</tt> method to handle these stranded
+         * It is up to the overload method to handle these stranded
          * bind fields correctly.
          */
         public List<JCVariableDecl> getStrandedBindFields() {
@@ -218,7 +216,7 @@ public class BindProcessor extends AbstractProcessor {
         private ArrayStack<AnnotationDossier> stack = new ArrayStack<AnnotationDossier>();
 
         /**
-         * Injects an override implementation of the <tt>__bind__(Map)</tt>
+         * Injects an override implementation of the overloaded bind
          * method into the specified class if any member variables are found to
          * be annotated with the <tt>@Load</tt> or <tt>@Bind</tt> annotations.
          *
@@ -245,8 +243,12 @@ public class BindProcessor extends AbstractProcessor {
                 // creating the source code buffer
                 StringBuilder sourceCode = new StringBuilder("class _A {");
                 sourceCode.append("@Override ");
-                sourceCode.append("protected void __bind__(pivot.collections.Map<String,pivot.wtkx.WTKXSerializer> namedSerializers) {");
-                sourceCode.append("super.__bind__(namedSerializers);");
+                sourceCode.append("protected void ");
+                sourceCode.append(BindMethodProcessor.BIND_OVERLOAD_NAME);
+                sourceCode.append("(pivot.collections.Map<String,pivot.wtkx.WTKXSerializer> namedSerializers) {");
+                sourceCode.append("super.");
+                sourceCode.append(BindMethodProcessor.BIND_OVERLOAD_NAME);
+                sourceCode.append("(namedSerializers);");
 
                 // Local variable declarations
                 sourceCode.append("pivot.wtkx.WTKXSerializer wtkxSerializer;");
@@ -454,7 +456,7 @@ public class BindProcessor extends AbstractProcessor {
     }
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnvironment) {
+    public boolean process(java.util.Set<? extends TypeElement> annotations, RoundEnvironment roundEnvironment) {
         if (!roundEnvironment.processingOver()) {
             for (Element rootElement : roundEnvironment.getRootElements()) {
                 if (rootElement.getKind() == ElementKind.CLASS) {
