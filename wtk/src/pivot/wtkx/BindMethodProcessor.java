@@ -20,8 +20,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -39,7 +37,6 @@ import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.parser.Parser;
 import com.sun.tools.javac.parser.Scanner;
 import com.sun.tools.javac.tree.JCTree.*;
-import com.sun.tools.javac.tree.TreeTranslator;
 import com.sun.tools.javac.util.Context;
 import com.sun.source.util.Trees;
 
@@ -54,18 +51,17 @@ import com.sun.source.util.Trees;
  *
  * @author tvolkert
  */
-@SupportedAnnotationTypes("pivot.wtkx.BindMethodProcessor.BindMethod")
+@SupportedAnnotationTypes("pivot.wtkx.BindMethodProcessor.BindableClass")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class BindMethodProcessor extends AbstractProcessor {
     /**
-     * Flags the base implementation of the bind method. This cues the
-     * annotation processor to re-write the body of the method.
+     * Flags Bindable base class.
      *
      * @author tvolkert
      */
     @Retention(RetentionPolicy.SOURCE)
-    @Target(ElementType.METHOD)
-    static @interface BindMethod {
+    @Target(ElementType.TYPE)
+    static @interface BindableClass {
     }
 
     static final String BIND_OVERLOAD_NAME = "__bind";
@@ -75,9 +71,7 @@ public class BindMethodProcessor extends AbstractProcessor {
      *
      * @author tvolkert
      */
-    private class BindOverloadInjector extends TreeTranslator {
-        private ArrayStack<Boolean> stack = new ArrayStack<Boolean>();
-
+    private class BindOverloadInjector extends Visitor {
         /**
          * Adds a bind overload signature (<tt>protected void __bind(Map)</tt>)
          * to the class containing the base bind implementation.
@@ -87,49 +81,23 @@ public class BindMethodProcessor extends AbstractProcessor {
          */
         @Override
         public void visitClassDef(JCClassDecl classDeclaration) {
-            stack.push(false);
-            super.visitClassDef(classDeclaration);
-            boolean addOverload = stack.pop();
+            // Create source code containing out bind overload
+            StringBuilder sourceCode = new StringBuilder();
+            sourceCode.append("class _A {");
+            sourceCode.append("protected void ");
+            sourceCode.append(BIND_OVERLOAD_NAME);
+            sourceCode.append("(pivot.collections.Map<String,pivot.wtkx.WTKXSerializer> m) {}");
+            sourceCode.append("}");
 
-            if (addOverload) {
-                // Create source code containing out bind overload
-                StringBuilder sourceCode = new StringBuilder();
-                sourceCode.append("class _A {");
-                sourceCode.append("protected void ");
-                sourceCode.append(BIND_OVERLOAD_NAME);
-                sourceCode.append("(pivot.collections.Map<String,pivot.wtkx.WTKXSerializer> m) {}");
-                sourceCode.append("}");
+            // Parse the source code and extract the method declaration
+            Scanner scanner = scannerFactory.newScanner(sourceCode.toString());
+            Parser parser = parserFactory.newParser(scanner, false, false);
+            JCCompilationUnit parsedCompilationUnit = parser.compilationUnit();
+            JCClassDecl parsedClassDeclaration = (JCClassDecl)parsedCompilationUnit.defs.head;
+            JCMethodDecl parsedMethodDeclaration = (JCMethodDecl)parsedClassDeclaration.defs.head;
 
-                // Parse the source code and extract the method declaration
-                Scanner scanner = scannerFactory.newScanner(sourceCode.toString());
-                Parser parser = parserFactory.newParser(scanner, false, false);
-                JCCompilationUnit parsedCompilationUnit = parser.compilationUnit();
-                JCClassDecl parsedClassDeclaration = (JCClassDecl)parsedCompilationUnit.defs.head;
-                JCMethodDecl parsedMethodDeclaration = (JCMethodDecl)parsedClassDeclaration.defs.head;
-
-                // Add the AST method declaration to our class
-                classDeclaration.defs = classDeclaration.defs.prepend(parsedMethodDeclaration);
-            }
-        }
-
-        /**
-         * Checks for the <tt>@BindMethod</tt> annotation on a method
-         * (signalling the base class' implementation), and marks the current
-         * stack frame when it finds the annotation.
-         *
-         * @param methodDeclaration
-         * The AST method declaration node
-         */
-        @Override
-        public void visitMethodDef(JCMethodDecl methodDeclaration) {
-            super.visitMethodDef(methodDeclaration);
-
-            Element methodElement = methodDeclaration.sym;
-            if (methodElement != null) {
-                if (methodElement.getAnnotation(BindMethod.class) != null) {
-                    stack.poke(true);
-                }
-            }
+            // Add the AST method declaration to our class
+            classDeclaration.defs = classDeclaration.defs.prepend(parsedMethodDeclaration);
         }
     }
 
@@ -137,7 +105,6 @@ public class BindMethodProcessor extends AbstractProcessor {
     private Context context;
     private Scanner.Factory scannerFactory;
     private Parser.Factory parserFactory;
-    private BindOverloadInjector bindOverloadInjector = new BindOverloadInjector();
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
@@ -150,28 +117,13 @@ public class BindMethodProcessor extends AbstractProcessor {
     }
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnvironment) {
+    public boolean process(java.util.Set<? extends TypeElement> annotations, RoundEnvironment roundEnvironment) {
         if (!roundEnvironment.processingOver()) {
-            Set<Element> classElements = new HashSet<Element>();
-
-            for (Element annotatedElement : roundEnvironment.getElementsAnnotatedWith(BindMethod.class)) {
-                if (annotatedElement.getKind() == ElementKind.METHOD) {
-                    Element classElement = annotatedElement;
-                    while (classElement != null
-                        && classElement.getKind() != ElementKind.CLASS) {
-                        classElement = classElement.getEnclosingElement();
-                    }
-
-                    if (classElement != null) {
-                        classElements.add(classElement);
-                    }
+            for (Element annotatedElement : roundEnvironment.getElementsAnnotatedWith(BindableClass.class)) {
+                if (annotatedElement.getKind() == ElementKind.CLASS) {
+                    JCClassDecl classDeclaration = (JCClassDecl)trees.getTree(annotatedElement);
+                    classDeclaration.accept(new BindOverloadInjector());
                 }
-            }
-
-            for (Element classElement : classElements) {
-                // Visit the AST class node with our BindOverloadInjector visitor
-                JCClassDecl classDeclaration = (JCClassDecl)trees.getTree(classElement);
-                classDeclaration.accept(bindOverloadInjector);
             }
         }
 

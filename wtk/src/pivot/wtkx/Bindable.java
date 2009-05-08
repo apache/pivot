@@ -40,6 +40,7 @@ import pivot.util.Resources;
  *
  * @author tvolkert
  */
+@BindMethodProcessor.BindableClass
 public abstract class Bindable {
     /**
      * WTKX binding annotation.
@@ -69,7 +70,6 @@ public abstract class Bindable {
     /**
      * Applies WTKX binding annotations to this bindable object.
      */
-    @BindMethodProcessor.BindMethod
     protected final void bind() throws BindException {
         ArrayList<Class<?>> typeHierarchy = new ArrayList<Class<?>>();
         Class<?> type = getClass();
