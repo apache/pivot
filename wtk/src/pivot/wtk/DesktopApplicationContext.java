@@ -56,40 +56,24 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             // Hook into OSX application menu
             if (System.getProperty("mrj.version") != null) {
+                /*
                 new com.apple.eawt.Application() {
                     {   addApplicationListener(new com.apple.eawt.ApplicationAdapter() {
                             @Override
                             public void handleAbout(com.apple.eawt.ApplicationEvent event) {
-                                // TODO i18n
-                                Display display = applicationContext.getDisplay();
-
-                                ArrayList<String> options = new ArrayList<String>();
-                                options.add("OK");
-
-                                Component body;
-                                WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                                try {
-                                    body = (Component)wtkxSerializer.readObject(getClass().getResource("about.wtkx"));
-                                } catch(Exception exception) {
-                                    throw new RuntimeException(exception);
-                                }
-
-                                Alert alert = new Alert(MessageType.INFO, "About Apache Pivot", options, body);
-                                alert.setTitle("About");
-                                alert.setSelectedOption(0);
-
-                                alert.open(display);
-
+                                showAboutDialog();
                                 event.setHandled(true);
                             }
 
                             @Override
                             public void handleQuit(com.apple.eawt.ApplicationEvent event) {
                                 exit();
+                                event.setHandled(true);
                             }
                         });
                     }
                 };
+                */
             }
         }
 
@@ -173,6 +157,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     private static HostFrame windowedHostFrame = null;
     private static HostFrame fullScreenHostFrame = null;
+
+    private static Alert aboutDialog = null;
 
     private static int x = 0;
     private static int y = 0;
@@ -407,5 +393,40 @@ public final class DesktopApplicationContext extends ApplicationContext {
         System.arraycopy(applicationArgs, 0, args, 1, applicationArgs.length);
         args[0] = applicationClass.getName();
         main(args);
+    }
+
+    /**
+     * Shows the platform "About" dialog.
+     */
+    public static void showAboutDialog() {
+        if (aboutDialog == null) {
+            Display display = applicationContext.getDisplay();
+
+            ArrayList<String> options = new ArrayList<String>();
+            options.add("OK");
+
+            Component body;
+            WTKXSerializer wtkxSerializer = new WTKXSerializer();
+            try {
+                // TODO i18n
+                body = (Component)wtkxSerializer.readObject(DesktopApplicationContext.class.getResource("about.wtkx"));
+            } catch(Exception exception) {
+                throw new RuntimeException(exception);
+            }
+
+            // TODO i18n
+            aboutDialog = new Alert(MessageType.INFO, "About Apache Pivot", options, body);
+            aboutDialog.setTitle("About");
+            aboutDialog.setSelectedOption(0);
+
+            aboutDialog.getWindowStateListeners().add(new WindowStateListener.Adapter() {
+                @Override
+                public void windowClosed(Window window, Display previousDisplay) {
+                    aboutDialog = null;
+                }
+            });
+
+            aboutDialog.open(display);
+        }
     }
 }
