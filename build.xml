@@ -507,23 +507,7 @@ limitations under the License.
                 <attribute name="Implementation-Title" value="Apache Pivot Tutorials"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
-            <fileset dir="tutorials/${folder.bin}" excludes="pivot/tutorials/stocktracker/**"/>
-            <fileset dir="tutorials/src">
-                <exclude name="**/*.java"/>
-                <exclude name="pivot/tutorials/stocktracker/**"/>
-            </fileset>
-        </jar>
-
-        <jar jarfile="${folder.lib}/${ant.project.name}-stocktracker.jar">
-            <manifest>
-                <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
-                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-                <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
-                <attribute name="Implementation-Title" value="Apache Pivot Stock Tracker Demo"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
-            <fileset dir="tutorials/${folder.bin}" includes="pivot/tutorials/stocktracker/*"/>
+            <fileset dir="tutorials/${folder.bin}"/>
             <fileset dir="tutorials/src">
                 <exclude name="**/*.java"/>
             </fileset>
@@ -533,7 +517,6 @@ limitations under the License.
     <target name="tutorials-clean">
         <delete dir="tutorials/${folder.bin}"/>
         <delete file="${folder.lib}/${ant.project.name}-tutorials.jar"/>
-        <delete file="${folder.lib}/${ant.project.name}-stocktracker.jar"/>
     </target>
 
     <!-- Demos -->
