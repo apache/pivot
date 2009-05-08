@@ -48,6 +48,12 @@ import com.sun.source.util.Trees;
  * implementation such that it calls into a newly defined <tt>protected
  * void bind(Map)</tt> method, thus paving the way for {@link BindProcessor} to
  * process subclasses of <tt>Bindable</tt>.
+ * <p>
+ * Note that this class works in close tandem with <tt>BindProcessor</tt> in
+ * that they share a mutual contract. They are distinct because this processor
+ * lives in the same sub-project that it must process, meaning that it gets
+ * compiled separately, before any other classes in its project. However,
+ * changes to one class should be coordinated with changes to the other.
  *
  * @author tvolkert
  */
@@ -76,66 +82,70 @@ public class BindMethodProcessor extends AbstractProcessor {
         /**
          * Adds a bind overload signature (<tt>protected void bind(Map)</tt>)
          * to the class containing the base bind implementation.
+         *
+         * @param classDeclaration
+         * The AST class declaration node
          */
         @Override
-        public void visitClassDef(JCTree.JCClassDecl tree) {
+        public void visitClassDef(JCTree.JCClassDecl classDeclaration) {
             stack.push(false);
-            super.visitClassDef(tree);
+            super.visitClassDef(classDeclaration);
             boolean addOverload = stack.pop();
 
             if (addOverload) {
                 // Create source code containing out bind overload
                 StringBuilder sourceCode = new StringBuilder();
                 sourceCode.append("class _A {");
-                sourceCode.append("protected void bind(pivot.collections.Map<String,Object> m) {}");
+                sourceCode.append("protected void __bind__(pivot.collections.Map<String,pivot.wtkx.WTKXSerializer> m) {}");
                 sourceCode.append("}");
 
                 // Parse the source code and extract the method declaration
                 Scanner scanner = scannerFactory.newScanner(sourceCode.toString());
                 Parser parser = parserFactory.newParser(scanner, false, false);
-                JCTree.JCCompilationUnit compilationUnit = parser.compilationUnit();
-                JCTree.JCClassDecl classDeclaration = (JCTree.JCClassDecl)compilationUnit.defs.head;
-                JCTree.JCMethodDecl methodDeclaration = (JCTree.JCMethodDecl)classDeclaration.defs.head;
+                JCTree.JCCompilationUnit parsedCompilationUnit = parser.compilationUnit();
+                JCTree.JCClassDecl parsedClassDeclaration = (JCTree.JCClassDecl)parsedCompilationUnit.defs.head;
+                JCTree.JCMethodDecl parsedMethodDeclaration = (JCTree.JCMethodDecl)parsedClassDeclaration.defs.head;
 
                 // Add the AST method declaration to our class
-                tree.defs = tree.defs.prepend(methodDeclaration);
+                classDeclaration.defs = classDeclaration.defs.prepend(parsedMethodDeclaration);
             }
         }
 
         /**
          * Checks for the <tt>@BindMethod</tt> annotation on a method
          * (signalling the base class' implementation). When found, this
-         * re-writes the method's body such that it calls into the bind(Map)
-         * overload (which will be defined in <tt>visitClassDef</tt>), thus
-         * clearing the way for us to override <tt>bind(Map)</tt> in bindable
-         * subclasses with inline implementations.
+         * re-writes the method's body such that it calls into the
+         * <tt>bind(Map)</tt> overload (which will be defined in
+         * <tt>visitClassDef</tt>), thus clearing the way for us to override
+         * <tt>bind(Map)</tt> in bindable subclasses with inline
+         * WTKX binding implementations.
          *
-         * @param tree
+         * @param methodDeclaration
          * The AST method declaration node
          */
         @Override
-        public void visitMethodDef(JCTree.JCMethodDecl tree) {
-            super.visitMethodDef(tree);
+        public void visitMethodDef(JCTree.JCMethodDecl methodDeclaration) {
+            super.visitMethodDef(methodDeclaration);
 
-            Element methodElement = tree.sym;
+            Element methodElement = methodDeclaration.sym;
             if (methodElement != null) {
                 BindMethod bindMethod = methodElement.getAnnotation(BindMethod.class);
 
                 if (bindMethod != null) {
                     // Generate the re-written source code for bind()
                     StringBuilder sourceCode = new StringBuilder("{");
-                    sourceCode.append("pivot.collections.HashMap<String, Object> m = ");
-                    sourceCode.append("new pivot.collections.HashMap<String, Object>();");
-                    sourceCode.append("bind(m);");
+                    sourceCode.append("pivot.collections.HashMap<String,pivot.wtkx.WTKXSerializer> m = ");
+                    sourceCode.append("new pivot.collections.HashMap<String,pivot.wtkx.WTKXSerializer>();");
+                    sourceCode.append("__bind__(m);");
                     sourceCode.append("}");
 
                     // Parse the source code into a AST block
                     Scanner scanner = scannerFactory.newScanner(sourceCode.toString());
                     Parser parser = parserFactory.newParser(scanner, false, false);
-                    JCTree.JCBlock methodBody = parser.block();
+                    JCTree.JCBlock parsedMethodBody = parser.block();
 
                     // Set the AST block as the body of the bind() method
-                    tree.body = methodBody;
+                    methodDeclaration.body = parsedMethodBody;
 
                     // Notify the stack that this is the correct level to add
                     // our bind overload
