@@ -32,6 +32,8 @@ import javax.tools.Diagnostic;
 import pivot.collections.ArrayList;
 import pivot.collections.ArrayStack;
 import pivot.collections.HashMap;
+import pivot.collections.List;
+import pivot.collections.Map;
 
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
@@ -43,9 +45,9 @@ import com.sun.tools.javac.util.Context;
 import com.sun.source.util.Trees;
 
 /**
- * Annotation processor that injects <tt>bind()</tt> overrides into classes
- * that use the <tt>@Load</tt> and <tt>@Bind</tt> annotations to perform WTKX
- * loading and binding.
+ * Annotation processor that injects <tt>__bind__(Map)</tt> overrides into
+ * classes that use the <tt>@Load</tt> and <tt>@Bind</tt> annotations to
+ * perform WTKX loading and binding.
  *
  * @author tvolkert
  */
@@ -54,44 +56,77 @@ import com.sun.source.util.Trees;
 public class BindProcessor extends AbstractProcessor {
     /**
      * Holds pertinent information about a class' member variables that use
-     * the <tt>@Load</tt> and <tt>@Bind</tt> annotations. A bind scope object
+     * the <tt>@Load</tt> and <tt>@Bind</tt> annotations. A dossier object
      * is pushed onto a stack before visiting a class and popped off the
      * stack after visiting it, allowing us to know if any members variables
-     * contained in the class need bind processing as we're exiting the class.
+     * contained in the class need processing.
      *
      * @author tvolkert
      */
-    private static class BindScope {
+    private static class AnnotationDossier {
+        /**
+         * Encapsulates a load field and the bind fields that are bound to that
+         * load field.
+         *
+         * @author tvolkert
+         */
         public static class LoadGroup {
-            public JCVariableDecl loadVariableDeclaration = null;
-            public ArrayList<JCVariableDecl> bindVariableDeclarations = null;
+            public JCVariableDecl loadField = null;
+            public ArrayList<JCVariableDecl> bindFields = null;
 
-            private LoadGroup(JCVariableDecl loadVariableDeclaration) {
-                this.loadVariableDeclaration = loadVariableDeclaration;
+            private LoadGroup(JCVariableDecl loadField) {
+                this.loadField = loadField;
             }
         }
 
-        // Maps load field names to their corresponding load group
-        public HashMap<String, LoadGroup> loadGroups = null;
+        private HashMap<String, LoadGroup> loadGroups = null;
+        private ArrayList<JCVariableDecl> strandedBindFields = null;
 
-        // Bind fields whose load field hasn't been seen yet
-        public ArrayList<JCVariableDecl> strandedBindVariableDeclarations = null;
+        /**
+         * Gets the load groups that have been recorded in this dossier,
+         * indexed by load field name.
+         *
+         * @return
+         * The load groups map, or <tt>null</tt> if no load groups have been
+         * recorded in this dossier
+         */
+        public Map<String, LoadGroup> getLoadGroups() {
+            return loadGroups;
+        }
+
+        /**
+         * Gets the bind fields that were recorded in this dossier whose
+         * associated load fields were missing from the dossier. When bind
+         * fields are first recorded, they can be stranded if they appear in
+         * the source file before their associated load field (since the source
+         * file is processed linearly). Calling {@link reconcile()} after all
+         * fields have been visited will pair these stranded bind fields up
+         * with their associated load group and remove them from the stranded
+         * list. After <tt>reconcile</tt> has been called, any bind fields that
+         * remain in the stranded list are assumed to be bound to
+         * <tt>public</tt> or <tt>protected</tt> load fields in a superclass.
+         * It is up to the <tt>__bind__</tt> method to handle these stranded
+         * bind fields correctly.
+         */
+        public List<JCVariableDecl> getStrandedBindFields() {
+            return strandedBindFields;
+        }
 
         /**
          * Creates a load group for the specified load field.
          *
-         * @param loadVariableDeclaration
+         * @param loadField
          * The AST load variable declaration node
          */
-        public void createLoadGroup(JCVariableDecl loadVariableDeclaration) {
+        public void createLoadGroup(JCVariableDecl loadField) {
             if (loadGroups == null) {
                 // Lazily create the load groups map
                 loadGroups = new HashMap<String, LoadGroup>();
             }
 
             // Create a new load group for this load field
-            String loadFieldName = loadVariableDeclaration.name.toString();
-            loadGroups.put(loadFieldName, new LoadGroup(loadVariableDeclaration));
+            String loadFieldName = loadField.name.toString();
+            loadGroups.put(loadFieldName, new LoadGroup(loadField));
         }
 
         /**
@@ -100,11 +135,11 @@ public class BindProcessor extends AbstractProcessor {
          * encountered by the bind injector visitor, it is added to the
          * stranded list.
          *
-         * @param loadVariableDeclaration
+         * @param loadField
          * The AST load variable declaration node
          */
-        public void addToLoadGroup(JCVariableDecl bindVariableDeclaration) {
-            addToLoadGroup(bindVariableDeclaration, true);
+        public void addToLoadGroup(JCVariableDecl bindField) {
+            addToLoadGroup(bindField, true);
         }
 
         /**
@@ -113,7 +148,7 @@ public class BindProcessor extends AbstractProcessor {
          * encountered by the bind injector visitor, and <tt>recordStranded</tt>
          * is <tt>true</tt>, then it is added to the stranded list.
          *
-         * @param loadVariableDeclaration
+         * @param loadField
          * The AST load variable declaration node
          *
          * @param recordStranded
@@ -123,10 +158,10 @@ public class BindProcessor extends AbstractProcessor {
          * <tt>true</tt> if the field was added to a load group; <tt>false</tt>
          * if it was not
          */
-        private boolean addToLoadGroup(JCVariableDecl bindVariableDeclaration, boolean recordStranded) {
+        private boolean addToLoadGroup(JCVariableDecl bindField, boolean recordStranded) {
             boolean added = false;
 
-            JCAnnotation bindAnnotation = getBindAnnotation(bindVariableDeclaration);
+            JCAnnotation bindAnnotation = getBindAnnotation(bindField);
             String loadFieldName = getAnnotationProperty(bindAnnotation, "property");
 
             if (loadGroups != null
@@ -134,22 +169,22 @@ public class BindProcessor extends AbstractProcessor {
                 added = true;
                 LoadGroup loadGroup = loadGroups.get(loadFieldName);
 
-                if (loadGroup.bindVariableDeclarations == null) {
+                if (loadGroup.bindFields == null) {
                     // Lazily create the bind fields list
-                    loadGroup.bindVariableDeclarations = new ArrayList<JCVariableDecl>();
+                    loadGroup.bindFields = new ArrayList<JCVariableDecl>();
                 }
 
                 // Add this bind field to its load group
-                loadGroup.bindVariableDeclarations.add(bindVariableDeclaration);
+                loadGroup.bindFields.add(bindField);
             }
 
             if (!added && recordStranded) {
-                if (strandedBindVariableDeclarations == null) {
+                if (strandedBindFields == null) {
                     // Lazily create the stranded list
-                    strandedBindVariableDeclarations = new ArrayList<JCVariableDecl>();
+                    strandedBindFields = new ArrayList<JCVariableDecl>();
                 }
 
-                strandedBindVariableDeclarations.add(bindVariableDeclaration);
+                strandedBindFields.add(bindField);
             }
 
             return added;
@@ -162,12 +197,12 @@ public class BindProcessor extends AbstractProcessor {
          * left in the stranded list are assumed to be binding to a superclass'
          * load field.
          */
-        public void resolve() {
-            if (strandedBindVariableDeclarations != null) {
-                for (int i = strandedBindVariableDeclarations.getLength() - 1; i >= 0; i--) {
-                    if (addToLoadGroup(strandedBindVariableDeclarations.get(i), false)) {
+        public void reconcile() {
+            if (strandedBindFields != null) {
+                for (int i = strandedBindFields.getLength() - 1; i >= 0; i--) {
+                    if (addToLoadGroup(strandedBindFields.get(i), false)) {
                         // Remove it from the stranded list
-                        strandedBindVariableDeclarations.remove(i, 1);
+                        strandedBindFields.remove(i, 1);
                     }
                 }
             }
@@ -180,27 +215,32 @@ public class BindProcessor extends AbstractProcessor {
      * @author tvolkert
      */
     private class BindInjector extends TreeTranslator {
-        private ArrayStack<BindScope> bindScopeStack = new ArrayStack<BindScope>();
+        private ArrayStack<AnnotationDossier> stack = new ArrayStack<AnnotationDossier>();
 
         /**
-         * Injects an override implementation of the <tt>bind(Map)</tt> method
-         * into the specified class if any member variables are found to be
-         * annotated with the <tt>@Load</tt> or <tt>@Bind</tt> annotations.
+         * Injects an override implementation of the <tt>__bind__(Map)</tt>
+         * method into the specified class if any member variables are found to
+         * be annotated with the <tt>@Load</tt> or <tt>@Bind</tt> annotations.
          *
-         * @param tree
+         * @param classDeclaration
          * The AST class declaration node
          */
         @Override
-        public void visitClassDef(JCClassDecl tree) {
-            BindScope bindScope = new BindScope();
+        public void visitClassDef(JCClassDecl classDeclaration) {
+            AnnotationDossier annotationDossier = new AnnotationDossier();
 
-            bindScopeStack.push(bindScope);
-            super.visitClassDef(tree);
-            bindScopeStack.pop();
+            // Visit all of the class' nodes to record a full dossier
+            stack.push(annotationDossier);
+            super.visitClassDef(classDeclaration);
+            stack.pop();
 
-            bindScope.resolve();
-            if (bindScope.loadGroups != null
-                || bindScope.strandedBindVariableDeclarations != null) {
+            // Reconcile the dossier
+            annotationDossier.reconcile();
+
+            Map<String, AnnotationDossier.LoadGroup> loadGroups = annotationDossier.getLoadGroups();
+            List<JCVariableDecl> strandedBindFields = annotationDossier.getStrandedBindFields();
+
+            if (loadGroups != null || strandedBindFields != null) {
                 // There is some bind work to be done in this class; start by
                 // creating the source code buffer
                 StringBuilder sourceCode = new StringBuilder("class _A {");
@@ -212,22 +252,60 @@ public class BindProcessor extends AbstractProcessor {
                 sourceCode.append("pivot.wtkx.WTKXSerializer wtkxSerializer;");
                 sourceCode.append("Object object;");
                 sourceCode.append("java.net.URL location;");
+                sourceCode.append("java.util.Locale locale;");
+                sourceCode.append("pivot.util.Resources resources;");
 
-                if (bindScope.loadGroups != null) {
-                    for (String loadFieldName : bindScope.loadGroups) {
-                        BindScope.LoadGroup loadGroup = bindScope.loadGroups.get(loadFieldName);
-                        JCVariableDecl loadVariableDeclaration = loadGroup.loadVariableDeclaration;
-                        JCAnnotation loadAnnotation = getLoadAnnotation(loadVariableDeclaration);
+                if (loadGroups != null) {
+                    for (String loadFieldName : loadGroups) {
+                        AnnotationDossier.LoadGroup loadGroup = loadGroups.get(loadFieldName);
+                        JCVariableDecl loadField = loadGroup.loadField;
+                        JCAnnotation loadAnnotation = getLoadAnnotation(loadField);
+
                         String resourceName = getAnnotationProperty(loadAnnotation, "name");
+                        String baseName = getAnnotationProperty(loadAnnotation, "resources");
+                        String language = getAnnotationProperty(loadAnnotation, "locale");
+                        boolean defaultResources = (baseName == null);
 
                         if (DEBUG) {
                             processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
                                 String.format("Processing load(%s, %s#%s)", resourceName,
-                                tree.name.toString(), loadFieldName));
+                                classDeclaration.name.toString(), loadFieldName));
+                        }
+
+                        if (defaultResources) {
+                            baseName = classDeclaration.name.toString();
+                            if ("".equals(baseName)) {
+                                baseName = null;
+                            }
+                        }
+
+                        if (baseName != null) {
+                            // Attempt to load the resources
+                            if (language == null) {
+                                sourceCode.append("locale = java.util.Locale.getDefault();");
+                            } else {
+                                sourceCode.append(String.format("locale = new java.util.Locale(\"%s\");", language));
+                            }
+                            sourceCode.append("resources = null;");
+                            sourceCode.append("try {");
+                            sourceCode.append(String.format("resources = new pivot.util.Resources(\"%s\", locale, \"UTF8\");", baseName));
+                            sourceCode.append("} catch(java.io.IOException ex) {");
+                            sourceCode.append("throw new pivot.wtkx.BindException(ex);");
+                            sourceCode.append("} catch (pivot.serialization.SerializationException ex) {");
+                            sourceCode.append("throw new pivot.wtkx.BindException(ex);");
+                            sourceCode.append("} catch (java.util.MissingResourceException ex) {");
+                            if (!defaultResources) {
+                                sourceCode.append("throw new pivot.wtkx.BindException(ex);");
+                            }
+                            sourceCode.append("}");
                         }
 
                         // Load the WTKX resource
-                        sourceCode.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer();");
+                        if (baseName == null) {
+                            sourceCode.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer();");
+                        } else {
+                            sourceCode.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer(resources);");
+                        }
                         sourceCode.append(String.format("location = getClass().getResource(\"%s\");", resourceName));
                         sourceCode.append("try {");
                         sourceCode.append("object = wtkxSerializer.readObject(location);");
@@ -237,19 +315,19 @@ public class BindProcessor extends AbstractProcessor {
 
                         // Bind the resource to the field
                         sourceCode.append(String.format("%s = (%s)object;", loadFieldName,
-                            loadVariableDeclaration.vartype.toString()));
+                            loadField.vartype.toString()));
 
                         // Public and protected fields get kept for subclasses
-                        if ((loadVariableDeclaration.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
+                        if ((loadField.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
                             sourceCode.append(String.format("namedSerializers.put(\"%s\", wtkxSerializer);",
                                 loadFieldName));
                         }
 
                         // Bind the resource lookups to their corresponding fields
-                        if (loadGroup.bindVariableDeclarations != null) {
-                            for (JCVariableDecl bindVariableDeclaration : loadGroup.bindVariableDeclarations) {
-                                String bindFieldName = bindVariableDeclaration.name.toString();
-                                JCAnnotation bindAnnotation = getBindAnnotation(bindVariableDeclaration);
+                        if (loadGroup.bindFields != null) {
+                            for (JCVariableDecl bindField : loadGroup.bindFields) {
+                                String bindFieldName = bindField.name.toString();
+                                JCAnnotation bindAnnotation = getBindAnnotation(bindField);
 
                                 String bindName = getAnnotationProperty(bindAnnotation, "name");
                                 if (bindName == null) {
@@ -261,7 +339,7 @@ public class BindProcessor extends AbstractProcessor {
                                     String property = getAnnotationProperty(bindAnnotation, "property");
                                     processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
                                         String.format("Processing bind(%s.%s, %s#%s)", property,
-                                        bindName, tree.name.toString(), bindFieldName));
+                                        bindName, classDeclaration.name.toString(), bindFieldName));
                                 }
 
                                 sourceCode.append(String.format("object = wtkxSerializer.getObjectByName(\"%s\");",
@@ -270,16 +348,16 @@ public class BindProcessor extends AbstractProcessor {
                                 sourceCode.append(String.format("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
                                 sourceCode.append("}");
                                 sourceCode.append(String.format("%s = (%s)object;", bindFieldName,
-                                    bindVariableDeclaration.vartype.toString()));
+                                    bindField.vartype.toString()));
                             }
                         }
                     }
                 }
 
-                if (bindScope.strandedBindVariableDeclarations != null) {
-                    for (JCVariableDecl bindVariableDeclaration : bindScope.strandedBindVariableDeclarations) {
-                        String bindFieldName = bindVariableDeclaration.name.toString();
-                        JCAnnotation bindAnnotation = getBindAnnotation(bindVariableDeclaration);
+                if (strandedBindFields != null) {
+                    for (JCVariableDecl bindField : strandedBindFields) {
+                        String bindFieldName = bindField.name.toString();
+                        JCAnnotation bindAnnotation = getBindAnnotation(bindField);
                         String loadFieldName = getAnnotationProperty(bindAnnotation, "property");
 
                         String bindName = getAnnotationProperty(bindAnnotation, "name");
@@ -301,7 +379,7 @@ public class BindProcessor extends AbstractProcessor {
                         sourceCode.append(String.format("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
                         sourceCode.append("}");
                         sourceCode.append(String.format("%s = (%s)object;", bindFieldName,
-                            bindVariableDeclaration.vartype.toString()));
+                            bindField.vartype.toString()));
                     }
                 }
 
@@ -311,12 +389,12 @@ public class BindProcessor extends AbstractProcessor {
                 // Parse the source code and extract the method declaration
                 Scanner scanner = scannerFactory.newScanner(sourceCode.toString());
                 Parser parser = parserFactory.newParser(scanner, false, false);
-                JCCompilationUnit compilationUnit = parser.compilationUnit();
-                JCClassDecl classDeclaration = (JCClassDecl)compilationUnit.defs.head;
-                JCMethodDecl methodDeclaration = (JCMethodDecl)classDeclaration.defs.head;
+                JCCompilationUnit parsedCompilationUnit = parser.compilationUnit();
+                JCClassDecl parsedClassDeclaration = (JCClassDecl)parsedCompilationUnit.defs.head;
+                JCMethodDecl parsedMethodDeclaration = (JCMethodDecl)parsedClassDeclaration.defs.head;
 
                 // Add the AST method declaration to our class
-                tree.defs = tree.defs.prepend(methodDeclaration);
+                classDeclaration.defs = classDeclaration.defs.prepend(parsedMethodDeclaration);
             }
         }
 
@@ -326,7 +404,7 @@ public class BindProcessor extends AbstractProcessor {
          * information in the current bind scope, to be used before we exit
          * the containing class.
          *
-         * @param tree
+         * @param variableDeclaration
          * The AST variable declaration node
          */
         @Override
@@ -342,14 +420,14 @@ public class BindProcessor extends AbstractProcessor {
                     "Cannot combine " + Bindable.Load.class.getName()
                     + " and " + Bindable.Bind.class.getName() + " annotations.");
             } else if (loadAnnotation != null) {
-                BindScope bindScope = bindScopeStack.peek();
-                bindScope.createLoadGroup(variableDeclaration);
+                AnnotationDossier annotationDossier = stack.peek();
+                annotationDossier.createLoadGroup(variableDeclaration);
 
                 // Increment the tally for reporting purposes
                 loadTally++;
             } else if (bindAnnotation != null) {
-                BindScope bindScope = bindScopeStack.peek();
-                bindScope.addToLoadGroup(variableDeclaration);
+                AnnotationDossier annotationDossier = stack.peek();
+                annotationDossier.addToLoadGroup(variableDeclaration);
 
                 // Increment the tally for reporting purposes
                 bindTally++;
