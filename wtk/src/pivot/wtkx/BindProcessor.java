@@ -43,9 +43,25 @@ import com.sun.tools.javac.util.Context;
 import com.sun.source.util.Trees;
 
 /**
- * Annotation processor that injects overridden bind overload methods into
- * classes that use the <tt>@Load</tt> and <tt>@Bind</tt> annotations to
- * perform WTKX loading and binding.
+ * Annotation processor that may be run on classes that use the bind
+ * annotations (<tt>@Load</tt> and <tt>@Bind</tt>) in order to cause the WTKX
+ * binding process to use compiled code as opposed to the Java Reflection API.
+ * Callers may wish to do this, for example, if they plan to run their Pivot
+ * application in an unsigned applet, since the reflective bind process
+ * requires security privileges not granted to un-trusted applets.
+ * <p>
+ * In order to compile using this annotation processor, add the
+ * <tt>-processor pivot.wtkx.BindProcessor</tt> argument to your <tt>javac</tt>
+ * command. Note that this class utilizes classes specific to Sun's
+ * <tt>javac</tt> implementation, and as such, it will only work with a Sun
+ * <tt>javac</tt> compiler.
+ * <p>
+ * To use this annotation processor with Ant, add the following line to your
+ * Ant <tt>javac</tt> task:
+ * <p>
+ * <pre>
+       &lt;compilerarg line="-processor pivot.wtkx.BindProcessor"/&gt;
+ * </pre>
  *
  * @author tvolkert
  */
@@ -243,12 +259,8 @@ public class BindProcessor extends AbstractProcessor {
                 // creating the source code buffer
                 StringBuilder sourceCode = new StringBuilder("class _A {");
                 sourceCode.append("@Override ");
-                sourceCode.append("protected void ");
-                sourceCode.append(BindMethodProcessor.BIND_OVERLOAD_NAME);
-                sourceCode.append("(pivot.collections.Map<String,pivot.wtkx.WTKXSerializer> namedSerializers) {");
-                sourceCode.append("super.");
-                sourceCode.append(BindMethodProcessor.BIND_OVERLOAD_NAME);
-                sourceCode.append("(namedSerializers);");
+                sourceCode.append("protected void bind(pivot.collections.Map<String,pivot.wtkx.WTKXSerializer> namedSerializers) {");
+                sourceCode.append("super.bind(namedSerializers);");
 
                 // Local variable declarations
                 sourceCode.append("pivot.wtkx.WTKXSerializer wtkxSerializer;");

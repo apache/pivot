@@ -22,7 +22,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
@@ -36,39 +35,111 @@ import pivot.serialization.SerializationException;
 import pivot.util.Resources;
 
 /**
- * Base class for objects that wish to leverage WTKX binding annotations.
+ * Base class for objects that wish to leverage WTKX binding. By extending this
+ * class, subclasses may use the {@link Load @Load} and {@link Bind @Bind}
+ * annotations to automate WTKX loading and binding within their class.
  *
+ * @see
+ * BindProcessor
+ *
+ * @author gbrown
  * @author tvolkert
  */
-@BindMethodProcessor.BindableClass
 public abstract class Bindable {
     /**
-     * WTKX binding annotation.
+     * Annotation that causes the annotated field to be loaded via WTKX and
+     * bound to the field. This annotation is the entry point into WTKX binding
+     * and a prerequisite to using the <tt>@Bind</tt> annotation.
+     *
+     * @see
+     * WTKXSerializer#readObject(URL)
      *
      * @author gbrown
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     protected static @interface Load {
+        /**
+         * A path name that identifies the WTKX resource to be loaded. The root
+         * WTKX element will be stored in the annotated field. The path name
+         * should be of the form defined by {@link Class#getResource(String)}.
+         */
         public String name();
+
+        /**
+         * The base name of the resources to associate with the WTKX load
+         * (optional). The base name should be of the form defined by the
+         * {@link Resources} class. If unspecified, the WTKX load will be
+         * assumed to not use resource strings.
+         */
         public String resources() default "\0";
+
+        /**
+         * The locale with which to load the WTKX (optional). This should be a
+         * lowercase two-letter ISO-639 code. If unspecified, the user's
+         * default locale will be used.
+         */
         public String locale() default "\0";
     }
 
     /**
-     * WTKX binding annotation.
+     * Annotation that causes a loaded WTKX element to be bound to the
+     * annotated field. This annotation necessitates the prior use of a
+     * <tt>@Load</tt> annotation and references the loaded field via the
+     * <tt>property</tt> attribute.
      *
      * @author gbrown
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     protected static @interface Bind {
+        /**
+         * The name of the property that was loaded via the <tt>@Load</tt>
+         * annotation.
+         *
+         * @see
+         * Load
+         */
         public String property();
+
+        /**
+         * The name of the WTKX variable that references the element to bind
+         * (optional). It should be a valid <tt>wtkx:id</tt> from the loaded
+         * WTKX resource. If unspecified, the name of the annotated field will
+         * be used.
+         *
+         * @see
+         * WTKXSerializer#getObjectByName(String)
+         */
         public String name() default "\0";
     }
 
     /**
-     * Applies WTKX binding annotations to this bindable object.
+     * Creates a new <tt>Bindable</tt> object.
+     */
+    protected Bindable() {
+    }
+
+    /**
+     * Applies WTKX binding annotations to this object. Subclasses should call
+     * this before they access their bound variables. Calling this more than
+     * once is legal; it will cause the annotated fields to be re-loaded and
+     * re-bound.
+     * <p>
+     * Note that by default, this method uses reflection to perform the
+     * binding. This may necessitate a call to <tt>setAccessible(true)</tt> on
+     * the bound field. If there is a security manager, its checkPermission
+     * method will correspondingly be called with a
+     * <tt>ReflectPermission("suppressAccessChecks")</tt> permission. This
+     * permission is not typically granted to un-trusted applets, meaning that
+     * this method of binding is not available to un-signed applets. To
+     * mitigate this, a compile-time annotation processor,
+     * {@link BindProcessor}, is available and will cause this method to use
+     * compiled code to perform the binding as opposed to reflection. This in
+     * turn should eliminate any security issues with the binding process.
+     *
+     * @throws BindException
+     * If an error occurs during binding
      */
     protected final void bind() throws BindException {
         ArrayList<Class<?>> typeHierarchy = new ArrayList<Class<?>>();
@@ -82,8 +153,7 @@ public abstract class Bindable {
         for (int i = 0, n = typeHierarchy.getLength(); i < n; i++) {
             type = typeHierarchy.get(i);
             try {
-                bindOverload = type.getDeclaredMethod(BindMethodProcessor.BIND_OVERLOAD_NAME,
-                    new Class<?>[] {Map.class});
+                bindOverload = type.getDeclaredMethod("bind", new Class<?>[] {Map.class});
                 break;
             } catch(NoSuchMethodException exception) {
                 // No-op
@@ -235,25 +305,18 @@ public abstract class Bindable {
                 }
             }
         } else {
-            Method baseOverload = null;
-            try {
-                baseOverload = Bindable.class.getDeclaredMethod(BindMethodProcessor.BIND_OVERLOAD_NAME,
-                    new Class<?>[] {Map.class});
-            } catch(NoSuchMethodException exception) {
-                // If bindOverload is non-null, the base overload must be there
-                throw new BindException(exception);
-            }
-
             // Invoke the bind overload
             HashMap<String, WTKXSerializer> namedSerializers = new HashMap<String, WTKXSerializer>();
-
-            try {
-                baseOverload.invoke(this, new Object[] {namedSerializers});
-            } catch(IllegalAccessException exception) {
-                throw new BindException(exception);
-            } catch(InvocationTargetException exception) {
-                throw new BindException(exception);
-            }
+            bind(namedSerializers);
         }
+    }
+
+    /**
+     * This is an internal method that callers should neither invoke nor
+     * override. It exists to support {@link BindProcessor}. Dealing directly
+     * with this method in any way may yield unpredictable behavior.
+     */
+    protected void bind(Map<String, WTKXSerializer> namedSerializers) {
+        // No-op
     }
 }
