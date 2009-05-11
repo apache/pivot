@@ -259,17 +259,19 @@ public class BindProcessor extends AbstractProcessor {
                 // creating the source code buffer
                 StringBuilder sourceCode = new StringBuilder("class _A {");
                 sourceCode.append("@Override ");
-                sourceCode.append("protected void bind(pivot.collections.Map<String,pivot.wtkx.WTKXSerializer> namedSerializers) {");
-                sourceCode.append("super.bind(namedSerializers);");
+                sourceCode.append("protected void bind(pivot.collections.Dictionary<String,");
+                sourceCode.append("pivot.collections.Dictionary<String, Object>> namedObjectsDictionaries) {");
+                sourceCode.append("super.bind(namedObjectsDictionaries);");
 
-                // Local variable declarations
                 sourceCode.append("pivot.wtkx.WTKXSerializer wtkxSerializer;");
                 sourceCode.append("Object object;");
-                sourceCode.append("java.net.URL location;");
-                sourceCode.append("java.util.Locale locale;");
-                sourceCode.append("pivot.util.Resources resources;");
 
                 if (loadGroups != null) {
+                    // Process WTKX loads in this class
+                    sourceCode.append("java.net.URL location;");
+                    sourceCode.append("java.util.Locale locale;");
+                    sourceCode.append("pivot.util.Resources resources;");
+
                     for (String loadFieldName : loadGroups) {
                         AnnotationDossier.LoadGroup loadGroup = loadGroups.get(loadFieldName);
                         JCVariableDecl loadField = loadGroup.loadField;
@@ -278,6 +280,7 @@ public class BindProcessor extends AbstractProcessor {
                         String resourceName = getAnnotationProperty(loadAnnotation, "name");
                         String baseName = getAnnotationProperty(loadAnnotation, "resources");
                         String language = getAnnotationProperty(loadAnnotation, "locale");
+                        //Boolean compile = getAnnotationProperty(loadAnnotation, "compile");
                         boolean defaultResources = (baseName == null);
 
                         if (DEBUG) {
@@ -302,7 +305,8 @@ public class BindProcessor extends AbstractProcessor {
                                 sourceCode.append(String.format("locale = new java.util.Locale(\"%s\");", language));
                             }
                             sourceCode.append("try {");
-                            sourceCode.append(String.format("resources = new pivot.util.Resources(%s, locale, \"UTF8\");",
+                            sourceCode.append(String.format
+                                ("resources = new pivot.util.Resources(%s, locale, \"UTF8\");",
                                 defaultResources ? (baseName + ".class.getName()") : ("\"" + baseName + "\"")));
                             sourceCode.append("} catch(java.io.IOException ex) {");
                             sourceCode.append("throw new pivot.wtkx.BindException(ex);");
@@ -330,8 +334,8 @@ public class BindProcessor extends AbstractProcessor {
 
                         // Public and protected fields get kept for subclasses
                         if ((loadField.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
-                            sourceCode.append(String.format("namedSerializers.put(\"%s\", wtkxSerializer);",
-                                loadFieldName));
+                            sourceCode.append(String.format
+                                ("namedObjectsDictionaries.put(\"%s\", wtkxSerializer.getNamedObjects());", loadFieldName));
                         }
 
                         // Bind the resource lookups to their corresponding fields
@@ -353,19 +357,25 @@ public class BindProcessor extends AbstractProcessor {
                                         bindName, classDeclaration.name.toString(), bindFieldName));
                                 }
 
-                                sourceCode.append(String.format("object = wtkxSerializer.getObjectByName(\"%s\");",
-                                    bindName));
-                                sourceCode.append("if (object == null) {");
-                                sourceCode.append(String.format("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
-                                sourceCode.append("}");
-                                sourceCode.append(String.format("%s = (%s)object;", bindFieldName,
-                                    bindField.vartype.toString()));
+                                sourceCode.append(String.format
+                                    ("object = wtkxSerializer.getObjectByName(\"%s\");", bindName));
+                                sourceCode.append
+                                    ("if (object == null) {");
+                                sourceCode.append(String.format
+                                    ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
+                                sourceCode.append
+                                    ("}");
+                                sourceCode.append(String.format
+                                    ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
                             }
                         }
                     }
                 }
 
                 if (strandedBindFields != null) {
+                    // Process binds to superclass-loaded fields
+                    sourceCode.append("pivot.collections.Dictionary<String, Object> namedObjects;");
+
                     for (JCVariableDecl bindField : strandedBindFields) {
                         String bindFieldName = bindField.name.toString();
                         JCAnnotation bindAnnotation = getBindAnnotation(bindField);
@@ -377,20 +387,26 @@ public class BindProcessor extends AbstractProcessor {
                             bindName = bindFieldName;
                         }
 
-                        sourceCode.append(String.format("wtkxSerializer = namedSerializers.get(\"%s\");",
-                            loadFieldName));
+                        sourceCode.append(String.format
+                            ("namedObjects = namedObjectsDictionaries.get(\"%s\");", loadFieldName));
 
-                        sourceCode.append("if (wtkxSerializer == null) {");
-                        sourceCode.append(String.format("throw new pivot.wtkx.BindException(\"Property not found: %s.\");", loadFieldName));
-                        sourceCode.append("}");
+                        sourceCode.append
+                            ("if (namedObjects == null) {");
+                        sourceCode.append(String.format
+                            ("throw new pivot.wtkx.BindException(\"Property not found: %s.\");", loadFieldName));
+                        sourceCode.append
+                            ("}");
 
-                        sourceCode.append(String.format("object = wtkxSerializer.getObjectByName(\"%s\");",
-                            bindName));
-                        sourceCode.append("if (object == null) {");
-                        sourceCode.append(String.format("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
-                        sourceCode.append("}");
-                        sourceCode.append(String.format("%s = (%s)object;", bindFieldName,
-                            bindField.vartype.toString()));
+                        sourceCode.append(String.format
+                            ("object = namedObjects.get(\"%s\");", bindName));
+                        sourceCode.append
+                            ("if (object == null) {");
+                        sourceCode.append(String.format
+                            ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
+                        sourceCode.append
+                            ("}");
+                        sourceCode.append(String.format
+                            ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
                     }
                 }
 
@@ -563,8 +579,9 @@ public class BindProcessor extends AbstractProcessor {
      * The value of the property, or <tt>null</tt> if it is not explicitly
      * set in the annotation
      */
-    private static String getAnnotationProperty(JCAnnotation annotation, String propertyName) {
-        String result = null;
+    @SuppressWarnings("unchecked")
+    private static <T> T getAnnotationProperty(JCAnnotation annotation, String propertyName) {
+        Object result = null;
 
         for (JCExpression arg : annotation.args) {
             JCAssign assign = (JCAssign)arg;
@@ -572,11 +589,11 @@ public class BindProcessor extends AbstractProcessor {
 
             if (key.name.contentEquals(propertyName)) {
                 JCLiteral value = (JCLiteral)assign.rhs;
-                result = (String)value.value;
+                result = value.getValue();
                 break;
             }
         }
 
-        return result;
+        return (T)result;
     }
 }

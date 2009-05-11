@@ -29,8 +29,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 
 import pivot.collections.ArrayList;
+import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
-import pivot.collections.Map;
 import pivot.serialization.SerializationException;
 import pivot.util.Resources;
 
@@ -67,19 +67,36 @@ public abstract class Bindable {
         public String name();
 
         /**
-         * The base name of the resources to associate with the WTKX load
-         * (optional). The base name should be of the form defined by the
-         * {@link Resources} class. If unspecified, the WTKX load will be
-         * assumed to not use resource strings.
+         * The base name of the resources to associate with the WTKX load.
+         * The base name should be of the form defined by the {@link Resources}
+         * class. If unspecified, the WTKX load will be assumed to not use
+         * resource strings.
          */
         public String resources() default "\0";
 
         /**
-         * The locale with which to load the WTKX (optional). This should be a
-         * lowercase two-letter ISO-639 code. If unspecified, the user's
-         * default locale will be used.
+         * The locale with which to load the WTKX. This should be a lowercase
+         * two-letter ISO-639 code. If unspecified, the user's default locale
+         * will be used.
          */
         public String locale() default "\0";
+
+        /**
+         * Indicates whether the loaded WTKX should be compiled into the class
+         * or if it should be loaded at runtime via the <tt>WTKXSerializer</tt>
+         * class. If unspecified, the WTKX loading will be done at runtime.
+         * <p>
+         * <b>Note</b>: This option only has meaning when the annotations are
+         * processed during compilation using {@link BindProcessor}. Callers
+         * who choose to skip the annotation processing will always be using a
+         * runtime implementation of WTKX loading, and in such cases, the
+         * <tt>compile</tt> flag will be ignored.
+         * <p>
+         * Also note that if the loaded WTKX is compiled into the class, the
+         * WTKX resource may not be needed at runtime; in such cases, the
+         * caller may wish to exclude it from their JAR file.
+         */
+        public boolean compile() default false;
     }
 
     /**
@@ -103,8 +120,8 @@ public abstract class Bindable {
         public String property();
 
         /**
-         * The name of the WTKX variable that references the element to bind
-         * (optional). It should be a valid <tt>wtkx:id</tt> from the loaded
+         * The name of the WTKX variable that references the element to bind.
+         * It should be a valid <tt>wtkx:id</tt> from the loaded
          * WTKX resource. If unspecified, the name of the annotated field will
          * be used.
          *
@@ -153,7 +170,7 @@ public abstract class Bindable {
         for (int i = 0, n = typeHierarchy.getLength(); i < n; i++) {
             type = typeHierarchy.get(i);
             try {
-                bindOverload = type.getDeclaredMethod("bind", new Class<?>[] {Map.class});
+                bindOverload = type.getDeclaredMethod("bind", new Class<?>[] {Dictionary.class});
                 break;
             } catch(NoSuchMethodException exception) {
                 // No-op
@@ -306,8 +323,9 @@ public abstract class Bindable {
             }
         } else {
             // Invoke the bind overload
-            HashMap<String, WTKXSerializer> namedSerializers = new HashMap<String, WTKXSerializer>();
-            bind(namedSerializers);
+            HashMap<String, Dictionary<String, Object>> namedObjectsDictionaries =
+                new HashMap<String, Dictionary<String, Object>>();
+            bind(namedObjectsDictionaries);
         }
     }
 
@@ -316,7 +334,7 @@ public abstract class Bindable {
      * override. It exists to support {@link BindProcessor}. Dealing directly
      * with this method in any way may yield unpredictable behavior.
      */
-    protected void bind(Map<String, WTKXSerializer> namedSerializers) {
+    protected void bind(Dictionary<String, Dictionary<String, Object>> namedObjectsDictionaries) {
         // No-op
     }
 }

@@ -92,15 +92,120 @@ public class WTKXSerializer implements Serializer<Object> {
         }
     }
 
+    /**
+     * Dictionary used for named object lookup.
+     *
+     * @author tvolkert
+     */
+    private class NamedObjectsDictionary implements Dictionary<String, Object> {
+        /**
+         * Retrieves a named object.
+         *
+         * @param name
+         * The name of the object, relative to this loader. The values's name
+         * is the concatentation of its parent namespaces and its ID, separated
+         * by periods (e.g. "foo.bar.baz").
+         *
+         * @return
+         * The named object, or <tt>null</tt> if an object with the given name
+         * does not exist.
+         *
+         * @author gbrown
+         */
+        public Object get(String key) {
+            if (key == null) {
+                throw new IllegalArgumentException("key is null.");
+            }
+
+            Object object = null;
+            WTKXSerializer serializer = WTKXSerializer.this;
+            String[] namespacePath = key.split("\\.");
+
+            int i = 0;
+            int n = namespacePath.length - 1;
+            while (i < n && serializer != null) {
+                String namespace = namespacePath[i++];
+                serializer = serializer.includeSerializers.get(namespace);
+            }
+
+            if (serializer != null) {
+                object = serializer.getObjectByID(namespacePath[i]);
+            }
+
+            return object;
+        }
+
+        public Object put(String key, Object value) {
+            throw new UnsupportedOperationException();
+        }
+
+        public Object remove(String key) {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean containsKey(String key) {
+            if (key == null) {
+                throw new IllegalArgumentException("key is null.");
+            }
+
+            boolean result = false;
+            WTKXSerializer serializer = WTKXSerializer.this;
+            String[] namespacePath = key.split("\\.");
+
+            int i = 0;
+            int n = namespacePath.length - 1;
+            while (i < n && serializer != null) {
+                String namespace = namespacePath[i++];
+                serializer = serializer.includeSerializers.get(namespace);
+            }
+
+            if (serializer != null) {
+                if (serializer.namedObjects.containsKey(key)) {
+                    result = true;
+                } else if (serializer.scriptEngineBindings != null) {
+                    result = serializer.scriptEngineBindings.containsKey(key);
+                }
+            }
+
+            return result;
+        }
+
+        @SuppressWarnings("unchecked")
+        public boolean isEmpty() {
+            boolean empty = namedObjects.isEmpty();
+
+            if (empty && scriptEngineBindings != null) {
+                // Check for script bindings
+                empty = scriptEngineBindings.isEmpty();
+            }
+
+            if (empty) {
+                // Check include serializers
+                for (String namespace : includeSerializers) {
+                    WTKXSerializer includeSerializer = includeSerializers.get(namespace);
+                    if (!includeSerializer.getNamedObjects().isEmpty()) {
+                        empty = false;
+                        break;
+                    }
+                }
+            }
+
+            return empty;
+        }
+    }
+
     private URL location = null;
     private Resources resources = null;
 
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
 
+    private NamedObjectsDictionary namedObjectsDictionary = new NamedObjectsDictionary();
+
     private XMLInputFactory xmlInputFactory;
     private Object scriptEngineManager;
     private Class<?> scriptEngineManagerClass;
+    private java.util.Map<String, Object> scriptEngineBindings;
 
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
@@ -123,6 +228,7 @@ public class WTKXSerializer implements Serializer<Object> {
         this(null);
     }
 
+    @SuppressWarnings("unchecked")
     public WTKXSerializer(Resources resources) {
         this.resources = resources;
 
@@ -130,11 +236,16 @@ public class WTKXSerializer implements Serializer<Object> {
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
 
         try {
-        	scriptEngineManagerClass = Class.forName("javax.script.ScriptEngineManager");
-        	scriptEngineManager = scriptEngineManagerClass.newInstance();
+            scriptEngineManagerClass = Class.forName("javax.script.ScriptEngineManager");
+            scriptEngineManager = scriptEngineManagerClass.newInstance();
+            Method getBindingsMethod = scriptEngineManagerClass.getMethod
+                ("getBindings", new Class<?>[] {});
+            scriptEngineBindings = (java.util.Map<String, Object>)
+                getBindingsMethod.invoke(scriptEngineManager, new Object[] {});
         } catch(Exception exception) {
-        	scriptEngineManagerClass = null;
-        	scriptEngineManager = null;
+            scriptEngineManagerClass = null;
+            scriptEngineManager = null;
+            scriptEngineBindings = null;
         }
     }
 
@@ -364,12 +475,8 @@ public class WTKXSerializer implements Serializer<Object> {
                                 	Method evalMethod = scriptEngine.getClass().getMethod("eval",
                                 			new Class<?>[] {Reader.class, bindingsClass});
 
-                                	Method getBindingsMethod =
-                                		scriptEngineManagerClass.getMethod("getBindings", new Class<?>[] {});
-
-                                	Object bindings = getBindingsMethod.invoke(scriptEngineManager, new Object[] {});
                                 	Reader scriptReader = new BufferedReader(new InputStreamReader(scriptLocation.openStream()));
-                                	evalMethod.invoke(scriptEngine, new Object[] {scriptReader, bindings});
+                                	evalMethod.invoke(scriptEngine, new Object[] {scriptReader, scriptEngineBindings});
                                 } catch(Exception exception) {
                                 	throw new SerializationException(exception);
                                 }
@@ -739,26 +846,20 @@ public class WTKXSerializer implements Serializer<Object> {
      */
     @SuppressWarnings("unchecked")
     public <T> T getObjectByName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("name is null.");
-        }
-
-        Object object = null;
-        WTKXSerializer serializer = this;
-        String[] namespacePath = name.split("\\.");
-
-        int i = 0;
-        int n = namespacePath.length - 1;
-        while (i < n && serializer != null) {
-            String namespace = namespacePath[i++];
-            serializer = serializer.includeSerializers.get(namespace);
-        }
-
-        if (serializer != null) {
-        	object = serializer.getObjectByID(namespacePath[i]);
-        }
-
+        Object object = namedObjectsDictionary.get(name);
         return (T)object;
+    }
+
+    /**
+     * Retrieves the named objects dictionary. The names are relative to this
+     * loader and can reference objects located in nested includes by using
+     * period-separated path strings (e.g. <tt>"foo.bar.baz"</tt>).
+     *
+     * @return
+     * The read-only named objects dictionary.
+     */
+    public Dictionary<String, Object> getNamedObjects() {
+        return namedObjectsDictionary;
     }
 
     private Object getObjectByID(String id) {
