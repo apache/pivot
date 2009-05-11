@@ -108,34 +108,18 @@ public class StockTracker extends Bindable implements Application {
         bind();
 
         // Wire up event handlers
-        stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
-            public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
-                // No-op
-            }
-
-            public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
-                // No-op
-            }
-
+        stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
                 refreshDetail();
             }
         });
 
-        stocksTableView.getComponentKeyListeners().add(new ComponentKeyListener() {
-            public boolean keyTyped(Component component, char character) {
-                return false;
-            }
-
+        stocksTableView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.DELETE) {
                     removeSelectedSymbols();
                 }
 
-                return false;
-            }
-
-            public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 return false;
             }
         });
@@ -147,20 +131,12 @@ public class StockTracker extends Bindable implements Application {
             }
         });
 
-        symbolTextInput.getComponentKeyListeners().add(new ComponentKeyListener() {
-            public boolean keyTyped(Component component, char character) {
-                return false;
-            }
-
+        symbolTextInput.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.ENTER) {
                     addSymbol();
                 }
 
-                return false;
-            }
-
-            public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 return false;
             }
         });
