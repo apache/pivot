@@ -54,7 +54,8 @@ limitations under the License.
                 
 	            <Rectangle x="0" y="0"
 	                width="160" height="120" fill="#0000ff"
-	                stroke="#00ff00" strokeThickness="4"/>
+	                stroke="#00ff00" strokeThickness="4"
+	                cornerRadius="20"/>
 	            <Arc x="-10" y="10" width="50" height="50" start="90.0" extent="90.0"
 	               fill="#ffff00" stroke="#ff0000" strokeThickness="4" type="pie"/>
                 <Arc x="0" y="10" width="50" height="50" start="0.0" extent="90.0"

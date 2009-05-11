@@ -30,4 +30,12 @@ public interface RectangleListener {
      * @param previousHeight
      */
     public void sizeChanged(Rectangle rectangle, int previousWidth, int previousHeight);
+
+    /**
+     * Called when a rectangle's corner radius has changed.
+     *
+     * @param rectangle
+     * @param previousCornerRadius
+     */
+    public void cornerRadiusChanged(Rectangle rectangle, int previousCornerRadius);
 }

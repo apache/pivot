@@ -19,6 +19,6 @@ limitations under the License.
 <ScrollPane xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns="pivot.wtk">
     <view>
-        <ImageView styles="{backgroundColor:'#999999'}" image="@activity.wtkd"/>
+        <ImageView styles="{backgroundColor:'#999999'}" image="@sample.wtkd"/>
     </view>
 </ScrollPane>
