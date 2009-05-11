@@ -97,7 +97,13 @@ public class WTKXSerializer implements Serializer<Object> {
      *
      * @author tvolkert
      */
-    private class NamedObjectsDictionary implements Dictionary<String, Object> {
+    public final class NamedObjectsDictionary implements Dictionary<String, Object> {
+        /**
+         * Don't allow outside callers to create instances of this class.
+         */
+        private NamedObjectsDictionary() {
+        }
+
         /**
          * Retrieves a named object.
          *
@@ -858,7 +864,7 @@ public class WTKXSerializer implements Serializer<Object> {
      * @return
      * The read-only named objects dictionary.
      */
-    public Dictionary<String, Object> getNamedObjects() {
+    public NamedObjectsDictionary getNamedObjects() {
         return namedObjectsDictionary;
     }
 
