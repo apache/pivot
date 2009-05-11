@@ -16,6 +16,11 @@
  */
 package pivot.wtkx;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.io.IOException;
+import java.net.URL;
+
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -26,6 +31,9 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
+import javax.tools.FileObject;
+import javax.tools.JavaFileManager;
+import javax.tools.StandardLocation;
 
 import pivot.collections.ArrayList;
 import pivot.collections.ArrayStack;
@@ -257,20 +265,20 @@ public class BindProcessor extends AbstractProcessor {
             if (loadGroups != null || strandedBindFields != null) {
                 // There is some bind work to be done in this class; start by
                 // creating the source code buffer
-                StringBuilder sourceCode = new StringBuilder("class _A {");
-                sourceCode.append("@Override ");
-                sourceCode.append("protected void bind(pivot.collections.Dictionary<String,");
-                sourceCode.append("pivot.collections.Dictionary<String, Object>> namedObjectDictionaries) {");
-                sourceCode.append("super.bind(namedObjectDictionaries);");
+                StringBuilder buf = new StringBuilder("class _A {");
+                buf.append("@Override ");
+                buf.append("protected void bind(pivot.collections.Dictionary<String,");
+                buf.append("pivot.collections.Dictionary<String, Object>> namedObjectDictionaries) {");
+                buf.append("super.bind(namedObjectDictionaries);");
 
-                sourceCode.append("pivot.wtkx.WTKXSerializer wtkxSerializer;");
-                sourceCode.append("Object object;");
+                buf.append("pivot.wtkx.WTKXSerializer wtkxSerializer;");
+                buf.append("Object object;");
 
                 if (loadGroups != null) {
                     // Process WTKX loads in this class
-                    sourceCode.append("java.net.URL location;");
-                    sourceCode.append("java.util.Locale locale;");
-                    sourceCode.append("pivot.util.Resources resources;");
+                    buf.append("java.net.URL location;");
+                    buf.append("java.util.Locale locale;");
+                    buf.append("pivot.util.Resources resources;");
 
                     for (String loadFieldName : loadGroups) {
                         AnnotationDossier.LoadGroup loadGroup = loadGroups.get(loadFieldName);
@@ -280,7 +288,7 @@ public class BindProcessor extends AbstractProcessor {
                         String resourceName = getAnnotationProperty(loadAnnotation, "name");
                         String baseName = getAnnotationProperty(loadAnnotation, "resources");
                         String language = getAnnotationProperty(loadAnnotation, "locale");
-                        //Boolean compile = getAnnotationProperty(loadAnnotation, "compile");
+                        Boolean compile = getAnnotationProperty(loadAnnotation, "compile");
                         boolean defaultResources = (baseName == null);
 
                         if (DEBUG) {
@@ -296,77 +304,137 @@ public class BindProcessor extends AbstractProcessor {
                             }
                         }
 
-                        // Attempt to load the resources
-                        sourceCode.append("resources = null;");
-                        if (baseName != null) {
-                            if (language == null) {
-                                sourceCode.append("locale = java.util.Locale.getDefault();");
+                        if (compile != null && compile.booleanValue()) {
+                            FileObject sourceFile = null;
+                            if (classDeclaration.sym != null) {
+                                sourceFile = classDeclaration.sym.sourcefile;
+                            }
+
+                            if (sourceFile != null) {
+                                JavaFileManager fileManager = context.get(JavaFileManager.class);
+
+                                InputStream inputStream;
+                                try {
+                                    if (resourceName.startsWith("/")) {
+                                        resourceName = resourceName.substring(1);
+                                        ClassLoader classLoader = fileManager.getClassLoader
+                                            (StandardLocation.SOURCE_PATH);
+                                        URL resourceLocation = classLoader.getResource(resourceName);
+                                        inputStream = new BufferedInputStream(resourceLocation.openStream());
+                                    } else {
+                                        String packageName = classDeclaration.sym.packge().toString();
+                                        FileObject resourceFile = fileManager.getFileForInput
+                                            (StandardLocation.SOURCE_PATH, packageName, resourceName);
+                                        inputStream = resourceFile.openInputStream();
+                                    }
+
+                                    try {
+                                        // TODO Handle resources
+                                        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                                        String blockCode = wtkxSerializer.interpretObject(inputStream);
+
+                                        // Open local scope for variable name protection
+                                        buf.append("{");
+
+                                        // Add interpreted code
+                                        buf.append(blockCode);
+
+                                        // Record interpreted values back into our main scope
+                                        buf.append(String.format
+                                            ("namedObjectDictionaries.put(\"%s\", __namedObjects);", loadFieldName));
+                                        buf.append(String.format
+                                            ("%s = (%s)__result;", loadFieldName, loadField.vartype.toString()));
+
+                                        // Close local scope
+                                        buf.append("}");
+                                    } finally {
+                                        inputStream.close();
+                                    }
+                                } catch (Exception ex) {
+                                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                                    "Error trying to load field " + classDeclaration.name.toString() + "." +
+                                    loadFieldName + ": " + ex.getMessage());
+                                }
                             } else {
-                                sourceCode.append(String.format("locale = new java.util.Locale(\"%s\");", language));
+                                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                                    "Unable to determine source file location for " +
+                                    classDeclaration.name.toString());
                             }
-                            sourceCode.append("try {");
-                            sourceCode.append(String.format
-                                ("resources = new pivot.util.Resources(%s, locale, \"UTF8\");",
-                                defaultResources ? (baseName + ".class.getName()") : ("\"" + baseName + "\"")));
-                            sourceCode.append("} catch(java.io.IOException ex) {");
-                            sourceCode.append("throw new pivot.wtkx.BindException(ex);");
-                            sourceCode.append("} catch (pivot.serialization.SerializationException ex) {");
-                            sourceCode.append("throw new pivot.wtkx.BindException(ex);");
-                            sourceCode.append("} catch (java.util.MissingResourceException ex) {");
-                            if (!defaultResources) {
-                                sourceCode.append("throw new pivot.wtkx.BindException(ex);");
+                        } else {
+                            // Attempt to load the resources
+                            buf.append("resources = null;");
+                            if (baseName != null) {
+                                if (language == null) {
+                                    buf.append("locale = java.util.Locale.getDefault();");
+                                } else {
+                                    buf.append(String.format
+                                        ("locale = new java.util.Locale(\"%s\");", language));
+                                }
+                                buf.append("try {");
+                                buf.append(String.format
+                                    ("resources = new pivot.util.Resources(%s, locale, \"UTF8\");",
+                                    defaultResources ? (baseName + ".class.getName()") : ("\"" + baseName + "\"")));
+                                buf.append("} catch(java.io.IOException ex) {");
+                                buf.append("throw new pivot.wtkx.BindException(ex);");
+                                buf.append("} catch (pivot.serialization.SerializationException ex) {");
+                                buf.append("throw new pivot.wtkx.BindException(ex);");
+                                buf.append("} catch (java.util.MissingResourceException ex) {");
+                                if (!defaultResources) {
+                                    buf.append("throw new pivot.wtkx.BindException(ex);");
+                                }
+                                buf.append("}");
                             }
-                            sourceCode.append("}");
-                        }
 
-                        // Load the WTKX resource
-                        sourceCode.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer(resources);");
-                        sourceCode.append(String.format("location = getClass().getResource(\"%s\");", resourceName));
-                        sourceCode.append("try {");
-                        sourceCode.append("object = wtkxSerializer.readObject(location);");
-                        sourceCode.append("} catch (Exception ex) {");
-                        sourceCode.append("throw new pivot.wtkx.BindException(ex);");
-                        sourceCode.append("}");
+                            // Load the WTKX resource
+                            buf.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer(resources);");
+                            buf.append(String.format("location = getClass().getResource(\"%s\");", resourceName));
+                            buf.append("try {");
+                            buf.append("object = wtkxSerializer.readObject(location);");
+                            buf.append("} catch (Exception ex) {");
+                            buf.append("throw new pivot.wtkx.BindException(ex);");
+                            buf.append("}");
 
-                        // Bind the resource to the field
-                        sourceCode.append(String.format("%s = (%s)object;", loadFieldName,
-                            loadField.vartype.toString()));
+                            // Bind the resource to the field
+                            buf.append(String.format
+                                ("%s = (%s)object;", loadFieldName, loadField.vartype.toString()));
 
-                        // Public and protected fields get kept for subclasses
-                        if ((loadField.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
-                            sourceCode.append(String.format
-                                ("namedObjectDictionaries.put(\"%s\", wtkxSerializer.getNamedObjects());", loadFieldName));
-                        }
+                            // Public and protected fields get kept for subclasses
+                            if ((loadField.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
+                                buf.append(String.format
+                                    ("namedObjectDictionaries.put(\"%s\", wtkxSerializer.getNamedObjects());",
+                                    loadFieldName));
+                            }
 
-                        // Bind the resource lookups to their corresponding fields
-                        if (loadGroup.bindFields != null) {
-                            for (JCVariableDecl bindField : loadGroup.bindFields) {
-                                String bindFieldName = bindField.name.toString();
-                                JCAnnotation bindAnnotation = getBindAnnotation(bindField);
+                            // Bind the resource lookups to their corresponding fields
+                            if (loadGroup.bindFields != null) {
+                                for (JCVariableDecl bindField : loadGroup.bindFields) {
+                                    String bindFieldName = bindField.name.toString();
+                                    JCAnnotation bindAnnotation = getBindAnnotation(bindField);
 
-                                String bindName = getAnnotationProperty(bindAnnotation, "name");
-                                if (bindName == null) {
-                                    // The bind name defaults to the field name
-                                    bindName = bindFieldName;
+                                    String bindName = getAnnotationProperty(bindAnnotation, "name");
+                                    if (bindName == null) {
+                                        // The bind name defaults to the field name
+                                        bindName = bindFieldName;
+                                    }
+
+                                    if (DEBUG) {
+                                        String property = getAnnotationProperty(bindAnnotation, "property");
+                                        processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
+                                            String.format("Processing bind(%s.%s, %s#%s)", property,
+                                            bindName, classDeclaration.name.toString(), bindFieldName));
+                                    }
+
+                                    buf.append(String.format
+                                        ("object = wtkxSerializer.getObjectByName(\"%s\");", bindName));
+                                    buf.append
+                                        ("if (object == null) {");
+                                    buf.append(String.format
+                                        ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
+                                    buf.append
+                                        ("}");
+                                    buf.append(String.format
+                                        ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
                                 }
-
-                                if (DEBUG) {
-                                    String property = getAnnotationProperty(bindAnnotation, "property");
-                                    processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
-                                        String.format("Processing bind(%s.%s, %s#%s)", property,
-                                        bindName, classDeclaration.name.toString(), bindFieldName));
-                                }
-
-                                sourceCode.append(String.format
-                                    ("object = wtkxSerializer.getObjectByName(\"%s\");", bindName));
-                                sourceCode.append
-                                    ("if (object == null) {");
-                                sourceCode.append(String.format
-                                    ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
-                                sourceCode.append
-                                    ("}");
-                                sourceCode.append(String.format
-                                    ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
                             }
                         }
                     }
@@ -374,7 +442,7 @@ public class BindProcessor extends AbstractProcessor {
 
                 if (strandedBindFields != null) {
                     // Process binds to superclass-loaded fields
-                    sourceCode.append("pivot.collections.Dictionary<String, Object> namedObjects;");
+                    buf.append("pivot.collections.Dictionary<String, Object> namedObjects;");
 
                     for (JCVariableDecl bindField : strandedBindFields) {
                         String bindFieldName = bindField.name.toString();
@@ -387,34 +455,34 @@ public class BindProcessor extends AbstractProcessor {
                             bindName = bindFieldName;
                         }
 
-                        sourceCode.append(String.format
+                        buf.append(String.format
                             ("namedObjects = namedObjectDictionaries.get(\"%s\");", loadFieldName));
 
-                        sourceCode.append
+                        buf.append
                             ("if (namedObjects == null) {");
-                        sourceCode.append(String.format
+                        buf.append(String.format
                             ("throw new pivot.wtkx.BindException(\"Property not found: %s.\");", loadFieldName));
-                        sourceCode.append
+                        buf.append
                             ("}");
 
-                        sourceCode.append(String.format
+                        buf.append(String.format
                             ("object = namedObjects.get(\"%s\");", bindName));
-                        sourceCode.append
+                        buf.append
                             ("if (object == null) {");
-                        sourceCode.append(String.format
+                        buf.append(String.format
                             ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
-                        sourceCode.append
+                        buf.append
                             ("}");
-                        sourceCode.append(String.format
+                        buf.append(String.format
                             ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
                     }
                 }
 
-                sourceCode.append("}");
-                sourceCode.append("}");
+                buf.append("}");
+                buf.append("}");
 
                 // Parse the source code and extract the method declaration
-                Scanner scanner = scannerFactory.newScanner(sourceCode.toString());
+                Scanner scanner = scannerFactory.newScanner(buf.toString());
                 Parser parser = parserFactory.newParser(scanner, false, false);
                 JCCompilationUnit parsedCompilationUnit = parser.compilationUnit();
                 JCClassDecl parsedClassDeclaration = (JCClassDecl)parsedCompilationUnit.defs.head;

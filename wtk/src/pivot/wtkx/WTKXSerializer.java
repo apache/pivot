@@ -176,7 +176,6 @@ public class WTKXSerializer implements Serializer<Object> {
             return result;
         }
 
-        @SuppressWarnings("unchecked")
         public boolean isEmpty() {
             boolean empty = namedObjects.isEmpty();
 
@@ -283,7 +282,12 @@ public class WTKXSerializer implements Serializer<Object> {
         }
 
         this.location = location;
-        return readObject(new BufferedInputStream(location.openStream()));
+        InputStream inputStream = new BufferedInputStream(location.openStream());
+        try {
+            return readObject(inputStream);
+        } finally {
+            inputStream.close();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -706,54 +710,6 @@ public class WTKXSerializer implements Serializer<Object> {
     }
 
     /**
-     * Interprets an object from the specified WTKX resource.
-     * <p>
-     * The name of a resource is a '/'-separated path name that identifies the
-     * resource. See {@link ClassLoader#getResource(String)} for more details.
-     *
-     * @param resourceName
-     * The resource name
-     *
-     * @return
-     * The interpreted Java source code
-     */
-    public String interpretObject(String resourceName) throws IOException,
-        SerializationException {
-        if (resourceName == null) {
-            throw new IllegalArgumentException("resourceName is null.");
-        }
-
-        ClassLoader classLoader = ThreadUtilities.getClassLoader();
-        URL location = classLoader.getResource(resourceName);
-
-        if (location == null) {
-            throw new SerializationException("Could not find resource named \""
-                + resourceName + "\".");
-        }
-
-        return interpretObject(location);
-    }
-
-    /**
-     * Interprets an object from a URL that points to a WTKX resource.
-     *
-     * @param location
-     * The location of the resource to be interpreted
-     *
-     * @return
-     * The interpreted Java source code
-     */
-    public String interpretObject(URL location) throws IOException,
-        SerializationException {
-        if (location == null) {
-            throw new IllegalArgumentException("location is null.");
-        }
-
-        this.location = location;
-        return interpretObject(new BufferedInputStream(location.openStream()));
-    }
-
-    /**
      * Interprets an object from a WTKX input stream.
      *
      * @param inputStream
@@ -769,7 +725,8 @@ public class WTKXSerializer implements Serializer<Object> {
         }
 
         StringBuilder buf = new StringBuilder();
-        buf.append("pivot.collections.Dictionary<String, Object> namedObjects = " +
+        buf.append("Object __result = null;");
+        buf.append("pivot.collections.Dictionary<String, Object> __namedObjects = " +
             "new pivot.collections.HashMap<String, Object>();\n");
 
         // Parse the XML stream

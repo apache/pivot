@@ -323,9 +323,9 @@ public abstract class Bindable {
             }
         } else {
             // Invoke the bind overload
-            HashMap<String, Dictionary<String, Object>> namedObjectsDictionaries =
+            HashMap<String, Dictionary<String, Object>> namedObjectDictionaries =
                 new HashMap<String, Dictionary<String, Object>>();
-            bind(namedObjectsDictionaries);
+            bind(namedObjectDictionaries);
         }
     }
 
@@ -334,7 +334,7 @@ public abstract class Bindable {
      * override. It exists to support {@link BindProcessor}. Dealing directly
      * with this method in any way may yield unpredictable behavior.
      */
-    protected void bind(Dictionary<String, Dictionary<String, Object>> namedObjectsDictionaries) {
+    protected void bind(Dictionary<String, Dictionary<String, Object>> namedObjectDictionaries) {
         // No-op
     }
 }
