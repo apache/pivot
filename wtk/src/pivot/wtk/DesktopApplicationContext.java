@@ -197,7 +197,13 @@ public final class DesktopApplicationContext extends ApplicationContext {
             if (i == 0) {
                 applicationClassName = arg;
             } else {
-                String[] property = arg.split(":");
+                String[] property;
+                if (arg.startsWith("-")) {
+                    arg = arg.substring(1);
+                    property = arg.split("=");
+                } else {
+                    property = arg.split(":");
+                }
 
                 if (property.length == 2) {
                     String key = property[0];
