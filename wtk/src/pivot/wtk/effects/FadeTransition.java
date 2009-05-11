@@ -32,6 +32,10 @@ public class FadeTransition extends Transition {
         this.component = component;
     }
 
+    public Component getComponent() {
+        return component;
+    }
+
     @Override
     public void start(TransitionListener transitionListener) {
         component.getDecorators().add(fadeDecorator);

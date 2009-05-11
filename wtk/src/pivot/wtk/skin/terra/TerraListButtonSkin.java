@@ -41,7 +41,7 @@ import pivot.wtk.Bounds;
 import pivot.wtk.Theme;
 import pivot.wtk.Window;
 import pivot.wtk.WindowStateListener;
-import pivot.wtk.effects.FadeTransition;
+import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.ListButtonSkin;
@@ -52,9 +52,6 @@ import pivot.wtk.skin.ListButtonSkin;
  * @author gbrown
  */
 public class TerraListButtonSkin extends ListButtonSkin {
-    private Panorama listViewPanorama;
-    private Border listViewBorder;
-
     private WindowStateListener listViewPopupStateListener = new WindowStateListener() {
         private boolean focusButtonOnClose = true;
 
@@ -74,8 +71,9 @@ public class TerraListButtonSkin extends ListButtonSkin {
             Vote vote = Vote.APPROVE;
 
             if (closeTransition == null) {
-                closeTransition = new FadeTransition(window,
-                    CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE);
+                closeTransition = new FadeWindowTransition(window,
+                    CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
+                    dropShadowDecorator);
 
                 closeTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
@@ -111,6 +109,9 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
     };
 
+    private Panorama listViewPanorama;
+    private Border listViewBorder;
+
     private Font font;
     private Color color;
     private Color disabledColor;
@@ -127,6 +128,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private Color disabledBevelColor;
 
     private Transition closeTransition = null;
+    private DropShadowDecorator dropShadowDecorator = null;
 
     private static final int TRIGGER_WIDTH = 14;
 
@@ -164,6 +166,10 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         // Set the popup content
         listViewPopup.setContent(listViewBorder);
+
+        // Attach the drop-shadow decorator
+        dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+        listViewPopup.getDecorators().add(dropShadowDecorator);
     }
 
     public int getPreferredWidth(int height) {

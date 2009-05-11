@@ -38,7 +38,7 @@ import pivot.wtk.Bounds;
 import pivot.wtk.Theme;
 import pivot.wtk.Window;
 import pivot.wtk.WindowStateListener;
-import pivot.wtk.effects.FadeTransition;
+import pivot.wtk.effects.DropShadowDecorator;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.CalendarButtonSkin;
@@ -51,8 +51,6 @@ import pivot.wtk.skin.CalendarButtonSkin;
  * @author gbrown
  */
 public class TerraCalendarButtonSkin extends CalendarButtonSkin {
-    private Border calendarBorder;
-
     private WindowStateListener calendarPopupStateListener = new WindowStateListener() {
         private boolean focusButtonOnClose = true;
 
@@ -72,8 +70,9 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
             Vote vote = Vote.APPROVE;
 
             if (closeTransition == null) {
-                closeTransition = new FadeTransition(window,
-                    CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE);
+                closeTransition = new FadeWindowTransition(window,
+                    CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
+                    dropShadowDecorator);
 
                 closeTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
@@ -109,6 +108,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         }
     };
 
+    private Border calendarBorder;
+
     private Font font;
     private Color color;
     private Color disabledColor;
@@ -124,6 +125,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     private Color disabledBevelColor;
 
     private Transition closeTransition = null;
+    private DropShadowDecorator dropShadowDecorator = null;
 
     private static final int TRIGGER_WIDTH = 14;
 
@@ -156,6 +158,10 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
         // Set the popup content
         calendarPopup.setContent(calendarBorder);
+
+        // Attach the drop-shadow decorator
+        dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+        calendarPopup.getDecorators().add(dropShadowDecorator);
     }
 
     public int getPreferredWidth(int height) {

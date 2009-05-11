@@ -35,7 +35,6 @@ import pivot.wtk.Panorama;
 import pivot.wtk.Theme;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
-import pivot.wtk.effects.FadeTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.WindowSkin;
@@ -92,8 +91,9 @@ public class TerraMenuPopupSkin extends WindowSkin
         public void itemSelected(Menu.Item item) {
             final MenuPopup menuPopup = (MenuPopup)getComponent();
 
-            closeTransition = new FadeTransition(menuPopup,
-                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE);
+            closeTransition = new FadeWindowTransition(menuPopup,
+                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
+                dropShadowDecorator);
 
             closeTransition.start(new TransitionListener() {
                 public void transitionCompleted(Transition transition) {
