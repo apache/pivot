@@ -260,8 +260,8 @@ public class BindProcessor extends AbstractProcessor {
                 StringBuilder sourceCode = new StringBuilder("class _A {");
                 sourceCode.append("@Override ");
                 sourceCode.append("protected void bind(pivot.collections.Dictionary<String,");
-                sourceCode.append("pivot.collections.Dictionary<String, Object>> namedObjectsDictionaries) {");
-                sourceCode.append("super.bind(namedObjectsDictionaries);");
+                sourceCode.append("pivot.collections.Dictionary<String, Object>> namedObjectDictionaries) {");
+                sourceCode.append("super.bind(namedObjectDictionaries);");
 
                 sourceCode.append("pivot.wtkx.WTKXSerializer wtkxSerializer;");
                 sourceCode.append("Object object;");
@@ -335,7 +335,7 @@ public class BindProcessor extends AbstractProcessor {
                         // Public and protected fields get kept for subclasses
                         if ((loadField.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
                             sourceCode.append(String.format
-                                ("namedObjectsDictionaries.put(\"%s\", wtkxSerializer.getNamedObjects());", loadFieldName));
+                                ("namedObjectDictionaries.put(\"%s\", wtkxSerializer.getNamedObjects());", loadFieldName));
                         }
 
                         // Bind the resource lookups to their corresponding fields
@@ -388,7 +388,7 @@ public class BindProcessor extends AbstractProcessor {
                         }
 
                         sourceCode.append(String.format
-                            ("namedObjects = namedObjectsDictionaries.get(\"%s\");", loadFieldName));
+                            ("namedObjects = namedObjectDictionaries.get(\"%s\");", loadFieldName));
 
                         sourceCode.append
                             ("if (namedObjects == null) {");

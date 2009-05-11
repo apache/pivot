@@ -97,11 +97,11 @@ public class WTKXSerializer implements Serializer<Object> {
      *
      * @author tvolkert
      */
-    public final class NamedObjectsDictionary implements Dictionary<String, Object> {
+    public final class NamedObjectDictionary implements Dictionary<String, Object> {
         /**
          * Don't allow outside callers to create instances of this class.
          */
-        private NamedObjectsDictionary() {
+        private NamedObjectDictionary() {
         }
 
         /**
@@ -206,7 +206,7 @@ public class WTKXSerializer implements Serializer<Object> {
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
 
-    private NamedObjectsDictionary namedObjectsDictionary = new NamedObjectsDictionary();
+    private NamedObjectDictionary namedObjectDictionary = new NamedObjectDictionary();
 
     private XMLInputFactory xmlInputFactory;
     private Object scriptEngineManager;
@@ -852,7 +852,7 @@ public class WTKXSerializer implements Serializer<Object> {
      */
     @SuppressWarnings("unchecked")
     public <T> T getObjectByName(String name) {
-        Object object = namedObjectsDictionary.get(name);
+        Object object = namedObjectDictionary.get(name);
         return (T)object;
     }
 
@@ -864,8 +864,8 @@ public class WTKXSerializer implements Serializer<Object> {
      * @return
      * The read-only named objects dictionary.
      */
-    public NamedObjectsDictionary getNamedObjects() {
-        return namedObjectsDictionary;
+    public NamedObjectDictionary getNamedObjects() {
+        return namedObjectDictionary;
     }
 
     private Object getObjectByID(String id) {
