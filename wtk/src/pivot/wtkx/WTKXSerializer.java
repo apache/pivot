@@ -968,8 +968,10 @@ public class WTKXSerializer implements Serializer<Object> {
                                             attribute.localName.substring(1);
                                         String setterMethodName = BeanDictionary.SET_PREFIX + key;
 
-                                        buf.append(String.format("__%d.%s(%s);", element.ref,
-                                            setterMethodName, resolveSource(attribute.value, attributeType)));
+                                        buf.append(resolveSource(attribute.value, attributeType,
+                                            ++Element.counter));
+                                        buf.append(String.format("__%d.%s(__%d);", element.ref,
+                                            setterMethodName, Element.counter));
                                     }
                                 }
                             }
@@ -1210,101 +1212,117 @@ public class WTKXSerializer implements Serializer<Object> {
         return resolvedValue;
     }
 
-    private String resolveSource(String attributeValue, Class<?> propertyType)
+    private String resolveSource(String attributeValue, Class<?> propertyType, int ref)
         throws MalformedURLException {
-        String resolvedSource = null;
+        StringBuilder buf = new StringBuilder();
 
         if (propertyType == Boolean.class
             || propertyType == Boolean.TYPE) {
-            try {
-                resolvedSource = String.valueOf(Boolean.parseBoolean(attributeValue));
-            } catch(NumberFormatException exception) {
-                resolvedSource = "\"" + attributeValue + "\"";
-            }
+            buf.append(String.format("boolean __%d = %b;",
+                ref, Boolean.parseBoolean(attributeValue)));
         } else if (propertyType == Character.class
             || propertyType == Character.TYPE) {
             if (attributeValue.length() > 0) {
-                resolvedSource = "'" + attributeValue.charAt(0) + "'";
+                buf.append(String.format("char __%d = '%c';",
+                    ref, attributeValue.charAt(0)));
             }
         } else if (propertyType == Byte.class
             || propertyType == Byte.TYPE) {
             try {
-                resolvedSource = String.valueOf(Byte.parseByte(attributeValue));
+                buf.append(String.format("byte __%d = %d;",
+                    ref, Byte.parseByte(attributeValue)));
             } catch(NumberFormatException exception) {
-                resolvedSource = "\"" + attributeValue + "\"";
+                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
             }
         } else if (propertyType == Short.class
             || propertyType == Short.TYPE) {
             try {
-                resolvedSource = String.valueOf(Short.parseShort(attributeValue));
+                buf.append(String.format("short __%d = %d;",
+                    ref, Short.parseShort(attributeValue)));
             } catch(NumberFormatException exception) {
-                resolvedSource = "\"" + attributeValue + "\"";
+                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
             }
         } else if (propertyType == Integer.class
             || propertyType == Integer.TYPE) {
             try {
-                resolvedSource = String.valueOf(Integer.parseInt(attributeValue));
+                buf.append(String.format("int __%d = %d;",
+                    ref, Integer.parseInt(attributeValue)));
             } catch(NumberFormatException exception) {
-                resolvedSource = "\"" + attributeValue + "\"";
+                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
             }
         } else if (propertyType == Long.class
             || propertyType == Long.TYPE) {
             try {
-                resolvedSource = String.valueOf(Long.parseLong(attributeValue));
+                buf.append(String.format("long __%d = %d;",
+                    ref, Long.parseLong(attributeValue)));
             } catch(NumberFormatException exception) {
-                resolvedSource = "\"" + attributeValue + "\"";
+                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
             }
         } else if (propertyType == Float.class
             || propertyType == Float.TYPE) {
             try {
-                resolvedSource = String.valueOf(Float.parseFloat(attributeValue));
+                buf.append(String.format("float __%d = %f;",
+                    ref, Float.parseFloat(attributeValue)));
             } catch(NumberFormatException exception) {
-                resolvedSource = "\"" + attributeValue + "\"";
+                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
             }
         } else if (propertyType == Double.class
             || propertyType == Double.TYPE) {
             try {
-                resolvedSource = String.valueOf(Double.parseDouble(attributeValue));
+                buf.append(String.format("double __%d = %f;",
+                    ref, Double.parseDouble(attributeValue)));
             } catch(NumberFormatException exception) {
-                resolvedSource = "\"" + attributeValue + "\"";
+                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
             }
         } else {
             if (attributeValue.length() > 0) {
                 if (attributeValue.charAt(0) == URL_PREFIX) {
                     if (attributeValue.length() > 1) {
                         if (attributeValue.charAt(1) == URL_PREFIX) {
-                            resolvedSource = "\"" + attributeValue.substring(1) + "\"";
+                            buf.append(String.format("String __%d = \"%s\";",
+                                ref, attributeValue.substring(1)));
                         } else {
-                            // TODO
-                            resolvedSource = "\"" + attributeValue + "\"";
+                            buf.append(String.format
+                                ("java.net.URL __%d = getClass().getResource(\"%s\");",
+                                ref, attributeValue.substring(1)));
                         }
                     }
                 } else if (attributeValue.charAt(0) == RESOURCE_KEY_PREFIX) {
                     if (attributeValue.length() > 1) {
                         if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
-                            resolvedSource = "\"" + attributeValue.substring(1) + "\"";
+                            buf.append(String.format("String __%d = \"%s\";",
+                                ref, attributeValue.substring(1)));
                         } else {
                             // TODO
-                            resolvedSource = "\"" + attributeValue + "\"";
+                            buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
                         }
                     }
                 } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {
                     if (attributeValue.length() > 1) {
                         if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
-                            resolvedSource = "\"" + attributeValue.substring(1) + "\"";
+                            buf.append(String.format("String __%d = \"%s\";",
+                                ref, attributeValue.substring(1)));
                         } else {
-                            resolvedSource = "__namedObjects.get(\"" + attributeValue.substring(1) + "\")";
+                            buf.append(String.format("%s __%d = (%s)__namedObjects.get(\"%s\");",
+                                propertyType.getName(), ref, propertyType.getName(),
+                                attributeValue.substring(1)));
                         }
                     }
                 } else {
-                    resolvedSource = "\"" + attributeValue + "\"";
+                    buf.append(String.format("String __%d = \"%s\";",
+                        ref, attributeValue));
                 }
             } else {
-                resolvedSource = "\"\"";
+                buf.append(String.format("String __%d = \"\";", ref));
             }
         }
 
-        return resolvedSource;
+        if (buf.length() == 0) {
+            // Fall-through case
+            buf.append(String.format("String __%d = null;", ref));
+        }
+
+        return buf.toString();
     }
 
     /**

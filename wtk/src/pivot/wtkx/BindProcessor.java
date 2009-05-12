@@ -262,7 +262,6 @@ public class BindProcessor extends AbstractProcessor {
             List<JCVariableDecl> strandedBindFields = annotationDossier.getStrandedBindFields();
 
             if (loadGroups != null || strandedBindFields != null) {
-                boolean foo = false;
                 // There is some bind work to be done in this class; start by
                 // creating the source code buffer
                 StringBuilder buf = new StringBuilder("class _A {");
@@ -305,7 +304,6 @@ public class BindProcessor extends AbstractProcessor {
                         }
 
                         if (compile != null && compile.booleanValue()) {
-                            foo = true;
                             FileObject sourceFile = null;
                             if (classDeclaration.sym != null) {
                                 sourceFile = classDeclaration.sym.sourcefile;
@@ -366,12 +364,10 @@ public class BindProcessor extends AbstractProcessor {
                                                 buf.append(String.format
                                                     ("object = __namedObjects.get(\"%s\");", bindName));
                                                 buf.append
-                                                    ("if (object == null) {");
+                                                    ("if (object == null) ");
                                                 buf.append(String.format
                                                     ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");",
                                                     bindName));
-                                                buf.append
-                                                    ("}");
                                                 buf.append(String.format
                                                     ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
                                             }
@@ -459,11 +455,9 @@ public class BindProcessor extends AbstractProcessor {
                                     buf.append(String.format
                                         ("object = wtkxSerializer.getObjectByName(\"%s\");", bindName));
                                     buf.append
-                                        ("if (object == null) {");
+                                        ("if (object == null) ");
                                     buf.append(String.format
                                         ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
-                                    buf.append
-                                        ("}");
                                     buf.append(String.format
                                         ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
                                 }
@@ -500,11 +494,9 @@ public class BindProcessor extends AbstractProcessor {
                         buf.append(String.format
                             ("object = namedObjects.get(\"%s\");", bindName));
                         buf.append
-                            ("if (object == null) {");
+                            ("if (object == null) ");
                         buf.append(String.format
                             ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", bindName));
-                        buf.append
-                            ("}");
                         buf.append(String.format
                             ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
                     }
@@ -522,9 +514,6 @@ public class BindProcessor extends AbstractProcessor {
 
                 // Add the AST method declaration to our class
                 classDeclaration.defs = classDeclaration.defs.prepend(parsedMethodDeclaration);
-                if (foo) {
-                    System.out.println(parsedMethodDeclaration);
-                }
             }
         }
 
