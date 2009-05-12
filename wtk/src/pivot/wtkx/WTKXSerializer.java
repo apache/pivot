@@ -63,7 +63,6 @@ public class WTKXSerializer implements Serializer<Object> {
         }
 
         public final Element parent;
-        public final String tagName;
         public final Type type;
         public final List<Attribute> attributes;
 
@@ -72,13 +71,12 @@ public class WTKXSerializer implements Serializer<Object> {
 
         public static int counter = -1;
 
-        public Element(Element parent, String tagName, Type type, List<Attribute> attributes, Object value) {
-            this(parent, tagName, type, attributes, value, -1);
+        public Element(Element parent, Type type, List<Attribute> attributes, Object value) {
+            this(parent, type, attributes, value, -1);
         }
 
-        public Element(Element parent, String tagName, Type type, List<Attribute> attributes, Object value, int ref) {
+        public Element(Element parent, Type type, List<Attribute> attributes, Object value, int ref) {
             this.parent = parent;
-            this.tagName = tagName;
             this.type = type;
             this.attributes = attributes;
             this.value = value;
@@ -429,7 +427,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                     value = serializer.readObject(new URL(location, src));
                                 }
 
-                                element = new Element(element, localName, Element.Type.INCLUDE, attributes, value);
+                                element = new Element(element, Element.Type.INCLUDE, attributes, value);
                             } else if (localName.equals(SCRIPT_TAG)) {
                             	if (scriptEngineManagerClass == null) {
                             		throw new SerializationException("Scripting is not supported on this platform.");
@@ -499,7 +497,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                 	throw new SerializationException(exception);
                                 }
 
-                                element = new Element(element, localName, Element.Type.SCRIPT, null, null);
+                                element = new Element(element, Element.Type.SCRIPT, null, null);
                             } else {
                                 throw new SerializationException(prefix + ":" + localName
                                     + " is not a valid tag.");
@@ -539,7 +537,7 @@ public class WTKXSerializer implements Serializer<Object> {
 
                                 try {
                                     Class<?> type = Class.forName(className);
-                                    element = new Element(element, localName, Element.Type.INSTANCE, attributes, type.newInstance());
+                                    element = new Element(element, Element.Type.INSTANCE, attributes, type.newInstance());
                                 } catch(Exception exception) {
                                     throw new SerializationException(exception);
                                 }
@@ -558,13 +556,13 @@ public class WTKXSerializer implements Serializer<Object> {
                                 if (propertyDictionary.isReadOnly(localName)) {
                                     Object value = propertyDictionary.get(localName);
                                     assert (value != null) : "Read-only properties cannot be null.";
-                                    element = new Element(element, localName, Element.Type.READ_ONLY_PROPERTY, attributes, value);
+                                    element = new Element(element, Element.Type.READ_ONLY_PROPERTY, attributes, value);
                                 } else {
                                     if (attributes.getLength() > 0) {
                                         throw new SerializationException("Writable property elements cannot have attributes.");
                                     }
 
-                                    element = new Element(element, localName, Element.Type.WRITABLE_PROPERTY, null, null);
+                                    element = new Element(element, Element.Type.WRITABLE_PROPERTY, null, null);
                                 }
                             }
                         }
@@ -821,7 +819,7 @@ public class WTKXSerializer implements Serializer<Object> {
                             try {
                                 // TODO Pass ClassLoader here
                                 Class<?> type = Class.forName(className, false, getClass().getClassLoader());
-                                element = new Element(element, localName, Element.Type.INSTANCE,
+                                element = new Element(element, Element.Type.INSTANCE,
                                     attributes, type, Element.counter);
                             } catch(Exception exception) {
                                 throw new SerializationException(exception);
@@ -850,7 +848,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                     ("assert (__%d != null) : \"Read-only properties cannot be null.\";",
                                     Element.counter));
 
-                                element = new Element(element, localName, Element.Type.READ_ONLY_PROPERTY,
+                                element = new Element(element, Element.Type.READ_ONLY_PROPERTY,
                                     attributes, valueType, Element.counter);
                             } else {
                                 if (attributes.getLength() > 0) {
@@ -858,7 +856,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                         ("Writable property elements cannot have attributes.");
                                 }
 
-                                element = new Element(element, localName, Element.Type.WRITABLE_PROPERTY,
+                                element = new Element(element, Element.Type.WRITABLE_PROPERTY,
                                     null, null, -1);
                             }
                         }
