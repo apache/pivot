@@ -263,6 +263,7 @@ public class BindProcessor extends AbstractProcessor {
             List<JCVariableDecl> strandedBindFields = annotationDossier.getStrandedBindFields();
 
             if (loadGroups != null || strandedBindFields != null) {
+                boolean foo = false;
                 // There is some bind work to be done in this class; start by
                 // creating the source code buffer
                 StringBuilder buf = new StringBuilder("class _A {");
@@ -305,6 +306,7 @@ public class BindProcessor extends AbstractProcessor {
                         }
 
                         if (compile != null && compile.booleanValue()) {
+                            foo = true;
                             FileObject sourceFile = null;
                             if (classDeclaration.sym != null) {
                                 sourceFile = classDeclaration.sym.sourcefile;
@@ -331,7 +333,7 @@ public class BindProcessor extends AbstractProcessor {
                                     try {
                                         // TODO Handle resources
                                         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                                        String blockCode = wtkxSerializer.interpretObject(inputStream);
+                                        String blockCode = wtkxSerializer.readSource(inputStream);
 
                                         // Open local scope for variable name protection
                                         buf.append("{");
@@ -521,6 +523,9 @@ public class BindProcessor extends AbstractProcessor {
 
                 // Add the AST method declaration to our class
                 classDeclaration.defs = classDeclaration.defs.prepend(parsedMethodDeclaration);
+                if (foo) {
+                    System.out.println(parsedMethodDeclaration);
+                }
             }
         }
 

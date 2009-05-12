@@ -68,25 +68,21 @@ public class WTKXSerializer implements Serializer<Object> {
         public final List<Attribute> attributes;
 
         public Object value;
-        public int count = -1;
+        public int ref;
 
         public static int counter = -1;
 
         public Element(Element parent, String tagName, Type type, List<Attribute> attributes, Object value) {
-            this.parent = parent;
-            this.tagName = tagName;
-            this.type = type;
-            this.attributes = attributes;
-            this.value = value;
+            this(parent, tagName, type, attributes, value, -1);
         }
 
-        public Element(Element parent, String tagName, Type type, List<Attribute> attributes, Object value, int count) {
+        public Element(Element parent, String tagName, Type type, List<Attribute> attributes, Object value, int ref) {
             this.parent = parent;
             this.tagName = tagName;
             this.type = type;
             this.attributes = attributes;
             this.value = value;
-            this.count = count;
+            this.ref = ref;
         }
     }
 
@@ -728,15 +724,15 @@ public class WTKXSerializer implements Serializer<Object> {
     /**
      * Interprets an object from a WTKX input stream.
      * <p>
-     * TODO Take a ClassLoader, and pass it to Class.forName()
+     * TODO This method should take a ClassLoader.
      *
      * @param inputStream
-     * The data stream from which the object will be interpreted
+     * The data stream from which the WTKX will be read
      *
      * @return
-     * The interpreted Java source code
+     * The Java source code that represents the WTKX
      */
-    public String interpretObject(InputStream inputStream) throws IOException,
+    public String readSource(InputStream inputStream) throws IOException,
         SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
@@ -819,11 +815,14 @@ public class WTKXSerializer implements Serializer<Object> {
 
                             String className = namespaceURI + "." + localName.replace('.', '$');
 
-                            buf.append(String.format("%s __%d = new %s();", className, ++Element.counter, className));
+                            buf.append(String.format
+                                ("%s __%d = new %s();", className, ++Element.counter, className));
 
                             try {
+                                // TODO Pass ClassLoader here
                                 Class<?> type = Class.forName(className);
-                                element = new Element(element, localName, Element.Type.INSTANCE, attributes, type, Element.counter);
+                                element = new Element(element, localName, Element.Type.INSTANCE,
+                                    attributes, type, Element.counter);
                             } catch(Exception exception) {
                                 throw new SerializationException(exception);
                             }
@@ -841,16 +840,22 @@ public class WTKXSerializer implements Serializer<Object> {
 
                             if (BeanDictionary.isReadOnly(type, localName)) {
                                 Class<?> valueType = BeanDictionary.getType(type, localName);
+                                Method getterMethod = BeanDictionary.getGetterMethod(type, localName);
 
-                                buf.append(String.format("Object __%d = (new pivot.beans.BeanDictionary(__%d)).get(\"%s\");",
-                                    ++Element.counter, element.count, localName));
-                                buf.append(String.format("assert (__%d != null) : \"Read-only properties cannot be null.\";",
+                                // Instantiate the property so we have a reference to it
+                                buf.append(String.format
+                                    ("%s __%d = __%d.%s();", valueType.getName(), ++Element.counter,
+                                    element.ref, getterMethod.getName()));
+                                buf.append(String.format
+                                    ("assert (__%d != null) : \"Read-only properties cannot be null.\";",
                                     Element.counter));
+
                                 element = new Element(element, localName, Element.Type.READ_ONLY_PROPERTY,
-                                    attributes, BeanDictionary.getType(type, localName), Element.counter);
+                                    attributes, valueType, Element.counter);
                             } else {
                                 if (attributes.getLength() > 0) {
-                                    throw new SerializationException("Writable property elements cannot have attributes.");
+                                    throw new SerializationException
+                                        ("Writable property elements cannot have attributes.");
                                 }
 
                                 element = new Element(element, localName, Element.Type.WRITABLE_PROPERTY,
@@ -867,15 +872,11 @@ public class WTKXSerializer implements Serializer<Object> {
                         if (element.parent != null) {
                             Class<?> parentType = (Class<?>)element.parent.value;
 
-                            if (parentType != null) {
-                                if (Sequence.class.isAssignableFrom(parentType)) {
-                                    buf.append(String.format("__%d.add(__%d);",
-                                        element.parent.count, element.count));
-                                } else if (ListenerList.class.isAssignableFrom(parentType)) {
-                                    buf.append(String.format
-                                        ("((pivot.util.ListenerList<Object>)__%d).add(__%d);",
-                                        element.parent.count, element.count));
-                                }
+                            if (parentType != null
+                                && (Sequence.class.isAssignableFrom(parentType)
+                                || ListenerList.class.isAssignableFrom(parentType))) {
+                                buf.append(String.format("__%d.add(__%d);",
+                                    element.parent.ref, element.ref));
                             }
                         }
 
@@ -886,7 +887,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                     + " must not be null.");
                             }
 
-                            buf.append(String.format("__namedObjects.put(\"%s\", __%d);", id, element.count));
+                            buf.append(String.format("__namedObjects.put(\"%s\", __%d);", id, element.ref));
                         }
 
                         break;
@@ -901,9 +902,13 @@ public class WTKXSerializer implements Serializer<Object> {
 
                     switch (element.type) {
                     case WRITABLE_PROPERTY: {
-                        String key = Character.toUpperCase(localName.charAt(0)) + localName.substring(1);
-                        String methodName = BeanDictionary.SET_PREFIX + key;
-                        buf.append(String.format("__%d.%s(__%d);", element.parent.count, methodName, element.count));
+                        Class<?> type = (Class<?>)element.value;
+                        Class<?> parentType = (Class<?>)element.parent.value;
+                        Method setterMethod = BeanDictionary.getSetterMethod(parentType, localName, type);
+
+                        buf.append(String.format("__%d.%s(__%d);",
+                            element.parent.ref, setterMethod.getName(), element.ref));
+
                         break;
                     }
 
@@ -918,26 +923,26 @@ public class WTKXSerializer implements Serializer<Object> {
                             // The element is an untyped object
                             for (Attribute attribute : element.attributes) {
                                 if (Character.isUpperCase(attribute.localName.charAt(0))) {
-                                    throw new SerializationException("Static setters are only supported for typed instances.");
+                                    throw new SerializationException
+                                        ("Static setters are only supported for typed instances.");
                                 }
 
                                 // Resolve and apply the attribute
                                 // TODO Resolve
                                 // TODO attribute.value shouldn't always be quoted
-                                buf.append(String.format("((pivot.collections.Dictionary)__%d).put(\"%s\", \"%s\")", element.count, attribute.localName, attribute.value));
+                                buf.append(String.format
+                                    ("__%d.put(\"%s\", \"%s\")",
+                                    element.ref, attribute.localName, attribute.value));
                             }
                         } else {
                             // The element represents a typed object; apply the attributes
-                            Class<?> valueType = (Class<?>)element.value;
-                            //BeanDictionary valueDictionary = new BeanDictionary(element.value);
-
                             for (Attribute attribute : element.attributes) {
                                 if (Character.isUpperCase(attribute.localName.charAt(0))) {
                                     // The property represents an attached value
                                     // TODO
                                     //setStaticProperty(attribute, element.value);
                                 } else {
-                                    Class<?> attributeType = BeanDictionary.getType(valueType, attribute.localName);
+                                    Class<?> attributeType = BeanDictionary.getType(type, attribute.localName);
 
                                     if (attributeType != null
                                         && ListenerList.class.isAssignableFrom(attributeType)) {
@@ -961,10 +966,11 @@ public class WTKXSerializer implements Serializer<Object> {
                                         }
                                         */
                                     } else {
-                                        String key = Character.toUpperCase(attribute.localName.charAt(0))
-                                            + attribute.localName.substring(1);
-                                        String methodName = BeanDictionary.SET_PREFIX + key;
-                                        buf.append(String.format("__%d.%s(\"%s\");", element.count, methodName, attribute.value));
+                                        // TODO What about primitive setters?
+                                        Method setterMethod = BeanDictionary.getSetterMethod
+                                            (type, attribute.localName, String.class);
+                                        buf.append(String.format("__%d.%s(\"%s\");",
+                                            element.ref, setterMethod.getName(), attribute.value));
                                     }
                                 }
                             }
@@ -975,7 +981,7 @@ public class WTKXSerializer implements Serializer<Object> {
                         if (element.parent != null
                             && element.parent.type == Element.Type.WRITABLE_PROPERTY) {
                             element.parent.value = element.value;
-                            element.parent.count = element.count;
+                            element.parent.ref = element.ref;
                         }
                     }
                     }
@@ -983,7 +989,7 @@ public class WTKXSerializer implements Serializer<Object> {
                     // If this is the top of the stack, return this element's value;
                     // otherwise, move up the stack
                     if (element.parent == null) {
-                        buf.append(String.format("__result = __%d;", element.count));
+                        buf.append(String.format("__result = __%d;", element.ref));
                     } else {
                         element = element.parent;
                     }
