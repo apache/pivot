@@ -16,87 +16,92 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{backgroundColor:10, thickness:0, padding:8}"
+<Window title="Pivot Demo"
+    maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns:effects="pivot.wtk.effects"
     xmlns="pivot.wtk">
     <content>
-        <Border styles="{padding:0}">
+        <Border styles="{backgroundColor:10, thickness:0, padding:8}">
             <content>
-                <ScrollPane wtkx:id="scrollPane" styles="{backgroundColor:11}"
-                    horizontalScrollBarPolicy="auto"
-                    verticalScrollBarPolicy="auto">
-                    <view>
-                        <FlowPane orientation="vertical" styles="{padding:6}">
-                            <Rollup wtkx:id="buttonsRollup">
-                                <heading>
-                                    <Label text="Buttons" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="listsRollup">
-                                <heading>
-                                    <Label text="Lists" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="textRollup">
-                                <heading>
-                                    <Label text="Text" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="calendarsRollup">
-                                <heading>
-                                    <Label text="Calendars" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="navigationRollup">
-                                <heading>
-                                    <Label text="Navigation" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="splittersRollup">
-                                <heading>
-                                    <Label text="Splitters" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="menusRollup">
-                                <heading>
-                                    <Label text="Menus" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="metersRollup">
-                                <heading>
-                                    <Label text="Meters &amp; Activity Indicators" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="spinnersRollup">
-                                <heading>
-                                    <Label text="Spinners &amp; Sliders" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="tablesRollup">
-                                <heading>
-                                    <Label text="Tables" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="treesRollup">
-                                <heading>
-                                    <Label text="Trees" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="dragDropRollup">
-                                <heading>
-                                    <Label text="Drag &amp; Drop" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                            <Rollup wtkx:id="alertsRollup">
-                                <heading>
-                                    <Label text="Alerts &amp; Prompts" styles="{fontBold:true, fontSize:12, color:13}"/>
-                                </heading>
-                            </Rollup>
-                        </FlowPane>
-                    </view>
-                </ScrollPane>
+                <Border styles="{padding:0}">
+                    <content>
+                        <ScrollPane wtkx:id="scrollPane" styles="{backgroundColor:11}"
+                            horizontalScrollBarPolicy="auto"
+                            verticalScrollBarPolicy="auto">
+                            <view>
+                                <FlowPane orientation="vertical" styles="{padding:6}">
+                                    <Rollup wtkx:id="buttonsRollup">
+                                        <heading>
+                                            <Label text="Buttons" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="listsRollup">
+                                        <heading>
+                                            <Label text="Lists" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="textRollup">
+                                        <heading>
+                                            <Label text="Text" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="calendarsRollup">
+                                        <heading>
+                                            <Label text="Calendars" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="navigationRollup">
+                                        <heading>
+                                            <Label text="Navigation" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="splittersRollup">
+                                        <heading>
+                                            <Label text="Splitters" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="menusRollup">
+                                        <heading>
+                                            <Label text="Menus" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="metersRollup">
+                                        <heading>
+                                            <Label text="Meters &amp; Activity Indicators" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="spinnersRollup">
+                                        <heading>
+                                            <Label text="Spinners &amp; Sliders" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="tablesRollup">
+                                        <heading>
+                                            <Label text="Tables" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="treesRollup">
+                                        <heading>
+                                            <Label text="Trees" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="dragDropRollup">
+                                        <heading>
+                                            <Label text="Drag &amp; Drop" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                    <Rollup wtkx:id="alertsRollup">
+                                        <heading>
+                                            <Label text="Alerts &amp; Prompts" styles="{fontBold:true, fontSize:12, color:13}"/>
+                                        </heading>
+                                    </Rollup>
+                                </FlowPane>
+                            </view>
+                        </ScrollPane>
+                    </content>
+                </Border>
             </content>
         </Border>
     </content>
-</Border>
+</Window>

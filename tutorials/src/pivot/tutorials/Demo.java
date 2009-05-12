@@ -362,6 +362,22 @@ public class Demo extends Bindable implements Application, Application.About {
 
             return Vote.APPROVE;
         }
+
+        private void initializeNumericSpinner(Spinner numericSpinner) {
+            NumericSpinnerData numericSpinnerData = new NumericSpinnerData(0, 256, 4);
+            numericSpinner.setSpinnerData(numericSpinnerData);
+            numericSpinner.setSelectedIndex(0);
+        }
+
+        private void initializeDateSpinner(Spinner dateSpinner) {
+            CalendarDate lowerBound = new CalendarDate(2008, 0, 0);
+            CalendarDate upperBound = new CalendarDate(2019, 11, 30);
+            CalendarDateSpinnerData spinnerData = new CalendarDateSpinnerData(lowerBound, upperBound);
+
+            CalendarDate today = new CalendarDate();
+            dateSpinner.setSpinnerData(spinnerData);
+            dateSpinner.setSelectedItem(today);
+        }
     }
 
     private class TablesRollupStateHandler extends RollupStateHandler {
@@ -660,22 +676,21 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private Display display = null;
-    private Window window = null;
 
-    @Load(name="demo.wtkx") private Component content;
-    @Bind(property="content") private Rollup buttonsRollup;
-    @Bind(property="content") private Rollup listsRollup;
-    @Bind(property="content") private Rollup textRollup;
-    @Bind(property="content") private Rollup calendarsRollup;
-    @Bind(property="content") private Rollup navigationRollup;
-    @Bind(property="content") private Rollup splittersRollup;
-    @Bind(property="content") private Rollup menusRollup;
-    @Bind(property="content") private Rollup metersRollup;
-    @Bind(property="content") private Rollup spinnersRollup;
-    @Bind(property="content") private Rollup tablesRollup;
-    @Bind(property="content") private Rollup treesRollup;
-    @Bind(property="content") private Rollup dragDropRollup;
-    @Bind(property="content") private Rollup alertsRollup;
+    @Load(name="demo.wtkx") private Window window;
+    @Bind(property="window") private Rollup buttonsRollup;
+    @Bind(property="window") private Rollup listsRollup;
+    @Bind(property="window") private Rollup textRollup;
+    @Bind(property="window") private Rollup calendarsRollup;
+    @Bind(property="window") private Rollup navigationRollup;
+    @Bind(property="window") private Rollup splittersRollup;
+    @Bind(property="window") private Rollup menusRollup;
+    @Bind(property="window") private Rollup metersRollup;
+    @Bind(property="window") private Rollup spinnersRollup;
+    @Bind(property="window") private Rollup tablesRollup;
+    @Bind(property="window") private Rollup treesRollup;
+    @Bind(property="window") private Rollup dragDropRollup;
+    @Bind(property="window") private Rollup alertsRollup;
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(Demo.class, args);
@@ -709,35 +724,14 @@ public class Demo extends Bindable implements Application, Application.About {
         dragDropRollup.getRollupStateListeners().add(new DragDropRollupStateHandler());
         alertsRollup.getRollupStateListeners().add(new AlertsRollupStateHandler());
 
-        window = new Window();
-        window.setTitle("Pivot Demo");
-        window.setMaximized(true);
-        window.setContent(content);
-
         window.open(display);
 
+        // Start with the "Buttons" rollup expanded
         ApplicationContext.scheduleCallback(new Runnable() {
             public void run() {
                 buttonsRollup.setExpanded(true);
             }
         }, 0);
-    }
-
-
-    private void initializeNumericSpinner(Spinner numericSpinner) {
-        NumericSpinnerData numericSpinnerData = new NumericSpinnerData(0, 256, 4);
-        numericSpinner.setSpinnerData(numericSpinnerData);
-        numericSpinner.setSelectedIndex(0);
-    }
-
-    private void initializeDateSpinner(Spinner dateSpinner) {
-        CalendarDate lowerBound = new CalendarDate(2008, 0, 0);
-        CalendarDate upperBound = new CalendarDate(2019, 11, 30);
-        CalendarDateSpinnerData spinnerData = new CalendarDateSpinnerData(lowerBound, upperBound);
-
-        CalendarDate today = new CalendarDate();
-        dateSpinner.setSpinnerData(spinnerData);
-        dateSpinner.setSelectedItem(today);
     }
 
     public boolean shutdown(boolean optional) throws Exception {
