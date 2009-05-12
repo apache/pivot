@@ -24,21 +24,21 @@ import pivot.serialization.JSONSerializer;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Form;
 import pivot.wtk.Label;
 import pivot.wtk.PushButton;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class DataBinding implements Application {
-	private Window window = null;
-	private Form form = null;
-	private PushButton loadJavaButton = null;
-	private PushButton loadJSONButton = null;
-	private PushButton clearButton = null;
-	private Label sourceLabel = null;
+public class DataBinding extends Bindable implements Application {
+	@Load(name="data_binding.wtkx") private Window window;
+	@Bind(property="window") private Form form;
+	@Bind(property="window") private PushButton loadJavaButton;
+	@Bind(property="window") private PushButton loadJSONButton;
+	@Bind(property="window") private PushButton clearButton;
+	@Bind(property="window") private Label sourceLabel;
 
 	private static final Contact CONTACT = new Contact("101", "Joe Smith",
 		new Address("123 Main St.", "Cambridge", "MA", "02142"),
@@ -47,18 +47,7 @@ public class DataBinding implements Application {
 
 	public void startup(Display display, Dictionary<String, String> properties)
 		throws Exception {
-		// Load the UI
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("data_binding.wtkx")));
-        form = (Form)wtkxSerializer.getObjectByName("form");
-        loadJavaButton = (PushButton)wtkxSerializer.getObjectByName("loadJavaButton");
-        loadJSONButton = (PushButton)wtkxSerializer.getObjectByName("loadJSONButton");
-        clearButton = (PushButton)wtkxSerializer.getObjectByName("clearButton");
-        sourceLabel = (Label)wtkxSerializer.getObjectByName("sourceLabel");
-
-        // Open the window
-        window.setMaximized(true);
-        window.open(display);
+	    bind();
 
         loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
         	public void buttonPressed(Button button) {
@@ -90,10 +79,15 @@ public class DataBinding implements Application {
         		sourceLabel.setText(null);
         	}
         });
+
+        window.open(display);
 	}
 
 	public boolean shutdown(boolean optional) {
-		window.close();
+	    if (window != null) {
+	        window.close();
+	    }
+
 		return false;
 	}
 
@@ -103,4 +97,8 @@ public class DataBinding implements Application {
 
 	public void resume() {
 	}
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(DataBinding.class, args);
+    }
 }

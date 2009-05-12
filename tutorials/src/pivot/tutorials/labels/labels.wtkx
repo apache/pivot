@@ -16,8 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane styles="{padding:4, verticalAlignment:'center'}"
+<Window title="Labels" maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
-    <ImageView image="pivot/tutorials/clock.png" cursor="crosshair"/>
-    <Label text="What time is it?"/>
-</FlowPane>
+    <content>
+        <FlowPane styles="{padding:4, verticalAlignment:'center'}">
+            <ImageView image="pivot/tutorials/clock.png" cursor="crosshair"/>
+            <Label text="What time is it?"/>
+        </FlowPane>
+    </content>
+</Window>

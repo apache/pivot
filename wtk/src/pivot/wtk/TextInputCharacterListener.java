@@ -33,9 +33,6 @@ public interface TextInputCharacterListener {
 
         public void charactersRemoved(TextInput textInput, int index, int count) {
         }
-
-        public void charactersReset(TextInput textInput) {
-        }
     }
 
     /**

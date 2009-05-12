@@ -18,27 +18,25 @@ package pivot.tutorials.buttons;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class ToggleButtons implements Application {
-    private Window window = null;
+public class ToggleButtons extends Bindable implements Application {
+    @Load(name="toggle_buttons.wtkx") private Window window;
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content =
-            (Component)wtkxSerializer.readObject("pivot/tutorials/buttons/toggle_buttons.wtkx");
-
-        window = new Window();
-        window.setContent(content);
-        window.setMaximized(true);
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
+        bind();
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -46,5 +44,9 @@ public class ToggleButtons implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ToggleButtons.class, args);
     }
 }

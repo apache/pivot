@@ -20,19 +20,52 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.wtk.Application;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.TextInput;
 import pivot.wtk.TextInputCharacterListener;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class Text implements Application {
-    private Window window = new Window();
-    private ArrayList<String> states = new ArrayList<String>();
+public class Text extends Bindable implements Application {
+    @Load(name="text.wtkx") private Window window;
+    @Bind(property="window") private TextInput stateTextInput;
+
+    private ArrayList<String> states;
+
+    private TextInputCharacterListener textInputCharacterListener =
+        new TextInputCharacterListener.Adapter() {
+        public void charactersInserted(final TextInput textInput, int index, int count) {
+            String text = textInput.getText();
+
+            int i = Sequence.Search.binarySearch(states, text,
+                states.getComparator());
+
+            if (i < 0) {
+                i = -(i + 1);
+                int n = states.getLength();
+
+                if (i < n) {
+                    text = text.toLowerCase();
+                    final String state = states.get(i);
+
+                    if (state.toLowerCase().startsWith(text)) {
+                        String nextState = (i == n - 1) ?
+                            null : states.get(i + 1);
+
+                        if (nextState == null
+                            || !nextState.toLowerCase().startsWith(text)) {
+                            textInput.setText(state);
+                        }
+                    }
+                }
+            }
+        }
+    };
 
     public Text() {
         // Populate the lookup values, ensuring that they are sorted
+        states = new ArrayList<String>();
         states.setComparator(String.CASE_INSENSITIVE_ORDER);
 
         states.add("Alabama");
@@ -90,53 +123,18 @@ public class Text implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content =
-            (Component)wtkxSerializer.readObject("pivot/tutorials/text/text.wtkx");
+        bind();
 
-        TextInput stateTextInput =
-            (TextInput)wtkxSerializer.getObjectByName("stateTextInput");
+        stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);
 
-        stateTextInput.getTextInputCharacterListeners().add(new TextInputCharacterListener() {
-            public void charactersInserted(TextInput textInput, int index, int count) {
-                String text = textInput.getText();
-
-                int i = Sequence.Search.binarySearch(states, text,
-                    states.getComparator());
-
-                if (i < 0) {
-                    i = -(i + 1);
-                    int n = states.getLength();
-
-                    if (i < n) {
-                        text = text.toLowerCase();
-                        String state = states.get(i);
-
-                        if (state.toLowerCase().startsWith(text)) {
-                            String nextState = (i == n - 1) ?
-                                null : states.get(i + 1);
-
-                            if (nextState == null
-                                || !nextState.toLowerCase().startsWith(text)) {
-                                textInput.setText(state);
-                                textInput.setSelection(state.length(), 0);
-                            }
-                        }
-                    }
-                }
-            }
-
-            public void charactersRemoved(TextInput textInput, int index, int count) {
-            }
-        });
-
-        window.setContent(content);
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -144,5 +142,9 @@ public class Text implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(Text.class, args);
     }
 }

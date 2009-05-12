@@ -14,20 +14,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.tutorials.layout;
+package pivot.tutorials.transition;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.Button;
+import pivot.wtk.ButtonPressListener;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
-public class StackPanes extends Bindable implements Application {
-    @Load(name="stackpanes.wtkx") private Window window;
+public class Transitions extends Bindable implements Application {
+    @Load(name="transitions.wtkx") private Window window;
+    @Bind(property="window") private Button button1;
+    @Bind(property="window") private Button button2;
+    @Bind(property="window") private Button button3;
+    @Bind(property="window") private Button button4;
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
         bind();
+
+        ButtonPressListener trigger = new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                button.setEnabled(false);
+
+                CollapseTransition transition = new CollapseTransition(button, 300, 30);
+                transition.start();
+            }
+        };
+
+        button1.getButtonPressListeners().add(trigger);
+        button2.getButtonPressListeners().add(trigger);
+        button3.getButtonPressListeners().add(trigger);
+        button4.getButtonPressListeners().add(trigger);
+
         window.open(display);
     }
 
@@ -46,6 +68,6 @@ public class StackPanes extends Bindable implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(StackPanes.class, args);
+        DesktopApplicationContext.main(Transitions.class, args);
     }
 }

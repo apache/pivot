@@ -19,72 +19,71 @@ package pivot.tutorials.lists;
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.wtk.Application;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Label;
 import pivot.wtk.ListView;
 import pivot.wtk.ListViewSelectionListener;
 import pivot.wtk.Span;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class ListViews implements Application {
-    private Window window = null;
+public class ListViews extends Bindable implements Application {
+    @Load(name="list_views.wtkx") private Window window;
+    @Bind(property="window") private Label selectionLabel;
+    @Bind(property="window") private ListView listView;
+
+    private ListViewSelectionListener listViewSelectionListener =
+        new ListViewSelectionListener() {
+        public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
+            updateSelection(listView);
+        }
+
+        public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
+            updateSelection(listView);
+        }
+
+        public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+            updateSelection(listView);
+        }
+
+        private void updateSelection(ListView listView) {
+            String selectionText = "";
+
+            Sequence<Span> selectedRanges = listView.getSelectedRanges();
+            for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
+                Span selectedRange = selectedRanges.get(i);
+
+                for (int j = selectedRange.getStart();
+                    j <= selectedRange.getEnd();
+                    j++) {
+                    if (selectionText.length() > 0) {
+                        selectionText += ", ";
+                    }
+
+                    String text = (String)listView.getListData().get(j);
+                    selectionText += text;
+                }
+            }
+
+            selectionLabel.setText(selectionText);
+        }
+    };
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content =
-            (Component)wtkxSerializer.readObject("pivot/tutorials/lists/list_views.wtkx");
+        bind();
 
-        final Label selectionLabel =
-            (Label)wtkxSerializer.getObjectByName("selectionLabel");
+        listView.getListViewSelectionListeners().add(listViewSelectionListener);
 
-        ListView listView = (ListView)wtkxSerializer.getObjectByName("listView");
-        listView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
-            public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
-                updateSelection(listView);
-            }
-
-            public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
-                updateSelection(listView);
-            }
-
-            public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
-                updateSelection(listView);
-            }
-
-            private void updateSelection(ListView listView) {
-                String selectionText = "";
-
-                Sequence<Span> selectedRanges = listView.getSelectedRanges();
-                for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
-                    Span selectedRange = selectedRanges.get(i);
-
-                    for (int j = selectedRange.getStart();
-                        j <= selectedRange.getEnd();
-                        j++) {
-                        if (selectionText.length() > 0) {
-                            selectionText += ", ";
-                        }
-
-                        String text = (String)listView.getListData().get(j);
-                        selectionText += text;
-                    }
-                }
-
-                selectionLabel.setText(selectionText);
-            }
-        });
-
-        window = new Window();
-        window.setContent(content);
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -92,5 +91,9 @@ public class ListViews implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ListViews.class, args);
     }
 }

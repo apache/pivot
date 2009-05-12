@@ -16,10 +16,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<StackPane xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
-	<ImageView image="pivot/tutorials/layout/03big.jpg"
-	    styles="{horizontalAlignment:'justify', verticalAlignment:'justify'}"/>
-	<Label text="StackPane Demo"
-   		styles="{font:'Helvetica bold 64', color:'#ffffff', wrapText:true,
-   		    horizontalAlignment:'center', verticalAlignment:'center'}"/>
-</StackPane>
+<Window title="Stack Panes" maximized="true"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    <content>
+        <StackPane>
+            <ImageView image="pivot/tutorials/layout/03big.jpg"
+                styles="{horizontalAlignment:'justify', verticalAlignment:'justify'}"/>
+            <Label text="StackPane Demo"
+                styles="{font:'Helvetica bold 64', color:'#ffffff', wrapText:true,
+                    horizontalAlignment:'center', verticalAlignment:'center'}"/>
+        </StackPane>
+    </content>
+</Window>
+

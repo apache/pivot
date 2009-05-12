@@ -21,58 +21,51 @@ import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Checkbox;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.ImageView;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class Checkboxes implements Application {
-    private class ButtonPressHandler implements ButtonPressListener {
-        public void buttonPressed(Button button) {
-            ImageView imageView = (ImageView)button.getUserData();
-            imageView.setDisplayable(!imageView.isDisplayable());
-        }
-    }
-
-    private Window window = null;
-    private ButtonPressHandler buttonPressHandler = new ButtonPressHandler();
+public class Checkboxes extends Bindable implements Application {
+    @Load(name="checkboxes.wtkx") private Window window = null;
+    @Bind(property="window") private Checkbox bellCheckbox;
+    @Bind(property="window") private Checkbox clockCheckbox;
+    @Bind(property="window") private Checkbox houseCheckbox;
+    @Bind(property="window") private ImageView bellImageView;
+    @Bind(property="window") private ImageView clockImageView;
+    @Bind(property="window") private ImageView houseImageView;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content =
-            (Component)wtkxSerializer.readObject("pivot/tutorials/buttons/checkboxes.wtkx");
+        bind();
 
-        // Wire up user data and event listeners
-        Checkbox bellCheckbox =
-            (Checkbox)wtkxSerializer.getObjectByName("bellCheckbox");
-        ImageView bellImageView =
-            (ImageView)wtkxSerializer.getObjectByName("bellImageView");
-        bellCheckbox.setUserData(bellImageView);
-        bellCheckbox.getButtonPressListeners().add(buttonPressHandler);
+        // Wire up event listeners
+        bellCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                bellImageView.setDisplayable(!bellImageView.isDisplayable());
+            }
+        });
 
-        Checkbox clockCheckbox =
-            (Checkbox)wtkxSerializer.getObjectByName("clockCheckbox");
-        ImageView clockImageView =
-            (ImageView)wtkxSerializer.getObjectByName("clockImageView");
-        clockCheckbox.setUserData(clockImageView);
-        clockCheckbox.getButtonPressListeners().add(buttonPressHandler);
+        clockCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                clockImageView.setDisplayable(!clockImageView.isDisplayable());
+            }
+        });
 
-        Checkbox houseCheckbox =
-            (Checkbox)wtkxSerializer.getObjectByName("houseCheckbox");
-        ImageView houseImageView =
-            (ImageView)wtkxSerializer.getObjectByName("houseImageView");
-        houseCheckbox.setUserData(houseImageView);
-        houseCheckbox.getButtonPressListeners().add(buttonPressHandler);
+        houseCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                houseImageView.setDisplayable(!houseImageView.isDisplayable());
+            }
+        });
 
-        window = new Window();
-        window.setContent(content);
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -80,5 +73,9 @@ public class Checkboxes implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(Checkboxes.class, args);
     }
 }

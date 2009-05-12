@@ -16,40 +16,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TablePane xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
-    <columns>
-        <TablePane.Column width="300"/>
-        <TablePane.Column width="-1"/>
-    </columns>
+<Window title="Flow Panes" maximized="true"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    <content>
+        <TablePane>
+            <columns>
+                <TablePane.Column width="300"/>
+                <TablePane.Column width="-1"/>
+            </columns>
 
-    <rows>
-        <TablePane.Row height="-1">
-            <Border styles="{padding:6, color:'#999999'}">
-                <content>
-                    <FlowPane wtkx:id="flowPane">
-                        <PushButton buttonData="One"/>
-                        <PushButton buttonData="Two"/>
-                        <PushButton buttonData="Three"/>
+            <rows>
+                <TablePane.Row height="-1">
+                    <Border styles="{padding:6, color:'#999999'}">
+                        <content>
+                            <FlowPane wtkx:id="flowPane">
+                                <PushButton buttonData="One"/>
+                                <PushButton buttonData="Two"/>
+                                <PushButton buttonData="Three"/>
+                            </FlowPane>
+                        </content>
+                    </Border>
+                    <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
+                        <Label text="Orientation" styles="{fontBold:true}"/>
+                        <RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" group="orientation" selected="true"/>
+                        <RadioButton wtkx:id="verticalOrientationButton" buttonData="Vertical" group="orientation"/>
+
+                        <Label text="Horizontal Alignment" styles="{fontBold:true}"/>
+                        <RadioButton wtkx:id="horizontalAlignmentLeftButton" buttonData="Left" group="horizontalAlignment" selected="true"/>
+                        <RadioButton wtkx:id="horizontalAlignmentRightButton" buttonData="Right" group="horizontalAlignment"/>
+                        <RadioButton wtkx:id="horizontalAlignmentCenterButton" buttonData="Center" group="horizontalAlignment"/>
+                        <RadioButton wtkx:id="horizontalAlignmentJustifyButton" buttonData="Justify" group="horizontalAlignment"/>
+
+                        <Label text="Vertical Alignment" styles="{fontBold:true}"/>
+                        <RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top" group="verticalAlignment" selected="true"/>
+                        <RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" group="verticalAlignment"/>
+                        <RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" group="verticalAlignment"/>
+                        <RadioButton wtkx:id="verticalAlignmentJustifyButton" buttonData="Justify" group="verticalAlignment"/>
                     </FlowPane>
-                </content>
-            </Border>
-            <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
-                <Label text="Orientation" styles="{fontBold:true}"/>
-                <RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" group="orientation" selected="true"/>
-                <RadioButton wtkx:id="verticalOrientationButton" buttonData="Vertical" group="orientation"/>
-
-                <Label text="Horizontal Alignment" styles="{fontBold:true}"/>
-                <RadioButton wtkx:id="horizontalAlignmentLeftButton" buttonData="Left" group="horizontalAlignment" selected="true"/>
-                <RadioButton wtkx:id="horizontalAlignmentRightButton" buttonData="Right" group="horizontalAlignment"/>
-                <RadioButton wtkx:id="horizontalAlignmentCenterButton" buttonData="Center" group="horizontalAlignment"/>
-                <RadioButton wtkx:id="horizontalAlignmentJustifyButton" buttonData="Justify" group="horizontalAlignment"/>
-
-                <Label text="Vertical Alignment" styles="{fontBold:true}"/>
-                <RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top" group="verticalAlignment" selected="true"/>
-                <RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" group="verticalAlignment"/>
-                <RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" group="verticalAlignment"/>
-                <RadioButton wtkx:id="verticalAlignmentJustifyButton" buttonData="Justify" group="verticalAlignment"/>
-            </FlowPane>
-        </TablePane.Row>
-    </rows>
-</TablePane>
+                </TablePane.Row>
+            </rows>
+        </TablePane>
+    </content>
+</Window>

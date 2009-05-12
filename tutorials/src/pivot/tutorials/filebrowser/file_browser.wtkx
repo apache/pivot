@@ -16,19 +16,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{color:10, padding:0}"
+<Window title="File Browser" maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns:content="pivot.wtk.content"
     xmlns="pivot.wtk">
-	<content>
-	    <ScrollPane preferredWidth="240" horizontalScrollBarPolicy="fillToCapacity">
-	        <view>
-	           <TreeView wtkx:id="folderTreeView">
-	               <nodeRenderer>
-	                   <content:TreeViewFileRenderer/>
-	               </nodeRenderer>
-	           </TreeView>
-	        </view>
-	    </ScrollPane>
-	</content>
-</Border>
+    <content>
+        <Border styles="{color:10, padding:0}">
+            <content>
+                <ScrollPane preferredWidth="240" horizontalScrollBarPolicy="fillToCapacity">
+                    <view>
+                       <TreeView wtkx:id="folderTreeView">
+                           <nodeRenderer>
+                               <content:TreeViewFileRenderer/>
+                           </nodeRenderer>
+                       </TreeView>
+                    </view>
+                </ScrollPane>
+            </content>
+        </Border>
+    </content>
+</Window>

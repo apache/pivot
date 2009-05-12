@@ -14,57 +14,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.tutorials.transition;
+package pivot.tutorials.progress;
 
 import pivot.collections.Dictionary;
+import pivot.wtk.ActivityIndicator;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
+import pivot.wtk.PushButton;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class TransitionDemo implements Application {
-    private Window window = null;
+public class ActivityIndicators extends Bindable implements Application {
+    @Load(name="activity_indicators.wtkx") private Window window;
+    @Bind(property="window") private ActivityIndicator activityIndicator1;
+    @Bind(property="window") private ActivityIndicator activityIndicator2;
+    @Bind(property="window") private ActivityIndicator activityIndicator3;
+    @Bind(property="window") private PushButton activityButton;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        bind();
 
-        Component content =
-            (Component)wtkxSerializer.readObject(getClass().getResource("transition.wtkx"));
-
-        ButtonPressListener trigger = new ButtonPressListener() {
+        activityButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
-                button.setEnabled(false);
-
-                CollapseTransition transition = new CollapseTransition(button, 300, 30);
-                transition.start();
+                activityIndicator1.setActive(!activityIndicator1.isActive());
+                activityIndicator2.setActive(!activityIndicator2.isActive());
+                activityIndicator3.setActive(!activityIndicator3.isActive());
+                updateButtonData();
             }
-        };
+        });
 
-        Button button1 = (Button)wtkxSerializer.getObjectByName("button1");
-        button1.getButtonPressListeners().add(trigger);
+        updateButtonData();
 
-        Button button2 = (Button)wtkxSerializer.getObjectByName("button2");
-        button2.getButtonPressListeners().add(trigger);
-
-        Button button3 = (Button)wtkxSerializer.getObjectByName("button3");
-        button3.getButtonPressListeners().add(trigger);
-
-        Button button4 = (Button)wtkxSerializer.getObjectByName("button4");
-        button4.getButtonPressListeners().add(trigger);
-
-        // Open the window
-        window = new Window(content);
-        window.setTitle("Transition Demo");
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -72,5 +64,13 @@ public class TransitionDemo implements Application {
     }
 
     public void resume() {
+    }
+
+    private void updateButtonData() {
+        activityButton.setButtonData(activityIndicator1.isActive() ? "Stop" : "Start");
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ActivityIndicators.class, args);
     }
 }

@@ -16,24 +16,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane styles="{padding:4, spacing:4}"
+<Window title="List Views" maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
-    <Border styles="{padding:0, color:10}">
-        <content>
-            <ScrollPane preferredWidth="80" preferredHeight="110"
-                horizontalScrollBarPolicy="fill"
-                verticalScrollBarPolicy="fillToCapacity">
-                <view>
-                    <ListView wtkx:id="listView" selectMode="multi"
-                        listData="['One', 'Two', 'Three', 'Four', 'Five',
-                            'Six', 'Seven', 'Eight', 'Nine', 'Ten']"/>
-                </view>
-            </ScrollPane>
-        </content>
-    </Border>
+    <content>
+        <FlowPane styles="{padding:4, spacing:4}">
+            <Border styles="{padding:0, color:10}">
+                <content>
+                    <ScrollPane preferredWidth="80" preferredHeight="110"
+                        horizontalScrollBarPolicy="fill"
+                        verticalScrollBarPolicy="fillToCapacity">
+                        <view>
+                            <ListView wtkx:id="listView" selectMode="multi"
+                                listData="['One', 'Two', 'Three', 'Four', 'Five',
+                                    'Six', 'Seven', 'Eight', 'Nine', 'Ten']"/>
+                        </view>
+                    </ScrollPane>
+                </content>
+            </Border>
+            <FlowPane orientation="vertical" preferredWidth="120" styles="{horizontalAlignment:'justify'}">
+                <Label text="You selected:"/>
+                <Label wtkx:id="selectionLabel" styles="{wrapText:true}"/>
+            </FlowPane>
+        </FlowPane>
+    </content>
+</Window>
 
-    <FlowPane orientation="vertical" preferredWidth="120" styles="{horizontalAlignment:'justify'}">
-        <Label text="You selected:"/>
-        <Label wtkx:id="selectionLabel" styles="{wrapText:true}"/>
-    </FlowPane>
-</FlowPane>

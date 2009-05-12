@@ -20,7 +20,7 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonStateListener;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
@@ -28,83 +28,91 @@ import pivot.wtk.Orientation;
 import pivot.wtk.RadioButton;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class FlowPanes implements Application, ButtonStateListener {
-    private FlowPane flowPane = null;
-    private RadioButton horizontalOrientationButton = null;
-    private RadioButton verticalOrientationButton = null;
-    private RadioButton horizontalAlignmentRightButton = null;
-    private RadioButton horizontalAlignmentLeftButton = null;
-    private RadioButton horizontalAlignmentCenterButton = null;
-    private RadioButton horizontalAlignmentJustifyButton = null;
-    private RadioButton verticalAlignmentTopButton = null;
-    private RadioButton verticalAlignmentBottomButton = null;
-    private RadioButton verticalAlignmentCenterButton = null;
-    private RadioButton verticalAlignmentJustifyButton = null;
+public class FlowPanes extends Bindable implements Application {
+    @Load(name="flowpanes.wtkx") private Window window;
+    @Bind(property="window") private FlowPane flowPane;
+    @Bind(property="window") private RadioButton horizontalOrientationButton;
+    @Bind(property="window") private RadioButton verticalOrientationButton;
+    @Bind(property="window") private RadioButton horizontalAlignmentRightButton;
+    @Bind(property="window") private RadioButton horizontalAlignmentLeftButton;
+    @Bind(property="window") private RadioButton horizontalAlignmentCenterButton;
+    @Bind(property="window") private RadioButton horizontalAlignmentJustifyButton;
+    @Bind(property="window") private RadioButton verticalAlignmentTopButton;
+    @Bind(property="window") private RadioButton verticalAlignmentBottomButton;
+    @Bind(property="window") private RadioButton verticalAlignmentCenterButton;
+    @Bind(property="window") private RadioButton verticalAlignmentJustifyButton;
 
-    private Window window = null;
+    private ButtonStateListener buttonStateListener = new ButtonStateListener() {
+        public void stateChanged(Button button, Button.State previousState) {
+            Orientation orientation = null;
+            if (horizontalOrientationButton.isSelected()) {
+                orientation = Orientation.HORIZONTAL;
+            } else if (verticalOrientationButton.isSelected()) {
+                orientation = Orientation.VERTICAL;
+            }
+
+            if (orientation != null) {
+                flowPane.setOrientation(orientation);
+            }
+
+            HorizontalAlignment horizontalAlignment = null;
+            if (horizontalAlignmentLeftButton.isSelected()) {
+                horizontalAlignment = HorizontalAlignment.LEFT;
+            } else if (horizontalAlignmentRightButton.isSelected()) {
+                horizontalAlignment = HorizontalAlignment.RIGHT;
+            } else if (horizontalAlignmentCenterButton.isSelected()) {
+                horizontalAlignment = HorizontalAlignment.CENTER;
+            } else if (horizontalAlignmentJustifyButton.isSelected()) {
+                horizontalAlignment = HorizontalAlignment.JUSTIFY;
+            }
+
+            if (horizontalAlignment != null) {
+                flowPane.getStyles().put("horizontalAlignment", horizontalAlignment);
+            }
+
+            VerticalAlignment verticalAlignment = null;
+            if (verticalAlignmentTopButton.isSelected()) {
+                verticalAlignment = VerticalAlignment.TOP;
+            } else if (verticalAlignmentBottomButton.isSelected()) {
+                verticalAlignment = VerticalAlignment.BOTTOM;
+            } else if (verticalAlignmentCenterButton.isSelected()) {
+                verticalAlignment = VerticalAlignment.CENTER;
+            } else if (verticalAlignmentJustifyButton.isSelected()) {
+                verticalAlignment = VerticalAlignment.JUSTIFY;
+            }
+
+            if (verticalAlignment != null) {
+                flowPane.getStyles().put("verticalAlignment", verticalAlignment);
+            }
+        }
+    };
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content =
-            (Component)wtkxSerializer.readObject("pivot/tutorials/layout/flowpanes.wtkx");
+        bind();
 
-        flowPane = (FlowPane)wtkxSerializer.getObjectByName("flowPane");
+        horizontalOrientationButton.getButtonStateListeners().add(buttonStateListener);
+        verticalOrientationButton.getButtonStateListeners().add(buttonStateListener);
+        horizontalAlignmentLeftButton.getButtonStateListeners().add(buttonStateListener);
+        horizontalAlignmentRightButton.getButtonStateListeners().add(buttonStateListener);
+        horizontalAlignmentCenterButton.getButtonStateListeners().add(buttonStateListener);
+        horizontalAlignmentJustifyButton.getButtonStateListeners().add(buttonStateListener);
+        verticalAlignmentTopButton.getButtonStateListeners().add(buttonStateListener);
+        verticalAlignmentBottomButton.getButtonStateListeners().add(buttonStateListener);
+        verticalAlignmentCenterButton.getButtonStateListeners().add(buttonStateListener);
+        verticalAlignmentJustifyButton.getButtonStateListeners().add(buttonStateListener);
 
-        // Orientation
-        horizontalOrientationButton =
-            (RadioButton)wtkxSerializer.getObjectByName("horizontalOrientationButton");
-        horizontalOrientationButton.getButtonStateListeners().add(this);
+        buttonStateListener.stateChanged(null, null);
 
-        verticalOrientationButton =
-            (RadioButton)wtkxSerializer.getObjectByName("verticalOrientationButton");
-        verticalOrientationButton.getButtonStateListeners().add(this);
-
-        // Horizontal alignment
-        horizontalAlignmentLeftButton =
-            (RadioButton)wtkxSerializer.getObjectByName("horizontalAlignmentLeftButton");
-        horizontalAlignmentLeftButton.getButtonStateListeners().add(this);
-
-        horizontalAlignmentRightButton =
-            (RadioButton)wtkxSerializer.getObjectByName("horizontalAlignmentRightButton");
-        horizontalAlignmentRightButton.getButtonStateListeners().add(this);
-
-        horizontalAlignmentCenterButton =
-            (RadioButton)wtkxSerializer.getObjectByName("horizontalAlignmentCenterButton");
-        horizontalAlignmentCenterButton.getButtonStateListeners().add(this);
-
-        horizontalAlignmentJustifyButton =
-            (RadioButton)wtkxSerializer.getObjectByName("horizontalAlignmentJustifyButton");
-        horizontalAlignmentJustifyButton.getButtonStateListeners().add(this);
-
-        // Vertical alignment
-        verticalAlignmentTopButton =
-            (RadioButton)wtkxSerializer.getObjectByName("verticalAlignmentTopButton");
-        verticalAlignmentTopButton.getButtonStateListeners().add(this);
-
-        verticalAlignmentBottomButton =
-            (RadioButton)wtkxSerializer.getObjectByName("verticalAlignmentBottomButton");
-        verticalAlignmentBottomButton.getButtonStateListeners().add(this);
-
-        verticalAlignmentCenterButton =
-            (RadioButton)wtkxSerializer.getObjectByName("verticalAlignmentCenterButton");
-        verticalAlignmentCenterButton.getButtonStateListeners().add(this);
-
-        verticalAlignmentJustifyButton =
-            (RadioButton)wtkxSerializer.getObjectByName("verticalAlignmentJustifyButton");
-        verticalAlignmentJustifyButton.getButtonStateListeners().add(this);
-
-        stateChanged(null, null);
-
-        window = new Window();
-        window.setContent(content);
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -114,46 +122,7 @@ public class FlowPanes implements Application, ButtonStateListener {
     public void resume() {
     }
 
-    public void stateChanged(Button button, Button.State previousState) {
-        Orientation orientation = null;
-        if (horizontalOrientationButton.isSelected()) {
-            orientation = Orientation.HORIZONTAL;
-        } else if (verticalOrientationButton.isSelected()) {
-            orientation = Orientation.VERTICAL;
-        }
-
-        if (orientation != null) {
-            flowPane.setOrientation(orientation);
-        }
-
-        HorizontalAlignment horizontalAlignment = null;
-        if (horizontalAlignmentLeftButton.isSelected()) {
-            horizontalAlignment = HorizontalAlignment.LEFT;
-        } else if (horizontalAlignmentRightButton.isSelected()) {
-            horizontalAlignment = HorizontalAlignment.RIGHT;
-        } else if (horizontalAlignmentCenterButton.isSelected()) {
-            horizontalAlignment = HorizontalAlignment.CENTER;
-        } else if (horizontalAlignmentJustifyButton.isSelected()) {
-            horizontalAlignment = HorizontalAlignment.JUSTIFY;
-        }
-
-        if (horizontalAlignment != null) {
-            flowPane.getStyles().put("horizontalAlignment", horizontalAlignment);
-        }
-
-        VerticalAlignment verticalAlignment = null;
-        if (verticalAlignmentTopButton.isSelected()) {
-            verticalAlignment = VerticalAlignment.TOP;
-        } else if (verticalAlignmentBottomButton.isSelected()) {
-            verticalAlignment = VerticalAlignment.BOTTOM;
-        } else if (verticalAlignmentCenterButton.isSelected()) {
-            verticalAlignment = VerticalAlignment.CENTER;
-        } else if (verticalAlignmentJustifyButton.isSelected()) {
-            verticalAlignment = VerticalAlignment.JUSTIFY;
-        }
-
-        if (verticalAlignment != null) {
-            flowPane.getStyles().put("verticalAlignment", verticalAlignment);
-        }
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(FlowPanes.class, args);
     }
 }

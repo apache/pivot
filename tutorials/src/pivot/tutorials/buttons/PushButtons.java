@@ -21,38 +21,35 @@ import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.MessageType;
 import pivot.wtk.PushButton;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class PushButtons implements Application {
-    private Window window = null;
+public class PushButtons extends Bindable implements Application {
+    @Load(name="push_buttons.wtkx") private Window window = null;
+    @Bind(property="window") private PushButton pushButton;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content =
-            (Component)wtkxSerializer.readObject("pivot/tutorials/buttons/push_buttons.wtkx");
+        bind();
 
-        // Get a reference to the button and add a button press listener
-        PushButton pushButton =
-            (PushButton)wtkxSerializer.getObjectByName("pushButton");
+        // Add a button press listener
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 Alert.alert(MessageType.INFO, "You clicked me!", window);
             }
         });
 
-        window = new Window();
-        window.setContent(content);
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -60,5 +57,9 @@ public class PushButtons implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(PushButtons.class, args);
     }
 }

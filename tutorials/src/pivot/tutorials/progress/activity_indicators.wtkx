@@ -16,31 +16,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Borders" maximized="true"
+<Window title="Activity Indicators" maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
     <content>
-        <TablePane styles="{horizontalSpacing:10}">
+        <TablePane>
             <columns>
-                <TablePane.Column width="1*"/>
                 <TablePane.Column width="1*"/>
             </columns>
             <rows>
                 <TablePane.Row height="1*">
-                    <Border title="Border 1">
+                    <Border>
                         <content>
-                            <Label text="Default border with title"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center',
-                                    wrapText:true}"/>
+                            <FlowPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <ActivityIndicator wtkx:id="activityIndicator1"
+                                    preferredWidth="24" preferredHeight="24"/>
+                                <ActivityIndicator wtkx:id="activityIndicator2" styles="{color:'#aa0000'}"
+                                    preferredWidth="48" preferredHeight="48"/>
+                                <ActivityIndicator wtkx:id="activityIndicator3" styles="{color:16}"
+                                    preferredWidth="96" preferredHeight="96"/>
+                            </FlowPane>
                         </content>
                     </Border>
-                    <Border styles="{color:'#ff0000', titleColor:'#000000', thickness:10,
-                        cornerRadii:20}">
-                        <content>
-                            <Label text="Custom border with 10-pixel thick red border, rounded corners, and no title"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center',
-                                    wrapText:true}"/>
-                        </content>
-                    </Border>
+                </TablePane.Row>
+                <TablePane.Row height="-1">
+                    <FlowPane styles="{horizontalAlignment:'center', padding:6}">
+                        <PushButton wtkx:id="activityButton" styles="{preferredAspectRatio:3}"/>
+                    </FlowPane>
                 </TablePane.Row>
             </rows>
         </TablePane>

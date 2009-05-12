@@ -16,7 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane styles="{padding:4, horizontalAlignment:'center', verticalAlignment:'center'}"
+<Window title="Push Buttons" maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
-    <PushButton wtkx:id="pushButton" buttonData="Click Me!"/>
-</FlowPane>
+    <content>
+        <FlowPane styles="{padding:4, horizontalAlignment:'center',
+            verticalAlignment:'center'}">
+            <PushButton wtkx:id="pushButton" buttonData="Click Me!"/>
+        </FlowPane>
+    </content>
+</Window>
+

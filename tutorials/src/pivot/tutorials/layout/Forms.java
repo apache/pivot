@@ -20,7 +20,7 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.Form;
@@ -30,24 +30,19 @@ import pivot.wtk.Prompt;
 import pivot.wtk.PushButton;
 import pivot.wtk.TextInput;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class Forms implements Application {
-    private Window window = null;
-    private FlowPane nameFlowPane = null;
-    private TextInput lastNameTextInput = null;
-    private TextInput firstNameTextInput = null;
-    private Label errorLabel = null;
+public class Forms extends Bindable implements Application {
+    @Load(name="forms.wtkx") private Window window;
+    @Bind(property="window") private FlowPane nameFlowPane;
+    @Bind(property="window") private TextInput lastNameTextInput;
+    @Bind(property="window") private TextInput firstNameTextInput;
+    @Bind(property="window") private PushButton submitButton;
+    @Bind(property="window") private Label errorLabel;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("forms.wtkx")));
+        bind();
 
-        nameFlowPane = (FlowPane)wtkxSerializer.getObjectByName("nameFlowPane");
-        lastNameTextInput = (TextInput)wtkxSerializer.getObjectByName("lastNameTextInput");
-        firstNameTextInput = (TextInput)wtkxSerializer.getObjectByName("firstNameTextInput");
-
-        PushButton submitButton = (PushButton)wtkxSerializer.getObjectByName("submitButton");
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 String lastName = lastNameTextInput.getText();
@@ -70,14 +65,14 @@ public class Forms implements Application {
             }
         });
 
-        errorLabel = (Label)wtkxSerializer.getObjectByName("errorLabel");
-
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -85,5 +80,9 @@ public class Forms implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(Forms.class, args);
     }
 }

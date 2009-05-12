@@ -29,24 +29,22 @@ import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
 import pivot.wtk.ComponentMouseButtonListener;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
 import pivot.wtk.TreeView;
 import pivot.wtk.TreeViewBranchListener;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class FileBrowser implements Application {
-    private Window window = null;
-    private TreeView folderTreeView = null;
+public class FileBrowser extends Bindable implements Application {
+    @Load(name="file_browser.wtkx") private Window window;
+    @Bind(property="window") private TreeView folderTreeView;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("file_browser_demo.wtkx")));
-
-        folderTreeView = (TreeView)wtkxSerializer.getObjectByName("folderTreeView");
+        bind();
 
         String pathname = System.getProperty("user.home");
         FileFilter fileFilter = new FileFilter() {
@@ -99,8 +97,6 @@ public class FileBrowser implements Application {
             }
         });
 
-        window.setTitle("File Browser Demo");
-        window.setMaximized(true);
         window.open(display);
     }
 
@@ -129,5 +125,9 @@ public class FileBrowser implements Application {
                 // No-op
             }
         }
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(FileBrowser.class, args);
     }
 }

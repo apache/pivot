@@ -19,33 +19,29 @@ package pivot.tutorials.buttons;
 import pivot.collections.Dictionary;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
-import pivot.wtk.Component;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.MessageType;
 import pivot.wtk.PushButton;
 import pivot.wtk.RadioButton;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class RadioButtons implements Application {
-    private Window window = null;
+public class RadioButtons extends Bindable implements Application {
+    @Load(name="radio_buttons.wtkx") private Window window;
+    @Bind(property="window") private RadioButton oneButton;
+    @Bind(property="window") private PushButton selectButton;
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content =
-            (Component)wtkxSerializer.readObject("pivot/tutorials/buttons/radio_buttons.wtkx");
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
+        bind();
 
         // Get a reference to the button group
-        RadioButton oneButton =
-            (RadioButton)wtkxSerializer.getObjectByName("oneButton");
         final Button.Group numbersGroup = oneButton.getGroup();
 
         // Add a button press listener
-        PushButton selectButton =
-            (PushButton)wtkxSerializer.getObjectByName("selectButton");
-
         selectButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 String message = "You selected \""
@@ -55,14 +51,14 @@ public class RadioButtons implements Application {
             }
         });
 
-        window = new Window();
-        window.setContent(content);
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -70,5 +66,9 @@ public class RadioButtons implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(RadioButtons.class, args);
     }
 }

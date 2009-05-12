@@ -18,23 +18,25 @@ package pivot.tutorials.separators;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class Separators implements Application {
-    private Window window = null;
+public class Separators extends Bindable implements Application {
+    @Load(name="separators.wtkx") private Window window;
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("separators.wtkx")));
-        window.setMaximized(true);
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
+        bind();
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -42,5 +44,9 @@ public class Separators implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(Separators.class, args);
     }
 }

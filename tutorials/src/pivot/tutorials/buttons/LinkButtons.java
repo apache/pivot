@@ -21,46 +21,41 @@ import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.CardPane;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.LinkButton;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class LinkButtons implements Application {
-    private Window window = null;
+public class LinkButtons extends Bindable implements Application {
+    @Load(name="link_buttons.wtkx") private Window window = null;
+    @Bind(property="window") private CardPane cardPane;
+    @Bind(property="window") private LinkButton nextButton;
+    @Bind(property="window") private LinkButton previousButton;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        bind();
 
-        Component content =
-            (Component)wtkxSerializer.readObject("pivot/tutorials/buttons/link_buttons.wtkx");
-
-        final CardPane cardPane = (CardPane)wtkxSerializer.getObjectByName("cardPane");
-
-        LinkButton nextButton = (LinkButton)wtkxSerializer.getObjectByName("nextButton");
         nextButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 cardPane.setSelectedIndex(1);
             }
         });
 
-        LinkButton previousButton = (LinkButton)wtkxSerializer.getObjectByName("previousButton");
         previousButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 cardPane.setSelectedIndex(0);
             }
         });
 
-        window = new Window();
-        window.setContent(content);
-        window.setMaximized(true);
         window.open(display);
-
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -68,5 +63,9 @@ public class LinkButtons implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(LinkButtons.class, args);
     }
 }

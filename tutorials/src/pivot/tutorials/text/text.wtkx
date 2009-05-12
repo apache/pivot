@@ -16,8 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane styles="{padding:4, verticalAlignment:'center'}"
+<Window title="Text Input" maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
-    <Label text="State:"/>
-    <TextInput wtkx:id="stateTextInput" textSize="20"/>
-</FlowPane>
+    <content>
+        <FlowPane styles="{padding:4, verticalAlignment:'center'}">
+            <Label text="State:"/>
+            <TextInput wtkx:id="stateTextInput" textSize="20"/>
+        </FlowPane>
+    </content>
+</Window>

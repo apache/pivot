@@ -16,10 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane orientation="vertical" styles="{padding:4}"
+<Window title="Radio Buttons" maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
-    <RadioButton wtkx:id="oneButton" buttonData="One" group="numbers" selected="true"/>
-    <RadioButton wtkx:id="twoButton" buttonData="Two" group="numbers"/>
-    <RadioButton wtkx:id="threeButton" buttonData="Three" group="numbers"/>
-    <PushButton wtkx:id="selectButton" buttonData="Select"/>
-</FlowPane>
+    <content>
+        <FlowPane orientation="vertical" styles="{padding:4}">
+            <RadioButton wtkx:id="oneButton" buttonData="One" group="numbers" selected="true"/>
+            <RadioButton wtkx:id="twoButton" buttonData="Two" group="numbers"/>
+            <RadioButton wtkx:id="threeButton" buttonData="Three" group="numbers"/>
+            <PushButton wtkx:id="selectButton" buttonData="Select"/>
+        </FlowPane>
+    </content>
+</Window>

@@ -16,22 +16,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane styles="{padding:4, horizontalAlignment:'center', verticalAlignment:'center'}"
+<Window title="Toggle Buttons" maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
-    <PushButton toggleButton="true">
-        <buttonData>
-            <content:ButtonData text="Anchor" icon="pivot/tutorials/anchor.png"/>
-        </buttonData>
-    </PushButton>
-    <PushButton toggleButton="true">
-        <buttonData>
-            <content:ButtonData text="Cup" icon="pivot/tutorials/cup.png"/>
-        </buttonData>
-    </PushButton>
-    <PushButton toggleButton="true">
-        <buttonData>
-            <content:ButtonData text="Star" icon="pivot/tutorials/star.png"/>
-        </buttonData>
-    </PushButton>
-</FlowPane>
+    xmlns:content="pivot.wtk.content"
+    xmlns="pivot.wtk">
+    <content>
+        <FlowPane styles="{padding:4, horizontalAlignment:'center',
+            verticalAlignment:'center'}">
+            <PushButton toggleButton="true">
+                <buttonData>
+                    <content:ButtonData text="Anchor" icon="pivot/tutorials/anchor.png"/>
+                </buttonData>
+            </PushButton>
+            <PushButton toggleButton="true">
+                <buttonData>
+                    <content:ButtonData text="Cup" icon="pivot/tutorials/cup.png"/>
+                </buttonData>
+            </PushButton>
+            <PushButton toggleButton="true">
+                <buttonData>
+                    <content:ButtonData text="Star" icon="pivot/tutorials/star.png"/>
+                </buttonData>
+            </PushButton>
+        </FlowPane>
+    </content>
+</Window>
+

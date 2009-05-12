@@ -149,6 +149,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
         } else {
             updateCallback.cancel();
             updateCallback = null;
+            repaintComponent();
         }
     }
 }

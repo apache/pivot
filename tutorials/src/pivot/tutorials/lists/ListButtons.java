@@ -21,18 +21,22 @@ import pivot.collections.Dictionary;
 import pivot.util.ThreadUtilities;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.ImageView;
 import pivot.wtk.ListButton;
 import pivot.wtk.ListButtonSelectionListener;
 import pivot.wtk.Window;
 import pivot.wtk.media.Image;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class ListButtons implements Application {
-    private class ListButtonSelectionHandler
-        implements ListButtonSelectionListener {
+public class ListButtons extends Bindable implements Application {
+    @Load(name="list_buttons.wtkx") private Window window;
+    @Bind(property="window") private ListButton listButton;
+    @Bind(property="window") private ImageView imageView;
+
+    private ListButtonSelectionListener listButtonSelectionListener =
+        new ListButtonSelectionListener() {
         public void selectedIndexChanged(ListButton listButton, int previousIndex) {
             int index = listButton.getSelectedIndex();
 
@@ -56,35 +60,22 @@ public class ListButtons implements Application {
                 imageView.setImage(image);
             }
         }
-
-    }
-
-    private ImageView imageView = null;
-    private Window window = null;
+    };
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content =
-            (Component)wtkxSerializer.readObject("pivot/tutorials/lists/list_buttons.wtkx");
+        bind();
 
-        imageView = (ImageView)wtkxSerializer.getObjectByName("imageView");
-
-        ListButton listButton =
-            (ListButton)wtkxSerializer.getObjectByName("listButton");
-
-        listButton.getListButtonSelectionListeners().add(new
-            ListButtonSelectionHandler());
-
+        listButton.getListButtonSelectionListeners().add(listButtonSelectionListener);
         listButton.setSelectedIndex(0);
 
-        window = new Window();
-        window.setContent(content);
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -92,5 +83,9 @@ public class ListButtons implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ListButtons.class, args);
     }
 }

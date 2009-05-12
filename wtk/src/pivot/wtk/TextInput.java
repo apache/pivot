@@ -223,10 +223,10 @@ public class TextInput extends Component {
             }
 
             // Clear the selection
-            selectionStart = 0;
-            selectionLength = 0;
-
             this.textNode = textNode;
+
+            selectionStart = textNode.getCharacterCount();
+            selectionLength = 0;
 
             textInputListeners.textNodeChanged(this, previousTextNode);
             textInputTextListeners.textChanged(this);
@@ -288,9 +288,14 @@ public class TextInput extends Component {
             textNode.removeRange(selectionStart, selectionLength);
         }
 
-        // Insert the text and update the selection
+        // Insert the text
+        int length = textNode.getCharacterCount();
         textNode.insertText(text, index);
-        setSelection(selectionStart + text.length(), selectionLength);
+
+        // Update the selection only if a listener did not modify the text
+        if (length + text.length() == textNode.getCharacterCount()) {
+            setSelection(index + text.length(), 0);
+        }
     }
 
     public void delete(Direction direction) {
