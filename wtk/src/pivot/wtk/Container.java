@@ -152,16 +152,14 @@ public abstract class Container extends Component
             throw new IllegalArgumentException("component is null.");
         }
 
-        if (component == this) {
-            throw new IllegalArgumentException("Cannot add a container to itself.");
+        if (component instanceof Container
+            && ((Container)component).isAncestor(this)) {
+            throw new IllegalArgumentException("Component already exists in ancestry.");
         }
 
         if (component.getParent() != null) {
             throw new IllegalArgumentException("Component already has a parent.");
         }
-
-        // TODO Attempting to insert an ancestor will cause a stack overflow.
-        // Do we care to guard against that case?
 
         component.setParent(Container.this);
         components.insert(component, index);
@@ -439,14 +437,15 @@ public abstract class Container extends Component
     }
 
     /**
-     * Tests if this container is an ancestor of a given component.
+     * Tests if this container is an ancestor of a given component. A container
+     * is considered to be its own ancestor.
      *
      * @param component
      * The component to test.
      *
      * @return
      * <tt>true</tt> if this container is an ancestor of <tt>component</tt>;
-     * <tt>false</tt>, otherwise.
+     * <tt>false</tt> otherwise.
      */
     public boolean isAncestor(Component component) {
         boolean ancestor = false;
