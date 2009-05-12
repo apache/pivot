@@ -19,6 +19,7 @@ package pivot.demos.roweditor;
 import pivot.collections.Dictionary;
 import pivot.collections.EnumList;
 import pivot.wtk.Application;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.ListButton;
 import pivot.wtk.Spinner;
@@ -27,22 +28,21 @@ import pivot.wtk.TextInput;
 import pivot.wtk.Window;
 import pivot.wtk.content.CalendarDateSpinnerData;
 import pivot.wtk.content.TableViewRowEditor;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
 /**
  * Demonstrates a flip transition used to initiate a table view row editor.
  *
  * @author tvolkert
  */
-public class Demo implements Application {
-    private Window window = null;
+public class Demo extends Bindable implements Application {
+    @Load(name="demo.wtkx") private Window window;
+    @Bind(property="window") TableView tableView;
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(getClass().getResource("demo.wtkx"));
-        window.open(display);
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
+        bind();
 
-        TableView tableView = (TableView)wtkxSerializer.getObjectByName("tableView");
         TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();
         tableView.setRowEditor(tableViewRowEditor);
 
@@ -62,6 +62,8 @@ public class Demo implements Application {
         amountTextInput.getStyles().put("strictValidation", true);
         amountTextInput.setTextKey("amount");
         tableViewRowEditor.getCellEditors().put("amount", amountTextInput);
+
+        window.open(display);
     }
 
     public boolean shutdown(boolean optional) throws Exception {
@@ -69,7 +71,6 @@ public class Demo implements Application {
             window.close();
         }
 
-        window = null;
         return true;
     }
 
@@ -77,5 +78,9 @@ public class Demo implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(Demo.class, args);
     }
 }

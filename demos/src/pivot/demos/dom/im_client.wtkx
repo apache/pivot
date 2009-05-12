@@ -16,30 +16,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{padding:8}"
+<Window title="" maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns="pivot.wtk">
     <content>
-        <CardPane wtkx:id="cardPane" orientation="horizontal" selectedIndex="0">
-            <Form wtkx:id="loginForm" styles="{fieldAlignment:'justify'}">
-                <sections>
-                    <Form.Section>
-                        <TextInput wtkx:id="usernameTextInput" Form.name="Username" />
-                        <TextInput wtkx:id="passwordTextInput" Form.name="Password" password="true" />
-                        <TextInput wtkx:id="domainTextInput" Form.name="Domain"/>
-                        <FlowPane>
-                            <PushButton wtkx:id="loginButton" buttonData="Login"/>
-                        </FlowPane>
-                        <Label wtkx:id="errorMessageLabel" styles="{color:'#ff0000', wrapText:true}"/>
-                    </Form.Section>
-                </sections>
-            </Form>
+        <Border styles="{padding:8}">
+            <content>
+                <CardPane wtkx:id="cardPane" orientation="horizontal" selectedIndex="0">
+                    <Form wtkx:id="loginForm" styles="{fieldAlignment:'justify'}">
+                        <sections>
+                            <Form.Section>
+                                <TextInput wtkx:id="usernameTextInput" Form.name="Username" />
+                                <TextInput wtkx:id="passwordTextInput" Form.name="Password" password="true" />
+                                <TextInput wtkx:id="domainTextInput" Form.name="Domain"/>
+                                <FlowPane>
+                                    <PushButton wtkx:id="loginButton" buttonData="Login"/>
+                                </FlowPane>
+                                <Label wtkx:id="errorMessageLabel" styles="{color:'#ff0000', wrapText:true}"/>
+                            </Form.Section>
+                        </sections>
+                    </Form>
 
-            <Border title="Messages" styles="{padding:4, color:10}">
-                <content>
-                    <Label wtkx:id="messageLabel" styles="{horizontalAlignment:'center', verticalAlignment:'center', wrapText:true}"/>
-                </content>
-            </Border>
-        </CardPane>
+                    <Border title="Messages" styles="{padding:4, color:10}">
+                        <content>
+                            <Label wtkx:id="messageLabel" styles="{horizontalAlignment:'center', verticalAlignment:'center', wrapText:true}"/>
+                        </content>
+                    </Border>
+                </CardPane>
+            </content>
+        </Border>
     </content>
-</Border>
+</Window>

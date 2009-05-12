@@ -18,7 +18,6 @@ package pivot.wtkx;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.io.IOException;
 import java.net.URL;
 
 import javax.annotation.processing.AbstractProcessor;

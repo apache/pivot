@@ -984,6 +984,17 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
+     * Sets the component's x-coordinate.
+     *
+     * @param x
+     * The component's horizontal position relative to the origin of the
+     * parent container.
+     */
+    public void setX(int x) {
+        setLocation(x, getY());
+    }
+
+    /**
      * Returns the component's y-coordinate.
      *
      * @return
@@ -992,6 +1003,17 @@ public abstract class Component implements ConstrainedVisual {
      */
     public int getY() {
         return y;
+    }
+
+    /**
+     * Sets the component's y-coordinate.
+     *
+     * @param y
+     * The component's vertical position relative to the origin of the
+     * parent container.
+     */
+    public void setY(int y) {
+        setLocation(getX(), y);
     }
 
     /**

@@ -16,13 +16,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}"
+<Frame title="Translucent Window" x="80" y="80"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
-    <Label text="A Translucent Window"/>
-    <Border styles="{color:13, padding:0}">
-        <content>
-            <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
-        </content>
-    </Border>
-</FlowPane>
+    <content>
+        <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify'}">
+            <Label text="A Translucent Window"/>
+            <Border styles="{color:13, padding:0}">
+                <content>
+                    <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
+                </content>
+            </Border>
+        </FlowPane>
+    </content>
+</Frame>
 

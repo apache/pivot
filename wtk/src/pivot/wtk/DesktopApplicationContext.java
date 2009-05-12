@@ -198,8 +198,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 applicationClassName = arg;
             } else {
                 String[] property;
-                if (arg.startsWith("-")) {
-                    arg = arg.substring(1);
+                if (arg.startsWith("--")) {
+                    arg = arg.substring(2);
                     property = arg.split("=");
                 } else {
                     property = arg.split(":");

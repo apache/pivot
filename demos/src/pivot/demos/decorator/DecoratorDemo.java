@@ -20,36 +20,27 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Frame;
 import pivot.wtk.Window;
 import pivot.wtk.effects.FadeDecorator;
-import pivot.wtk.effects.ReflectionDecorator;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class DecoratorDemo implements Application {
-    private Window reflectionWindow = null;
-    private Frame fadeFrame = null;
+public class DecoratorDemo extends Bindable implements Application {
+    @Load(name="reflection.wtkx") private Window reflectionWindow;
+    @Load(name="translucent.wtkx") private Frame translucentFrame;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        bind();
 
-        reflectionWindow =
-            new Window((Component)wtkxSerializer.readObject(getClass().getResource("reflection.wtkx")));
-        reflectionWindow.setTitle("Reflection Window");
-        reflectionWindow.getDecorators().add(new ReflectionDecorator());
-        reflectionWindow.setLocation(20, 20);
         reflectionWindow.open(display);
 
-        fadeFrame =
-            new Frame((Component)wtkxSerializer.readObject(getClass().getResource("translucent.wtkx")));
-        fadeFrame.setTitle("Translucent Window");
-
         final FadeDecorator fadeDecorator = new FadeDecorator();
-        fadeFrame.getDecorators().insert(fadeDecorator, 0);
+        translucentFrame.getDecorators().insert(fadeDecorator, 0);
 
-        fadeFrame.getComponentMouseListeners().add(new ComponentMouseListener.Adapter() {
+        translucentFrame.getComponentMouseListeners().add(new ComponentMouseListener.Adapter() {
             public void mouseOver(Component component) {
                 fadeDecorator.setOpacity(0.9f);
                 component.repaint();
@@ -61,13 +52,18 @@ public class DecoratorDemo implements Application {
             }
         });
 
-        fadeFrame.setLocation(80, 80);
-        fadeFrame.open(display);
+        translucentFrame.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        reflectionWindow.close();
-        fadeFrame.close();
+        if (reflectionWindow != null) {
+            reflectionWindow.close();
+        }
+
+        if (translucentFrame != null) {
+            translucentFrame.close();
+        }
+
         return true;
     }
 
@@ -75,5 +71,9 @@ public class DecoratorDemo implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(DecoratorDemo.class, args);
     }
 }

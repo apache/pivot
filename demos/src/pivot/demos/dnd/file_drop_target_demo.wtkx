@@ -16,52 +16,57 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TablePane xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
+<Window title="File Drop Target Demo" maximized="true"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns:dnd="pivot.demos.dnd"
     xmlns="pivot.wtk">
-    <columns>
-        <TablePane.Column width="1*"/>
-    </columns>
-    <rows>
-        <TablePane.Row height="1*">
-            <Border styles="{color:10, padding:0}">
-                <content>
-                    <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
-                        verticalScrollBarPolicy="fillToCapacity">
-                        <view>
-                            <TableView wtkx:id="fileTableView" selectMode="multi"
-                                styles="{showHorizontalGridLines:false}">
-                                <columns>
-                                    <TableView.Column name="name" width="180" headerData="File">
-                                        <cellRenderer>
-                                            <dnd:FileCellRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                    <TableView.Column name="size" width="60" headerData="Size">
-                                        <cellRenderer>
-                                            <dnd:FileCellRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                    <TableView.Column name="lastModified" width="120" headerData="Modified">
-                                        <cellRenderer>
-                                            <dnd:FileCellRenderer/>
-                                        </cellRenderer>
-                                    </TableView.Column>
-                                </columns>
-                            </TableView>
-                        </view>
-                        <columnHeader>
-                            <TableViewHeader tableView="$fileTableView" styles="{headersPressable:false}"/>
-                        </columnHeader>
-                    </ScrollPane>
-                </content>
-            </Border>
-        </TablePane.Row>
-        <TablePane.Row height="-1">
-	        <FlowPane styles="{padding:6, horizontalAlignment:'right', verticalAlignment:'center'}">
-	            <PushButton wtkx:id="uploadButton" buttonData="Upload"
-	               enabled="false" styles="{preferredAspectRatio:3}"/>
-	        </FlowPane>
-        </TablePane.Row>
-    </rows>
-</TablePane>
+    <content>
+        <TablePane>
+            <columns>
+                <TablePane.Column width="1*"/>
+            </columns>
+            <rows>
+                <TablePane.Row height="1*">
+                    <Border styles="{color:10, padding:0}">
+                        <content>
+                            <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
+                                verticalScrollBarPolicy="fillToCapacity">
+                                <view>
+                                    <TableView wtkx:id="fileTableView" selectMode="multi"
+                                        styles="{showHorizontalGridLines:false}">
+                                        <columns>
+                                            <TableView.Column name="name" width="180" headerData="File">
+                                                <cellRenderer>
+                                                    <dnd:FileCellRenderer/>
+                                                </cellRenderer>
+                                            </TableView.Column>
+                                            <TableView.Column name="size" width="60" headerData="Size">
+                                                <cellRenderer>
+                                                    <dnd:FileCellRenderer/>
+                                                </cellRenderer>
+                                            </TableView.Column>
+                                            <TableView.Column name="lastModified" width="120" headerData="Modified">
+                                                <cellRenderer>
+                                                    <dnd:FileCellRenderer/>
+                                                </cellRenderer>
+                                            </TableView.Column>
+                                        </columns>
+                                    </TableView>
+                                </view>
+                                <columnHeader>
+                                    <TableViewHeader tableView="$fileTableView" styles="{headersPressable:false}"/>
+                                </columnHeader>
+                            </ScrollPane>
+                        </content>
+                    </Border>
+                </TablePane.Row>
+                <TablePane.Row height="-1">
+                    <FlowPane styles="{padding:6, horizontalAlignment:'right', verticalAlignment:'center'}">
+                        <PushButton wtkx:id="uploadButton" buttonData="Upload"
+                           enabled="false" styles="{preferredAspectRatio:3}"/>
+                    </FlowPane>
+                </TablePane.Row>
+            </rows>
+        </TablePane>
+    </content>
+</Window>

@@ -30,6 +30,7 @@ import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.DropAction;
 import pivot.wtk.DropTarget;
@@ -41,21 +42,18 @@ import pivot.wtk.PushButton;
 import pivot.wtk.Span;
 import pivot.wtk.TableView;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class FileDropTargetDemo implements Application {
-    private Window window = null;
+public class FileDropTargetDemo extends Bindable implements Application {
+    @Load(name="file_drop_target_demo.wtkx") private Window window;
+    @Bind(property="window") private TableView fileTableView;
+    @Bind(property="window") private PushButton uploadButton;
 
     private FileList fileList = null;
-    private TableView fileTableView = null;
-    private PushButton uploadButton = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("file_drop_target_demo.wtkx")));
-
-        fileTableView = (TableView)wtkxSerializer.getObjectByName("fileTableView");
+        bind();
 
         fileList = new FileList();
         fileTableView.setTableData(fileList);
@@ -155,15 +153,12 @@ public class FileDropTargetDemo implements Application {
             }
         });
 
-        uploadButton = (PushButton)wtkxSerializer.getObjectByName("uploadButton");
         uploadButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 Prompt.prompt(MessageType.INFO, "Pretending to upload...", window);
             }
         });
 
-        window.setTitle("File Drop Target Demo");
-        window.setMaximized(true);
         window.open(display);
     }
 
@@ -172,8 +167,6 @@ public class FileDropTargetDemo implements Application {
             window.close();
         }
 
-        window = null;
-
         return false;
     }
 
@@ -181,5 +174,9 @@ public class FileDropTargetDemo implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(FileDropTargetDemo.class, args);
     }
 }

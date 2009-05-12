@@ -16,20 +16,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border styles="{padding:0, color:10}"
+<Window title="RSS Feed Demo" maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns:effects="pivot.wtk.effects"
     xmlns:rss="pivot.demos.rss"
     xmlns="pivot.wtk">
     <content>
-        <CardPane wtkx:id="cardPane" selectedIndex="0">
-            <Label wtkx:id="statusLabel" text="Loading..."
-                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-            <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
-                <view>
-                    <ListView wtkx:id="feedListView"/>
-                </view>
-            </ScrollPane>
-        </CardPane>
+        <Border styles="{padding:0, color:10}">
+            <content>
+                <CardPane wtkx:id="cardPane" selectedIndex="0">
+                    <Label wtkx:id="statusLabel" text="Loading..."
+                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                    <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
+                        <view>
+                            <ListView wtkx:id="feedListView"/>
+                        </view>
+                    </ScrollPane>
+                </CardPane>
+            </content>
+        </Border>
     </content>
-</Border>
+</Window>

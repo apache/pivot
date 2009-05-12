@@ -37,6 +37,7 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.CardPane;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Form;
 import pivot.wtk.Keyboard;
@@ -47,9 +48,9 @@ import pivot.wtk.Window;
 import pivot.wtk.effects.FadeTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class IMClient implements Application {
+public class IMClient extends Bindable implements Application {
     /**
      * Task for asynchronously logging into Jabber.
      *
@@ -77,28 +78,21 @@ public class IMClient implements Application {
 
     private XMPPConnection xmppConnection = null;
 
-    private Window window = null;
-    private CardPane cardPane = null;
-    private Form loginForm = null;
-
-    private TextInput usernameTextInput;
-    private TextInput passwordTextInput;
-    private TextInput domainTextInput;
-
-    private PushButton loginButton = null;
-    private Label errorMessageLabel = null;
-
-    private Label messageLabel = null;
+    @Load(name="im_client.wtkx") private Window window;
+    @Bind(property="window") private CardPane cardPane;
+    @Bind(property="window") private Form loginForm;
+    @Bind(property="window") private TextInput usernameTextInput;
+    @Bind(property="window") private TextInput passwordTextInput;
+    @Bind(property="window") private TextInput domainTextInput;
+    @Bind(property="window") private PushButton loginButton;
+    @Bind(property="window") private Label errorMessageLabel;
+    @Bind(property="window") private Label messageLabel;
 
     private ApplicationContext.ScheduledCallback scheduledFadeCallback = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("im_client.wtkx")));
-
-        cardPane = (CardPane)wtkxSerializer.getObjectByName("cardPane");
-        loginForm = (Form)wtkxSerializer.getObjectByName("loginForm");
+        bind();
 
         loginForm.getComponentKeyListeners().add(new ComponentKeyListener() {
             public boolean keyTyped(Component component, char character) {
@@ -118,26 +112,20 @@ public class IMClient implements Application {
             }
         });
 
-        usernameTextInput = (TextInput)wtkxSerializer.getObjectByName("usernameTextInput");
-        passwordTextInput = (TextInput)wtkxSerializer.getObjectByName("passwordTextInput");
-        domainTextInput = (TextInput)wtkxSerializer.getObjectByName("domainTextInput");
-
-        loginButton = (PushButton)wtkxSerializer.getObjectByName("loginButton");
         loginButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(final Button button) {
                 login();
             }
         });
 
-        errorMessageLabel = (Label)wtkxSerializer.getObjectByName("errorMessageLabel");
-
-        messageLabel = (Label)wtkxSerializer.getObjectByName("messageLabel");
-
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) throws Exception {
+        if (window != null) {
+            window.close();
+        }
+
         return false;
     }
 
@@ -214,5 +202,9 @@ public class IMClient implements Application {
         };
 
         xmppConnection.addPacketListener(packetListener, filter);
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(IMClient.class, args);
     }
 }

@@ -21,6 +21,7 @@ import java.awt.Font;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Label;
@@ -42,6 +43,7 @@ public class HelloJava implements Application {
 
         window = new Window();
         window.setContent(label);
+        window.setTitle("Hello World!");
         window.setMaximized(true);
         window.open(display);
     }
@@ -55,5 +57,9 @@ public class HelloJava implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(HelloJava.class, args);
     }
 }

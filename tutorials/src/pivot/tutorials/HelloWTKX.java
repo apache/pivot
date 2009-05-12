@@ -18,28 +18,25 @@ package pivot.tutorials;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class HelloWTKX implements Application {
-    private Window window = null;
+public class HelloWTKX extends Bindable implements Application {
+    @Load(name="hello.wtkx") private Window window;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        Component content =
-            (Component)wtkxSerializer.readObject("pivot/tutorials/hello.wtkx");
-
-        window = new Window();
-        window.setContent(content);
-        window.setMaximized(true);
+        bind();
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -47,5 +44,9 @@ public class HelloWTKX implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(HelloWTKX.class, args);
     }
 }

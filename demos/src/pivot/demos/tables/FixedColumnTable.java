@@ -19,7 +19,7 @@ package pivot.demos.tables;
 import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.wtk.Application;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.SortDirection;
 import pivot.wtk.Span;
@@ -27,29 +27,20 @@ import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TableViewSelectionListener;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class FixedColumnTable implements Application {
-    private Window window = null;
+public class FixedColumnTable extends Bindable implements Application {
+    @Load(name="fixed_column_table.wtkx") private Window window;
+    @Bind(property="window") private TableView primaryTableView;
+    @Bind(property="window") private TableViewHeader primaryTableViewHeader;
+    @Bind(property="window") private TableView fixedTableView;
+    @Bind(property="window") private TableViewHeader fixedTableViewHeader;
+
     private boolean synchronizingSelection = false;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-
-        Component content =
-            (Component)wtkxSerializer.readObject(getClass().getResource("fixed_column_table.wtkx"));
-
-        // Get references to the table views and table view headers
-        final TableView primaryTableView =
-            (TableView)wtkxSerializer.getObjectByName("primaryTableView");
-        final TableViewHeader primaryTableViewHeader =
-            (TableViewHeader)wtkxSerializer.getObjectByName("primaryTableViewHeader");
-
-        final TableView fixedTableView =
-            (TableView)wtkxSerializer.getObjectByName("fixedTableView");
-        final TableViewHeader fixedTableViewHeader =
-            (TableViewHeader)wtkxSerializer.getObjectByName("fixedTableViewHeader");
+        bind();
 
         // Keep selection state in sync
         primaryTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
@@ -129,15 +120,14 @@ public class FixedColumnTable implements Application {
             }
         });
 
-        // Open the window
-        window = new Window(content);
-        window.setTitle("Fixed Column Table Demo");
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -145,5 +135,9 @@ public class FixedColumnTable implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(FixedColumnTable.class, args);
     }
 }

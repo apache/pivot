@@ -16,6 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Label text="Hello WTKX!"
-    styles="{font:'Arial bold 24', color:'#ff0000', horizontalAlignment:'center', verticalAlignment:'center'}"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk"/>
+<Window title="Hello WTKX!" maximized="true"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    <content>
+        <Label text="Hello WTKX!"
+            styles="{font:'Arial bold 24', color:'#ff0000',
+                horizontalAlignment:'center', verticalAlignment:'center'}"/>
+    </content>
+</Window>

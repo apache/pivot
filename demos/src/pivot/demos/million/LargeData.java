@@ -30,6 +30,7 @@ import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Label;
 import pivot.wtk.ListButton;
@@ -37,9 +38,9 @@ import pivot.wtk.PushButton;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class LargeData implements Application {
+public class LargeData extends Bindable implements Application {
     private class LoadDataCallback implements Runnable {
         private class AddRowsCallback implements Runnable {
             private ArrayList<Object> page;
@@ -132,14 +133,13 @@ public class LargeData implements Application {
 
     private String basePath = null;
 
-	private Window window = null;
-
-    private ListButton fileListButton = null;
-    private PushButton loadDataButton = null;
-    private PushButton cancelButton = null;
-    private Label statusLabel = null;
-    private TableView tableView = null;
-    private TableViewHeader tableViewHeader = null;
+	@Load(name="large_data.wtkx") private Window window;
+    @Bind(property="window") private ListButton fileListButton;
+    @Bind(property="window") private PushButton loadDataButton;
+    @Bind(property="window") private PushButton cancelButton;
+    @Bind(property="window") private Label statusLabel;
+    @Bind(property="window") private TableView tableView;
+    @Bind(property="window") private TableViewHeader tableViewHeader;
 
     private CSVSerializer csvSerializer;
 
@@ -163,12 +163,8 @@ public class LargeData implements Application {
             throw new IllegalArgumentException("basePath is required.");
         }
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(getClass().getResource("large_data.wtkx"));
+        bind();
 
-        fileListButton = (ListButton)wtkxSerializer.getObjectByName("fileListButton");
-
-        loadDataButton = (PushButton)wtkxSerializer.getObjectByName("loadDataButton");
         loadDataButton.getButtonPressListeners().add(new ButtonPressListener() {
         	public void buttonPressed(Button button) {
         	    loadDataButton.setEnabled(false);
@@ -178,7 +174,6 @@ public class LargeData implements Application {
         	}
         });
 
-        cancelButton = (PushButton)wtkxSerializer.getObjectByName("cancelButton");
         cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 abort = true;
@@ -188,11 +183,6 @@ public class LargeData implements Application {
             }
         });
 
-        statusLabel = (Label)wtkxSerializer.getObjectByName("statusLabel");
-
-        tableView = (TableView)wtkxSerializer.getObjectByName("tableView");
-
-        tableViewHeader = (TableViewHeader)wtkxSerializer.getObjectByName("tableViewHeader");
         tableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler() {
         	@Override
         	public void headerPressed(TableViewHeader tableViewHeader, int index) {
@@ -208,7 +198,10 @@ public class LargeData implements Application {
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -242,5 +235,9 @@ public class LargeData implements Application {
     	    thread.setPriority(Thread.MIN_PRIORITY);
     	    thread.start();
     	}
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(LargeData.class, args);
     }
 }

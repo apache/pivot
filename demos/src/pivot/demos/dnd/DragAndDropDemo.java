@@ -25,6 +25,7 @@ import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Clipboard;
 import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.DragSource;
 import pivot.wtk.DropAction;
@@ -39,18 +40,25 @@ import pivot.wtk.PushButton;
 import pivot.wtk.Visual;
 import pivot.wtk.Window;
 import pivot.wtk.media.Image;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class DragAndDropDemo implements Application {
-    private Window window = null;
+public class DragAndDropDemo extends Bindable implements Application {
+    @Load(name="drag_and_drop.wtkx") private Window window;
+    @Bind(property="window") private Label label;
+    @Bind(property="window") private PushButton copyTextButton;
+    @Bind(property="window") private PushButton pasteTextButton;
+    @Bind(property="window") private ImageView imageView;
+    @Bind(property="window") private PushButton copyImageButton;
+    @Bind(property="window") private PushButton pasteImageButton;
+    @Bind(property="window") private ListView listView;
+    @Bind(property="window") private PushButton copyFilesButton;
+    @Bind(property="window") private PushButton pasteFilesButton;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("drag_and_drop.wtkx")));
+        bind();
 
         // Text
-        final Label label = (Label)wtkxSerializer.getObjectByName("label");
         label.setDragSource(new DragSource() {
             private LocalManifest content = null;
 
@@ -134,7 +142,6 @@ public class DragAndDropDemo implements Application {
             }
         });
 
-        PushButton copyTextButton = (PushButton)wtkxSerializer.getObjectByName("copyTextButton");
         copyTextButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 String text = label.getText();
@@ -144,7 +151,6 @@ public class DragAndDropDemo implements Application {
             }
         });
 
-        PushButton pasteTextButton = (PushButton)wtkxSerializer.getObjectByName("pasteTextButton");
         pasteTextButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 Manifest clipboardContent = Clipboard.getContent();
@@ -161,7 +167,6 @@ public class DragAndDropDemo implements Application {
         });
 
         // Images
-        final ImageView imageView = (ImageView)wtkxSerializer.getObjectByName("imageView");
         imageView.setDragSource(new DragSource() {
             private LocalManifest content = null;
 
@@ -246,7 +251,6 @@ public class DragAndDropDemo implements Application {
             }
         });
 
-        PushButton copyImageButton = (PushButton)wtkxSerializer.getObjectByName("copyImageButton");
         copyImageButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 Image image = imageView.getImage();
@@ -258,7 +262,6 @@ public class DragAndDropDemo implements Application {
             }
         });
 
-        PushButton pasteImageButton = (PushButton)wtkxSerializer.getObjectByName("pasteImageButton");
         pasteImageButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 Manifest clipboardContent = Clipboard.getContent();
@@ -275,7 +278,6 @@ public class DragAndDropDemo implements Application {
         });
 
         // Files
-        final ListView listView = (ListView)wtkxSerializer.getObjectByName("listView");
         listView.setListData(new FileList());
 
         listView.setDragSource(new DragSource() {
@@ -363,28 +365,26 @@ public class DragAndDropDemo implements Application {
             }
         });
 
-        PushButton copyFilesButton = (PushButton)wtkxSerializer.getObjectByName("copyFilesButton");
         copyFilesButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 // TODO
             }
         });
 
-        PushButton pasteFilesButton = (PushButton)wtkxSerializer.getObjectByName("pasteFilesButton");
         pasteFilesButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 // TODO
             }
         });
 
-        // Open the window
-        window.setTitle("Drag and Drop Demo");
-        window.setMaximized(true);
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -392,5 +392,9 @@ public class DragAndDropDemo implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(DragAndDropDemo.class, args);
     }
 }

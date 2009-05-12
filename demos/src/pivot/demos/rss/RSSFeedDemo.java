@@ -47,6 +47,7 @@ import pivot.wtk.BrowserApplicationContext;
 import pivot.wtk.CardPane;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.Insets;
@@ -55,14 +56,14 @@ import pivot.wtk.ListView;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
 /**
  * RSS feed demo application.
  *
  * @author gbrown
  */
-public class RSSFeedDemo implements Application {
+public class RSSFeedDemo extends Bindable implements Application {
     // Loads the feed in the background so the UI doesn't block
     private class LoadFeedTask extends IOTask<NodeList> {
         public NodeList execute() throws TaskExecutionException {
@@ -226,8 +227,10 @@ public class RSSFeedDemo implements Application {
 
     private XPath xpath;
 
-    private Window window = null;
-    private ListView feedListView = null;
+    @Load(name="rss_feed_demo.wtkx") private Window window;
+    @Bind(property="window") private ListView feedListView;
+    @Bind(property="window") private CardPane cardPane;
+    @Bind(property="window") private Label statusLabel;
 
     public static final String FEED_URI = "http://feeds.dzone.com/javalobby/frontpage?format=xml";
 
@@ -260,15 +263,10 @@ public class RSSFeedDemo implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("rss_feed_demo.wtkx")));
+        bind();
 
-        feedListView = (ListView)wtkxSerializer.getObjectByName("feedListView");
         feedListView.setItemRenderer(new RSSItemRenderer());
         feedListView.getComponentMouseButtonListeners().add(new FeedViewMouseButtonHandler());
-
-        final CardPane cardPane = (CardPane)wtkxSerializer.getObjectByName("cardPane");
-        final Label statusLabel = (Label)wtkxSerializer.getObjectByName("statusLabel");
 
         LoadFeedTask loadFeedTask = new LoadFeedTask();
         loadFeedTask.execute(new TaskListener<NodeList>() {
@@ -298,5 +296,9 @@ public class RSSFeedDemo implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(RSSFeedDemo.class, args);
     }
 }

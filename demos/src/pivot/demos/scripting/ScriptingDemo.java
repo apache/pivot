@@ -20,30 +20,25 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
-import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class ScriptingDemo implements Application {
+public class ScriptingDemo extends Bindable implements Application {
     public static class MyButtonPressListener implements ButtonPressListener {
         public void buttonPressed(Button button) {
             System.out.println("[Java] A button was clicked.");
         }
     }
 
-    private Window window = null;
+    @Load(name="scripting_demo.wtkx") private Window window;
+    @Bind(property="window") private String foo;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("scripting_demo.wtkx")));
-
-        String foo = (String)wtkxSerializer.getObjectByName("foo");
+        bind();
         System.out.println("foo = " + foo);
-
-        window.setTitle("Scripting Demo");
-        window.setMaximized(true);
         window.open(display);
     }
 
@@ -59,5 +54,9 @@ public class ScriptingDemo implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ScriptingDemo.class, args);
     }
 }

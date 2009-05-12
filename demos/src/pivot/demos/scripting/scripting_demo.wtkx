@@ -16,26 +16,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
+<Window title="Scripting Demo" maximized="true"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns:scripting="pivot.demos.scripting"
     xmlns="pivot.wtk">
     <content>
-        <FlowPane orientation="vertical" styles="{padding:6}">
-            <wtkx:script src="demo.js"/>
-            <!-- <wtkx:script src="demo.groovy"/> -->
+        <Border>
+            <content>
+                <FlowPane orientation="vertical" styles="{padding:6}">
+                    <wtkx:script src="demo.js"/>
+                    <!-- <wtkx:script src="demo.groovy"/> -->
 
-            <PushButton wtkx:id="pushButton" buttonData="Click Me!"
-                buttonPressListeners="$buttonPressListener1, $buttonPressListener2">
-                <buttonPressListeners>
-                    <scripting:ScriptingDemo.MyButtonPressListener/>
-                </buttonPressListeners>
-            </PushButton>
+                    <PushButton wtkx:id="pushButton" buttonData="Click Me!"
+                        buttonPressListeners="$buttonPressListener1, $buttonPressListener2">
+                        <buttonPressListeners>
+                            <scripting:ScriptingDemo.MyButtonPressListener/>
+                        </buttonPressListeners>
+                    </PushButton>
 
-            <Border styles="{padding:0, color:10}">
-                <content>
-                    <ListView listData="$listData" selectedIndex="0"/>
-                </content>
-            </Border>
-        </FlowPane>
+                    <Border styles="{padding:0, color:10}">
+                        <content>
+                            <ListView listData="$listData" selectedIndex="0"/>
+                        </content>
+                    </Border>
+                </FlowPane>
+            </content>
+        </Border>
     </content>
-</Border>
+</Window>
