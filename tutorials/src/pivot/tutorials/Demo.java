@@ -695,14 +695,6 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        // NOTE This is commented out because it takes a non-negligible amount
-        // of time to execute
-        /*
-        TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
-        URL schemeLocation = TerraTheme.class.getResource("TerraTheme_default.json");
-        terraTheme.loadScheme(schemeLocation);
-        */
-
         bind();
 
         buttonsRollup.getRollupStateListeners().add(new ButtonsRollupStateHandler());
