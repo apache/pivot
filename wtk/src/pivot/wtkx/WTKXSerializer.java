@@ -820,7 +820,7 @@ public class WTKXSerializer implements Serializer<Object> {
 
                             try {
                                 // TODO Pass ClassLoader here
-                                Class<?> type = Class.forName(className);
+                                Class<?> type = Class.forName(className, false, getClass().getClassLoader());
                                 element = new Element(element, localName, Element.Type.INSTANCE,
                                     attributes, type, Element.counter);
                             } catch(Exception exception) {
@@ -966,11 +966,12 @@ public class WTKXSerializer implements Serializer<Object> {
                                         }
                                         */
                                     } else {
-                                        // TODO What about primitive setters?
-                                        Method setterMethod = BeanDictionary.getSetterMethod
-                                            (type, attribute.localName, String.class);
-                                        buf.append(String.format("__%d.%s(\"%s\");",
-                                            element.ref, setterMethod.getName(), attribute.value));
+                                        String key = Character.toUpperCase(attribute.localName.charAt(0)) +
+                                            attribute.localName.substring(1);
+                                        String setterMethodName = BeanDictionary.SET_PREFIX + key;
+
+                                        buf.append(String.format("__%d.%s(%s);", element.ref,
+                                            setterMethodName, resolveSource(attribute.value, attributeType)));
                                     }
                                 }
                             }
@@ -1209,6 +1210,103 @@ public class WTKXSerializer implements Serializer<Object> {
         }
 
         return resolvedValue;
+    }
+
+    private String resolveSource(String attributeValue, Class<?> propertyType)
+        throws MalformedURLException {
+        String resolvedSource = null;
+
+        if (propertyType == Boolean.class
+            || propertyType == Boolean.TYPE) {
+            try {
+                resolvedSource = String.valueOf(Boolean.parseBoolean(attributeValue));
+            } catch(NumberFormatException exception) {
+                resolvedSource = "\"" + attributeValue + "\"";
+            }
+        } else if (propertyType == Character.class
+            || propertyType == Character.TYPE) {
+            if (attributeValue.length() > 0) {
+                resolvedSource = "'" + attributeValue.charAt(0) + "'";
+            }
+        } else if (propertyType == Byte.class
+            || propertyType == Byte.TYPE) {
+            try {
+                resolvedSource = String.valueOf(Byte.parseByte(attributeValue));
+            } catch(NumberFormatException exception) {
+                resolvedSource = "\"" + attributeValue + "\"";
+            }
+        } else if (propertyType == Short.class
+            || propertyType == Short.TYPE) {
+            try {
+                resolvedSource = String.valueOf(Short.parseShort(attributeValue));
+            } catch(NumberFormatException exception) {
+                resolvedSource = "\"" + attributeValue + "\"";
+            }
+        } else if (propertyType == Integer.class
+            || propertyType == Integer.TYPE) {
+            try {
+                resolvedSource = String.valueOf(Integer.parseInt(attributeValue));
+            } catch(NumberFormatException exception) {
+                resolvedSource = "\"" + attributeValue + "\"";
+            }
+        } else if (propertyType == Long.class
+            || propertyType == Long.TYPE) {
+            try {
+                resolvedSource = String.valueOf(Long.parseLong(attributeValue));
+            } catch(NumberFormatException exception) {
+                resolvedSource = "\"" + attributeValue + "\"";
+            }
+        } else if (propertyType == Float.class
+            || propertyType == Float.TYPE) {
+            try {
+                resolvedSource = String.valueOf(Float.parseFloat(attributeValue));
+            } catch(NumberFormatException exception) {
+                resolvedSource = "\"" + attributeValue + "\"";
+            }
+        } else if (propertyType == Double.class
+            || propertyType == Double.TYPE) {
+            try {
+                resolvedSource = String.valueOf(Double.parseDouble(attributeValue));
+            } catch(NumberFormatException exception) {
+                resolvedSource = "\"" + attributeValue + "\"";
+            }
+        } else {
+            if (attributeValue.length() > 0) {
+                if (attributeValue.charAt(0) == URL_PREFIX) {
+                    if (attributeValue.length() > 1) {
+                        if (attributeValue.charAt(1) == URL_PREFIX) {
+                            resolvedSource = "\"" + attributeValue.substring(1) + "\"";
+                        } else {
+                            // TODO
+                            resolvedSource = "\"" + attributeValue + "\"";
+                        }
+                    }
+                } else if (attributeValue.charAt(0) == RESOURCE_KEY_PREFIX) {
+                    if (attributeValue.length() > 1) {
+                        if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
+                            resolvedSource = "\"" + attributeValue.substring(1) + "\"";
+                        } else {
+                            // TODO
+                            resolvedSource = "\"" + attributeValue + "\"";
+                        }
+                    }
+                } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {
+                    if (attributeValue.length() > 1) {
+                        if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
+                            resolvedSource = "\"" + attributeValue.substring(1) + "\"";
+                        } else {
+                            resolvedSource = "__namedObjects.get(\"" + attributeValue.substring(1) + "\")";
+                        }
+                    }
+                } else {
+                    resolvedSource = "\"" + attributeValue + "\"";
+                }
+            } else {
+                resolvedSource = "\"\"";
+            }
+        }
+
+        return resolvedSource;
     }
 
     /**
