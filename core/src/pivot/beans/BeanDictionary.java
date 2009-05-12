@@ -286,11 +286,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * <tt>true</tt> if the property is read-only; <tt>false</tt>, otherwise.
      */
     public boolean isReadOnly(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        return (getSetterMethod(key, getType(key)) == null);
+        return isReadOnly(bean.getClass(), key);
     }
 
     /**
@@ -303,13 +299,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * The type of the property.
      */
     public Class<?> getType(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        Method getterMethod = getGetterMethod(key);
-
-        return (getterMethod == null) ? null : getterMethod.getReturnType();
+        return getType(bean.getClass(), key);
     }
 
     /**
@@ -332,8 +322,78 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
      * The getter method, or <tt>null</tt> if the method does not exist.
      */
     private Method getGetterMethod(String key) {
-        Class<?> type = bean.getClass();
+        return getGetterMethod(bean.getClass(), key);
+    }
 
+    /**
+     * Returns the setter method for a property.
+     *
+     * @param key
+     * The property name.
+     *
+     * @return
+     * The getter method, or <tt>null</tt> if the method does not exist.
+     */
+    private Method getSetterMethod(String key, Class<?> valueType) {
+        return getSetterMethod(bean.getClass(), key, valueType);
+    }
+
+    /**
+     * Tests the read-only state of a property.
+     *
+     * @param type
+     * The bean class.
+     *
+     * @param key
+     * The property name.
+     *
+     * @return
+     * <tt>true</tt> if the property is read-only; <tt>false</tt>, otherwise.
+     */
+    public static boolean isReadOnly(Class<?> type, String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key is null.");
+        }
+
+        return (getSetterMethod(type, key, getType(type, key)) == null);
+    }
+
+    /**
+     * Returns the type of a property.
+     *
+     * @param type
+     * The bean class.
+     *
+     * @param key
+     * The property name.
+     *
+     * @return
+     * The type of the property, or <tt>null</tt> if no such bean property
+     * exists.
+     */
+    public static Class<?> getType(Class<?> type, String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key is null.");
+        }
+
+        Method getterMethod = getGetterMethod(type, key);
+
+        return (getterMethod == null) ? null : getterMethod.getReturnType();
+    }
+
+    /**
+     * Returns the getter method for a property.
+     *
+     * @param type
+     * The bean class.
+     *
+     * @param key
+     * The property name.
+     *
+     * @return
+     * The getter method, or <tt>null</tt> if the method does not exist.
+     */
+    public static Method getGetterMethod(Class<?> type, String key) {
         // Upper-case the first letter
         key = Character.toUpperCase(key.charAt(0)) + key.substring(1);
         Method method = null;
@@ -358,14 +418,16 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
     /**
      * Returns the setter method for a property.
      *
+     * @param type
+     * The bean class.
+     *
      * @param key
      * The property name.
      *
      * @return
      * The getter method, or <tt>null</tt> if the method does not exist.
      */
-    private Method getSetterMethod(String key, Class<?> valueType) {
-        Class<?> type = bean.getClass();
+    public static Method getSetterMethod(Class<?> type, String key, Class<?> valueType) {
         Method method = null;
 
         if (valueType != null) {
@@ -383,7 +445,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
             if (method == null) {
                 // Look for a match on the value's super type
                 Class<?> superType = valueType.getSuperclass();
-                method = getSetterMethod(key, superType);
+                method = getSetterMethod(type, key, superType);
             }
 
             if (method == null) {
@@ -391,7 +453,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                 // signature with the corresponding primitive type
                 try {
                     Field primitiveTypeField = valueType.getField("TYPE");
-                    Class<?> primitiveValueType = (Class<?>)primitiveTypeField.get(this);
+                    Class<?> primitiveValueType = (Class<?>)primitiveTypeField.get(null);
 
                     try {
                         method = type.getMethod(methodName, new Class<?>[] {primitiveValueType});
@@ -413,7 +475,7 @@ public class BeanDictionary implements Dictionary<String, Object>, Iterable<Stri
                 while (method == null
                     && i < n) {
                     Class<?> interfaceType = interfaces[i++];
-                    method = getSetterMethod(key, interfaceType);
+                    method = getSetterMethod(type, key, interfaceType);
                 }
             }
         }
