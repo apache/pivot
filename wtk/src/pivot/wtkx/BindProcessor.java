@@ -266,7 +266,7 @@ public class BindProcessor extends AbstractProcessor {
                 // There is some bind work to be done in this class; start by
                 // creating the source code buffer
                 StringBuilder buf = new StringBuilder("class _A {");
-                buf.append("@Override ");
+                buf.append("@Override @SuppressWarnings(\"unchecked\") ");
                 buf.append("protected void bind(pivot.collections.Dictionary<String,");
                 buf.append("pivot.collections.Dictionary<String, Object>> namedObjectDictionaries) {");
                 buf.append("super.bind(namedObjectDictionaries);");
@@ -339,11 +339,42 @@ public class BindProcessor extends AbstractProcessor {
                                         // Add interpreted code
                                         buf.append(blockCode);
 
-                                        // Record interpreted values back into our main scope
-                                        buf.append(String.format
-                                            ("namedObjectDictionaries.put(\"%s\", __namedObjects);", loadFieldName));
+                                        // Public and protected fields get kept for subclasses
+                                        if ((loadField.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
+                                            buf.append(String.format
+                                                ("namedObjectDictionaries.put(\"%s\", __namedObjects);",
+                                                loadFieldName));
+                                        }
+
+                                        // Bind @Load member
                                         buf.append(String.format
                                             ("%s = (%s)__result;", loadFieldName, loadField.vartype.toString()));
+
+                                        // Bind @Bind members
+                                        if (loadGroup.bindFields != null) {
+                                            for (JCVariableDecl bindField : loadGroup.bindFields) {
+                                                String bindFieldName = bindField.name.toString();
+                                                JCAnnotation bindAnnotation = getBindAnnotation(bindField);
+
+                                                String bindName = getAnnotationProperty(bindAnnotation, "name");
+                                                if (bindName == null) {
+                                                    // The bind name defaults to the field name
+                                                    bindName = bindFieldName;
+                                                }
+
+                                                buf.append(String.format
+                                                    ("object = __namedObjects.get(\"%s\");", bindName));
+                                                buf.append
+                                                    ("if (object == null) {");
+                                                buf.append(String.format
+                                                    ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");",
+                                                    bindName));
+                                                buf.append
+                                                    ("}");
+                                                buf.append(String.format
+                                                    ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
+                                            }
+                                        }
 
                                         // Close local scope
                                         buf.append("}");
@@ -353,7 +384,7 @@ public class BindProcessor extends AbstractProcessor {
                                 } catch (Exception ex) {
                                     processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
                                     "Error trying to load field " + classDeclaration.name.toString() + "." +
-                                    loadFieldName + ": " + ex.getMessage());
+                                    loadFieldName + ": " + ex.toString());
                                 }
                             } else {
                                 processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,

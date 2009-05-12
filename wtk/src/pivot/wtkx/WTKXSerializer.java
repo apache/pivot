@@ -68,6 +68,9 @@ public class WTKXSerializer implements Serializer<Object> {
         public final List<Attribute> attributes;
 
         public Object value;
+        public int count = -1;
+
+        public static int counter = -1;
 
         public Element(Element parent, String tagName, Type type, List<Attribute> attributes, Object value) {
             this.parent = parent;
@@ -75,6 +78,15 @@ public class WTKXSerializer implements Serializer<Object> {
             this.type = type;
             this.attributes = attributes;
             this.value = value;
+        }
+
+        public Element(Element parent, String tagName, Type type, List<Attribute> attributes, Object value, int count) {
+            this.parent = parent;
+            this.tagName = tagName;
+            this.type = type;
+            this.attributes = attributes;
+            this.value = value;
+            this.count = count;
         }
     }
 
@@ -541,6 +553,10 @@ public class WTKXSerializer implements Serializer<Object> {
                                     throw new SerializationException("Root node must represent a typed object.");
                                 }
 
+                                if (element.type != Element.Type.INSTANCE) {
+                                    throw new SerializationException("Property elements must apply to typed objects.");
+                                }
+
                                 BeanDictionary propertyDictionary = new BeanDictionary(element.value);
 
                                 if (propertyDictionary.isReadOnly(localName)) {
@@ -711,6 +727,8 @@ public class WTKXSerializer implements Serializer<Object> {
 
     /**
      * Interprets an object from a WTKX input stream.
+     * <p>
+     * TODO Take a ClassLoader, and pass it to Class.forName()
      *
      * @param inputStream
      * The data stream from which the object will be interpreted
@@ -727,26 +745,249 @@ public class WTKXSerializer implements Serializer<Object> {
         StringBuilder buf = new StringBuilder();
         buf.append("Object __result = null;");
         buf.append("pivot.collections.Dictionary<String, Object> __namedObjects = " +
-            "new pivot.collections.HashMap<String, Object>();\n");
+            "new pivot.collections.HashMap<String, Object>();");
 
         // Parse the XML stream
+        Element element = null;
         try {
             XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(inputStream);
 
             while (reader.hasNext()) {
                 int event = reader.next();
 
-                // TODO
                 switch (event) {
                 case XMLStreamConstants.CHARACTERS: {
+                    // TODO
                     break;
                 }
 
                 case XMLStreamConstants.START_ELEMENT: {
+                    String namespaceURI = reader.getNamespaceURI();
+                    String prefix = reader.getPrefix();
+                    String localName = reader.getLocalName();
+
+                    String id = null;
+
+                    if (prefix != null
+                        && prefix.equals(WTKX_PREFIX)) {
+                        if (element == null) {
+                            throw new SerializationException(prefix + ":" + localName
+                                + " is not a valid root element.");
+                        }
+
+                        if (localName.equals(INCLUDE_TAG)) {
+                            // TODO
+                            throw new SerializationException(prefix + ":" + localName
+                                + " compilation is not yet implemented.");
+                        } else if (localName.equals(SCRIPT_TAG)) {
+                            throw new SerializationException(prefix + ":" + localName
+                                + " tags may not be compiled.");
+                        } else {
+                            throw new SerializationException(prefix + ":" + localName
+                                + " is not a valid tag.");
+                        }
+                    } else {
+                        ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+
+                        for (int i = 0, n = reader.getAttributeCount(); i < n; i++) {
+                            String attributeNamespaceURI = reader.getAttributeNamespace(i);
+                            if (attributeNamespaceURI == null) {
+                                attributeNamespaceURI = reader.getNamespaceURI("");
+                            }
+
+                            String attributePrefix = reader.getAttributePrefix(i);
+                            String attributeLocalName = reader.getAttributeLocalName(i);
+                            String attributeValue = reader.getAttributeValue(i);
+
+                            if (attributePrefix != null
+                                && attributePrefix.equals(WTKX_PREFIX)) {
+                                if (attributeLocalName.equals(ID_ATTRIBUTE)) {
+                                    id = attributeValue;
+                                }
+                            } else {
+                                attributes.add(new Attribute(attributeNamespaceURI,
+                                    attributePrefix, attributeLocalName, attributeValue));
+                            }
+                        }
+
+                        if (Character.isUpperCase(localName.charAt(0))) {
+                            // The element represents a typed object
+                            if (namespaceURI == null) {
+                                throw new SerializationException("No XML namespace specified for "
+                                    + localName + " tag.");
+                            }
+
+                            String className = namespaceURI + "." + localName.replace('.', '$');
+
+                            buf.append(String.format("%s __%d = new %s();", className, ++Element.counter, className));
+
+                            try {
+                                Class<?> type = Class.forName(className);
+                                element = new Element(element, localName, Element.Type.INSTANCE, attributes, type, Element.counter);
+                            } catch(Exception exception) {
+                                throw new SerializationException(exception);
+                            }
+                        } else {
+                            // The element represents a property
+                            if (element == null) {
+                                throw new SerializationException("Root node must represent a typed object.");
+                            }
+
+                            if (element.type != Element.Type.INSTANCE) {
+                                throw new SerializationException("Property elements must apply to typed objects.");
+                            }
+
+                            Class<?> type = (Class<?>)element.value;
+
+                            if (BeanDictionary.isReadOnly(type, localName)) {
+                                Class<?> valueType = BeanDictionary.getType(type, localName);
+
+                                buf.append(String.format("Object __%d = (new pivot.beans.BeanDictionary(__%d)).get(\"%s\");",
+                                    ++Element.counter, element.count, localName));
+                                buf.append(String.format("assert (__%d != null) : \"Read-only properties cannot be null.\";",
+                                    Element.counter));
+                                element = new Element(element, localName, Element.Type.READ_ONLY_PROPERTY,
+                                    attributes, BeanDictionary.getType(type, localName), Element.counter);
+                            } else {
+                                if (attributes.getLength() > 0) {
+                                    throw new SerializationException("Writable property elements cannot have attributes.");
+                                }
+
+                                element = new Element(element, localName, Element.Type.WRITABLE_PROPERTY,
+                                    null, null, -1);
+                            }
+                        }
+                    }
+
+                    switch (element.type) {
+                    case INCLUDE:
+                    case INSTANCE: {
+                        // If the element's parent is a sequence or a listener list, add
+                        // the element value to it
+                        if (element.parent != null) {
+                            Class<?> parentType = (Class<?>)element.parent.value;
+
+                            if (parentType != null) {
+                                if (Sequence.class.isAssignableFrom(parentType)) {
+                                    buf.append(String.format("__%d.add(__%d);",
+                                        element.parent.count, element.count));
+                                } else if (ListenerList.class.isAssignableFrom(parentType)) {
+                                    buf.append(String.format
+                                        ("((pivot.util.ListenerList<Object>)__%d).add(__%d);",
+                                        element.parent.count, element.count));
+                                }
+                            }
+                        }
+
+                        // If an ID was specified, add the value to the named object map
+                        if (id != null) {
+                            if (id.length() == 0) {
+                                throw new IllegalArgumentException(WTKX_PREFIX + ":" + ID_ATTRIBUTE
+                                    + " must not be null.");
+                            }
+
+                            buf.append(String.format("__namedObjects.put(\"%s\", __%d);", id, element.count));
+                        }
+
+                        break;
+                    }
+                    }
+
                     break;
                 }
 
                 case XMLStreamConstants.END_ELEMENT: {
+                    String localName = reader.getLocalName();
+
+                    switch (element.type) {
+                    case WRITABLE_PROPERTY: {
+                        String key = Character.toUpperCase(localName.charAt(0)) + localName.substring(1);
+                        String methodName = BeanDictionary.SET_PREFIX + key;
+                        buf.append(String.format("__%d.%s(__%d);", element.parent.count, methodName, element.count));
+                        break;
+                    }
+
+                    case SCRIPT: {
+                        break;
+                    }
+
+                    default: {
+                        Class<?> type = (Class<?>)element.value;
+
+                        if (type != null && Dictionary.class.isAssignableFrom(type)) {
+                            // The element is an untyped object
+                            for (Attribute attribute : element.attributes) {
+                                if (Character.isUpperCase(attribute.localName.charAt(0))) {
+                                    throw new SerializationException("Static setters are only supported for typed instances.");
+                                }
+
+                                // Resolve and apply the attribute
+                                // TODO Resolve
+                                // TODO attribute.value shouldn't always be quoted
+                                buf.append(String.format("((pivot.collections.Dictionary)__%d).put(\"%s\", \"%s\")", element.count, attribute.localName, attribute.value));
+                            }
+                        } else {
+                            // The element represents a typed object; apply the attributes
+                            Class<?> valueType = (Class<?>)element.value;
+                            //BeanDictionary valueDictionary = new BeanDictionary(element.value);
+
+                            for (Attribute attribute : element.attributes) {
+                                if (Character.isUpperCase(attribute.localName.charAt(0))) {
+                                    // The property represents an attached value
+                                    // TODO
+                                    //setStaticProperty(attribute, element.value);
+                                } else {
+                                    Class<?> attributeType = BeanDictionary.getType(valueType, attribute.localName);
+
+                                    if (attributeType != null
+                                        && ListenerList.class.isAssignableFrom(attributeType)) {
+                                        // The property represents a listener list
+                                        /*
+                                        ListenerList<Object> listenerList = (ListenerList<Object>)valueDictionary.get(attribute.localName);
+
+                                        // The attribute value is a comma-separated list of listener IDs
+                                        String[] listenerIDs = attribute.value.split(",");
+
+                                        for (int i = 0, n = listenerIDs.length; i < n; i++) {
+                                            String listenerID = listenerIDs[i].trim();
+
+                                            if (listenerID.length() > 0) {
+                                                listenerID = listenerID.substring(1);
+
+                                                if (listenerID.length() > 0) {
+                                                    listenerList.add(getObjectByID(listenerID));
+                                                }
+                                            }
+                                        }
+                                        */
+                                    } else {
+                                        String key = Character.toUpperCase(attribute.localName.charAt(0))
+                                            + attribute.localName.substring(1);
+                                        String methodName = BeanDictionary.SET_PREFIX + key;
+                                        buf.append(String.format("__%d.%s(\"%s\");", element.count, methodName, attribute.value));
+                                    }
+                                }
+                            }
+                        }
+
+                        // If the parent element is a writable property, set this as its value; it
+                        // will be applied later in the parent's closing tag
+                        if (element.parent != null
+                            && element.parent.type == Element.Type.WRITABLE_PROPERTY) {
+                            element.parent.value = element.value;
+                            element.parent.count = element.count;
+                        }
+                    }
+                    }
+
+                    // If this is the top of the stack, return this element's value;
+                    // otherwise, move up the stack
+                    if (element.parent == null) {
+                        buf.append(String.format("__result = __%d;", element.count));
+                    } else {
+                        element = element.parent;
+                    }
+
                     break;
                 }
                 }
