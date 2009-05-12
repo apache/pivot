@@ -274,7 +274,7 @@ public class Demo extends Bindable implements Application, Application.About {
                         if (button == Mouse.Button.RIGHT
                             || (button == Mouse.Button.LEFT
                                 && Keyboard.isPressed(Keyboard.Modifier.CTRL))) {
-                            menuPopup.open(window, component.mapPointToAncestor(display, x, y));
+                            menuPopup.open(window, component.mapPointToAncestor(component.getDisplay(), x, y));
                         }
 
                         return false;
@@ -675,8 +675,6 @@ public class Demo extends Bindable implements Application, Application.About {
         }
     }
 
-    private Display display = null;
-
     @Load(name="demo.wtkx") private Window window;
     @Bind(property="window") private Rollup buttonsRollup;
     @Bind(property="window") private Rollup listsRollup;
@@ -696,8 +694,7 @@ public class Demo extends Bindable implements Application, Application.About {
         DesktopApplicationContext.main(Demo.class, args);
     }
 
-    @SuppressWarnings("unchecked")
-    public void startup(final Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         // NOTE This is commented out because it takes a non-negligible amount
         // of time to execute
         /*
@@ -705,8 +702,6 @@ public class Demo extends Bindable implements Application, Application.About {
         URL schemeLocation = TerraTheme.class.getResource("TerraTheme_default.json");
         terraTheme.loadScheme(schemeLocation);
         */
-
-        this.display = display;
 
         bind();
 
