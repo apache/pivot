@@ -160,6 +160,9 @@ public abstract class Container extends Component
             throw new IllegalArgumentException("Component already has a parent.");
         }
 
+        // TODO Attempting to insert an ancestor will cause a stack overflow.
+        // Do we care to guard against that case?
+
         component.setParent(Container.this);
         components.insert(component, index);
 
