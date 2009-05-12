@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="List Buttons"
+<Window title="List Buttons" maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
     <content>
         <TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true,
