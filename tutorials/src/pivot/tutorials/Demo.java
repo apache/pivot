@@ -97,7 +97,7 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class ButtonsRollupStateHandler extends RollupStateHandler {
-        @Load(name="buttons.wtkx")
+        @Load(name="buttons.wtkx", compile=true)
         private Component component;
 
         public Vote previewExpandedChange(Rollup rollup) {
@@ -213,7 +213,7 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class SplittersRollupStateHandler extends RollupStateHandler {
-        @Load(name="splitters.wtkx") private Component component;
+        @Load(name="splitters.wtkx", compile=true) private Component component;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -293,7 +293,7 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class MetersRollupStateHandler extends RollupStateHandler {
-        @Load(name="meters.wtkx") private Component component;
+        @Load(name="meters.wtkx", compile=true) private Component component;
         @Bind(property="component") private ActivityIndicator activityIndicator1;
         @Bind(property="component") private ActivityIndicator activityIndicator2;
         @Bind(property="component") private ActivityIndicator activityIndicator3;
@@ -447,7 +447,7 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class TreesRollupStateHandler extends RollupStateHandler {
-        @Load(name="trees.wtkx") private Component component;
+        @Load(name="trees.wtkx", compile=true) private Component component;
         @Bind(property="component") private TreeView editableTreeView;
 
         public Vote previewExpandedChange(Rollup rollup) {
@@ -464,7 +464,7 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class DragDropRollupStateHandler extends RollupStateHandler {
-        @Load(name="dragdrop.wtkx") private Component component;
+        @Load(name="dragdrop.wtkx", compile=true) private Component component;
         @Bind(property="component") private ImageView imageView1;
         @Bind(property="component") private ImageView imageView2;
         @Bind(property="component") private ImageView imageView3;
@@ -591,7 +591,7 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class AlertsRollupStateHandler extends RollupStateHandler {
-        @Load(name="alerts.wtkx") private Component component;
+        @Load(name="alerts.wtkx", compile=true) private Component component;
         @Bind(property="component") private PushButton alertButton;
         @Bind(property="component") private PushButton promptButton;
 
@@ -675,7 +675,7 @@ public class Demo extends Bindable implements Application, Application.About {
         }
     }
 
-    @Load(name="demo.wtkx") private Window window;
+    @Load(name="demo.wtkx", compile=true) private Window window;
     @Bind(property="window") private Rollup buttonsRollup;
     @Bind(property="window") private Rollup listsRollup;
     @Bind(property="window") private Rollup textRollup;
