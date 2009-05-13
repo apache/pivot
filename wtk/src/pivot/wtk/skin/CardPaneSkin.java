@@ -363,7 +363,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
                 if (selectionChangeTransition.isRunning()) {
                     for (Component card : cardPane) {
-                        // Center old and new cards and ensure they are visible
+                        // Align old and new cards and ensure they are visible
                         if (card == previousSelectedCard
                             || card == selectedCard) {
                             int x = (orientation == Orientation.VERTICAL) ?
@@ -438,7 +438,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                             }
                         } else {
                             for (Component card : cardPane) {
-                                width = Math.max(height, card.getPreferredWidth(height));
+                                width = Math.max(width, card.getPreferredWidth(height));
                             }
                         }
 

@@ -31,7 +31,7 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class FlowPanes extends Bindable implements Application {
-    @Load(name="flowpanes.wtkx") private Window window;
+    @Load(name="flow_panes.wtkx") private Window window;
     @Bind(property="window") private FlowPane flowPane;
     @Bind(property="window") private RadioButton horizontalOrientationButton;
     @Bind(property="window") private RadioButton verticalOrientationButton;

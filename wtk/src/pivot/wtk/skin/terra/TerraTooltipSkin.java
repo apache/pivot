@@ -35,7 +35,6 @@ import pivot.wtk.Tooltip;
 import pivot.wtk.TooltipListener;
 import pivot.wtk.Window;
 import pivot.wtk.effects.DropShadowDecorator;
-import pivot.wtk.effects.FadeTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.skin.WindowSkin;
@@ -171,8 +170,9 @@ public class TerraTooltipSkin extends WindowSkin implements TooltipListener {
         Vote vote = Vote.APPROVE;
 
         if (closeTransition == null) {
-            closeTransition = new FadeTransition(window,
-                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE);
+            closeTransition = new FadeWindowTransition(window,
+                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
+                dropShadowDecorator);
 
             closeTransition.start(new TransitionListener() {
                 public void transitionCompleted(Transition transition) {
