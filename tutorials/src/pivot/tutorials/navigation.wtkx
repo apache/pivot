@@ -39,7 +39,7 @@ limitations under the License.
 
                             <rows>
                                 <TablePane.Row height="1*">
-                                    <TabPane tabOrientation="horizontal" selectedIndex="0">
+                                    <TabPane selectedIndex="0" styles="{tabOrientation:'horizontal'}">
                                         <tabs>
                                             <Label TabPane.icon="@bell.png" TabPane.name="Bell" text="Basic"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
@@ -52,7 +52,7 @@ limitations under the License.
                                 </TablePane.Row>
 
                                 <TablePane.Row height="-1">
-                                    <TabPane tabOrientation="horizontal" collapsible="true" selectedIndex="-1"
+                                    <TabPane selectedIndex="-1" styles="{tabOrientation:'horizontal', collapsible:true}"
                                         tooltipText="Click a tab to expand/collapse">
                                         <tabs>
                                             <Label TabPane.icon="@anchor.png" TabPane.name="Anchor" text="Collapsible"
@@ -74,7 +74,7 @@ limitations under the License.
                             </columns>
                             <rows>
                                 <TablePane.Row height="-1">
-                                    <TabPane tabOrientation="vertical" selectedIndex="0">
+                                    <TabPane selectedIndex="0" styles="{tabOrientation:'vertical'}">
                                         <tabs>
                                             <Label TabPane.icon="@bell.png" TabPane.name="Bell" text="Basic"
                                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
@@ -85,7 +85,7 @@ limitations under the License.
                                         </tabs>
                                     </TabPane>
 
-                                    <TabPane tabOrientation="vertical" collapsible="true" selectedIndex="-1"
+                                    <TabPane selectedIndex="-1" styles="{tabOrientation:'vertical', collapsible:true}"
                                         tooltipText="Click a tab to expand/collapse">
                                         <tabs>
                                             <Label TabPane.icon="@anchor.png" TabPane.name="Anchor" text="Collapsible"

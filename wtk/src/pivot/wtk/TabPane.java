@@ -190,12 +190,6 @@ public class TabPane extends Container {
 
     private static class TabPaneListenerList extends ListenerList<TabPaneListener>
         implements TabPaneListener {
-        public void tabOrientationChanged(TabPane tabPane) {
-            for (TabPaneListener listener : this) {
-                listener.tabOrientationChanged(tabPane);
-            }
-        }
-
         public void tabInserted(TabPane tabPane, int index) {
             for (TabPaneListener listener : this) {
                 listener.tabInserted(tabPane, index);
@@ -205,12 +199,6 @@ public class TabPane extends Container {
         public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
             for (TabPaneListener listener : this) {
                 listener.tabsRemoved(tabPane, index, tabs);
-            }
-        }
-
-        public void collapsibleChanged(TabPane tabPane) {
-            for (TabPaneListener listener : this) {
-                listener.collapsibleChanged(tabPane);
             }
         }
 
@@ -267,8 +255,6 @@ public class TabPane extends Container {
         }
     }
 
-    private Orientation tabOrientation = Orientation.HORIZONTAL;
-    private boolean collapsible = false;
     private int selectedIndex = -1;
 
     private ArrayList<Component> tabs = new ArrayList<Component>();
@@ -281,49 +267,8 @@ public class TabPane extends Container {
     private TabPaneAttributeListenerList tabPaneAttributeListeners = new TabPaneAttributeListenerList();
 
     public TabPane() {
-        this(false);
-    }
-
-    public TabPane(boolean collapsible) {
         super();
-
-        this.collapsible = collapsible;
-
         installSkin(TabPane.class);
-    }
-
-    public Orientation getTabOrientation() {
-        return tabOrientation;
-    }
-
-    public void setTabOrientation(Orientation tabOrientation) {
-        if (tabOrientation == null) {
-            throw new IllegalArgumentException("tabOrientation is null.");
-        }
-
-        if (this.tabOrientation != tabOrientation) {
-            this.tabOrientation = tabOrientation;
-            tabPaneListeners.tabOrientationChanged(this);
-        }
-    }
-
-    public void setTabOrientation(String tabOrientation) {
-        if (tabOrientation == null) {
-            throw new IllegalArgumentException("tabOrientation is null.");
-        }
-
-        setTabOrientation(Orientation.decode(tabOrientation));
-    }
-
-    public boolean isCollapsible() {
-        return collapsible;
-    }
-
-    public void setCollapsible(boolean collapsible) {
-        if (collapsible != this.collapsible) {
-            this.collapsible = collapsible;
-            tabPaneListeners.collapsibleChanged(this);
-        }
     }
 
     public int getSelectedIndex() {

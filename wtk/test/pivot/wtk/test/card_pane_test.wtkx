@@ -29,13 +29,10 @@ limitations under the License.
             </FlowPane>
         </TablePane.Row>
         <TablePane.Row height="1*">
-            <CardPane wtkx:id="cardPane" orientation="horizontal" styles="{matchSelectedCardSize:true}">
-                <Label text="320x240" preferredWidth="320" preferredHeight="240"
-                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                <Label text="640x480" preferredWidth="640" preferredHeight="480"
-                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                <Label text="800x600" preferredWidth="800" preferredHeight="600"
-                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+            <CardPane wtkx:id="cardPane" styles="{orientation:'horizontal', matchSelectedCardSize:true}">
+                <Border title="320x240" preferredWidth="320" preferredHeight="240"/>
+                <Border title="640x480" preferredWidth="640" preferredHeight="480"/>
+                <Border title="800x600" preferredWidth="800" preferredHeight="600"/>
             </CardPane>
         </TablePane.Row>
     </rows>

@@ -23,10 +23,10 @@ import pivot.wtk.Button;
 import pivot.wtk.CardPane;
 import pivot.wtk.CardPaneListener;
 import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.Frame;
-import pivot.wtk.Orientation;
 import pivot.wtk.Sheet;
 import pivot.wtkx.WTKXSerializer;
 
@@ -37,7 +37,7 @@ public class CardPaneTest implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-    	Frame frame = new Frame(new FlowPane());
+    	frame = new Frame(new FlowPane());
     	frame.getStyles().put("padding", 0);
     	frame.setTitle("Card Pane Test");
     	frame.setPreferredSize(800, 600);
@@ -54,11 +54,7 @@ public class CardPaneTest implements Application {
         		final Button selection = buttonGroup.getSelection();
         		int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(selection);
 
-        		cardPane.getCardPaneListeners().add(new CardPaneListener() {
-        		    public void orientationChanged(CardPane cardPane, Orientation previousOrientation) {
-
-        		    }
-
+        		cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
         			public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
         				if (selection != null) {
         					selection.getParent().setEnabled(false);
@@ -90,7 +86,10 @@ public class CardPaneTest implements Application {
     }
 
     public boolean shutdown(boolean optional) {
-    	frame.close();
+    	if (frame != null) {
+    	    frame.close();
+    	}
+
         return true;
     }
 
@@ -98,5 +97,9 @@ public class CardPaneTest implements Application {
     }
 
     public void suspend() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(CardPaneTest.class, args);
     }
 }

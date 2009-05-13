@@ -104,9 +104,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         public void press() {
             // If the tab pane is collapsible, toggle the button selection;
             // otherwise, select it
-            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
-            setSelected(tabPane.isCollapsible() ? !isSelected() : true);
-
+            setSelected(collapsible ? !isSelected() : true);
             super.press();
         }
     }
@@ -114,7 +112,6 @@ public class TerraTabPaneSkin extends ContainerSkin
     protected class TabButtonSkin extends ButtonSkin {
         public int getPreferredWidth(int height) {
             TabButton tabButton = (TabButton)getComponent();
-            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
@@ -125,7 +122,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             }
 
             int preferredWidth = 0;
-            switch (tabPane.getTabOrientation()) {
+            switch (tabOrientation) {
                 case HORIZONTAL: {
                     preferredWidth = dataRenderer.getPreferredWidth(height)
                         + buttonPadding.left + buttonPadding.right + 2;
@@ -144,7 +141,6 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         public int getPreferredHeight(int width) {
             TabButton tabButton = (TabButton)getComponent();
-            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
@@ -155,7 +151,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             }
 
             int preferredHeight = 0;
-            switch (tabPane.getTabOrientation()) {
+            switch (tabOrientation) {
                 case HORIZONTAL: {
                     preferredHeight = dataRenderer.getPreferredHeight(width)
                         + buttonPadding.top + buttonPadding.bottom + 2;
@@ -174,7 +170,6 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         public Dimensions getPreferredSize() {
             TabButton tabButton = (TabButton)getComponent();
-            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
@@ -183,7 +178,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             int preferredWidth = 0;
             int preferredHeight = 0;
-            switch (tabPane.getTabOrientation()) {
+            switch (tabOrientation) {
                 case HORIZONTAL: {
                     preferredWidth = preferredContentSize.width
                         + buttonPadding.left + buttonPadding.right + 2;
@@ -210,8 +205,6 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         public void paint(Graphics2D graphics) {
             TabButton tabButton = (TabButton)getComponent();
-            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
-            Orientation tabOrientation = tabPane.getTabOrientation();
 
             Color backgroundColor = (tabButton.isSelected()
                 || tabButton.active) ?
@@ -399,6 +392,9 @@ public class TerraTabPaneSkin extends ContainerSkin
     // Derived colors
     private Color buttonBevelColor;
 
+    private boolean collapsible = false;
+    private Orientation tabOrientation = Orientation.HORIZONTAL;
+
     private ExpandTransition expandTransition = null;
 
     private static final int EXPAND_DURATION = 250;
@@ -427,9 +423,6 @@ public class TerraTabPaneSkin extends ContainerSkin
 
 	@Override
 	public void setSize(int width, int height) {
-		TabPane tabPane = (TabPane)getComponent();
-		Orientation tabOrientation = tabPane.getTabOrientation();
-
 		if (expandTransition != null) {
 			if ((tabOrientation == Orientation.HORIZONTAL && width != getWidth())
 				|| (tabOrientation == Orientation.VERTICAL && height != getHeight())) {
@@ -456,9 +449,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         buttonPanorama.getStyles().put("buttonPadding", 6);
         buttonPanorama.setView(buttonFlowPane);
         tabPane.add(buttonPanorama);
-
-        // Apply the current tab orientation
-        tabOrientationChanged(tabPane);
 
         // Add buttons for all existing tabs
         for (Component tab : tabPane.getTabs()) {
@@ -490,8 +480,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         int preferredWidth;
 
         TabPane tabPane = (TabPane)getComponent();
-        Orientation tabOrientation = tabPane.getTabOrientation();
-
         if (expandTransition == null
     		|| tabOrientation == Orientation.VERTICAL) {
         	preferredWidth = 0;
@@ -582,8 +570,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         int preferredHeight;
 
         TabPane tabPane = (TabPane)getComponent();
-        Orientation tabOrientation = tabPane.getTabOrientation();
-
         if (expandTransition == null
     		|| tabOrientation == Orientation.HORIZONTAL) {
         	preferredHeight = 0;
@@ -694,7 +680,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         	buttonPanoramaSize = buttonPanorama.getSize();
         }
 
-        Orientation tabOrientation = tabPane.getTabOrientation();
         switch (tabOrientation) {
             case HORIZONTAL: {
                 int buttonPanoramaWidth = Math.min(width,
@@ -831,8 +816,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         int y = 0;
         int width = 0;
         int height = 0;
-
-        Orientation tabOrientation = tabPane.getTabOrientation();
 
         switch (tabOrientation) {
             case HORIZONTAL: {
@@ -1044,22 +1027,16 @@ public class TerraTabPaneSkin extends ContainerSkin
         buttonFlowPane.getStyles().put("spacing", buttonSpacing);
     }
 
-    protected void updateButtonData(Component tab) {
-        TabPane tabPane = (TabPane)getComponent();
-        int tabIndex = tabPane.getTabs().indexOf(tab);
-
-        if (tabIndex != -1) {
-            TabButton tabButton =
-                (TabButton)buttonFlowPane.get(tabIndex);
-
-            tabButton.setButtonData(new ButtonData(TabPane.getIcon(tab),
-                TabPane.getName(tab)));
-        }
+    public Orientation getTabOrientation() {
+        return tabOrientation;
     }
 
-    // Tab pane events
-    public void tabOrientationChanged(TabPane tabPane) {
-        Orientation tabOrientation = tabPane.getTabOrientation();
+    public void setTabOrientation(Orientation tabOrientation) {
+        if (tabOrientation == null) {
+            throw new IllegalArgumentException("tabOrientation is null.");
+        }
+
+        this.tabOrientation = tabOrientation;
 
         buttonFlowPane.setOrientation(tabOrientation);
 
@@ -1079,10 +1056,36 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
     }
 
-    public void collapsibleChanged(TabPane tabPane) {
-        // No-op
+    public void setTabOrientation(String tabOrientation) {
+        if (tabOrientation == null) {
+            throw new IllegalArgumentException("tabOrientation is null.");
+        }
+
+        setTabOrientation(Orientation.decode(tabOrientation));
     }
 
+    public boolean isCollapsible() {
+        return collapsible;
+    }
+
+    public void setCollapsible(boolean collapsible) {
+        this.collapsible = collapsible;
+    }
+
+    protected void updateButtonData(Component tab) {
+        TabPane tabPane = (TabPane)getComponent();
+        int tabIndex = tabPane.getTabs().indexOf(tab);
+
+        if (tabIndex != -1) {
+            TabButton tabButton =
+                (TabButton)buttonFlowPane.get(tabIndex);
+
+            tabButton.setButtonData(new ButtonData(TabPane.getIcon(tab),
+                TabPane.getName(tab)));
+        }
+    }
+
+    // Tab pane events
     public void tabInserted(TabPane tabPane, int index) {
     	if (expandTransition != null) {
     		expandTransition.stop();

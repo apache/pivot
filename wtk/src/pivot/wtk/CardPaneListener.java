@@ -30,9 +30,6 @@ public interface CardPaneListener {
      * @author tvolkert
      */
     public static class Adapter implements CardPaneListener {
-        public void orientationChanged(CardPane cardPane, Orientation previousOrientation) {
-        }
-
         public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
             return Vote.APPROVE;
         }
@@ -43,14 +40,6 @@ public interface CardPaneListener {
         public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
         }
     }
-
-    /**
-     * Called when a card pane's orientation has changed.
-     *
-     * @param cardPane
-     * @param previousOrientation
-     */
-    public void orientationChanged(CardPane cardPane, Orientation previousOrientation);
 
 	/**
 	 * Called to preview a selected index change.

@@ -118,6 +118,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     private boolean matchSelectedCardSize = false;
+    private Orientation orientation = null;
 
     private SelectionChangeTransition selectionChangeTransition = null;
     private static final int SELECTION_CHANGE_DURATION = 250;
@@ -127,9 +128,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public void setSize(int width, int height) {
         if (selectionChangeTransition != null) {
             if (!matchSelectedCardSize) {
-                CardPane cardPane = (CardPane)getComponent();
-                Orientation orientation = cardPane.getOrientation();
-
                 if ((orientation == Orientation.HORIZONTAL && width != getWidth())
                     || (orientation == Orientation.VERTICAL && height != getHeight())) {
                     selectionChangeTransition.end();
@@ -168,8 +166,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 }
             } else {
                 int selectedIndex = cardPane.getSelectedIndex();
-                Orientation orientation = cardPane.getOrientation();
-
                 if (selectedIndex != -1
                     || orientation == Orientation.HORIZONTAL) {
                     for (Component card : cardPane) {
@@ -185,8 +181,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
             Component selectedCard = selectionChangeTransition.getSelectedCard();
             int width = (selectedCard == null) ? 0 : selectedCard.getWidth();
-
-            Orientation orientation = cardPane.getOrientation();
 
             if (!matchSelectedCardSize
                 && orientation == Orientation.HORIZONTAL) {
@@ -213,8 +207,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 }
             } else {
                 int selectedIndex = cardPane.getSelectedIndex();
-                Orientation orientation = cardPane.getOrientation();
-
                 if (selectedIndex != -1
                     || orientation == Orientation.VERTICAL) {
                     for (Component card : cardPane) {
@@ -230,8 +222,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
             Component selectedCard = selectionChangeTransition.getSelectedCard();
             int height = (selectedCard == null) ? 0 : selectedCard.getHeight();
-
-            Orientation orientation = cardPane.getOrientation();
 
             if (!matchSelectedCardSize
                 && orientation == Orientation.VERTICAL) {
@@ -261,8 +251,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             } else {
                 int preferredWidth = 0;
                 int preferredHeight = 0;
-
-                Orientation orientation = cardPane.getOrientation();
 
                 int selectedIndex = cardPane.getSelectedIndex();
                 for (Component card : cardPane) {
@@ -311,8 +299,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             int preferredWidth = 0;
             int preferredHeight = 0;
 
-            Orientation orientation = cardPane.getOrientation();
-
             if (!matchSelectedCardSize
                 && orientation == Orientation.HORIZONTAL) {
                 preferredWidth = Math.max(previousWidth, width);
@@ -359,8 +345,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 Component previousSelectedCard = selectionChangeTransition.getPreviousSelectedCard();
                 Component selectedCard = selectionChangeTransition.getSelectedCard();
 
-                Orientation orientation = cardPane.getOrientation();
-
                 if (selectionChangeTransition.isRunning()) {
                     for (Component card : cardPane) {
                         // Align old and new cards and ensure they are visible
@@ -401,8 +385,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                         int dx = (int)((float)width * percentComplete) * direction;
                         int dy = (int)((float)height * percentComplete) * direction;
 
-                        Orientation orientation = cardPane.getOrientation();
-
                         for (int i = 0, n = cardPane.getLength(); i < n; i++) {
                             Component card = cardPane.get(i);
 
@@ -429,8 +411,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     }
                 } else {
                     Component selectedCard = selectionChangeTransition.getSelectedCard();
-                    Orientation orientation = cardPane.getOrientation();
-
                     if (selectedCard != null) {
                         if (orientation == Orientation.HORIZONTAL) {
                             for (Component card : cardPane) {
@@ -459,6 +439,22 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         invalidateComponent();
     }
 
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
+    }
+
+    public final void setOrientation(String orientation) {
+        if (orientation == null) {
+            throw new IllegalArgumentException("orientation is null.");
+        }
+
+        setOrientation(Orientation.decode(orientation));
+    }
+
     @Override
     public void componentInserted(Container container, int index) {
         if (selectionChangeTransition != null) {
@@ -483,17 +479,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         invalidateComponent();
     }
 
-    public void orientationChanged(CardPane cardPane, Orientation previousOrientation) {
-        // No-op
-    }
-
     public Vote previewSelectedIndexChange(final CardPane cardPane, final int selectedIndex) {
         Vote vote = Vote.APPROVE;
 
         if (cardPane.isShowing()) {
             if (selectionChangeTransition == null) {
-                Orientation orientation = cardPane.getOrientation();
-
                 if (matchSelectedCardSize
                     || orientation != null) {
                     int previousSelectedIndex = cardPane.getSelectedIndex();

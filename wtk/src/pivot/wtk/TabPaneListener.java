@@ -30,12 +30,6 @@ public interface TabPaneListener {
      * @author tvolkert
      */
     public static class Adapter implements TabPaneListener {
-        public void tabOrientationChanged(TabPane tabPane) {
-        }
-
-        public void collapsibleChanged(TabPane tabPane) {
-        }
-
         public void tabInserted(TabPane tabPane, int index) {
         }
 
@@ -45,20 +39,6 @@ public interface TabPaneListener {
         public void cornerChanged(TabPane tabPane, Component previousCorner) {
         }
     }
-
-    /**
-     * Called when a tab pane's orientation has changed.
-     *
-     * @param tabPane
-     */
-    public void tabOrientationChanged(TabPane tabPane);
-
-    /**
-     * Called when a tab pane's collapsible flag has changed.
-     *
-     * @param tabPane
-     */
-    public void collapsibleChanged(TabPane tabPane);
 
     /**
      * Called when a tab has been inserted into a tab pane's tab sequence.
