@@ -104,22 +104,20 @@ import pivot.util.Resources;
  *   <li>
  *     <b>Compiled</b>
  *     <br/><br/>
- *     As a performance optimization, a <tt>compile=true</tt> option is
- *     available in the {@link Load @Load} annotation. If this option is
- *     combined with the annotation processor, the WTKX will be compiled into
- *     the class and loaded via compiled code. This method is suitable for
- *     callers who are comfortable with the dependency implied by the annotation
- *     processor (outlined above) and comfortable with the specifics of the
- *     {@link Load#compile() compile=true} option.
+ *     As a performance optimization, <tt>BindProcessor</tt> supports a
+ *     <tt>compile=true</tt> option. This option will cause the WTKX to be
+ *     compiled into the class and loaded via compiled code. This method is
+ *     suitable for callers who are comfortable with the dependency implied by
+ *     the annotation processor (outlined above) and comfortable with the
+ *     specifics of the <tt>compile=true</tt> option. See the
+ *     <tt>BindProcessor</tt> class for more details.
  *     <br/><br/>
  *   </li>
  * </ol>
  *
- * @see
- * BindProcessor
- *
  * @author gbrown
  * @author tvolkert
+ * @see BindProcessor
  */
 public abstract class Bindable {
     /**
@@ -159,37 +157,11 @@ public abstract class Bindable {
         public String locale() default "\0";
 
         /**
-         * Indicates whether the loaded WTKX should be compiled into the class
-         * or if it should be loaded at runtime via the <tt>WTKXSerializer</tt>
-         * class. If unspecified, the WTKX loading will be done at runtime.
-         * <p>
-         * There are some considerations when using the <tt>compile=true</tt>
-         * option. Namely:
-         * <ol>
-         *   <li>
-         *     This option only has meaning when the annotations are processed
-         *     during compilation using {@link BindProcessor}. Callers who
-         *     forego use of the annotation processor will always be using a
-         *     runtime implementation of WTKX loading, and in such cases, the
-         *     <tt>compile</tt> flag will be ignored.
-         *   </li>
-         *   <li>
-         *     This option may render the WTKX file superfluous at runtime
-         *     since its contents are compiled directly into the class. In such
-         *     cases, callers may choose to exclude the WTKX file from their
-         *     JAR file.
-         *   </li>
-         *   <li>
-         *     WTKX URL resolution syntax (<tt>"&#64;relative/path.png"</tt>)
-         *     will load relative URLs relative to the <tt>Bindable</tt>
-         *     subclass (as opposed to relative to the WTKX file, which is
-         *     normally the case). It is therefore recommended that when this
-         *     option is used, your WTKX file should live in the same directory
-         *     as your <tt>Bindable</tt> subclass to eliminate any ambiguity.
-         *   </li>
-         * </ol>
+         * Indicates whether the WTKX resource is a compilable resource. Set
+         * this to <tt>false</tt> if your WTKX is dynamically generated at
+         * runtime. Defaults to <tt>true</tt>.
          */
-        public boolean compile() default false;
+        public boolean compilable() default true;
     }
 
     /**
