@@ -102,6 +102,7 @@ public class WTKXSerializer implements Serializer<Object> {
      * Dictionary used for named object lookup.
      *
      * @author tvolkert
+     * @author gbrown
      */
     public final class NamedObjectDictionary implements Dictionary<String, Object> {
         /**
@@ -113,7 +114,7 @@ public class WTKXSerializer implements Serializer<Object> {
         /**
          * Retrieves a named object.
          *
-         * @param name
+         * @param key
          * The name of the object, relative to this loader. The values's name
          * is the concatentation of its parent namespaces and its ID, separated
          * by periods (e.g. "foo.bar.baz").
@@ -121,8 +122,6 @@ public class WTKXSerializer implements Serializer<Object> {
          * @return
          * The named object, or <tt>null</tt> if an object with the given name
          * does not exist.
-         *
-         * @author gbrown
          */
         public Object get(String key) {
             if (key == null) {

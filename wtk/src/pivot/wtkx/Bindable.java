@@ -38,6 +38,82 @@ import pivot.util.Resources;
  * Base class for objects that wish to leverage WTKX binding. By extending this
  * class, subclasses may use the {@link Load @Load} and {@link Bind @Bind}
  * annotations to automate WTKX loading and binding within their class.
+ * <p>
+ * <h3>A Practical Example:</h3>
+ * As an example, consider the following WTKX file, named <tt>example.wtkx</tt>:
+ * <p>
+ * <pre>
+ * &lt;Border xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
+ *         xmlns="pivot.wtk"&gt;
+ *     &lt;content&gt;
+ *         &lt;FlowPane orientation="vertical"&gt;
+ *             &lt;Slider wtkx:id="redSlider" bounds="{minimum:0, maximum:255}" value="0"/&gt;
+ *             &lt;Slider wtkx:id="greenSlider" bounds="{minimum:0, maximum:255}" value="0"/&gt;
+ *             &lt;Slider wtkx:id="blueSlider" bounds="{minimum:0, maximum:255}" value="0"/&gt;
+ *             &lt;Border wtkx:id="colorBorder" preferredWidth="120" preferredHeight="30"/&gt;
+ *         &lt;/FlowPane&gt;
+ *     &lt;/content&gt;
+ * &lt;/Border&gt;
+ * </pre>
+ * You could leverage WTKX binding by subclassing <tt>Bindable</tt>, like so:
+ * <p>
+ * <pre>
+ * public class Example extends Bindable {
+ *     &#64;Load(name="example.wtkx") private Border border;
+ *
+ *     &#64;Bind(property="border") private Slider redSlider;
+ *     &#64;Bind(property="border") private Slider greenSlider;
+ *     &#64;Bind(property="border") private Slider blueSlider;
+ *     &#64;Bind(property="border", name="colorBorder") private Border colorSample;
+ *
+ *     public Example() {
+ *         // Your annotated variables will be null until you call bind()
+ *         bind();
+ *     }
+ * }
+ * </pre>
+ * <h3>Binding implementations:</h3>
+ * WTKX binding can be performed using one of three methods. It is important
+ * for callers to understand these methods so that they may decide which is
+ * appropriate for them. The methods are as follows:
+ * <ol>
+ *   <li>
+ *     <b>Runtime / Reflection</b>
+ *     <br/><br/>
+ *     The default binding process loads the WTKX at runtime and uses
+ *     reflection to bind the values to the variables. This method requires
+ *     security privileges; it is suitable for callers that are deploying to a
+ *     trusted application, such as a signed applet or a desktop application.
+ *     <br/><br/>
+ *   </li>
+ *   <li>
+ *     <b>Runtime / No Reflection</b>
+ *     <br/><br/>
+ *     For those callers that are deploying to an unsigned applet, a
+ *     compile-time annotation processor, {@link BindProcessor}, is available
+ *     and will cause the binding process to load the WTKX at runtime and bind
+ *     the values to the variables without the use of reflection. This
+ *     method requires the use of a Sun <tt>javac</tt> compiler; it is suitable
+ *     for callers that are willing to adopt a dependency on Sun's compiler in
+ *     order to function in an untrusted environment.
+ *     <br/><br/>
+ *     Note that it is possible to use the default binding method during
+ *     development and deploy using the annotation processor.
+ *     <br/><br/>
+ *   </li>
+ *   <li>
+ *     <b>Compiled</b>
+ *     <br/><br/>
+ *     As a performance optimization, a <tt>compile=true</tt> option is
+ *     available in the {@link Load @Load} annotation. If this option is
+ *     combined with the annotation processor, the WTKX will be compiled into
+ *     the class and loaded via compiled code. This method is suitable for
+ *     callers who are comfortable with the dependency implied by the annotation
+ *     processor (outlined above) and comfortable with the specifics of the
+ *     {@link Load#compile() compile=true} option.
+ *     <br/><br/>
+ *   </li>
+ * </ol>
  *
  * @see
  * BindProcessor
@@ -62,7 +138,8 @@ public abstract class Bindable {
         /**
          * A path name that identifies the WTKX resource to be loaded. The root
          * WTKX element will be stored in the annotated field. The path name
-         * should be of the form defined by {@link Class#getResource(String)}.
+         * should be of the form defined by {@link Class#getResource(String)}
+         * and is relative to the <tt>Bindable</tt> subclass.
          */
         public String name();
 
@@ -86,15 +163,31 @@ public abstract class Bindable {
          * or if it should be loaded at runtime via the <tt>WTKXSerializer</tt>
          * class. If unspecified, the WTKX loading will be done at runtime.
          * <p>
-         * <b>Note</b>: This option only has meaning when the annotations are
-         * processed during compilation using {@link BindProcessor}. Callers
-         * who choose to skip the annotation processing will always be using a
-         * runtime implementation of WTKX loading, and in such cases, the
-         * <tt>compile</tt> flag will be ignored.
-         * <p>
-         * Also note that if the loaded WTKX is compiled into the class, the
-         * WTKX resource may not be needed at runtime; in such cases, the
-         * caller may wish to exclude it from their JAR file.
+         * There are some considerations when using the <tt>compile=true</tt>
+         * option. Namely:
+         * <ol>
+         *   <li>
+         *     This option only has meaning when the annotations are processed
+         *     during compilation using {@link BindProcessor}. Callers who
+         *     forego use of the annotation processor will always be using a
+         *     runtime implementation of WTKX loading, and in such cases, the
+         *     <tt>compile</tt> flag will be ignored.
+         *   </li>
+         *   <li>
+         *     This option may render the WTKX file superfluous at runtime
+         *     since its contents are compiled directly into the class. In such
+         *     cases, callers may choose to exclude the WTKX file from their
+         *     JAR file.
+         *   </li>
+         *   <li>
+         *     WTKX URL resolution syntax (<tt>"&#64;relative/path.png"</tt>)
+         *     will load relative URLs relative to the <tt>Bindable</tt>
+         *     subclass (as opposed to relative to the WTKX file, which is
+         *     normally the case). It is therefore recommended that when this
+         *     option is used, your WTKX file should live in the same directory
+         *     as your <tt>Bindable</tt> subclass to eliminate any ambiguity.
+         *   </li>
+         * </ol>
          */
         public boolean compile() default false;
     }
@@ -122,8 +215,8 @@ public abstract class Bindable {
         /**
          * The name of the WTKX variable that references the element to bind.
          * It should be a valid <tt>wtkx:id</tt> from the loaded
-         * WTKX resource. If unspecified, the name of the annotated field will
-         * be used.
+         * WTKX resource. If unspecified, the name of the annotated property
+         * will be used.
          *
          * @see
          * WTKXSerializer#getObjectByName(String)
@@ -148,12 +241,13 @@ public abstract class Bindable {
      * the bound field. If there is a security manager, its checkPermission
      * method will correspondingly be called with a
      * <tt>ReflectPermission("suppressAccessChecks")</tt> permission. This
-     * permission is not typically granted to un-trusted applets, meaning that
-     * this method of binding is not available to un-signed applets. To
-     * mitigate this, a compile-time annotation processor,
-     * {@link BindProcessor}, is available and will cause this method to use
-     * compiled code to perform the binding as opposed to reflection. This in
-     * turn should eliminate any security issues with the binding process.
+     * permission is not granted to un-trusted applets, meaning that this
+     * method of binding is not available to un-signed applets.
+     * <p>
+     * To mitigate this problem, a compile-time annotation processor,
+     * {@link BindProcessor}, is available and will cause this method to work
+     * without requiring the use of reflection. This in turn will eliminate any
+     * security issues with the binding process.
      *
      * @throws BindException
      * If an error occurs during binding
