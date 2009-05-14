@@ -189,7 +189,9 @@ public class Sheet extends Window {
                     Component content = owner.getContent();
                     content.setEnabled(true);
 
-                    owner.moveToFront();
+                    if (owner.isOpen()) {
+                        owner.moveToFront();
+                    }
 
                     if (sheetCloseListener != null) {
                         sheetCloseListener.sheetClosed(this);

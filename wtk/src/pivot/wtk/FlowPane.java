@@ -59,6 +59,10 @@ public class FlowPane extends Container {
     }
 
     public void setOrientation(String orientation) {
+        if (orientation == null) {
+            throw new IllegalArgumentException();
+        }
+
         setOrientation(Orientation.decode(orientation));
     }
 }
