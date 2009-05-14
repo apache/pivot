@@ -256,6 +256,7 @@ public abstract class Bindable {
 
                 ArrayList<String> privateFieldNames = new ArrayList<String>();
 
+                // Process load annotations
                 for (int j = 0, n = fields.length; j < n; j++) {
                     Field field = fields[j];
                     String fieldName = field.getName();
@@ -336,13 +337,16 @@ public abstract class Bindable {
                         }
                     }
 
+                }
+
+                // Process bind annotations
+                for (int j = 0, n = fields.length; j < n; j++) {
+                    Field field = fields[j];
+                    String fieldName = field.getName();
+                    int fieldModifiers = field.getModifiers();
+
                     Bind bindAnnotation = field.getAnnotation(Bind.class);
                     if (bindAnnotation != null) {
-                        if (loadAnnotation != null) {
-                            throw new BindException("Cannot combine " + Load.class.getName()
-                                + " and " + Bind.class.getName() + " annotations.");
-                        }
-
                         // Ensure that we can write to the field
                         if ((fieldModifiers & Modifier.FINAL) > 0) {
                             throw new BindException(fieldName + " is final.");
