@@ -31,13 +31,6 @@ import pivot.wtk.effects.easing.Quartic;
 
 /**
  * Card pane skin.
- * <p>
- * NOTE We don't support constrained preferred sizes when sizing to the selected
- * card, because we always center the from and to cards during the transition.
- * Supporting a preferred constrained size would imply that we would justify
- * during the transition, and we don't currently provide a way to specify that
- * this is the desired behavior. We could provide horizontal and vertical
- * alignment styles, but the use cases for these are almost non-existent.
  *
  * @author gbrown
  */

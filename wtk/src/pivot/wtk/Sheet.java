@@ -16,6 +16,7 @@
  */
 package pivot.wtk;
 
+import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 import pivot.util.Vote;
 
@@ -26,6 +27,144 @@ import pivot.util.Vote;
  * @author gbrown
  */
 public class Sheet extends Window {
+    /**
+     * Container for common sheet content.
+     *
+     * @author gbrown
+     */
+    public static class ComponentPane extends Container {
+        private static class ComponentPaneListenerList extends ListenerList<ComponentPaneListener>
+            implements ComponentPaneListener {
+            public Vote previewSelectedIndexChange(ComponentPane componentPane, int selectedIndex) {
+                Vote vote = Vote.APPROVE;
+
+                for (ComponentPaneListener listener : this) {
+                    vote = vote.tally(listener.previewSelectedIndexChange(componentPane, selectedIndex));
+                }
+
+                return vote;
+            }
+
+            public void selectedIndexChangeVetoed(ComponentPane componentPane, Vote reason) {
+                for (ComponentPaneListener listener : this) {
+                    listener.selectedIndexChangeVetoed(componentPane, reason);
+                }
+            }
+
+            public void selectedIndexChanged(ComponentPane componentPane, int previousSelectedIndex) {
+                for (ComponentPaneListener listener : this) {
+                    listener.selectedIndexChanged(componentPane, previousSelectedIndex);
+                }
+            }
+        }
+
+        private int selectedIndex = -1;
+        private ComponentPaneListenerList componentPaneListeners = new ComponentPaneListenerList();
+
+        public ComponentPane() {
+            installSkin(ComponentPane.class);
+        }
+
+        public int getSelectedIndex() {
+            return selectedIndex;
+        }
+
+        public void setSelectedIndex(int selectedIndex) {
+            if (selectedIndex < -1
+                || selectedIndex > getLength() - 1) {
+                throw new IndexOutOfBoundsException();
+            }
+
+            int previousSelectedIndex = this.selectedIndex;
+
+            if (previousSelectedIndex != selectedIndex) {
+                Vote vote = componentPaneListeners.previewSelectedIndexChange(this, selectedIndex);
+
+                if (vote == Vote.APPROVE) {
+                    this.selectedIndex = selectedIndex;
+                    componentPaneListeners.selectedIndexChanged(this, previousSelectedIndex);
+                } else {
+                    componentPaneListeners.selectedIndexChangeVetoed(this, vote);
+                }
+            }
+        }
+
+        public Component getSelectedPanel() {
+            return (selectedIndex == -1) ? null : get(selectedIndex);
+        }
+
+        @Override
+        public void insert(Component component, int index) {
+            // Update the selection
+            if (selectedIndex >= index) {
+                selectedIndex++;
+            }
+
+            super.insert(component, index);
+        }
+
+        @Override
+        public Sequence<Component> remove(int index, int count) {
+            // Update the selection
+            if (selectedIndex >= index) {
+                if (selectedIndex < index + count) {
+                    selectedIndex = -1;
+                } else {
+                    selectedIndex -= count;
+                }
+            }
+
+            return super.remove(index, count);
+        }
+
+        public ListenerList<ComponentPaneListener> getComponentPaneListeners() {
+            return componentPaneListeners;
+        }
+    }
+
+    /**
+     * Component pane listener interface.
+     *
+     * @author gbrown
+     */
+    public static interface ComponentPaneListener {
+        public static class Adapter implements ComponentPaneListener {
+            public Vote previewSelectedIndexChange(ComponentPane componentPane, int selectedIndex) {
+                return Vote.APPROVE;
+            }
+
+            public void selectedIndexChangeVetoed(ComponentPane componentPane, Vote reason) {
+            }
+
+            public void selectedIndexChanged(ComponentPane componentPane, int previousSelectedIndex) {
+            }
+        }
+
+        /**
+         * Called to preview a selected index change.
+         *
+         * @param componentPane
+         * @param selectedIndex
+         */
+        public Vote previewSelectedIndexChange(ComponentPane componentPane, int selectedIndex);
+
+        /**
+         * Called when a selected index change has been vetoed.
+         *
+         * @param componentPane
+         * @param reason
+         */
+        public void selectedIndexChangeVetoed(ComponentPane componentPane, Vote reason);
+
+        /**
+         * Called when a component pane's selected index has changed.
+         *
+         * @param componentPane
+         * @param previousSelectedIndex
+         */
+        public void selectedIndexChanged(ComponentPane componentPane, int previousSelectedIndex);
+    }
+
     private static class SheetStateListenerList extends ListenerList<SheetStateListener>
         implements SheetStateListener {
         public Vote previewSheetClose(Sheet sheet, boolean result) {

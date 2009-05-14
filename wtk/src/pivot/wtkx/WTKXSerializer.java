@@ -141,7 +141,7 @@ public class WTKXSerializer implements Serializer<Object> {
 
             if (serializer != null) {
             	String id = namespacePath[i];
-            	
+
             	if (namedObjects.containsKey(id)) {
             		object = namedObjects.get(id);
             	} else {

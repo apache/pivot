@@ -20,33 +20,28 @@ import pivot.collections.Dictionary;
 import pivot.util.Vote;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
-import pivot.wtk.CardPane;
-import pivot.wtk.CardPaneListener;
-import pivot.wtk.Component;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.Frame;
 import pivot.wtk.Sheet;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class CardPaneTest implements Application {
+public class ComponentPaneTest extends Bindable implements Application {
     private Frame frame = null;
-    private Sheet sheet = null;
-    private CardPane cardPane = null;
+
+    @Load(resourceName="component_pane_test.wtkx") private Sheet sheet;
+    @Bind(fieldName="sheet") private Sheet.ComponentPane componentPane;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
+        bind();
+
     	frame = new Frame(new FlowPane());
     	frame.getStyles().put("padding", 0);
-    	frame.setTitle("Card Pane Test");
+    	frame.setTitle("Component Pane Test");
     	frame.setPreferredSize(800, 600);
     	frame.setLocation(20, 20);
-
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        sheet = new Sheet((Component)wtkxSerializer.readObject(getClass().getResource("card_pane_test.wtkx")));
-
-        cardPane = (CardPane)wtkxSerializer.getObjectByID("cardPane");
 
         Button.Group sizeGroup = Button.getGroup("sizeGroup");
         sizeGroup.getGroupListeners().add(new Button.GroupListener() {
@@ -54,8 +49,8 @@ public class CardPaneTest implements Application {
         		final Button selection = buttonGroup.getSelection();
         		int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(selection);
 
-        		cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
-        			public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
+        		componentPane.getComponentPaneListeners().add(new Sheet.ComponentPaneListener.Adapter() {
+        			public Vote previewSelectedIndexChange(Sheet.ComponentPane componentPane, int selectedIndex) {
         				if (selection != null) {
         					selection.getParent().setEnabled(false);
         				}
@@ -63,21 +58,21 @@ public class CardPaneTest implements Application {
         				return Vote.APPROVE;
         			}
 
-        			public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
+        			public void selectedIndexChangeVetoed(Sheet.ComponentPane componentPane, Vote reason) {
         				if (selection != null
     						&& reason == Vote.DENY) {
         					selection.getParent().setEnabled(true);
         				}
         			}
 
-        			public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+        			public void selectedIndexChanged(Sheet.ComponentPane componentPane, int previousSelectedIndex) {
         				if (selection != null) {
         					selection.getParent().setEnabled(true);
         				}
         			}
         		});
 
-        		cardPane.setSelectedIndex(selectedIndex);
+        		componentPane.setSelectedIndex(selectedIndex);
         	}
         });
 
@@ -100,6 +95,6 @@ public class CardPaneTest implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(CardPaneTest.class, args);
+        DesktopApplicationContext.main(ComponentPaneTest.class, args);
     }
 }
