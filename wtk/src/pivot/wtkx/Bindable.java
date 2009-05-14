@@ -319,7 +319,12 @@ public abstract class Bindable {
                         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
                         wtkxSerializers.put(fieldName, wtkxSerializer);
 
-                        URL location = type.getResource(loadAnnotation.resourceName());
+                        String loadResourceName = loadAnnotation.resourceName();
+                        URL location = type.getResource(loadResourceName);
+                        if (location == null) {
+                            throw new BindException(loadResourceName + " not found.");
+                        }
+
                         Object resource;
                         try {
                             resource = wtkxSerializer.readObject(location);

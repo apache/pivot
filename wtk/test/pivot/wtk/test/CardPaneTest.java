@@ -20,6 +20,8 @@ import pivot.collections.Dictionary;
 import pivot.util.Vote;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
+import pivot.wtk.CardPane;
+import pivot.wtk.CardPaneListener;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
@@ -27,11 +29,11 @@ import pivot.wtk.Frame;
 import pivot.wtk.Sheet;
 import pivot.wtkx.Bindable;
 
-public class ComponentPaneTest extends Bindable implements Application {
+public class CardPaneTest extends Bindable implements Application {
     private Frame frame = null;
 
-    @Load(resourceName="component_pane_test.wtkx") private Sheet sheet;
-    @Bind(fieldName="sheet") private Sheet.ComponentPane componentPane;
+    @Load(resourceName="card_pane_test.wtkx") private Sheet sheet;
+    @Bind(fieldName="sheet") private CardPane cardPane;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
@@ -49,8 +51,8 @@ public class ComponentPaneTest extends Bindable implements Application {
         		final Button selection = buttonGroup.getSelection();
         		int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(selection);
 
-        		componentPane.getComponentPaneListeners().add(new Sheet.ComponentPaneListener.Adapter() {
-        			public Vote previewSelectedIndexChange(Sheet.ComponentPane componentPane, int selectedIndex) {
+        		cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+        			public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
         				if (selection != null) {
         					selection.getParent().setEnabled(false);
         				}
@@ -58,21 +60,21 @@ public class ComponentPaneTest extends Bindable implements Application {
         				return Vote.APPROVE;
         			}
 
-        			public void selectedIndexChangeVetoed(Sheet.ComponentPane componentPane, Vote reason) {
+        			public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
         				if (selection != null
     						&& reason == Vote.DENY) {
         					selection.getParent().setEnabled(true);
         				}
         			}
 
-        			public void selectedIndexChanged(Sheet.ComponentPane componentPane, int previousSelectedIndex) {
+        			public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
         				if (selection != null) {
         					selection.getParent().setEnabled(true);
         				}
         			}
         		});
 
-        		componentPane.setSelectedIndex(selectedIndex);
+        		cardPane.setSelectedIndex(selectedIndex);
         	}
         });
 
@@ -95,6 +97,6 @@ public class ComponentPaneTest extends Bindable implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(ComponentPaneTest.class, args);
+        DesktopApplicationContext.main(CardPaneTest.class, args);
     }
 }

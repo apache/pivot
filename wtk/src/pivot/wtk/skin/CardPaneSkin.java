@@ -24,6 +24,7 @@ import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Orientation;
+import pivot.wtk.effects.FadeDecorator;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
 import pivot.wtk.effects.easing.Easing;
@@ -67,6 +68,79 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         public Component getToCard() {
             CardPane cardPane = (CardPane)getComponent();
             return (to == -1) ? null : cardPane.get(to);
+        }
+    }
+
+    /**
+     * Class that performs selection change transitions.
+     *
+     * @author gbrown
+     */
+    public class FadeTransition extends SelectionChangeTransition {
+        private FadeDecorator fadeOutDecorator = new FadeDecorator();
+        private FadeDecorator fadeInDecorator = new FadeDecorator();
+
+        public FadeTransition(int from, int to) {
+            super(from, to);
+        }
+
+        @Override
+        public void start(TransitionListener transitionListener) {
+            Component fromCard = getFromCard();
+            if (fromCard != null) {
+                fromCard.getDecorators().add(fadeOutDecorator);
+            }
+
+            Component toCard = getToCard();
+            if (toCard != null) {
+                toCard.getDecorators().add(fadeInDecorator);
+                toCard.setSize(toCard.getPreferredSize());
+                toCard.setVisible(true);
+            }
+
+            super.start(transitionListener);
+        }
+
+        @Override
+        public void stop() {
+            super.stop();
+
+            Component fromCard = getFromCard();
+            if (fromCard != null) {
+                fromCard.getDecorators().remove(fadeOutDecorator);
+                fromCard.setVisible(false);
+            }
+
+            Component toCard = getToCard();
+            if (toCard != null) {
+                toCard.getDecorators().remove(fadeInDecorator);
+            }
+        }
+
+        @Override
+        protected void update() {
+            float percentComplete = getPercentComplete();
+
+            int width = getWidth();
+            int height = getHeight();
+
+            // Center components
+            Component fromCard = getFromCard();
+            if (fromCard != null) {
+                fromCard.setLocation((width - fromCard.getWidth()) / 2,
+                    (height - fromCard.getHeight()) / 2);
+            }
+
+            Component toCard = getToCard();
+            if (toCard != null) {
+                toCard.setLocation((width - toCard.getWidth()) / 2,
+                    (height - toCard.getHeight()) / 2);
+            }
+
+            fadeOutDecorator.setOpacity(1.0f - percentComplete);
+            fadeInDecorator.setOpacity(percentComplete);
+
+            invalidateComponent();
         }
     }
 
@@ -128,6 +202,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         }
     }
 
+    private boolean sizeToSelection = false;
     private Orientation orientation = null;
 
     private SelectionChangeTransition selectionChangeTransition = null;
@@ -152,7 +227,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        if (height == -1) {
+        if (sizeToSelection
+            || height == -1) {
             Dimensions preferredSize = getPreferredSize();
             preferredWidth = preferredSize.width;
         } else {
@@ -168,7 +244,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        if (width == -1) {
+        if (sizeToSelection
+            || width == -1) {
             Dimensions preferredSize = getPreferredSize();
             preferredHeight = preferredSize.height;
         } else {
@@ -184,19 +261,64 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public Dimensions getPreferredSize() {
         Dimensions preferredSize;
 
-        int preferredWidth = 0;
-        int preferredHeight = 0;
-
         CardPane cardPane = (CardPane)getComponent();
 
-        for (Component card : cardPane) {
-            Dimensions cardSize = card.getPreferredSize();
+        if (sizeToSelection) {
+            if (selectionChangeTransition == null) {
+                Component selectedCard = cardPane.getSelectedCard();
 
-            preferredWidth = Math.max(cardSize.width, preferredWidth);
-            preferredHeight = Math.max(cardSize.height, preferredHeight);
+                if (selectedCard == null) {
+                    preferredSize = new Dimensions(0, 0);
+                } else {
+                    preferredSize = selectedCard.getPreferredSize();
+                }
+            } else {
+                float percentComplete = selectionChangeTransition.getPercentComplete();
+
+                int previousWidth;
+                int previousHeight;
+                Component fromCard = selectionChangeTransition.getFromCard();
+
+                if (fromCard == null) {
+                    previousWidth = 0;
+                    previousHeight = 0;
+                } else {
+                    Dimensions fromSize = fromCard.getPreferredSize();
+                    previousWidth = fromSize.width;
+                    previousHeight = fromSize.height;
+                }
+
+                int width;
+                int height;
+                Component toCard = selectionChangeTransition.getToCard();
+
+                if (toCard == null) {
+                    width = 0;
+                    height = 0;
+                } else {
+                    Dimensions toSize = toCard.getPreferredSize();
+                    width = toSize.width;
+                    height = toSize.height;
+                }
+
+                int preferredWidth = previousWidth + (int)((float)(width - previousWidth) * percentComplete);
+                int preferredHeight = previousHeight + (int)((float)(height - previousHeight) * percentComplete);
+
+                preferredSize = new Dimensions(preferredWidth, preferredHeight);
+            }
+        } else {
+            int preferredWidth = 0;
+            int preferredHeight = 0;
+
+            for (Component card : cardPane) {
+                Dimensions cardSize = card.getPreferredSize();
+
+                preferredWidth = Math.max(cardSize.width, preferredWidth);
+                preferredHeight = Math.max(cardSize.height, preferredHeight);
+            }
+
+            preferredSize = new Dimensions(preferredWidth, preferredHeight);
         }
-
-        preferredSize = new Dimensions(preferredWidth, preferredHeight);
 
         return preferredSize;
     }
@@ -213,6 +335,14 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 card.setSize(width, height);
             }
         }
+    }
+
+    public boolean getSizeToSelection() {
+        return sizeToSelection;
+    }
+
+    public void setSizeToSelection(boolean sizeToSelection) {
+        this.sizeToSelection = sizeToSelection;
     }
 
     public Orientation getOrientation() {
@@ -267,19 +397,20 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         Vote vote;
 
         if (cardPane.isShowing()
-            && selectionChangeTransition == null
-            && orientation != null) {
+            && selectionChangeTransition == null) {
             int previousSelectedIndex = cardPane.getSelectedIndex();
 
-            // TODO We may want to create a FadeOut transition when going from
-            // selected to deselected or a FadeIn transition for the opposite
-            if (previousSelectedIndex != -1
-                && selectedIndex != -1) {
-                selectionChangeTransition = new SlideTransition(previousSelectedIndex, selectedIndex);
+            if (sizeToSelection) {
+                selectionChangeTransition = new FadeTransition(previousSelectedIndex, selectedIndex);
+            } else {
+                if (orientation != null
+                    && previousSelectedIndex != -1
+                    && selectedIndex != -1) {
+                    selectionChangeTransition = new SlideTransition(previousSelectedIndex, selectedIndex);
+                } else {
+                    // TODO Use a fade in/out transition?
+                }
             }
-
-            // TODO Instantiate other transition types as appropriate (based
-            // on style property)
 
             if (selectionChangeTransition != null) {
                 selectionChangeTransition.start(new TransitionListener() {
@@ -329,7 +460,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         }
 
         if (selectedIndex == -1
-            || previousSelectedIndex == -1) {
+            || previousSelectedIndex == -1
+            || sizeToSelection) {
             invalidateComponent();
         }
     }

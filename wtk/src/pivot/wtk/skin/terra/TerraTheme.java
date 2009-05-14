@@ -175,7 +175,6 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(ScrollPane.Corner.class, TerraScrollPaneCornerSkin.class);
         componentSkinMap.put(Separator.class, TerraSeparatorSkin.class);
         componentSkinMap.put(Sheet.class, TerraSheetSkin.class);
-        componentSkinMap.put(Sheet.ComponentPane.class, TerraSheetComponentPaneSkin.class);
         componentSkinMap.put(Slider.class, TerraSliderSkin.class);
         componentSkinMap.put(Spinner.class, TerraSpinnerSkin.class);
         componentSkinMap.put(SplitPane.class, TerraSplitPaneSkin.class);

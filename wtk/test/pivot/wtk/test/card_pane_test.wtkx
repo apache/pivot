@@ -31,11 +31,11 @@ limitations under the License.
                     </FlowPane>
                 </TablePane.Row>
                 <TablePane.Row height="1*">
-                    <Sheet.ComponentPane wtkx:id="componentPane">
+                    <CardPane wtkx:id="cardPane" styles="{sizeToSelection:true, orientation:'vertical'}">
                         <Border title="320x240" preferredWidth="320" preferredHeight="240"/>
                         <Border title="640x480" preferredWidth="640" preferredHeight="480"/>
                         <Border title="800x600" preferredWidth="800" preferredHeight="600"/>
-                    </Sheet.ComponentPane>
+                    </CardPane>
                 </TablePane.Row>
             </rows>
         </TablePane>
