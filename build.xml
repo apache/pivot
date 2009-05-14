@@ -36,6 +36,7 @@ limitations under the License.
     <property name="compiler.debug" value="false"/>
     <property name="compiler.target" value="1.5"/>
     <property name="compiler.encoding" value="UTF-8"/>
+    <property name="compiler.compileWTKX" value="false"/>
 
     <!-- Dynamic properties -->
     <tstamp/>
@@ -470,7 +471,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg line="-Xlint -processor pivot.wtkx.BindProcessor -Acompile=false"/>
+            <compilerarg line="-Xlint -processor pivot.wtkx.BindProcessor -Acompile=${compiler.compileWTKX}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="web/${folder.bin}"/>
@@ -512,7 +513,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg line="-Xlint -processor pivot.wtkx.BindProcessor -Acompile=false"/>
+            <compilerarg line="-Xlint -processor pivot.wtkx.BindProcessor -Acompile=${compiler.compileWTKX}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="web/${folder.bin}"/>
