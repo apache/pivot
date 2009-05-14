@@ -28,15 +28,19 @@ public class ResponseCellRenderer extends TableViewCellRenderer {
     @Override
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        Transaction transaction = (Transaction)value;
-        Response response = transaction.getResponse();
-
-        StringBuilder buf = new StringBuilder();
-        buf.append(response.getStatusCode());
-        buf.append(" ");
-        buf.append(response.getStatusMessage());
-
-        setText(buf.toString());
         renderStyles(tableView, rowSelected, rowDisabled);
+
+        if (value != null) {
+            Transaction transaction = (Transaction)value;
+            Response response = transaction.getResponse();
+
+            StringBuilder buf = new StringBuilder();
+            buf.append(response.getStatusCode());
+            buf.append(" ");
+            buf.append(response.getStatusMessage());
+
+            setText(buf.toString());
+            renderStyles(tableView, rowSelected, rowDisabled);
+        }
     }
 }

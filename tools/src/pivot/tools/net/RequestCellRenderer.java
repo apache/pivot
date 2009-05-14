@@ -28,15 +28,19 @@ public class RequestCellRenderer extends TableViewCellRenderer {
     @Override
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        Transaction transaction = (Transaction)value;
-        Request httpRequest = transaction.getRequest();
-
-        StringBuilder buf = new StringBuilder();
-        buf.append(httpRequest.getMethod());
-        buf.append(" ");
-        buf.append(httpRequest.getLocation().getPath());
-
-        setText(buf.toString());
         renderStyles(tableView, rowSelected, rowDisabled);
+
+        if (value != null) {
+            Transaction transaction = (Transaction)value;
+            Request httpRequest = transaction.getRequest();
+
+            StringBuilder buf = new StringBuilder();
+            buf.append(httpRequest.getMethod());
+            buf.append(" ");
+            buf.append(httpRequest.getLocation().getPath());
+
+            setText(buf.toString());
+            renderStyles(tableView, rowSelected, rowDisabled);
+        }
     }
 }

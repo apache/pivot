@@ -28,14 +28,18 @@ public class BytesReceivedCellRenderer extends TableViewCellRenderer {
     @Override
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        Transaction transaction = (Transaction)value;
-        Request request = transaction.getRequest();
-        long bytesReceived = request.getBytesReceived();
-
-        StringBuilder buf = new StringBuilder();
-        buf.append(bytesReceived);
-
-        setText(buf.toString());
         renderStyles(tableView, rowSelected, rowDisabled);
+
+        if (value != null) {
+            Transaction transaction = (Transaction)value;
+            Request request = transaction.getRequest();
+            long bytesReceived = request.getBytesReceived();
+
+            StringBuilder buf = new StringBuilder();
+            buf.append(bytesReceived);
+
+            setText(buf.toString());
+            renderStyles(tableView, rowSelected, rowDisabled);
+        }
     }
 }
