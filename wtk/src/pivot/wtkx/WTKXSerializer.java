@@ -240,7 +240,6 @@ public class WTKXSerializer implements Serializer<Object> {
 
     public static final String INCLUDE_TAG = "include";
     public static final String INCLUDE_SRC_ATTRIBUTE = "src";
-    public static final String INCLUDE_NAMESPACE_ATTRIBUTE = "namespace";
     public static final String INCLUDE_RESOURCES_ATTRIBUTE = "resources";
 
     public static final String SCRIPT_TAG = "script";
@@ -386,8 +385,6 @@ public class WTKXSerializer implements Serializer<Object> {
                             if (localName.equals(INCLUDE_TAG)) {
                                 // The element represents an include
                                 String src = null;
-                                String namespace = null;
-
                                 Resources includeResources = resources;
 
                                 ArrayList<Attribute> attributes = new ArrayList<Attribute>();
@@ -410,8 +407,6 @@ public class WTKXSerializer implements Serializer<Object> {
                                     } else {
                                         if (attributeLocalName.equals(INCLUDE_SRC_ATTRIBUTE)) {
                                             src = attributeValue;
-                                        } else if (attributeLocalName.equals(INCLUDE_NAMESPACE_ATTRIBUTE)) {
-                                            namespace = attributeValue;
                                         } else if (attributeLocalName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
                                             includeResources = new Resources(attributeValue);
                                         } else {
@@ -429,8 +424,8 @@ public class WTKXSerializer implements Serializer<Object> {
 
                                 // Process the include
                                 WTKXSerializer serializer = new WTKXSerializer(includeResources);
-                                if (namespace != null) {
-                                    includeSerializers.put(namespace, serializer);
+                                if (id != null) {
+                                    includeSerializers.put(id, serializer);
                                 }
 
                                 Object value;
@@ -1026,23 +1021,23 @@ public class WTKXSerializer implements Serializer<Object> {
     }
 
     /**
-     * Retrieves a included serializer by its namespace.
+     * Retrieves a included serializer by its ID.
      *
-     * @param name
-     * The name of the serializer, relative to this loader. The values's name
-     * is the concatentation of its parent namespaces and its namespace,
-     * separated by periods (e.g. "foo.bar.baz").
+     * @param id
+     * The ID of the serializer, relative to this loader. The serializer's ID
+     * is the concatentation of its parent IDs and its ID, separated by periods
+     * (e.g. "foo.bar.baz").
      *
      * @return The named serializer, or <tt>null</tt> if a serializer with the
      * given name does not exist.
      */
-    public WTKXSerializer getSerializerByName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("name is null.");
+    public WTKXSerializer getSerializerByID(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id is null.");
         }
 
         WTKXSerializer serializer = this;
-        String[] namespacePath = name.split("\\.");
+        String[] namespacePath = id.split("\\.");
 
         int i = 0;
         int n = namespacePath.length;
@@ -1061,8 +1056,8 @@ public class WTKXSerializer implements Serializer<Object> {
      * The type of the object to return.
      *
      * @param id
-     * The name of the object, relative to this loader. The values's name is the
-     * concatentation of its parent namespaces and its ID, separated by periods
+     * The ID of the object, relative to this loader. The object's ID is the
+     * concatentation of its parent IDs and its ID, separated by periods
      * (e.g. "foo.bar.baz").
      *
      * @return The named object, or <tt>null</tt> if an object with the given

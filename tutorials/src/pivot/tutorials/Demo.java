@@ -229,7 +229,7 @@ public class Demo extends Bindable implements Application, Application.About {
         @Load(resourceName="menus.wtkx") private Component component;
         @Bind(fieldName="component") private ImageView menuImageView;
 
-        @Bind(fieldName="component", id="menubar.helpAboutMenuItem")
+        @Bind(fieldName="component", id="menuBar.helpAboutMenuItem")
         private Menu.Item helpAboutMenuItem;
 
         @Load(resourceName="menu_popup.wtkx") private MenuPopup menuPopup;

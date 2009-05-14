@@ -26,7 +26,7 @@ limitations under the License.
                 </columns>
                 <rows>
                     <TablePane.Row height="-1">
-                        <wtkx:include wtkx:id="menuBar" src="menu_bar.wtkx" namespace="menubar"/>
+                        <wtkx:include wtkx:id="menuBar" src="menu_bar.wtkx"/>
                     </TablePane.Row>
                     <TablePane.Row height="-1">
                         <Separator styles="{padding:0}" />

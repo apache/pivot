@@ -70,7 +70,7 @@ limitations under the License.
 
                     <Border styles="{padding:6, color:10}">
                         <content>
-                            <wtkx:include namespace="detail" src="stocktracker.detail.wtkx" />
+                            <wtkx:include wtkx:id="detail" src="stocktracker.detail.wtkx" />
                         </content>
                     </Border>
                 </TablePane.Row>
