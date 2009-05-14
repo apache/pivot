@@ -78,15 +78,15 @@ public class IMClient extends Bindable implements Application {
 
     private XMPPConnection xmppConnection = null;
 
-    @Load(name="im_client.wtkx") private Window window;
-    @Bind(property="window") private CardPane cardPane;
-    @Bind(property="window") private Form loginForm;
-    @Bind(property="window") private TextInput usernameTextInput;
-    @Bind(property="window") private TextInput passwordTextInput;
-    @Bind(property="window") private TextInput domainTextInput;
-    @Bind(property="window") private PushButton loginButton;
-    @Bind(property="window") private Label errorMessageLabel;
-    @Bind(property="window") private Label messageLabel;
+    @Load(resourceName="im_client.wtkx") private Window window;
+    @Bind(fieldName="window") private CardPane cardPane;
+    @Bind(fieldName="window") private Form loginForm;
+    @Bind(fieldName="window") private TextInput usernameTextInput;
+    @Bind(fieldName="window") private TextInput passwordTextInput;
+    @Bind(fieldName="window") private TextInput domainTextInput;
+    @Bind(fieldName="window") private PushButton loginButton;
+    @Bind(fieldName="window") private Label errorMessageLabel;
+    @Bind(fieldName="window") private Label messageLabel;
 
     private ApplicationContext.ScheduledCallback scheduledFadeCallback = null;
 

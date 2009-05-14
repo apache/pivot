@@ -59,12 +59,12 @@ import pivot.util.Resources;
  * <p>
  * <pre>
  * public class Example extends Bindable {
- *     &#64;Load(name="example.wtkx") private Border border;
+ *     &#64;Load(resourceName="example.wtkx") private Border border;
  *
- *     &#64;Bind(property="border") private Slider redSlider;
- *     &#64;Bind(property="border") private Slider greenSlider;
- *     &#64;Bind(property="border") private Slider blueSlider;
- *     &#64;Bind(property="border", name="colorBorder") private Border colorSample;
+ *     &#64;Bind(fieldName="border") private Slider redSlider;
+ *     &#64;Bind(fieldName="border") private Slider greenSlider;
+ *     &#64;Bind(fieldName="border") private Slider blueSlider;
+ *     &#64;Bind(fieldName="border", id="colorBorder") private Border colorSample;
  *
  *     public Example() {
  *         // Your annotated variables will be null until you call bind()
@@ -139,7 +139,7 @@ public abstract class Bindable {
          * should be of the form defined by {@link Class#getResource(String)}
          * and is relative to the <tt>Bindable</tt> subclass.
          */
-        public String name();
+        public String resourceName();
 
         /**
          * The base name of the resources to associate with the WTKX load.
@@ -150,9 +150,9 @@ public abstract class Bindable {
         public String resources() default "\0";
 
         /**
-         * The locale with which to load the WTKX. This should be a lowercase
-         * two-letter ISO-639 code. If unspecified, the user's default locale
-         * will be used.
+         * The locale with which to load WTKX resources. This should be a
+         * lowercase two-letter ISO-639 code. If unspecified, the user's
+         * default locale will be used.
          */
         public String locale() default "\0";
 
@@ -168,7 +168,7 @@ public abstract class Bindable {
      * Annotation that causes a loaded WTKX element to be bound to the
      * annotated field. This annotation necessitates the prior use of a
      * <tt>@Load</tt> annotation and references the loaded field via the
-     * <tt>property</tt> attribute.
+     * <tt>fieldName</tt> attribute.
      *
      * @author gbrown
      */
@@ -176,24 +176,24 @@ public abstract class Bindable {
     @Target(ElementType.FIELD)
     protected static @interface Bind {
         /**
-         * The name of the property that was loaded via the <tt>@Load</tt>
+         * The name of the field that was loaded via the <tt>@Load</tt>
          * annotation.
          *
          * @see
          * Load
          */
-        public String property();
+        public String fieldName();
 
         /**
-         * The name of the WTKX variable that references the element to bind.
+         * The ID of the WTKX variable that references the element to bind.
          * It should be a valid <tt>wtkx:id</tt> from the loaded
-         * WTKX resource. If unspecified, the name of the annotated property
+         * WTKX resource. If unspecified, the name of the annotated field
          * will be used.
          *
          * @see
-         * WTKXSerializer#getObjectByName(String)
+         * WTKXSerializer#getObjectByID(String)
          */
-        public String name() default "\0";
+        public String id() default "\0";
     }
 
     /**
@@ -244,7 +244,7 @@ public abstract class Bindable {
         }
 
         if (bindOverload == null) {
-            // Maps field name to the serializer that loaded the property; public
+            // Maps field name to the serializer that loaded the field; public
             // and protected serializers are retained for sub-types, but private
             // serializers are removed at the end of the block
             HashMap<String, WTKXSerializer> wtkxSerializers = new HashMap<String, WTKXSerializer>();
@@ -318,7 +318,7 @@ public abstract class Bindable {
                         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
                         wtkxSerializers.put(fieldName, wtkxSerializer);
 
-                        URL location = type.getResource(loadAnnotation.name());
+                        URL location = type.getResource(loadAnnotation.resourceName());
                         Object resource;
                         try {
                             resource = wtkxSerializer.readObject(location);
@@ -356,19 +356,19 @@ public abstract class Bindable {
                             }
                         }
 
-                        // Bind to the value loaded by the property's serializer
-                        String property = bindAnnotation.property();
-                        WTKXSerializer wtkxSerializer = wtkxSerializers.get(property);
+                        // Bind to the value loaded by the field's serializer
+                        String loadFieldName = bindAnnotation.fieldName();
+                        WTKXSerializer wtkxSerializer = wtkxSerializers.get(loadFieldName);
                         if (wtkxSerializer == null) {
-                            throw new BindException("Property \"" + property + "\" has not been loaded.");
+                            throw new BindException("Field \"" + loadFieldName + "\" has not been loaded.");
                         }
 
-                        String id = bindAnnotation.name();
+                        String id = bindAnnotation.id();
                         if (id.equals("\0")) {
                             id = field.getName();
                         }
 
-                        Object value = wtkxSerializer.getObjectByName(id);
+                        Object value = wtkxSerializer.getObjectByID(id);
                         if (value == null) {
                             throw new BindException("\"" + id + "\" does not exist.");
                         }

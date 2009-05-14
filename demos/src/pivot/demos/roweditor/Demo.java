@@ -36,8 +36,8 @@ import pivot.wtkx.Bindable;
  * @author tvolkert
  */
 public class Demo extends Bindable implements Application {
-    @Load(name="demo.wtkx") private Window window;
-    @Bind(property="window") TableView tableView;
+    @Load(resourceName="demo.wtkx") private Window window;
+    @Bind(fieldName="window") TableView tableView;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {

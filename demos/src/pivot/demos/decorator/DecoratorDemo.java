@@ -28,8 +28,8 @@ import pivot.wtk.effects.FadeDecorator;
 import pivot.wtkx.Bindable;
 
 public class DecoratorDemo extends Bindable implements Application {
-    @Load(name="reflection.wtkx") private Window reflectionWindow;
-    @Load(name="translucent.wtkx") private Frame translucentFrame;
+    @Load(resourceName="reflection.wtkx") private Window reflectionWindow;
+    @Load(resourceName="translucent.wtkx") private Frame translucentFrame;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {

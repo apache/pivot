@@ -24,7 +24,7 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class Separators extends Bindable implements Application {
-    @Load(name="separators.wtkx") private Window window;
+    @Load(resourceName="separators.wtkx") private Window window;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {

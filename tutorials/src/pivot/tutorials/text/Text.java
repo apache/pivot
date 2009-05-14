@@ -28,8 +28,8 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class Text extends Bindable implements Application {
-    @Load(name="text.wtkx") private Window window;
-    @Bind(property="window") private TextInput stateTextInput;
+    @Load(resourceName="text.wtkx") private Window window;
+    @Bind(fieldName="window") private TextInput stateTextInput;
 
     private ArrayList<String> states;
 

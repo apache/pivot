@@ -32,8 +32,8 @@ public class ScriptingDemo extends Bindable implements Application {
         }
     }
 
-    @Load(name="scripting_demo.wtkx") private Window window;
-    @Bind(property="window") private String foo;
+    @Load(resourceName="scripting_demo.wtkx") private Window window;
+    @Bind(fieldName="window") private String foo;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {

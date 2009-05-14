@@ -29,8 +29,8 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class PushButtons extends Bindable implements Application {
-    @Load(name="push_buttons.wtkx") private Window window = null;
-    @Bind(property="window") private PushButton pushButton;
+    @Load(resourceName="push_buttons.wtkx") private Window window = null;
+    @Bind(fieldName="window") private PushButton pushButton;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         bind();

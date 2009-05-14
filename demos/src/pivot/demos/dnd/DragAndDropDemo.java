@@ -43,16 +43,16 @@ import pivot.wtk.media.Image;
 import pivot.wtkx.Bindable;
 
 public class DragAndDropDemo extends Bindable implements Application {
-    @Load(name="drag_and_drop.wtkx") private Window window;
-    @Bind(property="window") private Label label;
-    @Bind(property="window") private PushButton copyTextButton;
-    @Bind(property="window") private PushButton pasteTextButton;
-    @Bind(property="window") private ImageView imageView;
-    @Bind(property="window") private PushButton copyImageButton;
-    @Bind(property="window") private PushButton pasteImageButton;
-    @Bind(property="window") private ListView listView;
-    @Bind(property="window") private PushButton copyFilesButton;
-    @Bind(property="window") private PushButton pasteFilesButton;
+    @Load(resourceName="drag_and_drop.wtkx") private Window window;
+    @Bind(fieldName="window") private Label label;
+    @Bind(fieldName="window") private PushButton copyTextButton;
+    @Bind(fieldName="window") private PushButton pasteTextButton;
+    @Bind(fieldName="window") private ImageView imageView;
+    @Bind(fieldName="window") private PushButton copyImageButton;
+    @Bind(fieldName="window") private PushButton pasteImageButton;
+    @Bind(fieldName="window") private ListView listView;
+    @Bind(fieldName="window") private PushButton copyFilesButton;
+    @Bind(fieldName="window") private PushButton pasteFilesButton;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {

@@ -3,7 +3,7 @@ package pivot.wtkx.test;
 import pivot.wtk.PushButton;
 
 public class BindTestB extends BindTestA {
-    @Bind(property="window")
+    @Bind(fieldName="window")
     private static PushButton pushButton;
 
     public static void main(String[] args) throws Exception{

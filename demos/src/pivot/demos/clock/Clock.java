@@ -58,9 +58,9 @@ public class Clock extends Movie {
     }
 
     public void setCurrentFrame(int currentFrame) {
-        Shape.Rotate secondsRotation = wtkxSerializer.getObjectByName("secondsRotation");
-        Shape.Rotate minutesRotation = wtkxSerializer.getObjectByName("minutesRotation");
-        Shape.Rotate hoursRotation = wtkxSerializer.getObjectByName("hoursRotation");
+        Shape.Rotate secondsRotation = wtkxSerializer.getObjectByID("secondsRotation");
+        Shape.Rotate minutesRotation = wtkxSerializer.getObjectByID("minutesRotation");
+        Shape.Rotate hoursRotation = wtkxSerializer.getObjectByID("hoursRotation");
 
         calendar.setTimeInMillis(System.currentTimeMillis());
 

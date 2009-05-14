@@ -24,7 +24,7 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class Labels extends Bindable implements Application {
-    @Load(name="labels.wtkx") private Window window;
+    @Load(resourceName="labels.wtkx") private Window window;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         bind();

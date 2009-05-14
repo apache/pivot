@@ -28,11 +28,11 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class ActivityIndicators extends Bindable implements Application {
-    @Load(name="activity_indicators.wtkx") private Window window;
-    @Bind(property="window") private ActivityIndicator activityIndicator1;
-    @Bind(property="window") private ActivityIndicator activityIndicator2;
-    @Bind(property="window") private ActivityIndicator activityIndicator3;
-    @Bind(property="window") private PushButton activityButton;
+    @Load(resourceName="activity_indicators.wtkx") private Window window;
+    @Bind(fieldName="window") private ActivityIndicator activityIndicator1;
+    @Bind(fieldName="window") private ActivityIndicator activityIndicator2;
+    @Bind(fieldName="window") private ActivityIndicator activityIndicator3;
+    @Bind(fieldName="window") private PushButton activityButton;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {

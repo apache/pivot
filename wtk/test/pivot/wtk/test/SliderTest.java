@@ -35,14 +35,14 @@ public class SliderTest implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("slider_test.wtkx")));
-        slider = (Slider)wtkxSerializer.getObjectByName("slider");
+        slider = (Slider)wtkxSerializer.getObjectByID("slider");
         slider.getSliderValueListeners().add(new SliderValueListener() {
         	public void valueChanged(Slider slider, int previousValue) {
         		valueLabel.setText(Integer.toString(slider.getValue()));
         	}
         });
 
-        valueLabel = (Label)wtkxSerializer.getObjectByName("valueLabel");
+        valueLabel = (Label)wtkxSerializer.getObjectByID("valueLabel");
 
         window.setTitle("Slider Test");
         window.setMaximized(true);

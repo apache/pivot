@@ -227,10 +227,10 @@ public class RSSFeedDemo extends Bindable implements Application {
 
     private XPath xpath;
 
-    @Load(name="rss_feed_demo.wtkx") private Window window;
-    @Bind(property="window") private ListView feedListView;
-    @Bind(property="window") private CardPane cardPane;
-    @Bind(property="window") private Label statusLabel;
+    @Load(resourceName="rss_feed_demo.wtkx") private Window window;
+    @Bind(fieldName="window") private ListView feedListView;
+    @Bind(fieldName="window") private CardPane cardPane;
+    @Bind(fieldName="window") private Label statusLabel;
 
     public static final String FEED_URI = "http://feeds.dzone.com/javalobby/frontpage?format=xml";
 

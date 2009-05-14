@@ -33,12 +33,12 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class DataBinding extends Bindable implements Application {
-	@Load(name="data_binding.wtkx") private Window window;
-	@Bind(property="window") private Form form;
-	@Bind(property="window") private PushButton loadJavaButton;
-	@Bind(property="window") private PushButton loadJSONButton;
-	@Bind(property="window") private PushButton clearButton;
-	@Bind(property="window") private Label sourceLabel;
+	@Load(resourceName="data_binding.wtkx") private Window window;
+	@Bind(fieldName="window") private Form form;
+	@Bind(fieldName="window") private PushButton loadJavaButton;
+	@Bind(fieldName="window") private PushButton loadJSONButton;
+	@Bind(fieldName="window") private PushButton clearButton;
+	@Bind(fieldName="window") private Label sourceLabel;
 
 	private static final Contact CONTACT = new Contact("101", "Joe Smith",
 		new Address("123 Main St.", "Cambridge", "MA", "02142"),

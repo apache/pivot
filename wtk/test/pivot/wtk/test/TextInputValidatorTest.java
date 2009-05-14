@@ -45,10 +45,10 @@ public class TextInputValidatorTest implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = new Window((Component)wtkxSerializer.readObject(
             getClass().getResource("textInputValidator_test.wtkx")));
-        textinputFloatRange = (TextInput)wtkxSerializer.getObjectByName("textinputFloatRange");
-        textinputIntRange = (TextInput)wtkxSerializer.getObjectByName("textinputIntRange");
-        textinputDateRegex = (TextInput)wtkxSerializer.getObjectByName("textinputDateRegex");
-        textinputCustomBoolean = (TextInput)wtkxSerializer.getObjectByName("textinputCustomBoolean");
+        textinputFloatRange = (TextInput)wtkxSerializer.getObjectByID("textinputFloatRange");
+        textinputIntRange = (TextInput)wtkxSerializer.getObjectByID("textinputIntRange");
+        textinputDateRegex = (TextInput)wtkxSerializer.getObjectByID("textinputDateRegex");
+        textinputCustomBoolean = (TextInput)wtkxSerializer.getObjectByID("textinputCustomBoolean");
 
         // standard float range model
         textinputFloatRange.setText("0.5");
@@ -82,7 +82,7 @@ public class TextInputValidatorTest implements Application {
             }
         });
 
-        invalidLabel = (Label)wtkxSerializer.getObjectByName("invalidLabel");
+        invalidLabel = (Label)wtkxSerializer.getObjectByID("invalidLabel");
 
         // standard int range model
         textinputIntRange.setText("0");

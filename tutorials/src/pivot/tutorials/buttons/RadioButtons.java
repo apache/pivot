@@ -30,9 +30,9 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class RadioButtons extends Bindable implements Application {
-    @Load(name="radio_buttons.wtkx") private Window window;
-    @Bind(property="window") private RadioButton oneButton;
-    @Bind(property="window") private PushButton selectButton;
+    @Load(resourceName="radio_buttons.wtkx") private Window window;
+    @Bind(fieldName="window") private RadioButton oneButton;
+    @Bind(fieldName="window") private PushButton selectButton;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {

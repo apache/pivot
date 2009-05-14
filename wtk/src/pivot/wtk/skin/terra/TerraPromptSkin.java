@@ -67,23 +67,23 @@ public class TerraPromptSkin extends TerraSheetSkin
         // Set the type image
         TerraTheme theme = (TerraTheme)Theme.getTheme();
 
-        ImageView typeImageView = (ImageView)wtkxSerializer.getObjectByName("typeImageView");
+        ImageView typeImageView = wtkxSerializer.getObjectByID("typeImageView");
         typeImageView.setImage(theme.getMessageIcon(prompt.getMessageType()));
 
         // Set the message
-        Label messageLabel = (Label)wtkxSerializer.getObjectByName("messageLabel");
+        Label messageLabel = wtkxSerializer.getObjectByID("messageLabel");
         String message = prompt.getMessage();
         messageLabel.setText(message);
 
         // Set the body
-        FlowPane messageFlowPane = (FlowPane)wtkxSerializer.getObjectByName("messageFlowPane");
+        FlowPane messageFlowPane = wtkxSerializer.getObjectByID("messageFlowPane");
         Component body = prompt.getBody();
         if (body != null) {
             messageFlowPane.add(body);
         }
 
         // Add the option buttons
-        FlowPane buttonFlowPane = (FlowPane)wtkxSerializer.getObjectByName("buttonFlowPane");
+        FlowPane buttonFlowPane = wtkxSerializer.getObjectByID("buttonFlowPane");
 
         for (int i = 0, n = prompt.getOptionCount(); i < n; i++) {
             Object option = prompt.getOption(i);

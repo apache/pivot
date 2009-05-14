@@ -33,12 +33,12 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class Forms extends Bindable implements Application {
-    @Load(name="forms.wtkx") private Window window;
-    @Bind(property="window") private FlowPane nameFlowPane;
-    @Bind(property="window") private TextInput lastNameTextInput;
-    @Bind(property="window") private TextInput firstNameTextInput;
-    @Bind(property="window") private PushButton submitButton;
-    @Bind(property="window") private Label errorLabel;
+    @Load(resourceName="forms.wtkx") private Window window;
+    @Bind(fieldName="window") private FlowPane nameFlowPane;
+    @Bind(fieldName="window") private TextInput lastNameTextInput;
+    @Bind(fieldName="window") private TextInput firstNameTextInput;
+    @Bind(fieldName="window") private PushButton submitButton;
+    @Bind(fieldName="window") private Label errorLabel;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         bind();

@@ -116,15 +116,15 @@ public class HTTPClient implements Application {
      * Gets the query to issue to the server, authenticated if needed.
      */
     private Request getRequest() {
-        ListButton protocolListButton = (ListButton)serializer.getObjectByName("request.protocol");
+        ListButton protocolListButton = (ListButton)serializer.getObjectByID("request.protocol");
         ListItem protocolListItem = (ListItem)protocolListButton.getSelectedItem();
         Protocol protocol = Protocol.decode(protocolListItem.getText());
         boolean secure = protocol.isSecure();
 
-        TextInput hostTextInput = (TextInput)serializer.getObjectByName("request.host");
+        TextInput hostTextInput = (TextInput)serializer.getObjectByID("request.host");
         String host = hostTextInput.getText();
 
-        TextInput portTextInput = (TextInput)serializer.getObjectByName("request.port");
+        TextInput portTextInput = (TextInput)serializer.getObjectByID("request.port");
         String portText = portTextInput.getText();
         int port;
         try {
@@ -133,16 +133,16 @@ public class HTTPClient implements Application {
             port = secure ? 443 : 80;
         }
 
-        TextInput pathTextInput = (TextInput)serializer.getObjectByName("request.path");
+        TextInput pathTextInput = (TextInput)serializer.getObjectByID("request.path");
         String path = pathTextInput.getText();
 
-        ListButton methodListButton = (ListButton)serializer.getObjectByName("request.method");
+        ListButton methodListButton = (ListButton)serializer.getObjectByID("request.method");
         ListItem methodListItem = (ListItem)methodListButton.getSelectedItem();
 
         // Construct the HTTP request
         Request httpRequest = new Request(methodListItem.getText(), protocol.toString(), host, port, path);
 
-        TextArea textArea = (TextArea)serializer.getObjectByName("request.body");
+        TextArea textArea = (TextArea)serializer.getObjectByID("request.body");
         String body = textArea.getText();
         httpRequest.setBody(body.getBytes());
 
@@ -178,14 +178,14 @@ public class HTTPClient implements Application {
                     throw new RuntimeException(ex);
                 }
 
-                Button okButton = (Button)sheetSerializer.getObjectByName("okButton");
+                Button okButton = (Button)sheetSerializer.getObjectByID("okButton");
                 okButton.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {
                         sheet.close(true);
                     }
                 });
 
-                Button cancelButton = (Button)sheetSerializer.getObjectByName("cancelButton");
+                Button cancelButton = (Button)sheetSerializer.getObjectByID("cancelButton");
                 cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {
                         sheet.close(false);
@@ -193,8 +193,8 @@ public class HTTPClient implements Application {
                 });
 
                 if (credentials != null) {
-                    TextInput usernameTextInput = (TextInput)sheetSerializer.getObjectByName("username");
-                    TextInput passwordTextInput = (TextInput)sheetSerializer.getObjectByName("password");
+                    TextInput usernameTextInput = (TextInput)sheetSerializer.getObjectByID("username");
+                    TextInput passwordTextInput = (TextInput)sheetSerializer.getObjectByID("password");
                     usernameTextInput.setText(credentials.getUsername());
                     passwordTextInput.setText(credentials.getPassword());
                 }
@@ -211,9 +211,9 @@ public class HTTPClient implements Application {
                     public void sheetClosed(Sheet sheet) {
                         if (sheet.getResult()) {
                             TextInput usernameTextInput = (TextInput)
-                                sheetSerializer.getObjectByName("username");
+                                sheetSerializer.getObjectByID("username");
                             TextInput passwordTextInput = (TextInput)
-                                sheetSerializer.getObjectByName("password");
+                                sheetSerializer.getObjectByID("password");
 
                             String username = usernameTextInput.getText();
                             String password = passwordTextInput.getText();
@@ -259,14 +259,14 @@ public class HTTPClient implements Application {
                     throw new RuntimeException(ex);
                 }
 
-                Button okButton = (Button)sheetSerializer.getObjectByName("okButton");
+                Button okButton = (Button)sheetSerializer.getObjectByID("okButton");
                 okButton.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {
                         sheet.close(true);
                     }
                 });
 
-                Button cancelButton = (Button)sheetSerializer.getObjectByName("cancelButton");
+                Button cancelButton = (Button)sheetSerializer.getObjectByID("cancelButton");
                 cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {
                         sheet.close(false);
@@ -274,12 +274,12 @@ public class HTTPClient implements Application {
                 });
 
                 if (keystorePath != null) {
-                    TextInput pathTextInput = (TextInput)sheetSerializer.getObjectByName("path");
+                    TextInput pathTextInput = (TextInput)sheetSerializer.getObjectByID("path");
                     pathTextInput.setText(keystorePath);
                 }
 
                 if (keystorePassword != null) {
-                    TextInput passwdTextInput = (TextInput)sheetSerializer.getObjectByName("passwd");
+                    TextInput passwdTextInput = (TextInput)sheetSerializer.getObjectByID("passwd");
                     passwdTextInput.setText(keystorePassword);
                 }
 
@@ -288,8 +288,8 @@ public class HTTPClient implements Application {
                         Vote vote = Vote.APPROVE;
 
                         if (result) {
-                            TextInput pathTextInput = (TextInput)sheetSerializer.getObjectByName("path");
-                            TextInput passwdTextInput = (TextInput)sheetSerializer.getObjectByName("passwd");
+                            TextInput pathTextInput = (TextInput)sheetSerializer.getObjectByID("path");
+                            TextInput passwdTextInput = (TextInput)sheetSerializer.getObjectByID("passwd");
 
                             keystorePath = pathTextInput.getText();
                             keystorePassword = passwdTextInput.getText();
@@ -327,7 +327,7 @@ public class HTTPClient implements Application {
         window = (Window)serializer.readObject("pivot/tools/net/application.wtkx");
         window.open(display);
 
-        TableView tableView = (TableView)serializer.getObjectByName("log.tableView");
+        TableView tableView = (TableView)serializer.getObjectByID("log.tableView");
         tableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
                 boolean consumed = false;
@@ -353,7 +353,7 @@ public class HTTPClient implements Application {
             }
         });
 
-        PushButton submitButton = (PushButton)serializer.getObjectByName("request.submit");
+        PushButton submitButton = (PushButton)serializer.getObjectByID("request.submit");
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(final Button button) {
                 button.setEnabled(false);
@@ -365,7 +365,7 @@ public class HTTPClient implements Application {
                         Response httpResponse = task.getResult();
                         Transaction transaction = new Transaction((Request)task, httpResponse);
 
-                        TableView tableView = (TableView)serializer.getObjectByName("log.tableView");
+                        TableView tableView = (TableView)serializer.getObjectByID("log.tableView");
                         List<Transaction> tableData = (List<Transaction>)tableView.getTableData();
                         tableData.add(transaction);
                     }

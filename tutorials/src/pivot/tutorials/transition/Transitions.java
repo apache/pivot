@@ -26,11 +26,11 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class Transitions extends Bindable implements Application {
-    @Load(name="transitions.wtkx") private Window window;
-    @Bind(property="window") private Button button1;
-    @Bind(property="window") private Button button2;
-    @Bind(property="window") private Button button3;
-    @Bind(property="window") private Button button4;
+    @Load(resourceName="transitions.wtkx") private Window window;
+    @Bind(fieldName="window") private Button button1;
+    @Bind(fieldName="window") private Button button2;
+    @Bind(fieldName="window") private Button button3;
+    @Bind(fieldName="window") private Button button4;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {

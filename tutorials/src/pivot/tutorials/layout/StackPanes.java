@@ -24,7 +24,7 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class StackPanes extends Bindable implements Application {
-    @Load(name="stack_panes.wtkx") private Window window;
+    @Load(resourceName="stack_panes.wtkx") private Window window;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         bind();

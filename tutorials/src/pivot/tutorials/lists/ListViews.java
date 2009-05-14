@@ -29,9 +29,9 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class ListViews extends Bindable implements Application {
-    @Load(name="list_views.wtkx") private Window window;
-    @Bind(property="window") private Label selectionLabel;
-    @Bind(property="window") private ListView listView;
+    @Load(resourceName="list_views.wtkx") private Window window;
+    @Bind(fieldName="window") private Label selectionLabel;
+    @Bind(fieldName="window") private ListView listView;
 
     private ListViewSelectionListener listViewSelectionListener =
         new ListViewSelectionListener() {

@@ -30,11 +30,11 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class FixedColumnTable extends Bindable implements Application {
-    @Load(name="fixed_column_table.wtkx") private Window window;
-    @Bind(property="window") private TableView primaryTableView;
-    @Bind(property="window") private TableViewHeader primaryTableViewHeader;
-    @Bind(property="window") private TableView fixedTableView;
-    @Bind(property="window") private TableViewHeader fixedTableViewHeader;
+    @Load(resourceName="fixed_column_table.wtkx") private Window window;
+    @Bind(fieldName="window") private TableView primaryTableView;
+    @Bind(fieldName="window") private TableViewHeader primaryTableViewHeader;
+    @Bind(fieldName="window") private TableView fixedTableView;
+    @Bind(fieldName="window") private TableViewHeader fixedTableViewHeader;
 
     private boolean synchronizingSelection = false;
 

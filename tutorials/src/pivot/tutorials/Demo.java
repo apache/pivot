@@ -97,7 +97,7 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class ButtonsRollupStateHandler extends RollupStateHandler {
-        @Load(name="buttons.wtkx")
+        @Load(resourceName="buttons.wtkx")
         private Component component;
 
         public Vote previewExpandedChange(Rollup rollup) {
@@ -111,10 +111,10 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class ListsRollupStateHandler extends RollupStateHandler {
-        @Load(name="lists.wtkx") private Component component;
-        @Bind(property="component") private ListView editableListView;
-        @Bind(property="component") private ListView iconListView;
-        @Bind(property="component") private ListView checkedListView;
+        @Load(resourceName="lists.wtkx") private Component component;
+        @Bind(fieldName="component") private ListView editableListView;
+        @Bind(fieldName="component") private ListView iconListView;
+        @Bind(fieldName="component") private ListView checkedListView;
 
         @SuppressWarnings("unchecked")
         public Vote previewExpandedChange(Rollup rollup) {
@@ -144,8 +144,8 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class TextRollupStateHandler extends RollupStateHandler {
-        @Load(name="text.wtkx") private Component component;
-        @Bind(property="component") private TextArea textArea;
+        @Load(resourceName="text.wtkx") private Component component;
+        @Bind(fieldName="component") private TextArea textArea;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -187,7 +187,7 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class CalendarsRollupStateHandler extends RollupStateHandler {
-        @Load(name="calendars.wtkx") private Component component;
+        @Load(resourceName="calendars.wtkx") private Component component;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -200,7 +200,7 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class NavigationRollupStateHandler extends RollupStateHandler {
-        @Load(name="navigation.wtkx") private Component component;
+        @Load(resourceName="navigation.wtkx") private Component component;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -213,7 +213,7 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class SplittersRollupStateHandler extends RollupStateHandler {
-        @Load(name="splitters.wtkx") private Component component;
+        @Load(resourceName="splitters.wtkx") private Component component;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -226,13 +226,13 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class MenusRollupStateHandler extends RollupStateHandler {
-        @Load(name="menus.wtkx") private Component component;
-        @Bind(property="component") private ImageView menuImageView;
+        @Load(resourceName="menus.wtkx") private Component component;
+        @Bind(fieldName="component") private ImageView menuImageView;
 
-        @Bind(property="component", name="menubar.helpAboutMenuItem")
+        @Bind(fieldName="component", id="menubar.helpAboutMenuItem")
         private Menu.Item helpAboutMenuItem;
 
-        @Load(name="menu_popup.wtkx") private MenuPopup menuPopup;
+        @Load(resourceName="menu_popup.wtkx") private MenuPopup menuPopup;
 
         {   new Action("selectImageAction") {
                 public String getDescription() {
@@ -293,10 +293,10 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class MetersRollupStateHandler extends RollupStateHandler {
-        @Load(name="meters.wtkx") private Component component;
-        @Bind(property="component") private ActivityIndicator activityIndicator1;
-        @Bind(property="component") private ActivityIndicator activityIndicator2;
-        @Bind(property="component") private ActivityIndicator activityIndicator3;
+        @Load(resourceName="meters.wtkx") private Component component;
+        @Bind(fieldName="component") private ActivityIndicator activityIndicator1;
+        @Bind(fieldName="component") private ActivityIndicator activityIndicator2;
+        @Bind(fieldName="component") private ActivityIndicator activityIndicator3;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -325,15 +325,15 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class SpinnersRollupStateHandler extends RollupStateHandler {
-        @Load(name="spinners.wtkx") private Component component;
+        @Load(resourceName="spinners.wtkx") private Component component;
 
-        @Bind(property="component") private Spinner numericSpinner;
-        @Bind(property="component") private Spinner dateSpinner;
+        @Bind(fieldName="component") private Spinner numericSpinner;
+        @Bind(fieldName="component") private Spinner dateSpinner;
 
-        @Bind(property="component") private Slider redSlider;
-        @Bind(property="component") private Slider greenSlider;
-        @Bind(property="component") private Slider blueSlider;
-        @Bind(property="component") private Border colorBorder;
+        @Bind(fieldName="component") private Slider redSlider;
+        @Bind(fieldName="component") private Slider greenSlider;
+        @Bind(fieldName="component") private Slider blueSlider;
+        @Bind(fieldName="component") private Border colorBorder;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -381,10 +381,10 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class TablesRollupStateHandler extends RollupStateHandler {
-        @Load(name="tables.wtkx") private Component component;
-        @Bind(property="component") private TableView sortableTableView;
-        @Bind(property="component") private TableView customTableView;
-        @Bind(property="component") private TableViewHeader sortableTableViewHeader;
+        @Load(resourceName="tables.wtkx") private Component component;
+        @Bind(fieldName="component") private TableView sortableTableView;
+        @Bind(fieldName="component") private TableView customTableView;
+        @Bind(fieldName="component") private TableViewHeader sortableTableViewHeader;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -447,8 +447,8 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class TreesRollupStateHandler extends RollupStateHandler {
-        @Load(name="trees.wtkx") private Component component;
-        @Bind(property="component") private TreeView editableTreeView;
+        @Load(resourceName="trees.wtkx") private Component component;
+        @Bind(fieldName="component") private TreeView editableTreeView;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -464,10 +464,10 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class DragDropRollupStateHandler extends RollupStateHandler {
-        @Load(name="dragdrop.wtkx") private Component component;
-        @Bind(property="component") private ImageView imageView1;
-        @Bind(property="component") private ImageView imageView2;
-        @Bind(property="component") private ImageView imageView3;
+        @Load(resourceName="dragdrop.wtkx") private Component component;
+        @Bind(fieldName="component") private ImageView imageView1;
+        @Bind(fieldName="component") private ImageView imageView2;
+        @Bind(fieldName="component") private ImageView imageView3;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -591,9 +591,9 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class AlertsRollupStateHandler extends RollupStateHandler {
-        @Load(name="alerts.wtkx") private Component component;
-        @Bind(property="component") private PushButton alertButton;
-        @Bind(property="component") private PushButton promptButton;
+        @Load(resourceName="alerts.wtkx") private Component component;
+        @Bind(fieldName="component") private PushButton alertButton;
+        @Bind(fieldName="component") private PushButton promptButton;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
@@ -675,20 +675,20 @@ public class Demo extends Bindable implements Application, Application.About {
         }
     }
 
-    @Load(name="demo.wtkx") private Window window;
-    @Bind(property="window") private Rollup buttonsRollup;
-    @Bind(property="window") private Rollup listsRollup;
-    @Bind(property="window") private Rollup textRollup;
-    @Bind(property="window") private Rollup calendarsRollup;
-    @Bind(property="window") private Rollup navigationRollup;
-    @Bind(property="window") private Rollup splittersRollup;
-    @Bind(property="window") private Rollup menusRollup;
-    @Bind(property="window") private Rollup metersRollup;
-    @Bind(property="window") private Rollup spinnersRollup;
-    @Bind(property="window") private Rollup tablesRollup;
-    @Bind(property="window") private Rollup treesRollup;
-    @Bind(property="window") private Rollup dragDropRollup;
-    @Bind(property="window") private Rollup alertsRollup;
+    @Load(resourceName="demo.wtkx") private Window window;
+    @Bind(fieldName="window") private Rollup buttonsRollup;
+    @Bind(fieldName="window") private Rollup listsRollup;
+    @Bind(fieldName="window") private Rollup textRollup;
+    @Bind(fieldName="window") private Rollup calendarsRollup;
+    @Bind(fieldName="window") private Rollup navigationRollup;
+    @Bind(fieldName="window") private Rollup splittersRollup;
+    @Bind(fieldName="window") private Rollup menusRollup;
+    @Bind(fieldName="window") private Rollup metersRollup;
+    @Bind(fieldName="window") private Rollup spinnersRollup;
+    @Bind(fieldName="window") private Rollup tablesRollup;
+    @Bind(fieldName="window") private Rollup treesRollup;
+    @Bind(fieldName="window") private Rollup dragDropRollup;
+    @Bind(fieldName="window") private Rollup alertsRollup;
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(Demo.class, args);

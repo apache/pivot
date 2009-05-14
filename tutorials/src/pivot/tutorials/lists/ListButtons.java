@@ -31,9 +31,9 @@ import pivot.wtk.media.Image;
 import pivot.wtkx.Bindable;
 
 public class ListButtons extends Bindable implements Application {
-    @Load(name="list_buttons.wtkx") private Window window;
-    @Bind(property="window") private ListButton listButton;
-    @Bind(property="window") private ImageView imageView;
+    @Load(resourceName="list_buttons.wtkx") private Window window;
+    @Bind(fieldName="window") private ListButton listButton;
+    @Bind(fieldName="window") private ImageView imageView;
 
     private ListButtonSelectionListener listButtonSelectionListener =
         new ListButtonSelectionListener() {

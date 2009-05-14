@@ -133,13 +133,13 @@ public class LargeData extends Bindable implements Application {
 
     private String basePath = null;
 
-	@Load(name="large_data.wtkx") private Window window;
-    @Bind(property="window") private ListButton fileListButton;
-    @Bind(property="window") private PushButton loadDataButton;
-    @Bind(property="window") private PushButton cancelButton;
-    @Bind(property="window") private Label statusLabel;
-    @Bind(property="window") private TableView tableView;
-    @Bind(property="window") private TableViewHeader tableViewHeader;
+    @Load(resourceName="large_data.wtkx") private Window window;
+    @Bind(fieldName="window") private ListButton fileListButton;
+    @Bind(fieldName="window") private PushButton loadDataButton;
+    @Bind(fieldName="window") private PushButton cancelButton;
+    @Bind(fieldName="window") private Label statusLabel;
+    @Bind(fieldName="window") private TableView tableView;
+    @Bind(fieldName="window") private TableViewHeader tableViewHeader;
 
     private CSVSerializer csvSerializer;
 
@@ -149,11 +149,11 @@ public class LargeData extends Bindable implements Application {
     private static final int PAGE_SIZE = 100;
 
     public LargeData() {
-    	csvSerializer = new CSVSerializer("ISO-8859-1");
-    	csvSerializer.getKeys().add("c0");
-    	csvSerializer.getKeys().add("c1");
-    	csvSerializer.getKeys().add("c2");
-    	csvSerializer.getKeys().add("c3");
+        csvSerializer = new CSVSerializer("ISO-8859-1");
+        csvSerializer.getKeys().add("c0");
+        csvSerializer.getKeys().add("c1");
+        csvSerializer.getKeys().add("c2");
+        csvSerializer.getKeys().add("c3");
     }
 
     public void startup(Display display, Dictionary<String, String> properties)
@@ -166,12 +166,12 @@ public class LargeData extends Bindable implements Application {
         bind();
 
         loadDataButton.getButtonPressListeners().add(new ButtonPressListener() {
-        	public void buttonPressed(Button button) {
-        	    loadDataButton.setEnabled(false);
-        		cancelButton.setEnabled(true);
+            public void buttonPressed(Button button) {
+                loadDataButton.setEnabled(false);
+                cancelButton.setEnabled(true);
 
-        		loadData();
-        	}
+                loadData();
+            }
         });
 
         cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
@@ -184,14 +184,14 @@ public class LargeData extends Bindable implements Application {
         });
 
         tableViewHeader.getTableViewHeaderPressListeners().add(new TableView.SortHandler() {
-        	@Override
-        	public void headerPressed(TableViewHeader tableViewHeader, int index) {
-        		long startTime = System.currentTimeMillis();
-        		super.headerPressed(tableViewHeader, index);
-        		long endTime = System.currentTimeMillis();
+            @Override
+            public void headerPressed(TableViewHeader tableViewHeader, int index) {
+                long startTime = System.currentTimeMillis();
+                super.headerPressed(tableViewHeader, index);
+                long endTime = System.currentTimeMillis();
 
-        		statusLabel.setText("Data sorted in " + (endTime - startTime) + " ms.");
-        	}
+                statusLabel.setText("Data sorted in " + (endTime - startTime) + " ms.");
+            }
         });
 
         window.open(display);
@@ -215,26 +215,26 @@ public class LargeData extends Bindable implements Application {
         abort = false;
         tableView.getTableData().clear();
 
-    	String fileName = (String)fileListButton.getSelectedItem();
+        String fileName = (String)fileListButton.getSelectedItem();
 
-    	URL origin = ApplicationContext.getOrigin();
+        URL origin = ApplicationContext.getOrigin();
 
-    	URL fileURL = null;
-    	try {
-    	    fileURL = new URL(origin, basePath + "/" + fileName);
-    	} catch(MalformedURLException exception) {
-    	    System.err.println(exception.getMessage());
-    	}
+        URL fileURL = null;
+        try {
+            fileURL = new URL(origin, basePath + "/" + fileName);
+        } catch(MalformedURLException exception) {
+            System.err.println(exception.getMessage());
+        }
 
-    	if (fileURL != null) {
-    	    statusLabel.setText("Loading " + fileURL);
+        if (fileURL != null) {
+            statusLabel.setText("Loading " + fileURL);
 
-    	    LoadDataCallback callback = new LoadDataCallback(fileURL);
-    	    Thread thread = new Thread(callback);
-    	    thread.setDaemon(true);
-    	    thread.setPriority(Thread.MIN_PRIORITY);
-    	    thread.start();
-    	}
+            LoadDataCallback callback = new LoadDataCallback(fileURL);
+            Thread thread = new Thread(callback);
+            thread.setDaemon(true);
+            thread.setPriority(Thread.MIN_PRIORITY);
+            thread.start();
+        }
     }
 
     public static void main(String[] args) {

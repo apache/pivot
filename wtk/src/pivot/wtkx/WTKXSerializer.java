@@ -140,7 +140,20 @@ public class WTKXSerializer implements Serializer<Object> {
             }
 
             if (serializer != null) {
-                object = serializer.getObjectByID(namespacePath[i]);
+            	String id = namespacePath[i];
+            	
+            	if (namedObjects.containsKey(id)) {
+            		object = namedObjects.get(id);
+            	} else {
+            		if (scriptEngineManager != null) {
+                    	try {
+                        	Method getMethod = scriptEngineManagerClass.getMethod("get", new Class<?>[] {String.class});
+                        	object = getMethod.invoke(scriptEngineManager, new Object[] {id});
+                    	} catch(Exception exception) {
+                    		throw new RuntimeException(exception);
+                    	}
+            		}
+            	}
             }
 
             return object;
@@ -663,7 +676,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                                         listenerID = listenerID.substring(1);
 
                                                         if (listenerID.length() > 0) {
-                                                            listenerList.add(getObjectByID(listenerID));
+                                                            listenerList.add(namedObjectDictionary.get(listenerID));
                                                         }
                                                     }
                                                 }
@@ -957,7 +970,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                                 listenerID = listenerID.substring(1);
 
                                                 if (listenerID.length() > 0) {
-                                                    listenerList.add(getObjectByID(listenerID));
+                                                    listenerList.add(namedObjectDictionary.get(listenerID));
                                                 }
                                             }
                                         }
@@ -1046,7 +1059,7 @@ public class WTKXSerializer implements Serializer<Object> {
      * @param <T>
      * The type of the object to return.
      *
-     * @param name
+     * @param id
      * The name of the object, relative to this loader. The values's name is the
      * concatentation of its parent namespaces and its ID, separated by periods
      * (e.g. "foo.bar.baz").
@@ -1055,8 +1068,8 @@ public class WTKXSerializer implements Serializer<Object> {
      * name does not exist.
      */
     @SuppressWarnings("unchecked")
-    public <T> T getObjectByName(String name) {
-        Object object = namedObjectDictionary.get(name);
+    public <T> T getObjectByID(String id) {
+        Object object = namedObjectDictionary.get(id);
         return (T)object;
     }
 
@@ -1070,25 +1083,6 @@ public class WTKXSerializer implements Serializer<Object> {
      */
     public NamedObjectDictionary getNamedObjects() {
         return namedObjectDictionary;
-    }
-
-    private Object getObjectByID(String id) {
-    	Object object = null;
-
-    	if (namedObjects.containsKey(id)) {
-    		object = namedObjects.get(id);
-    	} else {
-    		if (scriptEngineManager != null) {
-            	try {
-                	Method getMethod = scriptEngineManagerClass.getMethod("get", new Class<?>[] {String.class});
-                	object = getMethod.invoke(scriptEngineManager, new Object[] {id});
-            	} catch(Exception exception) {
-            		throw new RuntimeException(exception);
-            	}
-    		}
-    	}
-
-    	return object;
     }
 
     /**
@@ -1197,7 +1191,7 @@ public class WTKXSerializer implements Serializer<Object> {
                         if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
                             resolvedValue = attributeValue.substring(1);
                         } else {
-                            resolvedValue = getObjectByID(attributeValue.substring(1));
+                            resolvedValue = namedObjectDictionary.get(attributeValue.substring(1));
                         }
                     }
                 } else {

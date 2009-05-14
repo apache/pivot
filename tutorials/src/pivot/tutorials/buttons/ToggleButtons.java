@@ -24,7 +24,7 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class ToggleButtons extends Bindable implements Application {
-    @Load(name="toggle_buttons.wtkx") private Window window;
+    @Load(resourceName="toggle_buttons.wtkx") private Window window;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {

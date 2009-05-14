@@ -28,10 +28,10 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class LinkButtons extends Bindable implements Application {
-    @Load(name="link_buttons.wtkx") private Window window = null;
-    @Bind(property="window") private CardPane cardPane;
-    @Bind(property="window") private LinkButton nextButton;
-    @Bind(property="window") private LinkButton previousButton;
+    @Load(resourceName="link_buttons.wtkx") private Window window = null;
+    @Bind(fieldName="window") private CardPane cardPane;
+    @Bind(fieldName="window") private LinkButton nextButton;
+    @Bind(fieldName="window") private LinkButton previousButton;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         bind();

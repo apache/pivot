@@ -28,13 +28,13 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class Checkboxes extends Bindable implements Application {
-    @Load(name="checkboxes.wtkx") private Window window = null;
-    @Bind(property="window") private Checkbox bellCheckbox;
-    @Bind(property="window") private Checkbox clockCheckbox;
-    @Bind(property="window") private Checkbox houseCheckbox;
-    @Bind(property="window") private ImageView bellImageView;
-    @Bind(property="window") private ImageView clockImageView;
-    @Bind(property="window") private ImageView houseImageView;
+    @Load(resourceName="checkboxes.wtkx") private Window window = null;
+    @Bind(fieldName="window") private Checkbox bellCheckbox;
+    @Bind(fieldName="window") private Checkbox clockCheckbox;
+    @Bind(fieldName="window") private Checkbox houseCheckbox;
+    @Bind(fieldName="window") private ImageView bellImageView;
+    @Bind(fieldName="window") private ImageView clockImageView;
+    @Bind(fieldName="window") private ImageView houseImageView;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         bind();

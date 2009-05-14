@@ -57,19 +57,19 @@ import pivot.wtkx.Bindable;
 public class StockTracker extends Bindable implements Application {
     private ArrayList<String> symbols = new ArrayList<String>();
 
-    @Load(name="stocktracker.wtkx") private Window window;
+    @Load(resourceName="stocktracker.wtkx") private Window window;
 
-    @Bind(property="window") private TableView stocksTableView;
-    @Bind(property="window") private TextInput symbolTextInput;
-    @Bind(property="window") private Button addSymbolButton;
-    @Bind(property="window") private Button removeSymbolsButton;
-    @Bind(property="window") private Label lastUpdateLabel;
-    @Bind(property="window") private Button yahooFinanceButton;
+    @Bind(fieldName="window") private TableView stocksTableView;
+    @Bind(fieldName="window") private TextInput symbolTextInput;
+    @Bind(fieldName="window") private Button addSymbolButton;
+    @Bind(fieldName="window") private Button removeSymbolsButton;
+    @Bind(fieldName="window") private Label lastUpdateLabel;
+    @Bind(fieldName="window") private Button yahooFinanceButton;
 
-    @Bind(property="window", name="detail.rootPane")
+    @Bind(fieldName="window", id="detail.rootPane")
     private Container detailRootPane;
 
-    @Bind(property="window", name="detail.changeLabel")
+    @Bind(fieldName="window", id="detail.changeLabel")
     private Label detailChangeLabel;
 
     private GetQuery getQuery = null;

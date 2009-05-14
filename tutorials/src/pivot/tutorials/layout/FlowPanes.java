@@ -31,18 +31,18 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class FlowPanes extends Bindable implements Application {
-    @Load(name="flow_panes.wtkx") private Window window;
-    @Bind(property="window") private FlowPane flowPane;
-    @Bind(property="window") private RadioButton horizontalOrientationButton;
-    @Bind(property="window") private RadioButton verticalOrientationButton;
-    @Bind(property="window") private RadioButton horizontalAlignmentRightButton;
-    @Bind(property="window") private RadioButton horizontalAlignmentLeftButton;
-    @Bind(property="window") private RadioButton horizontalAlignmentCenterButton;
-    @Bind(property="window") private RadioButton horizontalAlignmentJustifyButton;
-    @Bind(property="window") private RadioButton verticalAlignmentTopButton;
-    @Bind(property="window") private RadioButton verticalAlignmentBottomButton;
-    @Bind(property="window") private RadioButton verticalAlignmentCenterButton;
-    @Bind(property="window") private RadioButton verticalAlignmentJustifyButton;
+    @Load(resourceName="flow_panes.wtkx") private Window window;
+    @Bind(fieldName="window") private FlowPane flowPane;
+    @Bind(fieldName="window") private RadioButton horizontalOrientationButton;
+    @Bind(fieldName="window") private RadioButton verticalOrientationButton;
+    @Bind(fieldName="window") private RadioButton horizontalAlignmentRightButton;
+    @Bind(fieldName="window") private RadioButton horizontalAlignmentLeftButton;
+    @Bind(fieldName="window") private RadioButton horizontalAlignmentCenterButton;
+    @Bind(fieldName="window") private RadioButton horizontalAlignmentJustifyButton;
+    @Bind(fieldName="window") private RadioButton verticalAlignmentTopButton;
+    @Bind(fieldName="window") private RadioButton verticalAlignmentBottomButton;
+    @Bind(fieldName="window") private RadioButton verticalAlignmentCenterButton;
+    @Bind(fieldName="window") private RadioButton verticalAlignmentJustifyButton;
 
     private ButtonStateListener buttonStateListener = new ButtonStateListener() {
         public void stateChanged(Button button, Button.State previousState) {

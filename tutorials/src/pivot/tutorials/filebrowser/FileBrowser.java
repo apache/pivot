@@ -39,8 +39,8 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class FileBrowser extends Bindable implements Application {
-    @Load(name="file_browser.wtkx") private Window window;
-    @Bind(property="window") private TreeView folderTreeView;
+    @Load(resourceName="file_browser.wtkx") private Window window;
+    @Bind(fieldName="window") private TreeView folderTreeView;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {

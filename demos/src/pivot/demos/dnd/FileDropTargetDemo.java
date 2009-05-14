@@ -45,9 +45,9 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class FileDropTargetDemo extends Bindable implements Application {
-    @Load(name="file_drop_target_demo.wtkx") private Window window;
-    @Bind(property="window") private TableView fileTableView;
-    @Bind(property="window") private PushButton uploadButton;
+    @Load(resourceName="file_drop_target_demo.wtkx") private Window window;
+    @Bind(fieldName="window") private TableView fileTableView;
+    @Bind(fieldName="window") private PushButton uploadButton;
 
     private FileList fileList = null;
 
