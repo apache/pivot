@@ -140,20 +140,21 @@ public class WTKXSerializer implements Serializer<Object> {
             }
 
             if (serializer != null) {
-            	String id = namespacePath[i];
+                String id = namespacePath[i];
 
-            	if (namedObjects.containsKey(id)) {
-            		object = namedObjects.get(id);
-            	} else {
-            		if (scriptEngineManager != null) {
-                    	try {
-                        	Method getMethod = scriptEngineManagerClass.getMethod("get", new Class<?>[] {String.class});
-                        	object = getMethod.invoke(scriptEngineManager, new Object[] {id});
-                    	} catch(Exception exception) {
-                    		throw new RuntimeException(exception);
-                    	}
-            		}
-            	}
+                if (serializer.namedObjects.containsKey(id)) {
+                    object = serializer.namedObjects.get(id);
+                } else {
+                    if (serializer.scriptEngineManager != null) {
+                        try {
+                            Method getMethod = serializer.scriptEngineManagerClass.getMethod("get",
+                                new Class<?>[] {String.class});
+                            object = getMethod.invoke(serializer.scriptEngineManager, new Object[] {id});
+                        } catch(Exception exception) {
+                            throw new RuntimeException(exception);
+                        }
+                    }
+                }
             }
 
             return object;
@@ -441,9 +442,9 @@ public class WTKXSerializer implements Serializer<Object> {
 
                                 element = new Element(element, Element.Type.INCLUDE, attributes, value);
                             } else if (localName.equals(SCRIPT_TAG)) {
-                            	if (scriptEngineManagerClass == null) {
-                            		throw new SerializationException("Scripting is not supported on this platform.");
-                            	}
+                                if (scriptEngineManagerClass == null) {
+                                    throw new SerializationException("Scripting is not supported on this platform.");
+                                }
 
                                 // The element represents a script
                                 String src = null;
@@ -455,8 +456,8 @@ public class WTKXSerializer implements Serializer<Object> {
                                     if (attributeLocalName.equals(SCRIPT_SRC_ATTRIBUTE)) {
                                         src = attributeValue;
                                     } else {
-                                    	throw new SerializationException(attributeLocalName + " is not a valid "
-                                			+ " attribute for the " + WTKX_PREFIX + ":" + SCRIPT_TAG + ".");
+                                        throw new SerializationException(attributeLocalName + " is not a valid "
+                                            + " attribute for the " + WTKX_PREFIX + ":" + SCRIPT_TAG + ".");
                                     }
                                 }
 
@@ -466,47 +467,47 @@ public class WTKXSerializer implements Serializer<Object> {
                                         + " tag.");
                                 }
 
-                            	int i = src.lastIndexOf(".");
-                            	if (i == -1) {
-                            		throw new SerializationException("Cannot determine type of script \""
-                        				+ src + "\".");
-                            	}
+                                int i = src.lastIndexOf(".");
+                                if (i == -1) {
+                                    throw new SerializationException("Cannot determine type of script \""
+                                        + src + "\".");
+                                }
 
-                            	String extension = src.substring(i + 1);
+                                String extension = src.substring(i + 1);
 
-                            	Object scriptEngine = null;
-                            	try {
-                                	Method getEngineByExtensionMethod =
-                                		scriptEngineManagerClass.getMethod("getEngineByExtension", new Class<?>[] {String.class});
+                                Object scriptEngine = null;
+                                try {
+                                    Method getEngineByExtensionMethod =
+                                        scriptEngineManagerClass.getMethod("getEngineByExtension", new Class<?>[] {String.class});
 
                                     scriptEngine = getEngineByExtensionMethod.invoke(scriptEngineManager, new Object[] {extension});
-                            	} catch(Exception exception) {
-                            		throw new RuntimeException(exception);
-                            	}
+                                } catch(Exception exception) {
+                                    throw new RuntimeException(exception);
+                                }
 
-                            	if (scriptEngine == null) {
-                                	throw new SerializationException("Unable to find scripting engine for "
-                            			+ " extension " + extension + ".");
+                                if (scriptEngine == null) {
+                                    throw new SerializationException("Unable to find scripting engine for "
+                                        + " extension " + extension + ".");
                                 }
 
                                 try {
                                     ClassLoader classLoader = ThreadUtilities.getClassLoader();
-                                	URL scriptLocation;
+                                    URL scriptLocation;
 
-                                	if (src.charAt(0) == '/') {
-                                		scriptLocation = classLoader.getResource(src);
+                                    if (src.charAt(0) == '/') {
+                                        scriptLocation = classLoader.getResource(src);
                                     } else {
-                                    	scriptLocation = new URL(location, src);
+                                        scriptLocation = new URL(location, src);
                                     }
 
-                                	Class<?> bindingsClass = Class.forName("javax.script.Bindings");
-                                	Method evalMethod = scriptEngine.getClass().getMethod("eval",
-                                			new Class<?>[] {Reader.class, bindingsClass});
+                                    Class<?> bindingsClass = Class.forName("javax.script.Bindings");
+                                    Method evalMethod = scriptEngine.getClass().getMethod("eval",
+                                        new Class<?>[] {Reader.class, bindingsClass});
 
-                                	Reader scriptReader = new BufferedReader(new InputStreamReader(scriptLocation.openStream()));
-                                	evalMethod.invoke(scriptEngine, new Object[] {scriptReader, scriptEngineBindings});
+                                    Reader scriptReader = new BufferedReader(new InputStreamReader(scriptLocation.openStream()));
+                                    evalMethod.invoke(scriptEngine, new Object[] {scriptReader, scriptEngineBindings});
                                 } catch(Exception exception) {
-                                	throw new SerializationException(exception);
+                                    throw new SerializationException(exception);
                                 }
 
                                 element = new Element(element, Element.Type.SCRIPT, null, null);
@@ -606,14 +607,14 @@ public class WTKXSerializer implements Serializer<Object> {
                                     namedObjects.put(id, element.value);
 
                                     if (scriptEngineManager != null) {
-                                    	try {
-	                                    	Method putMethod = scriptEngineManagerClass.getMethod("put",
-                                    			new Class<?>[] {String.class, Object.class});
-	                                    	putMethod.invoke(scriptEngineManager, new Object[] {id, namedObjects.get(id)});
-                                    	} catch(Exception exception) {
-                                    		throw new RuntimeException(exception);
-                                    	}
-                                	}
+                                        try {
+                                            Method putMethod = scriptEngineManagerClass.getMethod("put",
+                                                new Class<?>[] {String.class, Object.class});
+                                            putMethod.invoke(scriptEngineManager, new Object[] {id, namedObjects.get(id)});
+                                        } catch(Exception exception) {
+                                            throw new RuntimeException(exception);
+                                        }
+                                    }
                                 }
 
                                 break;
@@ -634,7 +635,7 @@ public class WTKXSerializer implements Serializer<Object> {
                             }
 
                             case SCRIPT: {
-                            	break;
+                                break;
                             }
 
                             default: {
