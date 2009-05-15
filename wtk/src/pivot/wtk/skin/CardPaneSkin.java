@@ -23,7 +23,6 @@ import pivot.wtk.CardPaneListener;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.Dimensions;
-import pivot.wtk.Orientation;
 import pivot.wtk.effects.FadeDecorator;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
@@ -36,6 +35,35 @@ import pivot.wtk.effects.easing.Quartic;
  * @author gbrown
  */
 public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
+    /**
+     * Defines the supported selection change effects.
+     *
+     * @author gbrown
+     */
+    public enum SelectionChangeEffect {
+        CROSSFADE,
+        HORIZONTAL_SLIDE,
+        VERTICAL_SLIDE;
+
+        public static SelectionChangeEffect decode(String value) {
+            SelectionChangeEffect selectionChangeEffect;
+
+            if (value == null) {
+                selectionChangeEffect = null;
+            } else if (value.equals("crossfade")) {
+                selectionChangeEffect = CROSSFADE;
+            } else if (value.equals("horizontalSlide")) {
+                selectionChangeEffect = HORIZONTAL_SLIDE;
+            } else if (value.equals("verticalSlide")) {
+                selectionChangeEffect = VERTICAL_SLIDE;
+            } else {
+                throw new IllegalArgumentException();
+            }
+
+            return selectionChangeEffect;
+        }
+    }
+
     /**
      * Abstract base class for selection change transitions.
      *
@@ -76,11 +104,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      *
      * @author gbrown
      */
-    public class FadeTransition extends SelectionChangeTransition {
+    public class CrossfadeTransition extends SelectionChangeTransition {
         private FadeDecorator fadeOutDecorator = new FadeDecorator();
         private FadeDecorator fadeInDecorator = new FadeDecorator();
 
-        public FadeTransition(int from, int to) {
+        public CrossfadeTransition(int from, int to) {
             super(from, to);
         }
 
@@ -120,22 +148,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         @Override
         protected void update() {
             float percentComplete = getPercentComplete();
-
-            int width = getWidth();
-            int height = getHeight();
-
-            // Center components
-            Component fromCard = getFromCard();
-            if (fromCard != null) {
-                fromCard.setLocation((width - fromCard.getWidth()) / 2,
-                    (height - fromCard.getHeight()) / 2);
-            }
-
-            Component toCard = getToCard();
-            if (toCard != null) {
-                toCard.setLocation((width - toCard.getWidth()) / 2,
-                    (height - toCard.getHeight()) / 2);
-            }
 
             fadeOutDecorator.setOpacity(1.0f - percentComplete);
             fadeInDecorator.setOpacity(percentComplete);
@@ -192,7 +204,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             Component fromCard = cardPane.get(from);
             Component toCard = cardPane.get(to);
 
-            if (orientation == Orientation.HORIZONTAL) {
+            if (selectionChangeEffect == SelectionChangeEffect.HORIZONTAL_SLIDE) {
                 fromCard.setLocation(dx, 0);
                 toCard.setLocation(-width * direction + dx, 0);
             } else {
@@ -203,7 +215,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     private boolean sizeToSelection = false;
-    private Orientation orientation = null;
+    private SelectionChangeEffect selectionChangeEffect = null;
 
     private SelectionChangeTransition selectionChangeTransition = null;
 
@@ -345,20 +357,21 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         this.sizeToSelection = sizeToSelection;
     }
 
-    public Orientation getOrientation() {
-        return orientation;
+    public SelectionChangeEffect getSelectionChangeEffect() {
+        return selectionChangeEffect;
     }
 
-    public void setOrientation(Orientation orientation) {
-        this.orientation = orientation;
+    public void setSelectionChangeEffect(SelectionChangeEffect selectionChangeEffect) {
+        // TODO Check against sizeToSelection?
+        this.selectionChangeEffect = selectionChangeEffect;
     }
 
-    public void setOrientation(String orientation) {
-        if (orientation == null) {
+    public void setSelectionChangeEffect(String selectionChangeEffect) {
+        if (selectionChangeEffect == null) {
             throw new IllegalArgumentException();
         }
 
-        setOrientation(Orientation.decode(orientation));
+        setSelectionChangeEffect(SelectionChangeEffect.decode(selectionChangeEffect));
     }
 
     @Override
@@ -397,18 +410,23 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         Vote vote;
 
         if (cardPane.isShowing()
+            && selectionChangeEffect != null
             && selectionChangeTransition == null) {
             int previousSelectedIndex = cardPane.getSelectedIndex();
 
-            if (sizeToSelection) {
-                selectionChangeTransition = new FadeTransition(previousSelectedIndex, selectedIndex);
-            } else {
-                if (orientation != null
-                    && previousSelectedIndex != -1
-                    && selectedIndex != -1) {
-                    selectionChangeTransition = new SlideTransition(previousSelectedIndex, selectedIndex);
-                } else {
-                    // TODO Use a fade in/out transition?
+            switch(selectionChangeEffect) {
+                case CROSSFADE: {
+                    selectionChangeTransition = new CrossfadeTransition(previousSelectedIndex, selectedIndex);
+                    break;
+                }
+
+                case HORIZONTAL_SLIDE:
+                case VERTICAL_SLIDE: {
+                    if (previousSelectedIndex != -1
+                        && selectedIndex != -1) {
+                        selectionChangeTransition = new SlideTransition(previousSelectedIndex, selectedIndex);
+                    }
+                    break;
                 }
             }
 

@@ -22,7 +22,7 @@ limitations under the License.
     <content>
         <Border styles="{padding:8}">
             <content>
-                <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{orientation:'horizontal'}">
+                <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontalSlide'}">
                     <Form wtkx:id="loginForm" styles="{fieldAlignment:'justify'}">
                         <sections>
                             <Form.Section>

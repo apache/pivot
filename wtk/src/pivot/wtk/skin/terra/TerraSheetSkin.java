@@ -335,7 +335,9 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         // when the transition is complete
         Vote vote = Vote.APPROVE;
 
-        if (closeTransition == null) {
+        Window owner = sheet.getOwner();
+        if (!owner.isClosing()
+            && closeTransition == null) {
             int duration = SLIDE_DURATION;
             int beginX = 0;
             int beginY = 0;
@@ -365,7 +367,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                 vote = Vote.DEFER;
             }
         } else {
-            vote = (closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+            vote = (closeTransition != null
+                && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
         }
 
         return vote;

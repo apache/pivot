@@ -24,7 +24,7 @@ limitations under the License.
     <content>
         <Border styles="{padding:0, color:10}">
             <content>
-                <CardPane wtkx:id="cardPane" selectedIndex="0">
+                <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'crossfade'}">
                     <Label wtkx:id="statusLabel" text="Loading..."
                         styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                     <ScrollPane horizontalScrollBarPolicy="fillToCapacity">
