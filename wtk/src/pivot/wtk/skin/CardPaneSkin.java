@@ -122,7 +122,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             Component toCard = getToCard();
             if (toCard != null) {
                 toCard.getDecorators().add(fadeInDecorator);
-                toCard.setSize(toCard.getPreferredSize());
                 toCard.setVisible(true);
             }
 
@@ -343,11 +342,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         int height = getHeight();
 
         for (Component card : cardPane) {
-            // If the card is visible, set its size and location
-            if (card.isVisible()) {
-                card.setLocation(0, 0);
-                card.setSize(width, height);
-            }
+            // Setting the size of non-visible cards does not impose a
+            // performance penalty since setSize() does not trigger an
+            // invalidate unless the component is visible
+            card.setLocation(0, 0);
+            card.setSize(width, height);
         }
     }
 
