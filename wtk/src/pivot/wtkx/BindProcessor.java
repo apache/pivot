@@ -288,19 +288,12 @@ public class BindProcessor extends AbstractProcessor {
             if (loadGroups != null || strandedBindFields != null) {
                 // There is some bind work to be done in this class
                 StringBuilder buf = new StringBuilder("class _TMP {");
-                buf.append("@Override @SuppressWarnings(\"unchecked\") ");
+                buf.append("@Override @SuppressWarnings({\"unchecked\",\"cast\"}) ");
                 buf.append("protected void bind(pivot.collections.Dictionary<String,");
                 buf.append("pivot.collections.Dictionary<String, Object>> namedObjectDictionaries) {");
                 buf.append("super.bind(namedObjectDictionaries);");
 
-                // Local variable declarations
-                buf.append("Object object;");
-                buf.append("pivot.wtkx.WTKXSerializer wtkxSerializer;");
-                buf.append("java.net.URL location;");
-                buf.append("java.util.Locale locale;");
-                buf.append("pivot.util.Resources resources;");
-
-                // Process @Load fields
+                // Process @Load fields (and their associated @Bind fields)
                 if (loadGroups != null) {
                     for (String loadFieldName : loadGroups) {
                         AnnotationDossier.LoadGroup loadGroup = loadGroups.get(loadFieldName);
@@ -395,28 +388,30 @@ public class BindProcessor extends AbstractProcessor {
         private void processCompiledLoad(StringBuilder buf, JCClassDecl classDeclaration,
             JCVariableDecl loadField, ArrayList<JCVariableDecl> bindFields) {
             FileObject sourceFile = null;
+
             if (classDeclaration.sym != null) {
                 sourceFile = classDeclaration.sym.sourcefile;
             }
 
             if (sourceFile != null) {
-                JavaFileManager fileManager = context.get(JavaFileManager.class);
-
                 String loadFieldName = loadField.name.toString();
 
-                // Get annotation properties
-                JCAnnotation loadAnnotation = getLoadAnnotation(loadField);
-                String resourceName = getAnnotationProperty(loadAnnotation, "resourceName");
-
-                InputStream inputStream;
                 try {
+                    JavaFileManager fileManager = context.get(JavaFileManager.class);
+
+                    // Get annotation properties
+                    JCAnnotation loadAnnotation = getLoadAnnotation(loadField);
+                    String resourceName = getAnnotationProperty(loadAnnotation, "resourceName");
+
+                    InputStream inputStream;
                     if (resourceName.startsWith("/")) {
-                        resourceName = resourceName.substring(1);
+                        // Absolute URL uses ClassLoader
                         ClassLoader classLoader = fileManager.getClassLoader
                             (StandardLocation.SOURCE_PATH);
-                        URL resourceLocation = classLoader.getResource(resourceName);
+                        URL resourceLocation = classLoader.getResource(resourceName.substring(1));
                         inputStream = new BufferedInputStream(resourceLocation.openStream());
                     } else {
+                        // Relative URL uses JavaFileManager
                         String packageName = classDeclaration.sym.packge().toString();
                         FileObject resourceFile = fileManager.getFileForInput
                             (StandardLocation.SOURCE_PATH, packageName, resourceName);
@@ -437,33 +432,33 @@ public class BindProcessor extends AbstractProcessor {
                         // Public and protected fields get kept for subclasses
                         if ((loadField.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
                             buf.append(String.format
-                                ("namedObjectDictionaries.put(\"%s\", __namedObjects);",
+                                ("namedObjectDictionaries.put(\"%s\", _namedObjects);",
                                 loadFieldName));
                         }
 
                         // Bind @Load member
                         buf.append(String.format
-                            ("%s = (%s)__result;", loadFieldName, loadField.vartype.toString()));
+                            ("%s = (%s)_result;", loadFieldName, loadField.vartype.toString()));
 
                         // Bind @Bind members
                         for (JCVariableDecl bindField : bindFields) {
                             String bindFieldName = bindField.name.toString();
                             JCAnnotation bindAnnotation = getBindAnnotation(bindField);
 
-                            String wtkxID = getAnnotationProperty(bindAnnotation, "id");
-                            if (wtkxID == null) {
+                            String id = getAnnotationProperty(bindAnnotation, "id");
+                            if (id == null) {
                                 // The bind name defaults to the field name
-                                wtkxID = bindFieldName;
+                                id = bindFieldName;
                             }
 
                             buf.append(String.format
-                                ("object = __namedObjects.get(\"%s\");", wtkxID));
+                                ("_result = _namedObjects.get(\"%s\");", id));
                             buf.append
-                                ("if (object == null) ");
+                                ("if (_result == null) ");
                             buf.append(String.format
-                                ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", wtkxID));
+                                ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", id));
                             buf.append(String.format
-                                ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
+                                ("%s = (%s)_result;", bindFieldName, bindField.vartype.toString()));
                         }
 
                         // Close local scope
@@ -472,14 +467,24 @@ public class BindProcessor extends AbstractProcessor {
                         inputStream.close();
                     }
                 } catch (Exception ex) {
+                    ex.printStackTrace();
                     processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
                         "Error trying to load field " + classDeclaration.name.toString() + "." +
                         loadFieldName + ": " + ex.toString());
                 }
             } else {
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                    "Unable to determine source file location for " +
-                    classDeclaration.name.toString());
+                if (classDeclaration.name.isEmpty()) {
+                    // NOTE: Anonymous inner classes do not have an associated
+                    // symbol, so their source file cannot be determined, and
+                    // we cannot compile their annotations. This bug has been
+                    // filed to Sun
+                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                        "WTKX compilation of anonymous classes is not supported.");
+                } else {
+                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                        "Unable to determine source file location for class: " +
+                        classDeclaration.name.toString());
+                }
             }
         }
 
@@ -504,6 +509,9 @@ public class BindProcessor extends AbstractProcessor {
             JCVariableDecl loadField, ArrayList<JCVariableDecl> bindFields) {
             String loadFieldName = loadField.name.toString();
 
+            // Open local scope for variable name protection
+            buf.append("{");
+
             // Get annotation properties
             JCAnnotation loadAnnotation = getLoadAnnotation(loadField);
             String resourceName = getAnnotationProperty(loadAnnotation, "resourceName");
@@ -520,13 +528,13 @@ public class BindProcessor extends AbstractProcessor {
             }
 
             // Attempt to load the resources
-            buf.append("resources = null;");
+            buf.append("pivot.util.Resources resources = null;");
             if (baseName != null) {
                 if (language == null) {
-                    buf.append("locale = java.util.Locale.getDefault();");
+                    buf.append("java.util.Locale locale = java.util.Locale.getDefault();");
                 } else {
                     buf.append(String.format
-                        ("locale = new java.util.Locale(\"%s\");", language));
+                        ("java.util.Locale locale = new java.util.Locale(\"%s\");", language));
                 }
                 buf.append("try {");
                 buf.append(String.format
@@ -544,8 +552,9 @@ public class BindProcessor extends AbstractProcessor {
             }
 
             // Load the WTKX resource
-            buf.append("wtkxSerializer = new pivot.wtkx.WTKXSerializer(resources);");
-            buf.append(String.format("location = getClass().getResource(\"%s\");", resourceName));
+            buf.append("Object object = null;");
+            buf.append("pivot.wtkx.WTKXSerializer wtkxSerializer = new pivot.wtkx.WTKXSerializer(resources);");
+            buf.append(String.format("java.net.URL location = getClass().getResource(\"%s\");", resourceName));
             buf.append("try {");
             buf.append("object = wtkxSerializer.readObject(location);");
             buf.append("} catch (Exception ex) {");
@@ -568,21 +577,24 @@ public class BindProcessor extends AbstractProcessor {
                 String bindFieldName = bindField.name.toString();
                 JCAnnotation bindAnnotation = getBindAnnotation(bindField);
 
-                String wtkxID = getAnnotationProperty(bindAnnotation, "id");
-                if (wtkxID == null) {
+                String id = getAnnotationProperty(bindAnnotation, "id");
+                if (id == null) {
                     // The bind name defaults to the field name
-                    wtkxID = bindFieldName;
+                    id = bindFieldName;
                 }
 
                 buf.append(String.format
-                    ("object = wtkxSerializer.getObjectByID(\"%s\");", wtkxID));
+                    ("object = wtkxSerializer.getObjectByID(\"%s\");", id));
                 buf.append
                     ("if (object == null) ");
                 buf.append(String.format
-                    ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", wtkxID));
+                    ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", id));
                 buf.append(String.format
                     ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
             }
+
+            // Close local scope
+            buf.append("}");
         }
 
         /**
@@ -605,10 +617,10 @@ public class BindProcessor extends AbstractProcessor {
                 JCAnnotation bindAnnotation = getBindAnnotation(bindField);
                 String loadFieldName = getAnnotationProperty(bindAnnotation, "fieldName");
 
-                String wtkxID = getAnnotationProperty(bindAnnotation, "id");
-                if (wtkxID == null) {
+                String id = getAnnotationProperty(bindAnnotation, "id");
+                if (id == null) {
                     // The bind name defaults to the field name
-                    wtkxID = bindFieldName;
+                    id = bindFieldName;
                 }
 
                 buf.append(String.format
@@ -622,11 +634,11 @@ public class BindProcessor extends AbstractProcessor {
                     ("}");
 
                 buf.append(String.format
-                    ("object = namedObjects.get(\"%s\");", wtkxID));
+                    ("object = namedObjects.get(\"%s\");", id));
                 buf.append
                     ("if (object == null) ");
                 buf.append(String.format
-                    ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", wtkxID));
+                    ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", id));
                 buf.append(String.format
                     ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
             }

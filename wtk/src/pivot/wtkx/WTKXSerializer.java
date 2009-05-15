@@ -729,8 +729,6 @@ public class WTKXSerializer implements Serializer<Object> {
 
     /**
      * Interprets an object from a WTKX input stream.
-     * <p>
-     * TODO This method should take a ClassLoader.
      *
      * @param inputStream
      * The data stream from which the WTKX will be read
@@ -745,8 +743,8 @@ public class WTKXSerializer implements Serializer<Object> {
         }
 
         StringBuilder buf = new StringBuilder();
-        buf.append("Object __result = null;");
-        buf.append("pivot.collections.Dictionary<String, Object> __namedObjects = " +
+        buf.append("Object _result = null;");
+        buf.append("pivot.collections.Dictionary<String, Object> _namedObjects = " +
             "new pivot.collections.HashMap<String, Object>();");
 
         // Parse the XML stream
@@ -819,13 +817,12 @@ public class WTKXSerializer implements Serializer<Object> {
                                     + localName + " tag.");
                             }
 
-                            String className = namespaceURI + "." + localName.replace('.', '$');
-
+                            String className = namespaceURI + "." + localName;
                             buf.append(String.format
-                                ("%s __%d = new %s();", className, ++Element.counter, className));
+                                ("%s _%d = new %s();", className, ++Element.counter, className));
 
                             try {
-                                // TODO Pass ClassLoader here
+                                className = namespaceURI + "." + localName.replace('.', '$');
                                 Class<?> type = Class.forName(className, false, getClass().getClassLoader());
                                 element = new Element(element, Element.Type.INSTANCE,
                                     attributes, type, Element.counter);
@@ -850,10 +847,10 @@ public class WTKXSerializer implements Serializer<Object> {
 
                                 // Instantiate the property so we have a reference to it
                                 buf.append(String.format
-                                    ("%s __%d = __%d.%s();", valueType.getName(), ++Element.counter,
+                                    ("%s _%d = _%d.%s();", valueType.getName().replace('$', '.'), ++Element.counter,
                                     element.ref, getterMethod.getName()));
                                 buf.append(String.format
-                                    ("assert (__%d != null) : \"Read-only properties cannot be null.\";",
+                                    ("assert (_%d != null) : \"Read-only properties cannot be null.\";",
                                     Element.counter));
 
                                 element = new Element(element, Element.Type.READ_ONLY_PROPERTY,
@@ -881,7 +878,7 @@ public class WTKXSerializer implements Serializer<Object> {
                             if (parentType != null
                                 && (Sequence.class.isAssignableFrom(parentType)
                                 || ListenerList.class.isAssignableFrom(parentType))) {
-                                buf.append(String.format("__%d.add(__%d);",
+                                buf.append(String.format("_%d.add(_%d);",
                                     element.parent.ref, element.ref));
                             }
                         }
@@ -893,7 +890,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                     + " must not be null.");
                             }
 
-                            buf.append(String.format("__namedObjects.put(\"%s\", __%d);", id, element.ref));
+                            buf.append(String.format("_namedObjects.put(\"%s\", _%d);", id, element.ref));
                         }
 
                         break;
@@ -912,7 +909,7 @@ public class WTKXSerializer implements Serializer<Object> {
                         Class<?> parentType = (Class<?>)element.parent.value;
                         Method setterMethod = BeanDictionary.getSetterMethod(parentType, localName, type);
 
-                        buf.append(String.format("__%d.%s(__%d);",
+                        buf.append(String.format("_%d.%s(_%d);",
                             element.parent.ref, setterMethod.getName(), element.ref));
 
                         break;
@@ -934,22 +931,29 @@ public class WTKXSerializer implements Serializer<Object> {
                                 }
 
                                 // Resolve and apply the attribute
-                                // TODO Resolve
-                                // TODO attribute.value shouldn't always be quoted
-                                buf.append(String.format
-                                    ("__%d.put(\"%s\", \"%s\")",
-                                    element.ref, attribute.localName, attribute.value));
+                                buf.append(String.format("_%d.put(\"%s\", %s);", element.ref,
+                                    attribute.localName, resolveSource(attribute.value, null)));
                             }
                         } else {
                             // The element represents a typed object; apply the attributes
                             for (Attribute attribute : element.attributes) {
+                                Class<?> attributeType = BeanDictionary.getType(type, attribute.localName);
+
                                 if (Character.isUpperCase(attribute.localName.charAt(0))) {
                                     // The property represents an attached value
-                                    // TODO
-                                    //setStaticProperty(attribute, element.value);
-                                } else {
-                                    Class<?> attributeType = BeanDictionary.getType(type, attribute.localName);
+                                    String propertyName = attribute.localName.substring
+                                        (attribute.localName.lastIndexOf(".") + 1);
+                                    propertyName = Character.toUpperCase(propertyName.charAt(0)) +
+                                        propertyName.substring(1);
+                                    String setterMethodName = BeanDictionary.SET_PREFIX + propertyName;
 
+                                    String propertyClassName = attribute.namespaceURI + "."
+                                        + attribute.localName.substring(0, attribute.localName.length()
+                                        - (propertyName.length() + 1));
+
+                                    buf.append(String.format("%s.%s(_%d, %s);", propertyClassName,
+                                        setterMethodName, element.ref, resolveSource(attribute.value, attributeType)));
+                                } else {
                                     if (attributeType != null
                                         && ListenerList.class.isAssignableFrom(attributeType)) {
                                         // The property represents a listener list
@@ -976,10 +980,8 @@ public class WTKXSerializer implements Serializer<Object> {
                                             attribute.localName.substring(1);
                                         String setterMethodName = BeanDictionary.SET_PREFIX + key;
 
-                                        buf.append(resolveSource(attribute.value, attributeType,
-                                            ++Element.counter));
-                                        buf.append(String.format("__%d.%s(__%d);", element.ref,
-                                            setterMethodName, Element.counter));
+                                        buf.append(String.format("_%d.%s(%s);", element.ref,
+                                            setterMethodName, resolveSource(attribute.value, attributeType)));
                                     }
                                 }
                             }
@@ -998,7 +1000,7 @@ public class WTKXSerializer implements Serializer<Object> {
                     // If this is the top of the stack, return this element's value;
                     // otherwise, move up the stack
                     if (element.parent == null) {
-                        buf.append(String.format("__result = __%d;", element.ref));
+                        buf.append(String.format("_result = _%d;", element.ref));
                     } else {
                         element = element.parent;
                     }
@@ -1201,117 +1203,104 @@ public class WTKXSerializer implements Serializer<Object> {
         return resolvedValue;
     }
 
-    private String resolveSource(String attributeValue, Class<?> propertyType, int ref)
+    private String resolveSource(String attributeValue, Class<?> propertyType)
         throws MalformedURLException {
-        StringBuilder buf = new StringBuilder();
+        String result = null;
 
         if (propertyType == Boolean.class
             || propertyType == Boolean.TYPE) {
-            buf.append(String.format("boolean __%d = %b;",
-                ref, Boolean.parseBoolean(attributeValue)));
+            result = String.valueOf(Boolean.parseBoolean(attributeValue));
         } else if (propertyType == Character.class
             || propertyType == Character.TYPE) {
             if (attributeValue.length() > 0) {
-                buf.append(String.format("char __%d = '%c';",
-                    ref, attributeValue.charAt(0)));
+                result = String.format("'%c'", attributeValue.charAt(0));
             }
         } else if (propertyType == Byte.class
             || propertyType == Byte.TYPE) {
             try {
-                buf.append(String.format("byte __%d = %d;",
-                    ref, Byte.parseByte(attributeValue)));
+                result = String.format("(byte)%d", Byte.parseByte(attributeValue));
             } catch(NumberFormatException exception) {
-                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
+                result = String.format("\"%s\"", attributeValue);
             }
         } else if (propertyType == Short.class
             || propertyType == Short.TYPE) {
             try {
-                buf.append(String.format("short __%d = %d;",
-                    ref, Short.parseShort(attributeValue)));
+                result = String.format("(short)%d", Short.parseShort(attributeValue));
             } catch(NumberFormatException exception) {
-                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
+                result = String.format("\"%s\"", attributeValue);
             }
         } else if (propertyType == Integer.class
             || propertyType == Integer.TYPE) {
             try {
-                buf.append(String.format("int __%d = %d;",
-                    ref, Integer.parseInt(attributeValue)));
+                result = String.format("(int)%d", Integer.parseInt(attributeValue));
             } catch(NumberFormatException exception) {
-                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
+                result = String.format("\"%s\"", attributeValue);
             }
         } else if (propertyType == Long.class
             || propertyType == Long.TYPE) {
             try {
-                buf.append(String.format("long __%d = %d;",
-                    ref, Long.parseLong(attributeValue)));
+                result = String.format("(long)%d", Long.parseLong(attributeValue));
             } catch(NumberFormatException exception) {
-                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
+                result = String.format("\"%s\"", attributeValue);
             }
         } else if (propertyType == Float.class
             || propertyType == Float.TYPE) {
             try {
-                buf.append(String.format("float __%d = %f;",
-                    ref, Float.parseFloat(attributeValue)));
+                result = String.format("(float)%f", Float.parseFloat(attributeValue));
             } catch(NumberFormatException exception) {
-                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
+                result = String.format("\"%s\"", attributeValue);
             }
         } else if (propertyType == Double.class
             || propertyType == Double.TYPE) {
             try {
-                buf.append(String.format("double __%d = %f;",
-                    ref, Double.parseDouble(attributeValue)));
+                result = String.format("(double)%f", Double.parseDouble(attributeValue));
             } catch(NumberFormatException exception) {
-                buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
+                result = String.format("\"%s\"", attributeValue);
             }
         } else {
             if (attributeValue.length() > 0) {
                 if (attributeValue.charAt(0) == URL_PREFIX) {
                     if (attributeValue.length() > 1) {
                         if (attributeValue.charAt(1) == URL_PREFIX) {
-                            buf.append(String.format("String __%d = \"%s\";",
-                                ref, attributeValue.substring(1)));
+                            result = String.format("\"%s\"", attributeValue.substring(1));
                         } else {
-                            buf.append(String.format
-                                ("java.net.URL __%d = getClass().getResource(\"%s\");",
-                                ref, attributeValue.substring(1)));
+                            result = String.format("getClass().getResource(\"%s\")", attributeValue.substring(1));
                         }
                     }
                 } else if (attributeValue.charAt(0) == RESOURCE_KEY_PREFIX) {
                     if (attributeValue.length() > 1) {
                         if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
-                            buf.append(String.format("String __%d = \"%s\";",
-                                ref, attributeValue.substring(1)));
+                            result = String.format("\"%s\"", attributeValue.substring(1));
                         } else {
                             // TODO
-                            buf.append(String.format("String __%d = \"%s\";", ref, attributeValue));
+                            result = String.format("\"%s\"", attributeValue);
                         }
                     }
                 } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {
                     if (attributeValue.length() > 1) {
                         if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
-                            buf.append(String.format("String __%d = \"%s\";",
-                                ref, attributeValue.substring(1)));
+                            result = String.format("\"%s\"", attributeValue.substring(1));
                         } else {
-                            buf.append(String.format("%s __%d = (%s)__namedObjects.get(\"%s\");",
-                                propertyType.getName(), ref, propertyType.getName(),
-                                attributeValue.substring(1)));
+                            String className = propertyType == null ?
+                                "Object" : propertyType.getName();
+                            result = String.format("(%s)_namedObjects.get(\"%s\");",
+                                className, attributeValue.substring(1));
                         }
                     }
                 } else {
-                    buf.append(String.format("String __%d = \"%s\";",
-                        ref, attributeValue));
+                    result = String.format("\"%s\"", attributeValue);
                 }
             } else {
-                buf.append(String.format("String __%d = \"\";", ref));
+                result = "\"\"";
             }
         }
 
-        if (buf.length() == 0) {
+        if (result == null) {
             // Fall-through case
-            buf.append(String.format("String __%d = null;", ref));
+            result = "null";
         }
 
-        return buf.toString();
+        return result;
     }
 
     /**
