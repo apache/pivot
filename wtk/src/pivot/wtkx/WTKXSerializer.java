@@ -1283,7 +1283,7 @@ public class WTKXSerializer implements Serializer<Object> {
                         } else {
                             String className = propertyType == null ?
                                 "Object" : propertyType.getName();
-                            result = String.format("(%s)_namedObjects.get(\"%s\");",
+                            result = String.format("(%s)_namedObjects.get(\"%s\")",
                                 className, attributeValue.substring(1));
                         }
                     }
