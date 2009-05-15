@@ -73,7 +73,7 @@ import pivot.util.Resources;
  * }
  * </pre>
  * <h3>Binding implementations:</h3>
- * WTKX binding can be performed using one of three methods. It is important
+ * WTKX binding can be performed using one of two methods. It is important
  * for callers to understand these methods so that they may decide which is
  * appropriate for them. The methods are as follows:
  * <ol>
@@ -99,18 +99,6 @@ import pivot.util.Resources;
  *     <br/><br/>
  *     Note that it is possible to use the default binding method during
  *     development and deploy using the annotation processor.
- *     <br/><br/>
- *   </li>
- *   <li>
- *     <b>Compiled</b>
- *     <br/><br/>
- *     As a performance optimization, <tt>BindProcessor</tt> supports a
- *     <tt>compile=true</tt> option. This option will cause the WTKX to be
- *     compiled into the class and loaded via compiled code. This method is
- *     suitable for callers who are comfortable with the dependency implied by
- *     the annotation processor (outlined above) and comfortable with the
- *     specifics of the <tt>compile=true</tt> option. See the
- *     <tt>BindProcessor</tt> class for more details.
  *     <br/><br/>
  *   </li>
  * </ol>
@@ -155,13 +143,6 @@ public abstract class Bindable {
          * default locale will be used.
          */
         public String locale() default "\0";
-
-        /**
-         * Indicates whether the WTKX resource is a compilable resource. Set
-         * this to <tt>false</tt> if your WTKX is dynamically generated at
-         * runtime. Defaults to <tt>true</tt>.
-         */
-        public boolean compilable() default true;
     }
 
     /**

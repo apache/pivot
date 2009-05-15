@@ -61,40 +61,16 @@ import com.sun.source.util.Trees;
  * <b>Note</b>: this class utilizes classes specific to Sun's <tt>javac</tt>
  * implementation, and as such, it will only work with a Sun <tt>javac</tt>
  * compiler.
- * <h3>Options:</h3>
- * As an optimization, this processor supports a <tt>compile</tt> option. When
- * this option is set to <tt>true</tt>, the WTKX will be compiled into the
- * class and loaded via compiled code (as opposed to loaded at runtime using
- * {@link WTKXSerializer}). If unspecified, the WTKX loading will be done at
- * runtime.
- * <p>
- * There are some considerations when using the <tt>compile=true</tt>
- * option. Namely:
- * <ol>
- *   <li>
- *     WTKX URL resolution syntax (<tt>"&#64;relative/path.png"</tt>)
- *     will load relative URLs relative to the <tt>Bindable</tt>
- *     subclass (as opposed to relative to the WTKX file, which is
- *     normally the case). It is therefore recommended that when this
- *     option is used, your WTKX file should live in the same directory
- *     as your <tt>Bindable</tt> subclass to eliminate any ambiguity.
- *   </li>
- *   <li>
- *     This option may render the WTKX file superfluous at runtime since its
- *     contents are compiled directly into the class. In such cases, callers
- *     may choose to exclude the WTKX file from their JAR file.
- *   </li>
- * </ol>
  * <h3>Usage:</h3>
  * To use this annotation processor at the command line, pass the following
  * options to <tt>javac</tt>:
  * <pre>
- *     -processor pivot.wtkx.BindProcessor [-Acompile=&lt;boolean&gt;]
+ *     -processor pivot.wtkx.BindProcessor
  * </pre>
  * To use this annotation processor with Ant, add the following line to your
  * Ant <tt>javac</tt> task:
  * <pre>
- *     &lt;compilerarg line="-processor pivot.wtkx.BindProcessor [-Acompile=&lt;boolean&gt;]"/&gt;
+ *     &lt;compilerarg line="-processor pivot.wtkx.BindProcessor"/&gt;
  * </pre>
  *
  * @author tvolkert
@@ -102,7 +78,6 @@ import com.sun.source.util.Trees;
  * @see Bindable.Bind
  */
 @SupportedAnnotationTypes("pivot.wtkx.*")
-@SupportedOptions("compile")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class BindProcessor extends AbstractProcessor {
     /**
@@ -298,14 +273,7 @@ public class BindProcessor extends AbstractProcessor {
                     for (String loadFieldName : loadGroups) {
                         AnnotationDossier.LoadGroup loadGroup = loadGroups.get(loadFieldName);
                         JCVariableDecl loadField = loadGroup.loadField;
-                        JCAnnotation loadAnnotation = getLoadAnnotation(loadField);
-                        Boolean compilable = getAnnotationProperty(loadAnnotation, "compilable");
-
-                        if (compile && compilable != Boolean.FALSE) {
-                            processCompiledLoad(buf, classDeclaration, loadField, loadGroup.bindFields);
-                        } else {
-                            processRuntimeLoad(buf, classDeclaration, loadField, loadGroup.bindFields);
-                        }
+                        processLoad(buf, classDeclaration, loadField, loadGroup.bindFields);
                     }
                 }
 
@@ -370,126 +338,6 @@ public class BindProcessor extends AbstractProcessor {
 
         /**
          * Processes an <tt>@Load</tt> field and associated <tt>@Bind</tt>
-         * fields into compiled code.
-         *
-         * @param buf
-         * The buffer into which to write the source code
-         *
-         * @param classDeclaration
-         * The AST node of the class that contains the <tt>@Load</tt> field
-         *
-         * @param loadField
-         * The AST node with the <tt>@Load</tt> annotation
-         *
-         * @param bindFields
-         * List of AST nodes with the <tt>@Bind</tt> annotations that are
-         * associated with the load field
-         */
-        private void processCompiledLoad(StringBuilder buf, JCClassDecl classDeclaration,
-            JCVariableDecl loadField, ArrayList<JCVariableDecl> bindFields) {
-            FileObject sourceFile = null;
-
-            if (classDeclaration.sym != null) {
-                sourceFile = classDeclaration.sym.sourcefile;
-            }
-
-            if (sourceFile != null) {
-                String loadFieldName = loadField.name.toString();
-
-                try {
-                    JavaFileManager fileManager = context.get(JavaFileManager.class);
-
-                    // Get annotation properties
-                    JCAnnotation loadAnnotation = getLoadAnnotation(loadField);
-                    String resourceName = getAnnotationProperty(loadAnnotation, "resourceName");
-
-                    InputStream inputStream;
-                    if (resourceName.startsWith("/")) {
-                        // Absolute URL uses ClassLoader
-                        ClassLoader classLoader = fileManager.getClassLoader
-                            (StandardLocation.SOURCE_PATH);
-                        URL resourceLocation = classLoader.getResource(resourceName.substring(1));
-                        inputStream = new BufferedInputStream(resourceLocation.openStream());
-                    } else {
-                        // Relative URL uses JavaFileManager
-                        String packageName = classDeclaration.sym.packge().toString();
-                        FileObject resourceFile = fileManager.getFileForInput
-                            (StandardLocation.SOURCE_PATH, packageName, resourceName);
-                        inputStream = resourceFile.openInputStream();
-                    }
-
-                    try {
-                        // TODO Handle resources
-                        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                        String blockCode = wtkxSerializer.readSource(inputStream);
-
-                        // Open local scope for variable name protection
-                        buf.append("{");
-
-                        // Add interpreted code
-                        buf.append(blockCode);
-
-                        // Public and protected fields get kept for subclasses
-                        if ((loadField.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
-                            buf.append(String.format
-                                ("namedObjectDictionaries.put(\"%s\", _namedObjects);",
-                                loadFieldName));
-                        }
-
-                        // Bind @Load member
-                        buf.append(String.format
-                            ("%s = (%s)_result;", loadFieldName, loadField.vartype.toString()));
-
-                        // Bind @Bind members
-                        for (JCVariableDecl bindField : bindFields) {
-                            String bindFieldName = bindField.name.toString();
-                            JCAnnotation bindAnnotation = getBindAnnotation(bindField);
-
-                            String id = getAnnotationProperty(bindAnnotation, "id");
-                            if (id == null) {
-                                // The bind name defaults to the field name
-                                id = bindFieldName;
-                            }
-
-                            buf.append(String.format
-                                ("_result = _namedObjects.get(\"%s\");", id));
-                            buf.append
-                                ("if (_result == null) ");
-                            buf.append(String.format
-                                ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", id));
-                            buf.append(String.format
-                                ("%s = (%s)_result;", bindFieldName, bindField.vartype.toString()));
-                        }
-
-                        // Close local scope
-                        buf.append("}");
-                    } finally {
-                        inputStream.close();
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        "Error trying to load field " + classDeclaration.name.toString() + "." +
-                        loadFieldName + ": " + ex.toString());
-                }
-            } else {
-                if (classDeclaration.name.isEmpty()) {
-                    // NOTE: Anonymous inner classes do not have an associated
-                    // symbol, so their source file cannot be determined, and
-                    // we cannot compile their annotations. This bug has been
-                    // filed to Sun
-                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        "WTKX compilation of anonymous classes is not supported.");
-                } else {
-                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        "Unable to determine source file location for class: " +
-                        classDeclaration.name.toString());
-                }
-            }
-        }
-
-        /**
-         * Processes an <tt>@Load</tt> field and associated <tt>@Bind</tt>
          * fields into runtime code.
          *
          * @param buf
@@ -505,7 +353,7 @@ public class BindProcessor extends AbstractProcessor {
          * List of AST nodes with the <tt>@Bind</tt> annotations that are
          * associated with the load field
          */
-        private void processRuntimeLoad(StringBuilder buf, JCClassDecl classDeclaration,
+        private void processLoad(StringBuilder buf, JCClassDecl classDeclaration,
             JCVariableDecl loadField, ArrayList<JCVariableDecl> bindFields) {
             String loadFieldName = loadField.name.toString();
 
@@ -654,7 +502,6 @@ public class BindProcessor extends AbstractProcessor {
     private Parser.Factory parserFactory;
 
     private BindInjector bindInjector = new BindInjector();
-    private boolean compile = false;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
@@ -664,11 +511,6 @@ public class BindProcessor extends AbstractProcessor {
         context = ((JavacProcessingEnvironment)processingEnvironment).getContext();
         scannerFactory = Scanner.Factory.instance(context);
         parserFactory = Parser.Factory.instance(context);
-
-        String compileOption = processingEnvironment.getOptions().get("compile");
-        if (compileOption != null) {
-            compile = Boolean.parseBoolean(compileOption);
-        }
     }
 
     @Override
