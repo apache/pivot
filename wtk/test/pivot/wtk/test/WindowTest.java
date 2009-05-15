@@ -22,6 +22,7 @@ import pivot.wtk.Component;
 import pivot.wtk.ComponentListener;
 import pivot.wtk.Container;
 import pivot.wtk.Cursor;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Dialog;
 import pivot.wtk.Display;
 import pivot.wtk.Frame;
@@ -133,5 +134,9 @@ public class WindowTest implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(WindowTest.class, args);
     }
 }

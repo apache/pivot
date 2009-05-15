@@ -733,7 +733,11 @@ public abstract class Component implements ConstrainedVisual {
             // of being laid out; it must be flagged as invalid to ensure
             // that layout is propagated downward when validate() is
             // called on it
-            invalidate();
+            if (visible) {
+                // We don't invalidate if the component is not visible; if
+                // the component later becomes visible, we validate
+                invalidate();
+            }
 
             // Redraw the region formerly occupied by this component
             if (parent != null) {
@@ -1161,10 +1165,9 @@ public abstract class Component implements ConstrainedVisual {
                 parent.repaint(getDecoratedBounds());
             }
 
+            // Ensure the layout is valid
             if (visible) {
-                // This component is being shown; ensure that it's layout
-                // is valid
-                invalidate();
+                validate();
             }
 
             componentListeners.visibleChanged(this);
