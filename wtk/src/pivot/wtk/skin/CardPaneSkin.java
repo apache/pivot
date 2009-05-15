@@ -152,7 +152,9 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             fadeOutDecorator.setOpacity(1.0f - percentComplete);
             fadeInDecorator.setOpacity(percentComplete);
 
-            invalidateComponent();
+            if (sizeToSelection) {
+                invalidateComponent();
+            }
         }
     }
 
@@ -439,8 +441,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                             (SelectionChangeTransition)transition;
                         cardPane.setSelectedIndex(selectionChangeTransition.getTo());
                         CardPaneSkin.this.selectionChangeTransition = null;
-
-                        invalidateComponent();
                     }
                 });
             }
@@ -461,7 +461,10 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             && selectionChangeTransition != null) {
             selectionChangeTransition.stop();
             selectionChangeTransition = null;
-            invalidateComponent();
+
+            if (sizeToSelection) {
+                invalidateComponent();
+            }
         }
     }
 
