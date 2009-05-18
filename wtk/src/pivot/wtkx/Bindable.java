@@ -178,6 +178,17 @@ public abstract class Bindable {
     }
 
     /**
+     * Interface denoting a WTKX object hierarchy to which we can bind values.
+     *
+     * @author tvolkert
+     */
+    public static interface ObjectHierarchy {
+        <T> T getRootObject();
+
+        <T> T getObjectByID(String id);
+    }
+
+    /**
      * Creates a new <tt>Bindable</tt> object.
      */
     protected Bindable() {

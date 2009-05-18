@@ -52,7 +52,7 @@ import pivot.util.ThreadUtilities;
  *
  * @author gbrown
  */
-public class WTKXSerializer implements Serializer<Object> {
+public class WTKXSerializer implements Serializer<Object>, Bindable.ObjectHierarchy {
     private static class Element  {
         public enum Type {
             INSTANCE,
@@ -213,6 +213,7 @@ public class WTKXSerializer implements Serializer<Object> {
     private URL location = null;
     private Resources resources = null;
 
+    private Object rootObject = null;
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
 
@@ -703,6 +704,9 @@ public class WTKXSerializer implements Serializer<Object> {
         // subsequent call to this method
         location = null;
 
+        // Set the root object
+        rootObject = object;
+
         return object;
     }
 
@@ -742,6 +746,21 @@ public class WTKXSerializer implements Serializer<Object> {
         }
 
         return serializer;
+    }
+
+    /**
+     * Retrieves the root object of the WTKX hierarchy.
+     *
+     * @param <T>
+     * The type of the object to return.
+     *
+     * @return
+     * The root object, or <tt>null</tt> if this serializer has not yet read an
+     * object from an input stream.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getRootObject() {
+        return (T)rootObject;
     }
 
     /**
