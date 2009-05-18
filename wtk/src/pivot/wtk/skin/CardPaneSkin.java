@@ -153,6 +153,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
             if (sizeToSelection) {
                 invalidateComponent();
+            } else {
+                repaintComponent();
             }
         }
     }
@@ -356,6 +358,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     public void setSizeToSelection(boolean sizeToSelection) {
         this.sizeToSelection = sizeToSelection;
+        invalidateComponent();
     }
 
     public SelectionChangeEffect getSelectionChangeEffect() {
