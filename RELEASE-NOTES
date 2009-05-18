@@ -20,23 +20,23 @@ Release notes for Pivot 1.2:
 New Features
 ------------
 
-- Drawing (vector image) support. Pivot now supports an API for defining and 
-  rendering vector graphics (PIVOT-18). 
+- Drawing (vector image) support. Pivot now supports an API for defining and
+  rendering vector graphics (PIVOT-18).
 
-- Add basic movie support. A MovieView component has been added that supports 
-  basic movie playback. However, serialization support for common video formats 
+- Add basic movie support. A MovieView component has been added that supports
+  basic movie playback. However, serialization support for common video formats
   has not yet been implemented (PIVOT-19).
 
 - Allow caller to specify a FileFilter in pivot.io.Folder (PIVOT-49).
 
-- Create a strictValidation style in TerraTextInputSkin. This style makes 
-  text inputs behave as if they have an input mask applied: when this style is 
-  set to true, input that would yield an invalid state (as defined by the 
+- Create a strictValidation style in TerraTextInputSkin. This style makes
+  text inputs behave as if they have an input mask applied: when this style is
+  set to true, input that would yield an invalid state (as defined by the
   Validator) is disallowed (PIVOT-62).
 
 - Display host scaling. Users can now scale the display host for accessibility
-  purposes or high-resolution displays. Control-Shift-mouse wheel and 
-  Control-Shift +/- allows the user to dynamically scale the display in a 
+  purposes or high-resolution displays. Control-Shift-mouse wheel and
+  Control-Shift +/- allows the user to dynamically scale the display in a
   running Pivot app (PIVOT-83).
 
 - Create Component.getGraphics(). This new method returns a graphics context
@@ -48,7 +48,7 @@ New Features
   load a WTKX file into a member variable and bind member variables to named
   objects declared in the WTKX source (PIVOT-111).
 
-- Support full-screen mode in DesktopApplicationContext. A key combination 
+- Support full-screen mode in DesktopApplicationContext. A key combination
   (Control-Shift-F) has been added to allow a user to toggle between windowed
   and full-screen exclusive mode (PIVOT-113).
 
@@ -57,11 +57,11 @@ New Features
 
 - WTKXSerializer interpreter (TBD) (PIVOT-116).
 
-- Provide a means for an application to handle "about" information. 
-  Applications often provide an "about box" that displays information about the 
-  application including title, version number, etc. Pivot now provides an 
-  optional interface for an application to handle "about" presentation such 
-  that it can be called by the application itself as well as by the system menu 
+- Provide a means for an application to handle "about" information.
+  Applications often provide an "about box" that displays information about the
+  application including title, version number, etc. Pivot now provides an
+  optional interface for an application to handle "about" presentation such
+  that it can be called by the application itself as well as by the system menu
   on Mac OSX (PIVOT-117).
 
 
@@ -72,15 +72,15 @@ Improvements
 
 - Update themes to use "provider" architecture, similar to charts (PIVOT-46).
 
-- Use a default comparator in pivot.io.Folder that sorts alphabetically 
+- Use a default comparator in pivot.io.Folder that sorts alphabetically
   (PIVOT-50).
 
 - Add path support for put() and remove() to JSONSerializer (PIVOT-55).
 
-- TableView.RowEditor should be initiated based on a double-click gesture 
+- TableView.RowEditor should be initiated based on a double-click gesture
   (PIVOT-57).
 
-- Rollup should differentiate between user-added and skin-added components 
+- Rollup should differentiate between user-added and skin-added components
   (PIVOT-63).
 
 - Make "bullet" configurable in TerraRollupSkin (PIVOT-64).
@@ -95,12 +95,12 @@ Improvements
   provide an inner Adapter class that implements the interface with default
   no-op methods (PIVOT-80).
 
-- Create Sequence.Tree.Path. The static methods in Sequence.Tree, and 
-  pivot.wtk.TreeView can change from using raw Sequence<Integer> to using Path. 
-  This is not only more explicit, but it allows callers to iterate over the 
+- Create Sequence.Tree.Path. The static methods in Sequence.Tree, and
+  pivot.wtk.TreeView can change from using raw Sequence<Integer> to using Path.
+  This is not only more explicit, but it allows callers to iterate over the
   path, whereas Sequence is not iterable (PIVOT-84).
-  
-- Make WTK structure-like classes immutable (including Point, Dimensions, 
+
+- Make WTK structure-like classes immutable (including Point, Dimensions,
   Insets, etc.) (PIVOT-85).
 
 - Add drop shadows to list button and calendar button popups (PIVOT-90).
@@ -111,9 +111,9 @@ Improvements
 
 - Perform bounds checking on opacity in ImageViewSkin (PIVOT-98).
 
-- Move META-INF/services/javax.xml.stream.XMLInputFactory file into rebundled 
+- Move META-INF/services/javax.xml.stream.XMLInputFactory file into rebundled
   StAX JAR (PIVOT-106).
-  
+
 - Eliminate wtkx:include namespace attribute (PIVOT-120).
 
 - Clean up CardPaneSkin styles; the previous styles for controlling selection
@@ -141,30 +141,30 @@ Bug Fixes
 
 - TreeBranch does not handle comparator completely (PIVOT-61).
 
-- Drop shadows in menu and list button popups don't fade when window is closed 
+- Drop shadows in menu and list button popups don't fade when window is closed
   (PIVOT-65).
-  
+
 - Override both equals() and hashCode() (PIVOT-70).
 
 - Dash array (focused state) values are incorrect (PIVOT-71).
 
 - Threading issues with ApplicationContext$ScheduledCallback (PIVOT-76).
 
-- MenuPopup should automatically close when a user clicks outside its bounds 
+- MenuPopup should automatically close when a user clicks outside its bounds
   (PIVOT-91).
 
 - Exception in DropShadowDecorator (PIVOT-94).
 
-- Build yields incorrect output in environments whose default encoding in not 
+- Build yields incorrect output in environments whose default encoding in not
   UTF-8 (PIVOT-97).
-  
+
 - Minor repaint issue in TerraSpinnerSkin (PIVOT-100).
 
 - Exception thrown upon application startup (PIVOT-101).
 
-- Data-driven component skins do not call render() on renderers before 
+- Data-driven component skins do not call render() on renderers before
   calculating preferred size (PIVOT-107).
-  
+
 - Calendar weekdays don't line up for French and Spanish (PIVOT-108).
 
 - ImageViewSkin does not correctly propagate repaint region (PIVOT-109).
@@ -173,6 +173,6 @@ Bug Fixes
 Additional Notes
 ----------------
 
-- Although the TextArea component is included in this release, it is not 
-  completely functional. It works reliably in read-only mode, but editing 
+- Although the TextArea component is included in this release, it is not
+  completely functional. It works reliably in read-only mode, but editing
   support is incomplete.
