@@ -28,10 +28,8 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Method;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
-import java.nio.CharBuffer;
 
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
@@ -49,7 +47,6 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
-import pivot.serialization.Serializer;
 import pivot.serialization.SerializationException;
 import pivot.util.ListenerList;
 
