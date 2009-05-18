@@ -1,4 +1,3 @@
-
 System Requirements
 ===================
 
@@ -10,13 +9,13 @@ System Requirements
 Project Set-Up
 ==============
 
-* Ensure that JUnit is on your Ant classpath
-  (set the CLASSPATH environment variable accordingly):
+* Ensure that JUnit is on your Ant classpath (set the CLASSPATH environment 
+  variable accordingly):
 
   http://ant.apache.org/manual/OptionalTasks/junit.html
 
-* Ensure that the LiveConnect APIs are on your classpath
-  (set the CLASSPATH environment variable accordingly):
+* Ensure that the LiveConnect APIs are on your classpath (set the CLASSPATH 
+  environment variable accordingly):
 
   Windows and Linux:
   http://java.sun.com/javase/6/webnotes/6u10/plugin2/liveconnect/#COMPILING
@@ -24,11 +23,11 @@ Project Set-Up
   Mac OSX:
   http://developer.apple.com/qa/qa2004/qa1364.html
 
+* Ensure that the JNLP APIs are on your classpath; follow the same process as
+  described in the previous step, substituting javaws.jar for plugin.jar.
+
 * Ensure that the JAVA_HOME environment variable is set correctly
   to point to a Java 6 installation.
-
-* Ensure that the JNLP APIs are on your classpath; follow the same process as
-  above, substituting javaws.jar for plugin.jar.
 
 
 Building Pivot

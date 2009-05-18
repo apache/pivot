@@ -41,3 +41,17 @@ code from "Filthy Rich Clients" by Chet Haase and Romain Guy, which is
 licensed under the Berkeley Software Distribution (BSD) License.
 
 https://filthyrichclients.dev.java.net/
+
+======================================================================
+
+The IM client demo uses the Smack Jabber API developed by Ignite Realtime and
+licensed under the Apache 2.0 license.
+
+http://www.igniterealtime.org/
+
+======================================================================
+
+The scripting demo uses the Groovy scripting engine, which is licensed under 
+the Apache 2.0 license:
+
+http://groovy.codehaus.org/

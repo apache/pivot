@@ -15,55 +15,164 @@
   limitations under the License.
 ================================================================================
 
-Major enhancements in Pivot 1.1 include:
+Release notes for Pivot 1.2:
 
-- New/updated components: 
-  - Accordion - provides navigation capabilities similar to a tab pane, but 
-    arranged vertically
-  - Calendar - basic date picker; both standalone and drop-down versions are 
-    supported
-  - Slider - allows a user to select one of a range of values by moving a 
-    draggable "thumb"
-  - Color Picker - presents a list of selectable color swatches to the user
-  - Support for checkboxes in tree and list views, including mixed state 
-    checkboxes in tree view
-  - Framework support for list, table, and tree view editors
+New Features
+------------
 
-- Improved drag/drop and clipboard support. Pivot applications can now interact 
-  with the desktop just like native apps, with full access to the system 
-  clipboard and drag/drop facilities.
+- Drawing (vector image) support. Pivot now supports an API for defining and 
+  rendering vector graphics (PIVOT-18). 
 
-- File browser support. Pivot now provides out-of-the-box support for browsing 
-  the local file system. Combined with the new drag/drop support, this makes 
-  Pivot an ideal choice for web-based file management applications.
+- Add basic movie support. A MovieView component has been added that supports 
+  basic movie playback. However, serialization support for common video formats 
+  has not yet been implemented (PIVOT-19).
 
-- Input validation framework. Pivot 1.1 includes an extensible framework for 
-  validating user input, allowing applications to provide instant and obvious 
-  feedback when invalid data has been entered.
+- Allow caller to specify a FileFilter in pivot.io.Folder (PIVOT-49).
+
+- Create a strictValidation style in TerraTextInputSkin. This style makes 
+  text inputs behave as if they have an input mask applied: when this style is 
+  set to true, input that would yield an invalid state (as defined by the 
+  Validator) is disallowed (PIVOT-62).
+
+- Display host scaling. Users can now scale the display host for accessibility
+  purposes or high-resolution displays. Control-Shift-mouse wheel and 
+  Control-Shift +/- allows the user to dynamically scale the display in a 
+  running Pivot app (PIVOT-83).
+
+- Create Component.getGraphics(). This new method returns a graphics context
+  suitable for drawing directly to a component without double-buffering
+  (effectively operating directly on the video RAM) (PIVOT-105).
+
+- Provide annotations to map WTKX data to application member variables. @Load
+  and @Bind annotations are now provided that allow a caller to automatically
+  load a WTKX file into a member variable and bind member variables to named
+  objects declared in the WTKX source (PIVOT-111).
+
+- Support full-screen mode in DesktopApplicationContext. A key combination 
+  (Control-Shift-F) has been added to allow a user to toggle between windowed
+  and full-screen exclusive mode (PIVOT-113).
+
+- Add an ActivityIndicator component. This new component allows an application
+  to show the user that a background task is in progress (PIVOT-115).
+
+- WTKXSerializer interpreter (TBD) (PIVOT-116).
+
+- Provide a means for an application to handle "about" information. 
+  Applications often provide an "about box" that displays information about the 
+  application including title, version number, etc. Pivot now provides an 
+  optional interface for an application to handle "about" presentation such 
+  that it can be called by the application itself as well as by the system menu 
+  on Mac OSX (PIVOT-117).
+
+
+Improvements
+------------
+
+- Optimize drop shadow decorator for better performance (PIVOT-36).
+
+- Update themes to use "provider" architecture, similar to charts (PIVOT-46).
+
+- Use a default comparator in pivot.io.Folder that sorts alphabetically 
+  (PIVOT-50).
+
+- Add path support for put() and remove() to JSONSerializer (PIVOT-55).
+
+- TableView.RowEditor should be initiated based on a double-click gesture 
+  (PIVOT-57).
+
+- Rollup should differentiate between user-added and skin-added components 
+  (PIVOT-63).
+
+- Make "bullet" configurable in TerraRollupSkin (PIVOT-64).
+
+- Optimize Viewport by only painting the revealed area (PIVOT-66).
+
+- Component#userData should allow multiple clients to co-exist (PIVOT-67).
+
+- Alignment.JUSTIFY improvements (PIVOT-68).
+
+- Create adapter classes for listener interfaces; common listener interfaces now
+  provide an inner Adapter class that implements the interface with default
+  no-op methods (PIVOT-80).
+
+- Create Sequence.Tree.Path. The static methods in Sequence.Tree, and 
+  pivot.wtk.TreeView can change from using raw Sequence<Integer> to using Path. 
+  This is not only more explicit, but it allows callers to iterate over the 
+  path, whereas Sequence is not iterable (PIVOT-84).
   
-- Support for scripting languages in WTKX. In addition to Java, the new 
-  <wtkx:script> tag allows developers to easily create Pivot applications using 
-  a variety of JVM languages including JavaScript, Groovy, and others.
+- Make WTK structure-like classes immutable (including Point, Dimensions, 
+  Insets, etc.) (PIVOT-85).
 
-- Enhanced support for DOM interaction. Pivot now supports bi-directional 
-  communication between an application and the web page that contains it. 
-  Multiple applications on the same page can also communicate with each other.
+- Add drop shadows to list button and calendar button popups (PIVOT-90).
 
-- Additional effects and more pervasive animations. All of Pivot's navigation 
-  components now use animated transitions; menus, list button popups, and sheets 
-  use a translucent background; and menus and list buttons fade when closed, 
-  providing a more enriching user experience.
+- Add a listCleared() event to pivot.collections.ListListener (PIVOT-95).
 
-- Improved font rendering. Pivot now uses the default system setting for font 
-  smoothing, producing more natural-looking user interfaces.
+- Java2D performance optimizations (PIVOT-96).
 
-- Numerous bug fixes and performance improvements.
+- Perform bounds checking on opacity in ImageViewSkin (PIVOT-98).
 
-Additional notes:
+- Move META-INF/services/javax.xml.stream.XMLInputFactory file into rebundled 
+  StAX JAR (PIVOT-106).
+  
+- Eliminate wtkx:include namespace attribute (PIVOT-120).
+
+- Clean up CardPaneSkin styles; the previous styles for controlling selection
+  change transitions were unintuitive and inflexible (PIVOT-121).
+
+
+Bug Fixes
+---------
+
+- Set ApplicationContext origin property when using Web Start (PIVOT-17).
+
+- Border corners are not painted correctly (PIVOT-48).
+
+- WTKXSerializer throws on empty string attributes (PIVOT-52).
+
+- Folder#refresh() doesn't fire events (PIVOT-54).
+
+- TableView.RowEditor does not extend Editor (PIVOT-56).
+
+- TerraTreeViewSkin#nodesSorted() is unimplemented (PIVOT-58).
+
+- TreeViewNodeEditor and ListViewItemEditor break on sorted lists (PIVOT-59).
+
+- TreeView does not appear to handle sorting properly (PIVOT-60).
+
+- TreeBranch does not handle comparator completely (PIVOT-61).
+
+- Drop shadows in menu and list button popups don't fade when window is closed 
+  (PIVOT-65).
+  
+- Override both equals() and hashCode() (PIVOT-70).
+
+- Dash array (focused state) values are incorrect (PIVOT-71).
+
+- Threading issues with ApplicationContext$ScheduledCallback (PIVOT-76).
+
+- MenuPopup should automatically close when a user clicks outside its bounds 
+  (PIVOT-91).
+
+- Exception in DropShadowDecorator (PIVOT-94).
+
+- Build yields incorrect output in environments whose default encoding in not 
+  UTF-8 (PIVOT-97).
+  
+- Minor repaint issue in TerraSpinnerSkin (PIVOT-100).
+
+- Exception thrown upon application startup (PIVOT-101).
+
+- Data-driven component skins do not call render() on renderers before 
+  calculating preferred size (PIVOT-107).
+  
+- Calendar weekdays don't line up for French and Spanish (PIVOT-108).
+
+- ImageViewSkin does not correctly propagate repaint region (PIVOT-109).
+
+
+Additional Notes
+----------------
 
 - Although the TextArea component is included in this release, it is not 
   completely functional. It works reliably in read-only mode, but editing 
   support is incomplete.
-
-- Stub APIs for vector drawing are included but are non-functional. Full 
-  support for vector graphics will come in a later release.

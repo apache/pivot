@@ -48,10 +48,10 @@ Pivot requires Java 5 or greater.
 * Pivot's charting components require a compatible chart provider. No such
   provider is included in this release, but one is available here:
 
-  http://pivot-jfree.googlecode.com/files/pivot-charts.jfree-1.0.jar
+  http://code.google.com/p/pivot-jfree/  
 
-  Please note that this provider has a dependency on JFreeChart, which is
-  licensed under LGPL.
+  Version 1.1 of this provider is compatible with Pivot 1.2. Please note that 
+  this provider has a dependency on JFreeChart, which is licensed under LGPL.
 
 * Scripting support requires a compatible script engine. See
   http://jcp.org/en/jsr/detail?id=223 or
@@ -65,4 +65,4 @@ Documentation
 Pivot home page: http://incubator.apache.org/pivot
 Demos:           http://cwiki.apache.org/PIVOT/demos.html
 Tutorials:       http://cwiki.apache.org/PIVOT/tutorial.html
-Javadoc:         http://incubator.apache.org/pivot/1.1/docs/api/index.html
+Javadoc:         http://incubator.apache.org/pivot/1.2/docs/api/index.html
