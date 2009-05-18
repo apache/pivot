@@ -243,7 +243,7 @@ public class Demo extends Bindable implements Application, Application.About {
                     Button.Group imageMenuGroup = Button.getGroup("imageMenuGroup");
                     Button selectedItem = imageMenuGroup.getSelection();
 
-                    String imageName = (String)selectedItem.getUserData();
+                    String imageName = (String)selectedItem.getUserData().get("image");
 
                     ClassLoader classLoader = ThreadUtilities.getClassLoader();
                     URL imageURL = classLoader.getResource(imageName);
@@ -605,7 +605,8 @@ public class Demo extends Bindable implements Application, Application.About {
                         Button.Group messageTypeGroup = Button.getGroup("messageType");
                         Button selection = messageTypeGroup.getSelection();
 
-                        Map<String, ?> userData = JSONSerializer.parseMap((String)selection.getUserData());
+                        Map<String, ?> userData =
+                            JSONSerializer.parseMap((String)selection.getUserData().get("messageInfo"));
                         String messageType = (String)userData.get("type");
 
                         if (messageType.equals("custom")) {
@@ -640,7 +641,8 @@ public class Demo extends Bindable implements Application, Application.About {
                         Button.Group messageTypeGroup = Button.getGroup("messageType");
                         Button selection = messageTypeGroup.getSelection();
 
-                        Map<String, ?> userData = JSONSerializer.parseMap((String)selection.getUserData());
+                        Map<String, ?> userData =
+                            JSONSerializer.parseMap((String)selection.getUserData().get("messageInfo"));
                         String messageType = (String)userData.get("type");
 
                         if (messageType.equals("custom")) {

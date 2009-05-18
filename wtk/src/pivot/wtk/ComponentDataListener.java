@@ -23,10 +23,31 @@ package pivot.wtk;
  */
 public interface ComponentDataListener {
     /**
-     * Called when a component's user data has changed.
+     * Called when a value has been added to a component's user data
+     * dictionary.
      *
      * @param component
+     * @param key
+     */
+    public void valueAdded(Component component, String key);
+
+    /**
+     * Called when a value has been updated in a component's user data
+     * dictionary.
+     *
+     * @param component
+     * @param key
      * @param previousValue
      */
-    public void userDataChanged(Component component, Object previousValue);
+    public void valueUpdated(Component component, String key, Object previousValue);
+
+    /**
+     * Called when a value has been removed from a component's user data
+     * dictionary.
+     *
+     * @param component
+     * @param key
+     * @param value
+     */
+    public void valueRemoved(Component component, String key, Object value);
 }

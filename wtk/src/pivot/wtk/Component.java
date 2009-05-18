@@ -55,7 +55,7 @@ public abstract class Component implements ConstrainedVisual {
      * @author gbrown
      */
     public final class StyleDictionary extends BeanDictionary {
-        public StyleDictionary(pivot.wtk.Skin skin) {
+        private StyleDictionary(pivot.wtk.Skin skin) {
             super(skin, true);
         }
 
@@ -72,6 +72,58 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             return previousValue;
+        }
+    }
+
+    /**
+     * User data dictionary implementation.
+     *
+     * @author gbrown
+     */
+    public final class UserDataDictionary implements
+        Dictionary<String, Object>, Iterable<String> {
+        private UserDataDictionary() {
+        }
+
+        public Object get(String key) {
+            return userData.get(key);
+        }
+
+        public Object put(String key, Object value) {
+            boolean update = userData.containsKey(key);
+            Object previousValue = userData.put(key, value);
+
+            if (update) {
+                componentDataListeners.valueUpdated(Component.this, key, previousValue);
+            } else {
+                componentDataListeners.valueAdded(Component.this, key);
+            }
+
+            return previousValue;
+        }
+
+        public Object remove(String key) {
+            Object previousValue;
+            if (userData.containsKey(key)) {
+                previousValue = userData.remove(key);
+                componentDataListeners.valueRemoved(Component.this, key, previousValue);
+            } else {
+                previousValue = null;
+            }
+
+            return previousValue;
+        }
+
+        public boolean containsKey(String key) {
+            return userData.containsKey(key);
+        }
+
+        public boolean isEmpty() {
+            return userData.isEmpty();
+        }
+
+        public Iterator<String> iterator() {
+            return new ImmutableIterator<String>(userData.iterator());
         }
     }
 
@@ -184,6 +236,9 @@ public abstract class Component implements ConstrainedVisual {
      */
     public static class ComponentDictionary implements
         Dictionary<Integer, Component>, Iterable<Integer> {
+        private ComponentDictionary() {
+        }
+
         public Component get(Integer key) {
             return components.get(key);
         }
@@ -431,9 +486,21 @@ public abstract class Component implements ConstrainedVisual {
 
     private static class ComponentDataListenerList extends ListenerList<ComponentDataListener>
         implements ComponentDataListener {
-        public void userDataChanged(Component component, Object previousValue) {
+        public void valueAdded(Component component, String key) {
             for (ComponentDataListener listener : this) {
-                listener.userDataChanged(component, previousValue);
+                listener.valueAdded(component, key);
+            }
+        }
+
+        public void valueUpdated(Component component, String key, Object previousValue) {
+            for (ComponentDataListener listener : this) {
+                listener.valueUpdated(component, key, previousValue);
+            }
+        }
+
+        public void valueRemoved(Component component, String key, Object value) {
+            for (ComponentDataListener listener : this) {
+                listener.valueRemoved(component, key, value);
             }
         }
     }
@@ -497,7 +564,8 @@ public abstract class Component implements ConstrainedVisual {
     private DropTarget dropTarget = null;
 
     // User data
-    private Object userData = null;
+    private HashMap<String, Object> userData = new HashMap<String, Object>();
+    private UserDataDictionary userDataDictionary = new UserDataDictionary();
 
     // Proxy class for getting/setting style properties on the skin
     private StyleDictionary styleDictionary = null;
@@ -2110,14 +2178,11 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    public Object getUserData() {
-        return userData;
-    }
-
-    public void setUserData(Object userData) {
-        Object previousUserData = this.userData;
-        this.userData = userData;
-        componentDataListeners.userDataChanged(this, previousUserData);
+    /**
+     * Returns the user data dictionary.
+     */
+    public UserDataDictionary getUserData() {
+        return userDataDictionary;
     }
 
     /**
