@@ -16,7 +16,6 @@
  */
 package pivot.wtkx;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,14 +28,10 @@ import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.net.URL;
 
-import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
 import javax.tools.JavaFileObject;
-import javax.tools.OptionChecker;
-import javax.tools.Tool;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
@@ -47,15 +42,14 @@ import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
-import pivot.serialization.SerializationException;
 import pivot.util.ListenerList;
 
 /**
- * Loads an object hierarchy from an XML document into compilable file objects.
+ * Translates WTKX documents into compilable Java file objects.
  *
  * @author tvolkert
  */
-public class WTKXCompiler implements Tool, OptionChecker {
+public class JavaTranslator {
     /**
      * A generated Java file object.
      *
@@ -137,6 +131,8 @@ public class WTKXCompiler implements Tool, OptionChecker {
     }
 
     /**
+     * A parsed XML element.
+     *
      * @author gbrown
      */
     private static class Element  {
@@ -166,6 +162,8 @@ public class WTKXCompiler implements Tool, OptionChecker {
     }
 
     /**
+     * A parsed XML attribute.
+     *
      * @author gbrown
      */
     private static class Attribute {
@@ -187,25 +185,11 @@ public class WTKXCompiler implements Tool, OptionChecker {
     private static final String WTKX_PREFIX = "WTKX";
     private static final String JAVA_SUFFIX = ".java";
 
-    private static final String SPACE = " ";
+    private static final String SPACE = "";
 
-    public WTKXCompiler() {
+    public JavaTranslator() {
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
-    }
-
-    public JavaFileObject readObject(URL location) throws IOException,
-        SerializationException {
-        if (location == null) {
-            throw new IllegalArgumentException("location is null.");
-        }
-
-        InputStream inputStream = new BufferedInputStream(location.openStream());
-        try {
-            return readObject(inputStream);
-        } finally {
-            inputStream.close();
-        }
     }
 
     /**
@@ -216,26 +200,43 @@ public class WTKXCompiler implements Tool, OptionChecker {
      * @param inputStream
      * The data stream from which the WTKX will be read
      *
+     * @param className
+     * The fully qualified class name of the class to generate.
+     *
      * @return
      * The compilable java file object represented by the WTKX
      */
-    public JavaFileObject readObject(InputStream inputStream) throws IOException,
-        SerializationException {
+    public JavaFileObject translate(InputStream inputStream, String className)
+        throws IOException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
         }
 
+        if (className == null) {
+            throw new IllegalArgumentException("className is null.");
+        }
+
         JavaFile javaFile = new JavaFile();
+        String packageName = null;
+
+        // Separate the package name from the un-qualified class name
+        int classDeliminatorIndex = className.lastIndexOf('.');
+        if (classDeliminatorIndex != -1) {
+            if (classDeliminatorIndex == 0) {
+                throw new IllegalArgumentException(className + " is not a valid class name.");
+            }
+
+            packageName = className.substring(0, classDeliminatorIndex);
+            className = className.substring(classDeliminatorIndex + 1);
+        }
 
         Writer writer = javaFile.openWriter();
         try {
-            String[] path = javaFile.getName().split(File.separator);
-            String tmpClassName = path[path.length - 1].split("\\.")[0];
-            tmpClassName = "Foo";
+            if (packageName != null) {
+                writer.write("package " + packageName + ";\n\n");
+            }
 
             writer.write(String.format(
-                "package pivot.wtkx.test;\n" +
-                "\n" +
                 "import pivot.collections.HashMap;\n" +
                 "import pivot.wtkx.Bindable;\n" +
                 "\n" +
@@ -251,7 +252,7 @@ public class WTKXCompiler implements Tool, OptionChecker {
                 "%1$4s@SuppressWarnings({\"unchecked\", \"cast\"})\n" +
                 "%1$4spublic <T> T getRootObject() {\n" +
                 "%1$8sObject result = null;\n",
-                SPACE, tmpClassName));
+                SPACE, className));
 
             // Parse the XML stream
             Element element = null;
@@ -277,19 +278,19 @@ public class WTKXCompiler implements Tool, OptionChecker {
                         if (prefix != null
                             && prefix.equals(WTKXSerializer.WTKX_PREFIX)) {
                             if (element == null) {
-                                throw new SerializationException(prefix + ":" + localName
+                                throw new IOException(prefix + ":" + localName
                                     + " is not a valid root element.");
                             }
 
                             if (localName.equals(WTKXSerializer.INCLUDE_TAG)) {
                                 // TODO
-                                throw new SerializationException(prefix + ":" + localName
+                                throw new IOException(prefix + ":" + localName
                                     + " compilation is not yet implemented.");
                             } else if (localName.equals(WTKXSerializer.SCRIPT_TAG)) {
-                                throw new SerializationException(prefix + ":" + localName
+                                throw new IOException(prefix + ":" + localName
                                     + " tags may not be compiled.");
                             } else {
-                                throw new SerializationException(prefix + ":" + localName
+                                throw new IOException(prefix + ":" + localName
                                     + " is not a valid tag.");
                             }
                         } else {
@@ -319,30 +320,33 @@ public class WTKXCompiler implements Tool, OptionChecker {
                             if (Character.isUpperCase(localName.charAt(0))) {
                                 // The element represents a typed object
                                 if (namespaceURI == null) {
-                                    throw new SerializationException("No XML namespace specified for "
+                                    throw new IOException("No XML namespace specified for "
                                         + localName + " tag.");
                                 }
 
-                                String className = namespaceURI + "." + localName;
-                                writer.write(String.format
-                                    ("%8s%s o%d = new %s();\n", SPACE, className, ++Element.counter, className));
+                                String elementClassName = namespaceURI + "." + localName;
+                                writer.write(String.format("%8s%s o%d = new %s();\n",
+                                    SPACE, elementClassName, ++Element.counter, elementClassName));
 
                                 try {
-                                    className = namespaceURI + "." + localName.replace('.', '$');
-                                    Class<?> type = Class.forName(className, false, getClass().getClassLoader());
+                                    elementClassName = namespaceURI + "." + localName.replace('.', '$');
+                                    Class<?> type = Class.forName(elementClassName,
+                                        false, getClass().getClassLoader());
                                     element = new Element(element, Element.Type.INSTANCE,
                                         attributes, type, Element.counter);
                                 } catch(Exception exception) {
-                                    throw new SerializationException(exception);
+                                    throw new IOException(exception);
                                 }
                             } else {
                                 // The element represents a property
                                 if (element == null) {
-                                    throw new SerializationException("Root node must represent a typed object.");
+                                    throw new IOException
+                                        ("Root node must represent a typed object.");
                                 }
 
                                 if (element.type != Element.Type.INSTANCE) {
-                                    throw new SerializationException("Property elements must apply to typed objects.");
+                                    throw new IOException
+                                        ("Property elements must apply to typed objects.");
                                 }
 
                                 Class<?> type = (Class<?>)element.clazz;
@@ -363,7 +367,7 @@ public class WTKXCompiler implements Tool, OptionChecker {
                                         attributes, valueType, Element.counter);
                                 } else {
                                     if (attributes.getLength() > 0) {
-                                        throw new SerializationException
+                                        throw new IOException
                                             ("Writable property elements cannot have attributes.");
                                     }
 
@@ -430,7 +434,7 @@ public class WTKXCompiler implements Tool, OptionChecker {
                                 // The element is an untyped object
                                 for (Attribute attribute : element.attributes) {
                                     if (Character.isUpperCase(attribute.localName.charAt(0))) {
-                                        throw new SerializationException
+                                        throw new IOException
                                             ("Static setters are only supported for typed instances.");
                                     }
 
@@ -455,8 +459,9 @@ public class WTKXCompiler implements Tool, OptionChecker {
                                             + attribute.localName.substring(0, attribute.localName.length()
                                             - (propertyName.length() + 1));
 
-                                        writer.write(String.format("%8s%s.%s(o%d, %s);\n", SPACE, propertyClassName,
-                                            setterMethodName, element.ref, resolve(attribute.value, attributeType)));
+                                        writer.write(String.format("%8s%s.%s(o%d, %s);\n",
+                                            SPACE, propertyClassName, setterMethodName, element.ref,
+                                            resolve(attribute.value, attributeType)));
                                     } else {
                                         if (attributeType != null
                                             && ListenerList.class.isAssignableFrom(attributeType)) {
@@ -517,7 +522,7 @@ public class WTKXCompiler implements Tool, OptionChecker {
 
                 reader.close();
             } catch(XMLStreamException exception) {
-                throw new SerializationException(exception);
+                throw new IOException(exception);
             }
 
             // Close method declaration
@@ -531,30 +536,6 @@ public class WTKXCompiler implements Tool, OptionChecker {
         }
 
         return javaFile;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int run(InputStream in, OutputStream out, OutputStream err, String... arguments) {
-        // TODO
-        return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public java.util.Set<SourceVersion> getSourceVersions() {
-        return java.util.Collections.unmodifiableSet
-            (java.util.EnumSet.range(SourceVersion.RELEASE_5, SourceVersion.latest()));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int isSupportedOption(String option) {
-        // TODO
-        return -1;
     }
 
     private String resolve(String attributeValue, Class<?> propertyType)
