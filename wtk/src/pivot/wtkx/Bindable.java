@@ -241,7 +241,11 @@ public abstract class Bindable {
             }
         }
 
-        if (bindOverload == null) {
+        if (bindOverload != null) {
+            // BindProcessor has been run; invoke the bind overload
+            HashMap<String, ObjectHierarchy> objectHierarchies = new HashMap<String, ObjectHierarchy>();
+            bind(objectHierarchies);
+        } else {
             // Maps field name to the serializer that loaded the field; public
             // and protected serializers are retained for sub-types, but private
             // serializers are removed at the end of the block
@@ -394,10 +398,6 @@ public abstract class Bindable {
                     wtkxSerializers.remove(privateFieldName);
                 }
             }
-        } else {
-            // Invoke the bind overload
-            HashMap<String, ObjectHierarchy> objectHierarchies = new HashMap<String, ObjectHierarchy>();
-            bind(objectHierarchies);
         }
     }
 
