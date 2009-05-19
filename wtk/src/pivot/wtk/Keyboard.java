@@ -237,6 +237,15 @@ public final class Keyboard {
         public static final int KEYPAD_LEFT = KeyEvent.VK_KP_LEFT;
         public static final int KEYPAD_RIGHT = KeyEvent.VK_KP_RIGHT;
 
+        public static final int PLUS = KeyEvent.VK_PLUS;
+        public static final int MINUS = KeyEvent.VK_MINUS;
+        public static final int EQUALS = KeyEvent.VK_EQUALS;
+
+        public static final int ADD = KeyEvent.VK_ADD;
+        public static final int SUBTRACT = KeyEvent.VK_SUBTRACT;
+        public static final int MULTIPLY = KeyEvent.VK_MULTIPLY;
+        public static final int DIVIDE = KeyEvent.VK_DIVIDE;
+
         public static final int F1 = KeyEvent.VK_F1;
         public static final int F2 = KeyEvent.VK_F2;
         public static final int F3 = KeyEvent.VK_F3;

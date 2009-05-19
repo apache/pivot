@@ -295,6 +295,40 @@ public abstract class ApplicationContext {
             }
         }
 
+        public void scaleUp() {
+            double newScale;
+
+            if (scale < 1) {
+                newScale = 1;
+            } else if (scale < 1.25) {
+                newScale = 1.25;
+            } else if (scale < 1.5) {
+                newScale = 1.5;
+            } else if (scale < 2) {
+                newScale = 2;
+            } else {
+                newScale = Math.min(Math.floor(scale) + 1, 12);
+            }
+
+            setScale(newScale);
+        }
+
+        public void scaleDown() {
+            double newScale;
+
+            if (scale <= 1.25) {
+                newScale = 1;
+            } else if (scale <= 1.5) {
+                newScale = 1.25;
+            } else if (scale <= 2) {
+                newScale = 1.5;
+            } else {
+                newScale = Math.ceil(scale) - 1;
+            }
+
+            setScale(newScale);
+        }
+
         public Point getMouseLocation() {
             return mouseLocation;
         }
@@ -934,22 +968,12 @@ public abstract class ApplicationContext {
                 case MouseEvent.MOUSE_WHEEL: {
                     if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
                         && Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        int direction = event.getWheelRotation();
-
-                        double newScale;
-                        if (scale == 1) {
-                            newScale = (direction < 0 ? 1.25 : 1);
-                        } else if (scale == 1.25) {
-                            newScale = (direction < 0 ? 1.5 : 1);
-                        } else if (scale == 1.5) {
-                            newScale = (direction < 0 ? 2 : 1.25);
-                        } else if (scale == 2) {
-                            newScale = (direction < 0 ? 3 : 1.5);
+                        // Mouse wheel scaling
+                        if (event.getWheelRotation() < 0) {
+                            scaleUp();
                         } else {
-                            newScale = scale - direction;
+                            scaleDown();
                         }
-
-                        setScale(Math.min(newScale, 12));
                     } else if (dragDescendant == null) {
                         // Determine the mouse owner
                         Component mouseOwner;
@@ -1030,6 +1054,18 @@ public abstract class ApplicationContext {
                     case KeyEvent.KEY_PRESSED: {
                         int keyCode = event.getKeyCode();
                         boolean consumed = false;
+
+                        if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
+                            && Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                            if (keyCode == Keyboard.KeyCode.PLUS
+                                || keyCode == Keyboard.KeyCode.EQUALS
+                                || keyCode == Keyboard.KeyCode.ADD) {
+                                scaleUp();
+                            } else if (keyCode == Keyboard.KeyCode.MINUS
+                                || keyCode == Keyboard.KeyCode.SUBTRACT) {
+                                scaleDown();
+                            }
+                        }
 
                         if (focusedComponent != null) {
                             consumed = focusedComponent.keyPressed(keyCode, keyLocation);
