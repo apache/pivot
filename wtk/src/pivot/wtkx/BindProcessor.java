@@ -367,7 +367,23 @@ public class BindProcessor extends AbstractProcessor {
                 }
             }
 
-            // Attempt to load the resources
+            buf.append("Object object = null;");
+            buf.append("ObjectHierarchy objectHierarchy = null;");
+            buf.append(String.format
+                ("Class<ObjectHierarchy> compiledClass = pivot.wtkx.Compiler.getClass(getClass(), \"%s\");",
+                resourceName));
+
+            // Load the WTKX resource via the compiled class
+            buf.append("if (compiledClass != null) {");
+            buf.append("try {");
+            buf.append("objectHierarchy = compiledClass.newInstance();");
+            buf.append("object = objectHierarchy.getRootObject();");
+            buf.append("} catch (Exception ex) {");
+            buf.append("throw new pivot.wtkx.BindException(ex);");
+            buf.append("}");
+            buf.append("} else {");
+
+            // Attempt to load the resource bundle
             buf.append("pivot.util.Resources resources = null;");
             if (baseName != null) {
                 if (language == null) {
@@ -391,14 +407,15 @@ public class BindProcessor extends AbstractProcessor {
                 buf.append("}");
             }
 
-            // Load the WTKX resource
-            buf.append("Object object = null;");
+            // Load the WTKX resource via serialization
             buf.append("pivot.wtkx.WTKXSerializer wtkxSerializer = new pivot.wtkx.WTKXSerializer(resources);");
             buf.append(String.format("java.net.URL location = getClass().getResource(\"%s\");", resourceName));
             buf.append("try {");
             buf.append("object = wtkxSerializer.readObject(location);");
             buf.append("} catch (Exception ex) {");
             buf.append("throw new pivot.wtkx.BindException(ex);");
+            buf.append("}");
+            buf.append("objectHierarchy = wtkxSerializer;");
             buf.append("}");
 
             // Bind the resource to the field
@@ -408,7 +425,7 @@ public class BindProcessor extends AbstractProcessor {
             // Public and protected fields get kept for subclasses
             if ((loadField.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
                 buf.append(String.format
-                    ("objectHierarchies.put(\"%s\", wtkxSerializer);", loadFieldName));
+                    ("objectHierarchies.put(\"%s\", objectHierarchy);", loadFieldName));
             }
 
             // Process @Bind variables
@@ -423,7 +440,7 @@ public class BindProcessor extends AbstractProcessor {
                 }
 
                 buf.append(String.format
-                    ("object = wtkxSerializer.getObjectByID(\"%s\");", id));
+                    ("object = objectHierarchy.getObjectByID(\"%s\");", id));
                 buf.append
                     ("if (object == null) ");
                 buf.append(String.format
