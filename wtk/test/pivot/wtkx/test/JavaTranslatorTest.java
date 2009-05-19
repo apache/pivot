@@ -23,19 +23,19 @@ import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
-import pivot.wtkx.JavaTranslator;
+import pivot.wtkx.Translator;
 
 /**
  * @author tvolkert
  */
 public class JavaTranslatorTest {
    public static void main(String[] args) throws Exception {
-       JavaTranslator javaTranslator = new JavaTranslator();
+       Translator translator = new Translator();
 
        InputStream inputStream = JavaTranslatorTest.class.getResourceAsStream
            ("java_translator_test.wtkx");
 
-       JavaFileObject javaFileObject = javaTranslator.translate(inputStream,
+       JavaFileObject javaFileObject = translator.translate(inputStream,
            "pivot.wtkx.test.java_translator_test_WTKX");
 
        System.out.println(javaFileObject.getCharContent(true));

@@ -49,7 +49,7 @@ import pivot.util.ListenerList;
  *
  * @author tvolkert
  */
-public class JavaTranslator {
+public class Translator {
     /**
      * A generated Java file object.
      *
@@ -187,7 +187,7 @@ public class JavaTranslator {
 
     private static final String SPACE = "";
 
-    public JavaTranslator() {
+    public Translator() {
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
     }
