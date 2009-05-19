@@ -187,24 +187,57 @@ public class Translator {
 
     private static final String SPACE = "";
 
+    /**
+     * Creates a new <tt>Translator</tt>.
+     */
     public Translator() {
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
     }
 
     /**
-     * Reads WTKX input stream into a compilable file object. The file object
-     * will hold a class that implements the {@link Bindable.ObjectHierarchy}
-     * interface.
+     * Translates a WTKX resource into a Java source file. The translated class
+     * will implement the {@link Bindable.ObjectHierarchy} interface.
+     *
+     * @param referenceClass
+     * The class relative to which the WTKX resource can be found.
+     *
+     * @param resourceName
+     * A path name that identifies the WTKX resource. The path name should be
+     * of the form defined by {@link Class#getResource(String)} and is relative
+     * to the base package. Note that this is the same form as is defined in
+     * {@link Bindable.Load#resourceName()}.
+     *
+     * @return
+     * The Java source file representation of the WTKX resource.
+     */
+    public JavaFileObject translate(Class<?> referenceClass, String resourceName)
+        throws IOException {
+        JavaFileObject javaFileObject;
+
+        InputStream inputStream = referenceClass.getResourceAsStream(resourceName);
+        try {
+            javaFileObject = translate(inputStream,
+                Compiler.getPreferredClassName(referenceClass, resourceName));
+        } finally {
+            inputStream.close();
+        }
+
+        return javaFileObject;
+    }
+
+    /**
+     * Translates a WTKX input stream into a Java source file. The translated class
+     * will implement the {@link Bindable.ObjectHierarchy} interface.
      *
      * @param inputStream
-     * The data stream from which the WTKX will be read
+     * The data stream from which the WTKX will be read.
      *
      * @param className
      * The fully qualified class name of the class to generate.
      *
      * @return
-     * The compilable java file object represented by the WTKX
+     * The Java source file representation of the WTKX.
      */
     public JavaFileObject translate(InputStream inputStream, String className)
         throws IOException {

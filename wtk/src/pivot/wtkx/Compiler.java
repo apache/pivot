@@ -16,7 +16,6 @@
  */
 package pivot.wtkx;
 
-import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -62,14 +61,9 @@ public class Compiler {
         throws IOException {
         boolean success = false;
 
-        JavaFileObject javaFileObject = null;
-        InputStream inputStream = referenceClass.getResourceAsStream(resourceName);
+        Translator translator = new Translator();
+        JavaFileObject javaFileObject = translator.translate(referenceClass, resourceName);
         try {
-            Translator translator = new Translator();
-
-            javaFileObject = translator.translate(inputStream,
-                getPreferredClassName(referenceClass, resourceName));
-
             ArrayList<JavaFileObject> javaFileObjects = new ArrayList<JavaFileObject>(1);
             javaFileObjects.add(javaFileObject);
 
@@ -79,11 +73,7 @@ public class Compiler {
 
             success = task.call();
         } finally {
-            inputStream.close();
-
-            if (javaFileObject != null) {
-                javaFileObject.delete();
-            }
+            javaFileObject.delete();
         }
 
         return success;
