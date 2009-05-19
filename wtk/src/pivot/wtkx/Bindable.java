@@ -183,8 +183,14 @@ public abstract class Bindable {
      * @author tvolkert
      */
     public static interface ObjectHierarchy {
+        /**
+         * Gets the root of the object hierarchy.
+         */
         <T> T getRootObject();
 
+        /**
+         * Gets a named object by its ID.
+         */
         <T> T getObjectByID(String id);
     }
 
@@ -390,9 +396,8 @@ public abstract class Bindable {
             }
         } else {
             // Invoke the bind overload
-            HashMap<String, Dictionary<String, Object>> namedObjectDictionaries =
-                new HashMap<String, Dictionary<String, Object>>();
-            bind(namedObjectDictionaries);
+            HashMap<String, ObjectHierarchy> objectHierarchies = new HashMap<String, ObjectHierarchy>();
+            bind(objectHierarchies);
         }
     }
 
@@ -401,7 +406,7 @@ public abstract class Bindable {
      * override. It exists to support {@link BindProcessor}. Dealing directly
      * with this method in any way may yield unpredictable behavior.
      */
-    protected void bind(Dictionary<String, Dictionary<String, Object>> namedObjectDictionaries) {
+    protected void bind(Dictionary<String, ObjectHierarchy> objectHierarchies) {
         // No-op
     }
 }

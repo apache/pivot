@@ -257,8 +257,8 @@ public class BindProcessor extends AbstractProcessor {
                 StringBuilder buf = new StringBuilder("class _TMP {");
                 buf.append("@Override @SuppressWarnings({\"unchecked\",\"cast\"}) ");
                 buf.append("protected void bind(pivot.collections.Dictionary<String,");
-                buf.append("pivot.collections.Dictionary<String, Object>> namedObjectDictionaries) {");
-                buf.append("super.bind(namedObjectDictionaries);");
+                buf.append("ObjectHierarchy> objectHierarchies) {");
+                buf.append("super.bind(objectHierarchies);");
 
                 // Process @Load fields (and their associated @Bind fields)
                 if (loadGroups != null) {
@@ -408,8 +408,7 @@ public class BindProcessor extends AbstractProcessor {
             // Public and protected fields get kept for subclasses
             if ((loadField.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
                 buf.append(String.format
-                    ("namedObjectDictionaries.put(\"%s\", wtkxSerializer.getNamedObjects());",
-                    loadFieldName));
+                    ("objectHierarchies.put(\"%s\", wtkxSerializer);", loadFieldName));
             }
 
             // Process @Bind variables
@@ -450,7 +449,7 @@ public class BindProcessor extends AbstractProcessor {
          * The list of <tt>@Bind</tt> fields
          */
         private void processStrandedBinds(StringBuilder buf, List<JCVariableDecl> strandedBindFields) {
-            buf.append("pivot.collections.Dictionary<String, Object> namedObjects;");
+            buf.append("ObjectHierarchy objectHierarchy;");
 
             for (JCVariableDecl bindField : strandedBindFields) {
                 String bindFieldName = bindField.name.toString();
@@ -464,23 +463,19 @@ public class BindProcessor extends AbstractProcessor {
                 }
 
                 buf.append(String.format
-                    ("namedObjects = namedObjectDictionaries.get(\"%s\");", loadFieldName));
+                    ("objectHierarchy = objectHierarchies.get(\"%s\");", loadFieldName));
 
                 buf.append
-                    ("if (namedObjects == null) {");
+                    ("if (objectHierarchy == null) ");
                 buf.append(String.format
                     ("throw new pivot.wtkx.BindException(\"Property not found: %s.\");", loadFieldName));
-                buf.append
-                    ("}");
 
                 buf.append(String.format
-                    ("object = namedObjects.get(\"%s\");", id));
-                buf.append
-                    ("if (object == null) ");
+                    ("%s = objectHierarchy.getObjectByID(\"%s\");", bindFieldName, id));
+                buf.append(String.format
+                    ("if (%s == null) ", bindFieldName));
                 buf.append(String.format
                     ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", id));
-                buf.append(String.format
-                    ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
             }
         }
     }
