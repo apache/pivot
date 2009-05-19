@@ -272,6 +272,8 @@ public class Translator {
             writer.write(String.format(
                 "import pivot.collections.HashMap;\n" +
                 "import pivot.wtkx.Bindable;\n" +
+                "import pivot.wtkx.Compiler;\n" +
+                "import pivot.wtkx.WTKXSerializer;\n" +
                 "\n" +
                 "public class %2$s implements Bindable.ObjectHierarchy {\n" +
                 "%1$4sprivate HashMap<String, Object> namedObjects = new HashMap<String, Object>();\n" +
@@ -284,7 +286,8 @@ public class Translator {
                 "\n" +
                 "%1$4s@SuppressWarnings({\"unchecked\", \"cast\"})\n" +
                 "%1$4spublic <T> T getRootObject() {\n" +
-                "%1$8sObject result = null;\n",
+                "%1$8sObject result = null;\n" +
+                "%1$8sClass<Bindable.ObjectHierarchy> includeClass;\n",
                 SPACE, className));
 
             // Parse the XML stream
@@ -316,9 +319,61 @@ public class Translator {
                             }
 
                             if (localName.equals(WTKXSerializer.INCLUDE_TAG)) {
-                                // TODO
-                                throw new IOException(prefix + ":" + localName
-                                    + " compilation is not yet implemented.");
+                                // The element represents an include
+                                String src = null;
+
+                                ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+
+                                for (int i = 0, n = reader.getAttributeCount(); i < n; i++) {
+                                    String attributeNamespaceURI = reader.getAttributeNamespace(i);
+                                    if (attributeNamespaceURI == null) {
+                                        attributeNamespaceURI = reader.getNamespaceURI("");
+                                    }
+
+                                    String attributePrefix = reader.getAttributePrefix(i);
+                                    String attributeLocalName = reader.getAttributeLocalName(i);
+                                    String attributeValue = reader.getAttributeValue(i);
+
+                                    if (attributePrefix != null
+                                        && attributePrefix.equals(WTKXSerializer.WTKX_PREFIX)) {
+                                        if (attributeLocalName.equals(WTKXSerializer.ID_ATTRIBUTE)) {
+                                            id = attributeValue;
+                                        }
+                                    } else {
+                                        if (attributeLocalName.equals(WTKXSerializer.INCLUDE_SRC_ATTRIBUTE)) {
+                                            src = attributeValue;
+                                        } else if (attributeLocalName.equals
+                                            (WTKXSerializer.INCLUDE_RESOURCES_ATTRIBUTE)) {
+                                            // TODO handle resources
+                                        } else {
+                                            attributes.add(new Attribute(attributeNamespaceURI,
+                                                attributePrefix, attributeLocalName, attributeValue));
+                                        }
+                                    }
+                                }
+
+                                if (src == null) {
+                                    throw new IOException(WTKXSerializer.INCLUDE_SRC_ATTRIBUTE
+                                        + " attribute is required for " + WTKXSerializer.WTKX_PREFIX
+                                        + ":" + WTKXSerializer.INCLUDE_TAG + " tag.");
+                                }
+
+                                // TODO We need to know the return type of the
+                                // include in order for compilation to work
+                                writer.write(String.format(
+                                    "%1$8sObject o%2$s;\n" +
+                                    "%1$8sincludeClass = Compiler.getClass(getClass(), \"%3$s\");\n" +
+                                    "%1$8sif (includeClass != null) {\n" +
+                                    "%1$12sBindable.ObjectHierarchy include = includeClass.newInstance();\n" +
+                                    "%1$12so%2$s = include.getRootObject();\n" +
+                                    "%1$8s} else {\n" +
+                                    "%1$12sWTKXSerializer wtkxSerializer = new WTKXSerializer();\n" +
+                                    "%1$12so%2$s = wtkxSerializer.readObject(getClass().getResource(\"%3$s\"));\n" +
+                                    "%1$8s}\n",
+                                    SPACE, ++Element.counter, src));
+
+                                element = new Element(element, Element.Type.INCLUDE, attributes,
+                                    Object.class, Element.counter);
                             } else if (localName.equals(WTKXSerializer.SCRIPT_TAG)) {
                                 throw new IOException(prefix + ":" + localName
                                     + " tags may not be compiled.");
@@ -375,11 +430,6 @@ public class Translator {
                                 if (element == null) {
                                     throw new IOException
                                         ("Root node must represent a typed object.");
-                                }
-
-                                if (element.type != Element.Type.INSTANCE) {
-                                    throw new IOException
-                                        ("Property elements must apply to typed objects.");
                                 }
 
                                 Class<?> type = (Class<?>)element.clazz;
