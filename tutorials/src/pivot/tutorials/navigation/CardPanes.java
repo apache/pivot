@@ -41,6 +41,7 @@ public class CardPanes extends Bindable implements Application {
     @Bind(fieldName="window") private RadioButton crossfadeRadioButton;
     @Bind(fieldName="window") private RadioButton horizontalSlideRadioButton;
     @Bind(fieldName="window") private RadioButton verticalSlideRadioButton;
+    @Bind(fieldName="window") private RadioButton noneRadioButton;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
@@ -83,6 +84,7 @@ public class CardPanes extends Bindable implements Application {
         crossfadeRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         horizontalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
         verticalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+        noneRadioButton.getButtonStateListeners().add(radioButtonStateListener);
 
         updateCardPane();
         updateLinkButtonState();

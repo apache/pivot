@@ -73,10 +73,6 @@ public class TerraTabPaneSkin extends ContainerSkin
      * @author gbrown
      */
     public class TabButton extends Button {
-    	public TabButton() {
-            this(null);
-        }
-
         public TabButton(Object tab) {
             super(tab);
 
@@ -170,7 +166,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             Component tab = (Component)tabButton.getButtonData();
             boolean active = (selectionChangeTransition != null
-                && selectionChangeTransition.getTab() == tab);
+                && selectionChangeTransition.tab == tab);
 
             Color backgroundColor = (tabButton.isSelected()
                 || active) ?
@@ -289,8 +285,8 @@ public class TerraTabPaneSkin extends ContainerSkin
      * @author gbrown
      */
     public class SelectionChangeTransition extends Transition {
-        private Component tab;
-        private boolean expand;
+        public final Component tab;
+        public final boolean expand;
 
         private Easing easing = new Quadratic();
 
@@ -299,14 +295,6 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             this.tab = tab;
             this.expand = expand;
-        }
-
-        public Component getTab() {
-            return tab;
-        }
-
-        public boolean isExpand() {
-            return expand;
         }
 
         public float getScale() {
@@ -1154,9 +1142,8 @@ public class TerraTabPaneSkin extends ContainerSkin
                             (SelectionChangeTransition)transition;
 
                         int selectedIndex;
-                        if (selectionChangeTransition.isExpand()) {
-                            Component tab = selectionChangeTransition.getTab();
-                            selectedIndex = tabPane.getTabs().indexOf(tab);
+                        if (selectionChangeTransition.expand) {
+                            selectedIndex = tabPane.getTabs().indexOf(selectionChangeTransition.tab);
                         } else {
                             selectedIndex = -1;
                         }

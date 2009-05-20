@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Frame title="Accordion Test" preferredWidth="240" preferredHeight="360"
+<Frame title="Accordion Test"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
     <content>
         <Accordion>

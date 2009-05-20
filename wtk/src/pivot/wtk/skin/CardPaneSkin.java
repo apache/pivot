@@ -70,8 +70,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * @author gbrown
      */
     public abstract class SelectionChangeTransition extends Transition {
-        private Component fromCard;
-        private Component toCard;
+        public final Component fromCard;
+        public final Component toCard;
 
         public SelectionChangeTransition(int from, int to) {
             super(SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE, false);
@@ -79,14 +79,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             CardPane cardPane = (CardPane)getComponent();
             fromCard = (from == -1) ? null : cardPane.get(from);
             toCard = (to == -1) ? null : cardPane.get(to);
-        }
-
-        public Component getFromCard() {
-            return fromCard;
-        }
-
-        public Component getToCard() {
-            return toCard;
         }
     }
 
@@ -105,12 +97,10 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
         @Override
         public void start(TransitionListener transitionListener) {
-            Component fromCard = getFromCard();
             if (fromCard != null) {
                 fromCard.getDecorators().add(fadeOutDecorator);
             }
 
-            Component toCard = getToCard();
             if (toCard != null) {
                 toCard.getDecorators().add(fadeInDecorator);
                 toCard.setVisible(true);
@@ -123,13 +113,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         public void stop() {
             super.stop();
 
-            Component fromCard = getFromCard();
             if (fromCard != null) {
                 fromCard.getDecorators().remove(fadeOutDecorator);
                 fromCard.setVisible(false);
             }
 
-            Component toCard = getToCard();
             if (toCard != null) {
                 toCard.getDecorators().remove(fadeInDecorator);
             }
@@ -167,7 +155,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
         @Override
         public void start(TransitionListener transitionListener) {
-            Component toCard = getToCard();
             toCard.setVisible(true);
 
             super.start(transitionListener);
@@ -175,7 +162,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
         @Override
         public void stop() {
-            Component fromCard = getFromCard();
             fromCard.setVisible(false);
 
             super.stop();
@@ -190,9 +176,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
             int dx = (int)((float)width * percentComplete) * direction;
             int dy = (int)((float)height * percentComplete) * direction;
-
-            Component fromCard = getFromCard();
-            Component toCard = getToCard();
 
             if (selectionChangeEffect == SelectionChangeEffect.HORIZONTAL_SLIDE) {
                 fromCard.setLocation(dx, 0);
@@ -281,26 +264,22 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
                 int previousWidth;
                 int previousHeight;
-                Component fromCard = selectionChangeTransition.getFromCard();
-
-                if (fromCard == null) {
+                if (selectionChangeTransition.fromCard == null) {
                     previousWidth = 0;
                     previousHeight = 0;
                 } else {
-                    Dimensions fromSize = fromCard.getPreferredSize();
+                    Dimensions fromSize = selectionChangeTransition.fromCard.getPreferredSize();
                     previousWidth = fromSize.width;
                     previousHeight = fromSize.height;
                 }
 
                 int width;
                 int height;
-                Component toCard = selectionChangeTransition.getToCard();
-
-                if (toCard == null) {
+                if (selectionChangeTransition.toCard == null) {
                     width = 0;
                     height = 0;
                 } else {
-                    Dimensions toSize = toCard.getPreferredSize();
+                    Dimensions toSize = selectionChangeTransition.toCard.getPreferredSize();
                     width = toSize.width;
                     height = toSize.height;
                 }
@@ -438,8 +417,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                         SelectionChangeTransition selectionChangeTransition =
                             (SelectionChangeTransition)transition;
 
-                        Component toCard = selectionChangeTransition.getToCard();
-                        int selectedIndex = cardPane.indexOf(toCard);
+                        int selectedIndex = cardPane.indexOf(selectionChangeTransition.toCard);
                         cardPane.setSelectedIndex(selectedIndex);
                         CardPaneSkin.this.selectionChangeTransition = null;
                     }
