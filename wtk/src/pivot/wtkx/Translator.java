@@ -20,12 +20,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.Reader;
-import java.io.Writer;
 import java.lang.reflect.Method;
 import java.net.URI;
 
@@ -101,8 +100,8 @@ public class Translator {
             return result;
         }
 
-        public Writer openWriter() throws IOException {
-            return new FileWriter(file);
+        public PrintWriter openWriter() throws IOException {
+            return new PrintWriter(file);
         }
 
         public long getLastModified() {
@@ -263,13 +262,13 @@ public class Translator {
             className = className.substring(classDeliminatorIndex + 1);
         }
 
-        Writer writer = javaFile.openWriter();
+        PrintWriter writer = javaFile.openWriter();
         try {
             if (packageName != null) {
-                writer.write("package " + packageName + ";\n\n");
+                writer.format("package %s;\n\n", packageName);
             }
 
-            writer.write(String.format(
+            writer.format(
                 "import pivot.collections.HashMap;\n" +
                 "import pivot.wtkx.Bindable;\n" +
                 "import pivot.wtkx.Compiler;\n" +
@@ -288,7 +287,9 @@ public class Translator {
                 "%1$4spublic <T> T getRootObject() {\n" +
                 "%1$8sObject result = null;\n" +
                 "%1$8sClass<Bindable.ObjectHierarchy> includeClass;\n",
-                SPACE, className));
+                SPACE,
+                className
+            );
 
             // Parse the XML stream
             Element element = null;
@@ -360,7 +361,7 @@ public class Translator {
 
                                 // TODO We need to know the return type of the
                                 // include in order for compilation to work
-                                writer.write(String.format(
+                                writer.format(
                                     "%1$8sObject o%2$s;\n" +
                                     "%1$8sincludeClass = Compiler.getClass(getClass(), \"%3$s\");\n" +
                                     "%1$8sif (includeClass != null) {\n" +
@@ -370,7 +371,10 @@ public class Translator {
                                     "%1$12sWTKXSerializer wtkxSerializer = new WTKXSerializer();\n" +
                                     "%1$12so%2$s = wtkxSerializer.readObject(getClass().getResource(\"%3$s\"));\n" +
                                     "%1$8s}\n",
-                                    SPACE, ++Element.counter, src));
+                                    SPACE,
+                                    ++Element.counter,
+                                    src
+                                );
 
                                 element = new Element(element, Element.Type.INCLUDE, attributes,
                                     Object.class, Element.counter);
@@ -413,8 +417,13 @@ public class Translator {
                                 }
 
                                 String elementClassName = namespaceURI + "." + localName;
-                                writer.write(String.format("%8s%s o%d = new %s();\n",
-                                    SPACE, elementClassName, ++Element.counter, elementClassName));
+                                writer.format(
+                                    "%8s%s o%d = new %s();\n",
+                                    SPACE,
+                                    elementClassName,
+                                    ++Element.counter,
+                                    elementClassName
+                                );
 
                                 try {
                                     elementClassName = namespaceURI + "." + localName.replace('.', '$');
@@ -422,7 +431,7 @@ public class Translator {
                                         false, getClass().getClassLoader());
                                     element = new Element(element, Element.Type.INSTANCE,
                                         attributes, type, Element.counter);
-                                } catch(Exception exception) {
+                                } catch (Exception exception) {
                                     throw new IOException(exception);
                                 }
                             } else {
@@ -439,12 +448,19 @@ public class Translator {
                                     Method getterMethod = BeanDictionary.getGetterMethod(type, localName);
 
                                     // Instantiate the property so we have a reference to it
-                                    writer.write(String.format
-                                        ("%8s%s o%d = o%d.%s();\n", SPACE, valueType.getName().replace('$', '.'),
-                                        ++Element.counter, element.ref, getterMethod.getName()));
-                                    writer.write(String.format
-                                        ("%8sassert (o%d != null) : \"Read-only properties cannot be null.\";\n",
-                                         SPACE, Element.counter));
+                                    writer.format(
+                                        "%8s%s o%d = o%d.%s();\n",
+                                        SPACE,
+                                        valueType.getName().replace('$', '.'),
+                                        ++Element.counter,
+                                        element.ref,
+                                        getterMethod.getName()
+                                    );
+                                    writer.format(
+                                        "%8sassert (o%d != null) : \"Read-only properties cannot be null.\";\n",
+                                        SPACE,
+                                        Element.counter
+                                    );
 
                                     element = new Element(element, Element.Type.READ_ONLY_PROPERTY,
                                         attributes, valueType, Element.counter);
@@ -471,8 +487,12 @@ public class Translator {
                                 if (parentType != null
                                     && (Sequence.class.isAssignableFrom(parentType)
                                     || ListenerList.class.isAssignableFrom(parentType))) {
-                                    writer.write(String.format("%8so%d.add(o%d);\n",
-                                        SPACE, element.parent.ref, element.ref));
+                                    writer.format(
+                                        "%8so%d.add(o%d);\n",
+                                        SPACE,
+                                        element.parent.ref,
+                                        element.ref
+                                    );
                                 }
                             }
 
@@ -484,8 +504,12 @@ public class Translator {
                                         + " must not be null.");
                                 }
 
-                                writer.write(String.format
-                                    ("%8snamedObjects.put(\"%s\", o%d);\n", SPACE, id, element.ref));
+                                writer.format(
+                                    "%8snamedObjects.put(\"%s\", o%d);\n",
+                                    SPACE,
+                                    id,
+                                    element.ref
+                                );
                             }
 
                             break;
@@ -504,8 +528,13 @@ public class Translator {
                             Class<?> parentType = (Class<?>)element.parent.clazz;
                             Method setterMethod = BeanDictionary.getSetterMethod(parentType, localName, type);
 
-                            writer.write(String.format("%8so%d.%s(o%d);\n",
-                                SPACE, element.parent.ref, setterMethod.getName(), element.ref));
+                            writer.format(
+                                "%8so%d.%s(o%d);\n",
+                                SPACE,
+                                element.parent.ref,
+                                setterMethod.getName(),
+                                element.ref
+                            );
 
                             break;
                         }
@@ -522,8 +551,13 @@ public class Translator {
                                     }
 
                                     // Resolve and apply the attribute
-                                    writer.write(String.format("%8so%d.put(\"%s\", %s);\n", SPACE, element.ref,
-                                        attribute.localName, resolve(attribute.value, null)));
+                                    writer.format(
+                                        "%8so%d.put(\"%s\", %s);\n",
+                                        SPACE,
+                                        element.ref,
+                                        attribute.localName,
+                                        resolve(attribute.value, null)
+                                    );
                                 }
                             } else {
                                 // The element represents a typed object; apply the attributes
@@ -542,9 +576,14 @@ public class Translator {
                                             + attribute.localName.substring(0, attribute.localName.length()
                                             - (propertyName.length() + 1));
 
-                                        writer.write(String.format("%8s%s.%s(o%d, %s);\n",
-                                            SPACE, propertyClassName, setterMethodName, element.ref,
-                                            resolve(attribute.value, attributeType)));
+                                        writer.format(
+                                            "%8s%s.%s(o%d, %s);\n",
+                                            SPACE,
+                                            propertyClassName,
+                                            setterMethodName,
+                                            element.ref,
+                                            resolve(attribute.value, attributeType)
+                                        );
                                     } else {
                                         if (attributeType != null
                                             && ListenerList.class.isAssignableFrom(attributeType)) {
@@ -573,8 +612,13 @@ public class Translator {
                                                 attribute.localName.substring(1);
                                             String setterMethodName = BeanDictionary.SET_PREFIX + key;
 
-                                            writer.write(String.format("%8so%d.%s(%s);\n", SPACE, element.ref,
-                                                setterMethodName, resolve(attribute.value, attributeType)));
+                                            writer.format(
+                                                "%8so%d.%s(%s);\n",
+                                                SPACE,
+                                                element.ref,
+                                                setterMethodName,
+                                                resolve(attribute.value, attributeType)
+                                            );
                                         }
                                     }
                                 }
@@ -593,7 +637,11 @@ public class Translator {
                         // If this is the top of the stack, return this element's value;
                         // otherwise, move up the stack
                         if (element.parent == null) {
-                            writer.write(String.format("%8sresult = o%d;\n", SPACE, element.ref));
+                            writer.format(
+                                "%8sresult = o%d;\n",
+                                SPACE,
+                                element.ref
+                            );
                         } else {
                             element = element.parent;
                         }
@@ -604,13 +652,13 @@ public class Translator {
                 }
 
                 reader.close();
-            } catch(XMLStreamException exception) {
+            } catch (XMLStreamException exception) {
                 throw new IOException(exception);
             }
 
             // Close method declaration
-            writer.write(String.format("%8sreturn (T)result;\n", SPACE));
-            writer.write(String.format("%4s}\n", SPACE));
+            writer.format("%8sreturn (T)result;\n", SPACE);
+            writer.format("%4s}\n", SPACE);
 
             // Close class declaration
             writer.write("}\n");
@@ -637,42 +685,42 @@ public class Translator {
             || propertyType == Byte.TYPE) {
             try {
                 result = String.format("(byte)%d", Byte.parseByte(attributeValue));
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 result = String.format("\"%s\"", attributeValue);
             }
         } else if (propertyType == Short.class
             || propertyType == Short.TYPE) {
             try {
                 result = String.format("(short)%d", Short.parseShort(attributeValue));
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 result = String.format("\"%s\"", attributeValue);
             }
         } else if (propertyType == Integer.class
             || propertyType == Integer.TYPE) {
             try {
                 result = String.format("(int)%d", Integer.parseInt(attributeValue));
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 result = String.format("\"%s\"", attributeValue);
             }
         } else if (propertyType == Long.class
             || propertyType == Long.TYPE) {
             try {
                 result = String.format("(long)%d", Long.parseLong(attributeValue));
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 result = String.format("\"%s\"", attributeValue);
             }
         } else if (propertyType == Float.class
             || propertyType == Float.TYPE) {
             try {
                 result = String.format("(float)%f", Float.parseFloat(attributeValue));
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 result = String.format("\"%s\"", attributeValue);
             }
         } else if (propertyType == Double.class
             || propertyType == Double.TYPE) {
             try {
                 result = String.format("(double)%f", Double.parseDouble(attributeValue));
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 result = String.format("\"%s\"", attributeValue);
             }
         } else {
