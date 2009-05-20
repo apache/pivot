@@ -125,8 +125,6 @@ public abstract class Container extends Component
     // are removed from the list and appended to the end
     private ArrayList<Component> components = new ArrayList<Component>();
 
-    private boolean valid = true;
-
     private FocusTraversalPolicy focusTraversalPolicy = null;
     private String contextKey = null;
 
@@ -315,28 +313,14 @@ public abstract class Container extends Component
     }
 
     @Override
-    public boolean isValid() {
-        return valid;
-    }
-
-    @Override
-    public void invalidate() {
-        valid = false;
-        super.invalidate();
-    }
-
-    @Override
     public void validate() {
-        super.validate();
+        if (!isValid()
+            && isVisible()) {
+            super.validate();
 
-        if (!valid) {
-            try {
-                for (int i = 0, n = components.getLength(); i < n; i++) {
-                    Component component = components.get(i);
-                    component.validate();
-                }
-            } finally {
-                valid = true;
+            for (int i = 0, n = components.getLength(); i < n; i++) {
+                Component component = components.get(i);
+                component.validate();
             }
         }
     }

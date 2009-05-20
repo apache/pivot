@@ -55,12 +55,20 @@ limitations under the License.
                                     <TabPane selectedIndex="-1" styles="{tabOrientation:'horizontal', collapsible:true}"
                                         tooltipText="Click a tab to expand/collapse">
                                         <tabs>
-                                            <Label TabPane.icon="@anchor.png" TabPane.name="Anchor" text="Collapsible"
-                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                            <Label TabPane.icon="@cup.png" TabPane.name="Cup" text="Collapsible"
-                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                            <Label TabPane.icon="@star.png" TabPane.name="Star" text="Collapsible"
-                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                            <FlowPane TabPane.icon="@anchor.png" TabPane.name="Anchor"
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'top'}">
+                                                <Label text="Collapsible"/>
+                                            </FlowPane>
+
+                                            <FlowPane TabPane.icon="@cup.png" TabPane.name="Cup"
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                                <Label text="Collapsible"/>
+                                            </FlowPane>
+
+                                            <FlowPane TabPane.icon="@star.png" TabPane.name="Star"
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'bottom'}">
+                                                <Label text="Collapsible"/>
+                                            </FlowPane>
                                         </tabs>
                                     </TabPane>
                                 </TablePane.Row>
@@ -88,12 +96,20 @@ limitations under the License.
                                     <TabPane selectedIndex="-1" styles="{tabOrientation:'vertical', collapsible:true}"
                                         tooltipText="Click a tab to expand/collapse">
                                         <tabs>
-                                            <Label TabPane.icon="@anchor.png" TabPane.name="Anchor" text="Collapsible"
-                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                            <Label TabPane.icon="@cup.png" TabPane.name="Cup" text="Collapsible"
-                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                            <Label TabPane.icon="@star.png" TabPane.name="Star" text="Collapsible"
-                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                            <FlowPane TabPane.icon="@anchor.png" TabPane.name="Anchor"
+                                                styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
+                                                <Label text="Collapsible"/>
+                                            </FlowPane>
+
+                                            <FlowPane TabPane.icon="@cup.png" TabPane.name="Cup"
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                                <Label text="Collapsible"/>
+                                            </FlowPane>
+
+                                            <FlowPane TabPane.icon="@star.png" TabPane.name="Star"
+                                                styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
+                                                <Label text="Collapsible"/>
+                                            </FlowPane>
                                         </tabs>
                                     </TabPane>
                                 </TablePane.Row>

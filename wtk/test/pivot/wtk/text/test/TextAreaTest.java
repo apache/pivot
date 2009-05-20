@@ -21,6 +21,7 @@ import pivot.collections.Sequence;
 import pivot.collections.Sequence.Tree.Path;
 import pivot.wtk.Application;
 import pivot.wtk.Component;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Frame;
 import pivot.wtk.Label;
@@ -144,5 +145,9 @@ public class TextAreaTest implements Application {
             offsetLabel.setText(Integer.toString(selectedNode.getDocumentOffset()));
             charactersLabel.setText(Integer.toString(selectedNode.getCharacterCount()));
         }
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(TextAreaTest.class, args);
     }
 }

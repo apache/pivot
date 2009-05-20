@@ -18,6 +18,7 @@ package pivot.wtk.test;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Frame;
 import pivot.wtkx.WTKXSerializer;
@@ -41,5 +42,9 @@ public class AccordionTest implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(AccordionTest.class, args);
     }
 }

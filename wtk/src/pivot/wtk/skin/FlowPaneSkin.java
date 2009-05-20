@@ -41,6 +41,22 @@ public class FlowPaneSkin extends ContainerSkin
     private Insets padding = new Insets(0);
     private int spacing = 4;
 
+    @Override
+    public void install(Component component) {
+        super.install(component);
+
+        FlowPane flowPane = (FlowPane)component;
+        flowPane.getFlowPaneListeners().add(this);
+    }
+
+    @Override
+    public void uninstall() {
+        FlowPane flowPane = (FlowPane)getComponent();
+        flowPane.getFlowPaneListeners().remove(this);
+
+        super.uninstall();
+    }
+
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 

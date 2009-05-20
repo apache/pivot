@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Tab Panes" maximized="true"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    <content>
+        <TablePane styles="{padding:8, horizontalSpacing:6}">
+            <columns>
+                <TablePane.Column width="1*"/>
+                <TablePane.Column/>
+            </columns>
+            <rows>
+                <TablePane.Row height="1*">
+                    <Border styles="{padding:12}">
+                        <content>
+                            <FlowPane>
+                                <TabPane wtkx:id="tabPane" selectedIndex="0">
+                                    <tabs>
+                                        <FlowPane TabPane.icon="pivot/tutorials/bell.png" TabPane.name="Bell"
+                                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                            <Border>
+                                                <content>
+                                                    <Label text="240x180" preferredWidth="240" preferredHeight="180"/>
+                                                </content>
+                                            </Border>
+                                        </FlowPane>
+
+                                        <FlowPane TabPane.icon="pivot/tutorials/clock.png" TabPane.name="Clock"
+                                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                            <Border>
+                                                <content>
+                                                    <Label text="320x240" preferredWidth="320" preferredHeight="240"/>
+                                                </content>
+                                            </Border>
+                                        </FlowPane>
+
+                                        <FlowPane TabPane.icon="pivot/tutorials/house.png" TabPane.name="House"
+                                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                            <Border>
+                                                <content>
+                                                    <Label text="480x360" preferredWidth="480" preferredHeight="360"/>
+                                                </content>
+                                            </Border>
+                                        </FlowPane>
+                                    </tabs>
+                                    <corner>
+                                        <FlowPane wtkx:id="cornerFlowPane" styles="{horizontalAlignment:'right'}">
+                                            <TextInput/>
+                                        </FlowPane>
+                                    </corner>
+                                </TabPane>
+                            </FlowPane>
+                        </content>
+                    </Border>
+
+                    <Border>
+                        <content>
+                            <FlowPane orientation="vertical" styles="{padding:4, spacing:6}">
+                                <Checkbox wtkx:id="collapsibleCheckbox" buttonData="Collapsible"/>
+                                <Label text="Tab orientation:"/>
+                                <RadioButton wtkx:id="horizontalRadioButton" buttonData="Horizontal" selected="true"
+                                    group="tabOrientation"/>
+                                <RadioButton wtkx:id="verticalRadioButton" buttonData="Vertical"
+                                    group="tabOrientation"/>
+                            </FlowPane>
+                        </content>
+                    </Border>
+                </TablePane.Row>
+            </rows>
+        </TablePane>
+    </content>
+</Window>
+

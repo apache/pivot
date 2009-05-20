@@ -531,6 +531,9 @@ public abstract class Component implements ConstrainedVisual {
     // a parent
     private Container parent = null;
 
+    // The component's valid state
+    private boolean valid = false;
+
     // The component's location, relative to the parent's origin
     private int x = 0;
     private int y = 0;
@@ -801,11 +804,7 @@ public abstract class Component implements ConstrainedVisual {
             // of being laid out; it must be flagged as invalid to ensure
             // that layout is propagated downward when validate() is
             // called on it
-            if (visible) {
-                // We don't invalidate if the component is not visible; if
-                // the component later becomes visible, we validate
-                invalidate();
-            }
+            invalidate();
 
             // Redraw the region formerly occupied by this component
             if (parent != null) {
@@ -1599,18 +1598,19 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's valid state.
-     *
-     * @return
-     * <tt>true</tt>; non-container components are always valid.
      */
     public boolean isValid() {
-        return true;
+        return valid;
     }
 
     /**
-     * Notifies the component's parent that it needs to re-layout.
+     * Flags the component's hierarchy as invalid, and clears any cached
+     * preferred size.
      */
     public void invalidate() {
+        valid = false;
+
+        // Clear the preferred size
         preferredSize = null;
 
         if (parent != null) {
@@ -1620,12 +1620,13 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Lays out the component by calling {@link Skin#layout()}.
-     * <p>
-     * This is an effective no-op for non-containers since the skin's
-     * implementation of layout() will be a no-op.
      */
     public void validate() {
-        skin.layout();
+        if (!valid
+            && visible) {
+            skin.layout();
+            valid = true;
+        }
     }
 
     /**

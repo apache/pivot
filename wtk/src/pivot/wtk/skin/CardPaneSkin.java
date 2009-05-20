@@ -225,6 +225,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public static final int SELECTION_CHANGE_DURATION = 250;
     public static final int SELECTION_CHANGE_RATE = 30;
 
+    @Override
     public void install(Component component) {
         super.install(component);
 
@@ -232,6 +233,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         cardPane.getCardPaneListeners().add(this);
     }
 
+    @Override
     public void uninstall() {
         CardPane cardPane = (CardPane)getComponent();
         cardPane.getCardPaneListeners().remove(this);
@@ -344,9 +346,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         int height = getHeight();
 
         for (Component card : cardPane) {
-            // Setting the size of non-visible cards does not impose a
-            // performance penalty since setSize() does not trigger an
-            // invalidate unless the component is visible
             card.setLocation(0, 0);
             card.setSize(width, height);
         }
@@ -357,6 +356,10 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     public void setSizeToSelection(boolean sizeToSelection) {
+        if (selectionChangeTransition != null) {
+            selectionChangeTransition.end();
+        }
+
         this.sizeToSelection = sizeToSelection;
         invalidateComponent();
     }
@@ -366,7 +369,10 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     public void setSelectionChangeEffect(SelectionChangeEffect selectionChangeEffect) {
-        // TODO Check against sizeToSelection?
+        if (selectionChangeTransition != null) {
+            selectionChangeTransition.end();
+        }
+
         this.selectionChangeEffect = selectionChangeEffect;
     }
 
@@ -381,8 +387,15 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     @Override
     public void componentInserted(Container container, int index) {
         if (selectionChangeTransition != null) {
-            selectionChangeTransition.stop();
-            selectionChangeTransition = null;
+            if (selectionChangeTransition.from >= index) {
+                selectionChangeTransition.from++;
+            }
+
+            if (selectionChangeTransition.to >= index) {
+                selectionChangeTransition.to++;
+            }
+
+            selectionChangeTransition.end();
         }
 
         super.componentInserted(container, index);
@@ -463,10 +476,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             && selectionChangeTransition != null) {
             selectionChangeTransition.stop();
             selectionChangeTransition = null;
-
-            if (sizeToSelection) {
-                invalidateComponent();
-            }
         }
     }
 
