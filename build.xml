@@ -714,6 +714,12 @@ limitations under the License.
     <target name="trim-whitespace">
         <replaceregexp match="[\t ]+$" replace="" flags="gm" byline="true">
             <fileset dir=".">
+                <include name="BUILD"/>
+                <include name="DISCLAIMER"/>
+                <include name="LICENSE"/>
+                <include name="NOTICE"/>
+                <include name="README"/>
+                <include name="RELEASE-NOTES"/>
                 <include name="**/*.java"/>
                 <include name="**/*.html"/>
                 <include name="**/*.txt"/>
