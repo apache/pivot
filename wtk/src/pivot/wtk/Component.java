@@ -1233,7 +1233,8 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             // Ensure the layout is valid
-            if (visible) {
+            if (visible
+                && !valid) {
                 validate();
             }
 

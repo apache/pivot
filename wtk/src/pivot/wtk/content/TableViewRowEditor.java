@@ -63,11 +63,11 @@ public class TableViewRowEditor implements TableView.RowEditor {
      */
     private Image tableRowImage = new Image() {
         public int getWidth() {
-            return tableView.getRowBounds(rowIndex).width;
+            return (tableView == null) ? 0 : tableView.getRowBounds(rowIndex).width;
         }
 
         public int getHeight() {
-            return tableView.getRowBounds(rowIndex).height;
+            return (tableView == null) ? 0 : tableView.getRowBounds(rowIndex).height;
         }
 
         public void paint(Graphics2D graphics) {
