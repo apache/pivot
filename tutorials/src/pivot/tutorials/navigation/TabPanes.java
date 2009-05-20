@@ -28,7 +28,6 @@ import pivot.wtk.Orientation;
 import pivot.wtk.RadioButton;
 import pivot.wtk.TabPane;
 import pivot.wtk.Window;
-import pivot.wtk.Button.Group;
 import pivot.wtkx.Bindable;
 
 public class TabPanes extends Bindable implements Application {
@@ -36,26 +35,31 @@ public class TabPanes extends Bindable implements Application {
     @Bind(fieldName="window") private TabPane tabPane;
     @Bind(fieldName="window") private Checkbox collapsibleCheckbox;
     @Bind(fieldName="window") private RadioButton horizontalRadioButton;
+    @Bind(fieldName="window") private RadioButton verticalRadioButton;
     @Bind(fieldName="window") private FlowPane cornerFlowPane;
-
-    private Button.Group tabOrientationGroup = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
         bind();
 
-        collapsibleCheckbox.getButtonStateListeners().add(new ButtonStateListener() {
+        ButtonStateListener checkboxStateListener = new ButtonStateListener() {
             public void stateChanged(Button button, Button.State previousState) {
                 updateTabPane();
             }
-        });
+        };
 
-        tabOrientationGroup = Button.getGroup("tabOrientation");
-        tabOrientationGroup.getGroupListeners().add(new Button.GroupListener() {
-            public void selectionChanged(Group group, Button previousSelection) {
-                updateTabPane();
+        collapsibleCheckbox.getButtonStateListeners().add(checkboxStateListener);
+
+        ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
+            public void stateChanged(Button button, Button.State previousState) {
+                if (button.isSelected()) {
+                    updateTabPane();
+                }
             }
-        });
+        };
+
+        horizontalRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+        verticalRadioButton.getButtonStateListeners().add(radioButtonStateListener);
 
         updateTabPane();
 
@@ -79,7 +83,7 @@ public class TabPanes extends Bindable implements Application {
     private void updateTabPane() {
         tabPane.getStyles().put("collapsible", collapsibleCheckbox.isSelected());
 
-        if (tabOrientationGroup.getSelection() == horizontalRadioButton) {
+        if (horizontalRadioButton.isSelected()) {
             tabPane.getStyles().put("tabOrientation", Orientation.HORIZONTAL);
             if (tabPane.getCorner() == null) {
                 tabPane.setCorner(cornerFlowPane);

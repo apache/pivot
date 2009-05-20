@@ -29,7 +29,7 @@ limitations under the License.
                     <Border styles="{padding:12}">
                         <content>
                             <FlowPane>
-                                <TabPane wtkx:id="tabPane" selectedIndex="0">
+                                <TabPane wtkx:id="tabPane">
                                     <tabs>
                                         <FlowPane TabPane.icon="pivot/tutorials/bell.png" TabPane.name="Bell"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">

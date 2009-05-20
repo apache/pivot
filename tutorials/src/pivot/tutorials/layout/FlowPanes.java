@@ -44,66 +44,29 @@ public class FlowPanes extends Bindable implements Application {
     @Bind(fieldName="window") private RadioButton verticalAlignmentCenterButton;
     @Bind(fieldName="window") private RadioButton verticalAlignmentJustifyButton;
 
-    private ButtonStateListener buttonStateListener = new ButtonStateListener() {
-        public void stateChanged(Button button, Button.State previousState) {
-            Orientation orientation = null;
-            if (horizontalOrientationButton.isSelected()) {
-                orientation = Orientation.HORIZONTAL;
-            } else if (verticalOrientationButton.isSelected()) {
-                orientation = Orientation.VERTICAL;
-            }
-
-            if (orientation != null) {
-                flowPane.setOrientation(orientation);
-            }
-
-            HorizontalAlignment horizontalAlignment = null;
-            if (horizontalAlignmentLeftButton.isSelected()) {
-                horizontalAlignment = HorizontalAlignment.LEFT;
-            } else if (horizontalAlignmentRightButton.isSelected()) {
-                horizontalAlignment = HorizontalAlignment.RIGHT;
-            } else if (horizontalAlignmentCenterButton.isSelected()) {
-                horizontalAlignment = HorizontalAlignment.CENTER;
-            } else if (horizontalAlignmentJustifyButton.isSelected()) {
-                horizontalAlignment = HorizontalAlignment.JUSTIFY;
-            }
-
-            if (horizontalAlignment != null) {
-                flowPane.getStyles().put("horizontalAlignment", horizontalAlignment);
-            }
-
-            VerticalAlignment verticalAlignment = null;
-            if (verticalAlignmentTopButton.isSelected()) {
-                verticalAlignment = VerticalAlignment.TOP;
-            } else if (verticalAlignmentBottomButton.isSelected()) {
-                verticalAlignment = VerticalAlignment.BOTTOM;
-            } else if (verticalAlignmentCenterButton.isSelected()) {
-                verticalAlignment = VerticalAlignment.CENTER;
-            } else if (verticalAlignmentJustifyButton.isSelected()) {
-                verticalAlignment = VerticalAlignment.JUSTIFY;
-            }
-
-            if (verticalAlignment != null) {
-                flowPane.getStyles().put("verticalAlignment", verticalAlignment);
-            }
-        }
-    };
-
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         bind();
 
-        horizontalOrientationButton.getButtonStateListeners().add(buttonStateListener);
-        verticalOrientationButton.getButtonStateListeners().add(buttonStateListener);
-        horizontalAlignmentLeftButton.getButtonStateListeners().add(buttonStateListener);
-        horizontalAlignmentRightButton.getButtonStateListeners().add(buttonStateListener);
-        horizontalAlignmentCenterButton.getButtonStateListeners().add(buttonStateListener);
-        horizontalAlignmentJustifyButton.getButtonStateListeners().add(buttonStateListener);
-        verticalAlignmentTopButton.getButtonStateListeners().add(buttonStateListener);
-        verticalAlignmentBottomButton.getButtonStateListeners().add(buttonStateListener);
-        verticalAlignmentCenterButton.getButtonStateListeners().add(buttonStateListener);
-        verticalAlignmentJustifyButton.getButtonStateListeners().add(buttonStateListener);
+        ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
+            public void stateChanged(Button button, Button.State previousState) {
+                if (button.isSelected()) {
+                    updateFlowPaneState();
+                }
+            }
+        };
 
-        buttonStateListener.stateChanged(null, null);
+        horizontalOrientationButton.getButtonStateListeners().add(radioButtonStateListener);
+        verticalOrientationButton.getButtonStateListeners().add(radioButtonStateListener);
+        horizontalAlignmentLeftButton.getButtonStateListeners().add(radioButtonStateListener);
+        horizontalAlignmentRightButton.getButtonStateListeners().add(radioButtonStateListener);
+        horizontalAlignmentCenterButton.getButtonStateListeners().add(radioButtonStateListener);
+        horizontalAlignmentJustifyButton.getButtonStateListeners().add(radioButtonStateListener);
+        verticalAlignmentTopButton.getButtonStateListeners().add(radioButtonStateListener);
+        verticalAlignmentBottomButton.getButtonStateListeners().add(radioButtonStateListener);
+        verticalAlignmentCenterButton.getButtonStateListeners().add(radioButtonStateListener);
+        verticalAlignmentJustifyButton.getButtonStateListeners().add(radioButtonStateListener);
+
+        updateFlowPaneState();
 
         window.open(display);
     }
@@ -120,6 +83,49 @@ public class FlowPanes extends Bindable implements Application {
     }
 
     public void resume() {
+    }
+
+    private void updateFlowPaneState() {
+        Orientation orientation = null;
+        if (horizontalOrientationButton.isSelected()) {
+            orientation = Orientation.HORIZONTAL;
+        } else if (verticalOrientationButton.isSelected()) {
+            orientation = Orientation.VERTICAL;
+        }
+
+        if (orientation != null) {
+            flowPane.setOrientation(orientation);
+        }
+
+        HorizontalAlignment horizontalAlignment = null;
+        if (horizontalAlignmentLeftButton.isSelected()) {
+            horizontalAlignment = HorizontalAlignment.LEFT;
+        } else if (horizontalAlignmentRightButton.isSelected()) {
+            horizontalAlignment = HorizontalAlignment.RIGHT;
+        } else if (horizontalAlignmentCenterButton.isSelected()) {
+            horizontalAlignment = HorizontalAlignment.CENTER;
+        } else if (horizontalAlignmentJustifyButton.isSelected()) {
+            horizontalAlignment = HorizontalAlignment.JUSTIFY;
+        }
+
+        if (horizontalAlignment != null) {
+            flowPane.getStyles().put("horizontalAlignment", horizontalAlignment);
+        }
+
+        VerticalAlignment verticalAlignment = null;
+        if (verticalAlignmentTopButton.isSelected()) {
+            verticalAlignment = VerticalAlignment.TOP;
+        } else if (verticalAlignmentBottomButton.isSelected()) {
+            verticalAlignment = VerticalAlignment.BOTTOM;
+        } else if (verticalAlignmentCenterButton.isSelected()) {
+            verticalAlignment = VerticalAlignment.CENTER;
+        } else if (verticalAlignmentJustifyButton.isSelected()) {
+            verticalAlignment = VerticalAlignment.JUSTIFY;
+        }
+
+        if (verticalAlignment != null) {
+            flowPane.getStyles().put("verticalAlignment", verticalAlignment);
+        }
     }
 
     public static void main(String[] args) {

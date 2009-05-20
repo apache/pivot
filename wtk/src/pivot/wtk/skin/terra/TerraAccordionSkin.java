@@ -649,6 +649,10 @@ public class TerraAccordionSkin extends ContainerSkin
         panelHeader.setGroup(panelHeaderGroup);
         panelHeaders.insert(panelHeader, index);
 
+        if (accordion.getPanels().getLength() == 1) {
+            accordion.setSelectedIndex(0);
+        }
+
         invalidateComponent();
     }
 

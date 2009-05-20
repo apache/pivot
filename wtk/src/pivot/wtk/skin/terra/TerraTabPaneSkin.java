@@ -1094,6 +1094,12 @@ public class TerraTabPaneSkin extends ContainerSkin
         tabButton.setGroup(tabButtonGroup);
 
         buttonFlowPane.insert(tabButton, index);
+
+        if (tabPane.getTabs().getLength() == 1) {
+            tabPane.setSelectedIndex(0);
+        }
+
+        invalidateComponent();
     }
 
     public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> removed) {
@@ -1111,6 +1117,8 @@ public class TerraTabPaneSkin extends ContainerSkin
             TabButton tabButton = (TabButton)removedButtons.get(i);
             tabButton.setGroup((Group)null);
         }
+
+        invalidateComponent();
     }
 
     public void cornerChanged(TabPane tabPane, Component previousCorner) {

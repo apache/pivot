@@ -38,7 +38,7 @@ limitations under the License.
                                             backgroundColor:'#cccccc'}">
                                             <Border styles="{padding:6}">
                                                 <content>
-                                                    <CardPane wtkx:id="cardPane" selectedIndex="0">
+                                                    <CardPane wtkx:id="cardPane">
                                                         <ImageView image="pivot/tutorials/IMG_0725_2.jpg"/>
                                                         <ImageView image="pivot/tutorials/IMG_0735_2.jpg"/>
                                                         <ImageView image="pivot/tutorials/IMG_0767_2.jpg"/>

@@ -64,16 +64,25 @@ public class CardPanes extends Bindable implements Application {
             }
         });
 
-        ButtonStateListener buttonStateListener = new ButtonStateListener() {
+        ButtonStateListener checkboxStateListener = new ButtonStateListener() {
             public void stateChanged(Button button, Button.State previousState) {
                 updateCardPane();
             }
         };
 
-        sizeToSelectionCheckbox.getButtonStateListeners().add(buttonStateListener);
-        crossfadeRadioButton.getButtonStateListeners().add(buttonStateListener);
-        horizontalSlideRadioButton.getButtonStateListeners().add(buttonStateListener);
-        verticalSlideRadioButton.getButtonStateListeners().add(buttonStateListener);
+        sizeToSelectionCheckbox.getButtonStateListeners().add(checkboxStateListener);
+
+        ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
+            public void stateChanged(Button button, Button.State previousState) {
+                if (button.isSelected()) {
+                    updateCardPane();
+                }
+            }
+        };
+
+        crossfadeRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+        horizontalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
+        verticalSlideRadioButton.getButtonStateListeners().add(radioButtonStateListener);
 
         updateCardPane();
         updateLinkButtonState();

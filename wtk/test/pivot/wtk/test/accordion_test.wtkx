@@ -19,7 +19,7 @@ limitations under the License.
 <Frame title="Accordion Test" preferredWidth="240" preferredHeight="360"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
     <content>
-        <Accordion selectedIndex="0">
+        <Accordion>
             <panels>
                 <Label Accordion.name="A" text="Hello"/>
                 <Label Accordion.name="B" text="World"/>
