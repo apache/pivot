@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Activity Indicators" maximized="true"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    <content>
+        <TablePane>
+            <columns>
+                <TablePane.Column width="1*"/>
+            </columns>
+            <rows>
+                <TablePane.Row height="1*">
+                    <Border>
+                        <content>
+                            <FlowPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <Label text="Progress:"/>
+                                <Meter wtkx:id="meter" preferredWidth="200" preferredHeight="16"/>
+                            </FlowPane>
+                        </content>
+                    </Border>
+                </TablePane.Row>
+                <TablePane.Row height="-1">
+                    <FlowPane styles="{horizontalAlignment:'center', padding:6}">
+                        <PushButton wtkx:id="progressButton" styles="{preferredAspectRatio:3}"/>
+                    </FlowPane>
+                </TablePane.Row>
+            </rows>
+        </TablePane>
+    </content>
+</Window>
