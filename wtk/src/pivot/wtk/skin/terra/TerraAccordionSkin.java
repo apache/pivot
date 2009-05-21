@@ -27,6 +27,7 @@ import pivot.collections.Sequence;
 import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
+import pivot.wtk.ComponentStateListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.HorizontalAlignment;
@@ -51,37 +52,19 @@ import pivot.wtk.skin.ContainerSkin;
 
 /**
  * Accordion skin.
- * <p>
- * TODO Make headers focusable?
- * <p>
- * TODO Disable the header when the component is disabled? We'd need
- * style properties to present a disabled header state. We'd also need
- * to manage button enabled state independently of the accordion enabled
- * state.
  *
  * @author gbrown
  */
 public class TerraAccordionSkin extends ContainerSkin
     implements AccordionListener, AccordionSelectionListener, AccordionAttributeListener {
 	protected class PanelHeader extends Button {
-        public PanelHeader(Object panel) {
+        public PanelHeader(Component panel) {
             super(panel);
 
             super.setToggleButton(true);
             setDataRenderer(DEFAULT_DATA_RENDERER);
 
             setSkin(new PanelHeaderSkin());
-        }
-
-        @Override
-        public boolean isEnabled() {
-            Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
-            return accordion.isEnabled();
-        }
-
-        @Override
-        public void setEnabled(boolean enabled) {
-            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -200,7 +183,7 @@ public class TerraAccordionSkin extends ContainerSkin
         }
 
         public Color getDisabledColor() {
-        	return buttonColor;
+        	return disabledButtonColor;
         }
     }
 
@@ -253,14 +236,32 @@ public class TerraAccordionSkin extends ContainerSkin
     private Insets padding;
     private Font buttonFont;
     private Color buttonColor;
+    private Color disabledButtonColor;
     private Color buttonBackgroundColor;
     private Insets buttonPadding;
 
     // Derived colors
     private Color buttonBevelColor;
 
-	public static final int GRADIENT_BEVEL_THICKNESS = 4;
-	private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer() {
+    private SelectionChangeTransition selectionChangeTransition = null;
+    private ClipDecorator previousSelectedPanelClipDecorator = new ClipDecorator();
+    private ClipDecorator selectedPanelClipDecorator = new ClipDecorator();
+
+    private ComponentStateListener panelStateListener = new ComponentStateListener.Adapter() {
+        @Override
+        public void enabledChanged(Component component) {
+            Accordion accordion = (Accordion)getComponent();
+            int i = accordion.getPanels().indexOf(component);
+            panelHeaders.get(i).setEnabled(component.isEnabled());
+        }
+    };
+
+    public static final int GRADIENT_BEVEL_THICKNESS = 4;
+
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer() {
+        {   getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+        }
+
         @Override
         public void render(Object data, Button button, boolean highlighted) {
             // TODO Create a custom inner renderer class that can display
@@ -272,16 +273,8 @@ public class TerraAccordionSkin extends ContainerSkin
         }
     };
 
-    private SelectionChangeTransition selectionChangeTransition = null;
-    public final ClipDecorator previousSelectedPanelClipDecorator = new ClipDecorator();
-    public final ClipDecorator selectedPanelClipDecorator = new ClipDecorator();
-
 	private static final int SELECTION_CHANGE_DURATION = 250;
 	private static final int SELECTION_CHANGE_RATE = 30;
-
-	static {
-		DEFAULT_DATA_RENDERER.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-	}
 
     public TerraAccordionSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -291,6 +284,7 @@ public class TerraAccordionSkin extends ContainerSkin
         padding = new Insets(4);
         buttonFont = theme.getFont().deriveFont(Font.BOLD);
         buttonColor = theme.getColor(15);
+        disabledButtonColor = theme.getColor(7);
         buttonBackgroundColor = theme.getColor(10);
         buttonPadding = new Insets(3, 4, 3, 4);
 
@@ -327,15 +321,17 @@ public class TerraAccordionSkin extends ContainerSkin
         accordion.getAccordionSelectionListeners().add(this);
         accordion.getAccordionAttributeListeners().add(this);
 
-        // Add header buttons for all existing panels
+        // Add headers for all existing panels
         for (Component panel : accordion.getPanels()) {
             PanelHeader panelHeader = new PanelHeader(panel);
             panelHeader.setGroup(panelHeaderGroup);
-            accordion.add(panelHeader);
             panelHeaders.add(panelHeader);
-        }
+            accordion.add(panelHeader);
 
-        selectedIndexChanged(accordion, -1);
+            // Listen for state changes on the panel
+            panelHeader.setEnabled(panel.isEnabled());
+            panel.getComponentStateListeners().add(panelStateListener);
+        }
     }
 
     public void uninstall() {
@@ -346,9 +342,13 @@ public class TerraAccordionSkin extends ContainerSkin
         accordion.getAccordionSelectionListeners().remove(this);
         accordion.getAccordionAttributeListeners().remove(this);
 
-        // Remove the header buttons
-        for (int i = 0, n = panelHeaders.getLength(); i < n; i++) {
-            accordion.remove(panelHeaders.get(i));
+        for (PanelHeader panelHeader : panelHeaders) {
+            // Stop listening for state changes on the panel
+            Component panel = (Component)panelHeader.getButtonData();
+            panel.getComponentStateListeners().remove(panelStateListener);
+
+            // Remove the header
+            accordion.remove(panelHeader);
         }
 
         super.uninstall();
@@ -642,14 +642,18 @@ public class TerraAccordionSkin extends ContainerSkin
             selectionChangeTransition.end();
         }
 
-        // Create a new button for the panel
+        // Add a header for the panel
         Component panel = accordion.getPanels().get(index);
         PanelHeader panelHeader = new PanelHeader(panel);
-
-        accordion.add(panelHeader);
         panelHeader.setGroup(panelHeaderGroup);
         panelHeaders.insert(panelHeader, index);
+        accordion.add(panelHeader);
 
+        // Listen for state changes on the panel
+        panelHeader.setEnabled(panel.isEnabled());
+        panel.getComponentStateListeners().add(panelStateListener);
+
+        // If this is the first panel, select it
         if (accordion.getPanels().getLength() == 1) {
             accordion.setSelectedIndex(0);
         }
@@ -657,17 +661,23 @@ public class TerraAccordionSkin extends ContainerSkin
         invalidateComponent();
     }
 
-    public void panelsRemoved(Accordion accordion, int index, Sequence<Component> panels) {
+    public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed) {
         if (selectionChangeTransition != null) {
             selectionChangeTransition.end();
         }
 
-        // Remove the buttons
-        Sequence<PanelHeader> removed = panelHeaders.remove(index, panels.getLength());
+        // Remove the headers
+        Sequence<PanelHeader> removedHeaders = panelHeaders.remove(index, removed.getLength());
 
-        for (int i = 0, n = removed.getLength(); i < n; i++) {
-            PanelHeader panelHeader = removed.get(i);
+        for (int i = 0, n = removedHeaders.getLength(); i < n; i++) {
+            PanelHeader panelHeader = removedHeaders.get(i);
             panelHeader.setGroup((Group)null);
+
+            // Stop listening for state changes on the panel
+            Component panel = (Component)panelHeader.getButtonData();
+            panel.getComponentStateListeners().remove(panelStateListener);
+
+            // Remove the header
             accordion.remove(panelHeader);
         }
 

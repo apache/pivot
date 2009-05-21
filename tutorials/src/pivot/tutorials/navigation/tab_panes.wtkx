@@ -35,7 +35,8 @@ limitations under the License.
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
-                                                    <Label text="240x180" preferredWidth="240" preferredHeight="180"/>
+                                                    <Label text="240x180" preferredWidth="240" preferredHeight="180"
+                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                                                 </content>
                                             </Border>
                                         </FlowPane>
@@ -44,7 +45,8 @@ limitations under the License.
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
-                                                    <Label text="320x240" preferredWidth="320" preferredHeight="240"/>
+                                                    <Label text="320x240" preferredWidth="320" preferredHeight="240"
+                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                                                 </content>
                                             </Border>
                                         </FlowPane>
@@ -53,10 +55,13 @@ limitations under the License.
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
-                                                    <Label text="480x360" preferredWidth="480" preferredHeight="360"/>
+                                                    <Label text="480x360" preferredWidth="480" preferredHeight="360"
+                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                                                 </content>
                                             </Border>
                                         </FlowPane>
+
+                                        <FlowPane TabPane.icon="pivot/tutorials/star.png" TabPane.name="Star" enabled="false"/>
                                     </tabs>
                                     <corner>
                                         <FlowPane wtkx:id="cornerFlowPane" styles="{horizontalAlignment:'right'}">

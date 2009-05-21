@@ -21,20 +21,22 @@ import pivot.wtk.Application;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Frame;
-import pivot.wtkx.WTKXSerializer;
+import pivot.wtkx.Bindable;
 
-public class AccordionTest implements Application {
-    private Frame frame = null;
+public class AccordionTest extends Bindable implements Application {
+    @Load(resourceName="accordion_test.wtkx") private Frame frame;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        frame = (Frame)wtkxSerializer.readObject(getClass().getResource("accordion_test.wtkx"));
+        bind();
         frame.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        frame.close();
+        if (frame != null) {
+            frame.close();
+        }
+
         return true;
     }
 

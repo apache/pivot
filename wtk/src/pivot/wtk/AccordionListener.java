@@ -33,7 +33,7 @@ public interface AccordionListener {
         public void panelInserted(Accordion accordion, int index) {
         }
 
-        public void panelsRemoved(Accordion accordion, int index, Sequence<Component> panels) {
+        public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed) {
         }
     }
 
@@ -50,7 +50,7 @@ public interface AccordionListener {
      *
      * @param accordion
      * @param index
-     * @param panels
+     * @param removed
      */
-    public void panelsRemoved(Accordion accordion, int index, Sequence<Component> panels);
+    public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed);
 }

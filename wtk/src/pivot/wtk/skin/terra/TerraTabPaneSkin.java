@@ -26,6 +26,7 @@ import pivot.collections.Sequence;
 import pivot.util.Vote;
 import pivot.wtk.Button;
 import pivot.wtk.Component;
+import pivot.wtk.ComponentStateListener;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;
 import pivot.wtk.GraphicsUtilities;
@@ -54,14 +55,6 @@ import pivot.wtk.skin.ContainerSkin;
 
 /**
  * Tab pane skin.
- * <p>
- * TODO Make tab buttons focusable?
- * <p>
- * TODO Disable the tab button when the component is disabled? We'd need
- * style properties to present a disabled tab button state. We'd also need
- * to manage button enabled state independently of tab pane enabled state.
- * <p>
- * TODO Add support for closeable attribute.
  *
  * @author gbrown
  */
@@ -73,18 +66,13 @@ public class TerraTabPaneSkin extends ContainerSkin
      * @author gbrown
      */
     public class TabButton extends Button {
-        public TabButton(Object tab) {
+        public TabButton(Component tab) {
             super(tab);
 
             super.setToggleButton(true);
             setDataRenderer(DEFAULT_DATA_RENDERER);
 
             setSkin(new TabButtonSkin());
-        }
-
-        @Override
-        public void setEnabled(boolean enabled) {
-            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -275,7 +263,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         public Color getDisabledColor() {
-        	return buttonColor;
+        	return disabledButtonColor;
         }
     }
 
@@ -353,15 +341,24 @@ public class TerraTabPaneSkin extends ContainerSkin
     private Insets padding;
     private Font buttonFont;
     private Color buttonColor;
+    private Color disabledButtonColor;
     private Insets buttonPadding;
 
-    // Derived colors
     private Color buttonBevelColor;
 
     private boolean collapsible = false;
     private Orientation tabOrientation = Orientation.HORIZONTAL;
 
     private SelectionChangeTransition selectionChangeTransition = null;
+
+    private ComponentStateListener tabStateListener = new ComponentStateListener.Adapter() {
+        @Override
+        public void enabledChanged(Component component) {
+            TabPane tabPane = (TabPane)getComponent();
+            int i = tabPane.getTabs().indexOf(component);
+            buttonFlowPane.get(i).setEnabled(component.isEnabled());
+        }
+    };
 
     private static final int SELECTION_CHANGE_DURATION = 250;
     private static final int SELECTION_CHANGE_RATE = 30;
@@ -387,12 +384,16 @@ public class TerraTabPaneSkin extends ContainerSkin
         padding = new Insets(6);
         buttonFont = theme.getFont();
         buttonColor = theme.getColor(1);
+        disabledButtonColor = theme.getColor(7);
         buttonPadding = new Insets(3, 4, 3, 4);
 
-        // Set the derived colors
         buttonBevelColor = TerraTheme.brighten(inactiveTabColor);
 
         setButtonSpacing(2);
+
+        buttonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
+        buttonPanorama.getStyles().put("buttonPadding", 6);
+        buttonPanorama.setView(buttonFlowPane);
 
         tabButtonGroup.getGroupListeners().add(new Button.GroupListener() {
             public void selectionChanged(Group group, Button previousSelection) {
@@ -415,18 +416,23 @@ public class TerraTabPaneSkin extends ContainerSkin
         tabPane.getTabPaneSelectionListeners().add(this);
         tabPane.getTabPaneAttributeListeners().add(this);
 
-        // Add the button panorama and flow pane
-        buttonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
-        buttonPanorama.getStyles().put("buttonPadding", 6);
-        buttonPanorama.setView(buttonFlowPane);
+        // Add the tab buttons
         tabPane.add(buttonPanorama);
 
-        // Add buttons for all existing tabs
-        for (Component tab : tabPane.getTabs()) {
+        Sequence<Component> tabs = tabPane.getTabs();
+        int selectedIndex = tabPane.getSelectedIndex();
+
+        for (int i = 0, n = tabs.getLength(); i < n; i++) {
+            Component tab = tabs.get(i);
+            tab.setVisible(i == selectedIndex);
+
             TabButton tabButton = new TabButton(tab);
             tabButton.setGroup(tabButtonGroup);
-
             buttonFlowPane.add(tabButton);
+
+            // Listen for state changes on the tab
+            tabButton.setEnabled(tab.isEnabled());
+            tab.getComponentStateListeners().add(tabStateListener);
         }
 
         selectedIndexChanged(tabPane, -1);
@@ -440,7 +446,12 @@ public class TerraTabPaneSkin extends ContainerSkin
         tabPane.getTabPaneSelectionListeners().remove(this);
         tabPane.getTabPaneAttributeListeners().remove(this);
 
-        // Remove the button panorama
+        // Remove the tab state listeners
+        for (Component tab : tabPane.getTabs()) {
+            tab.getComponentStateListeners().remove(tabStateListener);
+        }
+
+        // Remove the tab buttons
         tabPane.remove(buttonPanorama);
 
         super.uninstall();
@@ -1074,15 +1085,19 @@ public class TerraTabPaneSkin extends ContainerSkin
     	    selectionChangeTransition.end();
     	}
 
-        // Create a new button for the tab
         Component tab = tabPane.getTabs().get(index);
         tab.setVisible(false);
 
+        // Create a new button for the tab
         TabButton tabButton = new TabButton(tab);
         tabButton.setGroup(tabButtonGroup);
-
         buttonFlowPane.insert(tabButton, index);
 
+        // Listen for state changes on the tab
+        tabButton.setEnabled(tab.isEnabled());
+        tab.getComponentStateListeners().add(tabStateListener);
+
+    	// If this is the first tab, select it
         if (tabPane.getTabs().getLength() == 1) {
             tabPane.setSelectedIndex(0);
         }
@@ -1095,15 +1110,16 @@ public class TerraTabPaneSkin extends ContainerSkin
     	    selectionChangeTransition.end();
     	}
 
-    	// Remove the buttons
-        Sequence<Component> removedButtons = buttonFlowPane.remove(index, removed.getLength());
+        // Remove the buttons
+    	Sequence<Component> removedButtons = buttonFlowPane.remove(index, removed.getLength());
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
-            Component tab = removed.get(i);
-            tab.setVisible(true);
-
             TabButton tabButton = (TabButton)removedButtons.get(i);
             tabButton.setGroup((Group)null);
+
+            // Stop listening for state changes on the tab
+            Component tab = (Component)tabButton.getButtonData();
+            tab.getComponentStateListeners().remove(tabStateListener);
         }
 
         invalidateComponent();

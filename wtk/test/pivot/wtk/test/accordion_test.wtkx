@@ -23,7 +23,7 @@ limitations under the License.
             <panels>
                 <Label Accordion.name="A" text="Hello"/>
                 <Label Accordion.name="B" text="World"/>
-                <Label Accordion.name="C" text="From"/>
+                <Label Accordion.name="C" text="From" enabled="false"/>
                 <Label Accordion.name="D" text="Pivot"/>
             </panels>
         </Accordion>
