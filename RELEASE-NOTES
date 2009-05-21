@@ -119,6 +119,8 @@ Improvements
 - Clean up CardPaneSkin styles; the previous styles for controlling selection
   change transitions were unintuitive and inflexible (PIVOT-121).
 
+- Disable the tab button/accordion header when the corresponding tab/panel is
+  disabled (PIVOT-123).
 
 Bug Fixes
 ---------
