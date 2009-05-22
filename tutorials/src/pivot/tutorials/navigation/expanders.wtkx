@@ -30,12 +30,12 @@ limitations under the License.
                                     <wtkx:include src="stocks.wtkx"/>
                                 </content>
                             </Expander>
-                            <Expander title="Weather">
+                            <Expander title="Weather" expanded="false">
                                 <content>
                                     <wtkx:include src="weather.wtkx"/>
                                 </content>
                             </Expander>
-                            <Expander title="Calendar">
+                            <Expander title="Calendar" expanded="false">
                                 <content>
                                     <wtkx:include src="calendar.wtkx"/>
                                 </content>

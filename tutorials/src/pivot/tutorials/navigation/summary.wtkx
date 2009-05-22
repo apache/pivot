@@ -36,9 +36,13 @@ limitations under the License.
                     <Label text="123 Main St."/>
                     <Label text="Anytown, USA 12345"/>
                 </FlowPane>
-                <FlowPane styles="{horizontalAlignment:'center', padding:{top:12}}">
-                    <PushButton wtkx:id="confirmOrderButton" buttonData="Confirm Order"
-                        styles="{preferredAspectRatio:3}"/>
+                <FlowPane orientation="vertical"
+                    styles="{horizontalAlignment:'center', spacing:12, padding:{top:12}}">
+                    <PushButton wtkx:id="confirmOrderButton" styles="{preferredAspectRatio:3}"/>
+                    <ActivityIndicator wtkx:id="activityIndicator" styles="{color:16}"
+                        preferredWidth="48" preferredHeight="48"/>
+                    <Label wtkx:id="processingOrderLabel" text="Pretending to process order..." displayable="false"
+                        styles="{fontItalic:true}"/>
                 </FlowPane>
             </FlowPane>
         </TablePane.Row>

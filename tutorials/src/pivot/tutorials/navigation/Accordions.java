@@ -21,12 +21,14 @@ import pivot.collections.Sequence;
 import pivot.util.Vote;
 import pivot.wtk.Accordion;
 import pivot.wtk.AccordionSelectionListener;
+import pivot.wtk.ActivityIndicator;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
+import pivot.wtk.Label;
 import pivot.wtk.PushButton;
 import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
@@ -36,6 +38,9 @@ public class Accordions extends Bindable implements Application {
     @Bind(fieldName="window") private Accordion accordion;
     @Bind(fieldName="window", id="shippingPanel.nextButton") private PushButton shippingNextButton;
     @Bind(fieldName="window", id="paymentPanel.nextButton") private PushButton paymentNextButton;
+    @Bind(fieldName="window", id="summaryPanel.confirmOrderButton") private PushButton confirmOrderButton;
+    @Bind(fieldName="window", id="summaryPanel.activityIndicator") private ActivityIndicator activityIndicator;
+    @Bind(fieldName="window", id="summaryPanel.processingOrderLabel") private Label processingOrderLabel;
 
     private AccordionSelectionListener accordionSelectionListener = new AccordionSelectionListener() {
         private int selectedIndex = -1;
@@ -86,7 +91,17 @@ public class Accordions extends Bindable implements Application {
         shippingNextButton.getButtonPressListeners().add(nextButtonPressListener);
         paymentNextButton.getButtonPressListeners().add(nextButtonPressListener);
 
+        confirmOrderButton.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                // Pretend to submit or cancel the order
+                activityIndicator.setActive(!activityIndicator.isActive());
+                processingOrderLabel.setDisplayable(activityIndicator.isActive());
+                updateConfirmOrderButton();
+            }
+        });
+
         updateAccordion();
+        updateConfirmOrderButton();
 
         window.open(display);
     }
@@ -111,6 +126,14 @@ public class Accordions extends Bindable implements Application {
         Sequence<Component> panels = accordion.getPanels();
         for (int i = 0, n = panels.getLength(); i < n; i++) {
             panels.get(i).setEnabled(i <= selectedIndex);
+        }
+    }
+
+    private void updateConfirmOrderButton() {
+        if (activityIndicator.isActive()) {
+            confirmOrderButton.setButtonData("Cancel");
+        } else {
+            confirmOrderButton.setButtonData("Confirm Order");
         }
     }
 
