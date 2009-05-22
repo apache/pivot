@@ -23,6 +23,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 
 import pivot.util.Vote;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;
 import pivot.wtk.Cursor;
@@ -561,7 +562,7 @@ public class TerraRollupSkin extends RollupSkin {
     }
 
     @Override
-    public void expandedChanged(Rollup rollup) {
+    public void expandedChanged(final Rollup rollup) {
         invalidateComponent();
 
         if (rollup.getDisplay() != null) {
@@ -574,6 +575,12 @@ public class TerraRollupSkin extends RollupSkin {
                     false, EXPANSION_DURATION, EXPANSION_RATE);
                 expandTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
+                        ApplicationContext.queueCallback(new Runnable() {
+                            public void run() {
+                                rollup.scrollAreaToVisible(0, 0, rollup.getWidth(), rollup.getHeight());
+                            }
+                        });
+
                         expandTransition = null;
                     }
                 });

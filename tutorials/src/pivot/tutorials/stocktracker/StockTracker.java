@@ -92,7 +92,7 @@ public class StockTracker extends Bindable implements Application {
         symbols.add("MSFT");
         symbols.add("AMZN");
         symbols.add("GOOG");
-        symbols.add("VMW");
+        symbols.add("ORCL");
         symbols.add("JAVA");
     }
 

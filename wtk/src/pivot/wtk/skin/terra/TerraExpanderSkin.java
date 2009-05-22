@@ -25,6 +25,7 @@ import java.awt.RenderingHints;
 
 import pivot.collections.Dictionary;
 import pivot.util.Vote;
+import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;
@@ -225,7 +226,7 @@ public class TerraExpanderSkin extends ContainerSkin
 
     private ExpandTransition expandTransition = null;
 
-    private static final int EXPAND_DURATION = 250;
+    private static final int EXPAND_DURATION = 150;
     private static final int EXPAND_RATE = 30;
 
     public TerraExpanderSkin() {
@@ -660,7 +661,7 @@ public class TerraExpanderSkin extends ContainerSkin
         }
     }
 
-    public void expandedChanged(Expander expander) {
+    public void expandedChanged(final Expander expander) {
         if (expander.isShowing()) {
             if (expander.isExpanded()
         		&& expander.getContent() != null) {
@@ -669,6 +670,11 @@ public class TerraExpanderSkin extends ContainerSkin
                 layout();
                 expandTransition.start(new TransitionListener() {
                     public void transitionCompleted(Transition transition) {
+                        ApplicationContext.queueCallback(new Runnable() {
+                            public void run() {
+                                expander.scrollAreaToVisible(0, 0, expander.getWidth(), expander.getHeight());
+                            }
+                        });
                         expandTransition = null;
                     }
                 });
