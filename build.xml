@@ -294,7 +294,6 @@ limitations under the License.
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="web/${folder.bin}"/>
-                <pathelement location="wtk/${folder.bin}"/>
                 <fileset dir="web/lib" includes="**/*.jar"/>
             </classpath>
         </javac>
