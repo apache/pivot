@@ -24,9 +24,7 @@ import pivot.util.concurrent.TaskExecutionException;
 public class QueryException extends TaskExecutionException {
     private static final long serialVersionUID = 0;
 
-    private int status = -1;
-
-    // TODO Define static constants for status codes
+    private int status;
 
     public QueryException(int status) {
         this(status, null);
@@ -40,13 +38,15 @@ public class QueryException extends TaskExecutionException {
 
     public QueryException(Throwable cause) {
         super(cause);
+        status = 0;
     }
 
     /**
      * Returns the HTTP status code corresponding to the exception.
      *
      * @return
-     * An HTTP status code reflecting the nature of the exception.
+     * An HTTP status code reflecting the nature of the exception, or
+     * <tt>0</tt> if the HTTP status is not known.
      */
     public int getStatus() {
         return status;

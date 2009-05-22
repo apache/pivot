@@ -26,15 +26,15 @@ public class PropertyNotFoundException extends RuntimeException {
     private static final long serialVersionUID = 0;
 
     public PropertyNotFoundException() {
-        this(null, null);
+        super();
     }
 
     public PropertyNotFoundException(String message) {
-        this(message, null);
+        super(message);
     }
 
     public PropertyNotFoundException(Throwable cause) {
-        this(null, cause);
+        super(cause);
     }
 
     public PropertyNotFoundException(String message, Throwable cause) {

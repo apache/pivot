@@ -25,15 +25,15 @@ public class SerializationException extends Exception {
     private static final long serialVersionUID = 0;
 
     public SerializationException() {
-        this(null, null);
+        super();
     }
 
     public SerializationException(String message) {
-        this(message, null);
+        super(message);
     }
 
     public SerializationException(Throwable cause) {
-        this(null, cause);
+        super(cause);
     }
 
     public SerializationException(String message, Throwable cause) {

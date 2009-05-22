@@ -58,15 +58,44 @@ import pivot.util.concurrent.SynchronizedListenerList;
  */
 public abstract class Query<V> extends IOTask<V> {
     /**
-     * The supported HTTP methods.
+     * Supported HTTP methods.
      *
      * @author gbrown
      */
-    protected enum Method {
+    public enum Method {
         GET,
         POST,
         PUT,
         DELETE
+    }
+
+    /**
+     * Query status codes.
+     *
+     * @author gbrown
+     */
+    public static class Status {
+        public static final int OK = 200;
+        public static final int CREATED = 201;
+        public static final int NO_CONTENT = 204;
+
+        public static final int BAD_REQUEST = 400;
+        public static final int UNAUTHORIZED = 401;
+        public static final int FORBIDDEN = 403;
+        public static final int NOT_FOUND = 404;
+        public static final int METHOD_NOT_ALLOWED = 405;
+        public static final int REQUEST_TIMEOUT = 408;
+        public static final int CONFLICT = 409;
+        public static final int LENGTH_REQUIRED = 411;
+        public static final int PRECONDITION_FAILED = 412;
+        public static final int REQUEST_ENTITY_TOO_LARGE = 413;
+        public static final int REQUEST_URI_TOO_LONG = 414;
+        public static final int UNSUPPORTED_MEDIA_TYPE = 415;
+
+        public static final int INTERNAL_SERVER_ERROR = 500;
+        public static final int NOT_IMPLEMENTED = 501;
+        public static final int SERVICE_UNAVAILABLE = 503;
+        public static final int HTTP_VERSION_NOT_SUPPORTED = 505;
     }
 
     /**
