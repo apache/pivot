@@ -359,8 +359,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                 // Invoke the addApplicationListener() method with the proxy listener
                 addApplicationListenerMethod.invoke(eawtApplication, new Object[] {eawtApplicationListener});
-            } catch(Exception exception) {
-                System.err.println(exception);
+            } catch(Throwable throwable) {
+                System.err.println(throwable);
             }
         }
 
