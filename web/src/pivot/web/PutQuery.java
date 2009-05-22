@@ -24,12 +24,18 @@ package pivot.web;
 public class PutQuery extends Query<Void> {
     private Object value = null;
 
+    public static final Method METHOD = Method.DELETE;
+
     public PutQuery(String hostname, String path) {
         this(hostname, DEFAULT_PORT, path, false);
     }
 
     public PutQuery(String hostname, int port, String path, boolean secure) {
         super(hostname, port, path, secure);
+    }
+
+    public Method getMethod() {
+        return METHOD;
     }
 
     /**
@@ -56,7 +62,7 @@ public class PutQuery extends Query<Void> {
      */
     @Override
     public Void execute() throws QueryException {
-        execute(Method.PUT, value);
+        execute(METHOD, value);
         return null;
     }
 }

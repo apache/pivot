@@ -22,6 +22,8 @@ package pivot.web;
  * @author gbrown
  */
 public class DeleteQuery extends Query<Void> {
+    public static final Method METHOD = Method.DELETE;
+
     public DeleteQuery(String hostname, String path) {
         this(hostname, DEFAULT_PORT, path, false);
     }
@@ -30,12 +32,16 @@ public class DeleteQuery extends Query<Void> {
         super(hostname, port, path, secure);
     }
 
+    public Method getMethod() {
+        return METHOD;
+    }
+
     /**
      * Synchronously executes the DELETE operation.
      */
     @Override
     public Void execute() throws QueryException {
-        execute(Method.DELETE, null);
+        execute(METHOD, null);
         return null;
     }
 }

@@ -22,12 +22,18 @@ package pivot.web;
  * @author gbrown
  */
 public class GetQuery extends Query<Object> {
+    public static final Method METHOD = Method.GET;
+
     public GetQuery(String hostname, String path) {
         this(hostname, DEFAULT_PORT, path, false);
     }
 
     public GetQuery(String hostname, int port, String path, boolean secure) {
         super(hostname, port, path, secure);
+    }
+
+    public Method getMethod() {
+        return METHOD;
     }
 
     /**
@@ -38,6 +44,6 @@ public class GetQuery extends Query<Object> {
      */
     @Override
     public Object execute() throws QueryException {
-        return execute(Method.GET, null);
+        return execute(METHOD, null);
     }
 }

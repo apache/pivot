@@ -27,12 +27,18 @@ import java.net.URL;
 public class PostQuery extends Query<URL> {
     private Object value = null;
 
+    public static final Method METHOD = Method.POST;
+
     public PostQuery(String hostname, String path) {
         this(hostname, DEFAULT_PORT, path, false);
     }
 
     public PostQuery(String hostname, int port, String path, boolean secure) {
         super(hostname, port, path, secure);
+    }
+
+    public Method getMethod() {
+        return METHOD;
     }
 
     /**
@@ -66,7 +72,7 @@ public class PostQuery extends Query<URL> {
     public URL execute() throws QueryException {
         URL valueLocation = null;
 
-        execute(Method.POST, value);
+        execute(METHOD, value);
 
         String location = getResponseProperties().get("Location");
         if (location != null) {

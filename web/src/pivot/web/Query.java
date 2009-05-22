@@ -201,16 +201,16 @@ public abstract class Query<V> extends IOTask<V> {
     private ArgumentsDictionary argumentsDictionary = new ArgumentsDictionary();
     private RequestPropertiesDictionary requestPropertiesDictionary = new RequestPropertiesDictionary();
     private ResponsePropertiesDictionary responsePropertiesDictionary = new ResponsePropertiesDictionary();
-
-    private Serializer<?> serializer = new JSONSerializer();
+    private int status = 0;
 
     private volatile long bytesExpected = -1;
 
+    private Serializer<?> serializer = new JSONSerializer();
+
     private QueryListenerList<V> queryListeners = new QueryListenerList<V>();
 
-    private static Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
-
     public static final int DEFAULT_PORT = -1;
+    public static final Dispatcher DEFAULT_DISPATCHER = new Dispatcher();
 
     private static final String HTTP_PROTOCOL = "http";
     private static final String HTTPS_PROTOCOL = "https";
@@ -235,6 +235,8 @@ public abstract class Query<V> extends IOTask<V> {
                 exception);
         }
     }
+
+    public abstract Method getMethod();
 
     public String getHostname() {
         return locationContext.getHost();
@@ -318,6 +320,16 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     /**
+     * Returns the status of the most recent execution.
+     *
+     * @return
+     * An HTTP code representing the most recent execution status.
+     */
+    public int getStatus() {
+        return status;
+    }
+
+    /**
      * Returns the serializer used to stream the value passed to or from the
      * web query. By default, an instance of {@link JSONSerializer} is used.
      */
@@ -398,7 +410,7 @@ public abstract class Query<V> extends IOTask<V> {
         bytesReceived = 0;
         bytesExpected = -1;
 
-        int status = -1;
+        status = 0;
         String message = null;
 
         try {

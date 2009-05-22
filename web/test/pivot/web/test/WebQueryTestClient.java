@@ -28,10 +28,8 @@ import pivot.web.GetQuery;
 import pivot.web.DeleteQuery;
 import pivot.web.PostQuery;
 import pivot.web.PutQuery;
-import pivot.wtk.Application;
-import pivot.wtk.Display;
 
-public class WebQueryTestClient implements Application {
+public class WebQueryTestClient {
     final static boolean useProxy = true;
 
     final static String HOSTNAME = "localhost";
@@ -39,8 +37,7 @@ public class WebQueryTestClient implements Application {
     final static int PORT = 8080;
     final static boolean SECURE = false;
 
-    public void startup(Display display, Dictionary<String, String> properties)
-    	throws Exception {
+    public static void main(String[] args) throws Exception {
         final BasicAuthentication authentication = new BasicAuthentication("foo", "bar");
 
         // GET
@@ -52,12 +49,14 @@ public class WebQueryTestClient implements Application {
         getQuery.execute(new TaskListener<Object>() {
             @SuppressWarnings("unchecked")
             public void taskExecuted(Task<Object> task) {
-                Dictionary<String, Object> result = (Dictionary<String, Object>)task.getResult();
+                GetQuery getQuery = (GetQuery)task;
+                Dictionary<String, Object> result = (Dictionary<String, Object>)getQuery.getResult();
 
                 System.out.println("GET result: "
                     + "username: " + result.get("username") + ", "
                     + "pathInfo: " + result.get("pathInfo") + ", "
-                    + "queryString: " + result.get("queryString"));
+                    + "queryString: " + result.get("queryString")
+                    + "status: " + getQuery.getStatus());
             }
 
             public void executeFailed(Task<Object> task) {
@@ -108,15 +107,8 @@ public class WebQueryTestClient implements Application {
                 System.out.println("DELETE fault: " + task.getFault());
             }
         });
-    }
 
-    public boolean shutdown(boolean optional) {
-    	return true;
-    }
-
-    public void suspend() {
-    }
-
-    public void resume() {
+        // HACK - wait for all requests to complete
+        Thread.sleep(3000);
     }
 }
