@@ -1046,6 +1046,11 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         this.tabOrientation = tabOrientation;
 
+        // Invalidate the tab buttons since their preferred sizes have changed
+        for (Component tabButton : buttonFlowPane) {
+            tabButton.invalidate();
+        }
+
         buttonFlowPane.setOrientation(tabOrientation);
 
         switch (tabOrientation) {

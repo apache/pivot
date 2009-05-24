@@ -28,15 +28,12 @@ public final class Display extends Container {
     private class ValidateCallback implements Runnable {
         public void run() {
             validate();
-            if (!paintPending) {
-                validateCallback = null;
-            }
+            validateCallback = null;
         }
     }
 
     private ApplicationContext.DisplayHost displayHost;
     private ValidateCallback validateCallback = null;
-    private boolean paintPending = false;
 
     protected Display(ApplicationContext.DisplayHost displayHost) {
         this.displayHost = displayHost;
@@ -58,7 +55,7 @@ public final class Display extends Container {
 
     @Override
     protected void setParent(Container parent) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Display can't have a parent.");
     }
 
     @Override
@@ -82,7 +79,7 @@ public final class Display extends Container {
             Graphics2D graphics = (Graphics2D)displayHost.getGraphics();
 
             // If the display host has been made non-displayable (as will
-            // happen when the native peer closes), graphics will be null.
+            // happen when the native peer closes), graphics will be null
             if (graphics != null) {
                 double scale = displayHost.getScale();
                 if (scale == 1) {
@@ -97,17 +94,6 @@ public final class Display extends Container {
             }
         } else {
             displayHost.repaint(x, y, width, height);
-            paintPending = true;
-        }
-    }
-
-    @Override
-    public void paint(Graphics2D graphics) {
-        super.paint(graphics);
-        paintPending = false;
-
-        if (validateCallback != null) {
-            ApplicationContext.queueCallback(validateCallback);
         }
     }
 
