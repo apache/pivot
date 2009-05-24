@@ -50,9 +50,9 @@ import pivot.util.concurrent.SynchronizedListenerList;
  * </ul>
  *
  * @param <V>
- *            The type of the value retrieved or sent via the query. For GET
- *            operations, it is {@link Object}; for POST operations, the type is
- *            {@link URL}. For PUT and DELETE, it is {@link Void}.
+ * The type of the value retrieved or sent via the query. For GET operations,
+ * it is {@link Object}; for POST operations, the type is {@link URL}. For PUT
+ * and DELETE, it is {@link Void}.
  *
  * @author gbrown
  * @author tvolkert
@@ -97,18 +97,18 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     /**
-     * This class allows multiple values to be set against a given key.
+     * Represents a collection of keyed data associated with a query. Allows
+     * multiple values to be set against a given key.
      *
      * @author brindy
      */
-    public final class QueryDictionary implements Dictionary<String, String>,
-            Iterable<String> {
-
-        private HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+    public static final class QueryDictionary implements Dictionary<String, String>,
+        Iterable<String> {
+        private HashMap<String, ArrayList<String>> map =  new HashMap<String, ArrayList<String>>();
 
         public String get(String key) {
             ArrayList<String> list = map.get(key);
-            if (null != list && list.getLength() > 0) {
+            if (list != null && list.getLength() > 0) {
                 return list.get(0);
             }
             return null;
@@ -116,8 +116,8 @@ public abstract class Query<V> extends IOTask<V> {
 
         public String get(String key, int index) {
             ArrayList<String> list = map.get(key);
-            if (null == list || list.getLength() <= index) {
-                throw new ArrayIndexOutOfBoundsException(index);
+            if (list == null || list.getLength() <= index) {
+                throw new IndexOutOfBoundsException();
             }
             return list.get(index);
         }
@@ -126,9 +126,9 @@ public abstract class Query<V> extends IOTask<V> {
             ArrayList<String> list = new ArrayList<String>();
             list.add(value);
 
-            ArrayList<String> old = map.put(key, list);
-            if (old != null && old.getLength() > 0) {
-                return old.get(0);
+            ArrayList<String> previous = map.put(key, list);
+            if (previous != null && previous.getLength() > 0) {
+                return previous.get(0);
             }
 
             return null;
@@ -136,7 +136,7 @@ public abstract class Query<V> extends IOTask<V> {
 
         public int add(String key, String value) {
             ArrayList<String> list = map.get(key);
-            if (null == list) {
+            if (list == null) {
                 put(key, value);
                 return 0;
             }
@@ -149,17 +149,16 @@ public abstract class Query<V> extends IOTask<V> {
             ArrayList<String> list = map.get(key);
 
             // e.g if index = 0 and length = 0, throw an exception
-            if (null == list || list.getLength() <= index) {
-                throw new ArrayIndexOutOfBoundsException(index);
+            if (list == null || list.getLength() <= index) {
+                throw new IndexOutOfBoundsException();
             }
 
             list.insert(value, index);
         }
 
         public String remove(String key) {
-
             ArrayList<String> list = map.remove(key);
-            if (null != list && list.getLength() > 0) {
+            if (list != null && list.getLength() > 0) {
                 return list.get(0);
             }
 
@@ -168,8 +167,8 @@ public abstract class Query<V> extends IOTask<V> {
 
         public String remove(String key, int index) {
             ArrayList<String> list = map.get(key);
-            if (null == list || list.getLength() <= index) {
-                throw new ArrayIndexOutOfBoundsException(index);
+            if (list == null || list.getLength() <= index) {
+                throw new IndexOutOfBoundsException();
             }
             return list.get(index);
         }
@@ -188,7 +187,7 @@ public abstract class Query<V> extends IOTask<V> {
 
         public int getLength(String key) {
             ArrayList<String> list = map.get(key);
-            if (null == list) {
+            if (list == null) {
                 return 0;
             }
             return list.getLength();
@@ -204,9 +203,8 @@ public abstract class Query<V> extends IOTask<V> {
      *
      * @author tvolkert
      */
-    private static class QueryListenerList<V> extends
-            SynchronizedListenerList<QueryListener<V>> implements
-            QueryListener<V> {
+    private static class QueryListenerList<V> extends SynchronizedListenerList<QueryListener<V>>
+        implements QueryListener<V> {
         public synchronized void connected(Query<V> query) {
             for (QueryListener<V> listener : this) {
                 listener.connected(query);
@@ -266,7 +264,7 @@ public abstract class Query<V> extends IOTask<V> {
 
         try {
             locationContext = new URL(secure ? HTTPS_PROTOCOL : HTTP_PROTOCOL,
-                    hostname, port, path);
+                hostname, port, path);
         } catch (MalformedURLException exception) {
             throw new IllegalArgumentException(
                     "Unable to construct context URL.", exception);
@@ -305,21 +303,18 @@ public abstract class Query<V> extends IOTask<V> {
         StringBuilder queryStringBuilder = new StringBuilder();
 
         for (String key : parameters) {
-
             for (int index = 0; index < parameters.getLength(key); index++) {
                 try {
                     if (queryStringBuilder.length() > 0) {
                         queryStringBuilder.append("&");
                     }
 
-                    queryStringBuilder.append(URLEncoder.encode(key,
-                            URL_ENCODING)
-                            + "="
-                            + URLEncoder.encode(parameters.get(key, index),
-                                    URL_ENCODING));
+                    queryStringBuilder.append(URLEncoder.encode(key, URL_ENCODING)
+                        + "=" + URLEncoder.encode(parameters.get(key, index),
+                            URL_ENCODING));
                 } catch (UnsupportedEncodingException exception) {
-                    throw new IllegalStateException(
-                            "Unable to construct query string.", exception);
+                    throw new IllegalStateException("Unable to construct query string.",
+                        exception);
                 }
             }
         }
@@ -327,15 +322,12 @@ public abstract class Query<V> extends IOTask<V> {
         URL location = null;
         try {
             String queryString = queryStringBuilder.length() > 0 ? "?"
-                    + queryStringBuilder.toString() : "";
+                + queryStringBuilder.toString() : "";
 
-            location = new URL(locationContext.getProtocol(), locationContext
-                    .getHost(), locationContext.getPort(), locationContext
-                    .getPath()
-                    + queryString);
+            location = new URL(locationContext.getProtocol(), locationContext.getHost(),
+                locationContext.getPort(), locationContext.getPath() + queryString);
         } catch (MalformedURLException exception) {
-            throw new IllegalStateException("Unable to construct query URL.",
-                    exception);
+            throw new IllegalStateException("Unable to construct query URL.", exception);
         }
 
         return location;
@@ -362,27 +354,6 @@ public abstract class Query<V> extends IOTask<V> {
      * are returned via HTTP headers when the query is executed.
      */
     public QueryDictionary getResponseHeaders() {
-        return responseHeaders;
-    }
-
-    /**
-     * @deprecated use {@link #getParameters()} instead
-     */
-    public QueryDictionary getArguments() {
-        return parameters;
-    }
-
-    /**
-     * @deprecated use {@link #getRequestHeaders()} instead
-     */
-    public QueryDictionary getRequestProperties() {
-        return requestHeaders;
-    }
-
-    /**
-     * @deprecated use {@link #getResponseHeaders()} instead
-     */
-    public QueryDictionary getResponseProperties() {
         return responseHeaders;
     }
 
@@ -497,20 +468,18 @@ public abstract class Query<V> extends IOTask<V> {
 
             // Set the request headers
             if (method == Method.POST || method == Method.PUT) {
-                connection.setRequestProperty("Content-Type", serializer
-                        .getMIMEType(value));
+                connection.setRequestProperty("Content-Type", serializer.getMIMEType(value));
             }
+
             for (String key : requestHeaders) {
                 for (int index = 0; index < requestHeaders.getLength(key); index++) {
-                    connection.setRequestProperty(key, requestHeaders.get(key,
-                            index));
+                    connection.setRequestProperty(key, requestHeaders.get(key, index));
                 }
             }
 
             // Set the input/output state
             connection.setDoInput(true);
-            connection.setDoOutput(method == Method.POST
-                    || method == Method.PUT);
+            connection.setDoOutput(method == Method.POST || method == Method.PUT);
 
             // Connect to the server
             connection.connect();
@@ -521,8 +490,7 @@ public abstract class Query<V> extends IOTask<V> {
                 OutputStream outputStream = null;
                 try {
                     outputStream = connection.getOutputStream();
-                    serializer.writeObject(value, new MonitoredOutputStream(
-                            outputStream));
+                    serializer.writeObject(value, new MonitoredOutputStream(outputStream));
                 } finally {
                     if (outputStream != null) {
                         outputStream.close();
@@ -548,8 +516,8 @@ public abstract class Query<V> extends IOTask<V> {
 
             // NOTE Header indexes start at 1, not 0
             int i = 1;
-            for (String key = connection.getHeaderFieldKey(i); key != null; key = connection
-                    .getHeaderFieldKey(++i)) {
+            for (String key = connection.getHeaderFieldKey(i); key != null;
+                key = connection.getHeaderFieldKey(++i)) {
                 responseHeaders.add(key, connection.getHeaderField(i));
             }
 
@@ -558,8 +526,7 @@ public abstract class Query<V> extends IOTask<V> {
                 InputStream inputStream = null;
                 try {
                     inputStream = connection.getInputStream();
-                    value = serializer.readObject(new MonitoredInputStream(
-                            inputStream));
+                    value = serializer.readObject(new MonitoredInputStream(inputStream));
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();

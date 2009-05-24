@@ -1,17 +1,17 @@
-package pivot.web;
+package pivot.web.test;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import junit.framework.TestCase;
+import pivot.web.Query;
 import pivot.web.Query.QueryDictionary;
 
 public class QueryDictionaryTest extends TestCase {
 
 	@SuppressWarnings("unchecked")
 	public void testQueryDictionary() {
-		GetQuery query = new GetQuery("localhost", "path");
-		QueryDictionary dict = query.new QueryDictionary();
+		QueryDictionary dict = new Query.QueryDictionary();
 
 		assertNull(dict.get("key"));
 
