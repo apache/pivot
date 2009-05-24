@@ -44,6 +44,6 @@ public class BasicAuthentication implements Authentication {
         String credentials = username + ":" + password;
         String encodedCredentials = Base64.encode(credentials.getBytes());
 
-        query.getRequestProperties().put("Authorization", "Basic " + encodedCredentials);
+        query.getRequestHeaders().put("Authorization", "Basic " + encodedCredentials);
     }
 }

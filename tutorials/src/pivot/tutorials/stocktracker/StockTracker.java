@@ -212,8 +212,8 @@ public class StockTracker extends Bindable implements Application {
         // c1 - change percentage
         // v - volume
         String symbolsArgument = symbolsArgumentBuilder.toString();
-        getQuery.getArguments().put("s", symbolsArgument);
-        getQuery.getArguments().put("f", "snl1ohgc1v");
+        getQuery.getParameters().put("s", symbolsArgument);
+        getQuery.getParameters().put("f", "snl1ohgc1v");
 
         CSVSerializer quoteSerializer = new CSVSerializer();
         quoteSerializer.getKeys().add("symbol");

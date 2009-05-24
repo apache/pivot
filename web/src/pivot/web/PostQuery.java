@@ -74,7 +74,7 @@ public class PostQuery extends Query<URL> {
 
         execute(METHOD, value);
 
-        String location = getResponseProperties().get("Location");
+        String location = getResponseHeaders().get("Location");
         if (location != null) {
             try {
                 valueLocation = new URL(getLocation(), location);

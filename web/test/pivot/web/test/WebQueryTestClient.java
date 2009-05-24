@@ -42,7 +42,7 @@ public class WebQueryTestClient {
 
         // GET
         final GetQuery getQuery = new GetQuery(HOSTNAME, PORT, PATH, SECURE);
-        getQuery.getArguments().put("a", "b");
+        getQuery.getParameters().put("a", "b");
         getQuery.setSerializer(new BinarySerializer());
         authentication.authenticate(getQuery);
 

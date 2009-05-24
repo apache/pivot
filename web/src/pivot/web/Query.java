@@ -28,6 +28,7 @@ import java.util.Iterator;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 
+import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.io.IOTask;
@@ -38,8 +39,8 @@ import pivot.util.concurrent.Dispatcher;
 import pivot.util.concurrent.SynchronizedListenerList;
 
 /**
- * Abstract base class for web queries. A web query is an asynchronous
- * operation that executes one of the following HTTP methods:
+ * Abstract base class for web queries. A web query is an asynchronous operation
+ * that executes one of the following HTTP methods:
  *
  * <ul>
  * <li>GET</li>
@@ -49,9 +50,9 @@ import pivot.util.concurrent.SynchronizedListenerList;
  * </ul>
  *
  * @param <V>
- * The type of the value retrieved or sent via the query. For GET operations,
- * it is {@link Object}; for POST operations, the type is {@link URL}. For PUT
- * and DELETE, it is {@link Void}.
+ *            The type of the value retrieved or sent via the query. For GET
+ *            operations, it is {@link Object}; for POST operations, the type is
+ *            {@link URL}. For PUT and DELETE, it is {@link Void}.
  *
  * @author gbrown
  * @author tvolkert
@@ -63,10 +64,7 @@ public abstract class Query<V> extends IOTask<V> {
      * @author gbrown
      */
     public enum Method {
-        GET,
-        POST,
-        PUT,
-        DELETE
+        GET, POST, PUT, DELETE
     }
 
     /**
@@ -99,92 +97,105 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     /**
-     * Arguments dictionary implementation.
+     * This class allows multiple values to be set against a given key.
+     *
+     * @author brindy
      */
-    public final class ArgumentsDictionary
-        implements Dictionary<String, String>, Iterable<String> {
+    public final class QueryDictionary implements Dictionary<String, String>,
+            Iterable<String> {
+
+        private HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+
         public String get(String key) {
-            return arguments.get(key);
+            ArrayList<String> list = map.get(key);
+            if (null != list && list.getLength() > 0) {
+                return list.get(0);
+            }
+            return null;
+        }
+
+        public String get(String key, int index) {
+            ArrayList<String> list = map.get(key);
+            if (null == list || list.getLength() <= index) {
+                throw new ArrayIndexOutOfBoundsException(index);
+            }
+            return list.get(index);
         }
 
         public String put(String key, String value) {
-            return arguments.put(key, value);
+            ArrayList<String> list = new ArrayList<String>();
+            list.add(value);
+
+            ArrayList<String> old = map.put(key, list);
+            if (old != null && old.getLength() > 0) {
+                return old.get(0);
+            }
+
+            return null;
+        }
+
+        public int add(String key, String value) {
+            ArrayList<String> list = map.get(key);
+            if (null == list) {
+                put(key, value);
+                return 0;
+            }
+
+            list.add(value);
+            return list.getLength() - 1;
+        }
+
+        public void insert(String key, String value, int index) {
+            ArrayList<String> list = map.get(key);
+
+            // e.g if index = 0 and length = 0, throw an exception
+            if (null == list || list.getLength() <= index) {
+                throw new ArrayIndexOutOfBoundsException(index);
+            }
+
+            list.insert(value, index);
         }
 
         public String remove(String key) {
-            return arguments.remove(key);
+
+            ArrayList<String> list = map.remove(key);
+            if (null != list && list.getLength() > 0) {
+                return list.get(0);
+            }
+
+            return null;
+        }
+
+        public String remove(String key, int index) {
+            ArrayList<String> list = map.get(key);
+            if (null == list || list.getLength() <= index) {
+                throw new ArrayIndexOutOfBoundsException(index);
+            }
+            return list.get(index);
+        }
+
+        public void clear() {
+            map.clear();
         }
 
         public boolean containsKey(String key) {
-            return arguments.containsKey(key);
+            return map.containsKey(key);
         }
 
         public boolean isEmpty() {
-            return arguments.isEmpty();
+            return map.isEmpty();
+        }
+
+        public int getLength(String key) {
+            ArrayList<String> list = map.get(key);
+            if (null == list) {
+                return 0;
+            }
+            return list.getLength();
         }
 
         public Iterator<String> iterator() {
-            return arguments.iterator();
-        }
-    }
-
-    /**
-     * Request properties dictionary implementation.
-     */
-    public final class RequestPropertiesDictionary
-        implements Dictionary<String, String>, Iterable<String> {
-        public String get(String key) {
-            return requestProperties.get(key);
-        }
-
-        public String put(String key, String value) {
-            return requestProperties.put(key, value);
-        }
-
-        public String remove(String key) {
-            return requestProperties.remove(key);
-        }
-
-        public boolean containsKey(String key) {
-            return requestProperties.containsKey(key);
-        }
-
-        public boolean isEmpty() {
-            return requestProperties.isEmpty();
-        }
-
-        public Iterator<String> iterator() {
-            return requestProperties.iterator();
-        }
-    }
-
-    /**
-     * Response properties dictionary implementation.
-     */
-    public final class ResponsePropertiesDictionary
-        implements Dictionary<String, String>, Iterable<String> {
-        public String get(String key) {
-            return responseProperties.get(key);
-        }
-
-        public String put(String key, String value) {
-            throw new UnsupportedOperationException();
-        }
-
-        public String remove(String key) {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean containsKey(String key) {
-            return responseProperties.containsKey(key);
-        }
-
-        public boolean isEmpty() {
-            return responseProperties.isEmpty();
-        }
-
-        public Iterator<String> iterator() {
-            return responseProperties.iterator();
+            return map.iterator();
         }
     }
 
@@ -193,8 +204,9 @@ public abstract class Query<V> extends IOTask<V> {
      *
      * @author tvolkert
      */
-    private static class QueryListenerList<V> extends SynchronizedListenerList<QueryListener<V>>
-        implements QueryListener<V> {
+    private static class QueryListenerList<V> extends
+            SynchronizedListenerList<QueryListener<V>> implements
+            QueryListener<V> {
         public synchronized void connected(Query<V> query) {
             for (QueryListener<V> listener : this) {
                 listener.connected(query);
@@ -223,13 +235,9 @@ public abstract class Query<V> extends IOTask<V> {
     private URL locationContext = null;
     private HostnameVerifier hostnameVerifier = null;
 
-    private HashMap<String, String> arguments = new HashMap<String, String>();
-    private HashMap<String, String> requestProperties = new HashMap<String, String>();
-    private HashMap<String, String> responseProperties = new HashMap<String, String>();
-
-    private ArgumentsDictionary argumentsDictionary = new ArgumentsDictionary();
-    private RequestPropertiesDictionary requestPropertiesDictionary = new RequestPropertiesDictionary();
-    private ResponsePropertiesDictionary responsePropertiesDictionary = new ResponsePropertiesDictionary();
+    private QueryDictionary parameters = new QueryDictionary();
+    private QueryDictionary requestHeaders = new QueryDictionary();
+    private QueryDictionary responseHeaders = new QueryDictionary();
     private int status = 0;
 
     private volatile long bytesExpected = -1;
@@ -258,11 +266,12 @@ public abstract class Query<V> extends IOTask<V> {
 
         try {
             locationContext = new URL(secure ? HTTPS_PROTOCOL : HTTP_PROTOCOL,
-                hostname, port, path);
+                    hostname, port, path);
         } catch (MalformedURLException exception) {
-            throw new IllegalArgumentException("Unable to construct context URL.",
-                exception);
+            throw new IllegalArgumentException(
+                    "Unable to construct context URL.", exception);
         }
+
     }
 
     public abstract Method getMethod();
@@ -295,30 +304,38 @@ public abstract class Query<V> extends IOTask<V> {
     public URL getLocation() {
         StringBuilder queryStringBuilder = new StringBuilder();
 
-        for (String key : arguments) {
-            try {
-                if (queryStringBuilder.length() > 0) {
-                    queryStringBuilder.append("&");
-                }
+        for (String key : parameters) {
 
-                queryStringBuilder.append(URLEncoder.encode(key, URL_ENCODING)
-                    + "=" + URLEncoder.encode(arguments.get(key), URL_ENCODING));
-            } catch (UnsupportedEncodingException exception) {
-                throw new IllegalStateException("Unable to construct query string.", exception);
+            for (int index = 0; index < parameters.getLength(key); index++) {
+                try {
+                    if (queryStringBuilder.length() > 0) {
+                        queryStringBuilder.append("&");
+                    }
+
+                    queryStringBuilder.append(URLEncoder.encode(key,
+                            URL_ENCODING)
+                            + "="
+                            + URLEncoder.encode(parameters.get(key, index),
+                                    URL_ENCODING));
+                } catch (UnsupportedEncodingException exception) {
+                    throw new IllegalStateException(
+                            "Unable to construct query string.", exception);
+                }
             }
         }
 
         URL location = null;
         try {
-            String queryString = queryStringBuilder.length() > 0 ?
-                "?" + queryStringBuilder.toString() : "";
+            String queryString = queryStringBuilder.length() > 0 ? "?"
+                    + queryStringBuilder.toString() : "";
 
-            location = new URL(locationContext.getProtocol(),
-                locationContext.getHost(),
-                locationContext.getPort(),
-                locationContext.getPath() + queryString);
+            location = new URL(locationContext.getProtocol(), locationContext
+                    .getHost(), locationContext.getPort(), locationContext
+                    .getPath()
+                    + queryString);
         } catch (MalformedURLException exception) {
-            throw new IllegalStateException("Unable to construct query URL.", exception);
+            throw new IllegalStateException("Unable to construct query URL.",
+                    exception);
         }
 
         return location;
@@ -328,50 +345,70 @@ public abstract class Query<V> extends IOTask<V> {
      * Returns the web query's arguments dictionary. Arguments are passed via
      * the query string of the web query's URL.
      */
-    public ArgumentsDictionary getArguments() {
-        return argumentsDictionary;
+    public QueryDictionary getParameters() {
+        return parameters;
     }
 
     /**
      * Returns the web query's request property dictionary. Request properties
      * are passed via HTTP headers when the query is executed.
      */
-    public RequestPropertiesDictionary getRequestProperties() {
-        return requestPropertiesDictionary;
+    public QueryDictionary getRequestHeaders() {
+        return requestHeaders;
     }
 
     /**
      * Returns the web query's response property dictionary. Response properties
      * are returned via HTTP headers when the query is executed.
      */
-    public ResponsePropertiesDictionary getResponseProperties() {
-        return responsePropertiesDictionary;
+    public QueryDictionary getResponseHeaders() {
+        return responseHeaders;
+    }
+
+    /**
+     * @deprecated use {@link #getParameters()} instead
+     */
+    public QueryDictionary getArguments() {
+        return parameters;
+    }
+
+    /**
+     * @deprecated use {@link #getRequestHeaders()} instead
+     */
+    public QueryDictionary getRequestProperties() {
+        return requestHeaders;
+    }
+
+    /**
+     * @deprecated use {@link #getResponseHeaders()} instead
+     */
+    public QueryDictionary getResponseProperties() {
+        return responseHeaders;
     }
 
     /**
      * Returns the status of the most recent execution.
      *
-     * @return
-     * An HTTP code representing the most recent execution status.
+     * @return An HTTP code representing the most recent execution status.
      */
     public int getStatus() {
         return status;
     }
 
     /**
-     * Returns the serializer used to stream the value passed to or from the
-     * web query. By default, an instance of {@link JSONSerializer} is used.
+     * Returns the serializer used to stream the value passed to or from the web
+     * query. By default, an instance of {@link JSONSerializer} is used.
      */
     public Serializer<?> getSerializer() {
         return serializer;
     }
 
     /**
-     * Sets the serializer used to stream the value passed to or from the
-     * web query.
+     * Sets the serializer used to stream the value passed to or from the web
+     * query.
      *
      * @param serializer
-     * The serializer (must be non-null).
+     *            The serializer (must be non-null).
      */
     public void setSerializer(Serializer<?> serializer) {
         if (serializer == null) {
@@ -382,9 +419,9 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     /**
-     * Gets the number of bytes that have been sent in the body of this
-     * query's HTTP request. This will only be non-zero for POST and PUT
-     * requests, as GET and DELETE requests send no content to the server.
+     * Gets the number of bytes that have been sent in the body of this query's
+     * HTTP request. This will only be non-zero for POST and PUT requests, as
+     * GET and DELETE requests send no content to the server.
      * <p>
      * For POST and PUT requests, this number will increment in between the
      * {@link QueryListener#connected(Query) connected} and
@@ -413,9 +450,9 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     /**
-     * Gets the number of bytes that are expected to be received from the
-     * server in the body of the server's HTTP response. This value reflects
-     * the <tt>Content-Length</tt> HTTP response header and is thus merely an
+     * Gets the number of bytes that are expected to be received from the server
+     * in the body of the server's HTTP response. This value reflects the
+     * <tt>Content-Length</tt> HTTP response header and is thus merely an
      * expectation. The actual total number of bytes that will be received is
      * not known for certain until the full response has been received.
      * <p>
@@ -428,12 +465,11 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     @SuppressWarnings("unchecked")
-    protected Object execute(Method method, Object value)
-        throws QueryException {
+    protected Object execute(Method method, Object value) throws QueryException {
         URL location = getLocation();
         HttpURLConnection connection = null;
 
-        Serializer<Object> serializer = (Serializer<Object>)this.serializer;
+        Serializer<Object> serializer = (Serializer<Object>) this.serializer;
 
         bytesSent = 0;
         bytesReceived = 0;
@@ -444,32 +480,37 @@ public abstract class Query<V> extends IOTask<V> {
 
         try {
             // Clear any properties from a previous response
-            responseProperties.clear();
+            responseHeaders.clear();
 
             // Open a connection
-            connection = (HttpURLConnection)location.openConnection();
+            connection = (HttpURLConnection) location.openConnection();
             connection.setRequestMethod(method.toString());
             connection.setAllowUserInteraction(false);
             connection.setInstanceFollowRedirects(false);
             connection.setUseCaches(false);
 
             if (connection instanceof HttpsURLConnection
-                && hostnameVerifier != null) {
-                HttpsURLConnection httpsConnection = (HttpsURLConnection)connection;
+                    && hostnameVerifier != null) {
+                HttpsURLConnection httpsConnection = (HttpsURLConnection) connection;
                 httpsConnection.setHostnameVerifier(hostnameVerifier);
             }
 
             // Set the request headers
             if (method == Method.POST || method == Method.PUT) {
-                connection.setRequestProperty("Content-Type", serializer.getMIMEType(value));
+                connection.setRequestProperty("Content-Type", serializer
+                        .getMIMEType(value));
             }
-            for (String key : requestProperties) {
-                connection.setRequestProperty(key, requestProperties.get(key));
+            for (String key : requestHeaders) {
+                for (int index = 0; index < requestHeaders.getLength(key); index++) {
+                    connection.setRequestProperty(key, requestHeaders.get(key,
+                            index));
+                }
             }
 
             // Set the input/output state
             connection.setDoInput(true);
-            connection.setDoOutput(method == Method.POST || method == Method.PUT);
+            connection.setDoOutput(method == Method.POST
+                    || method == Method.PUT);
 
             // Connect to the server
             connection.connect();
@@ -480,7 +521,8 @@ public abstract class Query<V> extends IOTask<V> {
                 OutputStream outputStream = null;
                 try {
                     outputStream = connection.getOutputStream();
-                    serializer.writeObject(value, new MonitoredOutputStream(outputStream));
+                    serializer.writeObject(value, new MonitoredOutputStream(
+                            outputStream));
                 } finally {
                     if (outputStream != null) {
                         outputStream.close();
@@ -506,10 +548,9 @@ public abstract class Query<V> extends IOTask<V> {
 
             // NOTE Header indexes start at 1, not 0
             int i = 1;
-            for (String key = connection.getHeaderFieldKey(i);
-                key != null;
-                key = connection.getHeaderFieldKey(++i)) {
-                responseProperties.put(key, connection.getHeaderField(i));
+            for (String key = connection.getHeaderFieldKey(i); key != null; key = connection
+                    .getHeaderFieldKey(++i)) {
+                responseHeaders.add(key, connection.getHeaderField(i));
             }
 
             // Read the response body
@@ -517,7 +558,8 @@ public abstract class Query<V> extends IOTask<V> {
                 InputStream inputStream = null;
                 try {
                     inputStream = connection.getInputStream();
-                    value = serializer.readObject(new MonitoredInputStream(inputStream));
+                    value = serializer.readObject(new MonitoredInputStream(
+                            inputStream));
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();
