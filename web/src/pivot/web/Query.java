@@ -472,9 +472,14 @@ public abstract class Query<V> extends IOTask<V> {
             }
 
             for (String key : requestHeaders) {
+                StringBuffer buffer = new StringBuffer();
                 for (int index = 0; index < requestHeaders.getLength(key); index++) {
-                    connection.setRequestProperty(key, requestHeaders.get(key, index));
+                    if (index > 0) {
+                        buffer.append(",");
+                    }
+                    buffer.append(requestHeaders.get(key, index));
                 }
+                connection.setRequestProperty(key, buffer.toString());
             }
 
             // Set the input/output state

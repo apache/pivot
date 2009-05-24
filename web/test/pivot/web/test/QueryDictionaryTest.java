@@ -9,7 +9,6 @@ import pivot.web.Query.QueryDictionary;
 
 public class QueryDictionaryTest extends TestCase {
 
-	@SuppressWarnings("unchecked")
 	public void testQueryDictionary() {
 		QueryDictionary dict = new Query.QueryDictionary();
 
