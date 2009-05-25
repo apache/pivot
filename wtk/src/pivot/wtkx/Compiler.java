@@ -16,11 +16,17 @@
  */
 package pivot.wtkx;
 
+import java.io.InputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.OutputStream;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
 
+import javax.lang.model.SourceVersion;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
+import javax.tools.Tool;
 import javax.tools.ToolProvider;
 
 /**
@@ -31,7 +37,7 @@ import javax.tools.ToolProvider;
  *
  * @author tvolkert
  */
-public class Compiler {
+public class Compiler implements Tool {
     /**
      * Creates a new <tt>Compiler</tt>.
      */
@@ -64,12 +70,9 @@ public class Compiler {
         Translator translator = new Translator();
         JavaFileObject javaFileObject = translator.translate(referenceClass, resourceName);
         try {
-            ArrayList<JavaFileObject> javaFileObjects = new ArrayList<JavaFileObject>(1);
-            javaFileObjects.add(javaFileObject);
-
             JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
             JavaCompiler.CompilationTask task = compiler.getTask(null, null, null,
-                options, null, javaFileObjects);
+                options, null, Collections.singletonList(javaFileObject));
 
             success = task.call();
         } finally {
@@ -161,5 +164,21 @@ public class Compiler {
         }
 
         return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int run(InputStream in, OutputStream out, OutputStream err, String... arguments) {
+        // TODO
+        return 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Set<SourceVersion> getSourceVersions() {
+        return Collections.unmodifiableSet(EnumSet.range
+            (SourceVersion.RELEASE_5, SourceVersion.latest()));
     }
 }
