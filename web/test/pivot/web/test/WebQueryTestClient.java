@@ -55,7 +55,7 @@ public class WebQueryTestClient {
                 System.out.println("GET result: "
                     + "username: " + result.get("username") + ", "
                     + "pathInfo: " + result.get("pathInfo") + ", "
-                    + "queryString: " + result.get("queryString")
+                    + "queryString: " + result.get("queryString") + ", "
                     + "status: " + getQuery.getStatus());
             }
 

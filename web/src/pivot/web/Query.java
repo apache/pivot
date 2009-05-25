@@ -266,8 +266,7 @@ public abstract class Query<V> extends IOTask<V> {
             locationContext = new URL(secure ? HTTPS_PROTOCOL : HTTP_PROTOCOL,
                 hostname, port, path);
         } catch (MalformedURLException exception) {
-            throw new IllegalArgumentException(
-                    "Unable to construct context URL.", exception);
+            throw new IllegalArgumentException("Unable to construct context URL.", exception);
         }
 
     }
@@ -461,7 +460,7 @@ public abstract class Query<V> extends IOTask<V> {
             connection.setUseCaches(false);
 
             if (connection instanceof HttpsURLConnection
-                    && hostnameVerifier != null) {
+                && hostnameVerifier != null) {
                 HttpsURLConnection httpsConnection = (HttpsURLConnection) connection;
                 httpsConnection.setHostnameVerifier(hostnameVerifier);
             }
@@ -472,14 +471,13 @@ public abstract class Query<V> extends IOTask<V> {
             }
 
             for (String key : requestHeaders) {
-                StringBuffer buffer = new StringBuffer();
-                for (int index = 0; index < requestHeaders.getLength(key); index++) {
-                    if (index > 0) {
-                        buffer.append(",");
+                for (int i = 0, n = requestHeaders.getLength(key); i < n; i++) {
+                    if (i == 0) {
+                        connection.setRequestProperty(key, requestHeaders.get(key, i));
+                    } else {
+                        connection.addRequestProperty(key, requestHeaders.get(key, i));
                     }
-                    buffer.append(requestHeaders.get(key, index));
                 }
-                connection.setRequestProperty(key, buffer.toString());
             }
 
             // Set the input/output state
@@ -510,12 +508,6 @@ public abstract class Query<V> extends IOTask<V> {
             status = connection.getResponseCode();
             message = connection.getResponseMessage();
 
-            // If the response was anything other than 2xx, throw an exception
-            int statusPrefix = status / 100;
-            if (statusPrefix != 2) {
-                throw new QueryException(status, message);
-            }
-
             // Record the content length
             bytesExpected = connection.getContentLength();
 
@@ -524,6 +516,12 @@ public abstract class Query<V> extends IOTask<V> {
             for (String key = connection.getHeaderFieldKey(i); key != null;
                 key = connection.getHeaderFieldKey(++i)) {
                 responseHeaders.add(key, connection.getHeaderField(i));
+            }
+
+            // If the response was anything other than 2xx, throw an exception
+            int statusPrefix = status / 100;
+            if (statusPrefix != 2) {
+                throw new QueryException(status, message);
             }
 
             // Read the response body
