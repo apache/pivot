@@ -213,7 +213,7 @@ the following licenses.
 
 For wtk/src/pivot/wtk/effects/easing/*.java:
 
-  Copyright © 2001 Robert Penner
+  Copyright (c) 2001 Robert Penner
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -242,7 +242,7 @@ For wtk/src/pivot/wtk/effects/easing/*.java:
 
 For wtk/src/pivot/wtk/effects/DropShadowDecorator.java:
 
-  Copyright © 2006 Chet Haase and Romain Guy
+  Copyright (c) 2006 Chet Haase and Romain Guy
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
