@@ -171,6 +171,7 @@ Bug Fixes
 
 - ImageViewSkin does not correctly propagate repaint region (PIVOT-109).
 
+- Multiple response headers not handled correctly (PIVOT-125).
 
 Additional Notes
 ----------------

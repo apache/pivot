@@ -139,7 +139,7 @@ public abstract class Bindable {
 
         /**
          * The locale with which to load WTKX resources. This should be a
-         * lowercase two-letter ISO-639 code. If unspecified, the user's
+         * lowercase two-letter ISO-639 code. If unspecified, the current
          * default locale will be used.
          */
         public String locale() default "\0";
