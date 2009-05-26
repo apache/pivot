@@ -123,7 +123,7 @@ public class JSONSerializer implements Serializer<Object> {
         throws IOException, SerializationException {
         Object object = null;
 
-        skipWhitespace(reader);
+        skipWhitespaceAndComments(reader);
 
         if (c == -1) {
             throw new SerializationException("Unexpected end of input stream.");
@@ -148,10 +148,49 @@ public class JSONSerializer implements Serializer<Object> {
         return object;
     }
 
-    private void skipWhitespace(Reader reader)
-        throws IOException {
-        while (c != -1 && Character.isWhitespace(c)) {
+    private void skipWhitespaceAndComments(Reader reader)
+        throws IOException, SerializationException {
+        while (c != -1
+            && (Character.isWhitespace(c)
+                || c == '/')) {
+            boolean comment = (c == '/');
+
+            // Read the next character
             c = reader.read();
+
+            if (comment) {
+                if (c == '/') {
+                    // Single-line comment
+                    while (c != -1
+                        && c != '\n'
+                        && c != '\r') {
+                        c = reader.read();
+                    }
+                } else if (c == '*') {
+                    // Multi-line comment
+                    boolean closed = false;
+
+                    while (c != -1
+                        && !closed) {
+                        c = reader.read();
+
+                        if (c == '*') {
+                            c = reader.read();
+                            closed = (c == '/');
+                        }
+                    }
+
+                    if (!closed) {
+                        throw new SerializationException("Unexpected end of input stream.");
+                    }
+
+                    if (c != -1) {
+                        c = reader.read();
+                    }
+                } else {
+                    throw new SerializationException("Unexpected character in input stream.");
+                }
+            }
         }
     }
 
@@ -299,11 +338,11 @@ public class JSONSerializer implements Serializer<Object> {
 
         while (c != -1 && c != ']') {
             list.add(readValue(reader));
-            skipWhitespace(reader);
+            skipWhitespaceAndComments(reader);
 
             if (c == ',') {
                 c = reader.read();
-                skipWhitespace(reader);
+                skipWhitespaceAndComments(reader);
             } else if (c == -1) {
                 throw new SerializationException("Unexpected end of input stream.");
             } else {
@@ -325,7 +364,7 @@ public class JSONSerializer implements Serializer<Object> {
 
         // Move to the next character after '{'
         c = reader.read();
-        skipWhitespace(reader);
+        skipWhitespaceAndComments(reader);
 
         while (c != -1 && c != '}') {
             String key = null;
@@ -364,7 +403,7 @@ public class JSONSerializer implements Serializer<Object> {
                 throw new SerializationException("\"" + key + "\" is not a valid key.");
             }
 
-            skipWhitespace(reader);
+            skipWhitespaceAndComments(reader);
 
             if (c != ':') {
                 throw new SerializationException("Unexpected character in input stream.");
@@ -374,11 +413,11 @@ public class JSONSerializer implements Serializer<Object> {
             c = reader.read();
 
             map.put(key, readValue(reader));
-            skipWhitespace(reader);
+            skipWhitespaceAndComments(reader);
 
             if (c == ',') {
                 c = reader.read();
-                skipWhitespace(reader);
+                skipWhitespaceAndComments(reader);
             } else if (c == -1) {
                 throw new SerializationException("Unexpected end of input stream.");
             } else {

@@ -64,7 +64,8 @@ public class Service {
                         reader = new BufferedReader(new InputStreamReader(serviceInputStream, "UTF-8"));
                         String line = reader.readLine();
                         while (line != null
-                            && line.startsWith("#")) {
+                            && (line.length() == 0
+                                || line.startsWith("#"))) {
                             line = reader.readLine();
                         }
 

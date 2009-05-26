@@ -63,7 +63,8 @@ public class JSONSerializerTest {
         // test1();
         // test2();
     	// test3();
-        test4();
+        // test4();
+        test5();
     }
 
     public static void test0() {
@@ -201,6 +202,16 @@ public class JSONSerializerTest {
         JSONSerializer.remove(root, "a['h']");
 
         System.out.println("a['h'] exists: " + JSONSerializer.containsKey(root, "a['h']"));
+    }
+
+    public static void test5() {
+        JSONSerializer jsonSerializer = new JSONSerializer();
+
+        try {
+            jsonSerializer.writeObject(JSONSerializer.parse("// This is a comment\n\n['a', /*FOO*/ //dfsdf\n 'b' // FSKJHJKDSF\r /*ASDKHASD*/]"), System.out);
+        } catch(Exception exception) {
+            System.err.println(exception);
+        }
     }
 
     private static void testGet(Object root, String path) {
