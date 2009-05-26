@@ -31,7 +31,6 @@ import pivot.wtk.Bounds;
 import pivot.wtk.Button;
 import pivot.wtk.Checkbox;
 import pivot.wtk.Component;
-import pivot.wtk.Dimensions;
 import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Keyboard;
 import pivot.wtk.Mouse;
