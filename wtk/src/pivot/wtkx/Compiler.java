@@ -34,6 +34,9 @@ import javax.tools.ToolProvider;
  * classes. This enables callers to leverage compile-time checking of their
  * WTKX files as well as a performance improvement over runtime WTKX parsing
  * (via {@link WTKXSerializer}).
+ * <p>
+ * <b>NOTE</b>: This class contains experimental functionality and should be
+ * considered a "preview" until a future release.
  *
  * @author tvolkert
  */

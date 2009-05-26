@@ -45,6 +45,9 @@ import pivot.util.ListenerList;
 
 /**
  * Translates WTKX documents into compilable Java file objects.
+ * <p>
+ * <b>NOTE</b>: This class contains experimental functionality and should be
+ * considered a "preview" until a future release.
  *
  * @author tvolkert
  */
