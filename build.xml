@@ -18,13 +18,12 @@ limitations under the License.
 
 <project name="pivot" default="build">
     <!-- Properties that affect the directories that are created as part of the build -->
-    <property name="folder.src" value="src"/>
     <property name="folder.bin" value="ant-bin"/>
-    <property name="folder.lib" value="lib"/>
-    <property name="folder.dist" value="dist"/>
-    <property name="folder.install" value="install"/>
     <property name="folder.deploy" value="deploy"/>
+    <property name="folder.dist" value="dist"/>
     <property name="folder.doc" value="doc"/>
+    <property name="folder.install" value="install"/>
+    <property name="folder.lib" value="lib"/>
 
     <!-- Keystore properties -->
     <property name="keystore.location" value="etc/pivot.keystore"/>
@@ -42,6 +41,18 @@ limitations under the License.
     <property file="build.properties"/>
     <property name="folder.release" value="apache-${ant.project.name}-${version}"/>
 
+    <!-- Compiler argument properties -->
+    <property name="compilerarg.default" value="-Xlint"/>
+    <condition property="compilerarg.processor"
+        value="-Xlint -processor pivot.wtkx.BindProcessor" else="-Xlint">
+        <available classname="com.sun.tools.javac.tree.JCTree">
+          <classpath>
+            <fileset dir="${java.home}/lib" includes="**/*.jar"/>
+          </classpath>
+        </available>
+    </condition>
+
+    <!-- JDK version check -->
     <condition property="echo.jdk" value="Using JDK ${ant.java.version} (OK)"
         else="WARNING: Using JDK ${ant.java.version}">
         <equals arg1="${ant.java.version}" arg2="1.6"/>
@@ -56,8 +67,8 @@ limitations under the License.
 
     <target name="clean" description="Removes all build artifacts"
         depends="charts-clean, core-clean, web-clean, web-test-clean, wtk-clean, tutorials-clean, demos-clean, tools-clean">
-        <delete dir="${folder.dist}"/>
         <delete dir="${folder.deploy}"/>
+        <delete dir="${folder.dist}"/>
         <delete dir="${folder.doc}"/>
         <delete dir="${folder.install}"/>
         <delete dir="${folder.lib}"/>
@@ -104,7 +115,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg value="-Xlint"/>
+            <compilerarg value="${compilerarg.default}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="wtk/${folder.bin}"/>
@@ -115,7 +126,7 @@ limitations under the License.
 
     <target name="charts-package" depends="charts">
         <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-charts.jar">
+        <jar destfile="${folder.lib}/${ant.project.name}-charts.jar" index="true">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -147,7 +158,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg value="-Xlint"/>
+            <compilerarg value="${compilerarg.default}"/>
             <classpath>
                 <pathelement location="charts/${folder.bin}"/>
                 <pathelement location="core/${folder.bin}"/>
@@ -166,13 +177,13 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg value="-Xlint"/>
+            <compilerarg value="${compilerarg.default}"/>
         </javac>
     </target>
 
     <target name="core-package" depends="core">
         <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-core.jar">
+        <jar destfile="${folder.lib}/${ant.project.name}-core.jar" index="true">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -212,7 +223,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg value="-Xlint"/>
+            <compilerarg value="${compilerarg.default}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
             </classpath>
@@ -229,7 +240,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg value="-Xlint"/>
+            <compilerarg value="${compilerarg.default}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <fileset dir="web/lib" includes="**/*.jar"/>
@@ -239,7 +250,7 @@ limitations under the License.
 
     <target name="web-package" depends="web">
         <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-web.jar">
+        <jar destfile="${folder.lib}/${ant.project.name}-web.jar" index="true">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -256,7 +267,7 @@ limitations under the License.
             </fileset>
         </jar>
 
-        <jar jarfile="${folder.lib}/${ant.project.name}-web.server.jar">
+        <jar destfile="${folder.lib}/${ant.project.name}-web.server.jar" index="true">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -290,7 +301,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg value="-Xlint"/>
+            <compilerarg value="${compilerarg.default}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="web/${folder.bin}"/>
@@ -300,7 +311,7 @@ limitations under the License.
     </target>
 
     <target name="web-test-war" depends="core-package, web-package, wtk-package, web-test">
-        <jar jarfile="web/www/lib/${ant.project.name}-web.test.jar">
+        <jar destfile="web/www/lib/${ant.project.name}-web.test.jar" index="true">
             <fileset dir="web/${folder.bin}" includes="pivot/web/test/**" excludes="pivot/web/test/server/**"/>
             <fileset dir="web/test">
                 <exclude name="pivot/web/test/server/**"/>
@@ -365,7 +376,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg value="-Xlint"/>
+            <compilerarg value="${compilerarg.default}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
@@ -376,7 +387,7 @@ limitations under the License.
 
     <target name="wtk-package" depends="wtk">
         <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-wtk.jar">
+        <jar destfile="${folder.lib}/${ant.project.name}-wtk.jar" index="true">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -398,7 +409,7 @@ limitations under the License.
             </fileset>
         </jar>
 
-        <jar jarfile="${folder.lib}/${ant.project.name}-wtk.terra.jar">
+        <jar destfile="${folder.lib}/${ant.project.name}-wtk.terra.jar" index="true">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -416,7 +427,7 @@ limitations under the License.
             </fileset>
         </jar>
 
-        <jar jarfile="${folder.lib}/${ant.project.name}-wtk.obsidian.jar">
+        <jar destfile="${folder.lib}/${ant.project.name}-wtk.obsidian.jar" index="true">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -451,7 +462,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg line="-Xlint -processor pivot.wtkx.BindProcessor"/>
+            <compilerarg line="${compilerarg.processor}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="wtk/${folder.bin}"/>
@@ -469,7 +480,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg line="-Xlint -processor pivot.wtkx.BindProcessor"/>
+            <compilerarg line="${compilerarg.processor}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="web/${folder.bin}"/>
@@ -480,7 +491,7 @@ limitations under the License.
 
     <target name="tutorials-package" depends="tutorials">
         <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-tutorials.jar">
+        <jar destfile="${folder.lib}/${ant.project.name}-tutorials.jar" index="true">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -511,7 +522,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg line="-Xlint -processor pivot.wtkx.BindProcessor"/>
+            <compilerarg line="${compilerarg.processor}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="web/${folder.bin}"/>
@@ -523,7 +534,7 @@ limitations under the License.
 
     <target name="demos-package" depends="build">
         <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-demos.jar">
+        <jar destfile="${folder.lib}/${ant.project.name}-demos.jar" index="true">
             <fileset dir="demos/${folder.bin}"/>
             <fileset dir="demos/src">
                 <exclude name="**/*.java"/>
@@ -547,7 +558,7 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
-            <compilerarg value="-Xlint"/>
+            <compilerarg value="${compilerarg.default}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <pathelement location="web/${folder.bin}"/>
@@ -558,7 +569,7 @@ limitations under the License.
 
     <target name="tools-package" depends="tools">
         <mkdir dir="${folder.lib}"/>
-        <jar jarfile="${folder.lib}/${ant.project.name}-tools.jar">
+        <jar destfile="${folder.lib}/${ant.project.name}-tools.jar" index="true">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -594,6 +605,7 @@ limitations under the License.
 
                 <!-- Exclude folders containing compilation artifacts -->
                 <exclude name="**/${folder.bin}/**"/>
+                <exclude name="${folder.deploy}/**"/>
                 <exclude name="${folder.dist}/**"/>
                 <exclude name="${folder.doc}/**"/>
                 <exclude name="${folder.install}/**"/>
