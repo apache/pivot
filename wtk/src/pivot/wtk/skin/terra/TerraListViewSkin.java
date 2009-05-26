@@ -26,7 +26,6 @@ import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.wtk.Checkbox;
 import pivot.wtk.Component;
-import pivot.wtk.Dimensions;
 import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Insets;
 import pivot.wtk.Keyboard;
