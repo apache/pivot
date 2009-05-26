@@ -39,7 +39,7 @@ public class TreeNodeComparator implements Comparator<TreeNode> {
         } else if (text2 == null) {
             result = 1;
         } else {
-            result = text1.compareTo(text2);
+            result = text1.compareToIgnoreCase(text2);
         }
 
         return result;
