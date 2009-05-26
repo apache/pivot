@@ -29,10 +29,18 @@ http://www.robertpenner.com/easing_terms_of_use.html
 ======================================================================
 
 Pivot's servlets (pivot.web.server) are built using Apache Tomcat's
-implementation of the Servlet 2.5 specification, which is licensed under
-the Apache License 2.0.
+implementation of the Servlet 2.5 specification, which is licensed
+under the Apache License 2.0.
 
 http://tomcat.apache.org/
+
+======================================================================
+
+Pivot's WTKX classes (pivot.wtkx.*) are built using the Streaming API
+for XML (StAX) reference implementation, which is licensed under the
+Apache License 2.0.
+
+http://stax.codehaus.org/
 
 ======================================================================
 
@@ -44,14 +52,14 @@ https://filthyrichclients.dev.java.net/
 
 ======================================================================
 
-The IM client demo uses the Smack Jabber API developed by Ignite Realtime and
-licensed under the Apache 2.0 license.
+The IM client demo (pivot.demos.dom.IMClient) uses the Smack Jabber API
+developed by Ignite Realtime and licensed under the Apache License 2.0.
 
 http://www.igniterealtime.org/
 
 ======================================================================
 
-The scripting demo uses the Groovy scripting engine, which is licensed under
-the Apache 2.0 license:
+The scripting demo (pivot.demos.scripting.ScriptingDemo) uses the Groovy
+scripting engine, which is licensed under the Apache License 2.0.
 
 http://groovy.codehaus.org/
