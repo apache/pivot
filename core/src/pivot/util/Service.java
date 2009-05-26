@@ -62,7 +62,13 @@ public class Service {
                     BufferedReader reader = null;
                     try {
                         reader = new BufferedReader(new InputStreamReader(serviceInputStream, "UTF-8"));
-                        providerClassName = reader.readLine();
+                        String line = reader.readLine();
+                        while (line != null
+                            && line.startsWith("#")) {
+                            line = reader.readLine();
+                        }
+
+                        providerClassName = line;
                     } finally {
                         if (reader != null) {
                             reader.close();

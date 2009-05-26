@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
     <content>
         <StackPane>
-            <ImageView image="pivot/tutorials/layout/03big.jpg"
+            <ImageView image="pivot/tutorials/layout/background.png"
                 styles="{horizontalAlignment:'justify', verticalAlignment:'justify'}"/>
             <Label text="StackPane Demo"
                 styles="{font:'Helvetica bold 64', color:'#ffffff', wrapText:true,
