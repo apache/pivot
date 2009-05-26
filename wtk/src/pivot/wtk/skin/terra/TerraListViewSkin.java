@@ -141,10 +141,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         return preferredHeight;
     }
 
-    public Dimensions getPreferredSize() {
-        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
-    }
-
     public void layout() {
         // No-op
     }

@@ -386,10 +386,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         return preferredHeight;
     }
 
-    public Dimensions getPreferredSize() {
-        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
-    }
-
     public void layout() {
         // No-op
     }
@@ -1003,9 +999,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     protected int getNodeHeight() {
         TreeView treeView = (TreeView)getComponent();
         TreeView.NodeRenderer nodeRenderer = treeView.getNodeRenderer();
+        nodeRenderer.render(null, treeView, false, false,
+            TreeView.NodeCheckState.UNCHECKED, false, false);
 
         int nodeHeight = nodeRenderer.getPreferredHeight(-1);
-
         if (treeView.getCheckmarksEnabled()) {
             nodeHeight = Math.max(CHECKBOX.getHeight() + (2 * CHECKBOX_VERTICAL_PADDING), nodeHeight);
         }
