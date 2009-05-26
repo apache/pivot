@@ -26,9 +26,6 @@ public class NodeAdapterRenderer extends Label implements TreeView.NodeRenderer 
     public void render(Object node, TreeView treeView, boolean expanded,
         boolean selected, TreeView.NodeCheckState checkState,
         boolean highlighted, boolean disabled) {
-        NodeAdapter nodeAdapter = (NodeAdapter)node;
-        setText(nodeAdapter.getText());
-
         Object labelFont = treeView.getStyles().get("font");
         if (labelFont instanceof Font) {
             getStyles().put("font", labelFont);
@@ -51,6 +48,11 @@ public class NodeAdapterRenderer extends Label implements TreeView.NodeRenderer 
 
         if (color instanceof Color) {
             getStyles().put("color", color);
+        }
+
+        if (node != null) {
+           NodeAdapter nodeAdapter = (NodeAdapter)node;
+           setText(nodeAdapter.getText());
         }
     }
 }
