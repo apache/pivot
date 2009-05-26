@@ -17,6 +17,8 @@
 package pivot.web.test.server;
 
 import java.io.IOException;
+import java.util.Enumeration;
+
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -45,6 +47,7 @@ public class WebQueryTestServlet extends HttpServlet {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
         String authorization = request.getHeader("Authorization");
@@ -64,6 +67,21 @@ public class WebQueryTestServlet extends HttpServlet {
 
             // TODO Parse query string
 
+            // Dump headers
+            System.out.println("[Request Headers]");
+            Enumeration<String> headerNames = (Enumeration<String>)request.getHeaderNames();
+            while(headerNames.hasMoreElements()) {
+                String headerName = headerNames.nextElement();
+                System.out.print(headerName + "=");
+
+                Enumeration<String> headers = request.getHeaders(headerName);
+                while(headers.hasMoreElements()) {
+                    String header = headers.nextElement();
+                    System.out.print(header + ";");
+                }
+
+                System.out.print("\n");
+            }
             super.service(request, response);
         }
     }
@@ -80,6 +98,8 @@ public class WebQueryTestServlet extends HttpServlet {
         map.put("queryString", queryString);
 
         response.setStatus(200);
+        response.setHeader("foo", "hello");
+        response.addHeader("foo", "world");
 
         BinarySerializer serializer = new BinarySerializer();
         response.setContentType(serializer.getMIMEType(map));

@@ -28,6 +28,7 @@ import pivot.web.GetQuery;
 import pivot.web.DeleteQuery;
 import pivot.web.PostQuery;
 import pivot.web.PutQuery;
+import pivot.web.Query.QueryDictionary;
 
 public class WebQueryTestClient {
     final static boolean useProxy = true;
@@ -44,6 +45,8 @@ public class WebQueryTestClient {
         final GetQuery getQuery = new GetQuery(HOSTNAME, PORT, PATH, SECURE);
         getQuery.getParameters().put("a", "b");
         getQuery.setSerializer(new BinarySerializer());
+        getQuery.getRequestHeaders().add("bar", "hello");
+        getQuery.getRequestHeaders().add("bar", "world");
         authentication.authenticate(getQuery);
 
         getQuery.execute(new TaskListener<Object>() {
@@ -57,6 +60,17 @@ public class WebQueryTestClient {
                     + "pathInfo: " + result.get("pathInfo") + ", "
                     + "queryString: " + result.get("queryString") + ", "
                     + "status: " + getQuery.getStatus());
+
+                QueryDictionary responseHeaders = getQuery.getResponseHeaders();
+                for (String headerName : responseHeaders) {
+                    System.out.print(headerName + "=");
+
+                    for (int i = 0, n = responseHeaders.getLength(headerName); i < n; i++) {
+                        System.out.print(responseHeaders.get(headerName, i) + ";");
+                    }
+
+                    System.out.print("\n");
+                }
             }
 
             public void executeFailed(Task<Object> task) {

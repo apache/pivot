@@ -145,7 +145,6 @@ public class ProxyServlet extends HttpServlet {
         connection.setUseCaches(false);
 
         // Write request headers to connection
-        System.out.println("[Request Headers]");
         Enumeration<String> headerNames = (Enumeration<String>)request.getHeaderNames();
 
         if (headerNames != null) {
@@ -157,7 +156,6 @@ public class ProxyServlet extends HttpServlet {
 
                 while (headerValues.hasMoreElements()) {
                     String headerValue = headerValues.nextElement();
-                    System.out.println(headerName + ": " + headerValue);
 
                     if (connection.getRequestProperty(headerName) == null) {
                         connection.setRequestProperty(headerName, headerValue);
@@ -197,8 +195,6 @@ public class ProxyServlet extends HttpServlet {
 
         // Set the response status
         int status = connection.getResponseCode();
-        System.out.println("[Status] " + status);
-
         int statusPrefix = status / 100;
 
         if (statusPrefix == 1
@@ -210,15 +206,12 @@ public class ProxyServlet extends HttpServlet {
 
         // Write response headers
         // NOTE Header indexes start at 1, not 0
-        System.out.println("[Response Headers]");
-
         int i = 1;
         for (String key = connection.getHeaderFieldKey(i);
             key != null;
             key = connection.getHeaderFieldKey(++i)) {
             if (key != null && !ignoreResponseHeaders.contains(key)) {
                 String value = connection.getHeaderField(i);
-                System.out.println(key + ": " + value);
 
                 if (response.containsHeader(key)) {
                     response.addHeader(key, value);
