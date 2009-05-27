@@ -39,6 +39,7 @@ limitations under the License.
     <property name="compiler.debug" value="false"/>
     <property name="compiler.target" value="1.5"/>
     <property name="compiler.encoding" value="UTF-8"/>
+    <property name="compiler.indexJars" value="true"/>
     <condition property="compiler.sun">
         <and>
             <available classname="com.sun.tools.javac.code.Flags" classpathref="classpath.javalib"/>
@@ -75,8 +76,8 @@ limitations under the License.
 
     <!-- Sun compiler check -->
     <condition property="msg.suncompiler"
-        value="Sun compiler detected. Annotation processing enabled"
-        else="!!! WARNING !!! Sun compiler not detected. Annotation processing is disabled, and BindProcessor will not be compiled.">
+        value="Sun compiler detected; annotation processing enabled."
+        else="!!! WARNING !!! Sun compiler not detected; annotation processing is disabled, and BindProcessor will not be compiled.">
         <isset property="compiler.sun"/>
     </condition>
     <echo message="${msg.suncompiler}"/>
@@ -148,7 +149,7 @@ limitations under the License.
 
     <target name="charts-package" depends="charts">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-charts.jar" index="true">
+        <jar destfile="${folder.lib}/${ant.project.name}-charts.jar" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -205,7 +206,7 @@ limitations under the License.
 
     <target name="core-package" depends="core">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-core.jar" index="true">
+        <jar destfile="${folder.lib}/${ant.project.name}-core.jar" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -275,7 +276,7 @@ limitations under the License.
 
     <target name="web-package" depends="web">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-web.jar" index="true">
+        <jar destfile="${folder.lib}/${ant.project.name}-web.jar" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -292,7 +293,7 @@ limitations under the License.
             </fileset>
         </jar>
 
-        <jar destfile="${folder.lib}/${ant.project.name}-web.server.jar" index="true">
+        <jar destfile="${folder.lib}/${ant.project.name}-web.server.jar" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -336,7 +337,7 @@ limitations under the License.
     </target>
 
     <target name="web-test-war" depends="core-package, web-package, wtk-package, web-test">
-        <jar destfile="web/www/lib/${ant.project.name}-web.test.jar" index="true">
+        <jar destfile="web/www/lib/${ant.project.name}-web.test.jar" index="${compiler.indexJars}">
             <fileset dir="web/${folder.bin}" includes="pivot/web/test/**" excludes="pivot/web/test/server/**"/>
             <fileset dir="web/test">
                 <exclude name="pivot/web/test/server/**"/>
@@ -417,7 +418,7 @@ limitations under the License.
 
     <target name="wtk-package" depends="wtk">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-wtk.jar" index="true">
+        <jar destfile="${folder.lib}/${ant.project.name}-wtk.jar" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -439,7 +440,7 @@ limitations under the License.
             </fileset>
         </jar>
 
-        <jar destfile="${folder.lib}/${ant.project.name}-wtk.terra.jar" index="true">
+        <jar destfile="${folder.lib}/${ant.project.name}-wtk.terra.jar" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -457,7 +458,7 @@ limitations under the License.
             </fileset>
         </jar>
 
-        <jar destfile="${folder.lib}/${ant.project.name}-wtk.obsidian.jar" index="true">
+        <jar destfile="${folder.lib}/${ant.project.name}-wtk.obsidian.jar" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -521,7 +522,7 @@ limitations under the License.
 
     <target name="tutorials-package" depends="tutorials">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-tutorials.jar" index="true">
+        <jar destfile="${folder.lib}/${ant.project.name}-tutorials.jar" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
@@ -564,7 +565,7 @@ limitations under the License.
 
     <target name="demos-package" depends="build">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-demos.jar" index="true">
+        <jar destfile="${folder.lib}/${ant.project.name}-demos.jar" index="${compiler.indexJars}">
             <fileset dir="demos/${folder.bin}"/>
             <fileset dir="demos/src">
                 <exclude name="**/*.java"/>
@@ -599,7 +600,7 @@ limitations under the License.
 
     <target name="tools-package" depends="tools">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-tools.jar" index="true">
+        <jar destfile="${folder.lib}/${ant.project.name}-tools.jar" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
                 <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
