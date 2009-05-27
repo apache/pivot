@@ -391,6 +391,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
         editorScrollPane = new ScrollPane(ScrollPane.ScrollBarPolicy.NEVER, ScrollPane.ScrollBarPolicy.FILL);
         editorCardPane = new CardPane();
         editorTablePane = new TablePane();
+        editorTablePane.getStyles().put("horizontalSpacing", 1);
 
         // Set up the editor component hierarchy
         popup.setContent(editorScrollPane);
