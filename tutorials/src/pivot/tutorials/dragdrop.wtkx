@@ -24,7 +24,7 @@ limitations under the License.
     </Border>
     <Border styles="{padding:0}">
         <content>
-            <ImageView wtkx:id="imageView2" image="@weather-few-clouds.png" preferredWidth="48" preferredHeight="48"/>
+            <ImageView wtkx:id="imageView2" image="@weather-few-clouds-32x32.png" preferredWidth="48" preferredHeight="48"/>
         </content>
     </Border>
     <Border styles="{padding:0}">
