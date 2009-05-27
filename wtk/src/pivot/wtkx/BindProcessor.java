@@ -16,6 +16,8 @@
  */
 package pivot.wtkx;
 
+import java.lang.reflect.Method;
+
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -35,8 +37,6 @@ import pivot.collections.Map;
 
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
-import com.sun.tools.javac.parser.Parser;
-import com.sun.tools.javac.parser.Scanner;
 import com.sun.tools.javac.tree.JCTree.*;
 import com.sun.tools.javac.tree.TreeTranslator;
 import com.sun.tools.javac.util.Context;
@@ -280,10 +280,7 @@ public class BindProcessor extends AbstractProcessor {
                 // Close _TMP class declaration
                 buf.append("}");
 
-                // Parse the source code and extract the method declaration
-                Scanner scanner = scannerFactory.newScanner(buf.toString());
-                Parser parser = parserFactory.newParser(scanner, false, false);
-                JCCompilationUnit parsedCompilationUnit = parser.compilationUnit();
+                JCCompilationUnit parsedCompilationUnit = parseCompilationUnit(buf.toString());
                 JCClassDecl parsedClassDeclaration = (JCClassDecl)parsedCompilationUnit.defs.head;
                 JCMethodDecl parsedMethodDeclaration = (JCMethodDecl)parsedClassDeclaration.defs.head;
 
@@ -440,13 +437,11 @@ public class BindProcessor extends AbstractProcessor {
                 }
 
                 buf.append(String.format
-                    ("object = objectHierarchy.getObjectByID(\"%s\");", id));
-                buf.append
-                    ("if (object == null) ");
+                    ("%s = objectHierarchy.getObjectByID(\"%s\");", bindFieldName, id));
+                buf.append(String.format
+                    ("if (%s == null) ", bindFieldName));
                 buf.append(String.format
                     ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", id));
-                buf.append(String.format
-                    ("%s = (%s)object;", bindFieldName, bindField.vartype.toString()));
             }
 
             // Close local scope
@@ -495,6 +490,47 @@ public class BindProcessor extends AbstractProcessor {
                     ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", id));
             }
         }
+
+        private JCCompilationUnit parseCompilationUnit(String sourceCode) {
+            JCCompilationUnit parsedCompilationUnit = null;
+
+            try {
+                if (scannerFactory == null) {
+                    // Sun JDK 1.7
+                    Method newParserMethod = parserFactoryClass.getMethod
+                        ("newParser", new Class<?>[] {CharSequence.class, Boolean.TYPE,
+                        Boolean.TYPE, Boolean.TYPE});
+                    Object parser = newParserMethod.invoke(parserFactory, new Object[]
+                        {sourceCode, false, false, false});
+
+                    Class<?> parserClass = Class.forName("com.sun.tools.javac.parser.Parser");
+                    Method parseMethod = parserClass.getMethod("parseCompilationUnit", new Class<?>[] {});
+                    parsedCompilationUnit = (JCCompilationUnit)parseMethod.invoke(parser, new Object[] {});
+                } else {
+                    // Sun JDK 1.6
+                    Method newScannerMethod = scannerFactoryClass.getMethod
+                        ("newScanner", new Class<?>[] {CharSequence.class});
+                    Object scanner = newScannerMethod.invoke(scannerFactory, new Object[]
+                        {sourceCode});
+
+                    Class<?> lexerClass = Class.forName("com.sun.tools.javac.parser.Lexer");
+                    Method newParserMethod = parserFactoryClass.getMethod
+                        ("newParser", new Class<?>[] {lexerClass, Boolean.TYPE,
+                        Boolean.TYPE});
+                    Object parser = newParserMethod.invoke(parserFactory, new Object[]
+                        {scanner, false, false});
+
+                    Class<?> parserClass = Class.forName("com.sun.tools.javac.parser.Parser");
+                    Method parseMethod = parserClass.getMethod("compilationUnit", new Class<?>[] {});
+                    parsedCompilationUnit = (JCCompilationUnit)parseMethod.invoke(parser, new Object[] {});
+                }
+            } catch (Exception exception) {
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                    "Error while processing bind annotation: " + exception.getMessage());
+            }
+
+            return parsedCompilationUnit;
+        }
     }
 
     private int loadTally = 0;
@@ -502,8 +538,12 @@ public class BindProcessor extends AbstractProcessor {
 
     private Trees trees;
     private Context context;
-    private Scanner.Factory scannerFactory;
-    private Parser.Factory parserFactory;
+
+    Class<?> scannerFactoryClass = null;
+    private Object scannerFactory = null;
+
+    Class<?> parserFactoryClass = null;
+    private Object parserFactory = null;
 
     private BindInjector bindInjector = new BindInjector();
 
@@ -513,26 +553,51 @@ public class BindProcessor extends AbstractProcessor {
 
         trees = Trees.instance(processingEnvironment);
         context = ((JavacProcessingEnvironment)processingEnvironment).getContext();
-        scannerFactory = Scanner.Factory.instance(context);
-        parserFactory = Parser.Factory.instance(context);
+
+        try {
+            // Sun JDK 1.7
+            parserFactoryClass = Class.forName("com.sun.tools.javac.parser.ParserFactory");
+            Method parserFactoryInstanceMethod = parserFactoryClass.getMethod
+                ("instance", new Class<?>[] {Context.class});
+            parserFactory = parserFactoryInstanceMethod.invoke(null, new Object[] {context});
+        } catch (Exception exception) {
+            try {
+                // Sun JDK 1.6
+                scannerFactoryClass = Class.forName("com.sun.tools.javac.parser.Scanner$Factory");
+                Method scannerFactoryInstanceMethod = scannerFactoryClass.getMethod
+                    ("instance", new Class<?>[] {Context.class});
+                scannerFactory = scannerFactoryInstanceMethod.invoke(null, new Object[] {context});
+
+                parserFactoryClass = Class.forName("com.sun.tools.javac.parser.Parser$Factory");
+                Method parserFactoryInstanceMethod = parserFactoryClass.getMethod
+                    ("instance", new Class<?>[] {Context.class});
+                parserFactory = parserFactoryInstanceMethod.invoke(null, new Object[] {context});
+            } catch (Exception nestedException) {
+                // This processor will not work
+                processingEnvironment.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                    "Bind processing disabled: The compiler is not compatible.");
+            }
+        }
     }
 
     @Override
     public boolean process(java.util.Set<? extends TypeElement> annotations,
         RoundEnvironment roundEnvironment) {
-        if (!roundEnvironment.processingOver()) {
-            for (Element rootElement : roundEnvironment.getRootElements()) {
-                if (rootElement.getKind() == ElementKind.CLASS) {
-                    // Visit each AST class node with our BindInjector visitor
-                    JCClassDecl classDeclaration = (JCClassDecl)trees.getTree(rootElement);
-                    classDeclaration.accept(bindInjector);
+        if (parserFactory != null) {
+            if (!roundEnvironment.processingOver()) {
+                for (Element rootElement : roundEnvironment.getRootElements()) {
+                    if (rootElement.getKind() == ElementKind.CLASS) {
+                        // Visit each AST class node with our BindInjector visitor
+                        JCClassDecl classDeclaration = (JCClassDecl)trees.getTree(rootElement);
+                        classDeclaration.accept(bindInjector);
+                    }
                 }
+            } else {
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
+                    String.format("%d WTKX %s processed (bound to %d %s).",
+                    loadTally, loadTally == 1 ? "load" : "loads",
+                    bindTally, bindTally == 1 ? "variable" : "variables"));
             }
-        } else {
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE,
-                String.format("%d WTKX %s processed (bound to %d %s).",
-                loadTally, loadTally == 1 ? "load" : "loads",
-                bindTally, bindTally == 1 ? "variable" : "variables"));
         }
 
         return true;
