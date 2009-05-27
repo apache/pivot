@@ -1241,6 +1241,7 @@ public abstract class ApplicationContext {
      *
      * @param location
      */
+    @SuppressWarnings("rawtypes")
     public static void open(URL location) {
         // TODO Remove dynamic invocation when Java 6 is fully supported on
         // Mac OS X

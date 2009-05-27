@@ -663,7 +663,7 @@ public class JSONSerializer implements Serializer<Object> {
         return get(root, split(path));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private static Object get(Object root, Sequence<String> keys) {
         Object value = root;
 
@@ -815,7 +815,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The value previously associated with the path.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static Object put(Object root, String path, Object value) {
         if (root == null) {
             throw new IllegalArgumentException("root is null.");
@@ -857,7 +857,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * The value that was removed.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static Object remove(Object root, String path) {
         if (root == null) {
             throw new IllegalArgumentException("root is null.");
@@ -899,7 +899,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return
      * <tt>true</tt> if the path exists; <tt>false</tt>, otherwise.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static boolean containsKey(Object root, String path) {
         if (root == null) {
             throw new IllegalArgumentException("root is null.");

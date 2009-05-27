@@ -174,6 +174,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
      *
      * @param args
      */
+    @SuppressWarnings("rawtypes")
     public static void main(String[] args) {
         if (application != null) {
             throw new IllegalStateException();
