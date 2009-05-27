@@ -17,6 +17,10 @@ limitations under the License.
 -->
 
 <project name="pivot" default="build">
+    <path id="classpath.javalib">
+        <fileset dir="${java.home}/lib" includes="**/*.jar"/>
+    </path>
+
     <!-- Properties that affect the directories that are created as part of the build -->
     <property name="folder.bin" value="ant-bin"/>
     <property name="folder.deploy" value="deploy"/>
@@ -35,6 +39,15 @@ limitations under the License.
     <property name="compiler.debug" value="false"/>
     <property name="compiler.target" value="1.5"/>
     <property name="compiler.encoding" value="UTF-8"/>
+    <condition property="compiler.sun">
+        <and>
+            <available classname="com.sun.tools.javac.code.Flags" classpathref="classpath.javalib"/>
+            <available classname="com.sun.tools.javac.tree.JCTree" classpathref="classpath.javalib"/>
+            <available classname="com.sun.tools.javac.tree.TreeTranslator" classpathref="classpath.javalib"/>
+            <available classname="com.sun.tools.javac.util.Context" classpathref="classpath.javalib"/>
+            <available classname="com.sun.source.util.Trees" classpathref="classpath.javalib"/>
+        </and>
+    </condition>
 
     <!-- Compiler argument properties -->
     <property name="compilerarg.default" value="-Xlint"/>
@@ -47,13 +60,6 @@ limitations under the License.
     <tstamp/>
     <property file="build.properties"/>
     <property name="folder.release" value="apache-${ant.project.name}-${version}"/>
-    <condition property="compiler.sun">
-        <available classname="com.sun.tools.javac.tree.JCTree">
-            <classpath>
-                <fileset dir="${java.home}/lib" includes="**/*.jar"/>
-            </classpath>
-        </available>
-    </condition>
 
     <!-- JDK version check -->
     <fail message="Building Pivot requires JDK 1.6 or greater.">
@@ -69,8 +75,8 @@ limitations under the License.
 
     <!-- Sun compiler check -->
     <condition property="msg.suncompiler"
-        value="Sun compiler detected (annotation processing enabled)"
-        else="!!! WARNING !!! Sun compiler not detected (annotation processing disabled)">
+        value="Sun compiler detected. Annotation processing enabled"
+        else="!!! WARNING !!! Sun compiler not detected. Annotation processing is disabled, and BindProcessor will not be compiled.">
         <isset property="compiler.sun"/>
     </condition>
     <echo message="${msg.suncompiler}"/>
@@ -374,17 +380,21 @@ limitations under the License.
 
     <!-- WTK -->
     <target name="wtk" depends="core">
+        <!-- Fail descriptively if the user's classpath is not set up correctly -->
         <fail message="LiveConnect not found. Please see the BUILD file for more information.">
             <condition>
                 <not>
-                    <available classname="netscape.javascript.JSObject">
-                        <classpath>
-                            <fileset dir="${java.home}/lib" includes="**/*.jar"/>
-                        </classpath>
-                    </available>
+                    <available classname="netscape.javascript.JSObject" classpathref="classpath.javalib"/>
                 </not>
             </condition>
         </fail>
+
+        <!-- Exclude compilation of BindProcessor if we're not using a Sun compiler -->
+        <condition property="wtk.exclude" value="pivot/wtkx/BindProcessor.java" else="">
+            <not>
+                <isset property="compiler.sun"/>
+            </not>
+        </condition>
 
         <mkdir dir="wtk/${folder.bin}"/>
         <javac srcdir="wtk/src"
@@ -395,11 +405,12 @@ limitations under the License.
             target="${compiler.target}"
             encoding="${compiler.encoding}"
             failonerror="true">
+            <exclude name="${wtk.exclude}"/>
             <compilerarg value="${compilerarg.default}"/>
             <classpath>
                 <pathelement location="core/${folder.bin}"/>
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
-                <fileset dir="${java.home}/lib" includes="**/*.jar"/>
+                <path refid="classpath.javalib"/>
             </classpath>
         </javac>
     </target>
