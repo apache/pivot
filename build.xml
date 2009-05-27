@@ -36,28 +36,44 @@ limitations under the License.
     <property name="compiler.target" value="1.5"/>
     <property name="compiler.encoding" value="UTF-8"/>
 
-    <!-- Dynamic properties -->
-    <tstamp/>
-    <property file="build.properties"/>
-    <property name="folder.release" value="apache-${ant.project.name}-${version}"/>
-
     <!-- Compiler argument properties -->
     <property name="compilerarg.default" value="-Xlint"/>
     <condition property="compilerarg.processor"
         value="-Xlint -processor pivot.wtkx.BindProcessor" else="-Xlint">
+        <isset property="compiler.sun"/>
+    </condition>
+
+    <!-- Dynamic properties -->
+    <tstamp/>
+    <property file="build.properties"/>
+    <property name="folder.release" value="apache-${ant.project.name}-${version}"/>
+    <condition property="compiler.sun">
         <available classname="com.sun.tools.javac.tree.JCTree">
-          <classpath>
-            <fileset dir="${java.home}/lib" includes="**/*.jar"/>
-          </classpath>
+            <classpath>
+                <fileset dir="${java.home}/lib" includes="**/*.jar"/>
+            </classpath>
         </available>
     </condition>
 
     <!-- JDK version check -->
-    <condition property="echo.jdk" value="Using JDK ${ant.java.version} (OK)"
-        else="WARNING: Using JDK ${ant.java.version}">
-        <equals arg1="${ant.java.version}" arg2="1.6"/>
+    <fail message="Building Pivot requires JDK 1.6 or greater.">
+        <condition>
+            <not>
+                <or>
+                    <equals arg1="${ant.java.version}" arg2="1.6"/>
+                    <equals arg1="${ant.java.version}" arg2="1.7"/>
+                </or>
+            </not>
+        </condition>
+    </fail>
+
+    <!-- Sun compiler check -->
+    <condition property="msg.suncompiler"
+        value="Sun compiler detected (annotation processing enabled)"
+        else="!!! WARNING !!! Sun compiler not detected (annotation processing disabled)">
+        <isset property="compiler.sun"/>
     </condition>
-    <echo message="${echo.jdk}"/>
+    <echo message="${msg.suncompiler}"/>
 
     <target name="build" description="Compiles all packages"
         depends="charts, charts-test, core, core-test, web, web-test, wtk, wtk-test, tutorials, demos, tools"/>
@@ -207,10 +223,13 @@ limitations under the License.
 
     <!-- Core Test -->
     <target name="core-test" depends="core">
-        <fail message="JUnit not found. Please see the BUILD file for more information.">
+        <fail message="JUnit 4 not found. Please see the BUILD file for more information.">
             <condition>
                 <not>
-                    <available classname="junit.framework.TestCase"/>
+                    <and>
+                        <available classname="junit.framework.TestCase"/>
+                        <available classname="org.junit.Test"/>
+                    </and>
                 </not>
             </condition>
         </fail>
