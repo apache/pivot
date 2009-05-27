@@ -220,8 +220,9 @@ public class WTKXSerializer implements Serializer<Object>, Bindable.ObjectHierar
     private NamedObjectDictionary namedObjectDictionary = new NamedObjectDictionary();
 
     private XMLInputFactory xmlInputFactory;
-    private Object scriptEngineManager;
+
     private Class<?> scriptEngineManagerClass;
+    private Object scriptEngineManager;
     private java.util.Map<String, Object> scriptEngineBindings;
 
     public static final char URL_PREFIX = '@';
@@ -250,19 +251,6 @@ public class WTKXSerializer implements Serializer<Object>, Bindable.ObjectHierar
 
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
-
-        try {
-            scriptEngineManagerClass = Class.forName("javax.script.ScriptEngineManager");
-            scriptEngineManager = scriptEngineManagerClass.newInstance();
-            Method getBindingsMethod = scriptEngineManagerClass.getMethod
-                ("getBindings", new Class<?>[] {});
-            scriptEngineBindings = (java.util.Map<String, Object>)
-                getBindingsMethod.invoke(scriptEngineManager, new Object[] {});
-        } catch(Exception exception) {
-            scriptEngineManagerClass = null;
-            scriptEngineManager = null;
-            scriptEngineBindings = null;
-        }
     }
 
     public Resources getResources() {
@@ -430,8 +418,24 @@ public class WTKXSerializer implements Serializer<Object>, Bindable.ObjectHierar
 
                                 element = new Element(element, Element.Type.INCLUDE, attributes, value);
                             } else if (localName.equals(SCRIPT_TAG)) {
-                                if (scriptEngineManagerClass == null) {
-                                    throw new SerializationException("Scripting is not supported on this platform.");
+                                // Load the script engine manager if it has not been loaded
+                                if (scriptEngineManager == null) {
+                                    try {
+                                        scriptEngineManagerClass = Class.forName("javax.script.ScriptEngineManager");
+                                    } catch(ClassNotFoundException exception) {
+                                        throw new SerializationException("Scripting is not supported on this platform.");
+                                    }
+
+                                    try {
+                                        scriptEngineManager = scriptEngineManagerClass.newInstance();
+                                        Method getBindingsMethod = scriptEngineManagerClass.getMethod
+                                            ("getBindings", new Class<?>[] {});
+                                        scriptEngineBindings = (java.util.Map<String, Object>)
+                                            getBindingsMethod.invoke(scriptEngineManager, new Object[] {});
+                                    } catch(Exception exception) {
+                                        scriptEngineManager = null;
+                                        scriptEngineBindings = null;
+                                    }
                                 }
 
                                 // The element represents a script
