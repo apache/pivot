@@ -267,12 +267,12 @@ public abstract class Transition {
      * {@link TransitionListener#transitionCompleted(Transition)} event.
      */
     public void end() {
-    	if (transitionCallback != null) {
-        	currentTime = startTime + duration;
-        	stop();
-        	update();
-        	transitionListener.transitionCompleted(this);
-    	}
+        if (transitionCallback != null) {
+            currentTime = startTime + duration;
+            stop();
+            update();
+            transitionListener.transitionCompleted(this);
+        }
     }
 
     /**

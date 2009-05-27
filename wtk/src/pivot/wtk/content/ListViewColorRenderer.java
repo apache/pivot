@@ -68,7 +68,7 @@ public class ListViewColorRenderer extends ListViewItemRenderer {
     private ListItem listItem = new ListItem(colorBadge);
 
     public ListViewColorRenderer() {
-    	setShowIcon(true);
+        setShowIcon(true);
     }
 
     public void render(Object item, ListView listView, boolean selected,

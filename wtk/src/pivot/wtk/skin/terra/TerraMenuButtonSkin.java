@@ -142,12 +142,12 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         // Paint the background
-    	if (backgroundColor != null
-			&& bevelColor != null) {
+        if (backgroundColor != null
+            && bevelColor != null) {
             graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
                 width / 2, height / 2, backgroundColor));
             graphics.fillRect(0, 0, width, height);
-    	}
+        }
 
         // Paint the border
         if (borderColor != null) {

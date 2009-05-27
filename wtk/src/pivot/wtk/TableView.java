@@ -491,19 +491,19 @@ public class TableView extends Component {
 
         @SuppressWarnings("unchecked")
         public int compare(Object o1, Object o2) {
-        	Dictionary<String, ?> row1;
-        	if (o1 instanceof Dictionary<?, ?>) {
-        		row1 = (Dictionary<String, ?>)o1;
-        	} else {
-        		row1 = new BeanDictionary(o1);
-        	}
+            Dictionary<String, ?> row1;
+            if (o1 instanceof Dictionary<?, ?>) {
+                row1 = (Dictionary<String, ?>)o1;
+            } else {
+                row1 = new BeanDictionary(o1);
+            }
 
-        	Dictionary<String, ?> row2;
-        	if (o2 instanceof Dictionary<?, ?>) {
-        		row2 = (Dictionary<String, ?>)o2;
-        	} else {
-        		row2 = new BeanDictionary(o2);
-        	}
+            Dictionary<String, ?> row2;
+            if (o2 instanceof Dictionary<?, ?>) {
+                row2 = (Dictionary<String, ?>)o2;
+            } else {
+                row2 = new BeanDictionary(o2);
+            }
 
             Comparable<Object> comparable = (Comparable<Object>)row1.get(columnName);
             Object value = row2.get(columnName);

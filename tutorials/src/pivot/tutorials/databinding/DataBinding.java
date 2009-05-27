@@ -33,70 +33,70 @@ import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class DataBinding extends Bindable implements Application {
-	@Load(resourceName="data_binding.wtkx") private Window window;
-	@Bind(fieldName="window") private Form form;
-	@Bind(fieldName="window") private PushButton loadJavaButton;
-	@Bind(fieldName="window") private PushButton loadJSONButton;
-	@Bind(fieldName="window") private PushButton clearButton;
-	@Bind(fieldName="window") private Label sourceLabel;
+    @Load(resourceName="data_binding.wtkx") private Window window;
+    @Bind(fieldName="window") private Form form;
+    @Bind(fieldName="window") private PushButton loadJavaButton;
+    @Bind(fieldName="window") private PushButton loadJSONButton;
+    @Bind(fieldName="window") private PushButton clearButton;
+    @Bind(fieldName="window") private Label sourceLabel;
 
-	private static final Contact CONTACT = new Contact("101", "Joe Smith",
-		new Address("123 Main St.", "Cambridge", "MA", "02142"),
-		"(617) 555-1234", "joe_smith@foo.com",
-		new IMAccount("jsmith1234", "AIM"));
+    private static final Contact CONTACT = new Contact("101", "Joe Smith",
+        new Address("123 Main St.", "Cambridge", "MA", "02142"),
+        "(617) 555-1234", "joe_smith@foo.com",
+        new IMAccount("jsmith1234", "AIM"));
 
-	public void startup(Display display, Dictionary<String, String> properties)
-		throws Exception {
-	    bind();
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
+        bind();
 
         loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
-        	public void buttonPressed(Button button) {
-        		form.load(CONTACT);
-        		sourceLabel.setText("Java");
-        	}
+            public void buttonPressed(Button button) {
+                form.load(CONTACT);
+                sourceLabel.setText("Java");
+            }
         });
 
         loadJSONButton.getButtonPressListeners().add(new ButtonPressListener() {
-        	@SuppressWarnings("unchecked")
-        	public void buttonPressed(Button button) {
-        		JSONSerializer serializer = new JSONSerializer();
-        		InputStream inputStream = getClass().getResourceAsStream("contact.json");
+            @SuppressWarnings("unchecked")
+            public void buttonPressed(Button button) {
+                JSONSerializer serializer = new JSONSerializer();
+                InputStream inputStream = getClass().getResourceAsStream("contact.json");
 
-        		try {
-            		form.load((Map<String, Object>)serializer.readObject(inputStream));
-            		sourceLabel.setText("JSON");
-        		} catch(Exception exception) {
-        			System.out.println(exception);
-        		}
+                try {
+                    form.load((Map<String, Object>)serializer.readObject(inputStream));
+                    sourceLabel.setText("JSON");
+                } catch(Exception exception) {
+                    System.out.println(exception);
+                }
 
-        		button.setEnabled(true);
-        	}
+                button.setEnabled(true);
+            }
         });
 
         clearButton.getButtonPressListeners().add(new ButtonPressListener() {
-        	public void buttonPressed(Button button) {
-        		form.load(new Contact());
-        		sourceLabel.setText(null);
-        	}
+            public void buttonPressed(Button button) {
+                form.load(new Contact());
+                sourceLabel.setText(null);
+            }
         });
 
         window.open(display);
-	}
+    }
 
-	public boolean shutdown(boolean optional) {
-	    if (window != null) {
-	        window.close();
-	    }
+    public boolean shutdown(boolean optional) {
+        if (window != null) {
+            window.close();
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 
-	public void suspend() {
-	}
+    public void suspend() {
+    }
 
-	public void resume() {
-	}
+    public void resume() {
+    }
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(DataBinding.class, args);

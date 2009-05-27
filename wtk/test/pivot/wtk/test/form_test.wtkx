@@ -20,8 +20,8 @@ limitations under the License.
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
     <sections>
         <Form.Section heading="Test Section">
-	        <Label Form.name="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
-	            styles="{wrapText:true}"/>
+            <Label Form.name="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
+                styles="{wrapText:true}"/>
         </Form.Section>
         <Form.Section heading="Test Section">
             <Label Form.name="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."

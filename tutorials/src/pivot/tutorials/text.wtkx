@@ -26,11 +26,11 @@ limitations under the License.
                 <Form>
                     <sections>
                         <Form.Section>
-	                        <TextInput Form.name="Basic" text="Pivot" textSize="12"/>
-	                        <TextInput Form.name="Prompt" prompt="Name" textSize="12"/>
-	                        <TextInput Form.name="Password"
-	                            Form.flag="{messageType:'info', message:'This field has a maximum length of 12 characters.'}"
-	                            password="true" text="pivot" textSize="12" maximumLength="12" />
+                            <TextInput Form.name="Basic" text="Pivot" textSize="12"/>
+                            <TextInput Form.name="Prompt" prompt="Name" textSize="12"/>
+                            <TextInput Form.name="Password"
+                                Form.flag="{messageType:'info', message:'This field has a maximum length of 12 characters.'}"
+                                password="true" text="pivot" textSize="12" maximumLength="12" />
                             <TextInput Form.name="Validating" Form.flag="{messageType:'info', message:'This field only accepts numeric values from 0 through 9.'}"
                                 text="5" textSize="12" maximumLength="6">
                                 <validator>

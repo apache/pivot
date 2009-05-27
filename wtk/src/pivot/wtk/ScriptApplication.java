@@ -25,41 +25,41 @@ import pivot.wtkx.WTKXSerializer;
  * @author gbrown
  */
 public class ScriptApplication implements Application {
-	private Window window = null;
+    private Window window = null;
 
-	private static final String SRC_ARGUMENT = "src";
-	private static final String TITLE_ARGUMENT = "title";
+    private static final String SRC_ARGUMENT = "src";
+    private static final String TITLE_ARGUMENT = "title";
 
-	public static void main(String[] args) {
-	    DesktopApplicationContext.main(ScriptApplication.class, args);
-	}
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ScriptApplication.class, args);
+    }
 
-	public void startup(Display display, Dictionary<String, String> properties)
-		throws Exception {
-		if (!properties.containsKey(SRC_ARGUMENT)) {
-			throw new IllegalArgumentException(SRC_ARGUMENT + " argument is required.");
-		}
+    public void startup(Display display, Dictionary<String, String> properties)
+        throws Exception {
+        if (!properties.containsKey(SRC_ARGUMENT)) {
+            throw new IllegalArgumentException(SRC_ARGUMENT + " argument is required.");
+        }
 
-		String src = properties.get(SRC_ARGUMENT);
-		String title = properties.get(TITLE_ARGUMENT);
+        String src = properties.get(SRC_ARGUMENT);
+        String title = properties.get(TITLE_ARGUMENT);
 
-		WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
 
-		Component content = (Component)wtkxSerializer.readObject(src);
-		window = new Window(content);
-		window.setTitle(title);
-		window.setMaximized(true);
-		window.open(display);
-	}
+        Component content = (Component)wtkxSerializer.readObject(src);
+        window = new Window(content);
+        window.setTitle(title);
+        window.setMaximized(true);
+        window.open(display);
+    }
 
-	public boolean shutdown(boolean optional) {
-		window.close();
-		return true;
-	}
+    public boolean shutdown(boolean optional) {
+        window.close();
+        return true;
+    }
 
-	public void resume() {
-	}
+    public void resume() {
+    }
 
-	public void suspend() {
-	}
+    public void suspend() {
+    }
 }

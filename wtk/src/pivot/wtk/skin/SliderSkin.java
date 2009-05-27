@@ -27,30 +27,30 @@ import pivot.wtk.SliderValueListener;
  * @author gbrown
  */
 public abstract class SliderSkin extends ContainerSkin
-	implements SliderListener, SliderValueListener {
-	@Override
-	public void install(Component component) {
-		super.install(component);
+    implements SliderListener, SliderValueListener {
+    @Override
+    public void install(Component component) {
+        super.install(component);
 
-		Slider slider = (Slider)component;
-		slider.getSliderListeners().add(this);
-		slider.getSliderValueListeners().add(this);
-	}
+        Slider slider = (Slider)component;
+        slider.getSliderListeners().add(this);
+        slider.getSliderValueListeners().add(this);
+    }
 
-	@Override
-	public void uninstall() {
-		Slider slider = (Slider)getComponent();
-		slider.getSliderListeners().remove(this);
-		slider.getSliderValueListeners().remove(this);
+    @Override
+    public void uninstall() {
+        Slider slider = (Slider)getComponent();
+        slider.getSliderListeners().remove(this);
+        slider.getSliderValueListeners().remove(this);
 
-		super.uninstall();
-	}
+        super.uninstall();
+    }
 
-	public void boundsChanged(Slider slider, int previousMinimum, int previousMaximum) {
-		invalidateComponent();
-	}
+    public void boundsChanged(Slider slider, int previousMinimum, int previousMaximum) {
+        invalidateComponent();
+    }
 
-	public void valueChanged(Slider slider, int previousValue) {
-		// No-op
-	}
+    public void valueChanged(Slider slider, int previousValue) {
+        // No-op
+    }
 }

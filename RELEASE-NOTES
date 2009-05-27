@@ -64,6 +64,9 @@ New Features
   that it can be called by the application itself as well as by the system menu
   on Mac OSX (PIVOT-117).
 
+- Add a ByteArraySerializer for serializing arbitrary content, byte per byte
+  (in a buffered way, if possible) (PIVOT-126).
+
 
 Improvements
 ------------
@@ -121,6 +124,8 @@ Improvements
 
 - Disable the tab button/accordion header when the corresponding tab/panel is
   disabled (PIVOT-123).
+
+- Add support for comments to JSONSerializer (PIVOT-127).
 
 Bug Fixes
 ---------

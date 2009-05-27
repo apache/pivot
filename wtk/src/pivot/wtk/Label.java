@@ -100,10 +100,10 @@ public class Label extends Component {
             && context.containsKey(textKey)) {
             Object value = context.get(textKey);
             if (value != null) {
-            	value = value.toString();
+                value = value.toString();
             }
 
-        	setText((String)value);
+            setText((String)value);
         }
     }
 

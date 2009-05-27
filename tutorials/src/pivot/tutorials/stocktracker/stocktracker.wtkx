@@ -98,8 +98,8 @@ limitations under the License.
 
                 <TablePane.Row height="-1">
                     <FlowPane>
-	                    <Label text="%lastUpdate"/>
-	                    <Label wtkx:id="lastUpdateLabel"/>
+                        <Label text="%lastUpdate"/>
+                        <Label wtkx:id="lastUpdateLabel"/>
                     </FlowPane>
                     <FlowPane styles="{horizontalAlignment:'right'}">
                         <Label text="%dataProvidedBy" />

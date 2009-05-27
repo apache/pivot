@@ -28,13 +28,13 @@ public class CheckedListViewTest implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-    	ListView listView = new ListView(JSONSerializer.parseList("['One', 'Two', 'Three', 'Four']"));
-    	listView.setSelectMode(ListView.SelectMode.MULTI);
-    	listView.setCheckmarksEnabled(true);
-    	listView.setItemChecked(0, true);
-    	listView.setItemChecked(2, true);
+        ListView listView = new ListView(JSONSerializer.parseList("['One', 'Two', 'Three', 'Four']"));
+        listView.setSelectMode(ListView.SelectMode.MULTI);
+        listView.setCheckmarksEnabled(true);
+        listView.setItemChecked(0, true);
+        listView.setItemChecked(2, true);
 
-    	window = new Window(listView);
+        window = new Window(listView);
         window.setTitle("Checked List View Test");
         window.setMaximized(true);
         window.open(display);

@@ -22,12 +22,12 @@ package pivot.wtk;
  * @author gbrown
  */
 public interface SliderListener {
-	/**
-	 * Called when a slider's bounds have changed.
-	 *
-	 * @param slider
-	 * @param previousMinimum
-	 * @param previousMaximum
-	 */
-	public void boundsChanged(Slider slider, int previousMinimum, int previousMaximum);
+    /**
+     * Called when a slider's bounds have changed.
+     *
+     * @param slider
+     * @param previousMinimum
+     * @param previousMaximum
+     */
+    public void boundsChanged(Slider slider, int previousMinimum, int previousMaximum);
 }

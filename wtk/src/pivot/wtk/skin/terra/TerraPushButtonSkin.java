@@ -77,12 +77,12 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public int getPreferredWidth(int height) {
-    	int preferredWidth = 0;
+        int preferredWidth = 0;
 
-    	if (height == -1
-			&& !Float.isNaN(preferredAspectRatio)) {
-    		preferredWidth = getPreferredSize().width;
-    	} else {
+        if (height == -1
+            && !Float.isNaN(preferredAspectRatio)) {
+            preferredWidth = getPreferredSize().width;
+        } else {
             PushButton pushButton = (PushButton)getComponent();
             Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
 
@@ -103,18 +103,18 @@ public class TerraPushButtonSkin extends PushButtonSkin {
                 && (float)preferredWidth / (float)height < preferredAspectRatio) {
                 preferredWidth = (int)((float)height * preferredAspectRatio);
             }
-    	}
+        }
 
         return preferredWidth;
     }
 
     public int getPreferredHeight(int width) {
-    	int preferredHeight = 0;
+        int preferredHeight = 0;
 
-    	if (width== -1
-			&& !Float.isNaN(preferredAspectRatio)) {
-    		preferredHeight = getPreferredSize().height;
-    	} else {
+        if (width== -1
+            && !Float.isNaN(preferredAspectRatio)) {
+            preferredHeight = getPreferredSize().height;
+        } else {
             PushButton pushButton = (PushButton)getComponent();
             Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
 
@@ -135,7 +135,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
                 && (float)width / (float)preferredHeight < preferredAspectRatio) {
                 preferredHeight = (int)((float)width / preferredAspectRatio);
             }
-    	}
+        }
 
         return preferredHeight;
     }
@@ -195,12 +195,12 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         // Paint the background
-    	if (backgroundColor != null
-			&& bevelColor != null) {
+        if (backgroundColor != null
+            && bevelColor != null) {
             graphics.setPaint(new GradientPaint(width / 2, 0, bevelColor,
                 width / 2, height / 2, backgroundColor));
             graphics.fillRect(0, 0, width, height);
-    	}
+        }
 
         // Paint the border
         if (borderColor != null) {

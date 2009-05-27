@@ -38,23 +38,23 @@ import pivot.wtk.skin.SliderSkin;
  * @author gbrown
  */
 public class TerraSliderSkin extends SliderSkin {
-	/**
-	 * Slider thumb component.
-	 *
-	 * @author gbrown
-	 */
-	protected class Thumb extends Component {
-		public Thumb() {
-			setSkin(new ThumbSkin());
-		}
-	}
+    /**
+     * Slider thumb component.
+     *
+     * @author gbrown
+     */
+    protected class Thumb extends Component {
+        public Thumb() {
+            setSkin(new ThumbSkin());
+        }
+    }
 
-	/**
-	 * Slider thumb skin.
-	 *
-	 * @author gbrown
-	 */
-	protected class ThumbSkin extends ComponentSkin {
+    /**
+     * Slider thumb skin.
+     *
+     * @author gbrown
+     */
+    protected class ThumbSkin extends ComponentSkin {
         private boolean highlighted = false;
 
         @Override
@@ -63,33 +63,33 @@ public class TerraSliderSkin extends SliderSkin {
         }
 
         public int getPreferredWidth(int height) {
-			return 0;
-		}
+            return 0;
+        }
 
-		public int getPreferredHeight(int width) {
-			return 0;
-		}
+        public int getPreferredHeight(int width) {
+            return 0;
+        }
 
-		public void layout() {
-			// No-op
-		}
+        public void layout() {
+            // No-op
+        }
 
-		public void paint(Graphics2D graphics) {
-			int width = getWidth();
-			int height = getHeight();
+        public void paint(Graphics2D graphics) {
+            int width = getWidth();
+            int height = getHeight();
 
-	        graphics.setPaint(new GradientPaint(width / 2, 0, buttonBevelColor,
-        		width / 2, height, buttonBackgroundColor));
-	        graphics.fillRect(0, 0, width, height);
+            graphics.setPaint(new GradientPaint(width / 2, 0, buttonBevelColor,
+                width / 2, height, buttonBackgroundColor));
+            graphics.fillRect(0, 0, width, height);
 
-        	float alpha = (highlighted
-    			|| dragOffset != null) ? 0.25f : 0.0f;
-        	graphics.setPaint(new Color(0, 0, 0, alpha));
+            float alpha = (highlighted
+                || dragOffset != null) ? 0.25f : 0.0f;
+            graphics.setPaint(new Color(0, 0, 0, alpha));
             graphics.fillRect(0, 0, width, height);
 
             graphics.setPaint(buttonBorderColor);
             GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
-		}
+        }
 
         @Override
         public void enabledChanged(Component component) {
@@ -134,37 +134,37 @@ public class TerraSliderSkin extends SliderSkin {
         }
 
         @Override
-	    public void mouseOver(Component component) {
-			super.mouseOver(component);
+        public void mouseOver(Component component) {
+            super.mouseOver(component);
 
-			highlighted = true;
-			repaintComponent();
-	    }
+            highlighted = true;
+            repaintComponent();
+        }
 
-		@Override
-	    public void mouseOut(Component component) {
-			super.mouseOut(component);
+        @Override
+        public void mouseOut(Component component) {
+            super.mouseOut(component);
 
             highlighted = false;
             repaintComponent();
-	    }
+        }
 
-	    @Override
-	    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-	        boolean consumed = super.mouseDown(component, button, x, y);
+        @Override
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            boolean consumed = super.mouseDown(component, button, x, y);
 
-	        if (button == Mouse.Button.LEFT) {
-		        dragOffset = new Point(x, y);
-		        Mouse.capture(component);
+            if (button == Mouse.Button.LEFT) {
+                dragOffset = new Point(x, y);
+                Mouse.capture(component);
                 repaintComponent();
 
                 consumed = true;
-	        }
+            }
 
-	        return consumed;
-	    }
+            return consumed;
+        }
 
-	    @Override
+        @Override
         public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = super.mouseUp(component, button, x, y);
 
@@ -175,109 +175,109 @@ public class TerraSliderSkin extends SliderSkin {
             }
 
             return consumed;
-	    }
-	}
+        }
+    }
 
-	private Thumb thumb = new Thumb();
+    private Thumb thumb = new Thumb();
     Point dragOffset = null;
 
     private Color trackColor;
     private int trackWidth;
     private Color buttonBackgroundColor;
     private Color buttonBorderColor;
-	private int thumbWidth;
-	private int thumbHeight;
+    private int thumbWidth;
+    private int thumbHeight;
 
-	// Derived colors
+    // Derived colors
     private Color buttonBevelColor;
 
-	public static final int DEFAULT_WIDTH = 120;
-	public static final int MINIMUM_THUMB_WIDTH = 4;
-	public static final int MINIMUM_THUMB_HEIGHT = 4;
+    public static final int DEFAULT_WIDTH = 120;
+    public static final int MINIMUM_THUMB_WIDTH = 4;
+    public static final int MINIMUM_THUMB_HEIGHT = 4;
 
-	public TerraSliderSkin() {
-		TerraTheme theme = (TerraTheme)Theme.getTheme();
+    public TerraSliderSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
 
-		trackColor = theme.getColor(6);
-		trackWidth = 2;
-		buttonBackgroundColor = theme.getColor(10);
-		buttonBorderColor = theme.getColor(7);
+        trackColor = theme.getColor(6);
+        trackWidth = 2;
+        buttonBackgroundColor = theme.getColor(10);
+        buttonBorderColor = theme.getColor(7);
 
-		buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
+        buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
 
-		thumbWidth = 8;
-		thumbHeight = 16;
-	}
+        thumbWidth = 8;
+        thumbHeight = 16;
+    }
 
-	@Override
-	public void install(Component component) {
-		super.install(component);
+    @Override
+    public void install(Component component) {
+        super.install(component);
 
-		Slider slider = (Slider)component;
-		slider.add(thumb);
-	}
+        Slider slider = (Slider)component;
+        slider.add(thumb);
+    }
 
-	public void uninstall() {
-		Slider slider = (Slider)getComponent();
-		slider.remove(thumb);
+    public void uninstall() {
+        Slider slider = (Slider)getComponent();
+        slider.remove(thumb);
 
-		super.uninstall();
-	}
+        super.uninstall();
+    }
 
-	public int getPreferredWidth(int height) {
-		return DEFAULT_WIDTH;
-	}
+    public int getPreferredWidth(int height) {
+        return DEFAULT_WIDTH;
+    }
 
-	public int getPreferredHeight(int width) {
-		return thumbHeight;
-	}
+    public int getPreferredHeight(int width) {
+        return thumbHeight;
+    }
 
-	public Dimensions getPreferredSize() {
-		return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
-	}
+    public Dimensions getPreferredSize() {
+        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+    }
 
-	public void layout() {
-		Slider slider = (Slider)getComponent();
+    public void layout() {
+        Slider slider = (Slider)getComponent();
 
-		int width = getWidth();
-		int height = getHeight();
+        int width = getWidth();
+        int height = getHeight();
 
-		int minimum = slider.getMinimum();
-		int maximum = slider.getMaximum();
-		int value = slider.getValue();
+        int minimum = slider.getMinimum();
+        int maximum = slider.getMaximum();
+        int value = slider.getValue();
 
-		float ratio = (float)(value - minimum) / (maximum - minimum);
+        float ratio = (float)(value - minimum) / (maximum - minimum);
 
-		thumb.setSize(thumbWidth, thumbHeight);
-		thumb.setLocation((int)((float)(width - thumbWidth) * ratio),
-			(height - thumbHeight) / 2);
-	}
+        thumb.setSize(thumbWidth, thumbHeight);
+        thumb.setLocation((int)((float)(width - thumbWidth) * ratio),
+            (height - thumbHeight) / 2);
+    }
 
-	public void paint(Graphics2D graphics) {
-		super.paint(graphics);
+    public void paint(Graphics2D graphics) {
+        super.paint(graphics);
 
-		int width = getWidth();
-		int height = getHeight();
+        int width = getWidth();
+        int height = getHeight();
 
-		graphics.setColor(trackColor);
+        graphics.setColor(trackColor);
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
         GraphicsUtilities.drawLine(graphics, 0, (height - trackWidth) / 2,
             width, Orientation.HORIZONTAL, trackWidth);
-	}
+    }
 
-	public Color getTrackColor() {
-		return trackColor;
-	}
+    public Color getTrackColor() {
+        return trackColor;
+    }
 
-	public void setTrackColor(Color trackColor) {
-		if (trackColor == null) {
-			throw new IllegalArgumentException("trackColor is null.");
-		}
+    public void setTrackColor(Color trackColor) {
+        if (trackColor == null) {
+            throw new IllegalArgumentException("trackColor is null.");
+        }
 
-		this.trackColor = trackColor;
-		repaintComponent();
-	}
+        this.trackColor = trackColor;
+        repaintComponent();
+    }
 
     public final void setTrackColor(String trackColor) {
         if (trackColor == null) {
@@ -288,12 +288,12 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public int getTrackWidth() {
-    	return trackWidth;
+        return trackWidth;
     }
 
     public void setTrackWidth(int trackWidth) {
-    	this.trackWidth = trackWidth;
-    	repaintComponent();
+        this.trackWidth = trackWidth;
+        repaintComponent();
     }
 
     public void setTrackWidth(Number trackWidth) {
@@ -305,18 +305,18 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public Color getButtonBackgroundColor() {
-		return buttonBackgroundColor;
-	}
+        return buttonBackgroundColor;
+    }
 
-	public void setButtonBackgroundColor(Color buttonBackgroundColor) {
-		if (buttonBackgroundColor == null) {
-			throw new IllegalArgumentException("buttonBackgroundColor is null.");
-		}
+    public void setButtonBackgroundColor(Color buttonBackgroundColor) {
+        if (buttonBackgroundColor == null) {
+            throw new IllegalArgumentException("buttonBackgroundColor is null.");
+        }
 
-		this.buttonBackgroundColor = buttonBackgroundColor;
-		buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
-		repaintComponent();
-	}
+        this.buttonBackgroundColor = buttonBackgroundColor;
+        buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
+        repaintComponent();
+    }
 
     public final void setButtonBackgroundColor(String buttonBackgroundColor) {
         if (buttonBackgroundColor == null) {
@@ -326,40 +326,40 @@ public class TerraSliderSkin extends SliderSkin {
         setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor));
     }
 
-	public Color getButtonBorderColor() {
-		return buttonBorderColor;
-	}
+    public Color getButtonBorderColor() {
+        return buttonBorderColor;
+    }
 
-	public void setButtonBorderColor(Color buttonBorderColor) {
-		if (buttonBorderColor == null) {
-			throw new IllegalArgumentException("buttonBorderColor is null.");
-		}
+    public void setButtonBorderColor(Color buttonBorderColor) {
+        if (buttonBorderColor == null) {
+            throw new IllegalArgumentException("buttonBorderColor is null.");
+        }
 
-		this.buttonBorderColor = buttonBorderColor;
-		repaintComponent();
-	}
+        this.buttonBorderColor = buttonBorderColor;
+        repaintComponent();
+    }
 
-	public final void setButtonBorderColor(String buttonBorderColor) {
-		if (buttonBorderColor == null) {
-			throw new IllegalArgumentException("buttonBorderColor is null.");
-		}
+    public final void setButtonBorderColor(String buttonBorderColor) {
+        if (buttonBorderColor == null) {
+            throw new IllegalArgumentException("buttonBorderColor is null.");
+        }
 
-		setButtonBorderColor(GraphicsUtilities.decodeColor(buttonBorderColor));
-	}
+        setButtonBorderColor(GraphicsUtilities.decodeColor(buttonBorderColor));
+    }
 
-	public int getThumbWidth() {
-		return thumbWidth;
-	}
+    public int getThumbWidth() {
+        return thumbWidth;
+    }
 
-	public void setThumbWidth(int thumbWidth) {
-		if (thumbWidth < MINIMUM_THUMB_WIDTH) {
-			throw new IllegalArgumentException("thumbWidth must be greater than or equal to "
-				+ MINIMUM_THUMB_WIDTH);
-		}
+    public void setThumbWidth(int thumbWidth) {
+        if (thumbWidth < MINIMUM_THUMB_WIDTH) {
+            throw new IllegalArgumentException("thumbWidth must be greater than or equal to "
+                + MINIMUM_THUMB_WIDTH);
+        }
 
-		this.thumbWidth = thumbWidth;
-		invalidateComponent();
-	}
+        this.thumbWidth = thumbWidth;
+        invalidateComponent();
+    }
 
     public void setThumbWidth(Number thumbWidth) {
         if (thumbWidth == null) {
@@ -369,19 +369,19 @@ public class TerraSliderSkin extends SliderSkin {
         setThumbWidth(thumbWidth.intValue());
     }
 
-	public int getThumbHeight() {
-		return thumbHeight;
-	}
+    public int getThumbHeight() {
+        return thumbHeight;
+    }
 
-	public void setThumbHeight(int thumbHeight) {
-		if (thumbHeight < MINIMUM_THUMB_HEIGHT) {
-			throw new IllegalArgumentException("thumbHeight must be greater than or equal to "
-				+ MINIMUM_THUMB_HEIGHT);
-		}
+    public void setThumbHeight(int thumbHeight) {
+        if (thumbHeight < MINIMUM_THUMB_HEIGHT) {
+            throw new IllegalArgumentException("thumbHeight must be greater than or equal to "
+                + MINIMUM_THUMB_HEIGHT);
+        }
 
-		this.thumbHeight = thumbHeight;
-		invalidateComponent();
-	}
+        this.thumbHeight = thumbHeight;
+        invalidateComponent();
+    }
 
     public void setThumbHeight(Number thumbHeight) {
         if (thumbHeight == null) {
@@ -392,6 +392,6 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public void valueChanged(Slider slider, int previousValue) {
-		layout();
-	}
+        layout();
+    }
 }

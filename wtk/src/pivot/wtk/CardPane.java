@@ -29,7 +29,7 @@ import pivot.util.Vote;
 public class CardPane extends Container {
     private static class CardPaneListenerList extends ListenerList<CardPaneListener>
         implements CardPaneListener {
-    	public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
+        public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
             Vote vote = Vote.APPROVE;
 
             for (CardPaneListener listener : this) {
@@ -37,13 +37,13 @@ public class CardPane extends Container {
             }
 
             return vote;
-    	}
+        }
 
-    	public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
+        public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
             for (CardPaneListener listener : this) {
                 listener.selectedIndexChangeVetoed(cardPane, reason);
             }
-    	}
+        }
 
         public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
             for (CardPaneListener listener : this) {
@@ -84,19 +84,19 @@ public class CardPane extends Container {
         int previousSelectedIndex = this.selectedIndex;
 
         if (previousSelectedIndex != selectedIndex) {
-        	Vote vote = cardPaneListeners.previewSelectedIndexChange(this, selectedIndex);
+            Vote vote = cardPaneListeners.previewSelectedIndexChange(this, selectedIndex);
 
-        	if (vote == Vote.APPROVE) {
+            if (vote == Vote.APPROVE) {
                 this.selectedIndex = selectedIndex;
                 cardPaneListeners.selectedIndexChanged(this, previousSelectedIndex);
-        	} else {
-        		cardPaneListeners.selectedIndexChangeVetoed(this, vote);
-        	}
+            } else {
+                cardPaneListeners.selectedIndexChangeVetoed(this, vote);
+            }
         }
     }
 
     public Component getSelectedCard() {
-    	return (selectedIndex == -1) ? null : get(selectedIndex);
+        return (selectedIndex == -1) ? null : get(selectedIndex);
     }
 
     @Override

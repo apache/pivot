@@ -255,15 +255,15 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         public Font getFont() {
-        	return buttonFont;
+            return buttonFont;
         }
 
         public Color getColor() {
-        	return buttonColor;
+            return buttonColor;
         }
 
         public Color getDisabledColor() {
-        	return disabledButtonColor;
+            return disabledButtonColor;
         }
     }
 
@@ -314,15 +314,15 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         @Override
         public void stop() {
-        	TabPane tabPane = (TabPane)getComponent();
+            TabPane tabPane = (TabPane)getComponent();
 
             if (!expand) {
                 tab.setVisible(false);
             }
 
-        	tabPane.setEnabled(true);
+            tabPane.setEnabled(true);
 
-        	super.stop();
+            super.stop();
         }
 
         @Override
@@ -363,18 +363,18 @@ public class TerraTabPaneSkin extends ContainerSkin
     private static final int SELECTION_CHANGE_DURATION = 250;
     private static final int SELECTION_CHANGE_RATE = 30;
 
-	public static final int GRADIENT_BEVEL_THICKNESS = 4;
-	private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer() {
-	    @Override
-	    public void render(Object data, Button button, boolean highlighted) {
-	        // TODO Create a custom inner renderer class that can display
-	        // the close button (and also avoid the heap allocation every
-	        // time we're called to render())
-	        Component tab = (Component)data;
-	        super.render(new ButtonData(TabPane.getIcon(tab), TabPane.getName(tab)),
+    public static final int GRADIENT_BEVEL_THICKNESS = 4;
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer() {
+        @Override
+        public void render(Object data, Button button, boolean highlighted) {
+            // TODO Create a custom inner renderer class that can display
+            // the close button (and also avoid the heap allocation every
+            // time we're called to render())
+            Component tab = (Component)data;
+            super.render(new ButtonData(TabPane.getIcon(tab), TabPane.getName(tab)),
                 button, highlighted);
-	    }
-	};
+        }
+    };
 
     public TerraTabPaneSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -862,9 +862,9 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             // Draw the bevel for vertical tabs
             if (tabOrientation == Orientation.VERTICAL) {
-	            graphics.setPaint(new GradientPaint(width / 2, contentBounds.y + 1, buttonBevelColor,
-	                width / 2, contentBounds.y + 1 + GRADIENT_BEVEL_THICKNESS, activeTabColor));
-	            graphics.fillRect(contentBounds.x + 1, contentBounds.y + 1,
+                graphics.setPaint(new GradientPaint(width / 2, contentBounds.y + 1, buttonBevelColor,
+                    width / 2, contentBounds.y + 1 + GRADIENT_BEVEL_THICKNESS, activeTabColor));
+                graphics.fillRect(contentBounds.x + 1, contentBounds.y + 1,
                     contentBounds.width - 2, GRADIENT_BEVEL_THICKNESS);
             }
         }
@@ -1086,9 +1086,9 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     // Tab pane events
     public void tabInserted(TabPane tabPane, int index) {
-    	if (selectionChangeTransition != null) {
-    	    selectionChangeTransition.end();
-    	}
+        if (selectionChangeTransition != null) {
+            selectionChangeTransition.end();
+        }
 
         Component tab = tabPane.getTabs().get(index);
         tab.setVisible(false);
@@ -1102,7 +1102,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         tabButton.setEnabled(tab.isEnabled());
         tab.getComponentStateListeners().add(tabStateListener);
 
-    	// If this is the first tab, select it
+        // If this is the first tab, select it
         if (tabPane.getTabs().getLength() == 1) {
             tabPane.setSelectedIndex(0);
         }
@@ -1111,12 +1111,12 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> removed) {
-    	if (selectionChangeTransition != null) {
-    	    selectionChangeTransition.end();
-    	}
+        if (selectionChangeTransition != null) {
+            selectionChangeTransition.end();
+        }
 
         // Remove the buttons
-    	Sequence<Component> removedButtons = buttonFlowPane.remove(index, removed.getLength());
+        Sequence<Component> removedButtons = buttonFlowPane.remove(index, removed.getLength());
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
             TabButton tabButton = (TabButton)removedButtons.get(i);
@@ -1135,7 +1135,7 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     // Tab pane selection events
-	public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
+    public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
         Vote vote;
 
         if (tabPane.isShowing()
@@ -1185,18 +1185,18 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         return vote;
-	}
+    }
 
-	public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
+    public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
         if (reason == Vote.DENY
             && selectionChangeTransition != null) {
             selectionChangeTransition.stop();
             selectionChangeTransition = null;
         }
-	}
+    }
 
-	public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
-	    int selectedIndex = tabPane.getSelectedIndex();
+    public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
+        int selectedIndex = tabPane.getSelectedIndex();
         if (selectedIndex == -1) {
             Button button = tabButtonGroup.getSelection();
             if (button != null) {

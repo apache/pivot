@@ -28,9 +28,9 @@ import pivot.serialization.JSONSerializer;
 
 public class JSONSerializerTest {
     public static String[] testStrings = {
-    	"'hey\there'",
-    	"'hey\\there'",
-    	"'hey\\\\there'",
+        "'hey\there'",
+        "'hey\\there'",
+        "'hey\\\\there'",
         "  null",
         "\"Hello\\\" World\"",
         "'Hello\\\' \"World'",
@@ -62,7 +62,7 @@ public class JSONSerializerTest {
         // test0();
         // test1();
         // test2();
-    	// test3();
+        // test3();
         // test4();
         test5();
     }
@@ -139,26 +139,26 @@ public class JSONSerializerTest {
     }
 
     public static void test3() {
-    	JSONSerializer serializer = new JSONSerializer("ISO-8859-1");
-    	InputStream inputStream = JSONSerializerTest.class.getResourceAsStream("json_serializer_test.json");
+        JSONSerializer serializer = new JSONSerializer("ISO-8859-1");
+        InputStream inputStream = JSONSerializerTest.class.getResourceAsStream("json_serializer_test.json");
 
-    	Object root = null;
-    	try {
-    		root = serializer.readObject(inputStream);
-    	} catch(Exception exception) {
-    		System.out.println(exception);
-    	}
+        Object root = null;
+        try {
+            root = serializer.readObject(inputStream);
+        } catch(Exception exception) {
+            System.out.println(exception);
+        }
 
-    	if (root != null) {
-	    	System.out.println(JSONSerializer.getString(root, "foo"));
-	    	System.out.println(JSONSerializer.getString(root, "bar"));
-    	}
+        if (root != null) {
+            System.out.println(JSONSerializer.getString(root, "foo"));
+            System.out.println(JSONSerializer.getString(root, "bar"));
+        }
 
-    	try {
-        	serializer.writeObject(root, System.out);
-    	} catch(Exception exception) {
-    		System.out.println(exception);
-    	}
+        try {
+            serializer.writeObject(root, System.out);
+        } catch(Exception exception) {
+            System.out.println(exception);
+        }
     }
 
     private static void testList(String list, String path) {

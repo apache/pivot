@@ -22,18 +22,18 @@ limitations under the License.
         <content>
             <FlowPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:8, right:4}}">
                 <Label text="Spinners" styles="{fontBold:true}"/>
-	            <Form>
-	                <sections>
-	                    <Form.Section>
-	                        <Spinner Form.name="Basic" preferredWidth="60"
-	                            spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
-	                            circular="true" selectedIndex="0"/>
+                <Form>
+                    <sections>
+                        <Form.Section>
+                            <Spinner Form.name="Basic" preferredWidth="60"
+                                spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
+                                circular="true" selectedIndex="0"/>
                             <Spinner wtkx:id="numericSpinner" Form.name="Numeric"
                                 preferredWidth="60"/>
                             <Spinner wtkx:id="dateSpinner" Form.name="Date"/>
-	                    </Form.Section>
-	                </sections>
-	            </Form>
+                        </Form.Section>
+                    </sections>
+                </Form>
             </FlowPane>
         </content>
     </Border>

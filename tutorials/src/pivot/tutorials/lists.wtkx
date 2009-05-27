@@ -120,65 +120,65 @@ limitations under the License.
                 <Form>
                     <sections>
                         <Form.Section>
-	                        <ListButton Form.name="Basic" selectedIndex="0">
-	                            <listData>
-	                                <collections:ArrayList>
+                            <ListButton Form.name="Basic" selectedIndex="0">
+                                <listData>
+                                    <collections:ArrayList>
                                         <content:ListItem text="Red"/>
                                         <content:ListItem text="Orange"/>
                                         <content:ListItem text="Yellow"/>
                                         <content:ListItem text="Green"/>
                                         <content:ListItem text="Blue"/>
                                         <content:ListItem text="Purple"/>
-	                                </collections:ArrayList>
-	                            </listData>
-	                        </ListButton>
+                                    </collections:ArrayList>
+                                </listData>
+                            </ListButton>
 
-	                        <ListButton Form.name="Image" selectedIndex="2">
-	                            <listData>
-	                                <collections:ArrayList>
+                            <ListButton Form.name="Image" selectedIndex="2">
+                                <listData>
+                                    <collections:ArrayList>
                                         <content:ListItem icon="@anchor.png" text="Anchor"/>
                                         <content:ListItem icon="@bell.png" text="Bell"/>
                                         <content:ListItem icon="@clock.png" text="Clock"/>
                                         <content:ListItem icon="@cup.png" text="Cup"/>
                                         <content:ListItem icon="@house.png" text="House"/>
                                         <content:ListItem icon="@star.png" text="Star"/>
-	                                </collections:ArrayList>
-	                            </listData>
-	                            <itemRenderer>
-	                                <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
-	                                    showIcon="true"/>
-	                            </itemRenderer>
-	                        </ListButton>
+                                    </collections:ArrayList>
+                                </listData>
+                                <itemRenderer>
+                                    <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
+                                        showIcon="true"/>
+                                </itemRenderer>
+                            </ListButton>
 
-						    <ListButton Form.name="Color" selectedIndex="0"
-						        styles="{listSize:6}">
-						        <listData>
-						            <collections:ArrayList>
-						                <content:ColorItem color="#000000" name="Black"/>
-						                <content:ColorItem color="#0000AA" name="Blue"/>
-						                <content:ColorItem color="#00AA00" name="Green"/>
-						                <content:ColorItem color="#00AAAA" name="Cyan"/>
-						                <content:ColorItem color="#AA0000" name="Red"/>
-						                <content:ColorItem color="#AA00AA" name="Magenta"/>
-						                <content:ColorItem color="#AA5500" name="Brown"/>
-						                <content:ColorItem color="#AAAAAA" name="Light Gray"/>
-						                <content:ColorItem color="#555555" name="Dark Gray"/>
-						                <content:ColorItem color="#5555FF" name="Bright Blue"/>
-						                <content:ColorItem color="#55FF55" name="Bright Green"/>
-						                <content:ColorItem color="#55FFFF" name="Bright Cyan"/>
-						                <content:ColorItem color="#FF5555" name="Bright Red"/>
-						                <content:ColorItem color="#FF55FF" name="Bright Magenta"/>
-						                <content:ColorItem color="#FFFF55" name="Bright Yellow"/>
-						                <content:ColorItem color="#FFFFFF" name="White"/>
-						            </collections:ArrayList>
-						        </listData>
-						        <dataRenderer>
-						            <content:ListButtonColorRenderer/>
-						        </dataRenderer>
-						        <itemRenderer>
-						            <content:ListViewColorRenderer/>
-						        </itemRenderer>
-						    </ListButton>
+                            <ListButton Form.name="Color" selectedIndex="0"
+                                styles="{listSize:6}">
+                                <listData>
+                                    <collections:ArrayList>
+                                        <content:ColorItem color="#000000" name="Black"/>
+                                        <content:ColorItem color="#0000AA" name="Blue"/>
+                                        <content:ColorItem color="#00AA00" name="Green"/>
+                                        <content:ColorItem color="#00AAAA" name="Cyan"/>
+                                        <content:ColorItem color="#AA0000" name="Red"/>
+                                        <content:ColorItem color="#AA00AA" name="Magenta"/>
+                                        <content:ColorItem color="#AA5500" name="Brown"/>
+                                        <content:ColorItem color="#AAAAAA" name="Light Gray"/>
+                                        <content:ColorItem color="#555555" name="Dark Gray"/>
+                                        <content:ColorItem color="#5555FF" name="Bright Blue"/>
+                                        <content:ColorItem color="#55FF55" name="Bright Green"/>
+                                        <content:ColorItem color="#55FFFF" name="Bright Cyan"/>
+                                        <content:ColorItem color="#FF5555" name="Bright Red"/>
+                                        <content:ColorItem color="#FF55FF" name="Bright Magenta"/>
+                                        <content:ColorItem color="#FFFF55" name="Bright Yellow"/>
+                                        <content:ColorItem color="#FFFFFF" name="White"/>
+                                    </collections:ArrayList>
+                                </listData>
+                                <dataRenderer>
+                                    <content:ListButtonColorRenderer/>
+                                </dataRenderer>
+                                <itemRenderer>
+                                    <content:ListViewColorRenderer/>
+                                </itemRenderer>
+                            </ListButton>
                         </Form.Section>
                     </sections>
                 </Form>

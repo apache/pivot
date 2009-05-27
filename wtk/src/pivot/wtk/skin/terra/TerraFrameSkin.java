@@ -74,9 +74,9 @@ public class TerraFrameSkin extends WindowSkin {
      * @author gbrown
      */
     public static class FrameButtonSkin extends TerraPushButtonSkin {
-    	public FrameButtonSkin() {
-    		setPadding(3);
-    	}
+        public FrameButtonSkin() {
+            setPadding(3);
+        }
 
         @Override
         public boolean isFocusable() {
@@ -85,8 +85,8 @@ public class TerraFrameSkin extends WindowSkin {
 
         @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-        	super.mouseDown(component, button, x, y);
-        	return true;
+            super.mouseDown(component, button, x, y);
+            return true;
         }
     }
 

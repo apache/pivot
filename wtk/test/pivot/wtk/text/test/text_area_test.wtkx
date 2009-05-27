@@ -26,28 +26,28 @@ limitations under the License.
             </columns>
             <rows>
                 <TablePane.Row height="1*">
-					<Border styles="{padding:0}">
-					    <content>
-					        <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
-					            <view>
-					                <TextArea wtkx:id="textArea">
-					                   <document>
-					                       <wtkx:include src="document.wtkx"/>
-					                   </document>
-					                </TextArea>
-					            </view>
-					        </ScrollPane>
-					    </content>
-					</Border>
+                    <Border styles="{padding:0}">
+                        <content>
+                            <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fillToCapacity">
+                                <view>
+                                    <TextArea wtkx:id="textArea">
+                                       <document>
+                                           <wtkx:include src="document.wtkx"/>
+                                       </document>
+                                    </TextArea>
+                                </view>
+                            </ScrollPane>
+                        </content>
+                    </Border>
                 </TablePane.Row>
                 <TablePane.Row height="-1">
                     <FlowPane>
                         <Label>
                             <text><![CDATA[Selection:]]></text>
                         </Label>
-	                    <Label wtkx:id="selectionStartLabel"/>
-	                    <Label text=":"/>
-	                    <Label wtkx:id="selectionLengthLabel"/>
+                        <Label wtkx:id="selectionStartLabel"/>
+                        <Label text=":"/>
+                        <Label wtkx:id="selectionLengthLabel"/>
                     </FlowPane>
                 </TablePane.Row>
             </rows>

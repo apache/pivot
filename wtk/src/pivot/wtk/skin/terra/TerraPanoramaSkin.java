@@ -552,12 +552,12 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     public boolean getAlwaysShowScrollButtons() {
-    	return alwaysShowScrollButtons;
+        return alwaysShowScrollButtons;
     }
 
     public void setAlwaysShowScrollButtons(boolean alwaysShowScrollButtons) {
-    	this.alwaysShowScrollButtons = alwaysShowScrollButtons;
-    	updateScrollButtonVisibility();
+        this.alwaysShowScrollButtons = alwaysShowScrollButtons;
+        updateScrollButtonVisibility();
     }
 
     protected int getMaxScrollTop() {
@@ -595,16 +595,16 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         int scrollTop = panorama.getScrollTop();
         int maxScrollTop = getMaxScrollTop();
         northButton.setVisible((alwaysShowScrollButtons
-    		|| mouseOver) && scrollTop > 0);
+            || mouseOver) && scrollTop > 0);
         southButton.setVisible((alwaysShowScrollButtons
-    		|| mouseOver) && scrollTop < maxScrollTop);
+            || mouseOver) && scrollTop < maxScrollTop);
 
         int scrollLeft = panorama.getScrollLeft();
         int maxScrollLeft = getMaxScrollLeft();
         westButton.setVisible((alwaysShowScrollButtons
-    		|| mouseOver) && scrollLeft > 0);
+            || mouseOver) && scrollLeft > 0);
         eastButton.setVisible((alwaysShowScrollButtons
-    		|| mouseOver) && scrollLeft < maxScrollLeft);
+            || mouseOver) && scrollLeft < maxScrollLeft);
     }
 
     // User input

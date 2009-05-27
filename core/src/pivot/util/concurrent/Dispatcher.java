@@ -63,6 +63,7 @@ public class Dispatcher {
                 // TODO Use the thread pool
                 Thread workerThread = new Thread(runnable,
                     Dispatcher.this.getClass().getName() + "-WorkerThread");
+                workerThread.setPriority(Thread.MIN_PRIORITY);
                 workerThread.start();
             }
         }

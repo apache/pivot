@@ -144,7 +144,7 @@ public class Alert extends Dialog {
     }
 
     public static void alert(String message, Window owner,
-		DialogCloseListener dialogCloseListener) {
+        DialogCloseListener dialogCloseListener) {
         alert(MessageType.INFO, message, owner, dialogCloseListener);
     }
 
@@ -153,7 +153,7 @@ public class Alert extends Dialog {
     }
 
     public static void alert(MessageType type, String message, Window owner,
-		DialogCloseListener dialogCloseListener) {
+        DialogCloseListener dialogCloseListener) {
         Alert alert = createAlert(type, message);
         alert.open(owner, dialogCloseListener);
     }

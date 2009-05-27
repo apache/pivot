@@ -1,10 +1,10 @@
 
 {
     "glossary": {
-		"GlossDiv": {
-			"GlossList": {
+        "GlossDiv": {
+            "GlossList": {
                 "GlossEntry": {
-					"GlossTerm": "How Do, Youth, Standard Generalized Markup Language",
+                    "GlossTerm": "How Do, Youth, Standard Generalized Markup Language",
                 }
             }
         }

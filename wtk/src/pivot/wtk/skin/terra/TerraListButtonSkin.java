@@ -234,7 +234,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         if (listButton.isEnabled()) {
             backgroundColor = this.backgroundColor;
             bevelColor = (pressed
-        		|| (listViewPopup.isOpen() && closeTransition == null)) ? pressedBevelColor : this.bevelColor;
+                || (listViewPopup.isOpen() && closeTransition == null)) ? pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
         } else {
             backgroundColor = disabledBackgroundColor;
@@ -497,15 +497,15 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public int getListSize() {
-    	return listSize;
+        return listSize;
     }
 
     public void setListSize(int listSize) {
-    	if (listSize < -1) {
-    		throw new IllegalArgumentException("Invalid list size.");
-    	}
+        if (listSize < -1) {
+            throw new IllegalArgumentException("Invalid list size.");
+        }
 
-    	this.listSize = listSize;
+        this.listSize = listSize;
     }
 
     public Object getListFont() {
@@ -591,23 +591,23 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
     @Override
     public void buttonPressed(Button button) {
-    	if (!listViewPopup.isOpen()) {
-        	if (listSize == -1) {
-        		listViewBorder.setPreferredHeight(-1);
-        	} else {
-        		if (!listViewBorder.isPreferredHeightSet()) {
-            		ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
-            		int height = itemRenderer.getPreferredHeight(-1) * listSize + 2;
+        if (!listViewPopup.isOpen()) {
+            if (listSize == -1) {
+                listViewBorder.setPreferredHeight(-1);
+            } else {
+                if (!listViewBorder.isPreferredHeightSet()) {
+                    ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
+                    int height = itemRenderer.getPreferredHeight(-1) * listSize + 2;
 
-            		if (listViewBorder.getPreferredHeight() > height) {
-            			listViewBorder.setPreferredHeight(height);
-            		} else {
-            			listViewBorder.setPreferredHeight(-1);
-            		}
-        		}
-        	}
-    	}
+                    if (listViewBorder.getPreferredHeight() > height) {
+                        listViewBorder.setPreferredHeight(height);
+                    } else {
+                        listViewBorder.setPreferredHeight(-1);
+                    }
+                }
+            }
+        }
 
-    	super.buttonPressed(button);
+        super.buttonPressed(button);
     }
 }

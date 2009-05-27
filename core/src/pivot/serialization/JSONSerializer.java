@@ -232,26 +232,26 @@ public class JSONSerializer implements Serializer<Object> {
                 c = reader.read();
 
                 if (c == 't') {
-                	c = '\t';
+                    c = '\t';
                 } else if (c == 'n') {
-                	c = '\n';
+                    c = '\n';
                 } else if (c == 'u') {
-                	StringBuilder unicodeBuilder = new StringBuilder();
-                	while (unicodeBuilder.length() < 4) {
-                		c = reader.read();
-                		unicodeBuilder.append((char)c);
-                	}
+                    StringBuilder unicodeBuilder = new StringBuilder();
+                    while (unicodeBuilder.length() < 4) {
+                        c = reader.read();
+                        unicodeBuilder.append((char)c);
+                    }
 
-                	String unicode = unicodeBuilder.toString();
-                	c = (char)Integer.parseInt(unicode, 16);
+                    String unicode = unicodeBuilder.toString();
+                    c = (char)Integer.parseInt(unicode, 16);
                 } else {
-                	if (!(c == '\\'
-        				|| c == '/'
-                		|| c == '\"'
-            			|| c == '\''
-            			|| c == t)) {
+                    if (!(c == '\\'
+                        || c == '/'
+                        || c == '\"'
+                        || c == '\''
+                        || c == t)) {
                         throw new SerializationException("Unsupported escape sequence in input stream.");
-                	}
+                    }
                 }
             }
 
@@ -481,42 +481,42 @@ public class JSONSerializer implements Serializer<Object> {
         if (object == null) {
             writer.append("null");
         } else if (object instanceof String) {
-        	String string = (String)object;
-        	StringBuilder stringBuilder = new StringBuilder();
+            String string = (String)object;
+            StringBuilder stringBuilder = new StringBuilder();
 
-        	for (int i = 0, n = string.length(); i < n; i++) {
-        		char c = string.charAt(i);
+            for (int i = 0, n = string.length(); i < n; i++) {
+                char c = string.charAt(i);
 
-        		switch(c) {
-        			case '\t': {
-        				stringBuilder.append("\\t");
-        				break;
-        			}
+                switch(c) {
+                    case '\t': {
+                        stringBuilder.append("\\t");
+                        break;
+                    }
 
-        			case '\n': {
-        				stringBuilder.append("\\n");
-        				break;
-        			}
+                    case '\n': {
+                        stringBuilder.append("\\n");
+                        break;
+                    }
 
-        			case '\\':
-        			case '\"':
-        			case '\'': {
-        				stringBuilder.append("\\" + c);
-        				break;
-        			}
+                    case '\\':
+                    case '\"':
+                    case '\'': {
+                        stringBuilder.append("\\" + c);
+                        break;
+                    }
 
-        			default: {
-        				if (charset.name().startsWith("UTF")
-    						|| c <= 0xFF) {
-        					stringBuilder.append(c);
-        				} else {
-        					stringBuilder.append("\\u");
-        					stringBuilder.append(String.format("%04x", (short)c));
-        				}
-        			}
-        		}
+                    default: {
+                        if (charset.name().startsWith("UTF")
+                            || c <= 0xFF) {
+                            stringBuilder.append(c);
+                        } else {
+                            stringBuilder.append("\\u");
+                            stringBuilder.append(String.format("%04x", (short)c));
+                        }
+                    }
+                }
 
-        	}
+            }
 
             writer.append("\"" + stringBuilder.toString() + "\"");
         } else if (object instanceof Number) {

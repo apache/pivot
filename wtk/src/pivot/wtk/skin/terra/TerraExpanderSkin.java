@@ -85,24 +85,24 @@ public class TerraExpanderSkin extends ContainerSkin
 
         @Override
         public void start(TransitionListener transitionListener) {
-        	Expander expander = (Expander)getComponent();
-        	Component content = expander.getContent();
-        	content.getDecorators().add(clipDecorator);
+            Expander expander = (Expander)getComponent();
+            Component content = expander.getContent();
+            content.getDecorators().add(clipDecorator);
 
-        	getComponent().setEnabled(false);
+            getComponent().setEnabled(false);
 
             super.start(transitionListener);
         }
 
         @Override
         public void stop() {
-        	Expander expander = (Expander)getComponent();
-        	Component content = expander.getContent();
-        	content.getDecorators().remove(clipDecorator);
+            Expander expander = (Expander)getComponent();
+            Component content = expander.getContent();
+            content.getDecorators().remove(clipDecorator);
 
-        	getComponent().setEnabled(true);
+            getComponent().setEnabled(true);
 
-        	super.stop();
+            super.stop();
         }
 
         @Override
@@ -265,16 +265,16 @@ public class TerraExpanderSkin extends ContainerSkin
         titleFlowPane.add(titleLabel);
     }
 
-	@Override
-	public void setSize(int width, int height) {
-		if (expandTransition != null
-			&& width != getWidth()) {
-			expandTransition.end();
-			expandTransition = null;
-		}
+    @Override
+    public void setSize(int width, int height) {
+        if (expandTransition != null
+            && width != getWidth()) {
+            expandTransition.end();
+            expandTransition = null;
+        }
 
-		super.setSize(width, height);
-	}
+        super.setSize(width, height);
+    }
 
     @Override
     public void install(Component component) {
@@ -309,7 +309,7 @@ public class TerraExpanderSkin extends ContainerSkin
         int preferredWidth;
 
         if (expandTransition == null) {
-        	preferredWidth = 2;
+            preferredWidth = 2;
 
             Expander expander = (Expander)getComponent();
             Component content = expander.getContent();
@@ -338,7 +338,7 @@ public class TerraExpanderSkin extends ContainerSkin
 
             preferredWidth += Math.max(titleBarPreferredWidth, contentPreferredWidth);
         } else {
-        	preferredWidth = getWidth();
+            preferredWidth = getWidth();
         }
 
         return preferredWidth;
@@ -367,7 +367,7 @@ public class TerraExpanderSkin extends ContainerSkin
                 } else {
                     float scale = expandTransition.getScale();
                     preferredHeight += (int)(scale * (float)(padding.top + padding.bottom
-                		+ content.getHeight()));
+                        + content.getHeight()));
                 }
             }
         }
@@ -394,7 +394,7 @@ public class TerraExpanderSkin extends ContainerSkin
             titleBarFlowPane.setSize(Math.max(width - 2, 0), titleBarHeight);
             titleBarFlowPane.setLocation(1, 1);
         } else {
-        	titleBarHeight = titleBarFlowPane.getHeight();
+            titleBarHeight = titleBarFlowPane.getHeight();
         }
 
         if (content != null) {
@@ -408,14 +408,14 @@ public class TerraExpanderSkin extends ContainerSkin
                 int contentHeight = Math.max(height - reservedHeight, 0);
 
                 if (expandTransition == null) {
-                	content.setSize(contentWidth, contentHeight);
+                    content.setSize(contentWidth, contentHeight);
                 } else {
-                	if (!expandTransition.isRunning()) {
-                    	content.setSize(contentWidth, content.getPreferredHeight(contentWidth));
-                	}
+                    if (!expandTransition.isRunning()) {
+                        content.setSize(contentWidth, content.getPreferredHeight(contentWidth));
+                    }
 
-                	expandTransition.clipDecorator.setWidth(contentWidth);
-                	expandTransition.clipDecorator.setHeight(contentHeight);
+                    expandTransition.clipDecorator.setWidth(contentWidth);
+                    expandTransition.clipDecorator.setHeight(contentHeight);
                 }
 
                 int contentX = 1 + padding.left;
@@ -449,7 +449,7 @@ public class TerraExpanderSkin extends ContainerSkin
         int titleBarHeight = titleBarFlowPane.getHeight();
 
         graphics.setPaint(new GradientPaint(titleBarX + titleBarWidth / 2, titleBarY, titleBarBevelColor,
-    		titleBarX + titleBarWidth / 2, titleBarY + titleBarHeight, titleBarBackgroundColor));
+            titleBarX + titleBarWidth / 2, titleBarY + titleBarHeight, titleBarBackgroundColor));
         graphics.fillRect(titleBarX, titleBarY, titleBarWidth, titleBarHeight);
 
         graphics.setPaint(borderColor);
@@ -629,7 +629,7 @@ public class TerraExpanderSkin extends ContainerSkin
         if (expander.isShowing()) {
             if (expandTransition == null) {
                 if (expander.isExpanded()
-            		&& expander.getContent() != null) {
+                    && expander.getContent() != null) {
                     expandTransition = new ExpandTransition(true, EXPAND_DURATION, EXPAND_RATE);
 
                     layout();
@@ -643,9 +643,9 @@ public class TerraExpanderSkin extends ContainerSkin
                     vote = Vote.DEFER;
                 }
             } else {
-            	if (expandTransition.isRunning()) {
-                	vote = Vote.DEFER;
-            	}
+                if (expandTransition.isRunning()) {
+                    vote = Vote.DEFER;
+                }
             }
         }
 
@@ -664,7 +664,7 @@ public class TerraExpanderSkin extends ContainerSkin
     public void expandedChanged(final Expander expander) {
         if (expander.isShowing()) {
             if (expander.isExpanded()
-        		&& expander.getContent() != null) {
+                && expander.getContent() != null) {
                 expandTransition = new ExpandTransition(false, EXPAND_DURATION, EXPAND_RATE);
 
                 layout();
@@ -688,10 +688,10 @@ public class TerraExpanderSkin extends ContainerSkin
     }
 
     public void contentChanged(Expander expander, Component previousContent) {
-    	if (expandTransition != null) {
-    		expandTransition.stop();
-    		expandTransition = null;
-    	}
+        if (expandTransition != null) {
+            expandTransition.stop();
+            expandTransition = null;
+        }
 
         invalidateComponent();
     }

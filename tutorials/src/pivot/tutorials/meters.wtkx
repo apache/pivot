@@ -46,12 +46,12 @@ limitations under the License.
             <FlowPane orientation="vertical" styles="{padding:6, spacing:8}">
                 <Label text="Activity Indicators" styles="{fontBold:true}"/>
                 <FlowPane>
-	                <ActivityIndicator wtkx:id="activityIndicator1"
-	                    preferredWidth="24" preferredHeight="24"/>
-	                <ActivityIndicator wtkx:id="activityIndicator2" styles="{color:'#aa0000'}"
-	                    preferredWidth="48" preferredHeight="48"/>
-					<ActivityIndicator wtkx:id="activityIndicator3" styles="{color:16}"
-					    preferredWidth="96" preferredHeight="96"/>
+                    <ActivityIndicator wtkx:id="activityIndicator1"
+                        preferredWidth="24" preferredHeight="24"/>
+                    <ActivityIndicator wtkx:id="activityIndicator2" styles="{color:'#aa0000'}"
+                        preferredWidth="48" preferredHeight="48"/>
+                    <ActivityIndicator wtkx:id="activityIndicator3" styles="{color:16}"
+                        preferredWidth="96" preferredHeight="96"/>
                 </FlowPane>
             </FlowPane>
         </FlowPane>

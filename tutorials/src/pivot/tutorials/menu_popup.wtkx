@@ -18,23 +18,23 @@ limitations under the License.
 
 <MenuPopup xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
     <menu>
-		<Menu>
-		    <sections>
-		        <Menu.Section>
-		            <Menu.Item buttonData="IMG_0725_2.jpg" toggleButton="true"
-		                group="imageMenuGroup" action="selectImageAction">
+        <Menu>
+            <sections>
+                <Menu.Section>
+                    <Menu.Item buttonData="IMG_0725_2.jpg" toggleButton="true"
+                        group="imageMenuGroup" action="selectImageAction">
                         <userData image="pivot/tutorials/IMG_0725_2.jpg"/>
-		            </Menu.Item>
-		            <Menu.Item buttonData="IMG_0735_2.jpg" toggleButton="true"
-		                group="imageMenuGroup" action="selectImageAction">
+                    </Menu.Item>
+                    <Menu.Item buttonData="IMG_0735_2.jpg" toggleButton="true"
+                        group="imageMenuGroup" action="selectImageAction">
                         <userData image="pivot/tutorials/IMG_0735_2.jpg"/>
                     </Menu.Item>
-		            <Menu.Item buttonData="IMG_0767_2.jpg" toggleButton="true"
-		                group="imageMenuGroup" action="selectImageAction">
+                    <Menu.Item buttonData="IMG_0767_2.jpg" toggleButton="true"
+                        group="imageMenuGroup" action="selectImageAction">
                         <userData image="pivot/tutorials/IMG_0767_2.jpg"/>
                     </Menu.Item>
-		        </Menu.Section>
-		    </sections>
-		</Menu>
-	</menu>
+                </Menu.Section>
+            </sections>
+        </Menu>
+    </menu>
 </MenuPopup>

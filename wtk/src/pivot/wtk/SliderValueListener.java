@@ -22,11 +22,11 @@ package pivot.wtk;
  * @author gbrown
  */
 public interface SliderValueListener {
-	/**
-	 * Called when a slider's value has changed.
-	 *
-	 * @param slider
-	 * @param previousValue
-	 */
-	public void valueChanged(Slider slider, int previousValue);
+    /**
+     * Called when a slider's value has changed.
+     *
+     * @param slider
+     * @param previousValue
+     */
+    public void valueChanged(Slider slider, int previousValue);
 }

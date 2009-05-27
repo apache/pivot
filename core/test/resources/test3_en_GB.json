@@ -1,10 +1,10 @@
 
 {
     "glossary": {
-		"GlossDiv": {
-			"GlossList": {
+        "GlossDiv": {
+            "GlossList": {
                 "GlossEntry": {
-					"Acronym": "XSGML"
+                    "Acronym": "XSGML"
                 }
             }
         }

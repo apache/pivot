@@ -28,51 +28,51 @@ import pivot.wtk.Component;
  * @author gbrown
  */
 public class ClipDecorator implements Decorator {
-	private int x = 0;
-	private int y = 0;
-	private int width = 0;
-	private int height = 0;
+    private int x = 0;
+    private int y = 0;
+    private int width = 0;
+    private int height = 0;
 
-	public int getX() {
-		return x;
-	}
+    public int getX() {
+        return x;
+    }
 
-	public void setX(int x) {
-		this.x = x;
-	}
+    public void setX(int x) {
+        this.x = x;
+    }
 
-	public int getY() {
-		return y;
-	}
+    public int getY() {
+        return y;
+    }
 
-	public void setY(int y) {
-		this.y = y;
-	}
+    public void setY(int y) {
+        this.y = y;
+    }
 
-	public int getWidth() {
-		return width;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
-	public int getHeight() {
-		return height;
-	}
+    public int getHeight() {
+        return height;
+    }
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
-	public Graphics2D prepare(Component component, Graphics2D graphics) {
-		graphics.clipRect(x, y, width, height);
-		return graphics;
-	}
+    public Graphics2D prepare(Component component, Graphics2D graphics) {
+        graphics.clipRect(x, y, width, height);
+        return graphics;
+    }
 
-	public void update() {
-		// No-op
-	}
+    public void update() {
+        // No-op
+    }
 
     public Bounds getBounds(Component component) {
         return new Bounds(x, y, width, height);

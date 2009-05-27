@@ -39,43 +39,43 @@ public class CardPaneTest extends Bindable implements Application {
         throws Exception {
         bind();
 
-    	frame = new Frame(new FlowPane());
-    	frame.getStyles().put("padding", 0);
-    	frame.setTitle("Component Pane Test");
-    	frame.setPreferredSize(800, 600);
-    	frame.setLocation(20, 20);
+        frame = new Frame(new FlowPane());
+        frame.getStyles().put("padding", 0);
+        frame.setTitle("Component Pane Test");
+        frame.setPreferredSize(800, 600);
+        frame.setLocation(20, 20);
 
         Button.Group sizeGroup = Button.getGroup("sizeGroup");
         sizeGroup.getGroupListeners().add(new Button.GroupListener() {
-        	public void selectionChanged(Button.Group buttonGroup, Button previousSelection) {
-        		final Button selection = buttonGroup.getSelection();
-        		int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(selection);
+            public void selectionChanged(Button.Group buttonGroup, Button previousSelection) {
+                final Button selection = buttonGroup.getSelection();
+                int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(selection);
 
-        		cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
-        			public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
-        				if (selection != null) {
-        					selection.getParent().setEnabled(false);
-        				}
+                cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+                    public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
+                        if (selection != null) {
+                            selection.getParent().setEnabled(false);
+                        }
 
-        				return Vote.APPROVE;
-        			}
+                        return Vote.APPROVE;
+                    }
 
-        			public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
-        				if (selection != null
-    						&& reason == Vote.DENY) {
-        					selection.getParent().setEnabled(true);
-        				}
-        			}
+                    public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
+                        if (selection != null
+                            && reason == Vote.DENY) {
+                            selection.getParent().setEnabled(true);
+                        }
+                    }
 
-        			public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
-        				if (selection != null) {
-        					selection.getParent().setEnabled(true);
-        				}
-        			}
-        		});
+                    public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+                        if (selection != null) {
+                            selection.getParent().setEnabled(true);
+                        }
+                    }
+                });
 
-        		cardPane.setSelectedIndex(selectedIndex);
-        	}
+                cardPane.setSelectedIndex(selectedIndex);
+            }
         });
 
         frame.open(display);
@@ -83,9 +83,9 @@ public class CardPaneTest extends Bindable implements Application {
     }
 
     public boolean shutdown(boolean optional) {
-    	if (frame != null) {
-    	    frame.close();
-    	}
+        if (frame != null) {
+            frame.close();
+        }
 
         return true;
     }

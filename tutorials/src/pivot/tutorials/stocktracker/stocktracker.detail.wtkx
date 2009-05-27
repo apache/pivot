@@ -24,12 +24,12 @@ limitations under the License.
     <Form styles="{rightAlignLabels:true, fieldAlignment:'right'}">
         <sections>
             <Form.Section>
-	            <Label Form.name="%value" textKey="value" />
-	            <Label wtkx:id="changeLabel" Form.name="%change" textKey="change" />
-	            <Label Form.name="%openingValue" textKey="openingValue" />
-	            <Label Form.name="%highValue" textKey="highValue" />
-	            <Label Form.name="%lowValue" textKey="lowValue" />
-	            <Label Form.name="%volume" textKey="volume" />
+                <Label Form.name="%value" textKey="value" />
+                <Label wtkx:id="changeLabel" Form.name="%change" textKey="change" />
+                <Label Form.name="%openingValue" textKey="openingValue" />
+                <Label Form.name="%highValue" textKey="highValue" />
+                <Label Form.name="%lowValue" textKey="lowValue" />
+                <Label Form.name="%volume" textKey="volume" />
             </Form.Section>
         </sections>
     </Form>

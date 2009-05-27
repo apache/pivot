@@ -41,21 +41,21 @@ public interface CardPaneListener {
         }
     }
 
-	/**
-	 * Called to preview a selected index change.
-	 *
-	 * @param cardPane
-	 * @param selectedIndex
-	 */
-	public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex);
+    /**
+     * Called to preview a selected index change.
+     *
+     * @param cardPane
+     * @param selectedIndex
+     */
+    public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex);
 
-	/**
-	 * Called when a selected index change has been vetoed.
-	 *
-	 * @param cardPane
-	 * @param reason
-	 */
-	public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason);
+    /**
+     * Called when a selected index change has been vetoed.
+     *
+     * @param cardPane
+     * @param reason
+     */
+    public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason);
 
     /**
      * Called when a card pane's selected index has changed.

@@ -723,22 +723,26 @@ limitations under the License.
 
     <!-- Remove trailing white space in all source files -->
     <target name="trim-whitespace">
+        <fileset id="trimfiles" dir=".">
+            <include name="BUILD"/>
+            <include name="DISCLAIMER"/>
+            <include name="LICENSE"/>
+            <include name="NOTICE"/>
+            <include name="README"/>
+            <include name="RELEASE-NOTES"/>
+            <include name="**/*.java"/>
+            <include name="**/*.html"/>
+            <include name="**/*.txt"/>
+            <include name="**/*.properties"/>
+            <include name="**/*.xml"/>
+            <include name="**/*.wtkx"/>
+            <include name="**/*.json"/>
+        </fileset>
+        <replaceregexp match="[\t]" replace="    " flags="gm" byline="true">
+            <fileset refid="trimfiles"/>
+        </replaceregexp>
         <replaceregexp match="[\t ]+$" replace="" flags="gm" byline="true">
-            <fileset dir=".">
-                <include name="BUILD"/>
-                <include name="DISCLAIMER"/>
-                <include name="LICENSE"/>
-                <include name="NOTICE"/>
-                <include name="README"/>
-                <include name="RELEASE-NOTES"/>
-                <include name="**/*.java"/>
-                <include name="**/*.html"/>
-                <include name="**/*.txt"/>
-                <include name="**/*.properties"/>
-                <include name="**/*.xml"/>
-                <include name="**/*.wtkx"/>
-                <include name="**/*.json"/>
-            </fileset>
+            <fileset refid="trimfiles"/>
         </replaceregexp>
     </target>
 </project>

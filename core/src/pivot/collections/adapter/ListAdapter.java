@@ -149,7 +149,7 @@ public class ListAdapter<T> implements List<T> {
 
         if (previousComparator != comparator) {
             if (comparator != null) {
-            	Collections.sort(list, comparator);
+                Collections.sort(list, comparator);
             }
 
             this.comparator = comparator;

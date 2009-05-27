@@ -111,7 +111,7 @@ public class Sheet extends Window {
 
     @Override
     public void setSize(int width, int height) {
-    	super.setSize(width, height);
+        super.setSize(width, height);
 
         ApplicationContext.queueCallback(new Runnable() {
             public void run() {
@@ -143,7 +143,7 @@ public class Sheet extends Window {
 
             Component content = owner.getContent();
             if (content.isBlocked()) {
-            	throw new IllegalStateException("Owner content is already blocked.");
+                throw new IllegalStateException("Owner content is already blocked.");
             }
 
             content.setEnabled(false);

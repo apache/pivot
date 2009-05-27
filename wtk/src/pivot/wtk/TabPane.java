@@ -211,7 +211,7 @@ public class TabPane extends Container {
 
     private static class TabPaneSelectionListenerList extends ListenerList<TabPaneSelectionListener>
         implements TabPaneSelectionListener {
-    	public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
+        public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
             Vote vote = Vote.APPROVE;
 
             for (TabPaneSelectionListener listener : this) {
@@ -219,15 +219,15 @@ public class TabPane extends Container {
             }
 
             return vote;
-    	}
+        }
 
-    	public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
+        public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
             for (TabPaneSelectionListener listener : this) {
                 listener.selectedIndexChangeVetoed(tabPane, reason);
             }
-    	}
+        }
 
-    	public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
+        public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
             for (TabPaneSelectionListener listener : this) {
                 listener.selectedIndexChanged(tabPane, previousSelectedIndex);
             }
@@ -279,19 +279,19 @@ public class TabPane extends Container {
         int previousSelectedIndex = this.selectedIndex;
 
         if (previousSelectedIndex != selectedIndex) {
-        	Vote vote = tabPaneSelectionListeners.previewSelectedIndexChange(this, selectedIndex);
+            Vote vote = tabPaneSelectionListeners.previewSelectedIndexChange(this, selectedIndex);
 
-        	if (vote == Vote.APPROVE) {
-        		this.selectedIndex = selectedIndex;
-        		tabPaneSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
-        	} else {
-        		tabPaneSelectionListeners.selectedIndexChangeVetoed(this, vote);
-        	}
+            if (vote == Vote.APPROVE) {
+                this.selectedIndex = selectedIndex;
+                tabPaneSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
+            } else {
+                tabPaneSelectionListeners.selectedIndexChangeVetoed(this, vote);
+            }
         }
     }
 
     public Component getSelectedTab() {
-    	return (selectedIndex == -1) ? null : tabs.get(selectedIndex);
+        return (selectedIndex == -1) ? null : tabs.get(selectedIndex);
     }
 
     public TabSequence getTabs() {

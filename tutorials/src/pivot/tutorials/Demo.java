@@ -724,7 +724,10 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     public boolean shutdown(boolean optional) throws Exception {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 

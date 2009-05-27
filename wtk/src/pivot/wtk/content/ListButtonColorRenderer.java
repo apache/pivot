@@ -27,27 +27,27 @@ import pivot.wtk.ImageView;
  * @author gbrown
  */
 public class ListButtonColorRenderer extends ImageView
-	implements Button.DataRenderer {
+    implements Button.DataRenderer {
     private ListViewColorRenderer.ColorBadge colorBadge =
-    	new ListViewColorRenderer.ColorBadge();
+        new ListViewColorRenderer.ColorBadge();
 
     public ListButtonColorRenderer() {
-    	setImage(colorBadge);
+        setImage(colorBadge);
     }
 
     public void render(Object data, Button button, boolean highlighted) {
-    	Color color;
-    	if (data instanceof ColorItem) {
-    		ColorItem colorItem = (ColorItem)data;
-    		color = colorItem.getColor();
-    	} else {
-        	if (data instanceof Color) {
-        		color = (Color)data;
-        	} else {
-        		color = Color.decode(data.toString());
-        	}
-    	}
+        Color color;
+        if (data instanceof ColorItem) {
+            ColorItem colorItem = (ColorItem)data;
+            color = colorItem.getColor();
+        } else {
+            if (data instanceof Color) {
+                color = (Color)data;
+            } else {
+                color = Color.decode(data.toString());
+            }
+        }
 
-    	colorBadge.setColor(color);
+        colorBadge.setColor(color);
     }
 }

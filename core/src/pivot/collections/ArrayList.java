@@ -203,7 +203,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         if (previousComparator != comparator) {
             if (comparator != null) {
-            	Collections.sort(arrayList, comparator);
+                Collections.sort(arrayList, comparator);
             }
 
             this.comparator = comparator;
@@ -219,7 +219,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         // when it is created. We can potentially reset the modifier count when all
         // outstanding iterators are finalized.
 
-    	// TODO Alternatively, we could just return an immutable iterator
+        // TODO Alternatively, we could just return an immutable iterator
 
         return arrayList.iterator();
     }

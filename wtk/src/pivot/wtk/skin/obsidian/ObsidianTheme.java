@@ -48,10 +48,10 @@ public final class ObsidianTheme extends Theme {
     }
 
     public Image getMessageIcon(MessageType messageType) {
-    	return null;
+        return null;
     }
 
     public Image getSmallMessageIcon(MessageType messageType) {
-    	return null;
+        return null;
     }
 }
