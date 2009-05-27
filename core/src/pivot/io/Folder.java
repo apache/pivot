@@ -51,7 +51,7 @@ public class Folder extends File implements List<File> {
     private static final long serialVersionUID = 0;
 
     private ArrayList<File> files;
-    private FileFilter fileFilter;
+    private transient FileFilter fileFilter;
 
     private transient ListListenerList<File> listListeners = new ListListenerList<File>();
 

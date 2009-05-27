@@ -31,7 +31,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     private static final long serialVersionUID = 0;
 
     private int bitSet = 0;
-    private SetListenerList<E> setListeners = new SetListenerList<E>();
+    private transient SetListenerList<E> setListeners = new SetListenerList<E>();
 
     public void add(E element) {
         bitSet |= (1 << element.ordinal());
