@@ -1632,7 +1632,6 @@ public class TreeView extends Component {
      * @throws IllegalArgumentException
      * If the path contains any leaf nodes.
      */
-    @SuppressWarnings("rawtypes")
     private void monitorBranch(Path path) {
         BranchHandler parent = rootBranchHandler;
 

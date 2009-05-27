@@ -162,7 +162,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         return resourceMap.isEmpty();
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
     private void applyOverrides(Map<String, Object> sourceMap,
         Map<String, Object> overridesMap) {
 

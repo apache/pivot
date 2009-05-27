@@ -267,7 +267,7 @@ public class CSVSerializer implements Serializer<List<?>> {
         return new StreamIterator(reader);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
     private Object readItem(Reader reader)
         throws IOException, SerializationException {
         Object item = null;
@@ -388,7 +388,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @param writer
      * The writer to which data will be written.
      */
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
     public void writeObject(List<?> items, Writer writer)
         throws IOException, SerializationException {
         if (items == null) {

@@ -26,7 +26,7 @@ import pivot.serialization.Serializer;
 
 public class PropertiesSerializerTest
 {
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
     public static void main(String[] args) {
         Serializer serializer = new PropertiesSerializer();
 

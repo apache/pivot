@@ -96,7 +96,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             depth = (parent == null) ? 0 : parent.depth + 1;
         }
 
-        @SuppressWarnings({"unchecked", "rawtypes"})
+        @SuppressWarnings({"unchecked"})
         public static NodeInfo createNew(BranchInfo parent, Object data) {
             NodeInfo nodeInfo = null;
 

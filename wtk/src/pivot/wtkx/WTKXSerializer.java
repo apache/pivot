@@ -289,7 +289,7 @@ public class WTKXSerializer implements Serializer<Object>, Bindable.ObjectHierar
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
     public Object readObject(InputStream inputStream) throws IOException,
         SerializationException {
         if (inputStream == null) {

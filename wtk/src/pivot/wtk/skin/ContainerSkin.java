@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Transparency;
 
+import pivot.collections.Dictionary;
 import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.Container;
@@ -199,6 +200,14 @@ public abstract class ContainerSkin extends ComponentSkin
     public void setBackgroundPaint(Paint backgroundPaint) {
         this.backgroundPaint = backgroundPaint;
         repaintComponent();
+    }
+
+    public final void setBackgroundPaint(Dictionary<String, ?> backgroundPaint) {
+        if (backgroundPaint == null) {
+            throw new IllegalArgumentException("backgroundPaint is null");
+        }
+
+        setBackgroundPaint(GraphicsUtilities.decodePaint(backgroundPaint));
     }
 
     public Color getBackgroundColor() {

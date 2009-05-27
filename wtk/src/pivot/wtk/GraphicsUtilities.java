@@ -17,11 +17,17 @@
 package pivot.wtk;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.LinearGradientPaint;
 import java.awt.Paint;
+import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 
+import pivot.collections.Dictionary;
+import pivot.collections.List;
+import pivot.serialization.JSONSerializer;
 import pivot.wtk.Orientation;
 
 /**
@@ -30,6 +36,53 @@ import pivot.wtk.Orientation;
  * @author tvolkert
  */
 public final class GraphicsUtilities {
+    public enum PaintType {
+        SOLID_COLOR,
+        GRADIENT,
+        LINEAR_GRADIENT,
+        RADIAL_GRADIENT;
+
+        public static PaintType decode(String value) {
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+
+            PaintType paintType;
+            if (value.equals("solidColor")) {
+                paintType = SOLID_COLOR;
+            } else if (value.equals("gradient")) {
+                paintType = GRADIENT;
+            } else if (value.equals("linearGradient")) {
+                paintType = LINEAR_GRADIENT;
+            } else if (value.equals("radialGradient")) {
+                paintType = RADIAL_GRADIENT;
+            } else {
+                throw new IllegalArgumentException("\"" + value + "\" is not a valid paint type.");
+            }
+
+            return paintType;
+        }
+    }
+
+    public static final String PAINT_TYPE_KEY = "paintType";
+
+    public static final String COLOR_KEY = "color";
+
+    public static final String START_X_KEY = "startX";
+    public static final String START_Y_KEY = "startY";
+    public static final String END_X_KEY = "endX";
+    public static final String END_Y_KEY = "endY";
+
+    public static final String START_COLOR_KEY = "startColor";
+    public static final String END_COLOR_KEY = "endColor";
+
+    public static final String CENTER_X_KEY = "centerX";
+    public static final String CENTER_Y_KEY = "centerY";
+    public static final String RADIUS_KEY = "radius";
+
+    public static final String STOPS_KEY = "stops";
+    public static final String OFFSET_KEY = "offset";
+
     private GraphicsUtilities() {
     }
 
@@ -139,30 +192,30 @@ public final class GraphicsUtilities {
         }
     }
 
-    public static Color decodeColor(String name) throws NumberFormatException {
-        if (name == null) {
+    public static Color decodeColor(String value) throws NumberFormatException {
+        if (value == null) {
             throw new IllegalArgumentException();
         }
 
-        name = name.toLowerCase();
+        value = value.toLowerCase();
 
         int rgb;
         float alpha;
-        if (name.startsWith("0x")) {
-            name = name.substring(2);
-            if (name.length() != 8) {
+        if (value.startsWith("0x")) {
+            value = value.substring(2);
+            if (value.length() != 8) {
                 throw new IllegalArgumentException();
             }
 
-            rgb = Integer.parseInt(name.substring(0, 6), 16);
-            alpha = (float)Integer.parseInt(name.substring(6, 8), 16) / 255f;
-        } else if (name.startsWith("#")) {
-            name = name.substring(1);
-            if (name.length() != 6) {
+            rgb = Integer.parseInt(value.substring(0, 6), 16);
+            alpha = (float)Integer.parseInt(value.substring(6, 8), 16) / 255f;
+        } else if (value.startsWith("#")) {
+            value = value.substring(1);
+            if (value.length() != 6) {
                 throw new IllegalArgumentException();
             }
 
-            rgb = Integer.parseInt(name, 16);
+            rgb = Integer.parseInt(value, 16);
             alpha = 1.0f;
         } else {
             throw new IllegalArgumentException();
@@ -177,8 +230,105 @@ public final class GraphicsUtilities {
         return color;
     }
 
-    public static Paint decodePaint(String name) {
-        // TODO
-        return null;
+    public static Paint decodePaint(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Paint paint;
+        if (value.startsWith("#")
+            || value.startsWith("0x")
+            || value.startsWith("0X")) {
+            paint = decodeColor(value);
+        } else {
+            paint = decodePaint(JSONSerializer.parseMap(value));
+        }
+
+        return paint;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Paint decodePaint(Dictionary<String, ?> value) {
+        String paintType = JSONSerializer.getString(value, PAINT_TYPE_KEY);
+        if (paintType == null) {
+            throw new IllegalArgumentException(PAINT_TYPE_KEY + " is required.");
+        }
+
+        Paint paint;
+        switch(PaintType.decode(paintType)) {
+            case SOLID_COLOR: {
+                String color = JSONSerializer.getString(value, COLOR_KEY);
+                paint = decodeColor(color);
+                break;
+            }
+
+            case GRADIENT: {
+                float startX = JSONSerializer.getFloat(value, START_X_KEY);
+                float startY = JSONSerializer.getFloat(value, START_Y_KEY);
+                float endX = JSONSerializer.getFloat(value, END_X_KEY);
+                float endY = JSONSerializer.getFloat(value, END_Y_KEY);
+                Color startColor = Color.decode(JSONSerializer.getString(value, START_COLOR_KEY));
+                Color endColor = Color.decode(JSONSerializer.getString(value, END_COLOR_KEY));
+                paint = new GradientPaint(startX, startY, startColor, endX, endY, endColor);
+                break;
+            }
+
+            case LINEAR_GRADIENT: {
+                float startX = JSONSerializer.getFloat(value, START_X_KEY);
+                float startY = JSONSerializer.getFloat(value, START_Y_KEY);
+                float endX = JSONSerializer.getFloat(value, END_X_KEY);
+                float endY = JSONSerializer.getFloat(value, END_Y_KEY);
+
+                List<Dictionary<String, ?>> stops =
+                    (List<Dictionary<String, ?>>)JSONSerializer.getList(value, STOPS_KEY);
+
+                int n = stops.getLength();
+                float[] fractions = new float[n];
+                Color[] colors = new Color[n];
+                for (int i = 0; i < n; i++) {
+                    Dictionary<String, ?> stop = stops.get(i);
+
+                    float offset = JSONSerializer.getFloat(stop, OFFSET_KEY);
+                    fractions[i] = offset;
+
+                    Color color = Color.decode(JSONSerializer.getString(stop, COLOR_KEY));
+                    colors[i] = color;
+                }
+
+                paint = new LinearGradientPaint(startX, startY, endX, endY, fractions, colors);
+                break;
+            }
+
+            case RADIAL_GRADIENT: {
+                float centerX = JSONSerializer.getFloat(value, CENTER_X_KEY);
+                float centerY = JSONSerializer.getFloat(value, CENTER_Y_KEY);
+                float radius = JSONSerializer.getFloat(value, RADIUS_KEY);
+
+                List<Dictionary<String, ?>> stops =
+                    (List<Dictionary<String, ?>>)JSONSerializer.getList(value, STOPS_KEY);
+
+                int n = stops.getLength();
+                float[] fractions = new float[n];
+                Color[] colors = new Color[n];
+                for (int i = 0; i < n; i++) {
+                    Dictionary<String, ?> stop = stops.get(i);
+
+                    float offset = JSONSerializer.getFloat(stop, OFFSET_KEY);
+                    fractions[i] = offset;
+
+                    Color color = Color.decode(JSONSerializer.getString(stop, COLOR_KEY));
+                    colors[i] = color;
+                }
+
+                paint = new RadialGradientPaint(centerX, centerY, radius, fractions, colors);
+                break;
+            }
+
+            default: {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        return paint;
     }
 }
