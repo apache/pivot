@@ -66,6 +66,10 @@ New Features
 
 - Add a ByteArraySerializer for serializing arbitrary content, byte per byte
   (in a buffered way, if possible) (PIVOT-126).
+  
+- Added support for encoding basic gradient, stopped linear gradient, and 
+  stopped radial gradients via JSON. Encoded paints can be set as the background 
+  of a container as well as the fill or stroke of a shape (PIVOT-112). 
 
 
 Improvements
