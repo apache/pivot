@@ -39,6 +39,9 @@ New Features
   Control-Shift +/- allows the user to dynamically scale the display in a
   running Pivot app (PIVOT-83).
 
+- A Panel container has been added that performs no layout and supports
+  absolute sizing and positioning of components (PIVOT-92).
+
 - Create Component.getGraphics(). This new method returns a graphics context
   suitable for drawing directly to a component without double-buffering
   (effectively operating directly on the video RAM) (PIVOT-105).
@@ -66,10 +69,10 @@ New Features
 
 - Add a ByteArraySerializer for serializing arbitrary content, byte per byte
   (in a buffered way, if possible) (PIVOT-126).
-  
-- Added support for encoding basic gradient, stopped linear gradient, and 
-  stopped radial gradients via JSON. Encoded paints can be set as the background 
-  of a container as well as the fill or stroke of a shape (PIVOT-112). 
+
+- Added support for encoding basic gradient, stopped linear gradient, and
+  stopped radial gradients via JSON. Encoded paints can be set as the background
+  of a container as well as the fill or stroke of a shape (PIVOT-112).
 
 
 Improvements
