@@ -21,30 +21,30 @@ limitations under the License.
         xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
         xmlns="pivot.wtk"
         xmlns:content="pivot.wtk.content">
-  <content>
-    <TablePane styles="{verticalSpacing:1, showHorizontalGridLines:true, gridColor:7}">
-      <columns>
-        <TablePane.Column width="1*" />
-      </columns>
-      <rows>
-        <TablePane.Row height="-1">
-          <wtkx:include wtkx:id="menuBar" src="menuBar.wtkx" />
-        </TablePane.Row>
-        <TablePane.Row height="1*">
-          <Border styles="{thickness:0, padding:2}">
-            <content>
-              <SplitPane orientation="vertical" splitLocation="400" primaryRegion="top_left">
-                <top>
-                  <wtkx:include namespace="request" src="request.wtkx" />
-                </top>
-                <bottom>
-                  <wtkx:include namespace="log" src="log.wtkx" />
-                </bottom>
-              </SplitPane>
-            </content>
-          </Border>
-        </TablePane.Row>
-      </rows>
-    </TablePane>
-  </content>
+    <content>
+        <TablePane styles="{verticalSpacing:1, showHorizontalGridLines:true, gridColor:7}">
+            <columns>
+                <TablePane.Column width="1*" />
+            </columns>
+            <rows>
+                <TablePane.Row height="-1">
+                    <wtkx:include wtkx:id="menuBar" src="menuBar.wtkx" />
+                </TablePane.Row>
+                <TablePane.Row height="1*">
+                    <Border styles="{thickness:0, padding:2}">
+                        <content>
+                            <SplitPane orientation="vertical" splitLocation="400" primaryRegion="top_left">
+                                <top>
+                                    <wtkx:include wtkx:id="request" src="request.wtkx" />
+                                </top>
+                                <bottom>
+                                    <wtkx:include wtkx:id="log" src="log.wtkx" />
+                                </bottom>
+                            </SplitPane>
+                        </content>
+                    </Border>
+                </TablePane.Row>
+            </rows>
+        </TablePane>
+    </content>
 </Window>
