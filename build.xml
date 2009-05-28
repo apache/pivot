@@ -693,6 +693,8 @@ limitations under the License.
             tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-wtk-incubating.terra.jar"/>
         <copy file="${folder.lib}/${ant.project.name}-tools.jar"
             tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-tools-incubating.jar"/>
+        <copy file="wtk/lib/stax-1.2.0.jar" todir="${folder.install}/${folder.release}/${folder.lib}"/>
+        <copy file="wtk/lib/stax-api-1.0.jar" todir="${folder.install}/${folder.release}/${folder.lib}"/>
 
         <!-- Copy documentation -->
         <copy todir="${folder.install}/${folder.release}/${folder.doc}">
