@@ -28,8 +28,8 @@ import pivot.collections.Sequence;
 import pivot.util.ListenerList;
 
 /**
- * Exposes enumeration values as a <tt>List</tt>, allowing callers to use
- * <tt>enum</tt>s as their data models.
+ * Implementation of the {@link List} interface that is backed by an
+ * <tt>enum</tt>.
  *
  * @author tvolkert
  */

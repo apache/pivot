@@ -37,7 +37,12 @@ import pivot.wtkx.WTKXSerializer;
  * @author gbrown
  */
 public abstract class Image implements Visual {
-    protected class ImageListenerList extends ListenerList<ImageListener>
+    /**
+     * Image listener list.
+     *
+     * @author gbrown
+     */
+    protected static class ImageListenerList extends ListenerList<ImageListener>
         implements ImageListener {
         public void sizeChanged(Image image, int previousWidth, int previousHeight) {
             for (ImageListener listener : this) {

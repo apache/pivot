@@ -16,6 +16,11 @@
  */
 package pivot.wtk;
 
+/**
+ * Activity indicator listener interface.
+ *
+ * @author gbrown
+ */
 public interface ActivityIndicatorListener {
     /**
      * Called when an activity indicator's active state has changed.

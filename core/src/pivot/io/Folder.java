@@ -39,6 +39,11 @@ import pivot.util.ListenerList;
  * @author gbrown
  */
 public class Folder extends File implements List<File> {
+    /**
+     * Default file name comparator.
+     *
+     * @author gbrown
+     */
     public static class FileNameComparator implements Comparator<File> {
         public int compare(File file1, File file2) {
             String path1 = file1.getPath();

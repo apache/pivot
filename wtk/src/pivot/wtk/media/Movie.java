@@ -28,6 +28,11 @@ import pivot.wtk.Visual;
  * @author tvolkert
  */
 public abstract class Movie implements Visual {
+    /**
+     * Movie listener list.
+     *
+     * @author tvolkert
+     */
     protected static class MovieListenerList extends ListenerList<MovieListener>
         implements MovieListener {
         public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {

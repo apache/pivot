@@ -25,6 +25,11 @@ import pivot.wtk.GraphicsUtilities;
 import pivot.wtk.Theme;
 import pivot.wtk.skin.ActivityIndicatorSkin;
 
+/**
+ * Activity indicator skin.
+ *
+ * @author gbrown
+ */
 public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     private Color[] colors;
     private Color backgroundColor;
