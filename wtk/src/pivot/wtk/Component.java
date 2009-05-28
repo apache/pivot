@@ -763,8 +763,16 @@ public abstract class Component implements ConstrainedVisual {
         return skin.getWidth();
     }
 
+    public void setWidth(int width) {
+        setSize(width, getHeight());
+    }
+
     public int getHeight() {
         return skin.getHeight();
+    }
+
+    public void setHeight(int height) {
+        setSize(getWidth(), height);
     }
 
     public Dimensions getSize() {

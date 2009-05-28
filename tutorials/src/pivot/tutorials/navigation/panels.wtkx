@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Panels" maximized="true"
+    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
+    xmlns="pivot.wtk"
+    xmlns:media="pivot.wtk.media"
+    xmlns:drawing="pivot.wtk.media.drawing">
+    <content>
+        <StackPane>
+            <ImageView styles="{horizontalAlignment:'left', verticalAlignment:'top'}">
+                <image>
+                    <media:Drawing width="400" height="320">
+                        <canvas>
+                            <drawing:Canvas>
+                                <drawing:Rectangle x="20" y="20" width="320" height="240"
+                                    fill="{paintType:'gradient', startX:0, startY:0, startColor:'#4444ff',
+                                        endX:320, endY:240, endColor:'#000044'}"
+                                    stroke="#0000aa" strokeThickness="4"
+                                    cornerRadius="10"/>
+                            </drawing:Canvas>
+                        </canvas>
+                    </media:Drawing>
+                </image>
+            </ImageView>
+            <Panel>
+                <PushButton buttonData="Button 1"
+                    styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
+                    x="30" y="30" width="120" height="24"/>
+                <PushButton buttonData="Button 2"
+                    styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
+                    x="30" y="60" width="120" height="24"/>
+                <PushButton buttonData="Button 3"
+                    styles="{color:'#ffffff', backgroundColor:'#000066', borderColor:'#0000dd'}"
+                    x="30" y="90" width="120" height="24"/>
+            </Panel>
+        </StackPane>
+    </content>
+</Window>
