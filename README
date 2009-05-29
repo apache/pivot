@@ -34,11 +34,25 @@ Distribution JARs
   Development tools and utility applications.
 
 * StAX (stax-1.2.0.jar, stax-api-1.0.jar)
-  Streaming API for XML reference implementation, required when using Pivot's
-  WTKX library in Java 5 (Java 6 includes these libraries).
+  Streaming API for XML reference implementation.*
 
 To begin developing with Pivot, simply include the necessary libraries on your
 project classpath.
+
+* Pivot includes a repackaged version of the StAX libraries, which includes a
+service descriptor for the javax.xml.stream.XMLInputFactory class (the code is
+otherwise unchanged). An external StAX library is required when using Java 5;
+however, this modified version is also recommended when using Java 6 or above
+to avoid needless requests to the web server when running Pivot in an applet:
+the service resolution process employed by many JDK factory methods looks on
+the classpath for a service descriptor file; since an applet's classpath also
+contains its codebase, the JRE will look for this file on the web server if it
+is not found in an archive JAR. Such requests can have a noticeable impact on
+runtime performance, especially for slow or unresponsive web servers.
+
+Another alternative is to set the codebase_lookup applet parameter to false.
+However, this parameter requires Java 6 or later and also precludes the use
+of dynamically generated WTKX on the server.
 
 
 Dependencies
@@ -46,8 +60,10 @@ Dependencies
 
 Pivot requires Java 5 or greater.
 
-* WTKX support in Java 5 requires StAX 1.2, available from
-  http://stax.codehaus.org.
+* WTKX support in Java 5 requires a compatible StAX 1.0 implementation. A
+  modified version of the StAX reference implementation is included with the
+  Pivot distribution, as described above. The original version of this library
+  is available from http://stax.codehaus.org.
 
 * Pivot's charting components require a compatible chart provider. No such
   provider is included in this release, but one is available here:
