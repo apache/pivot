@@ -23,14 +23,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Iterator;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
 import pivot.io.IOTask;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.Serializer;

@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import junit.framework.TestCase;
-import pivot.web.Query;
 import pivot.web.QueryDictionary;
 
 public class QueryDictionaryTest extends TestCase {
