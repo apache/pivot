@@ -33,6 +33,10 @@ Distribution JARs
 * Tools (pivot-tools-incubating.jar):
   Development tools and utility applications.
 
+* StAX (stax-1.2.0.jar, stax-api-1.0.jar)
+  Streaming API for XML reference implementation, required when using Pivot's
+  WTKX library in Java 5 (Java 6 includes these libraries).
+
 To begin developing with Pivot, simply include the necessary libraries on your
 project classpath.
 

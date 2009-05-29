@@ -191,3 +191,6 @@ Additional Notes
 - Although the TextArea component is included in this release, it is not
   completely functional. It works reliably in read-only mode, but editing
   support is incomplete.
+
+- Although the WTKX Translator and Compiler are included in this release,
+  they are not completely functional and should be considered experimental.
