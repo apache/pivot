@@ -28,7 +28,7 @@ import pivot.web.GetQuery;
 import pivot.web.DeleteQuery;
 import pivot.web.PostQuery;
 import pivot.web.PutQuery;
-import pivot.web.Query.QueryDictionary;
+import pivot.web.QueryDictionary;
 
 public class WebQueryTestClient {
     final static boolean useProxy = true;
