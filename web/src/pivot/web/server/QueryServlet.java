@@ -25,7 +25,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Enumeration;
-import java.util.Iterator;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletException;
@@ -33,8 +32,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
