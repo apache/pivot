@@ -333,7 +333,7 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     /**
-     * Returns the web query's arguments dictionary. Arguments are passed via
+     * Returns the web query's parameter dictionary. Parameters are passed via
      * the query string of the web query's URL.
      */
     public QueryDictionary getParameters() {
@@ -341,7 +341,7 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     /**
-     * Returns the web query's request property dictionary. Request properties
+     * Returns the web query's request header dictionary. Request headers
      * are passed via HTTP headers when the query is executed.
      */
     public QueryDictionary getRequestHeaders() {
@@ -349,7 +349,7 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     /**
-     * Returns the web query's response property dictionary. Response properties
+     * Returns the web query's response header dictionary. Response headers
      * are returned via HTTP headers when the query is executed.
      */
     public QueryDictionary getResponseHeaders() {
