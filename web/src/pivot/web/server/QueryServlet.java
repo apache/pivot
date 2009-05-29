@@ -39,6 +39,7 @@ import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
 import pivot.util.Base64;
+import pivot.web.Query;
 
 /**
  * Abstract base class for web query servlets. It is the server counterpart to
@@ -89,102 +90,6 @@ public abstract class QueryServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Arguments dictionary implementation.
-     *
-     * @author tvolkert
-     */
-    public final class ArgumentsDictionary
-        implements Dictionary<String, String>, Iterable<String> {
-        public String get(String key) {
-            return arguments.get(key);
-        }
-
-        public String put(String key, String value) {
-            throw new UnsupportedOperationException();
-        }
-
-        public String remove(String key) {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean containsKey(String key) {
-            return arguments.containsKey(key);
-        }
-
-        public boolean isEmpty() {
-            return arguments.isEmpty();
-        }
-
-        public Iterator<String> iterator() {
-            return arguments.iterator();
-        }
-    }
-
-    /**
-     * Request properties dictionary implementation.
-     *
-     * @author tvolkert
-     */
-    public final class RequestPropertiesDictionary
-        implements Dictionary<String, String>, Iterable<String> {
-        public String get(String key) {
-            return requestProperties.get(key);
-        }
-
-        public String put(String key, String value) {
-            throw new UnsupportedOperationException();
-        }
-
-        public String remove(String key) {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean containsKey(String key) {
-            return requestProperties.containsKey(key);
-        }
-
-        public boolean isEmpty() {
-            return requestProperties.isEmpty();
-        }
-
-        public Iterator<String> iterator() {
-            return requestProperties.iterator();
-        }
-    }
-
-    /**
-     * Response properties dictionary implementation.
-     *
-     * @author tvolkert
-     */
-    public final class ResponsePropertiesDictionary
-        implements Dictionary<String, String>, Iterable<String> {
-        public String get(String key) {
-            return responseProperties.get(key);
-        }
-
-        public String put(String key, String value) {
-            return responseProperties.put(key, value);
-        }
-
-        public String remove(String key) {
-            return responseProperties.remove(key);
-        }
-
-        public boolean containsKey(String key) {
-            return responseProperties.containsKey(key);
-        }
-
-        public boolean isEmpty() {
-            return responseProperties.isEmpty();
-        }
-
-        public Iterator<String> iterator() {
-            return responseProperties.iterator();
-        }
-    }
-
     private boolean authenticationRequired = false;
     private Credentials credentials = null;
 
@@ -197,13 +102,9 @@ public abstract class QueryServlet extends HttpServlet {
 
     private boolean determineContentLength = false;
 
-    private HashMap<String, String> arguments = new HashMap<String, String>();
-    private HashMap<String, String> requestProperties = new HashMap<String, String>();
-    private HashMap<String, String> responseProperties = new HashMap<String, String>();
-
-    private ArgumentsDictionary argumentsDictionary = new ArgumentsDictionary();
-    private RequestPropertiesDictionary requestPropertiesDictionary = new RequestPropertiesDictionary();
-    private ResponsePropertiesDictionary responsePropertiesDictionary = new ResponsePropertiesDictionary();
+    private Query.QueryDictionary parameters = new Query.QueryDictionary();
+    private Query.QueryDictionary requestHeaders = new Query.QueryDictionary();
+    private Query.QueryDictionary responseHeaders = new Query.QueryDictionary();
 
     private Serializer<?> serializer = new JSONSerializer();
 
@@ -324,27 +225,27 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     * Returns the servlet's arguments dictionary, which holds the values
+     * Returns the servlet's parameter dictionary, which holds the values
      * passed in the HTTP request query string.
      */
-    public ArgumentsDictionary getArguments() {
-        return argumentsDictionary;
+    public Query.QueryDictionary getParameters() {
+        return parameters;
     }
 
     /**
-     * Returns the servlet's request property dictionary, which holds the HTTP
+     * Returns the servlet's request header dictionary, which holds the HTTP
      * request headers.
      */
-    public RequestPropertiesDictionary getRequestProperties() {
-        return requestPropertiesDictionary;
+    public Query.QueryDictionary getRequestHeaders() {
+        return requestHeaders;
     }
 
     /**
-     * Returns the servlet's response property dictionary, which holds the HTTP
+     * Returns the servlet's response header dictionary, which holds the HTTP
      * response headers that will be sent back to the client.
      */
-    public ResponsePropertiesDictionary getResponseProperties() {
-        return responsePropertiesDictionary;
+    public Query.QueryDictionary getResponseHeaders() {
+        return responseHeaders;
     }
 
     /**
@@ -468,9 +369,9 @@ public abstract class QueryServlet extends HttpServlet {
             }
 
             // Clear out any remnants of the previous service
-            arguments.clear();
-            requestProperties.clear();
-            responseProperties.clear();
+            parameters.clear();
+            requestHeaders.clear();
+            responseHeaders.clear();
 
             // Copy the query string into our arguments dictionary
             String queryString = request.getQueryString();
@@ -483,7 +384,7 @@ public abstract class QueryServlet extends HttpServlet {
                     String key = URLDecoder.decode(pair[0], URL_ENCODING);
                     String value = URLDecoder.decode((pair.length > 1) ? pair[1] : "", URL_ENCODING);
 
-                    arguments.put(key, value);
+                    parameters.add(key, value);
                 }
             }
 
@@ -493,7 +394,7 @@ public abstract class QueryServlet extends HttpServlet {
                 String headerName = headerNames.nextElement();
                 String headerValue = request.getHeader(headerName);
 
-                requestProperties.put(headerName, headerValue);
+                requestHeaders.add(headerName, headerValue);
             }
 
             if (authenticationRequired) {
@@ -671,8 +572,10 @@ public abstract class QueryServlet extends HttpServlet {
      *
      */
     private void setResponseHeaders(HttpServletResponse response) {
-        for (String key : responseProperties) {
-            response.setHeader(key, responseProperties.get(key));
+        for (String key : responseHeaders) {
+            for (int i = 0, n = responseHeaders.getLength(key); i < n; i++) {
+                response.addHeader(key, responseHeaders.get(key, i));
+            }
         }
     }
 }
