@@ -36,7 +36,7 @@ import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
 import pivot.util.Base64;
-import pivot.web.Query;
+import pivot.web.QueryDictionary;
 
 /**
  * Abstract base class for web query servlets. It is the server counterpart to
@@ -99,9 +99,9 @@ public abstract class QueryServlet extends HttpServlet {
 
     private boolean determineContentLength = false;
 
-    private Query.QueryDictionary parameters = new Query.QueryDictionary();
-    private Query.QueryDictionary requestHeaders = new Query.QueryDictionary();
-    private Query.QueryDictionary responseHeaders = new Query.QueryDictionary();
+    private QueryDictionary parameters = new QueryDictionary();
+    private QueryDictionary requestHeaders = new QueryDictionary();
+    private QueryDictionary responseHeaders = new QueryDictionary();
 
     private Serializer<?> serializer = new JSONSerializer();
 
@@ -225,7 +225,7 @@ public abstract class QueryServlet extends HttpServlet {
      * Returns the servlet's parameter dictionary, which holds the values
      * passed in the HTTP request query string.
      */
-    public Query.QueryDictionary getParameters() {
+    public QueryDictionary getParameters() {
         return parameters;
     }
 
@@ -233,7 +233,7 @@ public abstract class QueryServlet extends HttpServlet {
      * Returns the servlet's request header dictionary, which holds the HTTP
      * request headers.
      */
-    public Query.QueryDictionary getRequestHeaders() {
+    public QueryDictionary getRequestHeaders() {
         return requestHeaders;
     }
 
@@ -241,7 +241,7 @@ public abstract class QueryServlet extends HttpServlet {
      * Returns the servlet's response header dictionary, which holds the HTTP
      * response headers that will be sent back to the client.
      */
-    public Query.QueryDictionary getResponseHeaders() {
+    public QueryDictionary getResponseHeaders() {
         return responseHeaders;
     }
 

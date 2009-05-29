@@ -20,13 +20,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import junit.framework.TestCase;
-import pivot.web.Query;
-import pivot.web.Query.QueryDictionary;
+import pivot.web.QueryDictionary;
 
 public class QueryDictionaryTest extends TestCase {
 
     public void testQueryDictionary() {
-        QueryDictionary dict = new Query.QueryDictionary();
+        QueryDictionary dict = new QueryDictionary();
 
         assertNull(dict.get("key"));
 

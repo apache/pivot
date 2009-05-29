@@ -23,14 +23,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Iterator;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
 import pivot.io.IOTask;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.Serializer;
@@ -94,108 +90,6 @@ public abstract class Query<V> extends IOTask<V> {
         public static final int NOT_IMPLEMENTED = 501;
         public static final int SERVICE_UNAVAILABLE = 503;
         public static final int HTTP_VERSION_NOT_SUPPORTED = 505;
-    }
-
-    /**
-     * Represents a collection of keyed data associated with a query. Allows
-     * multiple values to be set against a given key.
-     *
-     * @author brindy
-     */
-    public static final class QueryDictionary implements Dictionary<String, String>,
-        Iterable<String> {
-        private HashMap<String, ArrayList<String>> map =  new HashMap<String, ArrayList<String>>();
-
-        public String get(String key) {
-            ArrayList<String> list = map.get(key);
-            if (list != null && list.getLength() > 0) {
-                return list.get(0);
-            }
-            return null;
-        }
-
-        public String get(String key, int index) {
-            ArrayList<String> list = map.get(key);
-            if (list == null || list.getLength() <= index) {
-                throw new IndexOutOfBoundsException();
-            }
-            return list.get(index);
-        }
-
-        public String put(String key, String value) {
-            ArrayList<String> list = new ArrayList<String>();
-            list.add(value);
-
-            ArrayList<String> previous = map.put(key, list);
-            if (previous != null && previous.getLength() > 0) {
-                return previous.get(0);
-            }
-
-            return null;
-        }
-
-        public int add(String key, String value) {
-            ArrayList<String> list = map.get(key);
-            if (list == null) {
-                put(key, value);
-                return 0;
-            }
-
-            list.add(value);
-            return list.getLength() - 1;
-        }
-
-        public void insert(String key, String value, int index) {
-            ArrayList<String> list = map.get(key);
-
-            // e.g if index = 0 and length = 0, throw an exception
-            if (list == null || list.getLength() <= index) {
-                throw new IndexOutOfBoundsException();
-            }
-
-            list.insert(value, index);
-        }
-
-        public String remove(String key) {
-            ArrayList<String> list = map.remove(key);
-            if (list != null && list.getLength() > 0) {
-                return list.get(0);
-            }
-
-            return null;
-        }
-
-        public String remove(String key, int index) {
-            ArrayList<String> list = map.get(key);
-            if (list == null || list.getLength() <= index) {
-                throw new IndexOutOfBoundsException();
-            }
-            return list.get(index);
-        }
-
-        public void clear() {
-            map.clear();
-        }
-
-        public boolean containsKey(String key) {
-            return map.containsKey(key);
-        }
-
-        public boolean isEmpty() {
-            return map.isEmpty();
-        }
-
-        public int getLength(String key) {
-            ArrayList<String> list = map.get(key);
-            if (list == null) {
-                return 0;
-            }
-            return list.getLength();
-        }
-
-        public Iterator<String> iterator() {
-            return map.iterator();
-        }
     }
 
     /**
