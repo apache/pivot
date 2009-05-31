@@ -135,7 +135,7 @@ public class ListView extends Component {
             int i, n;
 
             // Increment checked indexes
-            i = Sequence.Search.binarySearch(checkedIndexes, index);
+            i = ArrayList.binarySearch(checkedIndexes, index);
             if (i < 0) {
                 i = -(i + 1);
             }
@@ -147,7 +147,7 @@ public class ListView extends Component {
             }
 
             // Increment disabled indexes
-            i = Sequence.Search.binarySearch(disabledIndexes, index);
+            i = ArrayList.binarySearch(disabledIndexes, index);
             if (i < 0) {
                 i = -(i + 1);
             }
@@ -171,7 +171,7 @@ public class ListView extends Component {
             int i, n;
 
             // Decrement checked indexes
-            i = Sequence.Search.binarySearch(checkedIndexes, index);
+            i = ArrayList.binarySearch(checkedIndexes, index);
             if (i < 0) {
                 i = -(i + 1);
             }
@@ -183,7 +183,7 @@ public class ListView extends Component {
             }
 
             // Decrement disabled indexes
-            i = Sequence.Search.binarySearch(disabledIndexes, index);
+            i = ArrayList.binarySearch(disabledIndexes, index);
             if (i < 0) {
                 i = -(i + 1);
             }
@@ -958,7 +958,7 @@ public class ListView extends Component {
      * @param index
      */
     public boolean isItemChecked(int index) {
-        return (Sequence.Search.binarySearch(checkedIndexes, index) >= 0);
+        return (ArrayList.binarySearch(checkedIndexes, index) >= 0);
     }
 
     /**
@@ -972,7 +972,7 @@ public class ListView extends Component {
             throw new IllegalStateException("Checkmarks are not enabled.");
         }
 
-        int i = Sequence.Search.binarySearch(checkedIndexes, index);
+        int i = ArrayList.binarySearch(checkedIndexes, index);
 
         if ((i < 0 && checked)
             || (i >= 0 && !checked)) {
@@ -1010,7 +1010,7 @@ public class ListView extends Component {
      * otherwise.
      */
     public boolean isItemDisabled(int index) {
-        return (Sequence.Search.binarySearch(disabledIndexes, index) >= 0);
+        return (ArrayList.binarySearch(disabledIndexes, index) >= 0);
     }
 
     /**
@@ -1023,7 +1023,7 @@ public class ListView extends Component {
      * <tt>true</tt> to disable the item; <tt>false</tt>, otherwise.
      */
     public void setItemDisabled(int index, boolean disabled) {
-        int i = Sequence.Search.binarySearch(disabledIndexes, index);
+        int i = ArrayList.binarySearch(disabledIndexes, index);
 
         if ((i < 0 && disabled)
             || (i >= 0 && !disabled)) {

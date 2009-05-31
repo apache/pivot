@@ -400,9 +400,9 @@ public class Demo extends Bindable implements Application, Application.About {
                 columns.get(4).setHeaderData(new TableViewHeaderData("D"));
 
                 // Populate table
-                ArrayList<Object> tableData = new ArrayList<Object>();
+                ArrayList<Object> tableData = new ArrayList<Object>(10000);
 
-                for (int i = 0; i < 10000; i++) {
+                for (int i = 0, n = tableData.getCapacity(); i < n; i++) {
                     TableRow tableRow = new TableRow();
 
                     tableRow.put("i", i);

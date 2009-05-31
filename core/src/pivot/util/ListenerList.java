@@ -28,11 +28,7 @@ import java.util.NoSuchElementException;
  * @author gbrown
  */
 public abstract class ListenerList<T> implements Iterable<T> {
-    /**
-     * Represents a node in the linked list of event listeners.
-     *
-     * @author gbrown
-     */
+    // Node containing a listener in the list
     private class Node {
         private Node previous;
         private Node next;
@@ -45,16 +41,12 @@ public abstract class ListenerList<T> implements Iterable<T> {
         }
     }
 
-    /**
-     * Listener list iterator.
-     *
-     * @author gbrown
-     */
+    // Node iterator
     private class NodeIterator implements Iterator<T> {
         private Node node;
 
-        public NodeIterator(Node node) {
-            this.node = node;
+        public NodeIterator() {
+            this.node = first;
         }
 
         public boolean hasNext() {
@@ -77,9 +69,8 @@ public abstract class ListenerList<T> implements Iterable<T> {
         }
     }
 
-    /**
-     * The first node in the list, or <tt>null</tt> if the list is empty.
-     */
+    // First node in the list (we don't maintain a reference to the last
+    // node, since we need to walk the list looking for duplicates on add)
     private Node first = null;
 
     /**
@@ -147,6 +138,6 @@ public abstract class ListenerList<T> implements Iterable<T> {
     }
 
     public Iterator<T> iterator() {
-        return new NodeIterator(first);
+        return new NodeIterator();
     }
 }

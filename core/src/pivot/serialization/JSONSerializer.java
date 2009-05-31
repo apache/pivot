@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
@@ -37,8 +38,6 @@ import pivot.collections.Sequence;
 /**
  * Implementation of the {@link Serializer} interface that reads data from
  * and writes data to a JavaScript Object Notation (JSON) file.
- * <p>
- * TODO Wrap reader in a CountingReader that tracks line/character index.
  *
  * @author gbrown
  */
@@ -1187,5 +1186,113 @@ public class JSONSerializer implements Serializer<Object> {
     @SuppressWarnings("unchecked")
     public static Map<String, ?> parseMap(String json) {
         return (Map<String, ?>)parse(json);
+    }
+
+    /**
+     * Converts a object to a JSON string representation.
+     *
+     * @param value
+     * The object to convert.
+     *
+     * @return
+     * The resulting JSON string.
+     */
+    public static String toString(Object value)
+        throws SerializationException {
+        JSONSerializer jsonSerializer = new JSONSerializer();
+        StringWriter writer = new StringWriter();
+
+        try {
+            jsonSerializer.writeObject(value, writer);
+        } catch(IOException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        return writer.toString();
+    }
+
+    /**
+     * Converts a string to a JSON string representation.
+     *
+     * @param value
+     * The object to convert.
+     *
+     * @return
+     * The resulting JSON string.
+     */
+    public static String toString(String value) {
+        try {
+            return toString((Object)value);
+        } catch(SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    /**
+     * Converts a number to a JSON string representation.
+     *
+     * @param value
+     * The object to convert.
+     *
+     * @return
+     * The resulting JSON string.
+     */
+    public static String toString(Number value) {
+        try {
+            return toString((Object)value);
+        } catch(SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    /**
+     * Converts a boolean to a JSON string representation.
+     *
+     * @param value
+     * The object to convert.
+     *
+     * @return
+     * The resulting JSON string.
+     */
+    public static String toString(Boolean value) {
+        try {
+            return toString((Object)value);
+        } catch(SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    /**
+     * Converts a list to a JSON string representation.
+     *
+     * @param value
+     * The object to convert.
+     *
+     * @return
+     * The resulting JSON string.
+     */
+    public static String toString(List<?> value) {
+        try {
+            return toString((Object)value);
+        } catch(SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    /**
+     * Converts a map to a JSON string representation.
+     *
+     * @param value
+     * The object to convert.
+     *
+     * @return
+     * The resulting JSON string.
+     */
+    public static String toString(Map<String, ?> value) {
+        try {
+            return toString((Object)value);
+        } catch(SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 }

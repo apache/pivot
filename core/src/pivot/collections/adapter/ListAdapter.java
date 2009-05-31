@@ -55,7 +55,7 @@ public class ListAdapter<T> implements List<T> {
         }
         else {
             // Perform a binary search to find the insertion point
-            index = Search.binarySearch(this, item, comparator);
+            index = Collections.binarySearch(list, item, comparator);
             if (index < 0) {
                 index = -(index + 1);
             }
@@ -69,7 +69,7 @@ public class ListAdapter<T> implements List<T> {
 
     public void insert(T item, int index) {
         if (comparator != null
-            && Search.binarySearch(this, item, comparator) != -(index + 1)) {
+            && Collections.binarySearch(list, item, comparator) != -(index + 1)) {
             throw new IllegalArgumentException("Illegal insertion point.");
         }
 
@@ -80,7 +80,7 @@ public class ListAdapter<T> implements List<T> {
 
     public T update(int index, T item) {
         if (comparator != null
-            && Search.binarySearch(this, item, comparator) != index) {
+            && Collections.binarySearch(list, item, comparator) != index) {
             throw new IllegalArgumentException("Illegal item modification.");
         }
 

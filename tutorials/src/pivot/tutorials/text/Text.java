@@ -18,7 +18,6 @@ package pivot.tutorials.text;
 
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
-import pivot.collections.Sequence;
 import pivot.wtk.Application;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
@@ -38,7 +37,7 @@ public class Text extends Bindable implements Application {
         public void charactersInserted(final TextInput textInput, int index, int count) {
             String text = textInput.getText();
 
-            int i = Sequence.Search.binarySearch(states, text,
+            int i = ArrayList.binarySearch(states, text,
                 states.getComparator());
 
             if (i < 0) {

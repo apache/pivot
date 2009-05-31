@@ -17,9 +17,9 @@
 package pivot.collections;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 import pivot.util.ListenerList;
@@ -28,50 +28,111 @@ import pivot.util.ListenerList;
  * Implementation of the {@link List} interface that is backed by an
  * array.
  * <p>
- * TODO We're temporarily using a java.util.ArrayList to back this list.
- * Eventually, we'll replace this with an internal array representation.
+ * NOTE This class is not thread-safe. For concurrent access, use a
+ * {@link pivot.collections.concurrent.SynchronizedList}.
  *
  * @author gbrown
  */
 public class ArrayList<T> implements List<T>, Serializable {
+    private class ItemIterator implements Iterator<T> {
+        private int index = 0;
+        private int length;
+
+        public ItemIterator() {
+            length = ArrayList.this.length;
+        }
+
+        public boolean hasNext() {
+            return index < getLength();
+        }
+
+        public T next() {
+            if (length != ArrayList.this.length) {
+                throw new ConcurrentModificationException();
+            }
+
+            return get(index++);
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
     private static final long serialVersionUID = 0;
 
-    protected java.util.ArrayList<T> arrayList = null;
+    private Object[] items;
+    private int length = 0;
 
     private Comparator<T> comparator = null;
     private transient ListListenerList<T> listListeners = new ListListenerList<T>();
 
     public ArrayList() {
-        arrayList = new java.util.ArrayList<T>();
-    }
-
-    public ArrayList(T[] items) {
-        arrayList = new java.util.ArrayList<T>(items.length);
-        for (int i = 0; i < items.length; i++) {
-            arrayList.add(items[i]);
-        }
-    }
-
-    public ArrayList(Sequence<T> sequence) {
-        this(sequence, 0, sequence.getLength());
-    }
-
-    public ArrayList(Sequence<T> sequence, int index, int count) {
-        arrayList = new java.util.ArrayList<T>(count);
-
-        for (int i = index, n = index + count; i < n; i++) {
-            T item = sequence.get(i);
-            arrayList.add(item);
-        }
+        items = new Object[10];
     }
 
     public ArrayList(Comparator<T> comparator) {
-        arrayList = new java.util.ArrayList<T>();
+        this();
         this.comparator = comparator;
     }
 
-    public ArrayList(int initialCapacity) {
-        arrayList = new java.util.ArrayList<T>(initialCapacity);
+    public ArrayList(int capacity) {
+        if (capacity < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        items = new Object[capacity];
+    }
+
+    public ArrayList(T[] items) {
+        this(items, 0, items.length);
+    }
+
+    public ArrayList(T[] items, int index, int count) {
+        if (items == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (count < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        if (index < 0
+            || index + count > items.length) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        this.items = new Object[count];
+        System.arraycopy(items, index, this.items, 0, count);
+
+        length = count;
+    }
+
+    public ArrayList(Sequence<T> items) {
+        this(items, 0, items.getLength());
+    }
+
+    public ArrayList(Sequence<T> items, int index, int count) {
+        if (items == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (count < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        if (index < 0
+            || index + count > items.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        this.items = new Object[count];
+
+        for (int i = 0; i < count; i++) {
+            this.items[i] = items.get(index + i);
+        }
+
+        length = count;
     }
 
     public int add(T item) {
@@ -79,48 +140,71 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         if (comparator == null) {
             index = getLength();
+            insert(item, index);
         }
         else {
             // Perform a binary search to find the insertion point
-            index = Search.binarySearch(this, item, comparator);
+            index = binarySearch(this, item, comparator);
             if (index < 0) {
                 index = -(index + 1);
             }
+
+            insert(item, index, false);
         }
-
-        arrayList.add(index, item);
-
-        listListeners.itemInserted(this, index);
 
         return index;
     }
 
     public void insert(T item, int index) {
+        insert(item, index, true);
+    }
+
+    private void insert(T item, int index, boolean validate) {
+        if (index < 0
+            || index > length) {
+            throw new IndexOutOfBoundsException();
+        }
+
         if (comparator != null
-            && Search.binarySearch(this, item, comparator) != -(index + 1)) {
+            && validate
+            && binarySearch(this, item, comparator) != -(index + 1)) {
             throw new IllegalArgumentException("Illegal insertion point.");
         }
 
-        arrayList.add(index, item);
+        // Insert item
+        ensureCapacity(length + 1);
+        System.arraycopy(items, index, items, index + 1, length - index);
+        items[index] = item;
+
+        length++;
 
         listListeners.itemInserted(this, index);
     }
 
+    @SuppressWarnings("unchecked")
     public T update(int index, T item) {
-        if (comparator != null
-            && Search.binarySearch(this, item, comparator) != index) {
-            throw new IllegalArgumentException("Illegal item modification.");
+        if (index < 0
+            || index >= length) {
+            throw new IndexOutOfBoundsException();
         }
 
-        T previousItem = arrayList.get(index);
-        arrayList.set(index, item);
+        T previousItem = (T)items[index];
 
-        listListeners.itemUpdated(this, index, previousItem);
+        if (previousItem != item) {
+            if (comparator != null
+                && binarySearch(this, item, comparator) != index) {
+                throw new IllegalArgumentException("Illegal item modification.");
+            }
+
+            items[index] = item;
+
+            listListeners.itemUpdated(this, index, previousItem);
+        }
 
         return previousItem;
     }
 
-    public int remove (T item) {
+    public int remove(T item) {
         int index = indexOf(item);
 
         if (index == -1) {
@@ -132,39 +216,84 @@ public class ArrayList<T> implements List<T>, Serializable {
         return index;
     }
 
+    @SuppressWarnings("unchecked")
     public Sequence<T> remove(int index, int count) {
-        ArrayList<T> removed = new ArrayList<T>();
-
-        // Remove the items from the array list
-        // TODO Allocate the array list size first, or use a linked list
-        for (int i = count - 1; i >= 0; i--) {
-            removed.insert(arrayList.remove(index + i), 0);
+        if (index < 0
+            || index + count > length) {
+            throw new IndexOutOfBoundsException();
         }
 
-        listListeners.itemsRemoved(this, index, removed);
+        ArrayList<T> removed = new ArrayList<T>((T[])items, index, count);
+
+        // Remove items
+        if (count > 0) {
+            int end = index + count;
+            System.arraycopy(items, index + count, items, index, length - end);
+
+            length -= count;
+
+            // Clear any orphaned references
+            for (int i = length, n = length + count; i < n; i++) {
+                items[i] =  null;
+            }
+
+            listListeners.itemsRemoved(this, index, removed);
+        }
 
         return removed;
     }
 
     public void clear() {
-        arrayList.clear();
-        listListeners.listCleared(this);
+        if (length > 0) {
+            for (int i = 0; i < length; i++) {
+                items[i] = null;
+            }
+
+            length = 0;
+
+            listListeners.listCleared(this);
+        }
     }
 
+    @SuppressWarnings("unchecked")
     public T get(int index) {
-        return arrayList.get(index);
+        if (index < 0
+            || index >= length) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        return (T)items[index];
     }
 
+    @SuppressWarnings("unchecked")
     public int indexOf(T item) {
         int index = -1;
+
         if (comparator == null) {
-            // TODO Ensure that we use the equals() method here when
-            // managing list contents internally
-            index = arrayList.indexOf(item);
+            int i = 0;
+            while (i < length) {
+                if (item == null) {
+                    if (items[i] == null) {
+                        break;
+                    }
+                } else {
+                    if (item.equals(items[i])) {
+                        break;
+                    }
+                }
+
+                i++;
+            }
+
+            if (i < length) {
+                index = i;
+            } else {
+                index = -1;
+            }
         }
         else {
             // Perform a binary search to find the index
-            index = Search.binarySearch(this, item, comparator);
+            index = binarySearch(this, item, comparator);
             if (index < 0) {
                 index = -1;
             }
@@ -174,38 +303,53 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public int getLength() {
-        return arrayList.size();
+        return length;
+    }
+
+    public void trimToSize() {
+        Object[] items = new Object[length];
+        System.arraycopy(this.items, 0, items, 0, length);
+
+        this.items = items;
+        length = items.length;
+    }
+
+    public void ensureCapacity(int capacity) {
+        if (capacity > items.length) {
+            capacity = Math.max(this.items.length * 3 / 2, capacity);
+            Object[] items = new Object[capacity];
+            System.arraycopy(this.items, 0, items, 0, length);
+
+            this.items = items;
+        }
+    }
+
+    public int getCapacity() {
+        return items.length;
     }
 
     @SuppressWarnings("unchecked")
     public T[] toArray() {
-        T[] array = null;
+        Object[] array = new Object[length];
+        System.arraycopy(items, 0, array, 0, length);
 
-        int n = getLength();
-        if (n > 0) {
-            Class<?> type = get(0).getClass();
-            array = (T[])Array.newInstance(type, n);
-
-            for (int i = 0; i < n; i++) {
-                array[i] = get(i);
-            }
-        }
-
-        return array;
+        return (T[])array;
     }
 
     public Comparator<T> getComparator() {
         return comparator;
     }
 
+    @SuppressWarnings("unchecked")
     public void setComparator(Comparator<T> comparator) {
         Comparator<T> previousComparator = this.comparator;
 
         if (previousComparator != comparator) {
             if (comparator != null) {
-                Collections.sort(arrayList, comparator);
+                sort(this, comparator);
             }
 
+            // Set the new comparator
             this.comparator = comparator;
 
             listListeners.comparatorChanged(this, previousComparator);
@@ -213,15 +357,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public Iterator<T> iterator() {
-        // TODO Return a fail-fast iterator, similar to java.util.ArrayList
-        // We can use a modificationCount value; each call to a mutator method can
-        // increment the count - the iterator will retain a copy of the modifier count
-        // when it is created. We can potentially reset the modifier count when all
-        // outstanding iterators are finalized.
-
-        // TODO Alternatively, we could just return an immutable iterator
-
-        return arrayList.iterator();
+        return new ItemIterator();
     }
 
     public ListenerList<ListListener<T>> getListListeners() {
@@ -244,5 +380,73 @@ public class ArrayList<T> implements List<T>, Serializable {
         sb.append("]");
 
         return sb.toString();
+    }
+
+    public static <T> void sort(ArrayList<T> arrayList, Comparator<T> comparator) {
+        sort(arrayList, 0, arrayList.getLength(), comparator);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> void sort(ArrayList<T> arrayList, int from, int to, Comparator<T> comparator) {
+        if (arrayList == null
+            || comparator == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Arrays.sort((T[])arrayList.items, from, to, comparator);
+    }
+
+    public static <T extends Comparable<? super T>> int binarySearch(ArrayList<T> arrayList,
+        T item) {
+        Comparator<T> comparator = new Comparator<T>() {
+            public int compare(T t1, T t2) {
+                return t1.compareTo(t2);
+            }
+        };
+
+        return binarySearch(arrayList, item, comparator);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> int binarySearch(ArrayList<T> arrayList, T item,
+        final Comparator<T> comparator) {
+        if (arrayList == null
+            || item == null
+            || comparator == null) {
+            throw new IllegalArgumentException();
+        }
+
+        // TODO Use java.util.Arrays#binarySearch() when Java 6 is available
+        // on Mac OS X
+        // int index = Arrays.binarySearch((T[])arrayList.items, 0, arrayList.length, item, comparator);
+        int index = binarySearch((T[])arrayList.items, arrayList.length, item, comparator);
+
+        return index;
+    }
+
+    // TODO Remove this method when it is no longer needed; see above
+    private static <T> int binarySearch(T[] array, int length, T item, Comparator<T> comparator) {
+        int low = 0;
+        int high = length - 1;
+
+        while (low <= high) {
+            int mid = (low + high) >> 1;
+            T midVal = array[mid];
+            int cmp = comparator.compare(midVal, item);
+
+            if (cmp < 0) {
+               low = mid + 1;
+            }
+            else if (cmp > 0) {
+               high = mid - 1;
+            }
+            else {
+               // Item found
+               return mid;
+            }
+        }
+
+        // Item not found
+        return -(low + 1);
     }
 }

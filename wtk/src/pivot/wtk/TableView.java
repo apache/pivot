@@ -626,7 +626,7 @@ public class TableView extends Component {
             selectedRanges.insertIndex(index);
 
             // Increment disabled indexes
-            int i = Sequence.Search.binarySearch(disabledIndexes, index);
+            int i = ArrayList.binarySearch(disabledIndexes, index);
             if (i < 0) {
                 i = -(i + 1);
             }
@@ -648,7 +648,7 @@ public class TableView extends Component {
             selectedRanges.removeIndexes(index, count);
 
             // Decrement disabled indexes
-            int i = Sequence.Search.binarySearch(disabledIndexes, index);
+            int i = ArrayList.binarySearch(disabledIndexes, index);
             if (i < 0) {
                 i = -(i + 1);
             }
@@ -1359,7 +1359,7 @@ public class TableView extends Component {
      * otherwise.
      */
     public boolean isRowDisabled(int index) {
-        return (Sequence.Search.binarySearch(disabledIndexes, index) >= 0);
+        return (ArrayList.binarySearch(disabledIndexes, index) >= 0);
     }
 
     /**
@@ -1372,7 +1372,7 @@ public class TableView extends Component {
      * <tt>true</tt> to disable the row; <tt>false</tt>, otherwise.
      */
     public void setRowDisabled(int index, boolean disabled) {
-        int i = Sequence.Search.binarySearch(disabledIndexes, index);
+        int i = ArrayList.binarySearch(disabledIndexes, index);
 
         if ((i < 0 && disabled)
             || (i >= 0 && !disabled)) {

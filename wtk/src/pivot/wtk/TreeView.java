@@ -571,13 +571,13 @@ public class TreeView extends Component {
          * @param index
          * The index of the inserted item within its parent.
          */
-        private void incrementPaths(Sequence<Path> paths, Path basePath, int index) {
+        private void incrementPaths(ArrayList<Path> paths, Path basePath, int index) {
             // Calculate the child's path
             Path childPath = new Path(basePath);
             childPath.add(index);
 
             // Find the child path's place in our sorted paths sequence
-            int i = Sequence.Search.binarySearch(paths, childPath, PATH_COMPARATOR);
+            int i = ArrayList.binarySearch(paths, childPath, PATH_COMPARATOR);
             if (i < 0) {
                 i = -(i + 1);
             }
@@ -615,14 +615,14 @@ public class TreeView extends Component {
          * @param count
          * The number of items removed.
          */
-        private void clearAndDecrementPaths(Sequence<Path> paths, Path basePath, int index, int count) {
+        private void clearAndDecrementPaths(ArrayList<Path> paths, Path basePath, int index, int count) {
             int depth = basePath.getLength();
 
             // Find the index of the first path to clear (inclusive)
             Path testPath = new Path(basePath);
             testPath.add(index);
 
-            int start = Sequence.Search.binarySearch(paths, testPath, PATH_COMPARATOR);
+            int start = ArrayList.binarySearch(paths, testPath, PATH_COMPARATOR);
             if (start < 0) {
                 start = -(start + 1);
             }
@@ -630,7 +630,7 @@ public class TreeView extends Component {
             // Find the index of the last path to clear (exclusive)
             testPath.update(depth, index + count);
 
-            int end = Sequence.Search.binarySearch(paths, testPath, PATH_COMPARATOR);
+            int end = ArrayList.binarySearch(paths, testPath, PATH_COMPARATOR);
             if (end < 0) {
                 end = -(end + 1);
             }
@@ -670,13 +670,13 @@ public class TreeView extends Component {
          * @param index
          * The index of the updated item within its parent.
          */
-        private void clearPaths(Sequence<Path> paths, Path basePath, int index) {
+        private void clearPaths(ArrayList<Path> paths, Path basePath, int index) {
             // Calculate the child's path
             Path childPath = new Path(basePath);
             childPath.add(index);
 
             // Find the child path's place in our sorted paths sequence
-            int clearIndex = Sequence.Search.binarySearch(paths, childPath, PATH_COMPARATOR);
+            int clearIndex = ArrayList.binarySearch(paths, childPath, PATH_COMPARATOR);
             if (clearIndex < 0) {
                 clearIndex = -(clearIndex + 1);
             }
@@ -706,9 +706,9 @@ public class TreeView extends Component {
          * @param basePath
          * The path whose children were sorted.
          */
-        private void clearPaths(Sequence<Path> paths, Path basePath) {
+        private void clearPaths(ArrayList<Path> paths, Path basePath) {
             // Find first descendant in paths list, if it exists
-            int index = Sequence.Search.binarySearch(paths, basePath, PATH_COMPARATOR);
+            int index = ArrayList.binarySearch(paths, basePath, PATH_COMPARATOR);
             index = (index < 0 ? -(index + 1) : index + 1);
 
             // Remove all descendants from the paths list
@@ -1413,7 +1413,7 @@ public class TreeView extends Component {
         NodeCheckState checkState = NodeCheckState.UNCHECKED;
 
         if (checkmarksEnabled) {
-            int index = Sequence.Search.binarySearch(checkedPaths, path, PATH_COMPARATOR);
+            int index = ArrayList.binarySearch(checkedPaths, path, PATH_COMPARATOR);
 
             if (index >= 0) {
                 checkState = NodeCheckState.CHECKED;

@@ -276,7 +276,7 @@ public class SpanSequence implements Sequence<Span> {
      * of the span as defined by the binary search algorithm.
      */
     public int indexOf(Span span) {
-        return Search.binarySearch(spans, span, spanComparator);
+        return ArrayList.binarySearch(spans, span, spanComparator);
     }
 
     /**

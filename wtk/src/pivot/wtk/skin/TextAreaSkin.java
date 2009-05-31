@@ -468,7 +468,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             // Get the index of the node view at x, y
             nullNodeView.setLocation(x, y);
 
-            int i = Sequence.Search.binarySearch(nodeViews, nullNodeView,
+            int i = ArrayList.binarySearch(nodeViews, nullNodeView,
                 nodeViewLocationComparator);
 
             if (i < 0) {
@@ -507,7 +507,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
             // Get the index of the node view at offset
             nullNodeView.setOffset(offset);
 
-            int i = Sequence.Search.binarySearch(nodeViews, nullNodeView,
+            int i = ArrayList.binarySearch(nodeViews, nullNodeView,
                 nodeViewOffsetComparator);
 
             if (i < 0) {

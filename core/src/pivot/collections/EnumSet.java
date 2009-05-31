@@ -24,7 +24,7 @@ import pivot.util.ListenerList;
 
 /**
  * Implementation of the {@link Set} interface that is backed by a bitfield
- * representing <tt>enum</tt> values. Values are mapped to the bitfield by their
+ * representing enum> values. Values are mapped to the bitfield by their
  * ordinal value.
  */
 public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {

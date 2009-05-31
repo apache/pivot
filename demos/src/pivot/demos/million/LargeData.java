@@ -84,7 +84,7 @@ public class LargeData extends Bindable implements Application {
 
                     CSVSerializer.StreamIterator streamIterator = csvSerializer.getStreamIterator(inputStream);
 
-                    ArrayList<Object> page = new ArrayList<Object>(PAGE_SIZE);
+                    ArrayList<Object> page = new ArrayList<Object>(pageSize);
                     while (streamIterator.hasNext()
                         && !abort) {
                         Object item = streamIterator.next();
@@ -94,9 +94,9 @@ public class LargeData extends Bindable implements Application {
                         i++;
 
                         if (!streamIterator.hasNext()
-                            || page.getLength() == PAGE_SIZE) {
+                            || page.getLength() == pageSize) {
                             ApplicationContext.queueCallback(new AddRowsCallback(page));
-                            page = new ArrayList<Object>(PAGE_SIZE);
+                            page = new ArrayList<Object>(pageSize);
                         }
                     }
                 } finally {
@@ -142,11 +142,11 @@ public class LargeData extends Bindable implements Application {
     @Bind(fieldName="window") private TableViewHeader tableViewHeader;
 
     private CSVSerializer csvSerializer;
+    private int pageSize = 0;
 
     private volatile boolean abort = false;
 
     private static final String BASE_PATH_KEY = "basePath";
-    private static final int PAGE_SIZE = 100;
 
     public LargeData() {
         csvSerializer = new CSVSerializer("ISO-8859-1");
@@ -213,7 +213,12 @@ public class LargeData extends Bindable implements Application {
 
     private void loadData() {
         abort = false;
-        tableView.getTableData().clear();
+
+        int index = fileListButton.getSelectedIndex();
+        int capacity = (int)Math.pow(10, index + 1);
+        tableView.setTableData(new ArrayList<Object>(capacity));
+
+        pageSize = Math.max(capacity / 1000, 100);
 
         String fileName = (String)fileListButton.getSelectedItem();
 

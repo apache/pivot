@@ -451,7 +451,7 @@ public abstract class Element extends Node
 
         int index = -1;
         if (node.getParent() == this) {
-            index = Sequence.Search.binarySearch(nodes, node, nodeOffsetComparator);
+            index = ArrayList.binarySearch(nodes, node, nodeOffsetComparator);
 
             if (index < 0) {
                 // Decrement the index by one, since we only get exact
