@@ -97,8 +97,10 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     }
 
     public void clear() {
-        hashMap.clear();
-        mapListeners.mapCleared(this);
+        if (!hashMap.isEmpty()) {
+            hashMap.clear();
+            mapListeners.mapCleared(this);
+        }
     }
 
     public boolean containsKey(K key) {

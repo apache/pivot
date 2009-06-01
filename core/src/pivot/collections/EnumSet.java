@@ -19,42 +19,101 @@ package pivot.collections;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import pivot.util.ListenerList;
 
 /**
- * Implementation of the {@link Set} interface that is backed by a bitfield
- * representing enum> values. Values are mapped to the bitfield by their
- * ordinal value.
+ * Implementation of the {@link Set} interface that is backed by an array of
+ * enum values.
  */
 public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
+    private class ElementIterator implements Iterator<E> {
+        private int i = 0;
+        private E next;
+
+        private ElementIterator() {
+            next();
+        }
+
+        public boolean hasNext() {
+            return (next != null);
+        }
+
+        public E next() {
+            while (i < elements.length
+                && !members[i]) {
+                i++;
+            }
+
+            if (i < elements.length) {
+                next = elements[i];
+            } else {
+                throw new NoSuchElementException();
+            }
+
+            return next;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    };
+
     private static final long serialVersionUID = 0;
 
-    private int bitSet = 0;
+    private Class<E> enumClass;
+    private E[] elements;
+    private boolean[] members;
+    private int count = 0;
+
     private transient SetListenerList<E> setListeners = new SetListenerList<E>();
 
+    public EnumSet(Class<E> enumClass) {
+        this.enumClass = enumClass;
+
+        elements = enumClass.getEnumConstants();
+        members = new boolean[elements.length];
+    }
+
+    public Class<E> getEnumClass() {
+        return enumClass;
+    }
+
     public void add(E element) {
-        bitSet |= (1 << element.ordinal());
+        int ordinal = element.ordinal();
+
+        if (!members[ordinal]) {
+            members[ordinal] = true;
+            count++;
+            setListeners.elementAdded(this, element);
+        }
     }
 
     public void remove(E element) {
-        bitSet &= ~(1 << element.ordinal());
+        int ordinal = element.ordinal();
+
+        if (members[ordinal]) {
+            members[ordinal] = false;
+            count--;
+            setListeners.elementRemoved(this, element);
+        }
     }
 
     public void clear() {
-        bitSet = 0;
+        if (count > 0) {
+            members = new boolean[members.length];
+            count = 0;
+            setListeners.setCleared(this);
+        }
     }
 
     public boolean contains(E element) {
-        return (bitSet & (1 << element.ordinal())) > 0;
+        return members[element.ordinal()];
     }
 
     public boolean isEmpty() {
-        return bitSet > 0;
-    }
-
-    public ListenerList<SetListener<E>> getSetListeners() {
-        return setListeners;
+        return count == 0;
     }
 
     public Comparator<E> getComparator() {
@@ -66,7 +125,10 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     }
 
     public Iterator<E> iterator() {
-        // TODO
-        return null;
+        return new ElementIterator();
+    }
+
+    public ListenerList<SetListener<E>> getSetListeners() {
+        return setListeners;
     }
 }

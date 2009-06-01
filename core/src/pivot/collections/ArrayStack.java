@@ -34,7 +34,9 @@ public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
     }
 
     public void push(T item) {
-        insert(item, getComparator() == null ? getLength() : -1);
+        add(item);
+
+        // TODO Fire push event
     }
 
     public T pop() {
@@ -43,13 +45,21 @@ public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
             throw new IllegalStateException();
         }
 
-        return remove(length - 1, 1).get(0);
+        T item = remove(length - 1, 1).get(0);
+
+        // TODO Fire pop event
+
+        return item;
     }
 
     public T peek() {
+        T item = null;
         int length = getLength();
+        if (length > 0) {
+            item = get(length - 1);
+        }
 
-        return (length == 0) ? null : get(length - 1);
+        return item;
     }
 
     public T poke(T item) {
@@ -59,9 +69,5 @@ public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
         }
 
         return update(length - 1, item);
-    }
-
-    public int getRemainingCapacity() {
-        return -1;
     }
 }

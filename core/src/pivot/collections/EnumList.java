@@ -33,71 +33,40 @@ import pivot.util.ListenerList;
  * @author gbrown
  */
 public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
+    private class ItemIterator implements Iterator<E> {
+        private int i = 0;
+
+        public boolean hasNext() {
+            return (i < items.length);
+        }
+
+        public E next() {
+            if (i >= items.length) {
+                throw new NoSuchElementException();
+            }
+
+            return items[i++];
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    };
+
     private static final long serialVersionUID = 0;
 
     private Class<E> enumClass;
-    private E[] elements;
+    private E[] items;
 
-    private transient ListListenerList<E> listListeners = null;
-
-    public EnumList() {
-        this(null);
-    }
+    private transient ListListenerList<E> listListeners = new ListListenerList<E>();
 
     public EnumList(Class<E> enumClass) {
         this.enumClass = enumClass;
-
-        if (enumClass == null) {
-            elements = null;
-        } else {
-            elements = enumClass.getEnumConstants();
-        }
+        items = enumClass.getEnumConstants();
     }
 
     public Class<E> getEnumClass() {
         return enumClass;
-    }
-
-    public void setEnumClass(Class<E> enumClass) {
-        Class<E> previousEnumClass = this.enumClass;
-
-        if (enumClass != previousEnumClass) {
-            this.enumClass = enumClass;
-
-            // Clear old elements
-            if (elements != null) {
-                elements = null;
-
-                // Notify listeners
-                if (listListeners != null) {
-                    listListeners.listCleared(this);
-                }
-            }
-
-            // Add new elements
-            elements = enumClass.getEnumConstants();
-
-            if (elements != null) {
-                // Notify listeners of the new elements
-                if (listListeners != null) {
-                    for (int i = 0; i < elements.length; i++) {
-                        listListeners.itemInserted(this, i);
-                    }
-                }
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public final void setEnumClass(String enumClassName) {
-        Class<E> enumClass;
-        try {
-            enumClass = (Class<E>)Class.forName(enumClassName);
-        } catch (ClassNotFoundException exception) {
-            throw new IllegalArgumentException(exception);
-        }
-
-        setEnumClass(enumClass);
     }
 
     public int add(E item) {
@@ -125,36 +94,25 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
     }
 
     public E get(int index) {
-        return (elements != null ? elements[index] : null);
+        return items[index];
     }
 
     public int indexOf(E item) {
-        int index = -1;
-
-        if (elements != null) {
-            for (int i = 0; i < elements.length; i++) {
-                if (elements[i] == item) {
-                    index = i;
-                    break;
-                }
-            }
+        if (item == null) {
+            throw new IllegalArgumentException();
         }
 
-        return index;
+        return item.ordinal();
     }
 
     public int getLength() {
-        return (elements != null ? elements.length : 0);
+        return items.length;
     }
 
     @SuppressWarnings("unchecked")
     public E[] toArray() {
-        Object[] array = null;
-
-        if (elements != null) {
-            array = new Object[elements.length];
-            System.arraycopy(elements, 0, array, 0, elements.length);
-        }
+        Object[] array = new Object[items.length];
+        System.arraycopy(items, 0, array, 0, items.length);
 
         return (E[])array;
     }
@@ -168,32 +126,10 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
     }
 
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
-            private int i = 0;
-
-            public boolean hasNext() {
-                return (elements != null && i < elements.length);
-            }
-
-            public E next() {
-                if (elements == null || i >= elements.length) {
-                    throw new NoSuchElementException();
-                }
-
-                return elements[i++];
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        };
+        return new ItemIterator();
     }
 
     public ListenerList<ListListener<E>> getListListeners() {
-        if (listListeners == null) {
-            listListeners = new ListListenerList<E>();
-        }
-
         return listListeners;
     }
 
@@ -202,12 +138,12 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
 
         sb.append("[");
 
-        for (int i = 0, n = getLength(); i < n; i++) {
+        for (int i = 0; i < items.length; i++) {
             if (i > 0) {
                 sb.append(", ");
             }
 
-            sb.append(get(i));
+            sb.append(items[i]);
         }
 
         sb.append("]");

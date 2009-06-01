@@ -166,9 +166,15 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
 
         if (comparator != null
-            && validate
-            && binarySearch(this, item, comparator) != -(index + 1)) {
-            throw new IllegalArgumentException("Illegal insertion point.");
+            && validate) {
+            int i = binarySearch(this, item, comparator);
+            if (i < 0) {
+                i = -(i + 1);
+            }
+
+            if (index != i) {
+                throw new IllegalArgumentException("Illegal insertion point.");
+            }
         }
 
         // Insert item
@@ -245,12 +251,8 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     public void clear() {
         if (length > 0) {
-            for (int i = 0; i < length; i++) {
-                items[i] = null;
-            }
-
+            items = new Object[items.length];
             length = 0;
-
             listListeners.listCleared(this);
         }
     }
@@ -369,12 +371,12 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         sb.append("[");
 
-        for (int i = 0, n = getLength(); i < n; i++) {
+        for (int i = 0; i < items.length; i++) {
             if (i > 0) {
                 sb.append(", ");
             }
 
-            sb.append(get(i));
+            sb.append(items[i]);
         }
 
         sb.append("]");

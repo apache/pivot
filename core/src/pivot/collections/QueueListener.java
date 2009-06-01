@@ -17,48 +17,24 @@
 package pivot.collections;
 
 /**
- * Implementation of the {@link Queue} interface that is backed by an
- * array.
+ * Queue listener interface.
  *
  * @author gbrown
  */
-public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
-    private static final long serialVersionUID = 0;
+public interface QueueListener<T> {
+    /**
+     * Called when an item has been inserted into the tail of a queue.
+     *
+     * @param queue
+     * @param item
+     */
+    public void itemEnqueued(Queue<T> queue, T item);
 
-    public ArrayQueue() {
-        super();
-    }
-
-    public ArrayQueue(List<T> items) {
-        super(items);
-    }
-
-    public void enqueue(T item) {
-        add(item);
-
-        // TODO Fire enqueue event
-    }
-
-    public T dequeue() {
-        int length = getLength();
-        if (length == 0) {
-            throw new IllegalStateException();
-        }
-
-        T item = remove(length - 1, 1).get(0);
-
-        // TODO Fire dequeue event
-
-        return item;
-    }
-
-    public T peek() {
-        T item = null;
-        int length = getLength();
-        if (length > 0) {
-            item = get(length - 1);
-        }
-
-        return item;
-    }
+    /**
+     * Called when an item has been removed from the head of a queue.
+     *
+     * @param queue
+     * @param item
+     */
+    public void itemDequeued(Queue<T> queue, T item);
 }
