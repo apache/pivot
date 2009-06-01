@@ -22,19 +22,20 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import pivot.collections.ArrayList;
+import pivot.collections.LinkedList;
 import pivot.collections.Sequence;
+import pivot.serialization.JSONSerializer;
 
-public class ArrayListTest {
+public class LinkedListTest {
     @Test
     public void basicTest() {
-        ArrayList<String> list = new ArrayList<String>();
+        LinkedList<String> list = new LinkedList<String>();
         list.insert("B", 0);
         list.insert("C", 1);
         list.insert("D", 2);
         list.insert("A", 0);
 
-        assertEquals(ArrayList.binarySearch(list, "A"), 0);
+        assertEquals(list.indexOf("A"), 0);
 
         list.remove(0, 1);
         assertEquals(list.get(0), "B");
@@ -45,13 +46,16 @@ public class ArrayListTest {
         assertNotNull(removed.get(0));
         assertTrue(removed.get(0).equals("C"));
 
-        list.trimToSize();
-        list.ensureCapacity(10);
-        assertEquals(list.getCapacity(), 10);
-
         list.insert("E", 1);
         assertEquals(list.getLength(), 3);
         assertNotNull(list.get(1));
         assertTrue(list.get(1).equals("E"));
+
+        list.update(1, "F");
+        assertNotNull(list.get(1));
+        assertTrue(list.get(1).equals("F"));
+
+        list.insert("G", 0);
+        assertEquals(JSONSerializer.toString(list), "[\"G\", \"B\", \"F\", \"D\"]");
     }
 }
