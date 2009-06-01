@@ -14,27 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.core.test;
+package pivot.util.test;
 
-import static org.junit.Assert.assertEquals;
+import pivot.util.Version;
 
-import org.junit.Test;
+public class VersionTest {
+    public static void main(String[] args) {
+        Version version = Version.decode(System.getProperty("java.version"));
+        System.out.println(version);
 
-import pivot.collections.EnumList;
+        Version version_1_5_0_13 = new Version(1, 5, 0, 13);
+        System.out.println(version.compareTo(version_1_5_0_13));
 
-public class EnumListTest {
-    public enum TestEnum {
-        A,
-        B,
-        C
-    }
+        Version version_1_4_1_5 = new Version(1, 4, 1, 5);
+        System.out.println(version.compareTo(version_1_4_1_5));
 
-    @Test
-    public void basicTest() {
-        EnumList<TestEnum> enumList = new EnumList<TestEnum>(TestEnum.class);
+        Version version_1_6_0_10 = new Version(1, 6, 0, 10);
+        System.out.println(version.compareTo(version_1_6_0_10));
 
-        assertEquals(enumList.get(0), TestEnum.A);
-        assertEquals(enumList.get(1), TestEnum.B);
-        assertEquals(enumList.getLength(), 3);
+        Version maxVersion = new Version(0x7f, 0xff, 0xff, 0xff);
+        System.out.println(maxVersion.compareTo(version));
     }
 }

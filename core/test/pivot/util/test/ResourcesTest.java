@@ -14,39 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.core.test;
+package pivot.util.test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import pivot.collections.List;
 import pivot.collections.Map;
 import pivot.serialization.SerializationException;
 import pivot.util.Resources;
 
-public class ResourcesTest extends TestCase {
-
+public class ResourcesTest {
     private Locale old;
 
-    @Override
-    protected void setUp() throws Exception {
-
+    @Before
+    public void setUp() throws Exception {
         old = Locale.getDefault();
         Locale.setDefault(Locale.UK);
-
-        super.setUp();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         Locale.setDefault(old);
-        super.tearDown();
     };
 
+    @Test
     public void testReadDefaultLocale() throws Exception {
-
-        Resources res = new Resources("resources.test1");
+        Resources res = new Resources("pivot.util.test.test1");
         assertResources(res, "SGML", "Standard Generalized Markup Language");
     }
 
@@ -55,11 +57,11 @@ public class ResourcesTest extends TestCase {
      *
      * @throws Exception
      */
+    @Test
     public void testRead_GB_Locale() throws Exception {
-        Resources res = new Resources("resources.test2");
+        Resources res = new Resources("pivot.util.test.test2");
         assertResources(res, "SGML",
                 "How Do, Youth, Standard Generalized Markup Language");
-
     }
 
     /**
@@ -68,13 +70,13 @@ public class ResourcesTest extends TestCase {
      *
      * @throws Exception
      */
+    @Test
     public void testRead_GB_en_Locale() throws Exception {
         assertEquals("Default locale should be en_GB", "en_GB", Locale
                 .getDefault().toString());
-        Resources res = new Resources("resources.test3");
+        Resources res = new Resources("pivot.util.test.test3");
         assertResources(res, "XSGML",
                 "How Do, Youth, Standard Generalized Markup Language");
-
     }
 
     /**
@@ -82,57 +84,39 @@ public class ResourcesTest extends TestCase {
      *
      * @throws Exception
      */
+    @Test
     public void testRead_GB_en_LocaleExtraOverride() throws Exception {
         assertEquals("Default locale should be en_GB", "en_GB", Locale
                 .getDefault().toString());
-        Resources res = new Resources("resources.test6");
+        Resources res = new Resources("pivot.util.test.test6");
         assertResources(res, "XSGML",
                 "eXtra Standard Generalized Markup Language");
-
     }
 
+    @Test(expected=SerializationException.class)
     public void testSerialisationException() throws Exception {
-
-        try {
-            new Resources("resources.test4");
-            fail("Expected SerialisationException");
-        } catch (SerializationException e) {
-        }
-
+        new Resources("pivot.util.test.test4");
     }
 
+    @Test(expected=MissingResourceException.class)
     public void testMissingResource() throws Exception {
-
         // resource doesn't exist...
-        try {
-            new Resources("resources.test5");
-            fail("Expected IllegalArgumentException");
-        } catch (MissingResourceException e) {
-        }
-
+        new Resources("pivot.util.test.test5");
     }
 
+    @Test(expected=IllegalArgumentException.class)
     public void testNullLocale() throws Exception {
         // resource exists, but locale is null
-        try {
-            new Resources("resources.test1", (Locale) null);
-            fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-
-        }
+        new Resources("pivot.util.test.test1", (Locale) null);
     }
 
+    @Test(expected=NullPointerException.class)
     public void testNullBaseName() throws Exception {
-        try {
-            new Resources(null);
-            fail("Expected NullPointerException");
-        } catch (NullPointerException e) {
-        }
+        new Resources(null);
     }
 
     @SuppressWarnings("unchecked")
-    private static void assertResources(Resources res, String acronym,
-            String term) {
+    private static void assertResources(Resources res, String acronym, String term) {
         assertTrue(res.containsKey("glossary"));
 
         Map<String, Object> glossary = (Map<String, Object>) res
@@ -169,5 +153,4 @@ public class ResourcesTest extends TestCase {
         assertNotNull(list);
         assertEquals(2, list.getLength());
     }
-
 }

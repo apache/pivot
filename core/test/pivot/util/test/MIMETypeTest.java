@@ -14,25 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.core.test;
+package pivot.util.test;
 
-import pivot.util.Version;
+import pivot.util.MIMEType;
 
-public class VersionTest {
+public class MIMETypeTest {
     public static void main(String[] args) {
-        Version version = Version.decode(System.getProperty("java.version"));
-        System.out.println(version);
-
-        Version version_1_5_0_13 = new Version(1, 5, 0, 13);
-        System.out.println(version.compareTo(version_1_5_0_13));
-
-        Version version_1_4_1_5 = new Version(1, 4, 1, 5);
-        System.out.println(version.compareTo(version_1_4_1_5));
-
-        Version version_1_6_0_10 = new Version(1, 6, 0, 10);
-        System.out.println(version.compareTo(version_1_6_0_10));
-
-        Version maxVersion = new Version(0x7f, 0xff, 0xff, 0xff);
-        System.out.println(maxVersion.compareTo(version));
+        MIMEType mimeType = MIMEType.decode("foo; a=123; b=456; c=789");
+        System.out.println("Base type: " + mimeType.getBaseType());
+        System.out.println("a: " + mimeType.get("a"));
+        System.out.println("b: " + mimeType.get("b"));
+        System.out.println("c: " + mimeType.get("c"));
     }
 }
