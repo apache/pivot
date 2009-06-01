@@ -84,7 +84,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         items = new Object[capacity];
     }
 
-    public ArrayList(T[] items) {
+    public ArrayList(T... items) {
         this(items, 0, items.length);
     }
 
@@ -366,10 +366,44 @@ public class ArrayList<T> implements List<T>, Serializable {
         return listListeners;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object o) {
+        boolean equals = false;
+
+        if (o instanceof ArrayList<?>) {
+            ArrayList<T> arrayList = (ArrayList<T>)o;
+
+            Iterator<T> iterator = iterator();
+            Iterator<T> arrayListIterator = arrayList.iterator();
+
+            while (iterator.hasNext()
+                && arrayListIterator.hasNext()
+                && iterator.next().equals(arrayListIterator.next()));
+
+            equals = (!iterator.hasNext()
+                && !arrayListIterator.hasNext());
+        }
+
+        return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 1;
+        for (T item : this) {
+            hashCode = 31 * hashCode + (item == null ? 0 : item.hashCode());
+        }
+
+        return hashCode;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("[");
+        sb.append(getClass().getName());
+        sb.append(" [");
 
         for (int i = 0; i < items.length; i++) {
             if (i > 0) {

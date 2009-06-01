@@ -133,10 +133,12 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
         return listListeners;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("[");
+        sb.append(getClass().getName());
+        sb.append(" [");
 
         for (int i = 0; i < items.length; i++) {
             if (i > 0) {
@@ -149,5 +151,17 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
         sb.append("]");
 
         return sb.toString();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object o) {
+        return (o instanceof EnumList<?>
+            && ((EnumList<E>)o).enumClass == enumClass);
+    }
+
+    @Override
+    public int hashCode() {
+        return enumClass.hashCode();
     }
 }

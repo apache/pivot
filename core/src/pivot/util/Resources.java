@@ -171,7 +171,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
                 Object source = sourceMap.get(key);
                 Object override = overridesMap.get(key);
 
-                if (source instanceof Map && override instanceof Map) {
+                if (source instanceof Map<?, ?>
+                    && override instanceof Map<?, ?>) {
                     applyOverrides((Map<String, Object>) source,
                         (Map<String, Object>) override);
                 } else {

@@ -30,27 +30,33 @@ import pivot.util.ListenerList;
 public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     private class ElementIterator implements Iterator<E> {
         private int i = 0;
-        private E next;
-
-        private ElementIterator() {
-            next();
-        }
+        private E next = null;
 
         public boolean hasNext() {
+            if (next == null) {
+                while (i < elements.length
+                    && !members[i]) {
+                    i++;
+                }
+
+                if (i < elements.length) {
+                    next = elements[i];
+                } else {
+                    next = null;
+                }
+            }
+
             return (next != null);
         }
 
         public E next() {
-            while (i < elements.length
-                && !members[i]) {
-                i++;
-            }
-
-            if (i < elements.length) {
-                next = elements[i];
-            } else {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
             }
+
+            E next = this.next;
+            this.next = null;
+            i++;
 
             return next;
         }

@@ -287,7 +287,7 @@ public interface Sequence<T> {
                     path = new Path();
                     path.add(i);
                 } else {
-                    if (t instanceof Sequence) {
+                    if (t instanceof Sequence<?>) {
                         path = pathOf((Sequence<T>)t, item);
 
                         if (path != null) {

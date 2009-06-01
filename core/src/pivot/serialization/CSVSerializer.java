@@ -279,7 +279,7 @@ public class CSVSerializer implements Serializer<List<?>> {
             try {
                 item = itemClass.newInstance();
 
-                if (item instanceof Dictionary) {
+                if (item instanceof Dictionary<?, ?>) {
                     itemDictionary = (Dictionary<String, Object>)item;
                 } else {
                     itemDictionary = new BeanDictionary(item);
@@ -401,7 +401,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
         for (Object item : items) {
             Dictionary<String, Object> itemDictionary;
-            if (item instanceof Dictionary) {
+            if (item instanceof Dictionary<?, ?>) {
                 itemDictionary = (Dictionary<String, Object>)item;
             } else {
                 itemDictionary = new BeanDictionary(item);

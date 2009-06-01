@@ -30,6 +30,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 import pivot.collections.ArrayList;
+import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.collections.List;
 import pivot.collections.Map;
@@ -669,10 +670,10 @@ public class JSONSerializer implements Serializer<Object> {
         for (int i = 0, n = keys.getLength(); i < n; i++) {
             String key = keys.get(i);
 
-            if (value instanceof Map) {
+            if (value instanceof Dictionary<?, ?>) {
                 Map<String, Object> map = (Map<String, Object>)value;
                 value = map.get(key);
-            } else if (value instanceof Sequence) {
+            } else if (value instanceof Sequence<?>) {
                  List<Object> list = (List<Object>)value;
                  value = list.get(Integer.parseInt(key));
             } else {
@@ -834,10 +835,10 @@ public class JSONSerializer implements Serializer<Object> {
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
 
         Object parent = get(root, keys);
-        if (parent instanceof Map) {
-            Map<String, Object> map = (Map<String, Object>)parent;
-            previousValue = map.put(key, value);
-        } else if (parent instanceof Sequence) {
+        if (parent instanceof Dictionary<?, ?>) {
+            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
+            previousValue = dictionary.put(key, value);
+        } else if (parent instanceof Sequence<?>) {
              List<Object> list = (List<Object>)parent;
              previousValue = list.update(Integer.parseInt(key), value);
         } else {
@@ -876,10 +877,10 @@ public class JSONSerializer implements Serializer<Object> {
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
 
         Object parent = get(root, keys);
-        if (parent instanceof Map) {
-            Map<String, Object> map = (Map<String, Object>)parent;
-            previousValue = map.remove(key);
-        } else if (parent instanceof Sequence) {
+        if (parent instanceof Dictionary<?, ?>) {
+            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
+            previousValue = dictionary.remove(key);
+        } else if (parent instanceof Sequence<?>) {
              List<Object> list = (List<Object>)parent;
              previousValue = list.remove(Integer.parseInt(key), 1).get(0);
         } else {
@@ -918,10 +919,10 @@ public class JSONSerializer implements Serializer<Object> {
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
 
         Object parent = get(root, keys);
-        if (parent instanceof Map) {
-            Map<String, Object> map = (Map<String, Object>)parent;
-            containsKey = map.containsKey(key);
-        } else if (parent instanceof Sequence) {
+        if (parent instanceof Dictionary<?, ?>) {
+            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
+            containsKey = dictionary.containsKey(key);
+        } else if (parent instanceof Sequence<?>) {
              List<Object> list = (List<Object>)parent;
              containsKey = (list.getLength() > Integer.parseInt(key));
         } else {

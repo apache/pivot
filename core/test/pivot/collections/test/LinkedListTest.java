@@ -24,10 +24,10 @@ import org.junit.Test;
 
 import pivot.collections.LinkedList;
 import pivot.collections.Sequence;
-import pivot.serialization.JSONSerializer;
 
 public class LinkedListTest {
     @Test
+    @SuppressWarnings("unchecked")
     public void basicTest() {
         LinkedList<String> list = new LinkedList<String>();
         list.insert("B", 0);
@@ -56,6 +56,6 @@ public class LinkedListTest {
         assertTrue(list.get(1).equals("F"));
 
         list.insert("G", 0);
-        assertEquals(JSONSerializer.toString(list), "[\"G\", \"B\", \"F\", \"D\"]");
+        assertEquals(list, new LinkedList<String>("G", "B", "F", "D"));
     }
 }

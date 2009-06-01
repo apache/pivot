@@ -63,14 +63,6 @@ public class SynchronizedQueue<T> extends SynchronizedCollection<T>
         notify();
     }
 
-    /**
-     * Removes an item from the head of the queue, blocking if the queue is
-     * empty.
-     *
-     * @return
-     * The item at the head of the queue, or null if the removing thread
-     * was interrupted.
-     */
     public synchronized T dequeue() {
         T item = null;
         try {

@@ -27,6 +27,7 @@ import pivot.collections.Sequence;
 
 public class ArrayListTest {
     @Test
+    @SuppressWarnings("unchecked")
     public void basicTest() {
         ArrayList<String> list = new ArrayList<String>();
         list.insert("B", 0);
@@ -53,5 +54,7 @@ public class ArrayListTest {
         assertEquals(list.getLength(), 3);
         assertNotNull(list.get(1));
         assertTrue(list.get(1).equals("E"));
+
+        assertEquals(list, new ArrayList<String>("B", "E", "C"));
     }
 }

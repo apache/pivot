@@ -96,6 +96,22 @@ public class LinkedList<T> implements List<T>, Serializable {
         this.comparator = comparator;
     }
 
+    public LinkedList(T... items) {
+        for (int i = 0; i < items.length; i++) {
+            add(items[i]);
+        }
+    }
+
+    public LinkedList(Sequence<T> items) {
+        if (items == null) {
+            throw new IllegalArgumentException();
+        }
+
+        for (int i = 0, n = items.getLength(); i < n; i++) {
+            add(items.get(i));
+        }
+    }
+
     public int add(T item) {
         int index;
         if (comparator == null) {
@@ -385,5 +401,58 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     public ListenerList<ListListener<T>> getListListeners() {
         return listListeners;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object o) {
+        boolean equals = false;
+
+        if (o instanceof LinkedList<?>) {
+            LinkedList<T> linkedList = (LinkedList<T>)o;
+
+            Iterator<T> iterator = iterator();
+            Iterator<T> linkedListIterator = linkedList.iterator();
+
+            while (iterator.hasNext()
+                && linkedListIterator.hasNext()
+                && iterator.next().equals(linkedListIterator.next()));
+
+            equals = (!iterator.hasNext()
+                && !linkedListIterator.hasNext());
+        }
+
+        return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 1;
+        for (T item : this) {
+            hashCode = 31 * hashCode + (item == null ? 0 : item.hashCode());
+        }
+
+        return hashCode;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getClass().getName());
+        sb.append(" [");
+
+        int i = 0;
+        for (T item : this) {
+            if (i > 0) {
+                sb.append(", ");
+            }
+
+            sb.append(item);
+        }
+
+        sb.append("]");
+
+        return sb.toString();
     }
 }
