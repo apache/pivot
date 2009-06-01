@@ -89,6 +89,13 @@ public class LinkedList<T> implements List<T>, Serializable {
     private Comparator<T> comparator = null;
     private transient ListListenerList<T> listListeners = new ListListenerList<T>();
 
+    public LinkedList() {
+    }
+
+    public LinkedList(Comparator<T> comparator) {
+        this.comparator = comparator;
+    }
+
     public int add(T item) {
         int index;
         if (comparator == null) {

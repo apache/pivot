@@ -98,10 +98,6 @@ public class SynchronizedList<T> extends SynchronizedCollection<T>
         return ((List<T>)collection).remove(index, count);
     }
 
-    public synchronized void clear() {
-        ((List<T>)collection).clear();
-    }
-
     public synchronized T get(int index) {
         return ((List<T>)collection).get(index);
     }

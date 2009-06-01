@@ -94,11 +94,6 @@ public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
     }
 
     @SuppressWarnings("unchecked")
-    public synchronized void clear() {
-        ((Map<K, V>)collection).clear();
-    }
-
-    @SuppressWarnings("unchecked")
     public synchronized boolean isEmpty() {
         return ((Map<K, V>)collection).isEmpty();
     }

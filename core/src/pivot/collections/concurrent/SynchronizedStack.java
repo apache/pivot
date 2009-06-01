@@ -23,7 +23,7 @@ import pivot.collections.Stack;
  *
  * @author gbrown
  */
-public class SynchronizedStack<T> extends SynchronizedList<T>
+public class SynchronizedStack<T> extends SynchronizedCollection<T>
     implements Stack<T> {
     public SynchronizedStack(Stack<T> stack) {
         super(stack);
@@ -45,7 +45,7 @@ public class SynchronizedStack<T> extends SynchronizedList<T>
         T item = null;
 
         try {
-            while (getLength() == 0) {
+            while (isEmpty()) {
                 wait();
             }
 
@@ -63,5 +63,9 @@ public class SynchronizedStack<T> extends SynchronizedList<T>
 
     public T poke(T item) {
         return ((Stack<T>)collection).poke(item);
+    }
+
+    public synchronized boolean isEmpty() {
+        return ((Stack<T>)collection).isEmpty();
     }
 }

@@ -16,33 +16,62 @@
  */
 package pivot.collections;
 
+import java.util.Comparator;
+
 /**
  * Implementation of the {@link Stack} interface that is backed by a linked
  * list.
- * <p>
- * TODO This class is currently incomplete.
  */
 public class LinkedStack<T> extends LinkedList<T> implements Stack<T> {
     private static final long serialVersionUID = 0;
 
-    public void push(T item) {
-        // TODO Auto-generated method stub
+    private StackListenerList<T> stackListeners = new StackListenerList<T>();
 
+    public LinkedStack() {
+        this(null);
+    }
+
+    public LinkedStack(Comparator<T> comparator) {
+        super(comparator);
+    }
+
+    public void push(T item) {
+        add(item);
+        stackListeners.itemPushed(this, item);
     }
 
     public T pop() {
-        // TODO Auto-generated method stub
-        // TODO Throw if empty
-        return null;
+        int length = getLength();
+        if (length == 0) {
+            throw new IllegalStateException();
+        }
+
+        T item = remove(length - 1, 1).get(0);
+        stackListeners.itemPopped(this, item);
+
+        return item;
     }
 
     public T peek() {
-        // TODO Auto-generated method stub
-        return null;
+        T item = null;
+        int length = getLength();
+        if (length > 0) {
+            item = get(length - 1);
+        }
+
+        return item;
     }
 
     public T poke(T item) {
-        // TODO Auto-generated method stub
-        return null;
+        int length = getLength();
+        if (length == 0) {
+            throw new IllegalStateException();
+        }
+
+        return update(length - 1, item);
+    }
+
+    public boolean isEmpty() {
+        return (getLength() == 0);
     }
 }

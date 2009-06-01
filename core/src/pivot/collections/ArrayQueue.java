@@ -16,6 +16,8 @@
  */
 package pivot.collections;
 
+import java.util.Comparator;
+
 /**
  * Implementation of the {@link Queue} interface that is backed by an
  * array.
@@ -25,18 +27,19 @@ package pivot.collections;
 public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
     private static final long serialVersionUID = 0;
 
+    private QueueListenerList<T> queueListeners = new QueueListenerList<T>();
+
     public ArrayQueue() {
-        super();
+        this(null);
     }
 
-    public ArrayQueue(List<T> items) {
-        super(items);
+    public ArrayQueue(Comparator<T> comparator) {
+        super(comparator);
     }
 
     public void enqueue(T item) {
         add(item);
-
-        // TODO Fire enqueue event
+        queueListeners.itemEnqueued(this, item);
     }
 
     public T dequeue() {
@@ -46,8 +49,7 @@ public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
         }
 
         T item = remove(length - 1, 1).get(0);
-
-        // TODO Fire dequeue event
+        queueListeners.itemDequeued(this, item);
 
         return item;
     }
@@ -60,5 +62,9 @@ public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
         }
 
         return item;
+    }
+
+    public boolean isEmpty() {
+        return (getLength() == 0);
     }
 }

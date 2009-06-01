@@ -41,6 +41,10 @@ public abstract class SynchronizedCollection<T> implements Collection<T> {
         this.collection = collection;
     }
 
+    public synchronized void clear() {
+        collection.clear();
+    }
+
     public synchronized Comparator<T> getComparator() {
         return collection.getComparator();
     }

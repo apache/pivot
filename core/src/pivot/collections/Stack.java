@@ -16,13 +16,35 @@
  */
 package pivot.collections;
 
+import pivot.util.ListenerList;
+
 /**
  * Interface representing a last-in, first-out (LIFO) stack when unsorted, and
  * a priority stack when sorted.
  *
  * @author gbrown
  */
-public interface Stack<T> extends List<T> {
+public interface Stack<T> extends Collection<T> {
+    /**
+     * Stack listener list.
+     *
+     * @author gbrown
+     */
+    public static class StackListenerList<T> extends ListenerList<StackListener<T>>
+        implements StackListener<T> {
+        public void itemPushed(Stack<T> stack, T item) {
+            for (StackListener<T> listener : this) {
+                listener.itemPushed(stack, item);
+            }
+        }
+
+        public void itemPopped(Stack<T> stack, T item) {
+            for (StackListener<T> listener : this) {
+                listener.itemPopped(stack, item);
+            }
+        }
+    }
+
     /**
      * "Pushes" an item onto the stack. If the stack is unsorted, the item is
      * added at the top of the stack (<tt>getLength()</tt>). Otherwise, it is
@@ -56,4 +78,13 @@ public interface Stack<T> extends List<T> {
      * If the stack contains no items.
      */
     public T poke(T item);
+
+    /**
+     * Tests the emptiness of the stack.
+     *
+     * @return
+     * <tt>true</tt> if the stack contains no items; <tt>false</tt>,
+     * otherwise.
+     */
+    public boolean isEmpty();
 }

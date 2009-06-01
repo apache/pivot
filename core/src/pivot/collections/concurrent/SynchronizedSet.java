@@ -80,10 +80,6 @@ public class SynchronizedSet<E> extends SynchronizedCollection<E>
         ((Set<E>)collection).remove(element);
     }
 
-    public synchronized void clear() {
-        ((Set<E>)collection).clear();
-    }
-
     public synchronized boolean contains(E element) {
         return ((Set<E>)collection).contains(element);
     }

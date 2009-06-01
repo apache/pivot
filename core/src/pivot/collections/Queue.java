@@ -16,13 +16,35 @@
  */
 package pivot.collections;
 
+import pivot.util.ListenerList;
+
 /**
  * Interface representing a first-in, first-out (FIFO) queue when unsorted, and
  * a priority queue when sorted.
  *
  * @author gbrown
  */
-public interface Queue<T> extends List<T> {
+public interface Queue<T> extends Collection<T> {
+    /**
+     * Queue listener list.
+     *
+     * @author gbrown
+     */
+    public static class QueueListenerList<T> extends ListenerList<QueueListener<T>>
+        implements QueueListener<T> {
+        public void itemEnqueued(Queue<T> queue, T item) {
+            for (QueueListener<T> listener : this) {
+                listener.itemEnqueued(queue, item);
+            }
+        }
+
+        public void itemDequeued(Queue<T> queue, T item) {
+            for (QueueListener<T> listener : this) {
+                listener.itemDequeued(queue, item);
+            }
+        }
+    }
+
     /**
      * Enqueues an item. If the queue is unsorted, the item is added at the
      * tail of the queue (index <tt>0</tt>). Otherwise, it is inserted at the
@@ -44,8 +66,17 @@ public interface Queue<T> extends List<T> {
     /**
      * Returns the item at the head of the queue without removing it from the
      * queue. Returns null if the queue contains no items. Will also return null
-     * if the head item in the queue is null. <tt>getLength()</tt> can be used
+     * if the head item in the queue is null. <tt>isEmpty()</tt> can be used
      * to distinguish between these two cases.
      */
     public T peek();
+
+    /**
+     * Tests the emptiness of the queue.
+     *
+     * @return
+     * <tt>true</tt> if the queue contains no items; <tt>false</tt>,
+     * otherwise.
+     */
+    public boolean isEmpty();
 }

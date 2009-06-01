@@ -16,6 +16,8 @@
  */
 package pivot.collections;
 
+import java.util.Comparator;
+
 /**
  * Implementation of the {@link Stack} interface that is backed by an
  * array.
@@ -25,18 +27,19 @@ package pivot.collections;
 public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
     private static final long serialVersionUID = 0;
 
+    private StackListenerList<T> stackListeners = new StackListenerList<T>();
+
     public ArrayStack() {
-        super();
+        this(null);
     }
 
-    public ArrayStack(List<T> items) {
-        super(items);
+    public ArrayStack(Comparator<T> comparator) {
+        super(comparator);
     }
 
     public void push(T item) {
         add(item);
-
-        // TODO Fire push event
+        stackListeners.itemPushed(this, item);
     }
 
     public T pop() {
@@ -46,8 +49,7 @@ public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
         }
 
         T item = remove(length - 1, 1).get(0);
-
-        // TODO Fire pop event
+        stackListeners.itemPopped(this, item);
 
         return item;
     }
@@ -69,5 +71,9 @@ public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
         }
 
         return update(length - 1, item);
+    }
+
+    public boolean isEmpty() {
+        return (getLength() == 0);
     }
 }

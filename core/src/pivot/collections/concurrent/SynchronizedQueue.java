@@ -23,7 +23,7 @@ import pivot.collections.Queue;
  *
  * @author gbrown
  */
-public class SynchronizedQueue<T> extends SynchronizedList<T>
+public class SynchronizedQueue<T> extends SynchronizedCollection<T>
     implements Queue<T> {
     public SynchronizedQueue(Queue<T> queue) {
         super(queue);
@@ -47,7 +47,7 @@ public class SynchronizedQueue<T> extends SynchronizedList<T>
         T item = null;
 
         try {
-            while (getLength() == 0) {
+            while (isEmpty()) {
                 wait();
             }
 
@@ -62,19 +62,7 @@ public class SynchronizedQueue<T> extends SynchronizedList<T>
         return ((Queue<T>)collection).peek();
     }
 
-    @Override
-    public synchronized int add(T item) {
-        int index = super.add(item);
-
-        notify();
-
-        return index;
-    }
-
-    @Override
-    public synchronized void insert(T item, int index) {
-        super.insert(item, index);
-
-        notify();
+    public synchronized boolean isEmpty() {
+        return ((Queue<T>)collection).isEmpty();
     }
 }
