@@ -18,6 +18,8 @@ package pivot.collections;
 
 import java.util.Comparator;
 
+import pivot.util.ListenerList;
+
 /**
  * Implementation of the {@link Stack} interface that is backed by an
  * array.
@@ -64,16 +66,11 @@ public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
         return item;
     }
 
-    public T poke(T item) {
-        int length = getLength();
-        if (length == 0) {
-            throw new IllegalStateException();
-        }
-
-        return update(length - 1, item);
-    }
-
     public boolean isEmpty() {
         return (getLength() == 0);
+    }
+
+    public ListenerList<StackListener<T>> getStackListeners() {
+        return stackListeners;
     }
 }

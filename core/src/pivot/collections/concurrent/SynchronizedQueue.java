@@ -17,6 +17,8 @@
 package pivot.collections.concurrent;
 
 import pivot.collections.Queue;
+import pivot.collections.QueueListener;
+import pivot.util.ListenerList;
 
 /**
  * Synchronized implementation of the {@link Queue} interface.
@@ -25,12 +27,38 @@ import pivot.collections.Queue;
  */
 public class SynchronizedQueue<T> extends SynchronizedCollection<T>
     implements Queue<T> {
+    private static class SynchronizedQueueListenerList<T>
+        extends QueueListenerList<T> {
+        @Override
+        public synchronized void add(QueueListener<T> listener) {
+            super.add(listener);
+        }
+
+        @Override
+        public synchronized void remove(QueueListener<T> listener) {
+            super.remove(listener);
+        }
+
+        @Override
+        public synchronized void itemEnqueued(Queue<T> queue, T item) {
+            super.itemEnqueued(queue, item);
+        }
+
+        @Override
+        public synchronized void itemDequeued(Queue<T> queue, T item) {
+            super.itemDequeued(queue, item);
+        }
+    }
+
+    private SynchronizedQueueListenerList<T> queueListeners = new SynchronizedQueueListenerList<T>();
+
     public SynchronizedQueue(Queue<T> queue) {
         super(queue);
     }
 
     public synchronized void enqueue(T item) {
         ((Queue<T>)collection).enqueue(item);
+        queueListeners.itemEnqueued(this, item);
 
         notify();
     }
@@ -45,13 +73,13 @@ public class SynchronizedQueue<T> extends SynchronizedCollection<T>
      */
     public synchronized T dequeue() {
         T item = null;
-
         try {
             while (isEmpty()) {
                 wait();
             }
 
             item = ((Queue<T>)collection).dequeue();
+            queueListeners.itemDequeued(this, item);
         } catch(InterruptedException exception) {
         }
 
@@ -64,5 +92,9 @@ public class SynchronizedQueue<T> extends SynchronizedCollection<T>
 
     public synchronized boolean isEmpty() {
         return ((Queue<T>)collection).isEmpty();
+    }
+
+    public ListenerList<QueueListener<T>> getQueueListeners() {
+        return queueListeners;
     }
 }

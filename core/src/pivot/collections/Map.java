@@ -27,7 +27,7 @@ import pivot.util.ListenerList;
  */
 public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
     /**
-     * Map listener list implementation.
+     * Map listener list.
      *
      * @author gbrown
      */

@@ -79,4 +79,9 @@ public interface Queue<T> extends Collection<T> {
      * otherwise.
      */
     public boolean isEmpty();
+
+    /**
+     * Returns the queue listener list.
+     */
+    public ListenerList<QueueListener<T>> getQueueListeners();
 }

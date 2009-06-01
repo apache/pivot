@@ -17,6 +17,8 @@
 package pivot.collections.concurrent;
 
 import pivot.collections.Stack;
+import pivot.collections.StackListener;
+import pivot.util.ListenerList;
 
 /**
  * Synchronized implementation of the {@link Stack} interface.
@@ -25,31 +27,49 @@ import pivot.collections.Stack;
  */
 public class SynchronizedStack<T> extends SynchronizedCollection<T>
     implements Stack<T> {
+    private static class SynchronizedStackListenerList<T>
+        extends StackListenerList<T> {
+        @Override
+        public synchronized void add(StackListener<T> listener) {
+            super.add(listener);
+        }
+
+        @Override
+        public synchronized void remove(StackListener<T> listener) {
+            super.remove(listener);
+        }
+
+        @Override
+        public synchronized void itemPushed(Stack<T> stack, T item) {
+            super.itemPushed(stack, item);
+        }
+
+        @Override
+        public synchronized void itemPopped(Stack<T> stack, T item) {
+            super.itemPopped(stack, item);
+        }
+    }
+
+    private SynchronizedStackListenerList<T> stackListeners = new SynchronizedStackListenerList<T>();
+
     public SynchronizedStack(Stack<T> stack) {
         super(stack);
     }
 
-    public void push(T item) {
+    public synchronized void push(T item) {
         ((Stack<T>)collection).push(item);
+        stackListeners.itemPushed(this, item);
     }
 
-    /**
-     * Removes an item from the top of the stack, blocking if the stack is
-     * currently empty.
-     *
-     * @return
-     * The item at the top of the stack, or null if the removing thread
-     * was interrupted.
-     */
-    public T pop() {
+    public synchronized T pop() {
         T item = null;
-
         try {
             while (isEmpty()) {
                 wait();
             }
 
             item = ((Stack<T>)collection).pop();
+            stackListeners.itemPopped(this, item);
         }
         catch(InterruptedException exception) {
         }
@@ -57,15 +77,15 @@ public class SynchronizedStack<T> extends SynchronizedCollection<T>
         return item;
     }
 
-    public T peek() {
+    public synchronized T peek() {
         return ((Stack<T>)collection).peek();
-    }
-
-    public T poke(T item) {
-        return ((Stack<T>)collection).poke(item);
     }
 
     public synchronized boolean isEmpty() {
         return ((Stack<T>)collection).isEmpty();
+    }
+
+    public ListenerList<StackListener<T>> getStackListeners() {
+        return stackListeners;
     }
 }

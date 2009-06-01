@@ -26,7 +26,7 @@ import pivot.util.ListenerList;
  */
 public interface List<T> extends Sequence<T>, Collection<T> {
     /**
-     * List listener list implementation.
+     * List listener list.
      *
      * @author gbrown
      */

@@ -21,7 +21,6 @@ import java.util.Comparator;
 import pivot.collections.Map;
 import pivot.collections.MapListener;
 import pivot.util.ListenerList;
-import pivot.util.concurrent.SynchronizedListenerList;
 
 /**
  * Synchronized implementation of the {@link Map} interface.
@@ -30,52 +29,48 @@ import pivot.util.concurrent.SynchronizedListenerList;
  */
 public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
     implements Map<K, V> {
-    /**
-     * Synchronized map listener list implementation. Proxies events fired
-     * by inner map to listeners of synchronized map.
-     *
-     * @author gbrown
-     */
-    private class SynchronizedMapListenerList
-        extends SynchronizedListenerList<MapListener<K, V>>
-        implements MapListener<K, V> {
+    private static class SynchronizedMapListenerList<K, V>
+        extends MapListenerList<K, V> {
+        @Override
+        public synchronized void add(MapListener<K, V> listener) {
+            super.add(listener);
+        }
+
+        @Override
+        public synchronized void remove(MapListener<K, V> listener) {
+            super.remove(listener);
+        }
+
+        @Override
         public synchronized void valueAdded(Map<K, V> map, K key) {
-            for (MapListener<K, V> listener : this) {
-                listener.valueAdded(SynchronizedMap.this, key);
-            }
+            super.valueAdded(map, key);
         }
 
+        @Override
         public synchronized void valueRemoved(Map<K, V> map, K key, V value) {
-            for (MapListener<K, V> listener : this) {
-                listener.valueRemoved(SynchronizedMap.this, key, value);
-            }
+            super.valueRemoved(map, key, value);
         }
 
+        @Override
         public synchronized void valueUpdated(Map<K, V> map, K key, V previousValue) {
-            for (MapListener<K, V> listener : this) {
-                listener.valueUpdated(SynchronizedMap.this, key, previousValue);
-            }
+            super.valueUpdated(map, key, previousValue);
         }
 
+        @Override
         public synchronized void mapCleared(Map<K, V> map) {
-            for (MapListener<K, V> listener : this) {
-                listener.mapCleared(SynchronizedMap.this);
-            }
+            super.mapCleared(map);
         }
 
+        @Override
         public synchronized void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator) {
-            for (MapListener<K, V> listener : this) {
-                listener.comparatorChanged(SynchronizedMap.this, previousComparator);
-            }
+            super.comparatorChanged(map, previousComparator);
         }
     }
 
-    private SynchronizedMapListenerList mapListeners = new SynchronizedMapListenerList();
+    private SynchronizedMapListenerList<K, V> mapListeners = new SynchronizedMapListenerList<K, V>();
 
     public SynchronizedMap(Map<K, V> map) {
         super(map);
-
-        map.getMapListeners().add(mapListeners);
     }
 
     @SuppressWarnings("unchecked")
@@ -85,12 +80,29 @@ public class SynchronizedMap<K, V> extends SynchronizedCollection<K>
 
     @SuppressWarnings("unchecked")
     public synchronized V put(K key, V value) {
-        return ((Map<K, V>)collection).put(key, value);
+        boolean update = containsKey(key);
+        V previousValue = ((Map<K, V>)collection).put(key, value);
+
+        if (update) {
+            mapListeners.valueUpdated(this, key, previousValue);
+        }
+        else {
+            mapListeners.valueAdded(this, key);
+        }
+
+        return previousValue;
     }
 
     @SuppressWarnings("unchecked")
     public synchronized V remove(K key) {
-        return ((Map<K, V>)collection).remove(key);
+        V value = null;
+
+        if (containsKey(key)) {
+            value = ((Map<K, V>)collection).remove(key);
+            mapListeners.valueRemoved(this, key, value);
+        }
+
+        return value;
     }
 
     @SuppressWarnings("unchecked")

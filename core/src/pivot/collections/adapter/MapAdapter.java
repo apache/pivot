@@ -49,7 +49,7 @@ public class MapAdapter<K, V> implements Map<K, V> {
     }
 
     public V put(K key, V value) {
-        boolean update = map.containsKey(key);
+        boolean update = containsKey(key);
         V previousValue = map.put(key, value);
 
         if (update) {
@@ -65,7 +65,7 @@ public class MapAdapter<K, V> implements Map<K, V> {
     public V remove(K key) {
         V value = null;
 
-        if (map.containsKey(key)) {
+        if (containsKey(key)) {
             value = map.remove(key);
             mapListeners.valueRemoved(this, key, value);
         }
@@ -74,8 +74,10 @@ public class MapAdapter<K, V> implements Map<K, V> {
     }
 
     public void clear() {
-        map.clear();
-        mapListeners.mapCleared(this);
+        if (!isEmpty()) {
+            map.clear();
+            mapListeners.mapCleared(this);
+        }
     }
 
     public boolean containsKey(K key) {

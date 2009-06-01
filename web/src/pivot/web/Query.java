@@ -32,7 +32,6 @@ import pivot.serialization.JSONSerializer;
 import pivot.serialization.Serializer;
 import pivot.util.ListenerList;
 import pivot.util.concurrent.Dispatcher;
-import pivot.util.concurrent.SynchronizedListenerList;
 
 /**
  * Abstract base class for web queries. A web query is an asynchronous operation
@@ -97,8 +96,18 @@ public abstract class Query<V> extends IOTask<V> {
      *
      * @author tvolkert
      */
-    private static class QueryListenerList<V> extends SynchronizedListenerList<QueryListener<V>>
+    private static class QueryListenerList<V> extends ListenerList<QueryListener<V>>
         implements QueryListener<V> {
+        @Override
+        public synchronized void add(QueryListener<V> listener) {
+            super.add(listener);
+        }
+
+        @Override
+        public synchronized void remove(QueryListener<V> listener) {
+            super.remove(listener);
+        }
+
         public synchronized void connected(Query<V> query) {
             for (QueryListener<V> listener : this) {
                 listener.connected(query);

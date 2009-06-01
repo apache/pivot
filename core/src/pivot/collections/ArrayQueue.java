@@ -18,6 +18,8 @@ package pivot.collections;
 
 import java.util.Comparator;
 
+import pivot.util.ListenerList;
+
 /**
  * Implementation of the {@link Queue} interface that is backed by an
  * array.
@@ -66,5 +68,9 @@ public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
 
     public boolean isEmpty() {
         return (getLength() == 0);
+    }
+
+    public ListenerList<QueueListener<T>> getQueueListeners() {
+        return queueListeners;
     }
 }

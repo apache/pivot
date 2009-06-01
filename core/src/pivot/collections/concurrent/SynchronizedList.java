@@ -21,7 +21,6 @@ import pivot.collections.List;
 import pivot.collections.ListListener;
 import pivot.collections.Sequence;
 import pivot.util.ListenerList;
-import pivot.util.concurrent.SynchronizedListenerList;
 
 /**
  * Synchronized implementation of the {@link List} interface.
@@ -30,72 +29,89 @@ import pivot.util.concurrent.SynchronizedListenerList;
  */
 public class SynchronizedList<T> extends SynchronizedCollection<T>
     implements List<T> {
-    /**
-     * Synchronized list listener list implementation. Proxies events fired
-     * by inner list to listeners of synchronized list.
-     *
-     * @author gbrown
-     */
-    private class SynchronizedListListenerList
-        extends SynchronizedListenerList<ListListener<T>>
-        implements ListListener<T> {
+    private static class SynchronizedListListenerList<T>
+        extends ListListenerList<T> {
+        @Override
+        public synchronized void add(ListListener<T> listener) {
+            super.add(listener);
+        }
+
+        @Override
+        public synchronized void remove(ListListener<T> listener) {
+            super.remove(listener);
+        }
+
+        @Override
         public synchronized void itemInserted(List<T> list, int index) {
-            for (ListListener<T> listener : this) {
-                listener.itemInserted(SynchronizedList.this, index);
-            }
+            super.itemInserted(list, index);
         }
 
+        @Override
         public synchronized void itemsRemoved(List<T> list, int index, Sequence<T> items) {
-            for (ListListener<T> listener : this) {
-                listener.itemsRemoved(SynchronizedList.this, index, items);
-            }
+            super.itemsRemoved(list, index, items);
         }
 
+        @Override
         public synchronized void itemUpdated(List<T> list, int index, T previousItem) {
-            for (ListListener<T> listener : this) {
-                listener.itemUpdated(SynchronizedList.this, index, previousItem);
-            }
+            super.itemUpdated(list, index, previousItem);
         }
 
+        @Override
         public synchronized void listCleared(List<T> list) {
-            for (ListListener<T> listener : this) {
-                listener.listCleared(SynchronizedList.this);
-            }
+            super.listCleared(list);
         }
 
+        @Override
         public synchronized void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
-            for (ListListener<T> listener : this) {
-                listener.comparatorChanged(SynchronizedList.this, previousComparator);
-            }
+            super.comparatorChanged(list, previousComparator);
         }
     }
 
-    private SynchronizedListListenerList listListeners = new SynchronizedListListenerList();
+    private SynchronizedListListenerList<T> listListeners = new SynchronizedListListenerList<T>();
 
     public SynchronizedList(List<T> list) {
         super(list);
-
-        list.getListListeners().add(listListeners);
     }
 
     public synchronized int add(T item) {
-        return ((List<T>)collection).add(item);
+        int index = ((List<T>)collection).add(item);
+        listListeners.itemInserted(this, index);
+
+        return index;
     }
 
     public synchronized void insert(T item, int index) {
         ((List<T>)collection).insert(item, index);
+        listListeners.itemInserted(this, index);
     }
 
     public synchronized T update(int index, T item) {
-        return ((List<T>)collection).update(index, item);
+        T previousItem = ((List<T>)collection).update(index, item);
+        if (previousItem != item) {
+            listListeners.itemUpdated(this, index, previousItem);
+        }
+
+        return previousItem;
     }
 
-    public int remove (T item) {
-        return ((List<T>)collection).remove(item);
+    public synchronized int remove (T item) {
+        int index = indexOf(item);
+        if (index == -1) {
+            throw new IllegalArgumentException();
+        }
+
+        remove(index, 1);
+
+        return index;
     }
 
     public synchronized Sequence<T> remove(int index, int count) {
-        return ((List<T>)collection).remove(index, count);
+        Sequence<T> removed = ((List<T>)collection).remove(index, count);
+        if (count > 0) {
+            listListeners.itemsRemoved(this, index, removed);
+        }
+
+        return removed;
     }
 
     public synchronized T get(int index) {

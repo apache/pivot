@@ -85,17 +85,19 @@ public class ListAdapter<T> implements List<T> {
         }
 
         T previousItem = list.get(index);
-        list.set(index, item);
-        listListeners.itemUpdated(this, index, previousItem);
+
+        if (previousItem != item) {
+            list.set(index, item);
+            listListeners.itemUpdated(this, index, previousItem);
+        }
 
         return previousItem;
     }
 
     public int remove(T item) {
         int index = indexOf(item);
-
         if (index == -1) {
-            throw new IllegalArgumentException("item is not an element of this list.");
+            throw new IllegalArgumentException();
         }
 
         remove(index, 1);
@@ -112,20 +114,24 @@ public class ListAdapter<T> implements List<T> {
         } catch(InstantiationException exception) {
         }
 
-        for (int i = count - 1; i >= 0; i--) {
-            removedList.add(0, list.remove(index + i));
-        }
-
-        // Fire event
         List<T> removed = new ListAdapter<T>(removedList);
-        listListeners.itemsRemoved(this, index, removed);
+
+        if (count > 0) {
+            for (int i = count - 1; i >= 0; i--) {
+                removedList.add(0, list.remove(index + i));
+            }
+
+            listListeners.itemsRemoved(this, index, removed);
+        }
 
         return removed;
     }
 
     public void clear() {
-        list.clear();
-        listListeners.listCleared(this);
+        if (getLength() > 0) {
+            list.clear();
+            listListeners.listCleared(this);
+        }
     }
 
     public T get(int index) {

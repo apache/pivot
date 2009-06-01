@@ -45,22 +45,24 @@ public class SetAdapter<E> implements Set<E> {
     }
 
     public void add(E element) {
-        if (!set.contains(element)) {
+        if (!contains(element)) {
             set.add(element);
             setListeners.elementAdded(this, element);
         }
     }
 
     public void remove(E element) {
-        if (set.contains(element)) {
+        if (contains(element)) {
             set.remove(element);
             setListeners.elementRemoved(this, element);
         }
     }
 
     public void clear() {
-        set.clear();
-        setListeners.setCleared(this);
+        if (!isEmpty()) {
+            set.clear();
+            setListeners.setCleared(this);
+        }
     }
 
     public boolean contains(E element) {

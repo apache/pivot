@@ -802,7 +802,7 @@ public class Window extends Container {
             if (j < window.ownedWindows.getLength()) {
                 // There is another owned window to traverse; move down
                 // the tree
-                ownedWindowIndexes.poke(j + 1);
+                ownedWindowIndexes.update(ownedWindowIndexes.getLength() - 1, j + 1);
                 window = window.ownedWindows.get(j);
 
                 // If the window is not open, ignore it

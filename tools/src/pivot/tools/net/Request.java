@@ -31,7 +31,6 @@ import pivot.collections.Dictionary;
 import pivot.collections.HashMap;
 import pivot.io.IOTask;
 import pivot.util.ListenerList;
-import pivot.util.concurrent.SynchronizedListenerList;
 import pivot.util.concurrent.TaskExecutionException;
 
 /**
@@ -98,8 +97,18 @@ public class Request extends IOTask<Response> {
      *
      * @author tvolkert
      */
-    private static class RequestListenerList extends SynchronizedListenerList<RequestListener>
+    private static class RequestListenerList extends ListenerList<RequestListener>
         implements RequestListener {
+        @Override
+        public synchronized void add(RequestListener listener) {
+            super.add(listener);
+        }
+
+        @Override
+        public synchronized void remove(RequestListener listener) {
+            super.remove(listener);
+        }
+
         public synchronized void connected(Request httpRequest) {
             for (RequestListener listener : this) {
                 listener.connected(httpRequest);

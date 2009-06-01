@@ -72,14 +72,6 @@ public interface Stack<T> extends Collection<T> {
     public T peek();
 
     /**
-     * Replaces the item on top of the stack.
-     *
-     * @throws IllegalStateException
-     * If the stack contains no items.
-     */
-    public T poke(T item);
-
-    /**
      * Tests the emptiness of the stack.
      *
      * @return
@@ -87,4 +79,9 @@ public interface Stack<T> extends Collection<T> {
      * otherwise.
      */
     public boolean isEmpty();
+
+    /**
+     * Returns the stack listener list.
+     */
+    public ListenerList<StackListener<T>> getStackListeners();
 }

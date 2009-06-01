@@ -21,7 +21,6 @@ import java.util.Comparator;
 import pivot.collections.Set;
 import pivot.collections.SetListener;
 import pivot.util.ListenerList;
-import pivot.util.concurrent.SynchronizedListenerList;
 
 /**
  * Synchronized implementation of the {@link Set} interface.
@@ -30,54 +29,57 @@ import pivot.util.concurrent.SynchronizedListenerList;
  */
 public class SynchronizedSet<E> extends SynchronizedCollection<E>
     implements Set<E> {
-    /**
-     * Synchronized set listener list implementation. Proxies events fired
-     * by inner set to listeners of synchronized set.
-     *
-     * @author gbrown
-     */
-    private class SynchronizedSetListenerList
-        extends SynchronizedListenerList<SetListener<E>>
-        implements SetListener<E> {
-        public void elementAdded(Set<E> set, E element) {
-            for (SetListener<E> listener : this) {
-                listener.elementAdded(set, element);
-            }
+    private static class SynchronizedSetListenerList<E>
+        extends SetListenerList<E> {
+        @Override
+        public synchronized void add(SetListener<E> listener) {
+            super.add(listener);
         }
 
-        public void elementRemoved(Set<E> set, E element) {
-            for (SetListener<E> listener : this) {
-                listener.elementRemoved(SynchronizedSet.this, element);
-            }
+        @Override
+        public synchronized void remove(SetListener<E> listener) {
+            super.remove(listener);
         }
 
-        public void setCleared(Set<E> set) {
-            for (SetListener<E> listener : this) {
-                listener.setCleared(SynchronizedSet.this);
-            }
+        @Override
+        public synchronized void elementAdded(Set<E> set, E element) {
+            super.elementAdded(set, element);
         }
 
-        public void comparatorChanged(Set<E> set, Comparator<E> previousComparator) {
-            for (SetListener<E> listener : this) {
-                listener.comparatorChanged(SynchronizedSet.this, previousComparator);
-            }
+        @Override
+        public synchronized void elementRemoved(Set<E> set, E element) {
+            super.elementRemoved(set, element);
+        }
+
+        @Override
+        public synchronized void setCleared(Set<E> set) {
+            super.setCleared(set);
+        }
+
+        @Override
+        public synchronized void comparatorChanged(Set<E> set, Comparator<E> previousComparator) {
+            super.comparatorChanged(set, previousComparator);
         }
     }
 
-    private SynchronizedSetListenerList setListeners = new SynchronizedSetListenerList();
+    private SynchronizedSetListenerList<E> setListeners = new SynchronizedSetListenerList<E>();
 
     public SynchronizedSet(Set<E> set) {
         super(set);
-
-        set.getSetListeners().add(setListeners);
     }
 
     public synchronized void add(E element) {
-        ((Set<E>)collection).add(element);
+        if (!contains(element)) {
+            ((Set<E>)collection).add(element);
+            setListeners.elementAdded(this, element);
+        }
     }
 
     public synchronized void remove(E element) {
-        ((Set<E>)collection).remove(element);
+        if (contains(element)) {
+            ((Set<E>)collection).remove(element);
+            setListeners.elementRemoved(this, element);
+        }
     }
 
     public synchronized boolean contains(E element) {

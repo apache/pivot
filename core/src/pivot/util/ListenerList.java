@@ -22,8 +22,10 @@ import java.util.NoSuchElementException;
 /**
  * Abstract base class for listener lists.
  * <p>
- * NOTE This class is not thread safe. For thread-safe management of events,
- * use {@link pivot.util.concurrent.SynchronizedListenerList}.
+ * NOTE This class is not inherently thread safe. Subclasses that require
+ * thread-safe access should synchronize method access appropriately. Callers
+ * must manually synchronize on the listener list instance to ensure thread
+ * safety during iteration.
  *
  * @author gbrown
  */

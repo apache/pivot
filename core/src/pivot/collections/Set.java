@@ -26,7 +26,7 @@ import pivot.util.ListenerList;
  */
 public interface Set<E> extends Group<E>, Collection<E> {
     /**
-     * Set listener list implementation.
+     * Set listener list.
      *
      * @author gbrown
      */
