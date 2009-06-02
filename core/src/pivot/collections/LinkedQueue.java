@@ -38,7 +38,12 @@ public class LinkedQueue<T> extends LinkedList<T> implements Queue<T> {
     }
 
     public void enqueue(T item) {
-        add(item);
+        if (getComparator() == null) {
+            insert(item, 0);
+        } else {
+            add(item);
+        }
+
         queueListeners.itemEnqueued(this, item);
     }
 

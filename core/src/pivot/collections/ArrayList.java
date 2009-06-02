@@ -405,7 +405,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         sb.append(getClass().getName());
         sb.append(" [");
 
-        for (int i = 0; i < items.length; i++) {
+        for (int i = 0; i < length; i++) {
             if (i > 0) {
                 sb.append(", ");
             }

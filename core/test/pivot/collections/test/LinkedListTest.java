@@ -20,6 +20,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Comparator;
+
 import org.junit.Test;
 
 import pivot.collections.LinkedList;
@@ -27,7 +29,6 @@ import pivot.collections.Sequence;
 
 public class LinkedListTest {
     @Test
-    @SuppressWarnings("unchecked")
     public void basicTest() {
         LinkedList<String> list = new LinkedList<String>();
         list.insert("B", 0);
@@ -57,5 +58,42 @@ public class LinkedListTest {
 
         list.insert("G", 0);
         assertEquals(list, new LinkedList<String>("G", "B", "F", "D"));
+    }
+
+    @Test
+    public void sortTest1() {
+        LinkedList<String> linkedList = new LinkedList<String>();
+        linkedList.setComparator(new Comparator<String>() {
+            public int compare(String s1, String s2) {
+                return s1.toLowerCase().compareTo(s2.toLowerCase());
+            }
+        });
+
+        linkedList.add("N");
+        linkedList.add("P");
+        linkedList.add("d");
+        linkedList.add("A");
+        linkedList.add("z");
+
+        assertEquals(linkedList, new LinkedList<String>("A", "d", "N", "P", "z"));
+    }
+
+    @Test
+    public void sortTest2() {
+        LinkedList<String> linkedList = new LinkedList<String>();
+
+        linkedList.add("N");
+        linkedList.add("P");
+        linkedList.add("d");
+        linkedList.add("A");
+        linkedList.add("z");
+
+        linkedList.setComparator(new Comparator<String>() {
+            public int compare(String s1, String s2) {
+                return s1.toLowerCase().compareTo(s2.toLowerCase());
+            }
+        });
+
+        assertEquals(linkedList, new LinkedList<String>("A", "d", "N", "P", "z"));
     }
 }

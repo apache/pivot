@@ -74,7 +74,6 @@ public class ListAdapter<T> implements List<T> {
         }
 
         list.add(index, item);
-
         listListeners.itemInserted(this, index);
     }
 

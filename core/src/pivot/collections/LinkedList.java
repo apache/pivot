@@ -259,7 +259,11 @@ public class LinkedList<T> implements List<T>, Serializable {
                 end = end.next;
             }
 
-            end = end.previous;
+            if (end == null) {
+                end = last;
+            } else {
+                end = end.previous;
+            }
 
             // Decouple the nodes from the list
             if (start.previous != null) {
@@ -449,6 +453,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             }
 
             sb.append(item);
+            i++;
         }
 
         sb.append("]");

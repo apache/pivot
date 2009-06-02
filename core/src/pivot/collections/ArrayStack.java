@@ -39,6 +39,10 @@ public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
         super(comparator);
     }
 
+    public ArrayStack(int capacity) {
+        super(capacity);
+    }
+
     public void push(T item) {
         add(item);
         stackListeners.itemPushed(this, item);

@@ -39,8 +39,17 @@ public class ArrayQueue<T> extends ArrayList<T> implements Queue<T> {
         super(comparator);
     }
 
+    public ArrayQueue(int capacity) {
+        super(capacity);
+    }
+
     public void enqueue(T item) {
-        add(item);
+        if (getComparator() == null) {
+            insert(item, 0);
+        } else {
+            add(item);
+        }
+
         queueListeners.itemEnqueued(this, item);
     }
 

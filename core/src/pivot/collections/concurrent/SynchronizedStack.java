@@ -59,6 +59,8 @@ public class SynchronizedStack<T> extends SynchronizedCollection<T>
     public synchronized void push(T item) {
         ((Stack<T>)collection).push(item);
         stackListeners.itemPushed(this, item);
+
+        notify();
     }
 
     public synchronized T pop() {
