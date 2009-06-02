@@ -24,16 +24,13 @@ import pivot.util.ImmutableIterator;
 
 /**
  * Class that runs a sequence of tasks in series and notifies listeners
- * when all tasks are complete. Callers can retrieve task results or faults by
- * calling {@link Task#getResult()} and {@link Task#getFault()},
- * respectively.
+ * when all tasks are complete.
  *
  * @author gbrown
  */
 public class TaskSequence extends Task<Void>
     implements Sequence<Task<?>>, Iterable<Task<?>> {
     private ArrayList<Task<?>> tasks = new ArrayList<Task<?>>();
-    private int activeTaskIndex = -1;
 
     public TaskSequence() {
         super();
@@ -45,37 +42,10 @@ public class TaskSequence extends Task<Void>
 
     @Override
     @SuppressWarnings("unchecked")
-    public synchronized Void execute() throws TaskExecutionException {
-        TaskListener<Object> taskListener = new TaskListener<Object>() {
-            public void taskExecuted(Task<Object> task) {
-                synchronized (TaskSequence.this) {
-                    TaskSequence.this.notify();
-                }
-            }
-
-            public void executeFailed(Task<Object> task) {
-                synchronized (TaskSequence.this) {
-                    TaskSequence.this.notify();
-                }
-            }
-        };
-
-        activeTaskIndex = 0;
-
-        while (activeTaskIndex < tasks.getLength()) {
-            Task<Object> activeTask = (Task<Object>)tasks.get(activeTaskIndex);
-            activeTask.execute(taskListener);
-
-            try {
-                wait();
-            } catch (InterruptedException exception) {
-                throw new TaskExecutionException(exception);
-            }
-
-            activeTaskIndex++;
+    public Void execute() throws TaskExecutionException {
+        for (Task<?> task : tasks) {
+            task.execute();
         }
-
-        activeTaskIndex = -1;
 
         return null;
     }
@@ -87,16 +57,16 @@ public class TaskSequence extends Task<Void>
         return index;
     }
 
-    public synchronized void insert(Task<?> task, int index) {
-        if (activeTaskIndex != -1) {
+    public void insert(Task<?> task, int index) {
+        if (isPending()) {
             throw new IllegalStateException();
         }
 
         tasks.insert(task, index);
     }
 
-    public synchronized Task<?> update(int index, Task<?> task) {
-        if (activeTaskIndex != -1) {
+    public Task<?> update(int index, Task<?> task) {
+        if (isPending()) {
             throw new IllegalStateException();
         }
 
@@ -112,8 +82,8 @@ public class TaskSequence extends Task<Void>
         return index;
     }
 
-    public synchronized Sequence<Task<?>> remove(int index, int count) {
-        if (activeTaskIndex != -1) {
+    public Sequence<Task<?>> remove(int index, int count) {
+        if (isPending()) {
             throw new IllegalStateException();
         }
 

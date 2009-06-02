@@ -19,7 +19,7 @@ package pivot.util.concurrent;
 import java.util.Iterator;
 
 import pivot.collections.Group;
-import pivot.collections.HashMap;
+import pivot.collections.HashSet;
 import pivot.util.ImmutableIterator;
 
 /**
@@ -31,24 +31,9 @@ import pivot.util.ImmutableIterator;
  */
 public class TaskGroup extends Task<Void>
     implements Group<Task<?>>, Iterable<Task<?>> {
-    private class TaskHandler implements TaskListener<Object> {
-        public void taskExecuted(Task<Object> task) {
-            synchronized (TaskGroup.this) {
-                tasks.put(task, Boolean.TRUE);
-                TaskGroup.this.notify();
-            }
-        }
-
-        public void executeFailed(Task<Object> task) {
-            synchronized (TaskGroup.this) {
-                tasks.put(task, Boolean.TRUE);
-                TaskGroup.this.notify();
-            }
-        }
-    }
-
-    private HashMap<Task<?>, Boolean> tasks = new HashMap<Task<?>, Boolean>();
-    private boolean executing = false;
+    private HashSet<Task<?>> tasks = new HashSet<Task<?>>();
+    private int count = 0;
+    private int complete = 0;
 
     public TaskGroup() {
         super();
@@ -61,61 +46,58 @@ public class TaskGroup extends Task<Void>
     @Override
     @SuppressWarnings("unchecked")
     public synchronized Void execute() throws TaskExecutionException {
-        executing = true;
-
-        try {
-            TaskHandler taskHandler = new TaskHandler();
-
-            for (Task<?> task : tasks) {
-                tasks.put(task, Boolean.FALSE);
-                ((Task<Object>)task).execute(taskHandler);
-            }
-
-            boolean complete = false;
-
-            while (!complete) {
-                try {
-                    wait();
-                } catch (InterruptedException exception) {
-                    throw new TaskExecutionException(exception);
-                }
-
-                complete = true;
-                for (Task<?> task : tasks) {
-                    if (!tasks.get(task)) {
-                        complete = false;
-                        break;
-                    }
+        TaskListener<Object> taskListener = new TaskListener<Object>() {
+            public void taskExecuted(Task<Object> task) {
+                synchronized(TaskGroup.this) {
+                    complete++;
+                    TaskGroup.this.notify();
                 }
             }
-        } finally {
-            executing = false;
+
+            public void executeFailed(Task<Object> task) {
+                synchronized(TaskGroup.this) {
+                    complete++;
+                    TaskGroup.this.notify();
+                }
+            }
+        };
+
+        complete = 0;
+        for (Task<?> task : tasks) {
+            ((Task<Object>)task).execute(taskListener);
+        }
+
+        while (complete < count) {
+            try {
+                wait();
+            } catch (InterruptedException exception) {
+                throw new TaskExecutionException(exception);
+            }
         }
 
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    public synchronized void add(Task<?> element) {
-        if (executing) {
-            throw new IllegalStateException("Task group is executing.");
+    public void add(Task<?> element) {
+        if (isPending()) {
+            throw new IllegalStateException();
         }
 
-        tasks.put((Task<Object>)element, Boolean.FALSE);
+        tasks.add(element);
+        count++;
     }
 
-    @SuppressWarnings("unchecked")
-    public synchronized void remove(Task<?> element) {
-        if (executing) {
-            throw new IllegalStateException("Task group is executing.");
+    public void remove(Task<?> element) {
+        if (isPending()) {
+            throw new IllegalStateException();
         }
 
-        tasks.remove((Task<Object>)element);
+        tasks.remove(element);
+        count--;
     }
 
-    @SuppressWarnings("unchecked")
     public boolean contains(Task<?> element) {
-        return tasks.containsKey((Task<Object>)element);
+        return tasks.contains(element);
     }
 
     public boolean isEmpty() {
