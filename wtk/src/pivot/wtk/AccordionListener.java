@@ -25,7 +25,7 @@ import pivot.collections.Sequence;
  */
 public interface AccordionListener {
     /**
-     * Adapts the <tt>AccordionListener</tt> interface.
+     * Accordion listener adapter.
      *
      * @author tvolkert
      */

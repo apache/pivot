@@ -23,7 +23,7 @@ package pivot.wtk;
  */
 public interface ComponentMouseButtonListener {
     /**
-     * Adapts the <tt>ComponentMouseButtonListener</tt> interface.
+     * Component mouse button listener adapter.
      *
      * @author tvolkert
      */

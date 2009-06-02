@@ -23,7 +23,7 @@ package pivot.wtk;
  */
 public interface TextAreaCharacterListener {
     /**
-     * Adapts the <tt>TextAreaCharacterListener</tt> interface.
+     * Text area character listener adapter.
      *
      * @author tvolkert
      */

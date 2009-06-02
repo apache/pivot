@@ -26,7 +26,7 @@ import pivot.collections.List;
  */
 public interface TreeViewListener {
     /**
-     * Adapts the <tt>TreeViewListener</tt> interface.
+     * Tree view listener adapter.
      *
      * @author tvolkert
      */

@@ -25,7 +25,7 @@ import java.util.Comparator;
  */
 public interface ListListener<T> {
     /**
-     * Adapts the <tt>ListListener</tt> interface.
+     * List listener adapter.
      *
      * @author tvolkert
      */

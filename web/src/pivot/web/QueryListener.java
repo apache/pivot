@@ -17,19 +17,13 @@
 package pivot.web;
 
 /**
- * Defines event listener methods that pertain to queries. Developers register
- * for such events by adding themselves to a query's list of "query
- * listeners" (see {@link Query#getQueryListeners()}).
- * <p>
- * Note that, like {@link pivot.util.concurrent.TaskListener task listeners},
- * query listeners will be notified on the query's worker thread, not the thread
- * that executed the query.
+ * Query listener interface.
  *
  * @author tvolkert
  */
 public interface QueryListener<V> {
     /**
-     * Adapts the <tt>QueryListener</tt> interface.
+     * Query listener adapter.
      *
      * @author tvolkert
      */

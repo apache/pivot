@@ -23,7 +23,7 @@ package pivot.wtk.media;
  */
 public interface MovieListener {
     /**
-     * Adapts the <tt>MovieListener</tt> interface.
+     * Movie listener adapter.
      *
      * @author tvolkert
      */

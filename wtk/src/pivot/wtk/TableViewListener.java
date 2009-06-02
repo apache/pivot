@@ -25,7 +25,7 @@ import pivot.collections.List;
  */
 public interface TableViewListener {
     /**
-     * Adapts the <tt>TableViewListener</tt> interface.
+     * Table view listener adapter.
      *
      * @author tvolkert
      */

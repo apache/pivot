@@ -23,7 +23,7 @@ package pivot.wtk;
  */
 public interface TableViewRowListener {
     /**
-     * Adapts the <tt>TableViewRowListener</tt> interface.
+     * Table row listener adapter.
      *
      * @author tvolkert
      */

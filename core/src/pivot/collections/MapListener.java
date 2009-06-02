@@ -25,7 +25,7 @@ import java.util.Comparator;
  */
 public interface MapListener<K, V> {
     /**
-     * Adapts the <tt>MapListener</tt> interface.
+     * Map listener adapter.
      *
      * @author tvolkert
      */

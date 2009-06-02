@@ -25,7 +25,7 @@ import pivot.util.Vote;
  */
 public interface SheetStateListener extends SheetCloseListener {
     /**
-     * Adapts the <tt>SheetStateListener</tt> interface.
+     * Sheet state listener adapter.
      *
      * @author tvolkert
      */

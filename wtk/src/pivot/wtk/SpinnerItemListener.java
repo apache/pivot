@@ -23,7 +23,7 @@ package pivot.wtk;
  */
 public interface SpinnerItemListener {
     /**
-     * Adapts the <tt>SpinnerItemListener</tt> interface.
+     * Spinner item listener adapter.
      *
      * @author tvolkert
      */

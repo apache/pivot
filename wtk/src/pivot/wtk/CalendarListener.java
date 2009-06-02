@@ -25,7 +25,7 @@ import java.util.Locale;
  */
 public interface CalendarListener {
     /**
-     * Adapts the <tt>CalendarListener</tt> interface.
+     * Calendar listener adapter.
      *
      * @author tvolkert
      */

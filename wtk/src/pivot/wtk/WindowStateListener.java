@@ -26,7 +26,7 @@ import pivot.util.Vote;
  */
 public interface WindowStateListener {
     /**
-     * Adapts the <tt>WindowStateListener</tt> interface.
+     * Window state listener adapter.
      *
      * @author tvolkert
      */

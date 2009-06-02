@@ -24,7 +24,7 @@ package pivot.wtk;
  */
 public interface ComponentStateListener {
     /**
-     * Adapts the <tt>ComponentStateListener</tt> interface.
+     * Component state listener adapter.
      *
      * @author tvolkert
      */

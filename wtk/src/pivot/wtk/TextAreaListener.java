@@ -25,7 +25,7 @@ import pivot.wtk.text.Document;
  */
 public interface TextAreaListener {
     /**
-     * Adapts the <tt>TextAreaListener</tt> interface.
+     * Text area listener adapter.
      *
      * @author tvolkert
      */

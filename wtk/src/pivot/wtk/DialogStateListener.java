@@ -26,7 +26,7 @@ import pivot.util.Vote;
  */
 public interface DialogStateListener extends DialogCloseListener {
     /**
-     * Adapts the <tt>DialogStateListener</tt> interface.
+     * Dialog state listener adapter.
      *
      * @author tvolkert
      */

@@ -25,7 +25,7 @@ import pivot.wtk.media.Image;
  */
 public interface WindowListener {
     /**
-     * Adapts the <tt>WindowListener</tt> interface.
+     * Window listener adapter.
      *
      * @author tvolkert
      */

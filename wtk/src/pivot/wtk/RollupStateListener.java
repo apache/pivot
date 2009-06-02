@@ -27,7 +27,7 @@ import pivot.util.Vote;
  */
 public interface RollupStateListener {
     /**
-     * Adapts the <tt>RollupStateListener</tt> interface.
+     * Rollup state listener adapter.
      *
      * @author tvolkert
      */

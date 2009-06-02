@@ -26,7 +26,7 @@ import pivot.collections.Sequence.Tree.Path;
  */
 public interface TreeViewSelectionListener {
     /**
-     * Adapts the <tt>TreeViewSelectionListener</tt> interface.
+     * Tree view selection listener adapter.
      *
      * @author tvolkert
      */

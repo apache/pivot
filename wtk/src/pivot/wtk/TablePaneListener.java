@@ -25,7 +25,7 @@ import pivot.collections.Sequence;
  */
 public interface TablePaneListener {
     /**
-     * Adapts the <tt>TablePaneListener</tt> interface.
+     * Table pane listener adapter.
      *
      * @author tvolkert
      */

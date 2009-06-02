@@ -25,7 +25,7 @@ import pivot.collections.List;
  */
 public interface SpinnerListener {
     /**
-     * Adapts the <tt>SpinnerListener</tt> interface.
+     * Spinner listener adapter.
      *
      * @author tvolkert
      */

@@ -19,13 +19,13 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 
 /**
- * List view selection detail listener interface.
+ * List view selection listener interface.
  *
  * @author gbrown
  */
 public interface ListViewSelectionListener {
     /**
-     * Adapts the <tt>ListViewSelectionListener</tt> interface.
+     * List view selection listener adapter.
      *
      * @author tvolkert
      */

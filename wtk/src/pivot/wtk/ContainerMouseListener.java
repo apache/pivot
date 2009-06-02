@@ -24,7 +24,7 @@ package pivot.wtk;
  */
 public interface ContainerMouseListener {
     /**
-     * Adapts the <tt>ContainerMouseListener</tt> interface.
+     * Container mouse listener adapter.
      *
      * @author tvolkert
      */

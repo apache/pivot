@@ -24,7 +24,7 @@ package pivot.wtk;
  */
 public interface ListViewItemStateListener {
     /**
-     * Adapts the <tt>ListViewItemStateListener</tt> interface.
+     * List view item state listener adapter.
      *
      * @author tvolkert
      */

@@ -23,7 +23,7 @@ package pivot.wtk;
  */
 public interface ViewportListener {
     /**
-     * Adapts the <tt>ViewportListener</tt> interface.
+     * Viewport listener adapter.
      *
      * @author tvolkert
      */

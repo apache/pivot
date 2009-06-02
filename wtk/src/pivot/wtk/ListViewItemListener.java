@@ -23,7 +23,7 @@ package pivot.wtk;
  */
 public interface ListViewItemListener {
     /**
-     * Adapts the <tt>ListViewItemListener</tt> interface.
+     * List view item listener adapter.
      *
      * @author tvolkert
      */

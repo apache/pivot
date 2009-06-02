@@ -25,7 +25,7 @@ import pivot.util.Vote;
  */
 public interface ExpanderListener {
     /**
-     * Adapts the <tt>ExpanderListener</tt> interface.
+     * Expander listener adapter.
      *
      * @author tvolkert
      */

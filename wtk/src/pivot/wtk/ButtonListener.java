@@ -23,7 +23,7 @@ package pivot.wtk;
  */
 public interface ButtonListener {
     /**
-     * Adapts the <tt>ButtonListener</tt> interface.
+     * Button listener adapter.
      *
      * @author tvolkert
      */

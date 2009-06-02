@@ -19,13 +19,13 @@ package pivot.wtk;
 import pivot.collections.Sequence;
 
 /**
- * Table view selection detail listener interface.
+ * Table view selection listener interface.
  *
  * @author gbrown
  */
 public interface TableViewSelectionListener {
     /**
-     * Adapts the <tt>TableViewSelectionListener</tt> interface.
+     * Table view selection listener adapter.
      *
      * @author tvolkert
      */

@@ -25,7 +25,7 @@ import pivot.util.Vote;
  */
 public interface AccordionSelectionListener {
     /**
-     * Adapts the <tt>AccordionSelectionListener</tt> interface.
+     * Accordion selection listener adapter.
      *
      * @author tvolkert
      */

@@ -26,7 +26,7 @@ import pivot.wtk.text.validation.Validator;
  */
 public interface TextInputListener {
     /**
-     * Adapts the <tt>TextInputListener</tt> interface.
+     * Text input listener adapter.
      *
      * @author tvolkert
      */

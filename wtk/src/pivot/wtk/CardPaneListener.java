@@ -25,7 +25,7 @@ import pivot.util.Vote;
  */
 public interface CardPaneListener {
     /**
-     * Adapts the <tt>CardPaneListener</tt> interface.
+     * Card pane listener adapter.
      *
      * @author tvolkert
      */

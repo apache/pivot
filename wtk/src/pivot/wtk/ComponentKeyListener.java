@@ -23,7 +23,7 @@ package pivot.wtk;
  */
 public interface ComponentKeyListener {
     /**
-     * Adapts the <tt>ComponentKeyListener</tt> interface.
+     * Component key listener adapter.
      *
      * @author tvolkert
      */

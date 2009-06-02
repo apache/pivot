@@ -25,7 +25,7 @@ import java.util.Comparator;
  */
 public interface SetListener<E> {
     /**
-     * Adapts the <tt>SetListener</tt> interface.
+     * Set listener adapter.
      *
      * @author tvolkert
      */

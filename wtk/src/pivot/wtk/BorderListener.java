@@ -24,7 +24,7 @@ package pivot.wtk;
  */
 public interface BorderListener {
     /**
-     * Adapts the <tt>BorderListener</tt> interface.
+     * Border listener adapter.
      *
      * @author tvolkert
      */

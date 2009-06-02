@@ -25,7 +25,7 @@ import pivot.util.Vote;
  */
 public interface TabPaneSelectionListener {
     /**
-     * Adapts the <tt>TabPaneSelectionListener</tt> interface.
+     * Tab pane selection listener adapter.
      *
      * @author tvolkert
      */

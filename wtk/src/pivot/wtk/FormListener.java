@@ -25,7 +25,7 @@ import pivot.collections.Sequence;
  */
 public interface FormListener {
     /**
-     * Adapts the <tt>FormListener</tt> interface.
+     * Form listener adapter.
      *
      * @author tvolkert
      */
