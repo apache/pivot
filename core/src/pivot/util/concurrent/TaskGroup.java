@@ -24,24 +24,22 @@ import pivot.util.ImmutableIterator;
 
 /**
  * Class that runs a group of tasks in parallel and notifies listeners
- * when all tasks are complete. Callers can retrieve task results or faults by
- * calling {@link Task#getResult()} and {@link Task#getFault()},
- * respectively.
+ * when all tasks are complete.
  *
  * @author tvolkert
  * @author gbrown
  */
-public class TaskGroup<V> extends Task<Void>
-    implements Group<Task<V>>, Iterable<Task<V>> {
-    private class TaskHandler implements TaskListener<V> {
-        public void taskExecuted(Task<V> task) {
+public class TaskGroup extends Task<Void>
+    implements Group<Task<?>>, Iterable<Task<?>> {
+    private class TaskHandler implements TaskListener<Object> {
+        public void taskExecuted(Task<Object> task) {
             synchronized (TaskGroup.this) {
                 tasks.put(task, Boolean.TRUE);
                 TaskGroup.this.notify();
             }
         }
 
-        public void executeFailed(Task<V> task) {
+        public void executeFailed(Task<Object> task) {
             synchronized (TaskGroup.this) {
                 tasks.put(task, Boolean.TRUE);
                 TaskGroup.this.notify();
@@ -49,7 +47,7 @@ public class TaskGroup<V> extends Task<Void>
         }
     }
 
-    private HashMap<Task<V>, Boolean> tasks = new HashMap<Task<V>, Boolean>();
+    private HashMap<Task<?>, Boolean> tasks = new HashMap<Task<?>, Boolean>();
     private boolean executing = false;
 
     public TaskGroup() {
@@ -61,15 +59,16 @@ public class TaskGroup<V> extends Task<Void>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public synchronized Void execute() throws TaskExecutionException {
         executing = true;
 
         try {
             TaskHandler taskHandler = new TaskHandler();
 
-            for (Task<V> task : tasks) {
+            for (Task<?> task : tasks) {
                 tasks.put(task, Boolean.FALSE);
-                task.execute(taskHandler);
+                ((Task<Object>)task).execute(taskHandler);
             }
 
             boolean complete = false;
@@ -77,12 +76,12 @@ public class TaskGroup<V> extends Task<Void>
             while (!complete) {
                 try {
                     wait();
-                } catch (InterruptedException ex) {
-                    throw new TaskExecutionException(ex);
+                } catch (InterruptedException exception) {
+                    throw new TaskExecutionException(exception);
                 }
 
                 complete = true;
-                for (Task<V> task : tasks) {
+                for (Task<?> task : tasks) {
                     if (!tasks.get(task)) {
                         complete = false;
                         break;
@@ -96,31 +95,34 @@ public class TaskGroup<V> extends Task<Void>
         return null;
     }
 
-    public synchronized void add(Task<V> element) {
+    @SuppressWarnings("unchecked")
+    public synchronized void add(Task<?> element) {
         if (executing) {
             throw new IllegalStateException("Task group is executing.");
         }
 
-        tasks.put(element, Boolean.FALSE);
+        tasks.put((Task<Object>)element, Boolean.FALSE);
     }
 
-    public synchronized void remove(Task<V> element) {
+    @SuppressWarnings("unchecked")
+    public synchronized void remove(Task<?> element) {
         if (executing) {
             throw new IllegalStateException("Task group is executing.");
         }
 
-        tasks.remove(element);
+        tasks.remove((Task<Object>)element);
     }
 
-    public boolean contains(Task<V> element) {
-        return tasks.containsKey(element);
+    @SuppressWarnings("unchecked")
+    public boolean contains(Task<?> element) {
+        return tasks.containsKey((Task<Object>)element);
     }
 
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
 
-    public Iterator<Task<V>> iterator() {
-        return new ImmutableIterator<Task<V>>(tasks.iterator());
+    public Iterator<Task<?>> iterator() {
+        return new ImmutableIterator<Task<?>>(tasks.iterator());
     }
 }

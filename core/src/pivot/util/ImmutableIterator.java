@@ -24,9 +24,9 @@ import java.util.Iterator;
  * @author gbrown
  */
 public class ImmutableIterator<T> implements Iterator<T> {
-    Iterator<T> iterator;
+    Iterator<? extends T> iterator;
 
-    public ImmutableIterator(Iterator<T> iterator) {
+    public ImmutableIterator(Iterator<? extends T> iterator) {
         if (iterator == null) {
             throw new IllegalArgumentException("iterator is null.");
         }

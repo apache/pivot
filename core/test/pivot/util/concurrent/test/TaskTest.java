@@ -16,6 +16,8 @@
  */
 package pivot.util.concurrent.test;
 
+import org.junit.Test;
+
 import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskGroup;
 import pivot.util.concurrent.TaskListener;
@@ -50,7 +52,8 @@ public class TaskTest {
         }
     }
 
-    public static void main(String[] args) {
+    @Test
+    public void testTaskSequence() {
         TaskListener<Void> taskListener = new TaskListener<Void>() {
             public synchronized void taskExecuted(Task<Void> task) {
                 System.out.println("EXECUTED");
@@ -63,14 +66,7 @@ public class TaskTest {
             }
         };
 
-        testTaskSequence(taskListener);
-        testTaskGroup(taskListener);
-    }
-
-    private static void testTaskSequence(TaskListener<Void> taskListener) {
-        System.out.println("Testing task sequence");
-
-        TaskSequence<Void> taskSequence = new TaskSequence<Void>();
+        TaskSequence taskSequence = new TaskSequence();
 
         SleepTask task1 = new SleepTask(2000);
         taskSequence.add(task1);
@@ -91,10 +87,21 @@ public class TaskTest {
         }
     }
 
-    private static void testTaskGroup(TaskListener<Void> taskListener) {
-        System.out.println("Testing task group");
+    @Test
+    public void testTaskGroup() {
+        TaskListener<Void> taskListener = new TaskListener<Void>() {
+            public synchronized void taskExecuted(Task<Void> task) {
+                System.out.println("EXECUTED");
+                notify();
+            }
 
-        TaskGroup<Void> taskGroup = new TaskGroup<Void>();
+            public synchronized void executeFailed(Task<Void> task) {
+                System.out.println("FAILED: " + task.getFault());
+                notify();
+            }
+        };
+
+        TaskGroup taskGroup = new TaskGroup();
 
         SleepTask task1 = new SleepTask(2000);
         taskGroup.add(task1);

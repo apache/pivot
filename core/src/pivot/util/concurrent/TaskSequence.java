@@ -30,9 +30,9 @@ import pivot.util.ImmutableIterator;
  *
  * @author gbrown
  */
-public class TaskSequence<V> extends Task<Void>
-    implements Sequence<Task<V>>, Iterable<Task<V>> {
-    private ArrayList<Task<V>> tasks = new ArrayList<Task<V>>();
+public class TaskSequence extends Task<Void>
+    implements Sequence<Task<?>>, Iterable<Task<?>> {
+    private ArrayList<Task<?>> tasks = new ArrayList<Task<?>>();
     private int activeTaskIndex = -1;
 
     public TaskSequence() {
@@ -44,15 +44,16 @@ public class TaskSequence<V> extends Task<Void>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public synchronized Void execute() throws TaskExecutionException {
-        TaskListener<V> taskListener = new TaskListener<V>() {
-            public void taskExecuted(Task<V> task) {
+        TaskListener<Object> taskListener = new TaskListener<Object>() {
+            public void taskExecuted(Task<Object> task) {
                 synchronized (TaskSequence.this) {
                     TaskSequence.this.notify();
                 }
             }
 
-            public void executeFailed(Task<V> task) {
+            public void executeFailed(Task<Object> task) {
                 synchronized (TaskSequence.this) {
                     TaskSequence.this.notify();
                 }
@@ -62,7 +63,7 @@ public class TaskSequence<V> extends Task<Void>
         activeTaskIndex = 0;
 
         while (activeTaskIndex < tasks.getLength()) {
-            Task<V> activeTask = tasks.get(activeTaskIndex);
+            Task<Object> activeTask = (Task<Object>)tasks.get(activeTaskIndex);
             activeTask.execute(taskListener);
 
             try {
@@ -79,14 +80,14 @@ public class TaskSequence<V> extends Task<Void>
         return null;
     }
 
-    public int add(Task<V> task) {
+    public int add(Task<?> task) {
         int index = tasks.getLength();
         insert(task, index);
 
         return index;
     }
 
-    public synchronized void insert(Task<V> task, int index) {
+    public synchronized void insert(Task<?> task, int index) {
         if (activeTaskIndex != -1) {
             throw new IllegalStateException();
         }
@@ -94,7 +95,7 @@ public class TaskSequence<V> extends Task<Void>
         tasks.insert(task, index);
     }
 
-    public synchronized Task<V> update(int index, Task<V> task) {
+    public synchronized Task<?> update(int index, Task<?> task) {
         if (activeTaskIndex != -1) {
             throw new IllegalStateException();
         }
@@ -102,7 +103,7 @@ public class TaskSequence<V> extends Task<Void>
         return tasks.update(index, task);
     }
 
-    public int remove(Task<V> task) {
+    public int remove(Task<?> task) {
         int index = tasks.indexOf(task);
         if (index != -1) {
             tasks.remove(index, 1);
@@ -111,7 +112,7 @@ public class TaskSequence<V> extends Task<Void>
         return index;
     }
 
-    public synchronized Sequence<Task<V>> remove(int index, int count) {
+    public synchronized Sequence<Task<?>> remove(int index, int count) {
         if (activeTaskIndex != -1) {
             throw new IllegalStateException();
         }
@@ -119,12 +120,11 @@ public class TaskSequence<V> extends Task<Void>
         return tasks.remove(index, count);
     }
 
-    public Task<V> get(int index) {
+    public Task<?> get(int index) {
         return tasks.get(index);
     }
 
-
-    public int indexOf(Task<V> task) {
+    public int indexOf(Task<?> task) {
         return tasks.indexOf(task);
     }
 
@@ -132,7 +132,7 @@ public class TaskSequence<V> extends Task<Void>
         return tasks.getLength();
     }
 
-    public Iterator<Task<V>> iterator() {
-        return new ImmutableIterator<Task<V>>(tasks.iterator());
+    public Iterator<Task<?>> iterator() {
+        return new ImmutableIterator<Task<?>>(tasks.iterator());
     }
 }

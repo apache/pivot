@@ -16,12 +16,15 @@
  */
 package pivot.web.test;
 
-import java.net.URL;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 import pivot.collections.Dictionary;
 import pivot.serialization.BinarySerializer;
 import pivot.serialization.JSONSerializer;
 import pivot.util.concurrent.Task;
+import pivot.util.concurrent.TaskGroup;
 import pivot.util.concurrent.TaskListener;
 import pivot.web.BasicAuthentication;
 import pivot.web.GetQuery;
@@ -38,8 +41,11 @@ public class WebQueryTestClient {
     final static int PORT = 8080;
     final static boolean SECURE = false;
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void basicTest() {
         final BasicAuthentication authentication = new BasicAuthentication("foo", "bar");
+
+        TaskGroup queryGroup = new TaskGroup();
 
         // GET
         final GetQuery getQuery = new GetQuery(HOSTNAME, PORT, PATH, SECURE);
@@ -48,11 +54,28 @@ public class WebQueryTestClient {
         getQuery.getRequestHeaders().add("bar", "hello");
         getQuery.getRequestHeaders().add("bar", "world");
         authentication.authenticate(getQuery);
+        queryGroup.add(getQuery);
 
-        getQuery.execute(new TaskListener<Object>() {
+        // POST
+        final PostQuery postQuery = new PostQuery(HOSTNAME, PORT, PATH, SECURE);
+        authentication.authenticate(postQuery);
+        postQuery.setValue(JSONSerializer.parseList("[1, 2, 3]"));
+        queryGroup.add(postQuery);
+
+        // PUT
+        final PutQuery putQuery = new PutQuery(HOSTNAME, PORT, PATH, SECURE);
+        authentication.authenticate(putQuery);
+        putQuery.setValue(JSONSerializer.parseMap("{a:100, b:200, c:300}"));
+        queryGroup.add(putQuery);
+
+        // POST
+        final DeleteQuery deleteQuery = new DeleteQuery(HOSTNAME, PORT, PATH, SECURE);
+        authentication.authenticate(deleteQuery);
+        queryGroup.add(deleteQuery);
+
+        queryGroup.execute(new TaskListener<Void>() {
             @SuppressWarnings("unchecked")
-            public void taskExecuted(Task<Object> task) {
-                GetQuery getQuery = (GetQuery)task;
+            public synchronized void taskExecuted(Task<Void> task) {
                 Dictionary<String, Object> result = (Dictionary<String, Object>)getQuery.getResult();
 
                 System.out.println("GET result: "
@@ -71,58 +94,33 @@ public class WebQueryTestClient {
 
                     System.out.print("\n");
                 }
-            }
+                System.out.println("GET fault: " + getQuery.getFault());
 
-            public void executeFailed(Task<Object> task) {
-                System.out.println("GET fault: " + task.getFault());
-            }
-        });
-
-        // POST
-        PostQuery postQuery = new PostQuery(HOSTNAME, PORT, PATH, SECURE);
-        authentication.authenticate(postQuery);
-        postQuery.setValue(JSONSerializer.parseList("[1, 2, 3]"));
-
-        postQuery.execute(new TaskListener<URL>() {
-            public void taskExecuted(Task<URL> task) {
                 System.out.println("POST result: " + task.getResult());
+                System.out.println("POST fault: " + postQuery.getFault());
+
+                System.out.println("PUT fault: " + putQuery.getFault());
+                System.out.println("DELETE fault: " + deleteQuery.getFault());
             }
 
-            public void executeFailed(Task<URL> task) {
-                System.out.println("POST fault: " + task.getFault());
-            }
-        });
-
-        // PUT
-        PutQuery putQuery = new PutQuery(HOSTNAME, PORT, PATH, SECURE);
-        authentication.authenticate(putQuery);
-        putQuery.setValue(JSONSerializer.parseMap("{a:100, b:200, c:300}"));
-
-        putQuery.execute(new TaskListener<Void>() {
-            public void taskExecuted(Task<Void> task) {
-                System.out.println("PUT result");
-            }
-
-            public void executeFailed(Task<Void> task) {
-                System.out.println("PUT fault: " + task.getFault());
+            public synchronized void executeFailed(Task<Void> task) {
+                // No-op; task groups don't fail
             }
         });
 
-        // POST
-        DeleteQuery deleteQuery = new DeleteQuery(HOSTNAME, PORT, PATH, SECURE);
-        authentication.authenticate(deleteQuery);
-
-        deleteQuery.execute(new TaskListener<Void>() {
-            public void taskExecuted(Task<Void> task) {
-                System.out.println("DELETE result");
+        synchronized(queryGroup) {
+            if (queryGroup.isPending()) {
+                try {
+                    queryGroup.wait(10000);
+                } catch(InterruptedException exception) {
+                    throw new RuntimeException(exception);
+                }
             }
+        }
 
-            public void executeFailed(Task<Void> task) {
-                System.out.println("DELETE fault: " + task.getFault());
-            }
-        });
-
-        // HACK - wait for all requests to complete
-        Thread.sleep(3000);
+        assertTrue(getQuery.getFault() == null
+            && postQuery.getFault() == null
+            && putQuery.getFault() == null
+            && deleteQuery.getFault() == null);
     }
 }
