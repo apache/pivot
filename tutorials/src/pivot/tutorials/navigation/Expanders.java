@@ -20,15 +20,33 @@ import pivot.collections.Dictionary;
 import pivot.wtk.Application;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
+import pivot.wtk.Expander;
+import pivot.wtk.ExpanderListener;
 import pivot.wtk.Window;
 import pivot.wtkx.Bindable;
 
 public class Expanders extends Bindable implements Application {
     @Load(resourceName="expanders.wtkx") private Window window;
+    @Bind(fieldName="window") private Expander stocksExpander;
+    @Bind(fieldName="window") private Expander weatherExpander;
+    @Bind(fieldName="window") private Expander calendarExpander;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
         bind();
+
+        ExpanderListener expanderListener = new ExpanderListener.Adapter() {
+            public void expandedChanged(Expander expander) {
+                if (expander.isExpanded()) {
+                    expander.scrollAreaToVisible(0, 0, expander.getWidth(), expander.getHeight());
+                }
+            }
+        };
+
+        stocksExpander.getExpanderListeners().add(expanderListener);
+        weatherExpander.getExpanderListeners().add(expanderListener);
+        calendarExpander.getExpanderListeners().add(expanderListener);
+
         window.open(display);
     }
 

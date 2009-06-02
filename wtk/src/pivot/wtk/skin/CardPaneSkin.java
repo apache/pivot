@@ -438,8 +438,15 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
         if (reason == Vote.DENY
             && selectionChangeTransition != null) {
+            // NOTE We stop, rather than end, the transition so the completion
+            // event isn't fired; if the event fires, the listener will set
+            // the selection state
             selectionChangeTransition.stop();
             selectionChangeTransition = null;
+
+            if (sizeToSelection) {
+                invalidateComponent();
+            }
         }
     }
 

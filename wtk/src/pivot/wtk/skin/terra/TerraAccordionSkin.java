@@ -725,6 +725,9 @@ public class TerraAccordionSkin extends ContainerSkin
     public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
         if (reason == Vote.DENY
             && selectionChangeTransition != null) {
+            // NOTE We stop, rather than end, the transition so the completion
+            // event isn't fired; if the event fires, the listener will set
+            // the selection state
             selectionChangeTransition.stop();
             selectionChangeTransition = null;
             invalidateComponent();
