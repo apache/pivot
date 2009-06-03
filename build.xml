@@ -106,6 +106,7 @@ limitations under the License.
                 <fileset dir="charts/lib" includes="**/*.jar"/>
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
                 <fileset dir="web/lib" includes="**/*.jar"/>
+                <path refid="classpath.javalib"/>
             </classpath>
 
             <packageset dir="charts/src" includes="**/*"/>
