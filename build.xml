@@ -544,7 +544,7 @@ limitations under the License.
     </target>
 
     <!-- Demos -->
-    <target name="demos">
+    <target name="demos" depends="core, wtk, web">
         <mkdir dir="demos/${folder.bin}"/>
         <javac srcdir="demos/src"
             destDir="demos/${folder.bin}"
@@ -563,7 +563,7 @@ limitations under the License.
         </javac>
     </target>
 
-    <target name="demos-package" depends="build">
+    <target name="demos-package" depends="demos">
         <mkdir dir="${folder.lib}"/>
         <jar destfile="${folder.lib}/${ant.project.name}-demos.jar" index="${compiler.indexJars}">
             <fileset dir="demos/${folder.bin}"/>
