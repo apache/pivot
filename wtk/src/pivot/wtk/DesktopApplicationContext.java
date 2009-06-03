@@ -313,7 +313,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         fullScreenHostFrame = new HostFrame();
         fullScreenHostFrame.setUndecorated(true);
 
-        // Hook into OSX application menu
+        // Hook into OS X application menu
         if (System.getProperty("mrj.version") != null) {
             try {
                 // Get the EAWT classes and methods

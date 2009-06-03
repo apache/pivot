@@ -24,8 +24,6 @@ import pivot.wtk.media.Image;
 
 /**
  * Component that displays an image.
- * <p>
- * TODO Load images asynchronously in setImage()?
  *
  * @author gbrown
  */
@@ -93,11 +91,12 @@ public class ImageView extends Component {
      * @param image
      * The location of the image to set.
      */
-    public void setImage(URL image) {
+    public final void setImage(URL image) {
         if (image == null) {
             throw new IllegalArgumentException("image is null.");
         }
 
+        // TODO Support asynchronous loading?
         setImage(Image.load(image));
     }
 
@@ -107,7 +106,7 @@ public class ImageView extends Component {
      * @param image
      * The resource name of the image to set.
      */
-    public void setImage(String image) {
+    public final void setImage(String image) {
         if (image == null) {
             throw new IllegalArgumentException("image is null.");
         }

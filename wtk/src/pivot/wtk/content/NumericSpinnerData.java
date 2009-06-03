@@ -133,7 +133,6 @@ public class NumericSpinnerData implements List<Integer> {
 
     public void setLowerBound(int lowerBound) {
         this.lowerBound = lowerBound;
-        // TODO Notify listListeners of change
     }
 
     public int getUpperBound() {
@@ -142,7 +141,6 @@ public class NumericSpinnerData implements List<Integer> {
 
     public void setUpperBound(int upperBound) {
         this.upperBound = upperBound;
-        // TODO Notify listListeners of change
     }
 
     public int getIncrement() {
@@ -151,7 +149,6 @@ public class NumericSpinnerData implements List<Integer> {
 
     public void setIncrement(int increment) {
         this.increment = increment;
-        // TODO Notify listListeners of change
     }
 
     public int add(Integer item) {

@@ -119,10 +119,6 @@ public abstract class Container extends Component
         }
     }
 
-    // TODO A linked list may be more efficient than an array list; it would
-    // certainly optimize moveToTop() and moveToBottom() in Window, since
-    // an array list will need to perform a lot of copying as owned windows
-    // are removed from the list and appended to the end
     private ArrayList<Component> components = new ArrayList<Component>();
 
     private FocusTraversalPolicy focusTraversalPolicy = null;

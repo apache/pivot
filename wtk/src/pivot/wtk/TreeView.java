@@ -1649,7 +1649,7 @@ public class TreeView extends Component {
                 List<?> parentBranchData = parent.getBranchData();
                 Object childData = parentBranchData.get(index);
 
-                if (!(childData instanceof List)) {
+                if (!(childData instanceof List<?>)) {
                     throw new IllegalArgumentException
                         ("Unexpected leaf in branch path: " + path);
                 }

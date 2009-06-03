@@ -38,8 +38,8 @@ import pivot.wtk.media.ImageListener;
  * <p>
  * TODO Add rotation style.
  * <p>
- * TODO If horizontal or vertical alignment is specified, but not both, scale
- * aspect-correct in that dimension.
+ * TODO If horizontal or vertical alignment is "justify", but not both, scale
+ * aspect-correct.
  *
  * @author gbrown
  */

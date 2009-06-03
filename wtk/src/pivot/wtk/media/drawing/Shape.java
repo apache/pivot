@@ -34,8 +34,7 @@ import pivot.wtk.Point;
 /**
  * Abstract base class for shapes.
  * <p>
- * TODO Add a lineStyle property (solid, dashed, dotted, etc.)? Or support a
- * strokeDashArray property?
+ * TODO Add a strokeDashArray property.
  *
  * @author gbrown
  */

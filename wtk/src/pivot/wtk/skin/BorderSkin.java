@@ -40,6 +40,9 @@ import pivot.wtk.Theme;
 
 /**
  * Border skin.
+ * <p>
+ * TODO Add styles to support different border styles (e.g. inset, outset) or
+ * create subclasses for these border types.
  *
  * @author gbrown
  */

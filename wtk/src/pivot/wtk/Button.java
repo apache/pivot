@@ -22,12 +22,12 @@ import pivot.util.ListenerList;
 
 /**
  * Abstract base class for button components.
- *
+ * <p>
  * TODO Ensure that button group names are unique across applications?
  * Applets downloaded from different domains won't clash, but multiple instances
  * of the same application from the same domain would. Put the groups in the
  * application context?
- *
+ * <p>
  * TODO Allow callers to remove a button group (possibly by exposing group
  * dictionary interface).
  *

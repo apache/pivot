@@ -100,7 +100,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         public static NodeInfo createNew(BranchInfo parent, Object data) {
             NodeInfo nodeInfo = null;
 
-            if (data instanceof List) {
+            if (data instanceof List<?>) {
                 nodeInfo = new BranchInfo(parent, (List<Object>)data);
             } else {
                 nodeInfo = new NodeInfo(parent, data);

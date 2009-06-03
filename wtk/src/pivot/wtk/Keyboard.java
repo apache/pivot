@@ -296,9 +296,9 @@ public final class Keyboard {
      * or <tt>null</tt> if no modifiers are pressed.
      */
     public static DropAction getDropAction() {
-        // TODO Return an appropriate action for OS
+        // TODO Return an appropriate action for OS:
         // Windows: no modifier - move; control - copy; control-shift - link
-        // Mac OSX: no modifier - move; option - copy; option-command - link
+        // Mac OS X: no modifier - move; option - copy; option-command - link
 
         DropAction dropAction = null;
 

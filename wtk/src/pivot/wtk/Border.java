@@ -21,9 +21,6 @@ import pivot.util.ListenerList;
 
 /**
  * Container that displays a border.
- * <p>
- * TODO Add styles to support different border styles (e.g. inset, outset) or
- * create subclasses for these border types.
  *
  * @author gbrown
  */
