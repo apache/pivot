@@ -107,24 +107,13 @@ limitations under the License.
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
                 <fileset dir="web/lib" includes="**/*.jar"/>
             </classpath>
+
             <packageset dir="charts/src" includes="**/*"/>
             <packageset dir="core/src" includes="**/*"/>
             <packageset dir="web/src" includes="**/*"/>
             <packageset dir="wtk/src" includes="**/*"/>
-            <header>
-              <![CDATA[
-                 <script type="text/javascript">
-                   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-                   document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-                 </script>
-                 <script type="text/javascript">
-                   try {
-                     var pageTracker = _gat._getTracker("UA-7977275-1");
-                     pageTracker._trackPageview();
-                   } catch(err) {}
-                 </script>
-              ]]>
-            </header>
+
+            <link href="http://java.sun.com/javase/6/docs/api"/>
         </javadoc>
     </target>
 
@@ -544,7 +533,7 @@ limitations under the License.
     </target>
 
     <!-- Demos -->
-    <target name="demos">
+    <target name="demos" depends="core, wtk, web">
         <mkdir dir="demos/${folder.bin}"/>
         <javac srcdir="demos/src"
             destDir="demos/${folder.bin}"
@@ -563,7 +552,7 @@ limitations under the License.
         </javac>
     </target>
 
-    <target name="demos-package" depends="build">
+    <target name="demos-package" depends="demos">
         <mkdir dir="${folder.lib}"/>
         <jar destfile="${folder.lib}/${ant.project.name}-demos.jar" index="${compiler.indexJars}">
             <fileset dir="demos/${folder.bin}"/>
