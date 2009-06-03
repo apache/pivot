@@ -114,21 +114,6 @@ limitations under the License.
             <packageset dir="wtk/src" includes="**/*"/>
 
             <link href="http://java.sun.com/javase/6/docs/api"/>
-
-            <header>
-              <![CDATA[
-                 <script type="text/javascript">
-                   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-                   document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-                 </script>
-                 <script type="text/javascript">
-                   try {
-                     var pageTracker = _gat._getTracker("UA-7977275-1");
-                     pageTracker._trackPageview();
-                   } catch(err) {}
-                 </script>
-              ]]>
-            </header>
         </javadoc>
     </target>
 
