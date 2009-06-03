@@ -107,10 +107,14 @@ limitations under the License.
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
                 <fileset dir="web/lib" includes="**/*.jar"/>
             </classpath>
+
             <packageset dir="charts/src" includes="**/*"/>
             <packageset dir="core/src" includes="**/*"/>
             <packageset dir="web/src" includes="**/*"/>
             <packageset dir="wtk/src" includes="**/*"/>
+
+            <link href="http://java.sun.com/javase/6/docs/api"/>
+
             <header>
               <![CDATA[
                  <script type="text/javascript">
