@@ -67,15 +67,17 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            // Scale/translate to fit
+            // Translate/scale to fit
             if (width > height) {
-                final float scale = (float)height / 128f;
+                graphics.translate((width - height) / 2, 0);
+
+                float scale = (float)height / 128f;
                 graphics.scale(scale, scale);
-                graphics.translate(width - height, 0);
             } else {
-                final float scale = (float)width / 128f;
+                graphics.translate(0, (height - width) / 2);
+
+                float scale = (float)width / 128f;
                 graphics.scale(scale, scale);
-                graphics.translate(0, height - width);
             }
 
             graphics.translate(64, 64);

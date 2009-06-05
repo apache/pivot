@@ -73,11 +73,7 @@ public class FileDropTargetDemo extends Bindable implements Application {
             }
         });
 
-        fileTableView.getComponentKeyListeners().add(new ComponentKeyListener() {
-            public boolean keyTyped(Component component, char character) {
-                return false;
-            }
-
+        fileTableView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.DELETE
                     || keyCode == Keyboard.KeyCode.BACKSPACE) {
@@ -91,10 +87,6 @@ public class FileDropTargetDemo extends Bindable implements Application {
                     }
                 }
 
-                return false;
-            }
-
-            public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 return false;
             }
         });
