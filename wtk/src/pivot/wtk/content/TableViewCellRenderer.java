@@ -68,30 +68,24 @@ public class TableViewCellRenderer extends Label
         Component.StyleDictionary tableViewStyles = tableView.getStyles();
         Component.StyleDictionary styles = getStyles();
 
-        Object font = tableViewStyles.get("font");
+        Font font = (Font)tableViewStyles.get("font");
+        styles.put("font", font);
 
-        if (font instanceof Font) {
-            styles.put("font", font);
-        }
-
-        Object color = null;
-
+        Color color;
         if (tableView.isEnabled() && !rowDisabled) {
             if (rowSelected) {
                 if (tableView.isFocused()) {
-                    color = tableViewStyles.get("selectionColor");
+                    color = (Color)tableViewStyles.get("selectionColor");
                 } else {
-                    color = tableViewStyles.get("inactiveSelectionColor");
+                    color = (Color)tableViewStyles.get("inactiveSelectionColor");
                 }
             } else {
-                color = tableViewStyles.get("color");
+                color = (Color)tableViewStyles.get("color");
             }
         } else {
-            color = tableViewStyles.get("disabledColor");
+            color = (Color)tableViewStyles.get("disabledColor");
         }
 
-        if (color instanceof Color) {
-            styles.put("color", color);
-        }
+        styles.put("color", color);
     }
 }

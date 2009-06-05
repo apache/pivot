@@ -86,31 +86,28 @@ public class MenuBarItemDataRenderer extends FlowPane implements Button.DataRend
         }
 
         // Update the label
+        label.setText(text);
+
         if (text == null) {
             label.setDisplayable(false);
         } else {
             label.setDisplayable(true);
-            Object font = menuBar.getStyles().get("font");
-            if (font instanceof Font) {
-                label.getStyles().put("font", font);
-            }
 
-            Object color;
+            Font font = (Font)menuBar.getStyles().get("font");
+            label.getStyles().put("font", font);
+
+            Color color;
             if (button.isEnabled()) {
                 if (highlighted) {
-                    color = menuBar.getStyles().get("highlightColor");
+                    color = (Color)menuBar.getStyles().get("highlightColor");
                 } else {
-                    color = menuBar.getStyles().get("color");
+                    color = (Color)menuBar.getStyles().get("color");
                 }
             } else {
-                color = menuBar.getStyles().get("disabledColor");
+                color = (Color)menuBar.getStyles().get("disabledColor");
             }
 
-            if (color instanceof Color) {
-                label.getStyles().put("color", color);
-            }
-
-            label.setText(text);
+            label.getStyles().put("color", color);
         }
     }
 }

@@ -43,22 +43,16 @@ public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
     }
 
     protected void renderStyles(Spinner spinner) {
-        Object font = spinner.getStyles().get("font");
+        Font font = (Font)spinner.getStyles().get("font");
+        getStyles().put("font", font);
 
-        if (font instanceof Font) {
-            getStyles().put("font", font);
-        }
-
-        Object color = null;
-
+        Color color;
         if (spinner.isEnabled()) {
-            color = spinner.getStyles().get("color");
+            color = (Color)spinner.getStyles().get("color");
         } else {
-            color = spinner.getStyles().get("disabledColor");
+            color = (Color)spinner.getStyles().get("disabledColor");
         }
 
-        if (color instanceof Color) {
-            getStyles().put("color", color);
-        }
+        getStyles().put("color", color);
     }
 }

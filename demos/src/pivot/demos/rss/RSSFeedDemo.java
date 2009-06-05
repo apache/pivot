@@ -136,37 +136,6 @@ public class RSSFeedDemo extends Bindable implements Application {
 
         public void render(Object item, ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled) {
-            // Render styles
-            Font labelFont = (Font)listView.getStyles().get("font");
-            Font largeFont = labelFont.deriveFont(Font.BOLD, 14);
-            titleLabel.getStyles().put("font", largeFont);
-            categoriesLabel.getStyles().put("font", labelFont);
-            submitterLabel.getStyles().put("font", labelFont);
-
-            Color color = null;
-            if (listView.isEnabled() && !disabled) {
-                if (selected) {
-                    if (listView.isFocused()) {
-                        color = (Color)listView.getStyles().get("selectionColor");
-                    } else {
-                        color = (Color)listView.getStyles().get("inactiveSelectionColor");
-                    }
-                } else {
-                    color = (Color)listView.getStyles().get("color");
-                }
-            } else {
-                color = (Color)listView.getStyles().get("disabledColor");
-            }
-
-            if (color instanceof Color) {
-                titleLabel.getStyles().put("color", color);
-                categoriesHeadingLabel.getStyles().put("color", color);
-                categoriesLabel.getStyles().put("color", color);
-                submitterHeadingLabel.getStyles().put("color", color);
-                submitterLabel.getStyles().put("color", color);
-            }
-
-            // Render data
             if (item != null) {
                 Element itemElement = (Element)item;
 
@@ -195,6 +164,35 @@ public class RSSFeedDemo extends Bindable implements Application {
                 } catch(XPathExpressionException exception) {
                     System.err.println(exception);
                 }
+            }
+
+            Font font = (Font)listView.getStyles().get("font");
+            Font largeFont = font.deriveFont(Font.BOLD, 14);
+            titleLabel.getStyles().put("font", largeFont);
+            categoriesLabel.getStyles().put("font", font);
+            submitterLabel.getStyles().put("font", font);
+
+            Color color;
+            if (listView.isEnabled() && !disabled) {
+                if (selected) {
+                    if (listView.isFocused()) {
+                        color = (Color)listView.getStyles().get("selectionColor");
+                    } else {
+                        color = (Color)listView.getStyles().get("inactiveSelectionColor");
+                    }
+                } else {
+                    color = (Color)listView.getStyles().get("color");
+                }
+            } else {
+                color = (Color)listView.getStyles().get("disabledColor");
+            }
+
+            if (color instanceof Color) {
+                titleLabel.getStyles().put("color", color);
+                categoriesHeadingLabel.getStyles().put("color", color);
+                categoriesLabel.getStyles().put("color", color);
+                submitterHeadingLabel.getStyles().put("color", color);
+                submitterLabel.getStyles().put("color", color);
             }
         }
     }

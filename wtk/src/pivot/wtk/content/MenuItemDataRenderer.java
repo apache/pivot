@@ -102,30 +102,25 @@ public class MenuItemDataRenderer extends FlowPane implements Button.DataRendere
         imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
 
         // Update the labels
-        Object font = menu.getStyles().get("font");
-        if (font instanceof Font) {
-            textLabel.getStyles().put("font", font);
-            keyboardShortcutLabel.getStyles().put("font",
-                ((Font)font).deriveFont(Font.ITALIC));
-        }
+        textLabel.setText(text);
 
-        Object color;
+        Font font = (Font)menu.getStyles().get("font");
+        textLabel.getStyles().put("font", font);
+        keyboardShortcutLabel.getStyles().put("font", font.deriveFont(Font.ITALIC));
+
+        Color color;
         if (button.isEnabled()) {
             if (highlighted) {
-                color = menu.getStyles().get("highlightColor");
+                color = (Color)menu.getStyles().get("highlightColor");
             } else {
-                color = menu.getStyles().get("color");
+                color = (Color)menu.getStyles().get("color");
             }
         } else {
-            color = menu.getStyles().get("disabledColor");
+            color = (Color)menu.getStyles().get("disabledColor");
         }
 
-        if (color instanceof Color) {
-            textLabel.getStyles().put("color", color);
-            keyboardShortcutLabel.getStyles().put("color", color);
-        }
-
-        textLabel.setText(text);
+        textLabel.getStyles().put("color", color);
+        keyboardShortcutLabel.getStyles().put("color", color);
 
         boolean showKeyboardShortcuts = false;
         if (menu.getStyles().containsKey("showKeyboardShortcuts")) {

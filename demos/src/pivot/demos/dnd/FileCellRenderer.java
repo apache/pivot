@@ -40,34 +40,6 @@ public class FileCellRenderer extends Label implements TableView.CellRenderer {
 
     public void render(Object value, TableView tableView, TableView.Column column,
         boolean rowSelected, boolean rowHighlighted, boolean rowDisabled) {
-        // Update the styles
-        Object font = tableView.getStyles().get("font");
-
-        if (font instanceof Font) {
-            getStyles().put("font", font);
-        }
-
-        Object color = null;
-
-        if (tableView.isEnabled() && !rowDisabled) {
-            if (rowSelected) {
-                if (tableView.isFocused()) {
-                    color = tableView.getStyles().get("selectionColor");
-                } else {
-                    color = tableView.getStyles().get("inactiveSelectionColor");
-                }
-            } else {
-                color = tableView.getStyles().get("color");
-            }
-        } else {
-            color = tableView.getStyles().get("disabledColor");
-        }
-
-        if (color instanceof Color) {
-            getStyles().put("color", color);
-        }
-
-        // Update the data
         if (value != null) {
             File file = (File)value;
             String columnName = column.getName();
@@ -96,5 +68,25 @@ public class FileCellRenderer extends Label implements TableView.CellRenderer {
 
             setText(text);
         }
+
+        Font font = (Font)tableView.getStyles().get("font");
+        getStyles().put("font", font);
+
+        Color color;
+        if (tableView.isEnabled() && !rowDisabled) {
+            if (rowSelected) {
+                if (tableView.isFocused()) {
+                    color = (Color)tableView.getStyles().get("selectionColor");
+                } else {
+                    color = (Color)tableView.getStyles().get("inactiveSelectionColor");
+                }
+            } else {
+                color = (Color)tableView.getStyles().get("color");
+            }
+        } else {
+            color = (Color)tableView.getStyles().get("disabledColor");
+        }
+
+        getStyles().put("color", color);
     }
 }

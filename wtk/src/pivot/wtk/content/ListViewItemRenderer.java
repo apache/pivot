@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Font;
 
 import pivot.wtk.Bounds;
-import pivot.wtk.Component;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
@@ -94,38 +93,27 @@ public class ListViewItemRenderer extends FlowPane implements ListView.ItemRende
 
     protected void renderStyles(ListView listView, boolean selected,
         boolean highlighted, boolean disabled) {
-        Component.StyleDictionary listViewStyles = listView.getStyles();
+        imageView.getStyles().put("opacity", listView.isEnabled() ? 1.0f : 0.5f);
 
-        Component.StyleDictionary imageViewStyles = imageView.getStyles();
-        Component.StyleDictionary labelStyles = label.getStyles();
+        Font font = (Font)listView.getStyles().get("font");
+        label.getStyles().put("font", font);
 
-        imageViewStyles.put("opacity", listView.isEnabled() ? 1.0f : 0.5f);
-
-        if (label.getText() != null) {
-            Object labelFont = listViewStyles.get("font");
-            if (labelFont instanceof Font) {
-                labelStyles.put("font", labelFont);
-            }
-
-            Object color = null;
-            if (listView.isEnabled() && !disabled) {
-                if (selected) {
-                    if (listView.isFocused()) {
-                        color = listViewStyles.get("selectionColor");
-                    } else {
-                        color = listViewStyles.get("inactiveSelectionColor");
-                    }
+        Color color;
+        if (listView.isEnabled() && !disabled) {
+            if (selected) {
+                if (listView.isFocused()) {
+                    color = (Color)listView.getStyles().get("selectionColor");
                 } else {
-                    color = listViewStyles.get("color");
+                    color = (Color)listView.getStyles().get("inactiveSelectionColor");
                 }
             } else {
-                color = listViewStyles.get("disabledColor");
+                color = (Color)listView.getStyles().get("color");
             }
-
-            if (color instanceof Color) {
-                labelStyles.put("color", color);
-            }
+        } else {
+            color = (Color)listView.getStyles().get("disabledColor");
         }
+
+        label.getStyles().put("color", color);
     }
 
     public int getIconWidth() {

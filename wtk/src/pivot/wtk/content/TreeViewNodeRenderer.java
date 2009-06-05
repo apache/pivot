@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Font;
 
 import pivot.wtk.Bounds;
-import pivot.wtk.Component;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
@@ -100,39 +99,33 @@ public class TreeViewNodeRenderer extends FlowPane implements TreeView.NodeRende
         imageView.getStyles().put("opacity",
             (treeView.isEnabled() && !disabled) ? 1.0f : 0.5f);
 
-        // Show/hide the label
+        // Update the label
+        label.setText(text);
+
         if (text == null) {
             label.setDisplayable(false);
         } else {
             label.setDisplayable(true);
-            label.setText(text);
 
-            // Update the label styles
-            Component.StyleDictionary labelStyles = label.getStyles();
+            Font font = (Font)treeView.getStyles().get("font");
+            label.getStyles().put("font", font);
 
-            Object labelFont = treeView.getStyles().get("font");
-            if (labelFont instanceof Font) {
-                labelStyles.put("font", labelFont);
-            }
-
-            Object color = null;
+            Color color;
             if (treeView.isEnabled() && !disabled) {
                 if (selected) {
                     if (treeView.isFocused()) {
-                        color = treeView.getStyles().get("selectionColor");
+                        color = (Color)treeView.getStyles().get("selectionColor");
                     } else {
-                        color = treeView.getStyles().get("inactiveSelectionColor");
+                        color = (Color)treeView.getStyles().get("inactiveSelectionColor");
                     }
                 } else {
-                    color = treeView.getStyles().get("color");
+                    color = (Color)treeView.getStyles().get("color");
                 }
             } else {
-                color = treeView.getStyles().get("disabledColor");
+                color = (Color)treeView.getStyles().get("disabledColor");
             }
 
-            if (color instanceof Color) {
-                labelStyles.put("color", color);
-            }
+            label.getStyles().put("color", color);
         }
     }
 

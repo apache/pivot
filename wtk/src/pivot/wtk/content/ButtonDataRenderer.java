@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Font;
 
 import pivot.wtk.Button;
-import pivot.wtk.Component;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.VerticalAlignment;
@@ -72,7 +71,7 @@ public class ButtonDataRenderer extends FlowPane implements Button.DataRenderer 
             }
         }
 
-        // Show/hide the image view
+        // Update the image view
         if (icon == null) {
             imageView.setDisplayable(false);
         } else {
@@ -82,28 +81,25 @@ public class ButtonDataRenderer extends FlowPane implements Button.DataRenderer 
             imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
         }
 
-        // Show/hide the label
+        // Update the label
+        label.setText(text);
+
         if (text == null) {
             label.setDisplayable(false);
         } else {
             label.setDisplayable(true);
-            label.setText(text);
 
-            // Update the label styles
-            Component.StyleDictionary labelStyles = label.getStyles();
+            Font font = (Font)button.getStyles().get("font");
+            label.getStyles().put("font", font);
 
-            Object labelFont = button.getStyles().get("font");
-            if (labelFont instanceof Font) {
-                labelStyles.put("font", labelFont);
+            Color color;
+            if (button.isEnabled()) {
+                color = (Color)button.getStyles().get("color");
+            } else {
+                color = (Color)button.getStyles().get("disabledColor");
             }
 
-            Object color = button.isEnabled() ?
-                button.getStyles().get("color") :
-                    button.getStyles().get("disabledColor");
-
-            if (color instanceof Color) {
-                labelStyles.put("color", color);
-            }
+            label.getStyles().put("color", color);
         }
     }
 }
