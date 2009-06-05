@@ -18,8 +18,10 @@ package pivot.wtk.test;
 
 import pivot.collections.Dictionary;
 import pivot.wtk.Application;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
+import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.PushButton;
 import pivot.wtk.Window;
 
@@ -30,18 +32,23 @@ public class PushButtonTest implements Application {
         throws Exception {
         window = new Window();
         FlowPane flowPane = new FlowPane();
+        flowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
 
-        PushButton pushButton = new PushButton("OK");
-        pushButton.getStyles().put("preferredAspectRatio", 3.0f);
-        flowPane.add(pushButton);
+        PushButton uploadButton = new PushButton("Upload");
+        uploadButton.getStyles().put("preferredAspectRatio", 3.0f);
+        flowPane.add(uploadButton);
 
         window.setContent(flowPane);
+        window.setMaximized(true);
 
         window.open(display);
     }
 
     public boolean shutdown(boolean optional) {
-        window.close();
+        if (window != null) {
+            window.close();
+        }
+
         return true;
     }
 
@@ -49,5 +56,9 @@ public class PushButtonTest implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(PushButtonTest.class, args);
     }
 }

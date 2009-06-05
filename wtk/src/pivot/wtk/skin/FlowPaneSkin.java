@@ -309,7 +309,7 @@ public class FlowPaneSkin extends ContainerSkin
 
         Orientation orientation = flowPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
-            int preferredWidth = getPreferredWidth(height);
+            int preferredWidth = getPreferredWidth(-1);
 
             // Determine the fixed width (used in scaling components
             // when justified horizontally)
@@ -423,7 +423,7 @@ public class FlowPaneSkin extends ContainerSkin
                 }
             }
         } else {
-            int preferredHeight = getPreferredHeight(width);
+            int preferredHeight = getPreferredHeight(-1);
 
             // Determine the fixed height (used in scaling components
             // when justified vertically)
