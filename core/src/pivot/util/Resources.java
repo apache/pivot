@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 
 import pivot.collections.Dictionary;
+import pivot.collections.List;
 import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
@@ -48,6 +49,16 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     private Charset charset = null;
 
     private Map<String, Object> resourceMap = null;
+
+    public Resources(Object baseObject)
+        throws IOException, SerializationException {
+        this(baseObject.getClass());
+    }
+
+    public Resources(Class<?> baseObjectClass)
+        throws IOException, SerializationException {
+        this(baseObjectClass.getName());
+    }
 
     public Resources(String baseName)
         throws IOException, SerializationException {
@@ -144,6 +155,46 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     public Object get(String key) {
         return JSONSerializer.get(resourceMap, key);
+    }
+
+    public String getString(String key) {
+        return JSONSerializer.getString(resourceMap, key);
+    }
+
+    public Number getNumber(String key) {
+        return JSONSerializer.getNumber(resourceMap, key);
+    }
+
+    public Short getShort(String key) {
+        return JSONSerializer.getShort(resourceMap, key);
+    }
+
+    public Integer getInteger(String key) {
+        return JSONSerializer.getInteger(resourceMap, key);
+    }
+
+    public Long getLong(String key) {
+        return JSONSerializer.getLong(resourceMap, key);
+    }
+
+    public Float getFloat(String key) {
+        return JSONSerializer.getFloat(resourceMap, key);
+    }
+
+    public Double getDouble(String key) {
+        return JSONSerializer.getDouble(resourceMap, key);
+    }
+
+    public Boolean getBoolean(String key) {
+        return JSONSerializer.getBoolean(resourceMap, key);
+    }
+
+    public List<?> getList(String key) {
+        return JSONSerializer.getList(resourceMap, key);
+    }
+
+    public Map<String, ?> getMap(String key) {
+        return JSONSerializer.getMap(resourceMap, key);
     }
 
     public Object put(String key, Object value) {

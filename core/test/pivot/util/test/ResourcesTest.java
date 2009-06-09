@@ -112,7 +112,7 @@ public class ResourcesTest {
 
     @Test(expected=NullPointerException.class)
     public void testNullBaseName() throws Exception {
-        new Resources(null);
+        new Resources((String)null);
     }
 
     @SuppressWarnings("unchecked")
