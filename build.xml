@@ -52,10 +52,15 @@ limitations under the License.
 
     <!-- Compiler argument properties -->
     <property name="compilerarg.default" value="-Xlint"/>
+
+    <!--
     <condition property="compilerarg.processor"
         value="-Xlint -processor pivot.wtkx.BindProcessor" else="-Xlint">
         <isset property="compiler.sun"/>
     </condition>
+    -->
+    <!-- TODO Re-enable bind processing -->
+    <property name="compilerarg.processor" value="-Xlint"/>
 
     <!-- Dynamic properties -->
     <tstamp/>
