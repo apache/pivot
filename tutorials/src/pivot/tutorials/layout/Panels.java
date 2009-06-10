@@ -21,14 +21,15 @@ import pivot.wtk.Application;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKXSerializer;
 
-public class Panels extends Bindable implements Application {
-    @Load(resourceName="panels.wtkx") private Window window;
+public class Panels implements Application {
+    private Window window = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "panels.wtkx");
         window.open(display);
     }
 

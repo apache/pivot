@@ -31,16 +31,18 @@ import pivot.wtk.Display;
 import pivot.wtk.Label;
 import pivot.wtk.PushButton;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class Accordions extends Bindable implements Application {
-    @Load(resourceName="accordions.wtkx") private Window window;
-    @Bind(fieldName="window") private Accordion accordion;
-    @Bind(fieldName="window", id="shippingPanel.nextButton") private PushButton shippingNextButton;
-    @Bind(fieldName="window", id="paymentPanel.nextButton") private PushButton paymentNextButton;
-    @Bind(fieldName="window", id="summaryPanel.confirmOrderButton") private PushButton confirmOrderButton;
-    @Bind(fieldName="window", id="summaryPanel.activityIndicator") private ActivityIndicator activityIndicator;
-    @Bind(fieldName="window", id="summaryPanel.processingOrderLabel") private Label processingOrderLabel;
+public class Accordions implements Application {
+    private Window window = null;
+
+    @WTKX private Accordion accordion;
+    @WTKX(id="shippingPanel.nextButton") private PushButton shippingNextButton;
+    @WTKX(id="paymentPanel.nextButton") private PushButton paymentNextButton;
+    @WTKX(id="summaryPanel.confirmOrderButton") private PushButton confirmOrderButton;
+    @WTKX(id="summaryPanel.activityIndicator") private ActivityIndicator activityIndicator;
+    @WTKX(id="summaryPanel.processingOrderLabel") private Label processingOrderLabel;
 
     private AccordionSelectionListener accordionSelectionListener = new AccordionSelectionListener() {
         private int selectedIndex = -1;
@@ -78,7 +80,9 @@ public class Accordions extends Bindable implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "accordions.wtkx");
+        wtkxSerializer.bind(this);
 
         accordion.getAccordionSelectionListeners().add(accordionSelectionListener);
 

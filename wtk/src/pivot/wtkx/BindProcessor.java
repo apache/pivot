@@ -35,7 +35,6 @@ import pivot.collections.HashMap;
 import pivot.collections.List;
 import pivot.collections.Map;
 
-import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree.*;
 import com.sun.tools.javac.tree.TreeTranslator;
@@ -260,15 +259,6 @@ public class BindProcessor extends AbstractProcessor {
                 buf.append("ObjectHierarchy> objectHierarchies) {");
                 buf.append("super.bind(objectHierarchies);");
 
-                // Process @Load fields (and their associated @Bind fields)
-                if (loadGroups != null) {
-                    for (String loadFieldName : loadGroups) {
-                        AnnotationDossier.LoadGroup loadGroup = loadGroups.get(loadFieldName);
-                        JCVariableDecl loadField = loadGroup.loadField;
-                        processLoad(buf, classDeclaration, loadField, loadGroup.bindFields);
-                    }
-                }
-
                 // Process @Bind fields bound to superclass @Load fields
                 if (strandedBindFields != null) {
                     processStrandedBinds(buf, strandedBindFields);
@@ -302,150 +292,15 @@ public class BindProcessor extends AbstractProcessor {
         public void visitVarDef(JCVariableDecl field) {
             super.visitVarDef(field);
 
-            JCAnnotation loadAnnotation = getLoadAnnotation(field);
             JCAnnotation bindAnnotation = getBindAnnotation(field);
 
-            if (loadAnnotation != null
-                && bindAnnotation != null) {
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                    "Cannot combine " + Bindable.Load.class.getName()
-                    + " and " + Bindable.Bind.class.getName() + " annotations.");
-            } else if (loadAnnotation != null) {
-                AnnotationDossier annotationDossier = stack.peek();
-                annotationDossier.createLoadGroup(field);
-
-                // Increment the tally for reporting purposes
-                loadTally++;
-            } else if (bindAnnotation != null) {
+            if (bindAnnotation != null) {
                 AnnotationDossier annotationDossier = stack.peek();
                 annotationDossier.addToLoadGroup(field);
 
                 // Increment the tally for reporting purposes
                 bindTally++;
             }
-        }
-
-        /**
-         * Processes an <tt>@Load</tt> field and associated <tt>@Bind</tt>
-         * fields into runtime code.
-         *
-         * @param buf
-         * The buffer into which to write the source code
-         *
-         * @param classDeclaration
-         * The AST node of the class that contains the <tt>@Load</tt> field
-         *
-         * @param loadField
-         * The AST node with the <tt>@Load</tt> annotation
-         *
-         * @param bindFields
-         * List of AST nodes with the <tt>@Bind</tt> annotations that are
-         * associated with the load field
-         */
-        private void processLoad(StringBuilder buf, JCClassDecl classDeclaration,
-            JCVariableDecl loadField, ArrayList<JCVariableDecl> bindFields) {
-            String loadFieldName = loadField.name.toString();
-
-            // Open local scope for variable name protection
-            buf.append("{");
-
-            // Get annotation properties
-            JCAnnotation loadAnnotation = getLoadAnnotation(loadField);
-            String resourceName = getAnnotationProperty(loadAnnotation, "resourceName");
-            String baseName = getAnnotationProperty(loadAnnotation, "resources");
-            String language = getAnnotationProperty(loadAnnotation, "locale");
-
-            // Default the Resources baseName to the class name
-            boolean defaultResources = false;
-            if (baseName == null) {
-                defaultResources = true;
-                if (!classDeclaration.name.isEmpty()) {
-                    baseName = classDeclaration.name.toString();
-                }
-            }
-
-            buf.append("Object object = null;");
-            buf.append("ObjectHierarchy objectHierarchy = null;");
-            buf.append(String.format
-                ("Class<ObjectHierarchy> compiledClass = pivot.wtkx.Compiler.getClass(getClass(), \"%s\");",
-                resourceName));
-
-            // Load the WTKX resource via the compiled class
-            buf.append("if (compiledClass != null) {");
-            buf.append("try {");
-            buf.append("objectHierarchy = compiledClass.newInstance();");
-            buf.append("object = objectHierarchy.getRootObject();");
-            buf.append("} catch (Exception ex) {");
-            buf.append("throw new pivot.wtkx.BindException(ex);");
-            buf.append("}");
-            buf.append("} else {");
-
-            // Attempt to load the resource bundle
-            buf.append("pivot.util.Resources resources = null;");
-            if (baseName != null) {
-                if (language == null) {
-                    buf.append("java.util.Locale locale = java.util.Locale.getDefault();");
-                } else {
-                    buf.append(String.format
-                        ("java.util.Locale locale = new java.util.Locale(\"%s\");", language));
-                }
-                buf.append("try {");
-                buf.append(String.format
-                    ("resources = new pivot.util.Resources(%s, locale, \"UTF8\");",
-                    defaultResources ? (baseName + ".class.getName()") : ("\"" + baseName + "\"")));
-                buf.append("} catch(java.io.IOException ex) {");
-                buf.append("throw new pivot.wtkx.BindException(ex);");
-                buf.append("} catch (pivot.serialization.SerializationException ex) {");
-                buf.append("throw new pivot.wtkx.BindException(ex);");
-                buf.append("} catch (java.util.MissingResourceException ex) {");
-                if (!defaultResources) {
-                    buf.append("throw new pivot.wtkx.BindException(ex);");
-                }
-                buf.append("}");
-            }
-
-            // Load the WTKX resource via serialization
-            buf.append("pivot.wtkx.WTKXSerializer wtkxSerializer = new pivot.wtkx.WTKXSerializer(resources);");
-            buf.append(String.format("java.net.URL location = getClass().getResource(\"%s\");", resourceName));
-            buf.append("try {");
-            buf.append("object = wtkxSerializer.readObject(location);");
-            buf.append("} catch (Exception ex) {");
-            buf.append("throw new pivot.wtkx.BindException(ex);");
-            buf.append("}");
-            buf.append("objectHierarchy = wtkxSerializer;");
-            buf.append("}");
-
-            // Bind the resource to the field
-            buf.append(String.format
-                ("%s = (%s)object;", loadFieldName, loadField.vartype.toString()));
-
-            // Public and protected fields get kept for subclasses
-            if ((loadField.mods.flags & (Flags.PUBLIC | Flags.PROTECTED)) != 0) {
-                buf.append(String.format
-                    ("objectHierarchies.put(\"%s\", objectHierarchy);", loadFieldName));
-            }
-
-            // Process @Bind variables
-            for (JCVariableDecl bindField : bindFields) {
-                String bindFieldName = bindField.name.toString();
-                JCAnnotation bindAnnotation = getBindAnnotation(bindField);
-
-                String id = getAnnotationProperty(bindAnnotation, "id");
-                if (id == null) {
-                    // The bind name defaults to the field name
-                    id = bindFieldName;
-                }
-
-                buf.append(String.format
-                    ("%s = objectHierarchy.getObjectByID(\"%s\");", bindFieldName, id));
-                buf.append(String.format
-                    ("if (%s == null) ", bindFieldName));
-                buf.append(String.format
-                    ("throw new pivot.wtkx.BindException(\"Element not found: %s.\");", id));
-            }
-
-            // Close local scope
-            buf.append("}");
         }
 
         /**
@@ -604,21 +459,6 @@ public class BindProcessor extends AbstractProcessor {
     }
 
     /**
-     * Gets the <tt>Load</tt> AST annotation node that's associated with
-     * the specified AST variable declaration node.
-     *
-     * @param field
-     * The AST variable declaration node
-     *
-     * @return
-     * The AST annotation node, or <tt>null</tt> if no such annotation is
-     * associated with the variable declaration
-     */
-    private static JCAnnotation getLoadAnnotation(JCVariableDecl field) {
-        return getAnnotation(field, Bindable.Load.class.getSimpleName());
-    }
-
-    /**
      * Gets the <tt>Bind</tt> AST annotation node that's associated with
      * the specified AST variable declaration node.
      *
@@ -630,7 +470,7 @@ public class BindProcessor extends AbstractProcessor {
      * associated with the variable declaration
      */
     private static JCAnnotation getBindAnnotation(JCVariableDecl field) {
-        return getAnnotation(field, Bindable.Bind.class.getSimpleName());
+        return getAnnotation(field, WTKX.class.getSimpleName());
     }
 
     /**

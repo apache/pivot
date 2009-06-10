@@ -27,16 +27,20 @@ import pivot.wtk.MessageType;
 import pivot.wtk.PushButton;
 import pivot.wtk.RadioButton;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class RadioButtons extends Bindable implements Application {
-    @Load(resourceName="radio_buttons.wtkx") private Window window;
-    @Bind(fieldName="window") private RadioButton oneButton;
-    @Bind(fieldName="window") private PushButton selectButton;
+public class RadioButtons implements Application {
+    private Window window = null;
+
+    @WTKX private RadioButton oneButton;
+    @WTKX private PushButton selectButton;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "radio_buttons.wtkx");
+        wtkxSerializer.bind(this);
 
         // Get a reference to the button group
         final Button.Group numbersGroup = oneButton.getGroup();

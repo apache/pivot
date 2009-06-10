@@ -30,9 +30,10 @@ import pivot.wtk.Meter;
 import pivot.wtk.PushButton;
 import pivot.wtk.TaskAdapter;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class Meters extends Bindable implements Application {
+public class Meters implements Application {
     public class SampleTask extends Task<Void> {
         private int percentage = 0;
 
@@ -61,15 +62,17 @@ public class Meters extends Bindable implements Application {
         }
     }
 
-    @Load(resourceName="meters.wtkx") private Window window;
-    @Bind(fieldName="window") private Meter meter;
-    @Bind(fieldName="window") private PushButton progressButton;
+    private Window window = null;
+    @WTKX private Meter meter;
+    @WTKX private PushButton progressButton;
 
     private SampleTask sampleTask = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "meters.wtkx");
+        wtkxSerializer.bind(this);
 
         progressButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

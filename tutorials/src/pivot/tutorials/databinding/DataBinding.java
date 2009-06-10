@@ -30,15 +30,17 @@ import pivot.wtk.Form;
 import pivot.wtk.Label;
 import pivot.wtk.PushButton;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class DataBinding extends Bindable implements Application {
-    @Load(resourceName="data_binding.wtkx") private Window window;
-    @Bind(fieldName="window") private Form form;
-    @Bind(fieldName="window") private PushButton loadJavaButton;
-    @Bind(fieldName="window") private PushButton loadJSONButton;
-    @Bind(fieldName="window") private PushButton clearButton;
-    @Bind(fieldName="window") private Label sourceLabel;
+public class DataBinding implements Application {
+    private Window window = null;
+
+    @WTKX private Form form;
+    @WTKX private PushButton loadJavaButton;
+    @WTKX private PushButton loadJSONButton;
+    @WTKX private PushButton clearButton;
+    @WTKX private Label sourceLabel;
 
     private static final Contact CONTACT = new Contact("101", "Joe Smith",
         new Address("123 Main St.", "Cambridge", "MA", "02142"),
@@ -47,7 +49,9 @@ public class DataBinding extends Bindable implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "data_binding.wtkx");
+        wtkxSerializer.bind(this);
 
         loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

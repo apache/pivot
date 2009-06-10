@@ -27,23 +27,26 @@ import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.Frame;
 import pivot.wtk.Sheet;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class CardPaneTest extends Bindable implements Application {
+public class CardPaneTest implements Application {
     private Frame frame = null;
+    private Sheet sheet = null;
 
-    @Load(resourceName="card_pane_test.wtkx") private Sheet sheet;
-    @Bind(fieldName="sheet") private CardPane cardPane;
+    @WTKX private CardPane cardPane;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
-
         frame = new Frame(new FlowPane());
         frame.getStyles().put("padding", 0);
         frame.setTitle("Component Pane Test");
         frame.setPreferredSize(800, 600);
         frame.setLocation(20, 20);
+
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        sheet = (Sheet)wtkxSerializer.readObject(this, "card_pane_test.wtkx");
+        wtkxSerializer.bind(this);
 
         Button.Group sizeGroup = Button.getGroup("sizeGroup");
         sizeGroup.getGroupListeners().add(new Button.GroupListener() {

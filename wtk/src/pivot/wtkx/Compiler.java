@@ -125,41 +125,4 @@ public class Compiler {
 
         return name;
     }
-
-    /**
-     * Gets the compiled class created from a WTKX resource. This assumes that
-     * the class is named according to the {@linkplain
-     * #getPreferredClassName(Class,String) preferred class name} for
-     * compiled WTKX resources. If a compiled version of the resource exists
-     * but is named differently, this method will not discover it.
-     *
-     * @param referenceClass
-     * The class relative to which the WTKX resource will be considered.
-     * Use <tt>null</tt> to specify that the WTKX resource is relative to no
-     * class.
-     *
-     * @param resourceName
-     * A path name that identifies the WTKX resource. The path name should be
-     * of the form defined by {@link Class#getResource(String)} and is relative
-     * to the reference class. Note that this is the same form as is defined in
-     * {@link Bindable.Load#resourceName()}.
-     *
-     * @return
-     * The compiled WTKX class, or <tt>null</tt> if no such class was
-     * discovered.
-     */
-    @SuppressWarnings("unchecked")
-    public static Class<Bindable.ObjectHierarchy> getClass(Class<?> referenceClass,
-        String resourceName) {
-        Class<Bindable.ObjectHierarchy> result = null;
-
-        String className = getPreferredClassName(referenceClass, resourceName);
-        try {
-            result = (Class<Bindable.ObjectHierarchy>)Class.forName(className);
-        } catch (ClassNotFoundException ex) {
-            // No-op
-        }
-
-        return result;
-    }
 }

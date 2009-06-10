@@ -38,9 +38,10 @@ import pivot.wtk.PushButton;
 import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class LargeData extends Bindable implements Application {
+public class LargeData implements Application {
     private class LoadDataCallback implements Runnable {
         private class AddRowsCallback implements Runnable {
             private ArrayList<Object> page;
@@ -133,13 +134,14 @@ public class LargeData extends Bindable implements Application {
 
     private String basePath = null;
 
-    @Load(resourceName="large_data.wtkx") private Window window;
-    @Bind(fieldName="window") private ListButton fileListButton;
-    @Bind(fieldName="window") private PushButton loadDataButton;
-    @Bind(fieldName="window") private PushButton cancelButton;
-    @Bind(fieldName="window") private Label statusLabel;
-    @Bind(fieldName="window") private TableView tableView;
-    @Bind(fieldName="window") private TableViewHeader tableViewHeader;
+    private Window window = null;
+
+    @WTKX private ListButton fileListButton;
+    @WTKX private PushButton loadDataButton;
+    @WTKX private PushButton cancelButton;
+    @WTKX private Label statusLabel;
+    @WTKX private TableView tableView;
+    @WTKX private TableViewHeader tableViewHeader;
 
     private CSVSerializer csvSerializer;
     private int pageSize = 0;
@@ -163,7 +165,9 @@ public class LargeData extends Bindable implements Application {
             throw new IllegalArgumentException("basePath is required.");
         }
 
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "large_data.wtkx");
+        wtkxSerializer.bind(this);
 
         loadDataButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

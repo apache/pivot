@@ -42,18 +42,22 @@ import pivot.wtk.PushButton;
 import pivot.wtk.Span;
 import pivot.wtk.TableView;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class FileDropTargetDemo extends Bindable implements Application {
-    @Load(resourceName="file_drop_target_demo.wtkx") private Window window;
-    @Bind(fieldName="window") private TableView fileTableView;
-    @Bind(fieldName="window") private PushButton uploadButton;
+public class FileDropTargetDemo implements Application {
+    private Window window = null;
+
+    @WTKX private TableView fileTableView;
+    @WTKX private PushButton uploadButton;
 
     private FileList fileList = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "file_drop_target_demo.wtkx");
+        wtkxSerializer.bind(this);
 
         fileList = new FileList();
         fileTableView.setTableData(fileList);

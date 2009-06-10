@@ -28,20 +28,24 @@ import pivot.wtk.TextInput;
 import pivot.wtk.Window;
 import pivot.wtk.content.CalendarDateSpinnerData;
 import pivot.wtk.content.TableViewRowEditor;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
 /**
  * Demonstrates a flip transition used to initiate a table view row editor.
  *
  * @author tvolkert
  */
-public class Demo extends Bindable implements Application {
-    @Load(resourceName="demo.wtkx") private Window window;
-    @Bind(fieldName="window") TableView tableView;
+public class Demo implements Application {
+    private Window window = null;
+
+    @WTKX TableView tableView;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "demo.wtkx");
+        wtkxSerializer.bind(this);
 
         TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();
         tableView.setRowEditor(tableViewRowEditor);

@@ -28,19 +28,23 @@ import pivot.wtk.Orientation;
 import pivot.wtk.RadioButton;
 import pivot.wtk.TabPane;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class TabPanes extends Bindable implements Application {
-    @Load(resourceName="tab_panes.wtkx") private Window window;
-    @Bind(fieldName="window") private TabPane tabPane;
-    @Bind(fieldName="window") private Checkbox collapsibleCheckbox;
-    @Bind(fieldName="window") private RadioButton horizontalRadioButton;
-    @Bind(fieldName="window") private RadioButton verticalRadioButton;
-    @Bind(fieldName="window") private FlowPane cornerFlowPane;
+public class TabPanes implements Application {
+    private Window window = null;
+
+    @WTKX private TabPane tabPane;
+    @WTKX private Checkbox collapsibleCheckbox;
+    @WTKX private RadioButton horizontalRadioButton;
+    @WTKX private RadioButton verticalRadioButton;
+    @WTKX private FlowPane cornerFlowPane;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "tab_panes.wtkx");
+        wtkxSerializer.bind(this);
 
         ButtonStateListener checkboxStateListener = new ButtonStateListener() {
             public void stateChanged(Button button, Button.State previousState) {

@@ -26,14 +26,18 @@ import pivot.wtk.Display;
 import pivot.wtk.MessageType;
 import pivot.wtk.PushButton;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class PushButtons extends Bindable implements Application {
-    @Load(resourceName="push_buttons.wtkx") private Window window = null;
-    @Bind(fieldName="window") private PushButton pushButton;
+public class PushButtons implements Application {
+    private Window window = null;
+
+    @WTKX private PushButton pushButton;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "push_buttons.wtkx");
+        wtkxSerializer.bind(this);
 
         // Add a button press listener
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {

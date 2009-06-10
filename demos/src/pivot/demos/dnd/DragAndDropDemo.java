@@ -40,23 +40,27 @@ import pivot.wtk.PushButton;
 import pivot.wtk.Visual;
 import pivot.wtk.Window;
 import pivot.wtk.media.Image;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class DragAndDropDemo extends Bindable implements Application {
-    @Load(resourceName="drag_and_drop.wtkx") private Window window;
-    @Bind(fieldName="window") private Label label;
-    @Bind(fieldName="window") private PushButton copyTextButton;
-    @Bind(fieldName="window") private PushButton pasteTextButton;
-    @Bind(fieldName="window") private ImageView imageView;
-    @Bind(fieldName="window") private PushButton copyImageButton;
-    @Bind(fieldName="window") private PushButton pasteImageButton;
-    @Bind(fieldName="window") private ListView listView;
-    @Bind(fieldName="window") private PushButton copyFilesButton;
-    @Bind(fieldName="window") private PushButton pasteFilesButton;
+public class DragAndDropDemo implements Application {
+    private Window window = null;
+
+    @WTKX private Label label;
+    @WTKX private PushButton copyTextButton;
+    @WTKX private PushButton pasteTextButton;
+    @WTKX private ImageView imageView;
+    @WTKX private PushButton copyImageButton;
+    @WTKX private PushButton pasteImageButton;
+    @WTKX private ListView listView;
+    @WTKX private PushButton copyFilesButton;
+    @WTKX private PushButton pasteFilesButton;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "drag_and_drop.wtkx");
+        wtkxSerializer.bind(this);
 
         // Text
         label.setDragSource(new DragSource() {

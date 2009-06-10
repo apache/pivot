@@ -26,12 +26,14 @@ import pivot.wtk.ListView;
 import pivot.wtk.ListViewSelectionListener;
 import pivot.wtk.Span;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class ListViews extends Bindable implements Application {
-    @Load(resourceName="list_views.wtkx") private Window window;
-    @Bind(fieldName="window") private Label selectionLabel;
-    @Bind(fieldName="window") private ListView listView;
+public class ListViews implements Application {
+    private Window window = null;
+
+    @WTKX private Label selectionLabel;
+    @WTKX private ListView listView;
 
     private ListViewSelectionListener listViewSelectionListener =
         new ListViewSelectionListener() {
@@ -72,7 +74,9 @@ public class ListViews extends Bindable implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "list_views.wtkx");
+        wtkxSerializer.bind(this);
 
         listView.getListViewSelectionListeners().add(listViewSelectionListener);
 

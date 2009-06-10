@@ -25,16 +25,20 @@ import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.LinkButton;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class LinkButtons extends Bindable implements Application {
-    @Load(resourceName="link_buttons.wtkx") private Window window = null;
-    @Bind(fieldName="window") private CardPane cardPane;
-    @Bind(fieldName="window") private LinkButton nextButton;
-    @Bind(fieldName="window") private LinkButton previousButton;
+public class LinkButtons implements Application {
+    private Window window = null;
+
+    @WTKX private CardPane cardPane;
+    @WTKX private LinkButton nextButton;
+    @WTKX private LinkButton previousButton;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "link_buttons.wtkx");
+        wtkxSerializer.bind(this);
 
         nextButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

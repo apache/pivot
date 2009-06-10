@@ -26,6 +26,7 @@ import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -52,7 +53,7 @@ import pivot.util.ThreadUtilities;
  *
  * @author gbrown
  */
-public class WTKXSerializer implements Serializer<Object>, Bindable.ObjectHierarchy {
+public class WTKXSerializer implements Serializer<Object> {
     private static class Element  {
         public enum Type {
             INSTANCE,
@@ -257,8 +258,8 @@ public class WTKXSerializer implements Serializer<Object>, Bindable.ObjectHierar
         return resources;
     }
 
-    public Object readObject(String resourceName) throws IOException,
-        SerializationException {
+    public Object readObject(String resourceName)
+        throws IOException, SerializationException {
         if (resourceName == null) {
             throw new IllegalArgumentException("resourceName is null.");
         }
@@ -274,8 +275,34 @@ public class WTKXSerializer implements Serializer<Object>, Bindable.ObjectHierar
         return readObject(location);
     }
 
-    public Object readObject(URL location) throws IOException,
-        SerializationException {
+    public Object readObject(Object baseObject, String resourceName)
+        throws IOException, SerializationException {
+        if (baseObject == null) {
+            throw new IllegalArgumentException("baseObject is null.");
+        }
+
+        if (resourceName == null) {
+            throw new IllegalArgumentException("resourceName is null.");
+        }
+
+        return readObject(baseObject.getClass(), resourceName);
+    }
+
+    public Object readObject(Class<?> baseType, String resourceName)
+        throws IOException, SerializationException {
+        if (baseType == null) {
+            throw new IllegalArgumentException("baseType is null.");
+        }
+
+        if (resourceName == null) {
+            throw new IllegalArgumentException("resourceName is null.");
+        }
+
+        return readObject(baseType.getResource(resourceName));
+    }
+
+    public Object readObject(URL location)
+        throws IOException, SerializationException {
         if (location == null) {
             throw new IllegalArgumentException("location is null.");
         }
@@ -290,8 +317,8 @@ public class WTKXSerializer implements Serializer<Object>, Bindable.ObjectHierar
     }
 
     @SuppressWarnings({"unchecked"})
-    public Object readObject(InputStream inputStream) throws IOException,
-        SerializationException {
+    public Object readObject(InputStream inputStream)
+        throws IOException, SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
         }
@@ -775,7 +802,7 @@ public class WTKXSerializer implements Serializer<Object>, Bindable.ObjectHierar
      *
      * @param id
      * The ID of the object, relative to this loader. The object's ID is the
-     * concatentation of its parent IDs and its ID, separated by periods
+     * concatenation of its parent IDs and its ID, separated by periods
      * (e.g. "foo.bar.baz").
      *
      * @return The named object, or <tt>null</tt> if an object with the given
@@ -797,6 +824,78 @@ public class WTKXSerializer implements Serializer<Object>, Bindable.ObjectHierar
      */
     public NamedObjectDictionary getNamedObjects() {
         return namedObjectDictionary;
+    }
+
+    /**
+     * Applies WTKX binding annotations to an object.
+     * <p>
+     * If this method will be called by untrusted code, a bind processor must
+     * be applied at compile time. See {@link BindProcessor} for more
+     * information.
+     *
+     * @throws BindException
+     * If an error occurs during binding
+     */
+    public void bind(Object object) throws BindException {
+        Class<?> type = object.getClass();
+
+        Method __bindMethod = null;
+        try {
+            __bindMethod = type.getDeclaredMethod("__bind", new Class<?>[] {type});
+        } catch(NoSuchMethodException exception) {
+            // No-op
+        }
+
+        if (__bindMethod == null) {
+            Field[] fields = type.getDeclaredFields();
+
+            // Process bind annotations
+            for (int j = 0, n = fields.length; j < n; j++) {
+                Field field = fields[j];
+                String fieldName = field.getName();
+                int fieldModifiers = field.getModifiers();
+
+                WTKX wtkxAnnotation = field.getAnnotation(WTKX.class);
+                if (wtkxAnnotation != null) {
+                    // Ensure that we can write to the field
+                    if ((fieldModifiers & Modifier.FINAL) > 0) {
+                        throw new BindException(fieldName + " is final.");
+                    }
+
+                    if ((fieldModifiers & Modifier.PUBLIC) == 0) {
+                        try {
+                            field.setAccessible(true);
+                        } catch(SecurityException exception) {
+                            throw new BindException(fieldName + " is not accessible.");
+                        }
+                    }
+
+                    String id = wtkxAnnotation.id();
+                    if (id.equals("\0")) {
+                        id = field.getName();
+                    }
+
+                    // TODO Use containsKey() here
+                    Object value = getObjectByID(id);
+                    if (value != null) {
+                        // Set the value into the field
+                        try {
+                            field.set(object, value);
+                        } catch (IllegalAccessException exception) {
+                            throw new BindException(exception);
+                        }
+                    }
+                }
+            }
+        } else {
+            try {
+                __bindMethod.invoke(null, new Object[] {object});
+            } catch(IllegalAccessException exception) {
+                throw new RuntimeException(exception);
+            } catch(InvocationTargetException exception) {
+                throw new RuntimeException(exception);
+            }
+        }
     }
 
     /**

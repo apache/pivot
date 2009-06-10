@@ -30,18 +30,22 @@ import pivot.wtk.Prompt;
 import pivot.wtk.PushButton;
 import pivot.wtk.TextInput;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class Forms extends Bindable implements Application {
-    @Load(resourceName="forms.wtkx") private Window window;
-    @Bind(fieldName="window") private FlowPane nameFlowPane;
-    @Bind(fieldName="window") private TextInput lastNameTextInput;
-    @Bind(fieldName="window") private TextInput firstNameTextInput;
-    @Bind(fieldName="window") private PushButton submitButton;
-    @Bind(fieldName="window") private Label errorLabel;
+public class Forms implements Application {
+    private Window window = null;
+
+    @WTKX private FlowPane nameFlowPane;
+    @WTKX private TextInput lastNameTextInput;
+    @WTKX private TextInput firstNameTextInput;
+    @WTKX private PushButton submitButton;
+    @WTKX private Label errorLabel;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "forms.wtkx");
+        wtkxSerializer.bind(this);
 
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

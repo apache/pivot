@@ -28,24 +28,28 @@ import pivot.wtk.Orientation;
 import pivot.wtk.RadioButton;
 import pivot.wtk.VerticalAlignment;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class FlowPanes extends Bindable implements Application {
-    @Load(resourceName="flow_panes.wtkx") private Window window;
-    @Bind(fieldName="window") private FlowPane flowPane;
-    @Bind(fieldName="window") private RadioButton horizontalOrientationButton;
-    @Bind(fieldName="window") private RadioButton verticalOrientationButton;
-    @Bind(fieldName="window") private RadioButton horizontalAlignmentRightButton;
-    @Bind(fieldName="window") private RadioButton horizontalAlignmentLeftButton;
-    @Bind(fieldName="window") private RadioButton horizontalAlignmentCenterButton;
-    @Bind(fieldName="window") private RadioButton horizontalAlignmentJustifyButton;
-    @Bind(fieldName="window") private RadioButton verticalAlignmentTopButton;
-    @Bind(fieldName="window") private RadioButton verticalAlignmentBottomButton;
-    @Bind(fieldName="window") private RadioButton verticalAlignmentCenterButton;
-    @Bind(fieldName="window") private RadioButton verticalAlignmentJustifyButton;
+public class FlowPanes implements Application {
+    private Window window = null;
+
+    @WTKX private FlowPane flowPane;
+    @WTKX private RadioButton horizontalOrientationButton;
+    @WTKX private RadioButton verticalOrientationButton;
+    @WTKX private RadioButton horizontalAlignmentRightButton;
+    @WTKX private RadioButton horizontalAlignmentLeftButton;
+    @WTKX private RadioButton horizontalAlignmentCenterButton;
+    @WTKX private RadioButton horizontalAlignmentJustifyButton;
+    @WTKX private RadioButton verticalAlignmentTopButton;
+    @WTKX private RadioButton verticalAlignmentBottomButton;
+    @WTKX private RadioButton verticalAlignmentCenterButton;
+    @WTKX private RadioButton verticalAlignmentJustifyButton;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "flow_panes.wtkx");
+        wtkxSerializer.bind(this);
 
         ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
             public void stateChanged(Button button, Button.State previousState) {

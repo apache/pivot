@@ -36,15 +36,19 @@ import pivot.wtk.Mouse;
 import pivot.wtk.TreeView;
 import pivot.wtk.TreeViewBranchListener;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class FileBrowser extends Bindable implements Application {
-    @Load(resourceName="file_browser.wtkx") private Window window;
-    @Bind(fieldName="window") private TreeView folderTreeView;
+public class FileBrowser implements Application {
+    private Window window = null;
+
+    @WTKX private TreeView folderTreeView;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "file_browser.wtkx");
+        wtkxSerializer.bind(this);
 
         String pathname = System.getProperty("user.home");
         FileFilter fileFilter = new FileFilter() {

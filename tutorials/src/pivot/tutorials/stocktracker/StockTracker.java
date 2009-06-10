@@ -28,6 +28,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Sequence;
 import pivot.serialization.CSVSerializer;
+import pivot.util.Resources;
 import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskListener;
 import pivot.web.GetQuery;
@@ -52,25 +53,22 @@ import pivot.wtk.TextInput;
 import pivot.wtk.TextInputTextListener;
 import pivot.wtk.Window;
 import pivot.wtk.text.TextNode;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class StockTracker extends Bindable implements Application {
+public class StockTracker implements Application {
     private ArrayList<String> symbols = new ArrayList<String>();
 
-    @Load(resourceName="stocktracker.wtkx") private Window window;
+    private Window window = null;
 
-    @Bind(fieldName="window") private TableView stocksTableView;
-    @Bind(fieldName="window") private TextInput symbolTextInput;
-    @Bind(fieldName="window") private Button addSymbolButton;
-    @Bind(fieldName="window") private Button removeSymbolsButton;
-    @Bind(fieldName="window") private Label lastUpdateLabel;
-    @Bind(fieldName="window") private Button yahooFinanceButton;
-
-    @Bind(fieldName="window", id="detail.rootPane")
-    private Container detailRootPane;
-
-    @Bind(fieldName="window", id="detail.changeLabel")
-    private Label detailChangeLabel;
+    @WTKX private TableView stocksTableView;
+    @WTKX private TextInput symbolTextInput;
+    @WTKX private Button addSymbolButton;
+    @WTKX private Button removeSymbolsButton;
+    @WTKX private Label lastUpdateLabel;
+    @WTKX private Button yahooFinanceButton;
+    @WTKX(id="detail.rootPane") private Container detailRootPane;
+    @WTKX(id="detail.changeLabel") private Label detailChangeLabel;
 
     private GetQuery getQuery = null;
 
@@ -104,8 +102,11 @@ public class StockTracker extends Bindable implements Application {
             Locale.setDefault(new Locale(language));
         }
 
-        // Bind to the WTKX source
-        bind();
+        // Load and bind to the WTKX source
+        Resources resources = new Resources(this);
+        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        window = (Window)wtkxSerializer.readObject(this, "stocktracker.wtkx");
+        wtkxSerializer.bind(this);
 
         // Wire up event handlers
         stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {

@@ -21,14 +21,15 @@ import pivot.wtk.Application;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Frame;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKXSerializer;
 
-public class AccordionTest extends Bindable implements Application {
-    @Load(resourceName="accordion_test.wtkx") private Frame frame;
+public class AccordionTest implements Application {
+    private Frame frame = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        frame = (Frame)wtkxSerializer.readObject(this, "accordion_test.wtkx");
         frame.open(display);
     }
 

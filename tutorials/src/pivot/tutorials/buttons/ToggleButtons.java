@@ -21,14 +21,15 @@ import pivot.wtk.Application;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKXSerializer;
 
-public class ToggleButtons extends Bindable implements Application {
-    @Load(resourceName="toggle_buttons.wtkx") private Window window;
+public class ToggleButtons implements Application {
+    private Window window = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "toggle_buttons.wtkx");
         window.open(display);
     }
 

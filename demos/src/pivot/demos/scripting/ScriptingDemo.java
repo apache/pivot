@@ -23,21 +23,26 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class ScriptingDemo extends Bindable implements Application {
+public class ScriptingDemo implements Application {
     public static class MyButtonPressListener implements ButtonPressListener {
         public void buttonPressed(Button button) {
             System.out.println("[Java] A button was clicked.");
         }
     }
 
-    @Load(resourceName="scripting_demo.wtkx") private Window window;
-    @Bind(fieldName="window") private String foo;
+    private Window window = null;
+
+    @WTKX private String foo;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "scripting_demo.wtkx");
+        wtkxSerializer.bind(this);
+
         System.out.println("foo = " + foo);
         window.open(display);
     }

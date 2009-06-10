@@ -25,19 +25,23 @@ import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.ImageView;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class Checkboxes extends Bindable implements Application {
-    @Load(resourceName="checkboxes.wtkx") private Window window = null;
-    @Bind(fieldName="window") private Checkbox bellCheckbox;
-    @Bind(fieldName="window") private Checkbox clockCheckbox;
-    @Bind(fieldName="window") private Checkbox houseCheckbox;
-    @Bind(fieldName="window") private ImageView bellImageView;
-    @Bind(fieldName="window") private ImageView clockImageView;
-    @Bind(fieldName="window") private ImageView houseImageView;
+public class Checkboxes implements Application {
+    private Window window = null;
+
+    @WTKX private Checkbox bellCheckbox;
+    @WTKX private Checkbox clockCheckbox;
+    @WTKX private Checkbox houseCheckbox;
+    @WTKX private ImageView bellImageView;
+    @WTKX private ImageView clockImageView;
+    @WTKX private ImageView houseImageView;
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "checkboxes.wtkx");
+        wtkxSerializer.bind(this);
 
         // Wire up event listeners
         bellCheckbox.getButtonPressListeners().add(new ButtonPressListener() {

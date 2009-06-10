@@ -25,18 +25,22 @@ import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.PushButton;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class ActivityIndicators extends Bindable implements Application {
-    @Load(resourceName="activity_indicators.wtkx") private Window window;
-    @Bind(fieldName="window") private ActivityIndicator activityIndicator1;
-    @Bind(fieldName="window") private ActivityIndicator activityIndicator2;
-    @Bind(fieldName="window") private ActivityIndicator activityIndicator3;
-    @Bind(fieldName="window") private PushButton activityButton;
+public class ActivityIndicators implements Application {
+    private Window window = null;
+
+    @WTKX private ActivityIndicator activityIndicator1;
+    @WTKX private ActivityIndicator activityIndicator2;
+    @WTKX private ActivityIndicator activityIndicator3;
+    @WTKX private PushButton activityButton;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "activity_indicators.wtkx");
+        wtkxSerializer.bind(this);
 
         activityButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

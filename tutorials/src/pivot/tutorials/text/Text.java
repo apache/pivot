@@ -24,11 +24,13 @@ import pivot.wtk.Display;
 import pivot.wtk.TextInput;
 import pivot.wtk.TextInputCharacterListener;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class Text extends Bindable implements Application {
-    @Load(resourceName="text.wtkx") private Window window;
-    @Bind(fieldName="window") private TextInput stateTextInput;
+public class Text implements Application {
+    private Window window = null;
+
+    @WTKX private TextInput stateTextInput;
 
     private ArrayList<String> states;
 
@@ -122,7 +124,9 @@ public class Text extends Bindable implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "text.wtkx");
+        wtkxSerializer.bind(this);
 
         stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);
 

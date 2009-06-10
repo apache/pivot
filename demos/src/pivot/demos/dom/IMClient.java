@@ -48,9 +48,10 @@ import pivot.wtk.Window;
 import pivot.wtk.effects.FadeTransition;
 import pivot.wtk.effects.Transition;
 import pivot.wtk.effects.TransitionListener;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class IMClient extends Bindable implements Application {
+public class IMClient implements Application {
     /**
      * Task for asynchronously logging into Jabber.
      *
@@ -78,21 +79,24 @@ public class IMClient extends Bindable implements Application {
 
     private XMPPConnection xmppConnection = null;
 
-    @Load(resourceName="im_client.wtkx") private Window window;
-    @Bind(fieldName="window") private CardPane cardPane;
-    @Bind(fieldName="window") private Form loginForm;
-    @Bind(fieldName="window") private TextInput usernameTextInput;
-    @Bind(fieldName="window") private TextInput passwordTextInput;
-    @Bind(fieldName="window") private TextInput domainTextInput;
-    @Bind(fieldName="window") private PushButton loginButton;
-    @Bind(fieldName="window") private Label errorMessageLabel;
-    @Bind(fieldName="window") private Label messageLabel;
+    private Window window;
+
+    @WTKX private CardPane cardPane;
+    @WTKX private Form loginForm;
+    @WTKX private TextInput usernameTextInput;
+    @WTKX private TextInput passwordTextInput;
+    @WTKX private TextInput domainTextInput;
+    @WTKX private PushButton loginButton;
+    @WTKX private Label errorMessageLabel;
+    @WTKX private Label messageLabel;
 
     private ApplicationContext.ScheduledCallback scheduledFadeCallback = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "im_client.wtkx");
+        wtkxSerializer.bind(this);
 
         loginForm.getComponentKeyListeners().add(new ComponentKeyListener() {
             public boolean keyTyped(Component component, char character) {

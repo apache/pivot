@@ -25,17 +25,21 @@ import pivot.wtk.ImageView;
 import pivot.wtk.Window;
 import pivot.wtk.media.Drawing;
 import pivot.wtk.media.drawing.Shape;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class RotateLine extends Bindable implements Application {
-    @Load(resourceName="rotate_line.wtkd") private Drawing drawing;
-    @Bind(fieldName="drawing") private Shape.Rotate rotation;
+public class RotateLine implements Application {
+    private Drawing drawing = null;
+
+    @WTKX private Shape.Rotate rotation;
 
     private Window window = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception{
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        drawing = (Drawing)wtkxSerializer.readObject(this, "rotate_line.wtkd");
+        wtkxSerializer.bind(this);
 
         ApplicationContext.scheduleRecurringCallback(new Runnable() {
             public void run() {

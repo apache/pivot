@@ -27,20 +27,24 @@ import pivot.wtk.TableView;
 import pivot.wtk.TableViewHeader;
 import pivot.wtk.TableViewSelectionListener;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class FixedColumnTable extends Bindable implements Application {
-    @Load(resourceName="fixed_column_table.wtkx") private Window window;
-    @Bind(fieldName="window") private TableView primaryTableView;
-    @Bind(fieldName="window") private TableViewHeader primaryTableViewHeader;
-    @Bind(fieldName="window") private TableView fixedTableView;
-    @Bind(fieldName="window") private TableViewHeader fixedTableViewHeader;
+public class FixedColumnTable implements Application {
+    private Window window = null;
+
+    @WTKX private TableView primaryTableView;
+    @WTKX private TableViewHeader primaryTableViewHeader;
+    @WTKX private TableView fixedTableView;
+    @WTKX private TableViewHeader fixedTableViewHeader;
 
     private boolean synchronizingSelection = false;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "fixed_column_table.wtkx");
+        wtkxSerializer.bind(this);
 
         // Keep selection state in sync
         primaryTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {

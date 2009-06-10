@@ -23,17 +23,21 @@ import pivot.wtk.Display;
 import pivot.wtk.Expander;
 import pivot.wtk.ExpanderListener;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class Expanders extends Bindable implements Application {
-    @Load(resourceName="expanders.wtkx") private Window window;
-    @Bind(fieldName="window") private Expander stocksExpander;
-    @Bind(fieldName="window") private Expander weatherExpander;
-    @Bind(fieldName="window") private Expander calendarExpander;
+public class Expanders implements Application {
+    private Window window = null;
+
+    @WTKX private Expander stocksExpander;
+    @WTKX private Expander weatherExpander;
+    @WTKX private Expander calendarExpander;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "expanders.wtkx");
+        wtkxSerializer.bind(this);
 
         ExpanderListener expanderListener = new ExpanderListener.Adapter() {
             public void expandedChanged(Expander expander) {

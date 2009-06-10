@@ -28,12 +28,14 @@ import pivot.wtk.ListButton;
 import pivot.wtk.ListButtonSelectionListener;
 import pivot.wtk.Window;
 import pivot.wtk.media.Image;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class ListButtons extends Bindable implements Application {
-    @Load(resourceName="list_buttons.wtkx") private Window window;
-    @Bind(fieldName="window") private ListButton listButton;
-    @Bind(fieldName="window") private ImageView imageView;
+public class ListButtons implements Application {
+    private Window window = null;
+
+    @WTKX private ListButton listButton;
+    @WTKX private ImageView imageView;
 
     private ListButtonSelectionListener listButtonSelectionListener =
         new ListButtonSelectionListener() {
@@ -63,7 +65,9 @@ public class ListButtons extends Bindable implements Application {
     };
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "list_buttons.wtkx");
+        wtkxSerializer.bind(this);
 
         listButton.getListButtonSelectionListeners().add(listButtonSelectionListener);
         listButton.setSelectedIndex(0);

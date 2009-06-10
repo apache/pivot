@@ -28,6 +28,7 @@ import pivot.collections.Dictionary;
 import pivot.collections.List;
 import pivot.collections.Map;
 import pivot.serialization.JSONSerializer;
+import pivot.serialization.SerializationException;
 import pivot.util.CalendarDate;
 import pivot.util.ThreadUtilities;
 import pivot.util.Vote;
@@ -81,11 +82,12 @@ import pivot.wtk.effects.WatermarkDecorator;
 import pivot.wtk.media.Image;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.PlainTextSerializer;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.BindException;
 import pivot.wtkx.WTKXSerializer;
 
-public class Demo extends Bindable implements Application, Application.About {
-    private abstract class RollupStateHandler extends Bindable
+public class Demo implements Application, Application.About {
+    private abstract class RollupStateHandler
         implements RollupStateListener {
         public void expandedChangeVetoed(Rollup rollup, Vote reason) {
             // No-op
@@ -97,12 +99,19 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class ButtonsRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="buttons.wtkx")
-        private Component component;
+        private Component component = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "buttons.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
             }
 
@@ -111,16 +120,31 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class ListsRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="lists.wtkx") private Component component;
-        @Bind(fieldName="component") private ListView editableListView;
-        @Bind(fieldName="component") private ListView iconListView;
-        @Bind(fieldName="component") private ListView checkedListView;
+        private Component component = null;
+
+        @WTKX private ListView editableListView;
+        @WTKX private ListView iconListView;
+        @WTKX private ListView checkedListView;
 
         @SuppressWarnings("unchecked")
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "lists.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
+
+                try {
+                    wtkxSerializer.bind(this);
+                } catch(BindException exception) {
+                    throw new RuntimeException(exception);
+                }
 
                 List<ListItem> listData = (List<ListItem>)editableListView.getListData();
                 listData.setComparator(new Comparator<ListItem>() {
@@ -144,13 +168,28 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class TextRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="text.wtkx") private Component component;
-        @Bind(fieldName="component") private TextArea textArea;
+        private Component component = null;
+
+        @WTKX private TextArea textArea;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "text.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
+
+                try {
+                    wtkxSerializer.bind(this);
+                } catch(BindException exception) {
+                    throw new RuntimeException(exception);
+                }
 
                 PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
                 InputStream inputStream = getClass().getResourceAsStream("text_area.txt");
@@ -187,11 +226,19 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class CalendarsRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="calendars.wtkx") private Component component;
+        private Component component = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "calendars.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
             }
 
@@ -200,11 +247,19 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class NavigationRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="navigation.wtkx") private Component component;
+        private Component component = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "navigation.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
             }
 
@@ -213,11 +268,19 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class SplittersRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="splitters.wtkx") private Component component;
+        private Component component = null;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "splitters.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
             }
 
@@ -226,13 +289,12 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class MenusRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="menus.wtkx") private Component component;
-        @Bind(fieldName="component") private ImageView menuImageView;
+        private Component component = null;
 
-        @Bind(fieldName="component", id="menuBar.helpAboutMenuItem")
-        private Menu.Item helpAboutMenuItem;
+        @WTKX private ImageView menuImageView;
+        @WTKX(id="menuBar.helpAboutMenuItem") private Menu.Item helpAboutMenuItem;
 
-        @Load(resourceName="menu_popup.wtkx") private MenuPopup menuPopup;
+        private MenuPopup menuPopup = null;
 
         {   new Action("selectImageAction") {
                 public String getDescription() {
@@ -265,8 +327,30 @@ public class Demo extends Bindable implements Application, Application.About {
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "menus.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
+
+                try {
+                    wtkxSerializer.bind(this);
+                } catch(BindException exception) {
+                    throw new RuntimeException(exception);
+                }
+
+                try {
+                    menuPopup = (MenuPopup)wtkxSerializer.readObject(this, "menu_popup.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
 
                 menuImageView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
                     @Override
@@ -293,15 +377,30 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class MetersRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="meters.wtkx") private Component component;
-        @Bind(fieldName="component") private ActivityIndicator activityIndicator1;
-        @Bind(fieldName="component") private ActivityIndicator activityIndicator2;
-        @Bind(fieldName="component") private ActivityIndicator activityIndicator3;
+        private Component component = null;
+
+        @WTKX private ActivityIndicator activityIndicator1;
+        @WTKX private ActivityIndicator activityIndicator2;
+        @WTKX private ActivityIndicator activityIndicator3;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "meters.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
+
+                try {
+                    wtkxSerializer.bind(this);
+                } catch(BindException exception) {
+                    throw new RuntimeException(exception);
+                }
 
                 metersRollup.getRollupStateListeners().add(new RollupStateListener() {
                     public Vote previewExpandedChange(Rollup rollup) {
@@ -325,20 +424,34 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class SpinnersRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="spinners.wtkx") private Component component;
+        private Component component = null;
 
-        @Bind(fieldName="component") private Spinner numericSpinner;
-        @Bind(fieldName="component") private Spinner dateSpinner;
+        @WTKX private Spinner numericSpinner;
+        @WTKX private Spinner dateSpinner;
 
-        @Bind(fieldName="component") private Slider redSlider;
-        @Bind(fieldName="component") private Slider greenSlider;
-        @Bind(fieldName="component") private Slider blueSlider;
-        @Bind(fieldName="component") private Border colorBorder;
+        @WTKX private Slider redSlider;
+        @WTKX private Slider greenSlider;
+        @WTKX private Slider blueSlider;
+        @WTKX private Border colorBorder;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "spinners.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
+
+                try {
+                    wtkxSerializer.bind(this);
+                } catch(BindException exception) {
+                    throw new RuntimeException(exception);
+                }
 
                 initializeNumericSpinner(numericSpinner);
                 initializeDateSpinner(dateSpinner);
@@ -381,15 +494,30 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class TablesRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="tables.wtkx") private Component component;
-        @Bind(fieldName="component") private TableView sortableTableView;
-        @Bind(fieldName="component") private TableView customTableView;
-        @Bind(fieldName="component") private TableViewHeader sortableTableViewHeader;
+        private Component component = null;
+
+        @WTKX private TableView sortableTableView;
+        @WTKX private TableView customTableView;
+        @WTKX private TableViewHeader sortableTableViewHeader;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "tables.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
+
+                try {
+                    wtkxSerializer.bind(this);
+                } catch(BindException exception) {
+                    throw new RuntimeException(exception);
+                }
 
                 // Set table header data
                 TableView.ColumnSequence columns = sortableTableView.getColumns();
@@ -447,13 +575,28 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class TreesRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="trees.wtkx") private Component component;
-        @Bind(fieldName="component") private TreeView editableTreeView;
+        private Component component = null;
+
+        @WTKX private TreeView editableTreeView;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "trees.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
+
+                try {
+                    wtkxSerializer.bind(this);
+                } catch(BindException exception) {
+                    throw new RuntimeException(exception);
+                }
 
                 TreeBranch treeData = (TreeBranch)editableTreeView.getTreeData();
                 treeData.setComparator(new TreeNodeComparator());
@@ -464,15 +607,30 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class DragDropRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="dragdrop.wtkx") private Component component;
-        @Bind(fieldName="component") private ImageView imageView1;
-        @Bind(fieldName="component") private ImageView imageView2;
-        @Bind(fieldName="component") private ImageView imageView3;
+        private Component component = null;
+
+        @WTKX private ImageView imageView1;
+        @WTKX private ImageView imageView2;
+        @WTKX private ImageView imageView3;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "dragdrop.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
+
+                try {
+                    wtkxSerializer.bind(this);
+                } catch(BindException exception) {
+                    throw new RuntimeException(exception);
+                }
 
                 DragSource imageDragSource = new DragSource() {
                     private Image image = null;
@@ -591,14 +749,29 @@ public class Demo extends Bindable implements Application, Application.About {
     }
 
     private class AlertsRollupStateHandler extends RollupStateHandler {
-        @Load(resourceName="alerts.wtkx") private Component component;
-        @Bind(fieldName="component") private PushButton alertButton;
-        @Bind(fieldName="component") private PushButton promptButton;
+        private Component component = null;
+
+        @WTKX private PushButton alertButton;
+        @WTKX private PushButton promptButton;
 
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                bind();
+                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                try {
+                    component = (Component)wtkxSerializer.readObject(this, "alerts.wtkx");
+                } catch(IOException exception) {
+                    throw new RuntimeException(exception);
+                } catch(SerializationException exception) {
+                    throw new RuntimeException(exception);
+                }
+
                 rollup.setContent(component);
+
+                try {
+                    wtkxSerializer.bind(this);
+                } catch(BindException exception) {
+                    throw new RuntimeException(exception);
+                }
 
                 alertButton.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {
@@ -677,27 +850,30 @@ public class Demo extends Bindable implements Application, Application.About {
         }
     }
 
-    @Load(resourceName="demo.wtkx") private Window window;
-    @Bind(fieldName="window") private Rollup buttonsRollup;
-    @Bind(fieldName="window") private Rollup listsRollup;
-    @Bind(fieldName="window") private Rollup textRollup;
-    @Bind(fieldName="window") private Rollup calendarsRollup;
-    @Bind(fieldName="window") private Rollup navigationRollup;
-    @Bind(fieldName="window") private Rollup splittersRollup;
-    @Bind(fieldName="window") private Rollup menusRollup;
-    @Bind(fieldName="window") private Rollup metersRollup;
-    @Bind(fieldName="window") private Rollup spinnersRollup;
-    @Bind(fieldName="window") private Rollup tablesRollup;
-    @Bind(fieldName="window") private Rollup treesRollup;
-    @Bind(fieldName="window") private Rollup dragDropRollup;
-    @Bind(fieldName="window") private Rollup alertsRollup;
+    private Window window = null;
+
+    @WTKX private Rollup buttonsRollup;
+    @WTKX private Rollup listsRollup;
+    @WTKX private Rollup textRollup;
+    @WTKX private Rollup calendarsRollup;
+    @WTKX private Rollup navigationRollup;
+    @WTKX private Rollup splittersRollup;
+    @WTKX private Rollup menusRollup;
+    @WTKX private Rollup metersRollup;
+    @WTKX private Rollup spinnersRollup;
+    @WTKX private Rollup tablesRollup;
+    @WTKX private Rollup treesRollup;
+    @WTKX private Rollup dragDropRollup;
+    @WTKX private Rollup alertsRollup;
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(Demo.class, args);
     }
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "demo.wtkx");
+        wtkxSerializer.bind(this);
 
         buttonsRollup.getRollupStateListeners().add(new ButtonsRollupStateHandler());
         listsRollup.getRollupStateListeners().add(new ListsRollupStateHandler());

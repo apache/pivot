@@ -30,22 +30,26 @@ import pivot.wtk.LinkButton;
 import pivot.wtk.RadioButton;
 import pivot.wtk.Window;
 import pivot.wtk.skin.CardPaneSkin;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class CardPanes extends Bindable implements Application {
-    @Load(resourceName="card_panes.wtkx") private Window window;
-    @Bind(fieldName="window") private CardPane cardPane;
-    @Bind(fieldName="window") private LinkButton previousButton;
-    @Bind(fieldName="window") private LinkButton nextButton;
-    @Bind(fieldName="window") private Checkbox sizeToSelectionCheckbox;
-    @Bind(fieldName="window") private RadioButton crossfadeRadioButton;
-    @Bind(fieldName="window") private RadioButton horizontalSlideRadioButton;
-    @Bind(fieldName="window") private RadioButton verticalSlideRadioButton;
-    @Bind(fieldName="window") private RadioButton noneRadioButton;
+public class CardPanes implements Application {
+    private Window window = null;
+
+    @WTKX private CardPane cardPane;
+    @WTKX private LinkButton previousButton;
+    @WTKX private LinkButton nextButton;
+    @WTKX private Checkbox sizeToSelectionCheckbox;
+    @WTKX private RadioButton crossfadeRadioButton;
+    @WTKX private RadioButton horizontalSlideRadioButton;
+    @WTKX private RadioButton verticalSlideRadioButton;
+    @WTKX private RadioButton noneRadioButton;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "card_panes.wtkx");
+        wtkxSerializer.bind(this);
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
             public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {

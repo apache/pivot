@@ -25,17 +25,17 @@ import pivot.wtk.Display;
 import pivot.wtk.Frame;
 import pivot.wtk.Window;
 import pivot.wtk.effects.FadeDecorator;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKXSerializer;
 
-public class DecoratorDemo extends Bindable implements Application {
-    @Load(resourceName="reflection.wtkx") private Window reflectionWindow;
-    @Load(resourceName="translucent.wtkx") private Frame translucentFrame;
+public class DecoratorDemo implements Application {
+    private Window reflectionWindow = null;
+    private Frame translucentFrame = null;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
-
-        reflectionWindow.open(display);
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        reflectionWindow = (Window)wtkxSerializer.readObject(this, "reflection.wtkx");
+        translucentFrame = (Frame)wtkxSerializer.readObject(this, "translucent.wtkx");
 
         final FadeDecorator fadeDecorator = new FadeDecorator();
         translucentFrame.getDecorators().insert(fadeDecorator, 0);
@@ -52,6 +52,7 @@ public class DecoratorDemo extends Bindable implements Application {
             }
         });
 
+        reflectionWindow.open(display);
         translucentFrame.open(display);
     }
 

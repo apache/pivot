@@ -56,14 +56,15 @@ import pivot.wtk.ListView;
 import pivot.wtk.Mouse;
 import pivot.wtk.Orientation;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
 /**
  * RSS feed demo application.
  *
  * @author gbrown
  */
-public class RSSFeedDemo extends Bindable implements Application {
+public class RSSFeedDemo implements Application {
     // Loads the feed in the background so the UI doesn't block
     private class LoadFeedTask extends IOTask<NodeList> {
         public NodeList execute() throws TaskExecutionException {
@@ -225,10 +226,11 @@ public class RSSFeedDemo extends Bindable implements Application {
 
     private XPath xpath;
 
-    @Load(resourceName="rss_feed_demo.wtkx") private Window window;
-    @Bind(fieldName="window") private ListView feedListView;
-    @Bind(fieldName="window") private CardPane cardPane;
-    @Bind(fieldName="window") private Label statusLabel;
+    private Window window = null;
+
+    @WTKX private ListView feedListView;
+    @WTKX private CardPane cardPane;
+    @WTKX private Label statusLabel;
 
     public static final String FEED_URI = "http://feeds.dzone.com/javalobby/frontpage?format=xml";
 
@@ -261,7 +263,9 @@ public class RSSFeedDemo extends Bindable implements Application {
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "rss_feed_demo.wtkx");
+        wtkxSerializer.bind(this);
 
         feedListView.setItemRenderer(new RSSItemRenderer());
         feedListView.getComponentMouseButtonListeners().add(new FeedViewMouseButtonHandler());

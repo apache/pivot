@@ -23,18 +23,22 @@ import pivot.wtk.ButtonPressListener;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.Window;
-import pivot.wtkx.Bindable;
+import pivot.wtkx.WTKX;
+import pivot.wtkx.WTKXSerializer;
 
-public class Transitions extends Bindable implements Application {
-    @Load(resourceName="transitions.wtkx") private Window window;
-    @Bind(fieldName="window") private Button button1;
-    @Bind(fieldName="window") private Button button2;
-    @Bind(fieldName="window") private Button button3;
-    @Bind(fieldName="window") private Button button4;
+public class Transitions implements Application {
+    private Window window = null;
+
+    @WTKX private Button button1;
+    @WTKX private Button button2;
+    @WTKX private Button button3;
+    @WTKX private Button button4;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
-        bind();
+        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        window = (Window)wtkxSerializer.readObject(this, "transitions.wtkx");
+        wtkxSerializer.bind(this);
 
         ButtonPressListener trigger = new ButtonPressListener() {
             public void buttonPressed(Button button) {
