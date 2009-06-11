@@ -55,9 +55,9 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         this(baseObject.getClass());
     }
 
-    public Resources(Class<?> baseObjectClass)
+    public Resources(Class<?> baseType)
         throws IOException, SerializationException {
-        this(baseObjectClass.getName());
+        this(baseType.getName());
     }
 
     public Resources(String baseName)

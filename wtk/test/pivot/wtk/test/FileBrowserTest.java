@@ -36,7 +36,7 @@ public class FileBrowserTest implements Application {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("file_browser_test.wtkx")));
 
-        TreeView folderTreeView = (TreeView)wtkxSerializer.getObjectByID("folderTreeView");
+        TreeView folderTreeView = (TreeView)wtkxSerializer.get("folderTreeView");
 
         String pathname = "/";
         final Folder rootFolder = new Folder(pathname);

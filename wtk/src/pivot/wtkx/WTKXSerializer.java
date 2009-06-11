@@ -53,7 +53,7 @@ import pivot.util.ThreadUtilities;
  *
  * @author gbrown
  */
-public class WTKXSerializer implements Serializer<Object> {
+public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Object> {
     private static class Element  {
         public enum Type {
             INSTANCE,
@@ -91,134 +91,12 @@ public class WTKXSerializer implements Serializer<Object> {
         }
     }
 
-    /**
-     * Dictionary used for named object lookup.
-     *
-     * @author tvolkert
-     * @author gbrown
-     */
-    public final class NamedObjectDictionary implements Dictionary<String, Object> {
-        /**
-         * Don't allow outside callers to create instances of this class.
-         */
-        private NamedObjectDictionary() {
-        }
-
-        /**
-         * Retrieves a named object.
-         *
-         * @param key
-         * The name of the object, relative to this loader. The values's name
-         * is the concatentation of its parent namespaces and its ID, separated
-         * by periods (e.g. "foo.bar.baz").
-         *
-         * @return
-         * The named object, or <tt>null</tt> if an object with the given name
-         * does not exist.
-         */
-        public Object get(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            Object object = null;
-            WTKXSerializer serializer = WTKXSerializer.this;
-            String[] namespacePath = key.split("\\.");
-
-            int i = 0;
-            int n = namespacePath.length - 1;
-            while (i < n && serializer != null) {
-                String namespace = namespacePath[i++];
-                serializer = serializer.includeSerializers.get(namespace);
-            }
-
-            if (serializer != null) {
-                String id = namespacePath[i];
-
-                if (serializer.namedObjects.containsKey(id)) {
-                    object = serializer.namedObjects.get(id);
-                } else {
-                    if (serializer.scriptEngineManager != null) {
-                        try {
-                            Method getMethod = serializer.scriptEngineManagerClass.getMethod("get",
-                                new Class<?>[] {String.class});
-                            object = getMethod.invoke(serializer.scriptEngineManager, new Object[] {id});
-                        } catch(Exception exception) {
-                            throw new RuntimeException(exception);
-                        }
-                    }
-                }
-            }
-
-            return object;
-        }
-
-        public Object put(String key, Object value) {
-            throw new UnsupportedOperationException();
-        }
-
-        public Object remove(String key) {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean containsKey(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
-
-            boolean result = false;
-            WTKXSerializer serializer = WTKXSerializer.this;
-            String[] namespacePath = key.split("\\.");
-
-            int i = 0;
-            int n = namespacePath.length - 1;
-            while (i < n && serializer != null) {
-                String namespace = namespacePath[i++];
-                serializer = serializer.includeSerializers.get(namespace);
-            }
-
-            if (serializer != null) {
-                if (serializer.namedObjects.containsKey(key)) {
-                    result = true;
-                } else if (serializer.scriptEngineBindings != null) {
-                    result = serializer.scriptEngineBindings.containsKey(key);
-                }
-            }
-
-            return result;
-        }
-
-        public boolean isEmpty() {
-            boolean empty = namedObjects.isEmpty();
-
-            if (empty && scriptEngineBindings != null) {
-                // Check for script bindings
-                empty = scriptEngineBindings.isEmpty();
-            }
-
-            if (empty) {
-                // Check include serializers
-                for (String namespace : includeSerializers) {
-                    WTKXSerializer includeSerializer = includeSerializers.get(namespace);
-                    if (!includeSerializer.getNamedObjects().isEmpty()) {
-                        empty = false;
-                        break;
-                    }
-                }
-            }
-
-            return empty;
-        }
-    }
-
     private URL location = null;
     private Resources resources = null;
 
-    private Object rootObject = null;
+    private Object root = null;
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
-
-    private NamedObjectDictionary namedObjectDictionary = new NamedObjectDictionary();
 
     private XMLInputFactory xmlInputFactory;
 
@@ -393,7 +271,7 @@ public class WTKXSerializer implements Serializer<Object> {
                             if (localName.equals(INCLUDE_TAG)) {
                                 // The element represents an include
                                 String src = null;
-                                Resources includeResources = resources;
+                                Resources resources = this.resources;
 
                                 ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 
@@ -416,7 +294,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                         if (attributeLocalName.equals(INCLUDE_SRC_ATTRIBUTE)) {
                                             src = attributeValue;
                                         } else if (attributeLocalName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
-                                            includeResources = new Resources(attributeValue);
+                                            resources = new Resources(attributeValue);
                                         } else {
                                             attributes.add(new Attribute(attributeNamespaceURI,
                                                 attributePrefix, attributeLocalName, attributeValue));
@@ -431,7 +309,7 @@ public class WTKXSerializer implements Serializer<Object> {
                                 }
 
                                 // Process the include
-                                WTKXSerializer serializer = new WTKXSerializer(includeResources);
+                                WTKXSerializer serializer = new WTKXSerializer(resources);
                                 if (id != null) {
                                     includeSerializers.put(id, serializer);
                                 }
@@ -689,10 +567,8 @@ public class WTKXSerializer implements Serializer<Object> {
                                                     String listenerID = listenerIDs[i].trim();
 
                                                     if (listenerID.length() > 0) {
-                                                        listenerID = listenerID.substring(1);
-
                                                         if (listenerID.length() > 0) {
-                                                            listenerList.add(namedObjectDictionary.get(listenerID));
+                                                            listenerList.add(get(listenerID));
                                                         }
                                                     }
                                                 }
@@ -736,7 +612,7 @@ public class WTKXSerializer implements Serializer<Object> {
         location = null;
 
         // Set the root object
-        rootObject = object;
+        root = object;
 
         return object;
     }
@@ -761,7 +637,7 @@ public class WTKXSerializer implements Serializer<Object> {
      * @return The named serializer, or <tt>null</tt> if a serializer with the
      * given name does not exist.
      */
-    public WTKXSerializer getSerializerByID(String id) {
+    public WTKXSerializer getSerializer(String id) {
         if (id == null) {
             throw new IllegalArgumentException("id is null.");
         }
@@ -780,50 +656,126 @@ public class WTKXSerializer implements Serializer<Object> {
     }
 
     /**
-     * Retrieves the root object of the WTKX hierarchy.
-     *
-     * @param <T>
-     * The type of the object to return.
+     * Retrieves the root of the object hierarchy most recently processed by
+     * this serializer.
      *
      * @return
      * The root object, or <tt>null</tt> if this serializer has not yet read an
      * object from an input stream.
      */
-    @SuppressWarnings("unchecked")
-    public <T> T getRootObject() {
-        return (T)rootObject;
+    public Object getRoot() {
+        return root;
     }
 
     /**
      * Retrieves a named object.
      *
-     * @param <T>
-     * The type of the object to return.
-     *
-     * @param id
-     * The ID of the object, relative to this loader. The object's ID is the
-     * concatenation of its parent IDs and its ID, separated by periods
+     * @param name
+     * The name of the object, relative to this loader. The object's name is
+     * the concatenation of its parent IDs and its ID, separated by periods
      * (e.g. "foo.bar.baz").
      *
      * @return The named object, or <tt>null</tt> if an object with the given
-     * name does not exist.
+     * name does not exist. Use {@link #containsKey(String)} to distinguish
+     * between the two cases.
      */
-    @SuppressWarnings("unchecked")
-    public <T> T getObjectByID(String id) {
-        Object object = namedObjectDictionary.get(id);
-        return (T)object;
+    public Object get(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("name is null.");
+        }
+
+        Object object = null;
+        WTKXSerializer serializer = this;
+        String[] namespacePath = name.split("\\.");
+
+        int i = 0;
+        int n = namespacePath.length - 1;
+        while (i < n && serializer != null) {
+            String namespace = namespacePath[i++];
+            serializer = serializer.includeSerializers.get(namespace);
+        }
+
+        if (serializer != null) {
+            String id = namespacePath[i];
+
+            if (serializer.namedObjects.containsKey(id)) {
+                object = serializer.namedObjects.get(id);
+            } else {
+                if (serializer.scriptEngineManager != null) {
+                    try {
+                        Method getMethod = serializer.scriptEngineManagerClass.getMethod("get",
+                            new Class<?>[] {String.class});
+                        object = getMethod.invoke(serializer.scriptEngineManager, new Object[] {id});
+                    } catch(Exception exception) {
+                        throw new RuntimeException(exception);
+                    }
+                }
+            }
+        }
+
+        return object;
     }
 
-    /**
-     * Retrieves the named objects dictionary. The names are relative to this
-     * loader and can reference objects located in nested includes by using
-     * period-separated path strings (e.g. <tt>"foo.bar.baz"</tt>).
-     *
-     * @return
-     * The read-only named objects dictionary.
-     */
-    public NamedObjectDictionary getNamedObjects() {
-        return namedObjectDictionary;
+    public Object put(String name, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Object remove(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean containsKey(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("name is null.");
+        }
+
+        boolean result = false;
+        WTKXSerializer serializer = this;
+        String[] namespacePath = name.split("\\.");
+
+        int i = 0;
+        int n = namespacePath.length - 1;
+        while (i < n && serializer != null) {
+            String namespace = namespacePath[i++];
+            serializer = serializer.includeSerializers.get(namespace);
+        }
+
+        // TODO Review
+        if (serializer != null) {
+            String id = namespacePath[i];
+
+            if (serializer.namedObjects.containsKey(id)) {
+                result = true;
+            } else if (serializer.scriptEngineBindings != null) {
+                result = serializer.scriptEngineBindings.containsKey(id);
+            }
+        }
+
+        return result;
+    }
+
+    public boolean isEmpty() {
+        // TODO Review
+        boolean empty = namedObjects.isEmpty();
+
+        if (empty
+            && scriptEngineBindings != null) {
+            // Check for script bindings
+            empty = scriptEngineBindings.isEmpty();
+        }
+
+        if (empty) {
+            // Check include serializers
+            for (String namespace : includeSerializers) {
+                WTKXSerializer includeSerializer = includeSerializers.get(namespace);
+                if (!includeSerializer.isEmpty()) {
+                    empty = false;
+                    break;
+                }
+            }
+        }
+
+        return empty;
     }
 
     /**
@@ -875,10 +827,9 @@ public class WTKXSerializer implements Serializer<Object> {
                         id = field.getName();
                     }
 
-                    // TODO Use containsKey() here
-                    Object value = getObjectByID(id);
-                    if (value != null) {
+                    if (containsKey(id)) {
                         // Set the value into the field
+                        Object value = get(id);
                         try {
                             field.set(object, value);
                         } catch (IllegalAccessException exception) {
@@ -1004,7 +955,7 @@ public class WTKXSerializer implements Serializer<Object> {
                         if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
                             resolvedValue = attributeValue.substring(1);
                         } else {
-                            resolvedValue = namedObjectDictionary.get(attributeValue.substring(1));
+                            resolvedValue = get(attributeValue.substring(1));
                         }
                     }
                 } else {

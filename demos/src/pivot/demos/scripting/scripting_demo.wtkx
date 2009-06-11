@@ -28,7 +28,7 @@ limitations under the License.
                     <!-- <wtkx:script src="demo.groovy"/> -->
 
                     <PushButton wtkx:id="pushButton" buttonData="Click Me!"
-                        buttonPressListeners="$buttonPressListener1, $buttonPressListener2">
+                        buttonPressListeners="buttonPressListener1, buttonPressListener2">
                         <buttonPressListeners>
                             <scripting:ScriptingDemo.MyButtonPressListener/>
                         </buttonPressListeners>

@@ -74,7 +74,7 @@ public class TextAreaTest implements Application {
         frame.setPreferredSize(640, 480);
         frame.open(display);
 
-        textArea = (TextArea)wtkxSerializer.getObjectByID("textArea");
+        textArea = (TextArea)wtkxSerializer.get("textArea");
         textArea.getTextAreaSelectionListeners().add(new TextAreaSelectionListener() {
             public void selectionChanged(TextArea textArea,
                 int previousSelectionStart, int previousSelectionLength) {
@@ -83,10 +83,10 @@ public class TextAreaTest implements Application {
             }
         });
 
-        selectionStartLabel = (Label)wtkxSerializer.getObjectByID("selectionStartLabel");
-        selectionLengthLabel = (Label)wtkxSerializer.getObjectByID("selectionLengthLabel");
+        selectionStartLabel = (Label)wtkxSerializer.get("selectionStartLabel");
+        selectionLengthLabel = (Label)wtkxSerializer.get("selectionLengthLabel");
 
-        treeView = (TreeView)wtkxSerializer.getObjectByID("treeView");
+        treeView = (TreeView)wtkxSerializer.get("treeView");
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
             public void selectedPathAdded(TreeView treeView, Path path) {
                 // No-op
@@ -119,8 +119,8 @@ public class TextAreaTest implements Application {
             }
         });
 
-        offsetLabel = (Label)wtkxSerializer.getObjectByID("offsetLabel");
-        charactersLabel = (Label)wtkxSerializer.getObjectByID("charactersLabel");
+        offsetLabel = (Label)wtkxSerializer.get("offsetLabel");
+        charactersLabel = (Label)wtkxSerializer.get("charactersLabel");
 
         documentAdapter = new DocumentAdapter(textArea.getDocument());
         treeView.setTreeData(documentAdapter);

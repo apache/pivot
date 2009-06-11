@@ -46,7 +46,7 @@ public class SpinnerFocusTest implements Application {
         frame.setTitle("Spinner Focus Test");
         frame.open(display);
 
-        Spinner spinner = (Spinner)wtkxSerializer.getObjectByID("spinner");
+        Spinner spinner = (Spinner)wtkxSerializer.get("spinner");
         spinner.requestFocus();
 
         action.setEnabled(false);

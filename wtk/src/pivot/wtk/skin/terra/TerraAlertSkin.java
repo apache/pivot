@@ -70,23 +70,23 @@ public class TerraAlertSkin extends TerraDialogSkin
         // Set the type image
         TerraTheme theme = (TerraTheme)Theme.getTheme();
 
-        ImageView typeImageView = wtkxSerializer.getObjectByID("typeImageView");
+        ImageView typeImageView = (ImageView)wtkxSerializer.get("typeImageView");
         typeImageView.setImage(theme.getMessageIcon(alert.getMessageType()));
 
         // Set the message
-        Label messageLabel = wtkxSerializer.getObjectByID("messageLabel");
+        Label messageLabel = (Label)wtkxSerializer.get("messageLabel");
         String message = alert.getMessage();
         messageLabel.setText(message);
 
         // Set the body
-        FlowPane messageFlowPane = wtkxSerializer.getObjectByID("messageFlowPane");
+        FlowPane messageFlowPane = (FlowPane)wtkxSerializer.get("messageFlowPane");
         Component body = alert.getBody();
         if (body != null) {
             messageFlowPane.add(body);
         }
 
         // Add the option buttons
-        FlowPane buttonFlowPane = wtkxSerializer.getObjectByID("buttonFlowPane");
+        FlowPane buttonFlowPane = (FlowPane)wtkxSerializer.get("buttonFlowPane");
 
         for (int i = 0, n = alert.getOptionCount(); i < n; i++) {
             Object option = alert.getOption(i);
