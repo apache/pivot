@@ -452,37 +452,8 @@ public class ArrayList<T> implements List<T>, Serializable {
             throw new IllegalArgumentException();
         }
 
-        // TODO Use java.util.Arrays#binarySearch() when Java 6 is available
-        // on Mac OS X
-        // int index = Arrays.binarySearch((T[])arrayList.items, 0, arrayList.length, item, comparator);
-        int index = binarySearch((T[])arrayList.items, arrayList.length, item, comparator);
+        int index = Arrays.binarySearch((T[])arrayList.items, 0, arrayList.length, item, comparator);
 
         return index;
-    }
-
-    // TODO Remove this method when it is no longer needed; see above
-    private static <T> int binarySearch(T[] array, int length, T item, Comparator<T> comparator) {
-        int low = 0;
-        int high = length - 1;
-
-        while (low <= high) {
-            int mid = (low + high) >> 1;
-            T midVal = array[mid];
-            int cmp = comparator.compare(midVal, item);
-
-            if (cmp < 0) {
-               low = mid + 1;
-            }
-            else if (cmp > 0) {
-               high = mid - 1;
-            }
-            else {
-               // Item found
-               return mid;
-            }
-        }
-
-        // Item not found
-        return -(low + 1);
     }
 }

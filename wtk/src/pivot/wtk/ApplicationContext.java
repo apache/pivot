@@ -17,6 +17,7 @@
 package pivot.wtk;
 
 import java.awt.AWTEvent;
+import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -42,8 +43,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Timer;
@@ -1242,16 +1241,12 @@ public abstract class ApplicationContext {
      * @param location
      */
     public static void open(URL location) {
-        // TODO Remove dynamic invocation when Java 6 is fully supported on
-        // Mac OS X
+        Desktop desktop = Desktop.getDesktop();
+
         try {
-            Class<?> desktopClass = Class.forName("java.awt.Desktop");
-            Method getDesktopMethod = desktopClass.getMethod("getDesktop", new Class<?>[] {});
-            Method browseMethod = desktopClass.getMethod("browse", new Class[] {URI.class});
-            Object desktop = getDesktopMethod.invoke(null, (Object[]) null);
-            browseMethod.invoke(desktop, location.toURI());
-        } catch (Exception exception) {
-            System.err.println("Unable to open URL in default browser.");
+            desktop.browse(location.toURI());
+        } catch(Exception exception) {
+            System.out.println("Unable to open URL in default browser.");
         }
     }
 
