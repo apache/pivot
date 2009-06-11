@@ -790,7 +790,7 @@ public class Demo implements Application, Application.About {
                             Component body = null;
                             WTKXSerializer wtkxSerializer = new WTKXSerializer();
                             try {
-                                body = (Component)wtkxSerializer.readObject("pivot/tutorials/alert.wtkx");
+                                body = (Component)wtkxSerializer.readObject(this, "alert.wtkx");
                             } catch(Exception exception) {
                                 System.out.println(exception);
                             }
@@ -826,7 +826,7 @@ public class Demo implements Application, Application.About {
                             Component body = null;
                             WTKXSerializer wtkxSerializer = new WTKXSerializer();
                             try {
-                                body = (Component)wtkxSerializer.readObject("pivot/tutorials/alert.wtkx");
+                                body = (Component)wtkxSerializer.readObject(this, "alert.wtkx");
                             } catch(Exception exception) {
                                 System.out.println(exception);
                             }

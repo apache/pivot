@@ -111,6 +111,10 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return hashMap.isEmpty();
     }
 
+    public int count() {
+        return hashMap.size();
+    }
+
     public Comparator<K> getComparator() {
         return comparator;
     }

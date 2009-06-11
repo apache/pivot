@@ -19,13 +19,23 @@ import pivot.wtk.*
 
 foo = "ABCDE"
 
+def doSomething(button) {
+    Alert.alert("You clicked me!", button.getWindow())
+}
+
 public class MyButtonPressListener1 implements ButtonPressListener {
+    private Script script;
+    
+    public MyButtonPressListener1(Script script) {
+        this.script = script
+    }
+    
     public void buttonPressed(Button button) {
-        Alert.alert("You clicked me!", button.getWindow())
+        script.doSomething(button)
     }
 }
 
-buttonPressListener1 = new MyButtonPressListener1()
+buttonPressListener1 = new MyButtonPressListener1(this)
 
 public class MyButtonPressListener2 implements ButtonPressListener {
     public void buttonPressed(Button button) {

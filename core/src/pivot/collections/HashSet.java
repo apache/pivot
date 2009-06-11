@@ -83,6 +83,10 @@ public class HashSet<E> implements Set<E>, Serializable {
         return hashSet.isEmpty();
     }
 
+    public int count() {
+        return hashSet.size();
+    }
+
     public Comparator<E> getComparator() {
         return comparator;
     }

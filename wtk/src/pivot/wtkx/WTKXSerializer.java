@@ -22,14 +22,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
+import javax.script.Bindings;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
@@ -54,6 +60,81 @@ import pivot.util.ThreadUtilities;
  * @author gbrown
  */
 public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Object> {
+    private class NamedObjectBindings implements Bindings {
+        public Object get(Object key) {
+            return namedObjects.get(key.toString());
+        }
+
+        public Object put(String key, Object value) {
+            return namedObjects.put(key, value);
+        }
+
+        public void putAll(Map<? extends String, ? extends Object> map) {
+            for (String key : map.keySet()) {
+                namedObjects.put(key, map.get(key));
+            }
+        }
+
+        public Object remove(Object key) {
+            return namedObjects.remove(key.toString());
+        }
+
+        public void clear() {
+            namedObjects.clear();
+        }
+
+        public boolean containsKey(Object key) {
+            return namedObjects.containsKey(key.toString());
+        }
+
+        public boolean containsValue(Object value) {
+            boolean contains = false;
+            for (String key : namedObjects) {
+                if (namedObjects.get(key).equals(value)) {
+                    contains = true;
+                    break;
+                }
+            }
+
+            return contains;
+        }
+
+        public boolean isEmpty() {
+            return namedObjects.isEmpty();
+        }
+
+        public Set<String> keySet() {
+            java.util.HashSet<String> keySet = new java.util.HashSet<String>();
+            for (String key : namedObjects) {
+                keySet.add(key);
+            }
+
+            return keySet;
+        }
+
+        public Set<Entry<String, Object>> entrySet() {
+            java.util.HashMap<String, Object> hashMap = new java.util.HashMap<String, Object>();
+            for (String key : namedObjects) {
+                hashMap.put(key, namedObjects.get(key));
+            }
+
+            return hashMap.entrySet();
+        }
+
+        public int size() {
+            return namedObjects.count();
+        }
+
+        public Collection<Object> values() {
+            java.util.ArrayList<Object> values = new java.util.ArrayList<Object>();
+            for (String key : namedObjects) {
+                values.add(namedObjects.get(key));
+            }
+
+            return values;
+        }
+    }
+
     private static class Element  {
         public enum Type {
             INSTANCE,
@@ -98,11 +179,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
 
-    private XMLInputFactory xmlInputFactory;
+    private ScriptEngineManager scriptEngineManager = null;
+    private NamedObjectBindings namedObjectBindings = null;
 
-    private Class<?> scriptEngineManagerClass;
-    private Object scriptEngineManager;
-    private java.util.Map<String, Object> scriptEngineBindings;
+    private XMLInputFactory xmlInputFactory;
 
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
@@ -124,12 +204,16 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         this(null);
     }
 
-    @SuppressWarnings("unchecked")
     public WTKXSerializer(Resources resources) {
         this.resources = resources;
 
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
+
+        scriptEngineManager = new javax.script.ScriptEngineManager();
+        namedObjectBindings = new NamedObjectBindings();
+
+        scriptEngineManager.setBindings(namedObjectBindings);
     }
 
     public Resources getResources() {
@@ -323,27 +407,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                                 element = new Element(element, Element.Type.INCLUDE, attributes, value);
                             } else if (localName.equals(SCRIPT_TAG)) {
-                                // Load the script engine manager if it has not been loaded
-                                if (scriptEngineManager == null) {
-                                    try {
-                                        scriptEngineManagerClass = Class.forName("javax.script.ScriptEngineManager");
-                                    } catch(ClassNotFoundException exception) {
-                                        throw new SerializationException("Scripting is not supported on this platform.");
-                                    }
-
-                                    try {
-                                        scriptEngineManager = scriptEngineManagerClass.newInstance();
-                                        Method getBindingsMethod = scriptEngineManagerClass.getMethod
-                                            ("getBindings", new Class<?>[] {});
-                                        scriptEngineBindings = (java.util.Map<String, Object>)
-                                            getBindingsMethod.invoke(scriptEngineManager, new Object[] {});
-                                    } catch(Exception exception) {
-                                        scriptEngineManager = null;
-                                        scriptEngineBindings = null;
-                                    }
-                                }
-
-                                // The element represents a script
+                                // TODO Also look for language attribute, in case the script is inline
                                 String src = null;
 
                                 for (int i = 0, n = reader.getAttributeCount(); i < n; i++) {
@@ -371,38 +435,32 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                 }
 
                                 String extension = src.substring(i + 1);
-
-                                Object scriptEngine = null;
-                                try {
-                                    Method getEngineByExtensionMethod =
-                                        scriptEngineManagerClass.getMethod("getEngineByExtension", new Class<?>[] {String.class});
-
-                                    scriptEngine = getEngineByExtensionMethod.invoke(scriptEngineManager, new Object[] {extension});
-                                } catch(Exception exception) {
-                                    throw new RuntimeException(exception);
-                                }
+                                ScriptEngine scriptEngine = scriptEngineManager.getEngineByExtension(extension);
 
                                 if (scriptEngine == null) {
                                     throw new SerializationException("Unable to find scripting engine for "
                                         + " extension " + extension + ".");
                                 }
 
-                                try {
-                                    ClassLoader classLoader = ThreadUtilities.getClassLoader();
-                                    URL scriptLocation;
+                                // TODO If the parent element is a read-only property that refers to
+                                // a listener list, temporarily bind to an invocation handler and set the
+                                // handler as the current element (don't set the element to the script tag,
+                                // as below):
+                                // element = new Element(element, Element.Type.INSTANCE, attributes, handler);
 
+                                scriptEngine.setBindings(namedObjectBindings, ScriptContext.ENGINE_SCOPE);
+
+                                try {
+                                    URL scriptLocation;
                                     if (src.charAt(0) == '/') {
+                                        ClassLoader classLoader = ThreadUtilities.getClassLoader();
                                         scriptLocation = classLoader.getResource(src);
                                     } else {
                                         scriptLocation = new URL(location, src);
                                     }
 
-                                    Class<?> bindingsClass = Class.forName("javax.script.Bindings");
-                                    Method evalMethod = scriptEngine.getClass().getMethod("eval",
-                                        new Class<?>[] {Reader.class, bindingsClass});
-
-                                    Reader scriptReader = new BufferedReader(new InputStreamReader(scriptLocation.openStream()));
-                                    evalMethod.invoke(scriptEngine, new Object[] {scriptReader, scriptEngineBindings});
+                                    BufferedReader scriptReader = new BufferedReader(new InputStreamReader(scriptLocation.openStream()));
+                                    scriptEngine.eval(scriptReader);
                                 } catch(Exception exception) {
                                     throw new SerializationException(exception);
                                 }
@@ -498,16 +556,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     }
 
                                     namedObjects.put(id, element.value);
-
-                                    if (scriptEngineManager != null) {
-                                        try {
-                                            Method putMethod = scriptEngineManagerClass.getMethod("put",
-                                                new Class<?>[] {String.class, Object.class});
-                                            putMethod.invoke(scriptEngineManager, new Object[] {id, namedObjects.get(id)});
-                                        } catch(Exception exception) {
-                                            throw new RuntimeException(exception);
-                                        }
-                                    }
                                 }
 
                                 break;
@@ -684,7 +732,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("name is null.");
         }
 
-        Object object = null;
         WTKXSerializer serializer = this;
         String[] namespacePath = name.split("\\.");
 
@@ -695,22 +742,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             serializer = serializer.includeSerializers.get(namespace);
         }
 
-        if (serializer != null) {
-            String id = namespacePath[i];
+        String id = namespacePath[i];
 
-            if (serializer.namedObjects.containsKey(id)) {
-                object = serializer.namedObjects.get(id);
-            } else {
-                if (serializer.scriptEngineManager != null) {
-                    try {
-                        Method getMethod = serializer.scriptEngineManagerClass.getMethod("get",
-                            new Class<?>[] {String.class});
-                        object = getMethod.invoke(serializer.scriptEngineManager, new Object[] {id});
-                    } catch(Exception exception) {
-                        throw new RuntimeException(exception);
-                    }
-                }
-            }
+        Object object = null;
+        if (serializer != null
+            && serializer.namedObjects.containsKey(id)) {
+            object = serializer.namedObjects.get(id);
         }
 
         return object;
@@ -729,7 +766,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("name is null.");
         }
 
-        boolean result = false;
         WTKXSerializer serializer = this;
         String[] namespacePath = name.split("\\.");
 
@@ -740,42 +776,15 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             serializer = serializer.includeSerializers.get(namespace);
         }
 
-        // TODO Review
-        if (serializer != null) {
-            String id = namespacePath[i];
+        String id = namespacePath[i];
 
-            if (serializer.namedObjects.containsKey(id)) {
-                result = true;
-            } else if (serializer.scriptEngineBindings != null) {
-                result = serializer.scriptEngineBindings.containsKey(id);
-            }
-        }
-
-        return result;
+        return serializer != null
+            && serializer.namedObjects.containsKey(id);
     }
 
     public boolean isEmpty() {
-        // TODO Review
-        boolean empty = namedObjects.isEmpty();
-
-        if (empty
-            && scriptEngineBindings != null) {
-            // Check for script bindings
-            empty = scriptEngineBindings.isEmpty();
-        }
-
-        if (empty) {
-            // Check include serializers
-            for (String namespace : includeSerializers) {
-                WTKXSerializer includeSerializer = includeSerializers.get(namespace);
-                if (!includeSerializer.isEmpty()) {
-                    empty = false;
-                    break;
-                }
-            }
-        }
-
-        return empty;
+        return namedObjects.isEmpty()
+            && includeSerializers.isEmpty();
     }
 
     /**

@@ -20,9 +20,13 @@ importPackage(Packages.pivot.wtk);
 
 var foo = "Hello World";
 
+function doSomething(button) {
+    Alert.alert("You clicked me!", button.getWindow());
+}
+
 var buttonPressListener1 = new ButtonPressListener() {
     buttonPressed: function(button) {
-        Alert.alert("You clicked me!", button.getWindow());
+        doSomething(button);
     }
 };
 
