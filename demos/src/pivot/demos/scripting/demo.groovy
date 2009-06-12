@@ -14,8 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import pivot.wtk.*
+import pivot.collections.adapter.*
 
-def showAlert(button) {
-    Alert.alert("You clicked me!", button.getWindow())
-}
+listData = []
+listData << "One"
+listData << "Two"
+listData << "Three"
+
+listData = new ListAdapter(listData)

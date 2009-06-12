@@ -76,7 +76,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         public void putAll(Map<? extends String, ? extends Object> map) {
             for (String key : map.keySet()) {
-                namedObjects.put(key, map.get(key));
+                put(key, map.get(key));
             }
         }
 
@@ -681,7 +681,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                             scriptReader = new BufferedReader(new InputStreamReader(scriptLocation.openStream()));
                                             scriptEngine.eval(scriptReader);
                                         } catch(ScriptException exception) {
-                                            throw new SerializationException(exception);
+                                            System.err.println(exception.getMessage());
                                         } finally {
                                             if (scriptReader != null) {
                                                 scriptReader.close();
@@ -705,7 +705,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         try {
                                             scriptEngine.eval((String)element.value);
                                         } catch (ScriptException exception) {
-                                            throw new SerializationException(exception);
+                                            System.err.println(exception.getMessage());
                                         }
                                     }
                                 } else {

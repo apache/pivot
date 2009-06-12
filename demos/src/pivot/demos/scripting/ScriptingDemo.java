@@ -45,7 +45,7 @@ public class ScriptingDemo implements Application {
         window = (Window)wtkxSerializer.readObject(this, "scripting_demo.wtkx");
         wtkxSerializer.bind(this);
 
-        System.out.println("foo = \"" + foo + "\"");
+        System.out.println("foo = " + (foo == null ? null : "\"" + foo + "\""));
         System.out.println("listData.getLength() = " + listData.getLength());
 
         window.open(display);

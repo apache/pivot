@@ -20,37 +20,8 @@ limitations under the License.
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
     xmlns:scripting="pivot.demos.scripting"
     xmlns="pivot.wtk">
-    <wtkx:script language="javascript">
-    <![CDATA[
-    importPackage(Packages.pivot.collections);
-
-    var foo = "Hello World";
-
-    var listData = new ArrayList();
-    listData.add("One");
-    listData.add("Two");
-    listData.add("Three");
-    ]]>
-    </wtkx:script>
     <wtkx:script src="demo.js"/>
-
-    <!--
-    <wtkx:script language="groovy">
-    <![CDATA[
-    import pivot.collections.adapter.*
-
-    def foo = "ABCDE"
-
-    def listData = []
-    listData << "One"
-    listData << "Two"
-    listData << "Three"
-
-    listData = new ListAdapter(listData)
-    ]]>
-    </wtkx:script>
     <wtkx:script src="demo.groovy"/>
-    -->
 
     <content>
         <Border>
@@ -60,35 +31,20 @@ limitations under the License.
                         <buttonPressListeners>
                             <wtkx:script language="javascript">
                             <![CDATA[
+                            importPackage(Packages.pivot.wtk);
                             function buttonPressed(button) {
-                                showAlert(button);
-                            }
-                            ]]>
-                            </wtkx:script>
-                            <wtkx:script language="javascript">
-                            <![CDATA[
-                            function buttonPressed(button) {
-                                java.lang.System.out.println("[JavaScript] A button was clicked.");
+                                Alert.alert("Hello from JavaScript!", button.getWindow());
                             }
                             ]]>
                             </wtkx:script>
 
-                            <!--
                             <wtkx:script language="groovy">
                             <![CDATA[
-                            def buttonPressed(button) {
-                                showAlert(button);
+                            buttonPressed = {
+                                out.println("Hello from Groovy!")
                             }
                             ]]>
                             </wtkx:script>
-                            <wtkx:script language="groovy">
-                            <![CDATA[
-                            def buttonPressed(Button button) {
-                                System.out.println("[Groovy] A button was clicked.");
-                            }
-                            ]]>
-                            </wtkx:script>
-                            -->
                         </buttonPressListeners>
                     </PushButton>
 
