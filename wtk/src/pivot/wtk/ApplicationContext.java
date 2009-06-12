@@ -356,9 +356,9 @@ public abstract class ApplicationContext {
                     super.repaint((int)Math.floor(x * scale), (int)Math.floor(y * scale),
                         (int)Math.ceil(width * scale) + 1, (int)Math.ceil(height * scale) + 1);
                 }
-            }
 
-            paintPending = true;
+                paintPending = true;
+            }
         }
 
         @Override

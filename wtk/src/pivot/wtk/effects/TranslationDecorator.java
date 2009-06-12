@@ -96,10 +96,13 @@ public class TranslationDecorator implements Decorator {
     }
 
     public Bounds getBounds(Component component) {
-        Bounds bounds = new Bounds(x, y, component.getWidth(), component.getHeight());
+        int width = component.getWidth();
+        int height = component.getHeight();
+
+        Bounds bounds = new Bounds(x, y, width, height);
 
         if (clip) {
-            bounds = bounds.intersect(component.getBounds());
+            bounds = bounds.intersect(0, 0, width, height);
         }
 
         return bounds;

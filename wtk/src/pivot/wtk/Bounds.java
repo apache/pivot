@@ -116,26 +116,39 @@ public final class Bounds {
         return new Dimensions(width, height);
     }
 
+    public Bounds union(int x, int y, int width, int height) {
+        int x1 = Math.min(this.x, x);
+        int y1 = Math.min(this.y, y);
+        int x2 = Math.max(this.x + this.width, x + width);
+        int y2 = Math.max(this.y + this.height, y + height);
+
+        return new Bounds(x1, y1, x2 - x1, y2 - y1);
+
+    }
+
     public Bounds union(Bounds bounds) {
-        int x1 = Math.min(x, bounds.x);
-        int y1 = Math.min(y, bounds.y);
-        int x2 = Math.max(x + width, bounds.x + bounds.width);
-        int y2 = Math.max(y + height, bounds.y + bounds.height);
+        return union(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+
+    public Bounds intersect(int x, int y, int width, int height) {
+        int x1 = Math.max(this.x, x);
+        int y1 = Math.max(this.y, y);
+        int x2 = Math.min(this.x + this.width, x + width);
+        int y2 = Math.min(this.y + this.height, y + height);
 
         return new Bounds(x1, y1, x2 - x1, y2 - y1);
     }
 
     public Bounds intersect(Bounds bounds) {
-        int x1 = Math.max(x, bounds.x);
-        int y1 = Math.max(y, bounds.y);
-        int x2 = Math.min(x + width, bounds.x + bounds.width);
-        int y2 = Math.min(y + height, bounds.y + bounds.height);
-
-        return new Bounds(x1, y1, x2 - x1, y2 - y1);
+        return intersect(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
     public Bounds translate(int dx, int dy) {
         return new Bounds(x + dx, y + dy, width, height);
+    }
+
+    public Bounds translate(Point offset) {
+        return translate(offset.x, offset.y);
     }
 
     public boolean contains(Point point) {

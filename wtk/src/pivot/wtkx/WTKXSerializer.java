@@ -177,6 +177,21 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
+    private static class WTKXSerializerListenerList extends ListenerList<WTKXSerializerListener>
+        implements WTKXSerializerListener {
+        public void includeLoaded(WTKXSerializer serializer, String id) {
+            for (WTKXSerializerListener listener : this) {
+                listener.includeLoaded(serializer, id);
+            }
+        }
+
+        public void allIncludesLoaded(WTKXSerializer serializer) {
+            for (WTKXSerializerListener listener : this) {
+                listener.allIncludesLoaded(serializer);
+            }
+        }
+    }
+
     private URL location = null;
     private Resources resources = null;
 
@@ -188,6 +203,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     private XMLInputFactory xmlInputFactory;
 
+    private WTKXSerializerListenerList wtkxSerializerListeners = new WTKXSerializerListenerList();
+
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
     public static final char OBJECT_REFERENCE_PREFIX = '$';
@@ -198,6 +215,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     public static final String INCLUDE_TAG = "include";
     public static final String INCLUDE_SRC_ATTRIBUTE = "src";
     public static final String INCLUDE_RESOURCES_ATTRIBUTE = "resources";
+    public static final String INCLUDE_ASYNCHRONOUS_ATTRIBUTE = "aysnchronous";
 
     public static final String SCRIPT_TAG = "script";
     public static final String SCRIPT_SRC_ATTRIBUTE = "src";
@@ -451,9 +469,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                 ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 
                                 if (element.type == Element.Type.INCLUDE) {
-                                    // Process attributes looking for src, wtkx:id, and static property
-                                    // setters only
+                                    // Process attributes looking for wtkx:id, src, resources, asynchronous,
+                                    // and static property setters only
                                     String src = null;
+                                    Resources resources = this.resources;
 
                                     for (Attribute attribute : element.attributes) {
                                         if (attribute.prefix != null
@@ -467,6 +486,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                         } else {
                                             if (attribute.localName.equals(INCLUDE_SRC_ATTRIBUTE)) {
                                                 src = attribute.value;
+                                            } else if (attribute.localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
+                                                resources = new Resources(attribute.value);
+                                            } else if (attribute.localName.equals(INCLUDE_ASYNCHRONOUS_ATTRIBUTE)) {
+                                                // TODO
                                             } else {
                                                 if (attribute.namespaceURI == null) {
                                                     throw new SerializationException("Instance property setters are not"
@@ -1242,5 +1265,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         return method;
+    }
+
+    public ListenerList<WTKXSerializerListener> getWTKXSerializerListeners() {
+        return wtkxSerializerListeners;
     }
 }
