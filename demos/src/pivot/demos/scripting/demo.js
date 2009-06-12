@@ -14,29 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-importPackage(Packages.java.lang);
-importPackage(Packages.pivot.collections);
 importPackage(Packages.pivot.wtk);
 
-var foo = "Hello World";
-
-function doSomething(button) {
+function showAlert(button) {
     Alert.alert("You clicked me!", button.getWindow());
 }
-
-var buttonPressListener1 = new ButtonPressListener() {
-    buttonPressed: function(button) {
-        doSomething(button);
-    }
-};
-
-var buttonPressListener2 = new ButtonPressListener() {
-    buttonPressed: function(button) {
-        System.out.println("[JavaScript] A button was clicked.");
-    }
-};
-
-var listData = new ArrayList();
-listData.add("One");
-listData.add("Two");
-listData.add("Three");

@@ -17,6 +17,7 @@
 package pivot.demos.scripting;
 
 import pivot.collections.Dictionary;
+import pivot.collections.List;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
@@ -36,6 +37,7 @@ public class ScriptingDemo implements Application {
     private Window window = null;
 
     @WTKX private String foo;
+    @WTKX private List<?> listData;
 
     public void startup(Display display, Dictionary<String, String> properties)
         throws Exception {
@@ -43,7 +45,9 @@ public class ScriptingDemo implements Application {
         window = (Window)wtkxSerializer.readObject(this, "scripting_demo.wtkx");
         wtkxSerializer.bind(this);
 
-        System.out.println("foo = " + foo);
+        System.out.println("foo = \"" + foo + "\"");
+        System.out.println("listData.getLength() = " + listData.getLength());
+
         window.open(display);
     }
 

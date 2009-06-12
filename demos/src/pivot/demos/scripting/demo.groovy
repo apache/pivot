@@ -14,40 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import pivot.collections.adapter.*
 import pivot.wtk.*
 
-foo = "ABCDE"
-
-def doSomething(button) {
+def showAlert(button) {
     Alert.alert("You clicked me!", button.getWindow())
 }
-
-public class MyButtonPressListener1 implements ButtonPressListener {
-    private Script script;
-    
-    public MyButtonPressListener1(Script script) {
-        this.script = script
-    }
-    
-    public void buttonPressed(Button button) {
-        script.doSomething(button)
-    }
-}
-
-buttonPressListener1 = new MyButtonPressListener1(this)
-
-public class MyButtonPressListener2 implements ButtonPressListener {
-    public void buttonPressed(Button button) {
-        System.out.println("[Groovy] A button was clicked.");
-    }
-}
-
-buttonPressListener2 = new MyButtonPressListener2()
-
-listData = []
-listData << "One"
-listData << "Two"
-listData << "Three"
-
-listData = new ListAdapter(listData)
