@@ -314,7 +314,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         fullScreenHostFrame.setUndecorated(true);
 
         // Hook into OS X application menu
-        String osName = System.getProperty("os.name").toLowerCase();
+        String osName = System.getProperty("os.name");
         if (osName.toLowerCase().startsWith("mac os x")) {
             try {
                 // Get the EAWT classes and methods
