@@ -314,12 +314,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                 Method addMethod = sequence.getClass().getMethod("add",
                                                     new Class<?>[] {String.class});
                                                 addMethod.invoke(sequence, new Object[] {text});
-                                            } catch(NoSuchMethodException exception) {
+                                            } catch (NoSuchMethodException exception) {
                                                 throw new SerializationException("Text content cannot be added to "
                                                     + sequence.getClass().getName() + ".", exception);
-                                            } catch(InvocationTargetException exception) {
+                                            } catch (InvocationTargetException exception) {
                                                 throw new SerializationException(exception);
-                                            } catch(IllegalAccessException exception) {
+                                            } catch (IllegalAccessException exception) {
                                                 throw new SerializationException(exception);
                                             }
                                         }
@@ -461,7 +461,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                                     BufferedReader scriptReader = new BufferedReader(new InputStreamReader(scriptLocation.openStream()));
                                     scriptEngine.eval(scriptReader);
-                                } catch(Exception exception) {
+                                } catch (Exception exception) {
                                     throw new SerializationException(exception);
                                 }
 
@@ -506,7 +506,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                 try {
                                     Class<?> type = Class.forName(className);
                                     element = new Element(element, Element.Type.INSTANCE, attributes, type.newInstance());
-                                } catch(Exception exception) {
+                                } catch (Exception exception) {
                                     throw new SerializationException(exception);
                                 }
                             } else {
@@ -651,7 +651,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             }
 
             reader.close();
-        } catch(XMLStreamException exception) {
+        } catch (XMLStreamException exception) {
             throw new SerializationException(exception);
         }
 
@@ -802,8 +802,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         Method __bindMethod = null;
         try {
-            __bindMethod = type.getDeclaredMethod("__bind", new Class<?>[] {type});
-        } catch(NoSuchMethodException exception) {
+            __bindMethod = type.getDeclaredMethod("__bind", new Class<?>[] {Dictionary.class});
+        } catch (NoSuchMethodException exception) {
             // No-op
         }
 
@@ -826,7 +826,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     if ((fieldModifiers & Modifier.PUBLIC) == 0) {
                         try {
                             field.setAccessible(true);
-                        } catch(SecurityException exception) {
+                        } catch (SecurityException exception) {
                             throw new BindException(fieldName + " is not accessible.");
                         }
                     }
@@ -849,11 +849,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             }
         } else {
             try {
-                __bindMethod.invoke(null, new Object[] {object});
-            } catch(IllegalAccessException exception) {
-                throw new RuntimeException(exception);
-            } catch(InvocationTargetException exception) {
-                throw new RuntimeException(exception);
+                __bindMethod.invoke(null, new Object[] {this});
+            } catch (IllegalAccessException exception) {
+                throw new BindException(exception);
+            } catch (InvocationTargetException exception) {
+                throw new BindException(exception);
             }
         }
     }
@@ -883,7 +883,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             || propertyType == Boolean.TYPE) {
             try {
                 resolvedValue = Boolean.parseBoolean(attributeValue);
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 resolvedValue = attributeValue;
             }
         } else if (propertyType == Character.class
@@ -895,42 +895,42 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             || propertyType == Byte.TYPE) {
             try {
                 resolvedValue = Byte.parseByte(attributeValue);
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 resolvedValue = attributeValue;
             }
         } else if (propertyType == Short.class
             || propertyType == Short.TYPE) {
             try {
                 resolvedValue = Short.parseShort(attributeValue);
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 resolvedValue = attributeValue;
             }
         } else if (propertyType == Integer.class
             || propertyType == Integer.TYPE) {
             try {
                 resolvedValue = Integer.parseInt(attributeValue);
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 resolvedValue = attributeValue;
             }
         } else if (propertyType == Long.class
             || propertyType == Long.TYPE) {
             try {
                 resolvedValue = Long.parseLong(attributeValue);
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 resolvedValue = attributeValue;
             }
         } else if (propertyType == Float.class
             || propertyType == Float.TYPE) {
             try {
                 resolvedValue = Float.parseFloat(attributeValue);
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 resolvedValue = attributeValue;
             }
         } else if (propertyType == Double.class
             || propertyType == Double.TYPE) {
             try {
                 resolvedValue = Double.parseDouble(attributeValue);
-            } catch(NumberFormatException exception) {
+            } catch (NumberFormatException exception) {
                 resolvedValue = attributeValue;
             }
         } else {
@@ -1001,7 +1001,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         Class<?> propertyClass = null;
         try {
             propertyClass = Class.forName(propertyClassName);
-        } catch(ClassNotFoundException exception) {
+        } catch (ClassNotFoundException exception) {
             throw new SerializationException(exception);
         }
 
@@ -1031,7 +1031,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         // Invoke the setter
         try {
             setterMethod.invoke(null, new Object[] {object, propertyValue});
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             throw new SerializationException(exception);
         }
     }
@@ -1044,7 +1044,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             try {
                 method = propertyClass.getMethod(BeanDictionary.GET_PREFIX
                     + propertyName, new Class<?>[] {objectType});
-            } catch(NoSuchMethodException exception) {
+            } catch (NoSuchMethodException exception) {
                 // No-op
             }
 
@@ -1052,7 +1052,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                 try {
                     method = propertyClass.getMethod(BeanDictionary.IS_PREFIX
                         + propertyName, new Class<?>[] {objectType});
-                } catch(NoSuchMethodException exception) {
+                } catch (NoSuchMethodException exception) {
                     // No-op
                 }
             }
@@ -1076,7 +1076,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             try {
                 method = propertyClass.getMethod(methodName,
                     new Class<?>[] {objectType, propertyValueType});
-            } catch(NoSuchMethodException exception) {
+            } catch (NoSuchMethodException exception) {
                 // No-op
             }
 
@@ -1090,12 +1090,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     try {
                         method = propertyClass.getMethod(methodName,
                             new Class<?>[] {objectType, primitivePropertyValueType});
-                    } catch(NoSuchMethodException exception) {
+                    } catch (NoSuchMethodException exception) {
                         // No-op
                     }
-                } catch(NoSuchFieldException exception) {
+                } catch (NoSuchFieldException exception) {
                     // No-op; not a wrapper type
-                } catch(IllegalAccessException exception) {
+                } catch (IllegalAccessException exception) {
                     // No-op; not a wrapper type
                 }
             }
