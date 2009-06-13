@@ -96,7 +96,7 @@ public class IMClient implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "im_client.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, IMClient.class);
 
         loginForm.getComponentKeyListeners().add(new ComponentKeyListener() {
             public boolean keyTyped(Component component, char character) {

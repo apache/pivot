@@ -45,7 +45,7 @@ public class Demo implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "demo.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, Demo.class);
 
         TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();
         tableView.setRowEditor(tableViewRowEditor);

@@ -167,7 +167,7 @@ public class LargeData implements Application {
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "large_data.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, LargeData.class);
 
         loadDataButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

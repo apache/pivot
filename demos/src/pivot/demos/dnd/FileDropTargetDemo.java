@@ -57,7 +57,7 @@ public class FileDropTargetDemo implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "file_drop_target_demo.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, FileDropTargetDemo.class);
 
         fileList = new FileList();
         fileTableView.setTableData(fileList);

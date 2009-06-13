@@ -21,6 +21,7 @@ import pivot.util.Vote;
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
+import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;
 import pivot.wtk.FlowPane;
 import pivot.wtk.Frame;
@@ -115,5 +116,9 @@ public class SheetTest implements Application {
     }
 
     public void resume() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(SheetTest.class, args);
     }
 }

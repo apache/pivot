@@ -37,7 +37,7 @@ public class Expanders implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "expanders.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, Expanders.class);
 
         ExpanderListener expanderListener = new ExpanderListener.Adapter() {
             public void expandedChanged(Expander expander) {

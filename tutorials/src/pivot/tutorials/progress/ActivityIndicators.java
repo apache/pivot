@@ -40,7 +40,7 @@ public class ActivityIndicators implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "activity_indicators.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, ActivityIndicators.class);
 
         activityButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

@@ -951,12 +951,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
      * be applied at compile time. See {@link BindProcessor} for more
      * information.
      *
+     * @param t
+     * @param type
+     *
      * @throws BindException
      * If an error occurs during binding
      */
-    public void bind(Object object) throws BindException {
-        Class<?> type = object.getClass();
-
+    public <T> void bind(T t, Class<? super T> type) throws BindException {
         Method __bindMethod = null;
         try {
             __bindMethod = type.getDeclaredMethod("__bind", new Class<?>[] {type, WTKXSerializer.class});
@@ -998,7 +999,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         // Set the value into the field
                         Object value = get(id);
                         try {
-                            field.set(object, value);
+                            field.set(t, value);
                         } catch (IllegalAccessException exception) {
                             throw new BindException(exception);
                         }
@@ -1007,7 +1008,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             }
         } else {
             try {
-                __bindMethod.invoke(null, new Object[] {object, this});
+                __bindMethod.invoke(null, new Object[] {t, this});
             } catch (IllegalAccessException exception) {
                 throw new BindException(exception);
             } catch (InvocationTargetException exception) {

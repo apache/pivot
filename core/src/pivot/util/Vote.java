@@ -36,24 +36,28 @@ public enum Vote {
     public Vote tally(Vote vote) {
         Vote tally;
 
-        switch(vote) {
-            case APPROVE: {
-                tally = this;
-                break;
-            }
+        if (vote == null) {
+            tally = this;
+        } else {
+            switch(vote) {
+                case APPROVE: {
+                    tally = this;
+                    break;
+                }
 
-            case DENY: {
-                tally = vote;
-                break;
-            }
+                case DENY: {
+                    tally = vote;
+                    break;
+                }
 
-            case DEFER: {
-                tally = (this == DENY) ? this : vote;
-                break;
-            }
+                case DEFER: {
+                    tally = (this == DENY) ? this : vote;
+                    break;
+                }
 
-            default: {
-                throw new IllegalArgumentException();
+                default: {
+                    throw new IllegalArgumentException();
+                }
             }
         }
 

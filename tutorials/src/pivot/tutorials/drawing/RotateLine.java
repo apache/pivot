@@ -39,7 +39,7 @@ public class RotateLine implements Application {
         throws Exception{
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         drawing = (Drawing)wtkxSerializer.readObject(this, "rotate_line.wtkd");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, RotateLine.class);
 
         ApplicationContext.scheduleRecurringCallback(new Runnable() {
             public void run() {

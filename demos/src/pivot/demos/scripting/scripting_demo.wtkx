@@ -23,6 +23,22 @@ limitations under the License.
     <wtkx:script src="demo.js"/>
     <wtkx:script src="demo.groovy"/>
 
+    <windowStateListeners>
+        <wtkx:script language="javascript">
+        <![CDATA[
+        importPackage(java.lang);
+
+        function windowOpened(window) {
+            System.out.println("Window opened");
+        }
+
+        function windowClosed(window, display) {
+            System.out.println("Window closed");
+        }
+        ]]>
+        </wtkx:script>
+    </windowStateListeners>
+
     <content>
         <Border>
             <content>

@@ -44,7 +44,7 @@ public class TabPanes implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "tab_panes.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, TabPanes.class);
 
         ButtonStateListener checkboxStateListener = new ButtonStateListener() {
             public void stateChanged(Button button, Button.State previousState) {

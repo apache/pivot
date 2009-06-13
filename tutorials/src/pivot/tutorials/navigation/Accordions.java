@@ -82,7 +82,7 @@ public class Accordions implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "accordions.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, Accordions.class);
 
         accordion.getAccordionSelectionListeners().add(accordionSelectionListener);
 

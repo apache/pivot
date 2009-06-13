@@ -49,7 +49,7 @@ public class CardPanes implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "card_panes.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, CardPanes.class);
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
             public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {

@@ -265,7 +265,7 @@ public class RSSFeedDemo implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "rss_feed_demo.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, RSSFeedDemo.class);
 
         feedListView.setItemRenderer(new RSSItemRenderer());
         feedListView.getComponentMouseButtonListeners().add(new FeedViewMouseButtonHandler());

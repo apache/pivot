@@ -41,7 +41,7 @@ public class Checkboxes implements Application {
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "checkboxes.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, Checkboxes.class);
 
         // Wire up event listeners
         bellCheckbox.getButtonPressListeners().add(new ButtonPressListener() {

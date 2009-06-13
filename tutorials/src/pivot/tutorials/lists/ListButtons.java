@@ -67,7 +67,7 @@ public class ListButtons implements Application {
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "list_buttons.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, ListButtons.class);
 
         listButton.getListButtonSelectionListeners().add(listButtonSelectionListener);
         listButton.setSelectedIndex(0);

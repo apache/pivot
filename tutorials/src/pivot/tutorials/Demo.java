@@ -141,7 +141,7 @@ public class Demo implements Application, Application.About {
                 rollup.setContent(component);
 
                 try {
-                    wtkxSerializer.bind(this);
+                    wtkxSerializer.bind(this, ListsRollupStateHandler.class);
                 } catch(BindException exception) {
                     throw new RuntimeException(exception);
                 }
@@ -186,7 +186,7 @@ public class Demo implements Application, Application.About {
                 rollup.setContent(component);
 
                 try {
-                    wtkxSerializer.bind(this);
+                    wtkxSerializer.bind(this, TextRollupStateHandler.class);
                 } catch(BindException exception) {
                     throw new RuntimeException(exception);
                 }
@@ -339,7 +339,7 @@ public class Demo implements Application, Application.About {
                 rollup.setContent(component);
 
                 try {
-                    wtkxSerializer.bind(this);
+                    wtkxSerializer.bind(this, MenusRollupStateHandler.class);
                 } catch(BindException exception) {
                     throw new RuntimeException(exception);
                 }
@@ -397,7 +397,7 @@ public class Demo implements Application, Application.About {
                 rollup.setContent(component);
 
                 try {
-                    wtkxSerializer.bind(this);
+                    wtkxSerializer.bind(this, MetersRollupStateHandler.class);
                 } catch(BindException exception) {
                     throw new RuntimeException(exception);
                 }
@@ -448,7 +448,7 @@ public class Demo implements Application, Application.About {
                 rollup.setContent(component);
 
                 try {
-                    wtkxSerializer.bind(this);
+                    wtkxSerializer.bind(this, SpinnersRollupStateHandler.class);
                 } catch(BindException exception) {
                     throw new RuntimeException(exception);
                 }
@@ -514,7 +514,7 @@ public class Demo implements Application, Application.About {
                 rollup.setContent(component);
 
                 try {
-                    wtkxSerializer.bind(this);
+                    wtkxSerializer.bind(this, TablesRollupStateHandler.class);
                 } catch(BindException exception) {
                     throw new RuntimeException(exception);
                 }
@@ -593,7 +593,7 @@ public class Demo implements Application, Application.About {
                 rollup.setContent(component);
 
                 try {
-                    wtkxSerializer.bind(this);
+                    wtkxSerializer.bind(this, TreesRollupStateHandler.class);
                 } catch(BindException exception) {
                     throw new RuntimeException(exception);
                 }
@@ -627,7 +627,7 @@ public class Demo implements Application, Application.About {
                 rollup.setContent(component);
 
                 try {
-                    wtkxSerializer.bind(this);
+                    wtkxSerializer.bind(this, DragDropRollupStateHandler.class);
                 } catch(BindException exception) {
                     throw new RuntimeException(exception);
                 }
@@ -768,7 +768,7 @@ public class Demo implements Application, Application.About {
                 rollup.setContent(component);
 
                 try {
-                    wtkxSerializer.bind(this);
+                    wtkxSerializer.bind(this, AlertsRollupStateHandler.class);
                 } catch(BindException exception) {
                     throw new RuntimeException(exception);
                 }
@@ -873,7 +873,7 @@ public class Demo implements Application, Application.About {
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "demo.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, Demo.class);
 
         buttonsRollup.getRollupStateListeners().add(new ButtonsRollupStateHandler());
         listsRollup.getRollupStateListeners().add(new ListsRollupStateHandler());

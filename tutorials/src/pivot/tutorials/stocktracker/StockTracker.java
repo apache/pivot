@@ -106,7 +106,7 @@ public class StockTracker implements Application {
         Resources resources = new Resources(this);
         WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
         window = (Window)wtkxSerializer.readObject(this, "stocktracker.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, StockTracker.class);
 
         // Wire up event handlers
         stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {

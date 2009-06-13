@@ -38,7 +38,7 @@ public class LinkButtons implements Application {
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "link_buttons.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, LinkButtons.class);
 
         nextButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

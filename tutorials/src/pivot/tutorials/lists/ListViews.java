@@ -76,7 +76,7 @@ public class ListViews implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "list_views.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, ListViews.class);
 
         listView.getListViewSelectionListeners().add(listViewSelectionListener);
 

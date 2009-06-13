@@ -147,8 +147,17 @@ public abstract class Component implements ConstrainedVisual {
                 throw new IllegalArgumentException("decorator is null");
             }
 
+            // Repaint the the component's previous decorated region
+            if (parent != null) {
+                parent.repaint(getDecoratedBounds());
+            }
+
             decorators.insert(decorator, index);
-            repaint();
+
+            // Repaint the the component's current decorated region
+            if (parent != null) {
+                parent.repaint(getDecoratedBounds());
+            }
 
             componentDecoratorListeners.decoratorInserted(Component.this, index);
         }
@@ -158,8 +167,17 @@ public abstract class Component implements ConstrainedVisual {
                 throw new IllegalArgumentException("decorator is null.");
             }
 
+            // Repaint the the component's previous decorated region
+            if (parent != null) {
+                parent.repaint(getDecoratedBounds());
+            }
+
             Decorator previousDecorator = decorators.update(index, decorator);
-            repaint();
+
+            // Repaint the the component's current decorated region
+            if (parent != null) {
+                parent.repaint(getDecoratedBounds());
+            }
 
             componentDecoratorListeners.decoratorUpdated(Component.this, index,
                 previousDecorator);
@@ -177,10 +195,21 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         public Sequence<Decorator> remove(int index, int count) {
+            if (count > 0) {
+                // Repaint the the component's previous decorated region
+                if (parent != null) {
+                    parent.repaint(getDecoratedBounds());
+                }
+            }
+
             Sequence<Decorator> removed = decorators.remove(index, count);
 
             if (count > 0) {
-                repaint();
+                if (parent != null) {
+                    // Repaint the the component's current decorated region
+                    parent.repaint(getDecoratedBounds());
+                }
+
                 componentDecoratorListeners.decoratorsRemoved(Component.this, index, removed);
             }
 

@@ -60,7 +60,7 @@ public class DragAndDropDemo implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "drag_and_drop.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, DragAndDropDemo.class);
 
         // Text
         label.setDragSource(new DragSource() {

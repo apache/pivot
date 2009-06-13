@@ -40,7 +40,7 @@ public class RadioButtons implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "radio_buttons.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, RadioButtons.class);
 
         // Get a reference to the button group
         final Button.Group numbersGroup = oneButton.getGroup();

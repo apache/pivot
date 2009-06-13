@@ -72,7 +72,7 @@ public class Meters implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "meters.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, Meters.class);
 
         progressButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

@@ -38,7 +38,7 @@ public class Transitions implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "transitions.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, Transitions.class);
 
         ButtonPressListener trigger = new ButtonPressListener() {
             public void buttonPressed(Button button) {

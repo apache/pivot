@@ -48,7 +48,7 @@ public class FileBrowser implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "file_browser.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, FileBrowser.class);
 
         String pathname = System.getProperty("user.home");
         FileFilter fileFilter = new FileFilter() {

@@ -126,7 +126,7 @@ public class Text implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "text.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, Text.class);
 
         stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);
 

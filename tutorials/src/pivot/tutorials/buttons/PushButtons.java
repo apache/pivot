@@ -37,7 +37,7 @@ public class PushButtons implements Application {
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "push_buttons.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, PushButtons.class);
 
         // Add a button press listener
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {

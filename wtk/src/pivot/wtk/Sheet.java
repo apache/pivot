@@ -54,37 +54,13 @@ public class Sheet extends Window {
     private boolean result = false;
     private SheetCloseListener sheetCloseListener = null;
 
-    private ComponentListener ownerListener = new ComponentListener() {
-        public void parentChanged(Component component, Container previousParent) {
-            // No-op
-        }
-
+    private ComponentListener ownerListener = new ComponentListener.Adapter() {
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            ApplicationContext.queueCallback(new Runnable() {
-                public void run() {
-                    alignToOwnerContent();
-                }
-            });
+            alignToOwnerContent();
         }
 
         public void locationChanged(Component component, int previousX, int previousY) {
             alignToOwnerContent();
-        }
-
-        public void visibleChanged(Component component) {
-            // No-op
-        }
-
-        public void styleUpdated(Component component, String styleKey, Object previousValue) {
-            // No-op
-        }
-
-        public void cursorChanged(Component component, Cursor previousCursor) {
-            // No-op
-        }
-
-        public void tooltipTextChanged(Component component, String previousTooltipText) {
-            // No-op
         }
     };
 
@@ -113,11 +89,7 @@ public class Sheet extends Window {
     public void setSize(int width, int height) {
         super.setSize(width, height);
 
-        ApplicationContext.queueCallback(new Runnable() {
-            public void run() {
-                alignToOwnerContent();
-            }
-        });
+        alignToOwnerContent();
     }
 
     @Override
@@ -148,6 +120,7 @@ public class Sheet extends Window {
 
             content.setEnabled(false);
 
+            // Defer alignment until the display has laid this window out
             ApplicationContext.queueCallback(new Runnable() {
                 public void run() {
                     alignToOwnerContent();

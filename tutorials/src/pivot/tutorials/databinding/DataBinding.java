@@ -51,7 +51,7 @@ public class DataBinding implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "data_binding.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, DataBinding.class);
 
         loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {

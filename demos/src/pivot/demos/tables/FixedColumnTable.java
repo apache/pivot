@@ -44,7 +44,7 @@ public class FixedColumnTable implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "fixed_column_table.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, FixedColumnTable.class);
 
         // Keep selection state in sync
         primaryTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {

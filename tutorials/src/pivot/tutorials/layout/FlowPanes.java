@@ -49,7 +49,7 @@ public class FlowPanes implements Application {
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "flow_panes.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, FlowPanes.class);
 
         ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
             public void stateChanged(Button button, Button.State previousState) {

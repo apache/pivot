@@ -46,7 +46,7 @@ public class CardPaneTest implements Application {
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         sheet = (Sheet)wtkxSerializer.readObject(this, "card_pane_test.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, CardPaneTest.class);
 
         Button.Group sizeGroup = Button.getGroup("sizeGroup");
         sizeGroup.getGroupListeners().add(new Button.GroupListener() {

@@ -45,7 +45,7 @@ public class Forms implements Application {
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "forms.wtkx");
-        wtkxSerializer.bind(this);
+        wtkxSerializer.bind(this, Forms.class);
 
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
