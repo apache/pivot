@@ -24,7 +24,7 @@ package pivot.web;
 public class PutQuery extends Query<Void> {
     private Object value = null;
 
-    public static final Method METHOD = Method.DELETE;
+    public static final Method METHOD = Method.PUT;
 
     public PutQuery(String hostname, String path) {
         this(hostname, DEFAULT_PORT, path, false);
