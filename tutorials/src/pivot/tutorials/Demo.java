@@ -83,7 +83,6 @@ import pivot.wtk.media.Image;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.PlainTextSerializer;
 import pivot.wtkx.WTKX;
-import pivot.wtkx.BindException;
 import pivot.wtkx.WTKXSerializer;
 
 public class Demo implements Application, Application.About {
@@ -139,12 +138,7 @@ public class Demo implements Application, Application.About {
                 }
 
                 rollup.setContent(component);
-
-                try {
-                    wtkxSerializer.bind(this, ListsRollupStateHandler.class);
-                } catch(BindException exception) {
-                    throw new RuntimeException(exception);
-                }
+                wtkxSerializer.bind(this, ListsRollupStateHandler.class);
 
                 List<ListItem> listData = (List<ListItem>)editableListView.getListData();
                 listData.setComparator(new Comparator<ListItem>() {
@@ -184,12 +178,7 @@ public class Demo implements Application, Application.About {
                 }
 
                 rollup.setContent(component);
-
-                try {
-                    wtkxSerializer.bind(this, TextRollupStateHandler.class);
-                } catch(BindException exception) {
-                    throw new RuntimeException(exception);
-                }
+                wtkxSerializer.bind(this, TextRollupStateHandler.class);
 
                 PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
                 InputStream inputStream = getClass().getResourceAsStream("text_area.txt");
@@ -337,12 +326,7 @@ public class Demo implements Application, Application.About {
                 }
 
                 rollup.setContent(component);
-
-                try {
-                    wtkxSerializer.bind(this, MenusRollupStateHandler.class);
-                } catch(BindException exception) {
-                    throw new RuntimeException(exception);
-                }
+                wtkxSerializer.bind(this, MenusRollupStateHandler.class);
 
                 try {
                     menuPopup = (MenuPopup)wtkxSerializer.readObject(this, "menu_popup.wtkx");
@@ -395,12 +379,7 @@ public class Demo implements Application, Application.About {
                 }
 
                 rollup.setContent(component);
-
-                try {
-                    wtkxSerializer.bind(this, MetersRollupStateHandler.class);
-                } catch(BindException exception) {
-                    throw new RuntimeException(exception);
-                }
+                wtkxSerializer.bind(this, MetersRollupStateHandler.class);
 
                 metersRollup.getRollupStateListeners().add(new RollupStateListener() {
                     public Vote previewExpandedChange(Rollup rollup) {
@@ -446,12 +425,7 @@ public class Demo implements Application, Application.About {
                 }
 
                 rollup.setContent(component);
-
-                try {
-                    wtkxSerializer.bind(this, SpinnersRollupStateHandler.class);
-                } catch(BindException exception) {
-                    throw new RuntimeException(exception);
-                }
+                wtkxSerializer.bind(this, SpinnersRollupStateHandler.class);
 
                 initializeNumericSpinner(numericSpinner);
                 initializeDateSpinner(dateSpinner);
@@ -512,12 +486,7 @@ public class Demo implements Application, Application.About {
                 }
 
                 rollup.setContent(component);
-
-                try {
-                    wtkxSerializer.bind(this, TablesRollupStateHandler.class);
-                } catch(BindException exception) {
-                    throw new RuntimeException(exception);
-                }
+                wtkxSerializer.bind(this, TablesRollupStateHandler.class);
 
                 // Set table header data
                 TableView.ColumnSequence columns = sortableTableView.getColumns();
@@ -591,12 +560,7 @@ public class Demo implements Application, Application.About {
                 }
 
                 rollup.setContent(component);
-
-                try {
-                    wtkxSerializer.bind(this, TreesRollupStateHandler.class);
-                } catch(BindException exception) {
-                    throw new RuntimeException(exception);
-                }
+                wtkxSerializer.bind(this, TreesRollupStateHandler.class);
 
                 TreeBranch treeData = (TreeBranch)editableTreeView.getTreeData();
                 treeData.setComparator(new TreeNodeComparator());
@@ -625,12 +589,7 @@ public class Demo implements Application, Application.About {
                 }
 
                 rollup.setContent(component);
-
-                try {
-                    wtkxSerializer.bind(this, DragDropRollupStateHandler.class);
-                } catch(BindException exception) {
-                    throw new RuntimeException(exception);
-                }
+                wtkxSerializer.bind(this, DragDropRollupStateHandler.class);
 
                 DragSource imageDragSource = new DragSource() {
                     private Image image = null;
@@ -766,12 +725,7 @@ public class Demo implements Application, Application.About {
                 }
 
                 rollup.setContent(component);
-
-                try {
-                    wtkxSerializer.bind(this, AlertsRollupStateHandler.class);
-                } catch(BindException exception) {
-                    throw new RuntimeException(exception);
-                }
+                wtkxSerializer.bind(this, AlertsRollupStateHandler.class);
 
                 alertButton.getButtonPressListeners().add(new ButtonPressListener() {
                     public void buttonPressed(Button button) {

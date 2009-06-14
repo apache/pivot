@@ -188,13 +188,11 @@ public class RSSFeedDemo implements Application {
                 color = (Color)listView.getStyles().get("disabledColor");
             }
 
-            if (color instanceof Color) {
-                titleLabel.getStyles().put("color", color);
-                categoriesHeadingLabel.getStyles().put("color", color);
-                categoriesLabel.getStyles().put("color", color);
-                submitterHeadingLabel.getStyles().put("color", color);
-                submitterLabel.getStyles().put("color", color);
-            }
+            titleLabel.getStyles().put("color", color);
+            categoriesHeadingLabel.getStyles().put("color", color);
+            categoriesLabel.getStyles().put("color", color);
+            submitterHeadingLabel.getStyles().put("color", color);
+            submitterLabel.getStyles().put("color", color);
         }
     }
 

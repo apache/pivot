@@ -21,7 +21,7 @@ package pivot.wtkx;
  *
  * @author gbrown
  */
-public class BindException extends Exception {
+public class BindException extends RuntimeException {
     private static final long serialVersionUID = 0;
 
     public BindException() {
