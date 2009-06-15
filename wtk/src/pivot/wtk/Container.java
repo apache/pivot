@@ -20,13 +20,14 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Iterator;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.collections.Map;
-import pivot.collections.Sequence;
-import pivot.util.ImmutableIterator;
-import pivot.util.ListenerList;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ImmutableIterator;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.effects.Decorator;
 
 /**

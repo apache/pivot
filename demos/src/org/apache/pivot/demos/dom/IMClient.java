@@ -16,6 +16,10 @@
  */
 package org.apache.pivot.demos.dom;
 
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.concurrent.Task;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.util.concurrent.TaskListener;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
@@ -25,10 +29,6 @@ import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 
-import pivot.collections.Dictionary;
-import pivot.util.concurrent.Task;
-import pivot.util.concurrent.TaskExecutionException;
-import pivot.util.concurrent.TaskListener;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.BrowserApplicationContext;

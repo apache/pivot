@@ -16,9 +16,10 @@
  */
 package pivot.wtk.content;
 
-import pivot.collections.List;
-import pivot.collections.Sequence;
-import pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.Sequence.Tree.Path;
+
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;

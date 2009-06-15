@@ -27,11 +27,12 @@ import java.net.URLEncoder;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 
-import pivot.io.IOTask;
-import pivot.serialization.JSONSerializer;
-import pivot.serialization.Serializer;
-import pivot.util.ListenerList;
-import pivot.util.concurrent.Dispatcher;
+import org.apache.pivot.io.IOTask;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.concurrent.Dispatcher;
+
 
 /**
  * Abstract base class for web queries. A web query is an asynchronous operation

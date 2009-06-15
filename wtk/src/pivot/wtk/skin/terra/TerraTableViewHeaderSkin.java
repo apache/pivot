@@ -24,7 +24,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.Sequence;
+
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Cursor;

@@ -21,10 +21,11 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import pivot.collections.List;
-import pivot.collections.ListListener;
-import pivot.collections.Sequence;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.ListListener;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Spinner data model that presents a bounded list of integers. This is a

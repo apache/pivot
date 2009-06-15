@@ -21,9 +21,10 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 
-import pivot.collections.Dictionary;
-import pivot.collections.Sequence;
-import pivot.util.Vote;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentStateListener;

@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.charts.content;
 
-import pivot.collections.HashMap;
+import org.apache.pivot.collections.HashMap;
 
 /**
  * Represents series data for category chart views.

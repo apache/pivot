@@ -19,7 +19,8 @@ package pivot.wtk;
 import java.io.IOException;
 import java.net.URL;
 
-import pivot.io.FileList;
+import org.apache.pivot.io.FileList;
+
 import pivot.wtk.media.Image;
 
 /**

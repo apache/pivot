@@ -19,8 +19,9 @@ package org.apache.pivot.tools.net;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import pivot.collections.Dictionary;
-import pivot.collections.Map;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
+
 
 /**
  * An HTTP response from a web server.

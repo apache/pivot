@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.util.test;
 
-import pivot.util.Version;
+import org.apache.pivot.util.Version;
 
 public class VersionTest {
     public static void main(String[] args) {

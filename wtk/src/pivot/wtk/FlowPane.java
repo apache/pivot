@@ -16,7 +16,7 @@
  */
 package pivot.wtk;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Container that arranges components in a line, either vertically or

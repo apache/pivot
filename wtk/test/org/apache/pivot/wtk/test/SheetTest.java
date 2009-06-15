@@ -16,8 +16,9 @@
  */
 package org.apache.pivot.wtk.test;
 
-import pivot.collections.Dictionary;
-import pivot.util.Vote;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;

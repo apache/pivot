@@ -16,9 +16,10 @@
  */
 package pivot.wtk.content;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.Dictionary;
-import pivot.collections.List;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
+
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;

@@ -16,8 +16,8 @@
  */
 package pivot.wtk.content;
 
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
 
 /**
  * Default table row implementation.

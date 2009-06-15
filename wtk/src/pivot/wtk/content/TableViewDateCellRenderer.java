@@ -20,8 +20,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.Dictionary;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.TableView;
 
 /**

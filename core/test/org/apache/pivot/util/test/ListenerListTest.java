@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.util.test;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
 
 public class ListenerListTest {
     public static class TestHandler implements TestListener {

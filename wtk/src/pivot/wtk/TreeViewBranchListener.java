@@ -16,7 +16,7 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.collections.Sequence.Tree.Path;
 
 /**
  * Tree view branch listener interface.

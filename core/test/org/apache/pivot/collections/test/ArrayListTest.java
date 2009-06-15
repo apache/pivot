@@ -20,10 +20,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Sequence;
 import org.junit.Test;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Sequence;
 
 public class ArrayListTest {
     @Test

@@ -16,8 +16,9 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Sequence;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Abstract base class for viewport components. Viewports provide a windowed

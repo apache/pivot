@@ -16,7 +16,7 @@
  */
 package pivot.wtk.text;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Abstract base class for document nodes.

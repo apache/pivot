@@ -19,8 +19,9 @@ package pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Font;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.Dictionary;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Component;
 import pivot.wtk.Insets;
 import pivot.wtk.Label;

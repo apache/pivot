@@ -18,8 +18,9 @@ package pivot.wtk;
 
 import java.net.URL;
 
-import pivot.util.ListenerList;
-import pivot.util.ThreadUtilities;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.ThreadUtilities;
+
 import pivot.wtk.media.Image;
 
 /**

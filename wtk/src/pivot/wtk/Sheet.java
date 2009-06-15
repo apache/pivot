@@ -16,8 +16,8 @@
  */
 package pivot.wtk;
 
-import pivot.util.ListenerList;
-import pivot.util.Vote;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 
 /**
  * Window class representing a "sheet". A sheet behaves like a dialog that is

@@ -18,6 +18,12 @@ package org.apache.pivot.web.test;
 
 import static org.junit.Assert.assertTrue;
 
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.BinarySerializer;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.util.concurrent.Task;
+import org.apache.pivot.util.concurrent.TaskGroup;
+import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.web.BasicAuthentication;
 import org.apache.pivot.web.DeleteQuery;
 import org.apache.pivot.web.GetQuery;
@@ -26,12 +32,6 @@ import org.apache.pivot.web.PutQuery;
 import org.apache.pivot.web.QueryDictionary;
 import org.junit.Test;
 
-import pivot.collections.Dictionary;
-import pivot.serialization.BinarySerializer;
-import pivot.serialization.JSONSerializer;
-import pivot.util.concurrent.Task;
-import pivot.util.concurrent.TaskGroup;
-import pivot.util.concurrent.TaskListener;
 
 public class WebQueryTestClient {
     final static boolean useProxy = true;

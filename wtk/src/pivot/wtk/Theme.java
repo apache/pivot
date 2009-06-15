@@ -19,9 +19,10 @@ package pivot.wtk;
 import java.awt.Font;
 import java.lang.reflect.Modifier;
 
-import pivot.collections.ArrayList;
-import pivot.collections.HashMap;
-import pivot.util.Service;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.util.Service;
+
 import pivot.wtk.media.Image;
 import pivot.wtk.skin.BorderSkin;
 import pivot.wtk.skin.CardPaneSkin;

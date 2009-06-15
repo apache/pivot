@@ -22,7 +22,8 @@ import java.awt.Paint;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Shape representing a quad curve.

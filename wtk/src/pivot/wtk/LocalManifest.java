@@ -21,9 +21,10 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.net.URL;
 
-import pivot.collections.ArrayList;
-import pivot.collections.HashMap;
-import pivot.io.FileList;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.io.FileList;
+
 import pivot.wtk.media.Image;
 import pivot.wtk.media.Picture;
 

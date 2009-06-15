@@ -16,8 +16,8 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Sequence;
-import pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.Sequence.Tree.Path;
 
 /**
  * Tree view selection listener.

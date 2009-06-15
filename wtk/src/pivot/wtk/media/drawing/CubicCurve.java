@@ -22,7 +22,8 @@ import java.awt.Paint;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Rectangle2D;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Shape representing a cubic curve.

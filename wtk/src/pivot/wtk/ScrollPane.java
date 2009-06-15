@@ -16,8 +16,9 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Sequence;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Container that provides a scrollable view of a component, with optional

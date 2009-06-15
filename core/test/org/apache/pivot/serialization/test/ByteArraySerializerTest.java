@@ -23,11 +23,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import org.apache.pivot.serialization.ByteArraySerializer;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.serialization.Serializer;
 import org.junit.Test;
 
-import pivot.serialization.ByteArraySerializer;
-import pivot.serialization.SerializationException;
-import pivot.serialization.Serializer;
 
 public class ByteArraySerializerTest {
     public static final String testStrings = "// \n" + "// Hello from "

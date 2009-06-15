@@ -27,9 +27,10 @@ import java.awt.font.LineMetrics;
 import java.awt.font.TextHitInfo;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
+
+import org.apache.pivot.collections.Dictionary;
 // import java.text.AttributedCharacterIterator;
 
-import pivot.collections.Dictionary;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.Cursor;

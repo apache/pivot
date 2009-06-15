@@ -16,9 +16,10 @@
  */
 package pivot.wtk.skin;
 
-import pivot.collections.ArrayList;
-import pivot.collections.List;
-import pivot.util.Vote;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.Button;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentKeyListener;

@@ -25,9 +25,10 @@ import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 
-import pivot.collections.Dictionary;
-import pivot.collections.List;
-import pivot.serialization.JSONSerializer;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.serialization.JSONSerializer;
+
 import pivot.wtk.Orientation;
 
 /**

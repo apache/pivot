@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.web;
 
-import pivot.util.Base64;
+import org.apache.pivot.util.Base64;
 
 /**
  * Implementation of the {@link Authentication} interface supporting the

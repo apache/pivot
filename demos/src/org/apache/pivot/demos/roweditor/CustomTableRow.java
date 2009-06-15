@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.demos.roweditor;
 
-import pivot.util.CalendarDate;
+import org.apache.pivot.util.CalendarDate;
 
 /**
  * Custom table row data.

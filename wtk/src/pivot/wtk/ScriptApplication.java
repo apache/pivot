@@ -16,7 +16,8 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtkx.WTKXSerializer;
 
 /**

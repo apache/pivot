@@ -18,7 +18,8 @@ package pivot.wtk.skin;
 
 import java.awt.Color;
 
-import pivot.util.Vote;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.Action;
 import pivot.wtk.Component;
 import pivot.wtk.Container;

@@ -29,8 +29,9 @@ import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import pivot.collections.HashMap;
-import pivot.collections.immutable.ImmutableMap;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.immutable.ImmutableMap;
+
 import pivot.wtk.media.Image;
 import pivot.wtk.media.Picture;
 

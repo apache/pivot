@@ -16,10 +16,11 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Dictionary;
-import pivot.collections.Sequence;
-import pivot.serialization.JSONSerializer;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * A <tt>SplitPane</tt> is a container component that splits its size up into

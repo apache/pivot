@@ -16,7 +16,8 @@
  */
 package org.apache.pivot.wtk.test;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Action;
 import pivot.wtk.Alert;
 import pivot.wtk.Application;

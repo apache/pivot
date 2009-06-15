@@ -21,11 +21,12 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.collections.List;
-import pivot.serialization.CSVSerializer;
-import pivot.serialization.SerializationException;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.serialization.CSVSerializer;
+import org.apache.pivot.serialization.SerializationException;
+
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;

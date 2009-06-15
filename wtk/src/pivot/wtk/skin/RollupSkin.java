@@ -16,7 +16,8 @@
  */
 package pivot.wtk.skin;
 
-import pivot.util.Vote;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.Component;
 import pivot.wtk.Rollup;
 import pivot.wtk.RollupListener;

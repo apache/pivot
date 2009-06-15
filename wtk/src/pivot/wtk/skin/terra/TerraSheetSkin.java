@@ -19,8 +19,9 @@ package pivot.wtk.skin.terra;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import pivot.collections.Dictionary;
-import pivot.util.Vote;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseButtonListener;

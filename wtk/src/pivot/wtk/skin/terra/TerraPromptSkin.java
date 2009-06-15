@@ -16,8 +16,9 @@
  */
 package pivot.wtk.skin.terra;
 
-import pivot.collections.ArrayList;
-import pivot.collections.HashMap;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.HashMap;
+
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;

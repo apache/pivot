@@ -19,8 +19,9 @@ package pivot.wtk.content;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.Dictionary;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Insets;
 import pivot.wtk.TableView;

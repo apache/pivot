@@ -21,8 +21,9 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Transparency;
 
-import pivot.collections.Dictionary;
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
+
 import pivot.wtk.Component;
 import pivot.wtk.Container;
 import pivot.wtk.ContainerListener;

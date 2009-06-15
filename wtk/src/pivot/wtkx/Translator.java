@@ -36,12 +36,13 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamException;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.collections.List;
-import pivot.collections.Sequence;
-import pivot.util.ListenerList;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Translates WTKX documents into compilable Java file objects.

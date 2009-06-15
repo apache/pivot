@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.web;
 
-import pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 
 /**
  * Thrown when an error occurs while executing a web query.

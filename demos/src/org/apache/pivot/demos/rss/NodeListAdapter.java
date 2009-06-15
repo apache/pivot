@@ -20,13 +20,13 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.ListListener;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import pivot.collections.List;
-import pivot.collections.ListListener;
-import pivot.collections.Sequence;
-import pivot.util.ListenerList;
 
 /**
  * Wraps a W3C DOM {@link org.w3c.dom.NodeList} in a list collection.

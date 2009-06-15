@@ -16,8 +16,8 @@
  */
 package pivot.wtk.skin.terra;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Sequence;
 
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;

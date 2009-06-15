@@ -16,7 +16,7 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
 
 /**
  * Represents the entry point into a WTK application.

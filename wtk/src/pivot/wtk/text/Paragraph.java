@@ -16,8 +16,8 @@
  */
 package pivot.wtk.text;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Sequence;
 
 /**
  * Element representing a paragraph.

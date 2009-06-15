@@ -18,8 +18,9 @@ package org.apache.pivot.demos.dnd;
 
 import java.io.IOException;
 
-import pivot.collections.Dictionary;
-import pivot.io.FileList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.io.FileList;
+
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;

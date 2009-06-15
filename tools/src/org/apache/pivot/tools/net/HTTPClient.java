@@ -21,12 +21,13 @@ import java.io.File;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
-import pivot.collections.Dictionary;
-import pivot.collections.List;
-import pivot.util.Base64;
-import pivot.util.Vote;
-import pivot.util.concurrent.Task;
-import pivot.util.concurrent.TaskListener;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Base64;
+import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.concurrent.Task;
+import org.apache.pivot.util.concurrent.TaskListener;
+
 import pivot.wtk.Action;
 import pivot.wtk.Application;
 import pivot.wtk.Button;

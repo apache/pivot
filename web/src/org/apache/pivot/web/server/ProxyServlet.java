@@ -31,7 +31,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pivot.collections.HashSet;
+import org.apache.pivot.collections.HashSet;
+
 
 /**
  * HTTP proxy that allows an unsigned applet to issue web queries to services

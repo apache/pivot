@@ -36,10 +36,11 @@ import java.text.BreakIterator;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.collections.Sequence;
-import pivot.util.ImmutableIterator;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ImmutableIterator;
+
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;

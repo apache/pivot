@@ -19,12 +19,13 @@ package pivot.wtk;
 import java.net.URL;
 import java.util.Iterator;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Sequence;
-import pivot.util.ImmutableIterator;
-import pivot.util.ListenerList;
-import pivot.util.ThreadUtilities;
-import pivot.util.Vote;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ImmutableIterator;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.ThreadUtilities;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.media.Image;
 
 /**

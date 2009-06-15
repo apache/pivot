@@ -18,10 +18,11 @@ package pivot.wtk;
 
 import java.util.Iterator;
 
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
-import pivot.util.ImmutableIterator;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.util.ImmutableIterator;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Abstract base class for "actions". Actions are common application

@@ -27,11 +27,12 @@ import java.util.Iterator;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
-import pivot.io.IOTask;
-import pivot.util.ListenerList;
-import pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.io.IOTask;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
+
 
 /**
  * An asynchronous operation that executes an HTTP request.

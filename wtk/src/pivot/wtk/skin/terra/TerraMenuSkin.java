@@ -20,7 +20,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.Sequence;
+
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.GraphicsUtilities;

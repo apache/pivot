@@ -16,10 +16,11 @@
  */
 package org.apache.pivot.wtk.test;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.collections.List;
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
+
 import pivot.wtk.Application;
 import pivot.wtk.Display;
 import pivot.wtk.ListView;

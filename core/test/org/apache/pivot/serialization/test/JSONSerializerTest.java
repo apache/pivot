@@ -21,10 +21,11 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import pivot.collections.HashMap;
-import pivot.collections.List;
-import pivot.collections.Map;
-import pivot.serialization.JSONSerializer;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.JSONSerializer;
+
 
 public class JSONSerializerTest {
     public static String[] testStrings = {

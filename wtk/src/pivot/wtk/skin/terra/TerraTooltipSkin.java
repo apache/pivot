@@ -18,7 +18,8 @@ package pivot.wtk.skin.terra;
 
 import java.awt.Color;
 
-import pivot.util.Vote;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.Border;
 import pivot.wtk.Component;
 import pivot.wtk.ComponentMouseListener;

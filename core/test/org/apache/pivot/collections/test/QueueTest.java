@@ -20,11 +20,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Comparator;
 
+import org.apache.pivot.collections.ArrayQueue;
+import org.apache.pivot.collections.LinkedQueue;
+import org.apache.pivot.collections.Queue;
 import org.junit.Test;
 
-import pivot.collections.ArrayQueue;
-import pivot.collections.LinkedQueue;
-import pivot.collections.Queue;
 
 public class QueueTest {
     @Test

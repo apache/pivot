@@ -16,8 +16,8 @@
  */
 package pivot.wtk;
 
-import pivot.util.concurrent.Task;
-import pivot.util.concurrent.TaskListener;
+import org.apache.pivot.util.concurrent.Task;
+import org.apache.pivot.util.concurrent.TaskListener;
 
 /**
  * Class that forwards task events to the UI thread.

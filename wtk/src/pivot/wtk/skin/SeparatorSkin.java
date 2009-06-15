@@ -26,7 +26,8 @@ import java.awt.font.LineMetrics;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.GraphicsUtilities;

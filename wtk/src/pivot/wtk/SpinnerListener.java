@@ -16,7 +16,7 @@
  */
 package pivot.wtk;
 
-import pivot.collections.List;
+import org.apache.pivot.collections.List;
 
 /**
  * Spinner listener interface.

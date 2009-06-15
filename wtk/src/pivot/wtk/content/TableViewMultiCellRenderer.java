@@ -18,11 +18,12 @@ package pivot.wtk.content;
 
 import java.awt.Graphics2D;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
-import pivot.collections.Sequence;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.Sequence;
+
 import pivot.wtk.Dimensions;
 import pivot.wtk.TableView;
 import pivot.wtk.content.TableViewCellRenderer;

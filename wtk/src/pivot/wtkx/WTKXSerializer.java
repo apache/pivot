@@ -46,18 +46,19 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamException;
 
-import pivot.beans.BeanDictionary;
-import pivot.beans.PropertyNotFoundException;
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
-import pivot.collections.List;
-import pivot.collections.Sequence;
-import pivot.serialization.Serializer;
-import pivot.serialization.SerializationException;
-import pivot.util.ListenerList;
-import pivot.util.Resources;
-import pivot.util.ThreadUtilities;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.PropertyNotFoundException;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Resources;
+import org.apache.pivot.util.ThreadUtilities;
+
 
 /**
  * Loads an object hierarchy from an XML document.

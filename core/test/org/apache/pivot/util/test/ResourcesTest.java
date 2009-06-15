@@ -23,14 +23,14 @@ import static org.junit.Assert.assertTrue;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Resources;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import pivot.collections.List;
-import pivot.collections.Map;
-import pivot.serialization.SerializationException;
-import pivot.util.Resources;
 
 public class ResourcesTest {
     private Locale old;

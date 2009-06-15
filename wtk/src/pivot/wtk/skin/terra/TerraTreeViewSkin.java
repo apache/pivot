@@ -23,10 +23,11 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 
-import pivot.collections.ArrayList;
-import pivot.collections.List;
-import pivot.collections.Sequence;
-import pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.Sequence.Tree.Path;
+
 import pivot.wtk.Bounds;
 import pivot.wtk.Button;
 import pivot.wtk.Checkbox;

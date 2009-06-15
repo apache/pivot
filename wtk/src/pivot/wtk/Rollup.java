@@ -16,9 +16,10 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Sequence;
-import pivot.util.ListenerList;
-import pivot.util.Vote;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
+
 
 /**
  * Container that can be expanded or collapsed to respectively show or hide its

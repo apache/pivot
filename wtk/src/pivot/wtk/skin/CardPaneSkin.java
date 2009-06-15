@@ -16,8 +16,9 @@
  */
 package pivot.wtk.skin;
 
-import pivot.collections.Sequence;
-import pivot.util.Vote;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.CardPane;
 import pivot.wtk.CardPaneListener;
 import pivot.wtk.Component;

@@ -21,7 +21,7 @@ package org.apache.pivot.tools.net;
  * register for such events by adding themselves to a request's list of "HTTP
  * request listeners" (see {@link Request#getRequestListeners()}).
  * <p>
- * Note that, like {@link pivot.util.concurrent.TaskListener task listeners},
+ * Note that, like {@link org.apache.pivot.util.concurrent.TaskListener task listeners},
  * query listeners will be notified on the query's worker thread, not the thread
  * that executed the query.
  *

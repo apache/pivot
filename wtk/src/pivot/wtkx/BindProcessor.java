@@ -29,11 +29,12 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
-import pivot.collections.ArrayList;
-import pivot.collections.ArrayStack;
-import pivot.collections.HashMap;
-import pivot.collections.List;
-import pivot.collections.Map;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.ArrayStack;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
+
 
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree.*;

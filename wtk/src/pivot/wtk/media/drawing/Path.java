@@ -22,9 +22,10 @@ import java.awt.Paint;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Sequence;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * A shape representing a geometric path constructed from straight lines,

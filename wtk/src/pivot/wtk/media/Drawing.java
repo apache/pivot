@@ -21,7 +21,8 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RenderingHints;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.Bounds;
 import pivot.wtk.media.drawing.Canvas;
 import pivot.wtk.media.drawing.CanvasListener;

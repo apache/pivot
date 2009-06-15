@@ -23,8 +23,9 @@ import java.awt.RenderingHints;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 
-import pivot.collections.Dictionary;
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
+
 import pivot.wtk.Bounds;
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;

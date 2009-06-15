@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.charts.content;
 
-import pivot.collections.ArrayList;
+import org.apache.pivot.collections.ArrayList;
 
 /**
  * Represents series data for value chart views.

@@ -16,7 +16,7 @@
  */
 package pivot.wtk.media.drawing;
 
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.Sequence;
 
 /**
  * Shape transform listener interface.

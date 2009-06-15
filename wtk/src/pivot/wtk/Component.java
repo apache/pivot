@@ -24,18 +24,19 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 
-import pivot.beans.BeanDictionary;
-import pivot.beans.PropertyNotFoundException;
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
-import pivot.collections.HashSet;
-import pivot.collections.Map;
-import pivot.collections.Sequence;
-import pivot.serialization.JSONSerializer;
-import pivot.serialization.SerializationException;
-import pivot.util.ImmutableIterator;
-import pivot.util.ListenerList;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.PropertyNotFoundException;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.HashSet;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.ImmutableIterator;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.effects.Decorator;
 
 /**

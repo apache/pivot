@@ -16,7 +16,8 @@
  */
 package org.apache.pivot.demos.clock;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Application;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;

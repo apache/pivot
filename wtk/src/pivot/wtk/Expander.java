@@ -16,9 +16,10 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Sequence;
-import pivot.util.ListenerList;
-import pivot.util.Vote;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
+
 
 /**
  * Navigation container that allows a user to expand and collapse a content

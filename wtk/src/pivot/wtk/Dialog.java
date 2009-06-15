@@ -16,8 +16,8 @@
  */
 package pivot.wtk;
 
-import pivot.util.ListenerList;
-import pivot.util.Vote;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 
 /**
  * Window class whose primary purpose is to facilitate interaction between

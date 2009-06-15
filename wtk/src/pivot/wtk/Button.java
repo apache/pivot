@@ -16,9 +16,10 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Abstract base class for button components.

@@ -16,7 +16,8 @@
  */
 package org.apache.pivot.demos.dom;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Alert;
 import pivot.wtk.Application;
 import pivot.wtk.BrowserApplicationContext;

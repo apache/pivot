@@ -16,7 +16,7 @@
  */
 package pivot.wtk;
 
-import pivot.util.CalendarDate;
+import org.apache.pivot.util.CalendarDate;
 
 /**
  * Calendar selection listener interface.

@@ -16,8 +16,9 @@
  */
 package org.apache.pivot.demos.roweditor;
 
-import pivot.collections.Dictionary;
-import pivot.collections.EnumList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.EnumList;
+
 import pivot.wtk.Application;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;

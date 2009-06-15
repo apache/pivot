@@ -18,8 +18,9 @@ package pivot.wtk;
 
 import java.util.Comparator;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Sequence;
+
 
 /**
  * Class representing a sequence of sorted, consolidated spans.

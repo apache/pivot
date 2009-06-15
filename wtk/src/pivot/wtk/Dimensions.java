@@ -16,7 +16,7 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
 
 /**
  * Class representing the dimensions of an object.

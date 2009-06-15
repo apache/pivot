@@ -18,10 +18,11 @@ package pivot.wtk;
 
 import java.util.Iterator;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Sequence;
-import pivot.util.ImmutableIterator;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ImmutableIterator;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.content.MenuBarItemDataRenderer;
 
 /**

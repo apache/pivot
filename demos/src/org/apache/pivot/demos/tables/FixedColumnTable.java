@@ -16,8 +16,9 @@
  */
 package org.apache.pivot.demos.tables;
 
-import pivot.collections.Dictionary;
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
+
 import pivot.wtk.Application;
 import pivot.wtk.DesktopApplicationContext;
 import pivot.wtk.Display;

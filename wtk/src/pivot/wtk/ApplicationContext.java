@@ -48,10 +48,11 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
-import pivot.util.ImmutableIterator;
-import pivot.util.Version;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.util.ImmutableIterator;
+import org.apache.pivot.util.Version;
+
 import pivot.wtk.Component.DecoratorSequence;
 import pivot.wtk.Manifest;
 import pivot.wtk.RemoteManifest;

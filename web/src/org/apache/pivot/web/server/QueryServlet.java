@@ -32,12 +32,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.Base64;
 import org.apache.pivot.web.QueryDictionary;
 
-import pivot.serialization.JSONSerializer;
-import pivot.serialization.SerializationException;
-import pivot.serialization.Serializer;
-import pivot.util.Base64;
 
 /**
  * Abstract base class for web query servlets. It is the server counterpart to

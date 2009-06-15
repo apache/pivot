@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.charts;
 
-import pivot.collections.List;
+import org.apache.pivot.collections.List;
 
 /**
  * Chart view listener interface.

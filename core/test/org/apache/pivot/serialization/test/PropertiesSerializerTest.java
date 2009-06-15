@@ -19,10 +19,11 @@ package org.apache.pivot.serialization.test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-import pivot.collections.HashMap;
-import pivot.collections.Map;
-import pivot.serialization.PropertiesSerializer;
-import pivot.serialization.Serializer;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.PropertiesSerializer;
+import org.apache.pivot.serialization.Serializer;
+
 
 public class PropertiesSerializerTest
 {

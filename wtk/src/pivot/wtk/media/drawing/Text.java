@@ -29,8 +29,9 @@ import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
-import pivot.collections.ArrayList;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.Bounds;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.Platform;

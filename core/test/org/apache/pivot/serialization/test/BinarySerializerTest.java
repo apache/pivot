@@ -18,8 +18,9 @@ package org.apache.pivot.serialization.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import pivot.serialization.Serializer;
-import pivot.serialization.BinarySerializer;
+
+import org.apache.pivot.serialization.BinarySerializer;
+import org.apache.pivot.serialization.Serializer;
 
 public class BinarySerializerTest {
 

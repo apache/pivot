@@ -18,9 +18,9 @@ package org.apache.pivot.collections.test;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.pivot.collections.EnumList;
 import org.junit.Test;
 
-import pivot.collections.EnumList;
 
 public class EnumListTest {
     public enum TestEnum {

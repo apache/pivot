@@ -31,7 +31,8 @@ import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.GraphicsUtilities;

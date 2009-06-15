@@ -16,7 +16,7 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.Sequence;
 
 /**
  * Tab pane listener interface.

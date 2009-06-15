@@ -18,7 +18,8 @@ package pivot.wtk.skin;
 
 import java.util.Locale;
 
-import pivot.util.CalendarDate;
+import org.apache.pivot.util.CalendarDate;
+
 import pivot.wtk.Calendar;
 import pivot.wtk.CalendarListener;
 import pivot.wtk.CalendarSelectionListener;

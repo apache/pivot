@@ -18,11 +18,11 @@ package org.apache.pivot.collections.test;
 
 import static org.junit.Assert.assertTrue;
 
+import org.apache.pivot.collections.ArrayStack;
+import org.apache.pivot.collections.LinkedStack;
+import org.apache.pivot.collections.Stack;
 import org.junit.Test;
 
-import pivot.collections.ArrayStack;
-import pivot.collections.LinkedStack;
-import pivot.collections.Stack;
 
 public class StackTest {
     @Test

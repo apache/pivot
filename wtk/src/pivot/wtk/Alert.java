@@ -16,11 +16,12 @@
  */
 package pivot.wtk;
 
-import pivot.collections.ArrayList;
-import pivot.collections.List;
-import pivot.collections.Sequence;
-import pivot.util.ListenerList;
-import pivot.util.Resources;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Resources;
+
 
 /**
  * Class representing an "alert", a dialog commonly used to perform simple

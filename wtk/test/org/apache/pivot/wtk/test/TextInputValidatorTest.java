@@ -13,7 +13,8 @@
  */
 package org.apache.pivot.wtk.test;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.DesktopApplicationContext;

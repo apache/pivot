@@ -27,8 +27,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
-import pivot.serialization.SerializationException;
-import pivot.serialization.Serializer;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.serialization.Serializer;
+
 
 /**
  * Implementation of the {@link Serializer} interface that reads and writes

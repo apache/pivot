@@ -21,11 +21,12 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
-import pivot.io.IOTask;
-import pivot.util.ListenerList;
-import pivot.util.concurrent.Dispatcher;
-import pivot.util.concurrent.TaskListener;
-import pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.io.IOTask;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.concurrent.Dispatcher;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.util.concurrent.TaskListener;
+
 import pivot.wtk.Dimensions;
 import pivot.wtk.Visual;
 import pivot.wtkx.WTKXSerializer;

@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.util.test;
 
-import pivot.util.MIMEType;
+import org.apache.pivot.util.MIMEType;
 
 public class MIMETypeTest {
     public static void main(String[] args) {

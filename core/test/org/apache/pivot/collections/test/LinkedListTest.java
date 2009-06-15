@@ -22,10 +22,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Comparator;
 
+import org.apache.pivot.collections.LinkedList;
+import org.apache.pivot.collections.Sequence;
 import org.junit.Test;
 
-import pivot.collections.LinkedList;
-import pivot.collections.Sequence;
 
 public class LinkedListTest {
     @Test

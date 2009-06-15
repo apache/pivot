@@ -22,10 +22,11 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
-import pivot.collections.List;
-import pivot.collections.Map;
-import pivot.serialization.JSONSerializer;
-import pivot.serialization.SerializationException;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
+
 import pivot.wtk.Accordion;
 import pivot.wtk.ActivityIndicator;
 import pivot.wtk.Alert;

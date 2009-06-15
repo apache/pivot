@@ -23,8 +23,9 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-import pivot.collections.Dictionary;
-import pivot.util.Vote;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;
 import pivot.wtk.Component;

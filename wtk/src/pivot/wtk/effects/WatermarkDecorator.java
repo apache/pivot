@@ -22,7 +22,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.net.URL;
 
-import pivot.util.ThreadUtilities;
+import org.apache.pivot.util.ThreadUtilities;
+
 import pivot.wtk.Component;
 import pivot.wtk.FlowPane;
 import pivot.wtk.ImageView;

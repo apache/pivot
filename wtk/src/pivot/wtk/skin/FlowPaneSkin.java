@@ -16,7 +16,8 @@
  */
 package pivot.wtk.skin;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Component;
 import pivot.wtk.Dimensions;
 import pivot.wtk.FlowPane;

@@ -16,9 +16,10 @@
  */
 package pivot.wtk;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Sequence;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Container that arranges components in a two-dimensional grid, optionally

@@ -26,11 +26,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pivot.collections.HashMap;
-import pivot.serialization.BinarySerializer;
-import pivot.serialization.JSONSerializer;
-import pivot.serialization.SerializationException;
-import pivot.util.Base64;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.serialization.BinarySerializer;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Base64;
+
 
 public class WebQueryTestServlet extends HttpServlet {
     private static final long serialVersionUID = 0;

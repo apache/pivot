@@ -25,9 +25,10 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
-import pivot.collections.Dictionary;
-import pivot.collections.List;
-import pivot.util.Vote;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.Border;
 import pivot.wtk.Button;
 import pivot.wtk.Dimensions;

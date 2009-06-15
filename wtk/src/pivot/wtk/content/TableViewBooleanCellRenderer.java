@@ -16,8 +16,9 @@
  */
 package pivot.wtk.content;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.Dictionary;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Checkbox;
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;

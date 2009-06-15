@@ -16,7 +16,7 @@
  */
 package pivot.wtk;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Popup class that displays a cascading menu.

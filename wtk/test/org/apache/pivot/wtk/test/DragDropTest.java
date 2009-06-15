@@ -19,7 +19,8 @@ package org.apache.pivot.wtk.test;
 import java.awt.Color;
 import java.io.IOException;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Application;
 import pivot.wtk.Component;
 import pivot.wtk.Display;

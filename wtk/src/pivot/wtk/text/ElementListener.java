@@ -16,7 +16,7 @@
  */
 package pivot.wtk.text;
 
-import pivot.collections.Sequence;
+import org.apache.pivot.collections.Sequence;
 
 /**
  * Element listener interface.

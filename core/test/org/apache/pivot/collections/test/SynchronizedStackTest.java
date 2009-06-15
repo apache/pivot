@@ -18,14 +18,14 @@ package org.apache.pivot.collections.test;
 
 import static org.junit.Assert.assertTrue;
 
+import org.apache.pivot.collections.ArrayStack;
+import org.apache.pivot.collections.LinkedStack;
+import org.apache.pivot.collections.Stack;
+import org.apache.pivot.collections.concurrent.SynchronizedStack;
+import org.apache.pivot.util.concurrent.Task;
+import org.apache.pivot.util.concurrent.TaskListener;
 import org.junit.Test;
 
-import pivot.collections.ArrayStack;
-import pivot.collections.LinkedStack;
-import pivot.collections.Stack;
-import pivot.collections.concurrent.SynchronizedStack;
-import pivot.util.concurrent.Task;
-import pivot.util.concurrent.TaskListener;
 
 public class SynchronizedStackTest {
     @Test

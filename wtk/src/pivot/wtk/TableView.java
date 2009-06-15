@@ -18,14 +18,15 @@ package pivot.wtk;
 
 import java.util.Comparator;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.collections.List;
-import pivot.collections.ListListener;
-import pivot.collections.Sequence;
-import pivot.serialization.JSONSerializer;
-import pivot.util.ListenerList;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.ListListener;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.content.TableViewCellRenderer;
 import pivot.wtk.content.TableViewHeaderData;
 

@@ -16,7 +16,7 @@
  */
 package pivot.wtk;
 
-import pivot.util.Vote;
+import org.apache.pivot.util.Vote;
 
 /**
  * Defines event listener methods that pertain to rollup state. Developers

@@ -18,8 +18,9 @@ package pivot.wtk;
 
 import java.io.IOException;
 
-import pivot.collections.Dictionary;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.text.Element;
 import pivot.wtk.text.Node;
 import pivot.wtk.text.NodeListener;

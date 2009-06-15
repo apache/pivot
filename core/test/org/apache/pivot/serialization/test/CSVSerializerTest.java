@@ -18,8 +18,10 @@ package org.apache.pivot.serialization.test;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import pivot.collections.List;
-import pivot.serialization.CSVSerializer;
+
+import org.apache.pivot.collections.List;
+import org.apache.pivot.serialization.CSVSerializer;
+
 
 public class CSVSerializerTest {
     public static String[] testStrings = {

@@ -20,10 +20,11 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import pivot.collections.Dictionary;
-import pivot.collections.Sequence;
-import pivot.serialization.SerializationException;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.media.Image;
 import pivot.wtk.text.Document;
 import pivot.wtk.text.Element;

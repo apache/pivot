@@ -16,7 +16,8 @@
  */
 package pivot.wtk;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.media.Movie;
 
 /**

@@ -23,7 +23,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
 import java.awt.geom.RoundRectangle2D;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Shape representing a rectangle.

@@ -16,12 +16,12 @@
  */
 package org.apache.pivot.util.concurrent.test;
 
+import org.apache.pivot.util.concurrent.Task;
+import org.apache.pivot.util.concurrent.TaskGroup;
+import org.apache.pivot.util.concurrent.TaskListener;
+import org.apache.pivot.util.concurrent.TaskSequence;
 import org.junit.Test;
 
-import pivot.util.concurrent.Task;
-import pivot.util.concurrent.TaskGroup;
-import pivot.util.concurrent.TaskListener;
-import pivot.util.concurrent.TaskSequence;
 
 public class TaskTest {
     public static class SleepTask extends Task<Void> {

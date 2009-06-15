@@ -18,14 +18,15 @@ package pivot.wtk;
 
 import java.net.URL;
 
-import pivot.collections.ArrayList;
-import pivot.collections.ArrayStack;
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
-import pivot.collections.Sequence;
-import pivot.util.ListenerList;
-import pivot.util.ThreadUtilities;
-import pivot.util.Vote;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.ArrayStack;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.ThreadUtilities;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.media.Image;
 
 /**

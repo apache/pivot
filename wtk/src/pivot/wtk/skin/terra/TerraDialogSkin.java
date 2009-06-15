@@ -16,7 +16,8 @@
  */
 package pivot.wtk.skin.terra;
 
-import pivot.util.Vote;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.Component;
 import pivot.wtk.Dialog;
 import pivot.wtk.DialogStateListener;

@@ -16,8 +16,9 @@
  */
 package org.apache.pivot.demos.scripting;
 
-import pivot.collections.Dictionary;
-import pivot.collections.List;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
+
 import pivot.wtk.Application;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;

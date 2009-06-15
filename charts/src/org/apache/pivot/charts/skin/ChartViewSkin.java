@@ -22,9 +22,9 @@ import org.apache.pivot.charts.ChartView;
 import org.apache.pivot.charts.ChartViewCategoryListener;
 import org.apache.pivot.charts.ChartViewListener;
 import org.apache.pivot.charts.ChartViewSeriesListener;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
 
-import pivot.collections.List;
-import pivot.collections.Sequence;
 import pivot.wtk.Component;
 import pivot.wtk.skin.ComponentSkin;
 

@@ -19,11 +19,12 @@ package pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import pivot.beans.BeanDictionary;
-import pivot.collections.Dictionary;
-import pivot.collections.HashMap;
-import pivot.collections.List;
-import pivot.util.Vote;
+import org.apache.pivot.beans.BeanDictionary;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Vote;
+
 import pivot.wtk.Bounds;
 import pivot.wtk.CardPane;
 import pivot.wtk.Component;

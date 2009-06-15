@@ -19,7 +19,8 @@ package pivot.wtk.content;
 import java.text.DateFormat;
 import java.util.Locale;
 
-import pivot.util.CalendarDate;
+import org.apache.pivot.util.CalendarDate;
+
 import pivot.wtk.Button;
 import pivot.wtk.CalendarButton;
 import pivot.wtk.HorizontalAlignment;

@@ -16,8 +16,9 @@
  */
 package org.apache.pivot.wtk.test;
 
-import pivot.collections.Dictionary;
-import pivot.serialization.JSONSerializer;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
+
 import pivot.wtk.Application;
 import pivot.wtk.Display;
 import pivot.wtk.ListView;

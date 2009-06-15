@@ -16,7 +16,8 @@
  */
 package pivot.wtk.media;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Dimensions;
 import pivot.wtk.Visual;

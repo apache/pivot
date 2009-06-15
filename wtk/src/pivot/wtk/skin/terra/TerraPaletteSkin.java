@@ -24,7 +24,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Bounds;
 import pivot.wtk.Button;
 import pivot.wtk.ButtonPressListener;

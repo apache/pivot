@@ -21,7 +21,8 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.geom.Line2D;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.Point;
 
 /**

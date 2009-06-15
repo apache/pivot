@@ -16,7 +16,7 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
 
 /**
  * Base interface for "renderers". Renderers are used to customize the

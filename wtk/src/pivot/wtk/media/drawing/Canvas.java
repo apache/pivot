@@ -16,7 +16,8 @@
  */
 package pivot.wtk.media.drawing;
 
-import pivot.util.ListenerList;
+import org.apache.pivot.util.ListenerList;
+
 import pivot.wtk.ApplicationContext;
 
 /**

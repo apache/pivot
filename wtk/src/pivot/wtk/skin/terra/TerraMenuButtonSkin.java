@@ -25,7 +25,8 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
-import pivot.collections.Dictionary;
+import org.apache.pivot.collections.Dictionary;
+
 import pivot.wtk.Bounds;
 import pivot.wtk.Button;
 import pivot.wtk.Component;

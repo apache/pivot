@@ -16,9 +16,10 @@
  */
 package pivot.wtk;
 
-import pivot.collections.Dictionary;
-import pivot.serialization.JSONSerializer;
-import pivot.util.ListenerList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.serialization.JSONSerializer;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Allows a user to select one of a range of values.

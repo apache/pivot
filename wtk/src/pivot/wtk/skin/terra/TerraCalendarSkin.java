@@ -24,7 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import pivot.util.CalendarDate;
+import org.apache.pivot.util.CalendarDate;
+
 import pivot.wtk.Bounds;
 import pivot.wtk.Button;
 import pivot.wtk.Calendar;

@@ -20,7 +20,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 
-import pivot.io.Folder;
+import org.apache.pivot.io.Folder;
+
 import pivot.wtk.FlowPane;
 import pivot.wtk.HorizontalAlignment;
 import pivot.wtk.ImageView;
