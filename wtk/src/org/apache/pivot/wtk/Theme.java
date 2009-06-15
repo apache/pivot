@@ -54,7 +54,7 @@ public abstract class Theme {
     protected HashMap<Class<? extends Component>, Class<? extends Skin>> componentSkinMap =
         new HashMap<Class<? extends Component>, Class<? extends Skin>>();
 
-    public static final String PROVIDER_NAME = "pivot.wtk.Theme";
+    public static final String PROVIDER_NAME = "org.apache.pivot.wtk.Theme";
 
     private static Theme theme = null;
 
