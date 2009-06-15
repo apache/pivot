@@ -17,17 +17,17 @@
 package org.apache.pivot.demos.dom;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Alert;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.BrowserApplicationContext;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Window;
 
-import pivot.wtk.Alert;
-import pivot.wtk.Application;
-import pivot.wtk.BrowserApplicationContext;
-import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
-import pivot.wtk.Display;
-import pivot.wtk.FlowPane;
-import pivot.wtk.HorizontalAlignment;
-import pivot.wtk.PushButton;
-import pivot.wtk.Window;
 
 public class DOMTest implements Application {
     private Window window = null;

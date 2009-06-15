@@ -19,8 +19,9 @@ package org.apache.pivot.wtk.text.test;
 import java.awt.Color;
 import java.awt.Font;
 
-import pivot.wtk.Label;
-import pivot.wtk.TreeView;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.TreeView;
+
 
 public class NodeAdapterRenderer extends Label implements TreeView.NodeRenderer {
     public void render(Object node, TreeView treeView, boolean expanded,

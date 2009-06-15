@@ -23,7 +23,8 @@ import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
-import pivot.wtkx.Translator;
+import org.apache.pivot.wtkx.Translator;
+
 
 /**
  * @author tvolkert

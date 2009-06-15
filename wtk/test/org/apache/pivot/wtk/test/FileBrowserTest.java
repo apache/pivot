@@ -20,14 +20,14 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.io.Folder;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.TreeView;
+import org.apache.pivot.wtk.TreeViewBranchListener;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
-import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.Display;
-import pivot.wtk.Frame;
-import pivot.wtk.TreeView;
-import pivot.wtk.TreeViewBranchListener;
-import pivot.wtkx.WTKXSerializer;
 
 public class FileBrowserTest implements Application {
     private Frame frame = null;

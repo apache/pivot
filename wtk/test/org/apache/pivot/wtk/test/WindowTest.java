@@ -17,20 +17,20 @@
 package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentListener;
+import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.Cursor;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Dialog;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Palette;
+import org.apache.pivot.wtk.VerticalAlignment;
+import org.apache.pivot.wtk.effects.ReflectionDecorator;
 
-import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.ComponentListener;
-import pivot.wtk.Container;
-import pivot.wtk.Cursor;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Dialog;
-import pivot.wtk.Display;
-import pivot.wtk.Frame;
-import pivot.wtk.HorizontalAlignment;
-import pivot.wtk.Palette;
-import pivot.wtk.VerticalAlignment;
-import pivot.wtk.effects.ReflectionDecorator;
 
 public class WindowTest implements Application {
     private Frame window1 = new Frame();

@@ -20,20 +20,20 @@ import java.awt.Color;
 import java.io.IOException;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.DragSource;
+import org.apache.pivot.wtk.DropAction;
+import org.apache.pivot.wtk.DropTarget;
+import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.ImageView;
+import org.apache.pivot.wtk.LocalManifest;
+import org.apache.pivot.wtk.Manifest;
+import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Visual;
+import org.apache.pivot.wtk.media.Image;
 
-import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.Display;
-import pivot.wtk.DragSource;
-import pivot.wtk.DropAction;
-import pivot.wtk.DropTarget;
-import pivot.wtk.Frame;
-import pivot.wtk.ImageView;
-import pivot.wtk.Point;
-import pivot.wtk.Visual;
-import pivot.wtk.LocalManifest;
-import pivot.wtk.Manifest;
-import pivot.wtk.media.Image;
 
 public class DragDropTest implements Application {
     private Frame frame1 = new Frame();

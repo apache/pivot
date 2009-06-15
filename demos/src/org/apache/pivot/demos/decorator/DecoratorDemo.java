@@ -17,16 +17,16 @@
 package org.apache.pivot.demos.decorator;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentMouseListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.effects.FadeDecorator;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
-import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.ComponentMouseListener;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.Frame;
-import pivot.wtk.Window;
-import pivot.wtk.effects.FadeDecorator;
-import pivot.wtkx.WTKXSerializer;
 
 public class DecoratorDemo implements Application {
     private Window reflectionWindow = null;

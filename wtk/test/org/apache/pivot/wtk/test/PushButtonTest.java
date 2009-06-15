@@ -17,14 +17,14 @@
 package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Window;
 
-import pivot.wtk.Application;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.FlowPane;
-import pivot.wtk.HorizontalAlignment;
-import pivot.wtk.PushButton;
-import pivot.wtk.Window;
 
 public class PushButtonTest implements Application {
     private Window window = null;

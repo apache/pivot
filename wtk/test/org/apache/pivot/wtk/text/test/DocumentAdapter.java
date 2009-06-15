@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.text.test;
 
-import pivot.wtk.text.Document;
+import org.apache.pivot.wtk.text.Document;
 
 public class DocumentAdapter extends ElementAdapter {
     private static class RootElementAdapter extends ElementAdapter {

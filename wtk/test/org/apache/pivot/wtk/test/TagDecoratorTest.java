@@ -17,14 +17,14 @@
 package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.VerticalAlignment;
+import org.apache.pivot.wtk.effects.TagDecorator;
+import org.apache.pivot.wtk.media.Image;
 
-import pivot.wtk.Application;
-import pivot.wtk.Display;
-import pivot.wtk.Frame;
-import pivot.wtk.HorizontalAlignment;
-import pivot.wtk.VerticalAlignment;
-import pivot.wtk.effects.TagDecorator;
-import pivot.wtk.media.Image;
 
 public class TagDecoratorTest implements Application {
     private Frame frame = null;

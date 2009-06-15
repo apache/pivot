@@ -18,14 +18,14 @@ package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Alert;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Dialog;
+import org.apache.pivot.wtk.DialogCloseListener;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.MessageType;
 
-import pivot.wtk.Alert;
-import pivot.wtk.Application;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Dialog;
-import pivot.wtk.DialogCloseListener;
-import pivot.wtk.Display;
-import pivot.wtk.MessageType;
 
 public class ReflectionDecoratorTest implements Application {
     Display display = null;

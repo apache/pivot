@@ -25,11 +25,11 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.text.Element;
+import org.apache.pivot.wtk.text.ElementListener;
+import org.apache.pivot.wtk.text.Node;
+import org.apache.pivot.wtk.text.TextNode;
 
-import pivot.wtk.text.Element;
-import pivot.wtk.text.ElementListener;
-import pivot.wtk.text.Node;
-import pivot.wtk.text.TextNode;
 
 public class ElementAdapter extends NodeAdapter implements List<NodeAdapter> {
     private ElementListener elementListener = new ElementListener() {

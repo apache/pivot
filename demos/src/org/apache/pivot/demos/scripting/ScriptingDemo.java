@@ -18,15 +18,15 @@ package org.apache.pivot.demos.scripting;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKX;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
-import pivot.wtk.Application;
-import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.Window;
-import pivot.wtkx.WTKX;
-import pivot.wtkx.WTKXSerializer;
 
 public class ScriptingDemo implements Application {
     public static class MyButtonPressListener implements ButtonPressListener {

@@ -22,11 +22,12 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
 
-import pivot.wtk.HorizontalAlignment;
-import pivot.wtk.Insets;
-import pivot.wtk.Label;
-import pivot.wtk.TableView;
-import pivot.wtk.VerticalAlignment;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.VerticalAlignment;
+
 
 public class FileCellRenderer extends Label implements TableView.CellRenderer {
     public static final String NAME_KEY = "name";

@@ -19,11 +19,12 @@ package org.apache.pivot.demos.clock;
 import java.awt.Graphics2D;
 import java.util.Calendar;
 
-import pivot.wtk.media.Image;
-import pivot.wtk.media.ImageListener;
-import pivot.wtk.media.Movie;
-import pivot.wtk.media.drawing.Shape;
-import pivot.wtkx.WTKXSerializer;
+import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.media.ImageListener;
+import org.apache.pivot.wtk.media.Movie;
+import org.apache.pivot.wtk.media.drawing.Shape;
+import org.apache.pivot.wtkx.WTKXSerializer;
+
 
 /**
  * A concrete movie that animates a clock.

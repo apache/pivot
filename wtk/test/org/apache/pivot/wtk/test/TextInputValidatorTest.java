@@ -14,21 +14,21 @@
 package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.TextInputListener;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.text.TextNode;
+import org.apache.pivot.wtk.text.validation.FloatRangeValidator;
+import org.apache.pivot.wtk.text.validation.IntRangeValidator;
+import org.apache.pivot.wtk.text.validation.RegexTextValidator;
+import org.apache.pivot.wtk.text.validation.Validator;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
-import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.Label;
-import pivot.wtk.TextInput;
-import pivot.wtk.TextInputListener;
-import pivot.wtk.Window;
-import pivot.wtk.text.TextNode;
-import pivot.wtk.text.validation.FloatRangeValidator;
-import pivot.wtk.text.validation.IntRangeValidator;
-import pivot.wtk.text.validation.RegexTextValidator;
-import pivot.wtk.text.validation.Validator;
-import pivot.wtkx.WTKXSerializer;
 
 /**
  *

@@ -22,21 +22,21 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.DragSource;
+import org.apache.pivot.wtk.DropAction;
+import org.apache.pivot.wtk.DropTarget;
+import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.LocalManifest;
+import org.apache.pivot.wtk.Manifest;
+import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.VerticalAlignment;
+import org.apache.pivot.wtk.Visual;
 
-import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.Display;
-import pivot.wtk.DragSource;
-import pivot.wtk.DropAction;
-import pivot.wtk.DropTarget;
-import pivot.wtk.Frame;
-import pivot.wtk.HorizontalAlignment;
-import pivot.wtk.Label;
-import pivot.wtk.Point;
-import pivot.wtk.VerticalAlignment;
-import pivot.wtk.Visual;
-import pivot.wtk.LocalManifest;
-import pivot.wtk.Manifest;
 
 public class NativeDragDropTest implements Application {
     private Frame frame = null;

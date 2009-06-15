@@ -19,21 +19,21 @@ package org.apache.pivot.wtk.text.test;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.TextArea;
+import org.apache.pivot.wtk.TextAreaSelectionListener;
+import org.apache.pivot.wtk.TreeView;
+import org.apache.pivot.wtk.TreeViewSelectionListener;
+import org.apache.pivot.wtk.text.Element;
+import org.apache.pivot.wtk.text.Node;
+import org.apache.pivot.wtk.text.NodeListener;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
-import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.Frame;
-import pivot.wtk.Label;
-import pivot.wtk.TextArea;
-import pivot.wtk.TextAreaSelectionListener;
-import pivot.wtk.TreeView;
-import pivot.wtk.TreeViewSelectionListener;
-import pivot.wtk.text.Element;
-import pivot.wtk.text.Node;
-import pivot.wtk.text.NodeListener;
-import pivot.wtkx.WTKXSerializer;
 
 public class TextAreaTest implements Application {
     private Frame frame = null;

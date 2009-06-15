@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.charts;
 
-import pivot.wtk.Skin;
+import org.apache.pivot.wtk.Skin;
 
 /**
  * Provides a mapping from concrete chart component classes to chart skins.

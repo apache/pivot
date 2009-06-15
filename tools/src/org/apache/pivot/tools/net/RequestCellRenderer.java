@@ -16,8 +16,8 @@
  */
 package org.apache.pivot.tools.net;
 
-import pivot.wtk.TableView;
-import pivot.wtk.content.TableViewCellRenderer;
+import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.content.TableViewCellRenderer;
 
 /**
  * Renders an <tt>Request</tt> in the form of <tt>[method] [resource]</tt>.

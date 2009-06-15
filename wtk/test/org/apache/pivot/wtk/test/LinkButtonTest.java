@@ -17,17 +17,17 @@
 package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentMouseListener;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.LinkButton;
+import org.apache.pivot.wtk.VerticalAlignment;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.content.ButtonData;
+import org.apache.pivot.wtk.media.Image;
 
-import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.ComponentMouseListener;
-import pivot.wtk.Display;
-import pivot.wtk.FlowPane;
-import pivot.wtk.LinkButton;
-import pivot.wtk.VerticalAlignment;
-import pivot.wtk.Window;
-import pivot.wtk.content.ButtonData;
-import pivot.wtk.media.Image;
 
 public class LinkButtonTest implements Application {
     private Window window = new Window();

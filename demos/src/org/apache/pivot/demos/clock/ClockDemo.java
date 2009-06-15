@@ -17,12 +17,12 @@
 package org.apache.pivot.demos.clock;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.MovieView;
+import org.apache.pivot.wtk.Window;
 
-import pivot.wtk.Application;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.MovieView;
-import pivot.wtk.Window;
 
 /**
  * Demonstrates how to write a movie "asset" class.

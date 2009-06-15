@@ -19,11 +19,11 @@ package org.apache.pivot.wtk.test;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.ListView;
+import org.apache.pivot.wtk.Window;
 
-import pivot.wtk.Application;
-import pivot.wtk.Display;
-import pivot.wtk.ListView;
-import pivot.wtk.Window;
 
 public class ListViewTest implements Application {
     private Window window = null;

@@ -18,19 +18,19 @@ package org.apache.pivot.demos.roweditor;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.EnumList;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.ListButton;
+import org.apache.pivot.wtk.Spinner;
+import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.content.CalendarDateSpinnerData;
+import org.apache.pivot.wtk.content.TableViewRowEditor;
+import org.apache.pivot.wtkx.WTKX;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
-import pivot.wtk.Application;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.ListButton;
-import pivot.wtk.Spinner;
-import pivot.wtk.TableView;
-import pivot.wtk.TextInput;
-import pivot.wtk.Window;
-import pivot.wtk.content.CalendarDateSpinnerData;
-import pivot.wtk.content.TableViewRowEditor;
-import pivot.wtkx.WTKX;
-import pivot.wtkx.WTKXSerializer;
 
 /**
  * Demonstrates a flip transition used to initiate a table view row editor.

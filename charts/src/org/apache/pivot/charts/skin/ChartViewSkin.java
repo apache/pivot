@@ -24,9 +24,9 @@ import org.apache.pivot.charts.ChartViewListener;
 import org.apache.pivot.charts.ChartViewSeriesListener;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.skin.ComponentSkin;
 
-import pivot.wtk.Component;
-import pivot.wtk.skin.ComponentSkin;
 
 /**
  * Abstract base class for chart view skins.

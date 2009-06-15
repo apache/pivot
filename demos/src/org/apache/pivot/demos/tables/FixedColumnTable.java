@@ -18,18 +18,18 @@ package org.apache.pivot.demos.tables;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.SortDirection;
+import org.apache.pivot.wtk.Span;
+import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.TableViewHeader;
+import org.apache.pivot.wtk.TableViewSelectionListener;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKX;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
-import pivot.wtk.Application;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.SortDirection;
-import pivot.wtk.Span;
-import pivot.wtk.TableView;
-import pivot.wtk.TableViewHeader;
-import pivot.wtk.TableViewSelectionListener;
-import pivot.wtk.Window;
-import pivot.wtkx.WTKX;
-import pivot.wtkx.WTKXSerializer;
 
 public class FixedColumnTable implements Application {
     private Window window = null;

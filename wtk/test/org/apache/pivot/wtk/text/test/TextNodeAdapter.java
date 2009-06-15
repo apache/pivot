@@ -16,8 +16,8 @@
  */
 package org.apache.pivot.wtk.text.test;
 
-import pivot.wtk.text.TextNode;
-import pivot.wtk.text.TextNodeListener;
+import org.apache.pivot.wtk.text.TextNode;
+import org.apache.pivot.wtk.text.TextNodeListener;
 
 public class TextNodeAdapter extends NodeAdapter {
     private TextNodeListener textNodeListener = new TextNodeListener() {

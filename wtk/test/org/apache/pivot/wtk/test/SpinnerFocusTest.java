@@ -17,15 +17,15 @@
 package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Action;
+import org.apache.pivot.wtk.Alert;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.Spinner;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
-import pivot.wtk.Action;
-import pivot.wtk.Alert;
-import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.Display;
-import pivot.wtk.Frame;
-import pivot.wtk.Spinner;
-import pivot.wtkx.WTKXSerializer;
 
 public class SpinnerFocusTest implements Application {
     private Frame frame = null;

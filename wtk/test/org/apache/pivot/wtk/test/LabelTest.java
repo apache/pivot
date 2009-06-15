@@ -17,16 +17,16 @@
 package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.FlowPane;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.TextDecoration;
+import org.apache.pivot.wtk.Window;
 
-import pivot.wtk.Application;
-import pivot.wtk.Display;
-import pivot.wtk.HorizontalAlignment;
-import pivot.wtk.Label;
-import pivot.wtk.FlowPane;
-import pivot.wtk.Insets;
-import pivot.wtk.Orientation;
-import pivot.wtk.TextDecoration;
-import pivot.wtk.Window;
 
 public class LabelTest implements Application {
     private Window window = null;

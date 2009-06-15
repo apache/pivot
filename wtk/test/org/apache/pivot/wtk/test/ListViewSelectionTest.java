@@ -20,12 +20,12 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.ListView;
+import org.apache.pivot.wtk.ListViewSelectionListener;
+import org.apache.pivot.wtk.Span;
 
-import pivot.wtk.Application;
-import pivot.wtk.Display;
-import pivot.wtk.ListView;
-import pivot.wtk.ListViewSelectionListener;
-import pivot.wtk.Span;
 
 public class ListViewSelectionTest implements Application {
     private ListView listView = new ListView();

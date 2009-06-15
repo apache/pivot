@@ -17,12 +17,12 @@
 package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
-import pivot.wtk.Application;
-import pivot.wtk.Component;
-import pivot.wtk.Display;
-import pivot.wtk.Window;
-import pivot.wtkx.WTKXSerializer;
 
 /**
  * Demonstrates a layout issue with TablePane. A one-row, two-column table is

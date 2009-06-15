@@ -24,8 +24,8 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Service;
+import org.apache.pivot.wtk.Component;
 
-import pivot.wtk.Component;
 
 /**
  * Abstract base class for chart views.
@@ -400,7 +400,7 @@ public abstract class ChartView extends Component {
     }
 
     protected void installChartSkin(Class<? extends ChartView> chartViewClass) {
-        Class<? extends pivot.wtk.Skin> skinClass = provider.getSkinClass(chartViewClass);
+        Class<? extends org.apache.pivot.wtk.Skin> skinClass = provider.getSkinClass(chartViewClass);
 
         try {
             setSkin(skinClass.newInstance());
