@@ -199,6 +199,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     private Object root = null;
     private HashMap<String, Object> namedObjects = new HashMap<String, Object>();
     private HashMap<String, WTKXSerializer> includeSerializers = new HashMap<String, WTKXSerializer>();
+    private boolean clearNamespacesOnRead = true;
 
     private ScriptEngineManager scriptEngineManager = null;
 
@@ -307,8 +308,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         Object object = null;
 
         // Clear any previous named objects and include serializers
-        namedObjects.clear();
-        includeSerializers.clear();
+        if (clearNamespacesOnRead) {
+            namedObjects.clear();
+            includeSerializers.clear();
+        }
 
         // Parse the XML stream
         Element element = null;
@@ -687,7 +690,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     scriptEngine = scriptEngineManager.getEngineByExtension(extension);
 
                                     if (scriptEngine == null) {
-                                        throw new SerializationException("Unable to find scripting engine for "
+                                        throw new SerializationException("Unable to find scripting engine for"
                                             + " extension " + extension + ".");
                                     }
 
@@ -721,7 +724,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     scriptEngine = scriptEngineManager.getEngineByName(language);
 
                                     if (scriptEngine == null) {
-                                        throw new SerializationException("Unable to find scripting engine for "
+                                        throw new SerializationException("Unable to find scripting engine for"
                                             + " language " + language + ".");
                                     }
 
@@ -820,6 +823,9 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         // Set the root object
         root = object;
 
+        // Reset the clear namespaces flag
+        clearNamespacesOnRead = true;
+
         return object;
     }
 
@@ -916,6 +922,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("id is null.");
         }
 
+        if (clearNamespacesOnRead) {
+            includeSerializers.clear();
+            namedObjects.clear();
+        }
+
+        clearNamespacesOnRead = false;
+
         includeSerializers.remove(id);
         return namedObjects.put(id, value);
     }
@@ -924,6 +937,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         if (id == null) {
             throw new IllegalArgumentException("id is null.");
         }
+
+        if (clearNamespacesOnRead) {
+            includeSerializers.clear();
+            namedObjects.clear();
+        }
+
+        clearNamespacesOnRead = false;
 
         includeSerializers.remove(id);
         return namedObjects.remove(id);

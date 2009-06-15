@@ -26,6 +26,7 @@ import java.net.URLDecoder;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.immutable.ImmutableMap;
 
 import netscape.javascript.JSObject;
 
@@ -154,7 +155,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
                 if (application != null) {
                     try {
-                        application.startup(applicationContext.getDisplay(), properties);
+                        application.startup(applicationContext.getDisplay(),
+                            new ImmutableMap<String, String>(properties));
                     } catch (Exception exception) {
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());

@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 /**
  * Script application loader.
  *
@@ -28,12 +27,9 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class ScriptApplication implements Application {
     private Window window = null;
 
-    private static final String SRC_ARGUMENT = "src";
-    private static final String TITLE_ARGUMENT = "title";
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(ScriptApplication.class, args);
-    }
+    public static final String SRC_ARGUMENT = "src";
+    public static final String TITLE_ARGUMENT = "title";
+    public static final String WINDOW_PROPERTY = "window";
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
@@ -46,13 +42,20 @@ public class ScriptApplication implements Application {
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         for (String property : properties) {
-            wtkxSerializer.put(property, properties.get(property));
+            if (!property.equals(SRC_ARGUMENT)
+                && !property.equals(TITLE_ARGUMENT)) {
+                wtkxSerializer.put(property, properties.get(property));
+            }
         }
 
-        Component content = (Component)wtkxSerializer.readObject(src);
-        window = new Window(content);
+        window = new Window();
         window.setTitle(title);
         window.setMaximized(true);
+        wtkxSerializer.put(WINDOW_PROPERTY, window);
+
+        Component content = (Component)wtkxSerializer.readObject(src);
+        window.setContent(content);
+
         window.open(display);
     }
 
@@ -65,5 +68,9 @@ public class ScriptApplication implements Application {
     }
 
     public void suspend() {
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ScriptApplication.class, args);
     }
 }

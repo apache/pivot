@@ -47,7 +47,7 @@ limitations under the License.
                         <buttonPressListeners>
                             <wtkx:script language="javascript">
                             <![CDATA[
-                            importPackage(Packages.pivot.wtk);
+                            importPackage(org.apache.pivot.wtk);
                             function buttonPressed(button) {
                                 Alert.alert("Hello from JavaScript!", button.getWindow());
                             }
