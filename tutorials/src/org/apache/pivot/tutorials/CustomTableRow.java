@@ -18,8 +18,8 @@ package org.apache.pivot.tutorials;
 
 import java.net.URL;
 
-import pivot.wtk.ApplicationContext;
-import pivot.wtk.media.Image;
+import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.media.Image;
 
 public class CustomTableRow {
     private boolean a = false;

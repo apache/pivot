@@ -16,22 +16,22 @@
  */
 package org.apache.pivot.tutorials.progress;
 
-import pivot.collections.Dictionary;
-import pivot.util.concurrent.Task;
-import pivot.util.concurrent.TaskExecutionException;
-import pivot.util.concurrent.TaskListener;
-import pivot.wtk.Application;
-import pivot.wtk.ApplicationContext;
-import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.Meter;
-import pivot.wtk.PushButton;
-import pivot.wtk.TaskAdapter;
-import pivot.wtk.Window;
-import pivot.wtkx.WTKX;
-import pivot.wtkx.WTKXSerializer;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.concurrent.Task;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.util.concurrent.TaskListener;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Meter;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.TaskAdapter;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKX;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Meters implements Application {
     public class SampleTask extends Task<Void> {

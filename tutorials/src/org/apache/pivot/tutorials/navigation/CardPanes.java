@@ -16,22 +16,22 @@
  */
 package org.apache.pivot.tutorials.navigation;
 
-import pivot.collections.Dictionary;
-import pivot.wtk.Application;
-import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
-import pivot.wtk.ButtonStateListener;
-import pivot.wtk.CardPane;
-import pivot.wtk.CardPaneListener;
-import pivot.wtk.Checkbox;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.LinkButton;
-import pivot.wtk.RadioButton;
-import pivot.wtk.Window;
-import pivot.wtk.skin.CardPaneSkin;
-import pivot.wtkx.WTKX;
-import pivot.wtkx.WTKXSerializer;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.ButtonStateListener;
+import org.apache.pivot.wtk.CardPane;
+import org.apache.pivot.wtk.CardPaneListener;
+import org.apache.pivot.wtk.Checkbox;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.LinkButton;
+import org.apache.pivot.wtk.RadioButton;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.skin.CardPaneSkin;
+import org.apache.pivot.wtkx.WTKX;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class CardPanes implements Application {
     private Window window = null;

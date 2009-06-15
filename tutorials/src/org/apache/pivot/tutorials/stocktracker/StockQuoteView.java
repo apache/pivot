@@ -18,7 +18,7 @@ package org.apache.pivot.tutorials.stocktracker;
 
 import java.text.DecimalFormat;
 
-import pivot.beans.BeanDictionary;
+import org.apache.pivot.beans.BeanDictionary;
 
 public class StockQuoteView extends BeanDictionary {
     private static final DecimalFormat valueFormat = new DecimalFormat("$0.00");

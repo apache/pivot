@@ -16,19 +16,19 @@
  */
 package org.apache.pivot.tutorials.buttons;
 
-import pivot.collections.Dictionary;
-import pivot.wtk.Alert;
-import pivot.wtk.Application;
-import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.MessageType;
-import pivot.wtk.PushButton;
-import pivot.wtk.RadioButton;
-import pivot.wtk.Window;
-import pivot.wtkx.WTKX;
-import pivot.wtkx.WTKXSerializer;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Alert;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.MessageType;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.RadioButton;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKX;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class RadioButtons implements Application {
     private Window window = null;

@@ -16,16 +16,16 @@
  */
 package org.apache.pivot.tutorials.text;
 
-import pivot.collections.ArrayList;
-import pivot.collections.Dictionary;
-import pivot.wtk.Application;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.TextInput;
-import pivot.wtk.TextInputCharacterListener;
-import pivot.wtk.Window;
-import pivot.wtkx.WTKX;
-import pivot.wtkx.WTKXSerializer;
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.TextInputCharacterListener;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKX;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Text implements Application {
     private Window window = null;

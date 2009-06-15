@@ -19,14 +19,14 @@ package org.apache.pivot.tutorials;
 import java.awt.Color;
 import java.awt.Font;
 
-import pivot.collections.Dictionary;
-import pivot.wtk.Application;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.HorizontalAlignment;
-import pivot.wtk.Label;
-import pivot.wtk.VerticalAlignment;
-import pivot.wtk.Window;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.VerticalAlignment;
+import org.apache.pivot.wtk.Window;
 
 public class HelloJava implements Application {
     private Window window = null;

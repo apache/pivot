@@ -16,12 +16,12 @@
  */
 package org.apache.pivot.tutorials.transition;
 
-import pivot.wtk.Component;
-import pivot.wtk.effects.FadeDecorator;
-import pivot.wtk.effects.Transition;
-import pivot.wtk.effects.TransitionListener;
-import pivot.wtk.effects.easing.Easing;
-import pivot.wtk.effects.easing.Quadratic;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.effects.FadeDecorator;
+import org.apache.pivot.wtk.effects.Transition;
+import org.apache.pivot.wtk.effects.TransitionListener;
+import org.apache.pivot.wtk.effects.easing.Easing;
+import org.apache.pivot.wtk.effects.easing.Quadratic;
 
 public class CollapseTransition extends Transition {
     private Component component;

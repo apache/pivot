@@ -18,8 +18,8 @@ package org.apache.pivot.tutorials.stocktracker;
 
 import java.awt.Color;
 
-import pivot.wtk.TableView;
-import pivot.wtk.content.TableViewNumberCellRenderer;
+import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.content.TableViewNumberCellRenderer;
 
 public class ChangeCellRenderer extends TableViewNumberCellRenderer {
     public static final Color UP_COLOR = new Color(0x00, 0x80, 0x00);

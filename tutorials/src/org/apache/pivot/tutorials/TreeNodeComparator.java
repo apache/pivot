@@ -18,7 +18,7 @@ package org.apache.pivot.tutorials;
 
 import java.util.Comparator;
 
-import pivot.wtk.content.TreeNode;
+import org.apache.pivot.wtk.content.TreeNode;
 
 /**
  * Orders TreeNode instances by their name using string comparison.

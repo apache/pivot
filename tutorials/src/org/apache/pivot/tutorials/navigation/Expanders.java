@@ -16,15 +16,15 @@
  */
 package org.apache.pivot.tutorials.navigation;
 
-import pivot.collections.Dictionary;
-import pivot.wtk.Application;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.Expander;
-import pivot.wtk.ExpanderListener;
-import pivot.wtk.Window;
-import pivot.wtkx.WTKX;
-import pivot.wtkx.WTKXSerializer;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Expander;
+import org.apache.pivot.wtk.ExpanderListener;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKX;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Expanders implements Application {
     private Window window = null;

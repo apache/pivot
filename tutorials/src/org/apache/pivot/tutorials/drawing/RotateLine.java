@@ -16,17 +16,17 @@
  */
 package org.apache.pivot.tutorials.drawing;
 
-import pivot.collections.Dictionary;
-import pivot.wtk.Application;
-import pivot.wtk.ApplicationContext;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.ImageView;
-import pivot.wtk.Window;
-import pivot.wtk.media.Drawing;
-import pivot.wtk.media.drawing.Shape;
-import pivot.wtkx.WTKX;
-import pivot.wtkx.WTKXSerializer;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.ImageView;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.media.Drawing;
+import org.apache.pivot.wtk.media.drawing.Shape;
+import org.apache.pivot.wtkx.WTKX;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class RotateLine implements Application {
     private Drawing drawing = null;

@@ -16,23 +16,23 @@
  */
 package org.apache.pivot.tutorials.navigation;
 
-import pivot.collections.Dictionary;
-import pivot.collections.Sequence;
-import pivot.util.Vote;
-import pivot.wtk.Accordion;
-import pivot.wtk.AccordionSelectionListener;
-import pivot.wtk.ActivityIndicator;
-import pivot.wtk.Application;
-import pivot.wtk.Button;
-import pivot.wtk.ButtonPressListener;
-import pivot.wtk.Component;
-import pivot.wtk.DesktopApplicationContext;
-import pivot.wtk.Display;
-import pivot.wtk.Label;
-import pivot.wtk.PushButton;
-import pivot.wtk.Window;
-import pivot.wtkx.WTKX;
-import pivot.wtkx.WTKXSerializer;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtk.Accordion;
+import org.apache.pivot.wtk.AccordionSelectionListener;
+import org.apache.pivot.wtk.ActivityIndicator;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtkx.WTKX;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Accordions implements Application {
     private Window window = null;
