@@ -14,36 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.web;
+package org.apache.pivot.web;
 
 /**
- * Executes an HTTP GET operation.
+ * Interface for attaching authentication information to a web query.
  *
  * @author gbrown
  */
-public class GetQuery extends Query<Object> {
-    public static final Method METHOD = Method.GET;
-
-    public GetQuery(String hostname, String path) {
-        this(hostname, DEFAULT_PORT, path, false);
-    }
-
-    public GetQuery(String hostname, int port, String path, boolean secure) {
-        super(hostname, port, path, secure);
-    }
-
-    public Method getMethod() {
-        return METHOD;
-    }
-
-    /**
-     * Synchronously executes the GET operation.
-     *
-     * @return
-     * The result of the operation, deserialized using the query's serializer.
-     */
-    @Override
-    public Object execute() throws QueryException {
-        return execute(METHOD, null);
-    }
+public interface Authentication {
+    public void authenticate(Query<?> query);
 }

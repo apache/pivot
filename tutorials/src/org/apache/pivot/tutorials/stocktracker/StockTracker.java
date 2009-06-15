@@ -23,6 +23,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.pivot.web.GetQuery;
+
 import pivot.collections.ArrayList;
 import pivot.collections.Dictionary;
 import pivot.collections.List;
@@ -31,7 +33,6 @@ import pivot.serialization.CSVSerializer;
 import pivot.util.Resources;
 import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskListener;
-import pivot.web.GetQuery;
 import pivot.wtk.Application;
 import pivot.wtk.ApplicationContext;
 import pivot.wtk.Button;

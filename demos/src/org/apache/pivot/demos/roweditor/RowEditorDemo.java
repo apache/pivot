@@ -36,7 +36,7 @@ import pivot.wtkx.WTKXSerializer;
  *
  * @author tvolkert
  */
-public class Demo implements Application {
+public class RowEditorDemo implements Application {
     private Window window = null;
 
     @WTKX TableView tableView;
@@ -45,7 +45,7 @@ public class Demo implements Application {
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "demo.wtkx");
-        wtkxSerializer.bind(this, Demo.class);
+        wtkxSerializer.bind(this, RowEditorDemo.class);
 
         TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();
         tableView.setRowEditor(tableViewRowEditor);
@@ -85,6 +85,6 @@ public class Demo implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(Demo.class, args);
+        DesktopApplicationContext.main(RowEditorDemo.class, args);
     }
 }

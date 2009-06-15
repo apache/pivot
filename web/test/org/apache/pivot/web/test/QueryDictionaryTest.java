@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.web.test;
+package org.apache.pivot.web.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,9 +25,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.pivot.web.QueryDictionary;
 import org.junit.Test;
 
-import pivot.web.QueryDictionary;
 
 public class QueryDictionaryTest {
     @Test(expected=IndexOutOfBoundsException.class)

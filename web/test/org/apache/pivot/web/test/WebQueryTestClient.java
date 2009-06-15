@@ -14,10 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.web.test;
+package org.apache.pivot.web.test;
 
 import static org.junit.Assert.assertTrue;
 
+import org.apache.pivot.web.BasicAuthentication;
+import org.apache.pivot.web.DeleteQuery;
+import org.apache.pivot.web.GetQuery;
+import org.apache.pivot.web.PostQuery;
+import org.apache.pivot.web.PutQuery;
+import org.apache.pivot.web.QueryDictionary;
 import org.junit.Test;
 
 import pivot.collections.Dictionary;
@@ -26,12 +32,6 @@ import pivot.serialization.JSONSerializer;
 import pivot.util.concurrent.Task;
 import pivot.util.concurrent.TaskGroup;
 import pivot.util.concurrent.TaskListener;
-import pivot.web.BasicAuthentication;
-import pivot.web.GetQuery;
-import pivot.web.DeleteQuery;
-import pivot.web.PostQuery;
-import pivot.web.PutQuery;
-import pivot.web.QueryDictionary;
 
 public class WebQueryTestClient {
     final static boolean useProxy = true;

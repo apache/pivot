@@ -14,13 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.web;
+package org.apache.pivot.web;
 
 /**
- * Interface for attaching authentication information to a web query.
+ * Executes an HTTP DELETE operation.
  *
  * @author gbrown
  */
-public interface Authentication {
-    public void authenticate(Query<?> query);
+public class DeleteQuery extends Query<Void> {
+    public static final Method METHOD = Method.DELETE;
+
+    public DeleteQuery(String hostname, String path) {
+        this(hostname, DEFAULT_PORT, path, false);
+    }
+
+    public DeleteQuery(String hostname, int port, String path, boolean secure) {
+        super(hostname, port, path, secure);
+    }
+
+    public Method getMethod() {
+        return METHOD;
+    }
+
+    /**
+     * Synchronously executes the DELETE operation.
+     */
+    @Override
+    public Void execute() throws QueryException {
+        execute(METHOD, null);
+        return null;
+    }
 }

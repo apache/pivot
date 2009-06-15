@@ -14,23 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.web;
+package org.apache.pivot.web;
 
 /**
- * Executes an HTTP PUT operation.
+ * Executes an HTTP GET operation.
  *
  * @author gbrown
  */
-public class PutQuery extends Query<Void> {
-    private Object value = null;
+public class GetQuery extends Query<Object> {
+    public static final Method METHOD = Method.GET;
 
-    public static final Method METHOD = Method.PUT;
-
-    public PutQuery(String hostname, String path) {
+    public GetQuery(String hostname, String path) {
         this(hostname, DEFAULT_PORT, path, false);
     }
 
-    public PutQuery(String hostname, int port, String path, boolean secure) {
+    public GetQuery(String hostname, int port, String path, boolean secure) {
         super(hostname, port, path, secure);
     }
 
@@ -39,30 +37,13 @@ public class PutQuery extends Query<Void> {
     }
 
     /**
-     * Returns the value that will be PUT to the server when the query is
-     * executed.
-     */
-    public Object getValue() {
-        return value;
-    }
-
-    /**
-     * Sets the value that will be PUT to the server when the query is
-     * executed.
+     * Synchronously executes the GET operation.
      *
-     * @param value
-     * The value to PUT to the server.
-     */
-    public void setValue(Object value) {
-        this.value = value;
-    }
-
-    /**
-     * Synchronously executes the PUT operation.
+     * @return
+     * The result of the operation, deserialized using the query's serializer.
      */
     @Override
-    public Void execute() throws QueryException {
-        execute(METHOD, value);
-        return null;
+    public Object execute() throws QueryException {
+        return execute(METHOD, null);
     }
 }

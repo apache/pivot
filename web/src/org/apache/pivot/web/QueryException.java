@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.web;
+package org.apache.pivot.web;
 
 import pivot.util.concurrent.TaskExecutionException;
 

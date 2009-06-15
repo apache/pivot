@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.web.server;
+package org.apache.pivot.web.server;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,15 +32,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.pivot.web.QueryDictionary;
+
 import pivot.serialization.JSONSerializer;
 import pivot.serialization.SerializationException;
 import pivot.serialization.Serializer;
 import pivot.util.Base64;
-import pivot.web.QueryDictionary;
 
 /**
  * Abstract base class for web query servlets. It is the server counterpart to
- * {@link pivot.web.Query pivot.web.Query}.
+ * {@link org.apache.pivot.web.Query pivot.web.Query}.
  *
  * @author tvolkert
  */

@@ -14,21 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pivot.web;
+package org.apache.pivot.web;
 
 /**
- * Executes an HTTP DELETE operation.
+ * Executes an HTTP PUT operation.
  *
  * @author gbrown
  */
-public class DeleteQuery extends Query<Void> {
-    public static final Method METHOD = Method.DELETE;
+public class PutQuery extends Query<Void> {
+    private Object value = null;
 
-    public DeleteQuery(String hostname, String path) {
+    public static final Method METHOD = Method.PUT;
+
+    public PutQuery(String hostname, String path) {
         this(hostname, DEFAULT_PORT, path, false);
     }
 
-    public DeleteQuery(String hostname, int port, String path, boolean secure) {
+    public PutQuery(String hostname, int port, String path, boolean secure) {
         super(hostname, port, path, secure);
     }
 
@@ -37,11 +39,30 @@ public class DeleteQuery extends Query<Void> {
     }
 
     /**
-     * Synchronously executes the DELETE operation.
+     * Returns the value that will be PUT to the server when the query is
+     * executed.
+     */
+    public Object getValue() {
+        return value;
+    }
+
+    /**
+     * Sets the value that will be PUT to the server when the query is
+     * executed.
+     *
+     * @param value
+     * The value to PUT to the server.
+     */
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
+    /**
+     * Synchronously executes the PUT operation.
      */
     @Override
     public Void execute() throws QueryException {
-        execute(METHOD, null);
+        execute(METHOD, value);
         return null;
     }
 }

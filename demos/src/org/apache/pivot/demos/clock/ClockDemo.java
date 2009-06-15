@@ -28,7 +28,7 @@ import pivot.wtk.Window;
  *
  * @author tvolkert
  */
-public class Demo implements Application {
+public class ClockDemo implements Application {
     private Window window;
     private Clock clock = new Clock();
 
@@ -54,6 +54,6 @@ public class Demo implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(Demo.class, args);
+        DesktopApplicationContext.main(ClockDemo.class, args);
     }
 }
