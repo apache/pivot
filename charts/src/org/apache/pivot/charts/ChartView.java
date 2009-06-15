@@ -26,7 +26,6 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Service;
 import org.apache.pivot.wtk.Component;
 
-
 /**
  * Abstract base class for chart views.
  *
@@ -376,7 +375,7 @@ public abstract class ChartView extends Component {
     private ChartViewSeriesListenerList chartViewSeriesListeners = new ChartViewSeriesListenerList();
 
     public static final String DEFAULT_SERIES_NAME_KEY = "name";
-    public static final String PROVIDER_NAME = "pivot.charts.Provider";
+    public static final String PROVIDER_NAME = "org.apache.pivot.charts.Provider";
 
     private static Provider provider = null;
 

@@ -27,7 +27,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
-
 /**
  * Abstract base class for chart view skins.
  *
@@ -36,7 +35,7 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 public abstract class ChartViewSkin extends ComponentSkin
     implements ChartView.Skin,
         ChartViewListener, ChartViewCategoryListener, ChartViewSeriesListener {
-    private Color backgroundColor = null;
+    private Color backgroundColor = Color.WHITE;
 
     @Override
     public void install(Component component) {
