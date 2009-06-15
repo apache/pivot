@@ -41,9 +41,8 @@ project classpath.
 
 * Pivot includes a repackaged version of the StAX libraries, which includes a
 service descriptor for the javax.xml.stream.XMLInputFactory class (the code is
-otherwise unchanged). An external StAX library is required when using Java 5;
-however, this modified version is also recommended for web deployment in Java 6
-or above to avoid needless requests to the web server: the service resolution
+otherwise unchanged). This modified version is recommended for web deployment
+to avoid needless requests to the web server: the service resolution
 process employed by many JDK factory methods looks on the classpath for a
 service descriptor file; since an applet's classpath also contains its codebase,
 the JRE will look for this file on the web server if it is not found in an
@@ -51,22 +50,16 @@ archive JAR. Such requests can have a noticeable impact on runtime performance,
 especially for slow or unresponsive web servers.
 
 Another alternative is to set the codebase_lookup applet parameter to false.
-However, this parameter requires Java 6 or later and also precludes the use
-of dynamically generated WTKX on the server.
+However, this parameter precludes the use of dynamically generated WTKX on the
+server.
 
-These libraries are not necessary or recommended for desktop deployment in
-Java 6+.
+These libraries are not necessary or recommended for desktop deployment.
 
 
 Dependencies
 ============
 
-Pivot requires Java 5 or greater.
-
-* WTKX support in Java 5 requires a compatible StAX 1.0 implementation. A
-  modified version of the StAX reference implementation is included with the
-  Pivot distribution, as described above. The original version of this library
-  is available from http://stax.codehaus.org.
+Pivot requires Java 6 or greater.
 
 * Pivot's charting components require a compatible chart provider. No such
   provider is included in this release, but one is available here:

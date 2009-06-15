@@ -37,7 +37,7 @@ limitations under the License.
     <!-- Compiler properties -->
     <property name="compiler.deprecation" value="true"/>
     <property name="compiler.debug" value="false"/>
-    <property name="compiler.target" value="1.5"/>
+    <property name="compiler.target" value="1.6"/>
     <property name="compiler.encoding" value="UTF-8"/>
     <property name="compiler.indexJars" value="true"/>
     <condition property="compiler.sun">
@@ -63,9 +63,20 @@ limitations under the License.
     <property name="compilerarg.processor" value="-Xlint"/>
 
     <!-- Dynamic properties -->
-    <tstamp/>
     <property file="build.properties"/>
     <property name="folder.release" value="apache-${ant.project.name}-${version}"/>
+
+    <!-- Jar file names -->
+    <property name="jar.charts" value="${ant.project.name}-charts-${version}.jar" />
+    <property name="jar.core" value="${ant.project.name}-core-${version}.jar" />
+    <property name="jar.web" value="${ant.project.name}-web-${version}.jar" />
+    <property name="jar.web.server" value="${ant.project.name}-web-${version}.server.jar" />
+    <property name="jar.wtk" value="${ant.project.name}-wtk-${version}.jar" />
+    <property name="jar.wtk.terra" value="${ant.project.name}-wtk-${version}.terra.jar" />
+    <property name="jar.wtk.obsidian" value="${ant.project.name}-wtk-${version}.obsidian.jar" />
+    <property name="jar.tutorials" value="${ant.project.name}-tutorials-${version}.jar" />
+    <property name="jar.demos" value="${ant.project.name}-demos-${version}.jar" />
+    <property name="jar.tools" value="${ant.project.name}-tools-${version}.jar" />
 
     <!-- JDK version check -->
     <fail message="Building Pivot requires JDK 1.6 or greater.">
@@ -104,7 +115,7 @@ limitations under the License.
 
     <!-- Javadoc -->
     <target name="doc" description="Generates API documentation in ${folder.doc}">
-        <javadoc packagenames="pivot.*" destdir="${folder.doc}"
+        <javadoc packagenames="org.apache.pivot.*" destdir="${folder.doc}"
             author="true" version="true" use="true"
             classpath="${java.class.path}">
             <classpath>
@@ -144,10 +155,9 @@ limitations under the License.
 
     <target name="charts-package" depends="charts">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-charts.jar" index="${compiler.indexJars}">
+        <jar destfile="${folder.lib}/${jar.charts}" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                 <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                 <attribute name="Implementation-Title" value="Apache Pivot Charts"/>
@@ -163,7 +173,7 @@ limitations under the License.
 
     <target name="charts-clean">
         <delete dir="charts/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}-charts.jar"/>
+        <delete file="${folder.lib}/${jar.charts}"/>
     </target>
 
     <!-- Charts Test -->
@@ -201,10 +211,9 @@ limitations under the License.
 
     <target name="core-package" depends="core">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-core.jar" index="${compiler.indexJars}">
+        <jar destfile="${folder.lib}/${jar.core}" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                 <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                 <attribute name="Implementation-Title" value="Apache Pivot Core"/>
@@ -220,7 +229,7 @@ limitations under the License.
 
     <target name="core-clean">
         <delete dir="core/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}-core.jar"/>
+        <delete file="${folder.lib}/${jar.core}"/>
     </target>
 
     <!-- Core Test -->
@@ -271,35 +280,33 @@ limitations under the License.
 
     <target name="web-package" depends="web">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-web.jar" index="${compiler.indexJars}">
+        <jar destfile="${folder.lib}/${jar.web}" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                 <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                 <attribute name="Implementation-Title" value="Apache Pivot Web Queries"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
-            <fileset dir="web/${folder.bin}" excludes="pivot/web/server/**"/>
+            <fileset dir="web/${folder.bin}" excludes="org/apache/pivot/web/server/**"/>
             <fileset dir="web/src">
-                <exclude name="pivot/web/server/**"/>
+                <exclude name="org/apache/pivot/web/server/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
         </jar>
 
-        <jar destfile="${folder.lib}/${ant.project.name}-web.server.jar" index="${compiler.indexJars}">
+        <jar destfile="${folder.lib}/${jar.web.server}" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                 <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                 <attribute name="Implementation-Title" value="Apache Pivot Web Queries Server"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
-            <fileset dir="web/${folder.bin}" includes="pivot/web/server/*"/>
+            <fileset dir="web/${folder.bin}" includes="org/apache/pivot/web/server/*"/>
             <fileset dir="web/src">
-                <include name="pivot/web/server/**"/>
+                <include name="org/apache/pivot/web/server/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
@@ -308,8 +315,8 @@ limitations under the License.
 
     <target name="web-clean">
         <delete dir="web/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}-web.jar"/>
-        <delete file="${folder.lib}/${ant.project.name}-web.server.jar"/>
+        <delete file="${folder.lib}/${jar.web}"/>
+        <delete file="${folder.lib}/${jar.web.server}"/>
     </target>
 
     <!-- Web Test -->
@@ -333,9 +340,11 @@ limitations under the License.
 
     <target name="web-test-war" depends="core-package, web-package, wtk-package, web-test">
         <jar destfile="web/www/lib/${ant.project.name}-web.test.jar" index="${compiler.indexJars}">
-            <fileset dir="web/${folder.bin}" includes="pivot/web/test/**" excludes="pivot/web/test/server/**"/>
+            <fileset dir="web/${folder.bin}"
+                includes="org/apache/pivot/web/test/**"
+                excludes="org/apache/pivot/web/test/server/**"/>
             <fileset dir="web/test">
-                <exclude name="pivot/web/test/server/**"/>
+                <exclude name="org/apache/pivot/web/test/server/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
@@ -343,10 +352,10 @@ limitations under the License.
 
         <copy todir="web/www/lib">
             <fileset dir="${folder.lib}">
-                <include name="${ant.project.name}-core.jar"/>
-                <include name="${ant.project.name}-web.jar"/>
-                <include name="${ant.project.name}-wtk.jar"/>
-                <include name="${ant.project.name}-wtk.terra.jar"/>
+                <include name="${jar.core}"/>
+                <include name="${jar.web}"/>
+                <include name="${jar.wtk}"/>
+                <include name="${jar.wtk.terra}"/>
             </fileset>
             <fileset dir="wtk/lib" includes="*.jar"/>
         </copy>
@@ -354,16 +363,16 @@ limitations under the License.
         <war destfile="${folder.lib}/${ant.project.name}_web_test.war" webxml="web/web.xml">
             <fileset dir="web/www"/>
             <classes dir="web/${folder.bin}">
-                <include name="pivot/web/test/server/**"/>
+                <include name="org/apache/pivot/web/test/server/**"/>
             </classes>
             <classes dir="web/test">
-                <include name="pivot/web/test/server/**"/>
+                <include name="org/apache/pivot/web/test/server/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </classes>
             <lib dir="${folder.lib}">
-                <include name="${ant.project.name}-core.jar"/>
-                <include name="${ant.project.name}-web.server.jar"/>
+                <include name="${jar.core}"/>
+                <include name="${jar.web.server}"/>
             </lib>
         </war>
     </target>
@@ -386,7 +395,7 @@ limitations under the License.
         </fail>
 
         <!-- Exclude compilation of BindProcessor if we're not using a Sun compiler -->
-        <condition property="wtk.exclude" value="pivot/wtkx/BindProcessor.java" else="">
+        <condition property="wtk.exclude" value="org/apache/pivot/wtkx/BindProcessor.java" else="">
             <not>
                 <isset property="compiler.sun"/>
             </not>
@@ -413,58 +422,55 @@ limitations under the License.
 
     <target name="wtk-package" depends="wtk">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-wtk.jar" index="${compiler.indexJars}">
+        <jar destfile="${folder.lib}/${jar.wtk}" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                 <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                 <attribute name="Implementation-Title" value="Apache Pivot WTK"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
             <fileset dir="wtk/${folder.bin}">
-                <exclude name="pivot/wtk/skin/terra/**"/>
-                <exclude name="pivot/wtk/skin/obsidian/**"/>
+                <exclude name="org/apache/pivot/wtk/skin/terra/**"/>
+                <exclude name="org/apache/pivot/wtk/skin/obsidian/**"/>
             </fileset>
             <fileset dir="wtk/src">
-                <exclude name="pivot/wtk/skin/terra/**"/>
-                <exclude name="pivot/wtk/skin/obsidian/**"/>
+                <exclude name="org/apache/pivot/wtk/skin/terra/**"/>
+                <exclude name="org/apache/pivot/wtk/skin/obsidian/**"/>
                 <exclude name="META-INF/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
         </jar>
 
-        <jar destfile="${folder.lib}/${ant.project.name}-wtk.terra.jar" index="${compiler.indexJars}">
+        <jar destfile="${folder.lib}/${jar.wtk.terra}" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                 <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                 <attribute name="Implementation-Title" value="Apache Pivot WTK Terra Theme"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
-            <fileset dir="wtk/${folder.bin}" includes="pivot/wtk/skin/terra/**"/>
+            <fileset dir="wtk/${folder.bin}" includes="org/apache/pivot/wtk/skin/terra/**"/>
             <fileset dir="wtk/src">
-                <include name="pivot/wtk/skin/terra/**"/>
+                <include name="org/apache/pivot/wtk/skin/terra/**"/>
                 <include name="META-INF/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
         </jar>
 
-        <jar destfile="${folder.lib}/${ant.project.name}-wtk.obsidian.jar" index="${compiler.indexJars}">
+        <jar destfile="${folder.lib}/${jar.wtk.obsidian}" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                 <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                 <attribute name="Implementation-Title" value="Apache Pivot WTK Obsidian Theme"/>
                 <attribute name="Implementation-Version" value="${version}"/>
             </manifest>
-            <fileset dir="wtk/${folder.bin}" includes="pivot/wtk/skin/obsidian/**"/>
+            <fileset dir="wtk/${folder.bin}" includes="org/apache/pivot/wtk/skin/obsidian/**"/>
             <fileset dir="wtk/src">
-                <include name="pivot/wtk/skin/obsidian/**"/>
+                <include name="org/apache/pivot/wtk/skin/obsidian/**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/package.html"/>
             </fileset>
@@ -473,9 +479,9 @@ limitations under the License.
 
     <target name="wtk-clean">
         <delete dir="wtk/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}-wtk.jar"/>
-        <delete file="${folder.lib}/${ant.project.name}-wtk.terra.jar"/>
-        <delete file="${folder.lib}/${ant.project.name}-wtk.obsidian.jar"/>
+        <delete file="${folder.lib}/${jar.wtk}"/>
+        <delete file="${folder.lib}/${jar.wtk.terra}"/>
+        <delete file="${folder.lib}/${jar.wtk.obsidian}"/>
     </target>
 
     <!-- WTK Test -->
@@ -517,10 +523,9 @@ limitations under the License.
 
     <target name="tutorials-package" depends="tutorials">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-tutorials.jar" index="${compiler.indexJars}">
+        <jar destfile="${folder.lib}/${jar.tutorials}" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                 <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                 <attribute name="Implementation-Title" value="Apache Pivot Tutorials"/>
@@ -535,7 +540,7 @@ limitations under the License.
 
     <target name="tutorials-clean">
         <delete dir="tutorials/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}-tutorials.jar"/>
+        <delete file="${folder.lib}/${jar.tutorials}"/>
     </target>
 
     <!-- Demos -->
@@ -560,7 +565,7 @@ limitations under the License.
 
     <target name="demos-package" depends="demos">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-demos.jar" index="${compiler.indexJars}">
+        <jar destfile="${folder.lib}/${jar.demos}" index="${compiler.indexJars}">
             <fileset dir="demos/${folder.bin}"/>
             <fileset dir="demos/src">
                 <exclude name="**/*.java"/>
@@ -571,7 +576,7 @@ limitations under the License.
 
     <target name="demos-clean">
         <delete dir="demos/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}-demos.jar"/>
+        <delete file="${folder.lib}/${jar.demos}"/>
     </target>
 
     <!-- Tools -->
@@ -595,10 +600,9 @@ limitations under the License.
 
     <target name="tools-package" depends="tools">
         <mkdir dir="${folder.lib}"/>
-        <jar destfile="${folder.lib}/${ant.project.name}-tools.jar" index="${compiler.indexJars}">
+        <jar destfile="${folder.lib}/${jar.tools}" index="${compiler.indexJars}">
             <manifest>
                 <attribute name="Sealed" value="true"/>
-                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
                 <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                 <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                 <attribute name="Implementation-Title" value="Apache Pivot Tools"/>
@@ -613,7 +617,7 @@ limitations under the License.
 
     <target name="tools-clean">
         <delete dir="tools/${folder.bin}"/>
-        <delete file="${folder.lib}/${ant.project.name}-tools.jar"/>
+        <delete file="${folder.lib}/${jar.tools}"/>
     </target>
 
     <!-- Package source distribution -->
@@ -677,22 +681,21 @@ limitations under the License.
         </copy>
 
         <!-- Copy release binaries -->
-        <copy file="${folder.lib}/${ant.project.name}-charts.jar"
-            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-charts-incubating.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-core.jar"
-            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-core-incubating.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-web.jar"
-            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-web-incubating.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-web.server.jar"
-            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-web-incubating.server.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-wtk.jar"
-            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-wtk-incubating.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-wtk.terra.jar"
-            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-wtk-incubating.terra.jar"/>
-        <copy file="${folder.lib}/${ant.project.name}-tools.jar"
-            tofile="${folder.install}/${folder.release}/${folder.lib}/${ant.project.name}-tools-incubating.jar"/>
-        <copy file="wtk/lib/stax-1.2.0.jar" todir="${folder.install}/${folder.release}/${folder.lib}"/>
-        <copy file="wtk/lib/stax-api-1.0.jar" todir="${folder.install}/${folder.release}/${folder.lib}"/>
+        <copy todir="${folder.install}/${folder.release}/${folder.lib}">
+            <fileset dir="${folder.lib}">
+                <include name="${jar.charts}"/>
+                <include name="${jar.core}"/>
+                <include name="${jar.web}"/>
+                <include name="${jar.web.server}"/>
+                <include name="${jar.wtk}"/>
+                <include name="${jar.wtk.terra}"/>
+                <include name="${jar.tools}"/>
+            </fileset>
+            <fileset dir="wtk/lib">
+                <include name="stax-1.2.0.jar"/>
+                <include name="stax-api-1.0.1.jar"/>
+            </fileset>
+        </copy>
 
         <!-- Copy documentation -->
         <copy todir="${folder.install}/${folder.release}/${folder.doc}">
