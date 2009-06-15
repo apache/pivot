@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import pivot.collections.adapter.*
+import org.apache.pivot.collections.adapter.*
 
 listData = []
 listData << "One"

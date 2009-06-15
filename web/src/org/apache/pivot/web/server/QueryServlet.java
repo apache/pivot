@@ -38,10 +38,9 @@ import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.Base64;
 import org.apache.pivot.web.QueryDictionary;
 
-
 /**
  * Abstract base class for web query servlets. It is the server counterpart to
- * {@link org.apache.pivot.web.Query pivot.web.Query}.
+ * {@link org.apache.pivot.web.Query}.
  *
  * @author tvolkert
  */
