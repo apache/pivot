@@ -37,7 +37,7 @@ public class JavaTranslatorTest {
            ("java_translator_test.wtkx");
 
        JavaFileObject javaFileObject = translator.translate(inputStream,
-           "pivot.wtkx.test.java_translator_test_WTKX");
+           "org.apache.pivot.wtkx.test.java_translator_test_WTKX");
 
        System.out.println(javaFileObject.getCharContent(true));
 

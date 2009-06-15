@@ -268,7 +268,7 @@ public abstract class ApplicationContext {
             }
 
             try {
-                debugRepaint = Boolean.parseBoolean(System.getProperty("pivot.wtk.debugRepaint"));
+                debugRepaint = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugRepaint"));
             } catch (Exception ex) {
             }
 

@@ -47,7 +47,7 @@ public class ListButtons implements Application {
 
                 // Get the image URL for the selected item
                 ClassLoader classLoader = ThreadUtilities.getClassLoader();
-                URL imageURL = classLoader.getResource("pivot/tutorials/" + item);
+                URL imageURL = classLoader.getResource("org/apache/pivot/tutorials/" + item);
 
                 // If the image has not been added to the resource cache yet,
                 // add it

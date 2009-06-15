@@ -173,7 +173,7 @@ public class HTTPClient implements Application {
                 final Sheet sheet;
 
                 try {
-                    sheet = (Sheet)sheetSerializer.readObject("pivot/tools/net/setAuthentication.wtkx");
+                    sheet = (Sheet)sheetSerializer.readObject(this, "setAuthentication.wtkx");
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
@@ -254,7 +254,7 @@ public class HTTPClient implements Application {
                 final Sheet sheet;
 
                 try {
-                    sheet = (Sheet)sheetSerializer.readObject("pivot/tools/net/setKeystore.wtkx");
+                    sheet = (Sheet)sheetSerializer.readObject(this, "setKeystore.wtkx");
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
@@ -324,7 +324,7 @@ public class HTTPClient implements Application {
 
         // Load the main app window
         serializer = new WTKXSerializer();
-        window = (Window)serializer.readObject("pivot/tools/net/application.wtkx");
+        window = (Window)serializer.readObject(this, "application.wtkx");
         window.open(display);
 
         TableView tableView = (TableView)serializer.get("log.tableView");
@@ -340,7 +340,7 @@ public class HTTPClient implements Application {
 
                         try {
                             detailsFrame = (Frame)frameSerializer.readObject
-                                ("pivot/tools/net/detailsFrame.wtkx");
+                                (this, "detailsFrame.wtkx");
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }

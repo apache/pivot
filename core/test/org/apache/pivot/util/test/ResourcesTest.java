@@ -48,7 +48,7 @@ public class ResourcesTest {
 
     @Test
     public void testReadDefaultLocale() throws Exception {
-        Resources res = new Resources("pivot.util.test.test1");
+        Resources res = new Resources("org.apache.pivot.util.test.test1");
         assertResources(res, "SGML", "Standard Generalized Markup Language");
     }
 
@@ -59,7 +59,7 @@ public class ResourcesTest {
      */
     @Test
     public void testRead_GB_Locale() throws Exception {
-        Resources res = new Resources("pivot.util.test.test2");
+        Resources res = new Resources("org.apache.pivot.util.test.test2");
         assertResources(res, "SGML",
                 "How Do, Youth, Standard Generalized Markup Language");
     }
@@ -74,7 +74,7 @@ public class ResourcesTest {
     public void testRead_GB_en_Locale() throws Exception {
         assertEquals("Default locale should be en_GB", "en_GB", Locale
                 .getDefault().toString());
-        Resources res = new Resources("pivot.util.test.test3");
+        Resources res = new Resources("org.apache.pivot.util.test.test3");
         assertResources(res, "XSGML",
                 "How Do, Youth, Standard Generalized Markup Language");
     }
@@ -88,26 +88,26 @@ public class ResourcesTest {
     public void testRead_GB_en_LocaleExtraOverride() throws Exception {
         assertEquals("Default locale should be en_GB", "en_GB", Locale
                 .getDefault().toString());
-        Resources res = new Resources("pivot.util.test.test6");
+        Resources res = new Resources("org.apache.pivot.util.test.test6");
         assertResources(res, "XSGML",
                 "eXtra Standard Generalized Markup Language");
     }
 
     @Test(expected=SerializationException.class)
     public void testSerialisationException() throws Exception {
-        new Resources("pivot.util.test.test4");
+        new Resources("org.apache.pivot.util.test.test4");
     }
 
     @Test(expected=MissingResourceException.class)
     public void testMissingResource() throws Exception {
         // resource doesn't exist...
-        new Resources("pivot.util.test.test5");
+        new Resources("org.apache.pivot.util.test.test5");
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testNullLocale() throws Exception {
         // resource exists, but locale is null
-        new Resources("pivot.util.test.test1", (Locale) null);
+        new Resources("org.apache.pivot.util.test.test1", (Locale) null);
     }
 
     @Test(expected=NullPointerException.class)

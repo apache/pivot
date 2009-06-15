@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk.media">
     <canvas>
-        <Canvas xmlns="pivot.wtk.media.drawing">
+        <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
             <Ellipse x="41" y="1" width="238" height="238" stroke="#777777" strokeThickness="1" fill="#eeeeee"/>
             <Path x="160" y="120" stroke="#000000" fill="#000000">
                 <Path.MoveTo x="-5" y="0"/>
