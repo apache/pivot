@@ -24,7 +24,6 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.FileList;
-import org.apache.pivot.io.Folder;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -131,11 +130,11 @@ public class FileDropTargetDemo implements Application {
                         FileList tableData = (FileList)fileTableView.getTableData();
                         FileList fileList = dragContent.getFileList();
                         for (File file : fileList) {
-                            if (file instanceof Folder) {
-                                tableData.add((Folder)file);
-                            } else {
-                                tableData.add(file);
+                            if (file.isDirectory()) {
+                                // TODO Expand recursively
                             }
+
+                            tableData.add(file);
                         }
 
                         dropAction = DropAction.COPY;

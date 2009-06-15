@@ -336,7 +336,7 @@ public class TerraExpanderSkin extends ContainerSkin
                     + content.getPreferredHeight(contentWidth));
             } else {
                 float scale = expandTransition.getScale();
-                preferredHeight += (int)(scale * (float)(padding.top + padding.bottom
+                preferredHeight += (int)(scale * (padding.top + padding.bottom
                     + content.getPreferredHeight(contentWidth)));
             }
         }
@@ -372,7 +372,7 @@ public class TerraExpanderSkin extends ContainerSkin
                     preferredHeight += (padding.top + padding.bottom + contentSize.height);
                 } else {
                     float scale = expandTransition.getScale();
-                    preferredHeight += (int)(scale * (float)(padding.top + padding.bottom
+                    preferredHeight += (int)(scale * (padding.top + padding.bottom
                         + contentSize.height));
                 }
             }

@@ -126,8 +126,7 @@ public abstract class Theme {
 
             for (Integer handle : componentHandles) {
                 Component component = components.get(handle);
-                Class<? extends Component> componentClass =
-                    (Class<? extends Component>)component.getClass();
+                Class<? extends Component> componentClass = component.getClass();
 
                 if (theme.componentSkinMap.containsKey(componentClass)
                     && (componentClass.getEnclosingClass() == null

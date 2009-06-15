@@ -209,7 +209,7 @@ public final class GraphicsUtilities {
             }
 
             rgb = Integer.parseInt(value.substring(0, 6), 16);
-            alpha = (float)Integer.parseInt(value.substring(6, 8), 16) / 255f;
+            alpha = Integer.parseInt(value.substring(6, 8), 16) / 255f;
         } else if (value.startsWith("#")) {
             value = value.substring(1);
             if (value.length() != 6) {

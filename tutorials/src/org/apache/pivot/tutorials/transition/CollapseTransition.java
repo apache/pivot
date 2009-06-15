@@ -56,10 +56,9 @@ public class CollapseTransition extends Transition {
 
         if (percentComplete < 1.0f) {
             int duration = getDuration();
-
-            int width = (int)((float)initialWidth * (1.0f - percentComplete));
-
+            int width = (int)(initialWidth * (1.0f - percentComplete));
             width = (int)easing.easeInOut(getElapsedTime(), initialWidth, width - initialWidth, duration);
+
             component.setPreferredWidth(width);
 
             fadeDecorator.setOpacity(1.0f - percentComplete);

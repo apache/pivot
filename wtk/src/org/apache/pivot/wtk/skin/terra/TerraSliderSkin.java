@@ -127,7 +127,7 @@ public class TerraSliderSkin extends SliderSkin {
                 int minimum = slider.getMinimum();
                 int maximum = slider.getMaximum();
 
-                int value = (int)(minimum + (float)(maximum - minimum) * ratio);
+                int value = (int)(minimum + (maximum - minimum) * ratio);
                 slider.setValue(value);
             }
 
@@ -250,7 +250,7 @@ public class TerraSliderSkin extends SliderSkin {
         float ratio = (float)(value - minimum) / (maximum - minimum);
 
         thumb.setSize(thumbWidth, thumbHeight);
-        thumb.setLocation((int)((float)(width - thumbWidth) * ratio),
+        thumb.setLocation((int)((width - thumbWidth) * ratio),
             (height - thumbHeight) / 2);
     }
 

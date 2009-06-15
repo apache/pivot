@@ -245,12 +245,12 @@ public class Text extends Shape {
                 }
 
                 case RIGHT: {
-                    x = (float)bounds.width - (float)(lineBounds.getX() + lineBounds.getWidth());
+                    x = bounds.width - (float)(lineBounds.getX() + lineBounds.getWidth());
                     break;
                 }
 
                 case CENTER: {
-                    x = ((float)bounds.width - (float)(lineBounds.getX() + lineBounds.getWidth())) / 2f;
+                    x = (bounds.width - (float)(lineBounds.getX() + lineBounds.getWidth())) / 2f;
                     break;
                 }
 

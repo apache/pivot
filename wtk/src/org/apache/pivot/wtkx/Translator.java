@@ -445,7 +445,7 @@ public class Translator {
                                         ("Root node must represent a typed object.");
                                 }
 
-                                Class<?> type = (Class<?>)element.clazz;
+                                Class<?> type = element.clazz;
 
                                 if (BeanDictionary.isReadOnly(type, localName)) {
                                     Class<?> valueType = BeanDictionary.getType(type, localName);
@@ -486,7 +486,7 @@ public class Translator {
                             // If the element's parent is a sequence or a listener list, add
                             // the element value to it
                             if (element.parent != null) {
-                                Class<?> parentType = (Class<?>)element.parent.clazz;
+                                Class<?> parentType = element.parent.clazz;
 
                                 if (parentType != null
                                     && (Sequence.class.isAssignableFrom(parentType)
@@ -528,8 +528,8 @@ public class Translator {
 
                         switch (element.type) {
                         case WRITABLE_PROPERTY: {
-                            Class<?> type = (Class<?>)element.clazz;
-                            Class<?> parentType = (Class<?>)element.parent.clazz;
+                            Class<?> type = element.clazz;
+                            Class<?> parentType = element.parent.clazz;
                             Method setterMethod = BeanDictionary.getSetterMethod(parentType, localName, type);
 
                             writer.format(
@@ -544,7 +544,7 @@ public class Translator {
                         }
 
                         default: {
-                            Class<?> type = (Class<?>)element.clazz;
+                            Class<?> type = element.clazz;
 
                             if (type != null && Dictionary.class.isAssignableFrom(type)) {
                                 // The element is an untyped object

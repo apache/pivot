@@ -485,7 +485,7 @@ public class TerraAccordionSkin extends ContainerSkin
                     if (panel == selectionChangeTransition.fromPanel) {
                         panel.setLocation(padding.left + 1, panelY + padding.top);
 
-                        int previousSelectedPanelHeight = Math.round((float)panelHeight * (1.0f
+                        int previousSelectedPanelHeight = Math.round(panelHeight * (1.0f
                             - selectionChangeTransition.getEasedPercentComplete()));
                         previousSelectedPanelClipDecorator.setWidth(contentWidth);
                         previousSelectedPanelClipDecorator.setHeight(previousSelectedPanelHeight);
@@ -496,7 +496,7 @@ public class TerraAccordionSkin extends ContainerSkin
                     if (panel == selectionChangeTransition.toPanel) {
                         panel.setLocation(padding.left + 1, panelY + padding.top);
 
-                        int selectedPanelHeight = Math.round((float)panelHeight
+                        int selectedPanelHeight = Math.round(panelHeight
                             * selectionChangeTransition.getEasedPercentComplete());
                         selectedPanelClipDecorator.setWidth(contentWidth);
                         selectedPanelClipDecorator.setHeight(selectedPanelHeight);
@@ -744,7 +744,7 @@ public class TerraAccordionSkin extends ContainerSkin
                 button.setSelected(false);
             }
         } else {
-            Button button = (Button)panelHeaders.get(selectedIndex);
+            Button button = panelHeaders.get(selectedIndex);
             button.setSelected(true);
         }
 

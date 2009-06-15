@@ -146,14 +146,12 @@ public class ProxyServlet extends HttpServlet {
         connection.setUseCaches(false);
 
         // Write request headers to connection
-        Enumeration<String> headerNames = (Enumeration<String>)request.getHeaderNames();
+        Enumeration<String> headerNames = request.getHeaderNames();
 
         if (headerNames != null) {
             while (headerNames.hasMoreElements()) {
                 String headerName = headerNames.nextElement();
-
-                Enumeration<String> headerValues =
-                    (Enumeration<String>)request.getHeaders(headerName);
+                Enumeration<String> headerValues = request.getHeaders(headerName);
 
                 while (headerValues.hasMoreElements()) {
                     String headerValue = headerValues.nextElement();

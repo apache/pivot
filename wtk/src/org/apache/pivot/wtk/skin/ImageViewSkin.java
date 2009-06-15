@@ -63,10 +63,10 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         public void regionUpdated(Image image, int x, int y, int width, int height) {
             // TODO A rounding error is causing an off-by-one error; we're
             // accounting for it here by adding 1 to width and height
-            Bounds bounds = new Bounds(imageX + (int)Math.floor(((float)x * scaleX)),
-                imageY + (int)Math.floor((float)y * scaleY),
-                (int)Math.ceil((float)width * scaleX) + 1,
-                (int)Math.ceil((float)height * scaleY) + 1);
+            Bounds bounds = new Bounds(imageX + (int)Math.floor(x * scaleX),
+                imageY + (int)Math.floor(y * scaleY),
+                (int)Math.ceil(width * scaleX) + 1,
+                (int)Math.ceil(height * scaleY) + 1);
             repaintComponent(bounds);
         }
     };

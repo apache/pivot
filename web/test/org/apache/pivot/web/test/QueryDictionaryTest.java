@@ -76,7 +76,7 @@ public class QueryDictionaryTest {
         validKeys.add("key2");
         validKeys.add("key3");
 
-        for (String s : (Iterable<String>) dict) {
+        for (String s : dict) {
             assertTrue(s, validKeys.remove(s));
         }
 

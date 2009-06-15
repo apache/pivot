@@ -80,7 +80,7 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
                 Object cellData = rowData.get(columnName);
 
                 if (cellData instanceof Number) {
-                    formattedNumber = numberFormat.format((Number)cellData);
+                    formattedNumber = numberFormat.format(cellData);
                 } else {
                     System.err.println("Data for \"" + columnName + "\" is not an instance of "
                         + Number.class.getName());

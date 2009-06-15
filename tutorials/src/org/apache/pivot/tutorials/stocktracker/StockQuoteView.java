@@ -58,13 +58,13 @@ public class StockQuoteView extends BeanDictionary {
                 }
             } else if (key.equals("change")) {
                 try {
-                    value = changeFormat.format((Number)value);
+                    value = changeFormat.format(value);
                 } catch(Exception exception) {
                     value = "";
                 }
             } else if (key.equals("volume")) {
                 try {
-                    value = volumeFormat.format((Number)value);
+                    value = volumeFormat.format(value);
                 } catch(Exception exception) {
                     value = "";
                 }

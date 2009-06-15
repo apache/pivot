@@ -72,12 +72,12 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
             if (width > height) {
                 graphics.translate((width - height) / 2, 0);
 
-                float scale = (float)height / 128f;
+                float scale = height / 128f;
                 graphics.scale(scale, scale);
             } else {
                 graphics.translate(0, (height - width) / 2);
 
-                float scale = (float)width / 128f;
+                float scale = width / 128f;
                 graphics.scale(scale, scale);
             }
 
@@ -106,7 +106,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
 
         colors = new Color[12];
         for (int i = 0; i < 12; i++) {
-            float alpha = 255f * (float)i / 12;
+            float alpha = 255f * i / 12;
             colors[i] = new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)alpha);
         }
     }

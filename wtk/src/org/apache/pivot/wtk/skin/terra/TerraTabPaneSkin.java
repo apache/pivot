@@ -506,7 +506,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                     if (selectionChangeTransition != null) {
                         float scale = selectionChangeTransition.getScale();
-                        preferredWidth = (int)((float)preferredWidth * scale);
+                        preferredWidth = (int)(preferredWidth * scale);
                     }
 
                     preferredWidth += 2;
@@ -549,7 +549,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                     if (selectionChangeTransition != null) {
                         float scale = selectionChangeTransition.getScale();
-                        preferredHeight = (int)((float)preferredHeight * scale);
+                        preferredHeight = (int)(preferredHeight * scale);
                     }
 
                     preferredHeight += 2;
@@ -618,7 +618,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                     if (selectionChangeTransition != null) {
                         float scale = selectionChangeTransition.getScale();
-                        preferredHeight = (int)((float)preferredHeight * scale);
+                        preferredHeight = (int)(preferredHeight * scale);
                     }
 
                     preferredHeight += 2;
@@ -652,7 +652,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                     if (selectionChangeTransition != null) {
                         float scale = selectionChangeTransition.getScale();
-                        preferredWidth = (int)((float)preferredWidth * scale);
+                        preferredWidth = (int)(preferredWidth * scale);
                     }
 
                     preferredWidth += 2;

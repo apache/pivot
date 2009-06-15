@@ -70,7 +70,7 @@ public class WebQueryTestServlet extends HttpServlet {
 
             // Dump headers
             System.out.println("[Request Headers]");
-            Enumeration<String> headerNames = (Enumeration<String>)request.getHeaderNames();
+            Enumeration<String> headerNames = request.getHeaderNames();
             while(headerNames.hasMoreElements()) {
                 String headerName = headerNames.nextElement();
                 System.out.print(headerName + "=");

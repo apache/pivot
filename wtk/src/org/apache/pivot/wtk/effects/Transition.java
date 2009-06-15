@@ -158,7 +158,7 @@ public abstract class Transition {
      * The transition interval, in milliseconds.
      */
     public int getInterval() {
-        return (int)((1f / (float)rate) * 1000);
+        return (int)((1f / rate) * 1000);
     }
 
     /**

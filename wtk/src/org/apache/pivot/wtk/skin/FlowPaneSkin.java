@@ -127,8 +127,8 @@ public class FlowPaneSkin extends ContainerSkin
                             double heightScale = (double)preferredHeight
                                 / (double)totalPreferredHeight;
 
-                            componentHeight = (int)Math.round((double)(height
-                                - totalSpacing) * heightScale);
+                            componentHeight = (int)Math.round((height - totalSpacing)
+                                * heightScale);
                         } else {
                             componentHeight = 0;
                         }
@@ -219,8 +219,8 @@ public class FlowPaneSkin extends ContainerSkin
                             double widthScale = (double)preferredWidth
                                 / (double)totalPreferredWidth;
 
-                            componentWidth = (int)Math.round((double)(width
-                                - totalSpacing) * widthScale);
+                            componentWidth = (int)Math.round((width - totalSpacing)
+                                * widthScale);
                         }
                     }
 
@@ -367,7 +367,7 @@ public class FlowPaneSkin extends ContainerSkin
                             double widthScale = ((double)(width - fixedWidth)
                                 / (double)(preferredWidth - fixedWidth));
 
-                            componentWidth = (int)Math.max(Math.round((double)component.getPreferredWidth(-1)
+                            componentWidth = (int)Math.max(Math.round(component.getPreferredWidth(-1)
                                 * widthScale), 0);
 
                             if (verticalAlignment == VerticalAlignment.JUSTIFY) {
@@ -481,7 +481,7 @@ public class FlowPaneSkin extends ContainerSkin
                             double heightScale = (double)(height - fixedHeight)
                                 / (double)(preferredHeight - fixedHeight);
 
-                            componentHeight = (int)Math.max(Math.round((double)component.getPreferredHeight(-1)
+                            componentHeight = (int)Math.max(Math.round(component.getPreferredHeight(-1)
                                 * heightScale), 0);
 
                             if (horizontalAlignment == HorizontalAlignment.JUSTIFY) {

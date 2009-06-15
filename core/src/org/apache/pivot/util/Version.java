@@ -87,10 +87,10 @@ public class Version implements Comparable<Version>, Serializable {
     }
 
     public int getNumber() {
-        int number = (((int)majorRevision) & 0xff) << (8 * 3)
-            | (((int)minorRevision) & 0xff) << (8 * 2)
-            | (((int)maintenanceRevision) & 0xff) << (8 * 1)
-            | (((int)updateRevision) & 0xff) << (8 * 0);
+        int number = ((majorRevision) & 0xff) << (8 * 3)
+            | ((minorRevision) & 0xff) << (8 * 2)
+            | ((maintenanceRevision) & 0xff) << (8 * 1)
+            | ((updateRevision) & 0xff) << (8 * 0);
 
         return number;
     }

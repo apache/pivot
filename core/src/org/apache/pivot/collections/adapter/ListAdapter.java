@@ -110,7 +110,7 @@ public class ListAdapter<T> implements List<T> {
     public Sequence<T> remove(int index, int count) {
         java.util.List<T> removedList = null;
         try {
-            removedList = (java.util.List<T>)list.getClass().newInstance();
+            removedList = list.getClass().newInstance();
         } catch(IllegalAccessException exception) {
         } catch(InstantiationException exception) {
         }

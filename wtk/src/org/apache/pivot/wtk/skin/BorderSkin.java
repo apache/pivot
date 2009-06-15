@@ -248,7 +248,7 @@ public class BorderSkin extends ContainerSkin
 
             // Note that we add one pixel to the string bounds for spacing
             Rectangle2D titleBounds = font.getStringBounds(title, fontRenderContext);
-            titleBounds = new Rectangle2D.Double((double)(padding.left + thickness),
+            titleBounds = new Rectangle2D.Double(padding.left + thickness,
                 (topThickness - titleBounds.getHeight()) / 2,
                     titleBounds.getWidth() + 1, titleBounds.getHeight());
 

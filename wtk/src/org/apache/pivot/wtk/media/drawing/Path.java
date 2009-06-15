@@ -702,7 +702,7 @@ public class Path extends Shape
 
             // Over-estimate the bounds to keep the logic simple
             int strokeThickness = getStrokeThickness();
-            double radius = ((double)strokeThickness/Math.cos(Math.PI / 4)) / 2;
+            double radius = (strokeThickness / Math.cos(Math.PI / 4)) / 2;
 
             Rectangle2D bounds = generalPath.getBounds2D();
             setBounds((int)Math.floor(bounds.getX() - radius),

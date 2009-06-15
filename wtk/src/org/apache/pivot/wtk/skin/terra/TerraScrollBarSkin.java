@@ -369,13 +369,13 @@ public class TerraScrollBarSkin extends ContainerSkin
             GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
 
             if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-                arrow.moveTo((float)width + 0.5f, 0);
-                arrow.lineTo(0, (float)height / 2.0f);
-                arrow.lineTo((float)width + 0.5f, height);
+                arrow.moveTo(width + 0.5f, 0);
+                arrow.lineTo(0, height / 2.0f);
+                arrow.lineTo(width + 0.5f, height);
             } else {
-                arrow.moveTo(0, (float)height + 0.5f);
-                arrow.lineTo((float)width / 2.0f, 0);
-                arrow.lineTo(width, (float)height + 0.5f);
+                arrow.moveTo(0, height + 0.5f);
+                arrow.lineTo(width / 2.0f, 0);
+                arrow.lineTo(width, height + 0.5f);
             }
 
             arrow.closePath();
@@ -399,11 +399,11 @@ public class TerraScrollBarSkin extends ContainerSkin
 
             if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
                 arrow.moveTo(0, 0);
-                arrow.lineTo((float)width + 0.5f, (float)height / 2.0f);
+                arrow.lineTo(width + 0.5f, height / 2.0f);
                 arrow.lineTo(0, height);
             } else {
                 arrow.moveTo(0, 0);
-                arrow.lineTo((float)width / 2.0f, (float)height + 0.5f);
+                arrow.lineTo(width / 2.0f, height + 0.5f);
                 arrow.lineTo(width, 0);
             }
 
@@ -541,7 +541,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                     pixelValue = component.getY() - scrollUpButton.getHeight() + y - dragOffset;
                 }
 
-                int realValue = (int)((float)pixelValue / getValueScale());
+                int realValue = (int)(pixelValue / getValueScale());
 
                 // Bound the value
                 int rangeEnd = scrollBar.getRangeEnd();
@@ -718,13 +718,13 @@ public class TerraScrollBarSkin extends ContainerSkin
                 int availableWidth = width - scrollUpButton.getWidth() -
                     scrollDownButton.getWidth() + 2;
                 int handleWidth = Math.max(minimumHandleLength,
-                    Math.round(extentPercentage * (float)availableWidth));
+                    Math.round(extentPercentage * availableWidth));
 
                 // Calculate the position of the handle by calculating the
                 // scale that maps logical value to pixel value
                 int numLegalPixelValues = availableWidth - handleWidth + 1;
                 float valueScale = (float)numLegalPixelValues / (float)numLegalRealValues;
-                int handleX = (int)((float)value * valueScale) +
+                int handleX = (int)(value * valueScale) +
                     scrollUpButton.getWidth() - 1;
 
                 if (handleWidth > availableWidth) {
@@ -754,13 +754,13 @@ public class TerraScrollBarSkin extends ContainerSkin
                 int availableHeight = height - scrollUpButton.getHeight() -
                     scrollDownButton.getHeight() + 2;
                 int handleHeight = Math.max(minimumHandleLength,
-                    Math.round(extentPercentage * (float)availableHeight));
+                    Math.round(extentPercentage * availableHeight));
 
                 // Calculate the position of the handle by calculating the
                 // scale maps logical value to pixel value
                 int numLegalPixelValues = availableHeight - handleHeight + 1;
                 float valueScale = (float)numLegalPixelValues / (float)numLegalRealValues;
-                int handleY = (int)((float)value * valueScale) +
+                int handleY = (int)(value * valueScale) +
                     scrollUpButton.getHeight() - 1;
 
                 if (handleHeight > availableHeight) {
@@ -1049,7 +1049,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                     pixelStopValue -= handle.getWidth();
                 }
 
-                realStopValue = (int)((float)pixelStopValue / getValueScale());
+                realStopValue = (int)(pixelStopValue / getValueScale());
             } else {
                 direction = y < handle.getY() ? -1 : 1;
 
@@ -1062,7 +1062,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                     pixelStopValue -= handle.getHeight();
                 }
 
-                realStopValue = (int)((float)pixelStopValue / getValueScale());
+                realStopValue = (int)(pixelStopValue / getValueScale());
             }
 
             // Start the automatic scroller
@@ -1239,12 +1239,12 @@ public class TerraScrollBarSkin extends ContainerSkin
            int value = scrollBar.getValue();
 
            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-              int handleX = (int)((float)value * getValueScale()) +
+              int handleX = (int)(value * getValueScale()) +
                  scrollUpButton.getWidth() - 1;
 
               handle.setLocation(handleX, 0);
            } else {
-              int handleY = (int)((float)value * getValueScale()) +
+              int handleY = (int)(value * getValueScale()) +
                  scrollUpButton.getHeight() - 1;
 
               handle.setLocation(0, handleY);

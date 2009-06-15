@@ -175,8 +175,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
             float percentComplete = slideEasing.easeOut(getElapsedTime(), 0, 1, getDuration());
 
-            int dx = (int)((float)width * percentComplete) * direction;
-            int dy = (int)((float)height * percentComplete) * direction;
+            int dx = (int)(width * percentComplete) * direction;
+            int dy = (int)(height * percentComplete) * direction;
 
             if (selectionChangeEffect == SelectionChangeEffect.HORIZONTAL_SLIDE) {
                 fromCard.setLocation(dx, 0);
@@ -285,8 +285,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     height = toSize.height;
                 }
 
-                int preferredWidth = previousWidth + (int)((float)(width - previousWidth) * percentComplete);
-                int preferredHeight = previousHeight + (int)((float)(height - previousHeight) * percentComplete);
+                int preferredWidth = previousWidth + (int)((width - previousWidth) * percentComplete);
+                int preferredHeight = previousHeight + (int)((height - previousHeight) * percentComplete);
 
                 preferredSize = new Dimensions(preferredWidth, preferredHeight);
             }

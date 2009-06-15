@@ -102,7 +102,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             if (!Float.isNaN(preferredAspectRatio)
                 && preferredAspectRatio >= 1
                 && (float)preferredWidth / (float)height < preferredAspectRatio) {
-                preferredWidth = (int)((float)height * preferredAspectRatio);
+                preferredWidth = (int)(height * preferredAspectRatio);
             }
         }
 
@@ -134,7 +134,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             if (!Float.isNaN(preferredAspectRatio)
                 && preferredAspectRatio >= 1
                 && (float)width / (float)preferredHeight < preferredAspectRatio) {
-                preferredHeight = (int)((float)width / preferredAspectRatio);
+                preferredHeight = (int)(width / preferredAspectRatio);
             }
         }
 
@@ -159,11 +159,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         if (!Float.isNaN(preferredAspectRatio)) {
             if (preferredAspectRatio >= 1) {
                 if ((float)preferredWidth / (float)preferredHeight < preferredAspectRatio) {
-                    preferredWidth = (int)((float)preferredHeight * preferredAspectRatio);
+                    preferredWidth = (int)(preferredHeight * preferredAspectRatio);
                 }
             } else {
                 if ((float)preferredWidth / (float)preferredHeight > preferredAspectRatio) {
-                    preferredHeight = (int)((float)preferredWidth / preferredAspectRatio);
+                    preferredHeight = (int)(preferredWidth / preferredAspectRatio);
                 }
             }
         }

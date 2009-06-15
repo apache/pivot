@@ -567,12 +567,12 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
                             if (horizontalSpacing > 1) {
                                 columnWidth += horizontalSpacing - 1;
-                                columnX -= (int)(((float)horizontalSpacing * 0.5f) - 0.5f);
+                                columnX -= (int)((horizontalSpacing * 0.5f) - 0.5f);
                             }
 
                             if (verticalSpacing > 1) {
                                 rowHeight += verticalSpacing - 1;
-                                rowY -= (int)(((float)verticalSpacing * 0.5f) - 0.5f);
+                                rowY -= (int)((verticalSpacing * 0.5f) - 0.5f);
                             }
 
                             Rectangle2D.Float bounds = new Rectangle2D.Float(columnX, rowY,

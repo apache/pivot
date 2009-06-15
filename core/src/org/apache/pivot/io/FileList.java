@@ -61,18 +61,6 @@ public class FileList extends ListAdapter<File> {
         return index;
     }
 
-    public int add(Folder folder) {
-        for (File file : folder) {
-            if (file instanceof Folder) {
-                add((Folder)file);
-            } else {
-                add(file);
-            }
-        }
-
-        return -1;
-    }
-
     @Override
     public void insert(File file, int index) {
         throw new UnsupportedOperationException();

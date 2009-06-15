@@ -158,7 +158,7 @@ public class QuadCurve extends Shape {
         if (!isValid()) {
             // Over-estimate the bounds to keep the logic simple
             int strokeThickness = getStrokeThickness();
-            double radius = ((double)strokeThickness/Math.cos(Math.PI / 4)) / 2;
+            double radius = (strokeThickness / Math.cos(Math.PI / 4)) / 2;
 
             Rectangle2D boundingRectangle = quadCurve2D.getBounds2D();
             setBounds((int)Math.floor(boundingRectangle.getX() - radius),
