@@ -17,25 +17,25 @@ limitations under the License.
 -->
 
 <Window title="Toggle Buttons" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:content="pivot.wtk.content"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <FlowPane styles="{padding:4, horizontalAlignment:'center',
             verticalAlignment:'center'}">
             <PushButton toggleButton="true">
                 <buttonData>
-                    <content:ButtonData text="Anchor" icon="pivot/tutorials/anchor.png"/>
+                    <content:ButtonData text="Anchor" icon="org/apache/pivot/tutorials/anchor.png"/>
                 </buttonData>
             </PushButton>
             <PushButton toggleButton="true">
                 <buttonData>
-                    <content:ButtonData text="Cup" icon="pivot/tutorials/cup.png"/>
+                    <content:ButtonData text="Cup" icon="org/apache/pivot/tutorials/cup.png"/>
                 </buttonData>
             </PushButton>
             <PushButton toggleButton="true">
                 <buttonData>
-                    <content:ButtonData text="Star" icon="pivot/tutorials/star.png"/>
+                    <content:ButtonData text="Star" icon="org/apache/pivot/tutorials/star.png"/>
                 </buttonData>
             </PushButton>
         </FlowPane>

@@ -17,7 +17,8 @@ limitations under the License.
 -->
 
 <TabPane selectedIndex="0"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <tabs>
         <Label TabPane.name="Tab 1" preferredWidth="320" preferredHeight="240" text="Tab 1"/>
         <Label TabPane.name="Tab 2" preferredWidth="320" preferredHeight="240" text="Tab 2"/>

@@ -17,8 +17,8 @@ limitations under the License.
 -->
 
 <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{bottom:8}}"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <Label text="Boston, MA" styles="{fontBold:true}"/>
     <FlowPane>
         <Label text="Current: 88˚" styles="{fontSize:10}"/>
@@ -47,13 +47,13 @@ limitations under the License.
                 <Label text="W" styles="{horizontalAlignment:'center'}"/>
             </TablePane.Row>
             <TablePane.Row height="24">
-                <ImageView image="pivot/tutorials/weather-clear.png"/>
-                <ImageView image="pivot/tutorials/weather-few-clouds.png"/>
-                <ImageView image="pivot/tutorials/weather-showers-scattered.png"/>
-                <ImageView image="pivot/tutorials/weather-showers-scattered.png"/>
-                <ImageView image="pivot/tutorials/weather-few-clouds.png"/>
-                <ImageView image="pivot/tutorials/weather-clear.png"/>
-                <ImageView image="pivot/tutorials/weather-clear.png"/>
+                <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
+                <ImageView image="org/apache/pivot/tutorials/weather-few-clouds.png"/>
+                <ImageView image="org/apache/pivot/tutorials/weather-showers-scattered.png"/>
+                <ImageView image="org/apache/pivot/tutorials/weather-showers-scattered.png"/>
+                <ImageView image="org/apache/pivot/tutorials/weather-few-clouds.png"/>
+                <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
+                <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
             </TablePane.Row>
         </rows>
     </TablePane>

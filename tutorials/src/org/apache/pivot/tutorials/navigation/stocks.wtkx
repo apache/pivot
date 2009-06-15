@@ -17,8 +17,8 @@ limitations under the License.
 -->
 
 <TablePane styles="{horizontalSpacing:6, verticalSpacing:6}"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <columns>
         <TablePane.Column width="1*"/>
         <TablePane.Column width="-1"/>

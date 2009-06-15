@@ -18,8 +18,8 @@ limitations under the License.
 
 <ScrollPane wtkx:id="scrollPane" horizontalScrollBarPolicy="fill"
     styles="{backgroundColor:'#cccccc'}"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <view>
         <FlowPane orientation="vertical" styles="{padding:10, horizontalAlignment:'justify', spacing:5}">
             <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', spacing:10}">

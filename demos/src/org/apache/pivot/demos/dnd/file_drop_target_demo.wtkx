@@ -17,9 +17,9 @@ limitations under the License.
 -->
 
 <Window title="File Drop Target Demo" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:dnd="pivot.demos.dnd"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:dnd="org.apache.pivot.demos.dnd"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <TablePane>
             <columns>

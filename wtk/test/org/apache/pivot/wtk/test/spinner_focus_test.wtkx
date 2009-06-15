@@ -17,7 +17,8 @@ limitations under the License.
 -->
 
 <FlowPane styles="{verticalAlignment:'center'}"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <PushButton wtkx:id="pushButton" buttonData="Button" action="buttonAction"/>
     <Spinner wtkx:id="spinner" preferredWidth="60"
         spinnerData="['One', 'Two', 'Three', 'Four', 'Five']" circular="true"

@@ -17,9 +17,9 @@ limitations under the License.
 -->
 
 <Window title="Scripting Demo" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:scripting="pivot.demos.scripting"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:scripting="org.apache.pivot.demos.scripting"
+    xmlns="org.apache.pivot.wtk">
     <wtkx:script src="demo.js"/>
     <wtkx:script src="demo.groovy"/>
 

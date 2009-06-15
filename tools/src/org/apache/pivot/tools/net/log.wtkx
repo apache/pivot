@@ -16,9 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-        xmlns="pivot.wtk"
-        xmlns:net="pivot.tools.net"
+<Border xmlns:wtkx="http://pivot.apache.org/wtkx"
+        xmlns="org.apache.pivot.wtk"
+        xmlns:net="org.apache.pivot.tools.net"
         styles="{thickness:1, color:7, backgroundColor:11, padding:0}">
   <content>
     <ScrollPane horizontalScrollBarPolicy="fillToCapacity">

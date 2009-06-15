@@ -17,10 +17,10 @@ limitations under the License.
 -->
 
 <Window title="Panels" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns="pivot.wtk"
-    xmlns:media="pivot.wtk.media"
-    xmlns:drawing="pivot.wtk.media.drawing">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:media="org.apache.pivot.wtk.media"
+    xmlns:drawing="org.apache.pivot.wtk.media.drawing"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <StackPane>
             <ImageView styles="{horizontalAlignment:'left', verticalAlignment:'top'}">

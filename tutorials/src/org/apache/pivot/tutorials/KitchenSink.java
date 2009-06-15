@@ -85,7 +85,7 @@ import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-public class Demo implements Application, Application.About {
+public class KitchenSink implements Application, Application.About {
     private abstract class RollupStateHandler
         implements RollupStateListener {
         public void expandedChangeVetoed(Rollup rollup, Vote reason) {
@@ -821,13 +821,13 @@ public class Demo implements Application, Application.About {
     @WTKX private Rollup alertsRollup;
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(Demo.class, args);
+        DesktopApplicationContext.main(KitchenSink.class, args);
     }
 
     public void startup(Display display, Dictionary<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "demo.wtkx");
-        wtkxSerializer.bind(this, Demo.class);
+        window = (Window)wtkxSerializer.readObject(this, "kitchen_sink.wtkx");
+        wtkxSerializer.bind(this, KitchenSink.class);
 
         buttonsRollup.getRollupStateListeners().add(new ButtonsRollupStateHandler());
         listsRollup.getRollupStateListeners().add(new ListsRollupStateHandler());

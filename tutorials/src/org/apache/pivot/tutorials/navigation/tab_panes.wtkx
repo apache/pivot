@@ -17,7 +17,8 @@ limitations under the License.
 -->
 
 <Window title="Tab Panes" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <TablePane styles="{padding:8, horizontalSpacing:6}">
             <columns>
@@ -31,7 +32,7 @@ limitations under the License.
                             <FlowPane>
                                 <TabPane wtkx:id="tabPane">
                                     <tabs>
-                                        <FlowPane TabPane.icon="pivot/tutorials/bell.png" TabPane.name="Bell"
+                                        <FlowPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.name="Bell"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
@@ -41,7 +42,7 @@ limitations under the License.
                                             </Border>
                                         </FlowPane>
 
-                                        <FlowPane TabPane.icon="pivot/tutorials/clock.png" TabPane.name="Clock"
+                                        <FlowPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.name="Clock"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
@@ -51,7 +52,7 @@ limitations under the License.
                                             </Border>
                                         </FlowPane>
 
-                                        <FlowPane TabPane.icon="pivot/tutorials/house.png" TabPane.name="House"
+                                        <FlowPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.name="House"
                                             styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                             <Border>
                                                 <content>
@@ -61,7 +62,7 @@ limitations under the License.
                                             </Border>
                                         </FlowPane>
 
-                                        <FlowPane TabPane.icon="pivot/tutorials/star.png" TabPane.name="Star" enabled="false"/>
+                                        <FlowPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.name="Star" enabled="false"/>
                                     </tabs>
                                     <corner>
                                         <FlowPane wtkx:id="cornerFlowPane" styles="{horizontalAlignment:'right'}">

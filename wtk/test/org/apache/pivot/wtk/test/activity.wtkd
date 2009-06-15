@@ -17,10 +17,10 @@ limitations under the License.
 -->
 
 <Drawing width="256" height="256" background="#ffffff"
-    xmlns="pivot.wtk.media"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk.media">
     <canvas>
-        <Canvas xmlns="pivot.wtk.media.drawing">
+        <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
             <Group>
                 <transforms>
                     <Shape.Translate x="128" y="128"/>

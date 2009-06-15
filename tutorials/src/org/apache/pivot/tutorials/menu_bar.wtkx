@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<MenuBar xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
+<MenuBar xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
     <items>
         <MenuBar.Item buttonData="File">
             <menu>

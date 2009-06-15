@@ -16,9 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:collections="pivot.collections"
-    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
+<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content" xmlns="pivot.wtk">
     <ListButton selectedIndex="0">
         <listData>
             <collections:ArrayList>

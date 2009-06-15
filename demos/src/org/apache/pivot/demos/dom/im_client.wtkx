@@ -17,8 +17,8 @@ limitations under the License.
 -->
 
 <Window title="" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <Border styles="{padding:8}">
             <content>

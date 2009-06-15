@@ -17,7 +17,8 @@ limitations under the License.
 -->
 
 <Window title="Drag and Drop Demo" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <TablePane styles="{padding:4, horizontalSpacing:4}">
             <columns>

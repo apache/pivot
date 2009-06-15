@@ -16,9 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<MenuBar xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-         xmlns="pivot.wtk"
-         xmlns:content="pivot.wtk.content"
+<MenuBar xmlns:wtkx="http://pivot.apache.org/wtkx"
+         xmlns="org.apache.pivot.wtk"
+         xmlns:content="org.apache.pivot.wtk.content"
          preferredHeight="20"
          styles="{backgroundColor:10, spacing:8}">
   <items>

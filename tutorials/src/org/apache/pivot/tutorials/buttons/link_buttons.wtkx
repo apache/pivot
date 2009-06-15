@@ -17,13 +17,13 @@ limitations under the License.
 -->
 
 <Window title="Link Buttons" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:content="pivot.wtk.content"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontalSlide'}">
             <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                <ImageView image="pivot/tutorials/IMG_0735_2.jpg"/>
+                <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
                 <LinkButton wtkx:id="nextButton">
                     <buttonData>
                         <content:ButtonData text="Next" icon="@resultset_next.png"/>
@@ -32,7 +32,7 @@ limitations under the License.
             </FlowPane>
 
             <FlowPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                <ImageView image="pivot/tutorials/IMG_0767_2.jpg"/>
+                <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
                 <LinkButton wtkx:id="previousButton">
                     <buttonData>
                         <content:ButtonData text="Previous" icon="@resultset_previous.png"/>

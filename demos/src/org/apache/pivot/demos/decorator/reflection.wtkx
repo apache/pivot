@@ -17,8 +17,9 @@ limitations under the License.
 -->
 
 <Window title="Reflection Window" x="20" y="20"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:effects="pivot.wtk.effects" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:effects="org.apache.pivot.wtk.effects"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <ImageView image="@IMG_0767_2.jpg"/>
     </content>

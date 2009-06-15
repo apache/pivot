@@ -18,7 +18,8 @@ limitations under the License.
 
 <FlowPane wtkx:id="rootPane" orientation="vertical"
     styles="{horizontalAlignment:'justify'}"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <Label textKey="companyName" styles="{fontBold:true, fontSize:12}" />
     <Separator />
     <Form styles="{rightAlignLabels:true, fieldAlignment:'right'}">

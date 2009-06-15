@@ -17,8 +17,8 @@ limitations under the License.
 -->
 
 <FlowPane styles="{horizontalAlignment:'justify'}"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:0}">
         <content>
             <Calendar/>

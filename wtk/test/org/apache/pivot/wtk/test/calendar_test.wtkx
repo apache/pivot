@@ -16,7 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <CalendarButton wtkx:id="calendarButton" selectedDate="2009-08-25"
         locale="{language:'fr', country:'ca'}"/>
     <ListButton listData="['One', 'Two', 'Three']"/>

@@ -17,10 +17,11 @@ limitations under the License.
 -->
 
 <Window title="Labels" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <FlowPane styles="{padding:4, verticalAlignment:'center'}">
-            <ImageView image="pivot/tutorials/clock.png" cursor="crosshair"/>
+            <ImageView image="org/apache/pivot/tutorials/clock.png" cursor="crosshair"/>
             <Label text="What time is it?"/>
         </FlowPane>
     </content>

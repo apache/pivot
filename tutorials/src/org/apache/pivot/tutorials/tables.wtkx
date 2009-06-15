@@ -16,11 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Border xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:collections="pivot.collections"
-    xmlns:content="pivot.wtk.content"
-    xmlns:tutorials="pivot.tutorials"
-    xmlns="pivot.wtk">
+<Border xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns:tutorials="org.apache.pivot.tutorials"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <FlowPane styles="{padding:4, spacing:8}">
             <FlowPane orientation="vertical">

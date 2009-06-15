@@ -14,4 +14,4 @@
 # limitations under the License.
 
 # Service provider for Terra theme 
-pivot.wtk.skin.terra.TerraTheme
+org.apache.pivot.wtk.skin.terra.TerraTheme

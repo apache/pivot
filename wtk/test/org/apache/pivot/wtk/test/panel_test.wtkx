@@ -18,8 +18,8 @@ limitations under the License.
 
 <Panel styles="{backgroundColor:'#aacccc'}"
     preferredWidth="640" preferredHeight="480"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <PushButton buttonData="Push Button"
         x="100" y="20" width="120" height="40"/>
 </Panel>

@@ -17,10 +17,10 @@ limitations under the License.
 -->
 
 <Window title="%stockTracker" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:content="pivot.wtk.content"
-    xmlns:stocktracker="pivot.tutorials.stocktracker"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns:stocktracker="org.apache.pivot.tutorials.stocktracker"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <TablePane styles="{padding:8, horizontalSpacing:6, verticalSpacing:6}">
             <columns>

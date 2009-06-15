@@ -17,7 +17,8 @@ limitations under the License.
 -->
 
 <Window title="Checkboxes" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true,
             padding:4, horizontalSpacing:1, verticalSpacing:1, gridColor:10}">
@@ -31,21 +32,21 @@ limitations under the License.
                     <FlowPane styles="{verticalAlignment:'center'}">
                         <Checkbox wtkx:id="bellCheckbox" buttonData="Bell"/>
                     </FlowPane>
-                    <ImageView wtkx:id="bellImageView" image="pivot/tutorials/bell.png" displayable="false"/>
+                    <ImageView wtkx:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" displayable="false"/>
                 </TablePane.Row>
 
                 <TablePane.Row height="24">
                     <FlowPane styles="{verticalAlignment:'center'}">
                         <Checkbox wtkx:id="clockCheckbox" buttonData="Clock"/>
                     </FlowPane>
-                    <ImageView wtkx:id="clockImageView" image="pivot/tutorials/clock.png" displayable="false"/>
+                    <ImageView wtkx:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" displayable="false"/>
                 </TablePane.Row>
 
                 <TablePane.Row height="24">
                     <FlowPane styles="{verticalAlignment:'center'}">
                         <Checkbox wtkx:id="houseCheckbox" buttonData="House"/>
                     </FlowPane>
-                    <ImageView wtkx:id="houseImageView" image="pivot/tutorials/house.png" displayable="false"/>
+                    <ImageView wtkx:id="houseImageView" image="org/apache/pivot/tutorials/house.png" displayable="false"/>
                 </TablePane.Row>
             </rows>
         </TablePane>

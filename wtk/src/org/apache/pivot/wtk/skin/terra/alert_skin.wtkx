@@ -18,9 +18,9 @@ limitations under the License.
 
 <FlowPane orientation="vertical" styles="{spacing:8, horizontalAlignment:'justify'}"
     preferredWidth="300"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:collections="pivot.collections"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:12, backgroundColor:10, color:7}">
         <content>
             <TablePane styles="{horizontalSpacing:12, verticalSpacing:12}">

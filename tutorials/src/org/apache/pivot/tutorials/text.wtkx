@@ -16,9 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<FlowPane xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:validation="pivot.wtk.text.validation"
-    xmlns="pivot.wtk">
+<FlowPane xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:validation="org.apache.pivot.wtk.text.validation"
+    xmlns="org.apache.pivot.wtk">
     <Border>
         <content>
             <FlowPane orientation="vertical" styles="{horizontalAlignment:'justify', padding:{top:2, left:4, bottom:12, right:4}}">

@@ -17,8 +17,8 @@ limitations under the License.
 -->
 
 <Drawing width="320" height="240"
-    xmlns="pivot.wtk.media"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk.media">
     <canvas>
         <Canvas xmlns="pivot.wtk.media.drawing">
             <Ellipse x="41" y="1" width="238" height="238" stroke="#777777" strokeThickness="1" fill="#eeeeee"/>

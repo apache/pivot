@@ -17,9 +17,9 @@ limitations under the License.
 -->
 
 <Window title="File Browser" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:content="pivot.wtk.content"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <Border styles="{color:10, padding:0}">
             <content>

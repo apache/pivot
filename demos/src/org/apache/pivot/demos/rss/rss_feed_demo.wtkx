@@ -17,10 +17,10 @@ limitations under the License.
 -->
 
 <Window title="RSS Feed Demo" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:effects="pivot.wtk.effects"
-    xmlns:rss="pivot.demos.rss"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:effects="org.apache.pivot.wtk.effects"
+    xmlns:rss="org.apache.pivot.demos.rss"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <Border styles="{padding:0, color:10}">
             <content>

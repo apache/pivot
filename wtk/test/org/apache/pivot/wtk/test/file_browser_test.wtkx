@@ -17,10 +17,10 @@ limitations under the License.
 -->
 
 <Border styles="{padding:0}"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:io="pivot.io"
-    xmlns:content="pivot.wtk.content"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:io="org.apache.pivot.io"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <ScrollPane horizontalScrollBarPolicy="fillToCapacity"
             verticalScrollBarPolicy="fillToCapacity">

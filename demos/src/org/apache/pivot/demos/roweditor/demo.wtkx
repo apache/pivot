@@ -18,11 +18,11 @@ limitations under the License.
 
 <Window title="Row Editor Demo"
     maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:collections="pivot.collections"
-    xmlns:content="pivot.wtk.content"
-    xmlns:demo="pivot.demos.roweditor"
-    xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns:demo="org.apache.pivot.demos.roweditor"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <TablePane>
             <columns>

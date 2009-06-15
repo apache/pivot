@@ -19,8 +19,8 @@ limitations under the License.
 <Window title="Pivot Demo"
     maximized="true"
     xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:effects="pivot.wtk.effects"
-    xmlns="pivot.wtk">
+    xmlns:effects="org.apache.pivot.wtk.effects"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <Border styles="{backgroundColor:10, thickness:0, padding:8}">
             <content>

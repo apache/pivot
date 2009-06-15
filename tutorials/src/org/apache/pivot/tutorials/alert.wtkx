@@ -17,8 +17,9 @@ limitations under the License.
 -->
 
 <FlowPane orientation="vertical"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns:content="pivot.wtk.content" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
     <RadioButton group="icons" selected="true">
         <buttonData>
             <content:ButtonData text="Bell" icon="@bell.png"/>

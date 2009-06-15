@@ -17,7 +17,8 @@ limitations under the License.
 -->
 
 <Window title="Card Panes" maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1" xmlns="pivot.wtk">
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk">
     <content>
         <TablePane styles="{padding:8, horizontalSpacing:6}">
             <columns>
@@ -39,9 +40,9 @@ limitations under the License.
                                             <Border styles="{padding:6}">
                                                 <content>
                                                     <CardPane wtkx:id="cardPane">
-                                                        <ImageView image="pivot/tutorials/IMG_0725_2.jpg"/>
-                                                        <ImageView image="pivot/tutorials/IMG_0735_2.jpg"/>
-                                                        <ImageView image="pivot/tutorials/IMG_0767_2.jpg"/>
+                                                        <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                                                        <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                                                        <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
                                                     </CardPane>
                                                 </content>
                                             </Border>

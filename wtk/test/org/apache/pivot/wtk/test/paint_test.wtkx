@@ -20,5 +20,5 @@ limitations under the License.
     color:'#ff0000',
     startX:0, startY:0, startColor:'#ffffff',
     endX:400, endY:400, endColor:'#000000'}}"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
-    xmlns="pivot.wtk"/>
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"/>
