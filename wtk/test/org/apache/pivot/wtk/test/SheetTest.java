@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
@@ -35,12 +35,11 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.media.Image;
 
-
 public class SheetTest implements Application {
     private Frame frame = null;
     private Sheet sheet = null;
 
-    public void startup(final Display display, Dictionary<String, String> properties)
+    public void startup(final Display display, Map<String, String> properties)
         throws Exception {
         PushButton windowContent = new PushButton(Image.load(getClass().getResource("IMG_0767_2.jpg")));
         windowContent.setPreferredSize(480, 360);

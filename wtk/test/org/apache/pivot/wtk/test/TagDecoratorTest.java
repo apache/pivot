@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
@@ -25,11 +25,10 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.effects.TagDecorator;
 import org.apache.pivot.wtk.media.Image;
 
-
 public class TagDecoratorTest implements Application {
     private Frame frame = null;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         frame = new Frame();
         frame.setTitle("Tag Decorator Test");

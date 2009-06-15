@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tutorials.drawing;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -35,7 +35,7 @@ public class RotateLine implements Application {
 
     private Window window = null;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception{
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         drawing = (Drawing)wtkxSerializer.readObject(this, "rotate_line.wtkd");

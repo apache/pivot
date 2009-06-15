@@ -13,7 +13,7 @@
  */
 package org.apache.pivot.wtk.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -29,8 +29,8 @@ import org.apache.pivot.wtk.text.validation.RegexTextValidator;
 import org.apache.pivot.wtk.text.validation.Validator;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 /**
+ * Text input validator test.
  *
  * @author Noel Grandin
  */
@@ -42,7 +42,7 @@ public class TextInputValidatorTest implements Application {
     private TextInput textinputDateRegex = null;
     private TextInput textinputCustomBoolean = null;
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = new Window((Component)wtkxSerializer.readObject(
             getClass().getResource("textInputValidator_test.wtkx")));

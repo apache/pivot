@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tutorials.layout;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
@@ -46,7 +46,7 @@ public class FlowPanes implements Application {
     @WTKX private RadioButton verticalAlignmentCenterButton;
     @WTKX private RadioButton verticalAlignmentJustifyButton;
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "flow_panes.wtkx");
         wtkxSerializer.bind(this, FlowPanes.class);

@@ -17,7 +17,7 @@
 package org.apache.pivot.tutorials.text;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -122,7 +122,7 @@ public class Text implements Application {
         states.add("Wyoming");
     }
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "text.wtkx");

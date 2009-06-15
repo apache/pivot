@@ -18,7 +18,6 @@ package org.apache.pivot.tutorials.databinding;
 
 import java.io.InputStream;
 
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.wtk.Application;
@@ -47,7 +46,7 @@ public class DataBinding implements Application {
         "(617) 555-1234", "joe_smith@foo.com",
         new IMAccount("jsmith1234", "AIM"));
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "data_binding.wtkx");

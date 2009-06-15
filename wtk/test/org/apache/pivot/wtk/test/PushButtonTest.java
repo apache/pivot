@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -25,11 +25,10 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-
 public class PushButtonTest implements Application {
     private Window window = null;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         window = new Window();
         FlowPane flowPane = new FlowPane();

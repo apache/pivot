@@ -25,11 +25,9 @@ import java.net.URL;
 import java.net.URLDecoder;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 
 import netscape.javascript.JSObject;
-
 
 /**
  * Application context used to execute applications in a web browser.
@@ -43,91 +41,74 @@ public final class BrowserApplicationContext extends ApplicationContext {
      * @author gbrown
      */
     public static final class HostApplet extends Applet {
-        private class PropertyDictionary implements Dictionary<String, String> {
-            public String get(String key) {
-                String value = properties.containsKey(key) ?
-                    properties.get(key) : getParameter(key);
-                return value;
-            }
-
-            public String put(String key, String value) {
-                throw new UnsupportedOperationException();
-            }
-
-            public String remove(String key) {
-                throw new UnsupportedOperationException();
-            }
-
-            public boolean containsKey(String key) {
-                return properties.containsKey(key)
-                    || getParameter(key) != null;
-            }
-
-            public boolean isEmpty() {
-                return properties.isEmpty();
-            }
-        }
-
         private class InitCallback implements Runnable {
             public void run() {
-               // Set the origin
-               URL codeBase = getCodeBase();
-               if (codeBase != null) {
-                   if (codeBase.getProtocol().equals("file")) {
-                       File userHome = null;
-                       try {
-                           userHome = new File(System.getProperty("user.home"));
-                       } catch(SecurityException exception) {
-                           // No-op
-                       }
+                // Set the origin
+                URL codeBase = getCodeBase();
+                if (codeBase != null) {
+                    if (codeBase.getProtocol().equals("file")) {
+                        File userHome = null;
+                        try {
+                            userHome = new File(System.getProperty("user.home"));
+                        } catch (SecurityException exception) {
+                            // No-op
+                        }
 
-                       if (userHome != null) {
-                           try {
-                               origin = userHome.toURI().toURL();
-                           } catch(MalformedURLException exception) {
-                               // No-op
-                           }
-                       }
-                   } else {
-                       try {
-                           origin = new URL(codeBase.getProtocol(), codeBase.getHost(),
-                               codeBase.getPort(), "");
-                       } catch(MalformedURLException exception) {
-                           // No-op
-                       }
-                   }
-               }
+                        if (userHome != null) {
+                            try {
+                                origin = userHome.toURI().toURL();
+                            } catch (MalformedURLException exception) {
+                                // No-op
+                            }
+                        }
+                    } else {
+                        try {
+                            origin = new URL(codeBase.getProtocol(), codeBase.getHost(),
+                                codeBase.getPort(), "");
+                        } catch (MalformedURLException exception) {
+                            // No-op
+                        }
+                    }
+                }
 
-               // Create the application context
-               applicationContext = new BrowserApplicationContext();
+                // Create the application context
+                applicationContext = new BrowserApplicationContext();
 
-                // Load properties specified on the query string
+                // Get the startup properties
                 properties = new HashMap<String, String>();
 
+                // Load properties specified as applet parameters
+                String[][] parameterInfo = getParameterInfo();
+                for (int i = 0; i < parameterInfo.length; i++) {
+                    String[] parameter = parameterInfo[i];
+                    properties.put(parameter[0], parameter[1]);
+                }
+
+                // Load properties specified on the query string
                 URL documentBase = getDocumentBase();
                 if (documentBase != null) {
-                   String queryString = documentBase.getQuery();
-                   if (queryString != null) {
-                       String[] arguments = queryString.split("&");
+                    String queryString = documentBase.getQuery();
+                    if (queryString != null) {
+                        String[] arguments = queryString.split("&");
 
-                       for (int i = 0, n = arguments.length; i < n; i++) {
-                           String argument = arguments[i];
-                           String[] property = argument.split("=");
+                        for (int i = 0, n = arguments.length; i < n; i++) {
+                            String argument = arguments[i];
+                            String[] property = argument.split("=");
 
-                           if (property.length == 2) {
-                               String key, value;
-                               try {
-                                   final String encoding = "UTF-8";
-                                   key = URLDecoder.decode(property[0], encoding);
-                                   value = URLDecoder.decode(property[1], encoding);
-                                   properties.put(key, value);
-                               } catch(UnsupportedEncodingException exception) {
-                               }
-                           } else {
-                               System.err.println(argument + " is not a valid startup property.");
-                           }
-                       }
-                   }
+                            if (property.length == 2) {
+                                String key, value;
+                                try {
+                                    final String encoding = "UTF-8";
+                                    key = URLDecoder.decode(property[0], encoding);
+                                    value = URLDecoder.decode(property[1], encoding);
+                                    properties.put(key, value);
+                                } catch (UnsupportedEncodingException exception) {
+                                }
+                            } else {
+                                System.err.println(argument + " is not a valid startup property.");
+                            }
+                        }
+                    }
                 }
 
                 // Add the display host to the applet
@@ -149,8 +130,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 } else {
                     try {
                         Class<?> applicationClass = Class.forName(applicationClassName);
-                        application = (Application)applicationClass.newInstance();
-                    } catch(Exception exception) {
+                        application = (Application) applicationClass.newInstance();
+                    } catch (Exception exception) {
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());
                         exception.printStackTrace();
@@ -173,8 +154,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
                 if (application != null) {
                     try {
-                        application.startup(applicationContext.getDisplay(), propertyDictionary);
-                    } catch(Exception exception) {
+                        application.startup(applicationContext.getDisplay(), properties);
+                    } catch (Exception exception) {
                         Alert.alert(MessageType.ERROR, exception.getMessage(),
                             applicationContext.getDisplay());
                         exception.printStackTrace();
@@ -187,7 +168,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
             public void run() {
                 try {
                     application.shutdown(false);
-                } catch(Exception exception) {
+                } catch (Exception exception) {
                     Alert.alert(MessageType.ERROR, exception.getMessage(),
                         applicationContext.getDisplay());
                     exception.printStackTrace();
@@ -207,7 +188,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
         private BrowserApplicationContext applicationContext = null;
         private HashMap<String, String> properties = null;
-        private PropertyDictionary propertyDictionary = new PropertyDictionary();
         private Application application = null;
 
         public static final String APPLICATION_CLASS_NAME_PARAMETER = "applicationClassName";
@@ -274,7 +254,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
      * Retrieves a named application.
      *
      * @param name
-     * The name of the applet hosting the application.
+     *            The name of the applet hosting the application.
      */
     public static Application getApplication(String name) {
         if (name == null) {

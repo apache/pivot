@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
@@ -31,11 +31,10 @@ import org.apache.pivot.wtk.Palette;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 
-
 public class WindowTest implements Application {
     private Frame window1 = new Frame();
 
-    public void startup(Display display, Dictionary<String, String> properties) {
+    public void startup(Display display, Map<String, String> properties) {
         window1.setTitle("Window 1");
         window1.setPreferredSize(320, 240);
 

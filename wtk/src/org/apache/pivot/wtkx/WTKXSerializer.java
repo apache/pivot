@@ -491,6 +491,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                                 resources = new Resources(attribute.value);
                                             } else if (attribute.localName.equals(INCLUDE_ASYNCHRONOUS_ATTRIBUTE)) {
                                                 // TODO
+                                                throw new UnsupportedOperationException("Asynchronous includes are not"
+                                                    + " yet supported.");
                                             } else {
                                                 if (attribute.namespaceURI == null) {
                                                     throw new SerializationException("Instance property setters are not"
@@ -889,16 +891,16 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         WTKXSerializer serializer = this;
-        String[] namespacePath = name.split("\\.");
+        String[] path = name.split("\\.");
 
         int i = 0;
-        int n = namespacePath.length - 1;
+        int n = path.length - 1;
         while (i < n && serializer != null) {
-            String namespace = namespacePath[i++];
+            String namespace = path[i++];
             serializer = serializer.includeSerializers.get(namespace);
         }
 
-        String id = namespacePath[i];
+        String id = path[i];
 
         Object object = null;
         if (serializer != null
@@ -909,14 +911,22 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         return object;
     }
 
-    public Object put(String name, Object value) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public Object put(String id, Object value) {
+        if (id == null) {
+            throw new IllegalArgumentException("id is null.");
+        }
+
+        includeSerializers.remove(id);
+        return namedObjects.put(id, value);
     }
 
-    public Object remove(String name) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public Object remove(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id is null.");
+        }
+
+        includeSerializers.remove(id);
+        return namedObjects.remove(id);
     }
 
     public boolean containsKey(String name) {
@@ -925,16 +935,16 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         WTKXSerializer serializer = this;
-        String[] namespacePath = name.split("\\.");
+        String[] path = name.split("\\.");
 
         int i = 0;
-        int n = namespacePath.length - 1;
+        int n = path.length - 1;
         while (i < n && serializer != null) {
-            String namespace = namespacePath[i++];
+            String namespace = path[i++];
             serializer = serializer.includeSerializers.get(namespace);
         }
 
-        String id = namespacePath[i];
+        String id = path[i];
 
         return serializer != null
             && serializer.namedObjects.containsKey(id);

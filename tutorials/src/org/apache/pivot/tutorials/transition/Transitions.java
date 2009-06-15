@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tutorials.transition;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -34,7 +34,7 @@ public class Transitions implements Application {
     @WTKX private Button button3;
     @WTKX private Button button4;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "transitions.wtkx");

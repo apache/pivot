@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Display;
@@ -25,12 +25,11 @@ import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Panorama;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 public class PanoramaTest implements Application {
     private Frame frame1 = null;
     private Frame frame2 = null;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         frame1 = new Frame();
         frame1.setTitle("Panorama Test 1");

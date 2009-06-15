@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FlowPane;
@@ -27,11 +27,10 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextDecoration;
 import org.apache.pivot.wtk.Window;
 
-
 public class LabelTest implements Application {
     private Window window = null;
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         window = new Window();
         window.setTitle("Label Test");
 

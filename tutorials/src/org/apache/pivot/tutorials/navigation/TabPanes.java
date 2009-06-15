@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tutorials.navigation;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
@@ -40,7 +40,7 @@ public class TabPanes implements Application {
     @WTKX private RadioButton verticalRadioButton;
     @WTKX private FlowPane cornerFlowPane;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "tab_panes.wtkx");

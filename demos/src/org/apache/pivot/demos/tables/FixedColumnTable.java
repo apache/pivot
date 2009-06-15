@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.demos.tables;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -30,7 +30,6 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 public class FixedColumnTable implements Application {
     private Window window = null;
 
@@ -41,7 +40,7 @@ public class FixedColumnTable implements Application {
 
     private boolean synchronizingSelection = false;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "fixed_column_table.wtkx");

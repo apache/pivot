@@ -21,7 +21,7 @@ import java.io.File;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Base64;
 import org.apache.pivot.util.Vote;
@@ -47,7 +47,6 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ListItem;
 import org.apache.pivot.wtkx.WTKXSerializer;
-
 
 /**
  * HTTP client.
@@ -163,7 +162,7 @@ public class HTTPClient implements Application {
 
     // Application methods
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         new Action("setAuthenticationAction") {
             public String getDescription() {
                 return "Specifies authentication credentials";

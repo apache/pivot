@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.JSONSerializer;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Window;
 public class CheckedListViewTest implements Application {
     private Window window = null;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         ListView listView = new ListView(JSONSerializer.parseList("['One', 'Two', 'Three', 'Four']"));
         listView.setSelectMode(ListView.SelectMode.MULTI);

@@ -19,7 +19,7 @@ package org.apache.pivot.demos.dnd;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
@@ -44,7 +44,6 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 public class FileDropTargetDemo implements Application {
     private Window window = null;
 
@@ -53,7 +52,7 @@ public class FileDropTargetDemo implements Application {
 
     private FileList fileList = null;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "file_drop_target_demo.wtkx");

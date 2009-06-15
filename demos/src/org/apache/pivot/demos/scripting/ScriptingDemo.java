@@ -16,8 +16,8 @@
  */
 package org.apache.pivot.demos.scripting;
 
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -26,7 +26,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
-
 
 public class ScriptingDemo implements Application {
     public static class MyButtonPressListener implements ButtonPressListener {
@@ -40,7 +39,7 @@ public class ScriptingDemo implements Application {
     @WTKX private String foo;
     @WTKX private List<?> listData;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "scripting_demo.wtkx");

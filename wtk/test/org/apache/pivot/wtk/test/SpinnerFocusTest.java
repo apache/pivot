@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
@@ -26,11 +26,10 @@ import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 public class SpinnerFocusTest implements Application {
     private Frame frame = null;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         Action action = new Action("buttonAction") {
             public String getDescription() {

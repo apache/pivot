@@ -17,15 +17,14 @@
 package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Span;
-
 
 public class ListViewSelectionTest implements Application {
     private ListView listView = new ListView();
@@ -54,7 +53,7 @@ public class ListViewSelectionTest implements Application {
         listView.setSelectMode(ListView.SelectMode.MULTI);
     }
 
-    public void startup(Display display, Dictionary<String, String> properties) {
+    public void startup(Display display, Map<String, String> properties) {
         ArrayList<Span> selectedRanges = new ArrayList<Span>();
         selectedRanges.add(new Span(0, 0));
 

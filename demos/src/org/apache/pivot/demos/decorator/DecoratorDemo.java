@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.demos.decorator;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseListener;
@@ -27,12 +27,11 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.FadeDecorator;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 public class DecoratorDemo implements Application {
     private Window reflectionWindow = null;
     private Frame translucentFrame = null;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         reflectionWindow = (Window)wtkxSerializer.readObject(this, "reflection.wtkx");

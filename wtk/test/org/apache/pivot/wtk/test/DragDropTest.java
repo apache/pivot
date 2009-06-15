@@ -19,7 +19,7 @@ package org.apache.pivot.wtk.test;
 import java.awt.Color;
 import java.io.IOException;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Display;
@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtk.media.Image;
 
-
 public class DragDropTest implements Application {
     private Frame frame1 = new Frame();
     private Frame frame2 = new Frame();
@@ -42,7 +41,7 @@ public class DragDropTest implements Application {
     private static final Color IMAGE_VIEW_BACKGROUND_COLOR = new Color(0x99, 0x99, 0x99);
     private static final Color IMAGE_VIEW_DROP_HIGHLIGHT_COLOR = new Color(0xf0, 0xe6, 0x8c);
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         frame1.setTitle("Frame 1");
         frame1.setPreferredSize(160, 120);
         frame1.getStyles().put("resizable", false);

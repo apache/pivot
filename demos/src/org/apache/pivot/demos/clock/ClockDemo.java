@@ -16,13 +16,12 @@
  */
 package org.apache.pivot.demos.clock;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.MovieView;
 import org.apache.pivot.wtk.Window;
-
 
 /**
  * Demonstrates how to write a movie "asset" class.
@@ -33,7 +32,7 @@ public class ClockDemo implements Application {
     private Window window;
     private Clock clock = new Clock();
 
-    public void startup(Display display, Dictionary<String, String> properties) {
+    public void startup(Display display, Map<String, String> properties) {
         window = new Window(new MovieView(clock));
         window.setMaximized(true);
         window.open(display);

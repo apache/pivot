@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
@@ -30,14 +30,13 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 public class CardPaneTest implements Application {
     private Frame frame = null;
     private Sheet sheet = null;
 
     @WTKX private CardPane cardPane;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         frame = new Frame(new FlowPane());
         frame.getStyles().put("padding", 0);

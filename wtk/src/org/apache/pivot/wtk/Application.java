@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 
 /**
  * Represents the entry point into a WTK application.
@@ -47,7 +47,7 @@ public interface Application {
      * @param properties
      * Initialization properties passed to the application.
      */
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception;
+    public void startup(Display display, Map<String, String> properties) throws Exception;
 
     /**
      * Called when the application is being shut down.

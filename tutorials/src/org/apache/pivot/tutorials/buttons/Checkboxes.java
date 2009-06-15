@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tutorials.buttons;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -38,7 +38,7 @@ public class Checkboxes implements Application {
     @WTKX private ImageView clockImageView;
     @WTKX private ImageView houseImageView;
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "checkboxes.wtkx");
         wtkxSerializer.bind(this, Checkboxes.class);

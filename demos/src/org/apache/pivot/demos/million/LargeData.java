@@ -22,8 +22,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.CSVSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Application;
@@ -40,7 +40,6 @@ import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
-
 
 public class LargeData implements Application {
     private class LoadDataCallback implements Runnable {
@@ -159,7 +158,7 @@ public class LargeData implements Application {
         csvSerializer.getKeys().add("c3");
     }
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         basePath = properties.get(BASE_PATH_KEY);
         if (basePath == null) {

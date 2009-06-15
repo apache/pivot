@@ -17,18 +17,17 @@
 package org.apache.pivot.wtk.test;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Window;
 
-
 public class ListViewTest implements Application {
     private Window window = null;
 
-    public void startup(Display display, Dictionary<String, String> properties) {
+    public void startup(Display display, Map<String, String> properties) {
         ListView listView = new ListView();
 
         List<Object> listData = new ArrayList<Object>();

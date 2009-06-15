@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.text.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.wtk.Application;
@@ -33,7 +33,6 @@ import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.NodeListener;
 import org.apache.pivot.wtkx.WTKXSerializer;
-
 
 public class TextAreaTest implements Application {
     private Frame frame = null;
@@ -67,7 +66,7 @@ public class TextAreaTest implements Application {
         }
     };
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("text_area_test.wtkx")));

@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Display;
@@ -37,11 +37,10 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Visual;
 
-
 public class NativeDragDropTest implements Application {
     private Frame frame = null;
 
-    public void startup(final Display display, Dictionary<String, String> properties)
+    public void startup(final Display display, Map<String, String> properties)
         throws Exception {
         final Label label = new Label("http://www.apple.com");
         label.getStyles().put("font", new Font("Arial", Font.PLAIN, 24));

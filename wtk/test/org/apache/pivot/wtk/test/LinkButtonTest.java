@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk.test;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseListener;
@@ -28,11 +28,10 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ButtonData;
 import org.apache.pivot.wtk.media.Image;
 
-
 public class LinkButtonTest implements Application {
     private Window window = new Window();
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         FlowPane flowPane = new FlowPane();
         flowPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         flowPane.getStyles().put("spacing", 8);

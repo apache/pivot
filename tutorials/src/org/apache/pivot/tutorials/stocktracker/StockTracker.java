@@ -26,8 +26,8 @@ import java.util.Locale;
 import org.apache.pivot.web.GetQuery;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.CSVSerializer;
 import org.apache.pivot.util.Resources;
@@ -95,7 +95,7 @@ public class StockTracker implements Application {
         symbols.add("JAVA");
     }
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         // Set the locale
         String language = properties.get(LANGUAGE_PROPERTY_NAME);

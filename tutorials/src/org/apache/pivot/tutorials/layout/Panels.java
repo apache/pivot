@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tutorials.layout;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -26,7 +26,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class Panels implements Application {
     private Window window = null;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "panels.wtkx");

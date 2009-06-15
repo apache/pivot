@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials;
 import java.awt.Color;
 import java.awt.Font;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -31,7 +31,7 @@ import org.apache.pivot.wtk.Window;
 public class HelloJava implements Application {
     private Window window = null;
 
-    public void startup(Display display, Dictionary<String, String> properties) {
+    public void startup(Display display, Map<String, String> properties) {
         Label label = new Label();
         label.setText("Hello World!");
         label.getStyles().put("font", new Font("Arial", Font.BOLD, 24));

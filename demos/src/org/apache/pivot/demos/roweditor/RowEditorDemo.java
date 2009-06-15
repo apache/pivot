@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.demos.roweditor;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.EnumList;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.content.TableViewRowEditor;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 /**
  * Demonstrates a flip transition used to initiate a table view row editor.
  *
@@ -42,7 +41,7 @@ public class RowEditorDemo implements Application {
 
     @WTKX TableView tableView;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "demo.wtkx");

@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tutorials.buttons;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -35,7 +35,7 @@ public class LinkButtons implements Application {
     @WTKX private LinkButton nextButton;
     @WTKX private LinkButton previousButton;
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "link_buttons.wtkx");
         wtkxSerializer.bind(this, LinkButtons.class);

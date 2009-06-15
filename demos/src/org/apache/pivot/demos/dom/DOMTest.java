@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.demos.dom;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.BrowserApplicationContext;
@@ -28,12 +28,11 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-
 public class DOMTest implements Application {
     private Window window = null;
     private PushButton helloButton = null;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         FlowPane flowPane = new FlowPane();
         flowPane.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);

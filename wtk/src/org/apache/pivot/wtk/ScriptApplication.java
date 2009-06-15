@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
 
@@ -35,7 +35,7 @@ public class ScriptApplication implements Application {
         DesktopApplicationContext.main(ScriptApplication.class, args);
     }
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         if (!properties.containsKey(SRC_ARGUMENT)) {
             throw new IllegalArgumentException(SRC_ARGUMENT + " argument is required.");
@@ -45,6 +45,9 @@ public class ScriptApplication implements Application {
         String title = properties.get(TITLE_ARGUMENT);
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        for (String property : properties) {
+            wtkxSerializer.put(property, properties.get(property));
+        }
 
         Component content = (Component)wtkxSerializer.readObject(src);
         window = new Window(content);

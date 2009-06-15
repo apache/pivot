@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.net.MalformedURLException;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.io.Folder;
@@ -44,7 +44,7 @@ public class FileBrowser implements Application {
 
     @WTKX private TreeView folderTreeView;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "file_browser.wtkx");

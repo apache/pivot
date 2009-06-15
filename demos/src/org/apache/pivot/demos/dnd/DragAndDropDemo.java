@@ -18,7 +18,7 @@ package org.apache.pivot.demos.dnd;
 
 import java.io.IOException;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.io.FileList;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
@@ -43,7 +43,6 @@ import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtkx.WTKX;
 import org.apache.pivot.wtkx.WTKXSerializer;
 
-
 public class DragAndDropDemo implements Application {
     private Window window = null;
 
@@ -57,7 +56,7 @@ public class DragAndDropDemo implements Application {
     @WTKX private PushButton copyFilesButton;
     @WTKX private PushButton pasteFilesButton;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "drag_and_drop.wtkx");

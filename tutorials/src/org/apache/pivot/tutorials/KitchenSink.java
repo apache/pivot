@@ -24,7 +24,6 @@ import java.net.URL;
 import java.util.Comparator;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.JSONSerializer;
@@ -824,7 +823,7 @@ public class KitchenSink implements Application, Application.About {
         DesktopApplicationContext.main(KitchenSink.class, args);
     }
 
-    public void startup(Display display, Dictionary<String, String> properties) throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "kitchen_sink.wtkx");
         wtkxSerializer.bind(this, KitchenSink.class);

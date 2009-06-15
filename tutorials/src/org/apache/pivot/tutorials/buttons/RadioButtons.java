@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tutorials.buttons;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
@@ -36,7 +36,7 @@ public class RadioButtons implements Application {
     @WTKX private RadioButton oneButton;
     @WTKX private PushButton selectButton;
 
-    public void startup(Display display, Dictionary<String, String> properties)
+    public void startup(Display display, Map<String, String> properties)
         throws Exception {
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         window = (Window)wtkxSerializer.readObject(this, "radio_buttons.wtkx");
