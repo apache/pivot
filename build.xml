@@ -691,10 +691,6 @@ limitations under the License.
                 <include name="${jar.wtk.terra}"/>
                 <include name="${jar.tools}"/>
             </fileset>
-            <fileset dir="wtk/lib">
-                <include name="stax-1.2.0.jar"/>
-                <include name="stax-api-1.0.1.jar"/>
-            </fileset>
         </copy>
 
         <!-- Copy documentation -->
