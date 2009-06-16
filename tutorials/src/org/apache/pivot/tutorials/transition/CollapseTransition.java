@@ -36,6 +36,10 @@ public class CollapseTransition extends Transition {
         initialWidth = component.getWidth();
     }
 
+    public Component getComponent() {
+        return component;
+    }
+
     @Override
     public void start(TransitionListener transitionListener) {
         component.getDecorators().add(fadeDecorator);
@@ -57,14 +61,13 @@ public class CollapseTransition extends Transition {
         if (percentComplete < 1.0f) {
             int duration = getDuration();
             int width = (int)(initialWidth * (1.0f - percentComplete));
+
             width = (int)easing.easeInOut(getElapsedTime(), initialWidth, width - initialWidth, duration);
 
             component.setPreferredWidth(width);
 
             fadeDecorator.setOpacity(1.0f - percentComplete);
             component.repaint();
-        } else {
-            component.getParent().remove(component);
         }
     }
 }

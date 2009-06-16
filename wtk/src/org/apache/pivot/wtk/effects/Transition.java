@@ -30,6 +30,8 @@ public abstract class Transition {
     private int rate;
     private boolean repeat;
 
+    private boolean reversed = false;
+
     private TransitionListener transitionListener;
 
     private long startTime = 0;
@@ -186,10 +188,20 @@ public abstract class Transition {
      *
      * @return
      * Returns the amount of time that has passed since the transition
-     * was started.
+     * was started. If the transition is reversed, this value reflects the
+     * amount of time remaining.
      */
     public int getElapsedTime() {
-        return (int)(currentTime - startTime);
+        long endTime = startTime + duration;
+
+        int elapsedTime;
+        if (reversed) {
+            elapsedTime = (int)(endTime - currentTime);
+        } else {
+            elapsedTime = (int)(currentTime - startTime);
+        }
+
+        return elapsedTime;
     }
 
     /**
@@ -197,10 +209,17 @@ public abstract class Transition {
      *
      * @return
      * A value between 0 and 1, inclusive, representing the transition's
-     * percent complete.
+     * percent complete. If the transition is reversed, this value reflects
+     * the percent remaining.
      */
     public float getPercentComplete() {
-        return (float)(currentTime - startTime) / (float)(duration);
+        float percentComplete = (float)(currentTime - startTime) / (float)(duration);
+
+        if (reversed) {
+            percentComplete = 1.0f - percentComplete;
+        }
+
+        return percentComplete;
     }
 
     /**
@@ -280,4 +299,34 @@ public abstract class Transition {
      * transition's state.
      */
     protected abstract void update();
+
+    /**
+     * Reverses a currently running transition. Updates the start time so the
+     * reverse duration is the same as the current elapsed time.
+     */
+    public void reverse() {
+        if (transitionListener == null) {
+            throw new IllegalStateException("Transition is not currently running.");
+        }
+
+        if (repeat) {
+            throw new IllegalStateException("Transition is repeating.");
+        }
+
+        long repeatDuration = currentTime - startTime;
+        long endTime = currentTime + repeatDuration;
+        startTime = endTime - duration;
+
+        reversed = !reversed;
+    }
+
+    /**
+     * Tests whether the transition is reversed.
+     *
+     * @return
+     * <tt>true</tt> if the transition is reversed; <tt>false</tt>, otherwise.
+     */
+    public boolean isReversed() {
+        return reversed;
+    }
 }
