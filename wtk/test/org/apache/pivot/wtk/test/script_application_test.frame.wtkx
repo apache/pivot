@@ -16,36 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Script Application Test" maximized="true"
+<Frame title="Script Application Test Frame" preferredWidth="320" preferredHeight="240"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <wtkx:define>
-        <wtkx:include wtkx:id="testFrame" src="script_application_test.frame.wtkx"/>
-    </wtkx:define>
-
     <content>
-        <FlowPane orientation="vertical">
-            <Label wtkx:id="fooLabel"/>
-            <Label wtkx:id="barLabel"/>
-            <PushButton buttonData="Click Me">
-                <buttonPressListeners>
-                    <wtkx:script language="javascript">
-                    <![CDATA[
-                    function buttonPressed(button) {
-                        testFrame.open(root);
-                    }
-                    ]]>
-                    </wtkx:script>
-                </buttonPressListeners>
-            </PushButton>
-        </FlowPane>
+        <Label text="Sample Frame"
+            styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
     </content>
-
-    <wtkx:script language="javascript">
-    <![CDATA[
-    fooLabel.setText(foo);
-    barLabel.setText(bar);
-    ]]>
-    </wtkx:script>
-</Window>
+</Frame>
 

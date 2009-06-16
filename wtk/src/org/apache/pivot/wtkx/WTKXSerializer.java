@@ -59,7 +59,6 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.ThreadUtilities;
 
-
 /**
  * Loads an object hierarchy from an XML document.
  *
@@ -143,6 +142,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     private static class Element  {
         public enum Type {
+            DEFINE,
             INSTANCE,
             INCLUDE,
             SCRIPT,
@@ -222,6 +222,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     public static final String SCRIPT_TAG = "script";
     public static final String SCRIPT_SRC_ATTRIBUTE = "src";
     public static final String SCRIPT_LANGUAGE_ATTRIBUTE = "language";
+
+    public static final String DEFINE_TAG = "define";
+
+    public static final String ROOT_OBJECT_ID = "root";
 
     public static final String MIME_TYPE = "application/wtkx";
 
@@ -405,6 +409,13 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                 elementType = Element.Type.INCLUDE;
                             } else if (localName.equals(SCRIPT_TAG)) {
                                 elementType = Element.Type.SCRIPT;
+                            } else if (localName.equals(DEFINE_TAG)) {
+                                if (attributes.getLength() > 0) {
+                                    throw new SerializationException(WTKX_PREFIX + ":" + DEFINE_TAG
+                                        + " cannot have attributes.");
+                                }
+
+                                elementType = Element.Type.DEFINE;
                             } else {
                                 throw new SerializationException(prefix + ":" + localName
                                     + " is not a valid element.");
@@ -433,7 +444,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     throw new SerializationException("Parent element must be a typed object.");
                                 }
 
-                                if (prefix != null) {
+                                if (prefix != null
+                                    && prefix.length() > 0) {
                                     throw new SerializationException("Property elements cannot have a namespace prefix.");
                                 }
 
@@ -595,10 +607,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     }
                                 }
 
-                                // If the parent element is a writable property, set this as its value; it
-                                // will be applied later in the parent's closing tag
+                                // If the parent element is a writable property or a define, set this as its
+                                // value; it will be applied later in the parent's closing tag
                                 if (element.parent != null
-                                    && element.parent.type == Element.Type.WRITABLE_PROPERTY) {
+                                    && (element.parent.type == Element.Type.WRITABLE_PROPERTY
+                                        || element.parent.type == Element.Type.DEFINE)) {
                                     element.parent.value = element.value;
                                 }
 
@@ -640,24 +653,20 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                                 String src = null;
                                 String language = null;
                                 for (Attribute attribute : element.attributes) {
-                                    if (attribute.prefix != null) {
-                                        throw new SerializationException(WTKX_PREFIX + ":" + attribute.localName
-                                            + " is not a valid attribute.");
-                                    } else {
-                                        if (attribute.prefix != null) {
-                                            throw new SerializationException(attribute.prefix + ":" +
-                                                attribute.localName + " is not a valid" + " attribute for the "
-                                                + WTKX_PREFIX + ":" + SCRIPT_TAG + " tag.");
-                                        }
+                                    if (attribute.prefix != null
+                                        && attribute.prefix.length() > 0) {
+                                        throw new SerializationException(attribute.prefix + ":" +
+                                            attribute.localName + " is not a valid" + " attribute for the "
+                                            + WTKX_PREFIX + ":" + SCRIPT_TAG + " tag.");
+                                    }
 
-                                        if (attribute.localName.equals(SCRIPT_SRC_ATTRIBUTE)) {
-                                            src = attribute.value;
-                                        } else if (attribute.localName.equals(SCRIPT_LANGUAGE_ATTRIBUTE)) {
-                                            language = attribute.value;
-                                        } else {
-                                            throw new SerializationException(attribute.localName + " is not a valid"
-                                                + " attribute for the " + WTKX_PREFIX + ":" + SCRIPT_TAG + " tag.");
-                                        }
+                                    if (attribute.localName.equals(SCRIPT_SRC_ATTRIBUTE)) {
+                                        src = attribute.value;
+                                    } else if (attribute.localName.equals(SCRIPT_LANGUAGE_ATTRIBUTE)) {
+                                        language = attribute.value;
+                                    } else {
+                                        throw new SerializationException(attribute.localName + " is not a valid"
+                                            + " attribute for the " + WTKX_PREFIX + ":" + SCRIPT_TAG + " tag.");
                                     }
                                 }
 
@@ -802,6 +811,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         // otherwise, move up the stack
                         if (element.parent == null) {
                             object = element.value;
+                            namedObjects.put(ROOT_OBJECT_ID, object);
                         } else {
                             element = element.parent;
                         }

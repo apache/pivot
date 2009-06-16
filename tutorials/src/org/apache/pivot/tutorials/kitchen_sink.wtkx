@@ -16,9 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Pivot Demo"
-    maximized="true"
-    xmlns:wtkx="http://incubator.apache.org/pivot/wtkx/1.1"
+<Window title="Pivot Demo" maximized="true"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:effects="org.apache.pivot.wtk.effects"
     xmlns="org.apache.pivot.wtk">
     <content>

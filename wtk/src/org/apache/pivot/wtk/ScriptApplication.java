@@ -28,34 +28,25 @@ public class ScriptApplication implements Application {
     private Window window = null;
 
     public static final String SRC_ARGUMENT = "src";
-    public static final String TITLE_ARGUMENT = "title";
-    public static final String WINDOW_PROPERTY = "window";
 
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        if (!properties.containsKey(SRC_ARGUMENT)) {
-            throw new IllegalArgumentException(SRC_ARGUMENT + " argument is required.");
-        }
-
-        String src = properties.get(SRC_ARGUMENT);
-        String title = properties.get(TITLE_ARGUMENT);
+        String src = null;
 
         WTKXSerializer wtkxSerializer = new WTKXSerializer();
         for (String property : properties) {
-            if (!property.equals(SRC_ARGUMENT)
-                && !property.equals(TITLE_ARGUMENT)) {
+            if (property.equals(SRC_ARGUMENT)) {
+                src = properties.get(property);
+            } else {
                 wtkxSerializer.put(property, properties.get(property));
             }
         }
 
-        window = new Window();
-        window.setTitle(title);
-        window.setMaximized(true);
-        wtkxSerializer.put(WINDOW_PROPERTY, window);
+        if (src == null) {
+            throw new IllegalArgumentException(SRC_ARGUMENT + " argument is required.");
+        }
 
-        Component content = (Component)wtkxSerializer.readObject(src);
-        window.setContent(content);
-
+        window = (Window)wtkxSerializer.readObject(src);
         window.open(display);
     }
 
